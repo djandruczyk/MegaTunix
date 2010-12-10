@@ -19,9 +19,7 @@
 #include <stringmatch.h>
 
 
-static GHashTable *str_2_enum = NULL;
-
-
+extern gconstpointer *global_data;
 /*!
  \brief build_string_2_enum_table() constructs a hashtable that maps a textual
  name to it's matching enumeration.  It's used for mapping things from all the 
@@ -29,7 +27,7 @@ static GHashTable *str_2_enum = NULL;
  */
 G_MODULE_EXPORT void build_string_2_enum_table(void)
 {
-	extern gconstpointer *global_data;
+	GHashTable *str_2_enum = NULL;
 	str_2_enum = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,NULL);
 
 	/* Interrogation field types */
@@ -496,7 +494,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
-	DATA_SET_FULL(global_data,"str2_enum",str_2_enum,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"str_2_enum",str_2_enum,g_hash_table_destroy);
 }
 
 
@@ -521,9 +519,14 @@ G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
  */
 G_MODULE_EXPORT gint translate_string(const gchar *string)
 {
-	gpointer value = 0;
-	value = g_hash_table_lookup(str_2_enum,string);
-	if (value == NULL)
+	static GHashTable *str_2_enum = NULL;
+	gint value = 0;
+
+	if (!str_2_enum)
+        	str_2_enum = DATA_GET(global_data,"str_2_enum");
+
+	value = (GINT)g_hash_table_lookup(str_2_enum,string);
+	if (value == 0)
 	{
 		/*dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
 		return (MTX_UNKNOWN);

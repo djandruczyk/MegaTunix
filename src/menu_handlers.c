@@ -840,6 +840,7 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 
 G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 {
+	static gint (*ms_get_ecu_data)(gint,gint,gint,DataSize) = NULL;
 	GladeXML* xml = NULL;
 	GtkWidget* item = NULL;
 	gint i = 0;
@@ -871,6 +872,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gint precision = 0;
 
+	get_symbol("ms_get_ecu_data",(void *)&ms_get_ecu_data);
 	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
@@ -944,7 +946,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 
 	// fetch us a copy of the x bins
 	for (i=0; i != firmware->table_params[table]->x_bincount; i++)
-		x_bin[i] = evaluator_evaluate_x(evaluator, get_ecu_data(canID, page, base+(i*mult), size));
+		x_bin[i] = evaluator_evaluate_x(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
 
 	evaluator_destroy(evaluator);
 
@@ -958,7 +960,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 
 	// fetch us a copy of the y bins
 	for (i=0; i != firmware->table_params[table]->y_bincount; i++)
-		y_bin[i] = evaluator_evaluate_x(evaluator, get_ecu_data(canID, page, base+(i*mult), size));
+		y_bin[i] = evaluator_evaluate_x(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
 
 	evaluator_destroy(evaluator);
 

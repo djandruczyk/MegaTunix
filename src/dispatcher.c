@@ -168,8 +168,6 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
 
-	if (!update_widget_f)
-		get_symbol("update_widget",(void *)&update_widget_f);
 	if (!gui_dispatch_cond)
 		gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
 	if (!gui_dispatch_queue)
@@ -217,6 +215,8 @@ trypop:
 					widget = (GtkWidget *)message->payload;
 					if (GTK_IS_WIDGET(widget))
 					{
+						if (!update_widget_f)
+							get_symbol("update_widget",(void *)&update_widget_f);
 						gdk_threads_enter();
 						update_widget_f(widget,NULL);
 						gdk_threads_leave();

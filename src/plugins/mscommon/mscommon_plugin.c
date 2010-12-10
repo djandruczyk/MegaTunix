@@ -20,7 +20,7 @@
 #include <gtk/gtk.h>
 
 
-gconstpointer *global_data;
+gconstpointer *global_data = NULL;
 
 
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
@@ -91,6 +91,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("create_value_change_watch",(void *)&create_value_change_watch_f);
 	get_symbol_f("remove_watch",(void *)&remove_watch_f);
 	get_symbol_f("remove_from_lists",(void *)&remove_from_lists_f);
+	register_common_enums();
 }
 
 
@@ -100,12 +101,11 @@ G_MODULE_EXPORT void plugin_shutdown()
 }
 
 
-void register_enums(void)
+void register_common_enums(void)
 {
-	extern gconstpointer *global_data;
 	GHashTable *str_2_enum = NULL;
 
-	str_2_enum = DATA_GET(global_data,"str2_enum");
+	str_2_enum = DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
 		/* TCP Socket Commands */
@@ -195,5 +195,7 @@ void register_enums(void)
 				GINT_TO_POINTER(RESULT_TEXT));
 
 	}
+	else
+		printf("COULD NOT FIND global pointer to str_2_enum table\n!");
 }
 

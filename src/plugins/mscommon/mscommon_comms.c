@@ -17,6 +17,7 @@
 #include <defines.h>
 #include <debugging.h>
 #include <mscommon_comms.h>
+#include <mscommon_gui_handlers.h>
 #include <mtxsocket.h>
 #include <gtk/gtk.h>
 #include <firmware.h>
@@ -96,7 +97,7 @@ G_MODULE_EXPORT gint comms_test(void)
 #ifdef __WIN32__
 	extern int errno;
 #else
-	int errno;
+	int errno = 0;
 #endif
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
@@ -704,7 +705,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 
 	serial_params = DATA_GET(global_data,"serial_params");
 
-	get_symbol_f("setup_serial_params_f",(void *)&setup_serial_params_f);
+	get_symbol_f("setup_serial_params",(void *)&setup_serial_params_f);
 	get_symbol_f("open_serial",(void *)&open_serial_f);
 	get_symbol_f("close_serial",(void *)&close_serial_f);
 	get_symbol_f("lock_serial",(void *)&lock_serial_f);

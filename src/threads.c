@@ -142,8 +142,10 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		g_time_val_add(&cur,100000); /* 100 ms timeout */
 		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
-		if (DATA_GET(global_data,"leaving"))
+		if (DATA_GET(global_data,"leaving") || 
+				DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
+			printf("thread dispatcher told to exit!\n");
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(io_data_queue) != NULL)
 			{}
@@ -502,10 +504,10 @@ G_MODULE_EXPORT void build_output_string(Io_Message *message, Command *command, 
 				break;
 			case MTX_U32:
 			case MTX_S32:
-/*				printf("32 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
+				/*				printf("32 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
 				v = (GINT)DATA_GET(output->data,arg->internal_name);
-/*				printf("value %i\n",v); */
+				/*				printf("value %i\n",v); */
 				block->data = g_new0(guint8,4);
 				block->data[0] = (v & 0xff000000) >> 24;
 				block->data[1] = (v & 0xff0000) >> 16;
@@ -523,15 +525,14 @@ G_MODULE_EXPORT void build_output_string(Io_Message *message, Command *command, 
 				block->data = g_memdup(sent_data,len);
 				block->len = len;
 				/*
-				for (j=0;j<len;j++)
-				{
-					printf("sent_data[%i] is %i\n",j,sent_data[j]);
-					printf("block->data[%i] is %i\n",j,block->data[j]);
-				}
-				*/
+				   for (j=0;j<len;j++)
+				   {
+				   printf("sent_data[%i] is %i\n",j,sent_data[j]);
+				   printf("block->data[%i] is %i\n",j,block->data[j]);
+				   }
+				 */
 
 		}
 		g_array_append_val(message->sequence,block);
 	}
 }
-

@@ -24,6 +24,7 @@
 #include <logviewer_gui.h>
 #include <math.h>
 #include <multi_expr_loader.h>
+#include <plugin.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -153,6 +154,10 @@ G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 
 G_MODULE_EXPORT void draw_ve_marker(void)
 {
+	static gint (*ms_get_ecu_data)(gint,gint,gint,DataSize) = NULL;
+	static Firmware_Details *firmware = NULL;
+	static GHashTable *sources_hash = NULL;
+	static GList ***ve_widgets = NULL;
 	static gfloat *prev_x_source;
 	static gfloat *prev_y_source;
 	static GtkWidget ***last_widgets = NULL;
@@ -201,13 +206,15 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	gchar *hash_key = NULL;
 	GHashTable *hash = NULL;
 	MultiSource *multi = NULL;
-	Firmware_Details *firmware = NULL;
-	GHashTable *sources_hash = NULL;
-	GList ***ve_widgets = NULL;
 
-	sources_hash = DATA_GET(global_data,"sources_hash");
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
-	firmware = DATA_GET(global_data,"firmware");
+	if (!sources_hash)
+		sources_hash = DATA_GET(global_data,"sources_hash");
+	if (!ve_widgets)
+		ve_widgets = DATA_GET(global_data,"ve_widgets");
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!ms_get_ecu_data)
+		get_symbol("ms_get_ecu_data",(void *)&ms_get_ecu_data);
 	canID = firmware->canID;
 	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
@@ -335,7 +342,7 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	x_raw  = evaluator_evaluate_x(x_eval[table],x_source);
 	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
 	{
-		if (get_ecu_data(canID,page,base,size) >= x_raw)
+		if (ms_get_ecu_data(canID,page,base,size) >= x_raw)
 		{
 			bin[0] = -1;
 			bin[1] = 0;
@@ -343,8 +350,8 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 			right_w = 1;
 			break;
 		}
-		left = get_ecu_data(canID,page,base+(i*mult),size);
-		right = get_ecu_data(canID,page,base+((i+1)*mult),size);
+		left = ms_get_ecu_data(canID,page,base+(i*mult),size);
+		right = ms_get_ecu_data(canID,page,base+((i+1)*mult),size);
 
 		if ((x_raw > left) && (x_raw <= right))
 		{
@@ -373,7 +380,7 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	y_raw  = evaluator_evaluate_x(y_eval[table],y_source);
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{
-		if (get_ecu_data(canID,page,base,size) >= y_raw)
+		if (ms_get_ecu_data(canID,page,base,size) >= y_raw)
 		{
 			bin[2] = -1;
 			bin[3] = 0;
@@ -381,8 +388,8 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 			bottom_w = 0;
 			break;
 		}
-		bottom = get_ecu_data(canID,page,base+(i*mult),size);
-		top = get_ecu_data(canID,page,base+((i+1)*mult),size);
+		bottom = ms_get_ecu_data(canID,page,base+(i*mult),size);
+		top = ms_get_ecu_data(canID,page,base+((i+1)*mult),size);
 
 		if ((y_raw > bottom) && (y_raw <= top))
 		{

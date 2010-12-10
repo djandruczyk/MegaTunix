@@ -38,7 +38,6 @@
 #include <timeout_handlers.h>
 #include <xmlcomm.h>
 
-GThread * thread_dispatcher_id = NULL;
 gint pf_dispatcher_id = -1;
 gint gui_dispatcher_id = -1;
 gboolean gl_ability = FALSE;
@@ -109,6 +108,7 @@ gint main(gint argc, gchar ** argv)
 	//create_mtx_lock();
 
 	/* Allocate memory  */
+	build_string_2_enum_table();
 	serial_params = g_malloc0(sizeof(Serial_Params));
 	DATA_SET(global_data,"serial_params",serial_params);
 
@@ -117,7 +117,6 @@ gint main(gint argc, gchar ** argv)
 	init();			/* Initialize global vars */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
-	build_string_2_enum_table();
 
 	/* Create Message passing queues */
 	queue = g_async_queue_new();
@@ -135,16 +134,6 @@ gint main(gint argc, gchar ** argv)
 	setup_gui();		
 
 	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
-	/* Startup the serial General I/O handler.... */
-	thread_dispatcher_id = g_thread_create(thread_dispatcher,
-			NULL, /* Thread args */
-			TRUE, /* Joinable */
-			NULL); /*GError Pointer */
-	//	Debugging tool to monitor how busy the dispatcher timeout gets
-	//	g_thread_create(clock_watcher,
-	//			NULL, /* Thread args */
-	//			TRUE, /* Joinable */
-	//			NULL); /*GError Pointer */
 
 	pf_dispatcher_id = g_timeout_add(12,(GSourceFunc)pf_dispatcher,NULL);
 	gui_dispatcher_id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);

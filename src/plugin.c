@@ -59,6 +59,7 @@ G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT void plugins_init()
 {
 	GModule *module[3];
+	GThread *id = NULL;
 #ifdef __WIN32__
 	gchar * libname = NULL;
 #endif 
@@ -102,7 +103,7 @@ G_MODULE_EXPORT void plugins_init()
 	/* Set pointer to error message function global data container is
 	   passed to plugin(s) so they have access to get to global functions
 	   by looking up the symbols
-	   */
+	 */
 	DATA_SET(global_data,"error_msg_f",(gpointer)&error_msg);
 	DATA_SET(global_data,"get_symbol_f",(gpointer)&get_symbol);
 
@@ -112,14 +113,28 @@ G_MODULE_EXPORT void plugins_init()
 	/* ECU Specific module init */
 	if (g_module_symbol(module[1],"plugin_init",(void *)&plugin_init))
 		plugin_init(global_data);
+
+	/* Startup dispatcher thread */
+	id =  g_thread_create(thread_dispatcher,
+			NULL, /* Thread args */
+			TRUE, /* Joinable */
+			NULL); /*GError Pointer */
+	DATA_SET(global_data,"thread_dispatcher_id",id);
 }
 
 
 G_MODULE_EXPORT void plugins_shutdown()
 {
 	GModule *module = NULL;
+	GThread *id = NULL;
 	void (*plugin_shutdown)(void);
 
+	id = DATA_GET(global_data,"thread_dispatcher_id");
+	if (id)
+	{
+		DATA_SET(global_data,"thread_dispatcher_exit",GINT_TO_POINTER(TRUE));
+		g_thread_join(id);
+	}
 	/* Shutdown ECU module */
 	module = DATA_GET(global_data,"ecu_module");
 	if (module)

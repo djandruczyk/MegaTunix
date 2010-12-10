@@ -208,7 +208,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		{
 			if (firmware->table_params[table_num]->color_update == FALSE)
 			{
-				recalc_table_limits_f(canID,table_num);
+				recalc_table_limits(canID,table_num);
 				if ((firmware->table_params[table_num]->last_z_maxval != firmware->table_params[table_num]->z_maxval) || (firmware->table_params[table_num]->last_z_minval != firmware->table_params[table_num]->z_minval))
 					firmware->table_params[table_num]->color_update = TRUE;
 				else
@@ -496,22 +496,19 @@ G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief std_combo_handler() handles all combo boxes
+ \brief common_combo_handler() handles all combo boxes
  \param widget (GtkWidget *) the widget being modified
  \param data (gpointer) not used
  \returns TRUE
  */
-G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gboolean state = FALSE;
 	gint handler = 0;
-	gint bitmask = 0;
-	gint bitshift = 0;
 	gint total = 0;
-	guchar bitval = 0;
 	gchar * set_labels = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * lower = NULL;
@@ -522,9 +519,12 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	gchar ** vector = NULL;
 	guint i = 0;
 	gint tmpi = 0;
+	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
-	gint canID = 0;
+	gint bitval = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
 	gint table_num = 0;
 	gchar * range = NULL;
 	DataSize size = MTX_U08;
@@ -551,13 +551,10 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
-	page = (GINT) OBJ_GET(widget,"page");
-	offset = (GINT) OBJ_GET(widget,"offset");
-	bitmask = (GINT) OBJ_GET(widget,"bitmask");
-	bitshift = get_bitshift_f(bitmask);
+	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
+
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	handler = (GINT) OBJ_GET(widget,"handler");
-	canID = (GINT)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 
@@ -901,7 +898,7 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	{
 		if (firmware->table_params[i]->color_update == FALSE)
 		{
-			recalc_table_limits_f(0,i);
+			recalc_table_limits(0,i);
 			if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 				firmware->table_params[i]->color_update = TRUE;
 			else
@@ -1449,13 +1446,13 @@ void update_entry(GtkWidget *widget)
 	gint table_num = 0;
 	gfloat spin_value = 0.0;
 	gboolean force_color_update = FALSE;
-	get_essentials(widget, &canID, &page, &offset, &size, &precision);
-	value = convert_after_upload_f(widget);
-	GdkColor black = {0,0,0,0};
 	GdkColor color;
+	GdkColor black = {0,0,0,0};
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
+	get_essentials(widget, &canID, &page, &offset, &size, &precision);
+	value = convert_after_upload_f(widget);
 
 	if ((GINT)OBJ_GET(widget,"handler") == ODDFIRE_ANGLE)
 	{
@@ -1582,12 +1579,12 @@ void update_combo(GtkWidget *widget)
 {
 	static void (*update_ms2_user_outputs)(GtkWidget *) = NULL;
 	gint tmpi = -1;
+	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
-	gint canID = 0;
+	gint bitval = 0;
 	gint bitmask = 0;
 	gint bitshift = 0;
-	gint bitval = 0;
 	gint t_bitval = 0;
 	gdouble value = 0;
 	GtkTreeModel *model = NULL;
@@ -1598,14 +1595,14 @@ void update_combo(GtkWidget *widget)
 	GdkColor red = {0,65535,0,0};
 	GdkColor white = {0,65535,65535,65535};
 
-	if (!update_ms2_user_outputs)
-		get_symbol_f("update_ms2_user_outputs",(void *)&update_ms2_user_outputs);
 
 	get_essential_bits(widget,&canID, &page, &offset, &bitval, &bitmask, &bitshift);
 	/*printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(GINT)value);*/
 
 	if ((GINT)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
 	{
+		if (!update_ms2_user_outputs)
+			get_symbol_f("update_ms2_user_outputs",(void *)&update_ms2_user_outputs);
 		if (update_ms2_user_outputs)
 			update_ms2_user_outputs(widget);
 		else

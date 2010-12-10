@@ -58,7 +58,6 @@
 
 
 
-static gint upd_count = 0;
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
 extern gconstpointer *global_data;
@@ -832,6 +831,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	static gint (*get_ecu_data_f)(gpointer) = NULL;
+	static void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;
 	static GList ***ve_widgets = NULL;
 	gint canID = 0;
 	gint page = 0;
@@ -854,6 +854,8 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		ve_widgets = DATA_GET(global_data,"ve_widgets");
 	if (!get_ecu_data_f)
 		get_symbol("get_ecu_data",(void *)&get_ecu_data_f);
+	if (!ms_send_to_ecu_f)
+		get_symbol("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
 
 	firmware = DATA_GET(global_data,"firmware");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
@@ -1075,7 +1077,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			break;
 	}
 	if (send)
-		send_to_ecu(canID, page, offset, size, dload_val, TRUE);
+		ms_send_to_ecu_f(canID, page, offset, size, dload_val, TRUE);
 	return retval;
 }
 

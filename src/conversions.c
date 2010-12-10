@@ -214,7 +214,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 {
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	static gint (*get_ecu_data)(gpointer);
+	static gint (*get_ecu_data_f)(gpointer);
 	gfloat return_value = 0.0;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
@@ -239,8 +239,9 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	extern gconstpointer *global_data;
 
 
-	if (!get_ecu_data)
-		get_symbol("get_ecu_data",(void *)&get_ecu_data);
+	if (!get_ecu_data_f)
+		if(!get_symbol("get_ecu_data",(void *)&get_ecu_data_f))
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_after_upload()\n\tCan NOT locate \"get_ecu_data\" function pointer in plugins, BUG!\n"));
 	g_static_mutex_lock(&mutex);
 
 	ul_complex = (GBOOLEAN)OBJ_GET(widget,"ul_complex");
@@ -336,11 +337,11 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 	}
 	if (OBJ_GET(widget,"lookuptable"))
-		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data(widget));
+		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data_f(widget));
 	else
 	{
 		/*printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);*/
-		tmpi = get_ecu_data(widget);
+		tmpi = get_ecu_data_f(widget);
 		/*printf("value is %i\n",tmpi);*/
 	}
 
@@ -390,15 +391,20 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	if ((!widget) || (DATA_GET(global_data,"leaving")))
 		return;
 	if (!check_deps)
-		get_symbol("check_dependancies",(void *)&check_deps);
+		if (!get_symbol("check_dependancies",(void *)&check_deps))
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tCan NOT locate \"check_dependancies\" function pointer in plugins, BUG!\n"));
 	if (!update_widget_f)
-		get_symbol("update_widget",(void *)&update_widget_f);
+		if(!get_symbol("update_widget",(void *)&update_widget_f))
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tCan NOT locate \"update_widget\" function pointer in plugins, BUG!\n"));
 	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
-	if ((dep_obj) && (check_deps))
-		state = check_deps(dep_obj);
-	else
-		dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tWidget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n",glade_get_widget_name(widget)));
+	if (dep_obj)
+	{
+		if (check_deps)
+			state = check_deps(dep_obj);
+		else
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tWidget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n",glade_get_widget_name(widget)));
+	}
 
 	if ((GINT)units == FAHRENHEIT) 
 	{

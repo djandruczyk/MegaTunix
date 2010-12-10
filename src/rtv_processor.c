@@ -28,6 +28,7 @@
 #include <mtxmatheval.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>
+#include <plugin.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
@@ -214,6 +215,8 @@ store_it:
  */
 G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 {
+	static gint (*ms_get_ecu_data)(gint,gint,gint,DataSize) = NULL;
+	static Firmware_Details *firmware = NULL;
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
 	guchar *raw_data = incoming;
@@ -232,10 +235,11 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	gdouble lower_limit = 0;
 	gdouble upper_limit = 0;
 	gdouble result = 0.0;
-	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!ms_get_ecu_data)
+		get_symbol("ms_get_ecu_data",(void *)&ms_get_ecu_data);
 
 	symbols = (gchar **)DATA_GET(object,"expr_symbols");
 	expr_types = (gint *)DATA_GET(object,"expr_types");
@@ -277,10 +281,10 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
+				values[i]=(gdouble)(((ms_get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
 				/*
-				   printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
-				   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
+				   printf("raw ecu at page %i, offset %i is %i\n",page,offset,ms_get_ecu_data(canID,page,offset,size));
+				   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(ms_get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
 				 */
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
@@ -298,7 +302,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 				size = (DataSize) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)get_ecu_data(canID,page,offset,size);
+				values[i]=(gdouble)ms_get_ecu_data(canID,page,offset,size);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_VAR:
@@ -392,6 +396,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
  */
 G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
 {
+	static gint (*ms_get_ecu_data)(gint,gint,gint,DataSize) = NULL;
+	static Firmware_Details *firmware = NULL;
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
 	guchar *raw_data = incoming;
@@ -410,9 +416,11 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	gdouble lower_limit = 0;
 	gdouble upper_limit = 0;
 	gdouble result = 0.0;
-	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!ms_get_ecu_data)
+		get_symbol("ms_get_ecu_data",(void *)&ms_get_ecu_data);
 
 
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
@@ -455,10 +463,10 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				g_free(tmpbuf);
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
+				values[i]=(gdouble)(((ms_get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
 				/*
-				   printf("raw ecu at page %i, offset %i is %i\n",page,offset,get_ecu_data(canID,page,offset,size));
-				   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
+				   printf("raw ecu at page %i, offset %i is %i\n",page,offset,ms_get_ecu_data(canID,page,offset,size));
+				   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(ms_get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
 				 */
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
@@ -476,7 +484,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				size = (DataSize) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)get_ecu_data(canID,page,offset,size);
+				values[i]=(gdouble)ms_get_ecu_data(canID,page,offset,size);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_VAR:
