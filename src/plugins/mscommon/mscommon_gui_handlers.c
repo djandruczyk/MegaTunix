@@ -169,8 +169,6 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	if (OBJ_GET(widget,"use_color"))
 	{
-		if (OBJ_GET(widget,"table_num"))
-			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 		if (OBJ_GET(widget,"raw_lower"))
 			raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 		else
@@ -179,8 +177,9 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 		else
 			raw_upper = get_extreme_from_size_f(size,UPPER);
-		if (table_num >= 0)
+		if (OBJ_GET(widget,"table_num"))
 		{
+			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 			if (firmware->table_params[table_num]->color_update == FALSE)
 			{
 				recalc_table_limits(canID,table_num);
@@ -1496,7 +1495,7 @@ void update_entry(GtkWidget *widget)
 	gdouble value = 0.0;
 	gint raw_lower = 0;
 	gint raw_upper = 0;
-	gint table_num = 0;
+	gint table_num = -1;
 	gfloat spin_value = 0.0;
 	gboolean force_color_update = FALSE;
 	GdkColor color;
