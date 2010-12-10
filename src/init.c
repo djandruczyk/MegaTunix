@@ -22,7 +22,6 @@
 #include <glib/gstdio.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <interrogate.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <lookuptables.h>
@@ -40,31 +39,12 @@
 #include <widgetmgmt.h>
 #include <unistd.h>
 
-gint major_ver;
-gint minor_ver;
-gint micro_ver;
-gint preferred_delimiter;
-extern gint mem_view_style[];
-extern gint ms_reset_count;
-extern gint ms_goodread_count;
-extern gboolean just_starting;
-extern gint dbg_lvl;
-extern Serial_Params *serial_params;
-/* Support up to "x" page firmware.... */
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};
 GdkColor blue = { 0, 0, 0, 65535};
 GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
-GList ***ve_widgets = NULL;
-GList **tab_gauges = NULL;
-GHashTable **interdep_vars = NULL;
-GHashTable *widget_group_states = NULL;
-GHashTable *sources_hash = NULL;
-GtkWidget **te_windows = NULL;
 extern gconstpointer *global_data;
-gint *algorithm = NULL;
-gboolean *tracking_focus = NULL;
 
 
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
@@ -81,7 +61,11 @@ G_MODULE_EXPORT void init(void)
 	gboolean *hidden_list = NULL;
 	GdkColormap *colormap = NULL;
 	CmdLineArgs *args = NULL;
+	Serial_Params *serial_params = NULL;
+	GHashTable *widget_group_states = NULL;
 	gint i = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	colormap = gdk_colormap_get_system ();
 	args = DATA_GET(global_data,"args");
@@ -113,6 +97,11 @@ G_MODULE_EXPORT void init(void)
 	DATA_SET(global_data,"rttext_fps",GINT_TO_POINTER(15));
 	DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(30));
 	DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(20));
+	DATA_SET(global_data,"last_page",GINT_TO_POINTER(-1));
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
+	DATA_SET(global_data,"active_page",GINT_TO_POINTER(-1));
+	DATA_SET(global_data,"active_table",GINT_TO_POINTER(-1));
 	DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup("MS-1"),cleanup);
 	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-1"),cleanup);
 	DATA_SET_FULL(global_data,"hidden_list",hidden_list,cleanup);
@@ -144,19 +133,18 @@ G_MODULE_EXPORT void init(void)
 
 	serial_params->errcount = 0; /* I/O error count */
 	/* default for MS v1.x and 2.x */
-	serial_params->read_wait = 50;	/* delay between reads in milliseconds */
+	serial_params->read_wait = 50;	/* delay between reads in ms */
 
 	/* Set flags to clean state */
-	just_starting = TRUE; 	/* to handle initial errors */
-	ms_reset_count = 0; 	/* Counts MS clock resets */
-	ms_goodread_count = 0; 	/* How many reads of realtime vars completed */
-	preferred_delimiter = TAB;
-
+	DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(TAB));
 
 	if (!widget_group_states)
+	{
 		widget_group_states = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,NULL);
+		DATA_SET_FULL(global_data,"widget_group_states",widget_group_states,g_hash_table_destroy);
 		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
 		g_hash_table_insert(widget_group_states,g_strdup("multi_expression"),(gpointer)TRUE);
+	}
 }
 
 
@@ -178,6 +166,9 @@ G_MODULE_EXPORT gboolean read_config(void)
 	gchar *filename = NULL;
 	gboolean *hidden_list;
 	CmdLineArgs *args = NULL;
+	Serial_Params *serial_params = NULL;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
 	args = DATA_GET(global_data,"args");
@@ -203,7 +194,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "VE3D_FPS", &tmpi))
 			DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
-		cfg_read_int(cfgfile, "Global", "dbg_lvl", &dbg_lvl);
+		if(cfg_read_int(cfgfile, "Global", "dbg_lvl", &tmpi))
+			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(tmpi));
 		if(cfg_read_string(cfgfile, "Global", "last_offline_profile", &tmpbuf))
 		{
 			DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(tmpbuf),cleanup);
@@ -236,7 +228,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"dash_2_y_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_float(cfgfile, "Dashboards", "dash_2_size_ratio", &tmpf))
 			DATA_SET_FULL(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),cleanup);
-		cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &preferred_delimiter);
+		if (cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &tmpi))
+			DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(tmpi));	
 		if (args->network_mode)
 			DATA_SET(global_data,"read_timeout",GINT_TO_POINTER(250));
 		else
@@ -302,10 +295,6 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(tmpi));
 		if ((GINT)DATA_GET(global_data,"lv_scroll_delay") < 40)
 			DATA_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(100));
-		cfg_read_int(cfgfile, "MemViewer", "page0_style", &mem_view_style[0]);
-		cfg_read_int(cfgfile, "MemViewer", "page1_style", &mem_view_style[1]);
-		cfg_read_int(cfgfile, "MemViewer", "page2_style", &mem_view_style[2]);
-		cfg_read_int(cfgfile, "MemViewer", "page3_style", &mem_view_style[3]);
 		cfg_free(cfgfile);
 		cleanup(filename);
 		return TRUE;
@@ -330,26 +319,28 @@ G_MODULE_EXPORT gboolean read_config(void)
  */
 G_MODULE_EXPORT void save_config(void)
 {
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gchar *filename = NULL;
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = NULL;
 	GtkWidget *main_window = NULL;
-	int x = 0;
-	int y = 0;
-	int i = 0;
-	int count = 0;
-	int tmp_width = 0;
-	int tmp_height = 0;
-	int orig_width = 0;
-	int orig_height = 0;
+	gint x = 0;
+	gint y = 0;
+	gint i = 0;
+	gint count = 0;
+	gint tmp_width = 0;
+	gint tmp_height = 0;
+	gint orig_width = 0;
+	gint orig_height = 0;
 	gint total = 0;
 	gfloat ratio = 0.0;
 	GtkWidget *dash = NULL;
-	extern gboolean ready;
 	ConfigFile *cfgfile = NULL;
 	gboolean * hidden_list;
 	GString *string = NULL;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	Serial_Params *serial_params = NULL;
+
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	g_static_mutex_lock(&mutex);
 
@@ -372,7 +363,7 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_int(cfgfile, "Global", "RTText_FPS", (GINT)DATA_GET(global_data,"rttext_fps"));
 	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)DATA_GET(global_data,"dashboard_fps"));
 	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (GINT)DATA_GET(global_data,"ve3d_fps"));
-	cfg_write_int(cfgfile, "Global", "dbg_lvl", dbg_lvl);
+	cfg_write_int(cfgfile, "Global", "dbg_lvl", (GINT)DATA_GET(global_data,"dbg_lvl"));
 	if (DATA_GET(global_data,"last_offline_profile"))
 		cfg_write_string(cfgfile, "Global", "last_offline_profile", DATA_GET(global_data,"last_offline_profile"));
 	if (DATA_GET(global_data,"last_offline_filename"))
@@ -438,7 +429,7 @@ G_MODULE_EXPORT void save_config(void)
 	}
 				
 
-	if (ready)
+	if (DATA_GET(global_data,"ready"))
 	{
 		main_window = lookup_widget("main_window");
 		if (GTK_WIDGET_VISIBLE(main_window))
@@ -500,7 +491,7 @@ G_MODULE_EXPORT void save_config(void)
 		cleanup(tmpbuf);
 
 	}
-	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", preferred_delimiter);
+	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", (gint)DATA_GET(global_data,"preferred_delimiter"));
 	if (serial_params->port_name)
 		cfg_write_string(cfgfile, "Serial", "override_port", 
 					serial_params->port_name);
@@ -515,10 +506,6 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_int(cfgfile, "Logviewer", "scroll_delay",(GINT) DATA_GET(global_data,"lv_scroll_delay"));
 	write_logviewer_defaults(cfgfile);
 
-	cfg_write_int(cfgfile, "MemViewer", "page0_style", mem_view_style[0]);
-	cfg_write_int(cfgfile, "MemViewer", "page1_style", mem_view_style[1]);
-	cfg_write_int(cfgfile, "MemViewer", "page2_style", mem_view_style[2]);
-	cfg_write_int(cfgfile, "MemViewer", "page3_style", mem_view_style[3]);
 
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
@@ -581,7 +568,15 @@ G_MODULE_EXPORT void mem_alloc(void)
 {
 	gint i=0;
 	gint j=0;
-	extern Firmware_Details *firmware;
+	gint *algorithm = NULL;
+	gboolean *tracking_focus = NULL;
+	Firmware_Details *firmware = NULL;
+	GHashTable **interdep_vars = NULL;
+	GHashTable *sources_hash = NULL;
+	GList ***ve_widgets = NULL;
+	GList **tab_gauges = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!firmware->rt_data)
 		firmware->rt_data = g_new0(guint8, firmware->rtvars_size);
@@ -593,24 +588,49 @@ G_MODULE_EXPORT void mem_alloc(void)
 		firmware->ecu_data_last = g_new0(guint8 *, firmware->total_pages);
 	if (!firmware->ecu_data_backup)
 		firmware->ecu_data_backup = g_new0(guint8 *, firmware->total_pages);
-	if (!te_windows)
-		te_windows = g_new0(GtkWidget *, firmware->total_te_tables);
 
 	if (!ve_widgets)
+	{
 		ve_widgets = g_new0(GList **, firmware->total_pages);
+		DATA_SET(global_data,"ve_widgets",ve_widgets);
+	}
 	if (!tab_gauges)
+	{
 		tab_gauges = g_new0(GList *, firmware->total_tables);
+		DATA_SET(global_data,"tab_gauges",tab_gauges);
+	}
 	if (!sources_hash)
+	{
 		sources_hash = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,cleanup);
+		DATA_SET_FULL(global_data,"sources_hash",sources_hash,g_hash_table_destroy);
+	}
 	/* Hash tables to store the interdependant deferred variables before
 	 * download...
 	 */
 	if (!interdep_vars)
-		interdep_vars = g_new0(GHashTable *,firmware->total_tables);
+	{
+		if (firmware->total_tables > 0)
+		{
+			interdep_vars = g_new0(GHashTable *,firmware->total_tables);
+			DATA_SET(global_data,"interdep_vars",interdep_vars);
+		}
+	}
 	if (!algorithm)
-		algorithm = g_new0(gint, firmware->total_tables);
+	{
+		if (firmware->total_tables > 0)
+		{
+			algorithm = g_new0(gint, firmware->total_tables);
+			DATA_SET_FULL(global_data,"algorithm",algorithm,cleanup);
+		}
+	}
 	if (!tracking_focus)
-		tracking_focus = g_new0(gboolean, firmware->total_tables);
+	{
+		if (firmware->total_tables > 0)
+		{
+			tracking_focus = g_new0(gboolean, firmware->total_tables);
+			DATA_SET_FULL(global_data,"tracking_focus",tracking_focus,g_free);
+		}
+	}
 
 	for (i=0;i<firmware->total_tables;i++)
 	{
@@ -652,17 +672,26 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	gpointer data;
 	GtkListStore *store = NULL;
 	GList *defaults = NULL;
-	extern GHashTable *dynamic_widgets;
-	extern Rtv_Map *rtv_map;
-	extern Firmware_Details *firmware;
-	extern GStaticMutex serio_mutex;
-	extern GStaticMutex rtt_mutex;
+	Firmware_Details *firmware = NULL;
+	Serial_Params *serial_params = NULL;
+	GHashTable **interdep_vars = NULL;
+	GHashTable *dynamic_widgets = NULL;
+	Rtv_Map *rtv_map = NULL;
+	GList ***ve_widgets = NULL;
+	GMutex *serio_mutex = NULL;
+	GMutex *rtt_mutex = NULL;
 
-	g_static_mutex_lock(&serio_mutex);
+	serial_params = DATA_GET(global_data,"serial_params");
+	rtv_map = DATA_GET(global_data,"rtv_map");
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	firmware = DATA_GET(global_data,"firmware");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
+	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
 
+	g_mutex_lock(serio_mutex);
 	cleanup(serial_params->port_name);
 	cleanup(serial_params);
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 
 	/* Firmware datastructure.... */
 	if (firmware)
@@ -722,6 +751,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 				dealloc_te_params(firmware->te_params[i]);
 		}
 		cleanup(firmware->te_params);
+		interdep_vars = DATA_GET(global_data,"interdep_vars");
 
 		for (i=0;i<firmware->total_tables;i++)
 		{
@@ -741,10 +771,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup(firmware->rt_data_last);
 		cleanup(firmware);
 	}
-	if(widget_group_states)
-		g_hash_table_destroy(widget_group_states);
-	if(sources_hash)
-		g_hash_table_destroy(sources_hash);
 	if (rtv_map)
 	{
 		if (rtv_map->raw_list)
@@ -762,10 +788,11 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup(rtv_map);
 	}
 	/* Runtime Text*/
-	g_static_mutex_lock(&rtt_mutex);
+	g_mutex_lock(rtt_mutex);
 	store = DATA_GET(global_data,"rtt_model");
 	if (store)
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
+	g_mutex_unlock(rtt_mutex);
 
 	/* Logviewer settings */
 	defaults = get_list("logviewer_defaults");
@@ -777,6 +804,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	//g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	/* Dynamic widgets master hash  */
 
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	if (dynamic_widgets)
 		g_hash_table_destroy(dynamic_widgets);
 }
@@ -823,137 +851,8 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
 	return output;
 }
 
-/*!
- *  \brief initialize_page_params() creates and initializes the page_params
- *   datastructure to sane defaults and returns it
- *    */
-G_MODULE_EXPORT Page_Params * initialize_page_params(void)
-{
-	Page_Params *page_params = NULL;
-	page_params = g_malloc0(sizeof(Page_Params));
-	page_params->length = 0;
-	page_params->spconfig_offset = -1;
-	return page_params;
-}
-
          
-/*!
- *  \brief initialize_table_params() creates and initializes the Table_Params
- *   datastructure to sane defaults and returns it
- *    */
-G_MODULE_EXPORT Table_Params * initialize_table_params(void)
-{
-	Table_Params *table_params = NULL;
-	table_params = g_malloc0(sizeof(Table_Params));
-	table_params->table = g_array_sized_new(FALSE,TRUE,sizeof(GtkWidget *),36);
-	table_params->is_fuel = FALSE;
-	table_params->alternate_offset = -1;
-	table_params->divider_offset = -1;
-	table_params->rpmk_offset = -1;
-	table_params->reqfuel_offset = -1;
-	table_params->x_page = -1;
-	table_params->y_page = -1;
-	table_params->z_page = -1;
-	table_params->x_base = -1;
-	table_params->y_base = -1;
-	table_params->z_base = -1;
-	table_params->x_bincount = -1;
-	table_params->y_bincount = -1;
-	table_params->x_precision = 0;
-	table_params->y_precision = 0;
-	table_params->z_precision = 0;
-	table_params->bind_to_list = NULL;
-	table_params->x_suffix = NULL;
-	table_params->y_suffix = NULL;
-	table_params->z_suffix = NULL;
-	table_params->x_ul_conv_expr = NULL;
-	table_params->x_dl_conv_expr = NULL;
-	table_params->y_ul_conv_expr = NULL;
-	table_params->y_dl_conv_expr = NULL;
-	table_params->z_ul_conv_expr = NULL;
-	table_params->z_dl_conv_expr = NULL;
-	table_params->x_ul_conv_exprs = NULL;
-	table_params->x_dl_conv_exprs = NULL;
-	table_params->y_ul_conv_exprs = NULL;
-	table_params->y_dl_conv_exprs = NULL;
-	table_params->z_ul_conv_exprs = NULL;
-	table_params->z_dl_conv_exprs = NULL;
-	table_params->x_source_key = NULL;
-	table_params->y_source_key = NULL;
-	table_params->z_source_key = NULL;
-	table_params->table_name = NULL;
-	table_params->x_ul_eval = NULL;
-	table_params->y_ul_eval = NULL;
-	table_params->z_ul_eval = NULL;
-	table_params->x_dl_eval = NULL;
-	table_params->y_dl_eval = NULL;
-	table_params->z_dl_eval = NULL;
 
-	return table_params;
-}
-
-         
-/*!
- *  \brief initialize_te_params() creates and initializes the TE_Params
- *   datastructure to sane defaults and returns it
- *    */
-G_MODULE_EXPORT TE_Params * initialize_te_params(void)
-{
-	TE_Params *te_params = NULL;
-	te_params = g_malloc0(sizeof(TE_Params));
-	te_params->x_lock = FALSE;
-	te_params->y_lock = FALSE;
-	te_params->x_use_color = FALSE;
-	te_params->y_use_color = FALSE;
-	te_params->x_temp_dep = FALSE;
-	te_params->y_temp_dep = FALSE;
-	te_params->x_page = -1;
-	te_params->y_page = -1;
-	te_params->x_base = -1;
-	te_params->y_base = -1;
-	te_params->reversed = FALSE;
-	te_params->bincount = -1;
-	te_params->x_precision = 0;
-	te_params->y_precision = 0;
-	te_params->x_axis_label = NULL;
-	te_params->y_axis_label = NULL;
-	te_params->x_name = NULL;
-	te_params->y_name = NULL;
-	te_params->x_units = NULL;
-	te_params->y_units = NULL;
-	te_params->x_dl_conv_expr = NULL;
-	te_params->x_ul_conv_expr = NULL;
-	te_params->y_dl_conv_expr = NULL;
-	te_params->y_ul_conv_expr = NULL;
-	te_params->gauge_temp_dep = FALSE;
-	te_params->title = NULL;
-
-	return te_params;
-}
-
-
-/*!
- \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
-sockets
-*/
-G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
-{
-	extern Firmware_Details *firmware;
-	gint i = 0;
-	/*printf("dealloc_client_data\n");*/
-	if (client)
-	{
-		cleanup (client->ip);
-
-		if (client->ecu_data)
-		{
-			for (i=0;i<firmware->total_pages;i++)
-				cleanup (client->ecu_data[i]);
-			cleanup(client->ecu_data);
-		}
-		cleanup(client);
-	}
-}
 
 /*!
  \brief dealloc_message() deallocates the structure used to pass an I/O

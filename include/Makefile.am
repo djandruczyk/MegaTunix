@@ -1,6 +1,5 @@
 
 headers = \
-	2d_table_editor.h \
 	3d_vetable.h \
 	about_gui.h \
 	afr_calibrate.h \
@@ -16,22 +15,16 @@ headers = \
 	core_gui.h \
 	crx.h \
 	dashboard.h \
-	dataio.h \
-	datamgmt.h \
 	datalogging_gui.h \
 	debugging.h \
 	defines.h \
-	dep_loader.h \
-	dep_processor.h \
 	dispatcher.h \
 	enums.h \
-	fileio.h \
 	firmware.h \
 	getfiles.h \
 	gui_handlers.h \
 	helpers.h \
 	init.h \
-	interrogate.h \
 	keybinder.h \
 	keyparser.h \
 	listmgmt.h \
@@ -44,12 +37,12 @@ headers = \
 	lookuptables.h \
 	main.h \
 	menu_handlers.h \
+	mem_mgmt.h \
 	memory_gui.h \
 	mode_select.h \
 	ms1_loader.h \
 	ms2_loader.h \
 	mtxloader.h \
-	mtxsocket.h \
 	multi_expr_loader.h \
 	notifications.h \
 	offline.h \
@@ -57,7 +50,6 @@ headers = \
 	plugin.h \
 	post_process.h \
 	raweditor.h \
-	req_fuel.h \
 	rtv_map_loader.h \
 	rtv_processor.h \
 	runtime_gui.h \
@@ -68,13 +60,10 @@ headers = \
 	stringmatch.h \
 	tabloader.h \
 	tag_loader.h \
-       	therm.h \
 	threads.h \
 	timeout_handlers.h \
 	unions.h \
-	user_outputs.h \
 	vetable_gui.h \
-	vex_support.h \
 	visibility.h \
 	warmwizard_gui.h \
 	watches.h \

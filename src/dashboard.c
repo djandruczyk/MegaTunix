@@ -34,7 +34,6 @@
 static gboolean timer_active = FALSE;
 static volatile gboolean moving = FALSE;
 static volatile gboolean resizing = FALSE;
-GStaticMutex dash_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 
 /*!
@@ -58,9 +57,8 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	extern GdkColor black;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	extern gboolean interrogated;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return;
 	if (filename == NULL)
 		return;
@@ -335,12 +333,13 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 	GData * rtv_obj = NULL;
 	gchar * source = NULL;
 	GHashTable *dash_hash = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 
 	if(!GTK_IS_FIXED(dash))
 		return;
 	
-	dash_hash = (GHashTable *)DATA_GET(global_data,"dash_hash");
+	rtv_map = DATA_GET(global_data,"rtv_map");
+	dash_hash = DATA_GET(global_data,"dash_hash");
 	if (!dash_hash)
 	{
 		dash_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -379,26 +378,28 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 {
 	Dash_Gauge *d_gauge = (Dash_Gauge *)value;
-	extern GStaticMutex rtv_mutex;
+	static GMutex *rtv_mutex = NULL;;
 	GArray *history;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
-	extern gboolean forced_update;
-
 	GtkWidget *gauge = NULL;
+
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	
 	gauge = d_gauge->gauge;
 
 	history = (GArray *)DATA_GET(d_gauge->object,"history");
 	if ((gint)history->len-1 <= 0)
 		return;
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
 	gdk_threads_enter();
 	mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
-	if ((current != previous) || (forced_update))
+	if ((current != previous) || 
+			(DATA_GET(global_data,"forced_update")))
 	{
 		/*printf("updating gauge %s\n",(gchar *)key);*/
 		/*printf("updating gauge %s\n",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge)));*/
@@ -411,6 +412,9 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 
 G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 {
+	static GdkColormap *colormap = NULL;
+	static GdkColor black;
+	static GdkColor white;
 	GtkFixedChild *child = NULL;
 	gint x = 0;
 	gint y = 0;
@@ -426,15 +430,13 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	GtkRequisition req;
 	gint width = 0;
 	gint height = 0;
-	static GdkColormap *colormap = NULL;
-	static GdkColor black;
-	static GdkColor white;
+	GMutex *dash_mutex = DATA_GET(global_data,"dash_mutex");
 
 	if(!GTK_IS_WIDGET(dash))
 		return;
 	if(!GTK_IS_WINDOW(gtk_widget_get_toplevel(dash)))
 		return;
-	g_static_mutex_lock(&dash_mutex);
+	g_mutex_lock(dash_mutex);
 
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
 	if (!colormap)
@@ -516,7 +518,7 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	g_object_unref(colormap);
 	g_object_unref(gc1);
 	g_object_unref(bitmap);
-	g_static_mutex_unlock(&dash_mutex);
+	g_mutex_unlock(dash_mutex);
 	return;
 }
 
@@ -1066,10 +1068,9 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GtkWidget *label = NULL;
-	extern gboolean interrogated;
 	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
@@ -1115,10 +1116,11 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 
 G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 {
-	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 	GtkWidget *label = NULL;
+	GMutex *dash_mutex = DATA_GET(global_data,"dash_mutex");
+	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 
-	g_static_mutex_lock(&dash_mutex);
+	g_mutex_lock(dash_mutex);
 	label = OBJ_GET(widget,"label");
 	if (GTK_IS_WIDGET(label))
 	{
@@ -1136,7 +1138,7 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	}
 	if (dash_hash)
 		g_hash_table_foreach_remove(dash_hash,remove_dashcluster,data);
-	g_static_mutex_unlock(&dash_mutex);
+	g_mutex_unlock(dash_mutex);
 	return TRUE;
 }
 
@@ -1175,8 +1177,9 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	gint table_num = -1;
-	extern GList **tab_gauges;
+	GList **tab_gauges = NULL;
 
+	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	gauge = mtx_gauge_face_new();
 	gtk_container_add(GTK_CONTAINER(widget),gauge);
 	xml_name = OBJ_GET(widget,"gaugexml");
@@ -1196,26 +1199,27 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 
 G_MODULE_EXPORT void update_tab_gauges(void)
 {
-	extern gint active_table;
-	extern GList **tab_gauges;
 	GtkWidget *gauge = NULL;
 	gchar * source = NULL;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
-	extern gboolean forced_update;
 	guint i = 0;
 	GList *list = NULL;
+	GList **tab_gauges = NULL;
+
+	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	
-	if ((!tab_gauges) || (active_table < 0))
+	if ((!tab_gauges) || ((gint)DATA_GET(global_data,"active_table") < 0))
 		return;
-	list = g_list_first(tab_gauges[active_table]);
+	list = g_list_first(tab_gauges[(gint)DATA_GET(global_data,"active_table")]);
 	for (i=0;i<g_list_length(list);i++)
 	{
 		gauge = g_list_nth_data(list,i);
 		source = OBJ_GET(gauge,"datasource");
 		lookup_current_value(source,&current);
 		mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
-		if ((current != previous) || (forced_update))
+		if ((current != previous) || 
+				(DATA_GET(global_data,"forced_update")))
 			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
 	}
 

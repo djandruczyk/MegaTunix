@@ -5,6 +5,7 @@ INCLUDES = \
         @GTK_CFLAGS@ \
         @DEPRECATED_CFLAGS@ \
         @LIBXML2_CFLAGS@ \
+	@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 
@@ -12,12 +13,16 @@ plugin_LTLIBRARIES = libms2.la
 
 libms2_la_SOURCES = \
 	Makefile \
+	ms2_gui_handlers.c \
+	ms2_gui_handlers.h \
 	ms2_plugin.c \
 	ms2_plugin.h \
 	ms2-t-logger.c \
-	ms2-t-logger.h
+	ms2-t-logger.h \
+	user_outputs.c \
+	user_outputs.h
 
-libms2_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
+libms2_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ ../../../widgets/libmtxcombo_mask.la $(no_undefined) -module
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

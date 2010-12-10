@@ -21,7 +21,6 @@
 #include <comms_gui.h>
 #include <config.h>
 #include <comms.h>
-#include <dataio.h>
 #include <defines.h>
 #include <debugging.h>
 #include <errno.h>
@@ -46,11 +45,7 @@
 #endif
 
 
-Serial_Params *serial_params;
-gboolean connected = FALSE;
 gboolean port_open = FALSE;
-GStaticMutex serio_mutex = G_STATIC_MUTEX_INIT;
-GAsyncQueue *io_repair_queue = NULL;
 extern gconstpointer *global_data;
 
 /*!
@@ -64,10 +59,14 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
+	static GMutex *serio_mutex = NULL;
+	Serial_Params *serial_params = NULL;
 	gint fd = -1;
 	gchar * err_text = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 	/*printf("Opening serial port %s\n",port_name);*/
 	/* Open Read/Write and NOT as the controlling TTY */
 	/* Blocking mode... */
@@ -107,7 +106,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
 	}
 
 	/*printf("open_serial returning\n");*/
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	return port_open;
 }
 	
@@ -122,10 +121,14 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
  */
 G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 {
+	GMutex *serio_mutex = NULL;
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	if (serial_params->net_mode)
 		return;
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 #ifdef __WIN32__
 	if (fd)
 		win32_flush_serial(fd, type);
@@ -146,7 +149,7 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 		}
 	}
 #endif	
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 }
 
 
@@ -155,25 +158,31 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
  calls to initialize the serial port to the proper speed, bits, flow, parity
  etc..
  */
-G_MODULE_EXPORT void setup_serial_params(gint baudrate)
+G_MODULE_EXPORT void setup_serial_params(void)
 {
+	GMutex *serio_mutex = NULL;
+	gint baudrate = 0;	
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
+	baudrate = (GINT)DATA_GET(global_data,"ecu_baud");
 #ifndef __WIN32__
 	speed_t baud = B9600;
 #endif
 	if (serial_params->open == FALSE)
 		return;
 	/*printf("setup_serial_params entered\n");*/
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 #ifdef __WIN32__
 	win32_setup_serial_params(serial_params->fd, baudrate);
 #else
 	/* Save serial port status */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	flush_serial(serial_params->fd, TCIOFLUSH);
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 
 	/* Sets up serial port for the modes we want to use. 
 	 * NOTE: Original serial tio params are stored and restored 
@@ -263,7 +272,7 @@ G_MODULE_EXPORT void setup_serial_params(gint baudrate)
 	tcsetattr(serial_params->fd, TCSAFLUSH, &serial_params->newtio);
 
 #endif
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	return;
 }
 
@@ -274,13 +283,16 @@ G_MODULE_EXPORT void setup_serial_params(gint baudrate)
  */
 G_MODULE_EXPORT void close_serial(void)
 {
-	extern volatile gboolean leaving;
+	GMutex *serio_mutex = NULL;
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
+	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	if (!serial_params)
 		return;
 	if (serial_params->open == FALSE)
 		return;
 
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 
 	/*printf("Closing serial port\n");*/
 #ifndef __WIN32__
@@ -299,159 +311,15 @@ G_MODULE_EXPORT void close_serial(void)
 	if (serial_params->port_name)
 		g_free(serial_params->port_name);
 	serial_params->port_name = NULL;
-	connected = FALSE;
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 	port_open = FALSE;
 
 	/* An Closing the comm port */
 	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
-	if (!leaving)
+	if (!DATA_GET(global_data,"leaving"))
 		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	return;
 }
 
 
-G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
-{
-	/* We got sent here because of one of the following occurred:
-	 * Serial port isn't opened yet (app just fired up)
-	 * Serial I/O errors (missing data, or failures reading/writing)
-	 *  - This includes things like pulling the RS232 cable out of the ECU
-	 * Serial port disappeared (i.e. device hot unplugged)
-	 *  - This includes unplugging the USB side of a USB->Serial adapter
-	 *    or going out of bluetooth range, for a BT serial device
-	 *
-	 * Thus we need to handle all possible conditions cleanly
-	 */
-	static gboolean serial_is_open = FALSE; /* Assume never opened */
-	gint baud = 0;
-	gchar * potential_ports;
-	gint len = 0;
-	gboolean autodetect = FALSE;
-	guchar buf [1024];
-	extern volatile gboolean offline;
-	gchar ** vector = NULL;
-	guint i = 0;
-
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread created!\n"));
-
-	if (offline)
-	{
-		g_timeout_add(100,(GSourceFunc)queue_function,"kill_conn_warning");
-		dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, offline mode!\n"));
-		g_thread_exit(0);
-	}
-
-	if (!io_repair_queue)
-		io_repair_queue = g_async_queue_new();
-	/* IF serial_is_open is true, then the port was ALREADY opened 
-	 * previously but some error occurred that sent us down here. Thus
-	 * first do a simple comms test, if that succeeds, then just cleanup 
-	 * and return,  if not, close the port and essentially start over.
-	 */
-	if (serial_is_open == TRUE)
-	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port considered open, but throwing errors\n"));
-		i = 0;
-		while (i <= 5)
-		{
-			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
-			if (comms_test())
-			{
-				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, successfull comms test!\n"));
-				g_thread_exit(0);
-			}
-			i++;
-		}
-		close_serial();
-		unlock_serial();
-		serial_is_open = FALSE;
-		/* Fall through */
-	}
-	/* App just started, no connection yet*/
-	while (!serial_is_open) 	
-	{
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port NOT considered open yet.\n"));
-		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
-		if (!autodetect) /* User thinks he/she is S M A R T */
-		{
-			potential_ports = (gchar *)DATA_GET(global_data, "override_port");
-			if (potential_ports == NULL)
-				potential_ports = (gchar *)DATA_GET(global_data,"potential_ports");
-		}
-		else	/* Auto mode */
-			potential_ports = (gchar *)DATA_GET(global_data,"potential_ports");
-		vector = g_strsplit(potential_ports,",",-1);
-		for (i=0;i<g_strv_length(vector);i++)
-		{
-			/* Message queue used to exit immediately */
-			if (g_async_queue_try_pop(io_repair_queue))
-			{
-				g_timeout_add(300,(GSourceFunc)queue_function,"kill_conn_warning");
-				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, told to!\n"));
-				g_thread_exit(0);
-			}
-			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
-			{
-				dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s does NOT exist\n",vector[i]));
-
-				/* Wait 200 ms to avoid deadlocking */
-				g_usleep(200000);
-				continue;
-			}
-			g_usleep(100000);
-			dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Attempting to open port %s\n",vector[i]));
-			thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Attempting to open port %s\n"),vector[i]),FALSE,FALSE);
-			if (lock_serial(vector[i]))
-			{
-				if (open_serial(vector[i]))
-				{
-					if (autodetect)
-						thread_update_widget("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
-					baud = (GINT)DATA_GET(global_data,"ecu_baud");
-					thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Trying %i Baud for ECU link\n"),baud),FALSE,FALSE);
-					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to %i for comms test\n",vector[i],baud));
-					setup_serial_params(baud);
-					/* read out any junk in buffer and toss it */
-					read_wrapper(serial_params->fd,&buf,1024,&len);
-
-					thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Searching for ECU\n")),FALSE,FALSE);
-					dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
-					if (comms_test())
-					{	/* We have a winner !!  Abort loop */
-						thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Search successfull\n")),FALSE,FALSE);
-						serial_is_open = TRUE;
-						break;
-					}
-					else
-					{  
-						dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed, no ECU found, closing port %s.\n",vector[i]));
-						thread_update_logbar("comms_view",NULL,g_strdup_printf(_("No ECU found...\n")),FALSE,FALSE);
-						close_serial();
-						unlock_serial();
-						/*g_usleep(100000);*/
-
-					}
-				}
-				g_usleep(100000);
-			}
-			else
-			{
-				dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s is open by another application\n",vector[i]));
-				thread_update_logbar("comms_view","warning",g_strdup_printf(_("Port %s is open by another application\n"),vector[i]),FALSE,FALSE);
-			}
-		}
-		queue_function("conn_warning");
-	}
-
-	if (serial_is_open)
-	{
-		queue_function("kill_conn_warning");
-		thread_update_widget("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
-	}
-	if (vector)
-		g_strfreev(vector);
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, device found!\n"));
-	g_thread_exit(0);
-	return NULL;
-}

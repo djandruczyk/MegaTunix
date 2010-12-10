@@ -223,7 +223,7 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->func_call_name);
 				if (!get_symbol(cmd->func_call_name,(void *)&cmd->function))
-					printf(_("Unable to locate Function %s withing MegaTunix or active plugins\n"),cmd->func_call_name);
+					printf(_("Unable to locate Function %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"func_call_arg") == 0)
 			{
@@ -242,7 +242,7 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->helper_func_name);
 				if (!get_symbol(cmd->helper_func_name,(void *)&cmd->helper_function))
-					printf(_("Unable to locate Function %s withing MegaTunix or active plugins\n"),cmd->func_call_name);
+					printf(_("Unable to locate Function %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"helper_func_arg") == 0)
 			{
@@ -311,7 +311,7 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
 				if (!get_symbol(pf->name,(void *)&pf->function))
-					printf(_("Unable to locate Function %s withing MegaTunix or active plugins\n"),cmd->func_call_name);
+					printf(_("Unable to locate Function %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 				pf->w_arg = FALSE;
 				g_array_append_val(cmd->post_functions,pf);
 			}
@@ -320,7 +320,7 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
 				if (!get_symbol(pf->name,(void *)&pf->function_w_arg))
-					printf(_("Unable to locate Function %s withing MegaTunix or active plugins\n"),cmd->func_call_name);
+					printf(_("Unable to locate Function %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 				pf->w_arg = TRUE;
 				g_array_append_val(cmd->post_functions,pf);
 			}

@@ -16,14 +16,10 @@
 #include <debugging.h>
 #include <enums.h>
 #include <gui_handlers.h>
-#include <interrogate.h>
-#include <mtxsocket.h>
 #include <stringmatch.h>
 
 
-static GHashTable *str_2_enum = NULL;
-
-
+extern gconstpointer *global_data;
 /*!
  \brief build_string_2_enum_table() constructs a hashtable that maps a textual
  name to it's matching enumeration.  It's used for mapping things from all the 
@@ -31,34 +27,8 @@ static GHashTable *str_2_enum = NULL;
  */
 G_MODULE_EXPORT void build_string_2_enum_table(void)
 {
-	extern gconstpointer *global_data;
+	GHashTable *str_2_enum = NULL;
 	str_2_enum = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,NULL);
-
-	/* Firmware capabilities */
-	g_hash_table_insert(str_2_enum,"_PIS_",
-			GINT_TO_POINTER(PIS));
-	g_hash_table_insert(str_2_enum,"_MS1_",
-			GINT_TO_POINTER(MS1));
-	g_hash_table_insert(str_2_enum,"_MS1_STD_",
-			GINT_TO_POINTER(MS1_STD));
-	g_hash_table_insert(str_2_enum,"_MS1_DT_",
-			GINT_TO_POINTER(MS1_DT));
-	g_hash_table_insert(str_2_enum,"_MSNS_E_",
-			GINT_TO_POINTER(MSNS_E));
-	g_hash_table_insert(str_2_enum,"_MS2_",
-			GINT_TO_POINTER(MS2));
-	g_hash_table_insert(str_2_enum,"_MS2_STD_",
-			GINT_TO_POINTER(MS2_STD));
-	g_hash_table_insert(str_2_enum,"_MS2_E_",
-			GINT_TO_POINTER(MS2_E));
-	g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
-			GINT_TO_POINTER(MS2_E_COMPMON));
-	g_hash_table_insert(str_2_enum,"_SECU_3_",
-			GINT_TO_POINTER(SECU_3));
-	g_hash_table_insert(str_2_enum,"_FREEEMS_",
-			GINT_TO_POINTER(FREEEMS));
-	g_hash_table_insert(str_2_enum,"_JIMSTIM_",
-			GINT_TO_POINTER(JIMSTIM));
 
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,"_CHAR_",
@@ -77,16 +47,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_S32));
 	g_hash_table_insert(str_2_enum,"_UNDEF_",
 			GINT_TO_POINTER(MTX_UNDEF));
-	g_hash_table_insert(str_2_enum,"_COUNT_",
-			GINT_TO_POINTER(COUNT));
-	g_hash_table_insert(str_2_enum,"_SUBMATCH_",
-			GINT_TO_POINTER(SUBMATCH));
-	g_hash_table_insert(str_2_enum,"_NUMMATCH_",
-			GINT_TO_POINTER(NUMMATCH));
-	g_hash_table_insert(str_2_enum,"_FULLMATCH_",
-			GINT_TO_POINTER(FULLMATCH));
-	g_hash_table_insert(str_2_enum,"_REGEX_",
-			GINT_TO_POINTER(REGEX));
 
 	/* Data Types for glade data binder.... */
 	g_hash_table_insert(str_2_enum,"_INT_",
@@ -172,8 +132,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(REQ_FUEL_2));
 	g_hash_table_insert(str_2_enum,"_REQ_FUEL_POPUP_",
 			GINT_TO_POINTER(REQ_FUEL_POPUP));
-	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",
-			GINT_TO_POINTER(TRIGGER_ANGLE));
 	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",
 			GINT_TO_POINTER(READ_VE_CONST));
 	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",
@@ -338,58 +296,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	/* Action's */
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
-
-	/* TCP Socket Commands */
-	g_hash_table_insert(str_2_enum,"HELP",
-			GINT_TO_POINTER(HELP));
-	g_hash_table_insert(str_2_enum,"QUIT",
-			GINT_TO_POINTER(QUIT));
-	g_hash_table_insert(str_2_enum,"GET_REVISION",
-			GINT_TO_POINTER(GET_REVISION));
-	g_hash_table_insert(str_2_enum,"GET_SIGNATURE",
-			GINT_TO_POINTER(GET_SIGNATURE));
-	g_hash_table_insert(str_2_enum,"GET_RT_VARS",
-			GINT_TO_POINTER(GET_RT_VARS));
-	g_hash_table_insert(str_2_enum,"GET_RTV_LIST",
-			GINT_TO_POINTER(GET_RTV_LIST));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VARS",
-			GINT_TO_POINTER(GET_ECU_VARS));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U08",
-			GINT_TO_POINTER(GET_ECU_VAR_U08));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S08",
-			GINT_TO_POINTER(GET_ECU_VAR_S08));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U16",
-			GINT_TO_POINTER(GET_ECU_VAR_U16));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S16",
-			GINT_TO_POINTER(GET_ECU_VAR_S16));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U32",
-			GINT_TO_POINTER(GET_ECU_VAR_U32));
-	g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S32",
-			GINT_TO_POINTER(GET_ECU_VAR_S32));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U08",
-			GINT_TO_POINTER(SET_ECU_VAR_U08));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S08",
-			GINT_TO_POINTER(SET_ECU_VAR_S08));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U16",
-			GINT_TO_POINTER(SET_ECU_VAR_U16));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S16",
-			GINT_TO_POINTER(SET_ECU_VAR_S16));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U32",
-			GINT_TO_POINTER(SET_ECU_VAR_U32));
-	g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S32",
-			GINT_TO_POINTER(SET_ECU_VAR_S32));
-	g_hash_table_insert(str_2_enum,"BURN_FLASH",
-			GINT_TO_POINTER(BURN_FLASH));
-	g_hash_table_insert(str_2_enum,"GET_RAW_ECU",
-			GINT_TO_POINTER(GET_RAW_ECU));
-	g_hash_table_insert(str_2_enum,"SET_RAW_ECU",
-			GINT_TO_POINTER(SET_RAW_ECU));
-
-	/* Interrogation Test Results */
-	g_hash_table_insert(str_2_enum,"_RESULT_DATA_",
-			GINT_TO_POINTER(RESULT_DATA));
-	g_hash_table_insert(str_2_enum,"_RESULT_TEXT_",
-			GINT_TO_POINTER(RESULT_TEXT));
 
 	/* XMLcomm processing */
 	g_hash_table_insert(str_2_enum,"_DATA_",
@@ -588,7 +494,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
-	DATA_SET_FULL(global_data,"str2_enum",str_2_enum,g_hash_table_destroy);
+	DATA_SET_FULL(global_data,"str_2_enum",str_2_enum,g_hash_table_destroy);
 }
 
 
@@ -611,11 +517,16 @@ G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
  \param string (gchar *) string to be translated
  \returns enumeration equivalent
  */
-G_MODULE_EXPORT gint translate_string(gchar *string)
+G_MODULE_EXPORT gint translate_string(const gchar *string)
 {
-	gpointer value = 0;
-	value = g_hash_table_lookup(str_2_enum,string);
-	if (value == NULL)
+	static GHashTable *str_2_enum = NULL;
+	gint value = 0;
+
+	if (!str_2_enum)
+        	str_2_enum = DATA_GET(global_data,"str_2_enum");
+
+	value = (GINT)g_hash_table_lookup(str_2_enum,string);
+	if (value == 0)
 	{
 		/*dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
 		return (MTX_UNKNOWN);

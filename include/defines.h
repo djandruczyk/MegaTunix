@@ -62,6 +62,12 @@
 #define DEFERRED		0x11
 #define IGNORED			0x12
 
+
+/* TCP socket goodness */
+#define MTX_SOCKET_ASCII_PORT 12764 /* (ascii math) (m*t)+x */
+#define MTX_SOCKET_BINARY_PORT 12765
+#define MTX_SOCKET_CONTROL_PORT 12766
+
 /* For datalogging and Logviewer */
 #define TABLE_COLS 6
 

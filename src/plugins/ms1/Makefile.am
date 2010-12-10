@@ -12,10 +12,14 @@ plugin_LTLIBRARIES = libms1.la
 
 libms1_la_SOURCES = \
 	Makefile \
+	ms1_gui_handlers.c \
+	ms1_gui_handlers.h \
+	ms1_helpers.c \
+	ms1_helpers.h \
 	ms1_plugin.c \
 	ms1_plugin.h \
-	ms1-t-logger.c \
-	ms1-t-logger.h
+	ms1_tlogger.c \
+	ms1_tlogger.h
 
 libms1_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
 

@@ -38,9 +38,7 @@ static gfloat col_sat = 1.0;
 static gfloat col_val = 1.0;
 
 Logview_Data *lv_data = NULL;
-gboolean playback_mode = FALSE;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
-extern Log_Info *log_info;
 extern gconstpointer *global_data;
 
 
@@ -69,8 +67,11 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	gint table_cols = 5;
 	gchar * name = NULL;
 	gchar * tooltip = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
+	Log_Info *log_info;
 
+	log_info = DATA_GET(global_data,"log_info");
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	darea = lookup_widget("logviewer_trace_darea");
 	lv_data->darea = darea;
 
@@ -83,7 +84,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
 	/* Playback mode..... */
-	if (playback_mode)
+	if (DATA_GET(global_data,"playback_mode"))
 	{
 		gtk_window_set_title(GTK_WINDOW(window),
 				_("Playback Mode: Logviewer Choices"));
@@ -142,12 +143,12 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 
 	for (i=0;i<max_viewables;i++)
 	{
-		if (playback_mode)
+		if (DATA_GET(global_data,"playback_mode"))
 			list = g_list_prepend(list,(gpointer)g_ptr_array_index(log_info->log_list,i));
 		else
 			list = g_list_prepend(list,(gpointer)g_ptr_array_index(rtv_map->rtv_list,i));
 	}
-	if (playback_mode)
+	if (DATA_GET(global_data,"playback_mode"))
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"lview_name");
 	else
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
@@ -159,17 +160,14 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 		tooltip = NULL;
 
 		object = g_list_nth_data(list,i);
-		printf("obj ptr %p\n",object);
 
-		if (playback_mode)
+		if (DATA_GET(global_data,"playback_mode"))
 			name = g_strdup(DATA_GET(object,"lview_name"));
 		else
 		{
 			name = g_strdup(DATA_GET(object,"dlog_gui_name"));
 			tooltip = g_strdup(DATA_GET(object,"tooltip"));
 		}
-
-		printf("name %s\n",name);
 
 		button = gtk_check_button_new();
 		label = gtk_label_new(NULL);
@@ -272,7 +270,7 @@ G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 		object = OBJ_GET(tmpwidget,"object");
 		if ((gboolean)DATA_GET(object,"being_viewed"))
 		{
-			if (playback_mode)
+			if (DATA_GET(global_data,"playback_mode"))
 				name = DATA_GET(object,"lview_name");
 			else
 				name = DATA_GET(object,"dlog_gui_name");
@@ -322,10 +320,14 @@ G_MODULE_EXPORT void populate_viewer(void)
 	Viewable_Value *v_value = NULL;
 	gchar * name = NULL;
 	gboolean being_viewed = FALSE;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
+	Log_Info *log_info = NULL;
+
 
 	g_static_mutex_lock(&update_mutex);
+	log_info = DATA_GET(global_data,"log_info");
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
@@ -343,7 +345,7 @@ G_MODULE_EXPORT void populate_viewer(void)
 	 * malloc datastructure, populate it's values and insert a pointer
 	 * into the table for it..
 	 */
-	if (playback_mode)
+	if (DATA_GET(global_data,"playback_mode"))
 		total = log_info->field_count;
 	else
 		total = rtv_map->derived_total;
@@ -352,7 +354,7 @@ G_MODULE_EXPORT void populate_viewer(void)
 	{
 		object = NULL;
 		name = NULL;
-		if (playback_mode)
+		if (DATA_GET(global_data,"playback_mode"))
 		{
 			object = g_ptr_array_index(log_info->log_list,i);        
 			name = DATA_GET(object,"lview_name");
@@ -448,12 +450,14 @@ G_MODULE_EXPORT void populate_viewer(void)
  */
 G_MODULE_EXPORT void reset_logviewer_state(void)
 {
-	extern Rtv_Map *rtv_map;
-	extern Log_Info *log_info;
 	guint i = 0 ;
 	gconstpointer * object = NULL;
+	Rtv_Map *rtv_map = NULL;;
+	Log_Info *log_info;
 
-	if (playback_mode)
+	log_info = DATA_GET(global_data,"log_info");
+
+	if (DATA_GET(global_data,"playback_mode"))
 	{
 		if (!log_info)
 			return;
@@ -467,6 +471,7 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 	}
 	else
 	{
+		rtv_map = DATA_GET(global_data,"rtv_map");
 		if (!rtv_map)
 			return;
 		for (i=0;i<rtv_map->derived_total;i++)
@@ -499,7 +504,7 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 
 	/* Set limits of this variable. (it's ranges, used for scaling */
 
-	if (playback_mode)
+	if (DATA_GET(global_data,"playback_mode"))
 	{
 		/* textual name of the variable we're viewing.. */
 		v_value->vname = g_strdup(DATA_GET(object,"lview_name"));
@@ -879,13 +884,11 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
  */
 G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 {
-	extern gboolean connected;
-	extern gboolean interrogated;
-
-	if (playback_mode)
+	if (DATA_GET(global_data,"playback_mode"))
 		return TRUE;
 
-	if (!((connected) && (interrogated)))
+	if (!((DATA_GET(global_data,"connected")) && 
+				(DATA_GET(global_data,"interrogated"))))
 		return FALSE;
 	
 	if (!lv_data)
@@ -914,7 +917,7 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 G_MODULE_EXPORT gboolean pb_update_logview_traces(gboolean force_redraw)
 {
 
-	if (!playback_mode)
+	if (!DATA_GET(global_data,"playback_mode"))
 		return TRUE;
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
@@ -1037,7 +1040,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 		return;
 	}
 	/* Playback mode, playing from logfile.... */
-	if (playback_mode)
+	if (DATA_GET(global_data,"playback_mode"))
 	{
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
@@ -1272,7 +1275,7 @@ G_MODULE_EXPORT void set_default_lview_choices_state(void)
 		{
 			widget = g_list_nth_data(list,j);
 			object = OBJ_GET(widget,"object");
-			if (playback_mode)
+			if (DATA_GET(global_data,"playback_mode"))
 				potential = DATA_GET(object,"lview_name");
 			else
 				potential = DATA_GET(object,"dlog_gui_name");
@@ -1312,7 +1315,7 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 		OBJ_SET(darea,"log_pos_x100",GINT_TO_POINTER((gint)(val*100)));
 	lv_configure_event(darea,NULL,NULL);
 	scroll_logviewer_traces();
-	if ((val >= 100.0) && (playback_mode))
+	if ((val >= 100.0) && (DATA_GET(global_data,"playback_mode")))
 		stop_tickler(LV_PLAYBACK_TICKLER);
 	return TRUE;
 }
@@ -1331,10 +1334,10 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 	static GtkWidget * playback_controls_window = NULL;
 
 	reset_logviewer_state();
-	free_log_info();
+	free_log_info(DATA_GET(global_data,"log_info"));
 	if (mode == LV_PLAYBACK)
 	{
-		playback_mode = TRUE;
+		DATA_SET(global_data,"playback_mode",GINT_TO_POINTER(TRUE));
 		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), FALSE);
 		gtk_widget_set_sensitive(lookup_widget("logviewer_select_logfile_button"), TRUE);
 		gtk_widget_hide(lookup_widget("logviewer_rt_control_vbox1"));
@@ -1396,7 +1399,7 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 		}
 
 		stop_tickler(LV_PLAYBACK_TICKLER);
-		playback_mode = FALSE;
+		DATA_SET(global_data,"playback_mode",GINT_TO_POINTER(FALSE));
 		gtk_widget_set_sensitive(lookup_widget("logviewer_select_logfile_button"), FALSE);
 		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), TRUE);
 		gtk_widget_show(lookup_widget("logviewer_rt_control_vbox1"));
@@ -1427,7 +1430,7 @@ G_MODULE_EXPORT void finish_logviewer(void)
 	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
 	lv_data->info_width = 120;
 
-	if (playback_mode)
+	if (DATA_GET(global_data,"playback_mode"))
 		set_logviewer_mode(LV_PLAYBACK);
 	else
 		set_logviewer_mode(LV_REALTIME);

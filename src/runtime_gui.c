@@ -17,7 +17,6 @@
 #include <dashboard.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_processor.h>
 #include <enums.h>
 #include <firmware.h>
 #include <gui_handlers.h>
@@ -37,17 +36,10 @@
 #include <warmwizard_gui.h>
 #include <widgetmgmt.h>
 
-extern gboolean connected;
-extern gint active_page;
 extern GdkColor white;
 extern GdkColor black;
 extern GdkColor red;
 extern gconstpointer *global_data;
-
-gboolean forced_update = TRUE;
-gboolean rt_forced_update = TRUE;
-GStaticMutex rtv_mutex = G_STATIC_MUTEX_INIT;
-GStaticMutex rtt_mutex = G_STATIC_MUTEX_INIT;
 
 
 /*!
@@ -58,23 +50,21 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 {
 	static gint count = 0;
 	static gboolean conn_status = FALSE;
-	extern gboolean interrogated;
-	extern volatile gboolean leaving;
 
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	count++;
-	if (conn_status != connected)
+	if (conn_status != (GBOOLEAN)DATA_GET(global_data,"connected"))
 	{
 		gdk_threads_enter();
-		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,GINT_TO_POINTER(connected));
+		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,DATA_GET(global_data,"connected"));
 		gdk_threads_leave();
-		conn_status = connected;
-		forced_update = TRUE;
+		conn_status = (GBOOLEAN)DATA_GET(global_data,"connected");
+		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	}
 
 	gdk_threads_enter();
@@ -85,7 +75,7 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 	if (count > 60 )
 		count = 0;
 
-	forced_update = FALSE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(FALSE));
 	return TRUE;
 }
 
@@ -111,6 +101,10 @@ G_MODULE_EXPORT void reset_runtime_status(void)
  */
 G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 {
+	static gconstpointer *object = NULL;
+	static GArray * history = NULL;
+	static gchar * source = NULL;
+	static gchar * last_source = "";
 	GtkWidget *widget = (GtkWidget *) key;
 	gint bitval = 0;
 	gint bitmask = 0;
@@ -118,13 +112,10 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	gint value = 0;
 	gfloat tmpf = 0.0;
 	gint previous_value = 0;
-	static gconstpointer *object = NULL;
-	static GArray * history = NULL;
-	static gchar * source = NULL;
-	static gchar * last_source = "";
-	extern Rtv_Map *rtv_map;
-	extern volatile gboolean leaving;
-	if (leaving)
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
+
+	if (DATA_GET(global_data,"leaving"))
 		return;
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
@@ -142,7 +133,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 		if (!history)
 			return;
 	}
-	if (!connected)
+	if (!DATA_GET(global_data,"connected"))
 	{
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 		return;
@@ -163,7 +154,8 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 
 
 	/* if the value hasn't changed, don't bother continuing */
-	if (((value & bitmask) == (previous_value & bitmask)) && (!forced_update))
+	if (((value & bitmask) == (previous_value & bitmask)) && 
+			(!DATA_GET(global_data,"forced_update")))
 		return;	
 
 	if (((value & bitmask) >> bitshift) == bitval) /* enable it */
@@ -185,6 +177,8 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
  */
 G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
+	static GRand *rand = NULL;
+	static GMutex *rtv_mutex = NULL;
 	Rt_Slider *slider = (Rt_Slider *)value;
 	gint count = slider->count;
 	gint last_upd = slider->last_upd;
@@ -197,11 +191,12 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	gfloat percentage = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	static GRand *rand = NULL;
-	extern volatile gboolean leaving;
-	if (leaving)
+
+	if (DATA_GET(global_data,"leaving"))
 		return;
 
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	if (!rand)
 		rand = g_rand_new();
 	history = (GArray *)DATA_GET(slider->object,"history");
@@ -210,18 +205,19 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	if ((gint)history->len-1 <= 0)
 		return;
 	precision = (GINT)DATA_GET(slider->object,"precision");
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	/*printf("runtime_gui history length is %i, current index %i\n",history->len,history->len-1);*/
 	current = g_array_index(history, gfloat, history->len-1);
 	previous = slider->last;
 	slider->last = current;
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
 	upper = (gfloat)slider->upper;
 	lower = (gfloat)slider->lower;
 	
 	gdk_threads_enter();
-	if ((current != previous) || (rt_forced_update))
+	if ((current != previous) || 
+			(DATA_GET(global_data,"rt_forced_update")))
 	{
 		percentage = (current-lower)/(upper-lower);
 		tmpf = percentage <= 1.0 ? percentage : 1.0;
@@ -242,9 +238,10 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 
 
 		/* If changed by more than 5% or has been at least 5 
-		 * times withot an update or forced_update is set
+		 * times withot an update or rt_forced_update is set
 		 * */
-		if ((slider->textval) && ((abs(count-last_upd) > 2) || (rt_forced_update)))
+		if ((slider->textval) && ((abs(count-last_upd) > 2) || 
+					(DATA_GET(global_data,"rt_forced_update"))))
 		{
 			tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 
@@ -282,12 +279,16 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 	gint i = 0;
 	GHashTable **ve3d_sliders;
 	GHashTable *hash;
-	extern Firmware_Details *firmware;
+	TabIdent active_page;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 	ve3d_sliders = DATA_GET(global_data,"ve3d_sliders");
-	extern volatile gboolean leaving;
-	if (leaving)
+
+	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
+	active_page = (TabIdent)DATA_GET(global_data,"active_page");
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_TAB)	/* Runtime display is visible */
 		if ((hash = DATA_GET(global_data,"rt_sliders")))
@@ -305,7 +306,8 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 
 		if (!lookup_current_value("cltdeg",&coolant))
 			dbg_func(CRITICAL,g_strdup(__FILE__": update_runtime_vars_pf()\n\t Error getting current value of \"cltdeg\" from datasource\n"));
-		if ((coolant != last_coolant) || (forced_update))
+		if ((coolant != last_coolant) || 
+				(DATA_GET(global_data,"rt_forced_update")))
 			warmwizard_update_status(coolant);
 		last_coolant = coolant;
 	}
@@ -323,51 +325,61 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 
 G_MODULE_EXPORT gboolean update_rttext(gpointer data)
 {
-	extern volatile gboolean leaving;
-	if (leaving)
+	static GMutex *rtt_mutex = NULL;
+	if (!rtt_mutex)
+		rtt_mutex = DATA_GET(global_data,"rtt_mutex");
+	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
-	g_static_mutex_lock(&rtt_mutex);
+	g_mutex_lock(rtt_mutex);
 	if (DATA_GET(global_data,"rtt_model"))
 		gtk_tree_model_foreach(GTK_TREE_MODEL(DATA_GET(global_data,"rtt_model")),rtt_foreach,NULL);
 	if (DATA_GET(global_data,"rtt_hash"))
 		g_hash_table_foreach(DATA_GET(global_data,"rtt_hash"),rtt_update_values,NULL);
-	g_static_mutex_unlock(&rtt_mutex);
+	g_mutex_unlock(rtt_mutex);
 	return TRUE;
 }
 
 
 G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
 {
-	extern volatile gboolean leaving;
-	if (leaving)
+	static GMutex *dash_mutex = NULL;
+	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
-	extern GStaticMutex dash_mutex;
+	if (!dash_mutex)
+		dash_mutex = DATA_GET(global_data,"dash_mutex");
 
-	g_static_mutex_lock(&dash_mutex);
+	g_mutex_lock(dash_mutex);
 	if (DATA_GET(global_data,"dash_hash"))
 		g_hash_table_foreach(DATA_GET(global_data,"dash_hash"),update_dash_gauge,NULL);
-	g_static_mutex_unlock(&dash_mutex);
+	g_mutex_unlock(dash_mutex);
 	return TRUE;
 }
 
 
 G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 {
+	static gfloat xl,yl,zl = 9999.9;
 	gint i = 0;
 	Ve_View_3D * ve_view = NULL;
 	GtkWidget * tmpwidget=NULL;
-	extern Firmware_Details *firmware;
 	gfloat x,y,z = 0.0;
-	static gfloat xl,yl,zl = 9999.9;
 	gchar * string = NULL;
 	GHashTable *hash = NULL;
-	extern GHashTable *sources_hash;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
 	MultiSource *multi = NULL;
-	extern gint * algorithm;
-	extern volatile gboolean leaving;
-	if (leaving)
+	TabIdent active_page;
+	gint * algorithm;
+	Firmware_Details *firmware = NULL;
+	GHashTable *sources_hash = NULL;
+
+	sources_hash = DATA_GET(global_data,"sources_hash");
+	firmware = DATA_GET(global_data,"firmware");
+	algorithm = DATA_GET(global_data,"algorithm");
+	active_page = (TabIdent)DATA_GET(global_data,"active_page");
+	/* Update all the dynamic RT Sliders */
+
+	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
 	if (!firmware)
@@ -416,7 +428,7 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 					lookup_current_value(ve_view->x_source,&x);
 
 				/* Test X values, redraw if needed */
-				if (((fabs(x-xl)/x) > 0.001) || (forced_update))
+				if (((fabs(x-xl)/x) > 0.001) || (DATA_GET(global_data,"forced_update")))
 				{
 					xl = x;
 					goto redraw;
@@ -455,7 +467,7 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 					lookup_current_value(ve_view->y_source,&y);
 
 				/* Test Y values, redraw if needed */
-				if (((fabs(y-yl)/y) > 0.001) || (forced_update))
+				if (((fabs(y-yl)/y) > 0.001) || (DATA_GET(global_data,"forced_update")))
 				{
 					yl = y;
 					goto redraw;
@@ -494,7 +506,7 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 					lookup_current_value(ve_view->z_source,&z);
 
 				/* Test Z values, redraw if needed */
-				if (((fabs(z-zl)/z) > 0.001) || (forced_update))
+				if (((fabs(z-zl)/z) > 0.001) || (DATA_GET(global_data,"forced_update")))
 				{
 					zl = z;
 					goto redraw;
@@ -519,7 +531,7 @@ breakout:
 			update_tab_gauges();
 	}
 
-	if ((forced_update) || 
+	if ((DATA_GET(global_data,"forced_update")) || 
 			(active_page == VETABLES_TAB) || 
 			(active_page == SPARKTABLES_TAB) || 
 			(active_page == AFRTABLES_TAB) || 

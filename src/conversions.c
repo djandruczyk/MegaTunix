@@ -14,10 +14,8 @@
 #include <assert.h>
 #include <config.h>
 #include <conversions.h>
-#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_processor.h>
 #include <enums.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
@@ -25,6 +23,7 @@
 #include <lookuptables.h>
 #include <notifications.h>
 #include <mtxmatheval.h>
+#include <plugin.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,6 +41,7 @@
  */
 G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 {
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gint return_value = 0;
 	gint tmpi = 0;
 	gchar * conv_expr = NULL;
@@ -61,10 +61,12 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gchar *tmpbuf = NULL;
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
-	extern GHashTable *sources_hash;
-	extern gint *algorithm;
+	gint *algorithm = NULL;
+	GHashTable *sources_hash = NULL;
+	extern gconstpointer *global_data;
 
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	sources_hash = DATA_GET(global_data,"sources_hash");
+	algorithm = DATA_GET(global_data,"algorithm");
 
 	g_static_mutex_lock(&mutex);
 
@@ -211,6 +213,8 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
  */
 G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 {
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static gint (*get_ecu_data_f)(gpointer);
 	gfloat return_value = 0.0;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
@@ -230,10 +234,14 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gchar * tmpbuf = NULL;
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
-	extern GHashTable *sources_hash;
-	extern gint *algorithm;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	gint *algorithm = NULL;
+	GHashTable *sources_hash = NULL;
+	extern gconstpointer *global_data;
 
+
+	if (!get_ecu_data_f)
+		if(!get_symbol("get_ecu_data",(void *)&get_ecu_data_f))
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_after_upload()\n\tCan NOT locate \"get_ecu_data\" function pointer in plugins, BUG!\n"));
 	g_static_mutex_lock(&mutex);
 
 	ul_complex = (GBOOLEAN)OBJ_GET(widget,"ul_complex");
@@ -253,6 +261,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
+		sources_hash = DATA_GET(global_data,"sources_hash");
 		if (!OBJ_GET(widget,"ul_eval_hash"))
 		{
 			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
@@ -291,6 +300,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		}
 		else
 		{
+			algorithm = DATA_GET(global_data,"algorithm");
 			switch (algorithm[table_num])
 			{
 				case SPEED_DENSITY:
@@ -327,11 +337,11 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 	}
 	if (OBJ_GET(widget,"lookuptable"))
-		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data(canID,page,offset,size));
+		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data_f(widget));
 	else
 	{
 		/*printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);*/
-		tmpi = get_ecu_data(canID,page,offset,size);
+		tmpi = get_ecu_data_f(widget);
 		/*printf("value is %i\n",tmpi);*/
 	}
 
@@ -361,6 +371,8 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
  */
 G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 {
+	static void (*update_widget_f)(gpointer, gpointer);
+	static gboolean (*check_deps)(gconstpointer *) = NULL;
 	gconstpointer *dep_obj = NULL;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
@@ -370,18 +382,29 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	gboolean state = FALSE;
 	gint widget_temp = -1;
 	extern GdkColor black;
-	extern volatile gboolean leaving;
+	extern gconstpointer *global_data;
 
 	/* If this widgt depends on anything call check_dependancy which will
 	 * return TRUE/FALSE.  True if what it depends on is in the matching
 	 * state, FALSE otherwise...
 	 */
-	if ((!widget) || (leaving))
+	if ((!widget) || (DATA_GET(global_data,"leaving")))
 		return;
+	if (!check_deps)
+		if (!get_symbol("check_dependancies",(void *)&check_deps))
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tCan NOT locate \"check_dependancies\" function pointer in plugins, BUG!\n"));
+	if (!update_widget_f)
+		if(!get_symbol("update_widget",(void *)&update_widget_f))
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tCan NOT locate \"update_widget\" function pointer in plugins, BUG!\n"));
 	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
 	if (dep_obj)
-		state = check_dependancies(dep_obj);
+	{
+		if (check_deps)
+			state = check_deps(dep_obj);
+		else
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tWidget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n",glade_get_widget_name(widget)));
+	}
 
 	if ((GINT)units == FAHRENHEIT) 
 	{
@@ -417,12 +440,12 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			*/
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget(widget,NULL);
+			update_widget_f(widget,NULL);
 		}
 		if ((GTK_IS_ENTRY(widget)) && (widget_temp == CELSIUS))
 		{
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget(widget,NULL);
+			update_widget_f(widget,NULL);
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == CELSIUS))
 		{
@@ -471,12 +494,12 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 			*/
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget(widget,NULL);
+			update_widget_f(widget,NULL);
 		}
 		if ((GTK_IS_ENTRY(widget)) && (widget_temp == FAHRENHEIT))
 		{
 			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget(widget,NULL);
+			update_widget_f(widget,NULL);
 		}
 		if ((GTK_IS_RANGE(widget)) && (widget_temp == FAHRENHEIT))
 		{

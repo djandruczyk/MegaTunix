@@ -15,8 +15,6 @@
 #include <defines.h>
 #include <3d_vetable.h>
 #include <comms.h>
-#include <dataio.h>
-#include <datamgmt.h>
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
@@ -25,6 +23,7 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <notifications.h>
+#include <plugin.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -33,9 +32,7 @@
 #include <unistd.h>
 #include <widgetmgmt.h>
 
-extern GStaticMutex serio_mutex;
 extern gconstpointer *global_data;
-volatile gboolean outstanding_data = FALSE;
 
 /*!
  \brief update_comms_status updates the Gui with the results of the comms
@@ -44,280 +41,13 @@ volatile gboolean outstanding_data = FALSE;
  */
 G_MODULE_EXPORT void update_comms_status(void)
 {
-	extern gboolean connected;
 	GtkWidget *widget = NULL;
 
 	if (NULL != (widget = lookup_widget("runtime_connected_label")))
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)DATA_GET(global_data,"connected"));
 	if (NULL != (widget = lookup_widget("ww_connected_label")))
-		gtk_widget_set_sensitive(GTK_WIDGET(widget),connected);
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)DATA_GET(global_data,"connected"));
 	return;
-}
-
-/*! 
- \brief comms_test sends the clock_request command ("C") to the ECU and
- checks the response.  if nothing comes back, MegaTunix assumes the ecu isn't
- connected or powered down. NO Gui updates are done from this function as it
- gets called from a thread. update_comms_status is dispatched after this
- function ends from the main context to update the GUI.
- \see update_comms_status
- */
-
-G_MODULE_EXPORT gint comms_test(void)
-{
-	gboolean result = FALSE;
-	gchar * err_text = NULL;
-	gint len = 0;
-	static gint errcount = 0;
-	extern Serial_Params *serial_params;
-	extern gboolean connected;
-
-	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
-	if (!serial_params)
-		return FALSE;
-
-	dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
-
-	if ((GINT)DATA_GET(global_data,"ecu_baud") < 11920)
-	{
-		/*printf("MS-1 comms test\n");*/
-		if (!write_wrapper(serial_params->fd,"C",1,&len))
-		{
-			err_text = (gchar *)g_strerror(errno);
-			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
-			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
-			connected = FALSE;
-			return connected;
-		}
-		result = read_data(1,NULL,FALSE);
-	}
-	else
-	{
-		/*printf("MS-2 comms test\n");*/
-		if (!write_wrapper(serial_params->fd,"c",1,&len))
-		{
-			err_text = (gchar *)g_strerror(errno);
-			dbg_func(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
-			thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
-			connected = FALSE;
-			return connected;
-		}
-		result = read_data(-1,NULL,FALSE);
-	}
-	if (result)	/* Success */
-	{
-		connected = TRUE;
-		errcount=0;
-		dbg_func(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successful\n"));
-		queue_function("kill_conn_warning");
-		thread_update_widget("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
-		thread_update_logbar("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
-
-	}
-	else
-	{
-		/* An I/O Error occurred with the MegaSquirt ECU  */
-		connected = FALSE;
-		errcount++;
-		if (errcount > 5 )
-			queue_function("conn_warning");
-		thread_update_widget("titlebar",MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
-		dbg_func(SERIAL_RD|IO_PROCESS,g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
-		thread_update_logbar("comms_view","warning",g_strdup_printf(_("I/O with ECU Timeout\n")),FALSE,FALSE);
-	}
-	return connected;
-}
-
-/*!
- \brief send_to_slaves() sends messages to a thread talking to the slave
- clients to trigger them to update their GUI with appropriate changes
- \param data (OutputData *) pointer to data sent to ECU used to
- update other widgets that refer to that Page/Offset
- */
-
-G_MODULE_EXPORT void send_to_slaves(void *data)
-{
-	Io_Message *message = (Io_Message *)data;
-	OutputData *output = (OutputData *)message->payload;
-	extern GAsyncQueue *slave_msg_queue;
-	SlaveMessage *msg = NULL;
-
-	if (!output) /* If no data, don't bother the slaves */
-		return;
-	if (!(gboolean)DATA_GET(global_data,"network_access"))
-		return;
-
-	msg = g_new0(SlaveMessage, 1);
-	msg->page = (guint8)(GINT)DATA_GET(output->data,"page");
-	msg->offset = (guint16)(GINT)DATA_GET(output->data,"offset");
-	msg->length = (guint16)(GINT)DATA_GET(output->data,"num_bytes");
-	msg->size = (DataSize)DATA_GET(output->data,"size");
-	msg->mode = (WriteMode)DATA_GET(output->data,"mode");
-	msg->type = MTX_DATA_CHANGED;
-	if (msg->mode == MTX_CHUNK_WRITE)
-		msg->data = g_memdup(DATA_GET(output->data,"data"), msg->length);
-	else if (msg->mode == MTX_SIMPLE_WRITE)
-		msg->value = (GINT)DATA_GET(output->data,"value");
-	else
-	{
-		printf(_("Non simple/chunk write command, not notifying peers\n"));
-		g_free(msg);
-		return;
-	}
-
-	/*	printf("Sending message to peer(s)\n");*/
-	g_async_queue_ref(slave_msg_queue);
-	g_async_queue_push(slave_msg_queue,(gpointer)msg);
-	g_async_queue_unref(slave_msg_queue);
-	return;
-}
-
-
-G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
-{
-	extern GAsyncQueue *slave_msg_queue;
-	SlaveMessage *msg = NULL;
-
-	if (!(gboolean)DATA_GET(global_data,"network_access"))
-		return;
-
-	msg = g_new0(SlaveMessage, 1);
-	msg->type = MTX_STATUS_CHANGED;
-	msg->action = GROUP_SET_COLOR;
-	msg->value = (guint8)clr;
-	msg->data = g_strdup(groupname);
-	msg->length = (guint16)(GINT)strlen(groupname);
-
-	/*	printf("Sending message to peer(s)\n");*/
-	g_async_queue_ref(slave_msg_queue);
-	g_async_queue_push(slave_msg_queue,(gpointer)msg);
-	g_async_queue_unref(slave_msg_queue);
-	return;
-}
-
-/*!
- \brief update_write_status() checks the differences between the current ECU
- data snapshot and the last one, if there are any differences (things need to
- be burnt) then it turns all the widgets in the "burners" group to RED
- \param data (OutputData *) pointer to data sent to ECU used to
- update other widgets that refer to that Page/Offset
- */
-G_MODULE_EXPORT void update_write_status(void *data)
-{
-	Io_Message *message = (Io_Message *)data;
-	OutputData *output = (OutputData *)message->payload;
-	extern Firmware_Details *firmware;
-	guint8 **ecu_data = firmware->ecu_data;
-	guint8 **ecu_data_last = firmware->ecu_data_last;
-	gint i = 0;
-	gint canID = 0;
-	gint page = 0;
-	gint offset = 0;
-	gint length = 0;
-	WriteMode mode = MTX_CMD_WRITE;
-	gint z = 0;
-	extern gboolean paused_handlers;
-	extern volatile gboolean offline;
-
-	if (!output)
-		goto red_or_black;
-	else
-	{
-		canID = (GINT)DATA_GET(output->data,"canID");
-		page = (GINT)DATA_GET(output->data,"page");
-		offset = (GINT)DATA_GET(output->data,"offset");
-		length = (GINT)DATA_GET(output->data,"num_bytes");
-		mode = (WriteMode)DATA_GET(output->data,"mode");
-
-		if (!message->status) /* Bad write! */
-		{
-			dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
-			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
-		}
-	}
-
-	if (output->queue_update)
-	{
-		/*printf("queue update!\n");*/
-		paused_handlers = TRUE;
-		for (i=0;i<firmware->total_tables;i++)
-		{
-			/* This at least only recalcs the limits on one... */
-			if (((firmware->table_params[i]->x_page == page) ||
-						(firmware->table_params[i]->y_page == page) ||
-						(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
-			{
-				recalc_table_limits(canID,i);
-				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
-					firmware->table_params[i]->color_update = TRUE;
-				else
-					firmware->table_params[i]->color_update = FALSE;
-			}
-		}
-
-		gdk_threads_enter();
-		for (z=offset;z<offset+length;z++)
-		{
-			/*printf("refreshing widgets at page %i, offset %i\n",page,z);*/
-			refresh_widgets_at_offset(page,z);
-		}
-		gdk_threads_leave();
-
-		paused_handlers = FALSE;
-	}
-	/* We check to see if the last burn copy of the VE/constants matches 
-	 * the currently set, if so take away the "burn now" notification.
-	 * avoid unnecessary burns to the FLASH 
-	 */
-
-	if (offline)
-		return;
-red_or_black:
-	for (i=0;i<firmware->total_pages;i++)
-	{
-		if (!firmware->page_params[i]->dl_by_default)
-			continue;
-
-		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
-		{
-			gdk_threads_enter();
-			set_group_color(RED,"burners");
-			slaves_set_color(RED,"burners");
-			gdk_threads_leave();
-			outstanding_data = TRUE;
-			return;
-		}
-	}
-	outstanding_data = FALSE;
-	gdk_threads_enter();
-	set_group_color(BLACK,"burners");
-	slaves_set_color(BLACK,"burners");
-	gdk_threads_leave();
-	return;
-}
-
-
-/*!
- \brief queue_burn_ecu_flash() issues the commands to the ECU to burn the contents
- of RAM to flash.
- */
-G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
-{
-	extern Firmware_Details * firmware;
-	extern volatile gboolean offline;
-	extern volatile gboolean last_page;
-	OutputData *output = NULL;
-
-	if (offline)
-		return;
-
-	output = initialize_outputdata();
-	DATA_SET(output->data,"canID", GINT_TO_POINTER(firmware->canID));
-	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
-	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-	io_cmd(firmware->burn_command,output);
-	last_page = page;
 }
 
 
@@ -327,9 +57,8 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
  */
 G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
-	extern gboolean connected;
+	static GMutex *serio_mutex = NULL;
 	OutputData *output = message->payload;
-
 	gint res = 0;
 	gchar * err_text = NULL;
 	guint i = 0;
@@ -347,13 +76,32 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	gint num_bytes = 0;
 	gboolean retval = TRUE;
 	DBlock *block = NULL;
-	extern Serial_Params *serial_params;
-	extern Firmware_Details *firmware;
-	extern volatile gboolean offline;
+	Serial_Params *serial_params;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	Firmware_Details *firmware = NULL;
+	static void (*store_new_block)(gconstpointer *) = NULL;
+	static void (*set_ecu_data)(gconstpointer *) = NULL;
+	static gboolean (*write_wrapper)(gint, const void *, size_t, gint *) = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	serial_params = DATA_GET(global_data,"serial_params");
+	if (!serio_mutex)
+		serio_mutex = DATA_GET(global_data,"serio_mutex");
+	if (!write_wrapper)
+		get_symbol("write_wrapper",(void*)&write_wrapper);
+	if (!write_wrapper)
+		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"write_wrapper\" was NOT found in plugins, BUG!\n"));
+	if (!set_ecu_data)
+		get_symbol("set_ecu_data",(void*)&set_ecu_data);
+	if (!set_ecu_data)
+		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"set_ecu_data\" was NOT found in plugins, BUG!\n"));
+	if (!store_new_block)
+		get_symbol("store_new_block",(void*)&store_new_block);
+	if (!store_new_block)
+		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"store_new_block\" was NOT found in plugins, BUG!\n"));
 
 	g_static_mutex_lock(&mutex);
-	g_static_mutex_lock(&serio_mutex);
+	g_mutex_lock(serio_mutex);
 
 	if (output)
 	{
@@ -367,27 +115,27 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		mode = (WriteMode)DATA_GET(output->data,"mode");
 		/*printf("write_data(), canID %i, page %i, offset %i, value %i, num_bytes %i, size %i, data %p, mode %i\n",canID,page,offset,value,num_bytes,size,data,mode);*/
 	}
-	if (offline)
+	if (DATA_GET(global_data,"offline"))
 	{
 		/*printf ("OFFLINE writing value at %i,%i [%i]\n",page,offset,value); */
 		switch (mode)
 		{
 			case MTX_SIMPLE_WRITE:
-				set_ecu_data(canID,page,offset,size,value);
+				set_ecu_data(output->data);
 				break;
 			case MTX_CHUNK_WRITE:
-				store_new_block(canID,page,offset,data,num_bytes);
+				store_new_block(output->data);
 				break;
 			case MTX_CMD_WRITE:
 				break;
 		}
-		g_static_mutex_unlock(&serio_mutex);
+		g_mutex_unlock(serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return TRUE;		/* can't write anything if offline */
 	}
-	if (!connected)
+	if (!DATA_GET(global_data,"connected"))
 	{
-		g_static_mutex_unlock(&serio_mutex);
+		g_mutex_unlock(serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return FALSE;		/* can't write anything if disconnected */
 	}
@@ -431,7 +179,6 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 					g_usleep(firmware->interchardelay*1000);
 			}
 		}
-
 	}
 	if (notifies)
 	{
@@ -445,12 +192,12 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	if ((output) && (retval))
 	{
 		if (mode == MTX_SIMPLE_WRITE)
-			set_ecu_data(canID,page,offset,size,value);
+			set_ecu_data(output->data);
 		else if (mode == MTX_CHUNK_WRITE)
-			store_new_block(canID,page,offset,data,num_bytes);
+			store_new_block(output->data);
 	}
 
-	g_static_mutex_unlock(&serio_mutex);
+	g_mutex_unlock(serio_mutex);
 	g_static_mutex_unlock(&mutex);
 	return retval;
 }

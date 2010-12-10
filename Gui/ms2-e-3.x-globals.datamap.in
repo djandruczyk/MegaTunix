@@ -306,10 +306,10 @@ _tooltip=Sets the Engine firing type.
 
 [spark_mode_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
-choices=EDIS,EDIS Multispark,Basic trigger,Trigger return,Toothed wheel,420A/Neon,36-2+2,36-2-2-2,Subaru 6/7,Miata 99-00,6g72,IAW Weber,CAS 4/1,4G63,Twin trigger,Chrysler 2.2/2.5,Renix 44-2-2,Suzuki Swift,Suzuki Vitara 2.0,Daihatsu 3cyl,Daihatsu 4cyl,VTR1000,Rover#1,Rover#2,Rover#3,GM 7X,Honda RC51,Fuel Only
-bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,29,31
+choices=EDIS,EDIS Multispark,Basic trigger,Trigger return,Toothed wheel,420A/Neon,36-2+2,36-2-2-2,Subaru 6/7,Miata 99-00,6g72,IAW Weber,CAS 4/1,4G63,Twin trigger,Chrysler 2.2/2.5,Renix 44-2-2,Suzuki Swift,Suzuki Vitara 2.0,Daihatsu 3cyl,Daihatsu 4cyl,VTR1000,Rover#1,Rover#2,Rover#3,GM 7X,Log Crank,Log Crank & Cam,QR25DE,Honda RC51,Fuel Only,LS1,YZF1000
+bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,31,40,41
 offset=989
-bitmask=31
+bitmask=63
 _tooltip=Sets the Engine firing type.
 
 [launch_combo]

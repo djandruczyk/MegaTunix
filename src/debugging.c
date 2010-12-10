@@ -24,10 +24,9 @@
 #include <time.h>
 
 
-gint dbg_lvl = 0;
-
-GIOChannel * dbg_channel = NULL;
-GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
+extern gconstpointer *global_data;
+static GIOChannel * dbg_channel = NULL;
+static GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
 static DebugLevel dbglevels[] = 
 {
 	{ "Interrogation", DEBUG_LEVEL, INTERROGATOR, INTERROGATOR_SHIFT,FALSE},
@@ -111,6 +110,10 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 {
 	gsize count = 0;
 	GError *error = NULL;
+	static gint dbg_lvl = -1;
+
+	if (dbg_lvl == -1)
+		dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 	/*
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
@@ -155,6 +158,7 @@ G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 	gint k = 0;
 	gint mask = 0;
 	gint num_levels = sizeof(dbglevels)/sizeof(dbglevels[0]);
+	gint dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 
 
 	vbox2 = gtk_vbox_new(FALSE,0);

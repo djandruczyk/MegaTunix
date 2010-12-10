@@ -16,7 +16,6 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
-#include <req_fuel.h>
 
 
 
@@ -44,6 +43,31 @@ typedef struct _Table_Params Table_Params;
 typedef struct _TE_Params TE_Params;
 typedef struct _Page_Params Page_Params;
 typedef struct _Deferred_Data Deferred_Data;
+typedef struct _Req_Fuel_Params Req_Fuel_Params;
+
+
+/*!
+ \brief The _Req_Fuel_Params structure is used to store the current and last
+ values of the interdependant required fuel parameters for the function
+ that verifies req_fuel status and downloads it.  There is one structure
+ allocated PER Table (even if the table's aren't fuel..)
+ */
+struct _Req_Fuel_Params
+{
+	gint num_squirts;
+	gint num_cyls;
+	gint num_inj;
+	gint divider;
+	gint alternate;
+	gint last_num_squirts;
+	gint last_num_cyls;
+	gint last_num_inj;
+	gint last_divider;
+	gint last_alternate;
+	gfloat req_fuel_total;
+	gfloat last_req_fuel_total;
+};
+
 
 
 /*!

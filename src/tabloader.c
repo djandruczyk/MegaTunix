@@ -16,19 +16,15 @@
 #include <combo_loader.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_loader.h>
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <glade/glade.h>
-#include <gmodule.h>
 #include <keybinder.h>
 #include <keyparser.h>
 #include <listmgmt.h>
-#include <memory_gui.h>
 #include <notifications.h>
 #include <plugin.h>
-#include <rtv_map_loader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
@@ -36,7 +32,6 @@
 #include <tag_loader.h>
 #include <widgetmgmt.h>
 
-gboolean tabs_loaded = FALSE;
 extern gconstpointer *global_data;
 
 
@@ -47,7 +42,6 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 {
-	extern Firmware_Details * firmware;
 	gint i = 0;
 	gint cur = 0;
 	ConfigFile *cfgfile = NULL;
@@ -65,12 +59,12 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	GtkWidget *notebook = NULL;
 	GtkWidget *item = NULL;
 	extern GdkColor red;
-	extern volatile gboolean leaving;
 	gboolean * hidden_list = NULL;
-	extern gboolean connected;
-	extern volatile gboolean offline;
+	Firmware_Details *firmware = NULL;
 
-	if (!(((connected) || (offline)) && (!tabs_loaded)))
+	firmware = DATA_GET(global_data,"firmware");
+
+	if (DATA_GET(global_data,"tabs_loaded"))
 		return FALSE;
 	if (!firmware)
 		return FALSE;
@@ -203,7 +197,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		/* Allow gui to update as it should.... */
 		while (gtk_events_pending())
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				gdk_threads_leave();
 				return FALSE;
@@ -215,7 +209,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 	}
 	update_logbar("interr_view","warning",_("Tab Loading Complete!"),FALSE,FALSE,FALSE);
-	tabs_loaded = TRUE;
+	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
@@ -266,6 +260,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 	gint num_groups = 0;
 	Group *group = NULL;
 	GHashTable *groups = NULL;
+	void (*load_dep_obj)(GObject *,ConfigFile *,const gchar *,const gchar *) = NULL;
 
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
@@ -299,8 +294,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		}
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref(group->object);
-		gtk_object_sink(GTK_OBJECT(group->object));
+		g_object_ref_sink(group->object);
 
 		/* If this widget has a "depend_on" tag we need to 
 		 * load the dependency information and store it for 
@@ -308,7 +302,8 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies_obj(group->object,cfgfile,section,"depend_on");
+			if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
+				load_dep_obj(group->object,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 
@@ -486,8 +481,12 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gint tmpi = 0;
 	gchar *ptr = NULL;
 	gboolean indexed = FALSE;
-	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+	void (*load_dep_obj)(GObject *, ConfigFile *,const gchar *,const gchar *) = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	if (GTK_IS_CONTAINER(widget))
@@ -574,7 +573,8 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		load_dependancies_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
+		if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
+			load_dep_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
 
@@ -648,7 +648,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	offset = -1;
 	cfg_read_int(cfgfile,section, "offset", &offset);
-	if (offset >=0 && indexed)
+	if (offset >= 0 && indexed)
 	{
 		/*printf("indexed widget %s\n",widget->name); */
 		if (cfg_read_string(cfgfile, section, "size", &size))

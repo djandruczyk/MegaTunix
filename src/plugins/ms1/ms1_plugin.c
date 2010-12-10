@@ -14,7 +14,7 @@
 #include <config.h>
 #include <defines.h>
 #include <ms1_plugin.h>
-#include <ms1-t-logger.h>
+#include <ms1_tlogger.h>
 #include <gtk/gtk.h>
 
 
@@ -23,7 +23,6 @@ gconstpointer *global_data;
 
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
-	GModule *module = NULL;
 	global_data = data;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
@@ -31,18 +30,25 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	 */
 	error_msg_f = (void *)DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
-	module = DATA_GET(global_data,"megatunix_module");
-	if (!module)
-		error_msg_f(__FILE__": Plugin ERROR: pointer to megatunix module is invalid!\n\tBUG, contact author!");
-	g_module_symbol(module,"dbg_func",(void *)&dbg_func_f);
-	g_module_symbol(module,"lookup_widget",(void *)&lookup_widget_f);
-	g_module_symbol(module,"io_cmd",(void *)&io_cmd_f);
-	g_module_symbol(module,"start_tickler",(void *)&start_tickler_f);
-	g_module_symbol(module,"stop_tickler",(void *)&stop_tickler_f);
-	g_module_symbol(module,"signal_read_rtvars",(void *)&signal_read_rtvars_f);
-	g_module_symbol(module,"get_ecu_data",(void *)&get_ecu_data_f);
-	g_module_symbol(module,"initialize_gc",(void *)&initialize_gc_f);
-	g_module_symbol(module,"lookup_current_value",(void *)&lookup_current_value_f);
+	get_symbol_f = (void *)DATA_GET(global_data,"get_symbol_f");
+	g_assert(get_symbol_f);
+	get_symbol_f("dbg_func",(void *)&dbg_func_f);
+	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
+	get_symbol_f("io_cmd",(void *)&io_cmd_f);
+	get_symbol_f("start_tickler",(void *)&start_tickler_f);
+	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
+	get_symbol_f("signal_read_rtvars",(void *)&signal_read_rtvars_f);
+	get_symbol_f("ms_get_ecu_data",(void *)&ms_get_ecu_data_f);
+	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
+	get_symbol_f("initialize_gc",(void *)&initialize_gc_f);
+	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
+	get_symbol_f("std_entry_handler",(void *)&std_entry_handler_f);
+	get_symbol_f("entry_changed_handler",(void *)&entry_changed_handler_f);
+	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
+	get_symbol_f("get_extreme_from_size",(void *)&get_extreme_from_size_f);
+	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
+	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
+	get_symbol_f("get_bitshift",(void *)&get_bitshift_f);
 }
 
 
@@ -61,14 +67,6 @@ void register_enums(void)
 	str_2_enum = DATA_GET(global_data,"str2_enum");
 	if (str_2_enum)
 	{
-		g_hash_table_insert(str_2_enum,"_START_TOOTHMON_LOGGER_",
-				GINT_TO_POINTER(START_TOOTHMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
-				GINT_TO_POINTER(START_TRIGMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
-				GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
-				GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
 	}
 }
 

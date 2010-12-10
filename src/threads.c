@@ -18,20 +18,17 @@
 #include <comms.h>
 #include <comms_gui.h>
 #include <conversions.h>
-#include <dataio.h>
 #include <datalogging_gui.h>
-#include <datamgmt.h>
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <interrogate.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <mode_select.h>
-#include <mtxsocket.h>
 #include <notifications.h>
+#include <plugin.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,13 +39,8 @@
 #include <widgetmgmt.h>
 
 
-gboolean force_page_change;
-extern gboolean connected;			/* valid connection with MS */
-extern volatile gboolean offline;		/* ofline mode with MS */
-extern gboolean interrogated;			/* valid connection with MS */
 extern gconstpointer *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
-volatile gint last_page = -1;
 
 
 /*!
@@ -64,12 +56,14 @@ volatile gint last_page = -1;
  */
 G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 {
+	static GAsyncQueue *io_data_queue = NULL;
 	Io_Message *message = NULL;
 	GHashTable *commands_hash = NULL;
 	Command *command = NULL;
-	extern GAsyncQueue *io_data_queue;
 
 	commands_hash = DATA_GET(global_data,"commands_hash");
+	if (!io_data_queue)
+		io_data_queue = DATA_GET(global_data,"io_data_queue");
 
 	/* Fringe case for FUNC_CALL helpers that need to trigger 
 	 * post_functions AFTER all their subhandlers have ran.  We
@@ -120,19 +114,26 @@ G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
-	extern GAsyncQueue *io_data_queue;
-	extern GAsyncQueue *pf_dispatch_queue;
-	extern Serial_Params *serial_params;
-	extern volatile gboolean leaving;
-	extern GCond * io_dispatch_cond;
+	Serial_Params *serial_params = NULL;
 	CmdLineArgs *args = NULL;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
+	GAsyncQueue *io_data_queue = NULL;
+	GAsyncQueue *pf_dispatch_queue = NULL;
+	GCond * io_dispatch_cond = NULL;
+	void *(*network_repair_thread)(gpointer data) = NULL;
+	void *(*serial_repair_thread)(gpointer data) = NULL;
 //	GTimer *clock;
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
+	io_data_queue = DATA_GET(global_data,"io_data_queue");
+	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
+	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
 	args = DATA_GET(global_data,"args");
+	serial_params = DATA_GET(global_data,"serial_params");
+	get_symbol("network_repair_thread",(void*)&network_repair_thread);
+	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
 //	clock = g_timer_new();
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
@@ -141,8 +142,10 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		g_time_val_add(&cur,100000); /* 100 ms timeout */
 		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
-		if (leaving)
+		if (DATA_GET(global_data,"leaving") || 
+				DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
+			printf("thread dispatcher told to exit!\n");
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(io_data_queue) != NULL)
 			{}
@@ -153,9 +156,12 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		if (!message) /* NULL message */
 			continue;
 
-		if ((!offline) && (((!connected) && (serial_params->open)) || (!(serial_params->open))))
+		if ((!DATA_GET(global_data,"offline")) && 
+				(((!DATA_GET(global_data,"connected")) && 
+				  (serial_params->open)) || 
+				 (!(serial_params->open))))
 		{
-			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,offline,serial_params->open);*/
+			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,DATA_GET(global_data,"offline"),serial_params->open);*/
 			if (args->network_mode)
 			{
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));
@@ -168,7 +174,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 			}
 			g_thread_join(repair_thread);
 		}
-		if ((!serial_params->open) && (!offline))
+		if ((!serial_params->open) && (!DATA_GET(global_data,"offline")))
 		{
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Can't process requested command, aborting call\n"));
 			thread_update_logbar("comm_view","warning",g_strdup("Disconnected Serial Link. Check Communications link/cable...\n"),FALSE,FALSE);
@@ -234,303 +240,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 
 
 /*!
- \brief send_to_ecu() gets called to send a value to the ECU.  This function
- will check if the value sent is NOT the reqfuel_offset (that has special
- interdependancy issues) and then will check if there are more than 1 widgets
- that are associated with this page/offset and update those widgets before
- sending the value to the ECU.
- \param widget (GtkWidget *) pointer to the widget that was modified or NULL
- \param page (gint) page in which the value refers to.
- \param offset (gint) offset from the beginning of the page that this data
- refers to.
- \param value (gint) the value that should be sent to the ECU At page.offset
- \param queue_update (gboolean), if true queues a gui update, used to prevent
- a horrible stall when doing an ECU restore or batch load...
- */
-G_MODULE_EXPORT void send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, gboolean queue_update)
-{
-	extern Firmware_Details *firmware;
-	OutputData *output = NULL;
-	guint8 *data = NULL;
-	guint16 u16 = 0;
-	gint16 s16 = 0;
-	guint32 u32 = 0;
-	gint32 s32 = 0;
-
-	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": send_to_ecu()\n\t Sending canID %i, page %i, offset %i, value %i \n",canID,page,offset,value));
-
-	switch (size)
-	{
-		case MTX_CHAR:
-		case MTX_S08:
-		case MTX_U08:
-	/*		printf("8 bit var %i at offset %i\n",value,offset);*/
-			break;
-		case MTX_S16:
-		case MTX_U16:
-	/*		printf("16 bit var %i at offset %i\n",value,offset);*/
-			break;
-		case MTX_S32:
-		case MTX_U32:
-	/*		printf("32 bit var %i at offset %i\n",value,offset);*/
-			break;
-		default:
-			printf(_("ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"),canID,page,offset);
-	}
-	output = initialize_outputdata();
-	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
-	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
-	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
-	DATA_SET(output->data,"value", GINT_TO_POINTER(value));
-	DATA_SET(output->data,"size", GINT_TO_POINTER(size));
-	DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(get_multiplier(size)));
-	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
-	/* SPECIAL case for MS2,  as it's write always assume a "datablock"
-	 * and it doesn't have a simple easy write api due to it's use of 
-	 * different sized vars,  hence the extra complexity.
-	 */
-	if (firmware->capabilities & MS2)
-	{
-		/* Get memory */
-		data = g_new0(guint8,get_multiplier(size));
-		switch (size)
-		{
-			case MTX_CHAR:
-			case MTX_U08:
-				data[0] = (guint8)value;
-				break;
-			case MTX_S08:
-				data[0] = (gint8)value;
-				break;
-			case MTX_U16:
-				if (firmware->bigendian)
-					u16 = GUINT16_TO_BE((guint16)value);
-				else
-					u16 = GUINT16_TO_LE((guint16)value);
-				data[0] = (guint8)u16;
-				data[1] = (guint8)((guint16)u16 >> 8);
-				break;
-			case MTX_S16:
-				if (firmware->bigendian)
-					s16 = GINT16_TO_BE((gint16)value);
-				else
-					s16 = GINT16_TO_LE((gint16)value);
-				data[0] = (guint8)s16;
-				data[1] = (guint8)((gint16)s16 >> 8);
-				break;
-			case MTX_S32:
-				if (firmware->bigendian)
-					s32 = GINT32_TO_BE((gint32)value);
-				else
-					s32 = GINT32_TO_LE((gint32)value);
-				data[0] = (guint8)s32;
-				data[1] = (guint8)((gint32)s32 >> 8);
-				data[2] = (guint8)((gint32)s32 >> 16);
-				data[3] = (guint8)((gint32)s32 >> 24);
-				break;
-			case MTX_U32:
-				if (firmware->bigendian)
-					u32 = GUINT32_TO_BE((guint32)value);
-				else
-					u32 = GUINT32_TO_LE((guint32)value);
-				data[0] = (guint8)u32;
-				data[1] = (guint8)((guint32)u32 >> 8);
-				data[2] = (guint8)((guint32)u32 >> 16);
-				data[3] = (guint8)((guint32)u32 >> 24);
-				break;
-			default:
-				break;
-		}
-		DATA_SET_FULL(output->data,"data", (gpointer)data,g_free);
-	}
-
-	/* Set it here otherwise there's a risk of a missed burn due to 
- 	 * a potential race condition in the burn checker
- 	 */
-	set_ecu_data(canID,page,offset,size,value);
-	/* If the ecu is multi-page, run the handler to take care of queing
-	 * burns and/or page changing
-	 */
-	if (firmware->multi_page)
-		ms_handle_page_change(page,last_page);
-
-	output->queue_update = queue_update;
-	io_cmd(firmware->write_command,output);
-	last_page = page;
-	return;
-}
-
-
-G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
-{
-	extern Firmware_Details *firmware;
-	guint8 ** ecu_data = firmware->ecu_data;
-	guint8 ** ecu_data_last = firmware->ecu_data_last;
-
-	/*printf("handle page change!, page %i, last %i\n",page,last);
-	 */
-
-	if (last == -1)  /* First Write of the day, burn not needed... */
-	{
-		queue_ms1_page_change(page);
-		return;
-	}
-	if ((page == last) && (!force_page_change))
-	{
-		/*printf("page == last and force_page_change is not set\n");
- 		 */
-		return;
-	}
-	/* If current page is NOT a dl_by_default page, but the last one WAS
-	 * then a burn is required otherwise settings will be lost in the
-	 * last
-	 */
-	if ((!firmware->page_params[page]->dl_by_default) && (firmware->page_params[last]->dl_by_default))
-	{
-		/*printf("current was not dl by default  but last was,  burning\n");
-		*/
-		queue_burn_ecu_flash(last);
-		if (firmware->capabilities & MS1)
-			queue_ms1_page_change(page);
-		return;
-	}
-	/* If current page is NOT a dl_by_default page, OR the last one was
-	 * not then a burn is NOT required.
-	 */
-	if ((!firmware->page_params[page]->dl_by_default) || (!firmware->page_params[last]->dl_by_default))
-	{
-		/*printf("current is not dl by default or last was not as well\n");
-		*/
-		if ((page != last) && (firmware->capabilities & MS1))
-		{
-			/*printf("page diff and MS1, changing page\n");
-			*/
-			queue_ms1_page_change(page);
-		}
-		return;
-	}
-	/* If current and last pages are DIFFERENT,  do a memory buffer scan
-	 * to see if previous and last match,  if so return, otherwise burn
-	 * then change page
-	 */
-	if (((page != last) && (((memcmp(ecu_data_last[last],ecu_data[last],firmware->page_params[last]->length) != 0)) || ((memcmp(ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length) != 0)))))
-	{
-		/*printf("page and last don't match AND there's a ram difference, burning, before changing\n");
-		*/
-		queue_burn_ecu_flash(last);
-		if (firmware->capabilities & MS1)
-			queue_ms1_page_change(page);
-	}
-	else if ((page != last) && (firmware->capabilities & MS1))
-	{
-		/*printf("page and last don't match AND there's a NOT a RAM difference, changing page\n");
-		 */
-		queue_ms1_page_change(page);
-	}
-}
-
-
-G_MODULE_EXPORT void queue_ms1_page_change(gint page)
-{
-	extern Firmware_Details * firmware;
-	extern volatile gboolean offline;
-	OutputData *output = NULL;
-
-	if (offline)
-		return;
-
-	output = initialize_outputdata();
-	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
-	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-	io_cmd(firmware->page_command,output);
-	last_page = page;
-	return;
-}
-
-
-
-/*!
- \brief chunk_write() gets called to send a block of values to the ECU.
- \param canID (gint) can identifier (0-14)
- \param page (gint) page in which the value refers to.
- \param offset (gint) offset from the beginning of the page that this data
- refers to.
- \param len (gint) length of block to sent
- \param data (guint8) the block of data to be sent which better damn well be
- int ECU byte order if there is an endianness thing..
- a horrible stall when doing an ECU restore or batch load...
- */
-G_MODULE_EXPORT void chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * data)
-{
-	extern Firmware_Details *firmware;
-	OutputData *output = NULL;
-
-	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
-	output = initialize_outputdata();
-	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
-	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
-	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
-	DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(num_bytes));
-	DATA_SET_FULL(output->data,"data", (gpointer)data, g_free);
-	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
-
-	/* save it otherwise the burn checker can miss it due to a potential
- 	 * race condition
- 	 */
-	store_new_block(canID,page,offset,data,num_bytes);
-
-	if (firmware->multi_page)
-		ms_handle_page_change(page,last_page);
-	output->queue_update = TRUE;
-	io_cmd(firmware->chunk_write_command,output);
-	last_page = page;
-	return;
-}
-
-
-/*!
- \brief table_write() gets called to send a block of lookuptable values to the ECU
- \param page (tableID) (gint) page in which the value refers to.
- \param len (gint) length of block to sent
- \param data (guint8) the block of data to be sent which better damn well be
- int ECU byte order if there is an endianness thing..
- a horrible stall when doing an ECU restore or batch load...
- */
-G_MODULE_EXPORT void table_write(gint page, gint num_bytes, guint8 * data)
-{
-	extern Firmware_Details *firmware;
-	OutputData *output = NULL;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	g_static_mutex_lock(&mutex);
-
-	dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": table_write()\n\t Sending page %i, num_bytes %i, data %p\n",page,num_bytes,data));
-
-	output = initialize_outputdata();
-	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
-	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(num_bytes));
-	DATA_SET(output->data,"data", (gpointer)data);
-	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
-
-	/* save it otherwise the burn checker can miss it due to a potential
-	 * race condition
-	 */
-	store_new_block(0,page,0,data,num_bytes);
-
-	if (firmware->multi_page)
-		ms_handle_page_change(page,last_page);
-	output->queue_update = TRUE;
-	io_cmd(firmware->table_write_command,output);
-
-	g_static_mutex_unlock(&mutex);
-	return;
-}
-
-
-/*!
  \brief thread_update_logbar() is a function to be called from within threads
  to update a logbar (textview). It's not safe to update a widget from a 
  threaded context in win32, hence this fucntion is created to pass the 
@@ -551,12 +260,13 @@ G_MODULE_EXPORT void  thread_update_logbar(
 		gboolean count,
 		gboolean clear)
 {
-
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
 	Text_Message *t_message = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	t_message = g_new0(Text_Message, 1);
@@ -588,11 +298,13 @@ G_MODULE_EXPORT void  thread_update_logbar(
  */
 G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 {
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
 	QFunction *qfunc = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	qfunc = g_new0(QFunction, 1);
@@ -625,12 +337,13 @@ G_MODULE_EXPORT void  thread_update_widget(
 		WidgetType type,
 		gchar * msg)
 {
-
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
 	Widget_Update *w_update = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -658,12 +371,13 @@ G_MODULE_EXPORT void  thread_update_widget(
  */
 G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
-
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
 	Widget_Update *w_update = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -691,11 +405,12 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
  */
 G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {
-
+	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Io_Message *message = NULL;
-	extern GAsyncQueue *gui_dispatch_queue;
 	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
 
 	message->payload = (void *)widget;
@@ -711,47 +426,35 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 
 
 /*!
- \brief start_restore_monitor kicks off a thread to update the tools view
- during an ECU restore to provide user feedback since this is a time
- consuming operation.  if uses message passing over asyncqueues to send the 
- gui update messages.
+ \brief thread_refresh_widget() is a function to be called from within threads
+ to force a widget rerender
+ \param widget_name (GtkWidget *) widget pointer
  */
-G_MODULE_EXPORT void start_restore_monitor(void)
+G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint len)
 {
-	GThread * restore_update_thread = NULL;
-	restore_update_thread = g_thread_create(restore_update,
-			NULL, /* Thread args */
-			TRUE, /* Joinable */
-			NULL); /*GError Pointer */
+	static GAsyncQueue *gui_dispatch_queue = NULL;
+	gint tmp = 0;
+	Io_Message *message = NULL;
+	Widget_Range *range = NULL;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+	message = initialize_io_message();
+	range = g_new0(Widget_Range,1);
+
+	range->page = page;
+	range->offset = offset;
+	range->len = len;
+	message->payload = (void *)range;
+	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_REFRESH_RANGE;
+	g_array_append_val(message->functions,tmp);
+
+	g_async_queue_ref(gui_dispatch_queue);
+	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	g_async_queue_unref(gui_dispatch_queue);
+	return;
 }
-
-G_MODULE_EXPORT void *restore_update(gpointer data)
-{
-	extern GAsyncQueue *io_data_queue;
-	gint max_xfers = g_async_queue_length(io_data_queue);
-	gint remaining_xfers = max_xfers;
-	gint last_xferd = max_xfers;
-
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": restore_update()\n\tThread created!\n"));
-	thread_update_logbar("tools_view","warning",g_strdup_printf(_("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n"),max_xfers),FALSE,FALSE);
-	while (remaining_xfers > 5)
-	{
-		remaining_xfers = g_async_queue_length(io_data_queue);
-		g_usleep(10000);
-		if (remaining_xfers <= (last_xferd-50))
-		{
-			thread_update_logbar("tools_view",NULL,g_strdup_printf(_("Approximately %i Transactions remaining, please wait\n"),remaining_xfers),FALSE,FALSE);
-			last_xferd = remaining_xfers;
-		}
-
-	}
-	thread_update_logbar("tools_view","info",g_strdup_printf(_("All Transactions complete\n")),FALSE,FALSE);
-
-	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": restore_update()\n\tThread exiting!\n"));
-	return NULL;
-}
-
 
 
 /*! 
@@ -833,10 +536,10 @@ G_MODULE_EXPORT void build_output_string(Io_Message *message, Command *command, 
 				break;
 			case MTX_U32:
 			case MTX_S32:
-/*				printf("32 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
+				/*				printf("32 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
 				block->type = DATA;
 				v = (GINT)DATA_GET(output->data,arg->internal_name);
-/*				printf("value %i\n",v); */
+				/*				printf("value %i\n",v); */
 				block->data = g_new0(guint8,4);
 				block->data[0] = (v & 0xff000000) >> 24;
 				block->data[1] = (v & 0xff0000) >> 16;
@@ -854,15 +557,14 @@ G_MODULE_EXPORT void build_output_string(Io_Message *message, Command *command, 
 				block->data = g_memdup(sent_data,len);
 				block->len = len;
 				/*
-				for (j=0;j<len;j++)
-				{
-					printf("sent_data[%i] is %i\n",j,sent_data[j]);
-					printf("block->data[%i] is %i\n",j,block->data[j]);
-				}
-				*/
+				   for (j=0;j<len;j++)
+				   {
+				   printf("sent_data[%i] is %i\n",j,sent_data[j]);
+				   printf("block->data[%i] is %i\n",j,block->data[j]);
+				   }
+				 */
 
 		}
 		g_array_append_val(message->sequence,block);
 	}
 }
-

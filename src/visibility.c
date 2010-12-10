@@ -14,7 +14,6 @@
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
-#include <fileio.h>
 #include <glade/glade.h>
 #include <stdlib.h>
 #include <visibility.h>

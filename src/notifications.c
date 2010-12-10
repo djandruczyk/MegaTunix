@@ -15,7 +15,6 @@
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
-#include <fileio.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
@@ -41,7 +40,7 @@ extern gconstpointer *global_data;
  \param group (gchar *) textual name of the group of controls to alter color
  \see set_widget_color
  */
-G_MODULE_EXPORT void set_group_color(GuiColor color, gchar *group)
+G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 {
 	g_list_foreach(get_list(group), set_widget_color,(gpointer)color);
 }
@@ -175,11 +174,10 @@ G_MODULE_EXPORT void  update_logbar(
 	gchar *tmpbuf = NULL;
 	gpointer result = NULL;
 	GtkWidget * widget = NULL;
-	extern volatile gboolean leaving;
 
 	widget = (GtkWidget *)lookup_widget(view_name);
 
-	if ((leaving) || (!widget))
+	if ((DATA_GET(global_data,"leaving")) || (!widget))
 		return;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -274,14 +272,13 @@ G_MODULE_EXPORT void kill_conn_warning(void)
  */
 G_MODULE_EXPORT void warn_user(const gchar *message)
 {
-	extern gboolean interrogated;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	if ((args->be_quiet))
 		return;
 
 	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Go to Offline mode", GTK_RESPONSE_ACCEPT,NULL);
 	else
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"_Close", GTK_RESPONSE_CANCEL,NULL);
@@ -379,11 +376,12 @@ G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 G_MODULE_EXPORT void set_title(gchar * text)
 {
 	gchar * tmpbuf = NULL;
-	extern volatile gboolean leaving;
 	static GtkWidget *info_label = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
 
-	if ((!lookup_widget("main_window")) || (leaving))
+	firmware = DATA_GET(global_data,"firmware");
+
+	if ((!lookup_widget("main_window")) || (DATA_GET(global_data,"leaving")))
 		return;
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");

@@ -18,7 +18,6 @@
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
-#include <fileio.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <glib.h>
@@ -35,13 +34,8 @@
 #include <widgetmgmt.h>
 
 
-/* global vars (owned here...) */
-gchar *delimiter;
-gboolean begin = TRUE;
 
 /* External global vars */
-extern gint ready;
-extern Rtv_Map *rtv_map;
 extern gconstpointer *global_data;
 
 /* Static vars to all functions in this file... */
@@ -67,18 +61,17 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 	gconstpointer * object = NULL;
 	gchar * dlog_name = NULL;
 	gchar * tooltip = NULL;
-	extern gint preferred_delimiter;
-	extern gboolean tabs_loaded;
-	extern gboolean rtvars_loaded;
-	extern gboolean connected;
-	extern gboolean interrogated;
-	extern volatile gboolean leaving;
+	Rtv_Map *rtv_map = NULL;
 
-	if ((!tabs_loaded) || (leaving))
+	rtv_map = DATA_GET(global_data,"rtv_map");
+
+	if ((!DATA_GET(global_data,"tabs_loaded")) || 
+			(DATA_GET(global_data,"leaving")))
 		return;
-	if (!((connected) && (interrogated)))
+	if (!((DATA_GET(global_data,"connected")) && 
+				(DATA_GET(global_data,"interrogated"))))
 		return;
-	if (!rtvars_loaded)
+	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": populate_dlog_choices_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
@@ -102,7 +95,7 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 
 	/* Update status of the delimiter buttons... */
 
-	switch (preferred_delimiter)
+	switch ((gint)DATA_GET(global_data,"preferred_delimiter"))
 	{
 		case COMMA:
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(lookup_widget("dlog_comma_delimit_radio_button")),TRUE);
@@ -178,9 +171,6 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
  */
 G_MODULE_EXPORT void start_datalogging(void)
 {
-	extern volatile gboolean offline;
-	extern gboolean forced_update;
-
 	if (logging_active)
 		return;   /* Logging already running ... */
 	if (lookup_widget("dlog_logable_vars_vbox1"))
@@ -194,9 +184,9 @@ G_MODULE_EXPORT void start_datalogging(void)
 	logging_active = TRUE;
 	update_logbar("dlog_view",NULL,_("DataLogging Started...\n"),FALSE,FALSE,FALSE);
 
-	if (!offline)
+	if (!DATA_GET(global_data,"offline"))
 		start_tickler(RTV_TICKLER);
-	forced_update=TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return;
 }
 
@@ -275,8 +265,11 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	GString *output;
 	gconstpointer * object = NULL;
 	gchar * string = NULL;
-	extern gint preferred_delimiter;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
+	firmware = DATA_GET(global_data,"firmware");
 	if (!iochannel)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": write_log_header()\n\tIOChannel pointer was undefined, returning NOW...\n"));
@@ -304,7 +297,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 
 			j++;
 			if (j < total_logables)
-				output = g_string_append(output,delimiter);
+				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 		}
 	}
 	output = g_string_append(output,"\r\n");
@@ -331,10 +324,11 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 	GArray *history = NULL;
 	gint precision = 0;
 	gchar *tmpbuf = NULL;
-	extern gboolean interrogated;
-	extern gboolean connected;
+	Rtv_Map *rtv_map = NULL;
 
-	if (!((connected) && (interrogated)))
+	rtv_map = DATA_GET(global_data,"rtv_map");
+
+	if (!((DATA_GET(global_data,"connected")) && (DATA_GET(global_data,"interrogated"))))
 		return;
 
 	if (!logging_active) /* Logging isn't enabled.... */
@@ -360,7 +354,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 	{
 		write_log_header(iochannel, FALSE);
 		header_needed = FALSE;
-		begin = TRUE;
+		DATA_SET(global_data,"begin",GINT_TO_POINTER(TRUE));
 	}
 	j = 0;
 	for(i=0;i<rtv_map->derived_total;i++)
@@ -384,7 +378,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 		 * char at the end fo the line 
 		 */
 		if (j < total_logables)
-			output = g_string_append(output,delimiter);
+			output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 	}
 	output = g_string_append(output,"\r\n");
 	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
@@ -401,6 +395,9 @@ G_MODULE_EXPORT void dlog_select_all(void)
 	guint i = 0;
 	gconstpointer * object = NULL;
 	GtkWidget *button = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Check all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
@@ -422,6 +419,9 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 	guint i = 0;
 	GtkWidget * button = NULL;
 	gconstpointer * object = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
@@ -452,6 +452,9 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
 	GtkWidget * button = NULL;
 	gconstpointer * object = NULL;
 	gboolean state=FALSE;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
@@ -474,9 +477,11 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	t = g_malloc(sizeof(time_t));
 	time(t);
@@ -546,9 +551,11 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
-	extern Firmware_Details *firmware;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	t = g_malloc(sizeof(time_t));
 	time(t);
@@ -605,6 +612,9 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 	gfloat value = 0.0;
 	gboolean restart_tickler = FALSE;
 	GtkWidget * info_label = NULL;
+	Rtv_Map *rtv_map = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if (DATA_GET(global_data,"realtime_id"))
 	{
@@ -645,7 +655,7 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 			 * char at the end fo the line 
 			 */
 			if (j < rtv_map->derived_total)
-				output = g_string_append(output,delimiter);
+				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 		}
 		output = g_string_append(output,"\r\n");
 		if (notifies && ((x % notif_divisor) == 0))
