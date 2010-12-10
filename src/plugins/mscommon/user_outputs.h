@@ -22,8 +22,10 @@ extern void *(*evaluator_destroy_f)(void *);
 extern double (*evaluator_evaluate_x_f)(void *, double);
 extern void (*dbg_func_f)(gint, gchar *);
 extern glong (*get_extreme_from_size_f)(DataSize, Extreme);
+extern gint (*reverse_lookup_f)(gconstpointer *, gint );
 extern gfloat (*direct_lookup_data_f)(gchar *, gint );
 extern gint (*direct_reverse_lookup_f)(gchar *, gint );
+extern gfloat (*lookup_data_f)(gconstpointer *, gint );
 /* Externs */
 
 /* Prototypes */

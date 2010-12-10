@@ -538,10 +538,8 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 
-	printf("common combo handler firing\n");
 	interdep_vars = DATA_GET(global_data,"interdep_vars");
 	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
-	printf("canID %i, page %i, offset %i, bitval %i, bitmask %i, bitshift %i\n",canID,page,offset,bitval,bitmask,bitshift);
 
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	handler = (GINT) OBJ_GET(widget,"handler");
@@ -2181,3 +2179,18 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	return;
 }
 
+
+G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
+{
+	guint i = 0;
+	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+
+	firmware = DATA_GET(global_data,"firmware");
+
+	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
+		thread_refresh_widget(g_list_nth_data(ve_widgets[page][offset],i));
+	update_ve3d_if_necessary_f(page,offset);
+}

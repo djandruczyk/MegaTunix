@@ -157,14 +157,17 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	static GAsyncQueue *gui_dispatch_queue = NULL;
 	static GCond *gui_dispatch_cond = NULL;
 	static void (*update_widget_f)(gpointer,gpointer) = NULL;
-	gint len=0;
-	gint i=0;
+	static GList ***ve_widgets = NULL;
+	gint len = 0;
+	gint i = 0;
+	gint j = 0;
 	UpdateFunction val = 0;
 	gint count = 0;
 	GtkWidget *widget = NULL;
 	Io_Message *message = NULL;
 	Text_Message *t_message = NULL;
 	Widget_Update *w_update = NULL;
+	Widget_Range *range = NULL;
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
 
@@ -217,11 +220,33 @@ trypop:
 					{
 						if (!update_widget_f)
 							get_symbol("update_widget",(void *)&update_widget_f);
+						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 						gdk_threads_enter();
 						update_widget_f(widget,NULL);
 						gdk_threads_leave();
+						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 						message->payload = NULL;
 					}
+					break;
+				case UPD_REFRESH_RANGE:
+					range = (Widget_Range *)message->payload;
+					if (!range)
+						break;
+					if (!update_widget_f)
+						get_symbol("update_widget",(void *)&update_widget_f);
+					if (!ve_widgets)
+						ve_widgets = DATA_GET(global_data,"ve_widgets");
+					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
+					gdk_threads_enter();
+					for (i=range->offset;i<range->offset +range->len;i++)
+					{
+						for (j=0;j<g_list_length(ve_widgets[range->page][i]);j++)
+						update_widget_f(g_list_nth_data(ve_widgets[range->page][i],j),NULL);
+					}
+					gdk_threads_leave();
+					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
+					cleanup(range);
+					message->payload = NULL;
 					break;
 				case UPD_LOGBAR:
 					/*printf("logbar update\n");*/

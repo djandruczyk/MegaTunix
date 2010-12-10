@@ -21,6 +21,7 @@
 typedef struct _Io_Message Io_Message;
 typedef struct _Text_Message Text_Message;
 typedef struct _QFunction QFunction;
+typedef struct _Widget_Range Widget_Range;
 typedef struct _Widget_Update Widget_Update;
 typedef struct _OutputData OutputData;
 
@@ -49,6 +50,16 @@ struct _Widget_Update
 	WidgetType type;	/*! what type of widget are we updating */
 	gchar *msg;		/*! message to display */
 	gboolean state;		/*! state to set widget (MTX_SENSITIVE) */
+};
+
+
+/* Used to update a bunch of widgets in ve_widgets from a thread context
+   */
+struct _Widget_Range
+{
+	gint page;
+	gint offset;
+	gint len;
 };
 
 
@@ -104,6 +115,7 @@ void *thread_dispatcher(gpointer);	/* thread that processes messages */
 void thread_update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean);
 void thread_update_widget(const gchar *, WidgetType, gchar *);
 void thread_refresh_widget(GtkWidget *);
+void thread_refresh_widget_range(gint, gint, gint);
 void thread_widget_set_sensitive(const gchar * widget_name, gboolean state);
 gboolean queue_function(const gchar * );
 void build_output_string(Io_Message *, Command *, gpointer);

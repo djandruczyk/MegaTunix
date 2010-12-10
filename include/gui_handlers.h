@@ -30,35 +30,34 @@ typedef enum
 
 
 /* Prototypes */
- gboolean prevent_close(GtkWidget *, gpointer );
- gboolean leave(GtkWidget *, gpointer);
- gboolean comm_port_override(GtkEditable *);
- gboolean std_button_handler(GtkWidget *, gpointer);
- gboolean std_entry_handler(GtkWidget *, gpointer);
- gboolean entry_changed_handler(GtkWidget *, gpointer );
- gboolean toggle_button_handler(GtkWidget *, gpointer);
- gboolean bitmask_button_handler(GtkWidget *, gpointer);
- gboolean spin_button_handler(GtkWidget *, gpointer);
- gboolean widget_grab(GtkWidget *, GdkEventButton *, gpointer );
- gboolean key_event(GtkWidget *, GdkEventKey *, gpointer );
- gboolean set_algorithm(GtkWidget *, gpointer );
- void notebook_page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
- void subtab_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
- gboolean focus_out_handler(GtkWidget *, GdkEventFocus *, gpointer );
- gboolean slider_value_changed(GtkWidget *, gpointer );
+gboolean prevent_close(GtkWidget *, gpointer );
+gboolean leave(GtkWidget *, gpointer);
+gboolean comm_port_override(GtkEditable *);
+gboolean std_button_handler(GtkWidget *, gpointer);
+gboolean std_entry_handler(GtkWidget *, gpointer);
+gboolean entry_changed_handler(GtkWidget *, gpointer );
+gboolean toggle_button_handler(GtkWidget *, gpointer);
+gboolean bitmask_button_handler(GtkWidget *, gpointer);
+gboolean spin_button_handler(GtkWidget *, gpointer);
+gboolean widget_grab(GtkWidget *, GdkEventButton *, gpointer );
+gboolean key_event(GtkWidget *, GdkEventKey *, gpointer );
+gboolean set_algorithm(GtkWidget *, gpointer );
+void notebook_page_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
+void subtab_changed(GtkNotebook *, GtkNotebookPage *, guint, gpointer);
+gboolean focus_out_handler(GtkWidget *, GdkEventFocus *, gpointer );
+gboolean slider_value_changed(GtkWidget *, gpointer );
 gboolean force_update_table(gpointer);
 gboolean trigger_group_update(gpointer );
 void prompt_to_save(void);
 gboolean prompt_r_u_sure(void);
 guint get_bitshift(guint );
- void update_misc_gauge(DataWatch *);
-void thread_refresh_widgets_at_offset(gint, gint);
-void refresh_widgets_at_offset(gint, gint);
+void update_misc_gauge(DataWatch *);
 glong get_extreme_from_size(DataSize, Extreme);
- gboolean clamp_value(GtkWidget *, gpointer);
+gboolean clamp_value(GtkWidget *, gpointer);
 void refocus_cell(GtkWidget *, Direction);
 void set_widget_label_from_array(gpointer, gpointer);
 void insert_text_handler(GtkEntry *, const gchar *, gint, gint *, gpointer);
+void refresh_widgets_at_offset(gint, gint);
 
 
 /* Prototypes */

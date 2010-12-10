@@ -31,7 +31,7 @@ extern gint (*translate_string_f)(const gchar *);
 extern GtkWidget *(*lookup_widget_f)(const gchar *);
 extern void (*set_group_color_f)(GuiColor, const gchar * );
 extern OutputData *(*initialize_outputdata_f)(void);
-extern void (*thread_refresh_widgets_at_offset_f)(gint, gint);
+extern void (*thread_refresh_widget_range_f)(gint, gint, gint);
 extern void (*_set_sized_data_f)(guint8 *, gint, DataSize, gint, gboolean);
 extern gint (*_get_sized_data_f)(guint8 *, gint, DataSize, gboolean);
 /* Externs */

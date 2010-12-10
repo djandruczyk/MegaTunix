@@ -425,6 +425,38 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 }
 
 
+/*!
+ \brief thread_refresh_widget() is a function to be called from within threads
+ to force a widget rerender
+ \param widget_name (GtkWidget *) widget pointer
+ */
+G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint len)
+{
+	static GAsyncQueue *gui_dispatch_queue = NULL;
+	gint tmp = 0;
+	Io_Message *message = NULL;
+	Widget_Range *range = NULL;
+
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+	message = initialize_io_message();
+	range = g_new0(Widget_Range,1);
+
+	range->page = page;
+	range->offset = offset;
+	range->len = len;
+	message->payload = (void *)range;
+	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_REFRESH_RANGE;
+	g_array_append_val(message->functions,tmp);
+
+	g_async_queue_ref(gui_dispatch_queue);
+	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	g_async_queue_unref(gui_dispatch_queue);
+	return;
+}
+
+
 /*! 
  \brief build_output_string() is called when doing output to the ECU, to 
  append the needed data together into one nice string for sending

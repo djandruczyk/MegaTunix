@@ -41,6 +41,7 @@ extern gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 extern void (*set_reqfuel_color_f)(GuiColor, gint);
 extern gint (*translate_string_f)(const gchar *);
 extern void (*alter_widget_state_f)(gpointer, gpointer);
+extern void (*update_ve3d_if_necessary_f)(gint, gint);
 /* Externs */
 
 /* Prototypes */
@@ -75,7 +76,7 @@ void get_essential_bits(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gin
 void get_essentials(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
 void update_widget(gpointer, gpointer);
 void recalc_table_limits(gint, gint);
-
+void thread_refresh_widgets_at_offset(gint, gint);
 /* Prototypes */
 
 

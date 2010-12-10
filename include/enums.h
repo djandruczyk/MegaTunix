@@ -70,7 +70,8 @@ typedef enum
 	UPD_WIDGET,
 /*	UPD_RAW_MEMORY,*/
 	UPD_RUN_FUNCTION,
-	UPD_REFRESH
+	UPD_REFRESH,
+	UPD_REFRESH_RANGE
 }UpdateFunction;
 
 typedef enum

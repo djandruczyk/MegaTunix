@@ -16,6 +16,7 @@
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
+#include <errno.h>
 #include <mscommon_comms.h>
 #include <mscommon_gui_handlers.h>
 #include <mtxsocket.h>
@@ -94,11 +95,6 @@ G_MODULE_EXPORT gint comms_test(void)
 	gboolean result = FALSE;
 	gchar * err_text = NULL;
 	gint len = 0;
-#ifdef __WIN32__
-	extern int errno;
-#else
-	int errno = 0;
-#endif
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
@@ -584,13 +580,16 @@ G_MODULE_EXPORT void update_write_status(void *data)
 			}
 		}
 
-		gdk_threads_enter();
-		for (z=offset;z<offset+length;z++)
+		if (mode == MTX_CHUNK_WRITE)
+			thread_refresh_widget_range(page,offset,length);
+		else
 		{
-			/*printf("refreshing widgets at page %i, offset %i\n",page,z);*/
-			thread_refresh_widgets_at_offset_f(page,z);
+			for (z=offset;z<offset+length;z++)
+			{
+				/*printf("refreshing widgets at page %i, offset %i\n",page,z);*/
+				thread_refresh_widgets_at_offset(page,z);
+			}
 		}
-		gdk_threads_leave();
 		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 	}
 	/* We check to see if the last burn copy of the VE/constants matches 

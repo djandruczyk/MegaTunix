@@ -83,12 +83,13 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);
 	get_symbol_f("std_entry_handler",(void *)&std_entry_handler_f);
 	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
-	get_symbol_f("thread_refresh_widgets_at_offset",(void *)&thread_refresh_widgets_at_offset_f);
+	get_symbol_f("thread_refresh_widget_range",(void *)&thread_refresh_widget_range_f);
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
 	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);
 	get_symbol_f("translate_string",(void *)&translate_string_f);
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
+	get_symbol_f("update_ve3d_if_necessary",(void *)&update_ve3d_if_necessary_f);
 	get_symbol_f("warn_user",(void *)&warn_user_f);
 	register_common_enums();
 }

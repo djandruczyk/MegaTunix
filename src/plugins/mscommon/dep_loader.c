@@ -20,11 +20,7 @@
 #include <dep_loader.h>
 #include <enums.h>
 #include <firmware.h>
-#include <keyparser.h>
 #include <stdlib.h>
-#include <stringmatch.h>
-#include <widgetmgmt.h>
-
 
 extern gconstpointer *global_data;
 

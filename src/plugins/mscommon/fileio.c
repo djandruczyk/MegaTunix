@@ -13,32 +13,21 @@
 
 #include <api-versions.h>
 #include <apicheck.h>
-#include <comms.h>
 #include <config.h>
 #include <configfile.h>
 #include <datamgmt.h>
-#include <datalogging_gui.h>
 #include <debugging.h>
 #include <enums.h>
-#include <errno.h>
 #include <fileio.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include <gui_handlers.h>
-#include <helpers.h>
-#include <keyparser.h>
 #include <mscommon_comms.h>
-#include <notifications.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <threads.h>
-#include <timeout_handlers.h>
 #include <unistd.h>
-#include <vex_support.h>
-#include <widgetmgmt.h>
 #ifdef __WIN32__
  #include <windows.h>
 #else

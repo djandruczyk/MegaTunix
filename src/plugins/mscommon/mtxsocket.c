@@ -31,15 +31,10 @@
 #include <init.h>
 #include <mscommon_comms.h>
 #include <mtxsocket.h>
-#include <notifications.h>
 #include <rtv_map_loader.h>
-#include <rtv_processor.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stringmatch.h>
-#include <threads.h>
-#include <widgetmgmt.h>
 #ifndef __WIN32__
 #include <poll.h>
 #include <arpa/inet.h>
@@ -1819,10 +1814,7 @@ close_control:
 					state = WAITING_FOR_CMD;
 					ms_store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
-					gdk_threads_enter();
-					for (i=offset;i<(offset+count);i++)
-						thread_refresh_widgets_at_offset_f(page,i);
-					gdk_threads_leave();
+					thread_refresh_widget_range_f(page,offset,count);
 					g_free(buffer);
 					index = 0;
 					dbg_func_f(MTXSOCKET,g_strdup_printf("Gui Update complete\n"));
@@ -2017,15 +2009,10 @@ G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 #include <netinet/in.h>
 #include <netdb.h>
 #endif
-#include <notifications.h>
 #include <rtv_map_loader.h>
-#include <rtv_processor.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stringmatch.h>
-#include <threads.h>
-#include <widgetmgmt.h>
 #ifdef __WIN32__
 #include <winsock2.h>
 #else
@@ -3875,10 +3862,7 @@ close_control:
 					state = WAITING_FOR_CMD;
 					ms_store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
-					gdk_threads_enter();
-					for (i=offset;i<(offset+count);i++)
-						thread_refresh_widgets_at_offset_f(page,i);
-					gdk_threads_leave();
+					thread_refresh_widget_range_f(page,offset,count);
 					g_free(buffer);
 					index = 0;
 					dbg_func_f(MTXSOCKET,g_strdup_printf("Gui Update complete\n"));

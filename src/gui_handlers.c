@@ -1468,41 +1468,6 @@ G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 		remove_watch(watch->id);
 }
 
-G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
-{
-	guint i = 0;
-	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
-
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
-
-	firmware = DATA_GET(global_data,"firmware");
-
-	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-		thread_refresh_widget(g_list_nth_data(ve_widgets[page][offset],i));
-	update_ve3d_if_necessary(page,offset);
-}
-
-
-G_MODULE_EXPORT void refresh_widgets_at_offset(gint page, gint offset)
-{
-	static void (*update_widget_f)(gpointer, gpointer);
-	static Firmware_Details *firmware = NULL;
-	static GList ***ve_widgets = NULL;
-	guint i = 0;
-
-	if (!ve_widgets)
-		ve_widgets = DATA_GET(global_data,"ve_widgets");
-	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
-	if (!update_widget_f)
-		get_symbol("update_widget_f",(void *)&update_widget_f);
-
-	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-		update_widget_f(g_list_nth_data(ve_widgets[page][offset],i),NULL);
-	update_ve3d_if_necessary(page,offset);
-}
-
 
 G_MODULE_EXPORT glong get_extreme_from_size(DataSize size,Extreme limit)
 {
@@ -1662,3 +1627,22 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 	g_free(tmpbuf);
 }
 
+
+void refresh_widgets_at_offset(gint page, gint offset)
+{
+	static GList ***ve_widgets = NULL;
+	static Firmware_Details *firmware = NULL;
+	static void (*update_widget_f)(gpointer, gpointer);
+	guint i = 0;
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!ve_widgets)
+		ve_widgets = DATA_GET(global_data,"ve_widgets");
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
+
+	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
+		update_widget_f(g_list_nth_data(ve_widgets[page][offset],i),NULL);
+	update_ve3d_if_necessary(page,offset);
+}

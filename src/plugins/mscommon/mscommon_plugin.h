@@ -52,7 +52,6 @@ gfloat (*lookup_data_f)(gconstpointer *, gint );
 gint (*translate_string_f)(const gchar *);
 GtkWidget *(*lookup_widget_f)(const gchar *);
 void (*set_group_color_f)(GuiColor, const gchar * );
-void (*thread_refresh_widgets_at_offset_f)(gint, gint);
 gint (*get_multiplier_f)(DataSize);
 guint (*get_bitshift_f)(guint);
 GtkWidget *(*spin_button_handler_f)(GtkWidget *, gpointer);
@@ -88,6 +87,8 @@ gboolean (*focus_out_handler_f)(GtkWidget *, GdkEventFocus *, gpointer );
 guint32 (*create_value_change_watch_f)(const gchar *, gboolean, const gchar *, gpointer);
 void (*remove_from_lists_f)(gchar *, gpointer);
 void (*remove_watch_f)(guint32);
+void (*thread_refresh_widget_range_f)(gint, gint, gint);
+void (*update_ve3d_if_necessary_f)(gint, gint);
 /* Function Pointers */
 
 #endif

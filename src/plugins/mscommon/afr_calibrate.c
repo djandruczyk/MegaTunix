@@ -22,8 +22,6 @@
 #include <gtk/gtk.h>
 #include <math.h>
 #include <mscommon_comms.h>
-#include <threads.h>
-#include <widgetmgmt.h>
 
 
 static gint afr_enum;

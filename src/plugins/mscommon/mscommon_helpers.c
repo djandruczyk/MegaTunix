@@ -13,31 +13,18 @@
 
 #include <args.h>
 #include <config.h>
-#include <comms.h>
-#include <conversions.h>
 #include <dataio.h>
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
-#include <init.h>
-#include <listmgmt.h>
 #include <mscommon_comms.h>
 #include <mscommon_helpers.h>
-#include <mode_select.h>
 #include <mtxsocket.h>
-#include <notifications.h>
-#include <runtime_gui.h>
-#include <runtime_text.h>
-#include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <threads.h>
-#include <timeout_handlers.h>
-#include <widgetmgmt.h>
-
 
 extern gconstpointer *global_data;
 

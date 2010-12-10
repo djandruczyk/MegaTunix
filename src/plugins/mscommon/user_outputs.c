@@ -20,14 +20,12 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
-#include <keyparser.h>
-#include <gui_handlers.h>
 #include <lookuptables.h>
+#include <mscommon_comms.h>
 #include <multi_expr_loader.h>
 #include <mtxmatheval.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
-#include <threads.h>
 #include <user_outputs.h>
 
 enum
