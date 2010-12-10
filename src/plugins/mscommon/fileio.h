@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Externs */
-extern void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
+extern void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
 extern GtkWidget *(*lookup_widget_f)(const gchar *);
 extern gboolean (*set_file_api_f)(ConfigFile *, gint , gint );
 extern gboolean (*get_file_api_f)(ConfigFile *, gint *, gint *);

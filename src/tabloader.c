@@ -294,8 +294,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		}
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref(group->object);
-		gtk_object_sink(GTK_OBJECT(group->object));
+		g_object_ref_sink(group->object);
 
 		/* If this widget has a "depend_on" tag we need to 
 		 * load the dependency information and store it for 

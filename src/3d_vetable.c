@@ -342,8 +342,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	for (i=0;i<firmware->table_params[table_num]->x_bincount;i++)
 	{
 		ve_view->x_objects[i] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref(ve_view->x_objects[i]);
-		gtk_object_sink(GTK_OBJECT(ve_view->x_objects[i]));
+		g_object_ref_sink(ve_view->x_objects[i]);
 		OBJ_SET(ve_view->x_objects[i],"page",GINT_TO_POINTER(ve_view->x_page));
 		OBJ_SET(ve_view->x_objects[i],"offset",GINT_TO_POINTER(ve_view->x_base+(ve_view->x_mult * i)));
 		OBJ_SET(ve_view->x_objects[i],"size",GINT_TO_POINTER(ve_view->x_size));
@@ -358,8 +357,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	for (i=0;i<firmware->table_params[table_num]->y_bincount;i++)
 	{
 		ve_view->y_objects[i] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref(ve_view->y_objects[i]);
-		gtk_object_sink(GTK_OBJECT(ve_view->y_objects[i]));
+		g_object_ref_sink(ve_view->y_objects[i]);
 		OBJ_SET(ve_view->y_objects[i],"page",GINT_TO_POINTER(ve_view->y_page));
 		OBJ_SET(ve_view->y_objects[i],"offset",GINT_TO_POINTER(ve_view->y_base+(ve_view->y_mult * i)));
 		OBJ_SET(ve_view->y_objects[i],"size",GINT_TO_POINTER(ve_view->y_size));
@@ -381,8 +379,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		{
 			ve_view->quad_mesh[i][j] = g_new0(Quad, 1);
 			ve_view->z_objects[i][j] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-			g_object_ref(ve_view->z_objects[i][j]);
-			gtk_object_sink(GTK_OBJECT(ve_view->z_objects[i][j]));
+			g_object_ref_sink(ve_view->z_objects[i][j]);
 			OBJ_SET(ve_view->z_objects[i][j],"page",GINT_TO_POINTER(ve_view->z_page));
 			if (firmware->capabilities & PIS)
 				OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((i*ve_view->y_bincount)+j))));
@@ -419,8 +416,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	/* Bind pointer to veview to an object for retrieval elsewhere */
 	object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-	g_object_ref(object);
-	gtk_object_sink(GTK_OBJECT(object));
+	g_object_ref_sink(object);
 	OBJ_SET(object,"ve_view",(gpointer)ve_view);
 
 	tmpbuf = g_strdup_printf("ve_view_%i",table_num);

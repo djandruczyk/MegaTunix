@@ -245,6 +245,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		default:
+			printf("Handler is %s\n",translate_enum_f(handler));
 			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_combo_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins, BUG!\n"));
 			break;
 	}

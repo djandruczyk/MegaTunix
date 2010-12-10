@@ -20,7 +20,7 @@
 #include <math.h>
 #include <ms1_tlogger.h>
 
-TTMon_Data *ttm_data;
+static TTMon_Data *ttm_data;
 
 #define CTR 187
 #define UNITS 188

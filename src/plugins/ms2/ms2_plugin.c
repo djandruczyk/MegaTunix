@@ -51,6 +51,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
 	get_symbol_f("update_widget",(void *)&update_widget_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
+	get_symbol_f("translate_enum",(void *)&translate_enum_f);
 
 	register_enums();
 }

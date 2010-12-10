@@ -28,21 +28,13 @@
 #include <glib.h>
 #include <init.h>
 #include <interrogate.h>
-#include <listmgmt.h>
-#include <lookuptables.h>
-#include <mode_select.h>
-#include <mtxmatheval.h>
 #include <multi_expr_loader.h>
-#include <notifications.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stringmatch.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <threads.h>
 #include <unistd.h>
-#include <widgetmgmt.h>
 
 extern GtkWidget *interr_view;
 
@@ -806,8 +798,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			if(cfg_read_string(cfgfile,section,"z_depend_on",&firmware->table_params[i]->z_depend_on))
 			{
 				firmware->table_params[i]->z_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-				g_object_ref(firmware->table_params[i]->z_object);
-				gtk_object_sink(GTK_OBJECT(firmware->table_params[i]->z_object));
+				g_object_ref_sink(GTK_OBJECT(firmware->table_params[i]->z_object));
 				load_dependancies_obj(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
 				if(!cfg_read_string(cfgfile,section,"z_alt_lookuptable",&tmpbuf))
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"z_alt_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));

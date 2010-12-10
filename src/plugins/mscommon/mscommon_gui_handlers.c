@@ -504,6 +504,7 @@ G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
+	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gboolean state = FALSE;
@@ -598,7 +599,18 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 				return FALSE;
 			break;
 		default:
-			printf(_("std_combo_handler, default case!!! wrong wrong wrong!!\n"));
+			if (!ecu_handler)
+			{
+				if (get_symbol_f("ecu_combo_handler",(void *)&ecu_handler))
+					return ecu_handler(widget,data);
+				else
+				{
+					dbg_func_f(CRITICAL,g_strdup(__FILE__": common_combo_handler()\n\tDefault case, ecu handler NOT found in plugins, BUG!\n"));
+					return TRUE;
+				}
+			}
+			else
+				return ecu_handler(widget,data);
 			break;
 	}
 

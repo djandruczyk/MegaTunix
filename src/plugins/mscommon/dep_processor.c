@@ -18,8 +18,8 @@
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
+#include <dep_processor.h>
 #include <enums.h>
-#include <gui_handlers.h>
 
 
 /*!
@@ -81,7 +81,6 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 				tmpbuf = g_strdup_printf("%s_bitmask",deps[i]);
 				bitmask = (GINT)DATA_GET(object,tmpbuf);
 				bitshift = get_bitshift_f(bitmask);
-				/*printf("bitmask %i\n",bitmask); */
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_bitval",deps[i]);

@@ -45,6 +45,7 @@ guint (*get_bitshift_f)(guint);
 void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
 void (*update_widget_f)(gpointer, gpointer);
 gint (*convert_before_download_f)(GtkWidget *, gfloat);
+const gchar *(*translate_enum_f)(gint);
 
 
 /* Function pointers */
