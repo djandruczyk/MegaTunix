@@ -2,6 +2,7 @@ plugindir = $(datadir)/MegaTunix/plugins
 
 INCLUDES = \
         -I$(top_srcdir)/include \
+        -I$(top_srcdir)/widgets \
 	-I$(top_srcdir)/mtxmatheval \
         @GTK_CFLAGS@ \
         @DEPRECATED_CFLAGS@ \
@@ -50,7 +51,9 @@ libmscommon_la_SOURCES = \
 	vex_support.h
 
 
-libmscommon_la_LDFLAGS = -shared ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la ../../../widgets/libmtxcurve.la ../../../widgets/libmtxgauge.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ $(no_undefined) -module
+libmscommon_la_LDFLAGS = -shared $(no_undefined) -module
+#libmscommon_la_LIBADD = ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la ../../../widgets/libmtxcurve.la ../../../widgets/libmtxgauge.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ 
+libmscommon_la_LIBADD = ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcurve.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

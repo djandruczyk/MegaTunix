@@ -17,7 +17,6 @@
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
-#include "../../../widgets/gauge.h"
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <mscommon_gui_handlers.h>
@@ -164,7 +163,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 				firmware->te_params[table_num]->f_gauge)
 		{
 			parent = glade_xml_get_widget(xml,"te_gaugeframe");
-			gauge = mtx_gauge_face_new();
+			gauge = mtx_gauge_face_new_wrapper_f();
 			gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
 
 			OBJ_SET(window,"gauge",gauge);
@@ -178,9 +177,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			else
 				tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 			filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
-			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
+			mtx_gauge_face_import_xml_wrapper_f(gauge,filename);
 			lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
-			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
+			mtx_gauge_face_set_value_wrapper_f(gauge,tmpf);
 			g_free(filename);
 			id = create_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
 			OBJ_SET(gauge,"gauge_id",GINT_TO_POINTER(id));
@@ -498,7 +497,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 				firmware->te_params[table_num]->f_gauge) && (!embedded))
 	{
 		parent = glade_xml_get_widget(xml,"te_gaugeframe");
-		gauge = mtx_gauge_face_new();
+		gauge = mtx_gauge_face_new_wrapper_f();
 		gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
 		if (firmware->te_params[table_num]->gauge_temp_dep)
 		{
@@ -510,9 +509,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		else
 			tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
-		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
+		mtx_gauge_face_import_xml_wrapper_f(gauge,filename);
 		lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
-		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
+		mtx_gauge_face_set_value_wrapper_f(gauge,tmpf);
 
 		g_free(filename);
 		id = create_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
@@ -697,15 +696,15 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 
-	evaluator = evaluator_create_f(firmware->te_params[table_num]->x_ul_conv_expr);
-	firmware->te_params[table_num]->x_2d_lower_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->x_raw_lower);
-	firmware->te_params[table_num]->x_2d_upper_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->x_raw_upper);
-	evaluator_destroy_f(evaluator);
+	evaluator = eval_create_f(firmware->te_params[table_num]->x_ul_conv_expr);
+	firmware->te_params[table_num]->x_2d_lower_limit = eval_x_f(evaluator,firmware->te_params[table_num]->x_raw_lower);
+	firmware->te_params[table_num]->x_2d_upper_limit = eval_x_f(evaluator,firmware->te_params[table_num]->x_raw_upper);
+	eval_destroy_f(evaluator);
 
-	evaluator = evaluator_create_f(firmware->te_params[table_num]->y_ul_conv_expr);
-	firmware->te_params[table_num]->y_2d_lower_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->y_raw_lower);
-	firmware->te_params[table_num]->y_2d_upper_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->y_raw_upper);
-	evaluator_destroy_f(evaluator);
+	evaluator = eval_create_f(firmware->te_params[table_num]->y_ul_conv_expr);
+	firmware->te_params[table_num]->y_2d_lower_limit = eval_x_f(evaluator,firmware->te_params[table_num]->y_raw_lower);
+	firmware->te_params[table_num]->y_2d_upper_limit = eval_x_f(evaluator,firmware->te_params[table_num]->y_raw_upper);
+	eval_destroy_f(evaluator);
 
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),
 			firmware->te_params[table_num]->x_2d_lower_limit,

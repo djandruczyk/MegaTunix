@@ -66,9 +66,9 @@ gfloat (*convert_after_upload_f)(GtkWidget *);
 gint (*convert_before_download_f)(GtkWidget *, gfloat);
 GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
 void (*mem_alloc_f)(void);
-void *(*evaluator_create_f)(char *);
-void *(*evaluator_destroy_f)(void *);
-double (*evaluator_evaluate_x_f)(void *, double);
+void *(*eval_create_f)(char *);
+void (*eval_destroy_f)( void *);
+double (*eval_x_f)(void *, double);
 void (*thread_widget_set_sensitive_f)(const gchar *, gboolean);
 void (*get_table_f)(gpointer, gpointer, gpointer);
 void (*free_multi_source_f)(gpointer);
@@ -90,6 +90,10 @@ void (*remove_watch_f)(guint32);
 void (*thread_refresh_widget_range_f)(gint, gint, gint);
 void (*update_ve3d_if_necessary_f)(gint, gint);
 void (*thread_refresh_widget_f)(GtkWidget *);
+char *(*regex_wrapper_f)(char *, char *, int *);
+GtkWidget *(*mtx_gauge_face_new_wrapper_f)(void);
+void (*mtx_gauge_face_import_xml_wrapper_f)(GtkWidget *, gchar *);
+void (*mtx_gauge_face_set_value_wrapper_f)(GtkWidget *, gfloat);
 /* Function Pointers */
 
 #endif

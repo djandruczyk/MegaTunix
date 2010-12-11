@@ -15,7 +15,6 @@
 
 #include <assert.h>
 #include <config.h>
-#include <combo_mask.h>
 #include <defines.h>
 #include <debugging.h>
 #include <rtv_map_loader.h>
@@ -106,7 +105,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	if (GTK_IS_COMBO_BOX_ENTRY(widget))
 	{
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(widget),UO_CHOICE_COL);
-		entry = mask_entry_new_with_mask(regex);
+		entry = mask_entry_new_with_mask_wrapper_f(regex);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
 		if ((width = (GINT)OBJ_GET((GtkWidget *)widget,"max_chars")) > 0)
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);

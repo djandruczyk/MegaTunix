@@ -190,11 +190,8 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
-
 					gdk_threads_enter();
-					message->status = message->command->function(
-							message->command,
-							message->command->func_call_arg);
+					message->status = message->command->function(message->command,message->command->func_call_arg);
 					gdk_threads_leave();
 
 					/*

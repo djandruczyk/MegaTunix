@@ -19,6 +19,8 @@
 
 /* A simple validating entry */
 
+G_BEGIN_DECLS
+
 #define TYPE_MASK_ENTRY             (mask_entry_get_type ())
 #define MASK_ENTRY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_MASK_ENTRY, MaskEntry))
 #define MASK_ENTRY_CLASS(vtable)    (G_TYPE_CHECK_CLASS_CAST ((vtable), TYPE_MASK_ENTRY, MaskEntryClass))
@@ -44,5 +46,6 @@ void mask_entry_editable_init (GtkEditableClass *iface);
 GtkWidget *mask_entry_new (void);
 GtkWidget *mask_entry_new_with_mask (gchar *mask);
 
+G_END_DECLS
 
 #endif

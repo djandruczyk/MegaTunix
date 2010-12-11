@@ -15,7 +15,6 @@
 
 #include <assert.h>
 #include <config.h>
-#include <combo_mask.h>
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
@@ -328,7 +327,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",new,precision), -1);
 
 		/* Then evaluate it in reverse.... */
-		tmpf = evaluator_evaluate_x_f(multi->dl_eval,new);
+		tmpf = eval_x_f(multi->dl_eval,new);
 		/* Then if it used a lookuptable, reverse map it if possible 
 		 * to determine the ADC reading we need to send to ECU
 		 */
@@ -361,11 +360,11 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 
 		if (!evaluator)
 		{
-			evaluator = evaluator_create_f(DATA_GET(object,"dl_conv_expr"));
+			evaluator = eval_create_f(DATA_GET(object,"dl_conv_expr"));
 			if (!evaluator)
 			{
 				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(object,"dl_conv_expr")));
-				DATA_SET_FULL(object,"dl_evaluator",(gpointer)evaluator,evaluator_destroy_f);
+				DATA_SET_FULL(object,"dl_evaluator",(gpointer)evaluator,eval_destroy_f);
 			}
 		}
 		/* First conver to fahrenheit temp scale if temp dependant */
@@ -379,7 +378,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 		else
 			x = new;
 		/* Then evaluate it in reverse.... */
-		tmpf = evaluator_evaluate_x_f(evaluator,x);
+		tmpf = eval_x_f(evaluator,x);
 		/* Then if it used a lookuptable,  reverse map it if possible
 		 * to determine the ADC reading we need to send to ECU
 		 */
@@ -495,7 +494,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 					x = direct_lookup_data_f(multi->lookuptable,cur_val);
 				else
 					x = cur_val;
-				tmpf = evaluator_evaluate_x_f(evaluator,x);
+				tmpf = eval_x_f(evaluator,x);
 				if (temp_dep)
 				{
 					if (temp_units == CELSIUS)
@@ -517,7 +516,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = direct_lookup_data_f(multi->lookuptable,hys_val);
 					else
 						x = hys_val;
-					tmpf = evaluator_evaluate_x_f(evaluator,x);
+					tmpf = eval_x_f(evaluator,x);
 					if (temp_dep)
 					{
 						if (temp_units == CELSIUS)
@@ -540,7 +539,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = direct_lookup_data_f(multi->lookuptable,ulimit_val);
 					else
 						x = ulimit_val;
-					tmpf = evaluator_evaluate_x_f(evaluator,x);
+					tmpf = eval_x_f(evaluator,x);
 					if (temp_dep)
 					{
 						if (temp_units == CELSIUS)
@@ -568,11 +567,11 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_name")));
 						exit (-3);
 					}
-					evaluator = evaluator_create_f(expr);
+					evaluator = eval_create_f(expr);
 					if (!evaluator)
 					{
 						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
-						DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy_f);
+						DATA_SET_FULL(object,"ul_evaluator",evaluator,eval_destroy_f);
 					}
 					assert(evaluator);
 
@@ -585,7 +584,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 					x = lookup_data_f(object,cur_val);
 				else
 					x = cur_val;
-				tmpf = evaluator_evaluate_x_f(evaluator,x);
+				tmpf = eval_x_f(evaluator,x);
 				if (temp_dep)
 				{
 					if (temp_units == CELSIUS)
@@ -607,7 +606,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = lookup_data_f(object,hys_val);
 					else
 						x = hys_val;
-					tmpf = evaluator_evaluate_x_f(evaluator,x);
+					tmpf = eval_x_f(evaluator,x);
 					if (temp_dep)
 					{
 						if (temp_units == CELSIUS)
@@ -630,7 +629,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = lookup_data_f(object,ulimit_val);
 					else
 						x = ulimit_val;
-					tmpf = evaluator_evaluate_x_f(evaluator,x);
+					tmpf = eval_x_f(evaluator,x);
 					if (temp_dep)
 					{
 						if (temp_units == CELSIUS)
