@@ -396,11 +396,11 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 	cairo_text_extents_t y_extents;
 
 	cairo_set_font_size (cr, 9);
-	x_msg = g_strdup_printf("%1s: %2$.*3$f",
+	x_msg = g_strdup_printf("%1$s: %2$.*3$f",
 			priv->x_axis_label,
 			priv->coords[priv->active_coord].x,
 			priv->x_precision);
-	y_msg = g_strdup_printf("%1s: %2$.*3$f",
+	y_msg = g_strdup_printf("%1$s: %2$.*3$f",
 			priv->y_axis_label,
 			priv->coords[priv->active_coord].y,
 			priv->y_precision);

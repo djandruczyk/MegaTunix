@@ -501,9 +501,6 @@ afterfilter:
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 	g_signal_connect(G_OBJECT(dialog),"confirm-overwrite",
 			G_CALLBACK (confirm_overwrite_callback), NULL);
-
-//	gtk_file_chooser_set_show_hidden(GTK_FILE_CHOOSER(dialog),TRUE);
-
 	if (data->action == GTK_FILE_CHOOSER_ACTION_OPEN)
 		if (data->default_filename)
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog),data->default_filename);

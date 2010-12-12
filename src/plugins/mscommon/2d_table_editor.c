@@ -13,10 +13,11 @@
 
 #include <2d_table_editor.h>
 #include <config.h>
-#include "../../../widgets/curve.h"
+#include <curve.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
+#include <gauge.h>
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <mscommon_gui_handlers.h>
@@ -177,9 +178,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			else
 				tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 			filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
-			mtx_gauge_face_import_xml((gauge),filename);
+			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 			lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
-			mtx_gauge_face_set_value((gauge),tmpf);
+			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
 			g_free(filename);
 			id = create_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
 			OBJ_SET(gauge,"gauge_id",GINT_TO_POINTER(id));
@@ -509,9 +510,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		else
 			tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
-		mtx_gauge_face_import_xml((gauge),filename);
+		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
-		mtx_gauge_face_set_value((gauge),tmpf);
+		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
 
 		g_free(filename);
 		id = create_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
@@ -784,7 +785,7 @@ G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 		offset = -1;
 	if (( page >= 0 ) && (offset >= 0))
 		ve_widgets[page][offset] = g_list_remove(ve_widgets[page][offset],widget_ptr);
-	//dealloc_widget(widget_ptr,NULL);
+	/*dealloc_widget(widget_ptr,NULL);*/
 }
 
 

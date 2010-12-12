@@ -231,7 +231,6 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	g_static_mutex_unlock(&mutex);
 	dbg_func_f(INTERROGATOR,g_strdup("\n"__FILE__": interrogate_ecu() LEAVING\n\n"));
 	thread_update_widget_f("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
-	//set_title(g_strdup(_("Interrogation Complete...")));
 	return interrogated;
 }
 
@@ -1399,7 +1398,6 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	{
 		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
 		val = adj->value;
-		//printf ("firmware rtvars size %i\n",firmware->rtvars_size);
 		if (firmware->capabilities & MS1)
 		{
 			min = 1000.0*(1.0/(960.0/(firmware->rtvars_size+2.0)));

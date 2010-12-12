@@ -57,7 +57,6 @@ G_MODULE_EXPORT void mask_entry_set_background (MaskEntry *entry)
 		tmpbuf = g_utf8_casefold(tmpstr,-1);
 		g_free(tmpstr);
 		if (regex(tmpbuf,entry->mask,&len))
-//		if (!g_strrstr (entry->mask, tmpbuf))
 		{
 			gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
 			g_free(tmpbuf);

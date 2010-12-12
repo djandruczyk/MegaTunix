@@ -1063,9 +1063,9 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 				OBJ_SET(dummy,"index",GINT_TO_POINTER(index));
 				OBJ_SET(dummy,"num_points_spin",widget);
 				OBJ_SET(dummy,"handler",GINT_TO_POINTER(POLY_POINTS));
-				g_signal_handlers_block_by_func (dummy,alter_polygon_data, NULL);
+				g_signal_handlers_block_by_func (dummy,(gpointer)alter_polygon_data, NULL);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxGenPoly *)poly->data)->points[j].x);
-				g_signal_handlers_unblock_by_func (dummy,alter_polygon_data, NULL);
+				g_signal_handlers_unblock_by_func (dummy,(gpointer)alter_polygon_data, NULL);
 			}
 			else
 				printf("Spinbutton %s MISSING\n",tmpbuf);
@@ -1077,9 +1077,9 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 				OBJ_SET(dummy,"index",GINT_TO_POINTER(index));
 				OBJ_SET(dummy,"handler",GINT_TO_POINTER(POLY_POINTS));
 				OBJ_SET(dummy,"num_points_spin",widget);
-				g_signal_handlers_block_by_func (dummy,alter_polygon_data, NULL);
+				g_signal_handlers_block_by_func (dummy,(gpointer)alter_polygon_data, NULL);
 				gtk_spin_button_set_value(GTK_SPIN_BUTTON(dummy),((MtxGenPoly *)poly->data)->points[j].y);
-				g_signal_handlers_unblock_by_func (dummy,alter_polygon_data, NULL);
+				g_signal_handlers_unblock_by_func (dummy,(gpointer)alter_polygon_data, NULL);
 			}
 			else
 				printf("Spinbutton %s MISSING\n",tmpbuf);

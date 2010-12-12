@@ -2192,5 +2192,5 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 
 	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
 		thread_refresh_widget_f(g_list_nth_data(ve_widgets[page][offset],i));
-	//update_ve3d_if_necessary_f(page,offset);
+	/*update_ve3d_if_necessary_f(page,offset);*/
 }
