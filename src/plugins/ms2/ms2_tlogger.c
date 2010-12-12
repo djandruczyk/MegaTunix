@@ -15,11 +15,11 @@
 #include <cairo/cairo.h>
 #include <firmware.h>
 #include <math.h>
-#include <ms2-t-logger.h>
+#include <ms2_tlogger.h>
 
 MS2_TTMon_Data *ttm_data;
 
-static void bind_ttm_to_page(gint page)
+G_MODULE_EXPORT void bind_ttm_to_page(gint page)
 {
 	ttm_data->page = page;
 	OBJ_SET(ttm_data->darea,"page",GINT_TO_POINTER(page));
@@ -352,62 +352,6 @@ void ms2_update_trigtooth_display(gint page)
 	if (!ttm_data->darea->window) 
 		return;
 	gdk_window_clear(ttm_data->darea->window);
-}
-
-
-G_MODULE_EXPORT gboolean ms2_tlogger_button_handler(GtkWidget * widget, gpointer data)
-{
-	gint handler = (GINT)OBJ_GET(widget,"handler");
-
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-	{       /* It's pressed (or checked) */
-		switch ((ToggleButton)handler)
-		{
-
-			case START_TOOTHMON_LOGGER:
-				ttm_data->stop = FALSE;
-				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_toothmon");
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),FALSE);
-				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				io_cmd_f("ms2_e_read_toothmon",NULL);
-				break;
-			case START_TRIGMON_LOGGER:
-				ttm_data->stop = FALSE;
-				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_trigmon");
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),FALSE);
-				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				io_cmd_f("ms2_e_read_trigmon",NULL);
-				break;
-			case START_COMPOSITEMON_LOGGER:
-				ttm_data->stop = FALSE;
-				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_compositemon");
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),FALSE);
-				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				io_cmd_f("ms2_e_read_compositemon",NULL);
-				break;
-			case STOP_TOOTHMON_LOGGER:
-				ttm_data->stop = TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),TRUE);
-				break;
-			case STOP_TRIGMON_LOGGER:
-				ttm_data->stop = TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),TRUE);
-				break;
-			case STOP_COMPOSITEMON_LOGGER:
-				ttm_data->stop = TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),TRUE);
-				break;
-			default:
-				break;
-		}
-	}
-	return TRUE;
 }
 
 

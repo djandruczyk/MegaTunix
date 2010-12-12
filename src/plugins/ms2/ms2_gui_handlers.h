@@ -42,7 +42,18 @@ extern gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
-gboolean ecu_button_handler(GtkWidget *, gpointer);
+gboolean ecu_std_button_handler(GtkWidget *, gpointer);
+gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_combo_handler(GtkWidget *, gpointer);
 /* Prototypes */
+
+typedef enum
+{
+	START_TOOTHMON_LOGGER = LAST_TOGGLE_ENUM + 1,
+	START_TRIGMON_LOGGER,
+	STOP_TOOTHMON_LOGGER,
+	STOP_TRIGMON_LOGGER,
+	START_COMPOSITEMON_LOGGER,
+	STOP_COMPOSITEMON_LOGGER
+}MS2ToggleButton;
 #endif

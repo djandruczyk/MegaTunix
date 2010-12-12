@@ -1520,6 +1520,7 @@ G_MODULE_EXPORT gboolean close_control_socket(void)
 G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 {
 	static GAsyncQueue *slave_msg_queue = NULL;
+	static Firmware_Details *firmware = NULL;
  	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
 	GTimeVal cur;
@@ -1532,11 +1533,11 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 	gint res = 0;
 	gint len = 0;
 	guint8 *buffer = NULL;
-	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
 	if (!slave_msg_queue)
-		slave_msg_queue = DATA_GET(global_data,"slave_msq_queue");
+		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
 
 	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": notify_slaves_thread()\n\tThread created!\n"));
 	while(TRUE) /* endless loop */

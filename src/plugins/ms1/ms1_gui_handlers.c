@@ -16,6 +16,7 @@
 #include <defines.h>
 #include <enums.h>
 #include <ms1_gui_handlers.h>
+#include <ms1_tlogger.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
@@ -216,7 +217,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean ecu_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = -1;
 	gboolean restart = FALSE;
@@ -239,8 +240,53 @@ G_MODULE_EXPORT gboolean ecu_button_handler(GtkWidget *widget, gpointer data)
 				start_tickler_f(RTV_TICKLER);
 			break;
 		default:
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_button_handler()\n\tdefault case reached,  i.e. handler not foudn in global, common or ECU plugins, BUG!\n"));
+			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_std_button_handler()\n\tdefault case reached,  i.e. handler not foudn in global, common or ECU plugins, BUG!\n"));
 			break;
+	}
+	return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *tmpwidget = NULL;
+	gint handler = (GINT)OBJ_GET(widget, "handler");
+
+	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	{       /* It's pressed (or checked) */
+		switch ((ToggleButton)handler)
+		{
+
+			case START_TOOTHMON_LOGGER:
+				tmpwidget = lookup_widget_f("triggerlogger_buttons_table");
+				if (GTK_IS_WIDGET(tmpwidget))
+					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
+				start(TOOTHMON_TICKLER);
+				break;
+			case START_TRIGMON_LOGGER:
+				tmpwidget = lookup_widget_f("toothlogger_buttons_table");
+				if (GTK_IS_WIDGET(tmpwidget))
+					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
+				start(TRIGMON_TICKLER);
+				break;
+			case STOP_TOOTHMON_LOGGER:
+				stop(TOOTHMON_TICKLER);
+				tmpwidget = lookup_widget_f("triggerlogger_buttons_table");
+				if (GTK_IS_WIDGET(tmpwidget))
+					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
+				break;
+			case STOP_TRIGMON_LOGGER:
+				stop(TRIGMON_TICKLER);
+				tmpwidget = lookup_widget_f("toothlogger_buttons_table");
+				if (GTK_IS_WIDGET(tmpwidget))
+					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
+				break;
+			default:
+				dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_toggle_button_handler()\n\tdefault case reached,  i.e. handler not foudn in global, common or ECU plugins, BUG!\n"));
+				break;
+		}
 	}
 	return TRUE;
 }

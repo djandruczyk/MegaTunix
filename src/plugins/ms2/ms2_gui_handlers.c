@@ -18,6 +18,7 @@
 #include <enums.h>
 #include <glade/glade.h>
 #include <ms2_gui_handlers.h>
+#include <ms2_tlogger.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
@@ -35,9 +36,69 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean ecu_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
-	dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_button_handler()\n\tERROR handler NOT found, command aborted! BUG!!!\n"));
+	dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_std_button_handler()\n\tERROR handler NOT found, command aborted! BUG!!!\n"));
+	return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer data)
+{
+	extern MS2_TTMon_Data *ttm_data;
+	gint handler = -1;
+	
+	handler = (GINT)OBJ_GET(widget,"handler");
+
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	{       /* It's pressed (or checked) */
+		switch ((MS2ToggleButton)handler)
+		{
+
+			case START_TOOTHMON_LOGGER:
+				ttm_data->stop = FALSE;
+				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_toothmon");
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),FALSE);
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
+				io_cmd_f("ms2_e_read_toothmon",NULL);
+				break;
+			case START_TRIGMON_LOGGER:
+				ttm_data->stop = FALSE;
+				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_trigmon");
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),FALSE);
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
+				io_cmd_f("ms2_e_read_trigmon",NULL);
+				break;
+			case START_COMPOSITEMON_LOGGER:
+				ttm_data->stop = FALSE;
+				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_compositemon");
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),FALSE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),FALSE);
+				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
+				io_cmd_f("ms2_e_read_compositemon",NULL);
+				break;
+			case STOP_TOOTHMON_LOGGER:
+				ttm_data->stop = TRUE;
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),TRUE);
+				break;
+			case STOP_TRIGMON_LOGGER:
+				ttm_data->stop = TRUE;
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),TRUE);
+				break;
+			case STOP_COMPOSITEMON_LOGGER:
+				ttm_data->stop = TRUE;
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),TRUE);
+				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),TRUE);
+				break;
+			default:
+				dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_toggle_button_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins, BUG!\n"));
+				break;
+		}
+	}
 	return TRUE;
 }
 

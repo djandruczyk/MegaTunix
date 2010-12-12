@@ -137,7 +137,7 @@
                                         <property name="use_underline">True</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">False</property>
-                                        <signal name="toggled" handler="ms2_tlogger_button_handler"/>
+                                        <signal name="toggled" handler="toggle_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -157,7 +157,7 @@
                                         <property name="use_underline">True</property>
                                         <property name="draw_indicator">False</property>
                                         <property name="group">toothlogger_disable_radio_button</property>
-                                        <signal name="toggled" handler="ms2_tlogger_button_handler"/>
+                                        <signal name="toggled" handler="toggle_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -196,7 +196,7 @@
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
                                         <property name="draw_indicator">False</property>
-                                        <signal name="toggled" handler="ms2_tlogger_button_handler"/>
+                                        <signal name="toggled" handler="toggle_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -215,7 +215,7 @@
                                         <property name="active">True</property>
                                         <property name="draw_indicator">False</property>
                                         <property name="group">triggerlogger_enable_radio_button</property>
-                                        <signal name="toggled" handler="ms2_tlogger_button_handler"/>
+                                        <signal name="toggled" handler="toggle_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -256,7 +256,7 @@
                                         <property name="receives_default">False</property>
                                         <property name="use_underline">True</property>
                                         <property name="draw_indicator">False</property>
-                                        <signal name="toggled" handler="ms2_tlogger_button_handler"/>
+                                        <signal name="toggled" handler="toggle_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="top_attach">1</property>
@@ -275,7 +275,7 @@
                                         <property name="active">True</property>
                                         <property name="draw_indicator">False</property>
                                         <property name="group">compositelogger_enable_radio_button</property>
-                                        <signal name="toggled" handler="ms2_tlogger_button_handler"/>
+                                        <signal name="toggled" handler="toggle_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">1</property>

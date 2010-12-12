@@ -15,7 +15,8 @@
 #include <defines.h>
 #include <enums.h>
 #include <ms2_plugin.h>
-#include <ms2-t-logger.h>
+#include <ms2_gui_handlers.h>
+#include <ms2_tlogger.h>
 #include <gtk/gtk.h>
 
 
@@ -54,7 +55,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
 	get_symbol_f("update_widget",(void *)&update_widget_f);
 
-	register_enums();
+	register_ecu_enums();
 }
 
 
@@ -65,13 +66,24 @@ G_MODULE_EXPORT void plugin_shutdown(void)
 		ttm_data->stop = TRUE;
 }
 
-void register_enums(void)
+void register_ecu_enums(void)
 {
-	extern gconstpointer *global_data;
 	GHashTable *str_2_enum = NULL;
 
-	str_2_enum = DATA_GET(global_data,"str2_enum");
+	str_2_enum = DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
+		g_hash_table_insert(str_2_enum,"_START_TOOTHMON_LOGGER_",
+				GINT_TO_POINTER(START_TOOTHMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
+				GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
+				GINT_TO_POINTER(START_TRIGMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
+				GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_START_COMPOSITEMON_LOGGER_",
+				GINT_TO_POINTER(START_COMPOSITEMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_STOP_COMPOSITEMON_LOGGER_",
+				GINT_TO_POINTER(STOP_COMPOSITEMON_LOGGER));
 	}
 }

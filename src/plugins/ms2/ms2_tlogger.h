@@ -11,8 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __MS2_T_LOGGER_H__
-#define __MS2_T_LOGGER_H__
+#ifndef __MS2_TLOGGER_H__
+#define __MS2_TLOGGER_H__
 
 #include <defines.h>
 #include <gtk/gtk.h>
@@ -70,10 +70,10 @@ struct _MS2_TTMon_Data
 };
 
 /* Prototypes */
+void bind_ttm_to_page(gint);
 void ms2_setup_ms2_logger_display(GtkWidget *);
 gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
-gboolean ms2_tlogger_button_handler(GtkWidget *, gpointer);
 gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
 void ms2_ttm_update(DataWatch *);
 void _ms2_crunch_trigtooth_data(gint);

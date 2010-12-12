@@ -134,6 +134,7 @@ G_MODULE_EXPORT int setup_gui(void)
 
 	/* Tabs that should be hidden.... */
 	notebook = glade_xml_get_widget(xml,"toplevel_notebook");
+	g_object_set(G_OBJECT(notebook),"tab-border",0,NULL);
 	tabcount = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 	hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
 	for (i=0;i<tabcount;i++)

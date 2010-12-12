@@ -17,8 +17,8 @@ libms2_la_SOURCES = \
 	ms2_gui_handlers.h \
 	ms2_plugin.c \
 	ms2_plugin.h \
-	ms2-t-logger.c \
-	ms2-t-logger.h \
+	ms2_tlogger.c \
+	ms2_tlogger.h \
 	user_outputs.c \
 	user_outputs.h
 

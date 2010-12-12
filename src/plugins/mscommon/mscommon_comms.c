@@ -274,6 +274,37 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 
 
 /*!
+ \brief chunk_write() gets called to send a block of data to the ECU.  
+ This function has an ECU agnostic interface and is for sending 
+ arbritrary blocks of data to the ECU. This function extracts the 
+ important things from the passed ptr and sends to the real function 
+ which is ecu specific.
+ */
+G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
+{
+	gint canID = 0;
+	gint page = 0;
+	gint offset = 0;
+	GtkWidget *widget = (GtkWidget *)data;
+	gconstpointer *gptr = (gconstpointer *)data;
+
+	if (GTK_IS_WIDGET(widget))
+	{
+		canID = (GINT)OBJ_GET(widget,"canID");
+		page = (GINT)OBJ_GET(widget,"page");
+		offset = (GINT)OBJ_GET(widget,"offset");
+	}
+	else
+	{
+		canID = (GINT)DATA_GET(gptr,"canID");
+		page = (GINT)DATA_GET(gptr,"page");
+		offset = (GINT)DATA_GET(gptr,"offset");
+	}
+	ms_chunk_write(canID, page, offset, num_bytes, block);
+}
+
+
+/*!
  \brief ms_chunk_write() gets called to send a block of values to the ECU.
  \param canID (gint) can identifier (0-14)
  \param page (gint) page in which the value refers to.
@@ -315,6 +346,37 @@ G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num
 }
 
 
+/*!
+ \brief send_to_ecu() gets called to send a value to the ECU.  This function
+ is has an ECU agnostic interface and is for sending single 8-32 bit bits of 
+ data to the ECU. This one extracts the important things from the passed ptr
+ and sends to the real function which is ecu specific
+ */
+G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_update)
+{
+	gint canID = 0;
+	gint page = 0;
+	gint offset = 0;
+	DataSize size = MTX_U08;
+	GtkWidget *widget = (GtkWidget *)data;
+	gconstpointer *gptr = (gconstpointer *)data;
+
+	if (GTK_IS_WIDGET(widget))
+	{
+		canID = (GINT)OBJ_GET(widget,"canID");
+		page = (GINT)OBJ_GET(widget,"page");
+		offset = (GINT)OBJ_GET(widget,"offset");
+		size = (DataSize)OBJ_GET(widget,"datasize");
+	}
+	else
+	{
+		canID = (GINT)DATA_GET(gptr,"canID");
+		page = (GINT)DATA_GET(gptr,"page");
+		offset = (GINT)DATA_GET(gptr,"offset");
+		size = (DataSize)DATA_GET(gptr,"datasize");
+	}
+	ms_send_to_ecu(canID,page,offset,size,value,queue_update);
+}
 /*!
  \brief ms_send_to_ecu() gets called to send a value to the ECU.  This function
  will check if the value sent is NOT the reqfuel_offset (that has special
@@ -462,11 +524,13 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 
 	if (!slave_msg_queue)
 		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
-	if (!output) /* If no data, don't bother the slaves */
-		return;
+	printf("send_to_slaves, msg queue ptr %p\n",slave_msg_queue);
 	if (!(gboolean)DATA_GET(global_data,"network_access"))
 		return;
-
+	if (!output) /* If no data, don't bother the slaves */
+		return;
+	if (!slave_msg_queue)
+		return;
 	msg = g_new0(SlaveMessage, 1);
 	msg->page = (guint8)(GINT)DATA_GET(output->data,"page");
 	msg->offset = (guint16)(GINT)DATA_GET(output->data,"offset");

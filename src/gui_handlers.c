@@ -266,6 +266,7 @@ G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	static GtkSettings *settings = NULL;
+	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 	void *obj_data = NULL;
 	void (*function)(void);
 	gint handler = 0; 
@@ -342,6 +343,18 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				update_raw_memory_view((ToggleButton)handler,(GINT)obj_data);
 				break;	
 			default:
+				if (!common_handler)
+				{
+					if (get_symbol("common_toggle_button_handler",(void *)&common_handler))
+						return common_handler(widget,data);
+					else
+					{
+						dbg_func(CRITICAL,g_strdup_printf(__FILE__": toggle_button_handler()\n\tToggle button handler in common plugin is MISSING, BUG!\n"));
+						return FALSE;
+					}
+				}
+				else
+					return common_handler(widget,data);
 				break;
 		}
 	}
@@ -368,7 +381,31 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 					g_object_set(settings,"gtk-enable-tooltips",FALSE,NULL);
 				DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(FALSE));
 				break;
+			case FAHRENHEIT:
+			case CELSIUS:
+			case COMMA:
+			case TAB:
+			case OFFLINE_FIRMWARE_CHOICE:
+			case HEX_VIEW:
+			case DECIMAL_VIEW:
+			case BINARY_VIEW:
+			case REALTIME_VIEW:
+			case PLAYBACK_VIEW:
+				/* Not pressed, just break */
+				break;
 			default:
+				if (!common_handler)
+				{
+					if (get_symbol("common_toggle_button_handler",(void *)&common_handler))
+						return common_handler(widget,data);
+					else
+					{
+						dbg_func(CRITICAL,g_strdup_printf(__FILE__": toggle_button_handler()\n\tToggle button handler in common plugin is MISSING, BUG!\n"));
+						return FALSE;
+					}
+				}
+				else
+					return common_handler(widget,data);
 				break;
 		}
 	}
@@ -735,17 +772,16 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	interdep_vars = DATA_GET(global_data,"interdep_vars");
 	serial_params = DATA_GET(global_data,"serial_params");
 
+	if (!GTK_IS_WIDGET(widget))
+	{
+		dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n"));
+		return FALSE;
+	}
 	if ((DATA_GET(global_data,"paused_handlers")) || 
 			(!DATA_GET(global_data,"ready")))
 	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
-	}
-
-	if (!GTK_IS_WIDGET(widget))
-	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n"));
-		return FALSE;
 	}
 
 	handler = (MtxButton)OBJ_GET(widget,"handler");
@@ -831,11 +867,10 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	static gint (*get_ecu_data_f)(gpointer) = NULL;
-	static void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;
+	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
+	/*static void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;*/
+	static void (*update_widget_f)(gpointer, gpointer);
 	static GList ***ve_widgets = NULL;
-	gint canID = 0;
-	gint page = 0;
-	gint offset = 0;
 	DataSize size = 0;
 	gint value = 0;
 	gint active_table = -1;
@@ -854,16 +889,19 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		ve_widgets = DATA_GET(global_data,"ve_widgets");
 	if (!get_ecu_data_f)
 		get_symbol("get_ecu_data",(void *)&get_ecu_data_f);
+	if (!send_to_ecu_f)
+		get_symbol("send_to_ecu",(void *)&send_to_ecu_f);
+	/*
 	if (!ms_send_to_ecu_f)
 		get_symbol("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
+		*/
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
 
 	firmware = DATA_GET(global_data,"firmware");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
 
 
-	canID = (GINT) OBJ_GET(widget,"canID");
-	page = (GINT) OBJ_GET(widget,"page");
-	offset = (GINT) OBJ_GET(widget,"offset");
 	size = (DataSize) OBJ_GET(widget,"size");
 	reverse_keys = (GBOOLEAN) OBJ_GET(widget,"reverse_keys");
 	if (OBJ_GET(widget,"table_num"))
@@ -1063,8 +1101,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			retval = TRUE;
 			break;
 		case GDK_Escape:
-			refresh_widgets_at_offset(page,offset);
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+			update_widget_f(widget,NULL);
 			retval = FALSE;
 			break;
 		case GDK_Return:
@@ -1077,7 +1114,9 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			break;
 	}
 	if (send)
-		ms_send_to_ecu_f(canID, page, offset, size, dload_val, TRUE);
+		send_to_ecu_f(widget,dload_val,TRUE);
+
+	/*	ms_send_to_ecu_f(canID, page, offset, size, dload_val, TRUE);*/
 	return retval;
 }
 

@@ -13,6 +13,7 @@
 
 #include <config.h>
 #include <defines.h>
+#include <ms1_gui_handlers.h>
 #include <ms1_plugin.h>
 #include <ms1_tlogger.h>
 #include <gtk/gtk.h>
@@ -49,6 +50,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
 	get_symbol_f("get_bitshift",(void *)&get_bitshift_f);
+
+	register_ecu_enums();
 }
 
 
@@ -59,14 +62,20 @@ G_MODULE_EXPORT void plugin_shutdown()
 }
 
 
-void register_enums(void)
+void register_ecu_enums(void)
 {
-	extern gconstpointer *global_data;
 	GHashTable *str_2_enum = NULL;
-
-	str_2_enum = DATA_GET(global_data,"str2_enum");
+	str_2_enum = DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
+		g_hash_table_insert(str_2_enum,"_START_TOOTHMON_LOGGER_",
+				GINT_TO_POINTER(START_TOOTHMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
+				GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
+				GINT_TO_POINTER(START_TRIGMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
+				GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
 	}
 }
 

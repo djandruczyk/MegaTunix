@@ -470,49 +470,6 @@ G_MODULE_EXPORT void update_trigtooth_display(gint page)
 
 }
 
-G_MODULE_EXPORT gboolean ms1_tlogger_button_handler(GtkWidget * widget, gpointer data)
-{
-	GtkWidget *tmpwidget = NULL;
-	gint handler = (GINT)OBJ_GET(widget, "handler");
-
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
-	{       /* It's pressed (or checked) */
-		switch ((ToggleButton)handler)
-		{
-
-			case START_TOOTHMON_LOGGER:
-				tmpwidget = lookup_widget_f("triggerlogger_buttons_table");
-				if (GTK_IS_WIDGET(tmpwidget))
-					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
-				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				start(TOOTHMON_TICKLER);
-				break;
-			case START_TRIGMON_LOGGER:
-				tmpwidget = lookup_widget_f("toothlogger_buttons_table");
-				if (GTK_IS_WIDGET(tmpwidget))
-					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),FALSE);
-				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
-				start(TRIGMON_TICKLER);
-				break;
-			case STOP_TOOTHMON_LOGGER:
-				stop(TOOTHMON_TICKLER);
-				tmpwidget = lookup_widget_f("triggerlogger_buttons_table");
-				if (GTK_IS_WIDGET(tmpwidget))
-					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
-				break;
-			case STOP_TRIGMON_LOGGER:
-				stop(TRIGMON_TICKLER);
-				tmpwidget = lookup_widget_f("toothlogger_buttons_table");
-				if (GTK_IS_WIDGET(tmpwidget))
-					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
-				break;
-			default:
-				break;
-		}
-	}
-	return TRUE;
-}
-
 
 void start(EcuPluginTickler type)
 {

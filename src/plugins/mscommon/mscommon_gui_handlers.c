@@ -370,6 +370,33 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 }
 
 
+G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointer data)
+{
+        static gboolean (*ecu_handler)(GtkWidget *widget, gpointer) = NULL;
+	gint handler = -1;
+
+	handler = (GINT)OBJ_GET(widget,"handler");
+
+	switch (handler)
+	{
+		default:
+			if (!ecu_handler)
+			{
+				if (get_symbol_f("ecu_toggle_button_handler",(void *)&ecu_handler))
+					return ecu_handler(widget,data);
+				else
+				{
+					dbg_func_f(CRITICAL,g_strdup(__FILE__": common_toggle_button_handler()\n\tDefault case, ecu handler NOT found in plugins, BUG!\n"));
+					return TRUE;
+				}
+			}
+			else
+				return ecu_handler(widget,data);
+			break;
+	}
+}
+
+
 /*!
  * \brief slider_value_changed() handles controls based upon a slider
  * sort of like spinbutton controls
@@ -409,8 +436,9 @@ G_MODULE_EXPORT gboolean common_slider_handler(GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer data)
 {
+	static gboolean (*ecu_handler)(GtkWidget *widget, gpointer) = NULL;
 	gint handler = -1;
 	gint tmpi = 0;
 	gint tmp2 = 0;
@@ -475,6 +503,18 @@ G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 			reqd_fuel_change(widget);
 			break;
 		default:
+			if (!ecu_handler)
+			{
+				if (get_symbol_f("ecu_std_button_handler",(void *)&ecu_handler))
+					return ecu_handler(widget,data);
+				else
+				{
+					dbg_func_f(CRITICAL,g_strdup(__FILE__": common_std_button_handler()\n\tDefault case, ecu handler NOT found in plugins, BUG!\n"));
+					return TRUE;
+				}
+			}
+			else
+				return ecu_handler(widget,data);
 			break;
 	}
 	return TRUE;
@@ -1084,7 +1124,7 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 }
 
 
-G_MODULE_EXPORT gboolean common_spin_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean common_spinbutton_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
 	 * necessary deta in the the app and calls any handlers 
@@ -1092,6 +1132,7 @@ G_MODULE_EXPORT gboolean common_spin_handler(GtkWidget *widget, gpointer data)
 	 * select/case branch to handle the choices..
 	 */
 	static Firmware_Details *firmware = NULL;
+	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	gint dl_type = -1;
 	gint offset = -1;
 	gint dload_val = -1;
@@ -1115,7 +1156,6 @@ G_MODULE_EXPORT gboolean common_spin_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	GHashTable **interdep_vars = NULL;
 	GdkColor black = {0,0,0,0};
-	gboolean (*ecu_handler)(GtkWidget *, gpointer);
 
 
 	if ((DATA_GET(global_data,"paused_handlers")) ||
@@ -1343,7 +1383,7 @@ G_MODULE_EXPORT gboolean common_spin_handler(GtkWidget *widget, gpointer data)
 		default:
 			if (!ecu_handler)
 			{
-				if (get_symbol_f("ecu_spin_handler",(void *)&ecu_handler))
+				if (get_symbol_f("ecu_spinbutton_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
 				{

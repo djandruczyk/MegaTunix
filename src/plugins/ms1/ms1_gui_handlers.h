@@ -35,7 +35,18 @@ extern guint (*get_bitshift_f)(guint);
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
-gboolean ecu_button_handler(GtkWidget *, gpointer);
+gboolean ecu_std_button_handler(GtkWidget *, gpointer);
+gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_combo_handler(GtkWidget *, gpointer);
 /* Prototypes */
+
+typedef enum
+{
+        START_TOOTHMON_LOGGER = LAST_TOGGLE_ENUM + 1,
+        STOP_TOOTHMON_LOGGER,
+        START_TRIGMON_LOGGER,
+        STOP_TRIGMON_LOGGER
+}MS1ToggleButton;
+
 #endif
+
