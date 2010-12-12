@@ -163,7 +163,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 				firmware->te_params[table_num]->f_gauge)
 		{
 			parent = glade_xml_get_widget(xml,"te_gaugeframe");
-			gauge = mtx_gauge_face_new_wrapper_f();
+			gauge = mtx_gauge_face_new();
 			gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
 
 			OBJ_SET(window,"gauge",gauge);
@@ -177,9 +177,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			else
 				tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 			filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
-			mtx_gauge_face_import_xml_wrapper_f(gauge,filename);
+			mtx_gauge_face_import_xml((gauge),filename);
 			lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
-			mtx_gauge_face_set_value_wrapper_f(gauge,tmpf);
+			mtx_gauge_face_set_value((gauge),tmpf);
 			g_free(filename);
 			id = create_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
 			OBJ_SET(gauge,"gauge_id",GINT_TO_POINTER(id));
@@ -497,7 +497,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 				firmware->te_params[table_num]->f_gauge) && (!embedded))
 	{
 		parent = glade_xml_get_widget(xml,"te_gaugeframe");
-		gauge = mtx_gauge_face_new_wrapper_f();
+		gauge = mtx_gauge_face_new();
 		gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
 		if (firmware->te_params[table_num]->gauge_temp_dep)
 		{
@@ -509,9 +509,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		else
 			tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
 		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
-		mtx_gauge_face_import_xml_wrapper_f(gauge,filename);
+		mtx_gauge_face_import_xml((gauge),filename);
 		lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
-		mtx_gauge_face_set_value_wrapper_f(gauge,tmpf);
+		mtx_gauge_face_set_value((gauge),tmpf);
 
 		g_free(filename);
 		id = create_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);

@@ -1313,7 +1313,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 					pass=TRUE;
 				break;
 			case REGEX:
-				if (regex_wrapper_f(vector[1],test->result_str,&len))
+				if (regex(vector[1],test->result_str,&len))
 					pass=TRUE;
 				break;
 			default:

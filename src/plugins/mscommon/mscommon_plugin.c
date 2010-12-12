@@ -67,13 +67,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("lookup_precision",(void *)&lookup_precision_f);
 	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
 	get_symbol_f("mem_alloc",(void *)&mem_alloc_f);
-	get_symbol_f("mtx_gauge_face_new_wrapper",(void *)&mtx_gauge_face_new_wrapper_f);
-	get_symbol_f("mtx_gauge_face_import_xml_wrapper",(void *)&mtx_gauge_face_import_xml_wrapper_f);
-	get_symbol_f("mtx_gauge_face_set_value_wrapper",(void *)&mtx_gauge_face_set_value_wrapper_f);
 	get_symbol_f("parse_keys",(void *)&parse_keys_f);
 	get_symbol_f("process_rt_vars",(void *)&process_rt_vars_f);
 	get_symbol_f("queue_function",(void *)&queue_function_f);
-	get_symbol_f("regex_wrapper",(void *)&regex_wrapper_f);
 	get_symbol_f("remove_watch",(void *)&remove_watch_f);
 	get_symbol_f("remove_from_lists",(void *)&remove_from_lists_f);
 	get_symbol_f("reverse_lookup",(void *)&reverse_lookup_f);

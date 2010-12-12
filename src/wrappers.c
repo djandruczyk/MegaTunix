@@ -38,10 +38,10 @@ G_MODULE_EXPORT double eval_x(void * eval, double x)
 	return evaluator_evaluate_x(eval,x);
 }
 
-G_MODULE_EXPORT char * regex_wrapper(char *pattern, char *string, int *len)
-{
-	return regex(pattern,string,len);
-}
+//G_MODULE_EXPORT char * regex_wrapper(char *pattern, char *string, int *len)
+//{
+//	return regex(pattern,string,len);
+//}
 
 G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_wrapper(gchar *mask)
 {

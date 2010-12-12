@@ -52,8 +52,8 @@ libmscommon_la_SOURCES = \
 
 
 libmscommon_la_LDFLAGS = -shared $(no_undefined) -module
-#libmscommon_la_LIBADD = ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la ../../../widgets/libmtxcurve.la ../../../widgets/libmtxgauge.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ 
-libmscommon_la_LIBADD = ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcurve.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ 
+libmscommon_la_LIBADD = ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la ../../../widgets/libmtxcurve.la ../../../widgets/libmtxgauge.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ 
+#libmscommon_la_LIBADD = ../../../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@ 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

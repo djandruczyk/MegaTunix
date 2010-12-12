@@ -37,9 +37,6 @@ extern void (*remove_watch_f)(guint32);
 extern void *(*eval_create_f)(char *);
 extern void (*eval_destroy_f)(void *);
 extern double (*eval_x_f)(void *, double);
-extern GtkWidget *(mtx_gauge_face_new_wrapper_f)(void);
-extern void (*mtx_gauge_face_import_xml_wrapper_f)(GtkWidget *, gchar *);
-extern void (*mtx_gauge_face_set_value_wrapper_f)(GtkWidget *, gfloat);
 
 /*Externs */
 	
