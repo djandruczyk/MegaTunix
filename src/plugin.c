@@ -17,9 +17,13 @@
 #include <enums.h>
 #include <init.h>
 #include <listmgmt.h>
+#include <logviewer_gui.h>
 #include <mode_select.h>
 #include <notifications.h>
 #include <plugin.h>
+#include <rtv_processor.h>
+#include <string.h>
+#include <stdlib.h>
 #include <threads.h>
 #include <widgetmgmt.h>
 #include <timeout_handlers.h>
@@ -34,7 +38,7 @@ G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 	gboolean (*func)(GtkWidget *, gpointer) =  NULL;
 	gboolean res = FALSE;
 
-	module = (GModule *)DATA_GET(global_data,"plugin_module");
+	module = (GModule *)DATA_GET(global_data,"ecu_module");
 	func_name = (gchar *)OBJ_GET(widget,"function_name");
 	func = (void *)OBJ_GET(widget,"function");
 
@@ -52,27 +56,132 @@ G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 }
 
 
-void plugin_init()
+G_MODULE_EXPORT void plugins_init()
 {
-	void (*plugin_init)(gconstpointer);
+	GModule *module[3];
+	GThread *id = NULL;
+#ifdef __WIN32__
+	gchar * libname = NULL;
+#endif 
+	gchar * libpath = NULL;
+	void (*plugin_init)(gconstpointer *);
 
-	/* THIS IS A FUGLY HACK!!
-	   On linux you can create a shared lib with unresolved symbols,
-	   but you CAN NOT with windows, ALSO a DLL can't call functions outside itself
-	   So we cheat, by assigning the func pointers into our "global container" and
-	   pass that across on init of the plugin so it can call mtx functions and access
-	   global vars (within global_data)
-	   */
-	DATA_SET(global_data,"dbg_func_f",(gpointer)&dbg_func);
-	DATA_SET(global_data,"io_cmd_f",(gpointer)&io_cmd);
-	DATA_SET(global_data,"initialize_outputdata_f",(gpointer)&initialize_outputdata);
-	DATA_SET(global_data,"lookup_widget_f",(gpointer)&lookup_widget);
-	DATA_SET(global_data,"start_tickler_f",(gpointer)&start_tickler);
-	DATA_SET(global_data,"stop_tickler_f",(gpointer)&stop_tickler);
-	DATA_SET(global_data,"get_list_f",(gpointer)&get_list);
-	DATA_SET(global_data,"set_widget_sensitive_f",(gpointer)&set_widget_sensitive);
-	DATA_SET(global_data,"update_logbar_f",(gpointer)&update_logbar);
+	/* MegaTunix itself */
+	module[0] = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (!module[0])
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugin_init()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
+	DATA_SET(global_data,"megatunix_module",(gpointer)module[0]);
 
-	if (g_module_symbol(DATA_GET(global_data,"plugin_module"),"plugin_init",(void *)&plugin_init))
+	/* ECU library */
+#ifdef __WIN32__
+	libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
+	libpath = g_module_build_path(MTXPLUGINDIR,libname);
+	g_free(libname);
+#else
+	libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
+#endif
+	module[1] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+	if (!module[1])
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening ECU library module error:\n\t%s\n",g_module_error()));
+	g_free(libpath);
+	DATA_SET(global_data,"ecu_module",(gpointer)module[1]);
+
+	/* Common Library */
+#ifdef __WIN32__
+	libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"common_lib"));
+	libpath = g_module_build_path(MTXPLUGINDIR,libname);
+	g_free(libname);
+#else
+	libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"common_lib"));
+#endif
+	module[2] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+	if (!module[2])
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening Common library module error:\n\t%s\n",g_module_error()));
+	g_free(libpath);
+	DATA_SET(global_data,"common_module",(gpointer)module[2]);
+
+	/* Set pointer to error message function global data container is
+	   passed to plugin(s) so they have access to get to global functions
+	   by looking up the symbols
+	 */
+	DATA_SET(global_data,"error_msg_f",(gpointer)&error_msg);
+	DATA_SET(global_data,"get_symbol_f",(gpointer)&get_symbol);
+
+	/* Common module init */
+	if (g_module_symbol(module[2],"plugin_init",(void *)&plugin_init))
 		plugin_init(global_data);
+	/* ECU Specific module init */
+	if (g_module_symbol(module[1],"plugin_init",(void *)&plugin_init))
+		plugin_init(global_data);
+
+	/* Startup dispatcher thread */
+	id =  g_thread_create(thread_dispatcher,
+			NULL, /* Thread args */
+			TRUE, /* Joinable */
+			NULL); /*GError Pointer */
+	DATA_SET(global_data,"thread_dispatcher_id",id);
+}
+
+
+G_MODULE_EXPORT void plugins_shutdown()
+{
+	GModule *module = NULL;
+	GThread *id = NULL;
+	void (*plugin_shutdown)(void);
+
+	id = DATA_GET(global_data,"thread_dispatcher_id");
+	if (id)
+	{
+		DATA_SET(global_data,"thread_dispatcher_exit",GINT_TO_POINTER(TRUE));
+		g_thread_join(id);
+	}
+	/* Shutdown ECU module */
+	module = DATA_GET(global_data,"ecu_module");
+	if (module)
+	{
+		if (g_module_symbol(module,"plugin_shutdown",(void *)&plugin_shutdown))
+			plugin_shutdown();
+		if (!g_module_close(module))
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_shutdown()\n\tClosing module error:\n\t%s\n",g_module_error()));
+		DATA_SET(global_data,"ecu_module",NULL);
+	}
+	/* Shutdown Common module */
+	module = DATA_GET(global_data,"common_module");
+	if (module)
+	{
+		if (g_module_symbol(module,"plugin_shutdown",(void *)&plugin_shutdown))
+			plugin_shutdown();
+		if (!g_module_close(module))
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_shutdown()\n\tClosing module error:\n\t%s\n",g_module_error()));
+		DATA_SET(global_data,"common_module",NULL);
+	}
+}
+
+
+G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
+{
+	GModule *module[3];
+	gint i = 0;
+	gboolean found = FALSE;
+	extern gconstpointer *global_data;
+
+	/* Megatunix itself */
+	module[0] = DATA_GET(global_data,"megatunix_module");
+	/* Common library */
+	module[1] = DATA_GET(global_data,"common_module");
+	/* ECU Specific library */
+	module[2] = DATA_GET(global_data,"ecu_module");
+
+	for (i=0;i<3;i++)
+	{
+		if (!module[i])
+			printf("module %i is not found!\n",i);
+		if ((module[i]) && (!found))
+			if (g_module_symbol(module[i],name,function_p))
+				found = TRUE;
+	}
+	if (!found)
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tError finding symbol \"%s\" in any plugins\n",name));
+
+	return found;
 }

@@ -15,9 +15,22 @@
 #define __JIMSTIM_H__
 
 #include <gtk/gtk.h>
+#include <threads.h>
+
+/* Externs */
+extern void (*error_msg_f)(const gchar *);
+extern GtkWidget *(*lookup_widget_f)(const gchar *);
+extern void (*io_cmd_f)(const gchar *,void *);
+extern OutputData *(*initialize_outputdata_f)(void);
+extern void *(*dbg_func_f)(int,gchar *);
+extern void (*start_tickler_f)(gint);
+extern void (*stop_tickler_f)(gint);
+extern GList *(*get_list_f)(gchar *);
+extern void (*set_widget_sensitive_f)(gpointer, gpointer);
+extern void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
+/* Externs */
 
 typedef struct _JimStim_Data JimStim_Data;
-
 
 struct _JimStim_Data
 {
@@ -28,6 +41,8 @@ struct _JimStim_Data
 	GtkWidget *start_b;	/* start button */
 	GtkWidget *stop_b;	/* end button */
 	GtkWidget *rpm_e;	/* commanded rpm entry */
+	GtkWidget *step_rb;	/* Favor step radiobutton */
+	GtkWidget *sweep_rb;	/* Favor sweep radiobutton */
 	GtkWidget *frame;	/* JS controls frame */
 	gint start;		/* start value */
 	gint end;		/* end value */
@@ -43,7 +58,6 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *, gpointer);
 G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *, gpointer);
 G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *);
 G_MODULE_EXPORT void jimstim_sweeper_init(GtkWidget *);
-
 /* Prototypes */
 
 #endif

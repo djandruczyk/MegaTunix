@@ -28,7 +28,7 @@ static GArray * raw_memory_data;
  \param input (void *) pointer to the input stream
  \param offset (gint) offset of the datablock received (more correctly a page)
  */
-void post_process_raw_memory(void *input, gint offset)
+G_MODULE_EXPORT void post_process_raw_memory(void *input, gint offset)
 {
 	gint i = 0;
 	guchar *ptr = input;
@@ -55,19 +55,19 @@ void post_process_raw_memory(void *input, gint offset)
  the data (hex,binary.decimal)
  \param page_offset (gint) which page of data are we updating?
  */
-void update_raw_memory_view(ToggleButton type, gint page_offset)
+G_MODULE_EXPORT void update_raw_memory_view(ToggleButton type, gint page_offset)
 {
-	extern gboolean interrogated;
-	extern gboolean connected;
 	extern GArray * raw_memory_widgets;
 	extern GArray * raw_memory_data;
 	GtkWidget *entry = NULL;
 	guchar value = 0;
-	extern gint mem_view_style[];
+	gint mem_view_style[4];
 	gint i = 0;
 	gchar * tmpbuf = NULL;
+	extern gconstpointer *global_data;
 
-	if (!((connected) && (interrogated)))
+	if (!((DATA_GET(global_data,"connected")) && 
+				(DATA_GET(global_data,"interrogated"))))
 		return;
 
 	mem_view_style[page_offset] = (gint)type;
@@ -85,7 +85,7 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
 		switch ((ToggleButton)type)
 		{
 			case DECIMAL_VIEW:
-				
+
 				tmpbuf = g_strdup_printf("%.3i",value);
 				break;
 			case HEX_VIEW:
@@ -111,7 +111,7 @@ void update_raw_memory_view(ToggleButton type, gint page_offset)
  \param x (gint) the value to conver to binary
  \returns a textual string of the value in binary
  */
-gchar * get_bin(gint x)
+G_MODULE_EXPORT gchar * get_bin(gint x)
 {
 	GString *string = g_string_new(NULL);
 	gint n = 0;

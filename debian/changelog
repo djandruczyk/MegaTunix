@@ -1,13 +1,15 @@
 megatunix (0.9.24) stable; urgency=low
   * Nasty Memory leak on datalog dumper fixed
-  * JimStim tabs enhanced significnatly, sweeper bugs fixed
+  * JimStim tabs enhanced significantly, sweeper bugs fixed
   * Tooltips (being able to disable them) now work again
   * plugin architecture implemented, jimstim first device to have special
     purpose functionality isolated into the plugin
   * post_function executor now searches Mtx, common plugin and ecu 
     specific plugins
-  * plugins now work on win32, though implementation is less than ideal due
-    to DLL symbol restrictions
+  * Most of mtx convenience libs have been converted to shared libs/dlls which
+    solves most of the win32 issues.
+  * Most of the MS speciifc junk has been moved into the MS common and family
+    specific plugins
 megatunix (0.9.23) stable; urgency=low
   * Numerous memory leaks fixed
   * converted to GDataSet from GObject for many internal data storage sections

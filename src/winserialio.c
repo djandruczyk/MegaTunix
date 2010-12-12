@@ -21,15 +21,17 @@
  #include <windows.h>
 #endif
 
-extern Serial_Params *serial_params;
 
 /*!
  \brief win32_setup_serial_params() sets up the serial port attributes for win32
  by setting things basically for 8N1, no flow, no escapes, etc....
  */
-void win32_setup_serial_params(gint fd, gint baud)
+G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud)
 {
 #ifdef __WIN32__
+	extern gconstpointer *global_data;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 	DCB dcb;
 	COMMTIMEOUTS timeouts;
 
@@ -96,7 +98,7 @@ void win32_setup_serial_params(gint fd, gint baud)
  \param mode (integer enum) either TCIFLUSH (input flush), TCOFLUSH (output flush), 
  or TCIOFLUSH (both input and output flush).
  */
-void win32_flush_serial(int fd, FlushDirection mode)
+G_MODULE_EXPORT void win32_flush_serial(int fd, FlushDirection mode)
 {
 #ifdef __WIN32__
 	switch (mode)

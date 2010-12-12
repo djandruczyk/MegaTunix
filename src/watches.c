@@ -19,6 +19,7 @@
 #include <firmware.h>
 #include <math.h>
 #include <notifications.h>
+#include <plugin.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
@@ -40,10 +41,9 @@ G_MODULE_EXPORT void fire_off_rtv_watches_pf(void)
 	}
 }
 
-guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state, gboolean one_shot,gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
-	GModule *module = NULL;
 
 	watch = g_new0(DataWatch,1);
 	watch->style = SINGLE_BIT_STATE;
@@ -54,20 +54,16 @@ guint32 create_single_bit_state_watch(gchar * varname, gint bit, gboolean state,
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (module)
-		g_module_symbol(module,watch->function, (void *)&watch->func);
-	g_module_close(module);
+	get_symbol(watch->function,(void *)&watch->func);
 	if (!watch_hash)
 		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
 	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
 
-guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean one_shot,gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_single_bit_change_watch(const gchar * varname, gint bit,gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
-	GModule *module = NULL;
 
 	watch = g_new0(DataWatch,1);
 	watch->style = SINGLE_BIT_CHANGE;
@@ -77,10 +73,7 @@ guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean one_sh
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (module)
-		g_module_symbol(module,watch->function, (void *)&watch->func);
-	g_module_close(module);
+	get_symbol(watch->function,(void *)&watch->func);
 	if (!watch_hash)
 		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
 	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -88,10 +81,9 @@ guint32 create_single_bit_change_watch(gchar * varname, gint bit,gboolean one_sh
 }
 
 
-guint32 create_value_change_watch(gchar * varname, gboolean one_shot,gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_value_change_watch(const gchar * varname, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
-	GModule *module = NULL;
 
 	watch = g_new0(DataWatch,1);
 	watch->style = VALUE_CHANGE;
@@ -100,10 +92,7 @@ guint32 create_value_change_watch(gchar * varname, gboolean one_shot,gchar *fnam
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (module)
-		g_module_symbol(module,watch->function, (void *)&watch->func);
-	g_module_close(module);
+	get_symbol(watch->function,(void *)&watch->func);
 	if (!watch_hash)
 		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
 	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -111,27 +100,20 @@ guint32 create_value_change_watch(gchar * varname, gboolean one_shot,gchar *fnam
 }
 
 
-guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
-	GModule *module = NULL;
-	gint i = 0;
 
 	watch = g_new0(DataWatch,1);
 	watch->style = MULTI_VALUE;
 	watch->num_vars = g_strv_length(varnames);
 	watch->vals = g_new0(gfloat,watch->num_vars);
-	watch->varnames = g_new0(gchar *, watch->num_vars);
-	for (i=0;i<watch->num_vars;i++)
-		watch->varnames[i] = g_strdup(varnames[i]);
+	watch->varnames = g_strdupv(varnames);
 	watch->function = g_strdup(fname);
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (module)
-		g_module_symbol(module,watch->function, (void *)&watch->func);
-	g_module_close(module);
+	get_symbol(watch->function,(void *)&watch->func);
 	if (!watch_hash)
 		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
 	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -139,7 +121,7 @@ guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,gchar *fna
 }
 
 
-void watch_destroy(gpointer data)
+G_MODULE_EXPORT void watch_destroy(gpointer data)
 {
 	DataWatch *watch = (DataWatch *)data;
 	/*printf("destroying watch %ui\n",watch->id);*/
@@ -155,13 +137,13 @@ void watch_destroy(gpointer data)
 }
 
 
-void remove_watch(guint32 watch_id)
+G_MODULE_EXPORT void remove_watch(guint32 watch_id)
 {
 	g_hash_table_remove(watch_hash,GINT_TO_POINTER(watch_id));
 }
 
 
-void process_watches(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data)
 {
 	DataWatch * watch = (DataWatch *)value;
 	gfloat tmpf = 0.0;
@@ -249,7 +231,7 @@ void process_watches(gpointer key, gpointer value, gpointer data)
 }
 
 
-gboolean watch_active(guint32 id)
+G_MODULE_EXPORT gboolean watch_active(guint32 id)
 {
 	/*printf("watch_active call for watch %ui\n",id);*/
 	if (g_hash_table_lookup(watch_hash,GINT_TO_POINTER(id)))

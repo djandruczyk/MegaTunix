@@ -14,7 +14,6 @@
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
-#include <fileio.h>
 #include <glade/glade.h>
 #include <stdlib.h>
 #include <visibility.h>
@@ -88,7 +87,7 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 }
 
 
-gboolean hide_tab(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean hide_tab(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *child;
 	GtkWidget *label;

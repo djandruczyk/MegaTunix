@@ -27,10 +27,8 @@ gboolean get_state(gchar *, gint );
 void alter_widget_state(gpointer, gpointer);
 void get_geo(GtkWidget *, const char *, PangoRectangle *);
 void set_fixed_size(GtkWidget *, int);
-void set_widget_labels(gchar *);
- void lock_entry(GtkWidget *);
+void lock_entry(GtkWidget *);
 gint get_multiplier(DataSize );
-gboolean check_size(DataSize );
 void dump_datalist(GQuark, gpointer, gpointer);
 /* Prototypes */
 

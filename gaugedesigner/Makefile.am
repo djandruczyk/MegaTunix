@@ -9,7 +9,7 @@ INCLUDES = \
 	@LIBXML2_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
-gaugedesigner_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GLEXT_LIBS@ @WIN32_RESOURCES@
+gaugedesigner_LDADD = ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la @GTK_LIBS@ @LIBXML2_LIBS@ @EXTRA_LIBS@ @WIN32_RESOURCES@
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

@@ -16,13 +16,13 @@
 #include <configfile.h>
 #include <debugging.h>
 #include <defines.h>
-#include <dep_processor.h>
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
+#include <plugin.h>
 #include <stdlib.h>
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
@@ -49,7 +49,7 @@ enum
  \param fname (gpointer) textual name of the filename to load
  \param user_data (gpointer) unused
  */
-void get_table(gpointer table_name, gpointer fname, gpointer user_data)
+G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
 	gboolean status = FALSE;
 	gchar * filename = NULL;
@@ -82,7 +82,7 @@ void get_table(gpointer table_name, gpointer fname, gpointer user_data)
  \param filename (gchar *) filename to load table data from
  \returns TRUE on success, FALSE on failure
  */
-gboolean load_table(gchar *table_name, gchar *filename)
+G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 {
 	GIOStatus status;
 	GIOChannel *iochannel;
@@ -160,7 +160,7 @@ gboolean load_table(gchar *table_name, gchar *filename)
  \param value (gint ) value to be reverse looked up
  \returns the index closest to that data
  */
-gint reverse_lookup(gconstpointer *object, gint value)
+G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 {
 	gint i = 0;
 	gint j = 0;
@@ -175,12 +175,20 @@ gint reverse_lookup(gconstpointer *object, gint value)
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
+	static gboolean (*check_deps)(gconstpointer *);
 
+	if (!check_deps)
+		get_symbol("check_dependancies",(void *)&check_deps);
 	table = (gchar *)DATA_GET(object,"lookuptable");
 	alt_table = (gchar *)DATA_GET(object,"alt_lookuptable");
 	dep_obj = (gconstpointer *)DATA_GET(object,"dep_object");
-	if (dep_obj)
-		state = check_dependancies(dep_obj);
+	if (dep_obj) 
+	{
+		if (check_deps)
+			state = check_deps(dep_obj);
+		else
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": reverse_lookup()\n\tCould NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+	}
 	if (state)
 		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
 	else
@@ -241,7 +249,7 @@ gint reverse_lookup(gconstpointer *object, gint value)
  \param value (gint ) value to be reverse looked up
  \returns the index closest to that data
  */
-gint reverse_lookup_obj(GObject *object, gint value)
+G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 {
 	gint i = 0;
 	gint j = 0;
@@ -256,12 +264,21 @@ gint reverse_lookup_obj(GObject *object, gint value)
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
+	static gboolean (*check_deps)(gconstpointer *);
+
+	if (!check_deps)
+		get_symbol("check_dependancies",(void *)&check_deps);
 
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
 	dep_obj = (gconstpointer *)OBJ_GET(object,"dep_object");
-	if (dep_obj)
-		state = check_dependancies(dep_obj);
+	if (dep_obj) 
+	{
+		if (check_deps)
+			state = check_deps(dep_obj);
+		else
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": reverse_lookup_obj()\n\tCould NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+	}
 	if (state)
 		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
 	else
@@ -307,7 +324,7 @@ gint reverse_lookup_obj(GObject *object, gint value)
 }
 
 
-gint direct_reverse_lookup(gchar *table, gint value)
+G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 {
 	gint i = 0;
 	gint j = 0;
@@ -370,13 +387,17 @@ gint direct_reverse_lookup(gchar *table, gint value)
  \param offset (gint) offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
-gfloat lookup_data(gconstpointer *object, gint offset)
+G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 {
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
+	static gboolean (*check_deps)(gconstpointer *);
+
+	if (!check_deps)
+		get_symbol("check_dependancies",(void *)&check_deps);
 
 	table = (gchar *)DATA_GET(object,"lookuptable");
 	alt_table = (gchar *)DATA_GET(object,"alt_lookuptable");
@@ -389,9 +410,12 @@ gfloat lookup_data(gconstpointer *object, gint offset)
 	   printf("no dependancy\n");
 	 */
 
-	if (dep_obj)
+	if (dep_obj) 
 	{
-		state = check_dependancies(dep_obj);
+		if (check_deps)
+			state = check_deps(dep_obj);
+		else
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data()\n\tCould NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
 	{
@@ -420,20 +444,29 @@ gfloat lookup_data(gconstpointer *object, gint offset)
  \param offset (gint) offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
-gfloat lookup_data_obj(GObject *object, gint offset)
+G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 {
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
+	static gboolean (*check_deps)(gconstpointer *);
+
+	if (!check_deps)
+		get_symbol("check_dependancies",(void *)&check_deps);
 
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
 	dep_obj = (gconstpointer *)OBJ_GET(object,"dep_object");
 
-	if (dep_obj)
-		state = check_dependancies(dep_obj);
+	if (dep_obj) 
+	{
+		if (check_deps)
+			state = check_deps(dep_obj);
+		else
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data_obj()\n\tCould NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+	}
 	if (state)
 	{
 		/*printf("ALTERNATE\n");*/
@@ -455,7 +488,7 @@ gfloat lookup_data_obj(GObject *object, gint offset)
 
 
 
-gfloat direct_lookup_data(gchar *table, gint offset)
+G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 {
 	LookupTable *lookuptable = NULL;
 
@@ -484,7 +517,6 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 {
 	static gboolean ltc_created = FALSE;
 	static GtkWidget * lookuptables_config_window = NULL;
-	extern Firmware_Details *firmware;
 	GtkListStore *store = NULL;
 	GtkTreeStore *combostore = NULL;
 	GtkTreeIter iter;
@@ -504,6 +536,9 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	gchar ** tmpvector = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if ((ltc_created) && (ltc_visible))
 		return TRUE;
@@ -629,7 +664,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 
 }
 
-gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_hide(widget);
 	ltc_visible = FALSE;
@@ -637,7 +672,7 @@ gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
+G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
 {
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
@@ -648,10 +683,12 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 	gchar * new_name = NULL;
 	gchar ** vector = NULL;
 	gboolean restart_tickler = FALSE;
-	extern gint realtime_id;
-	extern GAsyncQueue *io_data_queue;
-	extern Firmware_Details *firmware;
 	gint count = 0;
+	GAsyncQueue *io_data_queue = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	io_data_queue = DATA_GET(global_data,"io_data_queue");
 
 	/* Get combo box model so we can set the combo to this new value */
 	g_object_get(G_OBJECT(renderer),"model",&store,NULL);
@@ -664,7 +701,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 		return TRUE;
 	if (g_strcasecmp(new_text,"System") == 0)
 		return TRUE;
-	if (realtime_id)
+	if (DATA_GET(global_data,"realtime_id"))
 	{
 		restart_tickler = TRUE;
 		stop_tickler(RTV_TICKLER);
@@ -706,7 +743,7 @@ gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_
 
 }
 
-void update_lt_config(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
 	ConfigFile *cfgfile = data;
 	LookupTable *lookuptable = value;
@@ -723,7 +760,7 @@ void update_lt_config(gpointer key, gpointer value, gpointer data)
  \param value (gpointer) value (enumeration value) in the hashtable
  \param user_data (gpointer) unused...
  */
-void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
+G_MODULE_EXPORT void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
 {
 	LookupTable *table;
 	table = (LookupTable *)value;

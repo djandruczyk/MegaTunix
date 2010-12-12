@@ -19,7 +19,7 @@ apifix_SOURCES = apifix.c gauge.h
 
 noinst_PROGRAMS = gaugedemo piedemo apifix curvedemo progressdemo stripchartdemo
 
-noinst_LTLIBRARIES = libmtxgauge.la libmtxcurve.la libmtxpie.la libmtxprogress.la libmtxstripchart.la
+lib_LTLIBRARIES = libmtxgauge.la libmtxcurve.la libmtxpie.la libmtxprogress.la libmtxstripchart.la libmtxcombo_mask.la
 
 libmtxgauge_la_SOURCES = gauge.c gauge.h gauge-xml.c gauge-xml.h gauge-private.c gauge-private.h
 
@@ -30,22 +30,30 @@ libmtxpie_la_SOURCES = piegauge.c piegauge.h piegauge-private.c piegauge-private
 libmtxprogress_la_SOURCES = progress.c progress.h progress-private.c progress-private.h
 
 libmtxstripchart_la_SOURCES = stripchart.c stripchart.h stripchart-private.c stripchart-private.h
+libmtxcombo_mask_la_SOURCES = combo_mask.c crx.c ../include/crx.h ../include/combo_mask.h
 
-libmtxgauge_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
-libmtxcurve_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
-libmtxpie_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
-libmtxprogress_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
-libmtxstripchart_la_LDFLAGS = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
+libmtxgauge_la_LDFLAGS = -shared $(no_undefined)
+libmtxcurve_la_LDFLAGS = -shared $(no_undefined) 
+libmtxpie_la_LDFLAGS = -shared $(no_undefined)
+libmtxprogress_la_LDFLAGS = -shared $(no_undefined)
+libmtxstripchart_la_LDFLAGS = -shared $(no_undefined)
+libmtxcombo_mask_la_LDFLAGS = -shared $(no_undefined)
+libmtxgauge_la_LIBADD = ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
+libmtxcurve_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@
+libmtxpie_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@
+libmtxprogress_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@
+libmtxstripchart_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@
+libmtxcombo_mask_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@ 
 
 gaugedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
-piedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxpie.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
+piedemo_LDADD = @GTK_LIBS@  ./libmtxpie.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
-progressdemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxprogress.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
+progressdemo_LDADD = @GTK_LIBS@  ./libmtxprogress.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
-curvedemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxcurve.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
+curvedemo_LDADD = @GTK_LIBS@  ./libmtxcurve.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
-stripchartdemo_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxstripchart.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
+stripchartdemo_LDADD = @GTK_LIBS@  ./libmtxstripchart.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
 apifix_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
@@ -54,8 +62,11 @@ COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@
 #AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused -pedantic
 AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wno-unused -pedantic
 
-CLEANFILES = *~ core gmon.out nohup.out 
+if CROSS_COMPILING
+no_undefined = -no-undefined
+endif
 
+CLEANFILES = *~ core gmon.out nohup.out 
 
 EXTRA_DIST = README
 

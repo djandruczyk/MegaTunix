@@ -25,7 +25,7 @@ extern gconstpointer *global_data;
  \returns pointer to GList
  \see store_list
  */
-GList * get_list(gchar * key)
+G_MODULE_EXPORT GList * get_list(const gchar * key)
 {
 	if (!lists_hash)
 	{
@@ -42,7 +42,7 @@ GList * get_list(gchar * key)
  \param list pointer to list to store
  \see get_list
  */
-void store_list(gchar * key, GList * list)
+G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
 {
 	if (!lists_hash)
 	{
@@ -59,7 +59,7 @@ void store_list(gchar * key, GList * list)
  \param key Text name of list to store
  \see get_list
  */
-void remove_list(gchar *key)
+G_MODULE_EXPORT void remove_list(const gchar *key)
 {
 	if (!lists_hash)
 		return;
@@ -67,7 +67,7 @@ void remove_list(gchar *key)
 }
 
 
-gint list_sort(gconstpointer a, gconstpointer b)
+G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
 {
 	ListElement *a1 = (ListElement *)a;
 	ListElement *b1 = (ListElement *)b;
@@ -75,14 +75,14 @@ gint list_sort(gconstpointer a, gconstpointer b)
 }
 
 
-gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
+G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
 {
 	const gchar *key = (const gchar *)data;
 	return g_ascii_strcasecmp((gchar *)DATA_GET(a,key),(gchar *)DATA_GET(b,key));
 }
 
 
-void free_element(gpointer data, gpointer user_data)
+G_MODULE_EXPORT void free_element(gpointer data, gpointer user_data)
 {
 	ListElement *a = (ListElement *)data;
 	g_free(a->filename);
@@ -90,7 +90,7 @@ void free_element(gpointer data, gpointer user_data)
 	g_free(a);
 }
 
-void simple_free_element(gpointer data, gpointer user_data)
+G_MODULE_EXPORT void simple_free_element(gpointer data, gpointer user_data)
 {
 	g_free((gchar *)data);
 }

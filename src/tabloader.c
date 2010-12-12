@@ -16,18 +16,15 @@
 #include <combo_loader.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_loader.h>
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <glade/glade.h>
-#include <gmodule.h>
 #include <keybinder.h>
 #include <keyparser.h>
 #include <listmgmt.h>
-#include <memory_gui.h>
 #include <notifications.h>
-#include <rtv_map_loader.h>
+#include <plugin.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
@@ -35,7 +32,6 @@
 #include <tag_loader.h>
 #include <widgetmgmt.h>
 
-gboolean tabs_loaded = FALSE;
 extern gconstpointer *global_data;
 
 
@@ -46,7 +42,6 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 {
-	extern Firmware_Details * firmware;
 	gint i = 0;
 	gint cur = 0;
 	ConfigFile *cfgfile = NULL;
@@ -64,12 +59,12 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	GtkWidget *notebook = NULL;
 	GtkWidget *item = NULL;
 	extern GdkColor red;
-	extern volatile gboolean leaving;
 	gboolean * hidden_list = NULL;
-	extern gboolean connected;
-	extern volatile gboolean offline;
+	Firmware_Details *firmware = NULL;
 
-	if (!(((connected) || (offline)) && (!tabs_loaded)))
+	firmware = DATA_GET(global_data,"firmware");
+
+	if (DATA_GET(global_data,"tabs_loaded"))
 		return FALSE;
 	if (!firmware)
 		return FALSE;
@@ -202,7 +197,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		/* Allow gui to update as it should.... */
 		while (gtk_events_pending())
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				gdk_threads_leave();
 				return FALSE;
@@ -214,7 +209,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 	}
 	update_logbar("interr_view","warning",_("Tab Loading Complete!"),FALSE,FALSE,FALSE);
-	tabs_loaded = TRUE;
+	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
@@ -229,7 +224,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
  \param value (gpointer) pointer to the struct Group to be deallocated
  \see load_groups
  */
-void group_free(gpointer value)
+G_MODULE_EXPORT void group_free(gpointer value)
 {
 	Group *group = value;
 	gint i = 0;
@@ -255,7 +250,7 @@ void group_free(gpointer value)
  \returns a GHashTable * to a newly created hashtable of the groups that were
  loaded. The groups are indexed in the hashtable by group name.
  */
-GHashTable * load_groups(ConfigFile *cfgfile)
+G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 {
 	gint x = 0;
 	gint tmpi = 0;
@@ -265,6 +260,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 	gint num_groups = 0;
 	Group *group = NULL;
 	GHashTable *groups = NULL;
+	void (*load_dep_obj)(GObject *,ConfigFile *,const gchar *,const gchar *) = NULL;
 
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
@@ -298,8 +294,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		}
 
 		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref(group->object);
-		gtk_object_sink(GTK_OBJECT(group->object));
+		g_object_ref_sink(group->object);
 
 		/* If this widget has a "depend_on" tag we need to 
 		 * load the dependency information and store it for 
@@ -307,7 +302,8 @@ GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies_obj(group->object,cfgfile,section,"depend_on");
+			if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
+				load_dep_obj(group->object,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
 
@@ -344,7 +340,7 @@ GHashTable * load_groups(ConfigFile *cfgfile)
  be bound to the widget
  \returns the page of the group
  */
-gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar *groupname)
+G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar *groupname)
 {
 	gint i = 0;
 	gint tmpi = 0;
@@ -399,7 +395,7 @@ gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar
  widget into.
  \returns void
  */
-void bind_to_lists(GtkWidget * widget, gchar * lists)
+G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
 {
 	gint bind_num_keys = 0;
 	gchar **tmpvector = NULL;
@@ -432,7 +428,7 @@ void bind_to_lists(GtkWidget * widget, gchar * lists)
 }
 
 
-void remove_from_lists(gchar * lists, gpointer data)
+G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
 {
 	gint i = 0;
 	gint bind_num_keys = 0;
@@ -463,7 +459,7 @@ void remove_from_lists(gchar * lists, gpointer data)
  \param widget (GtkWidget *) widget passed to load attributes on
  \param user_data (gpointer) pointer to a BingGroup structure.
  */
-void bind_data(GtkWidget *widget, gpointer user_data)
+G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 {
 	BindGroup *bindgroup = user_data;
 	ConfigFile *cfgfile = bindgroup->cfgfile;
@@ -485,8 +481,12 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	gint tmpi = 0;
 	gchar *ptr = NULL;
 	gboolean indexed = FALSE;
-	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+	void (*load_dep_obj)(GObject *, ConfigFile *,const gchar *,const gchar *) = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	firmware = DATA_GET(global_data,"firmware");
 
 
 	if (GTK_IS_CONTAINER(widget))
@@ -573,7 +573,8 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		load_dependancies_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
+		if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
+			load_dep_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
 
@@ -647,7 +648,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	offset = -1;
 	cfg_read_int(cfgfile,section, "offset", &offset);
-	if (offset >=0 && indexed)
+	if (offset >= 0 && indexed)
 	{
 		/*printf("indexed widget %s\n",widget->name); */
 		if (cfg_read_string(cfgfile, section, "size", &size))
@@ -749,7 +750,7 @@ void bind_data(GtkWidget *widget, gpointer user_data)
  found execute it
  \param functions (gchar *) CSV list of functions to run
  */
-void run_post_functions(const gchar * functions)
+G_MODULE_EXPORT void run_post_functions(const gchar * functions)
 {
 	run_post_functions_with_arg(functions,NULL);
 }
@@ -764,82 +765,30 @@ void run_post_functions(const gchar * functions)
  \param functions (gchar *) CSV list of functions to run
  \param widget (GtkWidget *) pointer to widget to be passed to the function
  */
-void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
+G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
-	void (*f_widget)(GtkWidget *);
-	void (*f_void)(void);
+	void (*f_widget)(GtkWidget *) = NULL;
+	void (*f_void)(void) = NULL;
 	gchar ** vector = NULL;
 	guint i = 0;
-	guint j = 0;
-#ifdef __WIN32__
-	gchar * libname = NULL;
-#endif
-	gchar * libpath = NULL;
-	gboolean found = FALSE;
-	GModule **module = NULL;
-
-	/* Mtx common and ecu specific libs */
-	module = g_new0(GModule *, 3);
-	module[0] = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (!module[0])
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
-	/* Common library */
-	if (strlen((gchar *)DATA_GET(global_data,"common_lib")) > 1)
-	{
-#ifdef __WIN32__
-		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"common_lib"));
-		libpath = g_module_build_path(MTXPLUGINDIR,libname);
-		g_free(libname);
-#else
-		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-		module[1] = g_module_open(libpath,G_MODULE_BIND_LAZY);
-		g_free(libpath);
-	}
-	/* ECU Specific library */
-	if (strlen((gchar *)DATA_GET(global_data,"ecu_lib")) > 1)
-	{
-#ifdef __WIN32__
-		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
-		libpath = g_module_build_path(MTXPLUGINDIR,libname);
-		g_free(libname);
-#else
-		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-		module[2] = g_module_open(libpath,G_MODULE_BIND_LAZY);
-		g_free(libpath);
-	}
 	vector = g_strsplit(functions,",",-1);
 	for (i=0;i<g_strv_length(vector);i++)
 	{
-		for (j=0;j<3;j++)
+		/* If widget defined, pass to post function */
+		if (widget)
 		{
-			/* If widget defined, pass to post function */
-			if (widget)
-			{
-				if ((!found) && (g_module_symbol(module[j],vector[i],(void *)&f_widget)))
-				{
-					f_widget(widget);
-					found = TRUE;
-				}
-			}
-			else /* If no widget find funct with no args.. */
-			{
-				if ((!found) && (g_module_symbol(module[j],vector[i],(void *)&f_void)))
-				{
-					f_void();
-					found = TRUE;
-				}
-			}
+			if (get_symbol(vector[i],(void *)&f_widget))
+				f_widget(widget);
+			else
+				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
 		}
-		if (!found)
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
+		else /* If no widget find funct with no args.. */
+		{
+			if (get_symbol(vector[i],(void *)&f_void))
+				f_void();
+			else
+				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
+		}
 	}
 	g_strfreev(vector);
-	for (j=0;j<3;j++)
-	{
-		if (!g_module_close(module[j]))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\t Failure calling \"g_module_close()\", error %s\n",g_module_error()));
-	}
-	g_free(module);
 }

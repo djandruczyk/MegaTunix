@@ -18,7 +18,9 @@
 
 /* Prototypes */
 gboolean plugin_function(GtkWidget *, gpointer);
-void plugin_init(void);
+void plugins_init(void);
+void plugins_shutdown(void);
+gboolean get_symbol(const gchar *, void **);
 /* Prototypes */
 
 #endif

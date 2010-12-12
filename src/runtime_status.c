@@ -43,7 +43,6 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT void load_status_pf(void)
 {
-	extern Firmware_Details *firmware;
 	gchar *filename = NULL;
 	gint x = 0;
 	gint y = 0;
@@ -57,10 +56,11 @@ G_MODULE_EXPORT void load_status_pf(void)
 	xmlNode *root_element = NULL;
 	GladeXML *main_xml;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
-	extern gboolean interrogated;
+	Firmware_Details *firmware = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
 
-	if (!(interrogated))
+	if (!(DATA_GET(global_data,"interrogated")))
 		return;
 	if (!firmware->status_map_file)
 	{
@@ -123,7 +123,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 }
 
 
-gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
+G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
 
@@ -148,7 +148,7 @@ gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
 }
 
 
-void load_status(xmlNode *node,GtkWidget *parent)
+G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 {
 	gchar *txt = NULL;
 	gchar *active_fg = NULL;

@@ -20,12 +20,12 @@
 
 /* Prototypes */
 void process_rt_vars(void * );
-gboolean lookup_precision(gchar *, gint *);
-gboolean lookup_current_value(gchar *, gfloat *);
-gboolean lookup_previous_value(gchar *, gfloat *);
-gboolean lookup_previous_nth_value(gchar *, gint, gfloat *);
-gboolean lookup_previous_n_values(gchar *, gint, gfloat *);
-gboolean lookup_previous_n_skip_x_values(gchar *, gint, gint, gfloat *);
+gboolean lookup_precision(const gchar *, gint *);
+gboolean lookup_current_value(const gchar *, gfloat *);
+gboolean lookup_previous_value(const gchar *, gfloat *);
+gboolean lookup_previous_nth_value(const gchar *, gint, gfloat *);
+gboolean lookup_previous_n_values(const gchar *, gint, gfloat *);
+gboolean lookup_previous_n_skip_x_values(const gchar *, gint, gint, gfloat *);
 gfloat handle_complex_expr(gconstpointer *, void *,ConvType);
 gfloat handle_complex_expr_obj(GObject *, void *,ConvType);
 gfloat handle_special(gconstpointer *,gchar *);

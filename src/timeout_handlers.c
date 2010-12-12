@@ -32,11 +32,6 @@
 #include <threads.h>
 #include <widgetmgmt.h>
 
-GThread *realtime_id = NULL;
-gint playback_id = 0;
-gint toothmon_id = 0;
-gint statuscounts_id = 0;
-static gint trigmon_id = 0;
 static gboolean restart_realtime = FALSE;
 
 
@@ -47,27 +42,24 @@ static gboolean restart_realtime = FALSE;
  which timeout to fire up.
  \see signal_read_rtvars_thread signal_read_rtvars
  */
-void start_tickler(TicklerType type)
+G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
-	extern volatile gboolean offline;
-	extern gboolean rtvars_loaded;
-	extern gboolean connected;
-	extern gboolean interrogated;
-	extern GCond *rtv_thread_cond;
 	extern gconstpointer *global_data;
+	gint id = 0;
+	GThread *realtime_id = NULL;
 	switch (type)
 	{
 		case RTV_TICKLER:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
-			if (!rtvars_loaded)
+			if (!DATA_GET(global_data,"rtvars_loaded"))
 				break;
 			if (restart_realtime)
 			{
 				update_logbar("comms_view",NULL,_("TTM is active, Realtime Reader suspended\n"),FALSE,FALSE,FALSE);
 				break;
 			}
-			if (!realtime_id)
+			if (!DATA_GET(global_data,"realtime_id"))
 			{
 				flush_rt_arrays();
 
@@ -75,72 +67,37 @@ void start_tickler(TicklerType type)
 						NULL, /* Thread args */
 						TRUE, /* Joinable */
 						NULL); /*GError Pointer */
+				DATA_SET(global_data,"realtime_id",realtime_id);
 				update_logbar("comms_view",NULL,_("Realtime Reader started\n"),FALSE,FALSE,FALSE);
 			}
 			else
 				update_logbar("comms_view","warning",_("Realtime Reader ALREADY started\n"),FALSE,FALSE,FALSE);
 			break;
 		case LV_PLAYBACK_TICKLER:
-			if (playback_id == 0)
-				playback_id = gdk_threads_add_timeout((GINT)DATA_GET(global_data,"lv_scroll_delay"),(GSourceFunc)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+			if (!DATA_GET(global_data,"playback_id"))
+			{
+				id = gdk_threads_add_timeout((GINT)DATA_GET(global_data,"lv_scroll_delay"),(GSourceFunc)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+				DATA_SET(global_data,"playback_id",GINT_TO_POINTER(id));
+			}
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
 			break;
-		case TOOTHMON_TICKLER:
-			if (offline)
-				break;
-			if (realtime_id)
-			{
-				/* TTM and Realtime are mutulally exclusive,
-				 * and TTM takes precedence,  so disabled 
-				 * realtime, and manually fire it once per
-				 * TTM read so the gauges will still update
-				 */
-				g_cond_signal(rtv_thread_cond);
-				restart_realtime = TRUE;
-				realtime_id = NULL;
-			}
-			if (toothmon_id == 0)
-			{
-				signal_toothtrig_read(TOOTHMON_TICKLER);
-				toothmon_id = g_timeout_add(3000,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
-			}
-			else
-				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
-			break;
-		case TRIGMON_TICKLER:
-			if (offline)
-				break;
-			if (realtime_id)
-			{
-				/* TTM and Realtime are mutually exclusive,
-				 * and TTM takes precedence,  so disabled 
-				 * realtime, and manually fire it once per
-				 * TTM read so the gauges will still update
-				 */
-				g_cond_signal(rtv_thread_cond);
-				restart_realtime = TRUE;
-				realtime_id = NULL;
-			}
-			if (trigmon_id == 0)
-			{
-				signal_toothtrig_read(TRIGMON_TICKLER);
-				trigmon_id = g_timeout_add(750,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
-			}
-			else
-				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tTrigmon tickler already active \n"));
-			break;
 		case SCOUNTS_TICKLER:
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 				break;
-			if (!((connected) && (interrogated)))
+			if (!((DATA_GET(global_data,"connected")) && 
+						(DATA_GET(global_data,"interrogated"))))
 				break;
-			if (statuscounts_id == 0)
-				statuscounts_id = g_timeout_add(100,(GSourceFunc)update_errcounts,NULL);
+			if (!DATA_GET(global_data,"statuscounts_id"))
+			{
+				id = g_timeout_add(100,(GSourceFunc)update_errcounts,NULL);
+				DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(id));
+			}
 			else
 				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
 			break;
 		default:
+			/* Search for registered handlers from plugins */
 			break;
 
 	}
@@ -153,67 +110,45 @@ void start_tickler(TicklerType type)
  /param TicklerType an enumeration used to determine which handler to stop.
  \see start_tickler
  */
-void stop_tickler(TicklerType type)
+G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
-	extern volatile gboolean leaving;
-	extern GCond *rtv_thread_cond;
+	GCond *rtv_thread_cond = NULL;
+	extern gconstpointer *global_data;
+	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
 	switch (type)
 	{
 		case RTV_TICKLER:
-			if (realtime_id)
+			if (DATA_GET(global_data,"realtime_id"))
 			{
 				g_cond_signal(rtv_thread_cond);
 				update_logbar("comms_view",NULL,_("Realtime Reader stopped\n"),FALSE,FALSE,FALSE);
-				realtime_id = NULL;
+				DATA_SET(global_data,"realtime_id",NULL);
 			}
 			else
 				update_logbar("comms_view","warning",_("Realtime Reader ALREADY stopped\n"),FALSE,FALSE,FALSE);
 
-			if (!leaving)
+			if (!DATA_GET(global_data,"leaving"))
 				reset_runtime_status();
 			break;
 
 		case LV_PLAYBACK_TICKLER:
-			if (playback_id)
+			if (DATA_GET(global_data,"playback_id"))
 			{
-				g_source_remove(playback_id);
-				playback_id = 0;
-			}
-			break;
-		case TOOTHMON_TICKLER:
-			if (toothmon_id)
-			{
-				g_source_remove(toothmon_id);
-				toothmon_id = 0;
-			}
-			if (restart_realtime)
-			{
-				restart_realtime = FALSE;
-				start_tickler(RTV_TICKLER);
-			}
-			break;
-		case TRIGMON_TICKLER:
-			if (trigmon_id)
-			{
-				g_source_remove(trigmon_id);
-				trigmon_id = 0;
-			}
-			if (restart_realtime)
-			{
-				restart_realtime = FALSE;
-				start_tickler(RTV_TICKLER);
+				g_source_remove((gint)DATA_GET(global_data,"playback_id"));
+				DATA_SET(global_data,"playback_id",GINT_TO_POINTER(0));
 			}
 			break;
 		case SCOUNTS_TICKLER:
-			if (statuscounts_id)
-				g_source_remove(statuscounts_id);
-			statuscounts_id = 0;
+			if (DATA_GET(global_data,"statuscounts_id"))
+			{
+				g_source_remove((gint)DATA_GET(global_data,"statuscounts_id"));
+				DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(0));
+			}
 			break;
 		default:
 			break;
 	}
 }
-
 
 
 /*!
@@ -224,16 +159,24 @@ void stop_tickler(TicklerType type)
  will only aggravate the queue roadblock.
  \returns 0 on signal to exit
  */
-void * signal_read_rtvars_thread(gpointer data)
+G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 {
-	extern Serial_Params *serial_params;
-	extern GAsyncQueue *io_data_queue;
-	extern GAsyncQueue *pf_dispatch_queue;
-	extern GCond *rtv_thread_cond;
+	Serial_Params *serial_params;
 	GMutex * mutex = g_mutex_new();
 	GTimeVal time;
+	GAsyncQueue *io_data_queue = NULL;
+	GAsyncQueue *pf_dispatch_queue = NULL;
+	GCond *rtv_thread_cond = NULL;
+	extern gconstpointer *global_data;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	io_data_queue = DATA_GET(global_data,"io_data_queue");
+	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
+	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
 
 	g_mutex_lock(mutex);
+	g_async_queue_ref(io_data_queue);
+	g_async_queue_ref(pf_dispatch_queue);
 	while (TRUE)
 	{
 
@@ -250,6 +193,9 @@ void * signal_read_rtvars_thread(gpointer data)
 		g_time_val_add(&time,serial_params->read_wait*1000);
 		if (g_cond_timed_wait(rtv_thread_cond,mutex,&time))
 		{
+			printf("rtv_thread_cond signaled, exiting!\n");
+			g_async_queue_unref(io_data_queue);
+			g_async_queue_unref(pf_dispatch_queue);
 			g_mutex_unlock(mutex);
 			g_mutex_free(mutex);
 			g_thread_exit(0);
@@ -262,10 +208,15 @@ void * signal_read_rtvars_thread(gpointer data)
  \brief signal_read_rtvars() sends io message to I/O core to tell ms to send 
  back runtime vars
  */
-void signal_read_rtvars(void)
+G_MODULE_EXPORT void signal_read_rtvars(void)
 {
 	OutputData *output = NULL;
-	extern Firmware_Details *firmware;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	if (!firmware)
+		return;
 
 	if (firmware->capabilities & MS2)
 	{
@@ -282,44 +233,11 @@ void signal_read_rtvars(void)
 
 
 /*!
- \brief signal_toothtrig_read() is called by a GTK+ timeout on a periodic basis
- to get a new set of toother or ignition trigger data.  It does so by queing 
- messages to a thread which handles I/O.  
- \returns TRUE
- */
-gboolean signal_toothtrig_read(TicklerType type)
-{
-	extern Firmware_Details *firmware;
-	dbg_func(IO_MSG,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
-
-	/* Make the gauges stay up to date,  even if rather slowly 
-	 * Also gets us access to current RPM and other vars for calculating 
-	 * data from the TTM results
-	 */
-	signal_read_rtvars();
-	switch (type)
-	{
-		case TOOTHMON_TICKLER:
-			if (firmware->capabilities & MSNS_E)
-				io_cmd("ms1_e_read_toothmon",NULL);
-			break;
-		case TRIGMON_TICKLER:
-			if (firmware->capabilities & MSNS_E)
-				io_cmd("ms1_e_read_trigmon",NULL);
-			break;
-		default:
-			break;
-	}
-	return TRUE;	/* Keep going.... */
-}
-
-
-/*!
  \brief early interrogation() is called from a one shot timeout from main
  in order to start the interrogation process as soon as the gui is up and 
  running.
  */
-gboolean early_interrogation(void)
+G_MODULE_EXPORT gboolean early_interrogation(void)
 {
 	set_title(g_strdup(_("Initiating background ECU interrogation...")));
 	update_logbar("interr_view","warning",_("Initiating background ECU interrogation...\n"),FALSE,FALSE,FALSE);

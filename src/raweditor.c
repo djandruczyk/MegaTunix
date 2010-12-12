@@ -50,9 +50,13 @@ G_MODULE_EXPORT void finish_raweditor(void)
 	gint cols = 8;
 	GdkColor purple = { 0, 61000, 57000, 65535};
 	extern GdkColor white;
-	extern Firmware_Details *firmware;
-	extern GList *** ve_widgets;
-	extern volatile gboolean leaving;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	top = lookup_widget("raweditor_top_vbox1");
 	if (!GTK_IS_WIDGET(top))
@@ -146,7 +150,7 @@ G_MODULE_EXPORT void finish_raweditor(void)
 		}
 		while (gtk_events_pending ())
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				return;
 			}
@@ -165,7 +169,7 @@ G_MODULE_EXPORT void finish_raweditor(void)
  \param event (GdkEvent *) the event type
  \param data (gpointer) unused
  */
-gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
+G_MODULE_EXPORT gboolean swap_base(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	gint format = 0;
 	gint i = 0;

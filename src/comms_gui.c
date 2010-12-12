@@ -23,12 +23,7 @@
 #include <unistd.h>
 #include <widgetmgmt.h>
 
-extern gint read_wait_time;
-extern gint ms_reset_count;
-extern gint ms_goodread_count;
-extern gint ms_ve_goodread_count;
 extern GdkColor black;
-extern Serial_Params *serial_params;
 extern GdkColor white;
 extern GdkColor red;
 extern GdkColor black;
@@ -41,10 +36,13 @@ extern GdkColor black;
  */
 G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
-	ms_ve_goodread_count = 0;
-	ms_goodread_count = 0;
-	ms_reset_count = 0;
-	serial_params->errcount = 0;
+	extern gconstpointer *global_data;
+	Serial_Params *serial_params = NULL;
+	serial_params = DATA_GET(global_data,"serial_params");
+
+	DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(0));
+	DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER(0));
+	DATA_SET(global_data,"reset_count",GINT_TO_POINTER(0));
 	return TRUE;
 }
 
@@ -54,25 +52,34 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
  current statistical error and i/O counters
  \returns TRUE
  */
-gboolean update_errcounts(void)
+G_MODULE_EXPORT gboolean update_errcounts(void)
 {
+	static gboolean pf_red = FALSE;
+	static GAsyncQueue *pf_dispatch_queue = NULL;
+        static GAsyncQueue *gui_dispatch_queue = NULL;
+	static GCond *statuscounts_cond = NULL;
 	gchar *tmpbuf = NULL;
 	gint tmp = 0;
 	GtkWidget * widget = NULL;
-	static gboolean pf_red = FALSE;
-	extern volatile gboolean leaving;
-	extern GAsyncQueue *pf_dispatch_queue;
-        extern GAsyncQueue *gui_dispatch_queue;
-	extern GCond *statuscounts_cond;
+	Serial_Params *serial_params = NULL;
+	extern gconstpointer *global_data;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	if (!pf_dispatch_queue)
+		pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+	if (!statuscounts_cond)
+		statuscounts_cond = DATA_GET(global_data,"statuscounts_cond");
 	
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 	{
 		g_cond_signal(statuscounts_cond);
 		return TRUE;
 	}
 
 	gdk_threads_enter();
-	tmpbuf = g_strdup_printf("%i",ms_ve_goodread_count);
+	tmpbuf = g_strdup_printf("%i",(GINT)DATA_GET(global_data,"ve_goodread_count"));
 	widget = lookup_widget("runtime_good_ve_entry");
 	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
@@ -81,7 +88,7 @@ gboolean update_errcounts(void)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
-	tmpbuf = g_strdup_printf("%i",ms_goodread_count);
+	tmpbuf = g_strdup_printf("%i",(GINT)DATA_GET(global_data,"rt_goodread_count"));
 	widget = lookup_widget("comms_rtcount_entry");
 	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
@@ -90,7 +97,7 @@ gboolean update_errcounts(void)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
-	tmpbuf = g_strdup_printf("%i",ms_reset_count);
+	tmpbuf = g_strdup_printf("%i",(GINT)DATA_GET(global_data,"reset_count"));
 	widget = lookup_widget("comms_reset_entry");
 	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);

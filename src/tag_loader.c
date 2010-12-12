@@ -38,7 +38,7 @@
  \param section (gchar *) section name in the config file to search for the
  tags
  */
-void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
+G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar *key = NULL;

@@ -19,7 +19,6 @@
 #include <defines.h>
 #include <errno.h>
 #include <glib.h>
-#include <mtxsocket.h>
 #include <offline.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -35,7 +34,7 @@ extern gconstpointer *global_data;
  \param argv (char **) array of command line args
  \returns void
  */
-void handle_args(gint argc, gchar * argv[])
+G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 {
 	GError *error = NULL;
 	CmdLineArgs *args = NULL;
@@ -45,7 +44,6 @@ void handle_args(gint argc, gchar * argv[])
 	gint result = 0;
 	gchar ** vector = NULL;
 	gchar * netinfo = NULL;
-	extern volatile gboolean offline;
 
 	args = init_args();
 	GOptionEntry entries[] =
@@ -146,7 +144,7 @@ void handle_args(gint argc, gchar * argv[])
 	}
 	if (args->offline)
 	{
-		offline = TRUE;
+		DATA_SET(global_data,"offline",GINT_TO_POINTER(TRUE));
 		g_timeout_add(1000,(GSourceFunc)set_offline_mode,NULL);
 	}
 	if (args->listen_mode)
@@ -191,7 +189,7 @@ void handle_args(gint argc, gchar * argv[])
 }
 
 
-CmdLineArgs * init_args(void)
+G_MODULE_EXPORT CmdLineArgs * init_args(void)
 {
 	CmdLineArgs *args;
 	args = g_new0(CmdLineArgs, 1);

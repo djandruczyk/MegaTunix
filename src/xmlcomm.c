@@ -17,6 +17,9 @@
 #include <enums.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <plugin.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stringmatch.h>
 #include <xmlcomm.h>
 #include <xmlbase.h>
@@ -24,7 +27,7 @@
 
 extern gconstpointer *global_data;
 
-void load_comm_xml(gchar *filename)
+G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 {
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
@@ -55,7 +58,7 @@ void load_comm_xml(gchar *filename)
 
 }
 
-void load_xmlcomm_elements(xmlNode *a_node)
+G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 {
 	static GHashTable *arguments = NULL;
 	static GHashTable *commands = NULL;
@@ -80,7 +83,7 @@ void load_xmlcomm_elements(xmlNode *a_node)
 	}
 }
 
-void load_potential_args(GHashTable *arguments, xmlNode *node)
+G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	PotentialArg *arg = NULL;
@@ -108,7 +111,7 @@ void load_potential_args(GHashTable *arguments, xmlNode *node)
 }
 
 
-void load_commands(GHashTable *commands_hash, xmlNode *node)
+G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	Command *cmd = NULL;
@@ -138,7 +141,7 @@ void load_commands(GHashTable *commands_hash, xmlNode *node)
 }
 
 
-void load_arg_details(PotentialArg *arg, xmlNode *node)
+G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	gchar *tmpbuf = NULL;
@@ -190,11 +193,10 @@ void load_arg_details(PotentialArg *arg, xmlNode *node)
 }
 
 
-void load_cmd_details(Command *cmd, xmlNode *node)
+G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	gchar *tmpbuf = NULL;
-	GModule *module = NULL;
 
 	if (!node->children)
 	{
@@ -220,12 +222,8 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"func_call_name") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->func_call_name);
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,cmd->func_call_name,(void *)&cmd->function);
-				if (!(cmd->function))
-					printf(_("ERROR Function %s is NULL\n"),cmd->func_call_name);
-				g_module_close(module);
+				if (!get_symbol(cmd->func_call_name,(void *)&cmd->function))
+					printf(_("Unable to locate Function %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"func_call_arg") == 0)
 			{
@@ -243,13 +241,8 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"helper_func") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->helper_func_name);
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,cmd->helper_func_name,(void *)&cmd->helper_function);
-				if (!(cmd->helper_function))
-					printf(_("ERROR Helper Function %s is NULL\n"),cmd->helper_func_name);
-				g_module_close(module);
-
+				if (!get_symbol(cmd->helper_func_name,(void *)&cmd->helper_function))
+					printf(_("Unable to locate Function %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"helper_func_arg") == 0)
 			{
@@ -268,7 +261,7 @@ void load_cmd_details(Command *cmd, xmlNode *node)
 }
 
 
-void load_cmd_args(Command *cmd, xmlNode *node)
+G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	gchar * tmpbuf = NULL;
@@ -297,11 +290,10 @@ void load_cmd_args(Command *cmd, xmlNode *node)
 	}
 }
 
-void load_cmd_post_functions(Command *cmd, xmlNode *node)
+G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	PostFunction *pf = NULL;
-	GModule *module = NULL;
 
 	if (!node->children)
 	{
@@ -318,26 +310,18 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 			{
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,pf->name,(void *)&pf->function);
-				if (!(pf->function))
-					dbg_func(CRITICAL,g_strdup_printf(_("ERROR, Post Function \"%s\" is NULL!!\n"),pf->name));
+				if (!get_symbol(pf->name,(void *)&pf->function))
+					printf(_("Unable to locate Function %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 				pf->w_arg = FALSE;
-				g_module_close(module);
 				g_array_append_val(cmd->post_functions,pf);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"function_w_arg") == 0)
 			{
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
-				module = g_module_open(NULL,G_MODULE_BIND_LAZY);
-				if (module)
-					g_module_symbol(module,pf->name,(void *)&pf->function_w_arg);
-				if (!(pf->function_w_arg))
-					dbg_func(CRITICAL,g_strdup_printf(_("ERROR, Post Function w/arg \"%s\" is NULL!!\n"),pf->name));
+				if (!get_symbol(pf->name,(void *)&pf->function_w_arg))
+					printf(_("Unable to locate Function %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 				pf->w_arg = TRUE;
-				g_module_close(module);
 				g_array_append_val(cmd->post_functions,pf);
 			}
 		}
@@ -346,7 +330,7 @@ void load_cmd_post_functions(Command *cmd, xmlNode *node)
 }
 
 
-void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 {
 	Command *cmd = NULL;
 	PostFunction *pf = NULL;
@@ -390,3 +374,5 @@ void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 	}
 	printf("\n\n");
 }
+
+

@@ -20,7 +20,6 @@
 /* Prototypes */
 void start_tickler(TicklerType);
 void stop_tickler(TicklerType);
-gboolean signal_toothtrig_read(TicklerType);
 void * signal_read_rtvars_thread(gpointer);
 void signal_read_rtvars(void);
 gboolean early_interrogation(void);

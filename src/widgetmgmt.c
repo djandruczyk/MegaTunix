@@ -16,20 +16,16 @@
 #include <defines.h>
 #include <widgetmgmt.h>
 #include <debugging.h>
-#include <dep_loader.h>
 #include <enums.h>
 #include <getfiles.h>
 #include <glade/glade.h>
-#include <gmodule.h>
 #include <keyparser.h>
-#include <memory_gui.h>
-#include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
 #include <tabloader.h>
 #include <tag_loader.h>
 
-GHashTable *dynamic_widgets = NULL;
+extern gconstpointer *global_data;
 
 /*!
  \brief populate_master() stores a pointer to all of the glade loaded 
@@ -39,11 +35,12 @@ GHashTable *dynamic_widgets = NULL;
  a call to glade_get_widget_name
  \param user_data (gpointer) is currently unused.
  */
-void populate_master(GtkWidget *widget, gpointer user_data)
+G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data)
 {
 	gchar *name = NULL;
 	gchar *fullname = NULL;
 	gchar *prefix = NULL;
+	GHashTable *dynamic_widgets = NULL;
 	ConfigFile *cfg = (ConfigFile *) user_data;
 	/* Populates a big master hashtable of all dynamic widgets so that 
 	 * various functions can do a lookup for the widgets name and get it's
@@ -70,8 +67,12 @@ void populate_master(GtkWidget *widget, gpointer user_data)
 		g_free(prefix);
 		return;
 	}
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	if(!dynamic_widgets)
+	{
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		DATA_SET_FULL(global_data,"dynamic_widgets",dynamic_widgets,g_hash_table_destroy);
+	}
 	fullname = g_strdup_printf("%s%s",prefix,name);
 	OBJ_SET(widget,"fullname",g_strdup(fullname));
 	if (!lookup_widget(fullname))
@@ -91,10 +92,16 @@ void populate_master(GtkWidget *widget, gpointer user_data)
  \param widget (GtkWidget *) Pointer to the widget to be stored by name.
  \see deregister_widget
  */
-void register_widget(gchar *name, GtkWidget * widget)
+G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
 {
+	GHashTable *dynamic_widgets = NULL;
+
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	if(!dynamic_widgets)
+	{
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		DATA_SET_FULL(global_data,"dynamic_widgets",dynamic_widgets,g_hash_table_destroy);
+	}
 	if (lookup_widget(name))
 	{
 		
@@ -113,14 +120,18 @@ void register_widget(gchar *name, GtkWidget * widget)
  \returns TRUE on success removing, FALSE on failure removing 
  \see register_widget
  */
-gboolean deregister_widget(gchar *name)
+G_MODULE_EXPORT gboolean deregister_widget(gchar *name)
 {
+	GHashTable *dynamic_widgets = NULL;
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	return (g_hash_table_remove(dynamic_widgets,name));
 }
 
 
-GtkWidget * lookup_widget(const gchar * name)
+G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
 {
+	GHashTable *dynamic_widgets = NULL;
+	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
 	if (dynamic_widgets)
 		return (g_hash_table_lookup(dynamic_widgets,name));
 	else
@@ -135,7 +146,7 @@ GtkWidget * lookup_widget(const gchar * name)
  \param index (int) which one we want to check
  \returns the decoded state from the string
  */
-gboolean get_state(gchar *string, gint index)
+G_MODULE_EXPORT gboolean get_state(gchar *string, gint index)
 {
 	gchar **tmpbuf = NULL;
 	gboolean state = FALSE;
@@ -153,7 +164,7 @@ gboolean get_state(gchar *string, gint index)
 }
 
 
-void alter_widget_state(gpointer key, gpointer data)
+G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 {
 	GtkWidget * widget = key;
 	gchar * tmpbuf = NULL;
@@ -163,7 +174,7 @@ void alter_widget_state(gpointer key, gpointer data)
 	gboolean value = FALSE;
 	gboolean state = FALSE;
 	MatchType type = AND;
-	extern GHashTable *widget_group_states;
+	GHashTable *widget_group_states = NULL;
 
 	if (!GTK_IS_WIDGET(widget))
 		return;
@@ -176,6 +187,7 @@ void alter_widget_state(gpointer key, gpointer data)
 	else
 	        tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
 
+	widget_group_states = DATA_GET(global_data,"widget_group_states");
 	if (OBJ_GET(widget,"match_type"))
 		type = (MatchType)OBJ_GET(widget,"match_type");
 	groups = parse_keys(tmpbuf,&num_groups,",");
@@ -214,45 +226,12 @@ void alter_widget_state(gpointer key, gpointer data)
 }
 
 
-/*!
- \brief set_widget_labels takes a passed string which is a comma 
- separated string of name/value pairs, first being the widget name 
- (global name) and the second being the string to set on this widget
- */
-void set_widget_labels(gchar *input)
-{
-	gchar ** vector = NULL;
-	gint count = 0;
-	gint i = 0;
-	GtkWidget * widget = NULL;
-	extern GHashTable *dynamic_widgets;
-
-	if (!input)
-		return;
-
-	vector = parse_keys(input,&count,",");
-	if (count%2 != 0)
-	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input));
-		return;
-	}
-	for(i=0;i<count;i+=2)
-	{
-		widget = lookup_widget(vector[i]);
-		if ((widget) && (GTK_IS_LABEL(widget)))
-			gtk_label_set_text(GTK_LABEL(widget),vector[i+1]);
-		else
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]));
-	}
-	g_strfreev(vector);
-
-}
 
 /* Calculate the bounding box for a string rendered with a widget's 
  * default font. Set geo to a rect with 0,0 positioned on the left-hand 
  *  baseline.
  *   */
-void get_geo( GtkWidget *widget, const char *text, PangoRectangle *geo )
+G_MODULE_EXPORT void get_geo( GtkWidget *widget, const char *text, PangoRectangle *geo )
 {
 	PangoLayout *layout;
 	int width, height;
@@ -269,7 +248,7 @@ void get_geo( GtkWidget *widget, const char *text, PangoRectangle *geo )
 
 /* Set a widget to a fixed size ... width in characters.
  *  */
-void set_fixed_size( GtkWidget *widget, int nchars )
+G_MODULE_EXPORT void set_fixed_size( GtkWidget *widget, int nchars )
 {
 	PangoRectangle geo;
 
@@ -293,7 +272,7 @@ G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 /*
  \brief,  returns number of bytes for passed DataSize enumeration
  */
-gint get_multiplier(DataSize size)
+G_MODULE_EXPORT gint get_multiplier(DataSize size)
 {
 	gint mult = 0;
 
@@ -319,27 +298,7 @@ gint get_multiplier(DataSize size)
 }
 
 
-gboolean check_size(DataSize size)
-{
-	switch (size)
-	{
-		case MTX_CHAR:
-		case MTX_U08:
-		case MTX_S08:
-		case MTX_U16:
-		case MTX_S16:
-		case MTX_U32:
-		case MTX_S32:
-			return TRUE;
-			break;
-		default:
-			return FALSE;
-			break;
-	}
-	return FALSE;
-}
-
-void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
+G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
 {
 	const gchar * key = NULL;
 	key = g_quark_to_string(key_id);

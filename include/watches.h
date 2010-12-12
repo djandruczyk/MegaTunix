@@ -60,10 +60,10 @@ struct _DataWatch
 };
 /* Prototypes */
  void fire_off_rtv_watches_pf(void);
-guint32 create_single_bit_state_watch(gchar *, gint, gboolean, gboolean, gchar *, gpointer);
-guint32 create_single_bit_change_watch(gchar *, gint, gboolean, gchar *, gpointer);
-guint32 create_value_change_watch(gchar *, gboolean,gchar *, gpointer);
-guint32 create_multi_value_watch(gchar **, gboolean,gchar *, gpointer);
+guint32 create_single_bit_state_watch(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
+guint32 create_single_bit_change_watch(const gchar *, gint, gboolean, const gchar *, gpointer);
+guint32 create_value_change_watch(const gchar *, gboolean, const gchar *, gpointer);
+guint32 create_multi_value_watch(gchar **, gboolean, const gchar *, gpointer);
 void watch_destroy(gpointer);
 void remove_watch(guint32);
 void process_watches(gpointer, gpointer, gpointer);

@@ -12,20 +12,17 @@
  */
 #include <config.h>
 #include <defines.h>
-#include <afr_calibrate.h>
-#include <datamgmt.h>
 #include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
-#include <fileio.h>
 #include <gui_handlers.h>
 #include <math.h>
 #include <menu_handlers.h>
+#include <plugin.h>
 #include <runtime_text.h>
 #include <stdlib.h>
 #include <tabloader.h>
 #include <threads.h>
-#include <vex_support.h>
 #include <widgetmgmt.h>
 #include <mtxmatheval.h>
 
@@ -62,12 +59,12 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 	GtkWidget *item = NULL;
 	guint i = 0;
 	GladeXML *xml = NULL;
-	extern Firmware_Details *firmware;
-	extern volatile gboolean leaving;
+	Firmware_Details *firmware = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
 
 	xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!xml) || (leaving))
+	if ((!xml) || (DATA_GET(global_data,"leaving")))
 		return;
 	gdk_threads_enter();
 	item = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
@@ -168,20 +165,28 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
 	FioAction action = -1;
 	action = (FioAction)OBJ_GET(widget,"fio_action");
+	void (*do_backup)(GtkWidget *, gpointer) = NULL;
+	void (*do_restore)(GtkWidget *, gpointer) = NULL;
+	void (*vex_import)(GtkWidget *, gpointer) = NULL;
+	void (*vex_export)(GtkWidget *, gpointer) = NULL;
 
 	switch (action)
 	{
 		case VEX_IMPORT:
-			select_vex_for_import(NULL,NULL);
+			if (get_symbol("select_vex_for_import",(void*)&vex_import))
+				vex_import(NULL,NULL);
 			break;
 		case VEX_EXPORT:
-			select_vex_for_export(NULL,NULL);
+			if (get_symbol("select_vex_for_export",(void*)&vex_export))
+				vex_export(NULL,NULL);
 			break;
 		case ECU_BACKUP:
-			select_file_for_ecu_backup(NULL,NULL);
+			if (get_symbol("select_file_for_ecu_backup",(void*)&do_backup))
+				do_backup(NULL,NULL);
 			break;
 		case ECU_RESTORE:
-			select_file_for_ecu_restore(NULL,NULL);
+			if (get_symbol("select_file_for_ecu_restore",(void*)&do_restore))
+				do_restore(NULL,NULL);
 			break;
 	}
 	return TRUE;
@@ -191,7 +196,7 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
  \brief General purpose handler to take care of menu initiated settings 
  transfers like VEX import/export and ECU backup/restore
  */
-gboolean check_tab_existance(TabIdent target)
+G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 {
 	GtkWidget *notebook = NULL;
 	TabIdent c_tab = 0;
@@ -226,12 +231,18 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
-	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets = NULL;
+	void (*update_widget_f)(gpointer, gpointer) = NULL;
+
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	firmware = DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -288,8 +299,8 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 					(gpointer)item);
 
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][2676],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][2678],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][2676],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][2678],update_widget_f,NULL);
 
 		}
 		else
@@ -301,8 +312,8 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 					(gpointer)item);
 
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][518],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][520],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][518],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][520],update_widget_f,NULL);
 
 		}
 
@@ -341,12 +352,11 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
-	extern Firmware_Details *firmware;
-	extern GList ***ve_widgets;
+	Firmware_Details *firmware = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -435,11 +445,13 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 	GtkWidget *item2 = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
-	extern GList ***ve_widgets;
+	Firmware_Details *firmware = NULL;
+	gboolean (*populate_afr_calibrator_combo_f)(GtkWidget *) = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -450,7 +462,8 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 
 		item = glade_xml_get_widget(xml,"ego_sensor_combo");
 		register_widget("afr_calibrate_ego_sensor_combo",item);
-		populate_afr_calibrator_combo(item);
+		if (get_symbol("populate_afr_calibrator_combo",(void *)&populate_afr_calibrator_combo_f))
+			populate_afr_calibrator_combo_f(item);
 		item2 = glade_xml_get_widget(xml,"generic_wideband_frame");
 		OBJ_SET(item,"generic_controls",item2);
 
@@ -499,12 +512,17 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
-	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
+	GList ***ve_widgets;
+	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
+
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	firmware = DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -607,16 +625,16 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		if (firmware->capabilities & PIS)
 		{
 			gtk_widget_destroy(item);
-			g_list_foreach(ve_widgets[0][2702],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][2704],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][2702],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][2704],update_widget_f,NULL);
 		}
 		else
 		{
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][506],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][508],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][530],update_widget,NULL);
-			g_list_foreach(ve_widgets[0][532],update_widget,NULL);
+			g_list_foreach(ve_widgets[0][506],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][508],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][530],update_widget_f,NULL);
+			g_list_foreach(ve_widgets[0][532],update_widget_f,NULL);
 		}
 
 		item = glade_xml_get_widget(xml,"get_data_button");
@@ -680,11 +698,15 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	GtkWidget *partner = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
-	extern GList ***ve_widgets;
+	GList ***ve_widgets = NULL;
+	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
+	
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -728,7 +750,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
 		ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
 
-		g_list_foreach(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget,NULL);
+		g_list_foreach(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
@@ -772,14 +794,13 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	extern volatile gboolean leaving;
-	extern GList ***ve_widgets;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
 	GList *spark_tables = NULL;
 	gint t;
 
+	firmware = DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -819,29 +840,42 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 
 G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 {
-	GladeXML* xml;
-	GtkWidget* item;
-	gint i, x, y;
-	gint table;
-	gchar *table_title;
-	extern Firmware_Details *firmware;
-	gint canID = firmware->canID;
+	static gint (*ms_get_ecu_data)(gint,gint,gint,DataSize) = NULL;
+	GladeXML* xml = NULL;
+	GtkWidget* item = NULL;
+	gint i = 0;
+	gint x = 0;
+	gint y = 0;
+	gint table=  0;
+	gchar *table_title = NULL;
+	Firmware_Details *firmware = NULL;
+	gint canID = 0;
 	gdouble x_bin[64], y_bin[64];
-	gint page;
-	gint base;
-	DataSize size;
-	gint mult;
-	void *evaluator;
-	gdouble light_advance;
-	gdouble idle_rpm, idle_load, idle_advance;
-	gdouble peak_torque_rpm, peak_torque_load, peak_torque_advance;
-	gdouble advance;
-	gdouble maximum_rpm_advance;
-	gdouble maximum_retard, retard_start_load;
-	extern GList ***ve_widgets;
+	gint page = 0;
+	gint base = 0;
+	DataSize size = MTX_U08;
+	gint mult = 0;
+	void *evaluator = NULL;
+	gdouble light_advance = 0.0;
+	gdouble idle_rpm = 0.0;
+       	gdouble idle_load = 0.0;
+	gdouble idle_advance = 0.0;
+	gdouble peak_torque_rpm = 0.0;
+        gdouble	peak_torque_load = 0.0;
+        gdouble	peak_torque_advance = 0.0;
+	gdouble advance = 0.0;
+	gdouble maximum_rpm_advance = 0.0;
+	gdouble maximum_retard = 0.0;
+       	gdouble retard_start_load = 0.0;
+	GList ***ve_widgets = NULL;
 	GList *list = NULL;
-	gchar * tmpbuf;
-	gint precision;
+	gchar * tmpbuf = NULL;
+	gint precision = 0;
+
+	get_symbol("ms_get_ecu_data",(void *)&ms_get_ecu_data);
+	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
 
 	xml = glade_get_widget_tree (GTK_WIDGET (widget));
 
@@ -912,7 +946,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 
 	// fetch us a copy of the x bins
 	for (i=0; i != firmware->table_params[table]->x_bincount; i++)
-		x_bin[i] = evaluator_evaluate_x(evaluator, get_ecu_data(canID, page, base+(i*mult), size));
+		x_bin[i] = evaluator_evaluate_x(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
 
 	evaluator_destroy(evaluator);
 
@@ -926,7 +960,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 
 	// fetch us a copy of the y bins
 	for (i=0; i != firmware->table_params[table]->y_bincount; i++)
-		y_bin[i] = evaluator_evaluate_x(evaluator, get_ecu_data(canID, page, base+(i*mult), size));
+		y_bin[i] = evaluator_evaluate_x(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
 
 	evaluator_destroy(evaluator);
 
@@ -977,7 +1011,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 }
 
 /* non extrapolating linear dual line interpolation (3 times fast after 6 beers :-) */
-gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdouble slope1_b, gdouble slope2_a, gdouble slope2_b)
+G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdouble slope1_b, gdouble slope2_a, gdouble slope2_b)
 {
 	gdouble slope1, slope2, result;
 	gdouble ratio;

@@ -92,9 +92,9 @@ tooltip=Baud rate the JimStim will use on next powerup after burn,  NOTE, anythi
 keys=offset,size,raw_lower,raw_upper,tooltip
 offset=1
 size=_U16_
-raw_lower=60
+raw_lower=0
 raw_upper=65535
-tooltip=Commanded RPM, valid range of 60 to 65534 RPM.  set to 65535 to re-enable the RPM pots on the JimStim itself.
+tooltip=Commanded RPM, valid range of 0,60 to 65534 RPM.  Set to 65535 to re-enable the RPM pots on the JimStim itself.
 
 [start_rpm_entry]
 keys=size,raw_lower,raw_upper,tooltip

@@ -14,31 +14,24 @@
 #include <apicheck.h>
 #include <api-versions.h>
 #include <config.h>
-#include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
-#include <fileio.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <interrogate.h>
 #include <listmgmt.h>
-#include <lookuptables.h>
-#include <mtxmatheval.h>
 #include <mode_select.h>
 #include <notifications.h>
-#include <multi_expr_loader.h>
 #include <offline.h>
-#include <rtv_map_loader.h>
+#include <personalities.h>
+#include <plugin.h>
 #include <string.h>
 #include <stdlib.h>
 #include <tabloader.h>
 #include <threads.h>
-#include <timeout_handlers.h>
 #include <widgetmgmt.h>
 
 
-volatile gboolean offline = FALSE;
 extern gconstpointer *global_data;
 
 
@@ -48,32 +41,31 @@ extern gconstpointer *global_data;
  choices to select one for loading to work in offline mode (no connection to
  an ECU)
  */
-gboolean set_offline_mode(void)
+G_MODULE_EXPORT gboolean set_offline_mode(void)
 {
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
-	GArray *tests = NULL;
-	GHashTable *tests_hash = NULL;
 	gboolean tmp = TRUE;
 	GModule *module = NULL;
 	GArray *pfuncs = NULL;
 	PostFunction *pf = NULL;
-	extern Firmware_Details *firmware;
-	extern gboolean interrogated;
-        extern GAsyncQueue *io_repair_queue;
+        GAsyncQueue *io_repair_queue = NULL;
+	Firmware_Details *firmware = NULL;
+	void (*load_firmware_details)(void *,const gchar *) = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
+	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 
 	/* Cause Serial Searcher thread to abort.... */
 	if (io_repair_queue)
 		g_async_queue_push(io_repair_queue,&tmp);
 
 	gdk_threads_enter();
-
 	filename = present_firmware_choices();
 	if (!filename)
 	{
-		offline = FALSE;
-		interrogated = FALSE;
+		DATA_SET(global_data,"offline",GINT_TO_POINTER(FALSE));
+		DATA_SET(global_data,"interrogated",GINT_TO_POINTER(FALSE));
 		widget = lookup_widget("interrogate_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
@@ -81,13 +73,15 @@ gboolean set_offline_mode(void)
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 		gdk_threads_leave();
-		return FALSE;
+		plugins_shutdown();
+		gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
 
+		return FALSE;
 	}
 
 	DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(filename),g_free);
-	offline = TRUE;
-	interrogated = TRUE;
+	DATA_SET(global_data,"offline",GINT_TO_POINTER(TRUE));
+	DATA_SET(global_data,"interrogated",GINT_TO_POINTER(TRUE));
 
 	/* Disable interrogation button */
 	widget = lookup_widget("interrogate_button");
@@ -96,10 +90,13 @@ gboolean set_offline_mode(void)
 
 	queue_function("kill_conn_warning");
 
-	tests = validate_and_load_tests(&tests_hash);
 	if (!firmware)
+	{
 		firmware = g_new0(Firmware_Details,1);
-	load_firmware_details(firmware,filename);
+		DATA_SET(global_data,"firmware",firmware);
+	}
+	if (get_symbol("load_firmware_details",(void*)&load_firmware_details))
+		load_firmware_details(firmware,filename);
 
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
@@ -204,8 +201,6 @@ gboolean set_offline_mode(void)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 
-	free_tests_array(tests);
-
 	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
@@ -228,7 +223,7 @@ gboolean set_offline_mode(void)
  choices.
  \returns the name of the chosen firmware
  */
-gchar * present_firmware_choices(void)
+G_MODULE_EXPORT gchar * present_firmware_choices(void)
 {
 	gchar ** filenames = NULL;
 	GtkWidget *dialog = NULL;
@@ -388,11 +383,11 @@ gchar * present_firmware_choices(void)
 		group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
 	}
 	/*
-	if (i==1)
-		gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
-	else
-		gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
-	*/
+	   if (i==1)
+	   gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
+	   else
+	   gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+	 */
 
 	g_strfreev(filenames);
 	g_array_free(classes,TRUE);
@@ -411,13 +406,14 @@ gchar * present_firmware_choices(void)
 		case GTK_RESPONSE_OK:
 			return DATA_GET(global_data,"offline_firmware_choice");
 			break;
+		case GTK_RESPONSE_CANCEL:
 		default:
 			return NULL;
 	}
 	return NULL;
 }
 
-gint ptr_sort(gconstpointer a, gconstpointer b)
+G_MODULE_EXPORT gint ptr_sort(gconstpointer a, gconstpointer b)
 {
 	return strcmp((gchar *)a, (gchar *) b);
 }
@@ -427,10 +423,12 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
-	extern gboolean interrogated;
-	extern Firmware_Details *firmware;
+	void (*restore_all_f)(const gchar *);
+	Firmware_Details *firmware = NULL;
 
-	if (!interrogated)
+	firmware = DATA_GET(global_data,"firmware");
+
+	if (!DATA_GET(global_data,"interrogated"))
 		return;
 
 	fileio = g_new0(MtxFileIO ,1);
@@ -449,7 +447,8 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	{
 		DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(filename),g_free);
 		update_logbar("tools_view",NULL,_("Full Restore of ECU Initiated\n"),FALSE,FALSE,FALSE);
-		restore_all_ecu_settings(filename);
+		get_symbol("restore_all_ecu_settings",(void *)&restore_all_f);
+		restore_all_f(filename);
 		g_free(filename);
 	}
 	else

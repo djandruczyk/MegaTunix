@@ -21,7 +21,6 @@
 #include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_loader.h>
 #include <multi_expr_loader.h>
 #include <enums.h>
 #include <firmware.h>
@@ -31,15 +30,13 @@
 #include <keyparser.h>
 #include <notifications.h>
 #include <mtxmatheval.h>
+#include <plugin.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
 #include <widgetmgmt.h>
 #include <unistd.h>
-
-Rtv_Map *rtv_map = NULL;
-gboolean rtvars_loaded = FALSE;
 
 
 /*!
@@ -51,7 +48,6 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 {
 	GtkWidget *dialog = NULL;
 	ConfigFile *cfgfile = NULL;
-	extern Firmware_Details *firmware;
 	gchar * filename = NULL;
 	gchar *tmpbuf = NULL;
 	gint derived_total = 0;
@@ -74,14 +70,19 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	DataSize size = MTX_U08;
 	void * eval = NULL;
 	gchar * expr = NULL;
-	extern gboolean interrogated;
-	extern gboolean connected;
+	Rtv_Map *rtv_map = NULL;
 	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+	static void (*load_deps)(gconstpointer *,ConfigFile *,const gchar *, const gchar *) = NULL;
 
-	rtvars_loaded = FALSE;
+	firmware = DATA_GET(global_data,"firmware");
 
-	if ((!interrogated) && (connected))
+	if ((!DATA_GET(global_data,"interrogated")) && 
+			(DATA_GET(global_data,"connected")))
 		return FALSE;
+
+	if (!load_deps)
+		get_symbol("load_dependancies",(void *)&load_deps);
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Realtime Map...")));
@@ -156,6 +157,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 	tmpbuf = NULL;
 	rtv_map = g_new0(Rtv_Map, 1);
+	DATA_SET(global_data,"rtv_map",rtv_map);
 	cfg_read_string(cfgfile,"realtime_map","applicable_signatures",&rtv_map->applicable_signatures);
 	cfg_read_string(cfgfile,"realtime_map","raw_list",&tmpbuf);
 	if (tmpbuf)
@@ -212,7 +214,10 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			load_dependancies(object,cfgfile,section,"depend_on");
+			if (load_deps)
+				load_deps(object,cfgfile,section,"depend_on");
+			else
+				dbg_func(CRITICAL|RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tfunction pointer for \"load_dependancies\" could NOT be found in plugins, BUG!\n"));
 			g_free(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
@@ -395,7 +400,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	}
 	cfg_free(cfgfile);
 	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
-	rtvars_loaded = TRUE;
+	DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
 	set_title(g_strdup(_("RT Map loaded...")));
 	gdk_threads_leave();
 	return TRUE;
@@ -409,7 +414,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
  \param cfgfile (ConfigFile *) configfile pointer to read from
  \param section (gchar *) section to read from in the config file
  */
-void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
+G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;
@@ -419,7 +424,10 @@ void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * sec
 	gchar * name = NULL;
 	gint tmpi;
 	gint i = 0;
-	extern Firmware_Details *firmware;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{
@@ -576,7 +584,7 @@ void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * sec
  \param cfgfile (ConfigFile *) configfile pointer to read from
  \param section (gchar *) section to read from in the config file
  */
-void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * section)
+G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;
@@ -586,7 +594,10 @@ void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * secti
 	gchar * name = NULL;
 	gint tmpi;
 	gint i = 0;
-	extern Firmware_Details *firmware;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{

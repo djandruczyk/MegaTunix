@@ -57,14 +57,13 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	extern volatile gboolean leaving;
-	extern gboolean rtvars_loaded;
-	extern Firmware_Details *firmware;
-	extern gboolean interrogated;
+	Firmware_Details *firmware = NULL;
 
-	if (leaving)
+	firmware = DATA_GET(global_data,"firmware");
+
+	if (DATA_GET(global_data,"leaving"))
 		return;
-	if (!(interrogated))
+	if (!(DATA_GET(global_data,"interrogated")))
 		return;
 	if (!firmware->rtt_map_file)
 	{
@@ -73,10 +72,10 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	}
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (leaving))
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return;
 
-	if (rtvars_loaded == FALSE) 
+	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
@@ -139,7 +138,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 }
 
 
-gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
+G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
 
@@ -164,7 +163,7 @@ gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *
 }
 
 
-void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
+G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 {
 	gchar *int_name = NULL;
 	gchar *source = NULL;
@@ -215,11 +214,13 @@ void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
  \param source (gchar *) data source for this rt_text 
  \returns a Struct Rt_Text *
  */
-Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
+G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	rtt = g_malloc0(sizeof(Rt_Text));
 
@@ -252,13 +253,15 @@ Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
  \param source (gchar *) data source for this rt_text 
  \returns a Struct Rt_Text *
  */
-Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean show_prefix)
+G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	rtt = g_malloc0(sizeof(Rt_Text));
 
@@ -363,8 +366,10 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
  \param value (gpointer) pointer to Rt_Slider
  \param data (gpointer) unused
  */
-void rtt_update_values(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
+	static GRand *rand = NULL;
+	static GMutex *rtv_mutex = NULL;
 	Rt_Text *rtt = NULL;
 	gint count = 0;
 	gint last_upd = 0;
@@ -374,15 +379,14 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * tmpbuf2 = NULL;
-	static GRand *rand = NULL;
-	extern gboolean forced_update;
-	extern GStaticMutex rtv_mutex;
 
 	rtt = (Rt_Text *)value;
 	if (!rtt)
 		return;
 	if (!rand)
 		rand = g_rand_new();
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 
 	count = rtt->count;
 	last_upd = rtt->last_upd;
@@ -393,17 +397,17 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 		return;
 	if ((gint)history->len-2 <= 0)
 		return;
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
 	previous = g_array_index(history, gfloat, history->len-2);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
 	if (GTK_IS_WIDGET(GTK_WIDGET(rtt->textval)->window))
 		if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
 			return;
 
 	if ((current != previous) 
-			|| (forced_update) 
+			|| (DATA_GET(global_data,"forced_update")) 
 			|| (rtt->textval && ((abs(count-last_upd)%g_rand_int_range(rand,25,50)) == 0)))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
@@ -432,7 +436,7 @@ void rtt_update_values(gpointer key, gpointer value, gpointer data)
 }
 
 
-void setup_rtt_treeview(GtkWidget *treeview)
+G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 {
 	GtkCellRenderer *renderer;
 	GtkTreeViewColumn *column;
@@ -460,8 +464,9 @@ void setup_rtt_treeview(GtkWidget *treeview)
 }
 
 
-gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
+G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
 {
+	static GMutex *rtv_mutex = NULL;
 	Rt_Text *rtt = NULL;
 	gint count = 0;
 	gint last_upd = 0;
@@ -470,8 +475,9 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 	gfloat previous = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
-	extern gboolean forced_update;
-	extern GStaticMutex rtv_mutex;
+
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 
 	gtk_tree_model_get (model, iter,
 			COL_RTT_OBJECT, &rtt,
@@ -487,11 +493,11 @@ gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,g
 		return FALSE;
 	if ((gint)history->len-1 <= 0)
 		return FALSE;
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
-	if ((current != previous) || (forced_update))
+	if ((current != previous) || (DATA_GET(global_data,"forced_update")))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 		gdk_threads_enter();

@@ -29,7 +29,7 @@
  \param delimiter (gchar *) char to split the string with
  \returns a string vector of the original string split up with the delimiter
  */
-gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
+G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gchar *delimiter)
 {
 	gchar **result = NULL;	
 	assert(string);
@@ -52,7 +52,7 @@ gchar ** parse_keys(gchar * string, gint * count, gchar *delimiter)
  \param delimiter (gchar *) char to split the string with
  \returns a dynamic integer array of the keystypes (enums)
  */
-gint * parse_keytypes(gchar * string, gint * count, gchar *delimiter)
+G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const gchar *delimiter)
 {
 	gchar **vector = NULL;	
 	gint *keytypes = NULL;

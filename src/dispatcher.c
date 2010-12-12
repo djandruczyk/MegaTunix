@@ -15,44 +15,17 @@
 #include <comms_gui.h>
 #include <config.h>
 #include <conversions.h>
-#include <dashboard.h>
-#include <dataio.h>
-#include <datalogging_gui.h>
 #include <defines.h>
 #include <debugging.h>
 #include <dispatcher.h>
 #include <enums.h>
 #include <gui_handlers.h>
-#include <helpers.h>
 #include <init.h>
-#include <interrogate.h>
-#include <listmgmt.h>
-#include <lookuptables.h>
-#include <logviewer_gui.h>
-#include <menu_handlers.h>
-#include <mode_select.h>
 #include <notifications.h>
-#include <post_process.h>
-#include <runtime_gui.h>
-#include <runtime_sliders.h>
-#include <runtime_text.h>
-#include <runtime_status.h>
-#include <rtv_map_loader.h>
-#include <serialio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <plugin.h>
 #include <tabloader.h>
-#include <timeout_handlers.h>
-#include <threads.h>
-#include <ms1-t-logger.h>
-#include <unistd.h>
 #include <widgetmgmt.h>
 
-
-extern GAsyncQueue *pf_dispatch_queue;
-extern GAsyncQueue *gui_dispatch_queue;
-extern GCond *pf_dispatch_cond;
-extern GCond *gui_dispatch_cond;
 static GTimer *ticker;
 
 /*!
@@ -63,16 +36,21 @@ static GTimer *ticker;
  \param data (gpointer) unused
  \returns TRUE 
  */
-gboolean pf_dispatcher(gpointer data)
+G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 {
-	gint len=0;
+	static GAsyncQueue *pf_dispatch_queue = NULL;
+	static GCond *pf_dispatch_cond = NULL;
+ 	gint len=0;
 	gint i=0;
 	PostFunction *pf=NULL;
 	Io_Message *message = NULL;
-	extern volatile gboolean leaving;
-	extern volatile gboolean might_be_leaving;
 	GTimeVal time;
+	extern gconstpointer *global_data;
 
+	if (!pf_dispatch_cond)
+		pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
+	if (!pf_dispatch_queue)
+		pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	if (!ticker)
 		ticker = g_timer_new();
 	else	
@@ -83,9 +61,9 @@ gboolean pf_dispatcher(gpointer data)
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
 	}
-	if (might_be_leaving)
+	if (DATA_GET(global_data,"might_be_leaving"))
 		return TRUE;
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 	{
 		g_cond_signal(pf_dispatch_cond);
 		return TRUE;
@@ -116,7 +94,7 @@ gboolean pf_dispatcher(gpointer data)
 		len = message->command->post_functions->len;
 		for (i=0;i<len;i++)
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				dealloc_message(message);
 				g_cond_signal(pf_dispatch_cond);
@@ -153,7 +131,7 @@ gboolean pf_dispatcher(gpointer data)
 	gdk_threads_enter();
 	while (gtk_events_pending())
 	{
-		if (leaving)
+		if (DATA_GET(global_data,"leaving"))
 			goto fast_exit;
 		gtk_main_iteration();
 	}
@@ -174,22 +152,29 @@ fast_exit:
  \param data (gpointer) unused
  \returns TRUE 
  */
-gboolean gui_dispatcher(gpointer data)
+G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
-	gint len=0;
-	gint i=0;
+	static GAsyncQueue *gui_dispatch_queue = NULL;
+	static GCond *gui_dispatch_cond = NULL;
+	static void (*update_widget_f)(gpointer,gpointer) = NULL;
+	static GList ***ve_widgets = NULL;
+	gint len = 0;
+	gint i = 0;
+	gint j = 0;
 	UpdateFunction val = 0;
 	gint count = 0;
 	GtkWidget *widget = NULL;
 	Io_Message *message = NULL;
 	Text_Message *t_message = NULL;
 	Widget_Update *w_update = NULL;
+	Widget_Range *range = NULL;
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
-	extern volatile gboolean leaving;
-	extern volatile gboolean might_be_leaving;
-	/*extern gint mem_view_style[];*/
 
+	if (!gui_dispatch_cond)
+		gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	if (!gui_dispatch_queue) /*queue not built yet... */
 	{
 		g_cond_signal(gui_dispatch_cond);
@@ -198,12 +183,12 @@ gboolean gui_dispatcher(gpointer data)
 	/* Endless Loop, wait for message, processs and repeat... */
 trypop:
 	/*printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));*/
-	if (leaving)
+	if (DATA_GET(global_data,"leaving"))
 	{
 		g_cond_signal(gui_dispatch_cond);
 		return TRUE;
 	}
-	if (might_be_leaving)
+	if (DATA_GET(global_data,"might_be_leaving"))
 		return TRUE;
 	message = g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
@@ -218,7 +203,7 @@ trypop:
 		len = message->functions->len;
 		for (i=0;i<len;i++)
 		{
-			if (leaving)
+			if (DATA_GET(global_data,"leaving"))
 			{
 				dealloc_message(message);
 				g_cond_signal(gui_dispatch_cond);
@@ -233,11 +218,35 @@ trypop:
 					widget = (GtkWidget *)message->payload;
 					if (GTK_IS_WIDGET(widget))
 					{
+						if (!update_widget_f)
+							get_symbol("update_widget",(void *)&update_widget_f);
+						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 						gdk_threads_enter();
-						update_widget(widget,NULL);
+						update_widget_f(widget,NULL);
 						gdk_threads_leave();
+						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 						message->payload = NULL;
 					}
+					break;
+				case UPD_REFRESH_RANGE:
+					range = (Widget_Range *)message->payload;
+					if (!range)
+						break;
+					if (!update_widget_f)
+						get_symbol("update_widget",(void *)&update_widget_f);
+					if (!ve_widgets)
+						ve_widgets = DATA_GET(global_data,"ve_widgets");
+					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
+					gdk_threads_enter();
+					for (i=range->offset;i<range->offset +range->len;i++)
+					{
+						for (j=0;j<g_list_length(ve_widgets[range->page][i]);j++)
+						update_widget_f(g_list_nth_data(ve_widgets[range->page][i],j),NULL);
+					}
+					gdk_threads_leave();
+					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
+					cleanup(range);
+					message->payload = NULL;
 					break;
 				case UPD_LOGBAR:
 					/*printf("logbar update\n");*/
@@ -303,17 +312,12 @@ trypop:
 					gdk_threads_enter();
 					reset_temps(DATA_GET(global_data,"temp_units"));
 					gdk_threads_leave();
-					/*
-					   case UPD_RAW_MEMORY:
-					   update_raw_memory_view(mem_view_style[message->offset],message->offset);
-					   break;
-					 */
 			}
 
 			gdk_threads_enter();
 			while (gtk_events_pending())
 			{
-				if (leaving)
+				if (DATA_GET(global_data,"leaving"))
 					goto dealloc;
 				gtk_main_iteration();
 			}
@@ -329,7 +333,7 @@ dealloc:
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
-	if ((count < 3) && (!leaving))
+	if ((count < 3) && (!DATA_GET(global_data,"leaving")))
 	{
 		/*printf("trying to handle another message\n");*/
 		goto trypop;
@@ -340,7 +344,7 @@ dealloc:
 }
 
 
-void *clock_watcher(gpointer data)
+G_MODULE_EXPORT void *clock_watcher(gpointer data)
 {
 	while(TRUE)
 	{

@@ -18,8 +18,7 @@
 #include <mode_select.h>
 #include <threads.h>
 
-gchar *states[] = {"FALSE","TRUE"};
-
+/*ostatic gchar *states[] = {"FALSE","TRUE"};*/
 
 /*!
  \brief set_widget_sensitive() is used to set a widgets state.  This function
@@ -28,7 +27,7 @@ gchar *states[] = {"FALSE","TRUE"};
  \param widget (gpointer) pointer to widget to change sensitivity
  \param state (gpointer) the state to set it to
  */
-void set_widget_sensitive(gpointer widget, gpointer state)
+G_MODULE_EXPORT void set_widget_sensitive(gpointer widget, gpointer state)
 {
         gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)state);
 }
@@ -41,25 +40,8 @@ void set_widget_sensitive(gpointer widget, gpointer state)
  \param widget (gpointer) pointer to widget to change sensitivity
  \param state (gpointer) the state to set it to.
  */
-void set_widget_active(gpointer widget, gpointer state)
+G_MODULE_EXPORT void set_widget_active(gpointer widget, gpointer state)
 {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)state);
 }
 
-
-/*!
- \brief drain_hashtable() is called to send all the data from a hashtable to
- the ECU
- \param offset (gpointer) offset in ecu_data this value goes to
- \param value (gpointer) pointer to OutputData Struct
- \param page (gpointer) unused.
- */
-gboolean drain_hashtable(gpointer offset, gpointer value, gpointer user_data)
-{
-	Deferred_Data *data = (Deferred_Data *)value;
-
-	send_to_ecu(data->canID,data->page,data->offset,data->size,data->value,FALSE);
-	g_free(data);
-	/* called per element from the hash table to drain and send to ECU */
-	return TRUE;
-}

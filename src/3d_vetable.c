@@ -35,10 +35,8 @@
 #include <config.h>
 #include <cairo/cairo.h>
 #include <conversions.h>
-#include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
-#include <dep_processor.h>
 #include <enums.h>
 #include <firmware.h>
 #include <glib.h>
@@ -54,6 +52,7 @@
 #include <multi_expr_loader.h>
 #include <notifications.h>
 #include <pango/pango-font.h>
+#include <plugin.h>
 #include <rtv_processor.h>
 #include <runtime_sliders.h>
 #include <stdio.h>
@@ -72,12 +71,13 @@ static GLuint font_list_base;
 #define DEFAULT_WIDTH  640
 #define DEFAULT_HEIGHT 480                                                                                  
 static GHashTable *winstat = NULL;
-GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
+static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
+extern gconstpointer *global_data;
 
 
 /* let's get what we need and calculate FPS */
 
-void CalculateFrameRate(void)
+G_MODULE_EXPORT void CalculateFrameRate(void)
 {
 	static float framesPerSecond = 0.0f;	/* This will store our fps*/
 	static long lastTime = 0;		/* This will hold the time from the last frame*/
@@ -109,7 +109,7 @@ void CalculateFrameRate(void)
 
 /* Draws the current frame rate on screen */
 
-void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
+G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
 {
 	GLint matrixMode;
 	if (!str)
@@ -148,7 +148,7 @@ void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLf
  \param val (gfloat) col_val from 0-1.0
  \returns a RGB3f at the hue angle requested
  */
-RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
+G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
 	RGB3f color;
 	gint i = 0;
@@ -243,16 +243,16 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gint i = 0;
 	gint j = 0;
 	Ve_View_3D *ve_view;
-	extern Firmware_Details *firmware;
 	extern gboolean gl_ability;
+	Firmware_Details *firmware = NULL;
 	gint table_num =  -1;
-	extern gboolean forced_update;
 
 	if (!gl_ability)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": create_ve3d_view()\n\t GtkGLEXT Library initialization failed, no GL for you :(\n"));
 		return FALSE;
 	}
+	firmware = DATA_GET(global_data,"firmware");
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 
@@ -342,8 +342,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	for (i=0;i<firmware->table_params[table_num]->x_bincount;i++)
 	{
 		ve_view->x_objects[i] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref(ve_view->x_objects[i]);
-		gtk_object_sink(GTK_OBJECT(ve_view->x_objects[i]));
+		g_object_ref_sink(ve_view->x_objects[i]);
 		OBJ_SET(ve_view->x_objects[i],"page",GINT_TO_POINTER(ve_view->x_page));
 		OBJ_SET(ve_view->x_objects[i],"offset",GINT_TO_POINTER(ve_view->x_base+(ve_view->x_mult * i)));
 		OBJ_SET(ve_view->x_objects[i],"size",GINT_TO_POINTER(ve_view->x_size));
@@ -358,8 +357,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	for (i=0;i<firmware->table_params[table_num]->y_bincount;i++)
 	{
 		ve_view->y_objects[i] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref(ve_view->y_objects[i]);
-		gtk_object_sink(GTK_OBJECT(ve_view->y_objects[i]));
+		g_object_ref_sink(ve_view->y_objects[i]);
 		OBJ_SET(ve_view->y_objects[i],"page",GINT_TO_POINTER(ve_view->y_page));
 		OBJ_SET(ve_view->y_objects[i],"offset",GINT_TO_POINTER(ve_view->y_base+(ve_view->y_mult * i)));
 		OBJ_SET(ve_view->y_objects[i],"size",GINT_TO_POINTER(ve_view->y_size));
@@ -381,8 +379,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		{
 			ve_view->quad_mesh[i][j] = g_new0(Quad, 1);
 			ve_view->z_objects[i][j] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-			g_object_ref(ve_view->z_objects[i][j]);
-			gtk_object_sink(GTK_OBJECT(ve_view->z_objects[i][j]));
+			g_object_ref_sink(ve_view->z_objects[i][j]);
 			OBJ_SET(ve_view->z_objects[i][j],"page",GINT_TO_POINTER(ve_view->z_page));
 			if (firmware->capabilities & PIS)
 				OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((i*ve_view->y_bincount)+j))));
@@ -419,8 +416,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	/* Bind pointer to veview to an object for retrieval elsewhere */
 	object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-	g_object_ref(object);
-	gtk_object_sink(GTK_OBJECT(object));
+	g_object_ref_sink(object);
 	OBJ_SET(object,"ve_view",(gpointer)ve_view);
 
 	tmpbuf = g_strdup_printf("ve_view_%i",table_num);
@@ -618,7 +614,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	gtk_widget_show_all(window);
 
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 
@@ -628,7 +624,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
  *with gtk_widget_destroy
  * 
  */
-gboolean free_ve3d_view(GtkWidget *widget)
+G_MODULE_EXPORT gboolean free_ve3d_view(GtkWidget *widget)
 {
 	Ve_View_3D *ve_view;
 	gchar * tmpbuf = NULL;
@@ -659,10 +655,9 @@ gboolean free_ve3d_view(GtkWidget *widget)
  * case the user moves it or places it off the edge of the window and 
  * can't find it...
  */
-void reset_3d_view(GtkWidget * widget)
+G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 {
 	Ve_View_3D *ve_view;
-	extern gboolean forced_update;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
@@ -675,7 +670,7 @@ void reset_3d_view(GtkWidget * widget)
 	ve_view->aspect = 1.0;
 	ve_view->h_strafe = -0.5;
 	ve_view->v_strafe = -0.5;
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	ve_view->mesh_created = FALSE;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
 	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
@@ -684,7 +679,7 @@ void reset_3d_view(GtkWidget * widget)
 /*!
  \brief get_gl_config gets the OpenGL mode creates a GL config and returns it
  */
-GdkGLConfig* get_gl_config(void)
+G_MODULE_EXPORT GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
 	/* Try double-buffered visual */
@@ -714,7 +709,7 @@ GdkGLConfig* get_gl_config(void)
  \brief ve3d_configure_event is called when the window needs to be drawn
  after a resize. 
  */
-gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
@@ -750,7 +745,7 @@ we don't
  even need to redraw at all..  :(
  /bug this code is slow, and needs to be optimized or redesigned
  */
-gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
@@ -821,7 +816,7 @@ rotated/scaled/strafed
  depending on which button the user had held down.
  \see ve3d_button_press_event
  */
-gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
@@ -865,7 +860,7 @@ order to
  calculate what to change when rerendering
  \see ve3d_motion_notify_event
  */
-gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
@@ -891,7 +886,7 @@ main
  OpenGL parameters of the window (this only needs to be done once I 
 think)
  */
-void ve3d_realize (GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
@@ -931,7 +926,7 @@ void ve3d_realize (GtkWidget *widget, gpointer data)
 }
 
 
-void ve3d_grey_window(Ve_View_3D *ve_view)
+G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 {
 	GdkPixmap *pmap = NULL;
 	cairo_t * cr = NULL;
@@ -958,15 +953,16 @@ void ve3d_grey_window(Ve_View_3D *ve_view)
  \brief ve3d_calculate_scaling is called during a redraw to recalculate 
  the dimensions for the scales to make thing look pretty
  */
-void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gint i=0;
 	gint j=0;
-	extern Firmware_Details *firmware;
 	gfloat min = 0.0;
 	gfloat max = 0.0;
 	gfloat tmpf = 0.0;
+	Firmware_Details *firmware = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
 	/*printf("CALC Scaling\n");*/
 
@@ -1027,12 +1023,14 @@ void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 VEtable grid 
  in 3D space
  */
-void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
-	extern Firmware_Details *firmware;
 	gint x = 0;
 	gint y = 0;
 	Quad * quad = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_ve_grid() \n"));
 
@@ -1116,13 +1114,14 @@ the
 user.  
  The user moves this with the arrow keys..
  */
-void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
-	extern Firmware_Details *firmware;
 	gfloat bottom = 0.0;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
+	Firmware_Details *firmware = NULL;
 
+	firmware = DATA_GET(global_data,"firmware");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
 	/*printf("draw edit indicator\n");*/
 	
@@ -1220,7 +1219,7 @@ void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 the
  green dot which tells where the engine is running at this instant.
  */
-void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gchar * label = NULL;
 	gfloat tmpf1 = 0.0;
@@ -1231,9 +1230,11 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gfloat tmpf6 = 0.0;
 	gfloat bottom = 0.0;
 	gboolean out_of_bounds = FALSE;
-	extern Firmware_Details *firmware;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
 	/*printf("draw runtime indicator\n");*/
@@ -1448,7 +1449,7 @@ void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
  \brief ve3d_draw_axis is called during rerender and draws the
  border axis scales around the VEgrid.
  */
-void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	/* Set vars and an asthetically pleasing maximum value */
 	gint i=0;
@@ -1538,7 +1539,7 @@ void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
  \brief ve3d_draw_text is called during rerender and draws the
  axis marker text
  */
-void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
+G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 {
 	glColor3f(0.2,0.8,0.8);
 	/* Set rendering postition */
@@ -1558,7 +1559,7 @@ void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
  *  the 
  *   fonts needed by OpenGL for rendering the text
  *    */
-void ve3d_load_font_metrics(GtkWidget *widget)
+G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc;
 	PangoFont *font;
@@ -1621,8 +1622,17 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gboolean cur_state = FALSE;
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
-	extern Firmware_Details *firmware;
-	extern gboolean forced_update;
+	Firmware_Details *firmware = NULL;
+	static gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize) = NULL;
+	static void (*send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	if (!ms_get_ecu_data_f)
+		get_symbol("ms_get_ecu_data",(void*)&ms_get_ecu_data_f);
+
+	if (!send_to_ecu_f)
+		get_symbol("send_to_ecu",(void*)&send_to_ecu_f);
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n"));
@@ -1668,9 +1678,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
 				max = (gint)pow(2,y_mult*8) -step;
-				if (get_ecu_data(canID,y_page,offset,y_size) <= max)
+				if (ms_get_ecu_data_f(canID,y_page,offset,y_size) <= max)
 				{
-					dload_val = get_ecu_data(canID,y_page,offset,y_size) + step;
+					dload_val = ms_get_ecu_data_f(canID,y_page,offset,y_size) + step;
 					page = y_page;
 					size = y_size;
 					update_widgets = TRUE;
@@ -1692,9 +1702,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
-				if (get_ecu_data(canID,y_page,offset,y_size) > step)
+				if (ms_get_ecu_data_f(canID,y_page,offset,y_size) > step)
 				{
-					dload_val = get_ecu_data(canID,y_page,offset,y_size) - step;
+					dload_val = ms_get_ecu_data_f(canID,y_page,offset,y_size) - step;
 					page = y_page;
 					size = y_size;
 					update_widgets = TRUE;
@@ -1717,9 +1727,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
-				if (get_ecu_data(canID,x_page,offset,x_size) > step)
+				if (ms_get_ecu_data_f(canID,x_page,offset,x_size) > step)
 				{
-					dload_val = get_ecu_data(canID,x_page,offset,x_size) - step;
+					dload_val = ms_get_ecu_data_f(canID,x_page,offset,x_size) - step;
 					page = x_page;
 					size = x_size;
 					update_widgets = TRUE;
@@ -1741,9 +1751,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
 				max = (gint)pow(2,x_mult*8) -step;
-				if (get_ecu_data(canID,x_page,offset,x_size) <= max)
+				if (ms_get_ecu_data_f(canID,x_page,offset,x_size) <= max)
 				{
-					dload_val = get_ecu_data(canID,x_page,offset,x_size) + step;
+					dload_val = ms_get_ecu_data_f(canID,x_page,offset,x_size) + step;
 					page = x_page;
 					size = x_size;
 					update_widgets = TRUE;
@@ -1765,12 +1775,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) + 10;
+						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1782,12 +1792,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) + 10;
+						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 
 					}
@@ -1797,9 +1807,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+				if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 				{
-					dload_val = get_ecu_data(canID,z_page,offset,z_size) + 10;
+					dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 10;
 					page = z_page;
 					size = z_size;
 					update_widgets = TRUE;
@@ -1820,12 +1830,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) + 1;
+						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1837,12 +1847,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) <= max)
+					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) + 1;
+						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1851,11 +1861,11 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (get_ecu_data(canID,z_page,offset,z_size) < max)
+				if (ms_get_ecu_data_f(canID,z_page,offset,z_size) < max)
 				{
 					page = z_page;
 					size = z_size;
-					dload_val = get_ecu_data(canID,z_page,offset,z_size) + 1;
+					dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 1;
 					update_widgets = TRUE;
 				}
 			}
@@ -1869,12 +1879,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) >= 10)
+					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) - 10;
+						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1886,12 +1896,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) >= 10)
+					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) - 10;
+						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1900,9 +1910,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (get_ecu_data(canID,z_page,offset,z_size) >= 10)
+				if (ms_get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
 				{
-					dload_val = get_ecu_data(canID,z_page,offset,z_size) - 10;
+					dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 10;
 					page = z_page;
 					size = z_size;
 					update_widgets = TRUE;
@@ -1921,12 +1931,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) > 0)
+					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) > 0)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) - 1;
+						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1938,12 +1948,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (get_ecu_data(canID,z_page,offset,z_size) > 0)
+					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) > 0)
 					{
-						dload_val = get_ecu_data(canID,z_page,offset,z_size) - 1;
+						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 
 					}
@@ -1953,9 +1963,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (get_ecu_data(canID,z_page,offset,z_size) > 0)
+				if (ms_get_ecu_data_f(canID,z_page,offset,z_size) > 0)
 				{
-					dload_val = get_ecu_data(canID,z_page,offset,z_size) - 1;
+					dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 1;
 					page = z_page;
 					size = z_size;
 					update_widgets = TRUE;
@@ -1981,9 +1991,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	{
 		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
 
-		send_to_ecu(canID,page,offset,size,dload_val, TRUE);
+		send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 		ve_view->mesh_created=FALSE;
-		forced_update = TRUE;
+		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 	}
 
@@ -1998,7 +2008,7 @@ intialize it's
  datastructure for use.  
  \see Ve_View
  */
-Ve_View_3D * initialize_ve3d_view(void)
+G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 {
 	Ve_View_3D *ve_view = NULL;
 	ve_view= g_new0(Ve_View_3D,1);
@@ -2060,16 +2070,19 @@ page/offset
 forces
  a redraw of that table. (convoluted and butt ugly, but it works)
  */
-void update_ve3d_if_necessary(int page, int offset)
+G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 {
-	extern Firmware_Details *firmware;
-	gint total_tables = firmware->total_tables;
+	gint total_tables = 0;
 	gboolean need_update = FALSE;
 	gint i = 0;
 	gchar * string = NULL;
 	GtkWidget * tmpwidget = NULL;
 	Ve_View_3D *ve_view = NULL;
 	gint count = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	total_tables = firmware->total_tables;
 	gint table_list[total_tables];
 
 	for (i=0;i<total_tables;i++)
@@ -2110,7 +2123,7 @@ void update_ve3d_if_necessary(int page, int offset)
 	}
 }
 
-void queue_ve3d_update(Ve_View_3D *ve_view)
+G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 {
 	static gint flag;
 
@@ -2126,7 +2139,7 @@ void queue_ve3d_update(Ve_View_3D *ve_view)
 	return;
 }
 
-gboolean sleep_and_reset(gpointer data)
+G_MODULE_EXPORT gboolean sleep_and_reset(gpointer data)
 {
 	gint *flag = (gint *)data;
 	*flag = 0;
@@ -2135,7 +2148,7 @@ gboolean sleep_and_reset(gpointer data)
 
 
 
-void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
+G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 {
 	gfloat tmpf1 = 0.0;
 	gfloat tmpf2 = 0.0;
@@ -2153,9 +2166,11 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 	gfloat right = 0.0;
 	gfloat top = 0.0;
 	gfloat bottom = 0.0;
-	extern Firmware_Details *firmware;
 	GLfloat w = ve_view->window->allocation.width;
 	GLfloat h = ve_view->window->allocation.height;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
 
 	/*printf("draw active vertexes marker \n");*/
 	glPointSize(MIN(w,h)/100.0);
@@ -2324,21 +2339,25 @@ void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
  /returns a Cur_Vals structure populted with appropriate fields soem of which
  MUST be freed when done.
  */
-Cur_Vals * get_current_values(Ve_View_3D *ve_view)
+G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 {
 	gfloat x_val = 0.0;
 	gfloat y_val = 0.0;
 	gfloat z_val = 0.0;
 	gfloat tmp = 0.0;
-	extern gint *algorithm;
-	extern GHashTable *sources_hash;
-	extern Firmware_Details *firmware;
+	gint *algorithm = NULL;
+	GHashTable *sources_hash = NULL;
 	GHashTable *hash = NULL;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
 	MultiSource *multi = NULL;
 	Cur_Vals *cur_val = NULL;
 	cur_val = g_new0(Cur_Vals, 1);
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	sources_hash = DATA_GET(global_data,"sources_hash");
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
 	/* X */
 	/* Edit value */
@@ -2487,9 +2506,8 @@ Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 }
 
 
-gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 {
-	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
@@ -2501,14 +2519,13 @@ gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 		ve_view->active_x = 0;
 		ve_view->active_y = 0;
 	}
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 
 
-gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 {
-	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
@@ -2522,34 +2539,32 @@ gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 {
-	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 		return FALSE;
 	ve_view->wireframe = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 
 
-gboolean set_opacity(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 {
-	extern gboolean forced_update;
 	Ve_View_3D *ve_view = NULL;
 
 	ve_view = OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 		return FALSE;
 	ve_view->opacity = gtk_range_get_value(GTK_RANGE(widget));
-	forced_update = TRUE;
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 
-void free_current_values(Cur_Vals *cur_val)
+G_MODULE_EXPORT void free_current_values(Cur_Vals *cur_val)
 {
 	if (cur_val->x_edit_text)
 		g_free(cur_val->x_edit_text);
@@ -2567,7 +2582,7 @@ void free_current_values(Cur_Vals *cur_val)
 }
 
 
-gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
+G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 {
 	gfloat tmp1 = 0.0;
 	gfloat tmp2 = 0.0;
@@ -2604,9 +2619,8 @@ gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 }
 
 
-void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
+G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
-	extern Firmware_Details *firmware;
 	gint x = 0;
 	gint y = 0;
 	gint z_mult = 0;
@@ -2614,8 +2628,16 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint z_base = 0;
 	gint tmpi = 0;
 	gfloat scaler = 0.0;
-	gint canID = firmware->canID;
+	gint canID = 0;
 	Quad * quad = NULL;
+	Firmware_Details *firmware = NULL;
+	static gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize) = NULL;
+
+	if (!ms_get_ecu_data_f)
+		get_symbol("ms_get_ecu_data",(void*)&ms_get_ecu_data_f);
+
+	firmware = DATA_GET(global_data,"firmware");
+	canID = firmware->canID;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": generate_quad_mesh() \n"));
 
@@ -2628,7 +2650,7 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	/* Draw QUAD MESH into stored grid (Calc'd once*/
 	for(y=0;y<ve_view->x_bincount*ve_view->y_bincount;++y)
 	{
-		tmpi = get_ecu_data(canID,z_page,z_base+(y*z_mult),ve_view->z_size);
+		tmpi = ms_get_ecu_data_f(canID,z_page,z_base+(y*z_mult),ve_view->z_size);
 		if (tmpi >ve_view->z_maxval)
 			ve_view->z_maxval = tmpi;
 		if (tmpi < ve_view->z_minval)
@@ -2651,22 +2673,22 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[0] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[0] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[1] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[1] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[2] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[2] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[3] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[3] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 			}
 			else
 			{
@@ -2674,22 +2696,22 @@ void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[0] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[0] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[1] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[1] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[2] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[2] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[3] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				quad->color[3] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
 			}
 		}
 	}

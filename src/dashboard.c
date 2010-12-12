@@ -34,7 +34,6 @@
 static gboolean timer_active = FALSE;
 static volatile gboolean moving = FALSE;
 static volatile gboolean resizing = FALSE;
-GStaticMutex dash_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 
 /*!
@@ -43,7 +42,7 @@ extern gconstpointer *global_data;
  \param  chooser, the fileshooser that triggered the signal
  \param data, user date
  */
-void load_dashboard(gchar *filename, gpointer data)
+G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *dash = NULL;
@@ -58,9 +57,8 @@ void load_dashboard(gchar *filename, gpointer data)
 	extern GdkColor black;
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
-	extern gboolean interrogated;
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return;
 	if (filename == NULL)
 		return;
@@ -153,7 +151,7 @@ void load_dashboard(gchar *filename, gpointer data)
 	dash_shape_combine(dash,TRUE);
 }
 
-gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
+G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 {
 	gint orig_width = 0;
 	gint orig_height = 0;
@@ -216,7 +214,7 @@ gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 }
 
 
-void load_elements(GtkWidget *dash, xmlNode *a_node)
+G_MODULE_EXPORT void load_elements(GtkWidget *dash, xmlNode *a_node)
 {
 	xmlNode *cur_node = NULL;
 
@@ -234,7 +232,7 @@ void load_elements(GtkWidget *dash, xmlNode *a_node)
 	}
 }
 
-void load_geometry(GtkWidget *dash, xmlNode *node)
+G_MODULE_EXPORT void load_geometry(GtkWidget *dash, xmlNode *node)
 {
 	GdkGeometry hints;
 	xmlNode *cur_node = NULL;
@@ -268,7 +266,7 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 
 }
 
-void load_gauge(GtkWidget *dash, xmlNode *node)
+G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	GtkWidget *gauge = NULL;
@@ -325,7 +323,7 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 }
 
 
-void link_dash_datasources(GtkWidget *dash,gpointer data)
+G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 {
 	Dash_Gauge *d_gauge = NULL;
 	GtkFixedChild *child = NULL;
@@ -335,12 +333,13 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 	GData * rtv_obj = NULL;
 	gchar * source = NULL;
 	GHashTable *dash_hash = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 
 	if(!GTK_IS_FIXED(dash))
 		return;
 	
-	dash_hash = (GHashTable *)DATA_GET(global_data,"dash_hash");
+	rtv_map = DATA_GET(global_data,"rtv_map");
+	dash_hash = DATA_GET(global_data,"dash_hash");
 	if (!dash_hash)
 	{
 		dash_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -376,29 +375,31 @@ void link_dash_datasources(GtkWidget *dash,gpointer data)
 	}
 }
 
-void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
+G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 {
 	Dash_Gauge *d_gauge = (Dash_Gauge *)value;
-	extern GStaticMutex rtv_mutex;
+	static GMutex *rtv_mutex = NULL;;
 	GArray *history;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
-	extern gboolean forced_update;
-
 	GtkWidget *gauge = NULL;
+
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	
 	gauge = d_gauge->gauge;
 
 	history = (GArray *)DATA_GET(d_gauge->object,"history");
 	if ((gint)history->len-1 <= 0)
 		return;
-	g_static_mutex_lock(&rtv_mutex);
+	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
-	g_static_mutex_unlock(&rtv_mutex);
+	g_mutex_unlock(rtv_mutex);
 
 	gdk_threads_enter();
 	mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
-	if ((current != previous) || (forced_update))
+	if ((current != previous) || 
+			(DATA_GET(global_data,"forced_update")))
 	{
 		/*printf("updating gauge %s\n",(gchar *)key);*/
 		/*printf("updating gauge %s\n",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge)));*/
@@ -409,8 +410,11 @@ void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 }
 
 
-void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
+G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 {
+	static GdkColormap *colormap = NULL;
+	static GdkColor black;
+	static GdkColor white;
 	GtkFixedChild *child = NULL;
 	gint x = 0;
 	gint y = 0;
@@ -426,15 +430,13 @@ void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	GtkRequisition req;
 	gint width = 0;
 	gint height = 0;
-	static GdkColormap *colormap = NULL;
-	static GdkColor black;
-	static GdkColor white;
+	GMutex *dash_mutex = DATA_GET(global_data,"dash_mutex");
 
 	if(!GTK_IS_WIDGET(dash))
 		return;
 	if(!GTK_IS_WINDOW(gtk_widget_get_toplevel(dash)))
 		return;
-	g_static_mutex_lock(&dash_mutex);
+	g_mutex_lock(dash_mutex);
 
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
 	if (!colormap)
@@ -516,11 +518,11 @@ void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	g_object_unref(colormap);
 	g_object_unref(gc1);
 	g_object_unref(bitmap);
-	g_static_mutex_unlock(&dash_mutex);
+	g_mutex_unlock(dash_mutex);
 	return;
 }
 
-gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	GtkWidget *dash = GTK_BIN(widget)->child;
 	if (!timer_active)
@@ -532,7 +534,7 @@ gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer da
 	return TRUE;
 }
 
-gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+G_MODULE_EXPORT gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (event->type == GDK_KEY_RELEASE)
 		return FALSE;
@@ -577,7 +579,7 @@ gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 
-void toggle_status_visible(void)
+G_MODULE_EXPORT void toggle_status_visible(void)
 {
 	gint x = 0;
 	gint y = 0;
@@ -600,7 +602,7 @@ void toggle_status_visible(void)
 }
 
 
-void toggle_rtt_visible(void)
+G_MODULE_EXPORT void toggle_rtt_visible(void)
 {
 	gint x = 0;
 	gint y = 0;
@@ -622,7 +624,7 @@ void toggle_rtt_visible(void)
 	}
 }
 
-void toggle_main_visible(void)
+G_MODULE_EXPORT void toggle_main_visible(void)
 {
 	gint x = 0;
 	gint y = 0;
@@ -644,7 +646,7 @@ void toggle_main_visible(void)
 	}
 }
 
-void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
+G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 {
 	GList *children = NULL;
 	guint i = 0;
@@ -678,7 +680,7 @@ void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 }
 
 
-gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr attr)
+G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr attr)
 {
 	gchar * text_attr = NULL;
 	GtkWidget * dash  = NULL;
@@ -711,14 +713,14 @@ gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr attr)
 }
 
 
-gboolean dash_popup_menu_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget, gpointer data)
 {
 	dash_context_popup(widget, NULL);
 	return TRUE;
 }
 
 
-void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
+G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 {
 	GtkWidget *menu = NULL;
 	GtkWidget *item = NULL;
@@ -799,7 +801,7 @@ void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 }
 
 
-gboolean close_dash(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 {
 	gint index = 0;
 	gchar * tmpbuf = NULL;
@@ -818,7 +820,7 @@ gboolean close_dash(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer data)
+G_MODULE_EXPORT gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer data)
 {
 	GtkWidget *widget = (GtkWidget *)data;
 	dash_toggle_attribute(gtk_widget_get_toplevel(widget),TATTLETALE);
@@ -826,7 +828,7 @@ gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer data)
 }
 
 
-gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
+G_MODULE_EXPORT gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
 {
 	gboolean value;
 	GtkWidget *widget = (GtkWidget *)data;
@@ -836,7 +838,7 @@ gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
 }
 
 
-gboolean get_dash_daytime_mode(GtkWidget *widget)
+G_MODULE_EXPORT gboolean get_dash_daytime_mode(GtkWidget *widget)
 {
 	GtkWidget * dash  = NULL;
 	GList *children = NULL;
@@ -864,7 +866,7 @@ gboolean get_dash_daytime_mode(GtkWidget *widget)
 }
 
 
-void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
+G_MODULE_EXPORT void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
 {
 	GtkWidget * dash  = NULL;
 	GList *children = NULL;
@@ -883,7 +885,7 @@ void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
 }
 
 
-gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer data)
+G_MODULE_EXPORT gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer data)
 {
 	GList *children = NULL;
 	guint i = 0;
@@ -910,7 +912,7 @@ gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer data)
 }
 
 
-gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer data)
+G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer data)
 {
 	GtkWidget *widget = (GtkWidget *)data;
 	dash_toggle_attribute(gtk_widget_get_toplevel(widget),ANTIALIAS);
@@ -919,7 +921,7 @@ gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer data)
 
 
 
-gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	/*printf("button event\n"); */
 	gint edge = -1;
@@ -1066,10 +1068,9 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GtkWidget *label = NULL;
-	extern gboolean interrogated;
 	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 
-	if (!interrogated)
+	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
@@ -1113,12 +1114,13 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 
 
 
-gboolean remove_dashboard(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 {
-	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 	GtkWidget *label = NULL;
+	GMutex *dash_mutex = DATA_GET(global_data,"dash_mutex");
+	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 
-	g_static_mutex_lock(&dash_mutex);
+	g_mutex_lock(dash_mutex);
 	label = OBJ_GET(widget,"label");
 	if (GTK_IS_WIDGET(label))
 	{
@@ -1136,11 +1138,11 @@ gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	}
 	if (dash_hash)
 		g_hash_table_foreach_remove(dash_hash,remove_dashcluster,data);
-	g_static_mutex_unlock(&dash_mutex);
+	g_mutex_unlock(dash_mutex);
 	return TRUE;
 }
 
-gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
+G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 {
 	gchar *tmpbuf = NULL;
 	Dash_Gauge *d_gauge = NULL;
@@ -1162,7 +1164,7 @@ gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 	return FALSE;
 }
 
-gboolean dummy(GtkWidget *widget,gpointer data)
+G_MODULE_EXPORT gboolean dummy(GtkWidget *widget,gpointer data)
 {
 	return TRUE;
 }
@@ -1175,8 +1177,9 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	gint table_num = -1;
-	extern GList **tab_gauges;
+	GList **tab_gauges = NULL;
 
+	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	gauge = mtx_gauge_face_new();
 	gtk_container_add(GTK_CONTAINER(widget),gauge);
 	xml_name = OBJ_GET(widget,"gaugexml");
@@ -1194,35 +1197,36 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 	tab_gauges[table_num] = g_list_prepend(tab_gauges[table_num],gauge);
 }
 
-void update_tab_gauges(void)
+G_MODULE_EXPORT void update_tab_gauges(void)
 {
-	extern gint active_table;
-	extern GList **tab_gauges;
 	GtkWidget *gauge = NULL;
 	gchar * source = NULL;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
-	extern gboolean forced_update;
 	guint i = 0;
 	GList *list = NULL;
+	GList **tab_gauges = NULL;
+
+	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	
-	if ((!tab_gauges) || (active_table < 0))
+	if ((!tab_gauges) || ((gint)DATA_GET(global_data,"active_table") < 0))
 		return;
-	list = g_list_first(tab_gauges[active_table]);
+	list = g_list_first(tab_gauges[(gint)DATA_GET(global_data,"active_table")]);
 	for (i=0;i<g_list_length(list);i++)
 	{
 		gauge = g_list_nth_data(list,i);
 		source = OBJ_GET(gauge,"datasource");
 		lookup_current_value(source,&current);
 		mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
-		if ((current != previous) || (forced_update))
+		if ((current != previous) || 
+				(DATA_GET(global_data,"forced_update")))
 			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
 	}
 
 }
 
 
-gboolean hide_dash_resizers(gpointer data)
+G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 {
 	if (GTK_IS_WIDGET(data))
 		dash_shape_combine(data,TRUE);
@@ -1230,7 +1234,7 @@ gboolean hide_dash_resizers(gpointer data)
 	return FALSE;
 }
 
-gboolean focus_event(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean focus_event(GtkWidget *widget, gpointer data)
 {
 	if (moving)
 	{
@@ -1247,7 +1251,7 @@ gboolean focus_event(GtkWidget *widget, gpointer data)
 }
 
 
-void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dash = OBJ_GET(widget,"dash");
 
@@ -1269,7 +1273,7 @@ void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 }
 
 
-void toggle_dash_on_top(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dash = GTK_BIN(widget)->child;
 
@@ -1287,7 +1291,7 @@ void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 }
 
 
-void toggle_gui_visible(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 {
 	/* IF visible, hide them */
 	if ((gboolean)DATA_GET(global_data,"gui_visible"))

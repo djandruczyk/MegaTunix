@@ -15,7 +15,6 @@
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
-#include <fileio.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <gui_handlers.h>
@@ -41,7 +40,7 @@ extern gconstpointer *global_data;
  \param group (gchar *) textual name of the group of controls to alter color
  \see set_widget_color
  */
-void set_group_color(GuiColor color, gchar *group)
+G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 {
 	g_list_foreach(get_list(group), set_widget_color,(gpointer)color);
 }
@@ -55,7 +54,7 @@ void set_group_color(GuiColor color, gchar *group)
  controls to change the color on
  \see set_widget_color
  */
-void set_reqfuel_color(GuiColor color, gint table_num)
+G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
 {
 	gchar *name = NULL;
 	name = g_strdup_printf("interdep_%i_ctrl",table_num);
@@ -70,7 +69,7 @@ void set_reqfuel_color(GuiColor color, gint table_num)
  \param widget (gpointer) the widget to  change color
  \param color (GuiColor) enumeration of the color to switch to..
  */
-void set_widget_color(gpointer widget, gpointer color)
+G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 {
 	switch ((GuiColor)color)
 	{
@@ -159,7 +158,7 @@ void set_widget_color(gpointer widget, gpointer color)
  \param count (gboolean) flag to show a running count or not
  \param clear (gboolean) if set, clear display before displaying text
  */
-void  update_logbar(
+G_MODULE_EXPORT void  update_logbar(
 		const gchar * view_name, 
 		const gchar * tagname, 
 		gchar * message,
@@ -175,11 +174,10 @@ void  update_logbar(
 	gchar *tmpbuf = NULL;
 	gpointer result = NULL;
 	GtkWidget * widget = NULL;
-	extern volatile gboolean leaving;
 
 	widget = (GtkWidget *)lookup_widget(view_name);
 
-	if ((leaving) || (!widget))
+	if ((DATA_GET(global_data,"leaving")) || (!widget))
 		return;
 
 	if (!GTK_IS_OBJECT(widget))
@@ -272,20 +270,19 @@ G_MODULE_EXPORT void kill_conn_warning(void)
  \brief warn_user() displays a warning message on the screen as a error dialog
  \param message (gchar *) the text to display
  */
-void warn_user(const gchar *message)
+G_MODULE_EXPORT void warn_user(const gchar *message)
 {
-	extern gboolean interrogated;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	if ((args->be_quiet))
 		return;
 
 	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
-			
-	if (!interrogated)
+
+	if (!DATA_GET(global_data,"interrogated"))
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Go to Offline mode", GTK_RESPONSE_ACCEPT,NULL);
 	else
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),"_Close", GTK_RESPONSE_CANCEL,NULL);
-			
+
 
 	g_signal_connect (G_OBJECT(warning_dialog),
 			"response",
@@ -297,7 +294,35 @@ void warn_user(const gchar *message)
 }
 
 
-gboolean get_response(GtkWidget *widget, gpointer data)
+
+/*!
+ \brief error_msg() displays a warning message on the screen as a error dialog
+ \param message (gchar *) the text to display
+ */
+G_MODULE_EXPORT void error_msg(const gchar *message)
+{
+	GtkWidget *dialog = NULL;
+	gint result = 0;
+	dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
+
+	gtk_dialog_add_buttons(GTK_DIALOG(dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Ignore at my peril!", GTK_RESPONSE_ACCEPT,NULL);
+
+	gtk_widget_show_all(dialog);
+	result = gtk_dialog_run(GTK_DIALOG(dialog));
+	switch (result)
+	{
+		case GTK_RESPONSE_CLOSE:
+			gtk_widget_destroy(dialog);
+			leave(NULL,NULL);
+			break;
+		case GTK_RESPONSE_ACCEPT:
+			gtk_widget_destroy(dialog);
+	}
+	return;
+}
+
+
+G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 {
 	gint response = (GINT)data;
 	if (response == GTK_RESPONSE_ACCEPT)
@@ -321,7 +346,7 @@ gboolean get_response(GtkWidget *widget, gpointer data)
  \param widget (GtkWidget *) widget to destroy
  \param data (gpointer) unused
  */
-gboolean close_dialog(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean close_dialog(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_destroy(widget);
 	gdk_threads_add_timeout(1500,set_warning_flag,NULL);
@@ -333,7 +358,7 @@ gboolean close_dialog(GtkWidget *widget, gpointer data)
 /*!
  \brief reset_infolabel() resets infolabel text to "Ready"
  */
-gboolean reset_infolabel(gpointer data)
+G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 {
 	static GtkWidget *info_label = NULL;
 	if (!info_label)
@@ -348,14 +373,15 @@ gboolean reset_infolabel(gpointer data)
  give user notifications...
  \param text (gchar *) text to append, dynamic strings only
  */
-void set_title(gchar * text)
+G_MODULE_EXPORT void set_title(gchar * text)
 {
 	gchar * tmpbuf = NULL;
-	extern volatile gboolean leaving;
 	static GtkWidget *info_label = NULL;
-	extern Firmware_Details *firmware;
+	Firmware_Details *firmware = NULL;
 
-	if ((!lookup_widget("main_window")) || (leaving))
+	firmware = DATA_GET(global_data,"firmware");
+
+	if ((!lookup_widget("main_window")) || (DATA_GET(global_data,"leaving")))
 		return;
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");
@@ -394,7 +420,7 @@ void set_title(gchar * text)
 	g_free(text);
 }
 
-gboolean set_warning_flag(gpointer user_data)
+G_MODULE_EXPORT gboolean set_warning_flag(gpointer user_data)
 {
 	warning_present = FALSE;
 	return FALSE;

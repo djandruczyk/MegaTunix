@@ -24,10 +24,9 @@
 #include <time.h>
 
 
-gint dbg_lvl = 0;
-
-GIOChannel * dbg_channel = NULL;
-GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
+extern gconstpointer *global_data;
+static GIOChannel * dbg_channel = NULL;
+static GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
 static DebugLevel dbglevels[] = 
 {
 	{ "Interrogation", DEBUG_LEVEL, INTERROGATOR, INTERROGATOR_SHIFT,FALSE},
@@ -52,7 +51,7 @@ static DebugLevel dbglevels[] =
  \brief open_debug() opens the channel to the debugging information log.
  The path defaults to the current working directory.
  */
-void open_debug(void)
+G_MODULE_EXPORT void open_debug(void)
 {
 	extern gconstpointer *global_data;
 	CmdLineArgs * args = NULL;
@@ -90,7 +89,7 @@ void open_debug(void)
 }
 
 
-void close_debug(void)
+G_MODULE_EXPORT void close_debug(void)
 {
 	g_static_mutex_lock(&dbg_mutex);
 	if (dbg_channel)
@@ -107,10 +106,14 @@ void close_debug(void)
  \param level (Dbg_Class enumeration) the debug level
  \param str (gchar *) message to print out
  */
-void dbg_func(Dbg_Class level, gchar *str)
+G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 {
 	gsize count = 0;
 	GError *error = NULL;
+	static gint dbg_lvl = -1;
+
+	if (dbg_lvl == -1)
+		dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 	/*
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;
@@ -144,7 +147,7 @@ void dbg_func(Dbg_Class level, gchar *str)
 	g_static_mutex_unlock(&dbg_mutex);
 }
 
-void populate_debugging(GtkWidget *parent)
+G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 {
 	GtkWidget *vbox2 = NULL;
 	GtkWidget *table = NULL;
@@ -155,6 +158,7 @@ void populate_debugging(GtkWidget *parent)
 	gint k = 0;
 	gint mask = 0;
 	gint num_levels = sizeof(dbglevels)/sizeof(dbglevels[0]);
+	gint dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 
 
 	vbox2 = gtk_vbox_new(FALSE,0);

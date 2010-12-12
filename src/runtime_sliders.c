@@ -46,30 +46,30 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT void load_sliders_pf(void)
 {
-	extern Firmware_Details *firmware;
-	extern volatile gboolean leaving;
 	GHashTable *rt_sliders = NULL;
 	GHashTable *ww_sliders = NULL;
 	gchar *filename = NULL;
 	xmlDoc * doc = NULL;
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
-	extern gboolean tabs_loaded;
-	extern gboolean rtvars_loaded;
-	extern gboolean interrogated;
+	Firmware_Details *firmware = NULL;
 
-	if (!interrogated)
+	firmware = DATA_GET(global_data,"firmware");
+
+	if (!DATA_GET(global_data,"interrogated"))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT connected and not interrogated, returning!\n\n"));
 		return;
 	}
 
-	if ((!tabs_loaded) || (leaving))
+	if ((!DATA_GET(global_data,"tabs_loaded")) || 
+			(DATA_GET(global_data,"leaving")))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, tabs not loaded or leaving, returning!\n\n"));
 		return;
 	}
-	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
+	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
+			(!DATA_GET(global_data,"tabs_loaded")))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
@@ -118,7 +118,7 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 	return;
 }
 
-gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash, gint table_num, TabIdent tab_id)
+G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash, gint table_num, TabIdent tab_id)
 {
 	xmlNode *cur_node = NULL;
 
@@ -142,7 +142,7 @@ gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable 
 	return TRUE;
 }
 
-void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
+G_MODULE_EXPORT void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
 {
 	gchar *slider_name = NULL;
 	gchar *source = NULL;
@@ -191,18 +191,17 @@ void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
  */
 G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 {
-	extern Firmware_Details *firmware;
-	extern volatile gboolean leaving;
 	gchar *filename = NULL;
 	xmlDoc * doc = NULL;
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
 	GHashTable **ve3d_sliders;
-	extern gboolean tabs_loaded;
-	extern gboolean rtvars_loaded;
-	extern gboolean interrogated;
+	Firmware_Details *firmware = NULL;
 
-	if ((rtvars_loaded == FALSE) || (tabs_loaded == FALSE))
+	firmware = DATA_GET(global_data,"firmware");
+
+	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
+			(!(DATA_GET(global_data,"tabs_loaded"))))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
@@ -250,7 +249,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
  \param ident (TabIdent) enumeration of the page this slider goes on
  \returns a Struct Rt_Slider *
  */
-Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
+G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
 {
 	Rt_Slider *slider = NULL;
 	GtkWidget *label = NULL;
@@ -258,10 +257,10 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
 	GtkWidget *table = NULL;
 	GtkWidget *hbox = NULL;
 	gchar * name = NULL;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
 
-
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
@@ -366,17 +365,21 @@ Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gc
  */
 G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 {
-	gconstpointer * object = NULL;
-	extern Rtv_Map *rtv_map;
+	gconstpointer *object = NULL;
+	Rtv_Map *rtv_map = NULL;
 	GtkWidget *parent = NULL;
 	GtkProgressBarOrientation orient;
 	GHashTable *rt_sliders = NULL;
 	GHashTable *aw_sliders = NULL;
 	GHashTable *ww_sliders = NULL;
 	GHashTable *enr_sliders = NULL;
+	gchar * source = NULL;
+	TabIdent ident = 0;
 	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
-	gchar * source = (gchar *)OBJ_GET(widget,"source");
-	TabIdent ident = (TabIdent)OBJ_GET(widget,"tab_ident");
+
+	rtv_map = DATA_GET(global_data,"rtv_map");
+	source = (gchar *)OBJ_GET(widget,"source");
+	ident = (TabIdent)OBJ_GET(widget,"tab_ident");
 		
 	if (!rtv_map)
 		return;
@@ -478,7 +481,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
  \param table_num (gint) the table_number to free the sliders for
  \returns FALSE
  */
-gboolean free_ve3d_sliders(gint table_num)
+G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 {
 	gchar * widget = NULL;
 	GHashTable **tables = NULL;
@@ -514,8 +517,8 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
 {
 	gboolean mapae_ctrl_state = FALSE;
 	gboolean tpsae_ctrl_state = FALSE;
-	extern GHashTable *widget_group_states;
-	gfloat value = gtk_range_get_value(GTK_RANGE(widget));
+	GHashTable *widget_group_states = NULL;
+ 	gfloat value = gtk_range_get_value(GTK_RANGE(widget));
 
 	if (value == 0)
 		tpsae_ctrl_state = FALSE;
@@ -527,6 +530,7 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
 	else
 		mapae_ctrl_state = TRUE;
 
+	widget_group_states = DATA_GET(global_data,"widget_group_states");
 	g_hash_table_insert(widget_group_states,g_strdup("tps_ae_ctrls"),GINT_TO_POINTER(tpsae_ctrl_state));
 	g_hash_table_insert(widget_group_states,g_strdup("map_ae_ctrls"),GINT_TO_POINTER(mapae_ctrl_state));
 	g_list_foreach(get_list("tps_ae_ctrls"),alter_widget_state,NULL);

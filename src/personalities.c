@@ -36,7 +36,7 @@ extern gconstpointer *global_data;
  in order to open the window to ask the user what ECU family to deal with
  running.
  */
-gboolean personality_choice(void)
+G_MODULE_EXPORT gboolean personality_choice(void)
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *vbox = NULL;
@@ -45,11 +45,6 @@ gboolean personality_choice(void)
 	GtkWidget *sep = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
-	GModule *module = NULL;
-#ifdef __WIN32__
-	gchar * libname = NULL;
-#endif
-	gchar * libpath = NULL;
 	gchar ** dirs = NULL;
 	gchar * filename = NULL;
 	PersonaElement *element = NULL;
@@ -85,8 +80,10 @@ gboolean personality_choice(void)
 		}
 		element = g_new0(PersonaElement, 1);
 		cfg_read_string(cfgfile,"Family","friendly_name",&element->name);
-		cfg_read_string(cfgfile,"Family","ecu_lib",&element->ecu_lib);
-		cfg_read_string(cfgfile,"Family","common_lib",&element->common_lib);
+		if(!cfg_read_string(cfgfile,"Family","ecu_lib",&element->ecu_lib))
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" ecu_lib undefined!, was MegaTunix installed properly?\n\n"));
+		if(!cfg_read_string(cfgfile,"Family","common_lib",&element->common_lib))
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" common_lib undefined!, was MegaTunix installed properly?\n\n"));
 		cfg_read_int(cfgfile,"Family","baud",&element->baud);
 		element->dirname = g_strdup(dirs[i]);
 		element->filename = g_path_get_basename(dirs[i]);
@@ -212,36 +209,14 @@ gboolean personality_choice(void)
 			break;
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
-#ifdef __WIN32__
-			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
-			libpath = g_module_build_path(MTXPLUGINDIR,libname);
-			g_free(libname);
-#else
-			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
-			g_free(libpath);
-			g_module_make_resident(module);
-			DATA_SET(global_data,"plugin_module",(gpointer)module);
-			plugin_init();
+			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
 			g_free(filename);
 			io_cmd("interrogation",NULL);
 			break;
 		default:
-#ifdef __WIN32__
-			libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
-			libpath = g_module_build_path(MTXPLUGINDIR,libname);
-			g_free(libname);
-#else
-			libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-			module = g_module_open(libpath,G_MODULE_BIND_LAZY);
-			g_free(libpath);
-			g_module_make_resident(module);
-			DATA_SET(global_data,"plugin_module",(gpointer)module);
-			plugin_init();
+			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
 			g_free(filename);
@@ -252,7 +227,7 @@ gboolean personality_choice(void)
 }
 
 
-gboolean persona_selection(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 {
 	PersonaElement *element = (PersonaElement *)data;
 
@@ -261,11 +236,10 @@ gboolean persona_selection(GtkWidget *widget, gpointer data)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{
 		DATA_SET(global_data,"ecu_baud", GINT_TO_POINTER(element->baud));
-		DATA_SET_FULL(global_data,"ecu_lib", g_strdup(element->ecu_lib),cleanup);
-		DATA_SET_FULL(global_data,"common_lib", g_strdup(element->common_lib),cleanup);
-		DATA_SET_FULL(global_data,"ecu_dirname", g_strdup(element->dirname),cleanup);
-		DATA_SET_FULL(global_data,"ecu_family", g_strdup(element->filename),cleanup);
+		DATA_SET_FULL(global_data,"ecu_lib", g_strdup(element->ecu_lib),g_free);
+		DATA_SET_FULL(global_data,"common_lib", g_strdup(element->common_lib),g_free);
+		DATA_SET_FULL(global_data,"ecu_dirname", g_strdup(element->dirname),g_free);
+		DATA_SET_FULL(global_data,"ecu_family", g_strdup(element->filename),g_free);
 	}
 	return TRUE;
 }
-

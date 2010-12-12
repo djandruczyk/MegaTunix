@@ -18,12 +18,13 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void set_group_color(GuiColor, gchar * );
+void set_group_color(GuiColor, const gchar * );
 void set_reqfuel_color(GuiColor, gint );
 void set_widget_color(gpointer, gpointer );
 void update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean,gboolean);
 void no_ms_connection(void);
 void warn_user(const gchar *);
+void error_msg(const gchar *);
 void set_title(gchar *);
 void conn_warning(void);
 void kill_conn_warning(void);

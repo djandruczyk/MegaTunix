@@ -21,7 +21,7 @@
 /*!
  \brief build_about makes the about tab and presents the MegaTunix logo
  */
-void install_logo(GtkWidget *alignment)
+G_MODULE_EXPORT void install_logo(GtkWidget *alignment)
 {
 	GdkPixbuf *pixbuf;
 	GtkWidget *image;
@@ -34,7 +34,7 @@ void install_logo(GtkWidget *alignment)
 }
 
 
-void build_about(GtkWidget *frame)
+G_MODULE_EXPORT void build_about(GtkWidget *frame)
 {
 	gchar *tmpbuf = NULL;
 	GtkWidget *label;

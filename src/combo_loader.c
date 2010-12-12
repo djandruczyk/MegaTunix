@@ -30,7 +30,7 @@
 
 
 
-void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
+G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
 	gchar ** choices = NULL;

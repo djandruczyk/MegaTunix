@@ -168,7 +168,7 @@ G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion
  \param state (gboolean) if set we highlight the target trace info box
  \returns void 
  */
-void highlight_tinfo(gint tnum, gboolean state)
+G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 {
 	GdkRectangle rect;
 	extern Logview_Data *lv_data;

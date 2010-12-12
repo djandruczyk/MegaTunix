@@ -15,7 +15,6 @@
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
-#include <fileio.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
 #include <keyparser.h>
@@ -31,8 +30,7 @@
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
 
-Log_Info *log_info = NULL;
-
+extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 {
@@ -46,8 +44,9 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 	gint precision = 0;
 	gchar * name = NULL;
 	DataSize size = MTX_U08;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map;
 
+	rtv_map = DATA_GET(global_data,"rtv_map");
 	tmpbuf = OBJ_GET(parent,"sources");
 	if (tmpbuf);
 		sources = g_strsplit(tmpbuf,",",-1);
@@ -85,7 +84,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 
 }
 
-void update_stripchart_data(DataWatch* watch)
+G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
 {
 	mtx_stripchart_set_values(MTX_STRIPCHART(watch->user_data),watch->vals);
 }
@@ -103,7 +102,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 	GIOChannel *iochannel = NULL;
 
 	reset_logviewer_state();
-	free_log_info();
+	free_log_info(DATA_GET(global_data,"log_info"));
 
 
 	fileio = g_new0(MtxFileIO ,1);
@@ -143,14 +142,16 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
  \brief load_logviewer_file() loads a datalog file for playback
  \param iochannel The IO channel representing the source file
  */
-void load_logviewer_file(GIOChannel *iochannel)
+G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 {
+	Log_Info *log_info = NULL;
 	if (!iochannel)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"));
 		return;
 	}
 	log_info = initialize_log_info();
+	DATA_SET(global_data,"log_info",log_info);
 	read_log_header(iochannel, log_info);
 	read_log_data(iochannel, log_info);
 	populate_limits(log_info);
@@ -163,7 +164,7 @@ void load_logviewer_file(GIOChannel *iochannel)
  of the log_info struture
  \returns a pointer to an allocated Log_Info structure
  */
-Log_Info * initialize_log_info(void)
+G_MODULE_EXPORT Log_Info * initialize_log_info(void)
 {
 	Log_Info *log_info = NULL;
 	log_info = g_malloc0(sizeof(Log_Info));
@@ -180,7 +181,7 @@ Log_Info * initialize_log_info(void)
  \param iochannel (GIOChannel *) iochannel that represents the input file
  \param log_info (Log_Info *)the Log_Info structure
  */
-void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
+G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus  status = G_IO_STATUS_ERROR;
@@ -190,8 +191,10 @@ void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	GArray *array = NULL;
 	gconstpointer *object = NULL;
 	gint i = 0;
-	extern gboolean offline;
-	extern Rtv_Map *rtv_map;
+	Rtv_Map *rtv_map;
+	extern gconstpointer *global_data;
+	
+	rtv_map = DATA_GET(global_data,"rtv_map");
 
 read_again:
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
@@ -209,7 +212,7 @@ read_again:
 		{
 			log_info->signature = g_strdup(g_strstrip(g_strdelimit(a_line->str,"\"\n\r",' ')));
 			/*printf(_("LOG signature is \"%s\"\n"),log_info->signature);*/
-			if (offline)
+			if (DATA_GET(global_data,"offline"))
 			{
 				printf("rtv_map->applicable_signatures is \"%s\"\n",rtv_map->applicable_signatures);
 				if (rtv_map->applicable_signatures)
@@ -263,7 +266,7 @@ read_again:
  maximum values based on the span of the data in the file
  \param log_info (Log_Info *) pointer to log info structure
  */
-void populate_limits(Log_Info *log_info)
+G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 {
 	guint i = 0;
 	gint j = 0;
@@ -310,7 +313,7 @@ void populate_limits(Log_Info *log_info)
  \param iochannel (GIOChannel *) data source 
  \param log_info (Log_Info *) pointer to log information struct
  */
-void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
+G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 {
 	GString *a_line = g_string_new("\0");
 	gchar **data = NULL;
@@ -376,9 +379,8 @@ void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
  \brief free_log_info frees the data allocated by a datalog import, 
  should be done when switching logfiles
  */
-void free_log_info(void)
+G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 {
-	extern Log_Info *log_info;
 	guint i = 0;
 	gconstpointer *object = NULL;
 	GArray *array = NULL;
@@ -401,6 +403,7 @@ void free_log_info(void)
 		g_free(log_info->delimiter);
 	g_free(log_info);
 	log_info = NULL;
+	DATA_SET(global_data,"log_info",NULL);
 
 	return;
 }
@@ -412,12 +415,11 @@ void free_log_info(void)
 G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
 {
 	gfloat tmpf = 0.0;
-	extern gint playback_id;
 	extern gconstpointer *global_data;
 
 	tmpf = gtk_range_get_value(GTK_RANGE(widget));
 	DATA_SET(global_data,"lv_scroll_delay", GINT_TO_POINTER((gint)tmpf));
-	if (playback_id > 0)
+	if (DATA_GET(global_data,"playback_id"))
 	{
 		stop_tickler(LV_PLAYBACK_TICKLER);
 		start_tickler(LV_PLAYBACK_TICKLER);
