@@ -21,7 +21,7 @@
 #include <stdlib.h>
 
 
-gconstpointer *global_data;
+extern gconstpointer *global_data;
 
 
 G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)

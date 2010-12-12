@@ -19,13 +19,10 @@
 #include <enums.h>
 #include <errno.h>
 #include <firmware.h>
-#include <post_process.h>
-#include <rtv_processor.h>
 #include <serialio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#include <threads.h>
 #include <unistd.h>
 #ifdef __WIN32__
 #include <winsock2.h>
@@ -38,7 +35,6 @@
 
 
 /* Externs */
-void (*dbg_func_f)(gint, gchar *);
 extern gconstpointer *global_data;
 
 /* Cause OS-X sucks.... */

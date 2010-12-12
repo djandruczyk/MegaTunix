@@ -12,28 +12,18 @@
  */
 
 #include <config.h>
-#include <comms.h>
 #include <datamgmt.h>
-#include <datalogging_gui.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
-#include <gui_handlers.h>
 #include <mscommon_comms.h>
-
-#include <notifications.h>
-#include <plugin.h>
-#include <serialio.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <vex_support.h>
-#include <xmlcomm.h>
-#include <threads.h>
-#include <widgetmgmt.h>
 
 static gchar *vex_comment = NULL;
 extern gconstpointer *global_data;

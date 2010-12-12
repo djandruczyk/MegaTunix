@@ -27,7 +27,7 @@
 #include <threads.h>
 
 
-gconstpointer *global_data;
+extern gconstpointer *global_data;
 
 /*!
  \brief queue_burn_ecu_flash() issues the commands to the ECU to 

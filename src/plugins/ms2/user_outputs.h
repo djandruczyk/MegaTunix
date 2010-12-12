@@ -29,7 +29,7 @@ extern void (*update_widget_f)(gpointer, gpointer);
 extern GtkWidget *(*mask_entry_new_with_mask_wrapper_f)(gchar *);
 /* Externs */
 
-enum
+typedef enum
 {
         UO_CHOICE_COL,
         UO_BITVAL_COL,
