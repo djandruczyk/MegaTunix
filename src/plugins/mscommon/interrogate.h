@@ -28,12 +28,13 @@ extern gboolean (*get_file_api_f)(ConfigFile *, gint *, gint *);
 extern gint (*translate_string_f)(const gchar *);
 extern void (*mem_alloc_f)(void);
 extern void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
-extern void *(*evaluator_create_f)(char *);
+extern void *(*eval_create_f)(char *);
 extern void (*thread_widget_set_sensitive_f)(const gchar *, gboolean);
 extern void (*get_table_f)(gpointer, gpointer, gpointer);
 extern void (*free_multi_source_f)(gpointer);
 extern void (*load_dependancies_obj_f)(GObject *,ConfigFile * ,gchar *, gchar *);
 extern void (*flush_serial_f)(gint, gint);
+extern char *(*regex_wrapper_f)(char *, char *, int *);
 /* Externs */
 
 typedef enum

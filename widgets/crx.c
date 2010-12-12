@@ -8,6 +8,7 @@
  * version: 0.13.13
  */
 #include "crx.h"
+#include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -330,7 +331,7 @@ _CMD3(multi)
 
 /* -------------- core functions ---------------- */
 
-char* regex(char* pat, char* sam, int* len)
+G_MODULE_EXPORT char* regex(char* pat, char* sam, int* len)
 {
     *len = 0;
     while (*pat && *sam)

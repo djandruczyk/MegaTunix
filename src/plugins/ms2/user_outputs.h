@@ -26,6 +26,7 @@ extern gfloat (*direct_lookup_data_f)(gchar *, gint );
 extern gint (*direct_reverse_lookup_f)(gchar *, gint );
 extern GtkWidget *(*lookup_widget_f)(const gchar *);
 extern void (*update_widget_f)(gpointer, gpointer);
+extern GtkWidget *(*mask_entry_new_with_mask_wrapper_f)(gchar *);
 /* Externs */
 
 enum

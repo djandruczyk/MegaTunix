@@ -48,6 +48,7 @@ extern GtkWidget *interr_view;
  */
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gboolean interrogated = FALSE;
 	GArray *tests = NULL;
 	GHashTable *tests_hash = NULL;
@@ -69,9 +70,8 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	guchar buf[BUFSIZE];
 	guchar *ptr = NULL;
 	gchar * message = NULL;
-	extern gconstpointer *global_data;
 	Serial_Params *serial_params = NULL;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	extern gconstpointer *global_data;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	if (DATA_GET(global_data,"offline"))
@@ -87,7 +87,6 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		return FALSE;
 	}
 	thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("Interrogating ECU...")));
-	/*set_title(g_strdup(_("Interrogating ECU...")));*/
 
 	/* Load tests from config files */
 	tests = validate_and_load_tests(&tests_hash);
@@ -346,13 +345,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	gint len6 = 0;
 	gint j = 0;
 
+
 	cfgfile = cfg_open_file((gchar *)filename);
 	if (!cfgfile)
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFile \"%s\" NOT OPENED successfully\n",filename));
 	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
-		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
+		thread_update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		cfg_free(cfgfile);
 		return FALSE;
 	}
@@ -379,7 +379,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		firmware->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
 		/*
-		printf("CAP #'s MS1 %i MS1_STD %i MSNS_E %i MS1_DT %i MS2 %i MS2_STD %i, MS2_E %i, MS2_E_COMPMON %i, PIS %i, SECU_3 %i, FEEEMS %i JIMSTIM %i\n",MS1,MS1_STD,MSNS_E,MS1_DT,MS2,MS2_STD,MS2_E,MS2_E_COMPMON,PIS,SECU_3,FREEEMS,JIMSTIM);
+		   printf("CAP #'s MS1 %i MS1_STD %i MSNS_E %i MS1_DT %i MS2 %i MS2_STD %i, MS2_E %i, MS2_E_COMPMON %i, PIS %i, SECU_3 %i, FEEEMS %i JIMSTIM %i\n",MS1,MS1_STD,MSNS_E,MS1_DT,MS2,MS2_STD,MS2_E,MS2_E_COMPMON,PIS,SECU_3,FREEEMS,JIMSTIM);
 
 		   if (firmware->capabilities & MS1)
 		   printf("MS1\n");
@@ -405,7 +405,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		   printf("FREEEMS\n");
 		   if (firmware->capabilities & JIMSTIM)
 		   printf("JIMSTIM\n");
-		   */
+		 */
 	}
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",
 				&firmware->rt_command))
@@ -526,11 +526,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				&firmware->sliders_map_file))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
 	cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
-				&firmware->rtt_map_file);
-/*		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));*/
+			&firmware->rtt_map_file);
+	/*		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));*/
 	cfg_read_string(cfgfile,"gui","StatusMapFile",
-				&firmware->status_map_file);
-/*		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));*/
+			&firmware->status_map_file);
+	/*		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));*/
 	if (!cfg_read_string(cfgfile,"lookuptables","tables",
 				&tmpbuf))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_profile_details()\n\t\"tables\" lookuptable name not found in interrogation profile, ERROR\n"));
@@ -944,11 +944,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
+					multi->ul_eval = eval_create_f(multi->ul_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
+					multi->dl_eval = eval_create_f(multi->dl_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
@@ -964,9 +964,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->x_ul_eval = evaluator_create_f(firmware->table_params[i]->x_ul_conv_expr);
+			firmware->table_params[i]->x_ul_eval = eval_create_f(firmware->table_params[i]->x_ul_conv_expr);
 			g_assert(firmware->table_params[i]->x_ul_eval);
-			firmware->table_params[i]->x_dl_eval = evaluator_create_f(firmware->table_params[i]->x_dl_conv_expr);
+			firmware->table_params[i]->x_dl_eval = eval_create_f(firmware->table_params[i]->x_dl_conv_expr);
 			g_assert(firmware->table_params[i]->x_dl_eval);
 		}
 		/* Check for multi source table handling */
@@ -994,11 +994,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
+					multi->ul_eval = eval_create_f(multi->ul_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
+					multi->dl_eval = eval_create_f(multi->dl_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
@@ -1014,8 +1014,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->y_ul_eval = evaluator_create_f(firmware->table_params[i]->y_ul_conv_expr);
-			firmware->table_params[i]->y_dl_eval = evaluator_create_f(firmware->table_params[i]->y_dl_conv_expr);
+			firmware->table_params[i]->y_ul_eval = eval_create_f(firmware->table_params[i]->y_ul_conv_expr);
+			firmware->table_params[i]->y_dl_eval = eval_create_f(firmware->table_params[i]->y_dl_conv_expr);
 		}
 
 		/* Check for multi source table handling */
@@ -1043,11 +1043,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
+					multi->ul_eval = eval_create_f(multi->ul_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
+					multi->dl_eval = eval_create_f(multi->dl_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
@@ -1063,19 +1063,20 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->z_ul_eval = evaluator_create_f(firmware->table_params[i]->z_ul_conv_expr);
-			firmware->table_params[i]->z_dl_eval = evaluator_create_f(firmware->table_params[i]->z_dl_conv_expr);
+			firmware->table_params[i]->z_ul_eval = eval_create_f(firmware->table_params[i]->z_ul_conv_expr);
+			firmware->table_params[i]->z_dl_eval = eval_create_f(firmware->table_params[i]->z_dl_conv_expr);
 		}
-
 	}
-
-	mem_alloc_f();
+	if (mem_alloc_f)
+		mem_alloc_f();
+	else
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFAILED TO LOCATE \"mem_alloc\" function within core/plugins"));
 
 	/* Display firmware version in the window... */
 
-	dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": determine_ecu()\n\tDetected Firmware: %s\n",firmware->name));
-	update_logbar_f("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE,TRUE);
-	update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE,TRUE);
+	dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tDetected Firmware: %s\n",firmware->name));
+	thread_update_logbar_f("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE);
+	thread_update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE);
 
 	return TRUE;
 

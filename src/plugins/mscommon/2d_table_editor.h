@@ -34,9 +34,9 @@ extern guint32 (*create_value_change_watch_f)(const gchar *, gboolean, const gch
 extern void (*alter_widget_state_f)(gpointer, gpointer);
 extern void (*remove_from_lists_f)(gchar *, gpointer);
 extern void (*remove_watch_f)(guint32);
-extern void *(*evaluator_create_f)(char *);
-extern void *(*evaluator_destroy_f)(void *);
-extern double (*evaluator_evaluate_x_f)(void *, double);
+extern void *(*eval_create_f)(char *);
+extern void (*eval_destroy_f)(void *);
+extern double (*eval_x_f)(void *, double);
 
 /*Externs */
 	

@@ -46,9 +46,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("direct_lookup_data",(void *)&direct_lookup_data_f);
 	get_symbol_f("direct_reverse_lookup",(void *)&direct_reverse_lookup_f);
 	get_symbol_f("entry_changed_handler",(void *)&entry_changed_handler_f);
-	get_symbol_f("evaluator_create",(void *)&evaluator_create_f);
-	get_symbol_f("evaluator_destroy",(void *)&evaluator_destroy_f);
-	get_symbol_f("evaluator_evaluate_x",(void *)&evaluator_evaluate_x_f);
+	get_symbol_f("eval_create",(void *)&eval_create_f);
+	get_symbol_f("eval_destroy",(void *)&eval_destroy_f);
+	get_symbol_f("eval_x",(void *)&eval_x_f);
 	get_symbol_f("free_multi_source",(void *)&free_multi_source_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
 	get_symbol_f("focus_out_handler",(void *)&focus_out_handler_f);

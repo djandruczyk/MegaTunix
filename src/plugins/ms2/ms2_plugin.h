@@ -46,7 +46,7 @@ void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
 void (*update_widget_f)(gpointer, gpointer);
 gint (*convert_before_download_f)(GtkWidget *, gfloat);
 gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
-
+GtkWidget *(*mask_entry_new_with_mask_wrapper_f)(gchar *);
 
 /* Function pointers */
 

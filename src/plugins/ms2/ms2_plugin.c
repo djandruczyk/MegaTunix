@@ -45,6 +45,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
 	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
 	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
+	get_symbol_f("mask_entry_new_with_mask_wrapper",(void *)&mask_entry_new_with_mask_wrapper_f);
 	get_symbol_f("ms_get_ecu_data",(void *)&ms_get_ecu_data_f);
 	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
 	get_symbol_f("search_model",(void *)&search_model_f);
