@@ -82,4 +82,21 @@ void thread_refresh_widgets_at_offset(gint, gint);
 /* Prototypes */
 
 
+typedef enum
+{
+        NUM_SQUIRTS_1 = LAST_BUTTON_ENUM + 3,
+        NUM_SQUIRTS_2,
+        NUM_CYLINDERS_1,
+        NUM_CYLINDERS_2,
+        NUM_INJECTORS_1,
+        NUM_INJECTORS_2,
+	LOCKED_REQ_FUEL,
+	REQ_FUEL_1,
+	REQ_FUEL_2,
+	MULTI_EXPRESSION,
+	ALT_SIMUL
+
+
+}CommonMtxButton;
+
 #endif

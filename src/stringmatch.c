@@ -90,8 +90,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 
 	/* Signal handler mapping */
-	g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
-			GINT_TO_POINTER(ALT_SIMUL));
 	g_hash_table_insert(str_2_enum,"_REQFUEL_RESCALE_TABLE_",
 			GINT_TO_POINTER(REQFUEL_RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,"_RESCALE_TABLE_",
@@ -104,28 +102,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(TE_TABLE));
 	g_hash_table_insert(str_2_enum,"_TE_TABLE_GROUP_",
 			GINT_TO_POINTER(TE_TABLE_GROUP));
-	g_hash_table_insert(str_2_enum,"_MULTI_EXPRESSION_",
-			GINT_TO_POINTER(MULTI_EXPRESSION));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",
 			GINT_TO_POINTER(GENERIC));
-	g_hash_table_insert(str_2_enum,"_NUM_SQUIRTS_1_",
-			GINT_TO_POINTER(NUM_SQUIRTS_1));
-	g_hash_table_insert(str_2_enum,"_NUM_SQUIRTS_2_",
-			GINT_TO_POINTER(NUM_SQUIRTS_2));
-	g_hash_table_insert(str_2_enum,"_NUM_CYLINDERS_1_",
-			GINT_TO_POINTER(NUM_CYLINDERS_1));
-	g_hash_table_insert(str_2_enum,"_NUM_CYLINDERS_2_",
-			GINT_TO_POINTER(NUM_CYLINDERS_2));
-	g_hash_table_insert(str_2_enum,"_NUM_INJECTORS_1_",
-			GINT_TO_POINTER(NUM_INJECTORS_1));
-	g_hash_table_insert(str_2_enum,"_NUM_INJECTORS_2_",
-			GINT_TO_POINTER(NUM_INJECTORS_2));
-	g_hash_table_insert(str_2_enum,"_LOCKED_REQ_FUEL_",
-			GINT_TO_POINTER(LOCKED_REQ_FUEL));
-	g_hash_table_insert(str_2_enum,"_REQ_FUEL_1_",
-			GINT_TO_POINTER(REQ_FUEL_1));
-	g_hash_table_insert(str_2_enum,"_REQ_FUEL_2_",
-			GINT_TO_POINTER(REQ_FUEL_2));
 	g_hash_table_insert(str_2_enum,"_REQ_FUEL_POPUP_",
 			GINT_TO_POINTER(REQ_FUEL_POPUP));
 	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",

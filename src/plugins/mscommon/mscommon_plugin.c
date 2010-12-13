@@ -15,6 +15,7 @@
 #include <defines.h>
 #include <mscommon_plugin.h>
 #include <mscommon_helpers.h>
+#include <mscommon_gui_handlers.h>
 #include <interrogate.h>
 #include <mtxsocket.h>
 #include <gtk/gtk.h>
@@ -106,97 +107,117 @@ void register_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
-	str_2_enum = DATA_GET(global_data,"str_2_enum");
+	str_2_enum = DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
 		/* TCP Socket Commands */
-		g_hash_table_insert(str_2_enum,"HELP",
-				GINT_TO_POINTER(HELP));
-		g_hash_table_insert(str_2_enum,"QUIT",
-				GINT_TO_POINTER(QUIT));
-		g_hash_table_insert(str_2_enum,"GET_REVISION",
-				GINT_TO_POINTER(GET_REVISION));
-		g_hash_table_insert(str_2_enum,"GET_SIGNATURE",
-				GINT_TO_POINTER(GET_SIGNATURE));
-		g_hash_table_insert(str_2_enum,"GET_RT_VARS",
-				GINT_TO_POINTER(GET_RT_VARS));
-		g_hash_table_insert(str_2_enum,"GET_RTV_LIST",
-				GINT_TO_POINTER(GET_RTV_LIST));
-		g_hash_table_insert(str_2_enum,"GET_ECU_VARS",
-				GINT_TO_POINTER(GET_ECU_VARS));
-		g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U08",
-				GINT_TO_POINTER(GET_ECU_VAR_U08));
-		g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S08",
-				GINT_TO_POINTER(GET_ECU_VAR_S08));
-		g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U16",
-				GINT_TO_POINTER(GET_ECU_VAR_U16));
-		g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S16",
-				GINT_TO_POINTER(GET_ECU_VAR_S16));
-		g_hash_table_insert(str_2_enum,"GET_ECU_VAR_U32",
-				GINT_TO_POINTER(GET_ECU_VAR_U32));
-		g_hash_table_insert(str_2_enum,"GET_ECU_VAR_S32",
-				GINT_TO_POINTER(GET_ECU_VAR_S32));
-		g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U08",
-				GINT_TO_POINTER(SET_ECU_VAR_U08));
-		g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S08",
-				GINT_TO_POINTER(SET_ECU_VAR_S08));
-		g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U16",
-				GINT_TO_POINTER(SET_ECU_VAR_U16));
-		g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S16",
-				GINT_TO_POINTER(SET_ECU_VAR_S16));
-		g_hash_table_insert(str_2_enum,"SET_ECU_VAR_U32",
-				GINT_TO_POINTER(SET_ECU_VAR_U32));
-		g_hash_table_insert(str_2_enum,"SET_ECU_VAR_S32",
-				GINT_TO_POINTER(SET_ECU_VAR_S32));
-		g_hash_table_insert(str_2_enum,"BURN_FLASH",
-				GINT_TO_POINTER(BURN_FLASH));
-		g_hash_table_insert(str_2_enum,"GET_RAW_ECU",
-				GINT_TO_POINTER(GET_RAW_ECU));
-		g_hash_table_insert(str_2_enum,"SET_RAW_ECU",
-				GINT_TO_POINTER(SET_RAW_ECU));
+		g_hash_table_insert (str_2_enum, "HELP", GINT_TO_POINTER (HELP));
+		g_hash_table_insert (str_2_enum, "QUIT", GINT_TO_POINTER (QUIT));
+		g_hash_table_insert (str_2_enum, "GET_REVISION",
+				GINT_TO_POINTER (GET_REVISION));
+		g_hash_table_insert (str_2_enum, "GET_SIGNATURE",
+				GINT_TO_POINTER (GET_SIGNATURE));
+		g_hash_table_insert (str_2_enum, "GET_RT_VARS",
+				GINT_TO_POINTER (GET_RT_VARS));
+		g_hash_table_insert (str_2_enum, "GET_RTV_LIST",
+				GINT_TO_POINTER (GET_RTV_LIST));
+		g_hash_table_insert (str_2_enum, "GET_ECU_VARS",
+				GINT_TO_POINTER (GET_ECU_VARS));
+		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_U08",
+				GINT_TO_POINTER (GET_ECU_VAR_U08));
+		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_S08",
+				GINT_TO_POINTER (GET_ECU_VAR_S08));
+		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_U16",
+				GINT_TO_POINTER (GET_ECU_VAR_U16));
+		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_S16",
+				GINT_TO_POINTER (GET_ECU_VAR_S16));
+		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_U32",
+				GINT_TO_POINTER (GET_ECU_VAR_U32));
+		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_S32",
+				GINT_TO_POINTER (GET_ECU_VAR_S32));
+		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_U08",
+				GINT_TO_POINTER (SET_ECU_VAR_U08));
+		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_S08",
+				GINT_TO_POINTER (SET_ECU_VAR_S08));
+		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_U16",
+				GINT_TO_POINTER (SET_ECU_VAR_U16));
+		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_S16",
+				GINT_TO_POINTER (SET_ECU_VAR_S16));
+		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_U32",
+				GINT_TO_POINTER (SET_ECU_VAR_U32));
+		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_S32",
+				GINT_TO_POINTER (SET_ECU_VAR_S32));
+		g_hash_table_insert (str_2_enum, "BURN_FLASH",
+				GINT_TO_POINTER (BURN_FLASH));
+		g_hash_table_insert (str_2_enum, "GET_RAW_ECU",
+				GINT_TO_POINTER (GET_RAW_ECU));
+		g_hash_table_insert (str_2_enum, "SET_RAW_ECU",
+				GINT_TO_POINTER (SET_RAW_ECU));
 		/* Firmware capabilities */
-		g_hash_table_insert(str_2_enum,"_PIS_",
-				GINT_TO_POINTER(PIS));
-		g_hash_table_insert(str_2_enum,"_MS1_",
-				GINT_TO_POINTER(MS1));
-		g_hash_table_insert(str_2_enum,"_MS1_STD_",
-				GINT_TO_POINTER(MS1_STD));
-		g_hash_table_insert(str_2_enum,"_MS1_DT_",
-				GINT_TO_POINTER(MS1_DT));
-		g_hash_table_insert(str_2_enum,"_MSNS_E_",
-				GINT_TO_POINTER(MSNS_E));
-		g_hash_table_insert(str_2_enum,"_MS2_",
-				GINT_TO_POINTER(MS2));
-		g_hash_table_insert(str_2_enum,"_MS2_STD_",
-				GINT_TO_POINTER(MS2_STD));
-		g_hash_table_insert(str_2_enum,"_MS2_E_",
-				GINT_TO_POINTER(MS2_E));
-		g_hash_table_insert(str_2_enum,"_MS2_E_COMPMON_",
-				GINT_TO_POINTER(MS2_E_COMPMON));
-		g_hash_table_insert(str_2_enum,"_SECU_3_",
-				GINT_TO_POINTER(SECU_3));
-		g_hash_table_insert(str_2_enum,"_FREEEMS_",
-				GINT_TO_POINTER(FREEEMS));
-		g_hash_table_insert(str_2_enum,"_JIMSTIM_",
-				GINT_TO_POINTER(JIMSTIM));
-		g_hash_table_insert(str_2_enum,"_COUNT_",
-				GINT_TO_POINTER(COUNT));
-		g_hash_table_insert(str_2_enum,"_SUBMATCH_",
-				GINT_TO_POINTER(SUBMATCH));
-		g_hash_table_insert(str_2_enum,"_NUMMATCH_",
-				GINT_TO_POINTER(NUMMATCH));
-		g_hash_table_insert(str_2_enum,"_FULLMATCH_",
-				GINT_TO_POINTER(FULLMATCH));
-		g_hash_table_insert(str_2_enum,"_REGEX_",
-				GINT_TO_POINTER(REGEX));
+		g_hash_table_insert (str_2_enum, "_PIS_", 
+				GINT_TO_POINTER (PIS));
+		g_hash_table_insert (str_2_enum, "_MS1_", 
+				GINT_TO_POINTER (MS1));
+		g_hash_table_insert (str_2_enum, "_MS1_STD_",
+				GINT_TO_POINTER (MS1_STD));
+		g_hash_table_insert (str_2_enum, "_MS1_DT_", 
+				GINT_TO_POINTER (MS1_DT));
+		g_hash_table_insert (str_2_enum, "_MSNS_E_", 
+				GINT_TO_POINTER (MSNS_E));
+		g_hash_table_insert (str_2_enum, "_MS2_", 
+				GINT_TO_POINTER (MS2));
+		g_hash_table_insert (str_2_enum, "_MS2_STD_",
+				GINT_TO_POINTER (MS2_STD));
+		g_hash_table_insert (str_2_enum, "_MS2_E_", 
+				GINT_TO_POINTER (MS2_E));
+		g_hash_table_insert (str_2_enum, "_MS2_E_COMPMON_",
+				GINT_TO_POINTER (MS2_E_COMPMON));
+		g_hash_table_insert (str_2_enum, "_SECU_3_", 
+				GINT_TO_POINTER (SECU_3));
+		g_hash_table_insert (str_2_enum, "_FREEEMS_",
+				GINT_TO_POINTER (FREEEMS));
+		g_hash_table_insert (str_2_enum, "_JIMSTIM_",
+				GINT_TO_POINTER (JIMSTIM));
+		g_hash_table_insert (str_2_enum, "_COUNT_", 
+				GINT_TO_POINTER (COUNT));
+		g_hash_table_insert (str_2_enum, "_SUBMATCH_",
+				GINT_TO_POINTER (SUBMATCH));
+		g_hash_table_insert (str_2_enum, "_NUMMATCH_",
+				GINT_TO_POINTER (NUMMATCH));
+		g_hash_table_insert (str_2_enum, "_FULLMATCH_",
+				GINT_TO_POINTER (FULLMATCH));
+		g_hash_table_insert (str_2_enum, "_REGEX_", 
+				GINT_TO_POINTER (REGEX));
 		/* Interrogation Test Results */
-		g_hash_table_insert(str_2_enum,"_RESULT_DATA_",
-				GINT_TO_POINTER(RESULT_DATA));
-		g_hash_table_insert(str_2_enum,"_RESULT_TEXT_",
-				GINT_TO_POINTER(RESULT_TEXT));
-
+		g_hash_table_insert (str_2_enum, "_RESULT_DATA_",
+				GINT_TO_POINTER (RESULT_DATA));
+		g_hash_table_insert (str_2_enum, "_RESULT_TEXT_",
+				GINT_TO_POINTER (RESULT_TEXT));
+		/* Common Handlers */
+		g_hash_table_insert (str_2_enum, "_NUM_SQUIRTS_1_",
+				GINT_TO_POINTER (NUM_SQUIRTS_1));
+		g_hash_table_insert (str_2_enum, "_NUM_SQUIRTS_2_",
+				GINT_TO_POINTER (NUM_SQUIRTS_2));
+		g_hash_table_insert (str_2_enum, "_NUM_CYLINDERS_1_",
+				GINT_TO_POINTER (NUM_CYLINDERS_1));
+		g_hash_table_insert (str_2_enum, "_NUM_CYLINDERS_2_",
+				GINT_TO_POINTER (NUM_CYLINDERS_2));
+		g_hash_table_insert (str_2_enum, "_NUM_INJECTORS_1_",
+				GINT_TO_POINTER (NUM_INJECTORS_1));
+		g_hash_table_insert (str_2_enum, "_NUM_INJECTORS_2_",
+				GINT_TO_POINTER (NUM_INJECTORS_2));
+		g_hash_table_insert(str_2_enum,"_LOCKED_REQ_FUEL_",
+				GINT_TO_POINTER(LOCKED_REQ_FUEL));
+		g_hash_table_insert(str_2_enum,"_REQ_FUEL_1_",
+				GINT_TO_POINTER(REQ_FUEL_1));
+		g_hash_table_insert(str_2_enum,"_REQ_FUEL_2_",
+				GINT_TO_POINTER(REQ_FUEL_2));
+		g_hash_table_insert(str_2_enum,"_MULTI_EXPRESSION_",
+				GINT_TO_POINTER(MULTI_EXPRESSION));
+		g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
+				GINT_TO_POINTER(ALT_SIMUL));
 	}
 	else
-		printf("COULD NOT FIND global pointer to str_2_enum table\n!");
+		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
 }
 
