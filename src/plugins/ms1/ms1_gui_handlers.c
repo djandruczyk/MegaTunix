@@ -148,7 +148,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 
 			break;
 		default:
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_entry_handler()\n\tERROR  handler NOT found, command aborted! BUG!!!\n"));
+			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_entry_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
 			break;
 
 	}

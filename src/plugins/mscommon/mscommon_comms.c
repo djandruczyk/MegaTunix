@@ -98,6 +98,9 @@ G_MODULE_EXPORT gint comms_test(void)
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
+/*	if (DATA_GET(global_data,"leaving"))
+		return TRUE;
+		*/
 	serial_params = DATA_GET(global_data,"serial_params");
 
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
@@ -810,6 +813,9 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	/* App just started, no connection yet*/
 	while (!serial_is_open) 	
 	{
+		/* If "leaving" flag set, EXIT now */
+		if (DATA_GET(global_data,"leaving"))
+			g_thread_exit(0);
 		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port NOT considered open yet.\n"));
 		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
 		if (!autodetect) /* User thinks he/she is S M A R T */

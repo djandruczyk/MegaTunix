@@ -199,6 +199,8 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
+	static GHashTable **interdep_vars = NULL;
+	static GHashTable *sources_hash = NULL;
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	gint bitshift = -1;
 	gint bitval = -1;
@@ -215,13 +217,11 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	gint table_num = -1;
 	gchar * set_labels = NULL;
 	Deferred_Data *d_data = NULL;
-	GHashTable **interdep_vars = NULL;
-	GHashTable *sources_hash = NULL;
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
-	interdep_vars = DATA_GET(global_data,"interdep_vars");
-
+	if (!interdep_vars)
+		interdep_vars = DATA_GET(global_data,"interdep_vars");
 
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
 		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
@@ -239,7 +239,8 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	{
 		case MULTI_EXPRESSION:
 			/*printf("MULTI_EXPRESSION CHANGE\n");*/
-			sources_hash = DATA_GET(global_data,"sources_hash");
+			if (!sources_hash)
+				sources_hash = DATA_GET(global_data,"sources_hash");
 			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_value")))
 			{
 				/*              printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
@@ -503,6 +504,8 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
+	static GHashTable **interdep_vars = NULL;
+	static GHashTable *sources_hash = NULL;
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
@@ -537,13 +540,11 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	GtkWidget *tmpwidget = NULL;
 	void *eval = NULL;
-	GHashTable **interdep_vars = NULL;
-	GHashTable *sources_hash = NULL;
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
-
-	interdep_vars = DATA_GET(global_data,"interdep_vars");
+	if (!interdep_vars)
+		interdep_vars = DATA_GET(global_data,"interdep_vars");
 	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
 
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
@@ -569,7 +570,8 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	switch ((MtxButton)handler)
 	{
 		case MULTI_EXPRESSION:
-			sources_hash = DATA_GET(global_data,"sources_hash");
+			if (!sources_hash)
+				sources_hash = DATA_GET(global_data,"sources_hash");
 			/*printf("combo MULTI EXPRESSION\n");*/
 			if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
 			{
@@ -900,9 +902,10 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 
 	if (DATA_GET(global_data,"leaving"))
 		return;
-//	if (!((DATA_GET(global_data,"connected")) ||
-//				(DATA_GET(global_data,"offline"))))
-//		return;
+/*	if (!((DATA_GET(global_data,"connected")) ||
+				(DATA_GET(global_data,"offline"))))
+		return;
+*/
 
 	gdk_threads_enter();
 	set_title_f(g_strdup(_("Updating Controls...")));
@@ -983,6 +986,8 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 		/*printf("num_inj for table %i in the firmware is %i\n",i,firmware->rf_params[i]->num_inj);*/
 
 		firmware->rf_params[i]->divider = ms_get_ecu_data(canID,firmware->table_params[i]->divider_page,firmware->table_params[i]->divider_offset,size);
+		if (firmware->rf_params[i]->divider == 0)
+			firmware->rf_params[i]->divider = 1;
 		firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
 		firmware->rf_params[i]->alternate = ms_get_ecu_data(canID,firmware->table_params[i]->alternate_page,firmware->table_params[i]->alternate_offset,size);
 		firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
@@ -1100,6 +1105,7 @@ G_MODULE_EXPORT gboolean common_spinbutton_handler(GtkWidget *widget, gpointer d
 	 * select/case branch to handle the choices..
 	 */
 	static Firmware_Details *firmware = NULL;
+	static GHashTable **interdep_vars = NULL;
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	gint dl_type = -1;
 	gint offset = -1;
@@ -1122,12 +1128,13 @@ G_MODULE_EXPORT gboolean common_spinbutton_handler(GtkWidget *widget, gpointer d
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;
-	GHashTable **interdep_vars = NULL;
 	GdkColor black = {0,0,0,0};
 
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
+	if (!interdep_vars)
+		interdep_vars = DATA_GET(global_data,"interdep_vars");
 
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");

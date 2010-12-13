@@ -100,6 +100,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GCond *statuscounts_cond = NULL;
 	Firmware_Details *firmware = NULL;
 
+
 	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
