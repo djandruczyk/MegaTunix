@@ -270,7 +270,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	/* Action's */
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
-
 	/* XMLcomm processing */
 	g_hash_table_insert(str_2_enum,"_DATA_",
 			GINT_TO_POINTER(DATA));
