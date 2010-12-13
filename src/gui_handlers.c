@@ -741,6 +741,7 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 	}
 	else
 		return common_handler(widget,data);
+	return TRUE;
 }
 
 
@@ -840,7 +841,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		default:
 			if (!common_handler)
 			{
-				if (get_symbol("common_spin_handler",(void *)&common_handler))
+				if (get_symbol("common_spinbutton_handler",(void *)&common_handler))
 					return common_handler(widget,data);
 				else
 				{

@@ -31,13 +31,20 @@ extern void (*start_tickler_f)(gint);
 extern void (*stop_tickler_f)(gint);
 extern void (*io_cmd_f)(const gchar *,void *);
 extern guint (*get_bitshift_f)(guint);
+extern void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
+extern void (*get_essentials_f)(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
+extern gfloat (*convert_after_upload_f)(GtkWidget *);
+extern gint (*get_ecu_data_f)(GtkWidget *);
+
 /* Externs */
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
+gboolean ecu_spinbutton_handler(GtkWidget *, gpointer);
 gboolean ecu_std_button_handler(GtkWidget *, gpointer);
 gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_combo_handler(GtkWidget *, gpointer);
+void ecu_update_entry(GtkWidget *);
 /* Prototypes */
 
 typedef enum
@@ -47,6 +54,12 @@ typedef enum
         START_TRIGMON_LOGGER,
         STOP_TRIGMON_LOGGER
 }MS1ToggleButton;
+
+typedef enum
+{
+        TRIGGER_ANGLE = LAST_BUTTON_ENUM + 1,
+        ODDFIRE_ANGLE
+}MS1MtxButton;
 
 #endif
 

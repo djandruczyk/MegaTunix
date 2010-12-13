@@ -44,6 +44,10 @@ glong (*get_extreme_from_size_f)(DataSize, Extreme);
 GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
 gint (*convert_before_download_f)(GtkWidget *, gfloat);
 guint (*get_bitshift_f)(guint);
+void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
+void (*get_essentials_f)(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
+gfloat (*convert_after_upload_f)(GtkWidget *);
+gint (*get_ecu_data_f)(GtkWidget *);
 /* Function Pointers */
 
 #endif

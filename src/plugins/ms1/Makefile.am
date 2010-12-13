@@ -5,6 +5,7 @@ INCLUDES = \
         @GTK_CFLAGS@ \
         @DEPRECATED_CFLAGS@ \
         @LIBXML2_CFLAGS@ \
+        @LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 
@@ -21,7 +22,7 @@ libms1_la_SOURCES = \
 	ms1_tlogger.c \
 	ms1_tlogger.h
 
-libms1_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
+libms1_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBGLADE_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

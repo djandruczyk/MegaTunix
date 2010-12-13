@@ -524,7 +524,6 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 
 	if (!slave_msg_queue)
 		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
-	printf("send_to_slaves, msg queue ptr %p\n",slave_msg_queue);
 	if (!(gboolean)DATA_GET(global_data,"network_access"))
 		return;
 	if (!output) /* If no data, don't bother the slaves */

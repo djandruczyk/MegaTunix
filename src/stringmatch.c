@@ -108,10 +108,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MULTI_EXPRESSION));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",
 			GINT_TO_POINTER(GENERIC));
-	g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",
-			GINT_TO_POINTER(TRIGGER_ANGLE));
-	g_hash_table_insert(str_2_enum,"_ODDFIRE_ANGLE_",
-			GINT_TO_POINTER(ODDFIRE_ANGLE));
 	g_hash_table_insert(str_2_enum,"_NUM_SQUIRTS_1_",
 			GINT_TO_POINTER(NUM_SQUIRTS_1));
 	g_hash_table_insert(str_2_enum,"_NUM_SQUIRTS_2_",
@@ -393,6 +389,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,"max_chars",
 			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"modspecific",
+			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"multi_expr_keys",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"oddfire_bit_offset",
