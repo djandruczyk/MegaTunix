@@ -162,14 +162,6 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	if (OBJ_GET(widget,"use_color"))
 	{
-		if (OBJ_GET(widget,"raw_lower"))
-			raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
-		else
-			raw_lower = get_extreme_from_size_f(size,LOWER);
-		if (OBJ_GET(widget,"raw_upper"))
-			raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
-		else
-			raw_upper = get_extreme_from_size_f(size,UPPER);
 		if (OBJ_GET(widget,"table_num"))
 		{
 			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
@@ -187,6 +179,14 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		}
 		else
 		{
+			if (OBJ_GET(widget,"raw_lower"))
+				raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+			else
+				raw_lower = get_extreme_from_size_f(size,LOWER);
+			if (OBJ_GET(widget,"raw_upper"))
+				raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+			else
+				raw_upper = get_extreme_from_size_f(size,UPPER);
 			color = get_colors_from_hue_f(((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
 		}
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
@@ -1307,6 +1307,13 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 
 	if (DATA_GET(global_data,"leaving"))
 		return;
+	if (!GTK_IS_WIDGET(widget))
+		return;
+	/* If passed widget and user data are identical,  break out as
+	 * we already updated the widget.
+	 */
+	if ((GTK_IS_WIDGET(user_data)) && (widget == user_data))
+		return;
 
 	upd_count++;
 	if ((upd_count%96) == 0)
@@ -1320,14 +1327,6 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 			gtk_main_iteration();
 		}
 	}
-	if (!GTK_IS_WIDGET(widget))
-		return;
-
-	/* If passed widget and user data are identical,  break out as
-	 * we already updated the widget.
-	 */
-	if ((GTK_IS_WIDGET(user_data)) && (widget == user_data))
-		return;
 
 	/*printf("update_widget %s, page %i, offset %i bitval %i, mask %i, shift %i\n",(gchar *)glade_get_widget_name(widget), page,offset,bitval,bitmask,bitshift);*/
 	/* update widget whether spin,radio or checkbutton  

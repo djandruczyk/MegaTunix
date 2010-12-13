@@ -64,16 +64,9 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	guint i = 0;
 	gint j = 0;
 	gint len = 0;
-	gint canID = 0;
-	gint page = 0;
-	gint offset = 0;
 	gboolean notifies = FALSE;
 	gint notif_divisor = 32;
-	DataSize size = MTX_U08;
-	gint value = 0;
 	WriteMode mode = MTX_CMD_WRITE;
-	guint8 *data = NULL;
-	gint num_bytes = 0;
 	gboolean retval = TRUE;
 	DBlock *block = NULL;
 	Serial_Params *serial_params;
@@ -104,20 +97,10 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	g_mutex_lock(serio_mutex);
 
 	if (output)
-	{
-		canID = (GINT)DATA_GET(output->data,"canID");
-		page = (GINT)DATA_GET(output->data,"page");
-		offset = (GINT)DATA_GET(output->data,"offset");
-		value = (GINT)DATA_GET(output->data,"value");
-		num_bytes = (GINT)DATA_GET(output->data,"num_bytes");
-		size = (DataSize)DATA_GET(output->data,"size");
-		data = (guint8 *)DATA_GET(output->data,"data");
 		mode = (WriteMode)DATA_GET(output->data,"mode");
-		/*printf("write_data(), canID %i, page %i, offset %i, value %i, num_bytes %i, size %i, data %p, mode %i\n",canID,page,offset,value,num_bytes,size,data,mode);*/
-	}
+
 	if (DATA_GET(global_data,"offline"))
 	{
-		/*printf ("OFFLINE writing value at %i,%i [%i]\n",page,offset,value); */
 		switch (mode)
 		{
 			case MTX_SIMPLE_WRITE:
@@ -143,20 +126,20 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	for (i=0;i<message->sequence->len;i++)
 	{
 		block = g_array_index(message->sequence,DBlock *,i);
-	/*	printf("Block pulled\n");*/
+		/*	printf("Block pulled\n");*/
 		if (block->type == ACTION)
 		{
-	/*		printf("Block type of ACTION!\n");*/
+			/*		printf("Block type of ACTION!\n");*/
 			if (block->action == SLEEP)
 			{
-	/*			printf("Sleeping for %i usec\n", block->arg);*/
+				/*			printf("Sleeping for %i usec\n", block->arg);*/
 				dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tSleeping for %i microseconds \n",block->arg));
 				g_usleep(block->arg);
 			}
 		}
 		else if (block->type == DATA)
 		{
-	/*		printf("Block type of DATA!\n");*/
+			/*		printf("Block type of DATA!\n");*/
 			if (block->len > 100)
 				notifies = TRUE;
 			for (j=0;j<block->len;j++)
