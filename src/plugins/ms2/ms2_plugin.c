@@ -35,6 +35,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f = (void *)DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
 
+	get_symbol_f("add_additional_rtt",(void *)&add_additional_rtt_f);
+	get_symbol_f("bind_to_lists",(void *)&bind_to_lists_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("create_single_bit_state_watch",(void *)&create_single_bit_state_watch_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
@@ -49,6 +51,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("mask_entry_new_with_mask_wrapper",(void *)&mask_entry_new_with_mask_wrapper_f);
 	get_symbol_f("ms_get_ecu_data",(void *)&ms_get_ecu_data_f);
 	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
+	get_symbol_f("register_widget",(void *)&register_widget_f);
 	get_symbol_f("search_model",(void *)&search_model_f);
 	get_symbol_f("signal_read_rtvars",(void *)&signal_read_rtvars_f);
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);

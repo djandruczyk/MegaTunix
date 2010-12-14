@@ -37,6 +37,8 @@ libmscommon_la_SOURCES = \
 	mscommon_gui_handlers.h \
 	mscommon_helpers.c \
 	mscommon_helpers.h \
+	mscommon_menu_handlers.c \
+	mscommon_menu_handlers.h \
 	mscommon_plugin.c \
 	mscommon_plugin.h \
 	mscommon_rtv_loader.c \

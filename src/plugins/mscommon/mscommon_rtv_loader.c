@@ -21,7 +21,7 @@
 
 extern gconstpointer *global_data;
 
-void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfile, gchar * section, gchar *symbol, ComplexExprType type)
+G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfile, gchar * section, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;
 	gchar * name = NULL;
@@ -102,7 +102,7 @@ void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfile, gchar * secti
 	return;
 }
 
-void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile, gchar * section, gchar *symbol, ComplexExprType type)
+G_MODULE_EXPORT void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile, gchar * section, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;
 	gchar * name = NULL;

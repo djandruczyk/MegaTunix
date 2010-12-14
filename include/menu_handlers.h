@@ -29,17 +29,9 @@ typedef enum
 
 /* Prototypes */
 void setup_menu_handlers_pf(void);
- gboolean jump_to_tab(GtkWidget *, gpointer );
- gboolean settings_transfer(GtkWidget *, gpointer );
+gboolean jump_to_tab(GtkWidget *, gpointer );
+gboolean settings_transfer(GtkWidget *, gpointer );
 gboolean check_tab_existance(TabIdent );
- gboolean show_tps_calibrator_window(GtkWidget *, gpointer);
- gboolean show_ms2_afr_calibrator_window(GtkWidget *, gpointer);
- gboolean show_table_generator_window(GtkWidget *, gpointer);
- gboolean show_sensor_calibration_help(GtkWidget *, gpointer);
- gboolean ms2_reinit(GtkWidget *, gpointer);
- gboolean ms2_reboot(GtkWidget *, gpointer);
-gdouble linear_interpolate(gdouble, gdouble, gdouble, gdouble, gdouble);
-
 /* Prototypes */
 
 #endif

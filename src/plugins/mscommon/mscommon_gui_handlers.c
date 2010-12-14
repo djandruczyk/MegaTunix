@@ -2075,3 +2075,46 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 		thread_refresh_widget_f(g_list_nth_data(ve_widgets[page][offset],i));
 	/*update_ve3d_if_necessary_f(page,offset);*/
 }
+
+
+G_MODULE_EXPORT void common_gui_init(void)
+{
+	void (*ecu_gui_init)(GladeXML *) = NULL;
+	GladeXML *xml = NULL;
+	GtkWidget *item = NULL;
+
+	xml  = DATA_GET(global_data,"main_xml");
+	/* Assigns additional data to the gui controls mainly so that
+	   functions within plugins can be located
+	   */
+	item = glade_xml_get_widget (xml, "generate_ignition_map1");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("show_create_ignition_map_window"));
+	item = glade_xml_get_widget (xml, "show_trigger_offset_menuitem");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("show_trigger_offset_window"));
+	item = glade_xml_get_widget (xml, "show_sensor_calibrator_menuitem");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("show_sensor_calibrator_window"));
+	item = glade_xml_get_widget (xml, "show_table_generator_menuitem");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("show_table_generator_window"));
+	item = glade_xml_get_widget (xml, "show_ms2_afr_calibrator_menuitem");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("show_ms2_afr_calibrator_window"));
+	item = glade_xml_get_widget (xml, "show_tps_calibrator_menuitem");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("show_tps_calibrator_window"));
+	item = glade_xml_get_widget (xml, "ms2_reinit_menuitem");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("ms2_reinit"));
+	item = glade_xml_get_widget (xml, "ms2_reboot_menuitem");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("ms2_reboot"));
+	item = glade_xml_get_widget (xml, "lookuptables_setup_menuitem");
+	if (item)
+		OBJ_SET(item,"function_name",g_strdup("lookuptables_configurator"));
+
+	if (get_symbol_f("ecu_gui_init",(void *)&ecu_gui_init))
+		ecu_gui_init(xml);
+}

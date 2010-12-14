@@ -47,6 +47,10 @@ void (*update_widget_f)(gpointer, gpointer);
 gint (*convert_before_download_f)(GtkWidget *, gfloat);
 gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 GtkWidget *(*mask_entry_new_with_mask_wrapper_f)(gchar *);
+void (*register_widget_f)(gchar *, GtkWidget *);
+void (*bind_to_lists_f)(GtkWidget * , gchar * );
+void (*add_additional_rtt_f)(GtkWidget *);
+
 
 /* Function pointers */
 

@@ -15,6 +15,8 @@ libms2_la_SOURCES = \
 	Makefile \
 	ms2_gui_handlers.c \
 	ms2_gui_handlers.h \
+	ms2_menu_handlers.c \
+	ms2_menu_handlers.h \
 	ms2_plugin.c \
 	ms2_plugin.h \
 	ms2_tlogger.c \

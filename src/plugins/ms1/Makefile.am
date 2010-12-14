@@ -15,6 +15,8 @@ libms1_la_SOURCES = \
 	Makefile \
 	ms1_gui_handlers.c \
 	ms1_gui_handlers.h \
+	ms1_menu_handlers.c \
+	ms1_menu_handlers.h \
 	ms1_helpers.c \
 	ms1_helpers.h \
 	ms1_plugin.c \

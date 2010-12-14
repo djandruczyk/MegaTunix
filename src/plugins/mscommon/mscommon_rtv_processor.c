@@ -22,7 +22,7 @@
 
 extern gconstpointer *global_data;
 
-gdouble common_rtv_processor(gconstpointer *object, gchar *symbol, ComplexExprType type)
+G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;
 	gint canID = 0;
@@ -81,7 +81,7 @@ gdouble common_rtv_processor(gconstpointer *object, gchar *symbol, ComplexExprTy
 }
 
 
-gdouble common_rtv_processor_obj(GObject *object, gchar *symbol, ComplexExprType type)
+G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;
 	gint canID = 0;

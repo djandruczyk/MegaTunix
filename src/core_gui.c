@@ -26,6 +26,7 @@
 #include <getfiles.h>
 #include <logo.h>
 #include <menu_handlers.h>
+#include <plugin.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -336,13 +337,13 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"locate_port_button");
 	gtk_widget_set_sensitive (widget,FALSE);
 #endif
-	
+
 	/* Read Timeout threshold spinner */
 	widget = glade_xml_get_widget(xml,"read_timeout_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(global_data,"read_timeout"));
 
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_READ_TIMEOUT));
-	
+
 	/* Active COMM Port entry */
 	widget = glade_xml_get_widget(xml,"active_port_entry");
 	register_widget("active_port_entry",widget);
@@ -431,4 +432,5 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 			"info",
 			"foreground",
 			"dark green", NULL);
+
 }

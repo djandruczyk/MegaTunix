@@ -33,18 +33,16 @@ extern gconstpointer *global_data;
 
 G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 {
-	GModule * module = NULL;
 	gchar * func_name = NULL;
 	gboolean (*func)(GtkWidget *, gpointer) =  NULL;
 	gboolean res = FALSE;
 
-	module = (GModule *)DATA_GET(global_data,"ecu_module");
 	func_name = (gchar *)OBJ_GET(widget,"function_name");
 	func = (void *)OBJ_GET(widget,"function");
 
 	if ((func_name) && (func == NULL))
 	{
-		if (g_module_symbol(module,func_name,(void *)&func))
+		if (get_symbol(func_name,(void *)&func))
 			OBJ_SET(widget,"function",(gpointer)func);
 		else
 			dbg_func(PLUGINS|CRITICAL,g_strdup_printf(_("ERROR, Cannot locate function \"%s\" within plugin %s\n"),func_name,(gchar *)DATA_GET(global_data,"ecu_library")));
@@ -65,6 +63,7 @@ G_MODULE_EXPORT void plugins_init()
 #endif 
 	gchar * libpath = NULL;
 	void (*plugin_init)(gconstpointer *);
+	void (*common_gui_init)(void) = NULL;
 
 	/* MegaTunix itself */
 	module[0] = g_module_open(NULL,G_MODULE_BIND_LAZY);
@@ -113,6 +112,9 @@ G_MODULE_EXPORT void plugins_init()
 	/* ECU Specific module init */
 	if (g_module_symbol(module[1],"plugin_init",(void *)&plugin_init))
 		plugin_init(global_data);
+
+	if (get_symbol("common_gui_init",(void *)&common_gui_init))
+		common_gui_init();
 
 	/* Startup dispatcher thread */
 	id =  g_thread_create(thread_dispatcher,

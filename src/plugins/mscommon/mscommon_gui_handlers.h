@@ -79,6 +79,7 @@ void get_essentials(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
 void update_widget(gpointer, gpointer);
 void recalc_table_limits(gint, gint);
 void thread_refresh_widgets_at_offset(gint, gint);
+void common_gui_init(void);
 /* Prototypes */
 
 

@@ -92,7 +92,6 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 
 G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new, gboolean bigendian)
 {
-	/* canID unused currently */
 	guint16 u16 = 0;
 	gint16 s16 = 0;
 	guint32 u32 = 0;
