@@ -46,8 +46,6 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gint tmpi = 0;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
-	gint page = -1;
-	gint offset = -1;
 	DataSize size = MTX_U08;
 	float lower = 0.0;
 	float upper = 0.0;
@@ -70,11 +68,9 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	g_static_mutex_lock(&mutex);
 
-	page = (GINT)OBJ_GET(widget,"page");
-	offset = (GINT)OBJ_GET(widget,"offset");
 
 	if (!OBJ_GET(widget,"size"))
-		printf(__FILE__"%s %i %s %i\n",_(": convert_before_download, FATAL ERROR, size undefined for widget at page"),page,_("offset"),offset);
+		printf(__FILE__"%s %s\n",_(": convert_before_download, FATAL ERROR, size undefined for widget %s "),glade_get_widget_name(widget));
 
 	size = (DataSize)OBJ_GET(widget,"size");
 
@@ -164,7 +160,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	if (!evaluator)
 	{
-		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for page: %i, offset: %i, value %i\n",page, offset, (gint)value));
+		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for widget %s value %i\n",glade_get_widget_name(widget), (gint)value));
 		if(value > upper)
 		{
 			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",upper));
@@ -181,7 +177,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	{
 		return_value = evaluator_evaluate_x(evaluator,value); 
 
-		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\tpage %i, offset %i, raw %.2f, sent %i\n",page, offset,value,return_value));
+		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",glade_get_widget_name(widget),value,return_value));
 
 		if (return_value > upper)
 		{
@@ -219,9 +215,6 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
 	gint tmpi = 0;
-	gint page = -1;
-	gint offset = -1;
-	gint canID = 0;
 	DataSize size = 0;
 	gboolean ul_complex = FALSE;
 	guint i = 0;
@@ -252,12 +245,9 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		return handle_complex_expr_obj(G_OBJECT(widget),NULL,UPLOAD);
 	}
 
-	page = (GINT)OBJ_GET(widget,"page");
-	offset = (GINT)OBJ_GET(widget,"offset");
-	canID = (GINT)OBJ_GET(widget,"canID");
 	size = (DataSize)OBJ_GET(widget,"size");
 	if (size == 0)
-		printf(_("BIG PROBLEM, size undefined! at page %i, offset %i, widget %s\n"),page,offset,(gchar *)glade_get_widget_name(widget));
+		printf(_("BIG PROBLEM, size undefined! widget %s \n"),(gchar *)glade_get_widget_name(widget));
 
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
@@ -339,24 +329,19 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	if (OBJ_GET(widget,"lookuptable"))
 		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data_f(widget));
 	else
-	{
-		/*printf("getting data at canid %i, page %i, offset %i, size %i\n",canID,page,offset,size);*/
 		tmpi = get_ecu_data_f(widget);
-		/*printf("value is %i\n",tmpi);*/
-	}
-
 
 	if (!evaluator)
 	{
 		return_value = tmpi;
-		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for page: %i, offset: %i, value %f\n",page, offset, return_value));
+		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for  widget %s, value %f\n",(gchar *)glade_get_widget_name(widget), return_value));
 		g_static_mutex_unlock(&mutex);
 		return (return_value);		
 	}
 	/*return_value = evaluator_evaluate_x(evaluator,tmpi)+0.0001; */
 	return_value = evaluator_evaluate_x(evaluator,tmpi);
 
-	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,tmpi,return_value));
+//	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,tmpi,return_value));
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
 }
