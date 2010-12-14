@@ -899,3 +899,32 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	return NULL;
 }
 
+
+/*!
+ \brief signal_read_rtvars() sends io message to I/O core to tell ms to send 
+ back runtime vars
+ */
+G_MODULE_EXPORT void signal_read_rtvars(void)
+{
+	OutputData *output = NULL;
+	extern gconstpointer *global_data;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	if (!firmware)
+		return;
+
+	/* MS2 */
+	if (firmware->capabilities & MS2)
+	{
+		output = initialize_outputdata_f();
+		DATA_SET(output->data,"canID", GINT_TO_POINTER(firmware->canID));
+		DATA_SET(output->data,"page", GINT_TO_POINTER(firmware->ms2_rt_page));
+		DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->ms2_rt_page));
+		DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+		io_cmd_f(firmware->rt_command,output);
+	}
+	else /* MS1 */
+		io_cmd_f(firmware->rt_command,NULL);
+	return;
+}

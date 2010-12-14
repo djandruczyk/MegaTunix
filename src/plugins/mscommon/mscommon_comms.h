@@ -46,6 +46,7 @@ void update_write_status(void *);
 void *restore_update(gpointer);
 void start_restore_monitor(void);
 void *serial_repair_thread(gpointer);
+void signal_read_rtvars(void);
 
 
 /* Prototypes */

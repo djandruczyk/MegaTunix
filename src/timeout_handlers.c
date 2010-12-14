@@ -161,6 +161,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
  */
 G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 {
+	static void (*signal_read_rtvars)(void);
 	Serial_Params *serial_params;
 	GMutex * mutex = g_mutex_new();
 	GTimeVal time;
@@ -173,6 +174,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
 	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
+	get_symbol("signal_read_rtvars",(void *)&signal_read_rtvars);
 
 	g_mutex_lock(mutex);
 	g_async_queue_ref(io_data_queue);
@@ -201,34 +203,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 			g_thread_exit(0);
 		}
 	}
-}
-
-
-/*!
- \brief signal_read_rtvars() sends io message to I/O core to tell ms to send 
- back runtime vars
- */
-G_MODULE_EXPORT void signal_read_rtvars(void)
-{
-	OutputData *output = NULL;
-	extern gconstpointer *global_data;
-	Firmware_Details *firmware = NULL;
-
-	firmware = DATA_GET(global_data,"firmware");
-	if (!firmware)
-		return;
-
-	if (firmware->capabilities & MS2)
-	{
-		output = initialize_outputdata();
-		DATA_SET(output->data,"canID", GINT_TO_POINTER(firmware->canID));
-		DATA_SET(output->data,"page", GINT_TO_POINTER(firmware->ms2_rt_page));
-		DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->ms2_rt_page));
-		DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-		io_cmd(firmware->rt_command,output);			
-	}
-	else
-		io_cmd(firmware->rt_command,NULL);			
 }
 
 

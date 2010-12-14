@@ -20,8 +20,7 @@
 /* Prototypes */
 void start_tickler(TicklerType);
 void stop_tickler(TicklerType);
-void * signal_read_rtvars_thread(gpointer);
-void signal_read_rtvars(void);
+void *signal_read_rtvars_thread(gpointer);
 gboolean early_interrogation(void);
 gboolean personality_choice(void);
 /* Prototypes */
