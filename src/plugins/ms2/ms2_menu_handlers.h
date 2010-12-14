@@ -25,7 +25,7 @@ extern void (*register_widget_f)(gchar *, GtkWidget *);
 extern gboolean (*get_symbol_f)(const gchar *, void **);
 extern void (*bind_to_lists_f)(GtkWidget * , gchar * );
 extern void (*add_additional_rtt_f)(GtkWidget *);
-
+extern void (*io_cmd_f)(const gchar *, void *);
 /* Exnerns */
 
 /* Prototypes */

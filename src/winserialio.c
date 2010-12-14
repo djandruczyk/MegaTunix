@@ -68,7 +68,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 			break;
 	}
 	if (stop == 2)
-		dcb.StopBits = TWOSTOPBIT;      /* #defined in windows.h */
+		dcb.StopBits = TWOSTOPBITS;      /* #defined in windows.h */
 	else
 		dcb.StopBits = ONESTOPBIT;      /* #defined in windows.h */
 

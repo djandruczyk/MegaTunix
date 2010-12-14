@@ -135,7 +135,11 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}
+#if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_get_visible(GTK_WIDGET(window)))
+#else
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+#endif
 		gtk_widget_hide_all(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -203,7 +207,11 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}
+#if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_get_visible(GTK_WIDGET(window)))
+#else
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+#endif
 		gtk_widget_hide_all(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -358,7 +366,11 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 
 		return TRUE;
 	}
+#if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_get_visible(GTK_WIDGET(window)))
+#else
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+#endif
 		gtk_widget_hide_all(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -468,7 +480,11 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
 	}
+#if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_get_visible(GTK_WIDGET(window)))
+#else
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+#endif
 		gtk_widget_hide_all(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -479,7 +495,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 /*! \brief tell ms2 to reinitialize */
 G_MODULE_EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
 {
-	io_cmd("ms2_reinit",NULL);
+	io_cmd_f("ms2_reinit",NULL);
 	return TRUE;
 }
 
@@ -487,7 +503,7 @@ G_MODULE_EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
 /*! \brief tell ms2 to fully reboot */
 G_MODULE_EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
 {
-	io_cmd("ms2_reboot",NULL);
+	io_cmd_f("ms2_reboot",NULL);
 	return TRUE;
 }
 

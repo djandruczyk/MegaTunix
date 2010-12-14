@@ -20,6 +20,7 @@
 
 /* Externs */
 extern gint (*translate_string_f)(const gchar *);
+extern void (*dbg_func_f)(gint, gchar *);
 /* Externs */
 
 /* Prototypes */

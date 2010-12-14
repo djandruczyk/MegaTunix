@@ -38,13 +38,13 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfil
 			name=NULL;
 			name=g_strdup_printf("%s_page",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_offset",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
@@ -56,7 +56,7 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfil
 			name=NULL;
 			name=g_strdup_printf("%s_bitmask",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
@@ -73,13 +73,13 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfil
 			name=NULL;
 			name=g_strdup_printf("%s_page",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_offset",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
@@ -119,13 +119,13 @@ G_MODULE_EXPORT void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile,
 			name=NULL;
 			name=g_strdup_printf("%s_page",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_offset",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
@@ -137,7 +137,7 @@ G_MODULE_EXPORT void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile,
 			name=NULL;
 			name=g_strdup_printf("%s_bitmask",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
@@ -154,13 +154,13 @@ G_MODULE_EXPORT void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile,
 			name=NULL;
 			name=g_strdup_printf("%s_page",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
 			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_offset",symbol);
 			if (!cfg_read_int(cfgfile,section,name,&tmpi))
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
+				dbg_func_f(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
 			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
