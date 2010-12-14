@@ -79,10 +79,10 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(IGNORED));
 
 	/* Complex Expressions (RT Vars)*/
-	g_hash_table_insert(str_2_enum,"_VE_EMB_BIT_",
-			GINT_TO_POINTER(VE_EMB_BIT));
-	g_hash_table_insert(str_2_enum,"_VE_VAR_",
-			GINT_TO_POINTER(VE_VAR));
+	g_hash_table_insert(str_2_enum,"_ECU_EMB_BIT_",
+			GINT_TO_POINTER(ECU_EMB_BIT));
+	g_hash_table_insert(str_2_enum,"_ECU_VAR_",
+			GINT_TO_POINTER(ECU_VAR));
 	g_hash_table_insert(str_2_enum,"_RAW_EMB_BIT_",
 			GINT_TO_POINTER(RAW_EMB_BIT));
 	g_hash_table_insert(str_2_enum,"_RAW_VAR_",

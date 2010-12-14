@@ -51,7 +51,7 @@ precision=2
 lookuptable=nbo2_table
 alt_lookuptable=wbo2_table
 depend_on=o2_sensor
-o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+o2_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,1
 use_color=TRUE
 _tooltip=The AFR Entries are the Air Fuel Radio values that the ECU should target.  The values are in O2 sensor VOLTS, not in actual AFR as the AFR reading is heavily dependant on having the proper lookup table selected, it was chosen to display the values in volts instead as that removes the ambiguity of "Do I have the right lookup table selected??".  The ECU will use these values after several conditions have been met including minimum RPM, coolant temp, engine runtime etc.. The ecu will attempt to keep the mixture set so that the O2 reading stays at the targeted value.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
@@ -64,7 +64,7 @@ precision=2
 lookuptable=nbo2_table
 alt_lookuptable=wbo2_table
 depend_on=o2_sensor
-o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+o2_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,1
 use_color=TRUE
 _tooltip=The AFR Entries are the Air Fuel Radio values that the ECU should target.  The values are in O2 sensor VOLTS, not in actual AFR as the AFR reading is heavily dependant on having the proper lookup table selected, it was chosen to display the values in volts instead as that removes the ambiguity of "Do I have the right lookup table selected??".  The ECU will use these values after several conditions have been met including minimum RPM, coolant temp, engine runtime etc.. The ecu will attempt to keep the mixture set so that the O2 reading stays at the targeted value.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
@@ -180,7 +180,7 @@ page=0
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=an_ego_button
-an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
+an_ego_button=_ECU_EMB_BIT_,_U08_,0,109,16,4,1
 
 [AFR1_load_tbl_units]
 keys=page,label,alt_label,depend_on
@@ -188,7 +188,7 @@ page=0
 label=KPa
 alt_label=TPSADC
 depend_on=an_ego_button
-an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
+an_ego_button=_ECU_EMB_BIT_,_U08_,0,109,16,4,1
 
 [AFR2_load_tbl_lab]
 keys=page,label,alt_label,depend_on
@@ -196,7 +196,7 @@ page=0
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=an_ego_button
-an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
+an_ego_button=_ECU_EMB_BIT_,_U08_,0,109,16,4,1
 
 [AFR2_load_tbl_units]
 keys=page,label,alt_label,depend_on
@@ -204,7 +204,7 @@ page=0
 label=KPa
 alt_label=TPSADC
 depend_on=an_ego_button
-an_ego_button=_VE_EMB_BIT_,_U08_,0,109,16,4,1
+an_ego_button=_ECU_EMB_BIT_,_U08_,0,109,16,4,1
 
 [AFR1_afrtable_filler_label]
 keys=page,label,alt_label,depend_on
@@ -212,7 +212,7 @@ page=0
 label=Narrowband O2 Sensor in use, beware of poor precision
 alt_label=Wideband O2 Sensor in use.
 depend_on=ego_sensor
-ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,0
+ego_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,0
 
 [AFR2_afrtable_filler_label]
 keys=page,label,alt_label,depend_on
@@ -220,7 +220,7 @@ page=0
 label=Narrowband O2 Sensor in use, beware of poor precision
 alt_label=Wideband O2 Sensor in use.
 depend_on=ego_sensor
-ego_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,0
+ego_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,0
 
 #----- widgets ---------------------------------------------------------------
 

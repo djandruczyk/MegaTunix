@@ -117,7 +117,7 @@ keys=label,alt_label,depend_on
 label=ASE Total Decay Time (Seconds)
 alt_label=ASE Total Decay Time (engine cycles)
 depend_on=ase_time_combo
-ase_time_combo=_VE_EMB_BIT_,_U08_,5,179,1,0,1
+ase_time_combo=_ECU_EMB_BIT_,_U08_,5,179,1,0,1
 
 [IATCorr_table]
 keys=bind_to_list

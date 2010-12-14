@@ -90,14 +90,14 @@ keys=label,alt_label,depend_on
 label=MAP Bins
 alt_label=TPS Bins
 depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,0,118,4,2,1
+alpha_n_button=_ECU_EMB_BIT_,_U08_,0,118,4,2,1
 
 [load_tbl_units]
 keys=label,alt_label,depend_on
 label=Kpa
 alt_label=TPSADC
 depend_on=alpha_n_button
-alpha_n_button=_VE_EMB_BIT_,_U08_,0,118,4,2,1
+alpha_n_button=_ECU_EMB_BIT_,_U08_,0,118,4,2,1
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -197,7 +197,7 @@ bind_to_list=interdep_0_ctrl
 ul_complex=TRUE
 ul_conv_expr=(reqfuel_1*((injectors_1+1)/divider_1))/10
 expr_symbols=reqfuel_1,injectors_1,divider_1
-expr_types=_VE_VAR_,_VE_EMB_BIT_,_VE_VAR_
+expr_types=_ECU_VAR_,_ECU_EMB_BIT_,_ECU_VAR_
 reqfuel_1_page=0
 reqfuel_1_offset=90
 injectors_1_page=0

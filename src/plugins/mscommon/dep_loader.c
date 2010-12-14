@@ -79,7 +79,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 		{
 			vector = g_strsplit(tmpbuf,",",-1);
 			len = g_strv_length(vector);
-			/* 7 args is VE_EMB_BIT, 4 args is VE_VAR */
+			/* 7 args is ECU_EMB_BIT, 4 args is ECU_VAR */
 			if (!((len == 7) || (len == 4)))
 			{
 				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t invalid number of arguments \"%i\" in section \"[%s]\", EXITING!!\n",g_strv_length(vector),section));
@@ -91,7 +91,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 		key = g_strdup_printf("%s_type",deps[i]);
 		DATA_SET(dep_obj,key,GINT_TO_POINTER(type));
 		g_free(key);
-		if (type == VE_EMB_BIT)
+		if (type == ECU_EMB_BIT)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);
 			tmpi = translate_string_f(vector[DEP_SIZE]);
@@ -160,7 +160,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			g_free(key);
 
 		}
-		if (type == VE_VAR)
+		if (type == ECU_VAR)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);
 			tmpi = translate_string_f(vector[DEP_SIZE]);
@@ -259,7 +259,7 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		{
 			vector = g_strsplit(tmpbuf,",",-1);
 			len = g_strv_length(vector);
-			/* 7 args is VE_EMB_BIT, 4 args is VE_VAR */
+			/* 7 args is ECU_EMB_BIT, 4 args is ECU_VAR */
 			if (!((len == 7) || (len == 4)))
 			{
 				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": load_dependancy()\n\t invalid number of arguments \"%i\" in section \"[%s]\", EXITING!!\n",g_strv_length(vector),section));
@@ -271,7 +271,7 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		key = g_strdup_printf("%s_type",deps[i]);
 		DATA_SET(dep_obj,key,GINT_TO_POINTER(type));
 		g_free(key);
-		if (type == VE_EMB_BIT)
+		if (type == ECU_EMB_BIT)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);
 			tmpi = translate_string_f(vector[DEP_SIZE]);
@@ -340,7 +340,7 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 			g_free(key);
 
 		}
-		if (type == VE_VAR)
+		if (type == ECU_VAR)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);
 			tmpi = translate_string_f(vector[DEP_SIZE]);

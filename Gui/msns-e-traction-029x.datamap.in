@@ -64,7 +64,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=3000RPM/Sec
 alt_label=5% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels
 
 [traction_rpm2s_label]
@@ -72,7 +72,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=4000RPM/Sec
 alt_label=15% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels
 
 [traction_rpm3s_label]
@@ -80,7 +80,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=6000RPM/Sec
 alt_label=30% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels
 
 [traction_rpm4s_label]
@@ -88,7 +88,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=10000RPM/Sec
 alt_label=70% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels
 
 [traction_retard1_label]
@@ -96,7 +96,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=3000RPM/Sec
 alt_label=5% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels,spark_controls
 
 [traction_retard2_label]
@@ -104,7 +104,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=4000RPM/Sec
 alt_label=15% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels,spark_controls
 
 [traction_retard3_label]
@@ -112,7 +112,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=6000RPM/Sec
 alt_label=30% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels,spark_controls
 
 [traction_retard4_label]
@@ -120,7 +120,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=10000RPM/Sec
 alt_label=70% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels,spark_controls
 
 [traction_sp_cut1_label]
@@ -128,7 +128,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=3000RPM/Sec
 alt_label=5% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut2_label]
@@ -136,7 +136,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=4000RPM/Sec
 alt_label=15% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut3_label]
@@ -144,7 +144,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=6000RPM/Sec
 alt_label=30% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_sp_cut4_label]
@@ -152,7 +152,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=10000RPM/Sec
 alt_label=70% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels,spark_controls,nonedis_controls
 
 [traction_cyc1_label]
@@ -160,7 +160,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=3000RPM/Sec
 alt_label=5% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels
 
 [traction_cyc2_label]
@@ -168,7 +168,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=4000RPM/Sec
 alt_label=15% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels
 
 [traction_cyc3_label]
@@ -176,7 +176,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=6000RPM/Sec
 alt_label=30% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels
 
 [traction_cyc4_label]
@@ -184,7 +184,7 @@ keys=label,alt_label,depend_on,bind_to_list
 label=10000RPM/Sec
 alt_label=70% Slip
 depend_on=tract_mode
-tract_mode=_VE_EMB_BIT_,_U08_,0,109,8,3,0
+tract_mode=_ECU_EMB_BIT_,_U08_,0,109,8,3,0
 bind_to_list=traction_labels
 
 #----- Radio/CheckCombo/buttons ----------------------------------------------

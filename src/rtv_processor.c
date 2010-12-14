@@ -264,7 +264,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		bitshift = 0;
 		switch ((ComplexExprType)expr_types[i])
 		{
-			case VE_EMB_BIT:
+			case ECU_EMB_BIT:
 				size = MTX_U08;
 
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
@@ -288,7 +288,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 				 */
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
-			case VE_VAR:
+			case ECU_VAR:
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
 				page = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
@@ -446,7 +446,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		bitshift = 0;
 		switch ((ComplexExprType)expr_types[i])
 		{
-			case VE_EMB_BIT:
+			case ECU_EMB_BIT:
 				size = MTX_U08;
 
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
@@ -470,7 +470,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				 */
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
-			case VE_VAR:
+			case ECU_VAR:
 				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
 				page = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);

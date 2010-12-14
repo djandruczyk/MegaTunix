@@ -56,8 +56,8 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 		g_free(tmpbuf);
 		switch (type)
 		{
-			case VE_EMB_BIT:
-				/*printf("VE_EMB_BIT\n");*/
+			case ECU_EMB_BIT:
+				/*printf("ECU_EMB_BIT\n");*/
 				tmpbuf = g_strdup_printf("%s_page",deps[i]);
 				page = (GINT)DATA_GET(object,tmpbuf);
 				/*printf("page %i\n",page);*/
@@ -94,7 +94,7 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 					return FALSE;
 				}
 				break;
-			case VE_VAR:
+			case ECU_VAR:
 
 				tmpbuf = g_strdup_printf("%s_page",deps[i]);
 				page = (GINT)DATA_GET(object,g_strdup_printf("%s_page",deps[i]));

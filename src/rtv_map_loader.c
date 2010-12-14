@@ -416,6 +416,8 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
  */
 G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
 {
+	static void (*common_rtv_loader)(gconstpointer *,ConfigFile *,gchar * section, ComplexExprType);
+	static Firmware_Details *firmware = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;
 	gint *expr_types = NULL;
@@ -425,9 +427,11 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 	gint tmpi;
 	gint i = 0;
 	extern gconstpointer *global_data;
-	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!common_rtv_loader)
+		get_symbol("common_rtv_loader",(void *)&common_rtv_loader);
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{
@@ -467,67 +471,11 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 	{
 		switch ((ComplexExprType)expr_types[i])
 		{
-			case VE_EMB_BIT:
-				/* VE Table embedded bitfield 4 params */
-				name=NULL;
-				name=g_strdup_printf("%s_page",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
-				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
-				name=g_strdup_printf("%s_offset",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
-				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
-				name=g_strdup_printf("%s_canID",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					tmpi = firmware->canID;
-				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
-				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
-				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
+			case ECU_EMB_BIT:
+				common_rtv_loader(object,cfgfile,section,ECU_EMB_BIT);
 				break;
-			case VE_VAR:
-				/* VE table std variable,  page/offset only */
-				name=NULL;
-				name=g_strdup_printf("%s_page",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name));
-				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
-				name=g_strdup_printf("%s_offset",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name));
-				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
-				name=g_strdup_printf("%s_canID",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					tmpi = firmware->canID;
-
-				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
-				name=g_strdup_printf("%s_size",expr_symbols[i]);
-				if (!cfg_read_string(cfgfile,section,name,&tmpbuf))
-					tmpi = MTX_U08;
-				else
-				{
-					tmpi = translate_string(tmpbuf);
-					g_free(tmpbuf);
-				}
-				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
-				g_free(name);
-				name=NULL;
+			case ECU_VAR:
+				common_rtv_loader(object,cfgfile,section,ECU_VAR);
 				break;
 			case RAW_VAR:
 				/* RAW variable */
@@ -571,7 +519,7 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 				break;
 
 			default:
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup(__FILE__": load_complex_params(), expr_type is UNDEFINED, this will cause a crash!!\n"));
+				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params(), expr_type %i is UNDEFINED, this will cause a crash!!\n",expr_types[i]));
 		}
 	}
 }
@@ -637,18 +585,18 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 	{
 		switch ((ComplexExprType)expr_types[i])
 		{
-			case VE_EMB_BIT:
+			case ECU_EMB_BIT:
 				/* VE Table embedded bitfield 4 params */
 				name=NULL;
 				name=g_strdup_printf("%s_page",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
@@ -660,23 +608,23 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 				name=NULL;
 				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_EMB_BIT, failure looking for:%s\n",name));
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				break;
-			case VE_VAR:
+			case ECU_VAR:
 				/* VE table std variable,  page/offset only */
 				name=NULL;
 				name=g_strdup_printf("%s_page",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name));
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tVE_VAR, failure looking for:%s\n",name));
+					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;

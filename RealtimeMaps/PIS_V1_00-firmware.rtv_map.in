@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=3
+minor=4
 
 [realtime_map]
 persona=PIS
@@ -1123,7 +1123,7 @@ real_upper=100
 complex_expr=TRUE
 ul_conv_expr=100.0 * ((pw/66) / (60000 / (rpm * (1+stroke) / (1+skips))))
 expr_symbols=stroke,cylinders,skips,rpm,pw
-expr_types=_VE_VAR_,_VE_VAR_,_VE_VAR_,_RAW_VAR_,_RAW_VAR_
+expr_types=_ECU_VAR_,_ECU_VAR_,_ECU_VAR_,_RAW_VAR_,_RAW_VAR_
 stroke_page=0
 stroke_offset=4
 stroke_size=_U16_

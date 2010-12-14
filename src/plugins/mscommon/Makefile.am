@@ -39,6 +39,8 @@ libmscommon_la_SOURCES = \
 	mscommon_helpers.h \
 	mscommon_plugin.c \
 	mscommon_plugin.h \
+	mscommon_rtv_loader.c \
+	mscommon_rtv_loader.h \
 	mtxsocket.c \
 	mtxsocket.h \
 	req_fuel.c \

@@ -117,10 +117,10 @@ typedef enum
 
 typedef enum
 {
-	VE_EMB_BIT=0x1c0,
-	VE_VAR,
-	RAW_VAR,
-	RAW_EMB_BIT
+	ECU_EMB_BIT=0x1c0,
+	ECU_VAR,
+	RAW_EMB_BIT,
+	RAW_VAR
 }ComplexExprType;
 
 typedef enum
