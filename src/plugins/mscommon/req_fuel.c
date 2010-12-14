@@ -850,9 +850,9 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	GdkColor black = { 0, 0, 0, 0};
 	gboolean use_color = FALSE;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));

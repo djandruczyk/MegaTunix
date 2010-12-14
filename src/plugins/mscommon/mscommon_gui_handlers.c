@@ -822,9 +822,9 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	gint base = 0;
 	gint length = 0;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -843,8 +843,8 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	{
 		if ((DATA_GET(global_data,"leaving")) || (!firmware))
 			return FALSE;
-		if (ve_widgets[page][offset] != NULL)
-			g_list_foreach(ve_widgets[page][offset],update_widget,NULL);
+		if (ecu_widgets[page][offset] != NULL)
+			g_list_foreach(ecu_widgets[page][offset],update_widget,NULL);
 	}
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	return FALSE;
@@ -895,9 +895,9 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 	guint8 addon = 0;
 	gint mult = 0;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
@@ -1082,8 +1082,8 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 		{
 			if ((DATA_GET(global_data,"leaving")) || (!firmware))
 				return;
-			if (ve_widgets[page][offset] != NULL)
-				g_list_foreach(ve_widgets[page][offset],
+			if (ecu_widgets[page][offset] != NULL)
+				g_list_foreach(ecu_widgets[page][offset],
 						update_widget,NULL);
 		}
 	}
@@ -2065,14 +2065,14 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-		thread_refresh_widget_f(g_list_nth_data(ve_widgets[page][offset],i));
+	for (i=0;i<g_list_length(ecu_widgets[page][offset]);i++)
+		thread_refresh_widget_f(g_list_nth_data(ecu_widgets[page][offset],i));
 	/*update_ve3d_if_necessary_f(page,offset);*/
 }
 

@@ -60,7 +60,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	gchar **vector = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 	gint num_tabs = 0;
 	gint x_mult = 0;
 	gint y_mult = 0;
@@ -75,7 +75,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if (!main_xml)
@@ -283,7 +283,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 				gtk_table_attach(GTK_TABLE(x_table),entry,
 						0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 			page = firmware->te_params[table_num]->x_page;
-			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
+			ecu_widgets[page][offset] = g_list_prepend(ecu_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
 			update_widget(G_OBJECT(entry),NULL);
 
@@ -334,7 +334,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 				gtk_table_attach(GTK_TABLE(y_table),entry,
 						0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 			page = firmware->te_params[table_num]->y_page;
-			ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
+			ecu_widgets[page][offset] = g_list_prepend(ecu_widgets[page][offset],(gpointer)entry);
 			widget_list = g_list_prepend(widget_list,(gpointer)entry);
 			update_widget(G_OBJECT(entry),NULL);
 		}
@@ -401,7 +401,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	GList *gauge_list = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 	gint x_mult = 0;
 	gint y_mult = 0;
 	gint page = 0;
@@ -415,7 +415,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 
 	if (table_num >= firmware->total_te_tables)
 	{
@@ -620,7 +620,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 			gtk_table_attach(GTK_TABLE(x_table),entry,
 					0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 		page = firmware->te_params[table_num]->x_page;
-		ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
+		ecu_widgets[page][offset] = g_list_prepend(ecu_widgets[page][offset],(gpointer)entry);
 		widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 		update_widget(G_OBJECT(entry),NULL);
@@ -673,7 +673,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 			gtk_table_attach(GTK_TABLE(y_table),entry,
 					0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 		page = firmware->te_params[table_num]->y_page;
-		ve_widgets[page][offset] = g_list_prepend(ve_widgets[page][offset],(gpointer)entry);
+		ecu_widgets[page][offset] = g_list_prepend(ecu_widgets[page][offset],(gpointer)entry);
 		widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 		update_widget(G_OBJECT(entry),NULL);
@@ -769,11 +769,11 @@ G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 
 G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 {
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 	gint page = -1;
 	gint offset = -1;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	remove_from_lists_f(OBJ_GET(widget_ptr,"bind_to_list"),widget_ptr);
 	if (OBJ_GET(widget_ptr,"page"))
 		page = (GINT)OBJ_GET(widget_ptr,"page");
@@ -784,7 +784,7 @@ G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 	else
 		offset = -1;
 	if (( page >= 0 ) && (offset >= 0))
-		ve_widgets[page][offset] = g_list_remove(ve_widgets[page][offset],widget_ptr);
+		ecu_widgets[page][offset] = g_list_remove(ecu_widgets[page][offset],widget_ptr);
 	/*dealloc_widget(widget_ptr,NULL);*/
 }
 

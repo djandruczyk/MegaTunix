@@ -60,12 +60,12 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	gdouble maximum_rpm_advance = 0.0;
 	gdouble maximum_retard = 0.0;
 	gdouble retard_start_load = 0.0;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 	GList *list = NULL;
 	gchar * tmpbuf = NULL;
 	gint precision = 0;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
@@ -181,13 +181,13 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 				advance -= linear_interpolate(y_bin[y], retard_start_load, y_bin[firmware->table_params[table]->y_bincount-1], 0, maximum_retard);
 
 			/* HACK ALERT,  this assumes the list at
-			 * ve_widgets[page][offset], contains the VEtable widget at
+			 * ecu_widgets[page][offset], contains the VEtable widget at
 			 * offset 0 of that list.  (assumptions are bad practice!)
 			 */
 			if (firmware->capabilities & PIS)
-				list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + ((x * firmware->table_params[table]->y_bincount) * mult) + (y * mult)];
+				list = ecu_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + ((x * firmware->table_params[table]->y_bincount) * mult) + (y * mult)];
 			else
-				list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + ((y * firmware->table_params[table]->y_bincount) * mult) + (x * mult)];
+				list = ecu_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + ((y * firmware->table_params[table]->y_bincount) * mult) + (x * mult)];
 			widget = g_list_nth_data(list,0);
 			precision = (GINT)OBJ_GET(widget, "precision");
 			tmpbuf = g_strdup_printf("%1$.*2$f", advance, precision);

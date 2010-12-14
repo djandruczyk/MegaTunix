@@ -157,7 +157,7 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	static GAsyncQueue *gui_dispatch_queue = NULL;
 	static GCond *gui_dispatch_cond = NULL;
 	static void (*update_widget_f)(gpointer,gpointer) = NULL;
-	static GList ***ve_widgets = NULL;
+	static GList ***ecu_widgets = NULL;
 	gint len = 0;
 	gint i = 0;
 	gint j = 0;
@@ -234,14 +234,14 @@ trypop:
 						break;
 					if (!update_widget_f)
 						get_symbol("update_widget",(void *)&update_widget_f);
-					if (!ve_widgets)
-						ve_widgets = DATA_GET(global_data,"ve_widgets");
+					if (!ecu_widgets)
+						ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 					gdk_threads_enter();
 					for (i=range->offset;i<range->offset +range->len;i++)
 					{
-						for (j=0;j<g_list_length(ve_widgets[range->page][i]);j++)
-						update_widget_f(g_list_nth_data(ve_widgets[range->page][i],j),NULL);
+						for (j=0;j<g_list_length(ecu_widgets[range->page][i]);j++)
+						update_widget_f(g_list_nth_data(ecu_widgets[range->page][i],j),NULL);
 					}
 					gdk_threads_leave();
 					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));

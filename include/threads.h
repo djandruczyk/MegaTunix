@@ -53,7 +53,7 @@ struct _Widget_Update
 };
 
 
-/* Used to update a bunch of widgets in ve_widgets from a thread context
+/* Used to update a bunch of widgets in ecu_widgets from a thread context
    */
 struct _Widget_Range
 {

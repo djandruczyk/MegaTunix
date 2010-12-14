@@ -877,7 +877,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
 	/*static void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;*/
 	static void (*update_widget_f)(gpointer, gpointer);
-	static GList ***ve_widgets = NULL;
+	static GList ***ecu_widgets = NULL;
 	DataSize size = 0;
 	gint value = 0;
 	gint active_table = -1;
@@ -892,8 +892,8 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	gboolean *tracking_focus = NULL;
 	Firmware_Details *firmware = NULL;
 
-	if (!ve_widgets)
-		ve_widgets = DATA_GET(global_data,"ve_widgets");
+	if (!ecu_widgets)
+		ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	if (!get_ecu_data_f)
 		get_symbol("get_ecu_data",(void *)&get_ecu_data_f);
 	if (!send_to_ecu_f)

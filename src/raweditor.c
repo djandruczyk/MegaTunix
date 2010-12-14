@@ -52,9 +52,9 @@ G_MODULE_EXPORT void finish_raweditor(void)
 	extern GdkColor white;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 
 	firmware = DATA_GET(global_data,"firmware");
 
@@ -111,7 +111,7 @@ G_MODULE_EXPORT void finish_raweditor(void)
 			OBJ_SET(entry,"base",GINT_TO_POINTER(16));
 			OBJ_SET(entry,"raw_lower",g_strdup("0"));
 			OBJ_SET(entry,"raw_upper",g_strdup("255"));
-			ve_widgets[i][j] = g_list_prepend(ve_widgets[i][j],(gpointer)entry);
+			ecu_widgets[i][j] = g_list_prepend(ecu_widgets[i][j],(gpointer)entry);
 			OBJ_SET(entry,"handler",
 					GINT_TO_POINTER(GENERIC));
 			g_signal_connect (G_OBJECT(entry), "changed",

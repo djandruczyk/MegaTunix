@@ -229,13 +229,13 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets;
+	GList ***ecu_widgets;
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
 	if (!update_widget_f)
 		get_symbol_f("update_widget",(void *)&update_widget_f);
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
@@ -258,8 +258,8 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_U16));
 			OBJ_SET(item,"dl_conv_expr",g_strdup("x/1"));
 			OBJ_SET(item,"ul_conv_expr",g_strdup("x*1"));
-			ve_widgets[0][2702] = g_list_prepend(
-					ve_widgets[0][2702],
+			ecu_widgets[0][2702] = g_list_prepend(
+					ecu_widgets[0][2702],
 					(gpointer)item);
 		}
 		else
@@ -272,8 +272,8 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
 			OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
 			OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
-			ve_widgets[0][506] = g_list_prepend(
-					ve_widgets[0][506],
+			ecu_widgets[0][506] = g_list_prepend(
+					ecu_widgets[0][506],
 					(gpointer)item);
 		}
 
@@ -288,8 +288,8 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_U16));
 			OBJ_SET(item,"dl_conv_expr",g_strdup("x/1"));
 			OBJ_SET(item,"ul_conv_expr",g_strdup("x*1"));
-			ve_widgets[0][2704] = g_list_prepend(
-					ve_widgets[0][2704],
+			ecu_widgets[0][2704] = g_list_prepend(
+					ecu_widgets[0][2704],
 					(gpointer)item);
 		}
 		else
@@ -302,8 +302,8 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
 			OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
 			OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
-			ve_widgets[0][508] = g_list_prepend(
-					ve_widgets[0][508],
+			ecu_widgets[0][508] = g_list_prepend(
+					ecu_widgets[0][508],
 					(gpointer)item);
 		}
 
@@ -317,8 +317,8 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
 		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
 		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
-		ve_widgets[0][530] = g_list_prepend(
-				ve_widgets[0][530],
+		ecu_widgets[0][530] = g_list_prepend(
+				ecu_widgets[0][530],
 				(gpointer)item);
 
 		if (firmware->capabilities & PIS)
@@ -334,23 +334,23 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
 		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
 		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
-		ve_widgets[0][532] = g_list_prepend(
-				ve_widgets[0][532],
+		ecu_widgets[0][532] = g_list_prepend(
+				ecu_widgets[0][532],
 				(gpointer)item);
 
 		if (firmware->capabilities & PIS)
 		{
 			gtk_widget_destroy(item);
-			g_list_foreach(ve_widgets[0][2702],update_widget_f,NULL);
-			g_list_foreach(ve_widgets[0][2704],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][2702],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][2704],update_widget_f,NULL);
 		}
 		else
 		{
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][506],update_widget_f,NULL);
-			g_list_foreach(ve_widgets[0][508],update_widget_f,NULL);
-			g_list_foreach(ve_widgets[0][530],update_widget_f,NULL);
-			g_list_foreach(ve_widgets[0][532],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][506],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][508],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][530],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][532],update_widget_f,NULL);
 		}
 
 		item = glade_xml_get_widget(xml,"get_data_button");
@@ -418,13 +418,13 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	GtkWidget *partner = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
 	if (!update_widget_f)
 		get_symbol_f("update_widget",(void *)&update_widget_f);
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
@@ -468,8 +468,8 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		OBJ_SET(item,"dl_conv_expr",OBJ_GET(partner,"dl_conv_expr"));
 		OBJ_SET(item,"ul_conv_expr",OBJ_GET(partner,"ul_conv_expr"));
 		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
-		ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
-		g_list_foreach(ve_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);
+		ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
+		g_list_foreach(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));

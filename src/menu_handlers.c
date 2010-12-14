@@ -210,13 +210,13 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
 	if (!update_widget_f)
 		get_symbol("update_widget",(void *)&update_widget_f);
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
@@ -244,16 +244,16 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		{
 			OBJ_SET(item,"raw_upper",g_strdup("255"));
 			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
-			ve_widgets[0][2676] = g_list_prepend(
-					ve_widgets[0][2676],
+			ecu_widgets[0][2676] = g_list_prepend(
+					ecu_widgets[0][2676],
 					(gpointer)item);
 		}
 		else
 		{
 			OBJ_SET(item,"raw_upper",g_strdup("2047"));
 			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
-			ve_widgets[0][518] = g_list_prepend(
-					ve_widgets[0][518],
+			ecu_widgets[0][518] = g_list_prepend(
+					ecu_widgets[0][518],
 					(gpointer)item);
 		}
 
@@ -272,26 +272,26 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		{
 			OBJ_SET(item,"raw_upper",g_strdup("255"));
 			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
-			ve_widgets[0][2678] = g_list_prepend(
-					ve_widgets[0][2678],
+			ecu_widgets[0][2678] = g_list_prepend(
+					ecu_widgets[0][2678],
 					(gpointer)item);
 
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][2676],update_widget_f,NULL);
-			g_list_foreach(ve_widgets[0][2678],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][2676],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][2678],update_widget_f,NULL);
 
 		}
 		else
 		{
 			OBJ_SET(item,"raw_upper",g_strdup("2047"));
 			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
-			ve_widgets[0][520] = g_list_prepend(
-					ve_widgets[0][520],
+			ecu_widgets[0][520] = g_list_prepend(
+					ecu_widgets[0][520],
 					(gpointer)item);
 
 			/* Force them to update */
-			g_list_foreach(ve_widgets[0][518],update_widget_f,NULL);
-			g_list_foreach(ve_widgets[0][520],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][518],update_widget_f,NULL);
+			g_list_foreach(ecu_widgets[0][520],update_widget_f,NULL);
 
 		}
 

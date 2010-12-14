@@ -573,7 +573,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	Firmware_Details *firmware = NULL;
 	GHashTable **interdep_vars = NULL;
 	GHashTable *sources_hash = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 	GList **tab_gauges = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -589,10 +589,10 @@ G_MODULE_EXPORT void mem_alloc(void)
 	if (!firmware->ecu_data_backup)
 		firmware->ecu_data_backup = g_new0(guint8 *, firmware->total_pages);
 
-	if (!ve_widgets)
+	if (!ecu_widgets)
 	{
-		ve_widgets = g_new0(GList **, firmware->total_pages);
-		DATA_SET(global_data,"ve_widgets",ve_widgets);
+		ecu_widgets = g_new0(GList **, firmware->total_pages);
+		DATA_SET(global_data,"ecu_widgets",ecu_widgets);
 	}
 	if (!tab_gauges)
 	{
@@ -647,12 +647,12 @@ G_MODULE_EXPORT void mem_alloc(void)
 			firmware->ecu_data_last[i] = g_new0(guint8, firmware->page_params[i]->length);
 		if (!firmware->ecu_data_backup[i])
 			firmware->ecu_data_backup[i] = g_new0(guint8, firmware->page_params[i]->length);
-		if (!ve_widgets[i])
+		if (!ecu_widgets[i])
 		{
-			ve_widgets[i] = g_new0(GList *, firmware->page_params[i]->length);
+			ecu_widgets[i] = g_new0(GList *, firmware->page_params[i]->length);
 			for (j=0;j<firmware->page_params[i]->length;j++)
 			{
-				ve_widgets[i][j] = NULL;
+				ecu_widgets[i][j] = NULL;
 			}
 		}
 	}
@@ -677,13 +677,13 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GHashTable **interdep_vars = NULL;
 	GHashTable *dynamic_widgets = NULL;
 	Rtv_Map *rtv_map = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	rtv_map = DATA_GET(global_data,"rtv_map");
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
@@ -698,16 +698,16 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	{
 		for (i=0;i<firmware->total_pages;i++)
 		{
-			if (ve_widgets[i])
+			if (ecu_widgets[i])
 			{
 				for (j=0;j<firmware->page_params[i]->length;j++)
 				{
-					g_list_foreach(ve_widgets[i][j],dealloc_widget,NULL);
-					g_list_free(ve_widgets[i][j]);
+					g_list_foreach(ecu_widgets[i][j],dealloc_widget,NULL);
+					g_list_free(ecu_widgets[i][j]);
 				}
 
 			}
-			cleanup(ve_widgets[i]);
+			cleanup(ecu_widgets[i]);
 		}
 		cleanup (firmware->name);
 		cleanup (firmware->profile_filename);

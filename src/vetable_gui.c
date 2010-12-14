@@ -64,9 +64,9 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 	gfloat retval = 0.0;
 	ScaleOp scaleop = ADD;
 	Firmware_Details *firmware = NULL;
-	GList ***ve_widgets = NULL;
+	GList ***ecu_widgets = NULL;
 
-	ve_widgets = DATA_GET(global_data,"ve_widgets");
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 
 	tmpbuf = (gchar *) OBJ_GET(widget,"data");
@@ -93,7 +93,7 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 
 	for (i=z_base;i<(z_base+(x_bins*y_bins));i++)
 	{
-		if (NULL != (list = ve_widgets[z_page][i]))
+		if (NULL != (list = ecu_widgets[z_page][i]))
 		{
 			list = g_list_first(list);
 			for (j=0;j<g_list_length(list);j++)
@@ -157,7 +157,7 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 	static gint (*ms_get_ecu_data)(gint,gint,gint,DataSize) = NULL;
 	static Firmware_Details *firmware = NULL;
 	static GHashTable *sources_hash = NULL;
-	static GList ***ve_widgets = NULL;
+	static GList ***ecu_widgets = NULL;
 	static gfloat *prev_x_source;
 	static gfloat *prev_y_source;
 	static GtkWidget ***last_widgets = NULL;
@@ -209,8 +209,8 @@ G_MODULE_EXPORT void draw_ve_marker(void)
 
 	if (!sources_hash)
 		sources_hash = DATA_GET(global_data,"sources_hash");
-	if (!ve_widgets)
-		ve_widgets = DATA_GET(global_data,"ve_widgets");
+	if (!ecu_widgets)
+		ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	if (!ms_get_ecu_data)
@@ -529,10 +529,10 @@ redraw:
 		if (z_bin[i] == -1)
 			continue;
 		/* HACK ALERT,  this assumes the list at 
-		 * ve_widgets[page][offset], contains the VEtable widget at
+		 * ecu_widgets[page][offset], contains the VEtable widget at
 		 * offset 0 of that list.  (assumptions are bad practice!)
 		 */
-		list = ve_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+(z_bin[i]*z_mult)];
+		list = ecu_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+(z_bin[i]*z_mult)];
 		widget = g_list_nth_data(list,0);
 
 		if (!GTK_IS_WIDGET(widget))
