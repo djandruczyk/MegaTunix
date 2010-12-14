@@ -35,6 +35,7 @@ gboolean leave(GtkWidget *, gpointer);
 gboolean comm_port_override(GtkEditable *);
 gboolean std_button_handler(GtkWidget *, gpointer);
 gboolean std_entry_handler(GtkWidget *, gpointer);
+gboolean std_combo_handler(GtkWidget *, gpointer);
 gboolean entry_changed_handler(GtkWidget *, gpointer );
 gboolean toggle_button_handler(GtkWidget *, gpointer);
 gboolean bitmask_button_handler(GtkWidget *, gpointer);

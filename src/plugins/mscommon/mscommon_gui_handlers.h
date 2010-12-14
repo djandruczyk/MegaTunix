@@ -52,7 +52,7 @@ gboolean common_slider_handler(GtkWidget *, gpointer);
 gboolean common_std_button_handler(GtkWidget *, gpointer);
 gboolean common_toggle_button_handler(GtkWidget *, gpointer);
 gboolean common_combo_handler(GtkWidget *, gpointer);
-gboolean common_spinbutton_handler(GtkWidget *, gpointer);
+gboolean common_spin_button_handler(GtkWidget *, gpointer);
 
 void set_widget_labels(const gchar *);
 void swap_labels(GtkWidget *, gboolean);

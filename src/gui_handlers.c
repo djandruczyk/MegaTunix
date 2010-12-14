@@ -484,7 +484,12 @@ G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *eve
 	if (OBJ_GET(widget,"not_sent"))
 	{
 		OBJ_SET(widget,"not_sent",NULL);
-		std_entry_handler(widget, data);
+		if (GTK_IS_SPIN_BUTTON(widget))
+			spin_button_handler(widget, data);
+		else if (GTK_IS_ENTRY(widget))
+			std_entry_handler(widget, data);
+		else if (GTK_IS_COMBO_BOX(widget))
+			std_combo_handler(widget, data);
 	}
 	return FALSE;
 }
@@ -842,7 +847,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		default:
 			if (!common_handler)
 			{
-				if (get_symbol("common_spinbutton_handler",(void *)&common_handler))
+				if (get_symbol("common_spin_button_handler",(void *)&common_handler))
 					return common_handler(widget,data);
 				else
 				{
@@ -1108,7 +1113,10 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			break;
 		case GDK_Return:
 		case GDK_KP_Enter:
-			std_entry_handler(widget,NULL);
+			if (GTK_IS_SPIN_BUTTON(widget))
+				spin_button_handler(widget, NULL);
+			else
+				std_entry_handler(widget,NULL);
 			retval = FALSE;
 			break;
 		default:	

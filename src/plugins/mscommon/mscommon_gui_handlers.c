@@ -96,6 +96,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	}
 	switch (handler)
 	{
+
 		case GENERIC:
 			if (OBJ_GET(widget,"temp_dep"))
 			{
@@ -1097,7 +1098,7 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 }
 
 
-G_MODULE_EXPORT gboolean common_spinbutton_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
 	 * necessary deta in the the app and calls any handlers 
@@ -1272,7 +1273,7 @@ G_MODULE_EXPORT gboolean common_spinbutton_handler(GtkWidget *widget, gpointer d
 		default:
 			if (!ecu_handler)
 			{
-				if (get_symbol_f("ecu_spinbutton_handler",(void *)&ecu_handler))
+				if (get_symbol_f("ecu_spin_button_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
 				{
@@ -1451,7 +1452,13 @@ void update_entry(GtkWidget *widget)
 		if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
 			value = (value-32)*(5.0/9.0);
 	}
-	if (GTK_IS_ENTRY(widget))
+	if (GTK_IS_SPIN_BUTTON(widget))
+	{
+		spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+		if (value != spin_value)
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
+	}
+	else
 	{
 
 		widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
@@ -1463,12 +1470,6 @@ void update_entry(GtkWidget *widget)
 			changed = TRUE;
 		}
 		g_free(tmpbuf);
-	}
-	else
-	{
-		spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-		if (value != spin_value)
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 	}
 
 	if (OBJ_GET(widget,"use_color"))

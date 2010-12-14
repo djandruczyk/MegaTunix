@@ -210,7 +210,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean ecu_spinbutton_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
 	gint dl_type = -1;

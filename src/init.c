@@ -615,7 +615,6 @@ G_MODULE_EXPORT void mem_alloc(void)
 			DATA_SET(global_data,"interdep_vars",interdep_vars);
 		}
 	}
-	printf("interdep_vars addy is %p\n",interdep_vars);
 	if (!algorithm)
 	{
 		if (firmware->total_tables > 0)

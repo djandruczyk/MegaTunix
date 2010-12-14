@@ -40,7 +40,7 @@ extern gint (*get_ecu_data_f)(GtkWidget *);
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
-gboolean ecu_spinbutton_handler(GtkWidget *, gpointer);
+gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
 gboolean ecu_std_button_handler(GtkWidget *, gpointer);
 gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_combo_handler(GtkWidget *, gpointer);

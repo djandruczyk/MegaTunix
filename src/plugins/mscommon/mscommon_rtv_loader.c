@@ -104,3 +104,87 @@ void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfile, gchar * secti
 	}
 	return;
 }
+
+void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile, gchar * section, gint i, ComplexExprType type)
+{
+	static Firmware_Details *firmware = NULL;
+	gchar * name = NULL;
+	gint tmpi = 0;
+	gchar **expr_symbols = NULL;
+	gchar *tmpbuf = NULL;
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+
+	expr_symbols = OBJ_GET(object,"expr_symbols");
+
+	switch (type)
+	{
+		case ECU_EMB_BIT:
+			/* ECU Embedded bitfield 4 params */
+			name=NULL;
+			name=g_strdup_printf("%s_page",expr_symbols[i]);
+			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+			g_free(name);
+			name=NULL;
+			name=g_strdup_printf("%s_offset",expr_symbols[i]);
+			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+			g_free(name);
+			name=NULL;
+			name=g_strdup_printf("%s_canID",expr_symbols[i]);
+			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				tmpi = firmware->canID;
+			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+			g_free(name);
+			name=NULL;
+			name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
+			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_EMB_BIT, failure looking for:%s\n",name));
+			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+			g_free(name);
+			name=NULL;
+			break;
+		case ECU_VAR:
+			/* ECU std variable, canID/page/offset/size */
+			name=NULL;
+			name=g_strdup_printf("%s_canID",expr_symbols[i]);
+			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				tmpi = firmware->canID;
+
+			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+			g_free(name);
+			name=NULL;
+			name=g_strdup_printf("%s_page",expr_symbols[i]);
+			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
+			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+			g_free(name);
+			name=NULL;
+			name=g_strdup_printf("%s_offset",expr_symbols[i]);
+			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tECU_VAR, failure looking for:%s\n",name));
+			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+			g_free(name);
+			name=NULL;
+			name=g_strdup_printf("%s_size",expr_symbols[i]);
+			if (!cfg_read_string(cfgfile,section,name,&tmpbuf))
+				tmpi = MTX_U08;
+			else
+			{
+				tmpi = translate_string_f(tmpbuf);
+				g_free(tmpbuf);
+			}
+			OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
+			g_free(name);
+			name=NULL;
+			break;
+		default:
+			return;
+			break;
+	}
+	return;
+}
