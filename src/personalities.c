@@ -84,7 +84,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" ecu_lib undefined!, was MegaTunix installed properly?\n\n"));
 		if(!cfg_read_string(cfgfile,"Family","common_lib",&element->common_lib))
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" common_lib undefined!, was MegaTunix installed properly?\n\n"));
-		cfg_read_int(cfgfile,"Family","baud",&element->baud);
+		if (!cfg_read_string(cfgfile,"Family","baud",&element->baud_str))
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" baud string undefined!, was MegaTunix installed properly?\n\n"));
 		element->dirname = g_strdup(dirs[i]);
 		element->filename = g_path_get_basename(dirs[i]);
 		if (g_strcasecmp(element->filename,(gchar *)DATA_GET(global_data,"previous_ecu_family")) == 0)
@@ -235,7 +236,7 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 		return FALSE;
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{
-		DATA_SET(global_data,"ecu_baud", GINT_TO_POINTER(element->baud));
+		DATA_SET(global_data,"ecu_baud_str", GINT_TO_POINTER(element->baud_str));
 		DATA_SET_FULL(global_data,"ecu_lib", g_strdup(element->ecu_lib),g_free);
 		DATA_SET_FULL(global_data,"common_lib", g_strdup(element->common_lib),g_free);
 		DATA_SET_FULL(global_data,"ecu_dirname", g_strdup(element->dirname),g_free);

@@ -25,11 +25,13 @@
 #include <debugging.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <gtk/gtk.h>
 #include <listmgmt.h>
 #include <locking.h>
 #include <notifications.h>
 #include <runtime_gui.h>
 #include <serialio.h>
+#include <stdlib.h>
 #include <string.h>
 #ifndef __WIN32__
  #include <termios.h>
@@ -161,20 +163,30 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 G_MODULE_EXPORT void setup_serial_params(void)
 {
 	GMutex *serio_mutex = NULL;
-	gint baudrate = 0;	
+	gchar * baud_str = NULL;
+	Parity parity = NONE;
+	gint baudrate = 0;
+	gint bits = 0;
+	gint stop = 0;
 	Serial_Params *serial_params = NULL;
+#ifndef __WIN32__
+	speed_t baud;
+#endif
 	serial_params = DATA_GET(global_data,"serial_params");
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
-	baudrate = (GINT)DATA_GET(global_data,"ecu_baud");
-#ifndef __WIN32__
-	speed_t baud = B9600;
-#endif
+	baud_str = DATA_GET(global_data,"ecu_baud_str");
+
+	if (!parse_baud_str(baud_str,&baudrate,&bits,&parity,&stop))
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tERROR! couldn't parse ecu_baud string %s\n",baud_str));
+
+	DATA_SET(global_data,"ecu_baud",GINT_TO_POINTER(baudrate));
 	if (serial_params->open == FALSE)
 		return;
 	/*printf("setup_serial_params entered\n");*/
 	g_mutex_lock(serio_mutex);
+
 #ifdef __WIN32__
-	win32_setup_serial_params(serial_params->fd, baudrate);
+	win32_setup_serial_params(serial_params->fd,baudrate,bits,parity,stop);
 #else
 	/* Save serial port status */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
@@ -213,10 +225,49 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	cfsetspeed(&serial_params->newtio, baud);
 
 	/* Mask and set to 8N1 mode... */
+	/* Clears the following bits */
+	/* CRTSCTS == RTS/CTS flow control lines
+	   PARENB == Parity
+	   CSTOPB == Stop bits
+	   CSIZE == Char Size (5-8 bits)
+	   */
 	serial_params->newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);
+
 	/* Set additional flags, note |= syntax.. */
-	/* Enable receiver, ignore modem ctrls lines, use 8 bits */
-	serial_params->newtio.c_cflag |= CLOCAL | CREAD | CS8;
+	/* CLOCAL == Ignore modem control lines
+	   CREAD == Enable receiver
+	   */
+	serial_params->newtio.c_cflag |= CLOCAL | CREAD;
+	switch (bits)
+	{
+		case 8:
+			serial_params->newtio.c_cflag |= CS8;
+			break;
+		case 7:
+			serial_params->newtio.c_cflag |= CS7;
+			break;
+		case 6:
+			serial_params->newtio.c_cflag |= CS6;
+			break;
+		case 5:
+			serial_params->newtio.c_cflag |= CS5;
+			break;
+	}
+	switch (parity)
+	{
+		case ODD:
+			serial_params->newtio.c_cflag |= PARENB | PARODD;
+			break;
+		case EVEN:
+			serial_params->newtio.c_cflag |= PARENB;
+			break;
+		case NONE:
+			break;
+	}
+	if (stop == 2)
+		serial_params->newtio.c_cflag |= CSTOPB;
+	/* 1 stop bit is default */
+
 
 	/* RAW Input */
 	/* Ignore signals, enable canonical, etc */
@@ -323,3 +374,32 @@ G_MODULE_EXPORT void close_serial(void)
 }
 
 
+G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits, Parity *parity, gint *stop)
+{
+	gchar **vector = NULL;
+	vector = g_strsplit(baud_str,",",-1);
+	if (g_strv_length(vector) != 4)
+	{
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": pause_baud_str()\tbaud string is NOT in correct format 'baud,bits,parity,stop'\n"));
+		return FALSE;
+	}
+	if (baud)
+		*baud = (gint)strtol(vector[0],NULL,10);
+	if (bits)
+		*bits = (gint)strtol(vector[1],NULL,10);
+	if (parity)
+	{
+		if (g_ascii_strncasecmp(vector[2],"N",1) == 0)
+			*parity = NONE;
+		else if (g_ascii_strncasecmp(vector[2],"O",1) == 0)
+			*parity = ODD;
+		else if (g_ascii_strncasecmp(vector[2],"E",1) == 0)
+			*parity = EVEN;
+		else
+			*parity = NONE;
+	}
+	if (stop)
+		*stop = (gint)strtol(vector[3],NULL,10);
+	g_strfreev(vector);
+	return TRUE;
+}

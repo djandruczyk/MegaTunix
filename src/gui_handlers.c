@@ -1125,8 +1125,6 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	}
 	if (send)
 		send_to_ecu_f(widget,dload_val,TRUE);
-
-	/*	ms_send_to_ecu_f(canID, page, offset, size, dload_val, TRUE);*/
 	return retval;
 }
 
@@ -1170,7 +1168,6 @@ G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gin
 G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gboolean marked = FALSE;
-	gint page = -1;
 	/*
 	gint table_num = -1;
 	const gchar * widget_name = NULL;
@@ -1202,16 +1199,6 @@ G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, g
 
 testit:
 	marked = (GBOOLEAN)OBJ_GET(widget,"marked");
-	page = (GINT)OBJ_GET(widget,"page");
-	/*
-	table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-	widget_name = glade_get_widget_name(widget);
-	vector = g_strsplit(widget_name,"_",-1);
-	printf("Widget %s, table_num %i, x rows %i, y cols %i vector size %i\n",widget_name,table_num,firmware->table_params[table_num]->x_bincount,firmware->table_params[table_num]->y_bincount,g_strv_length(vector));
-	printf("Total entries in this table %s, index of this one %s\n",vector[g_strv_length(vector)-1],vector[g_strv_length(vector)-3]);
-	printf("Row %i, col %i\n",strtol(vector[g_strv_length(vector)-3],NULL,10)/firmware->table_params[table_num]->x_bincount,strtol(vector[g_strv_length(vector)-3],NULL,10)%firmware->table_params[table_num]->x_bincount);
-	g_strfreev(vector);
-	*/
 
 	if (marked)
 	{
@@ -1676,22 +1663,3 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 	g_free(tmpbuf);
 }
 
-
-void refresh_widgets_at_offset(gint page, gint offset)
-{
-	static GList ***ve_widgets = NULL;
-	static Firmware_Details *firmware = NULL;
-	static void (*update_widget_f)(gpointer, gpointer);
-	guint i = 0;
-
-	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
-	if (!ve_widgets)
-		ve_widgets = DATA_GET(global_data,"ve_widgets");
-	if (!update_widget_f)
-		get_symbol("update_widget",(void *)&update_widget_f);
-
-	for (i=0;i<g_list_length(ve_widgets[page][offset]);i++)
-		update_widget_f(g_list_nth_data(ve_widgets[page][offset],i),NULL);
-	update_ve3d_if_necessary(page,offset);
-}

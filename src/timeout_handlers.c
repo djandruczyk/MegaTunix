@@ -25,6 +25,7 @@
 #include <runtime_gui.h>
 #include <logviewer_gui.h>
 #include <notifications.h>
+#include <plugin.h>
 #include <rtv_processor.h>
 #include <serialio.h>
 #include <stringmatch.h>

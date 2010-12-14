@@ -25,7 +25,7 @@
  \brief win32_setup_serial_params() sets up the serial port attributes for win32
  by setting things basically for 8N1, no flow, no escapes, etc....
  */
-void win32_setup_serial_params(gint fd, gint baud)
+void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gint stop)
 {
 #ifdef __WIN32__
 	DCB dcb;
@@ -41,12 +41,29 @@ void win32_setup_serial_params(gint fd, gint baud)
 		dcb.BaudRate = CBR_9600;
 	else if (baud == 115200)
 		dcb.BaudRate = CBR_115200;
-	dcb.ByteSize = 8;
-	dcb.Parity   = NOPARITY;        /* NOPARITY and friends are */
-	dcb.StopBits = ONESTOPBIT;      /* #defined in windows.h */
+	dcb.ByteSize = bits;
+	switch (parity)
+	{
+		case NONE:
+			dcb.Parity   = NOPARITY;
+			dcb.fParity = FALSE;            /* Disabled */
+			break;
+		case ODD:
+			dcb.Parity   = ODDPARITY;
+			dcb.fParity = TRUE;             /* Enabled */
+			break;
+		case EVEN:
+			dcb.Parity   = EVENPARITY;
+			dcb.fParity = TRUE;             /* Enabled */
+			break;
+	}
+	if (stop == 2)
+		dcb.StopBits = TWOSTOPBIT;      /* #defined in windows.h */
+	else
+		dcb.StopBits = ONESTOPBIT;      /* #defined in windows.h */
+
 
 	dcb.fBinary = TRUE;		/* Enable binary mode */
-	dcb.fParity = FALSE;		/* Disabled */
 	dcb.fOutxCtsFlow = FALSE;	/* don't monitor CTS line */
 	dcb.fOutxDsrFlow = FALSE;	/* don't monitor DSR line */
 	dcb.fDsrSensitivity = FALSE;	/* ignore Dsr line */
@@ -75,7 +92,7 @@ void win32_setup_serial_params(gint fd, gint baud)
 	   timeouts.ReadTotalTimeoutMultiplier  = 1;
 	   timeouts.WriteTotalTimeoutMultiplier = 1;
 	   timeouts.WriteTotalTimeoutConstant   = 25;
-	   */
+	 */
 	timeouts.ReadTotalTimeoutConstant    = 100;
 	timeouts.ReadTotalTimeoutMultiplier  = 0;
 	timeouts.WriteTotalTimeoutConstant   = 0;

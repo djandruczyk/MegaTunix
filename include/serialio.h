@@ -18,7 +18,6 @@
 #include <config.h>
 #include <defines.h>
 #include <gio/gio.h>
-#include <winserialio.h>
 #ifndef __WIN32__
  #include <termios.h>
  #ifdef __PIS_SUPPORT__
@@ -65,6 +64,20 @@ struct _Serial_Params
 };
 #endif
 
+typedef enum
+{
+	NONE,
+	ODD,
+	EVEN
+}Parity;
+
+typedef enum
+{
+	INBOUND=0x2E0,
+	OUTBOUND,
+	BOTH
+}FlushDirection;
+
 /* Prototypes */
 gboolean open_serial(gchar *);
 void close_serial(void);
@@ -72,6 +85,7 @@ void setup_serial_params(void);
 void toggle_serial_control_lines(void );
 void flush_serial(gint,FlushDirection);
 void *serial_repair_thread(gpointer );
+gboolean parse_baud_str(gchar *, gint *, gint *, Parity *, gint *);
 /* Prototypes */
 
 #endif

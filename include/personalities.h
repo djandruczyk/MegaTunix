@@ -25,7 +25,7 @@ struct _PersonaElement
 	gchar *name;		/* Shortname in choice box */
 	gchar *ecu_lib;		/* ECU specific library */
 	gchar *common_lib;	/* Common Library */
-	gint baud;		/* Random data */
+	gchar *baud_str;	/* Baud string, i.e. 9600,8,n,1 */
 	gboolean def;		/* Default choice */
 };
 /* Prototypes */

@@ -14,16 +14,12 @@
 #ifndef __WINSERIALIO_H__
 #define __WINSERIALIO_H__
 
-typedef enum
-{
-	INBOUND=0x2E0,
-	OUTBOUND,
-	BOTH
-}FlushDirection;
+#include <gtk/gtk.h>
+#include <serialio.h>
 
 
 /* Prototypes */
-void win32_setup_serial_params(int, int);
+void win32_setup_serial_params(gint, gint, gint, Parity, gint);
 void win32_toggle_serial_control_lines(void);
 void win32_flush_serial(int, FlushDirection);
 /* Prototypes */

@@ -25,6 +25,7 @@
 #include <getfiles.h>
 #include <loader_common.h>
 #include <ms1_loader.h>
+#include <serialio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,7 +65,7 @@ gint setup_port(gint fd, gint baud)
 {
 #ifdef __WIN32__
 
-	win32_setup_serial_params(fd, baud);
+	win32_setup_serial_params(fd, baud, 8, NONE, 1);
 #else
 	gint _baud = 0;
 
