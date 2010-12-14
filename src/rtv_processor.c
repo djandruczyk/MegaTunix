@@ -215,19 +215,17 @@ store_it:
  */
 G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 {
-	static gint (*ms_get_ecu_data)(gint,gint,gint,DataSize) = NULL;
+	static gdouble (*common_rtv_processor)(gconstpointer *, gchar *, ComplexExprType);
 	static Firmware_Details *firmware = NULL;
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
 	guchar *raw_data = incoming;
 	gint total_symbols = 0;
 	gint i = 0;
-	gint page = 0;
 	DataSize size = MTX_U08;
 	gint offset = 0;
 	guint bitmask = 0;
 	guint bitshift = 0;
-	gint canID = 0;
 	void * evaluator = NULL;
 	gchar **names = NULL;
 	gdouble * values = NULL;
@@ -238,9 +236,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
-	if (!ms_get_ecu_data)
-		get_symbol("ms_get_ecu_data",(void *)&ms_get_ecu_data);
-
+	if (!common_rtv_processor)
+		get_symbol("common_rtv_processor",(void *)&common_rtv_processor);
 	symbols = (gchar **)DATA_GET(object,"expr_symbols");
 	expr_types = (gint *)DATA_GET(object,"expr_types");
 	total_symbols = (GINT)DATA_GET(object,"total_symbols");
@@ -258,7 +255,6 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 
 	for (i=0;i<total_symbols;i++)
 	{
-		page = 0;
 		offset = 0;
 		bitmask = 0;
 		bitshift = 0;
@@ -266,43 +262,13 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		{
 			case ECU_EMB_BIT:
 				size = MTX_U08;
-
-				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
-				page = (GINT) DATA_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (GINT) DATA_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
-				canID = (GINT) DATA_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
-				bitmask = (GINT) DATA_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				bitshift = get_bitshift(bitmask);
-				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((ms_get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
-				/*
-				   printf("raw ecu at page %i, offset %i is %i\n",page,offset,ms_get_ecu_data(canID,page,offset,size));
-				   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(ms_get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
-				 */
+				names[i] = g_strdup(symbols[i]);
+				values[i] = common_rtv_processor(object,symbols[i],ECU_EMB_BIT);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case ECU_VAR:
-				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
-				page = (GINT) DATA_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (GINT) DATA_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
-				canID = (GINT) DATA_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
-				size = (DataSize) DATA_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)ms_get_ecu_data(canID,page,offset,size);
+				names[i] = g_strdup(symbols[i]);
+				values[i] = (gdouble)common_rtv_processor(object,symbols[i], ECU_VAR);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_VAR:
@@ -396,19 +362,17 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
  */
 G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
 {
-	static gint (*ms_get_ecu_data)(gint,gint,gint,DataSize) = NULL;
+	static gdouble (*common_rtv_processor_obj)(GObject *, gchar *, ComplexExprType);
 	static Firmware_Details *firmware = NULL;
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
 	guchar *raw_data = incoming;
 	gint total_symbols = 0;
 	gint i = 0;
-	gint page = 0;
 	DataSize size = MTX_U08;
 	gint offset = 0;
 	guint bitmask = 0;
 	guint bitshift = 0;
-	gint canID = 0;
 	void * evaluator = NULL;
 	gchar **names = NULL;
 	gdouble * values = NULL;
@@ -419,9 +383,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
-	if (!ms_get_ecu_data)
-		get_symbol("ms_get_ecu_data",(void *)&ms_get_ecu_data);
-
+	if (!common_rtv_processor_obj)
+		get_symbol("common_rtv_processor_obj",(void *)&common_rtv_processor_obj);
 
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
 	expr_types = (gint *)OBJ_GET(object,"expr_types");
@@ -440,7 +403,6 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 
 	for (i=0;i<total_symbols;i++)
 	{
-		page = 0;
 		offset = 0;
 		bitmask = 0;
 		bitshift = 0;
@@ -448,43 +410,13 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		{
 			case ECU_EMB_BIT:
 				size = MTX_U08;
-
-				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
-				page = (GINT) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (GINT) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
-				canID = (GINT) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_bitmask",symbols[i]);
-				bitmask = (GINT) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				bitshift = get_bitshift(bitmask);
-				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)(((ms_get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift);
-				/*
-				   printf("raw ecu at page %i, offset %i is %i\n",page,offset,ms_get_ecu_data(canID,page,offset,size));
-				   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(ms_get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
-				 */
+				names[i] = g_strdup(symbols[i]);
+				values[i] = common_rtv_processor_obj(object,symbols[i],ECU_EMB_BIT);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case ECU_VAR:
-				tmpbuf = g_strdup_printf("%s_page",symbols[i]);
-				page = (GINT) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
-				offset = (GINT) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_canID",symbols[i]);
-				canID = (GINT) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
-				size = (DataSize) OBJ_GET(object,tmpbuf);
-				g_free(tmpbuf);
-				names[i]=g_strdup(symbols[i]);
-				values[i]=(gdouble)ms_get_ecu_data(canID,page,offset,size);
+				names[i] = g_strdup(symbols[i]);
+				values[i] = (gdouble)common_rtv_processor_obj(object,symbols[i], ECU_VAR);
 				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_VAR:

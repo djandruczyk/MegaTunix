@@ -23,8 +23,8 @@ extern gint (*translate_string_f)(const gchar *);
 /* Externs */
 
 /* Prototypes */
-void common_rtv_loader(gconstpointer *, ConfigFile *, gchar *, gint, ComplexExprType);
-void common_rtv_loader_obj(GObject *, ConfigFile *, gchar *, gint, ComplexExprType);
+void common_rtv_loader(gconstpointer *, ConfigFile *, gchar *, gchar *, ComplexExprType);
+void common_rtv_loader_obj(GObject *, ConfigFile *, gchar *, gchar *, ComplexExprType);
 /* Prototypes */
 
 #endif

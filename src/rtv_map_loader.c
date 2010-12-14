@@ -416,7 +416,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
  */
 G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
 {
-	static void (*common_rtv_loader)(gconstpointer *,ConfigFile *,gchar * section, gint, ComplexExprType);
+	static void (*common_rtv_loader)(gconstpointer *,ConfigFile *,gchar * section, gchar *, ComplexExprType);
 	static Firmware_Details *firmware = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;
@@ -472,10 +472,10 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 		switch ((ComplexExprType)expr_types[i])
 		{
 			case ECU_EMB_BIT:
-				common_rtv_loader(object,cfgfile,section,i,ECU_EMB_BIT);
+				common_rtv_loader(object,cfgfile,section,expr_symbols[i],ECU_EMB_BIT);
 				break;
 			case ECU_VAR:
-				common_rtv_loader(object,cfgfile,section,i,ECU_VAR);
+				common_rtv_loader(object,cfgfile,section,expr_symbols[i],ECU_VAR);
 				break;
 			case RAW_VAR:
 				/* RAW variable */
@@ -534,7 +534,7 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
  */
 G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
-	static void (*common_rtv_loader_obj)(GObject *,ConfigFile *,gchar * section, gint, ComplexExprType);
+	static void (*common_rtv_loader_obj)(GObject *,ConfigFile *,gchar * section, gchar *, ComplexExprType);
 	static Firmware_Details *firmware = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **expr_symbols = NULL;
@@ -591,10 +591,10 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 		switch ((ComplexExprType)expr_types[i])
 		{
 			case ECU_EMB_BIT:
-				common_rtv_loader_obj(object,cfgfile,section,i,ECU_EMB_BIT);
+				common_rtv_loader_obj(object,cfgfile,section,expr_symbols[i],ECU_EMB_BIT);
 				break;
 			case ECU_VAR:
-				common_rtv_loader_obj(object,cfgfile,section,i,ECU_VAR);
+				common_rtv_loader_obj(object,cfgfile,section,expr_symbols[i],ECU_VAR);
 				break;
 			case RAW_VAR:
 				/* RAW variable */
