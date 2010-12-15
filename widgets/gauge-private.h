@@ -104,6 +104,8 @@ gboolean mtx_gauge_face_button_release (GtkWidget *,GdkEventButton *);
 gboolean mtx_gauge_face_key_event (GtkWidget *,GdkEventKey *);
 gboolean mtx_gauge_face_motion_event (GtkWidget *,GdkEventMotion *);
 void mtx_gauge_face_size_request (GtkWidget *, GtkRequisition *);
+void mtx_gauge_face_size_allocate (GtkWidget *, GtkAllocation *);
+void mtx_gauge_face_realize(GtkWidget *);
 void mtx_gauge_face_init (MtxGaugeFace *gauge);
 void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name);
 void generate_gauge_background(MtxGaugeFace *);

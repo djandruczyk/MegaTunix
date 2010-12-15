@@ -87,6 +87,8 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	widget_class->key_press_event = mtx_gauge_face_key_event;
 	/* Motion event not needed, as unused currently */
 	/*widget_class->motion_notify_event = mtx_gauge_face_motion_event;*/
+	/* Realize and size_allocate are NOT NEEDED casue GtkDrawingArea
+	   does it for us */
 	widget_class->size_request = mtx_gauge_face_size_request;
 	obj_class->finalize = mtx_gauge_face_finalize;
 
@@ -914,7 +916,11 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 	GdkPixmap *pmap = NULL;
 	GtkStateType state = GTK_STATE_NORMAL;
 
-#if GTK_MINOR_VERSION >= 20
+	g_return_val_if_fail(widget != NULL, FALSE);
+	g_return_val_if_fail(MTX_IS_GAUGE_FACE(widget), FALSE);
+	g_return_val_if_fail(event != NULL, FALSE);
+
+#if GTK_MINOR_VERSION >= 18
 	state = gtk_widget_get_state(GTK_WIDGET(widget));
 #else
 	state = GTK_WIDGET_STATE (widget);
@@ -1671,9 +1677,8 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
 	}
 	return FALSE;
 }
+
 					       
-
-
 /*!
  \brief sets the INITIAL sizeof the widget
  \param gauge (GtkWidget *) pointer to the gauge widget
@@ -1682,9 +1687,14 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
  */
 void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
+	g_return_if_fail(widget != NULL);
+	g_return_if_fail(MTX_IS_GAUGE_FACE(widget));
+	g_return_if_fail(requisition != NULL);
+
 	requisition->width = 75;
 	requisition->height = 75;
 }
+
 
 
 void calc_bounding_box(MtxPoint *coords, gint count, GdkRectangle *box)
