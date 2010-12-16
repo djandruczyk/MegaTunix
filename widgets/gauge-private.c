@@ -112,14 +112,6 @@ void mtx_gauge_face_finalize (GObject *gauge)
 		g_object_unref(priv->bg_pixmap);
 	if (priv->tmp_pixmap)
 		g_object_unref(priv->tmp_pixmap);
-	if (priv->bm_gc)
-		g_object_unref(priv->bm_gc);
-	if (priv->gc)
-		g_object_unref(priv->gc);
-	if (priv->colormap)
-		g_object_unref(priv->colormap);
-	if (priv->cr)
-		cairo_destroy(priv->cr);
 	if (priv->font_options)
 		cairo_font_options_destroy(priv->font_options);
 	if (priv->layout)
@@ -325,11 +317,8 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->value_xpos = 0.0;
 	priv->value_ypos = 0.40;
 	priv->value_font_scale = 0.2;
-	priv->cr = NULL;
 	priv->antialias = TRUE;
 	priv->show_value = TRUE;
-	priv->colormap = gdk_colormap_get_system();
-	priv->gc = NULL;
 	priv->show_tattletale = FALSE;
 	priv->tattletale_alpha = 0.5;
 	priv->peak = priv->lbound;
@@ -564,12 +553,11 @@ void update_gauge_position (MtxGaugeFace *gauge)
 #else
 			state = GTK_WIDGET_STATE(widget);
 #endif
-			gdk_draw_drawable(priv->tmp_pixmap,
-					widget->style->fg_gc[state],
-					priv->bg_pixmap,
-					0,0,
-					0,0,
-					widget->allocation.width,widget->allocation.height);
+			cr = gdk_cairo_create(priv->tmp_pixmap);
+			gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
+			cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+			cairo_fill(cr);
+			cairo_destroy(cr);
 			cr = gdk_cairo_create (priv->tmp_pixmap);
 
 			cairo_set_source_rgb(cr,range->color[priv->daytime_mode].red/65535.0,
@@ -591,22 +579,23 @@ cairo_jump_out_of_alerts:
 	state = GTK_WIDGET_STATE(widget);
 #endif
 	if (!alert)
+	{
 		/* Not in alert status,  copy from bg_pixmap to current pixmap */
-		gdk_draw_drawable(priv->pixmap,
-				widget->style->fg_gc[state],
-				priv->bg_pixmap,
-				0,0,
-				0,0,
-				widget->allocation.width,widget->allocation.height);
+		cr = gdk_cairo_create(priv->pixmap);
+		gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
+		cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+	}
 	else
+	{
 		/* In ALERT status, copy from tmp_pixmap to current pixmap instead */
-		gdk_draw_drawable(priv->pixmap,
-				widget->style->fg_gc[state],
-				priv->tmp_pixmap,
-				0,0,
-				0,0,
-				widget->allocation.width,widget->allocation.height);
-
+		cr = gdk_cairo_create(priv->pixmap);
+		gdk_cairo_set_source_pixmap(cr,priv->tmp_pixmap,0,0);
+		cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+	}
 
 	cr = gdk_cairo_create (priv->pixmap);
 	cairo_set_font_options(cr,priv->font_options);
@@ -757,10 +746,7 @@ cairo_jump_out_of_alerts:
  */
 gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
-	GdkColormap *colormap;
-	GdkColor black;
-	GdkColor white;
-	GdkGC *gc;
+	cairo_t *cr = NULL;
 
 	MtxGaugeFace * gauge = MTX_GAUGE_FACE(widget);
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
@@ -770,10 +756,6 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		priv->w = widget->allocation.width;
 		priv->h = widget->allocation.height;
 
-		if (priv->gc)
-			g_object_unref(priv->gc);
-		if (priv->bm_gc)
-			g_object_unref(priv->bm_gc);
 		if (priv->layout)
 			g_object_unref(priv->layout);
 		/* Shape combine bitmap */
@@ -818,9 +800,6 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		priv->needle_bounding_box.height = priv->h;
 		gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
 		priv->layout = gtk_widget_create_pango_layout(GTK_WIDGET(&gauge->parent),NULL);	
-		priv->gc = gdk_gc_new(priv->bg_pixmap);
-		gdk_gc_set_colormap(priv->gc,priv->colormap);
-
 		priv->xc = priv->w / 2;
 		priv->yc = priv->h / 2;
 		priv->radius = MIN (priv->w/2, priv->h/2); 
@@ -832,65 +811,24 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				CAIRO_ANTIALIAS_GRAY);
 
 		/* Shape combine mask bitmap */
-		colormap = gdk_colormap_get_system ();
-		gdk_color_parse ("black", & black);
-		gdk_colormap_alloc_color(colormap, &black,TRUE,TRUE);
-		gdk_color_parse ("white", & white);
-		gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
-		gc = gdk_gc_new (priv->bitmap);
-		gdk_gc_set_foreground (gc, &black);
-		gdk_draw_rectangle (priv->bitmap,
-				gc,
-				TRUE,  /* filled */
-				0,     /* x */
-				0,     /* y */
-				priv->w,
-				priv->h);
-
-		gdk_gc_set_foreground (gc, & white);
+		   cr = gdk_cairo_create(priv->bitmap);
+		   cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+		   cairo_paint(cr);
+		   cairo_set_operator(cr,CAIRO_OPERATOR_OVER);
+		   cairo_set_source_rgb (cr, 0,0,0);
 		/* Drag border boxes... */
-
 		if (priv->show_drag_border)
 		{
-			gdk_draw_rectangle (priv->bitmap,
-					gc,
-					TRUE,  /* filled */
-					0,     /* x */
-					0,     /* y */
-					DRAG_BORDER,
-					DRAG_BORDER);
-			gdk_draw_rectangle (priv->bitmap,
-					gc,
-					TRUE,  /* filled */
-					priv->w-DRAG_BORDER,     /* x */
-					0,     /* y */
-					DRAG_BORDER,
-					DRAG_BORDER);
-			gdk_draw_rectangle (priv->bitmap,
-					gc,
-					TRUE,  /* filled */
-					priv->w-DRAG_BORDER,     /* x */
-					priv->h-DRAG_BORDER,     /* y */
-					DRAG_BORDER,
-					DRAG_BORDER);
-			gdk_draw_rectangle (priv->bitmap,
-					gc,
-					TRUE,  /* filled */
-					0,     /* x */
-					priv->h-DRAG_BORDER,     /* y */
-					DRAG_BORDER,
-					DRAG_BORDER);
+			cairo_rectangle(cr,0,0,DRAG_BORDER,DRAG_BORDER);
+			cairo_rectangle(cr,priv->w-DRAG_BORDER,0,DRAG_BORDER,DRAG_BORDER);
+			cairo_rectangle(cr,priv->w-DRAG_BORDER,priv->h-DRAG_BORDER,DRAG_BORDER,DRAG_BORDER);
+			cairo_rectangle(cr,0,priv->h-DRAG_BORDER,DRAG_BORDER,DRAG_BORDER);
+			cairo_fill(cr);
 		}
-		gdk_draw_arc (priv->bitmap,
-				gc,
-				TRUE,     /* filled */
-				priv->xc-priv->radius,
-				priv->yc-priv->radius,
-				2*(priv->radius),
-				2*(priv->radius),
-				0,        /* angle 1 */
-				360*64);  /* angle 2: full circle */
-		g_object_unref(gc);
+		   cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
+		   cairo_fill(cr);
+		   cairo_stroke(cr);
+		   cairo_destroy(cr);
 
 	}
 	if (priv->radius > 0)
@@ -913,7 +851,6 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFacePrivate * priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
 	cairo_t *cr = NULL;
-	GdkPixmap *pmap = NULL;
 	GtkStateType state = GTK_STATE_NORMAL;
 
 	g_return_val_if_fail(widget != NULL, FALSE);
@@ -932,38 +869,22 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
 		{
-			gdk_draw_drawable(widget->window,
-					widget->style->fg_gc[state],
-					priv->pixmap,
-					event->area.x, event->area.y,
-					event->area.x, event->area.y,
-					event->area.width, event->area.height);
+			cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_pixmap(cr,priv->pixmap,event->area.x,event->area.y);
+			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+			cairo_fill(cr);
+			cairo_destroy(cr);
 		}
 		else
 		{
-			pmap=gdk_pixmap_new(widget->window,
-					priv->w,priv->h,
-					gtk_widget_get_visual(widget)->depth);
-			gdk_draw_drawable(pmap,
-					widget->style->fg_gc[state],
-					priv->pixmap,
-					event->area.x, event->area.y,
-					event->area.x, event->area.y,
-					event->area.width, event->area.height);
-			cr = gdk_cairo_create (pmap);
+			cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_pixmap(cr,priv->pixmap,event->area.x,event->area.y);
+			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
 			cairo_rectangle (cr,
 					0,0,priv->w,priv->h);
 			cairo_fill(cr);
 			cairo_destroy(cr);
-			gdk_draw_drawable(widget->window,
-					widget->style->fg_gc[state],
-					pmap,
-					event->area.x, event->area.y,
-					event->area.x, event->area.y,
-					event->area.width, event->area.height);
-			g_object_unref(pmap);
-
 		}
 	if (GTK_IS_WINDOW(widget->parent))
 	{
@@ -1510,12 +1431,11 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 #else
 	state = GTK_WIDGET_STATE(widget);
 #endif
-	gdk_draw_drawable(priv->tmp_pixmap,
-			widget->style->fg_gc[state],
-			priv->bg_pixmap,
-			0,0,
-			0,0,
-			widget->allocation.width,widget->allocation.height);
+	cr = gdk_cairo_create(priv->tmp_pixmap);
+	gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
+	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+	cairo_fill(cr);
+	cairo_destroy(cr);
 	priv->last_alert_index = -1;
 }
 
