@@ -145,7 +145,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		if (DATA_GET(global_data,"leaving") || 
 				DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
-			printf("thread dispatcher told to exit!\n");
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(io_data_queue) != NULL)
 			{}

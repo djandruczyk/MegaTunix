@@ -871,7 +871,7 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 #endif
 		{
 			cr = gdk_cairo_create(widget->window);
-			gdk_cairo_set_source_pixmap(cr,priv->pixmap,event->area.x,event->area.y);
+			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
 			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 			cairo_fill(cr);
 			cairo_destroy(cr);
@@ -879,7 +879,7 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 		else
 		{
 			cr = gdk_cairo_create(widget->window);
-			gdk_cairo_set_source_pixmap(cr,priv->pixmap,event->area.x,event->area.y);
+			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
 			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
 			cairo_rectangle (cr,
