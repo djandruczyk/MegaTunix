@@ -18,36 +18,43 @@
 #include <defines.h>
 #include <enums.h>
 
+#ifdef __MS1_PLUGIN_C__
+#define EXTERN
+#else
+#define EXTERN extern
+#endif
+
+
+/* Function Pointers */
+EXTERN void (*error_msg_f)(const gchar *);
+EXTERN gboolean (*get_symbol_f)(const gchar *,void **);
+EXTERN void (*io_cmd_f)(const gchar *,void *);
+EXTERN void (*dbg_func_f)(int,gchar *);
+EXTERN void (*start_tickler_f)(gint);
+EXTERN void (*stop_tickler_f)(gint);
+EXTERN void (*signal_read_rtvars_f)(void);
+EXTERN gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
+EXTERN void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
+EXTERN GtkWidget *(*lookup_widget_f)(const gchar *);
+EXTERN gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
+EXTERN GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
+EXTERN gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
+EXTERN gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
+EXTERN void (*recalc_table_limits_f)(gint, gint);
+EXTERN glong (*get_extreme_from_size_f)(DataSize, Extreme);
+EXTERN GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
+EXTERN gint (*convert_before_download_f)(GtkWidget *, gfloat);
+EXTERN guint (*get_bitshift_f)(guint);
+EXTERN void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
+EXTERN void (*get_essentials_f)(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
+EXTERN gfloat (*convert_after_upload_f)(GtkWidget *);
+EXTERN gint (*get_ecu_data_f)(GtkWidget *);
+/* Function Pointers */
+
 /* Prototypes */
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
 void register_ecu_enums(void);
 /* Prototypes */
-
-/* Function Pointers */
-void (*error_msg_f)(const gchar *);
-gboolean (*get_symbol_f)(const gchar *,void **);
-void (*io_cmd_f)(const gchar *,void *);
-void (*dbg_func_f)(int,gchar *);
-void (*start_tickler_f)(gint);
-void (*stop_tickler_f)(gint);
-void (*signal_read_rtvars_f)(void);
-gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
-void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
-GtkWidget *(*lookup_widget_f)(const gchar *);
-gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
-GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
-gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
-gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
-void (*recalc_table_limits_f)(gint, gint);
-glong (*get_extreme_from_size_f)(DataSize, Extreme);
-GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
-gint (*convert_before_download_f)(GtkWidget *, gfloat);
-guint (*get_bitshift_f)(guint);
-void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
-void (*get_essentials_f)(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
-gfloat (*convert_after_upload_f)(GtkWidget *);
-gint (*get_ecu_data_f)(GtkWidget *);
-/* Function Pointers */
 
 #endif

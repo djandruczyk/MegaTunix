@@ -17,8 +17,6 @@
 #include <defines.h>
 #include <gtk/gtk.h>
 
-/* Externs */
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
 /* Prototypes */
 void enable_reboot_button_pf(void);
 /* Prototypes */

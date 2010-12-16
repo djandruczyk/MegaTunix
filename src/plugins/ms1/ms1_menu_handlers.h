@@ -19,8 +19,6 @@
 #include <gtk/gtk.h>
 #include <threads.h>
 
-/* Externs */
-/* Externs */
 
 /* Prototypes */
 void ece_plugin_menu_setup(GladeXML *);

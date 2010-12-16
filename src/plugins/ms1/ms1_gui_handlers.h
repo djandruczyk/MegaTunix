@@ -17,27 +17,6 @@
 #include <enums.h>
 #include <gtk/gtk.h>
 
-/* Externs */
-extern void (*dbg_func_f)(int,gchar *);
-extern gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
-extern gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer);
-extern gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
-extern void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
-extern void (*recalc_table_limits_f)(gint, gint);
-extern glong (*get_extreme_from_size_f)(DataSize, Extreme);
-extern GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
-extern gint (*convert_before_download_f)(GtkWidget *, gfloat);
-extern void (*start_tickler_f)(gint);
-extern void (*stop_tickler_f)(gint);
-extern void (*io_cmd_f)(const gchar *,void *);
-extern guint (*get_bitshift_f)(guint);
-extern void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
-extern void (*get_essentials_f)(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
-extern gfloat (*convert_after_upload_f)(GtkWidget *);
-extern gint (*get_ecu_data_f)(GtkWidget *);
-
-/* Externs */
-
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
 gboolean ecu_spin_button_handler(GtkWidget *, gpointer);

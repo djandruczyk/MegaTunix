@@ -18,6 +18,7 @@
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <ms1_plugin.h>
 #include <ms1_tlogger.h>
 
 static TTMon_Data *ttm_data;

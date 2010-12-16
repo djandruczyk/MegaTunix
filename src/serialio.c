@@ -215,12 +215,30 @@ G_MODULE_EXPORT void setup_serial_params(void)
 
 	/* Set baud (posix way) */
 
-	if (baudrate == 9600)
-		baud = B9600;
-	else if (baudrate == 115200)
-		baud = B115200;
-	else if (baudrate == 8192)
-		baud = B38400;
+	switch (baudrate)
+	{
+		case 8192:
+			baud = B38400;
+			break;
+		case 9600:
+			baud = B9600;
+			break;
+		case 19200:
+			baud = B19200;
+			break;
+		case 38400:
+			baud = B38400;
+			break;
+		case 57600:
+			baud = B57600;
+			break;
+		case 115200:
+			baud = B115200;
+			break;
+		default:
+			/* Assume 9600 */
+			baud = B9600;
+	}
 
 	cfsetspeed(&serial_params->newtio, baud);
 
