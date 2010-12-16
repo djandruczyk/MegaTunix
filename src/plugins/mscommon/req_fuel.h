@@ -16,18 +16,6 @@
 
 #include <gtk/gtk.h>
 
-/* Externs */
-extern guint (*get_bitshift_f)(guint);
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
-extern void (*set_group_color_f)(GuiColor, const gchar * );
-extern GtkWidget *(*spin_button_handler_f)(GtkWidget *,gpointer);
-extern gint (*get_multiplier_f)(DataSize );
-extern glong (*get_extreme_from_size_f)(DataSize, Extreme);
-extern gfloat (*convert_after_upload_f)(GtkWidget *);
-extern gboolean (*entry_changed_handler_f)(GtkWidget *, gpointer );
-extern GdkColor (*get_colors_from_hue_f)(gfloat, gfloat, gfloat);
-/* Externs */
-
 
 typedef enum
 {

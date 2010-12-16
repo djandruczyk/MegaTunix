@@ -18,6 +18,7 @@
 #include <gtk/gtk.h>
 #include <mscommon_gui_handlers.h>
 #include <mscommon_menu_handlers.h>
+#include <mscommon_plugin.h>
 
 extern gconstpointer *global_data;
 

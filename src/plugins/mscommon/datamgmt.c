@@ -18,6 +18,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
+#include <mscommon_plugin.h>
 #include <string.h>
 
 

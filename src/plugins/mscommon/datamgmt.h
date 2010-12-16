@@ -17,10 +17,6 @@
 #include <enums.h>
 #include <gtk/gtk.h>
 
-/* Externs */
-extern gboolean (*get_symbol_f)(const gchar *, void **);
-/* Externs */
-
 /* Prototypes */
 gint ms_get_ecu_data(gint, gint, gint, DataSize); 
 gint ms_get_ecu_data_last(gint, gint, gint, DataSize); 

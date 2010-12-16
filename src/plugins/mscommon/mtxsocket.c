@@ -30,6 +30,7 @@
 #include <gio/gio.h>
 #include <init.h>
 #include <mscommon_comms.h>
+#include <mscommon_plugin.h>
 #include <mtxsocket.h>
 #include <rtv_map_loader.h>
 #include <serialio.h>
@@ -2004,6 +2005,7 @@ G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 #include <glib.h>
 #include <init.h>
 #include <mscommon_comms.h>
+#include <mscommon_plugin.h>
 #include <mtxsocket.h>
 #ifndef __WIN32__
 #include <arpa/inet.h>

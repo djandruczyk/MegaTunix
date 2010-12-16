@@ -17,14 +17,9 @@
 #include <defines.h>
 #include <gtk/gtk.h>
 
-/* Externs */
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
-/* Externs */
-
 /* Prototypes */
  gboolean flip_table_gen_temp_label(GtkWidget *, gpointer);
  gboolean table_gen_process_and_dl(GtkWidget *, gpointer);
-
 /* Prototypes */
 
 #endif

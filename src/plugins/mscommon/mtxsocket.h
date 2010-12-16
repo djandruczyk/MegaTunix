@@ -18,24 +18,6 @@
 #include <enums.h>
 #include <threads.h>
 
-/* Externs */
-extern void (*io_cmd_f)(const gchar *,void *);
-extern void (*dbg_func_f)(gint, gchar *);
-extern void (*cleanup_f)(void *);
-extern void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
-extern void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
-extern gboolean (*queue_function_f)(const gchar * );
-extern gboolean (*lookup_precision_f)(const gchar *, gint *);
-extern gboolean (*lookup_current_value_f)(const gchar *, gfloat *);
-extern gint (*translate_string_f)(const gchar *);
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
-extern void (*set_group_color_f)(GuiColor, const gchar * );
-extern OutputData *(*initialize_outputdata_f)(void);
-extern void (*thread_refresh_widget_range_f)(gint, gint, gint);
-extern void (*_set_sized_data_f)(guint8 *, gint, DataSize, gint, gboolean);
-extern gint (*_get_sized_data_f)(guint8 *, gint, DataSize, gboolean);
-/* Externs */
-
 
 #if GTK_MINOR_VERSION >= 18
 #include <gio/gio.h>

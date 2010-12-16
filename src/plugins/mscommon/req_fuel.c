@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 #include <mscommon_comms.h>
+#include <mscommon_plugin.h>
 #include <req_fuel.h>
 
 extern gconstpointer *global_data;

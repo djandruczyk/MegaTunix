@@ -18,10 +18,6 @@
 #include <gtk/gtk.h>
 #include <threads.h>
 
-/* Externs */
-extern void (*dbg_func_f)(gint, gchar *);
-/* Externs */
-
 /* Prototypes */
 void dump_output(gint, guchar *);
 gint read_data(gint , void **, gboolean);

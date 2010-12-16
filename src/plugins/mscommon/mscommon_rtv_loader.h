@@ -18,11 +18,6 @@
 #include <gtk/gtk.h>
 #include <threads.h>
 
-/* Externs */
-extern gint (*translate_string_f)(const gchar *);
-extern void (*dbg_func_f)(gint, gchar *);
-/* Externs */
-
 /* Prototypes */
 void common_rtv_loader(gconstpointer *, ConfigFile *, gchar *, gchar *, ComplexExprType);
 void common_rtv_loader_obj(GObject *, ConfigFile *, gchar *, gchar *, ComplexExprType);

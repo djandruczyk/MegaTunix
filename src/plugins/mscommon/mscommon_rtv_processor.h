@@ -18,10 +18,6 @@
 #include <gtk/gtk.h>
 #include <threads.h>
 
-/* Externs */
-extern guint (*get_bitshift_f)(guint);
-/* Externs */
-
 /* Prototypes */
 gdouble common_rtv_processor(gconstpointer *, gchar *, ComplexExprType);
 gdouble common_rtv_processor_obj(GObject *, gchar *, ComplexExprType);

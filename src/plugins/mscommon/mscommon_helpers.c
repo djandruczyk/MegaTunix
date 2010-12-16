@@ -21,6 +21,7 @@
 #include <firmware.h>
 #include <mscommon_comms.h>
 #include <mscommon_helpers.h>
+#include <mscommon_plugin.h>
 #include <mtxsocket.h>
 #include <stdio.h>
 #include <stdlib.h>

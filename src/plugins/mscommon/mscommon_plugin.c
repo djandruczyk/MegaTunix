@@ -11,11 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#define __MSCOMMON_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
 #include <mscommon_plugin.h>
 #include <mscommon_helpers.h>
 #include <mscommon_gui_handlers.h>
+#include <mscommon_plugin.h>
 #include <interrogate.h>
 #include <mtxsocket.h>
 #include <gtk/gtk.h>

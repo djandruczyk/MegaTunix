@@ -20,6 +20,7 @@
 #include <dep_loader.h>
 #include <enums.h>
 #include <firmware.h>
+#include <mscommon_plugin.h>
 #include <stdlib.h>
 
 extern gconstpointer *global_data;

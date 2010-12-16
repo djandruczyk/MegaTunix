@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <init.h>
 #include <interrogate.h>
+#include <mscommon_plugin.h>
 #include <multi_expr_loader.h>
 #include <serialio.h>
 #include <stdlib.h>

@@ -21,6 +21,7 @@
 #include <glade/glade.h>
 #include <mscommon_comms.h>
 #include <mscommon_gui_handlers.h>
+#include <mscommon_plugin.h>
 #include <req_fuel.h>
 #include <serialio.h>
 #include <stdlib.h>

@@ -25,6 +25,7 @@
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
 #include <mscommon_comms.h>
+#include <mscommon_plugin.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>

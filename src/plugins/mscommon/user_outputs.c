@@ -21,6 +21,7 @@
 #include <enums.h>
 #include <lookuptables.h>
 #include <mscommon_comms.h>
+#include <mscommon_plugin.h>
 #include <multi_expr_loader.h>
 #include <mtxmatheval.h>
 #include <rtv_map_loader.h>

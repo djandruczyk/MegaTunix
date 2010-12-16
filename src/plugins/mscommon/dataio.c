@@ -19,6 +19,7 @@
 #include <enums.h>
 #include <errno.h>
 #include <firmware.h>
+#include <mscommon_plugin.h>
 #include <serialio.h>
 #include <string.h>
 #include <sys/types.h>

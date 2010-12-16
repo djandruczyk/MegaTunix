@@ -17,14 +17,6 @@
 #include <enums.h>
 #include <gtk/gtk.h>
 
-/* Externs */
-extern void (*dbg_func_f)(gint, gchar *);
-extern void (*io_cmd_f)(const gchar *,void *);
-extern void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
-
-
-/* Externs */
 
 typedef enum
 {

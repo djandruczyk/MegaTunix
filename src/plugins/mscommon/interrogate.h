@@ -18,24 +18,6 @@
 #include <gtk/gtk.h>
 #include <firmware.h>
 
-/* Externs */
-extern void (*dbg_func_f)(gint, gchar *);
-extern void (*io_cmd_f)(const gchar *,void *);
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
-extern void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
-extern void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean,gboolean);
-extern gboolean (*get_file_api_f)(ConfigFile *, gint *, gint *);
-extern gint (*translate_string_f)(const gchar *);
-extern void (*mem_alloc_f)(void);
-extern void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
-extern void *(*eval_create_f)(char *);
-extern void (*thread_widget_set_sensitive_f)(const gchar *, gboolean);
-extern void (*get_table_f)(gpointer, gpointer, gpointer);
-extern void (*free_multi_source_f)(gpointer);
-extern void (*load_dependancies_obj_f)(GObject *,ConfigFile * ,gchar *, gchar *);
-extern void (*flush_serial_f)(gint, gint);
-extern char *(*regex_wrapper_f)(char *, char *, int *);
-/* Externs */
 
 typedef enum
 {

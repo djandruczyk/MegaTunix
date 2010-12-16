@@ -18,17 +18,6 @@
 #include <gtk/gtk.h>
 #include <threads.h>
 
-/* Externs */
-extern void (*io_cmd_f)(const gchar *,void *);
-extern GList *(*get_list_f)(gchar *);
-extern void (*set_widget_sensitive_f)(gpointer, gpointer);
-extern OutputData *(*initialize_outputdata_f)(void);
-extern void (*set_title_f)(const gchar *);
-extern void (*set_widget_sensitive_f)(gpointer, gpointer);
-extern void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
-extern void (*process_rt_vars_f)(void * );
-extern void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
-
 /* Prototypes */
 void spawn_read_ve_const_pf(void);
 void enable_get_data_buttons_pf(void);

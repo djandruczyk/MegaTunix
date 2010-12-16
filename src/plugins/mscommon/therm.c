@@ -18,8 +18,9 @@
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
-#include <mscommon_comms.h>
 #include <math.h>
+#include <mscommon_comms.h>
+#include <mscommon_plugin.h>
 #include <therm.h>
 
 

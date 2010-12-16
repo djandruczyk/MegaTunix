@@ -17,10 +17,6 @@
 #include <defines.h>
 #include <gtk/gtk.h>
 
-/* Externs */
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
-/* Externs */
-
 /* Prototypes */
  gboolean afr_calibrate_calc_and_dl(GtkWidget *, gpointer);
  gboolean populate_afr_calibrator_combo(GtkWidget *);

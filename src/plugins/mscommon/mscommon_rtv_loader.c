@@ -17,6 +17,7 @@
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
+#include <mscommon_plugin.h>
 #include <mscommon_rtv_loader.h>
 
 extern gconstpointer *global_data;

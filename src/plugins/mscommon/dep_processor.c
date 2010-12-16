@@ -20,6 +20,7 @@
 #include <debugging.h>
 #include <dep_processor.h>
 #include <enums.h>
+#include <mscommon_plugin.h>
 
 
 /*!

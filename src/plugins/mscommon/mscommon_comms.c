@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <mscommon_comms.h>
 #include <mscommon_gui_handlers.h>
+#include <mscommon_plugin.h>
 #include <mtxsocket.h>
 #include <gtk/gtk.h>
 #include <firmware.h>

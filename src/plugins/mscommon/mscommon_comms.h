@@ -18,17 +18,6 @@
 #include <gtk/gtk.h>
 #include <threads.h>
 
-/* Externs */
-extern void (*dbg_func_f)(gint, gchar *);
-extern void (*io_cmd_f)(const gchar *,void *);
-extern OutputData *(*initialize_outputdata_f)(void);
-extern void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
-extern void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
-extern gint (*get_multiplier_f)(DataSize);
-extern gboolean (*queue_function_f)(const gchar * );
-extern void (*thread_refresh_widgets_at_offset_f)(gint, gint);
-extern gboolean (*get_symbol_f)(const gchar *, void **);
-
 
 /* Prototypes */
 void queue_burn_ecu_flash(gint);
@@ -47,8 +36,6 @@ void *restore_update(gpointer);
 void start_restore_monitor(void);
 void *serial_repair_thread(gpointer);
 void signal_read_rtvars(void);
-
-
 /* Prototypes */
 
 #endif
