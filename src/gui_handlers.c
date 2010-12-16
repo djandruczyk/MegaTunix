@@ -1256,7 +1256,11 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 	if (tab_ident == RUNTIME_TAB)
 		DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
 
-	if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
+#if GTK_MINOR_VERSION >= 18
+	if ((OBJ_GET(widget,"table_num")) && (gtk_widget_get_state(widget) != GTK_STATE_INSENSITIVE))
+#else
+	if ((OBJ_GET(widget,"table_num")) && (GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE))
+#endif
 		active_table = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	else
 		active_table = -1;
@@ -1270,7 +1274,11 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
 			widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(sub),sub_page);
 /*			printf("subtable found, searching for active page\n"); */
-			if ((OBJ_GET(widget,"table_num")) && GTK_WIDGET_SENSITIVE(widget))
+#if GTK_MINOR_VERSION >= 18
+			if ((OBJ_GET(widget,"table_num")) && (gtk_widget_get_state(widget) != GTK_STATE_INSENSITIVE))
+#else
+			if ((OBJ_GET(widget,"table_num")) && (GTK_WIDGET_SENSITIVE(widget) != GTK_STATE_INSENSITIVE))
+#endif
 			{
 				active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 				/*printf("found it,  active table %i\n",active_table);*/

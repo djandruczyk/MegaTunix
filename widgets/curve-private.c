@@ -143,6 +143,7 @@ void mtx_curve_init (MtxCurve *curve)
 				|GDK_POINTER_MOTION_HINT_MASK
 				|GDK_ENTER_NOTIFY_MASK
 				|GDK_LEAVE_NOTIFY_MASK);
+	gtk_widget_set_double_buffered (GTK_WIDGET(curve), FALSE);
 	priv->self = curve;
 	priv->auto_rescale_id = 0;
 	priv->w = 100;		

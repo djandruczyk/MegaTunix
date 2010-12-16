@@ -107,6 +107,7 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
 	gtk_widget_add_events (GTK_WIDGET (gauge),GDK_BUTTON_PRESS_MASK
 			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
+	gtk_widget_set_double_buffered (GTK_WIDGET(gauge), FALSE);
 	priv->w = 130;		
 	priv->h = 20;
 	priv->pie_xc = 17;		/* pie x center coord from LL corner */

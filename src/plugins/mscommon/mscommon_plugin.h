@@ -94,6 +94,7 @@ char *(*regex_wrapper_f)(char *, char *, int *);
 GtkWidget *(*mtx_gauge_face_new_wrapper_f)(void);
 void (*mtx_gauge_face_import_xml_wrapper_f)(GtkWidget *, gchar *);
 void (*mtx_gauge_face_set_value_wrapper_f)(GtkWidget *, gfloat);
+void (*register_widget_f)(gchar *, GtkWidget *);
 /* Function Pointers */
 
 #endif

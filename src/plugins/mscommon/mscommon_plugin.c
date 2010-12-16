@@ -71,6 +71,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("parse_keys",(void *)&parse_keys_f);
 	get_symbol_f("process_rt_vars",(void *)&process_rt_vars_f);
 	get_symbol_f("queue_function",(void *)&queue_function_f);
+	get_symbol_f("register_widget",(void *)&register_widget_f);
 	get_symbol_f("remove_watch",(void *)&remove_watch_f);
 	get_symbol_f("remove_from_lists",(void *)&remove_from_lists_f);
 	get_symbol_f("reverse_lookup",(void *)&reverse_lookup_f);

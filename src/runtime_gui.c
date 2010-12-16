@@ -523,14 +523,11 @@ redraw:
 breakout:
 
 	gdk_threads_enter();
-	if (firmware->capabilities & PIS)
-	{
-		if ((active_page == RUNTIME_TAB) || 
-				(active_page == SETTINGS_TAB ) || 
-				(active_page == CORRECTIONS_TAB))
-			update_tab_gauges();
-	}
-
+	/*
+	if ((active_page == RUNTIME_TAB) || 
+			(active_page == SETTINGS_TAB ) || 
+			(active_page == CORRECTIONS_TAB))
+		update_tab_gauges();
 	if ((DATA_GET(global_data,"forced_update")) || 
 			(active_page == VETABLES_TAB) || 
 			(active_page == SPARKTABLES_TAB) || 
@@ -539,6 +536,7 @@ breakout:
 			(active_page == ROTARYTABLES_TAB) || 
 			(active_page == ALPHA_N_TAB) ||  
 			(active_page == STAGING_TAB))
+			*/
 	{
 		draw_ve_marker();
 		update_tab_gauges();

@@ -328,11 +328,13 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 #else
 				if (GTK_WIDGET_DRAWABLE (widget))
 #endif
+				{
 					cr = gdk_cairo_create(widget->window);
-			gdk_cairo_set_source_pixmap(cr,GTK_PROGRESS (widget)->offscreen_pixmap,0,0);
-			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
-			cairo_fill(cr);
-			cairo_destroy(cr);
+					gdk_cairo_set_source_pixmap(cr,GTK_PROGRESS (widget)->offscreen_pixmap,0,0);
+					cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+					cairo_fill(cr);
+					cairo_destroy(cr);
+				}
 		}
 		else
 		{

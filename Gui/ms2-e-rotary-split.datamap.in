@@ -48,21 +48,21 @@ _tooltip=The Rotary Split Entries are the values of Rotary Split in degrees that
 
 [gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-table_num=10
+table_num=11
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-table_num=10
+table_num=11
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_IgnLoad_Gauge.xml
 datasource=ignload
 
 [gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-table_num=10
+table_num=11
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
 datasource=sparkangle

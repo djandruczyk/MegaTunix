@@ -1215,14 +1215,42 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 	for (i=0;i<g_list_length(list);i++)
 	{
 		gauge = g_list_nth_data(list,i);
-		source = OBJ_GET(gauge,"datasource");
-		lookup_current_value(source,&current);
-		mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
-		if ((current != previous) || 
-				(DATA_GET(global_data,"forced_update")))
-			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
+#if GTK_MINOR_VERSION >= 18
+		if (gtk_widget_get_visible(gauge))
+#else
+		if (GTK_WIDGET_VISIBLE(gauge))
+#endif
+		{
+#if GTK_MINOR_VERSION >= 18
+			if (gtk_widget_get_state(gauge) != GTK_STATE_INSENSITIVE)
+#else
+			if (GTK_WIDGET_STATE(gauge) != GTK_STATE_INSENSITIVE) 
+#endif
+			{
+				source = OBJ_GET(gauge,"datasource");
+				/*printf("gauge is visible/sensitive, source %s\n",source);*/
+				if (source)
+				{
+					lookup_current_value(source,&current);
+					mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
+					if ((current != previous) || 
+							(DATA_GET(global_data,"forced_update")))
+						mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
+				}
+			}
+			/*
+			else
+				printf("insensitive\n");
+				*/
+		}
+		/*
+		else
+			printf("not visible\n");
+			*/
 	}
-
+	/*
+	printf("done updating gauges\n");
+	*/
 }
 
 

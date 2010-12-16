@@ -16,6 +16,7 @@
 #include <debugging.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
+#include <mscommon_gui_handlers.h>
 #include <mscommon_menu_handlers.h>
 
 extern gconstpointer *global_data;
@@ -29,6 +30,129 @@ void common_plugin_menu_setup(GladeXML *xml)
 	if (get_symbol_f("ecu_plugin_menu_setup",(void *)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);
 	return;
+}
+
+
+
+/*!
+   \brief General purpose handler to hide/show tps calibrate window
+    */
+G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
+{
+	static GtkWidget *window = NULL;
+	GtkWidget *item = NULL;
+	GladeXML *main_xml = NULL;
+	GladeXML *xml = NULL;
+	Firmware_Details *firmware = NULL;
+	GList ***ecu_widgets = NULL;
+
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	firmware = DATA_GET(global_data,"firmware");
+
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+		return TRUE;
+
+	if (!GTK_IS_WIDGET(window))
+	{
+		xml = glade_xml_new(main_xml->filename,"calibrate_tps_window",NULL);
+		window = glade_xml_get_widget(xml,"calibrate_tps_window");
+		glade_xml_signal_autoconnect(xml);
+
+		item = glade_xml_get_widget(xml,"tpsMin_entry");
+		register_widget_f("tpsMin_entry",item);
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
+		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"page",GINT_TO_POINTER(0));
+		if (firmware->capabilities & PIS)
+			OBJ_SET(item,"offset",GINT_TO_POINTER(2676));
+		else
+			OBJ_SET(item,"offset",GINT_TO_POINTER(518));
+		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		if (firmware->capabilities & PIS)
+		{
+			OBJ_SET(item,"raw_upper",g_strdup("255"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
+			ecu_widgets[0][2676] = g_list_prepend(
+					ecu_widgets[0][2676],
+					(gpointer)item);
+		}
+		else
+		{
+			OBJ_SET(item,"raw_upper",g_strdup("2047"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
+			ecu_widgets[0][518] = g_list_prepend(
+					ecu_widgets[0][518],
+					(gpointer)item);
+		}
+
+		item = glade_xml_get_widget(xml,"tpsMax_entry");
+		register_widget_f("tpsMax_entry",item);
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
+		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"page",GINT_TO_POINTER(0));
+		if (firmware->capabilities & PIS)
+			OBJ_SET(item,"offset",GINT_TO_POINTER(2678));
+		else
+			OBJ_SET(item,"offset",GINT_TO_POINTER(520));
+		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		if (firmware->capabilities & PIS)
+		{
+			OBJ_SET(item,"raw_upper",g_strdup("255"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
+			ecu_widgets[0][2678] = g_list_prepend(
+					ecu_widgets[0][2678],
+					(gpointer)item);
+
+			/* Force them to update */
+			g_list_foreach(ecu_widgets[0][2676],update_widget,NULL);
+			g_list_foreach(ecu_widgets[0][2678],update_widget,NULL);
+
+		}
+		else
+		{
+			OBJ_SET(item,"raw_upper",g_strdup("2047"));
+			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
+			ecu_widgets[0][520] = g_list_prepend(
+					ecu_widgets[0][520],
+					(gpointer)item);
+
+			/* Force them to update */
+			g_list_foreach(ecu_widgets[0][518],update_widget,NULL);
+			g_list_foreach(ecu_widgets[0][520],update_widget,NULL);
+
+		}
+
+		item = glade_xml_get_widget(xml,"get_tps_button_min");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GET_CURR_TPS));
+		if (firmware->capabilities & PIS)
+			OBJ_SET(item,"source",g_strdup("status_adc_tps"));
+		else
+			OBJ_SET(item,"source",g_strdup("tpsADC"));
+		OBJ_SET(item,"dest_widget",g_strdup("tpsMin_entry"));
+
+		item = glade_xml_get_widget(xml,"get_tps_button_max");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GET_CURR_TPS));
+		if (firmware->capabilities & PIS)
+			OBJ_SET(item,"source",g_strdup("status_adc_tps"));
+		else
+			OBJ_SET(item,"source",g_strdup("tpsADC"));
+		OBJ_SET(item,"dest_widget",g_strdup("tpsMax_entry"));
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
+		gtk_widget_show_all(GTK_WIDGET(window));
+		return TRUE;
+	}
+#if GTK_MINOR_VERSION >=18
+	if (gtk_widget_get_visible(GTK_WIDGET(window)))
+#else
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+#endif
+		gtk_widget_hide_all(GTK_WIDGET(window));
+	else
+		gtk_widget_show_all(GTK_WIDGET(window));
+	return TRUE;
 }
 
 

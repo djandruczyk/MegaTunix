@@ -27,10 +27,13 @@ extern void *(*eval_create_f)(char *);
 extern void (*eval_destroy_f)( void *);
 extern double (*eval_x_f)(void *, double);
 extern gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
+extern void (*register_widget_f)(gchar *, GtkWidget *);
 /* Externs */
 
 /* Prototypes */
 void common_plugin_menu_setup(GladeXML *);
+gboolean show_tps_calibrator_window(GtkWidget *, gpointer);
+gboolean show_create_ignition_map_window(GtkWidget *, gpointer);
 gboolean create_ignition_map(GtkWidget *, gpointer);
 gdouble linear_interpolate(gdouble, gdouble, gdouble, gdouble, gdouble);
 /* Prototypes */
