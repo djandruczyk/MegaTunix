@@ -18,20 +18,6 @@
 #include <gtk/gtk.h>
 #include <watches.h>
 
-/* Externs */
-extern void (*error_msg_f)(const gchar *);
-extern void (*io_cmd_f)(const gchar *, void *);
-extern void (*dbg_func_f)(int, gchar *);
-extern void (*start_tickler_f)(gint);
-extern void (*stop_tickler_f)(gint);
-extern void (*signal_read_rtvars_f)(void);
-extern gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
-extern gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
-extern GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
-extern void (*create_single_bit_state_watch_f)(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
-/* Externs */
-
 typedef struct _MS2_TTMon_Data MS2_TTMon_Data;
 /*!
  * \brief _MS2_TTMon_Data struct is a container used to hold private data

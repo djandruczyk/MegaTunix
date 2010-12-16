@@ -19,39 +19,44 @@
 #include <enums.h>
 #include <enums.h>
 
+#ifdef __MS2_PLUGIN_C__
+#define EXTERN
+#else
+#define EXTERN extern
+#endif
+
+/* Function pointers */
+EXTERN void (*error_msg_f)(const gchar *);
+EXTERN gboolean (*get_symbol_f)(const gchar *, void **);
+EXTERN void (*io_cmd_f)(const gchar *, void *);
+EXTERN void (*dbg_func_f)(int,gchar *);
+EXTERN void (*start_tickler_f)(gint);
+EXTERN void (*stop_tickler_f)(gint);
+EXTERN void (*signal_read_rtvars_f)(void);
+EXTERN gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
+EXTERN GtkWidget *(*lookup_widget_f)(const gchar *);
+EXTERN gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
+EXTERN GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
+EXTERN void (*create_single_bit_state_watch_f)(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
+EXTERN void *(*evaluator_create_f)(char *);
+EXTERN void *(*evaluator_destroy_f)(void *);
+EXTERN double (*evaluator_evaluate_x_f)(void *, double);
+EXTERN guint (*get_bitshift_f)(guint);
+EXTERN void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
+EXTERN void (*update_widget_f)(gpointer, gpointer);
+EXTERN gint (*convert_before_download_f)(GtkWidget *, gfloat);
+EXTERN gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
+EXTERN GtkWidget *(*mask_entry_new_with_mask_wrapper_f)(gchar *);
+EXTERN void (*register_widget_f)(gchar *, GtkWidget *);
+EXTERN void (*bind_to_lists_f)(GtkWidget * , gchar * );
+EXTERN void (*add_additional_rtt_f)(GtkWidget *);
+/* Function pointers */
+
 /* Prototypes */
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
 void register_ecu_enums(void);
 /* Prototypes */
 
-/* Function pointers */
-void (*error_msg_f)(const gchar *);
-gboolean (*get_symbol_f)(const gchar *, void **);
-void (*io_cmd_f)(const gchar *, void *);
-void (*dbg_func_f)(int,gchar *);
-void (*start_tickler_f)(gint);
-void (*stop_tickler_f)(gint);
-void (*signal_read_rtvars_f)(void);
-gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
-GtkWidget *(*lookup_widget_f)(const gchar *);
-gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
-GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
-void (*create_single_bit_state_watch_f)(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
-void *(*evaluator_create_f)(char *);
-void *(*evaluator_destroy_f)(void *);
-double (*evaluator_evaluate_x_f)(void *, double);
-guint (*get_bitshift_f)(guint);
-void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
-void (*update_widget_f)(gpointer, gpointer);
-gint (*convert_before_download_f)(GtkWidget *, gfloat);
-gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
-GtkWidget *(*mask_entry_new_with_mask_wrapper_f)(gchar *);
-void (*register_widget_f)(gchar *, GtkWidget *);
-void (*bind_to_lists_f)(GtkWidget * , gchar * );
-void (*add_additional_rtt_f)(GtkWidget *);
-
-
-/* Function pointers */
 
 #endif

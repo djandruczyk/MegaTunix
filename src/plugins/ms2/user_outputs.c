@@ -17,9 +17,10 @@
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
-#include <rtv_map_loader.h>
 #include <enums.h>
 #include <keyparser.h>
+#include <ms2_plugin.h>
+#include <rtv_map_loader.h>
 #include <stdlib.h>
 #include <user_outputs.h>
 

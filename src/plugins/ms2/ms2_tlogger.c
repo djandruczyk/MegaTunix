@@ -15,6 +15,7 @@
 #include <cairo/cairo.h>
 #include <firmware.h>
 #include <math.h>
+#include <ms2_plugin.h>
 #include <ms2_tlogger.h>
 
 MS2_TTMon_Data *ttm_data;

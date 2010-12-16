@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#define __MS2_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
