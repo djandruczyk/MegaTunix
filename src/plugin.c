@@ -56,7 +56,7 @@ G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 
 G_MODULE_EXPORT void plugins_init()
 {
-	GModule *module[3];
+	GModule *module[3] = {NULL,NULL,NULL};
 	GThread *id = NULL;
 #ifdef __WIN32__
 	gchar * libname = NULL;
@@ -72,32 +72,38 @@ G_MODULE_EXPORT void plugins_init()
 	DATA_SET(global_data,"megatunix_module",(gpointer)module[0]);
 
 	/* ECU library */
+	if (DATA_GET(global_data,"ecu_lib"))
+	{
 #ifdef __WIN32__
-	libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
-	libpath = g_module_build_path(MTXPLUGINDIR,libname);
-	g_free(libname);
+		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,libname);
+		g_free(libname);
 #else
-	libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
 #endif
-	module[1] = g_module_open(libpath,G_MODULE_BIND_LAZY);
-	if (!module[1])
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening ECU library module error:\n\t%s\n",g_module_error()));
-	g_free(libpath);
-	DATA_SET(global_data,"ecu_module",(gpointer)module[1]);
+		module[1] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+		if (!module[1])
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening ECU library module error:\n\t%s\n",g_module_error()));
+		g_free(libpath);
+		DATA_SET(global_data,"ecu_module",(gpointer)module[1]);
+	}
 
 	/* Common Library */
+	if (DATA_GET(global_data,"common_lib"))
+	{
 #ifdef __WIN32__
-	libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"common_lib"));
-	libpath = g_module_build_path(MTXPLUGINDIR,libname);
-	g_free(libname);
+		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"common_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,libname);
+		g_free(libname);
 #else
-	libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"common_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"common_lib"));
 #endif
-	module[2] = g_module_open(libpath,G_MODULE_BIND_LAZY);
-	if (!module[2])
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening Common library module error:\n\t%s\n",g_module_error()));
-	g_free(libpath);
-	DATA_SET(global_data,"common_module",(gpointer)module[2]);
+		module[2] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+		if (!module[2])
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening Common library module error:\n\t%s\n",g_module_error()));
+		g_free(libpath);
+		DATA_SET(global_data,"common_module",(gpointer)module[2]);
+	}
 
 	/* Set pointer to error message function global data container is
 	   passed to plugin(s) so they have access to get to global functions
@@ -107,11 +113,14 @@ G_MODULE_EXPORT void plugins_init()
 	DATA_SET(global_data,"get_symbol_f",(gpointer)&get_symbol);
 
 	/* Common module init */
-	if (g_module_symbol(module[2],"plugin_init",(void *)&plugin_init))
-		plugin_init(global_data);
+	if (module[2])
+		if (g_module_symbol(module[2],"plugin_init",(void *)&plugin_init))
+			plugin_init(global_data);
 	/* ECU Specific module init */
-	if (g_module_symbol(module[1],"plugin_init",(void *)&plugin_init))
-		plugin_init(global_data);
+	if (module[1])
+
+		if (g_module_symbol(module[1],"plugin_init",(void *)&plugin_init))
+			plugin_init(global_data);
 
 	if (get_symbol("common_gui_init",(void *)&common_gui_init))
 		common_gui_init();

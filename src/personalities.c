@@ -80,10 +80,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		}
 		element = g_new0(PersonaElement, 1);
 		cfg_read_string(cfgfile,"Family","friendly_name",&element->name);
-		if(!cfg_read_string(cfgfile,"Family","ecu_lib",&element->ecu_lib))
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" ecu_lib undefined!, was MegaTunix installed properly?\n\n"));
-		if(!cfg_read_string(cfgfile,"Family","common_lib",&element->common_lib))
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" common_lib undefined!, was MegaTunix installed properly?\n\n"));
+		cfg_read_string(cfgfile,"Family","ecu_lib",&element->ecu_lib);
+		cfg_read_string(cfgfile,"Family","common_lib",&element->common_lib);
 		if (!cfg_read_string(cfgfile,"Family","baud",&element->baud_str))
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" baud string undefined!, was MegaTunix installed properly?\n\n"));
 		element->dirname = g_strdup(dirs[i]);
@@ -236,11 +234,26 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 		return FALSE;
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{
-		DATA_SET(global_data,"ecu_baud_str", GINT_TO_POINTER(element->baud_str));
-		DATA_SET_FULL(global_data,"ecu_lib", g_strdup(element->ecu_lib),g_free);
-		DATA_SET_FULL(global_data,"common_lib", g_strdup(element->common_lib),g_free);
-		DATA_SET_FULL(global_data,"ecu_dirname", g_strdup(element->dirname),g_free);
-		DATA_SET_FULL(global_data,"ecu_family", g_strdup(element->filename),g_free);
+		if (element->baud_str)
+			DATA_SET(global_data,"ecu_baud_str", GINT_TO_POINTER(element->baud_str));
+		else
+			DATA_SET(global_data,"ecu_baud_str", NULL);
+		if (element->ecu_lib)
+			DATA_SET_FULL(global_data,"ecu_lib", g_strdup(element->ecu_lib),g_free);
+		else
+			DATA_SET(global_data,"ecu_lib", NULL);
+		if (element->common_lib)
+			DATA_SET_FULL(global_data,"common_lib", g_strdup(element->common_lib),g_free);
+		else
+			DATA_SET(global_data,"common_lib", NULL);
+		if (element->dirname)
+			DATA_SET_FULL(global_data,"ecu_dirname", g_strdup(element->dirname),g_free);
+		else
+			DATA_SET(global_data,"ecu_dirname", NULL);
+		if (element->filename)
+			DATA_SET_FULL(global_data,"ecu_family", g_strdup(element->filename),g_free);
+		else
+			DATA_SET(global_data,"ecu_family", NULL);
 	}
 	return TRUE;
 }

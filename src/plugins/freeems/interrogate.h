@@ -36,7 +36,9 @@ typedef enum
 	REGEX
 }MatchClass;
 
+
 /* Prototypes */
+gboolean interrogate_ecu(void);
 /* Prototypes */
 
 #endif

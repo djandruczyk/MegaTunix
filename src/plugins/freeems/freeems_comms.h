@@ -22,9 +22,11 @@
 
 
 /* Prototypes */
-gboolean data_to_be_read(GIOChannel *, GIOCondition, gpointer);
-gboolean data_can_be_written(GIOChannel *, GIOCondition, gpointer);
-void freeems_serial_setup(void);
+gboolean able_to_read(GIOChannel *, GIOCondition, gpointer);
+gboolean able_to_write(GIOChannel *, GIOCondition, gpointer);
+gboolean serial_error(GIOChannel *, GIOCondition, gpointer);
+void freeems_serial_enable(void);
+void *serial_repair_thread(gpointer);
 /* Prototypes */
 
 #endif

@@ -15,9 +15,12 @@ libfreeems_la_SOURCES = \
 	freeems_comms.c \
 	freeems_comms.h \
 	freeems_plugin.c \
-	freeems_plugin.h 
+	freeems_plugin.h \
+	interrogate.c \
+	interrogate.h
 
-libfreeems_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
+libfreeems_la_LDFLAGS = -shared $(no_undefined) -module
+libfreeems_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
