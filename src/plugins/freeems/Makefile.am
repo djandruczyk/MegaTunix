@@ -12,7 +12,10 @@ plugin_LTLIBRARIES = libfreeems.la
 
 libfreeems_la_SOURCES = \
 	Makefile \
-	template.c
+	freeems_comms.c \
+	freeems_comms.h \
+	freeems_plugin.c \
+	freeems_plugin.h 
 
 libfreeems_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
 

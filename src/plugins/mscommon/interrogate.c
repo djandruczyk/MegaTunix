@@ -379,7 +379,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		firmware->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
 		/*
-		   printf("CAP #'s MS1 %i MS1_STD %i MSNS_E %i MS1_DT %i MS2 %i MS2_STD %i, MS2_E %i, MS2_E_COMPMON %i, PIS %i, SECU_3 %i, FEEEMS %i JIMSTIM %i\n",MS1,MS1_STD,MSNS_E,MS1_DT,MS2,MS2_STD,MS2_E,MS2_E_COMPMON,PIS,SECU_3,FREEEMS,JIMSTIM);
+		   printf("CAP #'s MS1 %i MS1_STD %i MSNS_E %i MS1_DT %i MS2 %i MS2_STD %i, MS2_E %i, MS2_E_COMPMON %i, PIS %i, JIMSTIM %i\n",MS1,MS1_STD,MSNS_E,MS1_DT,MS2,MS2_STD,MS2_E,MS2_E_COMPMON,PIS,JIMSTIM);
 
 		   if (firmware->capabilities & MS1)
 		   printf("MS1\n");
@@ -399,10 +399,6 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		   printf("MS2_E_COMPMON\n");
 		   if (firmware->capabilities & PIS)
 		   printf("PIS\n");
-		   if (firmware->capabilities & SECU_3)
-		   printf("SECU_3\n");
-		   if (firmware->capabilities & FREEEMS)
-		   printf("FREEEMS\n");
 		   if (firmware->capabilities & JIMSTIM)
 		   printf("JIMSTIM\n");
 		 */

@@ -11,16 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#define __MSCOMMON_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
-#include <mscommon_plugin.h>
-#include <mscommon_helpers.h>
-#include <mscommon_gui_handlers.h>
-#include <mscommon_plugin.h>
-#include <interrogate.h>
-#include <mtxsocket.h>
+#include <firmware.h>
+#include <freeems_plugin.h>
 #include <gtk/gtk.h>
+#include <interrogate.h>
 
 
 gconstpointer *global_data = NULL;
@@ -44,17 +40,12 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("cleanup",(void *)&cleanup_f);
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
-	get_symbol_f("create_value_change_watch",(void *)&create_value_change_watch_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
-	get_symbol_f("direct_lookup_data",(void *)&direct_lookup_data_f);
-	get_symbol_f("direct_reverse_lookup",(void *)&direct_reverse_lookup_f);
 	get_symbol_f("entry_changed_handler",(void *)&entry_changed_handler_f);
 	get_symbol_f("eval_create",(void *)&eval_create_f);
 	get_symbol_f("eval_destroy",(void *)&eval_destroy_f);
 	get_symbol_f("eval_x",(void *)&eval_x_f);
-	get_symbol_f("free_multi_source",(void *)&free_multi_source_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
-	get_symbol_f("focus_out_handler",(void *)&focus_out_handler_f);
 	get_symbol_f("get_bitshift",(void *)&get_bitshift_f);
 	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
 	get_symbol_f("get_extreme_from_size",(void *)&get_extreme_from_size_f);
@@ -113,70 +104,9 @@ void register_common_enums(void)
 	str_2_enum = DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
-		/* TCP Socket Commands */
-		g_hash_table_insert (str_2_enum, "HELP", GINT_TO_POINTER (HELP));
-		g_hash_table_insert (str_2_enum, "QUIT", GINT_TO_POINTER (QUIT));
-		g_hash_table_insert (str_2_enum, "GET_REVISION",
-				GINT_TO_POINTER (GET_REVISION));
-		g_hash_table_insert (str_2_enum, "GET_SIGNATURE",
-				GINT_TO_POINTER (GET_SIGNATURE));
-		g_hash_table_insert (str_2_enum, "GET_RT_VARS",
-				GINT_TO_POINTER (GET_RT_VARS));
-		g_hash_table_insert (str_2_enum, "GET_RTV_LIST",
-				GINT_TO_POINTER (GET_RTV_LIST));
-		g_hash_table_insert (str_2_enum, "GET_ECU_VARS",
-				GINT_TO_POINTER (GET_ECU_VARS));
-		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_U08",
-				GINT_TO_POINTER (GET_ECU_VAR_U08));
-		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_S08",
-				GINT_TO_POINTER (GET_ECU_VAR_S08));
-		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_U16",
-				GINT_TO_POINTER (GET_ECU_VAR_U16));
-		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_S16",
-				GINT_TO_POINTER (GET_ECU_VAR_S16));
-		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_U32",
-				GINT_TO_POINTER (GET_ECU_VAR_U32));
-		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_S32",
-				GINT_TO_POINTER (GET_ECU_VAR_S32));
-		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_U08",
-				GINT_TO_POINTER (SET_ECU_VAR_U08));
-		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_S08",
-				GINT_TO_POINTER (SET_ECU_VAR_S08));
-		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_U16",
-				GINT_TO_POINTER (SET_ECU_VAR_U16));
-		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_S16",
-				GINT_TO_POINTER (SET_ECU_VAR_S16));
-		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_U32",
-				GINT_TO_POINTER (SET_ECU_VAR_U32));
-		g_hash_table_insert (str_2_enum, "SET_ECU_VAR_S32",
-				GINT_TO_POINTER (SET_ECU_VAR_S32));
-		g_hash_table_insert (str_2_enum, "BURN_FLASH",
-				GINT_TO_POINTER (BURN_FLASH));
-		g_hash_table_insert (str_2_enum, "GET_RAW_ECU",
-				GINT_TO_POINTER (GET_RAW_ECU));
-		g_hash_table_insert (str_2_enum, "SET_RAW_ECU",
-				GINT_TO_POINTER (SET_RAW_ECU));
 		/* Firmware capabilities */
-		g_hash_table_insert (str_2_enum, "_PIS_", 
-				GINT_TO_POINTER (PIS));
-		g_hash_table_insert (str_2_enum, "_MS1_", 
-				GINT_TO_POINTER (MS1));
-		g_hash_table_insert (str_2_enum, "_MS1_STD_",
-				GINT_TO_POINTER (MS1_STD));
-		g_hash_table_insert (str_2_enum, "_MS1_DT_", 
-				GINT_TO_POINTER (MS1_DT));
-		g_hash_table_insert (str_2_enum, "_MSNS_E_", 
-				GINT_TO_POINTER (MSNS_E));
-		g_hash_table_insert (str_2_enum, "_MS2_", 
-				GINT_TO_POINTER (MS2));
-		g_hash_table_insert (str_2_enum, "_MS2_STD_",
-				GINT_TO_POINTER (MS2_STD));
-		g_hash_table_insert (str_2_enum, "_MS2_E_", 
-				GINT_TO_POINTER (MS2_E));
-		g_hash_table_insert (str_2_enum, "_MS2_E_COMPMON_",
-				GINT_TO_POINTER (MS2_E_COMPMON));
-		g_hash_table_insert (str_2_enum, "_JIMSTIM_",
-				GINT_TO_POINTER (JIMSTIM));
+		g_hash_table_insert (str_2_enum, "_FREEEMS_",
+				GINT_TO_POINTER (FREEEMS));
 		g_hash_table_insert (str_2_enum, "_COUNT_", 
 				GINT_TO_POINTER (COUNT));
 		g_hash_table_insert (str_2_enum, "_SUBMATCH_",
@@ -192,29 +122,7 @@ void register_common_enums(void)
 				GINT_TO_POINTER (RESULT_DATA));
 		g_hash_table_insert (str_2_enum, "_RESULT_TEXT_",
 				GINT_TO_POINTER (RESULT_TEXT));
-		/* Common Handlers */
-		g_hash_table_insert (str_2_enum, "_NUM_SQUIRTS_1_",
-				GINT_TO_POINTER (NUM_SQUIRTS_1));
-		g_hash_table_insert (str_2_enum, "_NUM_SQUIRTS_2_",
-				GINT_TO_POINTER (NUM_SQUIRTS_2));
-		g_hash_table_insert (str_2_enum, "_NUM_CYLINDERS_1_",
-				GINT_TO_POINTER (NUM_CYLINDERS_1));
-		g_hash_table_insert (str_2_enum, "_NUM_CYLINDERS_2_",
-				GINT_TO_POINTER (NUM_CYLINDERS_2));
-		g_hash_table_insert (str_2_enum, "_NUM_INJECTORS_1_",
-				GINT_TO_POINTER (NUM_INJECTORS_1));
-		g_hash_table_insert (str_2_enum, "_NUM_INJECTORS_2_",
-				GINT_TO_POINTER (NUM_INJECTORS_2));
-		g_hash_table_insert(str_2_enum,"_LOCKED_REQ_FUEL_",
-				GINT_TO_POINTER(LOCKED_REQ_FUEL));
-		g_hash_table_insert(str_2_enum,"_REQ_FUEL_1_",
-				GINT_TO_POINTER(REQ_FUEL_1));
-		g_hash_table_insert(str_2_enum,"_REQ_FUEL_2_",
-				GINT_TO_POINTER(REQ_FUEL_2));
-		g_hash_table_insert(str_2_enum,"_MULTI_EXPRESSION_",
-				GINT_TO_POINTER(MULTI_EXPRESSION));
-		g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
-				GINT_TO_POINTER(ALT_SIMUL));
+		/* Special Common Handlers */
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
