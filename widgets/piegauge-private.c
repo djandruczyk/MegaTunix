@@ -91,8 +91,6 @@ void mtx_pie_gauge_finalize (GObject *gauge)
 		g_free(priv->value_font);
 	if (priv->valname)
 		g_free(priv->valname);
-	if (priv->cr)
-		cairo_destroy(priv->cr);
 }
 
 /*!
@@ -122,9 +120,6 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
 	priv->sweep_angle = 180;	/* CW sweep */
 	priv->value_font = g_strdup("Bitstream Vera Sans");
 	priv->value_font_scale = 0.2;
-	priv->cr = NULL;
-	priv->colormap = gdk_colormap_get_system();
-	priv->gc = NULL;
 	mtx_pie_gauge_init_colors(gauge);
 	/*mtx_pie_gauge_redraw (gauge);*/
 }
@@ -278,8 +273,6 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	priv->w = widget->allocation.width;
 	priv->h = widget->allocation.height;
 
-	if (priv->gc)
-		g_object_unref(priv->gc);
 	/* Backing pixmap (copy of window) */
 	if (priv->pixmap)
 		g_object_unref(priv->pixmap);
@@ -302,9 +295,6 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_destroy(cr);
 
 	gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
-	priv->gc = gdk_gc_new(priv->bg_pixmap);
-	gdk_gc_set_colormap(priv->gc,priv->colormap);
-
 
 	if (priv->font_options)
 		cairo_font_options_destroy(priv->font_options);
