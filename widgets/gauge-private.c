@@ -293,6 +293,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 			GDK_POINTER_MOTION_MASK);
 
 	g_object_set(G_OBJECT(gauge),"can_focus",GINT_TO_POINTER(TRUE),NULL);
+	gtk_widget_set_double_buffered (GTK_WIDGET(gauge), FALSE);
 
 	priv->max_layers = 10;
 	priv->w = 0;
@@ -768,30 +769,30 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		priv->pixmap=gdk_pixmap_new(widget->window,
 				priv->w,priv->h,
 				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(priv->pixmap,
-				widget->style->black_gc,
-				TRUE, 0,0,
-				priv->w,priv->h);
+		cr = gdk_cairo_create(priv->pixmap);
+		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+		cairo_paint(cr);
+		cairo_destroy(cr);
 		/* Static Background pixmap */
 		if (priv->bg_pixmap)
 			g_object_unref(priv->bg_pixmap);
 		priv->bg_pixmap=gdk_pixmap_new(widget->window,
 				priv->w,priv->h,
 				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(priv->bg_pixmap,
-				widget->style->black_gc,
-				TRUE, 0,0,
-				priv->w,priv->h);
+		cr = gdk_cairo_create(priv->pixmap);
+		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+		cairo_paint(cr);
+		cairo_destroy(cr);
 		/* Tmp Background pixmap */
 		if (priv->tmp_pixmap)
 			g_object_unref(priv->tmp_pixmap);
 		priv->tmp_pixmap=gdk_pixmap_new(widget->window,
 				priv->w,priv->h,
 				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(priv->tmp_pixmap,
-				widget->style->black_gc,
-				TRUE, 0,0,
-				priv->w,priv->h);
+		cr = gdk_cairo_create(priv->pixmap);
+		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+		cairo_paint(cr);
+		cairo_destroy(cr);
 		priv->last_alert_index = -1;
 
 		priv->needle_bounding_box.x = 0;
@@ -811,11 +812,11 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				CAIRO_ANTIALIAS_GRAY);
 
 		/* Shape combine mask bitmap */
-		   cr = gdk_cairo_create(priv->bitmap);
-		   cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
-		   cairo_paint(cr);
-		   cairo_set_operator(cr,CAIRO_OPERATOR_OVER);
-		   cairo_set_source_rgb (cr, 0,0,0);
+		cr = gdk_cairo_create(priv->bitmap);
+		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+		cairo_paint(cr);
+		cairo_set_operator(cr,CAIRO_OPERATOR_OVER);
+		cairo_set_source_rgb (cr, 0,0,0);
 		/* Drag border boxes... */
 		if (priv->show_drag_border)
 		{
@@ -825,10 +826,10 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 			cairo_rectangle(cr,0,priv->h-DRAG_BORDER,DRAG_BORDER,DRAG_BORDER);
 			cairo_fill(cr);
 		}
-		   cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
-		   cairo_fill(cr);
-		   cairo_stroke(cr);
-		   cairo_destroy(cr);
+		cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
+		cairo_fill(cr);
+		cairo_stroke(cr);
+		cairo_destroy(cr);
 
 	}
 	if (priv->radius > 0)
