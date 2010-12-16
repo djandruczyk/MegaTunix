@@ -106,12 +106,6 @@ void mtx_stripchart_finalize (GObject *chart)
 		g_object_unref(priv->grat_pixmap);
 	if (priv->font);
 		g_free(priv->font);
-	if (priv->gc);
-		g_object_unref(priv->gc);
-	if (priv->colormap);
-		g_object_unref(priv->colormap);
-	if (priv->cr);
-		cairo_destroy(priv->cr);
 	if (priv->traces);
 		mtx_stripchart_cleanup_traces(priv->traces);
 }
@@ -155,14 +149,13 @@ void mtx_stripchart_init (MtxStripChart *chart)
 			GDK_POINTER_MOTION_MASK |
 			GDK_ENTER_NOTIFY_MASK |
 			GDK_LEAVE_NOTIFY_MASK);
+        gtk_widget_set_double_buffered (GTK_WIDGET(chart), FALSE);
+
 	priv->num_traces = 0;
 	priv->w = 130;		
 	priv->h = 20;
 	priv->justification = GTK_JUSTIFY_RIGHT;
 	priv->font = g_strdup("Bitstream Vera Sans");
-	priv->cr = NULL;
-	priv->colormap = gdk_colormap_get_system();
-	priv->gc = NULL;
 	priv->traces = g_array_new(FALSE,TRUE,sizeof(MtxStripChartTrace *));
 	mtx_stripchart_init_colors(chart);
 /*	if (GTK_WIDGET_REALIZED(chart))
@@ -252,22 +245,16 @@ void update_stripchart_position (MtxStripChart *chart)
 	state = GTK_WIDGET_STATE (widget);
 #endif
 
-
 	/* Draw new data to trace pixmap */
 	/* Scroll trace pixmap */
-	gdk_draw_drawable(priv->trace_pixmap,
-			widget->style->fg_gc[state],
-			priv->trace_pixmap,
-			1,0,
-			0,0,
-			priv->w-1,priv->h);
-	gdk_draw_rectangle(priv->trace_pixmap,
-			widget->style->black_gc,
-			TRUE, priv->w-1,0,
-			1,priv->h);
-
+	cr = gdk_cairo_create(priv->trace_pixmap);
+	gdk_cairo_set_source_pixmap(cr,priv->trace_pixmap,-1,0);
+	cairo_rectangle(cr,0,0,priv->w,priv->h);
+	cairo_fill(cr);
+	cairo_set_source_rgb(cr,0,0,0);
+	cairo_rectangle(cr,priv->w-1,0,1,priv->h);
+	cairo_fill(cr);
 	/* Render new data */
-	cr = gdk_cairo_create (priv->trace_pixmap);
 	for (i=0;i<priv->num_traces;i++)
 	{
 		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
@@ -290,16 +277,11 @@ void update_stripchart_position (MtxStripChart *chart)
 	}
 	cairo_destroy(cr);
 
-	/* Copy background trace pixmap to background for final rendering */
-	gdk_draw_drawable(priv->grat_pixmap,
-			widget->style->fg_gc[state],
-			priv->trace_pixmap,
-			0,0,
-			0,0,
-			widget->allocation.width,widget->allocation.height);
-
-	cr = gdk_cairo_create (priv->grat_pixmap);
-	cr2 = gdk_cairo_create (priv->grat_pixmap);
+	/* Copy background trace pixmap to grat for grat rendering */
+	cr = gdk_cairo_create(priv->grat_pixmap);
+	gdk_cairo_set_source_pixmap(cr,priv->trace_pixmap,0,0);
+	cairo_rectangle(cr,0,0,priv->w,priv->h);
+	cairo_fill(cr);
 
 	/* Render the graticule lines */
 	cairo_set_source_rgba (cr, 
@@ -345,6 +327,7 @@ void update_stripchart_position (MtxStripChart *chart)
 		draw_quarters = TRUE;
 	g_free(message);
 	/* render the new data */
+	cr2 = gdk_cairo_create(priv->grat_pixmap);
 	cairo_set_source_rgba(cr2,0.13,0.13,0.13,0.75);
 
 	for (i=0;i<priv->num_traces;i++)
@@ -436,46 +419,43 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	cairo_t *cr = NULL;
 
 	priv->w = widget->allocation.width;
 	priv->h = widget->allocation.height;
 
-	if (priv->gc)
-		g_object_unref(priv->gc);
 	/* Backing pixmap (copy of window) */
 	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
 	priv->bg_pixmap=gdk_pixmap_new(widget->window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
-	gdk_draw_rectangle(priv->bg_pixmap,
-			widget->style->black_gc,
-			TRUE, 0,0,
-			priv->w,priv->h);
+	cr = gdk_cairo_create(priv->bg_pixmap);
+	cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+	cairo_paint(cr);
+	cairo_destroy(cr);
 	/* Trace pixmap */
 	if (priv->trace_pixmap)
 		g_object_unref(priv->trace_pixmap);
 	priv->trace_pixmap=gdk_pixmap_new(widget->window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
-	gdk_draw_rectangle(priv->trace_pixmap,
-			widget->style->black_gc,
-			TRUE, 0,0,
-			priv->w,priv->h);
+	cr = gdk_cairo_create(priv->trace_pixmap);
+	cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+	cairo_paint(cr);
+	cairo_destroy(cr);
 	/* Grat pixmap */
 	if (priv->grat_pixmap)
 		g_object_unref(priv->grat_pixmap);
 	priv->grat_pixmap=gdk_pixmap_new(widget->window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
-	gdk_draw_rectangle(priv->grat_pixmap,
-			widget->style->black_gc,
-			TRUE, 0,0,
-			priv->w,priv->h);
+	cr = gdk_cairo_create(priv->grat_pixmap);
+	cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+	cairo_paint(cr);
+	cairo_destroy(cr);
 
 	gdk_window_set_back_pixmap(widget->window,priv->bg_pixmap,0);
-	priv->gc = gdk_gc_new(priv->trace_pixmap);
-	gdk_gc_set_colormap(priv->gc,priv->colormap);
 
 	if (priv->font_options)
 		cairo_font_options_destroy(priv->font_options);
@@ -502,10 +482,9 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	cairo_t *cr = NULL;
-	GdkPixmap *pmap = NULL;
 	GtkStateType state = GTK_STATE_NORMAL;
 
-#if GTK_MINOR_VERSION >= 20
+#if GTK_MINOR_VERSION >= 18
 	state = gtk_widget_get_state(GTK_WIDGET(widget));
 #else
 	state = GTK_WIDGET_STATE (widget);
@@ -514,41 +493,30 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
 #else
-	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
+		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
-	{
-		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[state],
-				priv->bg_pixmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-	}
-	else
-	{
-		pmap=gdk_pixmap_new(widget->window,
-				priv->w,priv->h,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_drawable(pmap,
-				widget->style->fg_gc[state],
-				priv->bg_pixmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-		cr = gdk_cairo_create (pmap);
-		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
-		cairo_rectangle (cr,
-				0,0,priv->w,priv->h);
-		cairo_fill(cr);
-		cairo_destroy(cr);
-		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[state],
-				pmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-		g_object_unref(pmap);
-	}
+		{
+			cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
+			cairo_rectangle(cr,event->area.x, event->area.y,event->area.width, event->area.height);
+			cairo_fill(cr);
+			cairo_destroy(cr);
+		}
+		else
+		{
+			cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
+			cairo_rectangle(cr,event->area.x, event->area.y,event->area.width, event->area.height);
+			cairo_fill(cr);
+			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+			cairo_paint(cr);
+			/*
+			   cairo_rectangle (cr,
+			   0,0,priv->w,priv->h);
+			   cairo_fill(cr);
+			 */
+			cairo_destroy(cr);
+		}
 	return FALSE;
 }
 
@@ -693,15 +661,11 @@ void render_marker(MtxStripChart *chart)
 #endif
 
 	/* Copy trace+graticule to backing pixmap */
-	gdk_draw_drawable(priv->bg_pixmap,
-			widget->style->fg_gc[state],
-			priv->grat_pixmap,
-			0,0,
-			0,0,
-			widget->allocation.width,widget->allocation.height);
+	cr = gdk_cairo_create(priv->bg_pixmap);
+	gdk_cairo_set_source_pixmap(cr,priv->grat_pixmap,0,0);
+	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+	cairo_fill(cr);
 
-
-	cr = gdk_cairo_create (priv->bg_pixmap);
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
 	cairo_select_font_face (cr, priv->font, CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
         cairo_set_font_size (cr, 12);

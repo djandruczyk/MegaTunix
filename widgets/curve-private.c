@@ -110,10 +110,6 @@ void mtx_curve_finalize (GObject *curve)
 		g_free(priv->coords);
 	if (priv->points)
 		g_free(priv->points);
-	if (priv->gc)
-		g_object_unref(priv->gc);
-	if (priv->cr)
-		cairo_destroy(priv->cr);
 	if (priv->font_options)
 		cairo_font_options_destroy(priv->font_options);
 	if (priv->pos_str)
@@ -128,8 +124,6 @@ void mtx_curve_finalize (GObject *curve)
 		g_free(priv->x_axis_label);
 	if (priv->y_axis_label)
 		g_free(priv->y_axis_label);
-	if (priv->colormap)
-		g_object_unref(priv->colormap);
 }
 
 
@@ -153,9 +147,6 @@ void mtx_curve_init (MtxCurve *curve)
 	priv->auto_rescale_id = 0;
 	priv->w = 100;		
 	priv->h = 100;
-	priv->cr = NULL;
-	priv->colormap = gdk_colormap_get_system();
-	priv->gc = NULL;
 	priv->points = NULL;
 	priv->coords = NULL;
 	priv->num_points = 0;
@@ -263,14 +254,11 @@ void update_curve (MtxCurve *curve)
 	state = GTK_WIDGET_STATE (widget);
 #endif
 	/* Copy background pixmap to intermediary for final rendering */
-	gdk_draw_drawable(priv->pixmap,
-			widget->style->fg_gc[state],
-			priv->bg_pixmap,
-			0,0,
-			0,0,
-			widget->allocation.width,widget->allocation.height);
+	cr = gdk_cairo_create(priv->pixmap);
+	gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
+	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+	cairo_fill(cr);
 
-	cr = gdk_cairo_create (priv->pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 
 	/* The circles for each vertex itself */
@@ -311,18 +299,18 @@ void update_curve (MtxCurve *curve)
 
 	/* Edit Markers */
 	/*
-	if (priv->show_edit_marker)
-	{
-	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_EDIT].red/65535.0,
-	priv->colors[CURVE_COL_EDIT].green/65535.0,
-	priv->colors[CURVE_COL_EDIT].blue/65535.0);
-	cairo_set_line_width (cr, 1.0);
-	cairo_move_to (cr,0 ,((priv->y_edit-priv->lowest_y)*priv->y_scale) + priv->y_border);
-	cairo_line_to (cr, ((priv->x_edit-priv->lowest_x)*priv->x_scale) + priv->x_border,((priv->y_edit-priv->lowest_y)*priv->y_scale) + priv->y_border);
-	cairo_line_to (cr, ((priv->x_edit-priv->lowest_x)*priv->x_scale) + priv->x_border,0);
-	cairo_stroke(cr);
-	}
-	*/
+	   if (priv->show_edit_marker)
+	   {
+	   cairo_set_source_rgb (cr, priv->colors[CURVE_COL_EDIT].red/65535.0,
+	   priv->colors[CURVE_COL_EDIT].green/65535.0,
+	   priv->colors[CURVE_COL_EDIT].blue/65535.0);
+	   cairo_set_line_width (cr, 1.0);
+	   cairo_move_to (cr,0 ,((priv->y_edit-priv->lowest_y)*priv->y_scale) + priv->y_border);
+	   cairo_line_to (cr, ((priv->x_edit-priv->lowest_x)*priv->x_scale) + priv->x_border,((priv->y_edit-priv->lowest_y)*priv->y_scale) + priv->y_border);
+	   cairo_line_to (cr, ((priv->x_edit-priv->lowest_x)*priv->x_scale) + priv->x_border,0);
+	   cairo_stroke(cr);
+	   }
+	 */
 	/* Vertical and Horizontal Markers */
 	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_MARKER].red/65535.0,
 			priv->colors[CURVE_COL_MARKER].green/65535.0,
@@ -521,36 +509,33 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	MtxCurve * curve = MTX_CURVE(widget);
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	cairo_t *cr = NULL;
 
 	priv->w = widget->allocation.width;
 	priv->h = widget->allocation.height;
 
-	if (priv->gc)
-		g_object_unref(priv->gc);
 	/* Backing pixmap (copy of window) */
 	if (priv->pixmap)
 		g_object_unref(priv->pixmap);
 	priv->pixmap=gdk_pixmap_new(widget->window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
-	gdk_draw_rectangle(priv->pixmap,
-			widget->style->black_gc,
-			TRUE, 0,0,
-			priv->w,priv->h);
+	cr = gdk_cairo_create(priv->pixmap);
+        cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+	cairo_paint(cr);
+	cairo_destroy(cr);
 	/* Static Background pixmap */
 	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
 	priv->bg_pixmap=gdk_pixmap_new(widget->window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
-	gdk_draw_rectangle(priv->bg_pixmap,
-			widget->style->black_gc,
-			TRUE, 0,0,
-			priv->w,priv->h);
+	cr = gdk_cairo_create(priv->bg_pixmap);
+        cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+	cairo_paint(cr);
+	cairo_destroy(cr);
 
 	gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
-	priv->gc = gdk_gc_new(priv->bg_pixmap);
-	gdk_gc_set_colormap(priv->gc,priv->colormap);
 
 
 	if (priv->font_options)
@@ -579,7 +564,6 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	GtkStateType state = GTK_STATE_NORMAL;
 	cairo_t *cr = NULL;
-	GdkPixmap *pmap = NULL;
 
 #if GTK_MINOR_VERSION >= 20
 	state = gtk_widget_get_state(GTK_WIDGET(widget));
@@ -589,41 +573,27 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(curve)))
 #else
-	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
+		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 #endif
-	{
-		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[state],
-				priv->pixmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-	}
-	else
-	{
-		pmap=gdk_pixmap_new(widget->window,
-				priv->w,priv->h,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_drawable(pmap,
-				widget->style->fg_gc[state],
-				priv->pixmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-		cr = gdk_cairo_create (pmap);
-		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
-		cairo_rectangle (cr,
-				0,0,priv->w,priv->h);
-		cairo_fill(cr);
-		cairo_destroy(cr);
-		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[state],
-				pmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-		g_object_unref(pmap);
-	}
+		{
+			cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
+			cairo_rectangle(cr,event->area.x, event->area.y,widget->allocation.width,widget->allocation.height);
+			cairo_fill(cr);
+			cairo_destroy(cr);
+		}
+		else
+		{
+			cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
+			cairo_rectangle(cr,event->area.x, event->area.y,widget->allocation.width,widget->allocation.height);
+			cairo_fill(cr);
+			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+			cairo_rectangle (cr,
+					0,0,priv->w,priv->h);
+			cairo_fill(cr);
+			cairo_destroy(cr);
+		}
 	return FALSE;
 }
 

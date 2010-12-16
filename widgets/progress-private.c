@@ -307,60 +307,45 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 #endif
 
 #if GTK_MINOR_VERSION >= 18
-        if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
+	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
 #else
-	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
+		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
-	{
+		{
 
 
 #if GTK_MINOR_VERSION >= 20
-		if (gtk_widget_is_drawable (widget) && pbar->dirty)
+			if (gtk_widget_is_drawable (widget) && pbar->dirty)
 #else
-		if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
+				if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
 #endif
-			mtx_progress_bar_paint (GTK_PROGRESS (pbar));
+					mtx_progress_bar_paint (GTK_PROGRESS (pbar));
 
-		g_return_val_if_fail (event != NULL, FALSE);
+			g_return_val_if_fail (event != NULL, FALSE);
 
 #if GTK_MINOR_VERSION >= 20
-		if (gtk_widget_is_drawable (widget))
+			if (gtk_widget_is_drawable (widget))
 #else
-		if (GTK_WIDGET_DRAWABLE (widget))
+				if (GTK_WIDGET_DRAWABLE (widget))
 #endif
-			gdk_draw_drawable (widget->window,
-					widget->style->black_gc,
-					GTK_PROGRESS (widget)->offscreen_pixmap,
-					event->area.x, event->area.y,
-					event->area.x, event->area.y,
-					event->area.width,
-					event->area.height);
-	}
-	else
-	{
-		pmap=gdk_pixmap_new(widget->window,
-				widget->allocation.width,widget->allocation.height,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_drawable(pmap,
-				widget->style->fg_gc[state],
-				GTK_PROGRESS (widget)->offscreen_pixmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-		cr = gdk_cairo_create (pmap);
-		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
-		cairo_rectangle (cr,
-				0,0,widget->allocation.width,widget->allocation.height);
-		cairo_fill(cr);
-		cairo_destroy(cr);
-		gdk_draw_drawable(widget->window,
-				widget->style->fg_gc[state],
-				pmap,
-				event->area.x, event->area.y,
-				event->area.x, event->area.y,
-				event->area.width, event->area.height);
-		g_object_unref(pmap);
-	}
+					cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_pixmap(cr,GTK_PROGRESS (widget)->offscreen_pixmap,0,0);
+			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+			cairo_fill(cr);
+			cairo_destroy(cr);
+		}
+		else
+		{
+			cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_pixmap(cr,GTK_PROGRESS (widget)->offscreen_pixmap,0,0);
+			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+			cairo_fill(cr);
+			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+			cairo_rectangle (cr,
+					0,0,widget->allocation.width,widget->allocation.height);
+			cairo_fill(cr);
+			cairo_destroy(cr);
+		}
 	return TRUE;
 }
 
