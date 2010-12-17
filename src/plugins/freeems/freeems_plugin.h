@@ -97,6 +97,8 @@ EXTERN void (*mtx_gauge_face_set_value_wrapper_f)(GtkWidget *, gfloat);
 EXTERN void (*register_widget_f)(gchar *, GtkWidget *);
 EXTERN gboolean (*read_wrapper_f)(gint, void *, size_t, gint *);
 EXTERN gboolean (*write_wrapper_f)(gint, const void *, size_t, gint *);
+EXTERN gint (*read_data_f)(gint , void **, gboolean);
+
 /* Function Pointers */
 
 /* Prototypes */

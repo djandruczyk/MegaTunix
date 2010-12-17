@@ -138,7 +138,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to %i for comms test\n",vector[i],baud));
 					setup_serial_params_f();
 					/* read out any junk in buffer and toss it */
-					read_wrapper(serial_params->fd,&buf,1024,&len);
+					//read_wrapper_f(serial_params->fd,&buf,1024,&len);
 
 					thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Searching for ECU\n")),FALSE,FALSE);
 					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
@@ -234,6 +234,7 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 	GIOStatus status;
 	GError *err = NULL;
 
+	printf("Data waiting to be read!\n");
 	status = g_io_channel_read_chars(channel, &buf[0], count, &bytes_read, &err);
 	if (err)
 	{
@@ -267,8 +268,8 @@ G_MODULE_EXPORT gboolean able_to_write(GIOChannel *channel, GIOCondition cond, g
 	ack_queue = (GAsyncQueue *)data;
 	out_queue = DATA_GET(global_data,"out_packet_queue");
 
-	printf("Able to write, going to sleep for 10...\n");
-	g_usleep(10000000);
+	g_usleep(100000);
+	printf("Able to write, sleeping 100 ms\n");
 	return TRUE;
 }
 
@@ -297,4 +298,49 @@ G_MODULE_EXPORT gboolean serial_error(GIOChannel *channel, GIOCondition cond, gp
 			break;
 	}
 	return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean comms_test(void)
+{
+	static gint errcount = 0;
+	gboolean result = FALSE;
+	gchar * err_text = NULL;
+	gint len = 0;
+	Serial_Params *serial_params = NULL;
+	extern gconstpointer *global_data;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+
+	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
+	if (!serial_params)
+		return FALSE;
+
+	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
+
+	result = read_data_f(2024,NULL,FALSE);
+	if (result > 0)     /* Success */
+	{
+		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+		errcount=0;
+		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successful\n"));
+		queue_function_f("kill_conn_warning");
+		thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
+		thread_update_logbar_f("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
+		return TRUE;
+
+	}
+	else
+	{
+		/* An I/O Error occurred with the MegaSquirt ECU  */
+		DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+		errcount++;
+		if (errcount > 5 )
+			queue_function_f("conn_warning");
+		thread_update_widget_f("titlebar",MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
+		dbg_func_f(SERIAL_RD|IO_PROCESS,g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
+		thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("I/O with ECU Timeout\n")),FALSE,FALSE);
+		return FALSE;
+	}
+	return FALSE;
 }
