@@ -11,19 +11,25 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __DATAIO_H__
-#define __DATAIO_H__
+#ifndef __NULL_PLUGIN_H__
+#define __NULL_PLUGIN_H__
 
-#include <enums.h>
-#include <gtk/gtk.h>
-#include <threads.h>
+#include <defines.h>
+#include <configfile.h>
+
+#ifdef __NULL_PLUGIN_C__
+#define EXTERN
+#else
+#define EXTERN extern
+#endif
+
+/* Function Pointers */
+/* Function Pointers */
 
 /* Prototypes */
-void dump_output(gint, guchar *);
-gint read_data(gint , void **, gboolean);
-gboolean write_wrapper(gint, const void *, size_t, gint *);
-gboolean read_wrapper(gint, void *, size_t, gint *);
-
+void plugin_init(gconstpointer *);
+void plugin_shutdown(void);
+void register_common_enums(void);
 /* Prototypes */
 
 #endif

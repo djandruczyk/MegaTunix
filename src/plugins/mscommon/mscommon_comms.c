@@ -12,7 +12,6 @@
  */
 
 #include <config.h>
-#include <dataio.h>
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
@@ -113,7 +112,7 @@ G_MODULE_EXPORT gint comms_test(void)
 	if ((GINT)DATA_GET(global_data,"ecu_baud") < 115200)
 	{
 		/*printf("MS-1 comms test\n");*/
-		if (!write_wrapper(serial_params->fd,"C",1,&len))
+		if (!write_wrapper_f(serial_params->fd,"C",1,&len))
 		{
 			err_text = (gchar *)g_strerror(errno);
 			dbg_func_f(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
@@ -121,12 +120,12 @@ G_MODULE_EXPORT gint comms_test(void)
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			return FALSE;
 		}
-		result = read_data(1,NULL,FALSE);
+		result = read_data_f(1,NULL,FALSE);
 	}
 	else
 	{
 		/*printf("MS-2 comms test\n");*/
-		if (!write_wrapper(serial_params->fd,"c",1,&len))
+		if (!write_wrapper_f(serial_params->fd,"c",1,&len))
 		{
 			err_text = (gchar *)g_strerror(errno);
 			dbg_func_f(SERIAL_RD|CRITICAL,g_strdup_printf(__FILE__": comms_test()\n\tError writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n",err_text));
@@ -134,7 +133,7 @@ G_MODULE_EXPORT gint comms_test(void)
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			return FALSE;
 		}
-		result = read_data(-1,NULL,FALSE);
+		result = read_data_f(-1,NULL,FALSE);
 	}
 	if (result)     /* Success */
 	{
@@ -857,7 +856,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to %i for comms test\n",vector[i],baud));
 					setup_serial_params_f();
 					/* read out any junk in buffer and toss it */
-					read_wrapper(serial_params->fd,&buf,1024,&len);
+					read_wrapper_f(serial_params->fd,&buf,1024,&len);
 
 					thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Searching for ECU\n")),FALSE,FALSE);
 					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));

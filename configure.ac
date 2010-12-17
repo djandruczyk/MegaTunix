@@ -233,13 +233,14 @@ mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
 src/plugins/Makefile
+src/plugins/freeems/Makefile
 src/plugins/jimstim/Makefile
 src/plugins/ms1/Makefile
 src/plugins/ms2/Makefile
 src/plugins/mscommon/Makefile
-src/plugins/secu3/Makefile
-src/plugins/freeems/Makefile
+src/plugins/null/Makefile
 src/plugins/pis/Makefile
+src/plugins/secu3/Makefile
 msloader/Makefile
 msloader/resources.rc
 gaugedesigner/resources.rc

@@ -15,6 +15,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <freeems_comms.h>
+#include <freeems_plugin.h>
 #include <gtk/gtk.h>
 #include <serialio.h>
 #include <template.h>
@@ -35,12 +36,153 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	 *
 	 * Thus we need to handle all possible conditions if possible
 	 */
+	static gboolean serial_is_open = FALSE; /* Assume never opened */
+	static GAsyncQueue *io_repair_queue = NULL;
+	gint baud = 0;
+	gchar * potential_ports;
+	gint len = 0;
+	gboolean autodetect = FALSE;
+	guchar buf [1024];
+	gchar ** vector = NULL;
+	guint i = 0;
+	Serial_Params *serial_params = NULL;
+	void (*unlock_serial_f)(void) = NULL;
+	void (*close_serial_f)(void) = NULL;
+	gboolean (*open_serial_f)(const gchar *) = NULL;
+	gboolean (*lock_serial_f)(const gchar *) = NULL;
+	void (*setup_serial_params_f)(void) = NULL;
 
-	/* HACK ALERT, just turn on serial for now */
-	printf("serial_repair_thread, enabling freems comms!\n");
-	freeems_serial_enable();
-	return 0;
+	serial_params = DATA_GET(global_data,"serial_params");
+
+	get_symbol_f("setup_serial_params",(void *)&setup_serial_params_f);
+	get_symbol_f("open_serial",(void *)&open_serial_f);
+	get_symbol_f("close_serial",(void *)&close_serial_f);
+	get_symbol_f("lock_serial",(void *)&lock_serial_f);
+	get_symbol_f("unlock_serial",(void *)&unlock_serial_f);
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread created!\n"));
+
+	if (DATA_GET(global_data,"offline"))
+	{
+		g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
+		dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, offline mode!\n"));
+		g_thread_exit(0);
+	}
+	if (!io_repair_queue)
+		io_repair_queue = DATA_GET(global_data,"io_repair_queue");
+	/* IF serial_is_open is true, then the port was ALREADY opened 
+	 * previously but some error occurred that sent us down here. Thus
+	 * first do a simple comms test, if that succeeds, then just cleanup 
+	 * and return,  if not, close the port and essentially start over.
+	 */
+	if (serial_is_open == TRUE)
+	{
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port considered open, but throwing errors\n"));
+		i = 0;
+		while (i <= 5)
+		{
+			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
+			if (comms_test())
+			{
+				dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, successfull comms test!\n"));
+				g_thread_exit(0);
+			}
+			i++;
+		}
+		close_serial_f();
+		unlock_serial_f();
+		serial_is_open = FALSE;
+		/* Fall through */
+	}
+	while (!serial_is_open)
+	{
+		/* If "leaving" flag set, EXIT now */
+		if (DATA_GET(global_data,"leaving"))
+			g_thread_exit(0);
+		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port NOT considered open yet.\n"));
+		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
+		if (!autodetect) /* User thinks he/she is S M A R T */
+		{
+			potential_ports = (gchar *)DATA_GET(global_data, "override_port");
+			if (potential_ports == NULL)
+				potential_ports = (gchar *)DATA_GET(global_data,"potential_ports");
+		}
+		else    /* Auto mode */
+			potential_ports = (gchar *)DATA_GET(global_data,"potential_ports");
+		vector = g_strsplit(potential_ports,",",-1);
+		for (i=0;i<g_strv_length(vector);i++)
+		{
+			/* Message queue used to exit immediately */
+			if (g_async_queue_try_pop(io_repair_queue))
+			{
+				g_timeout_add(300,(GSourceFunc)queue_function_f,"kill_conn_warning");
+				dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, told to!\n"));
+				g_thread_exit(0);
+			}
+			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
+			{
+				dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s does NOT exist\n",vector[i]));
+
+				/* Wait 200 ms to avoid deadlocking */
+				g_usleep(200000);
+				continue;
+			}
+			g_usleep(100000);
+			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Attempting to open port %s\n",vector[i]));
+			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open port %s\n"),vector[i]),FALSE,FALSE);
+			if (lock_serial_f(vector[i]))
+			{
+				if (open_serial_f(vector[i]))
+				{
+					if (autodetect)
+						thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
+					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to %i for comms test\n",vector[i],baud));
+					setup_serial_params_f();
+					/* read out any junk in buffer and toss it */
+					read_wrapper(serial_params->fd,&buf,1024,&len);
+
+					thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Searching for ECU\n")),FALSE,FALSE);
+					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
+					if (comms_test())
+					{       /* We have a winner !!  Abort loop */
+						thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Search successfull\n")),FALSE,FALSE);
+						serial_is_open = TRUE;
+						break;
+					}
+					else
+					{
+						dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed, no ECU found, closing port %s.\n",vector[i]));
+						thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("No ECU found...\n")),FALSE,FALSE);
+						close_serial_f();
+						unlock_serial_f();
+						/*g_usleep(100000);*/
+					}
+				}
+				g_usleep(100000);
+			}
+			else
+			{
+				dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s is open by another application\n",vector[i]));
+				thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Port %s is open by another application\n"),vector[i]),FALSE,FALSE);
+			}
+		}
+		queue_function_f("conn_warning");
+	}
+
+	if (serial_is_open)
+	{
+		freeems_serial_enable();
+		queue_function_f("kill_conn_warning");
+		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
+	}
+	if (vector)
+		g_strfreev(vector);
+	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, device found!\n"));
+	g_thread_exit(0);
+	return NULL;
+
 }
+		
+
 
 
 G_MODULE_EXPORT void freeems_serial_enable(void)

@@ -13,7 +13,6 @@
 
 #include <args.h>
 #include <config.h>
-#include <dataio.h>
 #include <datamgmt.h>
 #include <defines.h>
 #include <debugging.h>
@@ -307,7 +306,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case NUM_REV:
 			if (DATA_GET(global_data,"offline"))
 				break;
-			count = read_data(-1,&message->recv_buf,FALSE);
+			count = read_data_f(-1,&message->recv_buf,FALSE);
 			ptr8 = (guchar *)message->recv_buf;
 			firmware->ecu_revision=(gint)ptr8[0];
 			if (count > 0)
@@ -318,7 +317,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case TEXT_REV:
 			if (DATA_GET(global_data,"offline"))
 				break;
-			count = read_data(-1,&message->recv_buf,FALSE);
+			count = read_data_f(-1,&message->recv_buf,FALSE);
 			if (count > 0)
 			{
 				thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
@@ -329,7 +328,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case SIGNATURE:
 			if (DATA_GET(global_data,"offline"))
 				break;
-			 count = read_data(-1,&message->recv_buf,FALSE);
+			 count = read_data_f(-1,&message->recv_buf,FALSE);
                          if (count > 0)
 			 {
 				 thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
@@ -341,7 +340,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case MS2_VECONST:
 			page = (GINT)DATA_GET(output->data,"page");
 			canID = (GINT)DATA_GET(output->data,"canID");
-			count = read_data(firmware->page_params[page]->length,&message->recv_buf,TRUE);
+			count = read_data_f(firmware->page_params[page]->length,&message->recv_buf,TRUE);
 			if (count != firmware->page_params[page]->length)
 				break;
 			ms_store_new_block(canID,page,0,
@@ -352,7 +351,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 			DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			break;
 		case MS1_RT_VARS:
-			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
+			count = read_data_f(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
 			ptr8 = (guchar *)message->recv_buf;
@@ -389,7 +388,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case MS2_RT_VARS:
 			page = (GINT)DATA_GET(output->data,"page");
 			canID = (GINT)DATA_GET(output->data,"canID");
-			count = read_data(firmware->rtvars_size,&message->recv_buf,TRUE);
+			count = read_data_f(firmware->rtvars_size,&message->recv_buf,TRUE);
 			if (count != firmware->rtvars_size)
 				break;
 			ms_store_new_block(canID,page,0,
@@ -449,7 +448,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
 		case MS1_GETERROR:
 			DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 			DATA_SET(global_data,"force_page_change",GINT_TO_POINTER(TRUE));
-			count = read_data(-1,&message->recv_buf,FALSE);
+			count = read_data_f(-1,&message->recv_buf,FALSE);
 			if (count <= 10)
 			{
 				thread_update_logbar_f("error_status_view",NULL,g_strdup(_("No ECU Errors were reported....\n")),FALSE,FALSE);

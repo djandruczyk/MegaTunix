@@ -18,7 +18,6 @@
 #include <config.h>
 #include <configfile.h>
 #include <crx.h>
-#include <dataio.h>
 #include <debugging.h>
 #include <dep_loader.h>
 #include <enums.h>
@@ -121,7 +120,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_CHAR)
 			{
 				string = g_strdup(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,string,1,&len);
+				res = write_wrapper_f(serial_params->fd,string,1,&len);
 				if (!res)
 					interrogate_error("String Write error",j);
 				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%s\"\n",string));
@@ -130,7 +129,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_U08)
 			{
 				uint8 = (guint8)atoi(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,&uint8,1,&len);
+				res = write_wrapper_f(serial_params->fd,&uint8,1,&len);
 				if (!res)
 					interrogate_error("U08 Write error",j);
 				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",uint8));
@@ -138,7 +137,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_U16)
 			{
 				uint16 = (guint16)atoi(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,&uint16,2,&len);
+				res = write_wrapper_f(serial_params->fd,&uint16,2,&len);
 				if (!res)
 					interrogate_error("U16 Write error",j);
 				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",uint8));
@@ -146,7 +145,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_S08)
 			{
 				sint8 = (gint8)atoi(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,&sint8,1,&len);
+				res = write_wrapper_f(serial_params->fd,&sint8,1,&len);
 				if (!res)
 					interrogate_error("S08 Write error",j);
 				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",sint8));
@@ -154,7 +153,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_S16)
 			{
 				sint16 = (gint16)atoi(test->test_vector[j]);
-				res = write_wrapper(serial_params->fd,&sint16,2,&len);
+				res = write_wrapper_f(serial_params->fd,&sint16,2,&len);
 				if (!res)
 					interrogate_error("S16 Write error",j);
 				dbg_func_f(INTERROGATOR,g_strdup_printf("\tSent command \"%i\"\n",sint8));
@@ -168,7 +167,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		{
 			dbg_func_f(INTERROGATOR,g_strdup_printf("\tInterrogation for command %s requesting %i bytes\n",test->test_name,total_wanted-total_read));
 
-			res = read_wrapper(serial_params->fd,
+			res = read_wrapper_f(serial_params->fd,
 					ptr+total_read,
 					total_wanted-total_read,&len);
 			total_read += len;

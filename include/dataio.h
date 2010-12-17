@@ -11,24 +11,18 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __PLUGIN_H__
-#define __PLUGIN_H__
+#ifndef __DATAIO_H__
+#define __DATAIO_H__
 
+#include <enums.h>
 #include <gtk/gtk.h>
-
-typedef enum
-{
-	MAIN,
-	COMMON,
-	ECU,
-	NUM_MODULES
-}ModIndex;
+#include <threads.h>
 
 /* Prototypes */
-gboolean plugin_function(GtkWidget *, gpointer);
-void plugins_init(void);
-void plugins_shutdown(void);
-gboolean get_symbol(const gchar *, void **);
+void dump_output(gint, guchar *);
+gint read_data(gint , void **, gboolean);
+gboolean write_wrapper(gint, const void *, size_t, gint *);
+gboolean read_wrapper(gint, void *, size_t, gint *);
 /* Prototypes */
 
 #endif

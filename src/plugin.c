@@ -66,27 +66,10 @@ G_MODULE_EXPORT void plugins_init()
 	void (*common_gui_init)(void) = NULL;
 
 	/* MegaTunix itself */
-	module[0] = g_module_open(NULL,G_MODULE_BIND_LAZY);
-	if (!module[0])
+	module[MAIN] = g_module_open(NULL,G_MODULE_BIND_LAZY);
+	if (!module[MAIN])
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugin_init()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
 	DATA_SET(global_data,"megatunix_module",(gpointer)module[0]);
-
-	/* ECU library */
-	if (DATA_GET(global_data,"ecu_lib"))
-	{
-#ifdef __WIN32__
-		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
-		libpath = g_module_build_path(MTXPLUGINDIR,libname);
-		g_free(libname);
-#else
-		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
-#endif
-		module[1] = g_module_open(libpath,G_MODULE_BIND_LAZY);
-		if (!module[1])
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening ECU library module error:\n\t%s\n",g_module_error()));
-		g_free(libpath);
-		DATA_SET(global_data,"ecu_module",(gpointer)module[1]);
-	}
 
 	/* Common Library */
 	if (DATA_GET(global_data,"common_lib"))
@@ -98,11 +81,27 @@ G_MODULE_EXPORT void plugins_init()
 #else
 		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"common_lib"));
 #endif
-		module[2] = g_module_open(libpath,G_MODULE_BIND_LAZY);
-		if (!module[2])
+		module[COMMON] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+		if (!module[COMMON])
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening Common library module error:\n\t%s\n",g_module_error()));
 		g_free(libpath);
-		DATA_SET(global_data,"common_module",(gpointer)module[2]);
+		DATA_SET(global_data,"common_module",(gpointer)module[COMMON]);
+	}
+	/* ECU library */
+	if (DATA_GET(global_data,"ecu_lib"))
+	{
+#ifdef __WIN32__
+		libname = g_strdup_printf("%s-0",(gchar *)DATA_GET(global_data,"ecu_lib"));
+		libpath = g_module_build_path(MTXPLUGINDIR,libname);
+		g_free(libname);
+#else
+		libpath = g_module_build_path(MTXPLUGINDIR,(gchar *)DATA_GET(global_data,"ecu_lib"));
+#endif
+		module[ECU] = g_module_open(libpath,G_MODULE_BIND_LAZY);
+		if (!module[ECU])
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening ECU library module error:\n\t%s\n",g_module_error()));
+		g_free(libpath);
+		DATA_SET(global_data,"ecu_module",(gpointer)module[ECU]);
 	}
 
 	/* Set pointer to error message function global data container is
@@ -113,13 +112,13 @@ G_MODULE_EXPORT void plugins_init()
 	DATA_SET(global_data,"get_symbol_f",(gpointer)&get_symbol);
 
 	/* Common module init */
-	if (module[2])
-		if (g_module_symbol(module[2],"plugin_init",(void *)&plugin_init))
+	if (module[COMMON])
+		if (g_module_symbol(module[COMMON],"plugin_init",(void *)&plugin_init))
 			plugin_init(global_data);
 	/* ECU Specific module init */
-	if (module[1])
+	if (module[ECU])
 
-		if (g_module_symbol(module[1],"plugin_init",(void *)&plugin_init))
+		if (g_module_symbol(module[ECU],"plugin_init",(void *)&plugin_init))
 			plugin_init(global_data);
 
 	if (get_symbol("common_gui_init",(void *)&common_gui_init))
@@ -171,19 +170,19 @@ G_MODULE_EXPORT void plugins_shutdown()
 
 G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 {
-	GModule *module[3];
-	gint i = 0;
+	GModule *module[3] = {NULL,NULL,NULL};
+	ModIndex i = MAIN;
 	gboolean found = FALSE;
 	extern gconstpointer *global_data;
 
 	/* Megatunix itself */
-	module[0] = DATA_GET(global_data,"megatunix_module");
+	module[MAIN] = DATA_GET(global_data,"megatunix_module");
 	/* Common library */
-	module[1] = DATA_GET(global_data,"common_module");
+	module[COMMON] = DATA_GET(global_data,"common_module");
 	/* ECU Specific library */
-	module[2] = DATA_GET(global_data,"ecu_module");
+	module[ECU] = DATA_GET(global_data,"ecu_module");
 
-	for (i=0;i<3;i++)
+	for (i=MAIN;i<NUM_MODULES;i++)
 	{
 		if (!module[i])
 			printf("module %i is not found!\n",i);

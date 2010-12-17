@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#define __FREEEMS_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
 #include <firmware.h>
@@ -29,14 +30,19 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
 	 */
-//	error_msg_f = (void *)DATA_GET(global_data,"error_msg_f");
-//	g_assert(error_msg_f);
+	error_msg_f = (void *)DATA_GET(global_data,"error_msg_f");
+	g_assert(error_msg_f);
 	get_symbol_f = (void *)DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
-//	get_symbol_f("_get_sized_data",(void *)&_get_sized_data_f);
-//	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
-//	get_symbol_f("dbg_func",(void *)&dbg_func_f);
-//	get_symbol_f("warn_user",(void *)&warn_user_f);
+	get_symbol_f("_get_sized_data",(void *)&_get_sized_data_f);
+	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
+	get_symbol_f("dbg_func",(void *)&dbg_func_f);
+	get_symbol_f("queue_function",(void *)&queue_function_f);
+	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
+	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
+	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
+	get_symbol_f("warn_user",(void *)&warn_user_f);
+	get_symbol_f("write_wrapper",(void *)&write_wrapper_f);
 	register_common_enums();
 }
 

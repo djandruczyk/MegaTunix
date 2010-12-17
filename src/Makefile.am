@@ -23,6 +23,7 @@ megatunix_SOURCES = \
 	conversions.c \
 	core_gui.c \
 	dashboard.c \
+	dataio.c \
 	datalogging_gui.c \
 	debugging.c \
 	dispatcher.c \

@@ -27,6 +27,8 @@
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <unistd.h>
@@ -276,3 +278,4 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	return TRUE;
 
 }
+
