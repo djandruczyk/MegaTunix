@@ -20,7 +20,9 @@ libfreeems_la_SOURCES = \
 	freeems_plugin.c \
 	freeems_plugin.h \
 	interrogate.c \
-	interrogate.h
+	interrogate.h \
+	packet_handlers.c \
+	packet_handlers.h 
 
 libfreeems_la_LDFLAGS = -shared $(no_undefined) -module
 libfreeems_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@

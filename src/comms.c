@@ -76,16 +76,11 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	Firmware_Details *firmware = NULL;
 	static void (*store_new_block)(gconstpointer *) = NULL;
 	static void (*set_ecu_data)(gconstpointer *) = NULL;
-	static gboolean (*write_wrapper)(gint, const void *, size_t, gint *) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	serial_params = DATA_GET(global_data,"serial_params");
 	if (!serio_mutex)
 		serio_mutex = DATA_GET(global_data,"serio_mutex");
-	if (!write_wrapper)
-		get_symbol("write_wrapper",(void*)&write_wrapper);
-	if (!write_wrapper)
-		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"write_wrapper\" was NOT found in plugins, BUG!\n"));
 	if (!set_ecu_data)
 		get_symbol("set_ecu_data",(void*)&set_ecu_data);
 	if (!set_ecu_data)

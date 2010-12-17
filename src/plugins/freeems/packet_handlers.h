@@ -1,0 +1,105 @@
+/*
+ * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ *
+ * Linux Megasquirt tuning software
+ * 
+ * 
+ * This software comes under the GPL (GNU Public License)
+ * You may freely copy,distribute, etc. this as long as all the source code
+ * is made available for FREE.
+ * 
+ * No warranty is made or implied. You use this program at your own risk.
+ */
+
+#ifndef __PACKET_HANDLERS_H__
+#define __PACKET_HANDLERS_H__
+
+#include <gtk/gtk.h>
+#include <defines.h>
+#include <configfile.h>
+#include <enums.h>
+
+
+typedef enum
+{
+	/* Firmware Independant */
+	REQUEST_INTERFACE_VERSION=0,
+	RESPONSE_INTERFACE_VERSION,
+	REQUEST_FIRMWARE_VERSION,
+	RESPONSE_FIRMWARE_VERSION,
+	REQUEST_MAX_PACKET_SIZE,
+	RESPONSE_MAX_PACKET_SIZE,
+	REQUEST_ECHO_PACKET_RETURN,
+	RESPONSE_ECHO_PACKET_RETURN,
+	REQUEST_SOFT_SYSTEM_RESET,
+	RESPONSE_SOFT_SYSTEM_RESET,  /* System comes up fresh, so this never happens */
+	REQUEST_HARD_SYSTEM_RESET,
+	RESPONSE_HARD_SYSTEM_RESET,  /* System comes up fresh, so this never happens */
+	REQUEST_ASYNC_ERROR_CODE,    /* Reserved, never used */
+	RESPONSE_ASYNC_ERROR_CODE,
+	REQUEST_ASYNC_DEBUG_INFO,    /* Reserved, never used */
+	RESPONSE_ASYNC_DEBUG_INFO,   /* NOTE: unrequested debug info packet */
+
+	/* Firmware Payload Type ID's */
+
+	/* Block Manipulation */
+	REQUEST_REPLACE_BLOCK_IN_RAM = 256,
+	RESPONSE_REPLACE_BLOCK_IN_RAM,
+	REQUEST_REPLACE_BLOCK_IN_FLASH,
+	RESPONSE_REPLACE_BLOCK_IN_FLASH,
+	REQUEST_RETRIEVE_BLOCK_FROM_RAM,
+	RESPONSE_RETRIEVE_BLOCK_FROM_RAM,
+	REQUEST_RETRIEVE_BLOCK_FROM_FLASH,
+	RESPONSE_RETRIEVE_BLOCK_FROM_FLASH,
+	REQUEST_BURN_BLOCK_FROM_RAM_TO_FLASH,
+	RESPONSE_BURN_BLOCK_FROM_RAM_TO_FLASH,
+	REQUEST_ERASE_ALL_BLOCKS_FROM_FLASH,
+	RESPONSE_ERASE_ALL_BLOCKS_FROM_FLASH,
+	REQUEST_BURN_ALL_BLOCKS_OF_FLASH,
+	RESPONSE_BURN_ALL_BLOCKS_OF_FLASH,
+
+	/* Main Table Manipulation */
+	REQUEST_ADJUST_MAIN_TABLE_CELL = 300,
+	RESPONSE_ADJUST_MAIN_TABLE_CELL,
+	REQUEST_ADJUST_MAIN_TABLE_RPM_AXIS,
+	RESPONSE_ADJUST_MAIN_TABLE_RPM_AXIS,
+	REQUEST_ADJUST_MAIN_TABLE_LOAD_AXIS,
+	RESPONSE_ADJUST_MAIN_TABLE_LOAD_AXIS,
+
+	/* 2D Table Manipulation */
+	REQUEST_ADJUST_2D_TABLE_AXIS,
+	RESPONSE_ADJUST_2D_TABLE_AXIS,
+	REQUEST_ADJUST_2D_TABLE_CELL,
+	RESPONSE_ADJUST_2D_TABLE_CELL,
+
+	/* Datalog Request Packets */
+	REQUEST_BASIC_DATALOG = 400,
+	RESPONSE_BASIC_DATALOG,
+	REQUEST_CONFIGURABLE_DATALOG,
+	RESPONSE_CONFIGURABLE_DATALOG,
+	REQUEST_SET_ASYNC_DATALOG_TYPE,
+	RESPONSE_SET_ASYNC_DATALOG_TYPE,
+
+	/* Special Functions */
+	REQUEST_FORWARD_PACKET_OVER_CAN = 500,
+	RESPONSE_FORWARD_PACKET_OVER_CAN,
+	REQUEST_FORWARD_PACKET_OVER_OTHER_UART,
+	RESPONSE_FORWARD_PACKET_OVER_OTHER_UART,
+
+	/* Generic memory grabber for debugging */
+	REQUEST_RETRIEVE_ARBRITRARY_MEMORY = 600,
+	RESPONSE_RETRIEVE_ARBRITRARY_MEMORY
+}PacketType;
+
+typedef enum
+{
+	START = 0xAA,
+	ESCAPE = 0xBB,
+	END = 0xCC
+}Escapes;
+
+/* Prototypes */
+gboolean find_any_packet(void *data, gint, gint *, gint *);
+/* Prototypes */
+
+#endif

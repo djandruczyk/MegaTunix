@@ -17,6 +17,7 @@
 #include <freeems_comms.h>
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
+#include <packet_handlers.h>
 #include <serialio.h>
 #include <template.h>
 
@@ -304,9 +305,11 @@ G_MODULE_EXPORT gboolean serial_error(GIOChannel *channel, GIOCondition cond, gp
 G_MODULE_EXPORT gboolean comms_test(void)
 {
 	static gint errcount = 0;
-	gboolean result = FALSE;
 	gchar * err_text = NULL;
+	char buf[2048];
 	gint len = 0;
+	gint start = 0;
+	gint end = 0;
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
@@ -318,16 +321,20 @@ G_MODULE_EXPORT gboolean comms_test(void)
 
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
 
-	result = read_data_f(2024,NULL,FALSE);
-	if (result > 0)     /* Success */
+	len = read_data_f(2048,(void *)&buf,FALSE);
+	printf("comms_test, got %i bytes\n",len);
+	if (len > 0)     /* Success */
 	{
-		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
-		errcount=0;
-		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successful\n"));
-		queue_function_f("kill_conn_warning");
-		thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
-		thread_update_logbar_f("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
-		return TRUE;
+		if (find_any_packet(&buf,len,&start, &end))
+		{
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+			errcount=0;
+			dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successful\n"));
+			queue_function_f("kill_conn_warning");
+			thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
+			thread_update_logbar_f("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
+			return TRUE;
+		}
 
 	}
 	else
