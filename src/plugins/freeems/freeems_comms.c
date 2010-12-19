@@ -18,8 +18,10 @@
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
 #include <packet_handlers.h>
+#include <poll.h>
 #include <serialio.h>
 #include <template.h>
+#include <unistd.h>
 
 
 extern gconstpointer *global_data;
@@ -188,13 +190,13 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 }
 		
 
-
-
 G_MODULE_EXPORT void freeems_serial_enable(void)
 {
 	GIOChannel *channel = NULL;
 	GAsyncQueue *queue = NULL;
 	Serial_Params *serial_params = NULL;
+	GThread *reader = NULL;
+	GThread *writer = NULL;
 	gint tmpi = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -204,9 +206,15 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 		dbg_func(CRITICAL,g_strdup(_(__FILE__": freeems_serial_setup, serial port is NOT open, or filedescriptor is invalid!\n")));
 		return;
 	}
-	queue = g_async_queue_new();
-	DATA_SET(global_data,"ack_queue",(gpointer)queue);
+	queue = DATA_GET(global_data,"ack_queue");
+	if (!queue)
+	{
+		queue = g_async_queue_new();
+		DATA_SET(global_data,"ack_queue",(gpointer)queue);
+	}
 
+//	reader = g_thread_create(serial_reader,queue,TRUE,NULL);
+//	writer = g_thread_create(serial_writer,queue,TRUE,NULL);
 #ifdef __WIN32__
 	channel = g_io_channel_win32_new_fd(serial_params->fd);
 #else
@@ -219,14 +227,49 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	tmpi = g_io_add_watch(channel,G_IO_IN|G_IO_PRI, able_to_read,(gpointer)queue);
 	DATA_SET(global_data,"read_watch",GINT_TO_POINTER(tmpi));
 
-	/* Writer */
-	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,(gpointer)queue);
-	DATA_SET(global_data,"write_watch",GINT_TO_POINTER(tmpi));
+//	/* Writer */
+//	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,(gpointer)queue);
+//	DATA_SET(global_data,"write_watch",GINT_TO_POINTER(tmpi));
 
 	/* Error Catcher */
 	tmpi = g_io_add_watch(channel,G_IO_ERR|G_IO_HUP|G_IO_NVAL, serial_error,NULL);
 	DATA_SET(global_data,"error_watch",GINT_TO_POINTER(tmpi));
 
+}
+
+
+G_MODULE_EXPORT void *serial_reader(gpointer data)
+{
+	Serial_Params *serial_params = NULL;
+	GTimeVal cur;
+	fd_set rd;
+	gint res = 0;
+	gint count = 0;
+	guchar buf[2048];
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	while (TRUE)
+	{
+		if (DATA_GET(global_data,"leaving"))
+			g_thread_exit(0);
+		cur.tv_sec = 1;
+		cur.tv_usec = 0;
+		FD_ZERO(&rd);
+		FD_SET(serial_params->fd, &rd);
+		res = select(serial_params->fd+1, &rd, NULL, NULL, (struct timeval *)&cur);
+		if (res < 0) 
+			printf("error, port closed?\n");
+		if (res == 0)
+		{
+			printf("no data avail to read, looping\n");
+			continue;
+		}
+		if (res > 0)
+		{
+			count = read(serial_params->fd,(void *)&buf,2048);
+			printf("read %i bytes\n",count);
+		}
+	}
 }
 
 
@@ -241,6 +284,7 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 
 	printf("Data waiting to be read!\n");
 	status = g_io_channel_read_chars(channel, &buf[0], count, &bytes_read, &err);
+	printf("read %i bytes\n",bytes_read);
 	if (err)
 	{
 		printf("error reported: \"%s\"\n",err->message);
@@ -256,12 +300,12 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 			break;
 		case G_IO_STATUS_EOF:
 			printf("EOF!\n");
+			g_io_channel_seek_position(channel,0,G_SEEK_CUR,NULL);
 			break;
 		case G_IO_STATUS_AGAIN:
 			printf("TEMP UNAVAIL!\n");
 			break;
 	}
-	printf("read %i bytes\n",bytes_read);
 	return TRUE;
 }
 
@@ -315,7 +359,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	gint start = 0;
 	gint end = 0;
 	gint loop = 0;
-	/* Packet sends back Firmware Version */
+	/* Packet sends back Interface Version */
 	/* START, sendback ack, Payload ID H, PAyload ID L, CKsum, STOP */
 	unsigned char pkt[6] = {0xAA,0x00,0x00,0x02,0x02,0xCC};
 	Serial_Params *serial_params = NULL;
@@ -329,28 +373,17 @@ G_MODULE_EXPORT gboolean comms_test(void)
 
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
 
-	flush_serial_f(serial_params->fd,BOTH);
+	/*printf("asking for interface version!\n");*/
 	if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
 	{
 		printf("write FAILED\n");
 		return FALSE;
 	}
-	dump_output_f(6,pkt);
 	len = read_data_f(2048,(void *)&buf,FALSE);
-	dump_output_f(len,buf);
-	/*
-	while (len < 2048)
+	/*printf("read %i bytes\n",len);*/
+	if (len > 0)     /* Perhaps Success ?*/
 	{
-		len += (gint)read_data_f(2048-len,(void *)(&buf+len), FALSE);
-		loop++;
-		if (loop >5)
-			break;
-		printf("looping for data\n");
-	}
-	*/
-	if (len > 0)     /* Success */
-	{
-		if (find_any_packet(buf,len,&start, &end))
+		if (find_any_packet(buf,len,&start, &end)) /* Real Success! */
 		{
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 			errcount=0;

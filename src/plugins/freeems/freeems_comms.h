@@ -16,9 +16,7 @@
 
 #include <gtk/gtk.h>
 #include <defines.h>
-#include <configfile.h>
 #include <enums.h>
-#include <threads.h>
 
 
 /* Prototypes */
@@ -28,6 +26,7 @@ gboolean serial_error(GIOChannel *, GIOCondition, gpointer);
 void freeems_serial_enable(void);
 gboolean comms_test(void);
 void *serial_repair_thread(gpointer);
+void *serial_reader(gpointer);
 /* Prototypes */
 
 #endif
