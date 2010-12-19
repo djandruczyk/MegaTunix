@@ -98,6 +98,9 @@ EXTERN void (*register_widget_f)(gchar *, GtkWidget *);
 EXTERN gboolean (*read_wrapper_f)(gint, void *, size_t, gint *);
 EXTERN gboolean (*write_wrapper_f)(gint, const void *, size_t, gint *);
 EXTERN gint (*read_data_f)(gint , void **, gboolean);
+EXTERN void (*dump_output_f)(gint, guchar *);
+EXTERN void (*flush_serial_f)(gint, gint);
+
 
 /* Function Pointers */
 

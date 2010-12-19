@@ -99,7 +99,7 @@ typedef enum
 }Escapes;
 
 /* Prototypes */
-gboolean find_any_packet(void *data, gint, gint *, gint *);
+gboolean find_any_packet(guchar *, gint, gint *, gint *);
 /* Prototypes */
 
 #endif

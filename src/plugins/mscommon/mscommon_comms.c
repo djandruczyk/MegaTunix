@@ -754,7 +754,6 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	 */
 	static gboolean serial_is_open = FALSE; /* Assume never opened */
 	static GAsyncQueue *io_repair_queue = NULL;
-	gint baud = 0;
 	gchar * potential_ports;
 	gint len = 0;
 	gboolean autodetect = FALSE;
@@ -829,6 +828,11 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 		vector = g_strsplit(potential_ports,",",-1);
 		for (i=0;i<g_strv_length(vector);i++)
 		{
+			if (DATA_GET(global_data,"leaving"))
+			{
+				g_strfreev(vector);
+				g_thread_exit(0);
+			}
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
@@ -853,7 +857,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 				{
 					if (autodetect)
 						thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
-					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to %i for comms test\n",vector[i],baud));
+					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened\n",vector[i]));
 					setup_serial_params_f();
 					/* read out any junk in buffer and toss it */
 					read_wrapper_f(serial_params->fd,&buf,1024,&len);

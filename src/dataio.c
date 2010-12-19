@@ -177,13 +177,12 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 		}
 		for (j=0;j<total_read;j++)
 		{
-			dbg_func(SERIAL_RD,g_strdup_printf("%.2x ", p[j]));
-			if (!((j+1)%8))
+			dbg_func(SERIAL_RD,g_strdup_printf("%.2X ", p[j]));
+			if (!((j+1)%16))
 				dbg_func(SERIAL_RD,g_strdup("\n"));
 		}
 		dbg_func(SERIAL_RD,g_strdup("\n\n"));
 	}
-
 }
 
 

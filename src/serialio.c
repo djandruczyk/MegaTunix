@@ -243,19 +243,16 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	cfsetspeed(&serial_params->newtio, baud);
 
 	/* Mask and set to 8N1 mode... */
-	/* Clears the following bits */
-	/* CRTSCTS == RTS/CTS flow control lines
-	   PARENB == Parity
-	   CSTOPB == Stop bits
-	   CSIZE == Char Size (5-8 bits)
-	   */
-	serial_params->newtio.c_cflag &= ~(CRTSCTS | PARENB | CSTOPB | CSIZE);
+	/* Mask out HW flow control */
+	serial_params->newtio.c_cflag &= ~(CRTSCTS);
 
 	/* Set additional flags, note |= syntax.. */
 	/* CLOCAL == Ignore modem control lines
 	   CREAD == Enable receiver
 	   */
 	serial_params->newtio.c_cflag |= CLOCAL | CREAD;
+	/* Mask out Bit size */
+	serial_params->newtio.c_cflag &= ~(CSIZE);
 	switch (bits)
 	{
 		case 8:
@@ -271,6 +268,8 @@ G_MODULE_EXPORT void setup_serial_params(void)
 			serial_params->newtio.c_cflag |= CS5;
 			break;
 	}
+	/* Mask out Parity Flags */
+	serial_params->newtio.c_cflag &= ~(PARENB | PARODD);
 	switch (parity)
 	{
 		case ODD:
@@ -282,6 +281,8 @@ G_MODULE_EXPORT void setup_serial_params(void)
 		case NONE:
 			break;
 	}
+	/* Mask out Stip bit flags */
+	serial_params->newtio.c_cflag &= ~(CSTOPB);
 	if (stop == 2)
 		serial_params->newtio.c_cflag |= CSTOPB;
 	/* 1 stop bit is default */
@@ -337,9 +338,8 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	}
 
 #endif
-
-	tcsetattr(serial_params->fd, TCSAFLUSH, &serial_params->newtio);
-
+	//tcsetattr(serial_params->fd, TCSAFLUSH, &serial_params->newtio);
+	tcsetattr(serial_params->fd, TCSANOW, &serial_params->newtio);
 #endif
 	g_mutex_unlock(serio_mutex);
 	return;

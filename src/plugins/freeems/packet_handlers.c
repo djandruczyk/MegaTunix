@@ -15,41 +15,29 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
+#include <freeems_plugin.h>
 #include <packet_handlers.h>
-#include <serialio.h>
-
-extern GtkWidget *interr_view;
 
 
-gboolean find_any_packet(void *data, gint len, gint *start, gint *end)
+gboolean find_any_packet(guchar *buf, gint len, gint *start, gint *end)
 {
-	guchar *ptr = NULL;
+	guchar *p = NULL;
 	gint i = 0;
 
 	g_assert(start);
 	g_assert(end);
-	*start = 0;
-	*end = 0;
-	ptr = data;
+	*start = -1;
+	*end = -1;
+	p = buf;
 	for (i=0;i<len;i++)
 	{
-		printf("offset %i,  \"%0X\" \n",i,(gint)ptr[i]);
-		if (ptr[i] == ESCAPE)
-			printf("ESCAPE byte found at offset %i\n",i);
-		if ((ptr[i] == START) && (*start == 0))
-		{
-			printf("Found start marker at %i\n",i);
+		if ((p[i] == START) && (*start == -1))
 			*start = i;
-		}
-		if ((ptr[i] == END) && (*end == 0))
-		{
-			printf("Found end marker at %i\n",i);
+		if ((p[i] == END) && (*end == -1))
 			*end = i;
-		}
 	}
-	if ((*start > 0) && (*end > 0))
+	if ((*start >= 0) && (*end >= 0))
 		return TRUE;
 	else
 		return FALSE;
-
 }

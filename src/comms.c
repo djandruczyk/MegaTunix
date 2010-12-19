@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <dataio.h>
 #include <defines.h>
 #include <3d_vetable.h>
 #include <comms.h>

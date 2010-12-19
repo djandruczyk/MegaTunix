@@ -39,7 +39,6 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	 */
 	static gboolean serial_is_open = FALSE; /* Assume never opened */
 	static GAsyncQueue *io_repair_queue = NULL;
-	gint baud = 0;
 	gchar * potential_ports;
 	gint len = 0;
 	gboolean autodetect = FALSE;
@@ -112,6 +111,11 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 		vector = g_strsplit(potential_ports,",",-1);
 		for (i=0;i<g_strv_length(vector);i++)
 		{
+			if (DATA_GET(global_data,"leaving"))
+			{
+				g_strfreev(vector);
+				g_thread_exit(0);
+			}
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
@@ -136,7 +140,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 				{
 					if (autodetect)
 						thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
-					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened, setting baud to %i for comms test\n",vector[i],baud));
+					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened\n",vector[i]));
 					setup_serial_params_f();
 					/* read out any junk in buffer and toss it */
 					//read_wrapper_f(serial_params->fd,&buf,1024,&len);
@@ -306,10 +310,14 @@ G_MODULE_EXPORT gboolean comms_test(void)
 {
 	static gint errcount = 0;
 	gchar * err_text = NULL;
-	char buf[2048];
+	guchar *buf = NULL;
 	gint len = 0;
 	gint start = 0;
 	gint end = 0;
+	gint loop = 0;
+	/* Packet sends back Firmware Version */
+	/* START, sendback ack, Payload ID H, PAyload ID L, CKsum, STOP */
+	unsigned char pkt[6] = {0xAA,0x00,0x00,0x02,0x02,0xCC};
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
@@ -319,13 +327,30 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	if (!serial_params)
 		return FALSE;
 
-	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
+	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
 
+	flush_serial_f(serial_params->fd,BOTH);
+	if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
+	{
+		printf("write FAILED\n");
+		return FALSE;
+	}
+	dump_output_f(6,pkt);
 	len = read_data_f(2048,(void *)&buf,FALSE);
-	printf("comms_test, got %i bytes\n",len);
+	dump_output_f(len,buf);
+	/*
+	while (len < 2048)
+	{
+		len += (gint)read_data_f(2048-len,(void *)(&buf+len), FALSE);
+		loop++;
+		if (loop >5)
+			break;
+		printf("looping for data\n");
+	}
+	*/
 	if (len > 0)     /* Success */
 	{
-		if (find_any_packet(&buf,len,&start, &end))
+		if (find_any_packet(buf,len,&start, &end))
 		{
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 			errcount=0;
@@ -335,7 +360,6 @@ G_MODULE_EXPORT gboolean comms_test(void)
 			thread_update_logbar_f("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
 			return TRUE;
 		}
-
 	}
 	else
 	{
