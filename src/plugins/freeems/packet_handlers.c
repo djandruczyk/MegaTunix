@@ -144,6 +144,8 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 				{
 					packet = g_new0(FreeEMS_Packet, 1);
 					packet->data = g_memdup(packetBuffer,currentPacketLength);
+					packet->raw_len = currentPacketLength;
+					packet_decode(packet);
 					g_async_queue_ref(queue);
 					g_async_queue_push(queue,(gpointer)packet);
 					g_async_queue_unref(queue);
@@ -169,26 +171,18 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 }
 
 
-/*
-G_MODULE_EXPORT gboolean find_any_packet(guchar *buf, gint len, gint *start, gint *end)
+void packet_decode(FreeEMS_Packet *packet)
 {
-	guchar *p = NULL;
-	gint i = 0;
-
-	g_assert(start);
-	g_assert(end);
-	*start = -1;
-	*end = -1;
-	p = buf;
-	for (i=0;i<len;i++)
-	{
-		if ((p[i] == START) && (*start == -1) && (*end == -1))
-			*start = i;
-		if ((p[i] == END) && (*start >= 0 ) && (*end == -1))
-			*end = i;
-	}
-	if ((*start >= 0) && (*end >= 0))
-		return TRUE;
-	else
-		return FALSE;
-}*/
+	guint8 *ptr = packet->data;
+	printf("Packet:\n");
+	packet->header_bits = ptr[0];
+	packet->payload_id = (ptr[1] << 8) + ptr[2];
+	printf("Payload type %i\n",packet->header_bits & PAYLOAD_TYPE_MASK);
+	printf("Ack valid %i\n",packet->header_bits & ACK_VALID_MASK);
+	printf("Ack type %i\n",packet->header_bits & ACK_TYPE_MASK);
+	printf("has addresses %i\n",packet->header_bits & HAS_ADDRESSES_MASK);
+	printf("has length %i\n",packet->header_bits & HAS_LENGTH_MASK);
+	printf("Payload ID %i\n",packet->payload_id);
+	printf("\n");
+	
+}

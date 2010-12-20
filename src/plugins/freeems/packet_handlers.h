@@ -106,7 +106,7 @@ struct
 #define PAYLOAD_TYPE_MASK	1
 #define ACK_VALID_MASK		2
 #define ACK_TYPE_MASK		4
-#define HAS_ADDRESS_MASK	8
+#define HAS_ADDRESSES_MASK	8
 #define HAS_LENGTH_MASK		16
 
 
@@ -115,6 +115,7 @@ typedef struct _FreeEMS_Packet FreeEMS_Packet;
 struct _FreeEMS_Packet
 {
 	guchar *data;		/* Raw packet data */
+	guint16 raw_len;	/* Raw packet length */
 	guint8 header_bits;
 	guint16 payload_id;
 	guint8 seq_num;
@@ -133,8 +134,8 @@ struct _FreeEMS_Packet
 
 
 /* Prototypes */
-G_MODULE_EXPORT void handle_data(guchar *buf, gint);
-gboolean find_any_packet(guchar *, gint, gint *, gint *);
+void handle_data(guchar *buf, gint);
+void packet_decode(FreeEMS_Packet *);
 /* Prototypes */
 
 #endif
