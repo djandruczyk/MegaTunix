@@ -200,22 +200,14 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 G_MODULE_EXPORT void freeems_serial_enable(void)
 {
 	GIOChannel *channel = NULL;
-	GAsyncQueue *queue = NULL;
 	Serial_Params *serial_params = NULL;
 	gint tmpi = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
-	printf("serial enable!\n");
 	if ((!serial_params->open) || (!serial_params->fd))
 	{
 		dbg_func(CRITICAL,g_strdup(_(__FILE__": freeems_serial_setup, serial port is NOT open, or filedescriptor is invalid!\n")));
 		return;
-	}
-	queue = DATA_GET(global_data,"ack_queue");
-	if (!queue)
-	{
-		queue = g_async_queue_new();
-		DATA_SET(global_data,"ack_queue",(gpointer)queue);
 	}
 
 #ifdef __WIN32__
@@ -224,16 +216,14 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	channel = g_io_channel_unix_new(serial_params->fd);
 #endif
 	DATA_SET(global_data,"serial_channel",channel);
-	printf("channel open!\n");
 	/* Set to raw mode */
 	g_io_channel_set_encoding(channel, NULL, NULL);
-//	g_io_channel_set_buffered(channel, FALSE);
 	/* Reader */
-	tmpi = g_io_add_watch_full(channel,0,G_IO_IN,able_to_read,(gpointer)queue, read_error);
+	tmpi = g_io_add_watch_full(channel,0,G_IO_IN,able_to_read,NULL, read_error);
 	DATA_SET(global_data,"read_watch",GINT_TO_POINTER(tmpi));
 
 //	/* Writer */
-//	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,(gpointer)queue);
+//	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,NULL);
 //	DATA_SET(global_data,"write_watch",GINT_TO_POINTER(tmpi));
 
 //	/* Error Catcher */
@@ -245,7 +235,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 
 G_MODULE_EXPORT void read_error(gpointer data)
 {
-	printf("READ ERROR, disabling io_channel stuff!!!\n");
+	/*printf("READ ERROR, disabling io_channel stuff!!!\n");*/
 	freeems_serial_disable();
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 }
@@ -304,11 +294,6 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 
 G_MODULE_EXPORT gboolean able_to_write(GIOChannel *channel, GIOCondition cond, gpointer data)
 {
-	GAsyncQueue *ack_queue = NULL;
-	GAsyncQueue *out_queue = NULL;
-	ack_queue = (GAsyncQueue *)data;
-	out_queue = DATA_GET(global_data,"out_packet_queue");
-
 	g_usleep(100000);
 	printf("Able to write, sleeping 100 ms\n");
 	return TRUE;
@@ -344,85 +329,46 @@ G_MODULE_EXPORT gboolean serial_error(GIOChannel *channel, GIOCondition cond, gp
 
 G_MODULE_EXPORT gboolean comms_test(void)
 {
-	static gint errcount = 0;
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
 	GTimeVal tval;
-	gchar * err_text = NULL;
-	guchar *buf = NULL;
 	gint len = 0;
-	gint start = 0;
-	gint end = 0;
-	gint loop = 0;
 	/* Packet sends back Interface Version */
 	/* START, sendback ack, Payload ID H, PAyload ID L, CKsum, STOP */
-	//unsigned char pkt[6] = {0xAA,0x00,0x00,0x02,0x02,0xCC};
 	unsigned char pkt[6] = {0xAA,0x00,0x00,0x00,0x00,0xCC};
 	Serial_Params *serial_params = NULL;
-	extern gconstpointer *global_data;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	queue = DATA_GET(global_data,"packet_queue");
 
-
+	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
+	if (!serial_params)
+		return FALSE;
 	g_get_current_time(&tval);
-	g_time_val_add(&tval,1000000);
+	g_time_val_add(&tval,100000);
 	packet = g_async_queue_timed_pop(queue,&tval);
 	if (packet)
 	{
 		printf("PACKET ARRIVED!!!!\n");
+		g_free(packet->data);
+		g_free(packet);
 		return TRUE; 
 	}
 	else
-	{
-		printf("NO PACKET\n");
-		return FALSE;
-	}
-
-	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
-	if (!serial_params)
-		return FALSE;
-
-	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
-
-	/*printf("asking for interface version!\n");*/
-	if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
-		return FALSE;
-	printf("wrote 6 bytes\n");
-	dump_output_f(6,pkt);
-	len = read_data_f(2048,(void *)&buf,FALSE);
-	printf("read %i bytes\n",len);
-	len = read_data_f(2048,(void *)&buf,FALSE);
-	printf("read %i bytes\n",len);
-	len = read_data_f(2048,(void *)&buf,FALSE);
-	printf("read %i bytes\n",len);
-	if (len > 0)     /* Perhaps Success ?*/
-	{
-		dump_output_f(len,buf);
-		if (find_any_packet(buf,len,&start, &end)) /* Real Success! */
+	{ /* Assume ECU is in non-streaming mode, try and probe it */
+		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
+		if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
+			return FALSE;
+		g_get_current_time(&tval);
+		g_time_val_add(&tval,100000);
+		packet = g_async_queue_timed_pop(queue,&tval);
+		if (packet)
 		{
-			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
-			errcount=0;
-			dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tECU Comms Test Successful\n"));
-			queue_function_f("kill_conn_warning");
-			thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
-			thread_update_logbar_f("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
-			g_free(buf);
-			return TRUE;
+			printf("FOUND BY PROBING!!!!!\n");
+			g_free(packet->data);
+			g_free(packet);
+			return TRUE; 
 		}
-			g_free(buf);
-	}
-	else
-	{
-		/* An I/O Error occurred with the MegaSquirt ECU  */
-		DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
-		errcount++;
-		if (errcount > 5 )
-			queue_function_f("conn_warning");
-		thread_update_widget_f("titlebar",MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
-		dbg_func_f(SERIAL_RD|IO_PROCESS,g_strdup(__FILE__": comms_test()\n\tI/O with ECU Timeout\n"));
-		thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("I/O with ECU Timeout\n")),FALSE,FALSE);
-		return FALSE;
 	}
 	return FALSE;
 }
