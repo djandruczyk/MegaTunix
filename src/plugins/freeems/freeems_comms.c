@@ -80,17 +80,6 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	if (serial_is_open == TRUE)
 	{
 		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port considered open, but throwing errors\n"));
-		i = 0;
-		while (i <= 5)
-		{
-			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
-			if (comms_test())
-			{
-				dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, successfull comms test!\n"));
-				g_thread_exit(0);
-			}
-			i++;
-		}
 		freeems_serial_disable();
 		close_serial_f();
 		unlock_serial_f();
