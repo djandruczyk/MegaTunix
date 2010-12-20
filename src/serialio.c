@@ -55,7 +55,7 @@ extern gconstpointer *global_data;
  comms page on success/failure
  \param port_name (gchar *) name of the port to open
  */
-G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
+G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 {
 	/* We are using DOS/Win32 style com port numbers instead of unix
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
@@ -72,11 +72,22 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name)
 	/*printf("Opening serial port %s\n",port_name);*/
 	/* Open Read/Write and NOT as the controlling TTY */
 	/* Blocking mode... */
+	if (nonblock)
+	{
 #ifdef __WIN32__
-	fd = open(port_name, O_RDWR | O_BINARY );
+		fd = open(port_name, O_RDWR | O_BINARY | O_NDELAY);
 #else
-	fd = open(port_name, O_RDWR | O_NOCTTY );
+		fd = open(port_name, O_RDWR | O_NOCTTY | O_NDELAY );
 #endif
+	}
+	else
+	{
+#ifdef __WIN32__
+		fd = open(port_name, O_RDWR | O_BINARY );
+#else
+		fd = open(port_name, O_RDWR | O_NOCTTY );
+#endif
+	}
 	if (fd > 0)
 	{
 		/* SUCCESS */
@@ -240,7 +251,8 @@ G_MODULE_EXPORT void setup_serial_params(void)
 			baud = B9600;
 	}
 
-	cfsetspeed(&serial_params->newtio, baud);
+	cfsetispeed(&serial_params->newtio, baud);
+	cfsetospeed(&serial_params->newtio, baud);
 
 	/* Mask and set to 8N1 mode... */
 	/* Mask out HW flow control */
@@ -273,7 +285,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	switch (parity)
 	{
 		case ODD:
-			serial_params->newtio.c_cflag |= PARENB | PARODD;
+			serial_params->newtio.c_cflag |= (PARENB | PARODD);
 			break;
 		case EVEN:
 			serial_params->newtio.c_cflag |= PARENB;
@@ -289,14 +301,26 @@ G_MODULE_EXPORT void setup_serial_params(void)
 
 
 	/* RAW Input */
-	/* Ignore signals, enable canonical, etc */
-	serial_params->newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+	/* Ignore signals, disable canonical, echo, etc */
+	/*
+	serial_params->newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ECHONL | IEXTEN | ISIG);
+	*/
+	serial_params->newtio.c_lflag = 0;
 
 	/* Disable software flow control */
-	serial_params->newtio.c_iflag &= ~(IXON | IXOFF );
+	serial_params->newtio.c_iflag &= ~(IXON | IXOFF | IXANY );
+	/*
+	serial_params->newtio.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
+			                           | INLCR | IGNCR | ICRNL );
+						   */
+	serial_params->newtio.c_iflag = IGNBRK;
+
 
 	/* Set raw output */
+	/*
 	serial_params->newtio.c_oflag &= ~OPOST;
+	*/
+	serial_params->newtio.c_oflag = 0;
 
 	/* 
 	   initialize all control characters 
@@ -309,8 +333,8 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	serial_params->newtio.c_cc[VKILL]    = 0;     /* @ */
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
-	serial_params->newtio.c_cc[VMIN]     = 0;     
 	serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
+	serial_params->newtio.c_cc[VMIN]     = 0;     
 
 #ifdef __PIS_SUPPORT__
 	if (ioctl(serial_params->fd, TIOCGSERIAL, &serial_params->oldctl) != 0)
@@ -342,6 +366,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	tcsetattr(serial_params->fd, TCSANOW, &serial_params->newtio);
 #endif
 	g_mutex_unlock(serio_mutex);
+	//flush_serial(serial_params->fd,BOTH);
 	return;
 }
 

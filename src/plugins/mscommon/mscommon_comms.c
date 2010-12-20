@@ -763,7 +763,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	Serial_Params *serial_params = NULL;
 	void (*unlock_serial_f)(void) = NULL;
 	void (*close_serial_f)(void) = NULL;
-	gboolean (*open_serial_f)(const gchar *) = NULL;
+	gboolean (*open_serial_f)(const gchar *,gboolean) = NULL;
 	gboolean (*lock_serial_f)(const gchar *) = NULL;
 	void (*setup_serial_params_f)(void) = NULL;
 
@@ -853,7 +853,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open port %s\n"),vector[i]),FALSE,FALSE);
 			if (lock_serial_f(vector[i]))
 			{
-				if (open_serial_f(vector[i]))
+				if (open_serial_f(vector[i],FALSE))
 				{
 					if (autodetect)
 						thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));

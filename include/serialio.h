@@ -79,7 +79,7 @@ typedef enum
 }FlushDirection;
 
 /* Prototypes */
-gboolean open_serial(gchar *);
+gboolean open_serial(gchar *, gboolean);
 void close_serial(void);
 void setup_serial_params(void);
 void toggle_serial_control_lines(void );

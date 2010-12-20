@@ -26,6 +26,7 @@
 
 extern gconstpointer *global_data;
 
+void read_error(gpointer);
 
 G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 {
@@ -50,7 +51,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	Serial_Params *serial_params = NULL;
 	void (*unlock_serial_f)(void) = NULL;
 	void (*close_serial_f)(void) = NULL;
-	gboolean (*open_serial_f)(const gchar *) = NULL;
+	gboolean (*open_serial_f)(const gchar *,gboolean) = NULL;
 	gboolean (*lock_serial_f)(const gchar *) = NULL;
 	void (*setup_serial_params_f)(void) = NULL;
 
@@ -138,7 +139,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open port %s\n"),vector[i]),FALSE,FALSE);
 			if (lock_serial_f(vector[i]))
 			{
-				if (open_serial_f(vector[i]))
+				if (open_serial_f(vector[i],TRUE))
 				{
 					if (autodetect)
 						thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
@@ -190,6 +191,25 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 }
 		
 
+G_MODULE_EXPORT void freeems_serial_disable(void)
+{
+	GIOChannel *channel = NULL;
+	GAsyncQueue *queue = NULL;
+	Serial_Params *serial_params = NULL;
+	GThread *reader = NULL;
+	GThread *writer = NULL;
+	gint tmpi = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_source_remove((guint)DATA_GET(global_data,"read_watch"));
+	channel = DATA_GET(global_data,"serial_channel");
+	if (channel)
+		g_io_channel_shutdown(channel,FALSE,NULL);
+	DATA_SET(global_data,"serial_channel",NULL);
+	DATA_SET(global_data,"read_watch",NULL);
+}
+
+
 G_MODULE_EXPORT void freeems_serial_enable(void)
 {
 	GIOChannel *channel = NULL;
@@ -213,63 +233,36 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 		DATA_SET(global_data,"ack_queue",(gpointer)queue);
 	}
 
-//	reader = g_thread_create(serial_reader,queue,TRUE,NULL);
-//	writer = g_thread_create(serial_writer,queue,TRUE,NULL);
 #ifdef __WIN32__
 	channel = g_io_channel_win32_new_fd(serial_params->fd);
 #else
 	channel = g_io_channel_unix_new(serial_params->fd);
 #endif
+	DATA_SET(global_data,"serial_channel",channel);
 	printf("channel open!\n");
 	/* Set to raw mode */
 	g_io_channel_set_encoding(channel, NULL, NULL);
+//	g_io_channel_set_buffered(channel, FALSE);
 	/* Reader */
-	tmpi = g_io_add_watch(channel,G_IO_IN|G_IO_PRI, able_to_read,(gpointer)queue);
+	tmpi = g_io_add_watch_full(channel,0,G_IO_IN,able_to_read,(gpointer)queue, read_error);
 	DATA_SET(global_data,"read_watch",GINT_TO_POINTER(tmpi));
 
 //	/* Writer */
 //	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,(gpointer)queue);
 //	DATA_SET(global_data,"write_watch",GINT_TO_POINTER(tmpi));
 
-	/* Error Catcher */
-	tmpi = g_io_add_watch(channel,G_IO_ERR|G_IO_HUP|G_IO_NVAL, serial_error,NULL);
-	DATA_SET(global_data,"error_watch",GINT_TO_POINTER(tmpi));
+//	/* Error Catcher */
+//	tmpi = g_io_add_watch(channel,G_IO_ERR|G_IO_HUP|G_IO_NVAL, serial_error,NULL);
+//	DATA_SET(global_data,"error_watch",GINT_TO_POINTER(tmpi));
 
 }
 
 
-G_MODULE_EXPORT void *serial_reader(gpointer data)
+G_MODULE_EXPORT void read_error(gpointer data)
 {
-	Serial_Params *serial_params = NULL;
-	GTimeVal cur;
-	fd_set rd;
-	gint res = 0;
-	gint count = 0;
-	guchar buf[2048];
-
-	serial_params = DATA_GET(global_data,"serial_params");
-	while (TRUE)
-	{
-		if (DATA_GET(global_data,"leaving"))
-			g_thread_exit(0);
-		cur.tv_sec = 1;
-		cur.tv_usec = 0;
-		FD_ZERO(&rd);
-		FD_SET(serial_params->fd, &rd);
-		res = select(serial_params->fd+1, &rd, NULL, NULL, (struct timeval *)&cur);
-		if (res < 0) 
-			printf("error, port closed?\n");
-		if (res == 0)
-		{
-			printf("no data avail to read, looping\n");
-			continue;
-		}
-		if (res > 0)
-		{
-			count = read(serial_params->fd,(void *)&buf,2048);
-			printf("read %i bytes\n",count);
-		}
-	}
+	printf("READ ERROR!!!\n");
+	freeems_serial_disable();
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 }
 
 
@@ -294,16 +287,21 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 	{
 		case G_IO_STATUS_ERROR:
 			printf("IO ERROR!\n");
+			return FALSE;
 			break;
 		case G_IO_STATUS_NORMAL:
 			printf("SUCCESS!\n");
+			return TRUE;
 			break;
 		case G_IO_STATUS_EOF:
 			printf("EOF!\n");
-			g_io_channel_seek_position(channel,0,G_SEEK_CUR,NULL);
+//			freeems_serial_disable();
+//			freeems_serial_enable();
+			return FALSE;
 			break;
 		case G_IO_STATUS_AGAIN:
 			printf("TEMP UNAVAIL!\n");
+			return TRUE;
 			break;
 	}
 	return TRUE;
@@ -340,10 +338,10 @@ G_MODULE_EXPORT gboolean serial_error(GIOChannel *channel, GIOCondition cond, gp
 			printf("ERROR condition!\n");
 			break;
 		case G_IO_HUP: 
-			printf("Hungup/connection broken!\n");
+			printf("Hungup/connection brokenm resetting!\n");
 			break;
 		case G_IO_NVAL: 
-			printf("Invalid req, descriptor not open!\n");
+			printf("Invalid req, descriptor not openm resetting!\n");
 			break;
 	}
 	return TRUE;
@@ -361,10 +359,12 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	gint loop = 0;
 	/* Packet sends back Interface Version */
 	/* START, sendback ack, Payload ID H, PAyload ID L, CKsum, STOP */
-	unsigned char pkt[6] = {0xAA,0x00,0x00,0x02,0x02,0xCC};
+	//unsigned char pkt[6] = {0xAA,0x00,0x00,0x02,0x02,0xCC};
+	unsigned char pkt[6] = {0xAA,0x00,0x00,0x00,0x00,0xCC};
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
+//	return TRUE; /* Fake it */
 	serial_params = DATA_GET(global_data,"serial_params");
 
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
@@ -375,14 +375,18 @@ G_MODULE_EXPORT gboolean comms_test(void)
 
 	/*printf("asking for interface version!\n");*/
 	if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
-	{
-		printf("write FAILED\n");
 		return FALSE;
-	}
+	printf("wrote 6 bytes\n");
+	dump_output_f(6,pkt);
 	len = read_data_f(2048,(void *)&buf,FALSE);
-	/*printf("read %i bytes\n",len);*/
+	printf("read %i bytes\n",len);
+	len = read_data_f(2048,(void *)&buf,FALSE);
+	printf("read %i bytes\n",len);
+	len = read_data_f(2048,(void *)&buf,FALSE);
+	printf("read %i bytes\n",len);
 	if (len > 0)     /* Perhaps Success ?*/
 	{
+		dump_output_f(len,buf);
 		if (find_any_packet(buf,len,&start, &end)) /* Real Success! */
 		{
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
@@ -391,8 +395,10 @@ G_MODULE_EXPORT gboolean comms_test(void)
 			queue_function_f("kill_conn_warning");
 			thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
 			thread_update_logbar_f("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
+			g_free(buf);
 			return TRUE;
 		}
+			g_free(buf);
 	}
 	else
 	{

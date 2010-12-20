@@ -72,7 +72,6 @@ EXTERN double (*eval_x_f)(void *, double);
 EXTERN void (*thread_widget_set_sensitive_f)(const gchar *, gboolean);
 EXTERN void (*get_table_f)(gpointer, gpointer, gpointer);
 EXTERN void (*free_multi_source_f)(gpointer);
-EXTERN void (*flush_serial_f)(gint, gint);
 EXTERN void (*_set_sized_data_f)(guint8 *, gint, DataSize, gint, gboolean);
 EXTERN gint (*_get_sized_data_f)(guint8 *, gint, DataSize, gboolean);
 EXTERN gboolean (*std_entry_handler_f)(GtkWidget *, gpointer);
