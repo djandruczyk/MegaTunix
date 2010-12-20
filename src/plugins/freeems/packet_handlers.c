@@ -19,7 +19,142 @@
 #include <packet_handlers.h>
 
 
-gboolean find_any_packet(guchar *buf, gint len, gint *start, gint *end)
+G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
+{
+	guchar character;
+	gint i = 0;
+	/* Statistic collection variables */
+	static guchar packetBuffer[3000];
+	static unsigned int packets = 0;
+	static unsigned int charsDropped = 0;
+	static unsigned int badChecksums = 0;
+	static unsigned int goodChecksums = 0;
+	static unsigned int startsInsidePacket = 0;
+	static unsigned int totalFalseStartLost = 0;
+	static unsigned int doubleStartByteOccurances = 0;
+	static unsigned int strayDataBytesOccurances = 0;
+	static unsigned int escapeBytesFound = 0;
+	static unsigned int escapedStopBytesFound = 0;
+	static unsigned int escapedStartBytesFound = 0;
+	static unsigned int escapedEscapeBytesFound = 0;
+	static unsigned int escapePairMismatches = 0;
+	static unsigned long sumOfGoodPacketLengths = 0;
+
+	/* Loop and state variables */
+	static gboolean insidePacket = FALSE;
+	static gboolean unescapeNext = FALSE;
+	static unsigned int processed = 0;
+	static unsigned char checksum = 0;
+	static unsigned char lastChar = 0;
+	static unsigned int currentPacketLength = 0;
+	for (i=0;i<len;i++)
+	{
+		character = buf[i];
+		if (character == START_BYTE)
+		{
+			if (insidePacket)
+			{
+				startsInsidePacket++;
+				if (currentPacketLength == 0)
+				{
+					doubleStartByteOccurances++;
+				}
+				else    
+				{       
+					totalFalseStartLost += currentPacketLength;
+					strayDataBytesOccurances++;
+				}
+			}
+			insidePacket = TRUE;
+			checksum = 0;
+			currentPacketLength = 0;
+		}
+		else if (insidePacket)
+		{
+			if (unescapeNext)
+			{	/* Clear escaped byte next flag */
+				unescapeNext = FALSE;
+				if (character == ESCAPED_ESCAPE_BYTE)
+				{
+					checksum += ESCAPE_BYTE;
+					lastChar = ESCAPE_BYTE;
+					escapedEscapeBytesFound++;
+					packetBuffer[currentPacketLength] = ESCAPE_BYTE;
+					currentPacketLength++;
+				}
+				else if (character == ESCAPED_START_BYTE)
+				{
+					/* Store and checksum start byte */
+					checksum += START_BYTE;
+					lastChar = START_BYTE;
+					escapedStartBytesFound++;
+					packetBuffer[currentPacketLength] = START_BYTE;
+					currentPacketLength++;
+				}
+				else if(character == ESCAPED_STOP_BYTE)
+				{
+					/* Store and checksum stop byte */
+					checksum += STOP_BYTE;
+					lastChar = STOP_BYTE;
+					escapedStopBytesFound++;
+					packetBuffer[currentPacketLength] = STOP_BYTE;
+					currentPacketLength++;
+				}else
+				{
+					/* Otherwise reset and record as data is bad */
+					insidePacket = FALSE;
+					checksum = 0;
+					currentPacketLength = 0;
+					escapePairMismatches++;
+				}
+			}
+			else if (character == ESCAPE_BYTE)
+			{
+				/* Set flag to indicate that the next byte should be un-escaped. */
+				unescapeNext = TRUE;
+				escapeBytesFound++;
+			}
+			else if (character == STOP_BYTE)
+			{
+				packets++;
+				/* Bring the checksum back to where it should be */
+				checksum -= lastChar;
+
+				/* Check that the checksum matches */
+				if(checksum != lastChar)
+				{
+					badChecksums++;
+					printf("Packet number %u ending of length %u at char number %u failed checksum! Received %u Calculated %u\n", packets, currentPacketLength, processed, lastChar, checksum);
+				}
+				else
+				{
+					goodChecksums++;
+					/* Add the length to the SUM */
+					sumOfGoodPacketLengths += currentPacketLength;
+				}
+				/* Clear the state */
+				printf("Full packet received, len %i!\n",currentPacketLength);
+				insidePacket = FALSE;
+				currentPacketLength= 0;
+				checksum = 0;
+			}
+			else
+			{
+				/* If it isn't special checksum it! */
+				checksum += character;
+				lastChar = character;
+				packetBuffer[currentPacketLength] = character;
+				currentPacketLength++;
+			}
+		}
+		else
+			charsDropped++;
+	}
+}
+
+
+/*
+G_MODULE_EXPORT gboolean find_any_packet(guchar *buf, gint len, gint *start, gint *end)
 {
 	guchar *p = NULL;
 	gint i = 0;
@@ -31,13 +166,13 @@ gboolean find_any_packet(guchar *buf, gint len, gint *start, gint *end)
 	p = buf;
 	for (i=0;i<len;i++)
 	{
-		if ((p[i] == START) && (*start == -1))
+		if ((p[i] == START) && (*start == -1) && (*end == -1))
 			*start = i;
-		if ((p[i] == END) && (*end == -1))
+		if ((p[i] == END) && (*start >= 0 ) && (*end == -1))
 			*end = i;
 	}
 	if ((*start >= 0) && (*end >= 0))
 		return TRUE;
 	else
 		return FALSE;
-}
+}*/

@@ -145,8 +145,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 						thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
 					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened\n",vector[i]));
 					setup_serial_params_f();
-					/* read out any junk in buffer and toss it */
-					//read_wrapper_f(serial_params->fd,&buf,1024,&len);
+					freeems_serial_enable();
 
 					thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Searching for ECU\n")),FALSE,FALSE);
 					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
@@ -178,7 +177,6 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 
 	if (serial_is_open)
 	{
-		freeems_serial_enable();
 		queue_function_f("kill_conn_warning");
 		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
 	}
@@ -196,8 +194,6 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	GIOChannel *channel = NULL;
 	GAsyncQueue *queue = NULL;
 	Serial_Params *serial_params = NULL;
-	GThread *reader = NULL;
-	GThread *writer = NULL;
 	gint tmpi = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -215,8 +211,6 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	GIOChannel *channel = NULL;
 	GAsyncQueue *queue = NULL;
 	Serial_Params *serial_params = NULL;
-	GThread *reader = NULL;
-	GThread *writer = NULL;
 	gint tmpi = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -260,7 +254,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 
 G_MODULE_EXPORT void read_error(gpointer data)
 {
-	printf("READ ERROR!!!\n");
+	printf("READ ERROR, disabling io_channel stuff!!!\n");
 	freeems_serial_disable();
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 }
@@ -268,16 +262,23 @@ G_MODULE_EXPORT void read_error(gpointer data)
 
 G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gpointer data)
 {
+	static gsize wanted = 2048;
+	gboolean res = FALSE;
 	gchar buf[2048];
 	gchar *ptr = NULL;
-	gsize count = 2048;
-	gsize bytes_read = 0;
+	gsize requested = 2048;
+	gsize received = 0;
+	gsize read_pos = 0;
 	GIOStatus status;
 	GError *err = NULL;
 
-	printf("Data waiting to be read!\n");
-	status = g_io_channel_read_chars(channel, &buf[0], count, &bytes_read, &err);
-	printf("read %i bytes\n",bytes_read);
+	read_pos = requested-wanted;
+	status = g_io_channel_read_chars(channel, &buf[read_pos], wanted, &received, &err);
+//	printf("Want %i, got %i,",wanted, received);
+	wanted -= received;
+//	printf("Still need %i\n",wanted);
+	if (wanted <= 0)
+		wanted = 2048;
 	if (err)
 	{
 		printf("error reported: \"%s\"\n",err->message);
@@ -287,24 +288,26 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 	{
 		case G_IO_STATUS_ERROR:
 			printf("IO ERROR!\n");
-			return FALSE;
+			res =  FALSE;
 			break;
 		case G_IO_STATUS_NORMAL:
-			printf("SUCCESS!\n");
-			return TRUE;
+			/*printf("SUCCESS!\n");*/
+			res = TRUE;
 			break;
 		case G_IO_STATUS_EOF:
 			printf("EOF!\n");
-//			freeems_serial_disable();
-//			freeems_serial_enable();
-			return FALSE;
+			res = FALSE;
 			break;
 		case G_IO_STATUS_AGAIN:
 			printf("TEMP UNAVAIL!\n");
-			return TRUE;
+			res =  TRUE;
 			break;
 	}
-	return TRUE;
+	//	printf("read %i bytes\n",bytes_read);
+	if (res)
+		handle_data((guchar *)buf+read_pos,received);
+	/* Returning false will cause the channel to shutdown*/
+	return res;
 }
 
 
@@ -364,7 +367,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
-//	return TRUE; /* Fake it */
+	return TRUE; /* Fake it */
 	serial_params = DATA_GET(global_data,"serial_params");
 
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));

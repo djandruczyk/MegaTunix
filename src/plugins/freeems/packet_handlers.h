@@ -19,7 +19,6 @@
 #include <configfile.h>
 #include <enums.h>
 
-
 typedef enum
 {
 	/* Firmware Independant */
@@ -91,14 +90,16 @@ typedef enum
 	RESPONSE_RETRIEVE_ARBRITRARY_MEMORY
 }PacketType;
 
-typedef enum
-{
-	START = 0xAA,
-	ESCAPE = 0xBB,
-	END = 0xCC
-}Escapes;
+#define	ESCAPE_BYTE			0xBB
+#define	START_BYTE			0xAA
+#define	STOP_BYTE			0xCC
+#define ESCAPED_ESCAPE_BYTE             0x44
+#define ESCAPED_START_BYTE              0x55
+#define ESCAPED_STOP_BYTE               0x33
+
 
 /* Prototypes */
+G_MODULE_EXPORT void handle_data(guchar *buf, gint);
 gboolean find_any_packet(guchar *, gint, gint *, gint *);
 /* Prototypes */
 
