@@ -26,6 +26,7 @@ gconstpointer *global_data = NULL;
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	global_data = data;
+	GAsyncQueue *queue = NULL;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
@@ -47,6 +48,10 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("warn_user",(void *)&warn_user_f);
 	get_symbol_f("write_wrapper",(void *)&write_wrapper_f);
 	register_common_enums();
+
+	/* Packet handling queue */
+	queue = g_async_queue_new();
+	DATA_SET(global_data,"packet_queue",queue);
 }
 
 

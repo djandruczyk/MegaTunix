@@ -18,11 +18,11 @@
 #include <freeems_plugin.h>
 #include <packet_handlers.h>
 
+extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 {
-	guchar character;
-	gint i = 0;
+	static GAsyncQueue *queue = NULL;
 	/* Statistic collection variables */
 	static guchar packetBuffer[3000];
 	static unsigned int packets = 0;
@@ -39,7 +39,6 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 	static unsigned int escapedEscapeBytesFound = 0;
 	static unsigned int escapePairMismatches = 0;
 	static unsigned long sumOfGoodPacketLengths = 0;
-
 	/* Loop and state variables */
 	static gboolean insidePacket = FALSE;
 	static gboolean unescapeNext = FALSE;
@@ -47,6 +46,13 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 	static unsigned char checksum = 0;
 	static unsigned char lastChar = 0;
 	static unsigned int currentPacketLength = 0;
+
+	guchar character;
+	gint i = 0;
+	FreeEMS_Packet *packet = NULL;
+	if (!queue)
+		queue = DATA_GET(global_data,"packet_queue");
+
 	for (i=0;i<len;i++)
 	{
 		character = buf[i];
@@ -124,7 +130,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 				if(checksum != lastChar)
 				{
 					badChecksums++;
-					printf("Packet number %u ending of length %u at char number %u failed checksum! Received %u Calculated %u\n", packets, currentPacketLength, processed, lastChar, checksum);
+					/*printf("Packet number %u ending of length %u at char number %u failed checksum! Received %u Calculated %u\n", packets, currentPacketLength, processed, lastChar, checksum);*/
 				}
 				else
 				{
@@ -134,6 +140,16 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 				}
 				/* Clear the state */
 				printf("Full packet received, len %i!\n",currentPacketLength);
+				if (queue)
+				{
+					packet = g_new0(FreeEMS_Packet, 1);
+					packet->data = g_memdup(packetBuffer,currentPacketLength);
+					g_async_queue_ref(queue);
+					g_async_queue_push(queue,(gpointer)packet);
+					g_async_queue_unref(queue);
+				}
+				else
+					printf("packet queue not found!?!!\n");
 				insidePacket = FALSE;
 				currentPacketLength= 0;
 				checksum = 0;

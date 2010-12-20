@@ -89,6 +89,40 @@ typedef enum
 	REQUEST_RETRIEVE_ARBRITRARY_MEMORY = 600,
 	RESPONSE_RETRIEVE_ARBRITRARY_MEMORY
 }PacketType;
+/*
+struct
+{
+	guint8 payload_type:1;
+	guint8 ack_valid:1;
+	guint8 ack_type:1;
+	guint8 has_adddress:1;
+	guint8 has_length:1;
+	guint8 reserved_1:1;
+	guint8 reserved_2:1;
+	guint8 reserved_3:1;
+}header_bits;
+*/
+
+#define PAYLOAD_TYPE_MASK	1
+#define ACK_VALID_MASK		2
+#define ACK_TYPE_MASK		4
+#define HAS_ADDRESS_MASK	8
+#define HAS_LENGTH_MASK		16
+
+
+typedef struct _FreeEMS_Packet FreeEMS_Packet;
+
+struct _FreeEMS_Packet
+{
+	guchar *data;		/* Raw packet data */
+	guint8 header_bits;
+	guint16 payload_id;
+	guint8 seq_num;
+	guint8 dest_addr;
+	guint8 source_addr;
+	guint16 payload_len;
+};
+
 
 #define	ESCAPE_BYTE			0xBB
 #define	START_BYTE			0xAA

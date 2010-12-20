@@ -91,6 +91,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			}
 			i++;
 		}
+		freeems_serial_disable();
 		close_serial_f();
 		unlock_serial_f();
 		serial_is_open = FALSE;
@@ -159,6 +160,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 					{
 						dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed, no ECU found, closing port %s.\n",vector[i]));
 						thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("No ECU found...\n")),FALSE,FALSE);
+						freeems_serial_disable();
 						close_serial_f();
 						unlock_serial_f();
 						/*g_usleep(100000);*/
@@ -354,6 +356,9 @@ G_MODULE_EXPORT gboolean serial_error(GIOChannel *channel, GIOCondition cond, gp
 G_MODULE_EXPORT gboolean comms_test(void)
 {
 	static gint errcount = 0;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	GTimeVal tval;
 	gchar * err_text = NULL;
 	guchar *buf = NULL;
 	gint len = 0;
@@ -367,8 +372,23 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
-	return TRUE; /* Fake it */
 	serial_params = DATA_GET(global_data,"serial_params");
+	queue = DATA_GET(global_data,"packet_queue");
+
+
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,1000000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	if (packet)
+	{
+		printf("PACKET ARRIVED!!!!\n");
+		return TRUE; 
+	}
+	else
+	{
+		printf("NO PACKET\n");
+		return FALSE;
+	}
 
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)

@@ -24,9 +24,9 @@ gboolean able_to_read(GIOChannel *, GIOCondition, gpointer);
 gboolean able_to_write(GIOChannel *, GIOCondition, gpointer);
 gboolean serial_error(GIOChannel *, GIOCondition, gpointer);
 void freeems_serial_enable(void);
+void freeems_serial_disable(void);
 gboolean comms_test(void);
 void *serial_repair_thread(gpointer);
-void *serial_reader(gpointer);
 /* Prototypes */
 
 #endif
