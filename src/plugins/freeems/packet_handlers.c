@@ -176,10 +176,20 @@ void packet_decode(FreeEMS_Packet *packet)
 	guint8 *ptr = packet->data;
 	printf("Packet:\n");
 	packet->header_bits = ptr[0];
-	packet->payload_id = (ptr[1] << 8) + ptr[2];
-	printf("Ack type %i\n",packet->header_bits & ACK_TYPE_MASK);
-	printf("Has length %i\n",packet->header_bits & HAS_LENGTH_MASK);
+	packet->payload_id = (ptr[H_ID_IDX] << 8) + ptr[L_ID_IDX];
+	printf("Ack type flag%i\n",packet->header_bits & ACK_TYPE_MASK);
+	printf("Has length flag %i\n",packet->header_bits & HAS_LENGTH_MASK);
+	if (packet->header_bits & HAS_LENGTH_MASK)
+	{
+		packet->payload_len = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
+		printf("Packet length %i\n",packet->payload_len);
+	}
 	printf("Has sequence number %i\n",packet->header_bits & HAS_SEQUENCE_MASK);
+	if (packet->header_bits & HAS_SEQUENCE_MASK)
+	{
+		packet->seq_num = ptr[SEQ_IDX];
+		printf("Packet Sequence id: %i\n",packet->seq_num);
+	}
 	printf("Payload ID %i\n",packet->payload_id);
 	printf("\n");
 	

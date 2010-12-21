@@ -102,6 +102,12 @@ struct
 #define HAS_LENGTH_MASK		1
 #define ACK_TYPE_MASK		2
 #define HAS_SEQUENCE_MASK	4
+/*Where in the header the bytes are */
+#define H_ID_IDX 1
+#define L_ID_IDX 2
+#define SEQ_IDX 3
+#define H_LEN_IDX 4
+#define L_LEN_IDX 5
 
 
 typedef struct _FreeEMS_Packet FreeEMS_Packet;
@@ -113,8 +119,6 @@ struct _FreeEMS_Packet
 	guint8 header_bits;
 	guint16 payload_id;
 	guint8 seq_num;
-	guint8 dest_addr;
-	guint8 source_addr;
 	guint16 payload_len;
 };
 
