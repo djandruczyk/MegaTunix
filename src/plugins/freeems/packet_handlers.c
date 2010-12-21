@@ -174,23 +174,25 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 void packet_decode(FreeEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
-	printf("Packet:\n");
 	packet->header_bits = ptr[0];
-	packet->payload_id = (ptr[H_ID_IDX] << 8) + ptr[L_ID_IDX];
-	printf("Ack type flag%i\n",packet->header_bits & ACK_TYPE_MASK);
-	printf("Has length flag %i\n",packet->header_bits & HAS_LENGTH_MASK);
+	printf("Ack Type Flag:%i\n",packet->header_bits & ACK_TYPE_MASK);
+	printf("Has Length Flag: %i\n",packet->header_bits & HAS_LENGTH_MASK);
 	if (packet->header_bits & HAS_LENGTH_MASK)
 	{
-		packet->payload_len = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
+		if (packet->header_bits & HAS_SEQUENCE_MASK)
+			packet->payload_len = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
+		else
+			packet->payload_len = (ptr[H_LEN_IDX-1] << 8) + ptr [L_LEN_IDX-1];
 		printf("Packet length %i\n",packet->payload_len);
 	}
-	printf("Has sequence number %i\n",packet->header_bits & HAS_SEQUENCE_MASK);
+	printf("Sequence Flag: %i\n",packet->header_bits & HAS_SEQUENCE_MASK);
 	if (packet->header_bits & HAS_SEQUENCE_MASK)
 	{
 		packet->seq_num = ptr[SEQ_IDX];
-		printf("Packet Sequence id: %i\n",packet->seq_num);
+		printf("Sequence id: %i\n",packet->seq_num);
 	}
-	printf("Payload ID %i\n",packet->payload_id);
+	packet->payload_id = (ptr[H_ID_IDX] << 8) + ptr[L_ID_IDX];
+	printf("Payload id: %i\n",packet->payload_id);
 	printf("\n");
 	
 }
