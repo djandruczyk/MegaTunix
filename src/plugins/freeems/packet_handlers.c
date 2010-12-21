@@ -177,11 +177,9 @@ void packet_decode(FreeEMS_Packet *packet)
 	printf("Packet:\n");
 	packet->header_bits = ptr[0];
 	packet->payload_id = (ptr[1] << 8) + ptr[2];
-	printf("Payload type %i\n",packet->header_bits & PAYLOAD_TYPE_MASK);
-	printf("Ack valid %i\n",packet->header_bits & ACK_VALID_MASK);
 	printf("Ack type %i\n",packet->header_bits & ACK_TYPE_MASK);
-	printf("has addresses %i\n",packet->header_bits & HAS_ADDRESSES_MASK);
-	printf("has length %i\n",packet->header_bits & HAS_LENGTH_MASK);
+	printf("Has length %i\n",packet->header_bits & HAS_LENGTH_MASK);
+	printf("Has sequence number %i\n",packet->header_bits & HAS_SEQUENCE_MASK);
 	printf("Payload ID %i\n",packet->payload_id);
 	printf("\n");
 	

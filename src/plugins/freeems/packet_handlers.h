@@ -88,22 +88,20 @@ typedef enum
 /*
 struct
 {
-	guint8 payload_type:1;
-	guint8 ack_valid:1;
-	guint8 ack_type:1;
-	guint8 has_adddress:1;
 	guint8 has_length:1;
-	guint8 reserved_1:1;
-	guint8 reserved_2:1;
+	guint8 ack_type:1;
+	guint8 has_sequence:1;
+	guint8 reserved_5:1;
+	guint8 reserved_4:1;
 	guint8 reserved_3:1;
+	guint8 reserved_2:1;
+	guint8 reserved_1:1;
 }header_bits;
 */
 
-#define PAYLOAD_TYPE_MASK	1
-#define ACK_VALID_MASK		2
-#define ACK_TYPE_MASK		4
-#define HAS_ADDRESSES_MASK	8
-#define HAS_LENGTH_MASK		16
+#define HAS_LENGTH_MASK		1
+#define ACK_TYPE_MASK		2
+#define HAS_SEQUENCE_MASK	4
 
 
 typedef struct _FreeEMS_Packet FreeEMS_Packet;
