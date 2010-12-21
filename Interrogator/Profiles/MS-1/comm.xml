@@ -52,7 +52,7 @@
 		</arg>
 		<arg>
 			<name>SEND_X</name>
-			<desc> Sends a simple "X"</desc>
+			<desc>Sends a simple "X"</desc>
 			<type>_STATIC_STRING_</type>
 			<string>X</string>
 		</arg>

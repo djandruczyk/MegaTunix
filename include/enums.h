@@ -229,7 +229,8 @@ typedef enum
 {
 	DATA=0x2A0,
 	ACTION,
-	STATIC_STRING
+	STATIC_STRING,
+	HEX_STRING
 }ArgType;
 
 typedef enum

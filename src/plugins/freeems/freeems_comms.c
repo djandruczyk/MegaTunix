@@ -334,7 +334,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	GTimeVal tval;
 	gint len = 0;
 	/* Packet sends back Interface Version */
-	/* START, sendback ack, Payload ID H, PAyload ID L, CKsum, STOP */
+	/* START, Header, Payload ID H, PAyload ID L, CKsum, STOP */
 	unsigned char pkt[6] = {0xAA,0x00,0x00,0x00,0x00,0xCC};
 	Serial_Params *serial_params = NULL;
 
@@ -346,7 +346,9 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		return FALSE;
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,100000);
+	g_async_queue_ref(queue);
 	packet = g_async_queue_timed_pop(queue,&tval);
+	g_async_queue_unref(queue);
 	if (packet)
 	{
 		printf("PACKET ARRIVED!!!!\n");
@@ -361,7 +363,9 @@ G_MODULE_EXPORT gboolean comms_test(void)
 			return FALSE;
 		g_get_current_time(&tval);
 		g_time_val_add(&tval,100000);
+		g_async_queue_ref(queue);
 		packet = g_async_queue_timed_pop(queue,&tval);
+		g_async_queue_unref(queue);
 		if (packet)
 		{
 			printf("FOUND BY PROBING!!!!!\n");

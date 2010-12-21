@@ -80,12 +80,40 @@
 		</arg>
 		<arg>
 			<name>SEND_X</name>
-			<desc> Sends a simple "X"</desc>
+			<desc>Sends a simple "X"</desc>
 			<type>_STATIC_STRING_</type>
 			<string>X</string>
 		</arg>
+		<arg>
+			<name>STOP_DATALOG_STREAM</name>
+			<desc>Sends raw packet to stop datalogging stream</desc>
+			<type>_HEX_STRING_</type>
+			<hex_string>0xAA,0x00,0x01,0x94,0x00,0x95,0xCC</hex_string>
+		</arg>
+		<arg>
+			<name>START_DATALOG_STREAM</name>
+			<desc>Sends raw packet to start datalogging stream</desc>
+			<type>_HEX_STRING_</type>
+			<hex_string>0xAA,0x00,0x01,0x94,0x01,0x96,0xCC</hex_string>
+		</arg>
 	</potential_args>
 	<commands>
+		<cmd>
+			<name>stop_datalog_stream</name>
+			<desc>Stops the automatic datalogging stream</desc>
+			<type>_RAW_WRITE_CMD_</type>
+			<args>
+				<arg>STOP_DATALOG_STREAM</arg>
+			</args>
+		</cmd>
+		<cmd>
+			<name>start_datalog_stream</name>
+			<desc>Starts the automatic datalogging stream</desc>
+			<type>_RAW_WRITE_CMD_</type>
+			<args>
+				<arg>START_DATALOG_STREAM</arg>
+			</args>
+		</cmd>
 		<cmd>
 			<name>interrogation</name>
 			<desc>Interrogates ECU to determine what it is</desc>

@@ -40,6 +40,7 @@ struct _PotentialArg
 	Action action;		/* Enum action */
 	gint action_arg;	/* Action argument */
 	gchar *static_string;	/* Static string */
+	gint string_len;	/* Static String Length */
 };
 
 
@@ -93,6 +94,7 @@ void load_cmd_details(Command *, xmlNode *);
 void load_cmd_args(Command *, xmlNode *);
 void load_cmd_post_functions(Command *, xmlNode *);
 void xmlcomm_dump_commands(gpointer, gpointer, gpointer);
+void parse_hex_string(gchar *, gchar *, gint *);
 /* Prototypes */
 
 #endif

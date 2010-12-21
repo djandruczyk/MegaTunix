@@ -186,7 +186,17 @@ G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"action_arg") == 0)
 				generic_xml_gint_import(cur_node,&arg->action_arg);
 			if (g_strcasecmp((gchar *)cur_node->name,"string") == 0)
+			{
 				generic_xml_gchar_import(cur_node,&arg->static_string);
+				arg->string_len = strlen(arg->static_string);
+			}
+			if (g_strcasecmp((gchar *)cur_node->name,"hex_string") == 0)
+			{
+				generic_xml_gchar_import(cur_node,&tmpbuf);
+				parse_hex_string(tmpbuf, arg->static_string, &arg->string_len);
+				g_free(tmpbuf);
+			}
+
 		}
 		cur_node = cur_node->next;
 	}
@@ -376,3 +386,25 @@ G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointe
 }
 
 
+void parse_hex_string(gchar *str, gchar *dest, gint *str_len)
+{
+	gchar **vector = NULL;
+	gint i = 0;
+	gint len = 0;
+	gint tmpi = 0;
+	
+
+	printf("parse_hex_string, passed string %s\n",str);
+	g_assert(str_len);
+	vector = g_strsplit(str,",",-1);
+	len = g_strv_length(vector);
+	dest = g_new0(gchar, len);
+	for (i=0;i<len;i++)
+	{
+		tmpi = strtol(vector[i],NULL,16);
+		dest[i]=tmpi;
+	}
+	g_strfreev(vector);
+	*str_len = len;
+	return;
+}

@@ -504,6 +504,14 @@ G_MODULE_EXPORT void build_output_string(Io_Message *message, Command *command, 
 			g_array_append_val(message->sequence,block);
 			continue;
 		}
+		if (arg->type == HEX_STRING)
+		{
+			block->type = DATA;
+			block->data = (guint8 *)g_memdup(arg->static_string,arg->string_len);
+			block->len = arg->string_len;
+			g_array_append_val(message->sequence,block);
+			continue;
+		}
 		if (!output)
 			continue;
 		switch (arg->size)
@@ -559,7 +567,6 @@ G_MODULE_EXPORT void build_output_string(Io_Message *message, Command *command, 
 				   printf("block->data[%i] is %i\n",j,block->data[j]);
 				   }
 				 */
-
 		}
 		g_array_append_val(message->sequence,block);
 	}
