@@ -261,13 +261,12 @@ bind_to_list=revlimit,rev_cut
 _tooltip=Number of sparks (X) to cut from (Y) events
 
 [nb_switching_voltage_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
 precision=3
 offset=598
-dl_conv_expr=x*100
-ul_conv_expr=x/100
-raw_upper=200
-_tooltip=This is the Voltage that the Narrow-Band O<sub>2</sub> sensor(s) toggle between rich and lean,  typically 0.450 volts.
+dl_conv_expr=x*10
+ul_conv_expr=x/10
+_tooltip=This is the AFR that the Narrow-Band O<sub>2</sub> sensor(s) toggles between rich and lean, typically 14/7 AFR.
 
 [ign_events_entry]
 keys=offset,tooltip
