@@ -11,6 +11,7 @@ rtmap_in_files = 	\
 		MS2-Extra-2.1.0.rtv_map.in \
 		MS2-Extra-3.0.x.rtv_map.in \
 		MS2-Extra-3.0.3w.rtv_map.in \
+		MS2-Extra-3.0.3y.rtv_map.in \
 		PIS_V1_00-firmware.rtv_map.in \
 		JimStim-2.x.rtv_map.in
 

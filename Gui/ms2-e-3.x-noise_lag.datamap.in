@@ -134,6 +134,14 @@ offset=997
 bitmask=48
 _tooltip=See MS2-Extra Manuals
 
+[mapsample_events_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=1,2,4
+bitvals=0,1,2
+offset=601
+bitmask=3
+_tooltip=Sets the Number of MAP sampling events
+
 #----- Entries ----------------------------------------------------------------
 
 [crank_time_mask_entry]

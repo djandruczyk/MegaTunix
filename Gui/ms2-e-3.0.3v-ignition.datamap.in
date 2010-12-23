@@ -47,6 +47,10 @@ bind_to_list=basic_trigger
 keys=bind_to_list
 bind_to_list=cust_wheel,four_cyl
 
+[dli_table]
+keys=bind_to_list
+bind_to_list=!edis,ign
+
 [use_cam_table]
 keys=bind_to_list
 bind_to_list=cust_wheel
@@ -196,6 +200,14 @@ choices=Off,Alternate
 bitvals=0,1
 offset=987
 bitmask=64
+_tooltip=See MS2-Extra Manuals
+
+[dli_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Off,Toyota DLI
+bitvals=0,1
+offset=987
+bitmask=128
 _tooltip=See MS2-Extra Manuals
 
 [use_cam_combo]

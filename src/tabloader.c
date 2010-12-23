@@ -488,6 +488,8 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 
+	if (!widget)
+		return;
 
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);

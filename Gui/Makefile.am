@@ -37,8 +37,10 @@ gui_glade_files = 	\
 		ms2-e-3.0.3v-ego_rev.glade \
 		ms2-e-3.x-globals.glade \
 		ms2-e-3.x-ignition.glade \
+		ms2-e-3.0.3y-ignition.glade \
 		ms2-e-3.x-nitrous_staging_orfc.glade \
 		ms2-e-3.0.3v-nitrous_staging_orfc.glade \
+		ms2-e-3.0.3y-noise_lag.glade \
 		ms2-e-3.x-noise_lag.glade \
 		ms2-e-3.x-remote_outputs.glade \
 		ms2-e-3.x-sequential.glade \
