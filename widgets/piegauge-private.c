@@ -180,15 +180,8 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
-	GtkStateType state = GTK_STATE_NORMAL;
 
 	widget = GTK_WIDGET(gauge);
-
-#if GTK_MINOR_VERSION >= 18
-	state = gtk_widget_get_state(GTK_WIDGET(widget));
-#else
-	state = GTK_WIDGET_STATE (widget);
-#endif
 
 	/* Copy background pixmap to intermediary for final rendering */
 	cr = gdk_cairo_create(priv->pixmap);
@@ -280,6 +273,7 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	priv->pixmap=gdk_pixmap_new(widget->window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
+	gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
 	cr = gdk_cairo_create(priv->pixmap);
 	cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
 	cairo_paint(cr);
@@ -295,7 +289,6 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_paint(cr);
 	cairo_destroy(cr);
 
-	gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
 
 	if (priv->font_options)
 		cairo_font_options_destroy(priv->font_options);
@@ -321,14 +314,7 @@ gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
-	GtkStateType state = GTK_STATE_NORMAL;
 	cairo_t *cr = NULL;
-
-#if GTK_MINOR_VERSION >= 18
-	state = gtk_widget_get_state(GTK_WIDGET(widget));
-#else
-	state = GTK_WIDGET_STATE (widget);
-#endif
 
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))

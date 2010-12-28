@@ -521,7 +521,6 @@ void update_gauge_position (MtxGaugeFace *gauge)
 	gfloat val = 0.0;
 	gboolean alert = FALSE;
 	MtxAlertRange *range = NULL;
-	GtkStateType state;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -549,11 +548,6 @@ void update_gauge_position (MtxGaugeFace *gauge)
 			 */
 			priv->last_alert_index = i;
 			widget = GTK_WIDGET(gauge);
-#if GTK_MINOR_VERSION >= 20
-			state = gtk_widget_get_state(GTK_WIDGET(widget));
-#else
-			state = GTK_WIDGET_STATE(widget);
-#endif
 			cr = gdk_cairo_create(priv->tmp_pixmap);
 			gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
 			cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
@@ -574,11 +568,6 @@ void update_gauge_position (MtxGaugeFace *gauge)
 	}
 cairo_jump_out_of_alerts:
 	/* Copy background pixmap to intermediary for final rendering */
-#if GTK_MINOR_VERSION >= 20
-	state = gtk_widget_get_state(GTK_WIDGET(widget));
-#else
-	state = GTK_WIDGET_STATE(widget);
-#endif
 	if (!alert)
 	{
 		/* Not in alert status,  copy from bg_pixmap to current pixmap */
@@ -851,17 +840,10 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFacePrivate * priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
 	cairo_t *cr = NULL;
-	GtkStateType state = GTK_STATE_NORMAL;
 
 	g_return_val_if_fail(widget != NULL, FALSE);
 	g_return_val_if_fail(MTX_IS_GAUGE_FACE(widget), FALSE);
 	g_return_val_if_fail(event != NULL, FALSE);
-
-#if GTK_MINOR_VERSION >= 18
-	state = gtk_widget_get_state(GTK_WIDGET(widget));
-#else
-	state = GTK_WIDGET_STATE (widget);
-#endif
 
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
@@ -916,7 +898,6 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 void generate_gauge_background(MtxGaugeFace *gauge)
 {
 	GtkWidget * widget = NULL;
-	GtkStateType state = GTK_STATE_NORMAL;
 	cairo_t *cr = NULL;
 	double dashes[2] = {4.0,4.0};
 	gfloat deg_per_major_tick = 0.0;
@@ -1427,11 +1408,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	cairo_destroy (cr);
 	/* SAVE copy of this on tmp pixmap */
 	widget = GTK_WIDGET(gauge);
-#if GTK_MINOR_VERSION >= 20
-	state = gtk_widget_get_state(GTK_WIDGET(widget));
-#else
-	state = GTK_WIDGET_STATE(widget);
-#endif
+
 	cr = gdk_cairo_create(priv->tmp_pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
 	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);

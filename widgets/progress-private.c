@@ -295,16 +295,10 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 	GtkProgressBar *pbar;
 	cairo_t *cr = NULL;
 	GdkPixmap *pmap = NULL;
-	GtkStateType state = GTK_STATE_NORMAL;
 
 	g_return_val_if_fail (MTX_IS_PROGRESS_BAR (widget), FALSE);
 
 	pbar = GTK_PROGRESS_BAR (widget);
-#if GTK_MINOR_VERSION >= 20
-	state = gtk_widget_get_state(GTK_WIDGET(widget));
-#else
-	state = GTK_WIDGET_STATE (widget);
-#endif
 
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
@@ -313,8 +307,7 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 #endif
 		{
 
-
-#if GTK_MINOR_VERSION >= 20
+#if GTK_MINOR_VERSION >= 18
 			if (gtk_widget_is_drawable (widget) && pbar->dirty)
 #else
 				if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
@@ -323,7 +316,7 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 
 			g_return_val_if_fail (event != NULL, FALSE);
 
-#if GTK_MINOR_VERSION >= 20
+#if GTK_MINOR_VERSION >= 18
 			if (gtk_widget_is_drawable (widget))
 #else
 				if (GTK_WIDGET_DRAWABLE (widget))
