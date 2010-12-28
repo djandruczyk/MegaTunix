@@ -21,6 +21,7 @@
 
 /* Prototypes */
 gboolean able_to_read(GIOChannel *, GIOCondition, gpointer);
+gboolean win32_able_to_read(GIOChannel *, GIOCondition, gpointer);
 gboolean able_to_write(GIOChannel *, GIOCondition, gpointer);
 gboolean serial_error(GIOChannel *, GIOCondition, gpointer);
 void freeems_serial_enable(void);

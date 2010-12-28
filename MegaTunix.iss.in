@@ -21,14 +21,14 @@ LicenseFile=.\LICENSE
 InfoBeforeFile=.\WIN_NOTES.txt
 
 [Files]
-Source: "z:\target\bin\*.dll"; DestDir: "{app}\2.12"; Flags: ignoreversion
-Source: "z:\target\etc\*.*"; DestDir: "{app}\2.12\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\lib\gtk-2.0\2.10.0\*.*"; DestDir: "{app}\2.12"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\themes\*.*"; DestDir: "{app}\2.12\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\locale\de\*.*"; DestDir: "{app}\2.12\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\locale\es\*.*"; DestDir: "{app}\2.12\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\locale\fi\*.*"; DestDir: "{app}\2.12\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\locale\fr\*.*"; DestDir: "{app}\2.12\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\target\bin-2.12.12\*.dll"; DestDir: "{app}\2.12"; Flags: ignoreversion
+Source: "z:\target\etc-2.12.12\*.*"; DestDir: "{app}\2.12\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\target\lib-2.12.12\gtk-2.0\2.10.0\*.*"; DestDir: "{app}\2.12"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\target\share-2.12.12\themes\*.*"; DestDir: "{app}\2.12\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\target\share-2.12.12\locale\de\*.*"; DestDir: "{app}\2.12\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\target\share-2.12.12\locale\es\*.*"; DestDir: "{app}\2.12\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\target\share-2.12.12\locale\fi\*.*"; DestDir: "{app}\2.12\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\target\share-2.12.12\locale\fr\*.*"; DestDir: "{app}\2.12\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\target\bin-2.20.1\*.dll"; DestDir: "{app}\2.20"; Flags: ignoreversion
 Source: "z:\target\etc-2.20.1\*.*"; DestDir: "{app}\2.20\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\target\lib-2.20.1\gtk-2.0\2.10.0\*.*"; DestDir: "{app}\2.20"; Flags: ignoreversion recursesubdirs createallsubdirs

@@ -28,8 +28,12 @@
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef __WIN32__
+#include <winsock2.h>
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
+#endif
 #include <threads.h>
 #include <timeout_handlers.h>
 #include <unistd.h>

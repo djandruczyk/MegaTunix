@@ -80,7 +80,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 	dcb.fRtsControl = RTS_CONTROL_DISABLE;  /* Disable RTS line */
 	dcb.fOutX = FALSE;		/* Disable Xoff */
 	dcb.fInX  = FALSE;		/* Disable Xin */
-	dcb.fErrorChar = FALSE;		/* Don't replcae bad chars */
+	dcb.fErrorChar = FALSE;		/* Don't replace bad chars */
 	dcb.fNull = FALSE;		/* don't drop NULL bytes */
 	dcb.fAbortOnError = FALSE;	/* Don't abort */
 	dcb.wReserved = 0;		/* as per msdn */
@@ -92,11 +92,33 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 	/* Set timeout params in a fashion that mimics linux behavior */
 	GetCommTimeouts((HANDLE) _get_osfhandle (fd), &timeouts);
 
-	timeouts.ReadIntervalTimeout         = 0;
-	timeouts.ReadTotalTimeoutMultiplier  = 0;
-	timeouts.WriteTotalTimeoutConstant   = 0;
-	timeouts.WriteTotalTimeoutMultiplier = 0;
-	timeouts.ReadTotalTimeoutConstant    = 100;
+	if (DATA_GET(global_data,"serial_nonblock"))
+	{
+		printf("nonblock\n");
+		/* Buffer? */
+//		SetupComm((HANDLE) _get_osfhandle (fd),128,128);
+		/*
+		timeouts.ReadIntervalTimeout         = MAXDWORD;
+		timeouts.ReadTotalTimeoutMultiplier  = 0;
+		timeouts.WriteTotalTimeoutConstant   = 0;
+		timeouts.WriteTotalTimeoutMultiplier = 20000L/baud;
+		timeouts.ReadTotalTimeoutConstant    = 0;
+		*/
+		// Works, but causes deadlock in reader blocking UI 
+		timeouts.ReadIntervalTimeout         = MAXDWORD;
+		timeouts.ReadTotalTimeoutMultiplier  = MAXDWORD;
+		timeouts.WriteTotalTimeoutConstant   = 0;
+		timeouts.WriteTotalTimeoutMultiplier = 20000L/baud;
+		timeouts.ReadTotalTimeoutConstant    = 100; /* 100ms timeout*/
+	}
+	else
+	{
+		timeouts.ReadIntervalTimeout         = 0;
+		timeouts.ReadTotalTimeoutMultiplier  = 0;
+		timeouts.WriteTotalTimeoutConstant   = 0;
+		timeouts.WriteTotalTimeoutMultiplier = 0;
+		timeouts.ReadTotalTimeoutConstant    = 100;
+	}
 
 	SetCommTimeouts((HANDLE) _get_osfhandle (fd) ,&timeouts);
 

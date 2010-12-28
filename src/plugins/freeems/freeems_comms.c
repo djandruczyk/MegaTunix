@@ -18,7 +18,11 @@
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
 #include <packet_handlers.h>
+#ifdef __WIN32__
+#include <winsock2.h>
+#else
 #include <poll.h>
+#endif
 #include <serialio.h>
 #include <template.h>
 #include <unistd.h>
@@ -27,6 +31,7 @@
 extern gconstpointer *global_data;
 
 void read_error(gpointer);
+void *win32_reader(gpointer);
 
 G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 {
@@ -176,7 +181,6 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, device found!\n"));
 	g_thread_exit(0);
 	return NULL;
-
 }
 		
 
@@ -187,8 +191,9 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	Serial_Params *serial_params = NULL;
 	gint tmpi = 0;
 
+	printf("freeems serial DISable!\n");
 	serial_params = DATA_GET(global_data,"serial_params");
-	g_source_remove((guint)DATA_GET(global_data,"read_watch"));
+//	g_source_remove((guint)DATA_GET(global_data,"read_watch"));
 	channel = DATA_GET(global_data,"serial_channel");
 	if (channel)
 		g_io_channel_shutdown(channel,FALSE,NULL);
@@ -203,21 +208,26 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	Serial_Params *serial_params = NULL;
 	gint tmpi = 0;
 
+	printf("freeems serial enable!\n");
 	serial_params = DATA_GET(global_data,"serial_params");
 	if ((!serial_params->open) || (!serial_params->fd))
 	{
-		dbg_func(CRITICAL,g_strdup(_(__FILE__": freeems_serial_setup, serial port is NOT open, or filedescriptor is invalid!\n")));
+		dbg_func_f(CRITICAL,g_strdup(_(__FILE__": freeems_serial_setup, serial port is NOT open, or filedescriptor is invalid!\n")));
 		return;
 	}
 
 #ifdef __WIN32__
-	channel = g_io_channel_win32_new_fd(serial_params->fd);
+	g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
+	return;
+
 #else
 	channel = g_io_channel_unix_new(serial_params->fd);
 #endif
 	DATA_SET(global_data,"serial_channel",channel);
 	/* Set to raw mode */
 	g_io_channel_set_encoding(channel, NULL, NULL);
+	/* Set to unbuffered mode */
+	g_io_channel_set_buffered(channel, FALSE);
 	/* Reader */
 	tmpi = g_io_add_watch_full(channel,0,G_IO_IN,able_to_read,NULL, read_error);
 	DATA_SET(global_data,"read_watch",GINT_TO_POINTER(tmpi));
@@ -235,7 +245,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 
 G_MODULE_EXPORT void read_error(gpointer data)
 {
-	/*printf("READ ERROR, disabling io_channel stuff!!!\n");*/
+	printf("READ ERROR, disabling io_channel stuff!!!\n");
 	freeems_serial_disable();
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 }
@@ -255,9 +265,9 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 
 	read_pos = requested-wanted;
 	status = g_io_channel_read_chars(channel, &buf[read_pos], wanted, &received, &err);
-//	printf("Want %i, got %i,",wanted, received);
+	/*	printf("Want %i, got %i,",wanted, received); */
 	wanted -= received;
-//	printf("Still need %i\n",wanted);
+	/*	printf("Still need %i\n",wanted); */
 	if (wanted <= 0)
 		wanted = 2048;
 	if (err)
@@ -272,7 +282,6 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 			res =  FALSE;
 			break;
 		case G_IO_STATUS_NORMAL:
-			/*printf("SUCCESS!\n");*/
 			res = TRUE;
 			break;
 		case G_IO_STATUS_EOF:
@@ -284,12 +293,13 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 			res =  TRUE;
 			break;
 	}
-	//	printf("read %i bytes\n",bytes_read);
+	printf("read %i bytes\n",received);
 	if (res)
 		handle_data((guchar *)buf+read_pos,received);
 	/* Returning false will cause the channel to shutdown*/
 	return res;
 }
+
 
 
 G_MODULE_EXPORT gboolean able_to_write(GIOChannel *channel, GIOCondition cond, gpointer data)
@@ -351,7 +361,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	g_async_queue_unref(queue);
 	if (packet)
 	{
-		printf("PACKET ARRIVED!!!!\n");
+		printf("COMMS TEST PACKET ARRIVED!!!!\n");
 		g_free(packet->data);
 		g_free(packet);
 		return TRUE; 
@@ -368,7 +378,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		g_async_queue_unref(queue);
 		if (packet)
 		{
-			printf("FOUND BY PROBING!!!!!\n");
+			printf("COMMS TEST FOUND BY PROBING!!!!!\n");
 			g_free(packet->data);
 			g_free(packet);
 			return TRUE; 
@@ -376,3 +386,39 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	}
 	return FALSE;
 }
+
+
+void *win32_reader(gpointer data)
+{
+	gint fd = (gint)data;
+	gint errcount = 0;
+	static gsize wanted = 2048;
+	gboolean res = FALSE;
+	gchar buf[2048];
+	gchar *ptr = NULL;
+	gsize requested = 2048;
+	gsize received = 0;
+	gsize read_pos = 0;
+	GIOStatus status;
+	GError *err = NULL;
+
+	while (TRUE)
+	{
+		read_pos = requested-wanted;
+		received = read(fd, &buf[read_pos], wanted);
+		printf("Want %i, got %i,",wanted, received); 
+		if (received == -1)
+			g_thread_exit(0);
+
+		wanted -= received;
+		/*	printf("Still need %i\n",wanted); */
+		if (wanted <= 0)
+			wanted = 2048;
+		printf("read %i bytes\n",received);
+		if (received > 0)
+			handle_data((guchar *)buf+read_pos,received);
+	}
+}
+
+
+

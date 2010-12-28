@@ -47,7 +47,6 @@
 #endif
 
 
-gboolean port_open = FALSE;
 extern gconstpointer *global_data;
 
 /*!
@@ -62,6 +61,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
 	static GMutex *serio_mutex = NULL;
+	gboolean port_open = FALSE;
 	Serial_Params *serial_params = NULL;
 	gint fd = -1;
 	gchar * err_text = NULL;
@@ -75,10 +75,11 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	if (nonblock)
 	{
 #ifdef __WIN32__
-		fd = open(port_name, O_RDWR | O_BINARY | O_NDELAY);
+		fd = open(port_name, O_RDWR | O_BINARY);
 #else
-		fd = open(port_name, O_RDWR | O_NOCTTY | O_NDELAY );
+		fd = open(port_name, O_RDWR | O_NOCTTY | O_NDELAY);
 #endif
+		DATA_SET(global_data,"serial_nonblock",GINT_TO_POINTER(TRUE));
 	}
 	else
 	{
@@ -390,13 +391,13 @@ G_MODULE_EXPORT void close_serial(void)
 
 	/*printf("Closing serial port\n");*/
 #ifndef __WIN32__
- #ifdef __PIS_SUPPORT
+#ifdef __PIS_SUPPORT
 	if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->oldctl) != 0)
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tError restoring ioctl\n"));
 	else
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tioctl restored OK\n"));
 
- #endif
+#endif
 	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
 #endif
 	close(serial_params->fd);
@@ -406,7 +407,6 @@ G_MODULE_EXPORT void close_serial(void)
 		g_free(serial_params->port_name);
 	serial_params->port_name = NULL;
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
-	port_open = FALSE;
 
 	/* An Closing the comm port */
 	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
