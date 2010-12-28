@@ -189,16 +189,34 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	GIOChannel *channel = NULL;
 	GAsyncQueue *queue = NULL;
 	Serial_Params *serial_params = NULL;
+	GTimeVal now;
+	GCond *cond = NULL;
+	GMutex *mutex = g_mutex_new();
+	gboolean res = FALSE;
 	gint tmpi = 0;
 
-	printf("freeems serial DISable!\n");
+	/*printf("freeems serial DISable!\n");*/
+#ifdef __WIN32__
+	g_mutex_lock(mutex);
+	g_get_current_time(&now);
+        g_time_val_add(&now,250000);
+        cond = DATA_GET(global_data,"serial_reader_cond");
+        res = g_cond_timed_wait(cond,mutex,&now);
+	if (res)
+		printf("condition signaled\n");
+	else
+		printf("cond timeout\n");
+	g_mutex_unlock(mutex);
+	g_mutex_free(mutex);
+#else
 	serial_params = DATA_GET(global_data,"serial_params");
-//	g_source_remove((guint)DATA_GET(global_data,"read_watch"));
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 	channel = DATA_GET(global_data,"serial_channel");
 	if (channel)
 		g_io_channel_shutdown(channel,FALSE,NULL);
 	DATA_SET(global_data,"serial_channel",NULL);
 	DATA_SET(global_data,"read_watch",NULL);
+#endif
 }
 
 
@@ -247,7 +265,6 @@ G_MODULE_EXPORT void read_error(gpointer data)
 {
 	printf("READ ERROR, disabling io_channel stuff!!!\n");
 	freeems_serial_disable();
-	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 }
 
 
@@ -401,22 +418,29 @@ void *win32_reader(gpointer data)
 	gsize read_pos = 0;
 	GIOStatus status;
 	GError *err = NULL;
+	GCond *cond = NULL;
 
+	cond = DATA_GET(global_data,"serial_reader_cond");
 	while (TRUE)
 	{
 		read_pos = requested-wanted;
 		received = read(fd, &buf[read_pos], wanted);
-		printf("Want %i, got %i,",wanted, received); 
+		/*printf("Want %i, got %i,",wanted, received); */
 		if (received == -1)
+		{
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+			g_cond_signal(cond);
 			g_thread_exit(0);
+		}
 
 		wanted -= received;
 		/*	printf("Still need %i\n",wanted); */
 		if (wanted <= 0)
 			wanted = 2048;
-		printf("read %i bytes\n",received);
+		/*printf("read %i bytes\n",received);*/
 		if (received > 0)
 			handle_data((guchar *)buf+read_pos,received);
+		g_cond_signal(cond);
 	}
 }
 

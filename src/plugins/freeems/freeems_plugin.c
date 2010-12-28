@@ -27,6 +27,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	global_data = data;
 	GAsyncQueue *queue = NULL;
+	GCond *cond = NULL;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
@@ -52,11 +53,18 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	/* Packet handling queue */
 	queue = g_async_queue_new();
 	DATA_SET(global_data,"packet_queue",queue);
+	cond = g_cond_new();
+	DATA_SET(global_data,"serial_reader_cond",cond);
 }
 
 
 G_MODULE_EXPORT void plugin_shutdown()
 {
+	GCond *cond = NULL;
+
+	cond = DATA_GET(global_data,"serial_reader_cond");
+	if (cond)
+		g_cond_free(cond);
 	return;
 }
 

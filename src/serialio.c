@@ -204,8 +204,8 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
 	g_mutex_unlock(serio_mutex);
-	flush_serial(serial_params->fd, TCIOFLUSH);
 
+	flush_serial(serial_params->fd, BOTH);
 	g_mutex_lock(serio_mutex);
 
 	/* Sets up serial port for the modes we want to use. 
@@ -367,7 +367,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	tcsetattr(serial_params->fd, TCSANOW, &serial_params->newtio);
 #endif
 	g_mutex_unlock(serio_mutex);
-	//flush_serial(serial_params->fd,BOTH);
+	flush_serial(serial_params->fd,BOTH);
 	return;
 }
 
