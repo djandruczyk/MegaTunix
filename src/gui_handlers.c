@@ -1506,7 +1506,7 @@ G_MODULE_EXPORT guint get_bitshift(guint mask)
 
 G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 {
-	if (MTX_IS_GAUGE_FACE(watch->user_data))
+	if (GTK_IS_WIDGET(watch->user_data))
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),watch->val);
 	else
 		remove_watch(watch->id);

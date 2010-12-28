@@ -751,6 +751,12 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 	MtxGaugeFace * gauge = MTX_GAUGE_FACE(widget);
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
+#if GTK_MINOR_VERSION < 18
+	GdkGC *gc = NULL;
+	GdkColormap *colormap = NULL;
+	GdkColor black;
+	GdkColor white;
+#endif
 
 	if(widget->window)
 	{
@@ -759,10 +765,6 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		if (priv->layout)
 			g_object_unref(priv->layout);
-		/* Shape combine bitmap */
-		if (priv->bitmap)
-			g_object_unref(priv->bitmap);
-		priv->bitmap = gdk_pixmap_new(NULL,priv->w,priv->h,1);
 		/* Backing pixmap (copy of window) */
 		if (priv->pixmap)
 			g_object_unref(priv->pixmap);
@@ -811,6 +813,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		cairo_font_options_set_antialias(priv->font_options,
 				CAIRO_ANTIALIAS_GRAY);
 
+#if GTK_MINOR_VERION >= 18
 		/* Shape combine mask bitmap */
 		cr = gdk_cairo_create(priv->bitmap);
 		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
@@ -830,6 +833,72 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		cairo_fill(cr);
 		cairo_stroke(cr);
 		cairo_destroy(cr);
+#else
+		/* Shape combine bitmap */
+		if (priv->bitmap)
+			g_object_unref(priv->bitmap);
+		priv->bitmap = gdk_pixmap_new(NULL,priv->w,priv->h,1);
+		/* Shape combine mask bitmap */
+		colormap = gdk_colormap_get_system ();
+		gdk_color_parse ("black", & black);
+		gdk_colormap_alloc_color(colormap, &black,TRUE,TRUE);
+		gdk_color_parse ("white", & white);
+		gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
+		gc = gdk_gc_new (priv->bitmap);
+		gdk_gc_set_foreground (gc, &black);
+		gdk_draw_rectangle (priv->bitmap,
+				gc,
+				TRUE, /* filled */
+				0, /* x */
+				0, /* y */
+				priv->w,
+				priv->h);
+
+		gdk_gc_set_foreground (gc, & white);
+		/* Drag border boxes... */
+
+		if (priv->show_drag_border)
+		{
+			gdk_draw_rectangle (priv->bitmap,
+					gc,
+					TRUE, /* filled */
+					0, /* x */
+					0, /* y */
+					DRAG_BORDER,
+					DRAG_BORDER);
+			gdk_draw_rectangle (priv->bitmap,
+					gc,
+					TRUE, /* filled */
+					priv->w-DRAG_BORDER, /* x */
+					0, /* y */
+					DRAG_BORDER,
+					DRAG_BORDER);
+			gdk_draw_rectangle (priv->bitmap,
+					gc,
+					TRUE, /* filled */
+					priv->w-DRAG_BORDER, /* x */
+					priv->h-DRAG_BORDER, /* y */
+					DRAG_BORDER,
+					DRAG_BORDER);
+			gdk_draw_rectangle (priv->bitmap,
+					gc,
+					TRUE, /* filled */
+					0, /* x */
+					priv->h-DRAG_BORDER, /* y */
+					DRAG_BORDER,
+					DRAG_BORDER);
+		}
+		gdk_draw_arc (priv->bitmap,
+				gc,
+				TRUE, /* filled */
+				priv->xc-priv->radius,
+				priv->yc-priv->radius,
+				2*(priv->radius),
+				2*(priv->radius),
+				0, /* angle 1 */
+				360*64); /* angle 2: full circle */
+		g_object_unref(gc);
+#endif
 
 	}
 	if (priv->radius > 0)

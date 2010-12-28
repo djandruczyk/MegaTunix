@@ -27,7 +27,6 @@
 
 
 #include <config.h>
-#include <cairo/cairo.h>
 #include <gauge.h>
 #include <gauge-private.h>
 #include <gtk/gtk.h>
