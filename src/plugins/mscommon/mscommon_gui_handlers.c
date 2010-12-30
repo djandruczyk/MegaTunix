@@ -1140,6 +1140,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
+	size = (DataSize) OBJ_GET(widget,"size");
 	get_essential_bits(widget,&canID,&page,&offset,NULL,&bitmask,&bitshift);
 
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
@@ -1296,7 +1297,6 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	return TRUE;
-
 }
 
 

@@ -194,6 +194,8 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	gchar **keys = NULL;
 	gint num_keys = 0;
 	gint dload_val = 0;
+	PostFunction *pf = NULL;
+	GArray *pfuncs = NULL;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
@@ -254,45 +256,58 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 					data = g_new0(guint8, firmware->page_params[page]->length);
 					for (offset=0;offset<num_keys;offset++)
 						data[offset]=(guint8)atoi(keys[offset]);
-					ms_chunk_write(canID,page,0,num_keys,data);
-
+					if (DATA_GET(global_data,"offline"))
+						ms_store_new_block(canID,page,0,data,num_keys);
+					else
+						ms_chunk_write(canID,page,0,num_keys,data);
 				}
 				else
 				{
-					for (offset=0;offset<num_keys;offset++)
+					if (DATA_GET(global_data,"offline"))
 					{
-						dload_val = atoi(keys[offset]);
-						if (dload_val != ms_get_ecu_data_last(canID,page,offset,size))
+						for (offset=0;offset<num_keys;offset++)
 						{
-							/*printf("writing data for page %i, offset %i\n",page,offset);*/
-							ms_send_to_ecu(canID,page,offset,size,dload_val, FALSE);
+							dload_val = atoi(keys[offset]);
+							ms_set_ecu_data(canID,page,offset,size,dload_val);
 						}
 					}
+					else
+					{
+						for (offset=0;offset<num_keys;offset++)
+						{
+							dload_val = atoi(keys[offset]);
+							if (dload_val != ms_get_ecu_data_last(canID,page,offset,size))
+							{
+								/*printf("writing data for page %i, offset %i\n",page,offset);*/
+								ms_send_to_ecu(canID,page,offset,size,dload_val, FALSE);
+							}
+						}
+					queue_burn_ecu_flash(page);
+					}
 				}
-				queue_burn_ecu_flash(page);
-
 				g_strfreev(keys);
 				g_free(tmpbuf);
 			}
 		}
 		start_restore_monitor();
 	}
-	/*
-	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
-	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("update_ve_const_pf");
-	get_symbol(pf->name,(void *)&pf->function);
-	pf->w_arg = FALSE;
-	pfuncs = g_array_append_val(pfuncs,pf);
+	if (DATA_GET(global_data,"offline"))
+	{
+		pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
+		pf = g_new0(PostFunction,1);
+		pf->name = g_strdup("update_ve_const_pf");
+		get_symbol_f(pf->name,(void *)&pf->function);
+		pf->w_arg = FALSE;
+		pfuncs = g_array_append_val(pfuncs,pf);
 
-	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("set_store_black_pf");
-	get_symbol(pf->name,(void *)&pf->function);
-	pf->w_arg = FALSE;
-	pfuncs = g_array_append_val(pfuncs,pf);
+		pf = g_new0(PostFunction,1);
+		pf->name = g_strdup("set_store_black_pf");
+		get_symbol_f(pf->name,(void *)&pf->function);
+		pf->w_arg = FALSE;
+		pfuncs = g_array_append_val(pfuncs,pf);
 
-	io_cmd(NULL,pfuncs);
-	*/
+		io_cmd(NULL,pfuncs);
+	}
 	if (restart)
 		start_tickler_f(RTV_TICKLER);
 }

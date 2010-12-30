@@ -3,7 +3,7 @@ major=1
 minor=6
 
 [interrogation_profile]
-name=MS-II-Extra V2.1.0 series
+name=MS-II-Extra V2.1.0e series
 
 [parameters]
 InterCharDelay=1

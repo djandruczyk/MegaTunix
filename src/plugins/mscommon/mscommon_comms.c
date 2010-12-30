@@ -424,7 +424,7 @@ G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize
 			/*              printf("32 bit var %i at offset %i\n",value,offset);*/
 			break;
 		default:
-			printf(_("ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"),canID,page,offset);
+			printf(_("ms_send_to_ecu() ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"),canID,page,offset);
 	}
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
