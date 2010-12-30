@@ -23,6 +23,7 @@
 void common_plugin_menu_setup(GladeXML *);
 gboolean show_tps_calibrator_window(GtkWidget *, gpointer);
 gboolean show_create_ignition_map_window(GtkWidget *, gpointer);
+gboolean show_trigger_offset_window(GtkWidget *, gpointer);
 gboolean create_ignition_map(GtkWidget *, gpointer);
 gdouble linear_interpolate(gdouble, gdouble, gdouble, gdouble, gdouble);
 /* Prototypes */

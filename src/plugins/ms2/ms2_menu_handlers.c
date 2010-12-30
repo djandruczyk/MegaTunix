@@ -25,27 +25,64 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 {
 	Firmware_Details *firmware = NULL;
+	GtkWidget *menu = NULL;
 	GtkWidget *item = NULL;
+	GtkWidget *image = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
 	gdk_threads_enter();
 	if (firmware->capabilities & MS2)
 	{
-		item = glade_xml_get_widget(xml,"show_table_generator_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
-		item = glade_xml_get_widget(xml,"show_tps_calibrator_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
-		item = glade_xml_get_widget(xml,"show_ms2_afr_calibrator_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
-		item = glade_xml_get_widget(xml,"show_sensor_calibrator_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
-		item = glade_xml_get_widget(xml,"show_trigger_offset_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
-		item = glade_xml_get_widget(xml,"ms2_reinit_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
-		item = glade_xml_get_widget(xml,"ms2_reboot_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
+		menu = glade_xml_get_widget (xml, "tools_menu_menu");
+		item = gtk_image_menu_item_new_with_mnemonic("Sensor _Calibration (MAP/Baro)");
+		image = gtk_image_new_from_stock("gtk-preferences",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_sensor_calibrator_window),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+		item = gtk_image_menu_item_new_with_mnemonic("Calibrate Ther_mistor Tables");
+		image = gtk_image_new_from_stock("gtk-preferences",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_table_generator_window),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+		item = gtk_image_menu_item_new_with_mnemonic("MS-2 _AFR Calibrator");
+		image = gtk_image_new_from_stock("gtk-preferences",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_ms2_afr_calibrator_window),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+		item = gtk_image_menu_item_new_with_mnemonic("MS-2 _TPS Calibrator");
+		image = gtk_image_new_from_stock("gtk-preferences",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_tps_calibrator_window),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+		item = gtk_image_menu_item_new_with_mnemonic("MS-2 Re-Init (WarmBoot)");
+		image = gtk_image_new_from_stock("gtk-redo",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(ms2_reinit),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+		item = gtk_image_menu_item_new_with_mnemonic("MS-2 ReBoot (ColdBoot)");
+		image = gtk_image_new_from_stock("gtk-refresh",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(ms2_reboot),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+		gtk_widget_show_all(menu);
 	}
 	gdk_threads_leave();
 	return;
@@ -407,90 +444,6 @@ G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointe
 	return TRUE;
 }
 
-
-
-/*!
-   \brief General purpose handler to hide/show trigger offset window
-    */
-G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
-{
-	static GtkWidget *window = NULL;
-	GtkWidget *item = NULL;
-	GtkWidget *partner = NULL;
-	GladeXML *main_xml = NULL;
-	GladeXML *xml = NULL;
-	GList ***ecu_widgets = NULL;
-	void (*update_widget_f)(gpointer, gpointer) = NULL;
-
-	if (!update_widget_f)
-		get_symbol_f("update_widget",(void *)&update_widget_f);
-
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
-		return TRUE;
-
-	if (!GTK_IS_WIDGET(window))
-	{
-		xml = glade_xml_new(main_xml->filename,"trigger_offset_window",NULL);
-		window = glade_xml_get_widget(xml,"trigger_offset_window");
-		glade_xml_signal_autoconnect(xml);
-
-		item = glade_xml_get_widget(xml,"plus_button");
-		register_widget_f("plus_button",item);
-		OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
-		OBJ_SET(item,"handler",GINT_TO_POINTER(INCREMENT_VALUE));
-		OBJ_SET(item,"amount",GINT_TO_POINTER(5));
-
-		item = glade_xml_get_widget(xml,"minus_button");
-		register_widget_f("minus_button",item);
-		OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
-		OBJ_SET(item,"handler",GINT_TO_POINTER(DECREMENT_VALUE));
-		OBJ_SET(item,"amount",GINT_TO_POINTER(5));
-
-		item = glade_xml_get_widget(xml,"advance_parent_box");
-		OBJ_SET(item,"ctrl_name",g_strdup("trigger_offset_tool_advance_rtt"));
-		OBJ_SET(item,"source",g_strdup("sparkangle"));
-		OBJ_SET(item,"label_prefix",g_strdup("<span font_desc=\"Sans 64\">"));
-		OBJ_SET(item,"label_suffix",g_strdup("</span>"));
-		OBJ_SET(item,"markup",GINT_TO_POINTER(TRUE));
-		add_additional_rtt_f(item);
-
-		item = glade_xml_get_widget(xml,"offset_entry");
-		register_widget_f("offset_entry",item);
-		partner = lookup_widget_f("IGN_trigger_offset_entry");
-		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
-		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
-		OBJ_SET(item,"page",OBJ_GET(partner,"page"));
-		OBJ_SET(item,"offset",OBJ_GET(partner,"offset"));
-		OBJ_SET(item,"size",OBJ_GET(partner,"size"));
-		OBJ_SET(item,"raw_lower",OBJ_GET(partner,"raw_lower"));
-		OBJ_SET(item,"raw_upper",OBJ_GET(partner,"raw_upper"));
-		OBJ_SET(item,"dl_conv_expr",OBJ_GET(partner,"dl_conv_expr"));
-		OBJ_SET(item,"ul_conv_expr",OBJ_GET(partner,"ul_conv_expr"));
-		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
-		ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
-		g_list_foreach(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);
-
-		item = glade_xml_get_widget(xml,"burn_data_button");
-		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
-		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
-		bind_to_lists_f(item,"burners");
-		/* Force them to update */
-		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
-		gtk_widget_show_all(GTK_WIDGET(window));
-		return TRUE;
-	}
-#if GTK_MINOR_VERSION >= 18
-	if (gtk_widget_get_visible(GTK_WIDGET(window)))
-#else
-	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
-#endif
-		gtk_widget_hide_all(GTK_WIDGET(window));
-	else
-		gtk_widget_show_all(GTK_WIDGET(window));
-	return TRUE;
-}
 
 
 /*! \brief tell ms2 to reinitialize */

@@ -23,14 +23,23 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 {
 	Firmware_Details *firmware = NULL;
 	GtkWidget *item = NULL;
+	GtkWidget *menu = NULL;
+	GtkWidget *image = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
 	gdk_threads_enter();
 	if (firmware->capabilities & MS1)
 	{
-		item = glade_xml_get_widget(xml,"lookuptables_setup_menuitem");
-		gtk_widget_set_sensitive(item,TRUE);
+		menu = glade_xml_get_widget (xml, "tools_menu_menu");
+		item = gtk_image_menu_item_new_with_mnemonic("MS-1 LookupTables Mgmt");
+		image = gtk_image_new_from_stock("gtk-index",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(lookuptables_configurator_f),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+		gtk_widget_show_all(menu);
 	}
 	gdk_threads_leave();
 	return;

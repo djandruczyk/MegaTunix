@@ -39,6 +39,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_assert(get_symbol_f);
 	get_symbol_f("_get_sized_data",(void *)&_get_sized_data_f);
 	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
+	get_symbol_f("add_additional_rtt",(void *)&add_additional_rtt_f);
 	get_symbol_f("alter_widget_state",(void *)&alter_widget_state_f);
 	get_symbol_f("bind_to_lists",(void *)&bind_to_lists_f);
 	get_symbol_f("check_tab_existance",(void *)&check_tab_existance_f);

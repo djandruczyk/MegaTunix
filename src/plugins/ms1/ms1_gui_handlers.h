@@ -16,7 +16,6 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
@@ -25,7 +24,7 @@ gboolean ecu_std_button_handler(GtkWidget *, gpointer);
 gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_combo_handler(GtkWidget *, gpointer);
 void ecu_update_entry(GtkWidget *);
-void ecu_gui_init(GladeXML *);
+void ecu_gui_init(void);
 /* Prototypes */
 
 typedef enum

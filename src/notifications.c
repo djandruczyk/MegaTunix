@@ -364,7 +364,7 @@ G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");
 	if (GTK_IS_WIDGET(info_label))
-		gtk_label_set_markup(GTK_LABEL(info_label),"<big>Ready...</big>");
+		gtk_label_set_markup(GTK_LABEL(info_label),"<b>Ready...<b>");
 	return FALSE;
 }
 
@@ -402,7 +402,7 @@ G_MODULE_EXPORT void set_title(gchar * text)
 	{
 		if (GTK_IS_WIDGET(info_label))
 		{
-			tmpbuf = g_markup_printf_escaped("<big><b>%s</b></big>",text);
+			tmpbuf = g_markup_printf_escaped("<b>%s</b>",text);
 			gtk_label_set_markup(GTK_LABEL(info_label),tmpbuf);
 			g_free(tmpbuf);
 		}

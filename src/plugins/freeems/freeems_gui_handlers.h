@@ -17,11 +17,10 @@
 #include <defines.h>
 #include <enums.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 /* Prototypes */
 void common_gui_init(void);
-void ecu_gui_init(GladeXML *);
+void ecu_gui_init(void);
 /* Prototypes */
 
 #endif

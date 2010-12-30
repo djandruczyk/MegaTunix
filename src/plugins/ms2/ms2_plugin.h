@@ -49,7 +49,6 @@ EXTERN gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 EXTERN GtkWidget *(*mask_entry_new_with_mask_wrapper_f)(gchar *);
 EXTERN void (*register_widget_f)(gchar *, GtkWidget *);
 EXTERN void (*bind_to_lists_f)(GtkWidget * , gchar * );
-EXTERN void (*add_additional_rtt_f)(GtkWidget *);
 /* Function pointers */
 
 /* Prototypes */

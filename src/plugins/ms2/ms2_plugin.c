@@ -36,7 +36,6 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f = (void *)DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
 
-	get_symbol_f("add_additional_rtt",(void *)&add_additional_rtt_f);
 	get_symbol_f("bind_to_lists",(void *)&bind_to_lists_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("create_single_bit_state_watch",(void *)&create_single_bit_state_watch_f);

@@ -49,6 +49,7 @@ EXTERN void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *,
 EXTERN void (*get_essentials_f)(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
 EXTERN gfloat (*convert_after_upload_f)(GtkWidget *);
 EXTERN gint (*get_ecu_data_f)(GtkWidget *);
+EXTERN gboolean (*lookuptables_configurator_f)(GtkWidget *, gpointer );
 /* Function Pointers */
 
 /* Prototypes */

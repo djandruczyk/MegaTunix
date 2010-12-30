@@ -24,21 +24,16 @@ extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void common_gui_init(void)
 {
-	void (*ecu_gui_init)(GladeXML *) = NULL;
-	GladeXML *xml = NULL;
-	GtkWidget *item = NULL;
-
-	xml  = DATA_GET(global_data,"main_xml");
 	/* This function is for doing any gui finalization on the CORE gui
 	   for stuff specific to this firmware family.
 	   */
 	/* If ECU lib has a call run it */
 	if (get_symbol_f("ecu_gui_init",(void *)&ecu_gui_init))
-		ecu_gui_init(xml);
+		ecu_gui_init();
 }
 
 
-G_MODULE_EXPORT void ecu_gui_init(GladeXML *xml)
+G_MODULE_EXPORT void ecu_gui_init(void)
 {
 	/* We don't need anything specific to this ecu initialized */
 }

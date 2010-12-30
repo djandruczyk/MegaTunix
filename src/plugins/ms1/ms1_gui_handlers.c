@@ -542,7 +542,7 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 }
 
 
-G_MODULE_EXPORT void ecu_gui_init(GladeXML *xml)
+G_MODULE_EXPORT void ecu_gui_init(void)
 {
 	/* We don't need anything specific to this ecu initialized */
 }

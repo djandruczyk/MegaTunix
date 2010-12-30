@@ -48,6 +48,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
 	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
 	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
+	get_symbol_f("lookuptables_configurator",(void *)&lookuptables_configurator_f);
 	get_symbol_f("ms_get_ecu_data",(void *)&ms_get_ecu_data_f);
 	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
 	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);

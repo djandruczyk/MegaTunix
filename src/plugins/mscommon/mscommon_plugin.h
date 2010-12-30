@@ -100,7 +100,7 @@ EXTERN gboolean (*read_wrapper_f)(gint, void *, size_t, gint *);
 EXTERN gint (*read_data_f)(gint , void **, gboolean);
 EXTERN gboolean (*check_tab_existance_f)(gint);
 EXTERN gboolean (*jump_to_tab_f)(GtkWidget *, gpointer );
-
+EXTERN void (*add_additional_rtt_f)(GtkWidget *);
 
 /* Function Pointers */
 
