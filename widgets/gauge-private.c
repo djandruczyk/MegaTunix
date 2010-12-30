@@ -802,7 +802,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		priv->bitmap = gdk_pixmap_new(NULL,priv->w,priv->h,1);
 		/* Shape combine mask bitmap */
 		cr = gdk_cairo_create(priv->bitmap);
-		cairo_set_source_rgb (cr, 0,0,0);
+		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(cr);
 		cairo_set_operator(cr,CAIRO_OPERATOR_SOURCE);
 		cairo_set_source_rgb (cr, 1.0,1.0,1.0);

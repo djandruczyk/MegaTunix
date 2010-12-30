@@ -141,8 +141,8 @@ keys themselves are not, as the string compare functions are case insensitive.
 			in hand with expr_symbols above,  the number of 
 			variables in this line and expr_symbols must be the
 			same otherwise an eror is thrown. Valid types are
-			_VE_EMB_BIT_ (meaning a bitfield imbedded into the VE
-			Variables, can be in any page), _VE_VAR_ menaing just
+			_ECU_EMB_BIT_ (meaning a bitfield imbedded into the VE
+			Variables, can be in any page), _ECU_VAR_ meaning just
 			a VE variable, at any page offset.
 	source		(string) string name of the source that this widget's
 			state relies upon (bitfields ONLY).  The source names
@@ -166,10 +166,10 @@ keys themselves are not, as the string compare functions are case insensitive.
 NOTE: regaring expr_symbols and expr_types:
 	The expr_types in combination of expr_symbols determine what following
 keys will be present in the section.  IF expr_symbols contains "cyls,reqfuel"
-and expr_types contains "_VE_EMB_BIT_,_VE_VAR_" then the following fields will
+and expr_types contains "_ECU_EMB_BIT_,_ECU_VAR_" then the following fields will
 be searched for. "cyls_page","cyls_offset","cyls_bitmask".
 "reqfuel_page" and "reqfuel_offset". (Embedded bitfields need, the page,offset
-and bitmask to be resolved completely), VE_VAR's ony need the page 
+and bitmask to be resolved completely), ECU_VAR's ony need the page 
 and offset to be resolved.
 completely.
 

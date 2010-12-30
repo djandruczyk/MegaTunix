@@ -196,7 +196,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		g_time_val_add(&time,serial_params->read_wait*1000);
 		if (g_cond_timed_wait(rtv_thread_cond,mutex,&time))
 		{
-			printf("rtv_thread_cond signaled, exiting!\n");
 			g_async_queue_unref(io_data_queue);
 			g_async_queue_unref(pf_dispatch_queue);
 			g_mutex_unlock(mutex);

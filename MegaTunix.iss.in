@@ -38,8 +38,7 @@ Source: "z:\target\share-2.20.1\locale\es\*.*"; DestDir: "{app}\2.20\share\local
 Source: "z:\target\share-2.20.1\locale\fi\*.*"; DestDir: "{app}\2.20\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\target\share-2.20.1\locale\fr\*.*"; DestDir: "{app}\2.20\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\target\dest\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\target\dest\lib\*.*"; DestDir: "{app}\lib"; Flags: ignoreversion
-Source: "z:\home\dave\git\MegaTunix\widgets\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
+Source: "z:\home\dave\git\MegaTunix\widgets\.libs\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
 Source: "z:\target\dest\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]
@@ -53,31 +52,31 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\MegaTunix"; Filena
 [Registry]
 ; Megatunix itself
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\megatunix.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}"; Flags: uninsdeletekey
 ; gaugedesigner
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\gaugedesigner.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.20;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.20;{app}"; Flags: uninsdeletekey
 ; dashdesigner
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\dashdesigner.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.20;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.20;{app}"; Flags: uninsdeletekey
 ; mtxloader 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\mtxloader.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.20;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.20;{app}"; Flags: uninsdeletekey
 ; msloader 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\msloader.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}"; Flags: uninsdeletekey
 ; curvedemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\curvedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\curvedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\curvedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\curvedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}"; Flags: uninsdeletekey
 ; gaugedemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\gaugedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}"; Flags: uninsdeletekey
 ; piedemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\piedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\piedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\piedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\piedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}"; Flags: uninsdeletekey
 ; progressdemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\progressdemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\progressdemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\progressdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\progressdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}"; Flags: uninsdeletekey
 ; stripchartdemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\stripchartdemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\stripchartdemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\stripchartdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}\lib"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\stripchartdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.12;{app}"; Flags: uninsdeletekey
