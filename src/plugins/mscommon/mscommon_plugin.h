@@ -98,6 +98,8 @@ EXTERN void (*register_widget_f)(gchar *, GtkWidget *);
 EXTERN gboolean (*write_wrapper_f)(gint, const void *, size_t, gint *);
 EXTERN gboolean (*read_wrapper_f)(gint, void *, size_t, gint *);
 EXTERN gint (*read_data_f)(gint , void **, gboolean);
+EXTERN gboolean (*check_tab_existance_f)(gint);
+EXTERN gboolean (*jump_to_tab_f)(GtkWidget *, gpointer );
 
 
 /* Function Pointers */

@@ -41,6 +41,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
 	get_symbol_f("alter_widget_state",(void *)&alter_widget_state_f);
 	get_symbol_f("bind_to_lists",(void *)&bind_to_lists_f);
+	get_symbol_f("check_tab_existance",(void *)&check_tab_existance_f);
 	get_symbol_f("cleanup",(void *)&cleanup_f);
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
@@ -64,6 +65,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("get_table",(void *)&get_table_f);
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
+	get_symbol_f("jump_to_tab",(void *)&jump_to_tab_f);
 	get_symbol_f("key_event",(void *)&key_event_f);
 	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
 	get_symbol_f("lookup_data",(void *)&lookup_data_f);

@@ -2088,6 +2088,7 @@ G_MODULE_EXPORT void common_gui_init(void)
 	/* Assigns additional data to the gui controls mainly so that
 	   functions within plugins can be located
 	   */
+
 	item = glade_xml_get_widget (xml, "generate_ignition_map1");
 	if (item)
 		OBJ_SET(item,"function_name",g_strdup("show_create_ignition_map_window"));

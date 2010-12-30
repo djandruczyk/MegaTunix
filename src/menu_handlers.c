@@ -35,11 +35,7 @@ static struct
 	{"vetable_tuning_menuitem",VETABLES_TAB},
 	{"spark_tuning_menuitem",SPARKTABLES_TAB},
 	{"afr_tuning_menuitem",AFRTABLES_TAB},
-	{"boost_tuning_menuitem",BOOSTTABLES_TAB},
-	{"staging_tuning_menuitem",STAGING_TAB},
-	{"rotary_tuning_menuitem",ROTARYTABLES_TAB},
 	{"runtime_vars_menuitem",RUNTIME_TAB},
-	{"ecu_errors_menuitem",ERROR_STATUS_TAB},
 };
 
 static struct 

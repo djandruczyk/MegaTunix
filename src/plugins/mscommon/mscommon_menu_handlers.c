@@ -26,7 +26,51 @@ extern gconstpointer *global_data;
 void common_plugin_menu_setup(GladeXML *xml)
 {
 	void (*ecu_plugin_menu_setup)(GladeXML *) = NULL;
+	GtkWidget *menu = NULL;
 	GtkWidget *item = NULL;
+	GtkWidget *image = NULL;
+
+	menu = glade_xml_get_widget (xml, "goto_tab1_menu");
+	item = gtk_menu_item_new_with_mnemonic("_Boost Tables");
+	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
+	OBJ_SET(item,"target_tab",GINT_TO_POINTER(BOOSTTABLES_TAB));
+	if (!check_tab_existance_f(BOOSTTABLES_TAB))
+		gtk_widget_set_sensitive(item,FALSE);
+	else
+		gtk_widget_set_sensitive(item,TRUE);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+	item = gtk_menu_item_new_with_mnemonic("_Staging Tables");
+	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
+	OBJ_SET(item,"target_tab",GINT_TO_POINTER(STAGING_TAB));
+	if (!check_tab_existance_f(STAGING_TAB))
+		gtk_widget_set_sensitive(item,FALSE);
+	else
+		gtk_widget_set_sensitive(item,TRUE);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+	item = gtk_menu_item_new_with_mnemonic("_Rotary Tables");
+	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
+	OBJ_SET(item,"target_tab",GINT_TO_POINTER(ROTARYTABLES_TAB));
+	if (!check_tab_existance_f(ROTARYTABLES_TAB))
+		gtk_widget_set_sensitive(item,FALSE);
+	else
+		gtk_widget_set_sensitive(item,TRUE);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+	gtk_widget_show_all(menu);
+
+	menu = glade_xml_get_widget (xml, "view_menu_menu");
+	item = gtk_image_menu_item_new_with_mnemonic("ECU _Errors");
+	image = gtk_image_new_from_stock("gtk-stop",GTK_ICON_SIZE_MENU);
+	g_object_set(item,"image",image,NULL);
+	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
+	OBJ_SET(item,"target_tab",GINT_TO_POINTER(ERROR_STATUS_TAB));
+	if (!check_tab_existance_f(ERROR_STATUS_TAB))
+		gtk_widget_set_sensitive(item,FALSE);
+	else
+		gtk_widget_set_sensitive(item,TRUE);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+	gtk_widget_show_all(menu);
 
 	if (get_symbol_f("ecu_plugin_menu_setup",(void *)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);
@@ -164,7 +208,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	gint i = 0;
 	gint x = 0;
 	gint y = 0;
-	gint table=  0;
+	gint table = 0;
 	gchar *table_title = NULL;
 	Firmware_Details *firmware = NULL;
 	gint canID = 0;
@@ -189,6 +233,8 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	GList *list = NULL;
 	gchar * tmpbuf = NULL;
 	gint precision = 0;
+	GtkTreeIter iter;
+	GtkTreeModel *model = NULL;
 
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
@@ -205,17 +251,14 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	}
 
 	/* the selected text in the combo box */
-	table_title = (gchar *) gtk_combo_box_get_active_text(GTK_COMBO_BOX(item));
-	if (table_title == NULL)
+	if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(item),&iter))
 	{
 		dbg_func_f(CRITICAL, g_strdup_printf(__FILE__ ": create_ignition_map():\n\ttable_title was unavailable\n"));
 		return TRUE;
 	}
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(item));
+	gtk_tree_model_get(model,&iter,1,&table,-1);
 
-	/* iterate through the firmware tables looking for a match */
-	for (table=0; table!= firmware->total_tables; table++)
-		if (!g_strcmp0(table_title, firmware->table_params[table]->table_name)) /* we have a match? */
-			break;
 
 	/* light load */
 	item = glade_xml_get_widget (xml, "light_advance");
@@ -324,6 +367,62 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	}
 
 	gtk_widget_hide(glade_xml_get_widget (xml, "create_ignition_window"));
+	return TRUE;
+}
+
+
+/*!
+  \ show / hide window
+  \ populates the combo box with available spark maps that could be filled out by the generator
+  */
+G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpointer data)
+{
+	static GtkWidget *window = NULL;
+	GtkWidget *item = NULL;
+	GladeXML *main_xml = NULL;
+	GladeXML *xml = NULL;
+	Firmware_Details *firmware;
+	GtkListStore *store = NULL;
+	GtkTreeIter iter;
+	gint t;
+
+	firmware = DATA_GET(global_data,"firmware");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+		return TRUE;
+
+	if (!GTK_IS_WIDGET(window))
+	{
+		xml = glade_xml_new(main_xml->filename,"create_ignition_window",NULL);
+		window = glade_xml_get_widget(xml,"create_ignition_window");
+		item = glade_xml_get_widget(xml,"spark_table_combo");
+		glade_xml_signal_autoconnect(xml);
+		store = gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_INT);
+
+		for (t=0;t<firmware->total_tables;t++)
+		{
+			if (firmware->table_params[t]->is_spark)
+			{
+				gtk_list_store_append(store,&iter);
+				gtk_list_store_set(store,&iter,0,g_strdup(firmware->table_params[t]->table_name),1,t,-1);
+			}
+		}
+		gtk_combo_box_set_model(GTK_COMBO_BOX(item),GTK_TREE_MODEL(store));
+		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(item),0);
+
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
+		gtk_widget_show_all(GTK_WIDGET(window));
+		return TRUE;
+	}
+
+#if GTK_MINOR_VERSION >=18
+	if (gtk_widget_get_visible(GTK_WIDGET(window)))
+#else
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+#endif
+		gtk_widget_hide_all(GTK_WIDGET(window));
+	else
+		gtk_widget_show_all(GTK_WIDGET(window));
 	return TRUE;
 }
 

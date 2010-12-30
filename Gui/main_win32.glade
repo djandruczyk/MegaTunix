@@ -171,33 +171,6 @@
                                     <signal name="activate" handler="jump_to_tab"/>
                                   </widget>
                                 </child>
-                                <child>
-                                  <widget class="GtkMenuItem" id="boost_tuning_menuitem">
-                                    <property name="visible">True</property>
-                                    <property name="sensitive">False</property>
-                                    <property name="label" translatable="yes">_Boost Tables</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="activate" handler="jump_to_tab"/>
-                                  </widget>
-                                </child>
-                                <child>
-                                  <widget class="GtkMenuItem" id="rotary_tuning_menuitem">
-                                    <property name="visible">True</property>
-                                    <property name="sensitive">False</property>
-                                    <property name="label" translatable="yes">_Rotary Trailing Table</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="activate" handler="jump_to_tab"/>
-                                  </widget>
-                                </child>
-                                <child>
-                                  <widget class="GtkMenuItem" id="staging_tuning_menuitem">
-                                    <property name="visible">True</property>
-                                    <property name="sensitive">False</property>
-                                    <property name="label" translatable="yes">_Injector Staging Table</property>
-                                    <property name="use_underline">True</property>
-                                    <signal name="activate" handler="jump_to_tab"/>
-                                  </widget>
-                                </child>
                               </widget>
                             </child>
                           </widget>
@@ -221,23 +194,6 @@
                         <child>
                           <widget class="GtkSeparatorMenuItem" id="separator3">
                             <property name="visible">True</property>
-                          </widget>
-                        </child>
-                        <child>
-                          <widget class="GtkImageMenuItem" id="ecu_errors_menuitem">
-                            <property name="label">ECU _Errors</property>
-                            <property name="visible">True</property>
-                            <property name="sensitive">False</property>
-                            <property name="use_underline">True</property>
-                            <property name="use_stock">False</property>
-                            <signal name="focus_out_event" handler="focus_out_handler"/>
-                            <signal name="activate" handler="jump_to_tab"/>
-                            <child internal-child="image">
-                              <widget class="GtkImage" id="image6">
-                                <property name="visible">True</property>
-                                <property name="stock">gtk-stop</property>
-                              </widget>
-                            </child>
                           </widget>
                         </child>
                       </widget>
@@ -3870,12 +3826,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">20.0</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
                     <signal name="activate" handler="std_entry_handler"/>
-                    <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -3930,11 +3881,6 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">115.0</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
@@ -3967,11 +3913,6 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">5.0</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
@@ -4028,12 +3969,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">100.0</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
                     <signal name="activate" handler="std_entry_handler"/>
-                    <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -4051,12 +3987,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">30.0</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
                     <signal name="activate" handler="std_entry_handler"/>
-                    <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -4122,11 +4053,6 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">3500</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
@@ -4165,41 +4091,13 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="idle_advance">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="invisible_char">&#x25CF;</property>
-                    <property name="width_chars">7</property>
-                    <property name="text" translatable="yes">15.0</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="activate" handler="std_entry_handler"/>
-                    <signal name="key_release_event" handler="key_event"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="x_options"></property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
                   <widget class="GtkEntry" id="idle_rpm">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">850</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
                     <signal name="activate" handler="std_entry_handler"/>
-                    <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -4217,11 +4115,6 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">40.0</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
@@ -4269,6 +4162,24 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
+                <child>
+                  <widget class="GtkEntry" id="idle_advance">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="width_chars">7</property>
+                    <property name="text" translatable="yes">15.0</property>
+                    <signal name="key_release_event" handler="key_event"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
               </widget>
               <packing>
                 <property name="top_attach">2</property>
@@ -4302,11 +4213,6 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
                     <property name="invisible_char">&#x25CF;</property>
                     <property name="width_chars">7</property>
                     <property name="text" translatable="yes">5.0</property>
-                    <signal name="changed" handler="entry_changed_handler"/>
-                    <signal name="key_press_event" handler="key_event"/>
-                    <signal name="insert_text" handler="insert_text_handler"/>
-                    <signal name="focus_out_event" handler="focus_out_handler"/>
-                    <signal name="activate" handler="std_entry_handler"/>
                     <signal name="key_release_event" handler="key_event"/>
                   </widget>
                   <packing>
@@ -4338,7 +4244,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkComboBox" id="spark_table_combo">
+              <widget class="GtkComboBoxEntry" id="spark_table_combo">
                 <property name="visible">True</property>
               </widget>
             </child>
