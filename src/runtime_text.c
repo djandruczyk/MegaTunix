@@ -61,13 +61,11 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (DATA_GET(global_data,"leaving"))
-		return;
 	if (!(DATA_GET(global_data,"interrogated")))
 		return;
 	if (!firmware->rtt_map_file)
 	{
-		//dbg_func(CRITICAL,g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": firmware->rtt_map_file is UNDEFINED,\n\texiting runtime text window creation routine!!!!\n"));
 		return;
 	}
 

@@ -13,6 +13,7 @@ snapshots_files = 	\
 			MegaSquirtnSpark-Extra_Highres_0[89]x-series.ecu \
 			MS-II_V2.8x-series.ecu \
 			MS-II-Extra_V2.1.0-series.ecu \
+			MS-II-Extra_V2.1.0e-series.ecu \
 			MS-II-Extra_V3.0.x-series.ecu \
 			MS-II-Extra_V3.0.3w_series.ecu
 

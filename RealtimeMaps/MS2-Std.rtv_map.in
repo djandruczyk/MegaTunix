@@ -1,11 +1,11 @@
 [API]
 major=1
-minor=4
+minor=5
 
 [realtime_map]
 persona=MS
 applicable_firmwares=MS-II V2.8x
-applicable_signatures=** V2.88Embedded Code by B&G **,** V2.89Embedded Code by B&G **
+applicable_revisions=** V2.88Embedded Code by B&G **,** V2.89Embedded Code by B&G **
 derived_total=70
 raw_list=raw_secl
 #raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsADC,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt,afr,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle

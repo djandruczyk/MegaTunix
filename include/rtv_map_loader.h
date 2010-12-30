@@ -31,7 +31,7 @@ struct _Rtv_Map
 	guint derived_total;	/*! Number of derived variables */
 	guint rtvars_size;	/*! total size of rtvars block */
 	gchar **raw_list;	/*! Char List of raw variables by name */
-	gchar *applicable_signatures;/*! Firmware signatures that use this map*/
+	gchar *applicable_revisions;/*! Firmware revisions that use this map*/
 	GHashTable *offset_hash;/*! Hashtable of rtv dervied values indexed by
 				  it's raw offset in the RTV block */
 	GArray *ts_array;	/*! Timestamp array */

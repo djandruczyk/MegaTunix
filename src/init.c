@@ -775,7 +775,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	{
 		if (rtv_map->raw_list)
 			g_strfreev(rtv_map->raw_list);
-		cleanup (rtv_map->applicable_signatures);
+		cleanup (rtv_map->applicable_revisions);
 		g_array_free(rtv_map->ts_array,TRUE);
 		for(i=0;i<rtv_map->rtv_list->len;i++)
 		{

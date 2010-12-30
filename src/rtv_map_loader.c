@@ -158,7 +158,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	tmpbuf = NULL;
 	rtv_map = g_new0(Rtv_Map, 1);
 	DATA_SET(global_data,"rtv_map",rtv_map);
-	cfg_read_string(cfgfile,"realtime_map","applicable_signatures",&rtv_map->applicable_signatures);
+	cfg_read_string(cfgfile,"realtime_map","applicable_revisions",&rtv_map->applicable_revisions);
 	cfg_read_string(cfgfile,"realtime_map","raw_list",&tmpbuf);
 	if (tmpbuf)
 	{
