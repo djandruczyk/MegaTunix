@@ -11,17 +11,17 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __FREEMS_GUI_HANDLERS_H__
-#define __FREEMS_GUI_HANDLERS_H__
+#ifndef __JIMSTIM_GUI_HANDLERS_H__
+#define __JIMSTIM_GUI_HANDLERS_H__
 
-#include <defines.h>
 #include <enums.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
 /* Prototypes */
-void common_gui_init(void);
 void ecu_gui_init(GladeXML *);
 /* Prototypes */
 
+
 #endif
+

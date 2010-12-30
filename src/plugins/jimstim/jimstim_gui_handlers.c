@@ -5,23 +5,22 @@
  * 
  * 
  * This software comes under the GPL (GNU Public License)
- * You may freely copy,distribute, etc. this as long as all the source code
+ * You may freely copy,distribute etc. this as long as the source code
  * is made available for FREE.
  * 
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __FREEMS_GUI_HANDLERS_H__
-#define __FREEMS_GUI_HANDLERS_H__
-
-#include <defines.h>
+#include <config.h>
 #include <enums.h>
-#include <gtk/gtk.h>
 #include <glade/glade.h>
+#include <gtk/gtk.h>
 
-/* Prototypes */
-void common_gui_init(void);
-void ecu_gui_init(GladeXML *);
-/* Prototypes */
 
-#endif
+extern gconstpointer *global_data;
+
+G_MODULE_EXPORT void ecu_gui_init(GladeXML *xml)
+{
+	/* We don't need anything specific to this ecu initialized */
+}
+

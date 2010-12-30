@@ -338,3 +338,10 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	}
 	return TRUE;
 }
+
+
+G_MODULE_EXPORT void ecu_gui_init(GladeXML *xml)
+{
+	/* We don't need anything specific to this ecu initialized */
+}
+

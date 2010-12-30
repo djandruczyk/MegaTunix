@@ -36,3 +36,10 @@ G_MODULE_EXPORT void common_gui_init(void)
 	if (get_symbol_f("ecu_gui_init",(void *)&ecu_gui_init))
 		ecu_gui_init(xml);
 }
+
+
+G_MODULE_EXPORT void ecu_gui_init(GladeXML *xml)
+{
+	/* We don't need anything specific to this ecu initialized */
+}
+
