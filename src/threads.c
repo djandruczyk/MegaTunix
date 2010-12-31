@@ -57,14 +57,21 @@ gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test
 G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 {
 	static GAsyncQueue *io_data_queue = NULL;
+	static void (*build_output_message_f)(Io_Message *, Command *, gpointer);
+	static GHashTable *commands_hash = NULL;
 	Io_Message *message = NULL;
-	GHashTable *commands_hash = NULL;
 	Command *command = NULL;
 
-	commands_hash = DATA_GET(global_data,"commands_hash");
+	if (!commands_hash)
+		commands_hash = DATA_GET(global_data,"commands_hash");
 	if (!io_data_queue)
 		io_data_queue = DATA_GET(global_data,"io_data_queue");
+	if (!build_output_message_f)
+		get_symbol("build_output_message",(void *)&build_output_message_f);
 
+	g_return_if_fail(build_output_message_f);
+	g_return_if_fail(commands_hash);
+	g_return_if_fail(io_data_queue);
 	/* Fringe case for FUNC_CALL helpers that need to trigger 
 	 * post_functions AFTER all their subhandlers have ran.  We
 	 * call io_cmd with no cmd name and pack in the post functions into
@@ -94,7 +101,7 @@ G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 			message->payload = data;
 		}
 		if (command->type != FUNC_CALL)
-			build_output_string(message,command,data);
+			build_output_message_f(message,command,data);
 	}
 
 	g_async_queue_ref(io_data_queue);
@@ -453,121 +460,3 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 }
 
 
-/*! 
- \brief build_output_string() is called when doing output to the ECU, to 
- append the needed data together into one nice string for sending
- */
-G_MODULE_EXPORT void build_output_string(Io_Message *message, Command *command, gpointer data)
-{
-	guint i = 0;
-	gint v = 0;
-	gint len = 0;
-	OutputData *output = NULL;
-	PotentialArg * arg = NULL;
-	guint8 *sent_data = NULL;
-	DBlock *block = NULL;
-
-	if (data)
-		output = (OutputData *)data;
-
-	message->sequence = g_array_new(FALSE,TRUE,sizeof(DBlock *));
-
-	/* Base command */
-	block = g_new0(DBlock, 1);
-	block->type = DATA;
-	block->data = (guint8 *)g_strdup(command->base);
-	if (!command->base)
-		block->len = 0;
-	else
-		block->len = strlen(command->base);
-	g_array_append_val(message->sequence,block);
-
-	/* Arguments */
-	for (i=0;i<command->args->len;i++)
-	{
-		arg = g_array_index(command->args,PotentialArg *, i);
-		block = g_new0(DBlock, 1);
-		if (arg->type == ACTION)
-		{
-			/*printf("build_output_string(): ACTION being created!\n");*/
-			block->type = ACTION;
-			block->action = arg->action;
-			block->arg = arg->action_arg;
-			g_array_append_val(message->sequence,block);
-			continue;
-		}
-		if (arg->type == STATIC_STRING)
-		{
-			block->type = DATA;
-			block->data = (guint8 *)g_strdup(arg->static_string);
-			block->len = strlen(arg->static_string);
-			g_array_append_val(message->sequence,block);
-			continue;
-		}
-		if (arg->type == HEX_STRING)
-		{
-			block->type = DATA;
-			block->data = (guint8 *)g_memdup(arg->static_string,arg->string_len);
-			block->len = arg->string_len;
-			g_array_append_val(message->sequence,block);
-			continue;
-		}
-		if (!output)
-			continue;
-		switch (arg->size)
-		{
-			case MTX_U08:
-			case MTX_S08:
-			case MTX_CHAR:
-				/*printf("8 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
-				block->type = DATA;
-				v = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("value %i\n",v);*/
-				block->data = g_new0(guint8,1);
-				block->data[0] = (guint8)v;
-				block->len = 1;
-				break;
-			case MTX_U16:
-			case MTX_S16:
-				/*printf("16 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
-				block->type = DATA;
-				v = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("value %i\n",v);*/
-				block->data = g_new0(guint8,2);
-				block->data[0] = (v & 0xff00) >> 8;
-				block->data[1] = (v & 0x00ff);
-				block->len = 2;
-				break;
-			case MTX_U32:
-			case MTX_S32:
-				/*				printf("32 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
-				block->type = DATA;
-				v = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*				printf("value %i\n",v); */
-				block->data = g_new0(guint8,4);
-				block->data[0] = (v & 0xff000000) >> 24;
-				block->data[1] = (v & 0xff0000) >> 16;
-				block->data[2] = (v & 0xff00) >> 8;
-				block->data[3] = (v & 0x00ff);
-				block->len = 4;
-				break;
-			case MTX_UNDEF:
-				/*printf("arg %i, name \"%s\"\n",i,arg->internal_name);*/
-				block->type = DATA;
-				if (!arg->internal_name)
-					printf(_("ERROR, MTX_UNDEF, donno what to do!!\n"));
-				sent_data = (guint8 *)DATA_GET(output->data,arg->internal_name);
-				len = (GINT)DATA_GET(output->data,"num_bytes");
-				block->data = g_memdup(sent_data,len);
-				block->len = len;
-				/*
-				   for (j=0;j<len;j++)
-				   {
-				   printf("sent_data[%i] is %i\n",j,sent_data[j]);
-				   printf("block->data[%i] is %i\n",j,block->data[j]);
-				   }
-				 */
-		}
-		g_array_append_val(message->sequence,block);
-	}
-}

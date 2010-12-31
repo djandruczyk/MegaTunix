@@ -16,12 +16,12 @@
 #include <defines.h>
 #include <debugging.h>
 #include <errno.h>
+#include <firmware.h>
+#include <gtk/gtk.h>
 #include <mscommon_comms.h>
 #include <mscommon_gui_handlers.h>
 #include <mscommon_plugin.h>
 #include <mtxsocket.h>
-#include <gtk/gtk.h>
-#include <firmware.h>
 #include <serialio.h>
 #include <string.h>
 #include <threads.h>
@@ -932,3 +932,124 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 		io_cmd_f(firmware->rt_command,NULL);
 	return;
 }
+
+
+/*! 
+ \brief build_output_string() is called when doing output to the ECU, to 
+ append the needed data together into one nice string for sending
+ */
+G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command, gpointer data)
+{
+	guint i = 0;
+	gint v = 0;
+	gint len = 0;
+	OutputData *output = NULL;
+	PotentialArg * arg = NULL;
+	guint8 *sent_data = NULL;
+	DBlock *block = NULL;
+
+	if (data)
+		output = (OutputData *)data;
+
+	message->sequence = g_array_new(FALSE,TRUE,sizeof(DBlock *));
+
+	/* Base command */
+	block = g_new0(DBlock, 1);
+	block->type = DATA;
+	block->data = (guint8 *)g_strdup(command->base);
+	if (!command->base)
+		block->len = 0;
+	else
+		block->len = strlen(command->base);
+	g_array_append_val(message->sequence,block);
+
+	/* Arguments */
+	for (i=0;i<command->args->len;i++)
+	{
+		arg = g_array_index(command->args,PotentialArg *, i);
+		block = g_new0(DBlock, 1);
+		if (arg->type == ACTION)
+		{
+			/*printf("build_output_string(): ACTION being created!\n");*/
+			block->type = ACTION;
+			block->action = arg->action;
+			block->arg = arg->action_arg;
+			g_array_append_val(message->sequence,block);
+			continue;
+		}
+		if (arg->type == STATIC_STRING)
+		{
+			block->type = DATA;
+			block->data = (guint8 *)g_strdup(arg->static_string);
+			block->len = strlen(arg->static_string);
+			g_array_append_val(message->sequence,block);
+			continue;
+		}
+		if (arg->type == HEX_STRING)
+		{
+			block->type = DATA;
+			block->data = (guint8 *)g_memdup(arg->static_string,arg->string_len);
+			block->len = arg->string_len;
+			g_array_append_val(message->sequence,block);
+			continue;
+		}
+		if (!output)
+			continue;
+		switch (arg->size)
+		{
+			case MTX_U08:
+			case MTX_S08:
+			case MTX_CHAR:
+				/*printf("8 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
+				block->type = DATA;
+				v = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("value %i\n",v);*/
+				block->data = g_new0(guint8,1);
+				block->data[0] = (guint8)v;
+				block->len = 1;
+				break;
+			case MTX_U16:
+			case MTX_S16:
+				/*printf("16 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
+				block->type = DATA;
+				v = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("value %i\n",v);*/
+				block->data = g_new0(guint8,2);
+				block->data[0] = (v & 0xff00) >> 8;
+				block->data[1] = (v & 0x00ff);
+				block->len = 2;
+				break;
+			case MTX_U32:
+			case MTX_S32:
+				/*                              printf("32 bit arg %i, name \"%s\"\n",i,arg->internal_name);*/
+				block->type = DATA;
+				v = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*                              printf("value %i\n",v); */
+				block->data = g_new0(guint8,4);
+				block->data[0] = (v & 0xff000000) >> 24;
+				block->data[1] = (v & 0xff0000) >> 16;
+				block->data[2] = (v & 0xff00) >> 8;
+				block->data[3] = (v & 0x00ff);
+				block->len = 4;
+				break;
+			case MTX_UNDEF:
+				/*printf("arg %i, name \"%s\"\n",i,arg->internal_name);*/
+				block->type = DATA;
+				if (!arg->internal_name)
+					printf(_("ERROR, MTX_UNDEF, donno what to do!!\n"));
+				sent_data = (guint8 *)DATA_GET(output->data,arg->internal_name);
+				len = (GINT)DATA_GET(output->data,"num_bytes");
+				block->data = g_memdup(sent_data,len);
+				block->len = len;
+				/*
+				   for (j=0;j<len;j++)
+				   {
+				   printf("sent_data[%i] is %i\n",j,sent_data[j]);
+				   printf("block->data[%i] is %i\n",j,block->data[j]);
+				   }
+				 */
+		}
+		g_array_append_val(message->sequence,block);
+	}
+}
+

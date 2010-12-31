@@ -118,7 +118,6 @@ void thread_refresh_widget(GtkWidget *);
 void thread_refresh_widget_range(gint, gint, gint);
 void thread_widget_set_sensitive(const gchar * widget_name, gboolean state);
 gboolean queue_function(const gchar * );
-void build_output_string(Io_Message *, Command *, gpointer);
 
 /* Prototypes */
 
