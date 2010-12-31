@@ -16,6 +16,7 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <interrogate.h>
+#include <freeems_helpers.h>
 #include <serialio.h>
 
 extern GtkWidget *interr_view;
@@ -30,7 +31,13 @@ extern GtkWidget *interr_view;
  */
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
+	GAsyncQueue *queue = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	/* ECU has already been detected via comms test
+	   Now we need to figure out its variant and adapt to it
+	   */
+	/* Send stream disable command */
+	stop_streaming();
 
 	/* FreeEMS Interrogator NOT WRITTEN YET */
 	return TRUE;

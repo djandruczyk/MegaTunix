@@ -17,6 +17,8 @@ libfreeems_la_SOURCES = \
 	freeems_comms.h \
 	freeems_gui_handlers.c \
 	freeems_gui_handlers.h \
+	freeems_helpers.c \
+	freeems_helpers.h \
 	freeems_plugin.c \
 	freeems_plugin.h \
 	interrogate.c \

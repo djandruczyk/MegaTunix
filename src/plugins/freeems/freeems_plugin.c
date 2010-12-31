@@ -43,6 +43,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	get_symbol_f("dump_output",(void *)&dump_output_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
+	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
 	get_symbol_f("queue_function",(void *)&queue_function_f);
 	get_symbol_f("read_data",(void *)&read_data_f);
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
