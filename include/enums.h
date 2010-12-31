@@ -222,15 +222,16 @@ typedef enum
 	MS1_E_TOOTHMON,
 	MS2_E_TRIGMON,
 	MS2_E_TOOTHMON,
-	MS2_E_COMPOSITEMON
-}XmlCmdType;
+	MS2_E_COMPOSITEMON,
+	LAST_XML_CMD_TYPE
+}FuncCall;
 
 typedef enum
 {
 	DATA=0x2A0,
 	ACTION,
 	STATIC_STRING,
-	HEX_STRING
+	LAST_ARG_TYPE
 }ArgType;
 
 typedef enum

@@ -935,8 +935,8 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 
 
 /*! 
- \brief build_output_string() is called when doing output to the ECU, to 
- append the needed data together into one nice string for sending
+ \brief build_output_message() is called when doing output to the ECU, to 
+ append the needed data together into one nice blob for sending
  */
 G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command, gpointer data)
 {
@@ -982,14 +982,6 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			block->type = DATA;
 			block->data = (guint8 *)g_strdup(arg->static_string);
 			block->len = strlen(arg->static_string);
-			g_array_append_val(message->sequence,block);
-			continue;
-		}
-		if (arg->type == HEX_STRING)
-		{
-			block->type = DATA;
-			block->data = (guint8 *)g_memdup(arg->static_string,arg->string_len);
-			block->len = arg->string_len;
 			g_array_append_val(message->sequence,block);
 			continue;
 		}
@@ -1052,4 +1044,3 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		g_array_append_val(message->sequence,block);
 	}
 }
-

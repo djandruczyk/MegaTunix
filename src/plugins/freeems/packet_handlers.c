@@ -191,7 +191,7 @@ void packet_decode(FreeEMS_Packet *packet)
 		packet->seq_num = ptr[SEQ_IDX];
 		printf("Sequence id: %i\n",packet->seq_num);
 	}
-	packet->payload_id = (ptr[H_ID_IDX] << 8) + ptr[L_ID_IDX];
+	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
 	printf("Payload id: %i\n",packet->payload_id);
 	printf("\n");
 	

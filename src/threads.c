@@ -54,7 +54,7 @@ gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test
  \param cmd (gchar *) and enumerated representation of a command to execute
  \param data (void *) additional data for fringe cases..
  */
-G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
+G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 {
 	static GAsyncQueue *io_data_queue = NULL;
 	static void (*build_output_message_f)(Io_Message *, Command *, gpointer);
@@ -77,7 +77,7 @@ G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 	 * call io_cmd with no cmd name and pack in the post functions into
 	 * the void pointer part.
 	 */
-	if (!io_cmd_name)
+	if (!cmd_name)
 	{
 		message = initialize_io_message();
 		message->command = g_new0(Command, 1);
@@ -88,10 +88,10 @@ G_MODULE_EXPORT void io_cmd(gchar *io_cmd_name, void *data)
 	/* Std io_message passed by string name */
 	else
 	{
-		command = g_hash_table_lookup(commands_hash,io_cmd_name);
+		command = g_hash_table_lookup(commands_hash,cmd_name);
 		if (!command)
 		{
-			printf(_("Command %s is INVALID, aborting call\n"),io_cmd_name);
+			printf(_("Command %s is INVALID, aborting call\n"),cmd_name);
 			return;;
 		}
 		message = initialize_io_message();

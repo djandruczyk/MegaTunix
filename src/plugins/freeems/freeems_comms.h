@@ -28,6 +28,7 @@ void freeems_serial_enable(void);
 void freeems_serial_disable(void);
 gboolean comms_test(void);
 void *serial_repair_thread(gpointer);
+guint8 *finalize_packet(guint8 *, gint, gint *);
 /* Prototypes */
 
 #endif

@@ -1,65 +1,9 @@
 <?xml version="1.0"?>
 <comms>
 	<potential_args>
-		<arg>
-			<name>MS2_CAN_ID</name>
-			<desc>This is the CAN ID, 0-15 is valid.</desc>
-			<type>_DATA_</type>
-			<internal_name>canID</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>MS2_TABLE_INDEX</name>
-			<desc>This is the table index in the firmware,  0-3 are lookuptables, 4-5 are data, and 6 is rtvars, these are analagous to pages from MS-I extra</desc>
-			<type>_DATA_</type>
-			<internal_name>phys_ecu_page</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>MS2_NUM_BYTES</name>
-			<desc>Length of data to transfer (read or write), MSB format</desc>
-			<type>_DATA_</type>
-			<internal_name>num_bytes</internal_name>
-			<size>_U16_</size>
-		</arg>
-		<arg>
-			<name>MS1_NUM_BYTES</name>
-			<desc>Length of data to transfer (read or write)</desc>
-			<type>_DATA_</type>
-			<internal_name>num_bytes</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>MS1_PAGE</name>
-			<desc>Page inside ECU firmware</desc>
-			<type>_DATA_</type>
-			<internal_name>phys_ecu_page</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>MS1_OFFSET</name>
-			<desc>Offset from the beginning of the page.</desc>
-			<type>_DATA_</type>
-			<internal_name>offset</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>MS2_OFFSET</name>
-			<desc>Offset from the beginning of the table. This is in MSB format</desc>
-			<type>_DATA_</type>
-			<internal_name>offset</internal_name>
-			<size>_U16_</size>
-		</arg>
-		<arg>
-			<name>MS1_BYTE</name>
-			<desc>byte to transfer to ECU, length is 1 byte </desc>
-			<type>_DATA_</type>
-			<internal_name>value</internal_name>
-			<size>_U08_</size>
-		</arg>
 		<arg>	
 			<name>DATACHUNK</name>
-			<desc>Data to transfer to ECU, length is variable. Only applies to chunk write compatible firmwares </desc>
+			<desc>Data to transfer to ECU, length is variable.</desc>
 			<type>_DATA_</type>
 			<internal_name>data</internal_name>
 			<size>_UNDEF_</size>
@@ -79,16 +23,39 @@
 			<action_arg>500000</action_arg>
 		</arg>
 		<arg>
-			<name>SEND_X</name>
-			<desc>Sends a simple "X"</desc>
-			<type>_STATIC_STRING_</type>
-			<string>X</string>
+			<name>SEQUENCE_NUM</name>
+			<desc>Sequence Number</desc>
+			<type>_SEQUENCE_NUM_</type>
+			<internal_name>sequence_num</internal_name>
+			<size>_U08_</size>
 		</arg>
 		<arg>
-			<name>STOP_DATALOG_STREAM</name>
-			<desc>Sends raw packet to stop datalogging stream</desc>
-			<type>_HEX_STRING_</type>
-			<hex_string>0xAA,0x00,0x01,0x94,0x00,0x95,0xCC</hex_string>
+			<name>PAYLOAD_ID</name>
+			<desc>Payload ID</desc>
+			<type>_PAYLOAD_ID_</type>
+			<internal_name>payload_id</internal_name>
+			<size>_U16_</size>
+		</arg>
+		<arg>
+			<name>LOCATION_ID</name>
+			<desc>Table/Location ID</desc>
+			<type>_LOCATION_ID_</type>
+			<internal_name>location_id</internal_name>
+			<size>_U16_</size>
+		</arg>
+		<arg>
+			<name>OFFSET</name>
+			<desc>Offset from the beginning of the table</desc>
+			<type>_OFFSET_</type>
+			<internal_name>offset</internal_name>
+			<size>_U16_</size>
+		</arg>
+		<arg>
+			<name>LENGTH</name>
+			<desc>Offset from the beginning of the table</desc>
+			<type>_LENGTH_</type>
+			<internal_name>length</internal_name>
+			<size>_U16_</size>
 		</arg>
 		<arg>
 			<name>START_DATALOG_STREAM</name>
@@ -98,6 +65,49 @@
 		</arg>
 	</potential_args>
 	<commands>
+		<cmd>
+			<name>stop_datalog_stream</name>
+			<desc>Stops the automatic datalogging stream</desc>
+			<type>_WRITE_CMD_</type>
+			<args>
+				<arg>SEQUENCE_NUM</arg>
+				<arg>PAYLOAD_ID</arg>
+			</args>
+		</cmd>
+		<cmd>
+			<name>start_datalog_stream</name>
+			<desc>Starts the automatic datalogging stream</desc>
+			<type>_WRITE_CMD_</type>
+			<args>
+				<arg>SEQUENCE_NUM</arg>
+				<arg>PAYLOAD_ID</arg>
+			</args>
+		</cmd>
+		<cmd>
+			<name>generic_write</name>
+			<desc>Generic write function</desc>
+			<type>_WRITE_CMD_</type>
+			<args>
+				<arg>SEQUENCE_NUM</arg>
+				<arg>PAYLOAD_ID</arg>
+				<arg>LOCATION_ID</arg>
+				<arg>OFFSET</arg>
+				<arg>LENGTH</arg>
+				<arg>DATACHUNK</arg>
+			</args>
+		</cmd>
+		<cmd>
+			<name>generic_read</name>
+			<desc>Generic read function</desc>
+			<type>_WRITE_CMD_</type>
+			<args>
+				<arg>SEQUENCE_NUM</arg>
+				<arg>PAYLOAD_ID</arg>
+				<arg>LOCATION_ID</arg>
+				<arg>OFFSET</arg>
+				<arg>LENGTH</arg>
+			</args>
+		</cmd>
 		<cmd>
 			<name>stop_datalog_stream</name>
 			<desc>Stops the automatic datalogging stream</desc>

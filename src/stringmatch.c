@@ -275,8 +275,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(DATA));
 	g_hash_table_insert(str_2_enum,"_ACTION_",
 			GINT_TO_POINTER(ACTION));
-	g_hash_table_insert(str_2_enum,"_HEX_STRING_",
-			GINT_TO_POINTER(HEX_STRING));
 	g_hash_table_insert(str_2_enum,"_STATIC_STRING_",
 			GINT_TO_POINTER(STATIC_STRING));
 	g_hash_table_insert(str_2_enum,"_SLEEP_",

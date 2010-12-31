@@ -21,6 +21,15 @@
 
 typedef enum
 {
+	SEQUENCE_NUM = LAST_ARG_TYPE + 1,
+	PAYLOAD_ID,
+	LOCATION_ID,
+	OFFSET,
+	LENGTH
+}FreeEMSArgTypes;
+
+typedef enum
+{
 	/* Firmware Independant */
 	REQUEST_INTERFACE_VERSION=0,
 	RESPONSE_INTERFACE_VERSION,
@@ -103,8 +112,9 @@ struct
 #define ACK_TYPE_MASK		2
 #define HAS_SEQUENCE_MASK	4
 /*Where in the header the bytes are */
-#define H_ID_IDX 1
-#define L_ID_IDX 2
+#define HEADER_IDX 0
+#define H_PAYLOAD_IDX 1
+#define L_PAYLOAD_IDX 2
 #define SEQ_IDX 3
 #define H_LEN_IDX 4
 #define L_LEN_IDX 5

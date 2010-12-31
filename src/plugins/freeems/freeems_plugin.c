@@ -18,6 +18,7 @@
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
 #include <interrogate.h>
+#include <packet_handlers.h>
 
 
 gconstpointer *global_data = NULL;
@@ -95,6 +96,19 @@ void register_common_enums(void)
 		g_hash_table_insert (str_2_enum, "_RESULT_TEXT_",
 				GINT_TO_POINTER (RESULT_TEXT));
 		/* Special Common Handlers */
+
+		/* XMLcomm processing */
+		g_hash_table_insert(str_2_enum,"_SEQUENCE_NUM_",
+				GINT_TO_POINTER(SEQUENCE_NUM));
+		g_hash_table_insert(str_2_enum,"_PAYLOAD_ID_",
+				GINT_TO_POINTER(PAYLOAD_ID));
+		g_hash_table_insert(str_2_enum,"_LOCATION_ID_",
+				GINT_TO_POINTER(LOCATION_ID));
+		g_hash_table_insert(str_2_enum,"_OFFSET_",
+				GINT_TO_POINTER(OFFSET));
+		g_hash_table_insert(str_2_enum,"_LENGTH_",
+				GINT_TO_POINTER(LENGTH));
+
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");

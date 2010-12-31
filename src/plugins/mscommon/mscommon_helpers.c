@@ -55,7 +55,7 @@ G_MODULE_EXPORT void spawn_read_ve_const_pf(void)
 }
 
 
-G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
+G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall type)
 {
 	OutputData *output = NULL;
 	Command *command = NULL;
@@ -110,7 +110,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, XmlCmdType type)
 	return TRUE;
 }
 
-G_MODULE_EXPORT gboolean read_ve_const(void *data, XmlCmdType type)
+G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 {
 	gint last_page;
 	OutputData *output = NULL;
@@ -268,7 +268,7 @@ G_MODULE_EXPORT void enable_ttm_buttons_pf(void)
 }
 
 
-G_MODULE_EXPORT void simple_read_pf(void * data, XmlCmdType type)
+G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 {
 	static guint16 lastcount = 0;
 	static gboolean just_starting = TRUE;
