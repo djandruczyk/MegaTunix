@@ -18,9 +18,18 @@
 #include <enums.h>
 #include <gtk/gtk.h>
 
+/* Enumerations */
+typedef enum
+{
+	WARM_BOOT_ECU = LAST_STD_BUTTON_ENUM + 1,
+	START_STREAMING,
+	STOP_STREAMING
+}FreeEMSStdButton;
+/* Enumerations */
+
 /* Prototypes */
+gboolean common_button_handler(GtkWidget *, gpointer);
 void common_gui_init(void);
-void ecu_gui_init(void);
 /* Prototypes */
 
 #endif

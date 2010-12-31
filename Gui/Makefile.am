@@ -21,6 +21,7 @@ gui_glade_files = 	\
 		dt-params.glade \
 		enrichments.glade \
 		error_status.glade \
+		freeems-debug.glade \
 		inj_timing_6x6x3.glade \
 		jimstim-runtime.glade \
 		logviewer.glade \
@@ -123,6 +124,7 @@ gui_in_files = 	\
 		dt-params.datamap.in \
 		enrichments_BnG.datamap.in \
 		error_status.datamap.in \
+		freeems-debug.datamap.in \
 		jimstim-runtime.datamap.in \
 		logviewer.datamap.in \
 		memviewer.datamap.in \

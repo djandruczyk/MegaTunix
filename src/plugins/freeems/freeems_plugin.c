@@ -15,6 +15,7 @@
 #include <config.h>
 #include <defines.h>
 #include <firmware.h>
+#include <freeems_gui_handlers.h>
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
 #include <interrogate.h>
@@ -108,7 +109,13 @@ void register_common_enums(void)
 				GINT_TO_POINTER(OFFSET));
 		g_hash_table_insert(str_2_enum,"_LENGTH_",
 				GINT_TO_POINTER(LENGTH));
-
+		/* Firmware Specific button handlers*/
+		g_hash_table_insert(str_2_enum,"_WARM_BOOT_ECU_",
+				GINT_TO_POINTER(WARM_BOOT_ECU));
+		g_hash_table_insert(str_2_enum,"_STOP_REALTIME_",
+				GINT_TO_POINTER(STOP_REALTIME));
+		g_hash_table_insert(str_2_enum,"_START_REALTIME_",
+				GINT_TO_POINTER(START_REALTIME));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");

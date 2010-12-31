@@ -1,0 +1,54 @@
+[global]
+description=Object data map for the Template Tab
+_tab_name=_Template
+id_prefix=Temp_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[warm_boot_button]
+keys=handler,tooltip
+handler=_WARM_BOOT_ECU_
+_tooltip=This button issues a warm reset to the ECU
+
+[stop_streaming_button]
+keys=handler,tooltip
+handler=_STOP_STREAMING_
+_tooltip=This button stops the datalog streaming
+
+[start_streaming_button]
+keys=handler,tooltip
+handler=_START_STREAMING_
+_tooltip=This button starts the datalog streaming
+
+#----- Widgets ---------------------------------------------------------------
+
+#----- Labels ----------------------------------------------------------------
+
+#----- Combos ----------------------------------------------------------------
+
+#----- Entries ---------------------------------------------------------------
+

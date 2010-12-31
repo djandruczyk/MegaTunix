@@ -24,17 +24,34 @@ extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void common_gui_init(void)
 {
+	void (*ecu_gui_init_f)(void) = NULL;
 	/* This function is for doing any gui finalization on the CORE gui
 	   for stuff specific to this firmware family.
 	   */
 	/* If ECU lib has a call run it */
-	if (get_symbol_f("ecu_gui_init",(void *)&ecu_gui_init))
-		ecu_gui_init();
+	if (get_symbol_f("ecu_gui_init",(void *)&ecu_gui_init_f))
+		ecu_gui_init_f();
 }
 
 
-G_MODULE_EXPORT void ecu_gui_init(void)
+
+G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 {
-	/* We don't need anything specific to this ecu initialized */
-}
+	FreeEMSStdButton handler;
 
+	handler = (FreeEMSStdButton)OBJ_GET(widget,"handler");
+
+	switch (handler)
+	{
+		case WARM_BOOT_ECU:
+			printf("Warm booting ECU\n");
+			break;
+		case STOP_STREAMING:
+			printf("Stop streaming\n");
+			break;
+		case START_STREAMING:
+			printf("Start Streaming\n");
+			break;
+	}
+	return TRUE;
+}
