@@ -29,6 +29,7 @@ typedef enum
 
 /* Prototypes */
 gboolean common_button_handler(GtkWidget *, gpointer);
+gboolean common_bitmask_button_handler(GtkWidget *, gpointer);
 void common_gui_init(void);
 /* Prototypes */
 

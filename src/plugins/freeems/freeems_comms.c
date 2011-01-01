@@ -227,7 +227,6 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	Serial_Params *serial_params = NULL;
 	gint tmpi = 0;
 
-	printf("freeems serial enable!\n");
 	serial_params = DATA_GET(global_data,"serial_params");
 	if ((!serial_params->open) || (!serial_params->fd))
 	{
@@ -238,7 +237,6 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 #ifdef __WIN32__
 	g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
 	return;
-
 #else
 	channel = g_io_channel_unix_new(serial_params->fd);
 #endif
@@ -251,20 +249,21 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	tmpi = g_io_add_watch_full(channel,0,G_IO_IN,able_to_read,NULL, read_error);
 	DATA_SET(global_data,"read_watch",GINT_TO_POINTER(tmpi));
 
-//	/* Writer */
-//	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,NULL);
-//	DATA_SET(global_data,"write_watch",GINT_TO_POINTER(tmpi));
-
-//	/* Error Catcher */
-//	tmpi = g_io_add_watch(channel,G_IO_ERR|G_IO_HUP|G_IO_NVAL, serial_error,NULL);
-//	DATA_SET(global_data,"error_watch",GINT_TO_POINTER(tmpi));
+/*	// Writer 
+ *	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,NULL);
+ *	DATA_SET(global_data,"write_watch",GINT_TO_POINTER(tmpi));
+ *
+ *	// Error Catcher 
+ *	tmpi = g_io_add_watch(channel,G_IO_ERR|G_IO_HUP|G_IO_NVAL, serial_error,NULL);
+ *	DATA_SET(global_data,"error_watch",GINT_TO_POINTER(tmpi));
+ */
 
 }
 
 
 G_MODULE_EXPORT void read_error(gpointer data)
 {
-	printf("READ ERROR, disabling io_channel stuff!!!\n");
+	printf("READ ERROR, disabling io_channel\n");
 	freeems_serial_disable();
 }
 
@@ -283,7 +282,7 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 
 	read_pos = requested-wanted;
 	status = g_io_channel_read_chars(channel, &buf[read_pos], wanted, &received, &err);
-	/*	printf("Want %i, got %i,",wanted, received); */
+	/*printf("Want %i, got %i,",wanted, received); */
 	wanted -= received;
 	/*	printf("Still need %i\n",wanted); */
 	if (wanted <= 0)
@@ -311,7 +310,7 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 			res =  TRUE;
 			break;
 	}
-	printf("read %i bytes\n",received);
+	/*printf("read %i bytes\n",received);*/
 	if (res)
 		handle_data((guchar *)buf+read_pos,received);
 	/* Returning false will cause the channel to shutdown*/
@@ -379,7 +378,8 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	g_async_queue_unref(queue);
 	if (packet)
 	{
-		printf("COMMS TEST PACKET ARRIVED!!!!\n");
+		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Packet Arrived!!\n"));
+		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 		g_free(packet->data);
 		g_free(packet);
 		return TRUE; 
@@ -396,12 +396,15 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		g_async_queue_unref(queue);
 		if (packet)
 		{
-			printf("COMMS TEST FOUND BY PROBING!!!!!\n");
+			dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound via probing!!\n"));
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 			g_free(packet->data);
 			g_free(packet);
 			return TRUE; 
 		}
 	}
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tNo device found...\n"));
 	return FALSE;
 }
 
@@ -458,14 +461,16 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	gboolean have_offset = FALSE;
 	gboolean have_length = FALSE;
 	gboolean have_datablock = FALSE;
+	gboolean have_databyte = FALSE;
 	guint8 *payload_data = NULL;
 	gint payload_data_length = 0;
+	gint byte = 0;
 	gint seq_num = -1;
 	gint payload_id = -1;
 	gint location_id = -1;
 	gint offset = -1;
 	gint length = -1;
-	gint packet_length = 3; /* always at least 3 bytes, not include stop/start/cksum */
+	gint packet_length = 2; /* Header + cksum, rest come in below */
 	gint payload_length = 0;
 	guint i = 0;
 	gint pos = 0;
@@ -473,7 +478,6 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	OutputData *output = NULL;
 	PotentialArg * arg = NULL;
 	guint8 *buf = NULL; /* Raw packet before escapes/start/stop */
-	guint8 *sent_data = NULL;
 	DBlock *block = NULL;
 
 	if (data)
@@ -505,7 +509,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			case PAYLOAD_ID:
 				have_payload_id = TRUE;
 				payload_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("PAyload ID number present %i\n",payload_id);
+				printf("Payload ID number present %i\n",payload_id);
 				packet_length += 2;
 				break;
 				/* Payload specific stuff */
@@ -524,7 +528,14 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			case LENGTH:
 				have_length = TRUE;
 				length = (GINT)DATA_GET(output->data,arg->internal_name);
+				printf("Payload length present %i\n",length);
 				payload_length += 2;
+				break;
+			case DATABYTE:
+				have_databyte = TRUE;
+				byte = (GINT)DATA_GET(output->data,arg->internal_name);
+				printf("DataByte present %i\n",byte);
+				packet_length += 1;
 				break;
 			case DATA:
 				have_datablock = TRUE;
@@ -538,9 +549,10 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		}
 	}
 
-	pos = 0;
+	pos = 1;
 	packet_length += payload_length;
-	/* Header */
+	printf("total raw packet length (-start/end/cksum) %i\n",packet_length);
+	/* Raw Packet */
 	buf = g_new0(guint8, packet_length);
 
 	/* Payload ID */
@@ -548,9 +560,18 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	buf[L_PAYLOAD_IDX] = (guint8)(payload_id & 0x00ff);
 	pos += 2;
 
+	/* Sequence number if present */
+	if (have_sequence > 0)
+	{
+		buf[HEADER_IDX] |= HAS_SEQUENCE_MASK;
+		buf[SEQ_IDX] = (guint8)seq_num;
+		pos += 1;
+	}
+
 	/* Payload Length if present */
 	if (payload_length > 0)
 	{
+		printf("payload length is %i\n",payload_length);
 		buf[HEADER_IDX] |= HAS_LENGTH_MASK;
 		if (have_sequence > 0)
 		{
@@ -563,31 +584,22 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			buf[L_LEN_IDX - 1] = (guint8)(payload_length & 0x00ff); 
 		}
 		pos += 2;
-	}
-	/* Sequence number if present */
-	if (have_sequence > 0)
-	{
-		buf[HEADER_IDX] |= HAS_SEQUENCE_MASK;
-		buf[SEQ_IDX] = (guint8)seq_num;
-		pos += 1;
-	}
 
-	/* Copy in payload if present */
-	if (payload_length > 0)
-	{
 		/* Location ID */
 		buf[pos++] = (guint8)((location_id & 0xff00) >> 8); 
 		buf[pos++] = (guint8)(location_id & 0x00ff); 
 		/* Offset */
 		buf[pos++] = (guint8)((offset & 0xff00) >> 8); 
 		buf[pos++] = (guint8)(offset & 0x00ff); 
-		/* Length */
+		/* Sub Length */
 		buf[pos++] = (guint8)((length & 0xff00) >> 8); 
 		buf[pos++] = (guint8)(length & 0x00ff); 
 		
-		g_memmove((void *)(gint)buf[pos],payload_data,payload_data_length);
+		g_memmove(buf+pos,payload_data,payload_data_length);
 		pos += payload_data_length;
 	}
+	else if (have_databyte) /* For odd cmds that don't have a full payload */
+		buf[pos++] = (guint8)(byte & 0x00ff); 
 
 	/* Checksum it */
 	for (i=0;i<packet_length;i++)
@@ -599,6 +611,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	block = g_new0(DBlock, 1);
 	block->type = DATA;
 	block->data = finalize_packet(buf,packet_length,&block->len);
+	g_free(buf);
 	g_array_append_val(message->sequence,block);
 }
 
@@ -616,10 +629,15 @@ guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
 	   Checksum it
 	   Add start/end flags to it
 	 */
+	printf("finalize, raw input length is %i\n",raw_len);
 	for (i=0;i<raw_len;i++)
+	{
+		printf("raw[%i] is %i\n",i,raw[i]);
 		if ((raw[i] == START_BYTE) || (raw[i] == STOP_BYTE) || (raw[i] == ESCAPE_BYTE))
 			num_2_escape++;
+	}
 	len = raw_len + num_2_escape + markers;
+	printf("length of final pkt is %i\n",len);
 	buf = g_new0(guint8,len);
 	buf[0] = START_BYTE;
 	pos = 1;
@@ -634,10 +652,17 @@ guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
 			buf[pos] = raw[i] ^ 0xFF;
 			pos++;
 		}
-		buf[pos] = raw[i];
-		pos++;
+		else
+		{
+			buf[pos] = raw[i];
+			pos++;
+		}
 	}
-	buf[pos] == STOP_BYTE;
+	buf[pos] = STOP_BYTE;
+	printf("last byte at index %i, Stop is %i, buf %i\n",pos,STOP_BYTE,buf[pos]);
+	printf("final length is %i\n",len);
+	for (i=0;i<len;i++)
+		printf("PAcket index %i, value %i\n",i,buf[i]);
 	if (len -1 != pos)
 		printf("packet finalize problem, length mismatch\n");
 	*final_len = len;

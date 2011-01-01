@@ -160,8 +160,9 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
 					retval = FALSE;
 				}
-				if (firmware->capabilities & MS2)
-					g_usleep(firmware->interchardelay*1000);
+				if (firmware)
+					if (firmware->capabilities & MS2)
+						g_usleep(firmware->interchardelay*1000);
 			}
 		}
 	}

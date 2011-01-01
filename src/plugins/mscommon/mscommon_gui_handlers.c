@@ -257,13 +257,6 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 			if (dload_val == ms_get_ecu_data(canID,page,offset,size))
 				return FALSE;
 			break;
-		case DEBUG_LEVEL:
-			/* Debugging selection buttons */
-			tmp32 = (GINT)DATA_GET(global_data,"dbg_lvl");
-			tmp32 = tmp32 & ~bitmask;
-			tmp32 = tmp32 | (bitval << bitshift);
-			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(tmp32));
-			break;
 
 		case ALT_SIMUL:
 			/* Alternate or simultaneous */

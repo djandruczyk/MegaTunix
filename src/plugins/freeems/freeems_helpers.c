@@ -26,7 +26,9 @@ G_MODULE_EXPORT void stop_streaming(void)
 {
 	OutputData *output = NULL;
 
+	printf("Stop streaming!\n");
 	output = initialize_outputdata_f();
-	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_ASYNC_DATALOG_OFF));
-
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_ASYNC_DATALOG_TYPE));
+	DATA_SET(output->data,"databyte",GINT_TO_POINTER(0));
+	io_cmd("datalog_mgmt",output);
 }

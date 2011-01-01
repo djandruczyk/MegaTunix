@@ -110,6 +110,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(OFFSET));
 		g_hash_table_insert(str_2_enum,"_LENGTH_",
 				GINT_TO_POINTER(LENGTH));
+		g_hash_table_insert(str_2_enum,"_DATABYTE_",
+				GINT_TO_POINTER(DATABYTE));
 		/* Firmware Specific button handlers*/
 		g_hash_table_insert(str_2_enum,"_WARM_BOOT_ECU_",
 				GINT_TO_POINTER(WARM_BOOT_ECU));

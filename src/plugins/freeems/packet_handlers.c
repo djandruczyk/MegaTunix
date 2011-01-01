@@ -139,7 +139,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 					sumOfGoodPacketLengths += currentPacketLength;
 				}
 				/* Clear the state */
-				printf("Full packet received, len %i!\n",currentPacketLength);
+				//printf("Full packet received, len %i!\n",currentPacketLength);
 				if (queue)
 				{
 					packet = g_new0(FreeEMS_Packet, 1);
@@ -175,24 +175,28 @@ void packet_decode(FreeEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
 	packet->header_bits = ptr[0];
+	/*
 	printf("Ack Type Flag:%i\n",packet->header_bits & ACK_TYPE_MASK);
 	printf("Has Length Flag: %i\n",packet->header_bits & HAS_LENGTH_MASK);
+	*/
 	if (packet->header_bits & HAS_LENGTH_MASK)
 	{
 		if (packet->header_bits & HAS_SEQUENCE_MASK)
 			packet->payload_len = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
 		else
 			packet->payload_len = (ptr[H_LEN_IDX-1] << 8) + ptr [L_LEN_IDX-1];
-		printf("Packet length %i\n",packet->payload_len);
+/*		printf("Packet length %i\n",packet->payload_len);*/
 	}
-	printf("Sequence Flag: %i\n",packet->header_bits & HAS_SEQUENCE_MASK);
+/*	printf("Sequence Flag: %i\n",packet->header_bits & HAS_SEQUENCE_MASK);*/
 	if (packet->header_bits & HAS_SEQUENCE_MASK)
 	{
 		packet->seq_num = ptr[SEQ_IDX];
-		printf("Sequence id: %i\n",packet->seq_num);
+		/*printf("Sequence id: %i\n",packet->seq_num); */
 	}
 	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
+	/*
 	printf("Payload id: %i\n",packet->payload_id);
 	printf("\n");
+	*/
 	
 }

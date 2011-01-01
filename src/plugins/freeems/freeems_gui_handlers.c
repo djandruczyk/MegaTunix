@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
 #include <freeems_plugin.h>
@@ -53,5 +54,34 @@ G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 			printf("Start Streaming\n");
 			break;
 	}
+	return TRUE;
+}
+
+
+
+G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpointer data)
+{
+	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
+	gint handler = 0;
+
+	handler = (GINT)OBJ_GET(widget,"handler");
+
+	/* No handlers yet, try ecu specific plugin */
+	switch (handler)
+	{
+		default:
+			if (!ecu_handler)
+			{
+				if (get_symbol_f("ecu_bitmask_button_handler",(void *)&ecu_handler))
+					return ecu_handler(widget,data);
+				else
+					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_bitmask_button_handler()\n\tDefault case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+			}
+			else
+				return ecu_handler(widget,data);
+			break;
+	}
+
+
 	return TRUE;
 }

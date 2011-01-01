@@ -426,6 +426,12 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
+	gint handler = 0;
+	gint tmp32 = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
+	gint bitval = 0;
+
 
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
@@ -434,18 +440,39 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 			(!DATA_GET(global_data,"ready")))
 		return TRUE;
 
-	if (!common_handler)
+	handler = (GINT)OBJ_GET(widget,"handler");
+	bitval = (GINT)OBJ_GET(widget,"bitval");
+	bitmask = (GINT)OBJ_GET(widget,"bitmask");
+	bitshift = get_bitshift(bitmask);
+	if (!GTK_IS_RADIO_BUTTON(widget))
+		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+	switch ((MtxButton)handler)
 	{
-		if (get_symbol("common_bitmask_button_handler",(void *)&common_handler))
-			return common_handler(widget,data);
-		else
-		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": bitmask_button_handler()\n\tiBitmask button handler in common plugin is MISSING, BUG!\n"));
-			return FALSE;
-		}
+		case DEBUG_LEVEL:
+			/* Debugging selection buttons */
+			tmp32 = (GINT)DATA_GET(global_data,"dbg_lvl");
+			tmp32 = tmp32 & ~bitmask;
+			tmp32 = tmp32 | (bitval << bitshift);
+			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(tmp32));
+			break;
+
+		default:
+			if (!common_handler)
+			{
+				if (get_symbol("common_bitmask_button_handler",(void *)&common_handler))
+					return common_handler(widget,data);
+				else
+				{
+					dbg_func(CRITICAL,g_strdup_printf(__FILE__": bitmask_button_handler()\n\tiBitmask button handler in common plugin is MISSING, BUG!\n"));
+					return FALSE;
+				}
+			}
+			else
+				return common_handler(widget,data);
+			break;
 	}
-	else
-		return common_handler(widget,data);
+	return TRUE;
 }
 
 

@@ -8,6 +8,13 @@
 			<internal_name>data</internal_name>
 			<size>_UNDEF_</size>
 		</arg>
+		<arg>	
+			<name>BYTE</name>
+			<desc>single byte.</desc>
+			<type>_DATABYTE_</type>
+			<internal_name>byte</internal_name>
+			<size>_U08_</size>
+		</arg>
 		<arg>
 			<name>PAUSE_100MS</name>
 			<desc>Pause for 100ms.</desc>
@@ -66,21 +73,13 @@
 	</potential_args>
 	<commands>
 		<cmd>
-			<name>stop_datalog_stream</name>
-			<desc>Stops the automatic datalogging stream</desc>
+			<name>datalog_mgmt</name>
+			<desc>Statlog stream mgmt (via byte code)</desc>
 			<type>_WRITE_CMD_</type>
 			<args>
-				<arg>SEQUENCE_NUM</arg>
+<!--				<arg>SEQUENCE_NUM</arg>-->
 				<arg>PAYLOAD_ID</arg>
-			</args>
-		</cmd>
-		<cmd>
-			<name>start_datalog_stream</name>
-			<desc>Starts the automatic datalogging stream</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg>
-				<arg>PAYLOAD_ID</arg>
+				<arg>BYTE</arg>
 			</args>
 		</cmd>
 		<cmd>
