@@ -25,28 +25,29 @@
 G_MODULE_EXPORT void stop_streaming(void)
 {
 	OutputData *output = NULL;
-	GCond *cond = NULL;
-	GMutex *mutex = g_mutex_new();
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
 	GTimeVal tval;
 	gint res = 0;
+	gint seq = 6;
 
-	cond = g_cond_new();
-	printf("Stop streaming!\n");
+	queue = g_async_queue_new();
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_ASYNC_DATALOG_TYPE));
 	DATA_SET(output->data,"databyte",GINT_TO_POINTER(0));
-	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(6));
-	register_packet_condition(SEQUENCE_NUM,cond,6);
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
+	register_packet_queue(PAYLOAD_ID,queue,405);
 	io_cmd("datalog_mgmt",output);
 	g_get_current_time(&tval);
-	g_time_val_add(&tval,5000000);
-	g_mutex_lock(mutex);
-	printf("going to wait on cond %p\n",cond);
-	res = g_cond_timed_wait(cond,mutex,&tval);
-	g_mutex_unlock(mutex);
-	if (res)
-		printf("COND ARRIVED!\n");
+	g_time_val_add(&tval,500000);
+	printf("going to wait on queue %p\n",(gpointer)queue);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	if (packet)
+		printf("PACKET ARRIVED!\n");
 	else
 		printf("TIMEOUT\n");
+	deregister_packet_queue(PAYLOAD_ID,queue,405);
+	freeems_packet_cleanup(packet);
+	g_async_queue_unref(queue);
 	return;
 }

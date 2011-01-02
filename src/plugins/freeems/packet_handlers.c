@@ -145,8 +145,6 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 					packet = g_new0(FreeEMS_Packet, 1);
 					packet->data = g_memdup(packetBuffer,currentPacketLength);
 					packet->raw_len = currentPacketLength;
-					//packet_decode(packet);
-					//dispatch_packet_conditions(packet);
 					g_async_queue_ref(queue);
 					g_async_queue_push(queue,(gpointer)packet);
 					g_async_queue_unref(queue);
@@ -195,11 +193,10 @@ void *packet_handler(gpointer data)
 		{
 			printf("packet arrived\n");
 			packet_decode(packet);
-			dispatch_packet_conditions(packet);
+			dispatch_packet_queues(packet);
 		}
 	}
 }
-
 
 
 void packet_decode(FreeEMS_Packet *packet)
@@ -237,41 +234,75 @@ void packet_decode(FreeEMS_Packet *packet)
 
 
 /*!
- *\brief registers a condition variable to be signalled when a packet arrives meeting the
- requested criteria
+ *\brief registers a queue for a subscriber to gets the packets it wants
+ based on provider criteria
  */
-G_MODULE_EXPORT gboolean register_packet_condition(gint type, GCond *cond, gint data)
+G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint data)
 {
 	static GHashTable *payloads = NULL;
 	static GHashTable *sequences = NULL;
 	GList *list = NULL;
-	gboolean res = FALSE;
 
 	if (!payloads)
-		payloads = DATA_GET(global_data,"payload_id_cond_hash");
+		payloads = DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
-		sequences = DATA_GET(global_data,"sequence_num_cond_hash");
+		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
 
 	switch ((FreeEMSArgTypes)type)
 	{
 		case PAYLOAD_ID:
-			printf("register packet watch on payload_id\n");
 			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
-			list = g_list_append(list,cond);
+			g_async_queue_ref(queue);
+			list = g_list_append(list,queue);
 			g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
 			break;
 		case SEQUENCE_NUM:
-			printf("register packet watch on sequence number %i\n",data);
 			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
-			list = g_list_append(list,cond);
+			g_async_queue_ref(queue);
+			list = g_list_append(list,queue);
 			g_hash_table_replace(sequences,GINT_TO_POINTER(data),list);
 			break;
 		default:
 			printf("Need to specific approrpriate criteria to match a packet\n");
-			res = FALSE;
 			break;
 	}
-	return res;
+	return;
+}
+
+
+/*!
+ *\brief de-registers a queue for a subscriber
+ */
+G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint data)
+{
+	static GHashTable *payloads = NULL;
+	static GHashTable *sequences = NULL;
+	GList *list = NULL;
+
+	if (!payloads)
+		payloads = DATA_GET(global_data,"payload_id_queue_hash");
+	if (!sequences)
+		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
+
+	switch ((FreeEMSArgTypes)type)
+	{
+		case PAYLOAD_ID:
+			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
+			list = g_list_remove(list,queue);
+			g_async_queue_unref(queue);
+			g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
+			break;
+		case SEQUENCE_NUM:
+			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
+			list = g_list_remove(list,queue);
+			g_async_queue_unref(queue);
+			g_hash_table_replace(sequences,GINT_TO_POINTER(data),list);
+			break;
+		default:
+			printf("Need to specific approrpriate criteria to match a packet\n");
+			break;
+	}
+	return;
 }
 
 
@@ -280,46 +311,76 @@ G_MODULE_EXPORT gboolean register_packet_condition(gint type, GCond *cond, gint 
  * criteria.  Uses g_signal_broadcast to wakeup all threads that went to 
  * sleep on a specific condition
  */
-G_MODULE_EXPORT void dispatch_packet_conditions(FreeEMS_Packet *packet)
+G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 {
 	static GHashTable *payloads = NULL;
 	static GHashTable *sequences = NULL;
+	GAsyncQueue *queue = NULL;
 	guint8 header = packet->data[0];
 	gint i = 0;
 	GList *list = NULL;
 
-	printf("dispatch packet conditions\n");
 	if (!payloads)
-		payloads = DATA_GET(global_data,"payload_id_cond_hash");
+		payloads = DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
-		sequences = DATA_GET(global_data,"sequence_num_cond_hash");
+		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
 
 	/* If sequence set, look for it and dispatch if found */
 	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
 	{
-		printf("Seq, looking for list for seq %i\n",packet->seq_num);
 		list = g_hash_table_lookup(sequences,GINT_TO_POINTER((gint)packet->seq_num));
-		if (list)
-			g_list_foreach(list,cond_bcast,GINT_TO_POINTER((gint)packet->seq_num));
+		for (i=0;i<g_list_length(list);i++)
+		{
+			queue = g_list_nth_data(list,i);
+			if (queue)
+			{
+				g_async_queue_ref(queue);
+				g_async_queue_push(queue,(gpointer)packet_deep_copy(packet));
+				g_async_queue_unref(queue);
+			}
+		}
 	}
 	if (payloads)
 	{
-		printf("PAyload, looking for list for payload id %i\n",packet->payload_id);
 		/* If payload ID matches, dispatch if found */
 		list = g_hash_table_lookup(payloads,GINT_TO_POINTER((gint)packet->payload_id));
-		if (list)
-			g_list_foreach(list,cond_bcast,GINT_TO_POINTER((gint)packet->payload_id));
+		for (i=0;i<g_list_length(list);i++)
+		{
+			queue = g_list_nth_data(list,i);
+			if (queue)
+			{
+				g_async_queue_ref(queue);
+				g_async_queue_push(queue,(gpointer)packet_deep_copy(packet));
+				g_async_queue_unref(queue);
+			}
+		}
 	}
+	freeems_packet_cleanup(packet);
 }
 
 
-G_MODULE_EXPORT void cond_bcast (gpointer data, gpointer user_data)
+
+FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
 {
-	if (data)
-	{
-		printf("broadcasting condition %p, user data %i\n",data,(gint)user_data);
-		g_cond_signal((GCond *)data);
-	}
-	else
-		printf("NULL cond var\n");
+	FreeEMS_Packet *new = NULL;
+	if (!packet)
+		return NULL;
+	new = g_new0(FreeEMS_Packet, 1);
+	new->data = g_memdup(packet->data,packet->raw_len);
+	new->raw_len = packet->raw_len;
+	new->header_bits = packet->header_bits;
+	new->payload_id = packet->payload_id;
+	new->payload_len = packet->payload_len;
+	new->seq_num = packet->seq_num;
+	return new;
+}
+
+
+void freeems_packet_cleanup(FreeEMS_Packet *packet)
+{
+	if (!packet)
+		return ;
+	g_free(packet->data);
+	g_free(packet);
+	return;
 }

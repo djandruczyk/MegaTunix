@@ -146,9 +146,12 @@ struct _FreeEMS_Packet
 void handle_data(guchar *buf, gint);
 void packet_decode(FreeEMS_Packet *);
 void *packet_handler(gpointer data);
-gboolean register_packet_condition(gint, GCond *, gint);
-void dispatch_packet_conditions(FreeEMS_Packet *);
+void register_packet_queue(gint type, GAsyncQueue *queue, gint data);
+void deregister_packet_queue(gint type, GAsyncQueue *queue, gint data);
+void dispatch_packet_queues(FreeEMS_Packet *);
 void cond_bcast (gpointer, gpointer);
+FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *);
+void freeems_packet_cleanup(FreeEMS_Packet *);
 /* Prototypes */
 
 #endif

@@ -376,59 +376,46 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
 		return FALSE;
-	cond = g_cond_new();
-        register_packet_condition(PAYLOAD_ID,cond,401);
-
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	g_get_current_time(&tval);
-	g_time_val_add(&tval,1000000);
-	g_mutex_lock(mutex);
-	printf("going to wait on cond %p\n",cond);
-	res = g_cond_timed_wait(cond,mutex,&tval);
-	g_mutex_unlock(mutex);
-	if (res)
-		printf("COND ARRIVED!\n");
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	if (packet)
+	{
+		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound streaming ECU!!\n"));
+		g_async_queue_unref(queue);
+		freeems_packet_cleanup(packet);
+		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+		return TRUE;
+	}
 	else
-		printf("TIMEOUT\n");
-	g_cond_free(cond);
-	cond = NULL;
-	DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
-	return TRUE;
-
-	/*
-	   g_async_queue_ref(queue);
-	   packet = g_async_queue_timed_pop(queue,&tval);
-	   g_async_queue_unref(queue);
-	   if (packet)
-	   {
-	   dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Packet Arrived!!\n"));
-	   DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
-	   g_free(packet->data);
-	   g_free(packet);
-	   return TRUE; 
-	   }
-	  else
-	   { // Assume ECU is in non-streaming mode, try and probe it 
-		   dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
-		   if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
-			   return FALSE;
-		   g_get_current_time(&tval);
-		   g_time_val_add(&tval,100000);
-		   g_async_queue_ref(queue);
-		   packet = g_async_queue_timed_pop(queue,&tval);
-		   g_async_queue_unref(queue);
-		   if (packet)
-		   {
-			   dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound via probing!!\n"));
-			   DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
-			   g_free(packet->data);
-			   g_free(packet);
-			   return TRUE; 
-		   }
-	   }
-	 */
-	   DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
-	   dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tNo device found...\n"));
-	   return FALSE;
+	{ // Assume ECU is in non-streaming mode, try and probe it 
+		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
+		register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+		if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
+		{
+			deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+			g_async_queue_unref(queue);
+			return FALSE;
+		}
+		g_get_current_time(&tval);
+		g_time_val_add(&tval,500000);
+		packet = g_async_queue_timed_pop(queue,&tval);
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+		if (packet)
+		{
+			dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound via probing!!\n"));
+			freeems_packet_cleanup(packet);
+			g_async_queue_unref(queue);
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+			return TRUE; 
+		}
+	}
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tNo device found...\n"));
+	return FALSE;
 }
 
 
@@ -590,38 +577,38 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			case SEQUENCE_NUM:
 				have_sequence = TRUE;
 				seq_num = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Sequence number present %i\n",seq_num);
+		//		printf("Sequence number present %i\n",seq_num);
 				packet_length += 1;
 				break;
 			case PAYLOAD_ID:
 				have_payload_id = TRUE;
 				payload_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Payload ID number present %i\n",payload_id);
+		//		printf("Payload ID number present %i\n",payload_id);
 				packet_length += 2;
 				break;
 				/* Payload specific stuff */
 			case LOCATION_ID:
 				have_location_id = TRUE;
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Location ID number present %i\n",location_id);
+		//		printf("Location ID number present %i\n",location_id);
 				payload_length += 2;
 				break;
 			case OFFSET:
 				have_offset = TRUE;
 				offset = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Location ID number present %i\n",location_id);
+		//		printf("Location ID number present %i\n",location_id);
 				payload_length += 2;
 				break;
 			case LENGTH:
 				have_length = TRUE;
 				length = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Payload length present %i\n",length);
+		//		printf("Payload length present %i\n",length);
 				payload_length += 2;
 				break;
 			case DATABYTE:
 				have_databyte = TRUE;
 				byte = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("DataByte present %i\n",byte);
+		//		printf("DataByte present %i\n",byte);
 				packet_length += 1;
 				break;
 			case DATA:
@@ -638,7 +625,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 
 	pos = 1;
 	packet_length += payload_length;
-	printf("total raw packet length (-start/end/cksum) %i\n",packet_length);
+//	printf("total raw packet length (-start/end/cksum) %i\n",packet_length);
 	/* Raw Packet */
 	buf = g_new0(guint8, packet_length);
 
@@ -658,7 +645,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	/* Payload Length if present */
 	if (payload_length > 0)
 	{
-		printf("payload length is %i\n",payload_length);
+//		printf("payload length is %i\n",payload_length);
 		buf[HEADER_IDX] |= HAS_LENGTH_MASK;
 		if (have_sequence > 0)
 		{
@@ -716,15 +703,15 @@ guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
 	   Checksum it
 	   Add start/end flags to it
 	 */
-	printf("finalize, raw input length is %i\n",raw_len);
+//	printf("finalize, raw input length is %i\n",raw_len);
 	for (i=0;i<raw_len;i++)
 	{
-		printf("raw[%i] is %i\n",i,raw[i]);
+//		printf("raw[%i] is %i\n",i,raw[i]);
 		if ((raw[i] == START_BYTE) || (raw[i] == STOP_BYTE) || (raw[i] == ESCAPE_BYTE))
 			num_2_escape++;
 	}
 	len = raw_len + num_2_escape + markers;
-	printf("length of final pkt is %i\n",len);
+//	printf("length of final pkt is %i\n",len);
 	buf = g_new0(guint8,len);
 	buf[0] = START_BYTE;
 	pos = 1;
@@ -746,10 +733,10 @@ guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
 		}
 	}
 	buf[pos] = STOP_BYTE;
-	printf("last byte at index %i, Stop is %i, buf %i\n",pos,STOP_BYTE,buf[pos]);
-	printf("final length is %i\n",len);
-	for (i=0;i<len;i++)
-		printf("Packet index %i, value 0x%0.2X\n",i,buf[i]);
+//	printf("last byte at index %i, Stop is %i, buf %i\n",pos,STOP_BYTE,buf[pos]);
+//	printf("final length is %i\n",len);
+//	for (i=0;i<len;i++)
+//		printf("Packet index %i, value 0x%.2X\n",i,buf[i]);
 	if (len -1 != pos)
 		printf("packet finalize problem, length mismatch\n");
 	*final_len = len;

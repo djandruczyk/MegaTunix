@@ -66,9 +66,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	DATA_SET(global_data,"packet_handler_thread",thread);
 	/* Packet subscribers */
 	hash =  g_hash_table_new(g_direct_hash,g_direct_equal);
-	DATA_SET(global_data,"sequence_num_cond_hash",hash);
+	DATA_SET(global_data,"sequence_num_queue_hash",hash);
 	hash = g_hash_table_new(g_direct_hash,g_direct_equal);
-	DATA_SET(global_data,"payload_id_cond_hash",hash);
+	DATA_SET(global_data,"payload_id_queue_hash",hash);
 }
 
 
@@ -80,10 +80,10 @@ G_MODULE_EXPORT void plugin_shutdown()
 	cond = DATA_GET(global_data,"serial_reader_cond");
 	if (cond)
 		g_cond_free(cond);
-	hash = DATA_GET(global_data,"sequence_num_cond_hash");
+	hash = DATA_GET(global_data,"sequence_num_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
-	hash = DATA_GET(global_data,"payload_id_cond_hash");
+	hash = DATA_GET(global_data,"payload_id_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
 	return;
