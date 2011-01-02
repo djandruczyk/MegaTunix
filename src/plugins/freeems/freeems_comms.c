@@ -34,6 +34,7 @@ extern gconstpointer *global_data;
 
 void read_error(gpointer);
 void *win32_reader(gpointer);
+void *unix_reader(gpointer);
 
 G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 {
@@ -237,6 +238,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 
 #ifdef __WIN32__
 	g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
+	
 	return;
 #endif
 	channel = g_io_channel_unix_new(serial_params->fd);
@@ -310,7 +312,7 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 			res =  TRUE;
 			break;
 	}
-	printf("read %i bytes\n",received);
+	/*printf("read %i bytes\n",received);*/
 	if (res)
 		handle_data((guchar *)buf+read_pos,received);
 	/* Returning false will cause the channel to shutdown*/
@@ -358,6 +360,9 @@ G_MODULE_EXPORT gboolean comms_test(void)
 {
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
+	GMutex *mutex = g_mutex_new();
+	GCond *cond = NULL;
+	gboolean res = FALSE;
 	GTimeVal tval;
 	gint len = 0;
 	/* Packet sends back Interface Version */
@@ -371,41 +376,59 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
 	if (!serial_params)
 		return FALSE;
+	cond = g_cond_new();
+        register_packet_condition(PAYLOAD_ID,cond,401);
+
 	g_get_current_time(&tval);
-	g_time_val_add(&tval,100000);
-	g_async_queue_ref(queue);
-	packet = g_async_queue_timed_pop(queue,&tval);
-	g_async_queue_unref(queue);
-	if (packet)
-	{
-		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Packet Arrived!!\n"));
-		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
-		g_free(packet->data);
-		g_free(packet);
-		return TRUE; 
-	}
+	g_time_val_add(&tval,1000000);
+	g_mutex_lock(mutex);
+	printf("going to wait on cond %p\n",cond);
+	res = g_cond_timed_wait(cond,mutex,&tval);
+	g_mutex_unlock(mutex);
+	if (res)
+		printf("COND ARRIVED!\n");
 	else
-	{ /* Assume ECU is in non-streaming mode, try and probe it */
-		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
-		if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
-			return FALSE;
-		g_get_current_time(&tval);
-		g_time_val_add(&tval,100000);
-		g_async_queue_ref(queue);
-		packet = g_async_queue_timed_pop(queue,&tval);
-		g_async_queue_unref(queue);
-		if (packet)
-		{
-			dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound via probing!!\n"));
-			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
-			g_free(packet->data);
-			g_free(packet);
-			return TRUE; 
-		}
-	}
-	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
-	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tNo device found...\n"));
-	return FALSE;
+		printf("TIMEOUT\n");
+	g_cond_free(cond);
+	cond = NULL;
+	DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+	return TRUE;
+
+	/*
+	   g_async_queue_ref(queue);
+	   packet = g_async_queue_timed_pop(queue,&tval);
+	   g_async_queue_unref(queue);
+	   if (packet)
+	   {
+	   dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Packet Arrived!!\n"));
+	   DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+	   g_free(packet->data);
+	   g_free(packet);
+	   return TRUE; 
+	   }
+	  else
+	   { // Assume ECU is in non-streaming mode, try and probe it 
+		   dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
+		   if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
+			   return FALSE;
+		   g_get_current_time(&tval);
+		   g_time_val_add(&tval,100000);
+		   g_async_queue_ref(queue);
+		   packet = g_async_queue_timed_pop(queue,&tval);
+		   g_async_queue_unref(queue);
+		   if (packet)
+		   {
+			   dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound via probing!!\n"));
+			   DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+			   g_free(packet->data);
+			   g_free(packet);
+			   return TRUE; 
+		   }
+	   }
+	 */
+	   DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+	   dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tNo device found...\n"));
+	   return FALSE;
 }
 
 
@@ -476,6 +499,12 @@ void *unix_reader(gpointer data)
 		t.tv_sec = 1;
 		t.tv_usec = 0;
 		res = select(fd+1,&readfds, NULL, NULL, &t);
+		if (res == -1)
+		{
+			printf("Select ERROR\n");
+			g_cond_signal(cond);
+			g_thread_exit(0);
+		}
 		if (res == 0)
 		{
 			printf("select timeout!\n");

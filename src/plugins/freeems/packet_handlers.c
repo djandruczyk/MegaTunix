@@ -145,8 +145,8 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 					packet = g_new0(FreeEMS_Packet, 1);
 					packet->data = g_memdup(packetBuffer,currentPacketLength);
 					packet->raw_len = currentPacketLength;
-					packet_decode(packet);
-					dispatch_packet_conditions(packet);
+					//packet_decode(packet);
+					//dispatch_packet_conditions(packet);
 					g_async_queue_ref(queue);
 					g_async_queue_push(queue,(gpointer)packet);
 					g_async_queue_unref(queue);
@@ -170,6 +170,36 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 			charsDropped++;
 	}
 }
+
+
+void *packet_handler(gpointer data)
+{
+	GTimeVal tval;
+	FreeEMS_Packet *packet = NULL;
+	GAsyncQueue *queue = DATA_GET(global_data,"packet_queue");
+	GCond *cond = DATA_GET(global_data,"packet_handler_cond");
+
+	printf("packet handler started!\n");
+	while(TRUE)
+	{
+		if (DATA_GET(global_data,"leaving"))
+		{
+			printf("leaving packet handler\n");
+			g_cond_signal(cond);
+                        g_thread_exit(0);
+		}
+		g_get_current_time(&tval);
+		g_time_val_add(&tval,100000);
+		packet = g_async_queue_timed_pop(queue,&tval);
+		if (packet)
+		{
+			printf("packet arrived\n");
+			packet_decode(packet);
+			dispatch_packet_conditions(packet);
+		}
+	}
+}
+
 
 
 void packet_decode(FreeEMS_Packet *packet)
@@ -285,6 +315,11 @@ G_MODULE_EXPORT void dispatch_packet_conditions(FreeEMS_Packet *packet)
 
 G_MODULE_EXPORT void cond_bcast (gpointer data, gpointer user_data)
 {
-	printf("broadcasting condition %p, user data %i\n",data,(gint)user_data);
-	g_cond_signal((GCond *)data);
+	if (data)
+	{
+		printf("broadcasting condition %p, user data %i\n",data,(gint)user_data);
+		g_cond_signal((GCond *)data);
+	}
+	else
+		printf("NULL cond var\n");
 }
