@@ -198,8 +198,6 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	gboolean res = FALSE;
 	gint tmpi = 0;
 
-	/*printf("freeems serial DISable!\n");*/
-//#ifdef __WIN32__
 	g_mutex_lock(mutex);
 	g_get_current_time(&now);
         g_time_val_add(&now,250000);
@@ -211,17 +209,6 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 		printf("cond timeout\n");
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
-	/*
-#else
-	serial_params = DATA_GET(global_data,"serial_params");
-	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
-	channel = DATA_GET(global_data,"serial_channel");
-	if (channel)
-		g_io_channel_shutdown(channel,FALSE,NULL);
-	DATA_SET(global_data,"serial_channel",NULL);
-	DATA_SET(global_data,"read_watch",NULL);
-#endif
-*/
 }
 
 
@@ -241,124 +228,10 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 #ifdef __WIN32__
 	g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
 	
-	return;
-#endif
+#else
 	g_thread_create(unix_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
+#endif
 	return;
-	
-/*
-	channel = g_io_channel_unix_new(serial_params->fd);
-	DATA_SET(global_data,"serial_channel",channel);
-	// Set to raw mode 
-	g_io_channel_set_encoding(channel, NULL, NULL);
-	// Set to unbuffered mode 
-	g_io_channel_set_buffered(channel, FALSE);
-	// Reader 
-	tmpi = g_io_add_watch_full(channel,0,G_IO_IN,able_to_read,NULL, read_error);
-	DATA_SET(global_data,"read_watch",GINT_TO_POINTER(tmpi));
-
- *	// Writer 
- *	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,NULL);
- *	DATA_SET(global_data,"write_watch",GINT_TO_POINTER(tmpi));
- *
- *	// Error Catcher 
- *	tmpi = g_io_add_watch(channel,G_IO_ERR|G_IO_HUP|G_IO_NVAL, serial_error,NULL);
- *	DATA_SET(global_data,"error_watch",GINT_TO_POINTER(tmpi));
- */
-
-}
-
-
-G_MODULE_EXPORT void read_error(gpointer data)
-{
-	printf("READ ERROR, disabling io_channel\n");
-	freeems_serial_disable();
-}
-
-
-G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gpointer data)
-{
-	static gsize wanted = 2048;
-	gboolean res = FALSE;
-	gchar buf[2048];
-	gchar *ptr = NULL;
-	gsize requested = 2048;
-	gsize received = 0;
-	gsize read_pos = 0;
-	GIOStatus status;
-	GError *err = NULL;
-
-	read_pos = requested-wanted;
-	status = g_io_channel_read_chars(channel, &buf[read_pos], wanted, &received, &err);
-	/*printf("Want %i, got %i,",wanted, received); */
-	wanted -= received;
-	/*	printf("Still need %i\n",wanted); */
-	if (wanted <= 0)
-		wanted = 2048;
-	if (err)
-	{
-		printf("error reported: \"%s\"\n",err->message);
-		g_error_free(err);
-	}
-	switch (status)
-	{
-		case G_IO_STATUS_ERROR:
-			printf("IO ERROR!\n");
-			res =  FALSE;
-			break;
-		case G_IO_STATUS_NORMAL:
-			res = TRUE;
-			break;
-		case G_IO_STATUS_EOF:
-			printf("EOF!\n");
-			res = FALSE;
-			break;
-		case G_IO_STATUS_AGAIN:
-			printf("TEMP UNAVAIL!\n");
-			res =  TRUE;
-			break;
-	}
-	/*printf("read %i bytes\n",received);*/
-	if (res)
-		handle_data((guchar *)buf+read_pos,received);
-	/* Returning false will cause the channel to shutdown*/
-	return res;
-}
-
-
-
-G_MODULE_EXPORT gboolean able_to_write(GIOChannel *channel, GIOCondition cond, gpointer data)
-{
-	g_usleep(100000);
-	printf("Able to write, sleeping 100 ms\n");
-	return TRUE;
-}
-
-
-G_MODULE_EXPORT gboolean serial_error(GIOChannel *channel, GIOCondition cond, gpointer data)
-{
-	switch (cond)
-	{
-		case G_IO_IN: 
-			printf("data waiting to be read!\n");
-			break;
-		case G_IO_OUT: 
-			printf("channel ready to be written to!\n");
-			break;
-		case G_IO_PRI: 
-			printf("Priority data waiting to be read!\n");
-			break;
-		case G_IO_ERR: 
-			printf("ERROR condition!\n");
-			break;
-		case G_IO_HUP: 
-			printf("Hungup/connection brokenm resetting!\n");
-			break;
-		case G_IO_NVAL: 
-			printf("Invalid req, descriptor not openm resetting!\n");
-			break;
-	}
-	return TRUE;
 }
 
 
@@ -494,10 +367,11 @@ void *unix_reader(gpointer data)
 		res = select(fd+1,&readfds, NULL, NULL, &t);
 		if (res == -1)
 		{
+			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			g_cond_signal(cond);
 			g_thread_exit(0);
 		}
-		if (res == 0)
+		if (res == 0) /* Timeout */
 		{
 			g_cond_signal(cond);
 			continue;
