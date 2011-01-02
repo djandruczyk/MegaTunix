@@ -139,13 +139,14 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 					sumOfGoodPacketLengths += currentPacketLength;
 				}
 				/* Clear the state */
-				//printf("Full packet received, len %i!\n",currentPacketLength);
+				printf("Full packet received, len %i!\n",currentPacketLength);
 				if (queue)
 				{
 					packet = g_new0(FreeEMS_Packet, 1);
 					packet->data = g_memdup(packetBuffer,currentPacketLength);
 					packet->raw_len = currentPacketLength;
 					packet_decode(packet);
+					dispatch_packet_conditions(packet);
 					g_async_queue_ref(queue);
 					g_async_queue_push(queue,(gpointer)packet);
 					g_async_queue_unref(queue);
@@ -174,29 +175,116 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 void packet_decode(FreeEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
+	gint i = 0;
+
 	packet->header_bits = ptr[0];
 	/*
-	printf("Ack Type Flag:%i\n",packet->header_bits & ACK_TYPE_MASK);
-	printf("Has Length Flag: %i\n",packet->header_bits & HAS_LENGTH_MASK);
-	*/
-	if (packet->header_bits & HAS_LENGTH_MASK)
+	   printf("Raw len %i\n",packet->raw_len);
+	   for (i=0;i<packet->raw_len;i++)
+	   printf("packet byte %i, valud 0x%0.2X\n",i,ptr[i]);
+	 */
+	printf("Ack/Nack Flag: %i\n",((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0);
+	printf("Has Sequence Flag: %i\n",((packet->header_bits & HAS_SEQUENCE_MASK) > 0) ? 1:0);
+	printf("Has Length Flag: %i\n",((packet->header_bits & HAS_LENGTH_MASK) > 0) ? 1:0);
+	if ((packet->header_bits & HAS_LENGTH_MASK) > 0)
 	{
 		if (packet->header_bits & HAS_SEQUENCE_MASK)
 			packet->payload_len = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
 		else
 			packet->payload_len = (ptr[H_LEN_IDX-1] << 8) + ptr [L_LEN_IDX-1];
-/*		printf("Packet length %i\n",packet->payload_len);*/
+		printf("Payload length %i\n",packet->payload_len);
 	}
-/*	printf("Sequence Flag: %i\n",packet->header_bits & HAS_SEQUENCE_MASK);*/
-	if (packet->header_bits & HAS_SEQUENCE_MASK)
+	if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
 	{
 		packet->seq_num = ptr[SEQ_IDX];
-		/*printf("Sequence id: %i\n",packet->seq_num); */
+		printf("Sequence id: %i\n",packet->seq_num); 
 	}
 	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
-	/*
+
 	printf("Payload id: %i\n",packet->payload_id);
 	printf("\n");
-	*/
-	
+}
+
+
+/*!
+ *\brief registers a condition variable to be signalled when a packet arrives meeting the
+ requested criteria
+ */
+G_MODULE_EXPORT gboolean register_packet_condition(gint type, GCond *cond, gint data)
+{
+	static GHashTable *payloads = NULL;
+	static GHashTable *sequences = NULL;
+	GList *list = NULL;
+	gboolean res = FALSE;
+
+	if (!payloads)
+		payloads = DATA_GET(global_data,"payload_id_cond_hash");
+	if (!sequences)
+		sequences = DATA_GET(global_data,"sequence_num_cond_hash");
+
+	switch ((FreeEMSArgTypes)type)
+	{
+		case PAYLOAD_ID:
+			printf("register packet watch on payload_id\n");
+			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
+			list = g_list_append(list,cond);
+			g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
+			break;
+		case SEQUENCE_NUM:
+			printf("register packet watch on sequence number %i\n",data);
+			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
+			list = g_list_append(list,cond);
+			g_hash_table_replace(sequences,GINT_TO_POINTER(data),list);
+			break;
+		default:
+			printf("Need to specific approrpriate criteria to match a packet\n");
+			res = FALSE;
+			break;
+	}
+	return res;
+}
+
+
+/*
+ *\brief Purpose is to dispatch the conditions waiting on a specific packet 
+ * criteria.  Uses g_signal_broadcast to wakeup all threads that went to 
+ * sleep on a specific condition
+ */
+G_MODULE_EXPORT void dispatch_packet_conditions(FreeEMS_Packet *packet)
+{
+	static GHashTable *payloads = NULL;
+	static GHashTable *sequences = NULL;
+	guint8 header = packet->data[0];
+	gint i = 0;
+	GList *list = NULL;
+
+	printf("dispatch packet conditions\n");
+	if (!payloads)
+		payloads = DATA_GET(global_data,"payload_id_cond_hash");
+	if (!sequences)
+		sequences = DATA_GET(global_data,"sequence_num_cond_hash");
+
+	/* If sequence set, look for it and dispatch if found */
+	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
+	{
+		printf("Seq, looking for list for seq %i\n",packet->seq_num);
+		list = g_hash_table_lookup(sequences,GINT_TO_POINTER((gint)packet->seq_num));
+		if (list)
+			g_list_foreach(list,cond_bcast,GINT_TO_POINTER((gint)packet->seq_num));
+	}
+	if (payloads)
+	{
+		printf("PAyload, looking for list for payload id %i\n",packet->payload_id);
+		/* If payload ID matches, dispatch if found */
+		list = g_hash_table_lookup(payloads,GINT_TO_POINTER((gint)packet->payload_id));
+		if (list)
+			g_list_foreach(list,cond_bcast,GINT_TO_POINTER((gint)packet->payload_id));
+	}
+}
+
+
+G_MODULE_EXPORT void cond_bcast (gpointer data, gpointer user_data)
+{
+	printf("broadcasting condition %p, user data %i\n",data,(gint)user_data);
+	g_cond_signal((GCond *)data);
 }

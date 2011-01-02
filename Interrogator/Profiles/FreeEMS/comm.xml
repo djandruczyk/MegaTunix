@@ -77,7 +77,7 @@
 			<desc>Statlog stream mgmt (via byte code)</desc>
 			<type>_WRITE_CMD_</type>
 			<args>
-<!--				<arg>SEQUENCE_NUM</arg>-->
+				<arg>SEQUENCE_NUM</arg> 
 				<arg>PAYLOAD_ID</arg>
 				<arg>BYTE</arg>
 			</args>

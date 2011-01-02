@@ -30,6 +30,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	global_data = data;
 	GAsyncQueue *queue = NULL;
 	GCond *cond = NULL;
+	GHashTable *hash = NULL;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
@@ -58,16 +59,28 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	DATA_SET(global_data,"packet_queue",queue);
 	cond = g_cond_new();
 	DATA_SET(global_data,"serial_reader_cond",cond);
+	/* Packet subscribers */
+	hash =  g_hash_table_new(g_direct_hash,g_direct_equal);
+	DATA_SET(global_data,"sequence_num_cond_hash",hash);
+	hash = g_hash_table_new(g_direct_hash,g_direct_equal);
+	DATA_SET(global_data,"payload_id_cond_hash",hash);
 }
 
 
 G_MODULE_EXPORT void plugin_shutdown()
 {
 	GCond *cond = NULL;
+	GHashTable *hash = NULL;
 
 	cond = DATA_GET(global_data,"serial_reader_cond");
 	if (cond)
 		g_cond_free(cond);
+	hash = DATA_GET(global_data,"sequence_num_cond_hash");
+	if (hash)
+		g_hash_table_destroy(hash);
+	hash = DATA_GET(global_data,"payload_id_cond_hash");
+	if (hash)
+		g_hash_table_destroy(hash);
 	return;
 }
 

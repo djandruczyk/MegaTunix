@@ -145,6 +145,9 @@ struct _FreeEMS_Packet
 /* Prototypes */
 void handle_data(guchar *buf, gint);
 void packet_decode(FreeEMS_Packet *);
+gboolean register_packet_condition(gint, GCond *, gint);
+void dispatch_packet_conditions(FreeEMS_Packet *);
+void cond_bcast (gpointer, gpointer);
 /* Prototypes */
 
 #endif

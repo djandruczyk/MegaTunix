@@ -26,6 +26,7 @@
 #include <serialio.h>
 #include <string.h>
 #include <template.h>
+#include <sys/select.h>
 #include <unistd.h>
 
 
@@ -237,9 +238,8 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 #ifdef __WIN32__
 	g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
 	return;
-#else
-	channel = g_io_channel_unix_new(serial_params->fd);
 #endif
+	channel = g_io_channel_unix_new(serial_params->fd);
 	DATA_SET(global_data,"serial_channel",channel);
 	/* Set to raw mode */
 	g_io_channel_set_encoding(channel, NULL, NULL);
@@ -310,7 +310,7 @@ G_MODULE_EXPORT gboolean able_to_read(GIOChannel *channel, GIOCondition cond, gp
 			res =  TRUE;
 			break;
 	}
-	/*printf("read %i bytes\n",received);*/
+	printf("read %i bytes\n",received);
 	if (res)
 		handle_data((guchar *)buf+read_pos,received);
 	/* Returning false will cause the channel to shutdown*/
@@ -429,7 +429,8 @@ void *win32_reader(gpointer data)
 	{
 		read_pos = requested-wanted;
 		received = read(fd, &buf[read_pos], wanted);
-		/*printf("Want %i, got %i,",wanted, received); */
+		g_usleep(10000);
+		//printf("Want %i, got %i,",wanted, received); 
 		if (received == -1)
 		{
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
@@ -441,10 +442,67 @@ void *win32_reader(gpointer data)
 		/*	printf("Still need %i\n",wanted); */
 		if (wanted <= 0)
 			wanted = 2048;
-		/*printf("read %i bytes\n",received);*/
+		//printf("WIN32 read %i bytes\n",received);
 		if (received > 0)
 			handle_data((guchar *)buf+read_pos,received);
 		g_cond_signal(cond);
+	}
+}
+
+
+void *unix_reader(gpointer data)
+{
+	gint fd = (gint)data;
+	gint errcount = 0;
+	static gsize wanted = 2048;
+	gboolean res = FALSE;
+	gchar buf[2048];
+	gchar *ptr = NULL;
+	gsize requested = 2048;
+	gsize received = 0;
+	gsize read_pos = 0;
+	GIOStatus status;
+	GError *err = NULL;
+	GCond *cond = NULL;
+	fd_set readfds;
+	struct timeval t;
+
+
+	cond = DATA_GET(global_data,"serial_reader_cond");
+	FD_SET(fd,&readfds);
+
+	while (TRUE)
+	{
+		t.tv_sec = 1;
+		t.tv_usec = 0;
+		res = select(fd+1,&readfds, NULL, NULL, &t);
+		if (res == 0)
+		{
+			printf("select timeout!\n");
+			g_cond_signal(cond);
+			continue;
+		}
+		if (FD_ISSET(fd,&readfds))
+		{
+			read_pos = requested-wanted;
+			received = read(fd, &buf[read_pos], wanted);
+			printf("Want %i, got %i,",wanted, received); 
+			if (received == -1)
+			{
+				DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+				g_cond_signal(cond);
+				g_thread_exit(0);
+			}
+
+			wanted -= received;
+			/*	printf("Still need %i\n",wanted); */
+			if (wanted <= 0)
+				wanted = 2048;
+			printf("UNIX read %i bytes\n",received);
+			if (received > 0)
+				handle_data((guchar *)buf+read_pos,received);
+			g_cond_signal(cond);
+		}
 	}
 }
 
@@ -662,7 +720,7 @@ guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
 	printf("last byte at index %i, Stop is %i, buf %i\n",pos,STOP_BYTE,buf[pos]);
 	printf("final length is %i\n",len);
 	for (i=0;i<len;i++)
-		printf("PAcket index %i, value %i\n",i,buf[i]);
+		printf("Packet index %i, value 0x%0.2X\n",i,buf[i]);
 	if (len -1 != pos)
 		printf("packet finalize problem, length mismatch\n");
 	*final_len = len;
