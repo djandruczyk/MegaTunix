@@ -177,12 +177,10 @@ void *packet_handler(gpointer data)
 	GAsyncQueue *queue = DATA_GET(global_data,"packet_queue");
 	GCond *cond = DATA_GET(global_data,"packet_handler_cond");
 
-	printf("packet handler started!\n");
 	while(TRUE)
 	{
 		if (DATA_GET(global_data,"leaving"))
 		{
-			printf("leaving packet handler\n");
 			g_cond_signal(cond);
                         g_thread_exit(0);
 		}
@@ -191,7 +189,6 @@ void *packet_handler(gpointer data)
 		packet = g_async_queue_timed_pop(queue,&tval);
 		if (packet)
 		{
-			printf("packet arrived\n");
 			packet_decode(packet);
 			dispatch_packet_queues(packet);
 		}
@@ -325,6 +322,7 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	if (!sequences)
 		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
 
+	printf ("DISPATCH\n");
 	/* If sequence set, look for it and dispatch if found */
 	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
 	{
@@ -344,11 +342,14 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	{
 		/* If payload ID matches, dispatch if found */
 		list = g_hash_table_lookup(payloads,GINT_TO_POINTER((gint)packet->payload_id));
+		printf("list %p\n",list);
 		for (i=0;i<g_list_length(list);i++)
 		{
 			queue = g_list_nth_data(list,i);
+			printf("queue %p\n",list);
 			if (queue)
 			{
+				printf("sending packet\n");
 				g_async_queue_ref(queue);
 				g_async_queue_push(queue,(gpointer)packet_deep_copy(packet));
 				g_async_queue_unref(queue);

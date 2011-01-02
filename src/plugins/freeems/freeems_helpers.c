@@ -18,8 +18,10 @@
 #include <freeems_helpers.h>
 #include <freeems_plugin.h>
 #include <packet_handlers.h>
+#include <serialio.h>
 #include <threads.h>
 
+extern gconstpointer *global_data;
 
 
 G_MODULE_EXPORT void stop_streaming(void)
@@ -28,20 +30,26 @@ G_MODULE_EXPORT void stop_streaming(void)
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
 	GTimeVal tval;
-	gint res = 0;
 	gint seq = 6;
+	Serial_Params *serial_params = NULL;
+	unsigned char pkt[7] = {START_BYTE,0x04,0x01,0x94,0x06,0x9F,STOP_BYTE};
+	gint res = 0;
+	gint len = 0;
 
+	serial_params = DATA_GET(global_data,"serial_params");
 	queue = g_async_queue_new();
-	output = initialize_outputdata_f();
-	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_ASYNC_DATALOG_TYPE));
-	DATA_SET(output->data,"databyte",GINT_TO_POINTER(0));
-	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	register_packet_queue(PAYLOAD_ID,queue,405);
-	io_cmd("datalog_mgmt",output);
+	if (!write_wrapper_f(serial_params->fd,&pkt, 7, &len))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,405);
+		g_async_queue_unref(queue);
+		return;
+	}
 	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
+	g_time_val_add(&tval,5000000);
 	printf("going to wait on queue %p\n",(gpointer)queue);
 	packet = g_async_queue_timed_pop(queue,&tval);
+	printf("after timed pop in helper\n");
 	if (packet)
 		printf("PACKET ARRIVED!\n");
 	else

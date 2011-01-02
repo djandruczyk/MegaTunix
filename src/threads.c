@@ -107,6 +107,7 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 	g_async_queue_ref(io_data_queue);
 	g_async_queue_push(io_data_queue,(gpointer)message);
 	g_async_queue_unref(io_data_queue);
+	printf("message on io data queue\n");
 
 }
 
@@ -130,7 +131,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	GCond * io_dispatch_cond = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
-//	GTimer *clock;
+/*	GTimer *clock;*/
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
@@ -141,12 +142,12 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	serial_params = DATA_GET(global_data,"serial_params");
 	get_symbol("network_repair_thread",(void*)&network_repair_thread);
 	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
-//	clock = g_timer_new();
+/*	clock = g_timer_new();*/
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
 	{
 		g_get_current_time(&cur);
-		g_time_val_add(&cur,100000); /* 100 ms timeout */
+		g_time_val_add(&cur,10000); /* 10 ms timeout */
 		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
 		if (DATA_GET(global_data,"leaving") || 
@@ -167,7 +168,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				  (serial_params->open)) || 
 				 (!(serial_params->open))))
 		{
-			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",connected,DATA_GET(global_data,"offline"),serial_params->open);*/
+			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",DATA_GET(global_data,"connected"),DATA_GET(global_data,"offline"),serial_params->open);*/
 			if (args->network_mode)
 			{
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));
@@ -207,13 +208,15 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				}
 				break;
 			case WRITE_CMD:
-//				g_timer_start(clock);
+/*				g_timer_start(clock);*/
 				message->status = write_data(message);
-				//		printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));
-				gdk_threads_enter();
+/*				printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
 				if (message->command->helper_function)
+				{
+					gdk_threads_enter();
 					message->command->helper_function(message, message->command->helper_func_arg);
-				gdk_threads_leave();
+					gdk_threads_leave();
+				}
 				//		printf("Write command with post function time %f\n",g_timer_elapsed(clock,NULL));
 				break;
 			case NULL_CMD:

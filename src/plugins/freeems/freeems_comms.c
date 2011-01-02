@@ -199,7 +199,7 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	gint tmpi = 0;
 
 	/*printf("freeems serial DISable!\n");*/
-#ifdef __WIN32__
+//#ifdef __WIN32__
 	g_mutex_lock(mutex);
 	g_get_current_time(&now);
         g_time_val_add(&now,250000);
@@ -211,6 +211,7 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 		printf("cond timeout\n");
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
+	/*
 #else
 	serial_params = DATA_GET(global_data,"serial_params");
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
@@ -220,6 +221,7 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	DATA_SET(global_data,"serial_channel",NULL);
 	DATA_SET(global_data,"read_watch",NULL);
 #endif
+*/
 }
 
 
@@ -241,17 +243,21 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	
 	return;
 #endif
+	g_thread_create(unix_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
+	return;
+	
+/*
 	channel = g_io_channel_unix_new(serial_params->fd);
 	DATA_SET(global_data,"serial_channel",channel);
-	/* Set to raw mode */
+	// Set to raw mode 
 	g_io_channel_set_encoding(channel, NULL, NULL);
-	/* Set to unbuffered mode */
+	// Set to unbuffered mode 
 	g_io_channel_set_buffered(channel, FALSE);
-	/* Reader */
+	// Reader 
 	tmpi = g_io_add_watch_full(channel,0,G_IO_IN,able_to_read,NULL, read_error);
 	DATA_SET(global_data,"read_watch",GINT_TO_POINTER(tmpi));
 
-/*	// Writer 
+ *	// Writer 
  *	tmpi = g_io_add_watch(channel,G_IO_OUT, able_to_write,NULL);
  *	DATA_SET(global_data,"write_watch",GINT_TO_POINTER(tmpi));
  *
@@ -479,22 +485,20 @@ void *unix_reader(gpointer data)
 
 
 	cond = DATA_GET(global_data,"serial_reader_cond");
-	FD_SET(fd,&readfds);
 
 	while (TRUE)
 	{
 		t.tv_sec = 1;
 		t.tv_usec = 0;
+		FD_SET(fd,&readfds);
 		res = select(fd+1,&readfds, NULL, NULL, &t);
 		if (res == -1)
 		{
-			printf("Select ERROR\n");
 			g_cond_signal(cond);
 			g_thread_exit(0);
 		}
 		if (res == 0)
 		{
-			printf("select timeout!\n");
 			g_cond_signal(cond);
 			continue;
 		}
@@ -502,7 +506,7 @@ void *unix_reader(gpointer data)
 		{
 			read_pos = requested-wanted;
 			received = read(fd, &buf[read_pos], wanted);
-			printf("Want %i, got %i,",wanted, received); 
+//			printf("Want %i, got %i,",wanted, received); 
 			if (received == -1)
 			{
 				DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
@@ -514,7 +518,7 @@ void *unix_reader(gpointer data)
 			/*	printf("Still need %i\n",wanted); */
 			if (wanted <= 0)
 				wanted = 2048;
-			printf("UNIX read %i bytes\n",received);
+//			printf("UNIX read %i bytes\n",received);
 			if (received > 0)
 				handle_data((guchar *)buf+read_pos,received);
 			g_cond_signal(cond);
