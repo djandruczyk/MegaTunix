@@ -20,6 +20,7 @@
 #include <freeems_helpers.h>
 #include <packet_handlers.h>
 #include <serialio.h>
+#include <string.h>
 
 extern gconstpointer *global_data;
 
@@ -160,7 +161,7 @@ void request_interface_version(gchar **version, guint8 *major, guint8 *minor, gu
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 	g_async_queue_unref(queue);
 	/*
 	if (packet)

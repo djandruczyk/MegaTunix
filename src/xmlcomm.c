@@ -393,8 +393,6 @@ void parse_hex_string(gchar *str, gchar *dest, gint *str_len)
 	gint len = 0;
 	gint tmpi = 0;
 	
-
-	printf("parse_hex_string, passed string %s\n",str);
 	g_assert(str_len);
 	vector = g_strsplit(str,",",-1);
 	len = g_strv_length(vector);

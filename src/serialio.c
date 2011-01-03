@@ -424,6 +424,7 @@ G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits,
 	if (g_strv_length(vector) != 4)
 	{
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": pause_baud_str()\tbaud string is NOT in correct format 'baud,bits,parity,stop'\n"));
+		g_strfreev(vector);
 		return FALSE;
 	}
 	if (baud)

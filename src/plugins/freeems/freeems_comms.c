@@ -190,20 +190,26 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	GTimeVal now;
 	GCond *cond = NULL;
 	GMutex *mutex = g_mutex_new();
+	GThread *thread = NULL;
 	gboolean res = FALSE;
 	gint tmpi = 0;
 
+	DATA_SET(global_data,"serial_abort",GINT_TO_POINTER(TRUE));
+	thread = DATA_GET(global_data,"serial_thread_id");
 	g_mutex_lock(mutex);
 	g_get_current_time(&now);
-        g_time_val_add(&now,250000);
+	/* Wait up to 2 seconds for thread to exit */
+        g_time_val_add(&now,2000000);
         cond = DATA_GET(global_data,"serial_reader_cond");
         res = g_cond_timed_wait(cond,mutex,&now);
+	g_thread_join(thread);
+	DATA_SET(global_data,"serial_thread_id",NULL);
 	/*
 	if (res)
 		printf("condition signaled\n");
 	else
 		printf("cond timeout\n");
-		*/
+	*/
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
 }
@@ -213,6 +219,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 {
 	GIOChannel *channel = NULL;
 	Serial_Params *serial_params = NULL;
+	GThread *thread = NULL;
 	gint tmpi = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -222,12 +229,14 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 		return;
 	}
 
+	DATA_SET(global_data,"serial_abort",GINT_TO_POINTER(FALSE));
 #ifdef __WIN32__
-	g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
+	thread = g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
 	
 #else
-	g_thread_create(unix_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
+	thread = g_thread_create(unix_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
 #endif
+	DATA_SET(global_data,"serial_thread_id",thread);
 	return;
 }
 
@@ -236,14 +245,19 @@ G_MODULE_EXPORT gboolean comms_test(void)
 {
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
-	GMutex *mutex = g_mutex_new();
 	GCond *cond = NULL;
 	gboolean res = FALSE;
 	GTimeVal tval;
 	gint len = 0;
 	/* Packet sends back Interface Version */
 	/* START, Header, Payload ID H, PAyload ID L, CKsum, STOP */
-	unsigned char pkt[6] = {0xAA,0x00,0x00,0x00,0x00,0xCC};
+	guint8 *buf = NULL;
+	/* Raw packet */
+	guint8 pkt[INTVER_REQ_PKT_LEN];
+	guint8 sum = 0;
+	gint tmit_len = 0;
+	gint i = 0;
+
 	Serial_Params *serial_params = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -270,12 +284,22 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	{ /* Assume ECU is in non-streaming mode, try and probe it */
 		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
 		register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
-		if (!write_wrapper_f(serial_params->fd,&pkt, 6, &len))
+		pkt[HEADER_IDX] = 0;
+		pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
+		pkt[L_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0x00ff );
+		for (i=0;i<INTVER_REQ_PKT_LEN-1;i++)
+			sum += pkt[i];
+		pkt[INTVER_REQ_PKT_LEN-1] = sum;
+		buf = finalize_packet((guint8 *)&pkt,INTVER_REQ_PKT_LEN,&tmit_len);
+
+		if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
 		{
+			g_free(buf);
 			deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 			g_async_queue_unref(queue);
 			return FALSE;
 		}
+		g_free(buf);
 		g_get_current_time(&tval);
 		g_time_val_add(&tval,500000);
 		packet = g_async_queue_timed_pop(queue,&tval);
@@ -313,6 +337,11 @@ void *win32_reader(gpointer data)
 	cond = DATA_GET(global_data,"serial_reader_cond");
 	while (TRUE)
 	{
+		if ((DATA_GET(global_data,"leaving")) || (DATA_GET(global_data,"serial_abort")))
+		{
+			g_cond_signal(cond);
+			g_thread_exit(0);
+		}
 		read_pos = requested-wanted;
 		received = read(fd, &buf[read_pos], wanted);
 		g_usleep(10000);
@@ -355,11 +384,16 @@ void *unix_reader(gpointer data)
 
 
 	cond = DATA_GET(global_data,"serial_reader_cond");
-
+	FD_ZERO(&readfds);
 	while (TRUE)
 	{
-		t.tv_sec = 1;
-		t.tv_usec = 0;
+		if ((DATA_GET(global_data,"leaving")) || (DATA_GET(global_data,"serial_abort")))
+		{
+			g_cond_signal(cond);
+			g_thread_exit(0);
+		}
+		t.tv_sec = 0;
+		t.tv_usec = 250000;
 		FD_SET(fd,&readfds);
 		res = select(fd+1,&readfds, NULL, NULL, &t);
 		if (res == -1)

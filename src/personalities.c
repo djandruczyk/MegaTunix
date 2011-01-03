@@ -131,7 +131,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 			hbox = gtk_hbox_new(FALSE,10);
 			gtk_container_add(GTK_CONTAINER(ebox),hbox);
-			label = gtk_label_new(g_strdup(element->name));
+			label = gtk_label_new(element->name);
 			gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 			if (!check_for_files (element->dirname,"prof"))
 			{
@@ -168,7 +168,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 		hbox = gtk_hbox_new(FALSE,10);
 		gtk_container_add(GTK_CONTAINER(ebox),hbox);
-		label = gtk_label_new(g_strdup(element->name));
+		label = gtk_label_new(element->name);
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 		if (!check_for_files (element->dirname,"prof"))
 		{
@@ -197,8 +197,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	gtk_widget_show_all(dialog);
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
-	g_list_foreach(p_list,free_element,NULL);
-	g_list_foreach(s_list,free_element,NULL);
+	g_list_foreach(p_list,free_persona_element,NULL);
+	g_list_foreach(s_list,free_persona_element,NULL);
 	g_list_free(p_list);
 	g_list_free(s_list);
 	switch (result)
@@ -235,7 +235,7 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{
 		if (element->baud_str)
-			DATA_SET(global_data,"ecu_baud_str", GINT_TO_POINTER(element->baud_str));
+			DATA_SET_FULL(global_data,"ecu_baud_str", g_strdup(element->baud_str),g_free);
 		else
 			DATA_SET(global_data,"ecu_baud_str", NULL);
 		if (element->ecu_lib)
@@ -257,3 +257,17 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 	}
 	return TRUE;
 }
+
+
+G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
+{
+	PersonaElement *e = (PersonaElement *)data;
+	cleanup(e->filename);
+	cleanup(e->dirname);
+	cleanup(e->name);
+	cleanup(e->common_lib);
+	cleanup(e->ecu_lib);
+	cleanup(e->baud_str);
+	cleanup(e);
+}
+

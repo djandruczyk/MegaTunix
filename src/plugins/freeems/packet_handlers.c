@@ -287,19 +287,27 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 	if (!sequences)
 		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
 
+	if (!queue)
+		return;
 	switch ((FreeEMSArgTypes)type)
 	{
 		case PAYLOAD_ID:
 			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
-			list = g_list_remove(list,queue);
-			g_async_queue_unref(queue);
-			g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
+			if (list)
+			{
+				list = g_list_remove(list,queue);
+				g_async_queue_unref(queue);
+				g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
+			}
 			break;
 		case SEQUENCE_NUM:
 			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
-			list = g_list_remove(list,queue);
-			g_async_queue_unref(queue);
-			g_hash_table_replace(sequences,GINT_TO_POINTER(data),list);
+			if (list)
+			{
+				list = g_list_remove(list,queue);
+				g_async_queue_unref(queue);
+				g_hash_table_replace(sequences,GINT_TO_POINTER(data),list);
+			}
 			break;
 		default:
 			printf("Need to specific approrpriate criteria to match a packet\n");
@@ -332,14 +340,17 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
 	{
 		list = g_hash_table_lookup(sequences,GINT_TO_POINTER((gint)packet->seq_num));
-		for (i=0;i<g_list_length(list);i++)
+		if (list)
 		{
-			queue = g_list_nth_data(list,i);
-			if (queue)
+			for (i=0;i<g_list_length(list);i++)
 			{
-				g_async_queue_ref(queue);
-				g_async_queue_push(queue,(gpointer)packet_deep_copy(packet));
-				g_async_queue_unref(queue);
+				queue = g_list_nth_data(list,i);
+				if (queue)
+				{
+					g_async_queue_ref(queue);
+					g_async_queue_push(queue,(gpointer)packet_deep_copy(packet));
+					g_async_queue_unref(queue);
+				}
 			}
 		}
 	}
@@ -347,14 +358,17 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	{
 		/* If payload ID matches, dispatch if found */
 		list = g_hash_table_lookup(payloads,GINT_TO_POINTER((gint)packet->payload_id));
-		for (i=0;i<g_list_length(list);i++)
+		if (list)
 		{
-			queue = g_list_nth_data(list,i);
-			if (queue)
+			for (i=0;i<g_list_length(list);i++)
 			{
-				g_async_queue_ref(queue);
-				g_async_queue_push(queue,(gpointer)packet_deep_copy(packet));
-				g_async_queue_unref(queue);
+				queue = g_list_nth_data(list,i);
+				if (queue)
+				{
+					g_async_queue_ref(queue);
+					g_async_queue_push(queue,(gpointer)packet_deep_copy(packet));
+					g_async_queue_unref(queue);
+				}
 			}
 		}
 	}

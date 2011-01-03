@@ -64,12 +64,6 @@
 			<internal_name>length</internal_name>
 			<size>_U16_</size>
 		</arg>
-		<arg>
-			<name>START_DATALOG_STREAM</name>
-			<desc>Sends raw packet to start datalogging stream</desc>
-			<type>_HEX_STRING_</type>
-			<hex_string>0xAA,0x00,0x01,0x94,0x01,0x96,0xCC</hex_string>
-		</arg>
 	</potential_args>
 	<commands>
 		<cmd>

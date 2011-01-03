@@ -145,7 +145,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
 	g_static_mutex_lock(&leave_mutex);
 
-
 	g_mutex_lock(mutex);
 
 	/* IO dispatch queue */

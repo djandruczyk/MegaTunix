@@ -31,6 +31,7 @@ struct _PersonaElement
 /* Prototypes */
 gboolean personality_choice(void);
 gboolean persona_selection(GtkWidget *, gpointer);
+void free_persona_element(gpointer, gpointer);
 /* Prototypes */
 
 #endif

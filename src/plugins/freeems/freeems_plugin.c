@@ -15,6 +15,7 @@
 #include <config.h>
 #include <defines.h>
 #include <firmware.h>
+#include <freeems_comms.h>
 #include <freeems_gui_handlers.h>
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
@@ -78,9 +79,12 @@ G_MODULE_EXPORT void plugin_shutdown()
 	GCond *cond = NULL;
 	GHashTable *hash = NULL;
 
+	freeems_serial_disable();
+	/*
 	cond = DATA_GET(global_data,"serial_reader_cond");
 	if (cond)
 		g_cond_free(cond);
+		*/
 	hash = DATA_GET(global_data,"sequence_num_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
