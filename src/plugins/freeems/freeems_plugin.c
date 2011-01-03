@@ -51,6 +51,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
+	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 	get_symbol_f("warn_user",(void *)&warn_user_f);
 	get_symbol_f("write_wrapper",(void *)&write_wrapper_f);
 	register_common_enums();

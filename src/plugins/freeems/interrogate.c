@@ -33,6 +33,11 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
 	GAsyncQueue *queue = NULL;
+	gchar *version = NULL;
+	gchar *fw_version = NULL;
+	guint8 major = 0;
+	guint8 minor = 0;
+	guint8 micro = 0;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	/* ECU has already been detected via comms test
 	   Now we need to figure out its variant and adapt to it
@@ -41,17 +46,24 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	stop_streaming();
 
 	/* Request firmware version */
-	request_firmware_version();
+	request_firmware_version(&fw_version);
+	update_logbar_f("interr_view",NULL,g_strdup_printf(_("Firmware Version request returned %i bytes (%s)\n"),strlen(fw_version),fw_version),FALSE,FALSE,TRUE);
+	thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strdup(fw_version));
+	g_free(fw_version);
 
 	/* Request interface version */
-	request_interface_version();
+	request_interface_version(&version, &major, &minor, &micro);
+	update_logbar_f("interr_view",NULL,g_strdup_printf(_("Interface Version request returned %i bytes ( %i.%i.%i %s)\n"),strlen(version)+3,major,minor,micro,version),FALSE,FALSE,TRUE);
 
+	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
+	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
+	g_free(version);
 	/* FreeEMS Interrogator NOT WRITTEN YET */
 	return TRUE;
 }
 
 
-void request_firmware_version(void)
+void request_firmware_version(gchar **version)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -66,7 +78,6 @@ void request_firmware_version(void)
 	gint i = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
-	gchar *version = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_if_fail(serial_params);
@@ -93,23 +104,24 @@ void request_firmware_version(void)
 	packet = g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
 	g_async_queue_unref(queue);
+	/*
 	if (packet)
 		printf("Firmware version PACKET ARRIVED!\n");
 	else
 		printf("TIMEOUT\n");
+	*/
 
+	if (packet)
+	{
+		*version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_len);
 
-	version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_len);
-	printf("Version \"%s\"\n",version);
-	thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strdup(version));
-	g_free(version);
-
-	freeems_packet_cleanup(packet);
+		freeems_packet_cleanup(packet);
+	}
 	return;
 }
 
 
-void request_interface_version(void)
+void request_interface_version(gchar **version, guint8 *major, guint8 *minor, guint8 *micro)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -122,12 +134,8 @@ void request_interface_version(void)
 	gint res = 0;
 	gint len = 0;
 	gint i = 0;
-	guint8 major = 0;
-	guint8 minor = 0;
-	guint8 micro = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
-	gchar *version = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_if_fail(serial_params);
@@ -154,21 +162,21 @@ void request_interface_version(void)
 	packet = g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
 	g_async_queue_unref(queue);
+	/*
 	if (packet)
 		printf("Firmware version PACKET ARRIVED!\n");
 	else
 		printf("TIMEOUT\n");
+	*/
 
+	if (packet)
+	{
 
-	version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset+3),packet->payload_len-3);
-	major = (guint8)(packet->data[packet->payload_base_offset]);
-	minor = (guint8)(packet->data[packet->payload_base_offset+1]);
-	micro = (guint8)(packet->data[packet->payload_base_offset+2]);
-	printf("Version \"%s\"\n",version);
-	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
-	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
-	g_free(version);
-
-	freeems_packet_cleanup(packet);
+		*version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset+3),packet->payload_len-3);
+		*major = (guint8)(packet->data[packet->payload_base_offset]);
+		*minor = (guint8)(packet->data[packet->payload_base_offset+1]);
+		*micro = (guint8)(packet->data[packet->payload_base_offset+2]);
+		freeems_packet_cleanup(packet);
+	}
 	return;
 }
