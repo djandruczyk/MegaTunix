@@ -22,10 +22,10 @@
 #include <winsock2.h>
 #else
 #include <poll.h>
+#include <sys/select.h>
 #endif
 #include <serialio.h>
 #include <template.h>
-#include <sys/select.h>
 #include <unistd.h>
 
 

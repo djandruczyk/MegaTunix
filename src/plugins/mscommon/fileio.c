@@ -306,7 +306,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 		pf->w_arg = FALSE;
 		pfuncs = g_array_append_val(pfuncs,pf);
 
-		io_cmd(NULL,pfuncs);
+		io_cmd_f(NULL,pfuncs);
 	}
 	if (restart)
 		start_tickler_f(RTV_TICKLER);
