@@ -198,10 +198,12 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
         g_time_val_add(&now,250000);
         cond = DATA_GET(global_data,"serial_reader_cond");
         res = g_cond_timed_wait(cond,mutex,&now);
+	/*
 	if (res)
 		printf("condition signaled\n");
 	else
 		printf("cond timeout\n");
+		*/
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
 }

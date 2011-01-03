@@ -98,6 +98,7 @@ void request_firmware_version(void)
 
 	version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_len);
 	printf("Version \"%s\"\n",version);
+	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
 	g_free(version);
 	
 	freeems_packet_cleanup(packet);
