@@ -295,8 +295,13 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
 			if (list)
 			{
-				list = g_list_remove(list,queue);
 				g_async_queue_unref(queue);
+				list = g_list_remove(list,queue);
+				if (g_list_length(list) == 0)
+				{
+					g_list_free(list);
+					list = NULL;
+				}
 				g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
 			}
 			break;
@@ -304,8 +309,13 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
 			if (list)
 			{
-				list = g_list_remove(list,queue);
 				g_async_queue_unref(queue);
+				list = g_list_remove(list,queue);
+				if (g_list_length(list) == 0)
+				{
+					g_list_free(list);
+					list = NULL;
+				}
 				g_hash_table_replace(sequences,GINT_TO_POINTER(data),list);
 			}
 			break;
