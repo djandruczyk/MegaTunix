@@ -198,8 +198,8 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	thread = DATA_GET(global_data,"serial_thread_id");
 	g_mutex_lock(mutex);
 	g_get_current_time(&now);
-	/* Wait up to 2 seconds for thread to exit */
-        g_time_val_add(&now,2000000);
+	/* Wait up to 0.5 seconds for thread to exit */
+        g_time_val_add(&now,500000);
         cond = DATA_GET(global_data,"serial_reader_cond");
         res = g_cond_timed_wait(cond,mutex,&now);
 	g_thread_join(thread);
