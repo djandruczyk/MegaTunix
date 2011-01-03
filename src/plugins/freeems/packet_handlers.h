@@ -18,6 +18,7 @@
 #include <defines.h>
 #include <configfile.h>
 #include <enums.h>
+#include <threads.h>
 
 typedef enum
 {
@@ -152,6 +153,9 @@ void dispatch_packet_queues(FreeEMS_Packet *);
 void cond_bcast (gpointer, gpointer);
 FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *);
 void freeems_packet_cleanup(FreeEMS_Packet *);
+guint8 *finalize_packet(guint8 *, gint, gint *);
+void build_output_message(Io_Message *, Command *, gpointer);
+
 /* Prototypes */
 
 #endif

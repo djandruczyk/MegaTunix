@@ -17,6 +17,7 @@
 #include <gtk/gtk.h>
 #include <freeems_plugin.h>
 #include <packet_handlers.h>
+#include <string.h>
 
 extern gconstpointer *global_data;
 
@@ -322,7 +323,6 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	if (!sequences)
 		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
 
-	printf ("DISPATCH\n");
 	/* If sequence set, look for it and dispatch if found */
 	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
 	{
@@ -342,14 +342,11 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	{
 		/* If payload ID matches, dispatch if found */
 		list = g_hash_table_lookup(payloads,GINT_TO_POINTER((gint)packet->payload_id));
-		printf("list %p\n",list);
 		for (i=0;i<g_list_length(list);i++)
 		{
 			queue = g_list_nth_data(list,i);
-			printf("queue %p\n",list);
 			if (queue)
 			{
-				printf("sending packet\n");
 				g_async_queue_ref(queue);
 				g_async_queue_push(queue,(gpointer)packet_deep_copy(packet));
 				g_async_queue_unref(queue);
@@ -384,4 +381,226 @@ void freeems_packet_cleanup(FreeEMS_Packet *packet)
 	g_free(packet->data);
 	g_free(packet);
 	return;
+}
+
+
+/*! 
+ \brief build_output_message() is called when doing output to the ECU, to 
+ append the needed data together into one nice blob for sending
+ */
+G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command, gpointer data)
+{
+	gboolean have_sequence = FALSE;
+	gboolean have_payload_id = FALSE;
+	gboolean have_location_id = FALSE;
+	gboolean have_offset = FALSE;
+	gboolean have_length = FALSE;
+	gboolean have_datablock = FALSE;
+	gboolean have_databyte = FALSE;
+	guint8 *payload_data = NULL;
+	gint payload_data_length = 0;
+	gint byte = 0;
+	gint seq_num = -1;
+	gint payload_id = -1;
+	gint location_id = -1;
+	gint offset = -1;
+	gint length = -1;
+	gint packet_length = 2; /* Header + cksum, rest come in below */
+	gint payload_length = 0;
+	guint i = 0;
+	gint pos = 0;
+	guint8 sum = 0;
+	OutputData *output = NULL;
+	PotentialArg * arg = NULL;
+	guint8 *buf = NULL; /* Raw packet before escapes/start/stop */
+	DBlock *block = NULL;
+
+	if (data)
+		output = (OutputData *)data;
+
+	message->sequence = g_array_new(FALSE,TRUE,sizeof(DBlock *));
+
+	payload_length = 0;
+	/* Arguments */
+	for (i=0;i<command->args->len;i++)
+	{
+		arg = g_array_index(command->args,PotentialArg *, i);
+		switch (arg->type)
+		{
+			case ACTION:
+				/*printf("build_output_message(): ACTION being created!\n");*/
+				block = g_new0(DBlock, 1);
+				block->type = ACTION;
+				block->action = arg->action;
+				block->arg = arg->action_arg;
+				g_array_append_val(message->sequence,block);
+				break;
+			case SEQUENCE_NUM:
+				have_sequence = TRUE;
+				seq_num = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("Sequence number present %i\n",seq_num);*/
+				packet_length += 1;
+				break;
+			case PAYLOAD_ID:
+				have_payload_id = TRUE;
+				payload_id = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("Payload ID number present %i\n",payload_id);*/
+				packet_length += 2;
+				break;
+				/* Payload specific stuff */
+			case LOCATION_ID:
+				have_location_id = TRUE;
+				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("Location ID number present %i\n",location_id);*/
+				payload_length += 2;
+				break;
+			case OFFSET:
+				have_offset = TRUE;
+				offset = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("Location ID number present %i\n",location_id);*/
+				payload_length += 2;
+				break;
+			case LENGTH:
+				have_length = TRUE;
+				length = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("Payload length present %i\n",length);*/
+				payload_length += 2;
+				break;
+			case DATABYTE:
+				have_databyte = TRUE;
+				byte = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("DataByte present %i\n",byte);*/
+				packet_length += 1;
+				break;
+			case DATA:
+				have_datablock = TRUE;
+				payload_data = (guint8 *)DATA_GET(output->data,arg->internal_name);
+				payload_data_length = (GINT)DATA_GET(output->data,"num_bytes");
+				payload_length += payload_data_length;
+				break;
+			default:
+				printf("FreeEMS doesn't handle this type %s\n",arg->name);
+				break;
+		}
+	}
+
+	pos = 1;
+	packet_length += payload_length;
+	/*printf("total raw packet length (-start/end/cksum) %i\n",packet_length);*/
+	/* Raw Packet */
+	buf = g_new0(guint8, packet_length);
+
+	/* Payload ID */
+	buf[H_PAYLOAD_IDX] = (guint8)((payload_id & 0xff00) >> 8);
+	buf[L_PAYLOAD_IDX] = (guint8)(payload_id & 0x00ff);
+	pos += 2;
+
+	/* Sequence number if present */
+	if (have_sequence > 0)
+	{
+		buf[HEADER_IDX] |= HAS_SEQUENCE_MASK;
+		buf[SEQ_IDX] = (guint8)seq_num;
+		pos += 1;
+	}
+
+	/* Payload Length if present */
+	if (payload_length > 0)
+	{
+		/*printf("payload length is %i\n",payload_length);*/
+		buf[HEADER_IDX] |= HAS_LENGTH_MASK;
+		if (have_sequence > 0)
+		{
+			buf[H_LEN_IDX] = (guint8)((payload_length & 0xff00) >> 8); 
+			buf[L_LEN_IDX] = (guint8)(payload_length & 0x00ff); 
+		}
+		else
+		{
+			buf[H_LEN_IDX - 1] = (guint8)((payload_length & 0xff00) >> 8);
+			buf[L_LEN_IDX - 1] = (guint8)(payload_length & 0x00ff); 
+		}
+		pos += 2;
+
+		/* Location ID */
+		buf[pos++] = (guint8)((location_id & 0xff00) >> 8); 
+		buf[pos++] = (guint8)(location_id & 0x00ff); 
+		/* Offset */
+		buf[pos++] = (guint8)((offset & 0xff00) >> 8); 
+		buf[pos++] = (guint8)(offset & 0x00ff); 
+		/* Sub Length */
+		buf[pos++] = (guint8)((length & 0xff00) >> 8); 
+		buf[pos++] = (guint8)(length & 0x00ff); 
+
+		g_memmove(buf+pos,payload_data,payload_data_length);
+		pos += payload_data_length;
+	}
+	else if (have_databyte) /* For odd cmds that don't have a full payload */
+		buf[pos++] = (guint8)(byte & 0x00ff); 
+
+	/* Checksum it */
+	for (i=0;i<packet_length;i++)
+		sum += buf[i];
+	buf[pos] = sum;
+	pos++;
+
+	/* Escape + start/stop it */
+	block = g_new0(DBlock, 1);
+	block->type = DATA;
+	block->data = finalize_packet(buf,packet_length,&block->len);
+	g_free(buf);
+	g_array_append_val(message->sequence,block);
+}
+
+
+guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
+{
+	gint i = 0;
+	gint num_2_escape = 0;
+	gint markers = 2;
+	gint len = 0;
+	gint pos = 0;
+	guint8 *buf = NULL;
+	/* This should allocate a buffer,
+	   Escape any special bytes in the packet
+	   Checksum it
+	   Add start/end flags to it
+	 */
+	/*printf("finalize, raw input length is %i\n",raw_len);*/
+	for (i=0;i<raw_len;i++)
+	{
+		/*printf("raw[%i] is %i\n",i,raw[i]);*/
+		if ((raw[i] == START_BYTE) || (raw[i] == STOP_BYTE) || (raw[i] == ESCAPE_BYTE))
+			num_2_escape++;
+	}
+	len = raw_len + num_2_escape + markers;
+	/*printf("length of final pkt is %i\n",len);*/
+	buf = g_new0(guint8,len);
+	buf[0] = START_BYTE;
+	pos = 1;
+	for (i=0;i<raw_len;i++)
+	{
+		if ((raw[i] == START_BYTE) \
+				|| (raw[i] == STOP_BYTE) \
+				|| (raw[i] == ESCAPE_BYTE))
+		{
+			buf[pos] = ESCAPE_BYTE;
+			pos++;
+			buf[pos] = raw[i] ^ 0xFF;
+			pos++;
+		}
+		else
+		{
+			buf[pos] = raw[i];
+			pos++;
+		}
+	}
+	buf[pos] = STOP_BYTE;
+	/*printf("last byte at index %i, Stop is %i, buf %i\n",pos,STOP_BYTE,buf[pos]);
+		printf("final length is %i\n",len);
+		for (i=0;i<len;i++)
+			printf("Packet index %i, value 0x%.2X\n",i,buf[i]);
+			*/
+	if (len -1 != pos)
+		printf("packet finalize problem, length mismatch\n");
+	*final_len = len;
+	return buf;
 }

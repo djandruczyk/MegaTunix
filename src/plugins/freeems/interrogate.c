@@ -16,12 +16,15 @@
 #include <config.h>
 #include <gtk/gtk.h>
 #include <interrogate.h>
+#include <freeems_plugin.h>
 #include <freeems_helpers.h>
+#include <packet_handlers.h>
 #include <serialio.h>
 
-extern GtkWidget *interr_view;
+extern gconstpointer *global_data;
 
 #define BUFSIZE 4096
+#define FIRM_REQ_PKT_LEN 4
 
 /*!
  \brief interrogate_ecu() interrogates the target ECU to determine what
@@ -39,6 +42,61 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	/* Send stream disable command */
 	stop_streaming();
 
+	/* Request firmware version */
+	request_firmware_version();
+
 	/* FreeEMS Interrogator NOT WRITTEN YET */
 	return TRUE;
+}
+
+
+void request_firmware_version(void)
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	GTimeVal tval;
+	Serial_Params *serial_params = NULL;
+	/* Raw packet */
+	guint8 *buf = NULL;
+	guint8 pkt[FIRM_REQ_PKT_LEN];
+	gint res = 0;
+	gint len = 0;
+	gint i = 0;
+	guint8 sum = 0;
+	gint tmit_len = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_if_fail(serial_params);
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (REQUEST_FIRMWARE_VERSION & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (REQUEST_FIRMWARE_VERSION & 0x00ff );
+	for (i=0;i<FIRM_REQ_PKT_LEN-1;i++)
+		sum += pkt[i];
+	pkt[FIRM_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,FIRM_REQ_PKT_LEN,&tmit_len);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, &len))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+		g_free(buf);
+		g_async_queue_unref(queue);
+		return;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,5000000);
+	printf("going to wait on queue %p\n",(gpointer)queue);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	printf("after timed pop in helper\n");
+	if (packet)
+		printf("Firmware version PACKET ARRIVED!\n");
+	else
+		printf("TIMEOUT\n");
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	freeems_packet_cleanup(packet);
+	g_async_queue_unref(queue);
+	return;
 }

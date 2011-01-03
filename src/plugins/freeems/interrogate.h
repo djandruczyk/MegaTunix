@@ -39,6 +39,8 @@ typedef enum
 
 /* Prototypes */
 gboolean interrogate_ecu(void);
+void request_firmware_version(void);
+
 /* Prototypes */
 
 #endif
