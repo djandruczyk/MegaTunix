@@ -107,8 +107,7 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 	g_async_queue_ref(io_data_queue);
 	g_async_queue_push(io_data_queue,(gpointer)message);
 	g_async_queue_unref(io_data_queue);
-	printf("message on io data queue\n");
-
+	return;
 }
 
 

@@ -30,6 +30,10 @@ typedef enum
 	DATABYTE
 }FreeEMSArgTypes;
 
+/* For raw packet generation in interrogator */
+#define FIRM_REQ_PKT_LEN 4
+#define DATALOG_REQ_PKT_LEN 5
+
 typedef enum
 {
 	/* Firmware Independant */
@@ -129,8 +133,9 @@ struct _FreeEMS_Packet
 	guchar *data;		/* Raw packet data */
 	guint16 raw_len;	/* Raw packet length */
 	guint8 header_bits;
-	guint16 payload_id;
 	guint8 seq_num;
+	guint16 payload_id;
+	guint16 payload_base_offset;
 	guint16 payload_len;
 };
 

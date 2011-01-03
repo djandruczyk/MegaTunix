@@ -201,6 +201,7 @@ void packet_decode(FreeEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
 	gint i = 0;
+	gint tmpi = 3; /* header and payload Are ALWAYS present */
 
 	packet->header_bits = ptr[0];
 	/*
@@ -213,6 +214,7 @@ void packet_decode(FreeEMS_Packet *packet)
 	printf("Has Length Flag: %i\n",((packet->header_bits & HAS_LENGTH_MASK) > 0) ? 1:0);
 	if ((packet->header_bits & HAS_LENGTH_MASK) > 0)
 	{
+		tmpi += 2;
 		if (packet->header_bits & HAS_SEQUENCE_MASK)
 			packet->payload_len = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
 		else
@@ -221,12 +223,15 @@ void packet_decode(FreeEMS_Packet *packet)
 	}
 	if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
 	{
+		tmpi += 1;
 		packet->seq_num = ptr[SEQ_IDX];
 		printf("Sequence id: %i\n",packet->seq_num); 
 	}
 	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
+	packet->payload_base_offset = tmpi;
 
 	printf("Payload id: %i\n",packet->payload_id);
+	printf("Payload base offset: %i\n",packet->payload_base_offset);
 	printf("\n");
 }
 
@@ -363,13 +368,8 @@ FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
 	FreeEMS_Packet *new = NULL;
 	if (!packet)
 		return NULL;
-	new = g_new0(FreeEMS_Packet, 1);
+	new = g_memdup(packet,sizeof(FreeEMS_Packet));
 	new->data = g_memdup(packet->data,packet->raw_len);
-	new->raw_len = packet->raw_len;
-	new->header_bits = packet->header_bits;
-	new->payload_id = packet->payload_id;
-	new->payload_len = packet->payload_len;
-	new->seq_num = packet->seq_num;
 	return new;
 }
 

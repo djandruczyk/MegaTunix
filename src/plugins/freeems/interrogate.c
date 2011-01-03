@@ -23,8 +23,6 @@
 
 extern gconstpointer *global_data;
 
-#define BUFSIZE 4096
-#define FIRM_REQ_PKT_LEN 4
 
 /*!
  \brief interrogate_ecu() interrogates the target ECU to determine what
@@ -65,6 +63,7 @@ void request_firmware_version(void)
 	gint i = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
+	gchar *version = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_if_fail(serial_params);
@@ -87,16 +86,20 @@ void request_firmware_version(void)
 	}
 	g_free(buf);
 	g_get_current_time(&tval);
-	g_time_val_add(&tval,5000000);
-	printf("going to wait on queue %p\n",(gpointer)queue);
+	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
-	printf("after timed pop in helper\n");
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	g_async_queue_unref(queue);
 	if (packet)
 		printf("Firmware version PACKET ARRIVED!\n");
 	else
 		printf("TIMEOUT\n");
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+
+
+	version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_len);
+	printf("Version \"%s\"\n",version);
+	g_free(version);
+	
 	freeems_packet_cleanup(packet);
-	g_async_queue_unref(queue);
 	return;
 }
