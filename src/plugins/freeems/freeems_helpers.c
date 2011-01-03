@@ -32,7 +32,7 @@ G_MODULE_EXPORT void stop_streaming(void)
 	GTimeVal tval;
 	gint seq = 6;
 	Serial_Params *serial_params = NULL;
-	unsigned char pkt[7] = {0xAA,0x00,0x01,0x94,0x95,0xCC};
+	unsigned char pkt[7] = {0xAA,0x00,0x01,0x94,0x00,0x95,0xCC};
 	gint res = 0;
 	gint len = 0;
 
