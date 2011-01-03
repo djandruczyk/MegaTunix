@@ -32,6 +32,7 @@ typedef enum
 
 /* For raw packet generation in interrogator */
 #define FIRM_REQ_PKT_LEN 4
+#define INTVER_REQ_PKT_LEN 4
 #define DATALOG_REQ_PKT_LEN 5
 
 typedef enum

@@ -43,6 +43,9 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	/* Request firmware version */
 	request_firmware_version();
 
+	/* Request interface version */
+	request_interface_version();
+
 	/* FreeEMS Interrogator NOT WRITTEN YET */
 	return TRUE;
 }
@@ -98,9 +101,74 @@ void request_firmware_version(void)
 
 	version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_len);
 	printf("Version \"%s\"\n",version);
-	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
+	thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strdup(version));
 	g_free(version);
-	
+
+	freeems_packet_cleanup(packet);
+	return;
+}
+
+
+void request_interface_version(void)
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	GTimeVal tval;
+	Serial_Params *serial_params = NULL;
+	guint8 *buf = NULL;
+	/* Raw packet */
+	guint8 pkt[INTVER_REQ_PKT_LEN];
+	gint res = 0;
+	gint len = 0;
+	gint i = 0;
+	guint8 major = 0;
+	guint8 minor = 0;
+	guint8 micro = 0;
+	guint8 sum = 0;
+	gint tmit_len = 0;
+	gchar *version = NULL;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_if_fail(serial_params);
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0x00ff );
+	for (i=0;i<INTVER_REQ_PKT_LEN-1;i++)
+		sum += pkt[i];
+	pkt[INTVER_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,INTVER_REQ_PKT_LEN,&tmit_len);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, &len))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+		g_free(buf);
+		g_async_queue_unref(queue);
+		return;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	g_async_queue_unref(queue);
+	if (packet)
+		printf("Firmware version PACKET ARRIVED!\n");
+	else
+		printf("TIMEOUT\n");
+
+
+	version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset+3),packet->payload_len-3);
+	major = (guint8)(packet->data[packet->payload_base_offset]);
+	minor = (guint8)(packet->data[packet->payload_base_offset+1]);
+	micro = (guint8)(packet->data[packet->payload_base_offset+2]);
+	printf("Version \"%s\"\n",version);
+	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
+	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
+	g_free(version);
+
 	freeems_packet_cleanup(packet);
 	return;
 }
