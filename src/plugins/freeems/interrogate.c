@@ -39,6 +39,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	guint8 major = 0;
 	guint8 minor = 0;
 	guint8 micro = 0;
+	GList *locations = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	/* ECU has already been detected via comms test
 	   Now we need to figure out its variant and adapt to it
@@ -59,6 +60,9 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
 	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
 	g_free(version);
+
+	/* Request List of location ID's */
+	locations = request_location_ids();
 	/* FreeEMS Interrogator NOT WRITTEN YET */
 	return TRUE;
 }
@@ -114,7 +118,7 @@ void request_firmware_version(gchar **version)
 
 	if (packet)
 	{
-		*version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_len);
+		*version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
 
 		freeems_packet_cleanup(packet);
 	}
@@ -164,20 +168,85 @@ void request_interface_version(gchar **version, guint8 *major, guint8 *minor, gu
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 	g_async_queue_unref(queue);
 	/*
-	if (packet)
-		printf("Firmware version PACKET ARRIVED!\n");
-	else
-		printf("TIMEOUT\n");
-	*/
+	   if (packet)
+	   printf("Firmware version PACKET ARRIVED!\n");
+	   else
+	   printf("TIMEOUT\n");
+	 */
 
 	if (packet)
 	{
-
-		*version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset+3),packet->payload_len-3);
+		*version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset+3),packet->payload_length-3);
 		*major = (guint8)(packet->data[packet->payload_base_offset]);
 		*minor = (guint8)(packet->data[packet->payload_base_offset+1]);
 		*micro = (guint8)(packet->data[packet->payload_base_offset+2]);
 		freeems_packet_cleanup(packet);
 	}
 	return;
+}
+
+
+/*
+ \brief Queries the ECU for a location ID list
+ */
+GList *request_location_ids(void)
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	GTimeVal tval;
+	Serial_Params *serial_params = NULL;
+	guint8 *buf = NULL;
+	/* Raw packet */
+	guint8 pkt[LOC_ID_LIST_REQ_PKT_LEN];
+	gint res = 0;
+	gint len = 0;
+	gint i = 0;
+	gint h = 0;
+	gint l = 0;
+	gint tmpi = 0;
+	guint8 sum = 0;
+	gint tmit_len = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_val_if_fail(serial_params,NULL);
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LIST_OF_LOCATION_IDS & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LIST_OF_LOCATION_IDS & 0x00ff );
+	pkt[L_PAYLOAD_IDX+1] = 0;
+	for (i=0;i<LOC_ID_LIST_REQ_PKT_LEN-1;i++)
+		sum += pkt[i];
+	pkt[LOC_ID_LIST_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,LOC_ID_LIST_REQ_PKT_LEN,&tmit_len);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LIST_OF_LOCATION_IDS);
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, &len))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LIST_OF_LOCATION_IDS);
+		g_free(buf);
+		g_async_queue_unref(queue);
+		return NULL;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LIST_OF_LOCATION_IDS);
+	g_async_queue_unref(queue);
+	if (packet)
+	{
+		freeems_packet_cleanup(packet);
+		printf("location id list packet arrived\n");
+		for (i=0;i<packet->payload_length;i++)
+		{
+			tmpi = 0;
+			h = packet->data[packet->payload_base_offset+i];
+			i++;
+			l = packet->data[packet->payload_base_offset+i];
+			tmpi = (h << 8) + l;
+			printf("location ID %i\n",tmpi);
+		}
+	}
+	return NULL;
 }

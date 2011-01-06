@@ -145,7 +145,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 				{
 					packet = g_new0(FreeEMS_Packet, 1);
 					packet->data = g_memdup(packetBuffer,currentPacketLength);
-					packet->raw_len = currentPacketLength;
+					packet->raw_length = currentPacketLength;
 					g_async_queue_ref(queue);
 					g_async_queue_push(queue,(gpointer)packet);
 					g_async_queue_unref(queue);
@@ -205,8 +205,8 @@ void packet_decode(FreeEMS_Packet *packet)
 
 	packet->header_bits = ptr[0];
 	/*
-	   printf("Raw len %i\n",packet->raw_len);
-	   for (i=0;i<packet->raw_len;i++)
+	   printf("Raw len %i\n",packet->raw_length);
+	   for (i=0;i<packet->raw_length;i++)
 	   printf("packet byte %i, valud 0x%0.2X\n",i,ptr[i]);
 	 */
 	printf("Ack/Nack Flag: %i\n",((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0);
@@ -216,10 +216,10 @@ void packet_decode(FreeEMS_Packet *packet)
 	{
 		tmpi += 2;
 		if (packet->header_bits & HAS_SEQUENCE_MASK)
-			packet->payload_len = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
+			packet->payload_length = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
 		else
-			packet->payload_len = (ptr[H_LEN_IDX-1] << 8) + ptr [L_LEN_IDX-1];
-		printf("Payload length %i\n",packet->payload_len);
+			packet->payload_length = (ptr[H_LEN_IDX-1] << 8) + ptr [L_LEN_IDX-1];
+		printf("Payload length %i\n",packet->payload_length);
 	}
 	if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
 	{
@@ -393,7 +393,7 @@ FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
 	if (!packet)
 		return NULL;
 	new = g_memdup(packet,sizeof(FreeEMS_Packet));
-	new->data = g_memdup(packet->data,packet->raw_len);
+	new->data = g_memdup(packet->data,packet->raw_length);
 	return new;
 }
 
@@ -575,7 +575,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 }
 
 
-guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
+guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
 {
 	gint i = 0;
 	gint num_2_escape = 0;
@@ -588,19 +588,19 @@ guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
 	   Checksum it
 	   Add start/end flags to it
 	 */
-	/*printf("finalize, raw input length is %i\n",raw_len);*/
-	for (i=0;i<raw_len;i++)
+	/*printf("finalize, raw input length is %i\n",raw_length);*/
+	for (i=0;i<raw_length;i++)
 	{
 		/*printf("raw[%i] is %i\n",i,raw[i]);*/
 		if ((raw[i] == START_BYTE) || (raw[i] == STOP_BYTE) || (raw[i] == ESCAPE_BYTE))
 			num_2_escape++;
 	}
-	len = raw_len + num_2_escape + markers;
+	len = raw_length + num_2_escape + markers;
 	/*printf("length of final pkt is %i\n",len);*/
 	buf = g_new0(guint8,len);
 	buf[0] = START_BYTE;
 	pos = 1;
-	for (i=0;i<raw_len;i++)
+	for (i=0;i<raw_length;i++)
 	{
 		if ((raw[i] == START_BYTE) \
 				|| (raw[i] == STOP_BYTE) \
@@ -625,6 +625,6 @@ guint8 *finalize_packet(guint8 *raw, gint raw_len, gint *final_len )
 			*/
 	if (len -1 != pos)
 		printf("packet finalize problem, length mismatch\n");
-	*final_len = len;
+	*final_length = len;
 	return buf;
 }

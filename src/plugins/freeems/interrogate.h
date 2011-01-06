@@ -41,6 +41,8 @@ typedef enum
 gboolean interrogate_ecu(void);
 void request_firmware_version(gchar **);
 void request_interface_version(gchar **, guint8 *, guint8 *, guint8 *);
+GList *request_location_ids(void);
+
 /* Prototypes */
 
 #endif

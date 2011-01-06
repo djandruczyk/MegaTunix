@@ -53,17 +53,17 @@ G_MODULE_EXPORT void stop_streaming(void)
 	buf = finalize_packet((guint8 *)&pkt,DATALOG_REQ_PKT_LEN,&tmit_len);
 
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,REQUEST_SET_ASYNC_DATALOG_TYPE+1);
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
 	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
 	{
-		deregister_packet_queue(PAYLOAD_ID,queue,REQUEST_SET_ASYNC_DATALOG_TYPE+1);
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
 		g_async_queue_unref(queue);
 		return;
 	}
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,REQUEST_SET_ASYNC_DATALOG_TYPE+1);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
 	g_async_queue_unref(queue);
 	if (packet)
 		freeems_packet_cleanup(packet);

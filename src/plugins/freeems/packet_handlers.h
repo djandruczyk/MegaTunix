@@ -34,6 +34,7 @@ typedef enum
 #define FIRM_REQ_PKT_LEN 4
 #define INTVER_REQ_PKT_LEN 4
 #define DATALOG_REQ_PKT_LEN 5
+#define LOC_ID_LIST_REQ_PKT_LEN 5
 
 typedef enum
 {
@@ -138,12 +139,12 @@ typedef struct _FreeEMS_Packet FreeEMS_Packet;
 struct _FreeEMS_Packet
 {
 	guchar *data;		/* Raw packet data */
-	guint16 raw_len;	/* Raw packet length */
+	guint16 raw_length;	/* Raw packet length */
 	guint8 header_bits;
 	guint8 seq_num;
 	guint16 payload_id;
 	guint16 payload_base_offset;
-	guint16 payload_len;
+	guint16 payload_length;
 };
 
 
