@@ -50,13 +50,13 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 	/* Request firmware version */
 	request_firmware_version(&fw_version);
-	update_logbar_f("interr_view",NULL,g_strdup_printf(_("Firmware Version request returned %i bytes (%s)\n"),strlen(fw_version),fw_version),FALSE,FALSE,TRUE);
+	update_logbar_f("interr_view",NULL,g_strdup_printf(_("Firmware Version request returned %i bytes (%s)\n"),(gint)strlen(fw_version),fw_version),FALSE,FALSE,TRUE);
 	thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strdup(fw_version));
 	g_free(fw_version);
 
 	/* Request interface version */
 	request_interface_version(&version, &major, &minor, &micro);
-	update_logbar_f("interr_view",NULL,g_strdup_printf(_("Interface Version request returned %i bytes ( %i.%i.%i %s)\n"),strlen(version)+3,major,minor,micro,version),FALSE,FALSE,TRUE);
+	update_logbar_f("interr_view",NULL,g_strdup_printf(_("Interface Version request returned %i bytes ( %i.%i.%i %s)\n"),(gint)strlen(version)+3,major,minor,micro,version),FALSE,FALSE,TRUE);
 
 	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
 	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
