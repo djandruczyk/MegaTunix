@@ -17,6 +17,7 @@
 #include <gtk/gtk.h>
 #include <defines.h>
 #include <configfile.h>
+#include <freeems_globaldefs.h>
 #include <enums.h>
 #include <threads.h>
 
@@ -34,7 +35,30 @@ typedef enum
 #define FIRM_REQ_PKT_LEN 4
 #define INTVER_REQ_PKT_LEN 4
 #define DATALOG_REQ_PKT_LEN 5
-#define LOC_ID_LIST_REQ_PKT_LEN 5
+#define LOC_ID_LIST_REQ_PKT_LEN 7
+
+/* Block bits logic */
+#define BLOCK_BITS_ALL		0
+#define BLOCK_BITS_OR		BIT0
+#define BLOCK_BITS_AND		BIT1
+
+/* Masks for the flag field in the blockDetails struct below */
+#define BLOCK_HAS_PARENT	BIT0_16
+#define BLOCK_IN_RAM		BIT1_16
+#define BLOCK_IN_FLASH		BIT2_16
+#define BLOCK_IS_INDEXABLE	BIT3_16
+#define BLOCK_IS_READONLY	BIT4_16
+#define BLOCK_GETS_VERIFIED	BIT5_16
+#define BLOCK_SPARE_FLAG_6	BIT6_16
+#define BLOCK_SPARE_FLAG_7	BIT7_16
+#define BLOCK_SPARE_FLAG_8	BIT8_16
+#define BLOCK_SPARE_FLAG_9	BIT9_16
+#define BLOCK_SPARE_FLAG_10	BIT10_16
+#define BLOCK_SPARE_FLAG_11	BIT11_16
+#define BLOCK_IS_2DUS_TABLE	BIT12_16
+#define BLOCK_IS_MAIN_TABLE	BIT13_16
+#define BLOCK_IS_LOOKUP_TABLE	BIT14_16
+#define BLOCK_IS_CONFIGURATION	BIT15_16
 
 typedef enum
 {

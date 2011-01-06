@@ -64,10 +64,17 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 	/* Request List of location ID's */
 	locations = request_location_ids();
-	for (i=0;i<g_list_length(locations);i++)
+	if (locations)
 	{
-		printf("Locations ID %i\n",(gint)g_list_nth_data(locations,i));
+		update_logbar_f("interr_view",NULL,g_strdup_printf(_("Location ID Query returned %i locationID's.\n"),g_list_length(locations)),FALSE,FALSE,TRUE);
+
+		for (i=0;i<g_list_length(locations);i++)
+		{
+			printf("Locations ID %i\n",(gint)g_list_nth_data(locations,i));
+		}
 	}
+	else
+		update_logbar_f("interr_view",NULL,g_strdup_printf(_("Location ID Query FAILED to return any locationID's.\n")),FALSE,FALSE,TRUE);
 	/* FreeEMS Interrogator NOT WRITTEN YET */
 	return TRUE;
 }
@@ -213,6 +220,8 @@ GList *request_location_ids(void)
 	gint tmpi = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
+	guint8 flag = BLOCK_BITS_OR;
+	guint16 bits = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
@@ -220,7 +229,10 @@ GList *request_location_ids(void)
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LIST_OF_LOCATION_IDS & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LIST_OF_LOCATION_IDS & 0x00ff );
-	pkt[L_PAYLOAD_IDX+1] = 0;
+	bits |= BLOCK_IS_INDEXABLE;
+	pkt[L_PAYLOAD_IDX+1] = flag;	/* All, Or or And */
+	pkt[L_PAYLOAD_IDX+2] = (bits & 0xff00) >> 8;	/* H bits */
+	pkt[L_PAYLOAD_IDX+3] = (bits & 0x00ff); 	/* L bits */
 	for (i=0;i<LOC_ID_LIST_REQ_PKT_LEN-1;i++)
 		sum += pkt[i];
 	pkt[LOC_ID_LIST_REQ_PKT_LEN-1] = sum;

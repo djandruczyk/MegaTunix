@@ -13,6 +13,7 @@ plugin_LTLIBRARIES = libfreeems.la
 
 libfreeems_la_SOURCES = \
 	Makefile \
+	freeems_globaldefs.h \
 	freeems_comms.c \
 	freeems_comms.h \
 	freeems_gui_handlers.c \
