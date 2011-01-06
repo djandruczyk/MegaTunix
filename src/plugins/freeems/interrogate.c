@@ -39,6 +39,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	guint8 major = 0;
 	guint8 minor = 0;
 	guint8 micro = 0;
+	gint i = 0;
 	GList *locations = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	/* ECU has already been detected via comms test
@@ -63,6 +64,10 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 	/* Request List of location ID's */
 	locations = request_location_ids();
+	for (i=0;i<g_list_length(locations);i++)
+	{
+		printf("Locations ID %i\n",(gint)g_list_nth_data(locations,i));
+	}
 	/* FreeEMS Interrogator NOT WRITTEN YET */
 	return TRUE;
 }
@@ -195,6 +200,7 @@ GList *request_location_ids(void)
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
 	GTimeVal tval;
+	GList *list = NULL;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
 	/* Raw packet */
@@ -236,8 +242,6 @@ GList *request_location_ids(void)
 	g_async_queue_unref(queue);
 	if (packet)
 	{
-		freeems_packet_cleanup(packet);
-		printf("location id list packet arrived\n");
 		for (i=0;i<packet->payload_length;i++)
 		{
 			tmpi = 0;
@@ -245,8 +249,9 @@ GList *request_location_ids(void)
 			i++;
 			l = packet->data[packet->payload_base_offset+i];
 			tmpi = (h << 8) + l;
-			printf("location ID %i\n",tmpi);
+			list = g_list_append(list,GINT_TO_POINTER(tmpi));
 		}
+		freeems_packet_cleanup(packet);
 	}
-	return NULL;
+	return list;
 }
