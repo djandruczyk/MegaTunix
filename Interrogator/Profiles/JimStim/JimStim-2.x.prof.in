@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=6
+minor=7
 
 [interrogation_profile]
 name=JimStim v2.x
@@ -11,7 +11,7 @@ SignatureVia=get_signature
 RT_Command=jimstim_std_rtvars
 RT_total_bytes=8
 Get_All_Command=jimstim_read_all
-VE_Command=jimstim_veconst
+Read_Command=jimstim_veconst
 Burn_Command=jimstim_burn
 Burn_All_Command=jimstim_burn_all
 Write_Command=jimstim_generic_write

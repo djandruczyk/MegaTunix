@@ -663,3 +663,53 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	g_free(version);
 
 }
+
+
+gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
+{
+	ConfigFile *cfgfile;
+	gchar * tmpbuf = NULL;
+	gchar * section = NULL;
+	gchar ** list = NULL;
+
+
+	cfgfile = cfg_open_file((gchar *)filename);
+	if (!cfgfile)
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFile \"%s\" NOT OPENED successfully\n",filename));
+	get_file_api_f(cfgfile,&major,&minor);
+	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
+	{
+		thread_update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
+		cfg_free(cfgfile);
+		return FALSE;
+	}
+
+	firmware->profile_filename = g_strdup(filename);
+	cfg_read_string(cfgfile,"interrogation_profile","name",&firmware->name);
+
+	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": load_firmware_details()\n\tfile:%s opened successfully\n",filename));
+	if(!cfg_read_boolean(cfgfile,"parameters","BigEndian",&firmware->bigendian))
+	{
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"BigEndian\" key not found in interrogation profile, assuming ECU firmware byte order is big endian, ERROR in interrogation profile\n"));
+		firmware->bigendian = TRUE;
+	}
+	if(!cfg_read_string(cfgfile,"parameters","Capabilities",
+				&tmpbuf))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
+	else
+	{
+		/*printf("Capabilities %s\n",tmpbuf);*/
+		firmware->capabilities = translate_capabilities(tmpbuf);
+		g_free(tmpbuf);
+	}
+	/* Commands to map agaisnt the comm.xml */
+	if(!cfg_read_string(cfgfile,"parameters","Get_All_Command",
+				&firmware->get_all_command))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_string(cfgfile,"parameters","Write_Command",
+				&firmware->write_command))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Write_Command\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
+				&firmware->burn_command))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
+}

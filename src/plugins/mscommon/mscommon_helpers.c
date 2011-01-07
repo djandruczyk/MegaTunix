@@ -139,7 +139,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 					DATA_SET(output->data,"page",GINT_TO_POINTER(i));
 					DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-					io_cmd_f(firmware->ve_command,output);
+					io_cmd_f(firmware->read_command,output);
 				}
 			}
 			command = (Command *)data;
@@ -163,7 +163,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 					DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 					DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[i]->length));
 					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-					io_cmd_f(firmware->ve_command,output);
+					io_cmd_f(firmware->read_command,output);
 				}
 			}
 			command = (Command *)data;
@@ -182,7 +182,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->length));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd_f(firmware->ve_command,output);
+				io_cmd_f(firmware->read_command,output);
 			}
 			command = (Command *)data;
 			io_cmd_f(NULL,command->post_functions);
@@ -200,7 +200,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->length));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd_f(firmware->ve_command,output);
+				io_cmd_f(firmware->read_command,output);
 			}
 			command = (Command *)data;
 			io_cmd_f(NULL,command->post_functions);
@@ -218,7 +218,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 				DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 				DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->length));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd_f(firmware->ve_command,output);
+				io_cmd_f(firmware->read_command,output);
 			}
 			command = (Command *)data;
 			io_cmd_f(NULL,command->post_functions);
@@ -233,7 +233,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd_f(firmware->ve_command,output);
+				io_cmd_f(firmware->read_command,output);
 				command = (Command *)data;
 				io_cmd_f(NULL,command->post_functions);
 			}
@@ -248,7 +248,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-				io_cmd_f(firmware->ve_command,output);
+				io_cmd_f(firmware->read_command,output);
 				command = (Command *)data;
 				io_cmd_f(NULL,command->post_functions);
 			}

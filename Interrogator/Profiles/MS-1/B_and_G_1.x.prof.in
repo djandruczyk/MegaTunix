@@ -1,6 +1,6 @@
 [api]
 major=1
-minor=6
+minor=7
 
 [interrogation_profile]
 name=Old Bowling & Grippo v1.0
@@ -11,7 +11,7 @@ NumVerVia=get_numrev
 RT_Command=ms1_std_rtvars
 RT_total_bytes=22
 Get_All_Command=ms1_read_all
-VE_Command=ms1_veconst
+Read_Command=ms1_veconst
 Burn_Command=ms1_burn
 Burn_All_Command=ms1_burn_all
 Write_Command=ms1_generic_write

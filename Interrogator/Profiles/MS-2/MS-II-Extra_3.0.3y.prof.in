@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=6
+minor=7
 
 [interrogation_profile]
 name=MS-II-Extra V3.0.3y series
@@ -13,7 +13,7 @@ RT_Command=ms1_std_rtvars
 RT_total_bytes=169
 MS2_RT_Page=6
 Get_All_Command=ms2_read_all
-VE_Command=ms2_veconst
+Read_Command=ms2_veconst
 Burn_Command=ms2_burn
 Burn_All_Command=ms2_burn_all
 Write_Command=ms2_generic_write
