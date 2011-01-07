@@ -441,6 +441,7 @@ void test_cleanup(gpointer data)
 	cleanup_f(test->test_func);
 	cleanup_f(test->test_name);
 	cleanup_f(test->test_desc);
+	cleanup_f(test->result_str);
 	if (test->result_type == RESULT_LIST)
 		g_list_free((GList *)test->result);
 	else
