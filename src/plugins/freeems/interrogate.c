@@ -48,7 +48,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	guint8 minor = 0;
 	guint8 micro = 0;
 	gint i = 0;
-	gboolean res = 0;
+	gboolean interrogated = FALSE;
 	GList *locations = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
@@ -58,7 +58,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 	/* ECU has already been detected via comms test
 	   Now we need to figure out its variant and adapt to it
-	   */
+	 */
 	/* Send stream disable command */
 	stop_streaming();
 
@@ -84,8 +84,16 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		else
 			test->result = NULL;
 	}
+//	interrogated = determine_ecu(tests,tests_hash);
+	DATA_SET(global_data,"interrogated",GINT_TO_POINTER(interrogated));
+	if (interrogated)
+	{
+		thread_widget_set_sensitive_f("interrogate_button",FALSE);
+		thread_widget_set_sensitive_f("offline_button",FALSE);
+	}
 
-
+	g_array_free(tests,TRUE);
+	g_hash_table_destroy(tests_hash);
 
 
 	/* Request firmware version */
@@ -113,6 +121,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		{
 			printf("Locations ID %i\n",(gint)g_list_nth_data(locations,i));
 		}
+		g_list_free(locations);
 	}
 	else
 		update_logbar_f("interr_view",NULL,g_strdup_printf(_("Location ID Query FAILED to return any locationID's.\n")),FALSE,FALSE,TRUE);
@@ -408,7 +417,7 @@ gboolean validate_and_load_tests(GArray **tests, GHashTable **tests_hash)
 		return FALSE;
 	}
 
-	*tests_hash = g_hash_table_new(g_str_hash,g_str_equal);
+	*tests_hash = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,test_cleanup);
 
 	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": validate_and_load_tests()\n\tfile %s, opened successfully\n",filename));
 	*tests = g_array_new(FALSE,TRUE,sizeof(Detection_Test *));
@@ -451,3 +460,18 @@ gboolean validate_and_load_tests(GArray **tests, GHashTable **tests_hash)
 	g_free(filename);
 	return TRUE;
 }
+
+
+void test_cleanup(gpointer data)
+{
+	Detection_Test *test = (Detection_Test *)data;
+	cleanup_f(test->test_func);
+	cleanup_f(test->test_name);
+	cleanup_f(test->test_desc);
+	if (test->result_type == RESULT_LIST)
+		g_list_free((GList *)test->result);
+	else
+		cleanup_f(test->result);
+	cleanup_f(test);
+}
+

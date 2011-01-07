@@ -32,6 +32,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	GAsyncQueue *queue = NULL;
 	GCond *cond = NULL;
 	GThread *thread = NULL;
+	GMutex *mutex = NULL;
 	GHashTable *hash = NULL;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
@@ -43,6 +44,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_assert(get_symbol_f);
 	get_symbol_f("_get_sized_data",(void *)&_get_sized_data_f);
 	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
+	get_symbol_f("cleanup",(void *)&cleanup_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	get_symbol_f("dump_output",(void *)&dump_output_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
@@ -74,6 +76,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	DATA_SET(global_data,"sequence_num_queue_hash",hash);
 	hash = g_hash_table_new(g_direct_hash,g_direct_equal);
 	DATA_SET(global_data,"payload_id_queue_hash",hash);
+	mutex = g_mutex_new();
+	DATA_SET(global_data,"queue_mutex",mutex);
 }
 
 
@@ -81,19 +85,29 @@ G_MODULE_EXPORT void plugin_shutdown()
 {
 	GCond *cond = NULL;
 	GHashTable *hash = NULL;
+	GMutex *mutex = NULL;
 
 	freeems_serial_disable();
-	/*
 	cond = DATA_GET(global_data,"serial_reader_cond");
 	if (cond)
 		g_cond_free(cond);
-		*/
+	DATA_SET(global_data,"serial_reader_cond",NULL);
+	cond = DATA_GET(global_data,"packet_handler_cond");
+	if (cond)
+		g_cond_free(cond);
+	DATA_SET(global_data,"packet_handler_cond",NULL);
 	hash = DATA_GET(global_data,"sequence_num_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
+	DATA_SET(global_data,"sequence_num_queue_hash",NULL);
 	hash = DATA_GET(global_data,"payload_id_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
+	DATA_SET(global_data,"payload_id_queue_hash",NULL);
+	mutex = DATA_GET(global_data,"queue_mutex");
+	if (mutex)
+		g_mutex_free(mutex);
+	DATA_SET(global_data,"queue_mutex",NULL);
 	return;
 }
 
@@ -123,6 +137,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER (RESULT_DATA));
 		g_hash_table_insert (str_2_enum, "_RESULT_TEXT_",
 				GINT_TO_POINTER (RESULT_TEXT));
+		g_hash_table_insert (str_2_enum, "_RESULT_LIST_",
+				GINT_TO_POINTER (RESULT_LIST));
 		/* Special Common Handlers */
 
 		/* XMLcomm processing */

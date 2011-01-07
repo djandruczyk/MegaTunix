@@ -198,11 +198,14 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	thread = DATA_GET(global_data,"serial_thread_id");
 	g_mutex_lock(mutex);
 	g_get_current_time(&now);
-	/* Wait up to 0.5 seconds for thread to exit */
-        g_time_val_add(&now,500000);
+	/* Wait up to 0.25 seconds for thread to exit */
+        g_time_val_add(&now,250000);
         cond = DATA_GET(global_data,"serial_reader_cond");
-        res = g_cond_timed_wait(cond,mutex,&now);
-	g_thread_join(thread);
+	if (cond)
+	{
+		res = g_cond_timed_wait(cond,mutex,&now);
+		g_thread_join(thread);
+	}
 	DATA_SET(global_data,"serial_thread_id",NULL);
 	/*
 	if (res)
@@ -269,7 +272,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
+	g_time_val_add(&tval,250000);
 	packet = g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	if (packet)
@@ -301,14 +304,14 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		}
 		g_free(buf);
 		g_get_current_time(&tval);
-		g_time_val_add(&tval,500000);
+		g_time_val_add(&tval,250000);
 		packet = g_async_queue_timed_pop(queue,&tval);
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+		g_async_queue_unref(queue);
 		if (packet)
 		{
 			dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound via probing!!\n"));
 			freeems_packet_cleanup(packet);
-			g_async_queue_unref(queue);
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 			return TRUE; 
 		}
@@ -339,7 +342,8 @@ void *win32_reader(gpointer data)
 	{
 		if ((DATA_GET(global_data,"leaving")) || (DATA_GET(global_data,"serial_abort")))
 		{
-			g_cond_signal(cond);
+			if (cond)
+				g_cond_signal(cond);
 			g_thread_exit(0);
 		}
 		read_pos = requested-wanted;
@@ -389,11 +393,12 @@ void *unix_reader(gpointer data)
 	{
 		if ((DATA_GET(global_data,"leaving")) || (DATA_GET(global_data,"serial_abort")))
 		{
-			g_cond_signal(cond);
+			if (cond)
+				g_cond_signal(cond);
 			g_thread_exit(0);
 		}
 		t.tv_sec = 0;
-		t.tv_usec = 250000;
+		t.tv_usec = 100000;
 		FD_SET(fd,&readfds);
 		res = select(fd+1,&readfds, NULL, NULL, &t);
 		if (res == -1)

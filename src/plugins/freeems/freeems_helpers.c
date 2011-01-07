@@ -56,10 +56,12 @@ G_MODULE_EXPORT void stop_streaming(void)
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
 	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
 	{
+		g_free(buf);
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
 		g_async_queue_unref(queue);
 		return;
 	}
+	g_free(buf);
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);

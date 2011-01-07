@@ -182,7 +182,8 @@ void *packet_handler(gpointer data)
 	{
 		if (DATA_GET(global_data,"leaving"))
 		{
-			g_cond_signal(cond);
+			if (cond)
+				g_cond_signal(cond);
                         g_thread_exit(0);
 		}
 		g_get_current_time(&tval);
@@ -244,12 +245,17 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 {
 	static GHashTable *payloads = NULL;
 	static GHashTable *sequences = NULL;
+	static GMutex *mutex = NULL;
 	GList *list = NULL;
 
+	if (!mutex)
+		mutex = DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
 		payloads = DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
 		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
+	g_return_if_fail(mutex);
+	g_mutex_lock(mutex);
 
 	switch ((FreeEMSArgTypes)type)
 	{
@@ -269,6 +275,7 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 			printf("Need to specific approrpriate criteria to match a packet\n");
 			break;
 	}
+	g_mutex_unlock(mutex);
 	return;
 }
 
@@ -280,8 +287,11 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 {
 	static GHashTable *payloads = NULL;
 	static GHashTable *sequences = NULL;
+	static GMutex *mutex = NULL;
 	GList *list = NULL;
 
+	if (!mutex)
+		mutex = DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
 		payloads = DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
@@ -289,6 +299,9 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 
 	if (!queue)
 		return;
+
+	g_return_if_fail(mutex);
+	g_mutex_lock(mutex);
 	switch ((FreeEMSArgTypes)type)
 	{
 		case PAYLOAD_ID:
@@ -323,6 +336,7 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 			printf("Need to specific approrpriate criteria to match a packet\n");
 			break;
 	}
+	g_mutex_unlock(mutex);
 	return;
 }
 
@@ -336,16 +350,21 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 {
 	static GHashTable *payloads = NULL;
 	static GHashTable *sequences = NULL;
+	static GMutex *mutex = NULL;
 	GAsyncQueue *queue = NULL;
 	guint8 header = packet->data[0];
 	gint i = 0;
 	GList *list = NULL;
 
+	if (!mutex)
+		mutex = DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
 		payloads = DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
 		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
 
+	g_return_if_fail(mutex);
+	g_mutex_lock(mutex);
 	/* If sequence set, look for it and dispatch if found */
 	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
 	{
@@ -382,6 +401,7 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 			}
 		}
 	}
+	g_mutex_unlock(mutex);
 	freeems_packet_cleanup(packet);
 }
 

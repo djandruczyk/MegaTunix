@@ -56,6 +56,7 @@ struct _Detection_Test
 };
 
 /* Prototypes */
+void test_cleanup(gpointer);
 gboolean interrogate_ecu(void);
 gchar *request_firmware_version(void);
 gchar *request_interface_version(void);
