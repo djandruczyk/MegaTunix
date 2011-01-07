@@ -107,7 +107,7 @@ struct _Firmware_Details
 	gchar *status_map_file;	/*! runtime status map filename */
 	gchar *rt_command;	/*! New RT Command string */
 	gchar *get_all_command;	/*! New Get All Command string */
-	gchar *ve_command;	/*! New VE Command string */
+	gchar *read_command;	/*! New Read Command string */
 	gchar *write_command;	/*! New Write Command string */
 	gchar *table_write_command;	/*! Table Write Command string */
 	gchar *chunk_write_command;	/*! New Chunk Write Command string */

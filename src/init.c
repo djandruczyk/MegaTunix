@@ -721,7 +721,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup (firmware->status_map_file);
 		cleanup (firmware->rt_command);
 		cleanup (firmware->get_all_command);
-		cleanup (firmware->ve_command);
+		cleanup (firmware->read_command);
 		cleanup (firmware->write_command);
 		cleanup (firmware->table_write_command);
 		cleanup (firmware->chunk_write_command);

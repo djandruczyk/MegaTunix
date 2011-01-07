@@ -68,6 +68,8 @@ gboolean validate_and_load_tests(GArray **, GHashTable **);
 gboolean determine_ecu(GArray *, GHashTable *);
 gboolean check_for_match(GHashTable *, gchar *);
 void update_interrogation_gui_pf(void);
+gboolean load_firmware_details(Firmware_Details *, gchar *);
+gint translate_capabilities(const gchar *);
 
 /* Prototypes */
 

@@ -671,6 +671,8 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
 	gchar ** list = NULL;
+	gint major = 0;
+	gint minor = 0;
 
 
 	cfgfile = cfg_open_file((gchar *)filename);
@@ -703,6 +705,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 		g_free(tmpbuf);
 	}
 	/* Commands to map agaisnt the comm.xml */
+	if(!cfg_read_string(cfgfile,"parameters","RT_Command",&firmware->rt_command))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RT_Command\" variable not found in interrogation profile, ERROR\n"));
+
 	if(!cfg_read_string(cfgfile,"parameters","Get_All_Command",
 				&firmware->get_all_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"));
@@ -712,4 +717,90 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
 				&firmware->burn_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
+				&firmware->burn_command))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
+
+	/* Gui Section */
+	if(!cfg_read_string(cfgfile,"gui","LoadTabs",&tmpbuf))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"LoadTabs\" list not found in interrogation profile, ERROR\n"));
+	else
+	{
+		firmware->tab_list = g_strsplit(tmpbuf,",",0);
+		g_free(tmpbuf);
+	}
+	if(!cfg_read_string(cfgfile,"gui","TabConfs",
+				&tmpbuf))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"TabConfs\" list not found in interrogation profile, ERROR\n"));
+	else
+	{
+		firmware->tab_confs = g_strsplit(tmpbuf,",",0);
+		g_free(tmpbuf);
+	}
+	if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
+				&firmware->rtv_map_file))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_string(cfgfile,"gui","SliderMapFile",
+				&firmware->sliders_map_file))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
+	cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
+			&firmware->rtt_map_file);
+	/*              dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));*/
+	cfg_read_string(cfgfile,"gui","StatusMapFile",
+			&firmware->status_map_file);
+	/*              dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));*/
+
+	/* Megatunix Doesn't yet know how to deal with FreeEMS's locationID's
+	   which are semi-analagous to Pages in MS-land
+	 */
+	if (mem_alloc_f)
+		mem_alloc_f();
+	else
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFAILED TO LOCATE \"mem_alloc\" function within core/plugins"));
+
+	/* Display firmware version in the window... */
+
+	dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tDetected Firmware: %s\n",firmware->name));
+	thread_update_logbar_f("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE);
+	thread_update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE);
+
+	return TRUE;
 }
+
+
+
+/*!
+   \brief translate_capabilities() converts a stringlist into a mask of 
+    enumerations and returns it
+     \param string (gchar *) listing of capabilities in textual format
+      \returns an integer mask of the capabilites
+       */
+G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
+{
+	gchar **vector = NULL;
+	gint i = 0;
+	gint value = 0;
+	gint tmpi = 0;
+
+
+	if (!string)
+	{
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": translate_capabilities()\n\tstring fed is NULLs\n"));
+		return -1;
+	}
+
+	vector = g_strsplit(string,",",0);
+	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tstring fed is %s\n",string));
+	while (vector[i] != NULL)
+	{
+		dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tTrying to translate %s\n",vector[i]));
+		tmpi = translate_string_f(vector[i]);
+		dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": translate_capabilities()\n\tTranslated value of %s is %i\n",vector[i],value));
+		value += tmpi;
+		i++;
+	}
+
+	g_strfreev(vector);
+	return value;
+}
+
