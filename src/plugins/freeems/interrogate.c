@@ -517,9 +517,8 @@ gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 			DATA_SET(global_data,"firmware",firmware);
 		}
 
-/*		if (!load_firmware_details(firmware,filename))
+		if (!load_firmware_details(firmware,filename))
 			retval = FALSE;
-			*/
 	}
 	g_free(filename);
 	return(retval);
@@ -770,11 +769,11 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 
 
 /*!
-   \brief translate_capabilities() converts a stringlist into a mask of 
-    enumerations and returns it
-     \param string (gchar *) listing of capabilities in textual format
-      \returns an integer mask of the capabilites
-       */
+ \brief translate_capabilities() converts a stringlist into a mask of 
+ enumerations and returns it
+ \param string (gchar *) listing of capabilities in textual format
+ \returns an integer mask of the capabilites
+ */
 G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 {
 	gchar **vector = NULL;

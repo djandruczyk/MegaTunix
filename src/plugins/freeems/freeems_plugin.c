@@ -50,6 +50,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
 	get_symbol_f("get_file_api",(void *)&get_file_api_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
+	get_symbol_f("mem_alloc",(void *)&mem_alloc_f);
 	get_symbol_f("queue_function",(void *)&queue_function_f);
 	get_symbol_f("read_data",(void *)&read_data_f);
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);

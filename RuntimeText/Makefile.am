@@ -2,6 +2,7 @@ rttextdir = $(datadir)/MegaTunix/$(RTTEXT_DATA_DIR)
 
 rttext_files = 	\
 		DualTable.xml \
+		FreeEMS.xml \
 		JimStim-2.x.xml \
 		MS1-Std.xml \
 		MS2-Std.xml \

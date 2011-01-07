@@ -5,7 +5,7 @@ minor=5
 [realtime_map]
 persona=FreeEMS
 applicable_firmwares=FreeEMS 0.0.0
-derived_total=0
+derived_total=49
 
 [derived_0]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,real_lower,real_upper,log_by_default
