@@ -123,9 +123,9 @@
 			<type>_FUNC_CALL_</type>
 			<func_call_name>interrogate_ecu</func_call_name>
 			<defer_post_functions>FALSE</defer_post_functions>
-			<!--
 			<post_functions>
 				<function>update_interrogation_gui_pf</function>
+			<!--
 				<function>load_realtime_map_pf</function>
 				<function>initialize_dashboards_pf</function>
 				<function>load_status_pf</function>
@@ -138,8 +138,8 @@
 				<function>reset_temps_pf</function>
 				<function>startup_default_timeouts_pf</function>
 				<function>ready_msg_pf</function>
+				-->
 			</post_functions>
-			-->
 		</cmd>
 	</commands>
 </comms>

@@ -79,8 +79,8 @@ phys_ecu_page=0
 length=125
 
 [interrogation]
-match_on=IFACE_VER,FW_VER
-IFACE_VER=_REGEX_,FreeEMS Vanilla
+match_on=FW_VER
+#IFACE_VER=_REGEX_,FreeEMS Vanilla
 FW_VER=_REGEX_,FreeEMS Vanilla 0.1.2 SNAPSHOT
 
 [gui]

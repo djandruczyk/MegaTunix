@@ -71,3 +71,4 @@ G_MODULE_EXPORT void stop_streaming(void)
 		freeems_packet_cleanup(packet);
 	return;
 }
+

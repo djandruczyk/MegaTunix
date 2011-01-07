@@ -17,7 +17,9 @@
 #include <api-versions.h>
 #include <config.h>
 #include <configfile.h>
+#include <crx.h>
 #include <debugging.h>
+#include <firmware.h>
 #include <getfiles.h>
 #include <gtk/gtk.h>
 #include <interrogate.h>
@@ -42,11 +44,6 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	GHashTable *tests_hash = NULL;
 	GArray *tests = NULL;
 	Detection_Test *test = NULL;
-	gchar *version = NULL;
-	gchar *fw_version = NULL;
-	guint8 major = 0;
-	guint8 minor = 0;
-	guint8 micro = 0;
 	gint i = 0;
 	gboolean interrogated = FALSE;
 	GList *locations = NULL;
@@ -80,11 +77,15 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		test = g_array_index(tests,Detection_Test *, i);
 		/* Check func existance and run it */
 		if (test->function)
-			test->result = test->function();
+		{
+			test->result = test->function(&test->num_bytes);
+			if (test->result_type == RESULT_TEXT)
+				test->result_str = g_strndup((const gchar *)(test->result),test->num_bytes);
+		}
 		else
 			test->result = NULL;
 	}
-//	interrogated = determine_ecu(tests,tests_hash);
+	interrogated = determine_ecu(tests,tests_hash);
 	DATA_SET(global_data,"interrogated",GINT_TO_POINTER(interrogated));
 	if (interrogated)
 	{
@@ -95,42 +96,12 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	g_array_free(tests,TRUE);
 	g_hash_table_destroy(tests_hash);
 
-
-	/* Request firmware version */
-	fw_version = request_firmware_version();
-	update_logbar_f("interr_view",NULL,g_strdup_printf(_("Firmware Version request returned %i bytes (%s)\n"),(gint)strlen(fw_version),fw_version),FALSE,FALSE,TRUE);
-	thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strdup(fw_version));
-	g_free(fw_version);
-
-	/* Request interface version */
-	/* version = request_detailed_interface_version(&major, &minor, &micro);*/
-	version = request_interface_version();
-	update_logbar_f("interr_view",NULL,g_strdup_printf(_("Interface Version request returned %i bytes ( %i.%i.%i %s)\n"),(gint)strlen(version)+3,major,minor,micro,version),FALSE,FALSE,TRUE);
-
-	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
-	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
-	g_free(version);
-
-	/* Request List of location ID's */
-	locations = request_location_ids();
-	if (locations)
-	{
-		update_logbar_f("interr_view",NULL,g_strdup_printf(_("Location ID Query returned %i locationID's.\n"),g_list_length(locations)),FALSE,FALSE,TRUE);
-
-		for (i=0;i<g_list_length(locations);i++)
-		{
-			printf("Locations ID %i\n",(gint)g_list_nth_data(locations,i));
-		}
-		g_list_free(locations);
-	}
-	else
-		update_logbar_f("interr_view",NULL,g_strdup_printf(_("Location ID Query FAILED to return any locationID's.\n")),FALSE,FALSE,TRUE);
-	/* FreeEMS Interrogator NOT WRITTEN YET */
-	return TRUE;
+	g_static_mutex_unlock(&mutex);
+	return interrogated;
 }
 
 
-gchar *request_firmware_version(void)
+gchar *request_firmware_version(gint *len)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -142,7 +113,6 @@ gchar *request_firmware_version(void)
 	guint8 *buf = NULL;
 	guint8 pkt[FIRM_REQ_PKT_LEN];
 	gint res = 0;
-	gint len = 0;
 	gint i = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
@@ -159,7 +129,7 @@ gchar *request_firmware_version(void)
 	buf = finalize_packet((guint8 *)&pkt,FIRM_REQ_PKT_LEN,&tmit_len);
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
-	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, &len))
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
 		g_free(buf);
@@ -182,14 +152,15 @@ gchar *request_firmware_version(void)
 	if (packet)
 	{
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-
+		if (len)
+			*len = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
 	return version;
 }
 
 
-gchar * request_interface_version(void)
+gchar * request_interface_version(gint *len)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -201,7 +172,6 @@ gchar * request_interface_version(void)
 	/* Raw packet */
 	guint8 pkt[INTVER_REQ_PKT_LEN];
 	gint res = 0;
-	gint len = 0;
 	gint i = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
@@ -218,7 +188,7 @@ gchar * request_interface_version(void)
 	buf = finalize_packet((guint8 *)&pkt,INTVER_REQ_PKT_LEN,&tmit_len);
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
-	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, &len))
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		g_free(buf);
@@ -241,6 +211,8 @@ gchar * request_interface_version(void)
 	if (packet)
 	{
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
+		if (len)
+			*len = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
 	return version;
@@ -276,7 +248,7 @@ gchar * request_detailed_interface_version(guint8 *major, guint8 *minor, guint8 
 	buf = finalize_packet((guint8 *)&pkt,INTVER_REQ_PKT_LEN,&tmit_len);
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
-	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, &len))
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		g_free(buf);
@@ -311,7 +283,7 @@ gchar * request_detailed_interface_version(guint8 *major, guint8 *minor, guint8 
 /*
  \brief Queries the ECU for a location ID list
  */
-GList *request_location_ids(void)
+GList *request_location_ids(gint * len)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -323,7 +295,6 @@ GList *request_location_ids(void)
 	/* Raw packet */
 	guint8 pkt[LOC_ID_LIST_REQ_PKT_LEN];
 	gint res = 0;
-	gint len = 0;
 	gint i = 0;
 	gint h = 0;
 	gint l = 0;
@@ -349,7 +320,7 @@ GList *request_location_ids(void)
 	buf = finalize_packet((guint8 *)&pkt,LOC_ID_LIST_REQ_PKT_LEN,&tmit_len);
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LIST_OF_LOCATION_IDS);
-	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, &len))
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LIST_OF_LOCATION_IDS);
 		g_free(buf);
@@ -373,6 +344,8 @@ GList *request_location_ids(void)
 			tmpi = (h << 8) + l;
 			list = g_list_append(list,GINT_TO_POINTER(tmpi));
 		}
+		if (len)
+			*len = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
 	return list;
@@ -475,3 +448,217 @@ void test_cleanup(gpointer data)
 	cleanup_f(test);
 }
 
+
+gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
+{
+	gboolean retval = TRUE;
+	gint i = 0;
+	Detection_Test *test = NULL;
+	gint num_tests = tests->len;
+	gboolean match = FALSE;
+	gchar * filename = NULL;
+	gchar ** filenames = NULL;
+	GArray *classes = NULL;
+	Firmware_Details *firmware = NULL;
+	extern gconstpointer *global_data;
+
+	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
+	if (!filenames)
+	{
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": determine_ecu()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"));
+		return FALSE;
+	}
+
+	i = 0;
+	while (filenames[i])
+	{
+		if (check_for_match(tests_hash,filenames[i]))
+		{
+			match = TRUE;
+			filename = g_strdup(filenames[i]);
+			break;
+		}
+		i++;
+	}
+	g_strfreev(filenames);
+	g_array_free(classes,TRUE);
+	/* Update the screen with the data... */
+	for (i=0;i<num_tests;i++)
+	{
+		test = g_array_index(tests,Detection_Test *,i);
+		if (test->result_type == RESULT_DATA)
+		{
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\tCommand (%s), returned %i byts\n",test->test_desc,test->num_bytes));
+			thread_update_logbar_f("interr_view","info",g_strdup_printf("\tCommand (%s), returned %i bytes)\n",test->test_desc,test->num_bytes),FALSE,FALSE);
+		}
+		if (test->result_type == RESULT_TEXT)
+		{
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\tCommand (%s), returned (%s)\n",test->test_desc,test->result_str));
+			thread_update_logbar_f("interr_view","info",g_strdup_printf("\tCommand (%s), returned (%s)\n",test->test_desc,test->result_str),FALSE,FALSE);
+		}
+		else if (test->result_type == RESULT_LIST)
+		{
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\tCommand (%s), returned %i elements\n",test->test_desc,g_list_length((GList *)test->result)));
+			thread_update_logbar_f("interr_view","info",g_strdup_printf("\tCommand (%s), returned %i elements\n",test->test_desc,g_list_length((GList *)test->result)),FALSE,FALSE);
+		}
+	}
+	if (match == FALSE) /* (we DID NOT find one) */
+	{
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__":\n\tdetermine_ecu()\n\tFirmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
+		update_logbar_f("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE,TRUE);
+		retval = FALSE;
+	}
+	else
+	{
+		if (!firmware)
+		{
+			firmware = g_new0(Firmware_Details,1);
+			DATA_SET(global_data,"firmware",firmware);
+		}
+
+/*		if (!load_firmware_details(firmware,filename))
+			retval = FALSE;
+			*/
+	}
+	g_free(filename);
+	return(retval);
+}
+
+
+/*!
+ \brief check_for_match() compares the resutls of the interrogation with the
+ ECU to the canidates in turn. When a match occurs TRUE is returned
+ otherwise it returns FALSE
+ \param cmd_array (GArray *) array of commands
+ \param potential (Canidate *) potential 
+ \param canidate (Canidate *) Canidate
+ \returns TRUE on match, FALSE on failure
+ */
+G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
+{
+	ConfigFile *cfgfile = NULL;
+	Detection_Test *test = NULL;
+	guint i = 0;
+	gint len = 0;
+	gboolean pass = FALSE;
+	gchar * tmpbuf = NULL;
+	gchar ** vector = NULL;
+	gchar ** match_on = NULL;
+	gint major = 0;
+	gint minor = 0;
+	MatchClass class = 0;
+
+	cfgfile = cfg_open_file(filename);
+	if (!cfgfile)
+		return FALSE;
+
+	get_file_api_f(cfgfile,&major,&minor);
+	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
+	{
+		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
+		cfg_free(cfgfile);
+		return FALSE;
+	}
+
+	if (cfg_read_string(cfgfile,"interrogation","match_on",&tmpbuf) == FALSE)
+		printf(_("ERROR:!! \"match_on\" key missing from interrogation profile [interrogation] section\n"));
+	match_on = g_strsplit(tmpbuf,",",-1);
+	g_free(tmpbuf);
+
+	for (i=0;i<g_strv_length(match_on);i++)
+	{
+		pass = FALSE;
+		/*printf("checking for match on %s\n",match_on[i]);*/
+		test = g_hash_table_lookup(tests_hash,match_on[i]);
+		if (!test)
+		{
+			printf(_("ERROR test data not found for test \"%s\"\n"),match_on[i]);
+			continue;
+		}
+
+		/* If the test_name is NOT IN the interrogation profile,  we 
+		 * abort as it's NOT match
+		 */
+		if (!cfg_read_string(cfgfile,"interrogation",test->test_name,&tmpbuf))
+		{
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
+			cfg_free(cfgfile);
+			g_strfreev(match_on);
+			return FALSE;
+		}
+		vector = g_strsplit(tmpbuf,",",-1);
+		g_free(tmpbuf);
+		/* Possible choices are "Count", "submatch" and "fullmatch", so
+		 * stringparse to get them into a consistent form
+		 */
+		if (g_strv_length(vector) != 2)
+			printf(_("ERROR interrogation check_for match vector does NOT have two args it has %i\n"),g_strv_length(vector));
+		class = translate_string_f(vector[0]);
+		/*printf("potential data is %s\n",vector[1]);*/
+		switch (class)
+		{
+			case COUNT:
+				if (test->num_bytes == atoi(vector[1]))
+					pass=TRUE;
+				break;
+			case NUMMATCH:
+				if ((gint)(test->result_str[0]) == atoi(vector[1]))
+					pass=TRUE;
+				break;
+			case SUBMATCH:
+				if (strstr(test->result_str,vector[1]) != NULL)
+					pass=TRUE;
+				break;
+			case FULLMATCH:
+				if (g_ascii_strcasecmp(test->result_str,vector[1]) == 0)
+					pass=TRUE;
+				break;
+			case REGEX:
+				if (regex(vector[1],test->result_str,&len))
+					pass=TRUE;
+				break;
+			default:
+				pass=FALSE;
+		}
+		g_strfreev(vector);
+		if (pass == TRUE)
+			continue;
+		else
+		{
+			dbg_func_f(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\tMISMATCH,\"%s\" is NOT a match...\n\n",filename));
+			g_strfreev(match_on);
+			cfg_free(cfgfile);
+			return FALSE;
+		}
+
+	}
+	g_strfreev(match_on);
+	dbg_func_f(INTERROGATOR,g_strdup_printf("\n"__FILE__": check_for_match()\n\t\"%s\" is a match for all conditions ...\n\n",filename));
+	cfg_free(cfgfile);
+	return TRUE;
+}
+
+
+
+G_MODULE_EXPORT void update_interrogation_gui_pf(void)
+{
+	gchar *version = NULL;
+	gchar *fw_version = NULL;
+	guint8 major = 0;
+	guint8 minor = 0;
+	guint8 micro = 0;
+
+	if (!DATA_GET(global_data,"interrogated"))
+		return;
+	/* Request firmware version */
+	fw_version = request_firmware_version(NULL);
+	thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strdup(fw_version));
+	g_free(fw_version);
+
+	/* Request interface version */
+	version = request_detailed_interface_version(&major, &minor, &micro);
+	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
+	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
+	g_free(version);
+
+}

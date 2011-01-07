@@ -50,19 +50,24 @@ struct _Detection_Test
 	gchar *test_name;	/* Friendly test name, like "MS-II_RTvars" */
 	gchar *test_desc;	/* Gui displayed test description */
 	gchar *test_func;	/* Function to run */
-	void *(*function)(void);/* Function Pointer */
+	void *(*function)(gint *);/* Function Pointer */
 	guint32 result_type;	/* DATA,TEXT or LIST */
 	void *result;		/* Result of test stored for matching */
+	gchar *result_str;	/* String version of result */
+	gint num_bytes;		/* number of bytes in returned string */
 };
 
 /* Prototypes */
 void test_cleanup(gpointer);
 gboolean interrogate_ecu(void);
-gchar *request_firmware_version(void);
-gchar *request_interface_version(void);
+gchar *request_firmware_version(gint *);
+gchar *request_interface_version(gint *);
+GList *request_location_ids(gint *);
 gchar *request_detailed_interface_version(guint8 *, guint8 *, guint8 *);
-GList *request_location_ids(void);
 gboolean validate_and_load_tests(GArray **, GHashTable **);
+gboolean determine_ecu(GArray *, GHashTable *);
+gboolean check_for_match(GHashTable *, gchar *);
+void update_interrogation_gui_pf(void);
 
 /* Prototypes */
 

@@ -253,7 +253,8 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 		res = write(fd,buf,count);
 		/*              printf("result of write is %i\n",res); */
 	}
-	*len = res;
+	if (len)
+		*len = res;
 	if (res < 0)
 	{
 		printf(_("Write error! \"%s\"\n"),strerror(errno));
