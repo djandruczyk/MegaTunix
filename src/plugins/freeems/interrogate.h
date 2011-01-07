@@ -24,7 +24,8 @@
 typedef enum
 {
 	RESULT_DATA=0x440,
-	RESULT_TEXT
+	RESULT_TEXT,
+	RESULT_LIST
 }Test_Result;
 
 typedef enum
@@ -36,12 +37,31 @@ typedef enum
 	REGEX
 }MatchClass;
 
+/*!
+ \brief The _Detection_Test struct holds the basics for each ECU test.
+ a friendly human readable test name (this matches up eith test names in the 
+ actual profile), the actual_test string (a machine parsable form), and a 
+ test_vector,  which is the result of splitting up the actual_test string into
+ it's component parts. 
+ */
+typedef struct _Detection_Test Detection_Test;
+struct _Detection_Test
+{
+	gchar *test_name;	/* Friendly test name, like "MS-II_RTvars" */
+	gchar *test_desc;	/* Gui displayed test description */
+	gchar *test_func;	/* Function to run */
+	void *(*function)(void);/* Function Pointer */
+	guint32 result_type;	/* DATA,TEXT or LIST */
+	void *result;		/* Result of test stored for matching */
+};
 
 /* Prototypes */
 gboolean interrogate_ecu(void);
-void request_firmware_version(gchar **);
-void request_interface_version(gchar **, guint8 *, guint8 *, guint8 *);
+gchar *request_firmware_version(void);
+gchar *request_interface_version(void);
+gchar *request_detailed_interface_version(guint8 *, guint8 *, guint8 *);
 GList *request_location_ids(void);
+gboolean validate_and_load_tests(GArray **, GHashTable **);
 
 /* Prototypes */
 

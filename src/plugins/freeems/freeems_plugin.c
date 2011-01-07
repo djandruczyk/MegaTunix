@@ -46,12 +46,15 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	get_symbol_f("dump_output",(void *)&dump_output_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
+	get_symbol_f("get_file_api",(void *)&get_file_api_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
 	get_symbol_f("queue_function",(void *)&queue_function_f);
 	get_symbol_f("read_data",(void *)&read_data_f);
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
+	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);
+	get_symbol_f("translate_string",(void *)&translate_string_f);
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 	get_symbol_f("warn_user",(void *)&warn_user_f);
 	get_symbol_f("write_wrapper",(void *)&write_wrapper_f);
