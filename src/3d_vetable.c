@@ -74,6 +74,7 @@ static GHashTable *winstat = NULL;
 static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 
+static gboolean delayed_expose(gpointer);
 
 /* let's get what we need and calculate FPS */
 
@@ -564,14 +565,20 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK(set_scaling_mode),
 			NULL);
 
-	/* Wireframe/solid toggle */
-	button = gtk_check_button_new_with_label("Wireframe or Solid");
+	/* Wireframe toggle */
+	button = gtk_radio_button_new_with_label(NULL,"Wireframe Rendering");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),ve_view->wireframe);
 	OBJ_SET(button,"ve_view",ve_view);
 	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,TRUE,0);
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(set_rendering_mode),
 			NULL);
+
+	/* Solid toggle */
+	button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(button),"Solid Rendering");
+	OBJ_SET(button,"ve_view",ve_view);
+	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,TRUE,0);
+
 
 	/* Opacity Slider */
 	scale = gtk_hscale_new_with_range(0.1,1.0,0.001);
@@ -615,6 +622,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_widget_show_all(window);
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+//	g_timeout_add(1000,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -747,12 +755,17 @@ we don't
  */
 G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	GdkGLContext *glcontext = gtk_widget_get_gl_context(widget);
-	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable(widget);
+	GdkGLContext *glcontext = NULL;
+	GdkGLDrawable *gldrawable = NULL;
 	Ve_View_3D *ve_view = NULL;
 	Cur_Vals *cur_vals = NULL;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
+	if (!GTK_WIDGET_REALIZED(widget))
+		return FALSE;
+
+	glcontext = gtk_widget_get_gl_context(widget);
+	gldrawable = gtk_widget_get_gl_drawable(widget);
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
 	/*printf("expose event \n");*/
 
@@ -893,8 +906,6 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	GdkGLProc proc = NULL;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
-	/*printf("realize\n");*/
-
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return;
@@ -2533,8 +2544,7 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->fixed_scale = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	ve_view->mesh_created=FALSE;
-	gdk_window_invalidate_rect (widget->window, &widget->allocation,FALSE);
-
+	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 	return TRUE;
 }
 
@@ -2548,6 +2558,7 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->wireframe = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 	return TRUE;
 }
 
@@ -2561,6 +2572,7 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->opacity = gtk_range_get_value(GTK_RANGE(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 	return TRUE;
 }
 
@@ -2716,4 +2728,14 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		}
 	}
 	ve_view->mesh_created = TRUE;
+}
+
+
+gboolean delayed_expose(gpointer data)
+{
+	Ve_View_3D *ve_view = (Ve_View_3D *)data;
+
+	printf("delayed expose\n");
+	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
+	return FALSE;
 }
