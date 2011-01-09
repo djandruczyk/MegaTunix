@@ -842,7 +842,7 @@
                                         <child>
                                           <widget class="GtkLabel" id="label15">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes">MegaSquirt ECU Information</property>
+                                            <property name="label" translatable="yes">ECU Information</property>
                                             <property name="use_markup">True</property>
                                           </widget>
                                           <packing>
@@ -1600,7 +1600,7 @@
                                 <child>
                                   <widget class="GtkLabel" id="label25">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">MegaSquirt I/O Statistics</property>
+                                    <property name="label" translatable="yes">I/O Statistics</property>
                                     <property name="use_markup">True</property>
                                   </widget>
                                   <packing>

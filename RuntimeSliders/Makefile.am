@@ -2,6 +2,7 @@ rtsliderdir = $(datadir)/MegaTunix/$(RTSLIDERS_DATA_DIR)
 
 rtslider_files = 	README \
 			DualTable.xml \
+			FreeEMS.xml \
 			JimStim-2.x.xml \
 			MSnS-Extra.xml \
 			MS1-Std.xml \

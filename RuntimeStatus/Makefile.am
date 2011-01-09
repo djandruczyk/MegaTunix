@@ -1,6 +1,7 @@
 rtstatusdir = $(datadir)/MegaTunix/$(RTSTATUS_DATA_DIR)
 
 rtstatus_files = \
+		FreeEMS.xml \
 		JimStim-2.x.xml \
 		MS1-Std.xml \
 		MS2-Std.xml \

@@ -345,7 +345,7 @@
         <child>
           <widget class="GtkLabel" id="topframe_title">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">MegaSquirt Visual Log Viewer</property>
+            <property name="label" translatable="yes">Visual Log Viewer</property>
           </widget>
           <packing>
             <property name="type">label_item</property>
