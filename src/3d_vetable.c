@@ -809,6 +809,8 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glTranslatef (-0.5, -0.5, -0.5);
 
 	/* Draw everything */
+	if (GTK_WIDGET_IS_SENSITIVE(widget))
+	{
 	cur_vals = get_current_values(ve_view);
 	ve3d_calculate_scaling(ve_view,cur_vals);
 	if (!ve_view->mesh_created)
@@ -821,11 +823,9 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	free_current_values(cur_vals);
 	CalculateFrameRate();
 	/* Grey things out if we're supposed to be insensitive */
-	if (!GTK_WIDGET_IS_SENSITIVE(widget))
-	{
-		printf("grey it!\n");
-		ve3d_grey_window(ve_view);
 	}
+	else
+		ve3d_grey_window(ve_view);
 
 	gdk_gl_drawable_swap_buffers (gldrawable);
 	glFlush ();
@@ -1249,8 +1249,7 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
 
 
 /*!
- \brief ve3d_draw_runtime_indicator is called during rerender and draws 
-the
+ \brief ve3d_draw_runtime_indicator is called during rerender and draws the
  green dot which tells where the engine is running at this instant.
  */
 G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
@@ -1288,7 +1287,7 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 
 	/* Tail, last val. */
 	glLineWidth(MIN(w,h)/90.0);
-	glColor3f(0.0,0.0,0.50);
+	glColor3f(0.0,0.0,0.25);
 	if (ve_view->fixed_scale)
 	{
 		tmpf4 = get_fixed_pos(ve_view,cur_val->p_x_vals[2],_X_);
@@ -1312,13 +1311,15 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
 	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
 
+	/*
 	glPointSize(MIN(w,h)/90.0);
 	glBegin(GL_POINTS);
 	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glEnd();
+	*/
 
 	/* Tail, second last val. */
-	glColor3f(0.0,0.0,0.65);
+	glColor3f(0.0,0.0,0.50);
 	if (ve_view->fixed_scale)
 	{
 		tmpf1 = get_fixed_pos(ve_view,cur_val->p_x_vals[1],_X_);
@@ -1342,10 +1343,12 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	tmpf3 = tmpf3 > 1.0 ? 1.0:tmpf3;
 	tmpf3 = tmpf3 < 0.0 ? 0.0:tmpf3;
 
+	/*
 	glPointSize(MIN(w,h)/75.0);
 	glBegin(GL_POINTS);
 	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glEnd();
+	*/
 
 	glBegin(GL_LINE_STRIP);
 	/* If anything out of bounds change color and clamp! */
@@ -1358,7 +1361,7 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	glVertex3f(tmpf4,tmpf5,tmpf6);
 	glEnd();
 
-	/* Tail, third from last val. */
+	/* Tail, last val. */
 	glColor3f(0.0,0.0,0.80);
 	if (ve_view->fixed_scale)
 	{
@@ -1383,10 +1386,12 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	tmpf6 = tmpf6 > 1.0 ? 1.0:tmpf6;
 	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
 
+	/*
 	glPointSize(MIN(w,h)/65.0);
 	glBegin(GL_POINTS);
 	glVertex3f(tmpf1,tmpf2,tmpf3);
 	glEnd();
+	*/
 
 	glBegin(GL_LINE_STRIP);
 	/* If anything out of bounds change color and clamp! */
