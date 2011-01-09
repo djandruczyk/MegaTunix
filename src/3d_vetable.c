@@ -622,7 +622,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_widget_show_all(window);
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-//	g_timeout_add(1000,delayed_expose,ve_view);
+	g_timeout_add(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -2735,7 +2735,6 @@ gboolean delayed_expose(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
 
-	printf("delayed expose\n");
 	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 	return FALSE;
 }
