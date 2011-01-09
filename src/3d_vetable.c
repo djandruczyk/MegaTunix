@@ -557,28 +557,46 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK(set_tracking_focus),
 			NULL);
 
-	/* Fixed/Prop scale toggle */
-	button = gtk_check_button_new_with_label("Fixed Scale or Proportional");
-	OBJ_SET(button,"ve_view",ve_view);
-	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,TRUE,0);
-	g_signal_connect(G_OBJECT(button), "toggled",
-			G_CALLBACK(set_scaling_mode),
-			NULL);
-
+	/* Table for rendering mode */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_box_pack_end(GTK_BOX(vbox2),table,FALSE,FALSE,0);
+	label = gtk_label_new("Rendering Mode");
+	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,0,0,0,0);
 	/* Wireframe toggle */
-	button = gtk_radio_button_new_with_label(NULL,"Wireframe Rendering");
+	button = gtk_radio_button_new_with_label(NULL,"Wireframe");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),ve_view->wireframe);
 	OBJ_SET(button,"ve_view",ve_view);
-	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,TRUE,0);
+	gtk_table_attach(GTK_TABLE(table),button,0,1,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(set_rendering_mode),
 			NULL);
 
 	/* Solid toggle */
-	button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(button),"Solid Rendering");
+	button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(button),"Solid");
 	OBJ_SET(button,"ve_view",ve_view);
-	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,TRUE,0);
+	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 
+
+	/* Table for Scaling mode */
+	table = gtk_table_new(2,2,TRUE);
+	gtk_box_pack_end(GTK_BOX(vbox2),table,FALSE,FALSE,0);
+	label = gtk_label_new("Axis Scale");
+	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,0,0,0,0);
+
+	/* Fixed Scale toggle */
+	button = gtk_radio_button_new_with_label(NULL,"Fixed");
+	OBJ_SET(button,"ve_view",ve_view);
+	gtk_table_attach(GTK_TABLE(table),button,0,1,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+	g_signal_connect(G_OBJECT(button), "toggled",
+			G_CALLBACK(set_scaling_mode),
+			NULL);
+
+	/* Prop Scale toggle */
+	button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(button),"Proportional");
+
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),!ve_view->fixed_scale);
+	OBJ_SET(button,"ve_view",ve_view);
+	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 
 	/* Opacity Slider */
 	scale = gtk_hscale_new_with_range(0.1,1.0,0.001);
@@ -1056,10 +1074,12 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 	/* Draw QUAD MESH */
-	for(y=0;y<ve_view->y_bincount-1;++y)
+	//for(y=0;y<ve_view->y_bincount-1;++y)
+	for(y=ve_view->y_bincount-1;y >= 0;y--)
 	{
 		glBegin(GL_QUADS);
-		for(x=0;x<ve_view->x_bincount-1;++x)
+		//for(x=0;x<ve_view->x_bincount-1;++x)
+		for(x=ve_view->x_bincount-1;x >= 0;x--)
 		{
 			quad = ve_view->quad_mesh[x][y];
 			/* (0x,0y) */
@@ -1080,10 +1100,12 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	if (!ve_view->wireframe)  /* render black grid on main grid */
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		for(y=0;y<ve_view->y_bincount-1;++y)
+		//for(y=0;y<ve_view->y_bincount-1;++y)
+		for(y=ve_view->y_bincount-1;y>=0;y--)
 		{
 			glBegin(GL_QUADS);
-			for(x=0;x<ve_view->x_bincount-1;++x)
+			//for(x=0;x<ve_view->x_bincount-1;++x)
+			for(x=ve_view->x_bincount-1;x>=0;x--)
 			{
 				glColor4f(0,0,0, 1);
 				quad = ve_view->quad_mesh[x][y];
@@ -1098,7 +1120,8 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			}
 			glEnd();
 			glBegin(GL_QUADS);
-			for(x=0;x<ve_view->x_bincount-1;++x)
+			//for(x=0;x<ve_view->x_bincount-1;++x)
+			for(x=ve_view->x_bincount-1;x>=0;x--)
 			{
 				glColor4f(0,0,0, 1);
 				quad = ve_view->quad_mesh[x][y];
