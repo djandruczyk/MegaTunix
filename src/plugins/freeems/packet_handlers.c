@@ -176,12 +176,13 @@ void *packet_handler(gpointer data)
 	GTimeVal tval;
 	FreeEMS_Packet *packet = NULL;
 	GAsyncQueue *queue = DATA_GET(global_data,"packet_queue");
-	GCond *cond = DATA_GET(global_data,"packet_handler_cond");
+	GCond *cond = NULL;
 
 	while(TRUE)
 	{
 		if (DATA_GET(global_data,"leaving"))
 		{
+			cond = DATA_GET(global_data,"packet_handler_cond");
 			if (cond)
 				g_cond_signal(cond);
                         g_thread_exit(0);

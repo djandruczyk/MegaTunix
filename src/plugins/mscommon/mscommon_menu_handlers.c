@@ -203,13 +203,13 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	size = firmware->table_params[table]->x_size;
 	mult = get_multiplier_f(size);
 
-	evaluator = eval_create_f(firmware->table_params[table]->x_ul_conv_expr);
+	evaluator = evaluator_create_f(firmware->table_params[table]->x_ul_conv_expr);
 
 	/* fetch us a copy of the x bins */
 	for (i=0; i != firmware->table_params[table]->x_bincount; i++)
-		x_bin[i] = eval_x_f(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
+		x_bin[i] = evaluator_evaluate_x_f(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
 
-	eval_destroy_f(evaluator);
+	evaluator_destroy_f(evaluator);
 
 	/* Find bin corresponding to load  */
 	page = firmware->table_params[table]->y_page;
@@ -217,13 +217,13 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	size = firmware->table_params[table]->y_size;
 	mult = get_multiplier_f(size);
 
-	evaluator = eval_create_f(firmware->table_params[table]->y_ul_conv_expr);
+	evaluator = evaluator_create_f(firmware->table_params[table]->y_ul_conv_expr);
 
 	/* fetch us a copy of the y bins */
 	for (i=0; i != firmware->table_params[table]->y_bincount; i++)
-		y_bin[i] = eval_x_f(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
+		y_bin[i] = evaluator_evaluate_x_f(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
 
-	eval_destroy_f(evaluator);
+	evaluator_destroy_f(evaluator);
 
 	page = firmware->table_params[table]->z_page;
 	base = firmware->table_params[table]->z_base;

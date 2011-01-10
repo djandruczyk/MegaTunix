@@ -37,6 +37,7 @@
 
 extern gconstpointer *global_data;
 
+
 /*!
  \brief load_rt_text_pf() is called to load up the runtime text configurations
  from the file specified in the firmware's interrogation profile, and populate
@@ -115,7 +116,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 
 	/*Get the root element node */
 	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT);
-	DATA_SET_FULL(global_data,"rtt_model",store,gtk_list_store_clear);
+	DATA_SET(global_data,"rtt_model",store);
 	treeview = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	gtk_box_pack_start(GTK_BOX(parent),treeview,TRUE,TRUE,0);
 	setup_rtt_treeview(treeview);
@@ -220,7 +221,6 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
-	rtt = g_malloc0(sizeof(Rt_Text));
 
 	if (!rtv_map)
 	{
@@ -234,6 +234,7 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 		return NULL;
 	}
 
+	rtt = g_malloc0(sizeof(Rt_Text));
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
@@ -508,4 +509,5 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	}
 	return FALSE;
 }
+
 

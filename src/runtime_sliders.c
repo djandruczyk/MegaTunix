@@ -282,7 +282,7 @@ G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_n
 	table = lookup_widget(name);
 	if (!table)
 	{
-		//		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name));
 		g_free(name);
 		return NULL;
 	}

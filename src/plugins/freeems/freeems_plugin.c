@@ -93,18 +93,22 @@ G_MODULE_EXPORT void plugin_shutdown()
 	if (cond)
 		g_cond_free(cond);
 	DATA_SET(global_data,"serial_reader_cond",NULL);
+	cond = NULL;
 	cond = DATA_GET(global_data,"packet_handler_cond");
 	if (cond)
 		g_cond_free(cond);
 	DATA_SET(global_data,"packet_handler_cond",NULL);
+	cond = NULL;
 	hash = DATA_GET(global_data,"sequence_num_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
 	DATA_SET(global_data,"sequence_num_queue_hash",NULL);
+	hash = NULL;
 	hash = DATA_GET(global_data,"payload_id_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
 	DATA_SET(global_data,"payload_id_queue_hash",NULL);
+	hash = NULL;
 	mutex = DATA_GET(global_data,"queue_mutex");
 	if (mutex)
 		g_mutex_free(mutex);

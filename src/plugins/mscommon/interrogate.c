@@ -939,11 +939,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = eval_create_f(multi->ul_conv_expr);
+					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = eval_create_f(multi->dl_conv_expr);
+					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
@@ -959,9 +959,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->x_ul_eval = eval_create_f(firmware->table_params[i]->x_ul_conv_expr);
+			firmware->table_params[i]->x_ul_eval = evaluator_create_f(firmware->table_params[i]->x_ul_conv_expr);
 			g_assert(firmware->table_params[i]->x_ul_eval);
-			firmware->table_params[i]->x_dl_eval = eval_create_f(firmware->table_params[i]->x_dl_conv_expr);
+			firmware->table_params[i]->x_dl_eval = evaluator_create_f(firmware->table_params[i]->x_dl_conv_expr);
 			g_assert(firmware->table_params[i]->x_dl_eval);
 		}
 		/* Check for multi source table handling */
@@ -989,11 +989,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = eval_create_f(multi->ul_conv_expr);
+					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = eval_create_f(multi->dl_conv_expr);
+					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
@@ -1009,8 +1009,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->y_ul_eval = eval_create_f(firmware->table_params[i]->y_ul_conv_expr);
-			firmware->table_params[i]->y_dl_eval = eval_create_f(firmware->table_params[i]->y_dl_conv_expr);
+			firmware->table_params[i]->y_ul_eval = evaluator_create_f(firmware->table_params[i]->y_ul_conv_expr);
+			firmware->table_params[i]->y_dl_eval = evaluator_create_f(firmware->table_params[i]->y_dl_conv_expr);
 		}
 
 		/* Check for multi source table handling */
@@ -1038,11 +1038,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				multi->ul_conv_expr = g_strdup(ul_conv_exprs[j]);
 				multi->dl_conv_expr = g_strdup(dl_conv_exprs[j]);
 				if (multi->ul_conv_expr)
-					multi->ul_eval = eval_create_f(multi->ul_conv_expr);
+					multi->ul_eval = evaluator_create_f(multi->ul_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ ul_conv_exprs is NULL for table %i\n",i));
 				if (multi->dl_conv_expr)
-					multi->dl_eval = eval_create_f(multi->dl_conv_expr);
+					multi->dl_eval = evaluator_create_f(multi->dl_conv_expr);
 				else
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ dl_conv_exprs is NULL for table %i\n",i));
 				multi->suffix = g_strdup(suffixes[j]);
@@ -1058,8 +1058,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		else
 		{
-			firmware->table_params[i]->z_ul_eval = eval_create_f(firmware->table_params[i]->z_ul_conv_expr);
-			firmware->table_params[i]->z_dl_eval = eval_create_f(firmware->table_params[i]->z_dl_conv_expr);
+			firmware->table_params[i]->z_ul_eval = evaluator_create_f(firmware->table_params[i]->z_ul_conv_expr);
+			firmware->table_params[i]->z_dl_eval = evaluator_create_f(firmware->table_params[i]->z_dl_conv_expr);
 		}
 	}
 	if (mem_alloc_f)

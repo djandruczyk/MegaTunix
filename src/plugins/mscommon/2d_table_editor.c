@@ -698,14 +698,14 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 
-	evaluator = eval_create_f(firmware->te_params[table_num]->x_ul_conv_expr);
-	firmware->te_params[table_num]->x_2d_lower_limit = eval_x_f(evaluator,firmware->te_params[table_num]->x_raw_lower);
-	firmware->te_params[table_num]->x_2d_upper_limit = eval_x_f(evaluator,firmware->te_params[table_num]->x_raw_upper);
+	evaluator = evaluator_create_f(firmware->te_params[table_num]->x_ul_conv_expr);
+	firmware->te_params[table_num]->x_2d_lower_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->x_raw_lower);
+	firmware->te_params[table_num]->x_2d_upper_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->x_raw_upper);
 	eval_destroy_f(evaluator);
 
-	evaluator = eval_create_f(firmware->te_params[table_num]->y_ul_conv_expr);
-	firmware->te_params[table_num]->y_2d_lower_limit = eval_x_f(evaluator,firmware->te_params[table_num]->y_raw_lower);
-	firmware->te_params[table_num]->y_2d_upper_limit = eval_x_f(evaluator,firmware->te_params[table_num]->y_raw_upper);
+	evaluator = evaluator_create_f(firmware->te_params[table_num]->y_ul_conv_expr);
+	firmware->te_params[table_num]->y_2d_lower_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->y_raw_lower);
+	firmware->te_params[table_num]->y_2d_upper_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->y_raw_upper);
 	eval_destroy_f(evaluator);
 
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),

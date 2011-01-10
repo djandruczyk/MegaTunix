@@ -716,9 +716,6 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
 				&firmware->burn_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
-	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
-				&firmware->burn_command))
-		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
 
 	/* Gui Section */
 	if(!cfg_read_string(cfgfile,"gui","LoadTabs",&tmpbuf))
@@ -762,6 +759,7 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tDetected Firmware: %s\n",firmware->name));
 	thread_update_logbar_f("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE);
 	thread_update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE);
+	cfg_free(cfgfile);
 
 	return TRUE;
 }

@@ -89,7 +89,7 @@
 	</rtt>
 	<rtt>
 		<internal_name>lambda</internal_name>
-		<datasource>Lambda</datasource>
+		<datasource>LAMBDA</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>airflow</internal_name>

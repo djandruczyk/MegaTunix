@@ -783,6 +783,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 			dealloc_rtv_object(data);
 		}
 		g_hash_table_destroy(rtv_map->rtv_hash);
+		g_hash_table_foreach(rtv_map->offset_hash,dealloc_list,NULL);
 		g_hash_table_destroy(rtv_map->offset_hash);
 		g_ptr_array_free(rtv_map->rtv_list,TRUE);
 		cleanup(rtv_map);
@@ -791,7 +792,10 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	g_mutex_lock(rtt_mutex);
 	store = DATA_GET(global_data,"rtt_model");
 	if (store)
+	{
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
+		gtk_list_store_clear(GTK_LIST_STORE(store));
+	}
 	g_mutex_unlock(rtt_mutex);
 
 	/* Logviewer settings */
@@ -1192,8 +1196,8 @@ G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 	Rt_Text *rtt = (Rt_Text *)data;
 	/*printf("dealloc_rtt\n");*/
 	cleanup(rtt->ctrl_name);
-	cleanup(rtt->label_prefix);
-	cleanup(rtt->label_suffix);
+//	cleanup(rtt->label_prefix);
+//	cleanup(rtt->label_suffix);
 	cleanup(rtt);
 }
 
@@ -1203,7 +1207,8 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 	Rt_Slider *slider = (Rt_Slider *)data;
 	/*printf("dealloc_slider\n");*/
 	cleanup(slider->ctrl_name);
-	/* Don't free object or history as those are just ptr's to the actual
+	/* Don't free object or history or friendly_name 
+	 * as those are just ptr's to the actual
 	 * data in the rtv object and that gets freed elsewhere
 	 */
 	cleanup(slider);

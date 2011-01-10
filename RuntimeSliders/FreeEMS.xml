@@ -124,30 +124,6 @@
 		<row>4</row>
 		<source>TFCTotal</source>
 	</rt_rts>
-	<ww_rts>
-		<slider_name>ww_clt</slider_name>
-		<table>0</table>
-		<row>0</row>
-		<source>CLT</source>
-	</ww_rts>
-	<ww_rts>
-		<slider_name>ww_warmcorr</slider_name>
-		<table>0</table>
-		<row>1</row>
-		<source>TFCTotal</source>
-	</ww_rts>
-	<ww_rts>
-		<slider_name>ww_lambda</slider_name>
-		<table>0</table>
-		<row>2</row>
-		<source>LAMBDA</source>
-	</ww_rts>
-	<ww_rts>
-		<slider_name>ww_map</slider_name>
-		<table>0</table>
-		<row>4</row>
-		<source>LoadMain</source>
-	</ww_rts>
 	<ve3d_rts>
 		<slider_name>ve3d_rpm</slider_name>
 		<table>0</table>

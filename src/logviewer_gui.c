@@ -356,13 +356,13 @@ G_MODULE_EXPORT void populate_viewer(void)
 		name = NULL;
 		if (DATA_GET(global_data,"playback_mode"))
 		{
-			object = g_ptr_array_index(log_info->log_list,i);        
+			object = g_ptr_array_index(log_info->log_list,i);
 			name = DATA_GET(object,"lview_name");
 		}
 		else
 		{
 			object = g_ptr_array_index(rtv_map->rtv_list,i); 
-			name = g_strdup(DATA_GET(object,"dlog_gui_name"));
+			name = DATA_GET(object,"dlog_gui_name");
 		}
 		if (!name)
 			dbg_func(CRITICAL,g_strdup("ERROR, name is NULL\n"));

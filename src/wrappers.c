@@ -23,45 +23,22 @@
 #include <mtxmatheval.h>
 
 
-G_MODULE_EXPORT void * eval_create(char *expr)
+G_MODULE_EXPORT void * evaluator_create_w(char *expr)
 {
 	return evaluator_create(expr);
 }
 
-G_MODULE_EXPORT void eval_destroy( void *eval)
+G_MODULE_EXPORT void evaluator_destroy_w( void *eval)
 {
 	evaluator_destroy(eval);
 }
 
-G_MODULE_EXPORT double eval_x(void * eval, double x)
+G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
 {
 	return evaluator_evaluate_x(eval,x);
 }
 
-//G_MODULE_EXPORT char * regex_wrapper(char *pattern, char *string, int *len)
-//{
-//	return regex(pattern,string,len);
-//}
-
-G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_wrapper(gchar *mask)
+G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_f(gchar *mask)
 {
 	return mask_entry_new_with_mask(mask);
 }
-
-G_MODULE_EXPORT GtkWidget *mtx_gauge_face_new_wrapper(void)
-{
-	return mtx_gauge_face_new();
-}
-
-G_MODULE_EXPORT void mtx_gauge_face_import_xml_wrapper(GtkWidget *gauge, gchar *xml)
-{
-	mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),xml);
-	return;
-}
-
-G_MODULE_EXPORT void mtx_gauge_face_set_value_wrapper(GtkWidget *gauge, gfloat value)
-{
-	mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),value);
-	return;
-}
-

@@ -11,15 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __WRAPPERS_H__
-#define __WRAPPERS_H__
+#ifndef __VETABLE_GUI_H__
+#define __VETABLE_GUI_H__
 
 #include <gtk/gtk.h>
+#include <enums.h>
 
 /* Prototypes */
-void *evaluator_create_w(char *);
-void evaluator_destroy_w( void *);
-double evaluator_evaluate_x_w(void *, gdouble);
+
+void common_draw_ve_marker(void );
+
 /* Prototypes */
 
 #endif

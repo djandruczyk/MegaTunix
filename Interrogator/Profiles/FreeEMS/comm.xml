@@ -135,8 +135,8 @@
 				<function>populate_dlog_choices_pf</function>
 			<!--
 				<function>read_all_locations</function>
-				<function>startup_default_timeouts_pf</function>
 				-->
+				<function>startup_default_timeouts_pf</function>
 				<function>reset_temps_pf</function>
 				<function>ready_msg_pf</function>
 			</post_functions>

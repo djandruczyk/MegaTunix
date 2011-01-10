@@ -51,6 +51,8 @@ libmscommon_la_SOURCES = \
 	therm.h \
 	user_outputs.c \
 	user_outputs.h \
+	vetable_gui.c \
+	vetable_gui.h \
 	vex_support.c \
 	vex_support.h
 
