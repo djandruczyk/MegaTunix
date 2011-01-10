@@ -231,8 +231,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	/* Tell plugins to shutdown */
 	plugins_shutdown();
 
-	/* Close binary logs */
-	close_binary_logs();
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));

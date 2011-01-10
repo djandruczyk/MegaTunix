@@ -114,7 +114,6 @@ gint main(gint argc, gchar ** argv)
 
 	handle_args(argc,argv);	/* handle CLI arguments */
 	open_debug();		/* Open debug log */
-	open_binary_logs();	/* Open comms logs */
 	init();			/* Initialize global vars */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
@@ -140,8 +139,6 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
 	id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);
 	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
-	id = g_timeout_add(1000,(GSourceFunc)flush_binary_logs,NULL);
-	DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
 
 	/* Kickoff fast interrogation */
 	gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);

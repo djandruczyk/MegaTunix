@@ -99,6 +99,9 @@ EXTERN gboolean (*write_wrapper_f)(gint, const void *, size_t, gint *);
 EXTERN gint (*read_data_f)(gint , void **, gboolean);
 EXTERN void (*dump_output_f)(gint, guchar *);
 EXTERN void (*flush_serial_f)(gint, gint);
+EXTERN void (*open_binary_logs_f)(void);
+EXTERN void (*close_binary_logs_f)(void);
+EXTERN gboolean (*flush_binary_logs_f)(gpointer);
 
 
 /* Function Pointers */

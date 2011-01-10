@@ -28,8 +28,15 @@ void open_binary_logs(void)
 	GIOChannel *ichan = NULL;
 	GIOChannel *ochan = NULL;
 	GError *err = NULL;
+#ifdef __WIN32__
+	gchar *ifilename = "C:\\program files\\megatunix\\inputlog.bin";
+	gchar *ofilename = "C:\\program files\\megatunix\\outputlog.bin";
+#else
+	gchar *ifilename = "/tmp/inputlog.bin";
+	gchar *ofilename = "/tmp/outputlog.bin";
+#endif
 
-	ichan = g_io_channel_new_file("/tmp/inputlog.bin","w",&err);
+	ichan = g_io_channel_new_file(ifilename,"w",&err);
 	if (ichan)
 	{
 		g_io_channel_set_encoding(ichan,NULL,NULL);
@@ -40,7 +47,7 @@ void open_binary_logs(void)
 		printf("unable to open input (reader) binary log, error %s\n",err->message);
 		g_error_free(err);
 	}
-	ochan = g_io_channel_new_file("/tmp/outputlog.bin","w",&err);
+	ochan = g_io_channel_new_file(ofilename,"w",&err);
 	if (ochan)
 	{
 		g_io_channel_set_encoding(ochan,NULL,NULL);

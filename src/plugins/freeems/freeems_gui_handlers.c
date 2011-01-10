@@ -15,8 +15,9 @@
 #include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
-#include <freeems_plugin.h>
 #include <freeems_gui_handlers.h>
+#include <freeems_helpers.h>
+#include <freeems_plugin.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
 
