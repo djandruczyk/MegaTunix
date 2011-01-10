@@ -22,7 +22,7 @@ log_by_default=TRUE
 
 [derived_1]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,temp_dep,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=IAT
 _dlog_gui_name=Intake Air Temp
 dlog_field_name=IAT
@@ -38,7 +38,7 @@ log_by_default=TRUE
 
 [derived_2]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,temp_dep,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=CHT,CLT
 _dlog_gui_name=Coolant/Head Temp
 dlog_field_name=CHT/CLT
@@ -54,7 +54,7 @@ log_by_default=TRUE
 
 [derived_3]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=TPS
 _dlog_gui_name=Throttle Pos.
 dlog_field_name=TPS
@@ -69,7 +69,7 @@ log_by_default=TRUE
 
 [derived_4]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=EGO,LAMBDA
 _dlog_gui_name=Lambda
 dlog_field_name=EGO
@@ -84,7 +84,7 @@ log_by_default=TRUE
 
 [derived_5]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=MAP
 _dlog_gui_name=Manifold Pressure
 dlog_field_name=MAP
@@ -99,7 +99,7 @@ log_by_default=TRUE
 
 [derived_6]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=AAP
 _dlog_gui_name=Atmospheric Pressure
 dlog_field_name=AAP
@@ -114,7 +114,7 @@ log_by_default=TRUE
 
 [derived_7]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=BRV
 _dlog_gui_name=Batt. Volts
 dlog_field_name=BRV
@@ -129,7 +129,7 @@ log_by_default=TRUE
 
 [derived_8]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,temp_dep,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=MAT
 _dlog_gui_name=Manifold Air Temp
 dlog_field_name=MAT
@@ -145,7 +145,7 @@ log_by_default=TRUE
 
 [derived_9]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=EGO2,LAMBDA2
 _dlog_gui_name=Lambda2
 dlog_field_name=EGO2
@@ -160,7 +160,7 @@ log_by_default=TRUE
 
 [derived_10]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=IAP
 _dlog_gui_name=Intercooler Air Pressure
 dlog_field_name=IAP
@@ -175,7 +175,7 @@ log_by_default=TRUE
 
 [derived_11]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=MAF
 _dlog_gui_name=Mass AirFlow
 dlog_field_name=MAF
@@ -190,7 +190,7 @@ log_by_default=TRUE
 
 [derived_12]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=DMAP
 _dlog_gui_name=1st Deriv MAP
 dlog_field_name=DMAP
@@ -205,7 +205,7 @@ log_by_default=TRUE
 
 [derived_13]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=DTPS
 _dlog_gui_name=1st Deriv TPS
 dlog_field_name=DTPS
@@ -220,7 +220,7 @@ log_by_default=TRUE
 
 [derived_14]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=RPM
 _dlog_gui_name=RPM
 dlog_field_name=RPM
@@ -235,7 +235,7 @@ log_by_default=TRUE
 
 [derived_15]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=DRPM
 _dlog_gui_name=1st deriv RPM
 dlog_field_name=DRPM
@@ -250,7 +250,7 @@ log_by_default=TRUE
 
 [derived_16]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=DDRPM
 _dlog_gui_name=2nd deriv RPM
 dlog_field_name=DDRPM
@@ -265,7 +265,7 @@ log_by_default=TRUE
 
 [derived_17]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=LoadMain
 _dlog_gui_name=LoadMain
 dlog_field_name=LoadMain
@@ -280,7 +280,7 @@ log_by_default=TRUE
 
 [derived_18]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=VEMain
 _dlog_gui_name=VEMain
 dlog_field_name=VEMain
@@ -295,7 +295,7 @@ log_by_default=TRUE
 
 [derived_19]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=LambdaTgt
 _dlog_gui_name=Lambda Tgt
 dlog_field_name=LambdaTgt
@@ -310,7 +310,7 @@ log_by_default=TRUE
 
 [derived_20]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=AirFlow
 _dlog_gui_name=AirFlow
 dlog_field_name=AirFlow
@@ -325,7 +325,7 @@ log_by_default=TRUE
 
 [derived_21]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=DensityAndFuel
 _dlog_gui_name=DensityAndFuel
 dlog_field_name=DensityAndFuel
@@ -340,7 +340,7 @@ log_by_default=TRUE
 
 [derived_22]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=BasePW
 _dlog_gui_name=BasePW
 dlog_field_name=BasePW
@@ -355,7 +355,7 @@ log_by_default=TRUE
 
 [derived_23]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=ETE
 _dlog_gui_name=Engine Temp Enrich
 dlog_field_name=ETE
@@ -370,7 +370,7 @@ log_by_default=TRUE
 
 [derived_24]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_S16
+size=_S16_
 internal_names=TFCTotal
 _dlog_gui_name=Transient Fuel Total
 dlog_field_name=TFCTotal
@@ -385,7 +385,7 @@ log_by_default=TRUE
 
 [derived_25]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=EffectivePW
 _dlog_gui_name=Actual PW
 dlog_field_name=EffectivePW
@@ -400,7 +400,7 @@ log_by_default=TRUE
 
 [derived_26]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=IDT
 _dlog_gui_name=Min PW
 dlog_field_name=IDT
@@ -415,7 +415,7 @@ log_by_default=TRUE
 
 [derived_27]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=RefPW
 _dlog_gui_name=RefPW
 dlog_field_name=RefPW
@@ -430,7 +430,7 @@ log_by_default=TRUE
 
 [derived_28]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=sp1
 _dlog_gui_name=sp1
 dlog_field_name=sp1
@@ -445,7 +445,7 @@ log_by_default=FALSE
 
 [derived_29]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=sp2
 _dlog_gui_name=sp2
 dlog_field_name=sp2
@@ -460,7 +460,7 @@ log_by_default=FALSE
 
 [derived_30]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=sp3
 _dlog_gui_name=sp3
 dlog_field_name=sp3
@@ -475,7 +475,7 @@ log_by_default=FALSE
 
 [derived_31]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=sp4
 _dlog_gui_name=sp4
 dlog_field_name=sp4
@@ -490,7 +490,7 @@ log_by_default=FALSE
 
 [derived_32]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=sp5
 _dlog_gui_name=sp5
 dlog_field_name=sp5
@@ -505,7 +505,7 @@ log_by_default=FALSE
 
 [derived_33]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawIAT
 _dlog_gui_name=raw IAT
 dlog_field_name=rawIAT
@@ -520,7 +520,7 @@ log_by_default=TRUE
 
 [derived_34]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawCHT,rawCLT
 _dlog_gui_name=raw CLT
 dlog_field_name=rawCHT
@@ -535,7 +535,7 @@ log_by_default=TRUE
 
 [derived_35]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawTPS
 _dlog_gui_name=raw TPS
 dlog_field_name=rawTPS
@@ -550,7 +550,7 @@ log_by_default=TRUE
 
 [derived_36]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawEGO
 _dlog_gui_name=raw EGO
 dlog_field_name=rawEGO
@@ -565,7 +565,7 @@ log_by_default=TRUE
 
 [derived_37]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawMAP
 _dlog_gui_name=raw MAP
 dlog_field_name=rawMAP
@@ -580,7 +580,7 @@ log_by_default=TRUE
 
 [derived_38]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawAAP
 _dlog_gui_name=raw AAP
 dlog_field_name=rawAAP
@@ -595,7 +595,7 @@ log_by_default=TRUE
 
 [derived_39]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawBRV
 _dlog_gui_name=raw BRV
 dlog_field_name=rawBRV
@@ -610,7 +610,7 @@ log_by_default=TRUE
 
 [derived_40]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawMAT
 _dlog_gui_name=raw MAT
 dlog_field_name=rawMAT
@@ -625,7 +625,7 @@ log_by_default=TRUE
 
 [derived_41]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawEGO2
 _dlog_gui_name=raw EGO2
 dlog_field_name=rawEGO2
@@ -640,7 +640,7 @@ log_by_default=TRUE
 
 [derived_42]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawIAP
 _dlog_gui_name=raw IAP
 dlog_field_name=rawIAP
@@ -655,7 +655,7 @@ log_by_default=TRUE
 
 [derived_43]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawMAF
 _dlog_gui_name=Raw MAF value
 dlog_field_name=rawMAF
@@ -670,7 +670,7 @@ log_by_default=TRUE
 
 [derived_44]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawADC3
 _dlog_gui_name=raw ADC3
 dlog_field_name=rawADC3
@@ -685,7 +685,7 @@ log_by_default=FALSE
 
 [derived_45]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawADC4
 _dlog_gui_name=raw ADC4
 dlog_field_name=rawADC4
@@ -700,7 +700,7 @@ log_by_default=FALSE
 
 [derived_46]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawADC5
 _dlog_gui_name=raw ADC5
 dlog_field_name=rawADC5
@@ -715,7 +715,7 @@ log_by_default=FALSE
 
 [derived_47]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawADC6
 _dlog_gui_name=raw ADC6
 dlog_field_name=rawADC6
@@ -730,7 +730,7 @@ log_by_default=FALSE
 
 [derived_48]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
-size=MTX_U16
+size=_U16_
 internal_names=rawADC7
 _dlog_gui_name=raw ADC7
 dlog_field_name=rawADC7

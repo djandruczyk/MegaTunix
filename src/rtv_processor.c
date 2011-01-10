@@ -111,7 +111,9 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 		/* Get list of derived vars for raw offset "i" */
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(i));
 		if (list == NULL) /* no derived vars for this variable */
+		{
 			continue;
+		}
 		list = g_list_first(list);
 		for (j=0;j<g_list_length(list);j++)
 		{
@@ -119,9 +121,11 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 			special = NULL;
 			hash = NULL;
 			object=(gconstpointer *)g_list_nth_data(list,j);
-			/*			printf("Dumping datalist for objects\n");
-						g_datalist_foreach(object,dump_datalist,NULL);
-			 */
+			/*
+			printf("Dumping datalist for objects\n");
+			g_dataset_foreach(object,dump_datalist,NULL);
+			*/
+			 
 			if (!object)
 			{
 				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_processor()\n\t Object bound to list at offset %i is invalid!!!!\n",i));

@@ -43,7 +43,9 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 	{
 		case MTX_CHAR:
 		case MTX_U08:
-			/*                      printf("8 bit, returning %i\n",(guint8)data[offset]);*/
+			/*
+			printf("8 bit, returning %i\n",(guint8)data[offset]);
+			*/
 			return (guint8)data[offset];
 			break;
 		case MTX_S08:
@@ -55,7 +57,9 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 				result = GUINT16_FROM_BE(u16);
 			else
 				result = GUINT16_FROM_LE(u16);
-			/*                      printf("U16 bit, returning %i\n",result);*/
+			/*
+			printf("U16 bit, returning %i\n",result);
+			*/
 			return (guint16)result;
 			break;
 		case MTX_S16:
@@ -65,7 +69,9 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			else
 				result = GINT16_FROM_LE(s16);
 			return (gint16)result;
-			/*                      printf("S16 bit, returning %i\n",result);*/
+			/*
+			printf("S16 bit, returning %i\n",result);
+			*/
 			break;
 		case MTX_U32:
 			u32 = ((guint8)data[offset] +((guint8)data[offset+1] << 8)+((guint8)data[offset+2] << 16)+((guint8)data[offset+3] << 24));
@@ -73,6 +79,9 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 				result = GUINT_FROM_BE(u32);
 			else
 				result = GUINT_FROM_LE(u32);
+			/*
+			printf("U32 bit, returning %i\n",result);
+			*/
 			return (guint32)result;
 			break;
 		case MTX_S32:
@@ -81,9 +90,13 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 				result = GINT_FROM_BE(u32);
 			else
 				result = GINT_FROM_LE(u32);
+			/*
+			printf("S32 bit, returning %i\n",result);
+			*/
 			return (gint32)result;
 			break;
 		default:
+			printf(__FILE__": _get_sized_data() SIZE INVALID!!!\n");
 			break;
 	}
 	return 0;

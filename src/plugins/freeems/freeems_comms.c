@@ -478,7 +478,7 @@ void *rtv_subscriber(gpointer data)
 		packet = g_async_queue_timed_pop(queue,&now);
 		if (packet)
 		{
-			DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER((gint)DATA_GET(global_data,"rt_goodread_count")));
+			DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER((gint)DATA_GET(global_data,"rt_goodread_count")+1));
 			process_rt_vars_f(packet->data+packet->payload_base_offset,packet->payload_length);
 			io_cmd("datalog_post_functions",NULL);
 			freeems_packet_cleanup(packet);
