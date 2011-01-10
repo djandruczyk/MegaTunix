@@ -38,7 +38,7 @@ G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
 	return evaluator_evaluate_x(eval,x);
 }
 
-G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_f(gchar *mask)
+G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_w(gchar *mask)
 {
 	return mask_entry_new_with_mask(mask);
 }

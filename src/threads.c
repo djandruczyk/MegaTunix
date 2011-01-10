@@ -84,6 +84,7 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 		message->command->defer_post_functions = FALSE;
 		message->command->post_functions = (GArray *)data;
 		message->command->type = NULL_CMD;
+		message->command->dynamic = TRUE;
 	}
 	/* Std io_message passed by string name */
 	else
@@ -100,7 +101,7 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 		{
 			message->payload = data;
 		}
-		if (command->type != FUNC_CALL)
+		if (command->type == WRITE_CMD)
 			build_output_message_f(message,command,data);
 	}
 

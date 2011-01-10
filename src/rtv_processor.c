@@ -44,9 +44,11 @@ extern gconstpointer *global_data;
  complex function so read the sourcecode.. ;)
  \param incoming (void *) pointer to the raw incoming data
  */
-G_MODULE_EXPORT void process_rt_vars(void *incoming)
+G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 {
 	static GMutex *rtv_mutex = NULL;
+	static Rtv_Map *rtv_map = NULL;
+	static Firmware_Details *firmware = NULL;
 	gint temp_units;
 	guchar *raw_realtime = incoming;
 	gconstpointer * object = NULL;
@@ -70,21 +72,23 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming)
 	gint hours = 0;
 	gint minutes = 0;
 	gint seconds = 0;
-	Rtv_Map *rtv_map = NULL;
-	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!rtv_map)
+		rtv_map = DATA_GET(global_data,"rtv_map");
 	if (!rtv_mutex)
 		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 
-	if (!incoming)
-		printf(_("ERROR, INPUT IS NULL!!!!\n"));
+	g_return_if_fail(rtv_mutex);
+	g_return_if_fail(rtv_map);
+	g_return_if_fail(firmware);
+	g_return_if_fail(incoming);
 	/* Store timestamps in ringbuffer */
 
 	/* Backup current rtv copy */
-	memcpy(firmware->rt_data_last,firmware->rt_data,firmware->rtvars_size);
-	memcpy(firmware->rt_data,incoming,firmware->rtvars_size);
+	//memcpy(firmware->rt_data_last,firmware->rt_data,len);
+	//memcpy(firmware->rt_data,incoming,len);
 	temp_units = (GINT)DATA_GET(global_data,"temp_units");
 	g_get_current_time(&timeval);
 	g_array_append_val(rtv_map->ts_array,timeval);
@@ -115,8 +119,8 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming)
 			special = NULL;
 			hash = NULL;
 			object=(gconstpointer *)g_list_nth_data(list,j);
-/*			printf("Dumping datalist for objects\n");
-			 g_datalist_foreach(object,dump_datalist,NULL);
+			/*			printf("Dumping datalist for objects\n");
+						g_datalist_foreach(object,dump_datalist,NULL);
 			 */
 			if (!object)
 			{

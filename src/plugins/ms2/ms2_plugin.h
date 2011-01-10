@@ -46,7 +46,7 @@ EXTERN void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
 EXTERN void (*update_widget_f)(gpointer, gpointer);
 EXTERN gint (*convert_before_download_f)(GtkWidget *, gfloat);
 EXTERN gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
-EXTERN GtkWidget *(*mask_entry_new_with_mask_wrapper_f)(gchar *);
+EXTERN GtkWidget *(*mask_entry_new_with_mask_f)(gchar *);
 EXTERN void (*register_widget_f)(gchar *, GtkWidget *);
 EXTERN void (*bind_to_lists_f)(GtkWidget * , gchar * );
 /* Function pointers */

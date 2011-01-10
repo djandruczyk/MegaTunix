@@ -875,7 +875,7 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 	message->sequence = NULL;
 	cleanup (message->recv_buf);
 	if (message->command)
-		if (message->command->type == NULL_CMD)
+		if (message->command->dynamic)
 			cleanup(message->command);
 	message->command = NULL;
         if (message->payload)

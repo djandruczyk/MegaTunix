@@ -51,6 +51,7 @@ struct _PotentialArg
  */
 struct _Command
 {
+	gboolean dynamic;	/* Hacky flag to know if this is dyn allocated*/
 	gchar *name;		/* Command Name */
 	gchar *desc;		/* Command Description */
 	gchar *base;		/* Base command charactor(s) */

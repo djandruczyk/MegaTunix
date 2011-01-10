@@ -706,6 +706,9 @@ gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 	/* Commands to map agaisnt the comm.xml */
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",&firmware->rt_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RT_Command\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_int(cfgfile,"parameters","RT_total_bytes",
+				&firmware->rtvars_size))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RT_total_bytes\" variable not found in interrogation profile, ERROR\n"));
 
 	if(!cfg_read_string(cfgfile,"parameters","Get_All_Command",
 				&firmware->get_all_command))

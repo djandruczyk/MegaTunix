@@ -182,7 +182,7 @@ struct _FreeEMS_Packet
 
 /* Prototypes */
 void handle_data(guchar *buf, gint);
-void packet_decode(FreeEMS_Packet *);
+gboolean packet_decode(FreeEMS_Packet *);
 void *packet_handler(gpointer data);
 void register_packet_queue(gint type, GAsyncQueue *queue, gint data);
 void deregister_packet_queue(gint type, GAsyncQueue *queue, gint data);

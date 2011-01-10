@@ -8,10 +8,6 @@
 		<description>Runtime Text definitions for FreeEMS 0.0.0.</description>
 	</info>
 	<rtt>
-		<internal_name>hrclock</internal_name>
-		<datasource>hr_clock</datasource>
-	</rtt>
-	<rtt>
 		<internal_name>rpm</internal_name>
 		<datasource>RPM</datasource>
 	</rtt>

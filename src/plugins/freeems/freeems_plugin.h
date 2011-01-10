@@ -38,7 +38,7 @@ EXTERN void (*set_title_f)(const gchar *);
 EXTERN void (*set_widget_sensitive_f)(gpointer, gpointer);
 EXTERN void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
 EXTERN void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
-EXTERN void (*process_rt_vars_f)(void * );
+EXTERN void (*process_rt_vars_f)(void *,gint );
 EXTERN void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
 EXTERN gboolean (*queue_function_f)(const gchar * );
 EXTERN gboolean (*lookup_precision_f)(const gchar *, gint *);

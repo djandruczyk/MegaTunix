@@ -14,6 +14,7 @@
 #include <config.h>
 #include <debugging.h>
 #include <defines.h>
+#include <firmware.h>
 #include <freeems_comms.h>
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
@@ -434,4 +435,71 @@ void *unix_reader(gpointer data)
 			g_cond_signal(cond);
 		}
 	}
+}
+
+
+gboolean setup_rtv(void)
+{
+	GAsyncQueue *queue = NULL;
+	GThread *thread = NULL;
+
+	queue = g_async_queue_new();
+	thread = g_thread_create(rtv_subscriber,queue,TRUE,NULL);
+	DATA_SET(global_data,"rtv_subscriber_thread", thread);
+	/* This sends packets to the rtv_subscriber queue */
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	return TRUE;
+}
+
+
+gboolean teardown_rtv(void)
+{
+	GAsyncQueue *queue = NULL;
+	GThread *thread = NULL;
+
+	/* This sends packets to the rtv_subscriber queue */
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	thread = DATA_GET(global_data,"rtv_subscriber_thread");
+	return TRUE;
+}
+
+
+void *rtv_subscriber(gpointer data)
+{
+	GAsyncQueue *queue = (GAsyncQueue *)data;
+	GTimeVal now;
+	FreeEMS_Packet *packet = NULL;
+
+	while (TRUE)
+	{
+		g_get_current_time(&now);
+		/* Wait up to 0.25 seconds for thread to exit */
+		g_time_val_add(&now,250000);
+		packet = g_async_queue_timed_pop(queue,&now);
+		if (packet)
+		{
+			DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER((gint)DATA_GET(global_data,"rt_goodread_count")));
+			process_rt_vars_f(packet->data+packet->payload_base_offset,packet->payload_length);
+			io_cmd("datalog_post_functions",NULL);
+			freeems_packet_cleanup(packet);
+		}
+	}
+
+}
+
+
+void signal_read_rtvars(void)
+{
+	OutputData *output = NULL;	
+	Firmware_Details *firmware = NULL;
+
+        firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(firmware);
+
+	output = initialize_outputdata_f();
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(77));
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_BASIC_DATALOG));
+	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+	io_cmd_f(firmware->rt_command,output);
+	return;
 }

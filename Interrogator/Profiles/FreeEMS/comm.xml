@@ -76,6 +76,19 @@
 			</args>
 		</cmd>
 		<cmd>
+			<name>datalog_post_functions</name>
+			<desc>datalog stream post functions</desc>
+			<type>_NULL_CMD_</type>
+			<defer_post_functions>FALSE</defer_post_functions>
+			<post_functions>
+				<function>update_runtime_vars_pf</function>
+				<function>update_logview_traces_pf</function>
+                                <function>fire_off_rtv_watches_pf</function>
+                                <function>run_datalog_pf</function>
+			</post_functions>
+		</cmd>
+
+		<cmd>
 			<name>generic_write</name>
 			<desc>Generic write function</desc>
 			<type>_WRITE_CMD_</type>
@@ -98,22 +111,6 @@
 				<arg>LOCATION_ID</arg>
 				<arg>OFFSET</arg>
 				<arg>LENGTH</arg>
-			</args>
-		</cmd>
-		<cmd>
-			<name>stop_datalog_stream</name>
-			<desc>Stops the automatic datalogging stream</desc>
-			<type>_RAW_WRITE_CMD_</type>
-			<args>
-				<arg>STOP_DATALOG_STREAM</arg>
-			</args>
-		</cmd>
-		<cmd>
-			<name>start_datalog_stream</name>
-			<desc>Starts the automatic datalogging stream</desc>
-			<type>_RAW_WRITE_CMD_</type>
-			<args>
-				<arg>START_DATALOG_STREAM</arg>
 			</args>
 		</cmd>
 		<cmd>

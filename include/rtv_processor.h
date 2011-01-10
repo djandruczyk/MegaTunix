@@ -19,7 +19,7 @@
 #include <enums.h>
 
 /* Prototypes */
-void process_rt_vars(void * );
+void process_rt_vars(void *,gint);
 gboolean lookup_precision(const gchar *, gint *);
 gboolean lookup_current_value(const gchar *, gfloat *);
 gboolean lookup_previous_value(const gchar *, gfloat *);

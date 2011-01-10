@@ -383,7 +383,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
-			process_rt_vars_f((void *)message->recv_buf);
+			process_rt_vars_f((void *)message->recv_buf,firmware->rtvars_size);
 			break;
 		case MS2_RT_VARS:
 			page = (GINT)DATA_GET(output->data,"page");
@@ -440,7 +440,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
-			process_rt_vars_f((void *)message->recv_buf);
+			process_rt_vars_f((void *)message->recv_buf,firmware->rtvars_size);
 			break;
 		case MS2_BOOTLOADER:
 			printf(_("MS2_BOOTLOADER not written yet\n"));

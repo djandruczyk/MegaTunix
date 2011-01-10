@@ -915,8 +915,7 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-	if (!firmware)
-		return;
+	g_return_if_fail(firmware);
 
 	/* MS2 */
 	if (firmware->capabilities & MS2)

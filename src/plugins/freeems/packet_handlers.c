@@ -29,6 +29,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 	static unsigned int packets = 0;
 	static unsigned int charsDropped = 0;
 	static unsigned int badChecksums = 0;
+	static unsigned int badPackets = 0;
 	static unsigned int goodChecksums = 0;
 	static unsigned int startsInsidePacket = 0;
 	static unsigned int totalFalseStartLost = 0;
@@ -140,12 +141,18 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 					sumOfGoodPacketLengths += currentPacketLength;
 				}
 				/* Clear the state */
-				printf("Full packet received, len %i!\n",currentPacketLength);
-				if (queue)
+				printf("Full packet received, %i bytes!\n",currentPacketLength);
+				packet = g_new0(FreeEMS_Packet, 1);
+				packet->data = g_memdup(packetBuffer,currentPacketLength);
+				packet->raw_length = currentPacketLength;
+				if (!packet_decode(packet))
 				{
-					packet = g_new0(FreeEMS_Packet, 1);
-					packet->data = g_memdup(packetBuffer,currentPacketLength);
-					packet->raw_length = currentPacketLength;
+					printf("Packet fields don't make sense!\n");
+					freeems_packet_cleanup(packet);
+					badPackets++;
+				}
+				else if (queue)
+				{
 					g_async_queue_ref(queue);
 					g_async_queue_push(queue,(gpointer)packet);
 					g_async_queue_unref(queue);
@@ -191,15 +198,12 @@ void *packet_handler(gpointer data)
 		g_time_val_add(&tval,100000);
 		packet = g_async_queue_timed_pop(queue,&tval);
 		if (packet)
-		{
-			packet_decode(packet);
 			dispatch_packet_queues(packet);
-		}
 	}
 }
 
 
-void packet_decode(FreeEMS_Packet *packet)
+gboolean packet_decode(FreeEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
 	gint i = 0;
@@ -235,6 +239,17 @@ void packet_decode(FreeEMS_Packet *packet)
 	printf("Payload id: %i\n",packet->payload_id);
 	printf("Payload base offset: %i\n",packet->payload_base_offset);
 	printf("\n");
+	if (packet->header_bits & HAS_LENGTH_MASK)
+	{
+		if ((packet->payload_length - 3) > packet->raw_length)
+		{
+			printf("payload length + header/payload EXCEEDS packet length, BUGGY PACKET!!\n");
+			return FALSE;
+		}
+		else
+			return TRUE;
+	}
+	return TRUE;
 }
 
 

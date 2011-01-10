@@ -207,14 +207,14 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			leave(NULL,NULL);
 			break;
 		case GTK_RESPONSE_ACCEPT:
-		case GTK_RESPONSE_OK:
+		case GTK_RESPONSE_OK: /* Normal mode */
 			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
 			g_free(filename);
 			io_cmd("interrogation",NULL);
 			break;
-		default:
+		default: /* Offline */
 			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);

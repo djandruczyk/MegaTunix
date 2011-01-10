@@ -4,40 +4,28 @@
                 <major>1</major>
                 <minor>0</minor>
         </api>
-        <rt_rts>
-		<slider_name>Clock</slider_name>
-		<table>0</table>
-		<row>0</row>
-		<source>hr_clock</source>
-	</rt_rts>
 	<rt_rts>
 		<slider_name>batt_volts</slider_name>
 		<table>0</table>
-		<row>1</row>
+		<row>0</row>
 		<source>BRV</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>rpm</slider_name>
 		<table>0</table>
-		<row>2</row>
+		<row>1</row>
 		<source>RPM</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>effectivepw</slider_name>
 		<table>0</table>
-		<row>3</row>
+		<row>2</row>
 		<source>EffectivePW</source>
-	</rt_rts>
-	<rt_rts>
-		<slider_name>iap</slider_name>
-		<table>0</table>
-		<row>4</row>
-		<source>IAP</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>maf</slider_name>
 		<table>0</table>
-		<row>5</row>
+		<row>3</row>
 		<source>MAF</source>
 	</rt_rts>
 	<rt_rts>
