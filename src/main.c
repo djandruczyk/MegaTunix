@@ -13,6 +13,7 @@
 
 
 #include <args.h>
+#include <binlogger.h>
 #include <comms_gui.h>
 #include <config.h>
 #include <conversions.h>
@@ -38,8 +39,6 @@
 #include <timeout_handlers.h>
 #include <xmlcomm.h>
 
-gint pf_dispatcher_id = -1;
-gint gui_dispatcher_id = -1;
 gboolean gl_ability = FALSE;
 gconstpointer *global_data = NULL;
 
@@ -57,6 +56,7 @@ gint main(gint argc, gchar ** argv)
 	GAsyncQueue *queue = NULL;
 	GCond *cond = NULL;
 	GMutex *mutex = NULL;
+	gint id = 0;
 	setlocale(LC_ALL,"");
 #ifdef __WIN32__
 	bindtextdomain(PACKAGE, "C:\\Program Files\\MegaTunix\\dist\\locale");
@@ -114,6 +114,7 @@ gint main(gint argc, gchar ** argv)
 
 	handle_args(argc,argv);	/* handle CLI arguments */
 	open_debug();		/* Open debug log */
+	open_binary_logs();	/* Open comms logs */
 	init();			/* Initialize global vars */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
@@ -135,11 +136,16 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
 
-	pf_dispatcher_id = g_timeout_add(12,(GSourceFunc)pf_dispatcher,NULL);
-	gui_dispatcher_id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);
+	id = g_timeout_add(12,(GSourceFunc)pf_dispatcher,NULL);
+	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
+	id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);
+	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
+	id = g_timeout_add(1000,(GSourceFunc)flush_binary_logs,NULL);
+	DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
 
 	/* Kickoff fast interrogation */
 	gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
+	
 
 	DATA_SET(global_data,"ready",GINT_TO_POINTER(TRUE));
 	gtk_main();

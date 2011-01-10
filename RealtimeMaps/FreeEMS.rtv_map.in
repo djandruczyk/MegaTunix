@@ -461,7 +461,7 @@ log_by_default=FALSE
 [derived_30]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
-internal_names=sp3
+internal_names=sp3,clock
 _dlog_gui_name=sp3
 dlog_field_name=sp3
 offset=56

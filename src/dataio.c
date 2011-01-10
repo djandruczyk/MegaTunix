@@ -227,10 +227,17 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 
 G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 {
+	GIOChannel *ochan = NULL;
 	gint res = 0;
 	GError *error = NULL;
 	Serial_Params *serial_params = NULL;
 	serial_params = DATA_GET(global_data,"serial_params");
+	if (!ochan)
+		ochan = DATA_GET(global_data,"outbound_raw_logchan");
+	if (ochan)
+		g_io_channel_write_chars(ochan,buf,count,NULL,NULL);
+	else
+		printf("coun't locate output log channel\n");
 
 	/*      printf("write_wrapper\n"); */
 	if (serial_params->net_mode)

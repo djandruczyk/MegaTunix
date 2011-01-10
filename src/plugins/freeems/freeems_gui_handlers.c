@@ -45,13 +45,12 @@ G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 	switch (handler)
 	{
 		case WARM_BOOT_ECU:
+			warm_boot_ecu();
 			printf("Warm booting ECU\n");
 			break;
-		case STOP_STREAMING:
-			printf("Stop streaming\n");
-			break;
-		case START_STREAMING:
-			printf("Start Streaming\n");
+		case COLD_BOOT_ECU:
+			cold_boot_ecu();
+			printf("Cold booting ECU\n");
 			break;
 	}
 	return TRUE;

@@ -5,27 +5,33 @@
                 <minor>0</minor>
         </api>
 	<rt_rts>
-		<slider_name>batt_volts</slider_name>
+		<slider_name>clock</slider_name>
 		<table>0</table>
 		<row>0</row>
+		<source>clock</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>batt_volts</slider_name>
+		<table>0</table>
+		<row>1</row>
 		<source>BRV</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>rpm</slider_name>
 		<table>0</table>
-		<row>1</row>
+		<row>2</row>
 		<source>RPM</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>effectivepw</slider_name>
 		<table>0</table>
-		<row>2</row>
+		<row>3</row>
 		<source>EffectivePW</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>maf</slider_name>
 		<table>0</table>
-		<row>3</row>
+		<row>4</row>
 		<source>MAF</source>
 	</rt_rts>
 	<rt_rts>

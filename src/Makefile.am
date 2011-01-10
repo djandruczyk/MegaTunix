@@ -17,6 +17,7 @@ megatunix_SOURCES = \
 	about_gui.c \
 	apicheck.c \
 	args.c \
+	binlogger.c \
 	comms.c \
 	comms_gui.c \
 	combo_loader.c \

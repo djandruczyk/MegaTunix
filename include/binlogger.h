@@ -11,18 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __FREEEMS_HELPERS_H__
-#define __FREEEMS_HELPERS_H__
+#ifndef __BINLOGGER_H__
+#define __BINLOGGER_H__
 
-#include <defines.h>
-#include <enums.h>
 #include <gtk/gtk.h>
 
-
-
 /* Prototypes */
-void stop_streaming(void);
-void warm_boot_ecu(void);
+void open_binary_logs(void);
+void close_binary_logs(void);
+gboolean flush_binary_logs(gpointer);
 /* Prototypes */
 
 #endif

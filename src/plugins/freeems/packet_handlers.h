@@ -36,6 +36,7 @@ typedef enum
 #define INTVER_REQ_PKT_LEN 4
 #define DATALOG_REQ_PKT_LEN 5
 #define LOC_ID_LIST_REQ_PKT_LEN 7
+#define SOFT_SYSTEM_RESET_PKT_LEN 4
 
 /* Block bits logic */
 #define BLOCK_BITS_ALL		0

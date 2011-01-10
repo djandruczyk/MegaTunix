@@ -34,16 +34,6 @@ keys=handler,tooltip
 handler=_WARM_BOOT_ECU_
 _tooltip=This button issues a warm reset to the ECU
 
-[stop_streaming_button]
-keys=handler,tooltip
-handler=_STOP_STREAMING_
-_tooltip=This button stops the datalog streaming
-
-[start_streaming_button]
-keys=handler,tooltip
-handler=_START_STREAMING_
-_tooltip=This button starts the datalog streaming
-
 #----- Widgets ---------------------------------------------------------------
 
 #----- Labels ----------------------------------------------------------------

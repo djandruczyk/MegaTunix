@@ -115,7 +115,6 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	gint source = 0;
 	gint rate = 0;
 
-	printf("startign up all renderers\n");
 	gdk_threads_enter();
 	set_title(g_strdup(_("Starting up data renderers...")));
 	gdk_threads_leave();

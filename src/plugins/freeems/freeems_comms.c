@@ -469,7 +469,6 @@ gboolean teardown_rtv(void)
 		g_thread_join(thread);
 		DATA_SET(global_data,"rtv_subscriber_thread",NULL);
 		DATA_SET(global_data,"rtv_subscriber_thread_exit",NULL);
-		printf("rtv_subscriber exited...\n");
 	}
 	return TRUE;
 }

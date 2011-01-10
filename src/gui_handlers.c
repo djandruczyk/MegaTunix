@@ -14,6 +14,7 @@
 #define _ISOC99_SOURCE
 #include <3d_vetable.h>
 #include <args.h>
+#include <binlogger.h>
 #include <config.h>
 #include <ctype.h>
 #include <combo_loader.h>
@@ -78,8 +79,7 @@ extern GdkColor white;
  */
 G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
-	extern gint pf_dispatcher_id;
-	extern gint gui_dispatcher_id;
+	gint id;
 	/*
 	   extern GThread * ascii_socket_id;
 	   extern GThread * binary_socket_id;
@@ -154,26 +154,30 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_cond_timed_wait(io_dispatch_cond,mutex,&now);
 
 	/* PF dispatch queue */
-	if (pf_dispatcher_id)
-		g_source_remove(pf_dispatcher_id);
+	id = DATA_GET(global_data,"pf_dispatcher_id");
+	if (id)
+		g_source_remove(id);
+	DATA_SET(global_data,"pf_dispatcher_id",NULL);
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
 	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
 
 	/* Statuscounts timeout */
-	if (DATA_GET(global_data,"statuscounts_id"))
-		g_source_remove((gint)DATA_GET(global_data,"statuscounts_id"));
-	DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(0));
+	id = DATA_GET(global_data,"statuscounts_id");
+	if (id)
+		g_source_remove(id);
+	DATA_SET(global_data,"statuscounts_id",NULL);
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	statuscounts_cond = DATA_GET(global_data,"statuscounts_cond");
 	g_cond_timed_wait(statuscounts_cond,mutex,&now);
 
 	/* GUI Dispatch timeout */
-	if (gui_dispatcher_id)
-		g_source_remove(gui_dispatcher_id);
-	gui_dispatcher_id = 0;
+	id = DATA_GET(global_data,"gui_dispatcher_id");
+	if (id)
+		g_source_remove(id);
+	DATA_SET(global_data,"gui_dispatcher_id",NULL);
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
@@ -227,6 +231,8 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	/* Tell plugins to shutdown */
 	plugins_shutdown();
 
+	/* Close binary logs */
+	close_binary_logs();
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));

@@ -164,10 +164,8 @@ void register_common_enums(void)
 		/* Firmware Specific button handlers*/
 		g_hash_table_insert(str_2_enum,"_WARM_BOOT_ECU_",
 				GINT_TO_POINTER(WARM_BOOT_ECU));
-		g_hash_table_insert(str_2_enum,"_STOP_REALTIME_",
-				GINT_TO_POINTER(STOP_REALTIME));
-		g_hash_table_insert(str_2_enum,"_START_REALTIME_",
-				GINT_TO_POINTER(START_REALTIME));
+		g_hash_table_insert(str_2_enum,"_COLD_BOOT_ECU_",
+				GINT_TO_POINTER(COLD_BOOT_ECU));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");

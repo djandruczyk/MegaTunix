@@ -22,8 +22,7 @@
 typedef enum
 {
 	WARM_BOOT_ECU = LAST_STD_BUTTON_ENUM + 1,
-	START_STREAMING,
-	STOP_STREAMING
+	COLD_BOOT_ECU
 }FreeEMSStdButton;
 /* Enumerations */
 

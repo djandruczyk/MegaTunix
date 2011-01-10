@@ -26,6 +26,7 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 {
 	static GAsyncQueue *queue = NULL;
+	static GIOChannel *ichan = NULL;
 	/* Statistic collection variables */
 	static guchar packetBuffer[3000];
 	static unsigned int packets = 0;
@@ -56,6 +57,10 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 	FreeEMS_Packet *packet = NULL;
 	if (!queue)
 		queue = DATA_GET(global_data,"packet_queue");
+	if (!ichan)
+		ichan = DATA_GET(global_data,"inbound_raw_logchan");
+	if (ichan)
+		g_io_channel_write_chars(ichan,buf,len,NULL,NULL);
 
 	for (i=0;i<len;i++)
 	{
