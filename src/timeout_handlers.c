@@ -163,6 +163,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 {
 	static void (*signal_read_rtvars)(void);
+	static gboolean (*setup_rtv)(void);
 	Serial_Params *serial_params;
 	GMutex * mutex = g_mutex_new();
 	GTimeVal time;
@@ -176,7 +177,16 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
 	get_symbol("signal_read_rtvars",(void *)&signal_read_rtvars);
+	get_symbol("setup_rtv",(void *)&setup_rtv);
+	g_return_val_if_fail(serial_params,NULL);
+	g_return_val_if_fail(signal_read_rtvars,NULL);
+	g_return_val_if_fail(io_data_queue,NULL);
+	g_return_val_if_fail(pf_dispatch_queue,NULL);
+	g_return_val_if_fail(rtv_thread_cond,NULL);
 
+	if (setup_rtv)
+		if (!setup_rtv())
+			g_thread_exit(NULL);
 	g_mutex_lock(mutex);
 	g_async_queue_ref(io_data_queue);
 	g_async_queue_ref(pf_dispatch_queue);
@@ -187,7 +197,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		while (( g_async_queue_length(io_data_queue) > 2) || 
 				(g_async_queue_length(pf_dispatch_queue) > 8))
 			g_usleep(5000);
-
 
 		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
 		signal_read_rtvars();
