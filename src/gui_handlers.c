@@ -100,7 +100,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GCond *statuscounts_cond = NULL;
 	Firmware_Details *firmware = NULL;
 
-
 	firmware = DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
@@ -117,10 +116,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		prompt_to_save();
 	}
 
-	DATA_SET(global_data,"leaving",GINT_TO_POINTER(TRUE));
 	/* Stop timeout functions */
-
-	plugins_shutdown();
 	stop_tickler(RTV_TICKLER);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"));
 	stop_tickler(LV_PLAYBACK_TICKLER);
@@ -128,6 +124,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	stop_datalogging();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
+
+	/* Set global flag */
+	DATA_SET(global_data,"leaving",GINT_TO_POINTER(TRUE));
+
 
 	/* Message to trigger serial repair queue to exit immediately */
 	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
@@ -181,6 +181,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	g_mutex_unlock(mutex);
 
+
 	save_config();
 
 	/*
@@ -222,6 +223,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	g_mutex_lock(serio_mutex);
 	g_mutex_unlock(serio_mutex);
+
+	/* Tell plugins to shutdown */
+	plugins_shutdown();
+
 	/* Free all buffers */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));

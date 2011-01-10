@@ -21,6 +21,8 @@
 
 extern gconstpointer *global_data;
 
+#define PKT_DEBUG 0
+
 G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 {
 	static GAsyncQueue *queue = NULL;
@@ -141,7 +143,6 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 					sumOfGoodPacketLengths += currentPacketLength;
 				}
 				/* Clear the state */
-				printf("Full packet received, %i bytes!\n",currentPacketLength);
 				packet = g_new0(FreeEMS_Packet, 1);
 				packet->data = g_memdup(packetBuffer,currentPacketLength);
 				packet->raw_length = currentPacketLength;
@@ -215,9 +216,6 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	   for (i=0;i<packet->raw_length;i++)
 	   printf("packet byte %i, valud 0x%0.2X\n",i,ptr[i]);
 	 */
-	printf("Ack/Nack Flag: %i\n",((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0);
-	printf("Has Sequence Flag: %i\n",((packet->header_bits & HAS_SEQUENCE_MASK) > 0) ? 1:0);
-	printf("Has Length Flag: %i\n",((packet->header_bits & HAS_LENGTH_MASK) > 0) ? 1:0);
 	if ((packet->header_bits & HAS_LENGTH_MASK) > 0)
 	{
 		tmpi += 2;
@@ -225,20 +223,27 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 			packet->payload_length = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
 		else
 			packet->payload_length = (ptr[H_LEN_IDX-1] << 8) + ptr [L_LEN_IDX-1];
-		printf("Payload length %i\n",packet->payload_length);
 	}
 	if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
 	{
 		tmpi += 1;
 		packet->seq_num = ptr[SEQ_IDX];
-		printf("Sequence id: %i\n",packet->seq_num); 
 	}
 	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
 	packet->payload_base_offset = tmpi;
 
-	printf("Payload id: %i\n",packet->payload_id);
-	printf("Payload base offset: %i\n",packet->payload_base_offset);
-	printf("\n");
+	if (PKT_DEBUG)
+	{
+		printf("Full packet received, %i bytes!\n",packet->raw_length);
+		printf("Ack/Nack Flag: %i\n",((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0);
+		printf("Has Sequence Flag: %i\n",((packet->header_bits & HAS_SEQUENCE_MASK) > 0) ? 1:0);
+		printf("Sequence id: %i\n",packet->seq_num); 
+		printf("Payload id: %i\n",packet->payload_id);
+		printf("Has Length Flag: %i\n",((packet->header_bits & HAS_LENGTH_MASK) > 0) ? 1:0);
+		printf("Payload length %i\n",packet->payload_length);
+		printf("Payload base offset: %i\n",packet->payload_base_offset);
+		printf("\n");
+	}
 	if (packet->header_bits & HAS_LENGTH_MASK)
 	{
 		if ((packet->payload_length - 3) > packet->raw_length)

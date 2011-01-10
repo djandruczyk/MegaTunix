@@ -444,6 +444,7 @@ gboolean setup_rtv(void)
 	GThread *thread = NULL;
 
 	queue = g_async_queue_new();
+	DATA_SET(global_data,"rtv_subscriber_queue", queue);
 	thread = g_thread_create(rtv_subscriber,queue,TRUE,NULL);
 	DATA_SET(global_data,"rtv_subscriber_thread", thread);
 	/* This sends packets to the rtv_subscriber queue */
@@ -458,8 +459,18 @@ gboolean teardown_rtv(void)
 	GThread *thread = NULL;
 
 	/* This sends packets to the rtv_subscriber queue */
+	queue = DATA_GET(global_data,"rtv_subscriber_queue");
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
 	thread = DATA_GET(global_data,"rtv_subscriber_thread");
+	if (thread)
+	{
+		DATA_SET(global_data,"rtv_subscriber_thread_exit",GINT_TO_POINTER(1));
+		g_thread_join(thread);
+		DATA_SET(global_data,"rtv_subscriber_thread",NULL);
+		DATA_SET(global_data,"rtv_subscriber_thread_exit",NULL);
+		printf("rtv_subscriber exited...\n");
+	}
 	return TRUE;
 }
 
@@ -470,7 +481,7 @@ void *rtv_subscriber(gpointer data)
 	GTimeVal now;
 	FreeEMS_Packet *packet = NULL;
 
-	while (TRUE)
+	while (!DATA_GET(global_data,"rtv_subscriber_thread_exit"))
 	{
 		g_get_current_time(&now);
 		/* Wait up to 0.25 seconds for thread to exit */
@@ -484,7 +495,8 @@ void *rtv_subscriber(gpointer data)
 			freeems_packet_cleanup(packet);
 		}
 	}
-
+	g_thread_exit(0);
+	return NULL;
 }
 
 

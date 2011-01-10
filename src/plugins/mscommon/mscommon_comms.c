@@ -1043,3 +1043,14 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		g_array_append_val(message->sequence,block);
 	}
 }
+
+gboolean setup_rtv(void)
+{
+	return TRUE;
+}
+
+
+gboolean teardown_rtv(void)
+{
+	return TRUE;
+}

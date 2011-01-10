@@ -116,6 +116,8 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 	GCond *rtv_thread_cond = NULL;
 	extern gconstpointer *global_data;
 	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
+	g_return_if_fail(rtv_thread_cond);
+
 	switch (type)
 	{
 		case RTV_TICKLER:
@@ -164,6 +166,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 {
 	static void (*signal_read_rtvars)(void);
 	static gboolean (*setup_rtv)(void);
+	static gboolean (*teardown_rtv)(void);
 	Serial_Params *serial_params;
 	GMutex * mutex = g_mutex_new();
 	GTimeVal time;
@@ -178,6 +181,8 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
 	get_symbol("signal_read_rtvars",(void *)&signal_read_rtvars);
 	get_symbol("setup_rtv",(void *)&setup_rtv);
+	get_symbol("teardown_rtv",(void *)&teardown_rtv);
+
 	g_return_val_if_fail(serial_params,NULL);
 	g_return_val_if_fail(signal_read_rtvars,NULL);
 	g_return_val_if_fail(io_data_queue,NULL);
@@ -209,6 +214,8 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 			g_async_queue_unref(pf_dispatch_queue);
 			g_mutex_unlock(mutex);
 			g_mutex_free(mutex);
+			if (teardown_rtv)
+				teardown_rtv();
 			g_thread_exit(0);
 		}
 	}
