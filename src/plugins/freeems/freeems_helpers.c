@@ -75,7 +75,6 @@ G_MODULE_EXPORT void stop_streaming(void)
 void warm_boot_ecu(void)
 {
 	GTimeVal tval;
-	gint seq = 6;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
 	guint8 pkt[SOFT_SYSTEM_RESET_PKT_LEN]; 
@@ -87,15 +86,14 @@ void warm_boot_ecu(void)
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_if_fail(serial_params);
-	printf("warm boot ecu?\n");
 
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_SOFT_SYSTEM_RESET & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_SOFT_SYSTEM_RESET & 0x00ff );
-	for (i=0;i<REQUEST_SOFT_SYSTEM_RESET-1;i++)
+	for (i=0;i<SOFT_SYSTEM_RESET_PKT_LEN-1;i++)
 		sum += pkt[i];
-	pkt[REQUEST_SOFT_SYSTEM_RESET-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,REQUEST_SOFT_SYSTEM_RESET,&tmit_len);
+	pkt[SOFT_SYSTEM_RESET_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,SOFT_SYSTEM_RESET_PKT_LEN,&tmit_len);
 	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
 	{
 		g_free(buf);
@@ -109,7 +107,6 @@ void warm_boot_ecu(void)
 void cold_boot_ecu(void)
 {
 	GTimeVal tval;
-	gint seq = 6;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
 	guint8 pkt[HARD_SYSTEM_RESET_PKT_LEN]; 
@@ -121,15 +118,14 @@ void cold_boot_ecu(void)
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_if_fail(serial_params);
-	printf("cold boot ecu?\n");
 
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_HARD_SYSTEM_RESET & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_HARD_SYSTEM_RESET & 0x00ff );
-	for (i=0;i<REQUEST_HARD_SYSTEM_RESET-1;i++)
+	for (i=0;i<HARD_SYSTEM_RESET_PKT_LEN-1;i++)
 		sum += pkt[i];
-	pkt[REQUEST_HARD_SYSTEM_RESET-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,REQUEST_HARD_SYSTEM_RESET,&tmit_len);
+	pkt[HARD_SYSTEM_RESET_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,HARD_SYSTEM_RESET_PKT_LEN,&tmit_len);
 	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
 	{
 		g_free(buf);

@@ -34,6 +34,11 @@ keys=handler,tooltip
 handler=_WARM_BOOT_ECU_
 _tooltip=This button issues a warm reset to the ECU
 
+[cold_boot_button]
+keys=handler,tooltip
+handler=_COLD_BOOT_ECU_
+_tooltip=This button issues a cold reset to the ECU
+
 #----- Widgets ---------------------------------------------------------------
 
 #----- Labels ----------------------------------------------------------------

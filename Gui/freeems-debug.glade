@@ -33,13 +33,6 @@
                           <widget class="GtkTable" id="table4">
                             <property name="visible">True</property>
                             <property name="n_rows">3</property>
-                            <property name="homogeneous">True</property>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
                             <child>
                               <widget class="GtkFrame" id="frame4">
                                 <property name="visible">True</property>
@@ -64,6 +57,15 @@
                                   </packing>
                                 </child>
                               </widget>
+                              <packing>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                            <child>
+                              <placeholder/>
                             </child>
                           </widget>
                         </child>
@@ -71,7 +73,6 @@
                           <widget class="GtkTable" id="table5">
                             <property name="visible">True</property>
                             <property name="n_rows">3</property>
-                            <property name="homogeneous">True</property>
                             <child>
                               <widget class="GtkFrame" id="frame3">
                                 <property name="visible">True</property>
@@ -82,6 +83,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
+                                    <signal name="clicked" handler="std_button_handler"/>
                                   </widget>
                                 </child>
                                 <child>
@@ -96,7 +98,7 @@
                                 </child>
                               </widget>
                               <packing>
-                                <property name="x_options">GTK_FILL</property>
+                                <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>
@@ -109,7 +111,6 @@
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="right_attach">2</property>
-                            <property name="y_options">GTK_FILL</property>
                           </packing>
                         </child>
                       </widget>
