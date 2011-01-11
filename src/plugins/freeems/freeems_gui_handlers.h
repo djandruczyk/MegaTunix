@@ -21,8 +21,8 @@
 /* Enumerations */
 typedef enum
 {
-	WARM_BOOT_ECU = LAST_STD_BUTTON_ENUM + 1,
-	COLD_BOOT_ECU
+	SOFT_BOOT_ECU = LAST_STD_BUTTON_ENUM + 1,
+	HARD_BOOT_ECU
 }FreeEMSStdButton;
 /* Enumerations */
 

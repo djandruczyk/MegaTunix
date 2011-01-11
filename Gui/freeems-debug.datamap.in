@@ -29,14 +29,14 @@ handler=_BURN_MS_FLASH_
 bind_to_list=burners
 _tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
-[warm_boot_button]
+[soft_boot_button]
 keys=handler,tooltip
-handler=_WARM_BOOT_ECU_
+handler=_SOFT_BOOT_ECU_
 _tooltip=This button issues a warm reset to the ECU
 
-[cold_boot_button]
+[hard_boot_button]
 keys=handler,tooltip
-handler=_COLD_BOOT_ECU_
+handler=_HARD_BOOT_ECU_
 _tooltip=This button issues a cold reset to the ECU
 
 #----- Widgets ---------------------------------------------------------------

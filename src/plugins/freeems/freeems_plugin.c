@@ -177,10 +177,10 @@ void register_common_enums(void)
 		g_hash_table_insert(str_2_enum,"_DATABYTE_",
 				GINT_TO_POINTER(DATABYTE));
 		/* Firmware Specific button handlers*/
-		g_hash_table_insert(str_2_enum,"_WARM_BOOT_ECU_",
-				GINT_TO_POINTER(WARM_BOOT_ECU));
-		g_hash_table_insert(str_2_enum,"_COLD_BOOT_ECU_",
-				GINT_TO_POINTER(COLD_BOOT_ECU));
+		g_hash_table_insert(str_2_enum,"_SOFT_BOOT_ECU_",
+				GINT_TO_POINTER(SOFT_BOOT_ECU));
+		g_hash_table_insert(str_2_enum,"_HARD_BOOT_ECU_",
+				GINT_TO_POINTER(HARD_BOOT_ECU));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");

@@ -22,8 +22,8 @@
 
 /* Prototypes */
 void stop_streaming(void);
-void warm_boot_ecu(void);
-void cold_boot_ecu(void);
+void soft_boot_ecu(void);
+void hard_boot_ecu(void);
 /* Prototypes */
 
 #endif

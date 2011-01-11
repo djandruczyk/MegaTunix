@@ -38,8 +38,8 @@
                                 <property name="visible">True</property>
                                 <property name="label_xalign">0</property>
                                 <child>
-                                  <widget class="GtkButton" id="warm_boot_button">
-                                    <property name="label" translatable="yes">Warm Boot the ECU</property>
+                                  <widget class="GtkButton" id="soft_boot_button">
+                                    <property name="label" translatable="yes">Soft Boot the ECU</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
@@ -78,8 +78,8 @@
                                 <property name="visible">True</property>
                                 <property name="label_xalign">0</property>
                                 <child>
-                                  <widget class="GtkButton" id="cold_boot_button">
-                                    <property name="label" translatable="yes">Cold Boot the ECU</property>
+                                  <widget class="GtkButton" id="hard_boot_button">
+                                    <property name="label" translatable="yes">Hard Boot the ECU</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>

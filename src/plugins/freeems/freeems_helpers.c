@@ -72,7 +72,7 @@ G_MODULE_EXPORT void stop_streaming(void)
 }
 
 
-void warm_boot_ecu(void)
+void soft_boot_ecu(void)
 {
 	GTimeVal tval;
 	Serial_Params *serial_params = NULL;
@@ -104,7 +104,7 @@ void warm_boot_ecu(void)
 }
 
 
-void cold_boot_ecu(void)
+void hard_boot_ecu(void)
 {
 	GTimeVal tval;
 	Serial_Params *serial_params = NULL;

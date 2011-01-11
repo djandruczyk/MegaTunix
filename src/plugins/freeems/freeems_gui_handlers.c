@@ -45,11 +45,11 @@ G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 
 	switch (handler)
 	{
-		case WARM_BOOT_ECU:
-			warm_boot_ecu();
+		case SOFT_BOOT_ECU:
+			soft_boot_ecu();
 			break;
-		case COLD_BOOT_ECU:
-			cold_boot_ecu();
+		case HARD_BOOT_ECU:
+			hard_boot_ecu();
 			break;
 	}
 	return TRUE;
