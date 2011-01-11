@@ -23,7 +23,7 @@
 extern gconstpointer *global_data;
 
 
-void open_binary_logs(void)
+G_MODULE_EXPORT void open_binary_logs(void)
 {
 	GIOChannel *ichan = NULL;
 	GIOChannel *ochan = NULL;
@@ -61,7 +61,7 @@ void open_binary_logs(void)
 }
 
 
-void close_binary_logs(void)
+G_MODULE_EXPORT void close_binary_logs(void)
 {
 	GIOChannel *ichan = NULL;
 	GIOChannel *ochan = NULL;
@@ -83,7 +83,7 @@ void close_binary_logs(void)
 }
 
 
-gboolean flush_binary_logs(gpointer data)
+G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 {
 	GIOChannel *ichan = NULL;
 	GIOChannel *ochan = NULL;

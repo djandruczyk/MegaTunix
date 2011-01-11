@@ -32,7 +32,8 @@ libfreeems_la_SOURCES = \
 	vetable_gui.h 
 
 libfreeems_la_LDFLAGS = -shared $(no_undefined) -module
-libfreeems_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@
+libfreeems_la_LIBADD = ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la ../../../widgets/libmtxcurve.la ../../../widgets/libmtxgauge.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@
+
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 

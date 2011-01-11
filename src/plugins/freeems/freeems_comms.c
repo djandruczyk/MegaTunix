@@ -438,7 +438,7 @@ void *unix_reader(gpointer data)
 }
 
 
-gboolean setup_rtv(void)
+G_MODULE_EXPORT gboolean setup_rtv(void)
 {
 	GAsyncQueue *queue = NULL;
 	GThread *thread = NULL;
@@ -453,7 +453,7 @@ gboolean setup_rtv(void)
 }
 
 
-gboolean teardown_rtv(void)
+G_MODULE_EXPORT gboolean teardown_rtv(void)
 {
 	GAsyncQueue *queue = NULL;
 	GThread *thread = NULL;
@@ -474,7 +474,7 @@ gboolean teardown_rtv(void)
 }
 
 
-void *rtv_subscriber(gpointer data)
+G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 {
 	GAsyncQueue *queue = (GAsyncQueue *)data;
 	GTimeVal now;
@@ -490,7 +490,7 @@ void *rtv_subscriber(gpointer data)
 		{
 			DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER((gint)DATA_GET(global_data,"rt_goodread_count")+1));
 			process_rt_vars_f(packet->data+packet->payload_base_offset,packet->payload_length);
-			io_cmd("datalog_post_functions",NULL);
+			io_cmd_f("datalog_post_functions",NULL);
 			freeems_packet_cleanup(packet);
 		}
 	}
@@ -499,7 +499,7 @@ void *rtv_subscriber(gpointer data)
 }
 
 
-void signal_read_rtvars(void)
+G_MODULE_EXPORT void signal_read_rtvars(void)
 {
 	OutputData *output = NULL;	
 	Firmware_Details *firmware = NULL;

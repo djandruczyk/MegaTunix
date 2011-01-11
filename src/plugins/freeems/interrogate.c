@@ -101,7 +101,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 }
 
 
-gchar *request_firmware_version(gint *len)
+G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -160,7 +160,7 @@ gchar *request_firmware_version(gint *len)
 }
 
 
-gchar * request_interface_version(gint *len)
+G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -219,7 +219,7 @@ gchar * request_interface_version(gint *len)
 }
 
 
-gchar * request_detailed_interface_version(guint8 *major, guint8 *minor, guint8 *micro)
+G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8 *minor, guint8 *micro)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -283,7 +283,7 @@ gchar * request_detailed_interface_version(guint8 *major, guint8 *minor, guint8 
 /*
  \brief Queries the ECU for a location ID list
  */
-GList *request_location_ids(gint * len)
+G_MODULE_EXPORT GList *request_location_ids(gint * len)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -358,7 +358,7 @@ GList *request_location_ids(gint * len)
  command tested against the ECU arestored
  \returns a dynamic GArray for commands
  */
-gboolean validate_and_load_tests(GArray **tests, GHashTable **tests_hash)
+G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **tests_hash)
 {
 	ConfigFile *cfgfile;
 	Detection_Test *test = NULL;
@@ -435,7 +435,7 @@ gboolean validate_and_load_tests(GArray **tests, GHashTable **tests_hash)
 }
 
 
-void test_cleanup(gpointer data)
+G_MODULE_EXPORT void test_cleanup(gpointer data)
 {
 	Detection_Test *test = (Detection_Test *)data;
 	cleanup_f(test->test_func);
@@ -450,7 +450,7 @@ void test_cleanup(gpointer data)
 }
 
 
-gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
+G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 {
 	gboolean retval = TRUE;
 	gint i = 0;
@@ -664,7 +664,7 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 }
 
 
-gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
+G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 {
 	ConfigFile *cfgfile;
 	gchar * tmpbuf = NULL;

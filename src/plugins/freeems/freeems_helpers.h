@@ -23,6 +23,7 @@
 /* Prototypes */
 void stop_streaming(void);
 void warm_boot_ecu(void);
+void cold_boot_ecu(void);
 /* Prototypes */
 
 #endif
