@@ -61,6 +61,7 @@ headers = \
 	stringmatch.h \
 	tabloader.h \
 	tag_loader.h \
+	template.h \
 	threads.h \
 	timeout_handlers.h \
 	unions.h \

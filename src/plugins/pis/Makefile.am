@@ -12,7 +12,10 @@ plugin_LTLIBRARIES = libpis.la
 
 libpis_la_SOURCES = \
 	Makefile \
-	template.c
+	pis_plugin.c \
+	pis_plugin.h \
+	pis_gui_handlers.c \
+	pis_gui_handlers.h
 
 libpis_la_LDFLAGS = -shared @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ $(no_undefined) -module
 

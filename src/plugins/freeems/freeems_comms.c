@@ -26,7 +26,6 @@
 #include <sys/select.h>
 #endif
 #include <serialio.h>
-#include <template.h>
 #include <unistd.h>
 
 
