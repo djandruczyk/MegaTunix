@@ -14,7 +14,7 @@
 #define __MS3_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
-#include <null_plugin.h>
+#include <ms3_plugin.h>
 #include <gtk/gtk.h>
 
 

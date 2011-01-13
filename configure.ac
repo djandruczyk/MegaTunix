@@ -237,6 +237,7 @@ src/plugins/freeems/Makefile
 src/plugins/jimstim/Makefile
 src/plugins/ms1/Makefile
 src/plugins/ms2/Makefile
+src/plugins/ms3/Makefile
 src/plugins/mscommon/Makefile
 src/plugins/null/Makefile
 src/plugins/pis/Makefile
