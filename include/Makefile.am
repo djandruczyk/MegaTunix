@@ -2,7 +2,6 @@
 headers = \
 	3d_vetable.h \
 	about_gui.h \
-	afr_calibrate.h \
 	api-versions.h \
 	apicheck.h \
 	args.h \
