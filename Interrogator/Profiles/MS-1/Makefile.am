@@ -1,15 +1,15 @@
 profilesdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)/Profiles/MS-1
 
 profiles_in = \
-	B_and_G_1.x.prof.in \
-	B_and_G_2.0-3.01.prof.in \
-	Dualtable-1.02.prof.in \
-	SquirtnSpark-Extra-HR-08x.prof.in \
-	SquirtnSpark-Extra-HR-010a.prof.in \
-	SquirtnSpark-Extra-HR-011x.prof.in \
-	SquirtnSpark-Extra-HR-011d.prof.in \
-	SquirtnSpark-Extra-029x.prof.in \
-	SquirtnSpark-Extra-029yx.prof.in 
+	MS1-BnG_1.x.prof.in \
+	MS1-BnG_3.x.prof.in \
+	MS1-DT-1.02.prof.in \
+	MS1-Extra-HR-08x.prof.in \
+	MS1-Extra-HR-010a.prof.in \
+	MS1-Extra-HR-011x.prof.in \
+	MS1-Extra-HR-011d.prof.in \
+	MS1-Extra-029x.prof.in \
+	MS1-Extra-029yx.prof.in 
 
 
 profiles_DATA = details.cfg \

@@ -3,7 +3,7 @@ major=1
 minor=7
 
 [interrogation_profile]
-name=MegaSquirtnSpark-Extra 029x
+name=MegaSquirtnSpark-Extra Highres 011[ab]
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_
@@ -11,7 +11,7 @@ SignatureVia=get_signature
 TextVerVia=ms1_get_textrev
 NumVerVia=get_numrev
 RT_Command=ms1_extra_rtvars
-RT_total_bytes=39
+RT_total_bytes=42
 Get_All_Command=ms1_read_all
 Read_Command=ms1_veconst
 Burn_Command=ms1_burn
@@ -269,13 +269,13 @@ z_base_offset=0
 z_size=_U08_
 z_source=afr1
 z_suffix=AFR
-z_dl_conv_expr=x/10
-z_ul_conv_expr=x*10
+z_ul_conv_expr=x/10
+z_dl_conv_expr=x*10
 z_lookuptable=nbo2_table
 z_alt_lookuptable=wbo2_table
 z_depend_on=z_o2_sensor
 z_o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
-z_precision=1
+z_precision=2
 
 [table_6]
 _table_name=AFR Table 2, MSnSpark-Extra
@@ -312,7 +312,7 @@ z_lookuptable=nbo2_table
 z_alt_lookuptable=wbo2_table
 z_depend_on=z_o2_sensor
 z_o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
-z_precision=1
+z_precision=2
 
 [table_7]
 _table_name=Boost Table 1, KPA target: RPM vs TPS, MSnSpark-Extra
@@ -346,6 +346,7 @@ z_suffixes=KPa,KPa,KPa,KPa
 z_ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 z_dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
 z_precisions=0,0,0,0
+
 
 [table_8]
 _table_name=Boost Table 2, DC Target: RPM vs TPS, MSnSpark-Extra
@@ -424,8 +425,8 @@ x_dl_conv_expr=x/100
 x_precision=0
 y_page=8
 y_base_offset=105
-y_size=_U08_
 y_bincount=6
+y_size=_U08_
 y_multi_source=TRUE
 y_source_key=map_sensor
 y_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -544,20 +545,19 @@ length=256
 match_on=MS-I_Clock,MS-I_RTVars,MSnS-E_RTVars,MS-I_VEconst,MS_Signature
 MS-I_Clock=_COUNT_,1
 MS-I_RTVars=_COUNT_,22
-MSnS-E_RTVars=_COUNT_,39
+MSnS-E_RTVars=_COUNT_,42
 MS-I_VEconst=_COUNT_,189
-MS_Signature=_SUBMATCH_,extra format 029q
-
+MS_Signature=_REGEX_,format hr_11[ab]
 
 [gui]
-RealtimeMapFile=MSnS-Extra-029x
-SliderMapFile=MSnS-Extra
-RuntimeTextMapFile=MSnS-Extra
-StatusMapFile=MSnS-Extra
+RealtimeMapFile=MS1-Extra-HR-029x
+SliderMapFile=MS1-Extra
+RuntimeTextMapFile=MS1-Extra
+StatusMapFile=MS1-Extra
 
-LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,msns-e-idle,msns-e-ego,msns-e-boost-knock,msns-e-water-nos-launch,msns-e-crank-ase,msns-e-output-pins,msns-e-outputs-sel,msns-e-traction,msns-e-wheeldecode,msns-e-advanced,msns-e-accelwizard,vetable_12x12x3,sparktable_12x12x2,afrtable_8x8x2,boost_6x6x3,rotary-trail,msns-e-toothtrigger,error_status
+LoadTabs=runtime,datalogging,logviewer,tools,msns-e-features,msns-e-fuelconstants,msns-e-idle,msns-e-ego,msns-e-boost-knock,msns-e-water-nos-launch,msns-e-crank-ase,msns-e-output-pins-hr-011x,msns-e-outputs-sel,msns-e-traction,msns-e-wheeldecode-029yx,msns-e-advanced,msns-e-accelwizard,vetable_12x12x3,sparktable_12x12x2,afrtable_8x8x2,boost_6x6x3,rotary-trail,msns-e-toothtrigger,error_status
 
-TabConfs=runtime,datalogging,logviewer,tools,msns-e-features-029x,msns-e-fuelconstants-029x,msns-e-idle-029x,msns-e-ego-029x,msns-e-boost-knock-029x,msns-e-water-nos-launch-029x,msns-e-crank-ase-029x,msns-e-output-pins-029x,msns-e-outputs-sel-029x,msns-e-traction-029x,msns-e-wheeldecode-029x,msns-e-advanced-029x,msns-e-accelwizard-029x,vetable_12x12x3-029x,sparktable_12x12x2-029x,afrtable_8x8x2-029x,boost_6x6x3-029x,rotary-trail-029x,msns-e-toothtrigger-029x,error_status
+TabConfs=runtime,datalogging,logviewer,tools,msns-e-features-029x,msns-e-fuelconstants-hr,msns-e-idle-hr,msns-e-ego-029x,msns-e-boost-knock-029x,msns-e-water-nos-launch-029x,msns-e-crank-ase-029x,msns-e-output-pins-hr-011x,msns-e-outputs-sel-029x,msns-e-traction-029x,msns-e-wheeldecode-hr_10x,msns-e-advanced-029x,msns-e-accelwizard-029x,vetable_12x12x3-029x,sparktable_12x12x2-029x,afrtable_8x8x2-029x,boost_6x6x3-029x,rotary-trail-029x,msns-e-toothtrigger-029x,error_status
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

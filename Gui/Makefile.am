@@ -34,6 +34,7 @@ gui_glade_files = 	\
 		ms2-e-3.x-can.glade \
 		ms2-e-3.x-corrections_misc.glade \
 		ms2-e-3.x-crank_idle_warmup.glade \
+		ms2-e-3.1.x-crank_idle_warmup.glade \
 		ms2-e-3.x-debugging.glade \
 		ms2-e-3.0.3v-ego_rev.glade \
 		ms2-e-3.x-globals.glade \
@@ -135,6 +136,7 @@ gui_in_files = 	\
 		ms2-e-3.x-can.datamap.in \
 		ms2-e-3.x-corrections_misc.datamap.in \
 		ms2-e-3.x-crank_idle_warmup.datamap.in \
+		ms2-e-3.1.x-crank_idle_warmup.datamap.in \
 		ms2-e-3.x-debugging.datamap.in \
 		ms2-e-3.x-ego_rev.datamap.in \
 		ms2-e-3.0.3v-ego_rev.datamap.in \
