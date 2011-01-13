@@ -153,6 +153,12 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
 	g_cond_timed_wait(io_dispatch_cond,mutex,&now);
 
+	/* Binary Log flusher */
+	id = (GINT)DATA_GET(global_data,"binlog_flush_id");
+	if (id)
+		g_source_remove(id);
+	DATA_SET(global_data,"binlog_flush_id",NULL);
+
 	/* PF dispatch queue */
 	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
 	if (id)
@@ -221,6 +227,8 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	close_serial();
 	unlock_serial();
+
+	close_binary_logs();
 
 	/* Grab and release all mutexes to get them to relinquish
 	 */

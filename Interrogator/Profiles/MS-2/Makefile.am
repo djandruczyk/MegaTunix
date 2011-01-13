@@ -6,6 +6,7 @@ profiles_in = \
 	MS-II-Extra_3.0.x.prof.in \
 	MS-II-Extra_3.0.3w.prof.in \
 	MS-II-Extra_3.0.3y.prof.in \
+	MS-II-Extra_3.1.0.prof.in \
 	MS-II.prof.in 
 
 

@@ -102,6 +102,8 @@ EXTERN void (*flush_serial_f)(gint, gint);
 EXTERN void (*open_binary_logs_f)(void);
 EXTERN void (*close_binary_logs_f)(void);
 EXTERN gboolean (*flush_binary_logs_f)(gpointer);
+EXTERN void (*log_inbound_data_f)(const void *, size_t);
+EXTERN void (*log_outbound_data_f)(const void *, size_t);
 
 
 /* Function Pointers */

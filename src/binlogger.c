@@ -97,3 +97,25 @@ G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 		g_io_channel_flush(ochan,NULL);
 	return TRUE;
 }
+
+
+G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
+{
+	static GIOChannel *ochan = NULL;
+
+	if (!ochan)
+		ochan = DATA_GET(global_data,"outbound_raw_logchan");
+	if (ochan)
+		g_io_channel_write_chars(ochan,buf,count,NULL,NULL);
+}
+
+
+G_MODULE_EXPORT void log_inbound_data(const void * buf, size_t count)
+{
+	static GIOChannel *ichan = NULL;
+
+	if (!ichan)
+		ichan = DATA_GET(global_data,"inbound_raw_logchan");
+	if (ichan)
+		g_io_channel_write_chars(ichan,buf,count,NULL,NULL);
+}

@@ -20,6 +20,9 @@
 void open_binary_logs(void);
 void close_binary_logs(void);
 gboolean flush_binary_logs(gpointer);
+void log_outbound_data(const void *, size_t);
+void log_inbound_data(const void *, size_t);
+
 /* Prototypes */
 
 #endif
