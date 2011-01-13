@@ -16,6 +16,7 @@
 #include <assert.h>
 #include <config.h>
 #include <configfile.h>
+#include <conversions.h>
 #include <defines.h>
 #include <debugging.h>
 #include <enums.h>
@@ -49,7 +50,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 	static GMutex *rtv_mutex = NULL;
 	static Rtv_Map *rtv_map = NULL;
 	static Firmware_Details *firmware = NULL;
-	gint temp_units;
+	gint mtx_temp_units;
 	guchar *raw_realtime = incoming;
 	gconstpointer * object = NULL;
 	gchar * expr = NULL;
@@ -89,7 +90,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 	/* Backup current rtv copy */
 	//memcpy(firmware->rt_data_last,firmware->rt_data,len);
 	//memcpy(firmware->rt_data,incoming,len);
-	temp_units = (GINT)DATA_GET(global_data,"temp_units");
+	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 	g_get_current_time(&timeval);
 	g_array_append_val(rtv_map->ts_array,timeval);
 	if (rtv_map->ts_array->len%250 == 0)
@@ -188,10 +189,7 @@ store_it:
 			if (temp_dep)
 			{
 				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tvar at offset %i is temp dependant.\n",offset));*/
-				if (temp_units == CELSIUS)
-					result = (tmpf-32.0)*(5.0/9.0);
-				else
-					result = tmpf;
+				result = temp_to_host(tmpf);
 			}
 			else
 				result = tmpf;

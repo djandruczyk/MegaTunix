@@ -96,6 +96,8 @@ EXTERN gint (*read_data_f)(gint , void **, gboolean);
 EXTERN gboolean (*check_tab_existance_f)(gint);
 EXTERN gboolean (*jump_to_tab_f)(GtkWidget *, gpointer );
 EXTERN void (*add_additional_rtt_f)(GtkWidget *);
+EXTERN gdouble (*temp_to_ecu_f)(gdouble);
+EXTERN gdouble (*temp_to_host_f)(gdouble);
 
 /* Function Pointers */
 

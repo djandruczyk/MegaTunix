@@ -54,7 +54,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gint precision = -1;
 	gint spconfig_offset = -1;
 	gint oddfire_bit_offset = -1;
-	gint temp_units = 0;
+	gint mtx_temp_units = 0;
 	gfloat scaler = 0.0;
 	gboolean temp_dep = FALSE;
 	gfloat real_value = 0.0;
@@ -100,12 +100,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 
 		case GENERIC:
 			if (OBJ_GET(widget,"temp_dep"))
-			{
-				if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
-					value = (tmpf*(9.0/5.0))+32;
-				else
-					value = tmpf;
-			}
+				value = temp_to_ecu_f(tmpf);
 			else
 				value = tmpf;
 			dload_val = convert_before_download_f(widget,value);
@@ -124,7 +119,11 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
 			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);
 
-			tmpbuf = g_strdup_printf("%1$.*2$f",real_value,precision);
+			if (OBJ_GET(widget,"temp_dep"))
+				value = temp_to_host_f(real_value);
+			else
+				value = real_value;
+			tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
 			g_signal_handlers_unblock_by_func (widget,(gpointer) entry_changed_handler_f, data);
@@ -734,24 +733,28 @@ G_MODULE_EXPORT void switch_labels(gpointer key, gpointer data)
 {
 	GtkWidget * widget = (GtkWidget *) key;
 	gboolean state = (GBOOLEAN) data;
-	gint temp_units;
+	gint mtx_temp_units;
 
-	temp_units = (GINT)DATA_GET(global_data,"temp_units");
+	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 	if (GTK_IS_WIDGET(widget))
 	{
 		if ((GBOOLEAN)OBJ_GET(widget,"temp_dep") == TRUE)
 		{
 			if (state)
 			{
-				if (temp_units == FAHRENHEIT)
+				if (mtx_temp_units == FAHRENHEIT)
 					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_f_label"));
+				else if (mtx_temp_units == KELVIN)
+					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_k_label"));
 				else
 					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_c_label"));
 			}
 			else
 			{
-				if (temp_units == FAHRENHEIT)
+				if (mtx_temp_units == FAHRENHEIT)
 					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"f_label"));
+				else if (mtx_temp_units == KELVIN)
+					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"k_label"));
 				else
 					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"c_label"));
 			}
@@ -1117,7 +1120,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 	gint handler = -1;
 	gint divider_offset = 0;
 	gint table_num = -1;
-	gint temp_units = 0;
+	gint mtx_temp_units = 0;
 	gint source = 0;
 	gboolean temp_dep = FALSE;
 	gfloat value = 0.0;
@@ -1259,10 +1262,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 			break;
 		case GENERIC:   /* Handles almost ALL other variables */
 			if ((GBOOLEAN)OBJ_GET(widget,"temp_dep"))
-			{
-				if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
-					value = (value*(9.0/5.0))+32;
-			}
+				value = temp_to_ecu_f(value);
 			dload_val = convert_before_download_f(widget,value);
 			break;
 		default:
@@ -1442,10 +1442,7 @@ void update_entry(GtkWidget *widget)
 
 	}
 	if ((GBOOLEAN)OBJ_GET(widget,"temp_dep"))
-	{
-		if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
-			value = (value-32)*(5.0/9.0);
-	}
+		value = temp_to_host_f(value);
 	if (GTK_IS_SPIN_BUTTON(widget))
 	{
 		spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));

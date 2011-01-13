@@ -288,6 +288,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"alt_f_label",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"alt_k_label",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"alt_label",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"alt_lookuptable",
@@ -351,6 +353,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"initializer",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"internal_names",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"k_label",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"label",
 			GINT_TO_POINTER(MTX_STRING));
@@ -466,6 +470,14 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(OR));
 	g_hash_table_insert(str_2_enum,"_AND_",
 			GINT_TO_POINTER(AND));
+
+	/* Temp Scales */
+	g_hash_table_insert(str_2_enum,"_KELVIN_",
+			GINT_TO_POINTER(KELVIN));
+	g_hash_table_insert(str_2_enum,"_CELSIUS_",
+			GINT_TO_POINTER(CELSIUS));
+	g_hash_table_insert(str_2_enum,"_FAHRENHEIT_",
+			GINT_TO_POINTER(FAHRENHEIT));
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 

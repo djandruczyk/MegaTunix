@@ -179,11 +179,12 @@ keys=set_label
 set_label=MS-II Warmup Tables
 
 [temp_axis_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature
 c_label=\302\260C.
 f_label=\302\260F.
+k_label=\302\260K.
 
 #----- Buttons ---------------------------------------------------------------
 

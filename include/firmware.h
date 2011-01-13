@@ -96,8 +96,8 @@ struct _Firmware_Details
 	gchar *name;		/*! textual name */
 	gchar *profile_filename;/*! Interrogation profile filename */
 	gchar *actual_signature;/*! the raw signature from the ECU */
-	gchar *text_revision;	/*! Textual revision string */
 	gint signature_len;	/*! Length of signature in bytes */
+	gchar *text_revision;	/*! Textual revision string */
 	gint txt_rev_len;	/*! Length of txt_rev in bytes */
 	gchar **tab_list;	/*! vector string of tabs to load */
 	gchar **tab_confs;	/*! Tab configuration files */
@@ -118,6 +118,7 @@ struct _Firmware_Details
 	gchar *SignatureVia;	/*! Key to retrieve signature string */
 	gchar *TextVerVia;	/*! Key to retrieve text version string */
 	gchar *NumVerVia;	/*! Key to retrieve numerical version string */
+	TempUnits ecu_temp_units;	/*! Scale of ecu temp scaled units */
 	gint interchardelay;	/*! Inter char delay (MS-II mostly) */
 	gint ro_above;		/*! read only above this page */
 	gint canID;		/*! CanID for this firmware.. */

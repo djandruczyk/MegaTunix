@@ -191,15 +191,17 @@ bind_to_list=staging_table
 #----- Labels ---------------------------------------------------------------
 
 [orfc_clt_label]
-keys=bind_to_list,f_label,c_label,temp_dep
+keys=bind_to_list,k_label,f_label,c_label,temp_dep
 bind_to_list=temperature
+k_label=and CLT greater than: (\302\260K.)
 f_label=and CLT greater than: (\302\260F.)
 c_label=and CLT greater than: (\302\260C.)
 temp_dep=TRUE
 
 [no2_enable_clt_label]
-keys=bind_to_list,f_label,c_label,temp_dep
+keys=bind_to_list,k_label,f_label,c_label,temp_dep
 bind_to_list=temperature
+k_label=and CLT temp above: (\302\260K.)
 f_label=and CLT temp above: (\302\260F.)
 c_label=and CLT temp above: (\302\260C.)
 temp_dep=TRUE

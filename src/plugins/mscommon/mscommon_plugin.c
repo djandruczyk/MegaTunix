@@ -92,6 +92,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);
 	get_symbol_f("std_entry_handler",(void *)&std_entry_handler_f);
 	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
+	get_symbol_f("temp_to_ecu",(void *)&temp_to_ecu_f);
+	get_symbol_f("temp_to_host",(void *)&temp_to_host_f);
 	get_symbol_f("thread_refresh_widget",(void *)&thread_refresh_widget_f);
 	get_symbol_f("thread_refresh_widget_range",(void *)&thread_refresh_widget_range_f);
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);

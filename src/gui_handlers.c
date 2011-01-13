@@ -154,7 +154,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_cond_timed_wait(io_dispatch_cond,mutex,&now);
 
 	/* PF dispatch queue */
-	id = DATA_GET(global_data,"pf_dispatcher_id");
+	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
 	if (id)
 		g_source_remove(id);
 	DATA_SET(global_data,"pf_dispatcher_id",NULL);
@@ -164,7 +164,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
 
 	/* Statuscounts timeout */
-	id = DATA_GET(global_data,"statuscounts_id");
+	id = (GINT)DATA_GET(global_data,"statuscounts_id");
 	if (id)
 		g_source_remove(id);
 	DATA_SET(global_data,"statuscounts_id",NULL);
@@ -174,7 +174,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_cond_timed_wait(statuscounts_cond,mutex,&now);
 
 	/* GUI Dispatch timeout */
-	id = DATA_GET(global_data,"gui_dispatcher_id");
+	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");
 	if (id)
 		g_source_remove(id);
 	DATA_SET(global_data,"gui_dispatcher_id",NULL);
@@ -321,13 +321,18 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));
 				break;
 			case FAHRENHEIT:
-				DATA_SET(global_data,"temp_units",GINT_TO_POINTER(FAHRENHEIT));
+				DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(FAHRENHEIT));
 				reset_temps(GINT_TO_POINTER(FAHRENHEIT));
 				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 				break;
 			case CELSIUS:
-				DATA_SET(global_data,"temp_units",GINT_TO_POINTER(CELSIUS));
+				DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(CELSIUS));
 				reset_temps(GINT_TO_POINTER(CELSIUS));
+				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+				break;
+			case KELVIN:
+				DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(KELVIN));
+				reset_temps(GINT_TO_POINTER(KELVIN));
 				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 				break;
 			case COMMA:
@@ -392,6 +397,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case FAHRENHEIT:
 			case CELSIUS:
+			case KELVIN:
 			case COMMA:
 			case TAB:
 			case OFFLINE_FIRMWARE_CHOICE:

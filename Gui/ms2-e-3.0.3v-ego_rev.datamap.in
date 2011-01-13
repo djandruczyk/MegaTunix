@@ -109,9 +109,10 @@ bind_to_list=rev_clt
 #----- Labels ---------------------------------------------------------------
 
 [active_ego_temp_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 c_label=Active Above CLT (\302\260C.)
 f_label=Active Above CLT (\302\260F.)
+k_label=Active Above CLT (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 

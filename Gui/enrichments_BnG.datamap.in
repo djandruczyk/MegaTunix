@@ -42,100 +42,114 @@ bind_to_list=burners
 #----- Dynamic Labels (temp dependant) ---------------------------------------
 
 [cpulse_neg40_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=-40 \302\260C.
 f_label=-40 \302\260F.
+k_label=233 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [cpulse_pos170_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=77 \302\260C.
 f_label=170 \302\260F.
+k_label=350 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_1]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=-40 \302\260C.
 f_label=-40 \302\260F.
+k_label=233 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_2]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=-28.8 \302\260C.
 f_label=-20 \302\260F.
+k_label=244 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_3]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=-17.7 \302\260C.
 f_label=0 \302\260F.
+k_label=255 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_4]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=-6.6 \302\260C.
 f_label=20 \302\260F.
+k_label=266 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_5]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=4.4 \302\260C.
 f_label=40 \302\260F.
+k_label=278 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_6]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=15.5 \302\260C.
 f_label=60 \302\260F.
+k_label=289 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_7]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=26.6 \302\260C.
 f_label=80 \302\260F.
+k_label=300 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_8]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=37.7 \302\260C.
 f_label=100 \302\260F.
+k_label=311 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_9]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=54.4 \302\260C.
 f_label=130 \302\260F.
+k_label=328 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_label_10]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=71.1 \302\260C.
 f_label=160 \302\260F.
+k_label=344 \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [warmup_master_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Engine Temperature in \302\260C.
 f_label=Engine Temperature in \302\260F.
+k_label=Engine Temperature in \302\260K.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ego_active_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=EGO Active Temp\n(\302\260C.)
 f_label=EGO Active Temp\n(\302\260F.)
+k_label=EGO Active Temp\n(\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 

@@ -173,13 +173,13 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	GtkWidget *image = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	gchar * tmpbuf = NULL;
-	gint temp_units;
+	gint mtx_temp_units;
 	Serial_Params *serial_params = NULL;
 	CmdLineArgs *args = NULL;;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	args = DATA_GET(global_data,"args");
-	temp_units = (GINT)DATA_GET(global_data,"temp_units");
+	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
 	register_widget("toplevel_notebook",widget);
@@ -215,12 +215,17 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	/* General Tab, Temp Scales */
 	button = glade_xml_get_widget(xml,"fahrenheit_rbutton");
 	OBJ_SET(button,"handler",GINT_TO_POINTER(FAHRENHEIT));
-	if (temp_units == FAHRENHEIT)
+	if (mtx_temp_units == FAHRENHEIT)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	button = glade_xml_get_widget(xml,"celsius_rbutton");
 	OBJ_SET(button,"handler",GINT_TO_POINTER(CELSIUS));
-	if (temp_units == CELSIUS)
+	if (mtx_temp_units == CELSIUS)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+
+	button = glade_xml_get_widget(xml,"kelvin_rbutton");
+	OBJ_SET(button,"handler",GINT_TO_POINTER(KELVIN));
+	if (mtx_temp_units == KELVIN)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	/* General Tab, Dashboard Ebox */

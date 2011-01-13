@@ -226,60 +226,68 @@ keys=set_label
 set_label=MS-II Warmup Tables
 
 [temp_axis_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature
 c_label=(\302\260C.)
 f_label=(\302\260F.)
+k_label=(\302\260K.)
 
 [temp2_axis_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature
 c_label=(\302\260C.)
 f_label=(\302\260F.)
+k_label=(\302\260K.)
 
 [cloop_idle_temp_axis_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature
 c_label=(\302\260C.)
 f_label=(\302\260F.)
+k_label=(\302\260K.)
 
 [clt_crank_temp_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature
 c_label=(\302\260C.)
 f_label=(\302\260F.)
+k_label=(\302\260K.)
 
 [fast_idle_temp_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature,solenoid_common
 c_label=Fast Idle Temp (\302\260C.)
 f_label=fast Idle Temp (\302\260F.)
+k_label=fast Idle Temp (\302\260K.)
 
 [solenoid_hysteresis_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature,solenoid_common
 c_label=Hysteresis (\302\260C.)
 f_label=Hysteresis (\302\260F.)
+k_label=Hysteresis (\302\260K.)
 	
 [iac_hysteresis_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature,iac_openloop
 c_label=Hysteresis (\302\260C.)
 f_label=Hysteresis (\302\260F.)
+k_label=Hysteresis (\302\260K.)
 	
 [idle_cold_temp_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 temp_dep=TRUE
 bind_to_list=temperature,iac_openloop
 c_label=Cold Temp (\302\260C.)
 f_label=Cold Temp (\302\260F.)
+k_label=Cold Temp (\302\260K.)
 	
 [min_duty_pid_label]
 keys=bind_to_list

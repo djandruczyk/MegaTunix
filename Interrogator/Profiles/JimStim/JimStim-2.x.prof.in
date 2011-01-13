@@ -6,6 +6,7 @@ minor=7
 name=JimStim v2.x
 
 [parameters]
+EcuTempUnits=_FAHRENHEIT_
 TextVerVia=get_textrev
 SignatureVia=get_signature
 RT_Command=jimstim_std_rtvars

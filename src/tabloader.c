@@ -370,7 +370,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 				OBJ_SET(object,group->keys[i],GINT_TO_POINTER(tmpi));
 				if (strstr(group->keys[i], "temp_dep"))
 				{
-					OBJ_SET(object,"widget_temp",DATA_GET(global_data,"temp_units"));
+					OBJ_SET(object,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
 				}
 				break;
 			case MTX_STRING:
@@ -608,7 +608,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	*/
 	if (cfg_read_string(cfgfile,section,"temp_dep",&tmpbuf))
 	{
-		OBJ_SET(widget,"widget_temp",DATA_GET(global_data,"temp_units"));
+		OBJ_SET(widget,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
 		g_free(tmpbuf);
 	}
 

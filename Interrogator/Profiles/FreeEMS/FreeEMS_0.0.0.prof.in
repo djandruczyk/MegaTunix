@@ -6,6 +6,7 @@ minor=7
 name=FreeEMS 0.0.0
 
 [parameters]
+EcuTempUnits=_KELVIN_
 Read_Command=generic_read
 Write_Command=generic_write
 RT_Command=basic_datalog

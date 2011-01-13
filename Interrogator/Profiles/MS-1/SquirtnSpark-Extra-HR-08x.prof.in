@@ -6,6 +6,7 @@ minor=7
 name=MegaSquirtnSpark-Extra Highres 08x
 
 [parameters]
+EcuTempUnits=_FAHRENHEIT_
 SignatureVia=get_signature
 TextVerVia=ms1_get_textrev
 NumVerVia=get_numrev

@@ -370,12 +370,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 		}
 		/* First conver to fahrenheit temp scale if temp dependant */
 		if (temp_dep)
-		{
-			if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
-				x = (new*9.0/5.0)+32;
-			else
-				x = new;
-		}
+			x = temp_to_ecu_f(new);
 		else
 			x = new;
 		/* Then evaluate it in reverse.... */
@@ -438,7 +433,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 	gboolean temp_dep = FALSE;
 	gboolean looptest = FALSE;
 	void * evaluator = NULL;
-	gint temp_units;
+	gint mtx_temp_units;
 	gchar * tmpbuf = NULL;
 	gchar * key = NULL;
 	gchar * hash_key = NULL;
@@ -449,7 +444,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 	if (!gtk_tree_model_get_iter_first(model,&iter))
 		return;
 	sources_hash = DATA_GET(global_data,"sources_hash");
-	temp_units = (GINT)DATA_GET(global_data,"temp_units");
+	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 	src_offset = (GINT)OBJ_GET(model,"src_offset");
 	lim_offset = (GINT)OBJ_GET(model,"lim_offset");
 	hys_offset = (GINT)OBJ_GET(model,"hys_offset");
@@ -497,12 +492,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 					x = cur_val;
 				tmpf = evaluator_evaluate_x_f(evaluator,x);
 				if (temp_dep)
-				{
-					if (temp_units == CELSIUS)
-						result = (tmpf-32)*(5.0/9.0);
-					else
-						result = tmpf;
-				}
+					result = temp_to_host_f(tmpf);
 				else
 					result = tmpf;
 				tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
@@ -519,12 +509,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = hys_val;
 					tmpf = evaluator_evaluate_x_f(evaluator,x);
 					if (temp_dep)
-					{
-						if (temp_units == CELSIUS)
-							result = (tmpf-32)*(5.0/9.0);
-						else
-							result = tmpf;
-					}
+						result = temp_to_host_f(tmpf);
 					else
 						result = tmpf;
 
@@ -542,12 +527,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = ulimit_val;
 					tmpf = evaluator_evaluate_x_f(evaluator,x);
 					if (temp_dep)
-					{
-						if (temp_units == CELSIUS)
-							result = (tmpf-32)*(5.0/9.0);
-						else
-							result = tmpf;
-					}
+						result = temp_to_host_f(tmpf);
 					else
 						result = tmpf;
 
@@ -587,12 +567,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 					x = cur_val;
 				tmpf = evaluator_evaluate_x_f(evaluator,x);
 				if (temp_dep)
-				{
-					if (temp_units == CELSIUS)
-						result = (tmpf-32)*(5.0/9.0);
-					else
-						result = tmpf;
-				}
+					result = temp_to_host_f(tmpf);
 				else
 					result = tmpf;
 				tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
@@ -609,12 +584,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = hys_val;
 					tmpf = evaluator_evaluate_x_f(evaluator,x);
 					if (temp_dep)
-					{
-						if (temp_units == CELSIUS)
-							result = (tmpf-32)*(5.0/9.0);
-						else
-							result = tmpf;
-					}
+						result = temp_to_host_f(tmpf);
 					else
 						result = tmpf;
 
@@ -632,12 +602,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = ulimit_val;
 					tmpf = evaluator_evaluate_x_f(evaluator,x);
 					if (temp_dep)
-					{
-						if (temp_units == CELSIUS)
-							result = (tmpf-32)*(5.0/9.0);
-						else
-							result = tmpf;
-					}
+						result = temp_to_host_f(tmpf);
 					else
 						result = tmpf;
 

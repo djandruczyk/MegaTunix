@@ -59,11 +59,12 @@ bind_to_list=barocorr_params
 #----- Labels ----------------------------------------------------------------
 
 [orfc_clt_label]
-keys=bind_to_list,temp_dep,c_label,f_label
+keys=bind_to_list,temp_dep,c_label,f_label,k_label
 bind_to_list=temperature
 temp_dep=TRUE
 c_label=and CLT greater than: (\302\260C.)
 f_label=and CLT greater than: (\302\260F.)
+k_label=and CLT greater than: (\302\260K.)
 
 [an_barocorr_label]
 keys=bind_to_list

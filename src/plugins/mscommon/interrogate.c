@@ -362,6 +362,13 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	cfg_read_string(cfgfile,"parameters","TextVerVia",&firmware->TextVerVia);
 	cfg_read_string(cfgfile,"parameters","NumVerVia",&firmware->NumVerVia);
 	cfg_read_string(cfgfile,"parameters","SignatureVia",&firmware->SignatureVia);
+	if(cfg_read_string(cfgfile,"parameters","EcuTempUnits",&tmpbuf))
+	{
+		firmware->ecu_temp_units = translate_string_f(tmpbuf);
+		g_free(tmpbuf);
+	}
+	else
+		dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": load_firmware_details()\n\tFailed to find EcuTempUnits key in interrogation profile\n"));
 
 	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": load_firmware_details()\n\tfile:%s opened successfully\n",filename));
 	if(!cfg_read_boolean(cfgfile,"parameters","BigEndian",&firmware->bigendian))

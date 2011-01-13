@@ -171,7 +171,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(window,"gauge",gauge);
 			if (firmware->te_params[table_num]->gauge_temp_dep)
 			{
-				if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
+				if ((GINT)DATA_GET(global_data,"mtx_temp_units") == CELSIUS)
 					tmpbuf = g_strdelimit(firmware->te_params[table_num]->c_gauge,"\\",'/');
 				else
 					tmpbuf = g_strdelimit(firmware->te_params[table_num]->f_gauge,"\\",'/');
@@ -256,7 +256,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
 			if(firmware->te_params[table_num]->x_temp_dep)
 			{
-				OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"temp_units"));
+				OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
 				OBJ_SET(entry,"bind_to_list", g_strdup("temperature"));
 				bind_to_lists_f(entry,"temperature");
 			}
@@ -308,7 +308,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
 			if(firmware->te_params[table_num]->y_temp_dep)
 			{
-				OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"temp_units"));
+				OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
 				OBJ_SET(entry,"bind_to_list", g_strdup("temperature"));
 				bind_to_lists_f(entry,"temperature");
 			}
@@ -503,7 +503,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		gauge_list = g_list_prepend(gauge_list,(gpointer)gauge);
 		if (firmware->te_params[table_num]->gauge_temp_dep)
 		{
-			if ((GINT)DATA_GET(global_data,"temp_units") == CELSIUS)
+			if ((GINT)DATA_GET(global_data,"mtx_temp_units") == CELSIUS)
 				tmpbuf = g_strdelimit(firmware->te_params[table_num]->c_gauge,"\\",'/');
 			else
 				tmpbuf = g_strdelimit(firmware->te_params[table_num]->f_gauge,"\\",'/');
@@ -593,7 +593,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 
 		if(firmware->te_params[table_num]->x_temp_dep)
 		{
-			OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"temp_units"));
+			OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
 			OBJ_SET(entry,"bind_to_list",g_strdup("temperature"));
 			bind_to_lists_f(entry,"temperature");
 		}
@@ -647,7 +647,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 
 		if(firmware->te_params[table_num]->y_temp_dep)
 		{
-			OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"temp_units"));
+			OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
 			OBJ_SET(entry,"bind_to_list",g_strdup("temperature"));
 			bind_to_lists_f(entry,"temperature");
 		}

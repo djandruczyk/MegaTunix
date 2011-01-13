@@ -67,17 +67,19 @@ bind_to_list=orfc
 #----- Labels ---------------------------------------------------------------
 
 [orfc_clt_label]
-keys=bind_to_list,f_label,c_label,temp_dep
+keys=bind_to_list,k_label,f_label,c_label,temp_dep
 bind_to_list=temperature
 f_label=and CLT greater than: (\302\260F.)
 c_label=and CLT greater than: (\302\260C.)
+k_label=and CLT greater than: (\302\260K.)
 temp_dep=TRUE
 
 [no2_enable_clt_label]
-keys=bind_to_list,f_label,c_label,temp_dep
+keys=bind_to_list,k_label,f_label,c_label,temp_dep
 bind_to_list=temperature
 f_label=and CLT temp above: (\302\260F.)
 c_label=and CLT temp above: (\302\260C.)
+k_label=and CLT temp above: (\302\260K.)
 temp_dep=TRUE
 
 [orfc_ego_label]

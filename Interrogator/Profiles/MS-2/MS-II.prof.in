@@ -6,6 +6,7 @@ minor=7
 name=MS-II V2.8x
 
 [parameters]
+EcuTempUnits=_FAHRENHEIT_
 InterCharDelay=1
 SignatureVia=get_signature
 TextVerVia=ms2_get_textrev

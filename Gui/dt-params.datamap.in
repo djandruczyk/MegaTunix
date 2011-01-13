@@ -181,20 +181,23 @@ bind_to_list=enh_idle
 #----- Labels ---------------------------------------------------------------
 
 [fast_idle_temp_label]
-keys=c_label,f_label,alt_c_label,alt_f_label,temp_dep,bind_to_list,depend_on
+keys=c_label,f_label,k_label,alt_c_label,alt_f_label,alt_k_label,temp_dep,bind_to_list,depend_on
 c_label=Fast Idle Temp (\302\260C.)
 f_label=Fast Idle Temp (\302\260F.)
+k_label=Fast Idle Temp (\302\260K.)
 alt_c_label=Fast Idle Cutoff Temp (\302\260C.)
 alt_f_label=Fast Idle Cutoff Temp (\302\260F.)
+alt_k_label=Fast Idle Cutoff Temp (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 depend_on=idle_mode_button
 idle_mode_button=_ECU_EMB_BIT_,_U08_,0,118,16,4,0
 
 [slow_idle_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Slow Idle Temp (\302\260C.)
 f_label=Slow Idle Temp (\302\260F.)
+k_label=Slow Idle Temp (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature,enh_idle
 

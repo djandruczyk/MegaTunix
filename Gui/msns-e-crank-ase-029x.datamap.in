@@ -98,9 +98,10 @@ keys=bind_to_list
 bind_to_list=fixed_decay,fixed_map
 
 [clt_fixed_ase_label]
-keys=bind_to_list,c_label,f_label,temp_dep
+keys=bind_to_list,c_label,f_label,k_label,temp_dep
 c_label=Use Fixed ASE/MAP when CLT below (\302\260C.)
 f_label=Use Fixed ASE/MAP when CLT below (\302\260F.)
+k_label=Use Fixed ASE/MAP when CLT below (\302\260K.)
 temp_dep=TRUE
 bind_to_list=fixed_decay,fixed_map,temperature
 
@@ -247,82 +248,92 @@ page=4
 bind_to_list=xtra_crank
 
 [ase_label_1]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=-40
 f_label=-40
+k_label=233
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_2]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=-28.8
 f_label=-20
+k_label=244
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_3]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=-17.7
 f_label=0
+k_label=255
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_4]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=-6.6
 f_label=20
+k_label=266
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_5]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=4.4
 f_label=40
+k_label=278
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_6]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=15.5
 f_label=60
+k_label=289
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_7]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=26.6
 f_label=80
+k_label=300
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_8]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=37.7
 f_label=100
+k_label=311
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_9]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=54.4
 f_label=130
+k_label=328
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ase_label_10]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=71.1
 f_label=160
+k_label=344
 temp_dep=TRUE
 bind_to_list=temperature
 
@@ -337,18 +348,20 @@ page=4
 set_label=Ret 1 deg per (\302\260F.)
 
 [iat_adv_clt_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=& below CLT (\302\260C.)
 f_label=& below CLT (\302\260F.)
+k_label=& below CLT (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [iat_ret_temp_label]
-keys=page,c_label,f_label,temp_dep,bind_to_list
+keys=page,c_label,f_label,k_label,temp_dep,bind_to_list
 page=4
 c_label=& IAT above (\302\260C.)
 f_label=& IAT above (\302\260F.)
+k_label=& IAT above (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 

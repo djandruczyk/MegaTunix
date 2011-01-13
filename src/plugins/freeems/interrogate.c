@@ -684,11 +684,18 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		cfg_free(cfgfile);
 		return FALSE;
 	}
+	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": load_firmware_details()\n\tfile:%s opened successfully\n",filename));
 
 	firmware->profile_filename = g_strdup(filename);
 	cfg_read_string(cfgfile,"interrogation_profile","name",&firmware->name);
+	if(cfg_read_string(cfgfile,"parameters","EcuTempUnits",&tmpbuf))
+	{
+		firmware->ecu_temp_units = translate_string_f(tmpbuf);
+		g_free(tmpbuf);
+	}
+	else
+		dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": load_firmware_details()\n\tFailed to find EcuTempUnits key in interrogation profile\n"));
 
-	dbg_func_f(INTERROGATOR,g_strdup_printf(__FILE__": load_firmware_details()\n\tfile:%s opened successfully\n",filename));
 	if(!cfg_read_boolean(cfgfile,"parameters","BigEndian",&firmware->bigendian))
 	{
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"BigEndian\" key not found in interrogation profile, assuming ECU firmware byte order is big endian, ERROR in interrogation profile\n"));

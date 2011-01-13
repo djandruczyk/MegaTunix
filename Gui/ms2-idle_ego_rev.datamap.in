@@ -59,30 +59,34 @@ _tooltip=This button will turn red when a value is changed in the ECU's RAM but 
 #----- Labels ---------------------------------------------------------------
 
 [fidle_temp_label]
-keys=temp_dep,c_label,f_label,bind_to_list
+keys=temp_dep,c_label,k_label,f_label,bind_to_list
 temp_dep=TRUE
 bind_to_list=temperature,solenoid_common
 c_label=Fast Idle Temp (\302\260C.)
 f_label=Fast Idle Temp (\302\260F.)
+k_label=Fast Idle Temp (\302\260K.)
 
 [active_ego_temp_label]
-keys=temp_dep,bind_to_list,c_label,f_label
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
 c_label=Active Above CLT (\302\260C.)
 f_label=Active Above CLT (\302\260F.)
+k_label=Active Above CLT (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [hysteresis_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Hysteresis (\302\260C.)
 f_label=Hysteresis (\302\260F.)
+k_label=Hysteresis (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature,iac_common
 
 [cold_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Cold Temperature (\302\260C.)
 f_label=Cold Temperature (\302\260F.)
+k_label=Cold Temperature (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature,iac_common
 

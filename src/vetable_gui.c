@@ -40,7 +40,6 @@
  that was used. From this widget we extract the table number and other 
  needed data to properly do the rescaling.
  */
-static gboolean color_changed = FALSE;
 extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void rescale_table(GtkWidget *widget)

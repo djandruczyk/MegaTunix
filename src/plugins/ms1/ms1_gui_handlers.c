@@ -227,9 +227,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 	gint handler = -1;
 	gint divider_offset = 0;
 	gint table_num = -1;
-	gint temp_units = 0;
 	gint source = 0;
-	gboolean temp_dep = FALSE;
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
 	Deferred_Data *d_data = NULL;

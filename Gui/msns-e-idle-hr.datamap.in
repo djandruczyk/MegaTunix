@@ -68,37 +68,42 @@ keys=bind_to_list
 bind_to_list=pwm_idle_controls
 
 [bng_idle_cutoff_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Fast Idle Cutoff Temp (\302\260C.)
 f_label=Fast Idle Cutoff Temp (\302\260F.)
+k_label=Fast Idle Cutoff Temp (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature,bng_idle_controls
 
 [w_fast_idle_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Fast Idle (cold) Temp (\302\260C.)
 f_label=Fast Idle (cold) Temp (\302\260F.)
+k_label=Fast Idle (cold) Temp (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [w_slow_idle_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Slow Idle (hot) Temp (\302\260C.)
 f_label=Slow Idle (hot) Temp (\302\260F.)
+k_label=Slow Idle (hot) Temp (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [fast_idle_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Fast Idle (cold) Temp (\302\260C.)
 f_label=Fast Idle (cold) Temp (\302\260F.)
+k_label=Fast Idle (cold) Temp (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 
 [slow_idle_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Slow Idle (hot) Temp (\302\260C.)
 f_label=Slow Idle (hot) Temp (\302\260F.)
+k_label=Slow Idle (hot) Temp (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 

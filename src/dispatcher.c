@@ -310,7 +310,7 @@ trypop:
 					message->payload = NULL;
 					break;
 					gdk_threads_enter();
-					reset_temps(DATA_GET(global_data,"temp_units"));
+					reset_temps(DATA_GET(global_data,"mtx_temp_units"));
 					gdk_threads_leave();
 			}
 

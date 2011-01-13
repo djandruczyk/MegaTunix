@@ -6,6 +6,7 @@ minor=7
 name=Standard Bowling & Grippo v2.0-3.01
 
 [parameters]
+EcuTempUnits=_FAHRENHEIT_
 TextVerVia=ms1_get_textrev
 NumVerVia=get_numrev
 RT_Command=ms1_std_rtvars

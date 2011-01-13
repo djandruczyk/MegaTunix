@@ -361,7 +361,6 @@
                                   <widget class="GtkHBox" id="hbox2">
                                     <property name="visible">True</property>
                                     <property name="spacing">5</property>
-                                    <property name="homogeneous">True</property>
                                     <child>
                                       <widget class="GtkFrame" id="frame1">
                                         <property name="visible">True</property>
@@ -440,6 +439,22 @@
                                               <packing>
                                                 <property name="fill">False</property>
                                                 <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkRadioButton" id="kelvin_rbutton">
+                                                <property name="label" translatable="yes">Kelvin</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <property name="group">fahrenheit_rbutton</property>
+                                                <signal name="toggled" handler="toggle_button_handler"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="fill">False</property>
+                                                <property name="position">2</property>
                                               </packing>
                                             </child>
                                           </widget>

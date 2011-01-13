@@ -37,9 +37,10 @@ handler=_REQ_FUEL_POPUP_
 #----- Labels ----------------------------------------------------------------
 
 [fast_idle_thresh_temp_label]
-keys=c_label,f_label,temp_dep,bind_to_list
+keys=c_label,f_label,k_label,temp_dep,bind_to_list
 c_label=Fast Idle Threshold (\302\260C.)
 f_label=Fast Idle Threshold (\302\260F.)
+k_label=Fast Idle Threshold (\302\260K.)
 temp_dep=TRUE
 bind_to_list=temperature
 

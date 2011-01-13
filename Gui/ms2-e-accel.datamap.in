@@ -217,16 +217,18 @@ keys=bind_to_list
 bind_to_list=non_eae
 
 [EAEAWWCLT_label]
-keys=bind_to_list,c_label,f_label
+keys=bind_to_list,c_label,f_label,k_label
 bind_to_list=temperature
 c_label=(\302\260C.)
 f_label=(\302\260F.)
+k_label=(\302\260K.)
 
 [EAESOWCLT_label]
-keys=bind_to_list,c_label,f_label
+keys=bind_to_list,c_label,f_label,k_label
 bind_to_list=temperature
 c_label=(\302\260C.)
 f_label=(\302\260F.)
+k_label=(\302\260K.)
 
 [eae_lag_frame]
 keys=bind_to_list

@@ -30,6 +30,7 @@
 #include <tabloader.h>
 
 
+extern gconstpointer *global_data;
 
 /*!
  \brief convert_before_download() converts the value passed using the
@@ -61,7 +62,6 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gchar * hash_key = NULL;
 	gint *algorithm = NULL;
 	GHashTable *sources_hash = NULL;
-	extern gconstpointer *global_data;
 
 	sources_hash = DATA_GET(global_data,"sources_hash");
 	algorithm = DATA_GET(global_data,"algorithm");
@@ -391,117 +391,228 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tWidget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n",glade_get_widget_name(widget)));
 	}
 
-	if ((GINT)units == FAHRENHEIT) 
+	switch ((TempUnits)units)
 	{
-		/*printf("fahr %s\n",glade_get_widget_name(widget));*/
-		if (GTK_IS_LABEL(widget))
-		{
-			if ((dep_obj) && (state))	
-				text = (gchar *)OBJ_GET(widget,"alt_f_label");
-			else
-				text = (gchar *)OBJ_GET(widget,"f_label");
-			gtk_label_set_text(GTK_LABEL(widget),text);
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+		case FAHRENHEIT:
+			/*printf("fahr %s\n",glade_get_widget_name(widget));*/
+			if (GTK_IS_LABEL(widget))
+			{
+				if ((dep_obj) && (state))	
+					text = (gchar *)OBJ_GET(widget,"alt_f_label");
+				else
+					text = (gchar *)OBJ_GET(widget,"f_label");
+				gtk_label_set_text(GTK_LABEL(widget),text);
+				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 
-		}
-		if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp == CELSIUS))
-		{
+			}
+			if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp != FAHRENHEIT))
+			{
 
-			adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
-					GTK_SPIN_BUTTON(widget));
-			upper = adj->upper;
-			value = adj->value;
-			lower = adj->lower;
-			adj->value = ((value *(9.0/5.0))+32)+0.001;
-			adj->upper = ((upper *(9.0/5.0))+32)+0.001;
-			adj->lower = ((lower *(9.0/5.0))+32)+0.001;
+				adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
+						GTK_SPIN_BUTTON(widget));
+				upper = adj->upper;
+				value = adj->value;
+				lower = adj->lower;
+				if (widget_temp == CELSIUS)
+				{
+					adj->value = c_to_f(value);
+					adj->lower = c_to_f(lower);
+					adj->upper = c_to_f(upper);
+				}
+				else /* Previous is kelvin */
+				{
+					adj->value = k_to_f(value);
+					adj->lower = k_to_f(lower);
+					adj->upper = k_to_f(upper);
+				}
 
-			gtk_adjustment_changed(adj);
-			/*
-			gtk_spin_button_set_value(
-					GTK_SPIN_BUTTON(widget),
-					adj->value);
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-			*/
-			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget_f(widget,NULL);
-		}
-		if ((GTK_IS_ENTRY(widget)) && (widget_temp == CELSIUS))
-		{
-			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget_f(widget,NULL);
-		}
-		if ((GTK_IS_RANGE(widget)) && (widget_temp == CELSIUS))
-		{
-			adj = (GtkAdjustment *) gtk_range_get_adjustment(
-					GTK_RANGE(widget));
-			upper = adj->upper;
-			lower = adj->lower;
-			value = adj->value;
-			adj->value = ((value *(9.0/5.0))+32)+0.001;
-			adj->lower = ((lower *(9.0/5.0))+32)+0.001;
-			adj->upper = ((upper *(9.0/5.0))+32)+0.001;
+				gtk_adjustment_changed(adj);
+				/*
+				   gtk_spin_button_set_value(
+				   GTK_SPIN_BUTTON(widget),
+				   adj->value);
+				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				 */
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+				update_widget_f(widget,NULL);
+			}
+			if ((GTK_IS_ENTRY(widget)) && (widget_temp != FAHRENHEIT))
+			{
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+				update_widget_f(widget,NULL);
+			}
+			if ((GTK_IS_RANGE(widget)) && (widget_temp != FAHRENHEIT))
+			{
+				adj = (GtkAdjustment *) gtk_range_get_adjustment(
+						GTK_RANGE(widget));
+				upper = adj->upper;
+				lower = adj->lower;
+				value = adj->value;
+				if (widget_temp == CELSIUS)
+				{
+					adj->value = c_to_f(value);
+					adj->lower = c_to_f(lower);
+					adj->upper = c_to_f(upper);
+				}
+				else /* Previous is kelvin */
+				{
+					adj->value = k_to_f(value);
+					adj->lower = k_to_f(lower);
+					adj->upper = k_to_f(upper);
+				}
 
-			gtk_range_set_adjustment(GTK_RANGE(widget),adj);
-			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-		}
+				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			}
+			break;
+		case CELSIUS:
+			/*printf("fahr %s\n",glade_get_widget_name(widget));*/
+			if (GTK_IS_LABEL(widget))
+			{
+				if ((dep_obj) && (state))	
+					text = (gchar *)OBJ_GET(widget,"alt_c_label");
+				else
+					text = (gchar *)OBJ_GET(widget,"c_label");
+				gtk_label_set_text(GTK_LABEL(widget),text);
+				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+
+			}
+			if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp != CELSIUS))
+			{
+
+				adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
+						GTK_SPIN_BUTTON(widget));
+				upper = adj->upper;
+				value = adj->value;
+				lower = adj->lower;
+				if (widget_temp == FAHRENHEIT)
+				{
+					adj->value = f_to_c(value);
+					adj->lower = f_to_c(lower);
+					adj->upper = f_to_c(upper);
+				}
+				else /* Previous is kelvin */
+				{
+					adj->value = k_to_c(value);
+					adj->lower = k_to_c(lower);
+					adj->upper = k_to_c(upper);
+				}
+
+				gtk_adjustment_changed(adj);
+				/*
+				   gtk_spin_button_set_value(
+				   GTK_SPIN_BUTTON(widget),
+				   adj->value);
+				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				 */
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+				update_widget_f(widget,NULL);
+			}
+			if ((GTK_IS_ENTRY(widget)) && (widget_temp != CELSIUS))
+			{
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+				update_widget_f(widget,NULL);
+			}
+			if ((GTK_IS_RANGE(widget)) && (widget_temp != CELSIUS))
+			{
+				adj = (GtkAdjustment *) gtk_range_get_adjustment(
+						GTK_RANGE(widget));
+				upper = adj->upper;
+				lower = adj->lower;
+				value = adj->value;
+				if (widget_temp == FAHRENHEIT)
+				{
+					adj->value = f_to_c(value);
+					adj->lower = f_to_c(lower);
+					adj->upper = f_to_c(upper);
+				}
+				else /* Previous is kelvin */
+				{
+					adj->value = k_to_c(value);
+					adj->lower = k_to_c(lower);
+					adj->upper = k_to_c(upper);
+				}
+
+				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			}
+			break;
+		case KELVIN:
+			/*printf("fahr %s\n",glade_get_widget_name(widget));*/
+			if (GTK_IS_LABEL(widget))
+			{
+				if ((dep_obj) && (state))	
+					text = (gchar *)OBJ_GET(widget,"alt_k_label");
+				else
+					text = (gchar *)OBJ_GET(widget,"k_label");
+				gtk_label_set_text(GTK_LABEL(widget),text);
+				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+
+			}
+			if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp != KELVIN))
+			{
+
+				adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
+						GTK_SPIN_BUTTON(widget));
+				upper = adj->upper;
+				value = adj->value;
+				lower = adj->lower;
+				if (widget_temp == FAHRENHEIT)
+				{
+					adj->value = f_to_k(value);
+					adj->lower = f_to_k(lower);
+					adj->upper = f_to_k(upper);
+				}
+				else /* Previous is celsius */
+				{
+					adj->value = c_to_k(value);
+					adj->lower = c_to_k(lower);
+					adj->upper = c_to_k(upper);
+				}
+
+				gtk_adjustment_changed(adj);
+				/*
+				   gtk_spin_button_set_value(
+				   GTK_SPIN_BUTTON(widget),
+				   adj->value);
+				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				 */
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+				update_widget_f(widget,NULL);
+			}
+			if ((GTK_IS_ENTRY(widget)) && (widget_temp != KELVIN))
+			{
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+				update_widget_f(widget,NULL);
+			}
+			if ((GTK_IS_RANGE(widget)) && (widget_temp != KELVIN))
+			{
+				adj = (GtkAdjustment *) gtk_range_get_adjustment(
+						GTK_RANGE(widget));
+				upper = adj->upper;
+				lower = adj->lower;
+				value = adj->value;
+				if (widget_temp == FAHRENHEIT)
+				{
+					adj->value = f_to_k(value);
+					adj->lower = f_to_k(lower);
+					adj->upper = f_to_k(upper);
+				}
+				else /* Previous is celsius */
+				{
+					adj->value = c_to_k(value);
+					adj->lower = c_to_k(lower);
+					adj->upper = c_to_k(upper);
+				}
+
+				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
+				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
+			}
+			break;
 	}
-	else
-	{
-		/*printf("cels %s\n",glade_get_widget_name(widget));*/
-		if (GTK_IS_LABEL(widget))
-		{
-			if ((dep_obj) && (state))	
-				text = (gchar *)OBJ_GET(widget,"alt_c_label");
-			else
-				text = (gchar *)OBJ_GET(widget,"c_label");
-			gtk_label_set_text(GTK_LABEL(widget),text);
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-		}
-
-		if ((GTK_IS_SPIN_BUTTON(widget)) && (widget_temp == FAHRENHEIT))
-		{
-			adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
-					GTK_SPIN_BUTTON(widget));
-			upper = adj->upper;
-			lower = adj->lower;
-			value = adj->value;
-			adj->value = ((value-32)*(5.0/9.0))+0.001;
-			adj->lower = ((lower-32)*(5.0/9.0))+0.001;
-			adj->upper = ((upper-32)*(5.0/9.0))+0.001;
-			gtk_adjustment_changed(adj);
-			/*
-			gtk_spin_button_set_value(
-					GTK_SPIN_BUTTON(widget),
-					adj->value);
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-			*/
-			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget_f(widget,NULL);
-		}
-		if ((GTK_IS_ENTRY(widget)) && (widget_temp == FAHRENHEIT))
-		{
-			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-			update_widget_f(widget,NULL);
-		}
-		if ((GTK_IS_RANGE(widget)) && (widget_temp == FAHRENHEIT))
-		{
-			adj = (GtkAdjustment *) gtk_range_get_adjustment(
-					GTK_RANGE(widget));
-			upper = adj->upper;
-			lower = adj->lower;
-			value = adj->value;
-			adj->value = ((value-32)*(5.0/9.0))+0.001;
-			adj->lower = ((lower-32)*(5.0/9.0))+0.001;
-			adj->upper = ((upper-32)*(5.0/9.0))+0.001;
-
-			gtk_range_set_adjustment(GTK_RANGE(widget),adj);
-			OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
-		}
-	}
-
 }
 
 
@@ -515,4 +626,91 @@ G_MODULE_EXPORT void reset_temps(gpointer type)
 	/* Better way.. :) */
 	g_list_foreach(get_list("temperature"),convert_temps,type);
 
+}
+
+
+gdouble temp_to_host(gdouble in)
+{
+	gdouble res = 0.0;
+	static Firmware_Details *firmware = NULL;
+	TempUnits mtx_temp_units = (TempUnits)DATA_GET(global_data,"mtx_temp_units");
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,in);
+
+	if(firmware->ecu_temp_units == mtx_temp_units)
+		res = in;
+	else if ((firmware->ecu_temp_units == CELSIUS) && (mtx_temp_units == FAHRENHEIT))
+		res = c_to_f(in);
+	else if ((firmware->ecu_temp_units == CELSIUS) && (mtx_temp_units == KELVIN))
+		res = c_to_k(in);
+	else if ((firmware->ecu_temp_units == FAHRENHEIT) && (mtx_temp_units == KELVIN))
+		res = f_to_k(in);
+	else if ((firmware->ecu_temp_units == FAHRENHEIT) && (mtx_temp_units == CELSIUS))
+		res = f_to_c(in);
+	else 
+		res = in;
+	return res;
+}
+
+gdouble temp_to_ecu(gdouble in)
+{
+	gdouble res = 0.0;
+	static Firmware_Details *firmware = NULL;
+	TempUnits mtx_temp_units = (TempUnits)DATA_GET(global_data,"mtx_temp_units");
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,in);
+
+	if(firmware->ecu_temp_units == mtx_temp_units)
+		res = in;
+	else if ((firmware->ecu_temp_units == CELSIUS) && (mtx_temp_units == FAHRENHEIT))
+		res = f_to_c(in);
+	else if ((firmware->ecu_temp_units == CELSIUS) && (mtx_temp_units == KELVIN))
+		res = k_to_c(in);
+	else if ((firmware->ecu_temp_units == FAHRENHEIT) && (mtx_temp_units == KELVIN))
+		res = k_to_f(in);
+	else if ((firmware->ecu_temp_units == FAHRENHEIT) && (mtx_temp_units == CELSIUS))
+		res = c_to_f(in);
+	else
+		res = in;
+	return res;
+}
+
+
+gdouble c_to_f(gdouble in)
+{
+	return ((in *(9.0/5.0))+32.0)+0.001;
+}
+
+
+gdouble c_to_k(gdouble in)
+{
+	return (in+273.0);
+}
+
+
+gdouble f_to_c(gdouble in)
+{
+	return ((in-32.0)*(5.0/9.0))+0.001;
+}
+
+
+gdouble f_to_k(gdouble in)
+{
+	return ((in-32.0)*(5.0/9.0))+273.001;
+}
+
+
+gdouble k_to_f(gdouble in)
+{
+	return (((in-273) *(9.0/5.0))+32.0)+0.001;
+}
+
+
+gdouble k_to_c(gdouble in)
+{
+	return (in-273.0);
 }

@@ -326,8 +326,6 @@ typedef enum
 {
 	TOOLTIPS_STATE=0x500,
 	TRACKING_FOCUS,
-	FAHRENHEIT,
-	CELSIUS,
 	COMMA,
 	TAB,
 	REALTIME_VIEW,
@@ -384,4 +382,10 @@ typedef enum
 	LAST_STD_BUTTON_ENUM
 }StdButton;
 
+typedef enum
+{
+	KELVIN = 0x540,
+	FAHRENHEIT,
+	CELSIUS
+}TempUnits;
 #endif

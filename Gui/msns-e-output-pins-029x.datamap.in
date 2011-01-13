@@ -49,17 +49,19 @@ keys=bind_to_list
 bind_to_list=tachout_params
 
 [efan_on_temp_label]
-keys=bind_to_list,temp_dep,c_label,f_label
+keys=bind_to_list,temp_dep,c_label,f_label,k_label
 temp_dep=TRUE
 c_label=Fan On Temp \302\260C.
 f_label=Fan On Temp \302\260F.
+k_label=Fan On Temp \302\260K.
 bind_to_list=fan_controls,temperature
 
 [efan_off_temp_label]
-keys=bind_to_list,temp_dep,c_label,f_label
+keys=bind_to_list,temp_dep,c_label,f_label,k_label
 temp_dep=TRUE
 c_label=Fan Off Temp \302\260C.
 f_label=Fan Off Temp \302\260F.
+k_label=Fan Off Temp \302\260K.
 bind_to_list=fan_controls,temperature
 
 #------ Radio Buttons --------------------------------------------------------

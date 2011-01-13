@@ -179,16 +179,18 @@ keys=bind_to_list
 bind_to_list=revlimit
 
 [nonlinear_mat_temp_label]
-keys=bind_to_list,c_label,f_label
+keys=bind_to_list,c_label,f_label,k_label
 bind_to_list=temperature
 c_label=(\302\260C.)
 f_label=(\302\260F.)
+k_label=(\302\260K.)
 
 [mat_retard_temp_label]
-keys=bind_to_list,c_label,f_label
+keys=bind_to_list,c_label,f_label,k_label
 bind_to_list=temperature
 c_label=(\302\260C.)
 f_label=(\302\260F.)
+k_label=(\302\260K.)
 
 [mat_retard_table]
 keys=bind_to_list
