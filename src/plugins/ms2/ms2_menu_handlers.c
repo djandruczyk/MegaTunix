@@ -35,6 +35,14 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 	if (firmware->capabilities & MS2)
 	{
 		menu = glade_xml_get_widget (xml, "tools_menu_menu");
+		item = gtk_image_menu_item_new_with_mnemonic("Battery _Voltage Calibration");
+		image = gtk_image_new_from_stock("gtk-preferences",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_battery_calibrator_window),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+		
 		item = gtk_image_menu_item_new_with_mnemonic("Sensor _Calibration (MAP/Baro)");
 		image = gtk_image_new_from_stock("gtk-preferences",GTK_ICON_SIZE_MENU);
 		g_object_set(item,"image",image,NULL);
@@ -258,8 +266,8 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 
 
 /*!
-   \brief General purpose handler to hide/show Sensor calibrate window
-    */
+ \brief General purpose handler to hide/show Sensor calibrate window
+ */
 G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
@@ -407,11 +415,94 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_get_visible(GTK_WIDGET(window)))
 #else
-	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+		if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-		gtk_widget_hide_all(GTK_WIDGET(window));
-	else
+			gtk_widget_hide_all(GTK_WIDGET(window));
+		else
+			gtk_widget_show_all(GTK_WIDGET(window));
+	return TRUE;
+}
+
+
+/*!
+ \brief General purpose handler to hide/show Battery calibrate window
+ */
+G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpointer data)
+{
+	static GtkWidget *window = NULL;
+	GtkWidget *item = NULL;
+	GladeXML *main_xml = NULL;
+	GladeXML *xml = NULL;
+	Firmware_Details *firmware = NULL;
+	GList ***ecu_widgets;
+	void (*update_widget_f)(gpointer, gpointer) = NULL;
+
+	if (!update_widget_f)
+		get_symbol_f("update_widget",(void *)&update_widget_f);
+
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	firmware = DATA_GET(global_data,"firmware");
+	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
+	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+		return TRUE;
+
+	if (!GTK_IS_WIDGET(window))
+	{
+		xml = glade_xml_new(main_xml->filename,"battery_calibration_window",NULL);
+		window = glade_xml_get_widget(xml,"battery_calibration_window");
+		glade_xml_signal_autoconnect(xml);
+
+		item = glade_xml_get_widget(xml,"batt0_entry");
+		register_widget_f("batt0_entry",item);
+		OBJ_SET(item,"page",GINT_TO_POINTER(0));
+		OBJ_SET(item,"offset",GINT_TO_POINTER(522));
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
+		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		ecu_widgets[0][522] = g_list_prepend(
+				ecu_widgets[0][522],
+				(gpointer)item);
+
+		item = glade_xml_get_widget(xml,"battmax_entry");
+		register_widget_f("battmax_entry",item);
+		OBJ_SET(item,"page",GINT_TO_POINTER(0));
+		OBJ_SET(item,"offset",GINT_TO_POINTER(524));
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
+		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
+		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
+		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
+		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		ecu_widgets[0][524] = g_list_prepend(
+				ecu_widgets[0][524],
+				(gpointer)item);
+
+			/* Force them to update */
+		g_list_foreach(ecu_widgets[0][522],update_widget_f,NULL);
+		g_list_foreach(ecu_widgets[0][524],update_widget_f,NULL);
+
+		item = glade_xml_get_widget(xml,"get_data_button");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(READ_VE_CONST));
+		OBJ_SET(item,"bind_to_list",g_strdup("get_data_buttons"));
+
+		item = glade_xml_get_widget(xml,"burn_data_button");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
+		bind_to_lists_f(item,"burners");
+		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
+
+		return TRUE;
+	}
+#if GTK_MINOR_VERSION >= 18
+	if (gtk_widget_get_visible(GTK_WIDGET(window)))
+#else
+		if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+#endif
+			gtk_widget_hide_all(GTK_WIDGET(window));
+		else
+			gtk_widget_show_all(GTK_WIDGET(window));
 	return TRUE;
 }
 
