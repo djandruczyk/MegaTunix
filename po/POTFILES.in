@@ -156,6 +156,8 @@ src/plugins/ms2/ms2_menu_handlers.c
 src/plugins/ms2/ms2_plugin.c
 src/plugins/ms2/ms2_tlogger.c
 src/plugins/ms2/user_outputs.c
+src/plugins/ms3/ms3_gui_handlers.c
+src/plugins/ms3/ms3_plugin.c
 src/plugins/mscommon/2d_table_editor.c
 src/plugins/mscommon/afr_calibrate.c
 src/plugins/mscommon/datamgmt.c
@@ -178,8 +180,10 @@ src/plugins/mscommon/vetable_gui.c
 src/plugins/mscommon/vex_support.c
 src/plugins/null/null_gui_handlers.c
 src/plugins/null/null_plugin.c
-src/plugins/pis/template.c
-src/plugins/secu3/template.c
+src/plugins/pis/pis_gui_handlers.c
+src/plugins/pis/pis_plugin.c
+src/plugins/secu3/secu3_gui_handlers.c
+src/plugins/secu3/secu3_plugin.c
 src/post_process.c
 src/raweditor.c
 src/rtv_map_loader.c
