@@ -3,7 +3,7 @@ major=1
 minor=5
 
 [realtime_map]
-persona=MS
+persona=MS-2
 applicable_firmwares=MS-II-Extra V3.0.3y series,MS-II-Extra V3.1.0 series
 applicable_revisions=MS2/Extra Alpha pre 3.1 RC1
 derived_total=102

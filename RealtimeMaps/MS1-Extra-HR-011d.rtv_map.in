@@ -3,7 +3,7 @@ major=1
 minor=5
 
 [realtime_map]
-persona=MS
+persona=MS-1
 applicable_firmwares=MegaSquirtnSpark-Extra Highres 011d
 applicable_revisions=MS/Extra format hr_11 **********
 derived_total=57

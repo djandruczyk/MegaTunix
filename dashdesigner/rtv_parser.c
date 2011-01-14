@@ -107,10 +107,11 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 		/*printf("int name %s\n",int_name);*/
 		gtk_list_store_append(store,&iter);
 		/*printf("var %s, %s, icount %i, total %i\n",element,int_name,icount,rtv_data->total_files);*/
-		if (icount == rtv_data->total_files)
-			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (common)",DATASOURCE_COL,g_strdup(int_name),-1);
-		else
-			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (FW Specific)", DATASOURCE_COL,g_strdup(int_name),-1);
+//		if (icount == rtv_data->total_files)
+//			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (common)",DATASOURCE_COL,g_strdup(int_name),-1);
+//		else
+//			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (FW Specific)", DATASOURCE_COL,g_strdup(int_name),-1);
+		gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),PERSONA_COL,"", DATASOURCE_COL,g_strdup(int_name),-1);
 	
 	}
 }

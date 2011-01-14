@@ -3,7 +3,7 @@ major=1
 minor=5
 
 [realtime_map]
-persona=MS
+persona=JimStim
 applicable_firmwares=JimStim v2.x,JimStim v0.x
 applicable_revisions=JimStim (c)JSM,JB 29Mar2009****,JimStim format 0001 ***********
 derived_total=8

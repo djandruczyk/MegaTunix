@@ -26,17 +26,8 @@ AM_MAINTAINER_MODE
 
 dnl Checks for programs.
 
-AC_PROG_CC
-AC_PROG_CXX
-AC_PROG_INSTALL
-AC_PROG_LIBTOOL
-AC_PROG_LN_S
-AC_PROG_AWK
-AC_PROG_MKDIR_P
-AM_PROG_MKDIR_P
-AC_PROG_MAKE_SET
-AM_PROG_LEX
-if test "$LEX" != "flex"; 
+AC_PROG_LEX
+if test "x$LEX" != "xflex"; 
 then
 	echo "You need the 'flex' package"
 	exit 1
@@ -47,6 +38,15 @@ then
 	echo "You need the 'bison' package"
 	exit 1
 fi
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+AC_PROG_LIBTOOL
+AC_PROG_LN_S
+AC_PROG_AWK
+AC_PROG_MKDIR_P
+AM_PROG_MKDIR_P
+AC_PROG_MAKE_SET
 
 dnl Gettext Goodness
 AC_PROG_INTLTOOL([0.30])

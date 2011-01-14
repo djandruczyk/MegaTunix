@@ -3,7 +3,7 @@ major=1
 minor=5
 
 [realtime_map]
-persona=MS
+persona=MS-1
 applicable_firmwares=Dualtable v1.02,Dualtable v1.01,Dualtable v0.90-1.0
 derived_total=39
 

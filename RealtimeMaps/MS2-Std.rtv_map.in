@@ -3,7 +3,7 @@ major=1
 minor=5
 
 [realtime_map]
-persona=MS
+persona=MS-2
 applicable_firmwares=MS-II V2.8x
 applicable_revisions=** V2.88Embedded Code by B&G **,** V2.89Embedded Code by B&G **
 derived_total=70
