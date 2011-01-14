@@ -25,6 +25,8 @@
 
 
 
+extern gconstpointer *global_data;
+static gboolean read_import_file(GIOChannel *);
 
 G_MODULE_EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer data)
 {
@@ -40,15 +42,86 @@ G_MODULE_EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer d
 G_MODULE_EXPORT gboolean import_table_from_file(GtkWidget *widget, gpointer data)
 {
 	gchar * filename = NULL;
+	GIOChannel *chan = NULL;
+	gboolean res = FALSE;
 	printf("import table from file\n");
 	/* This should load and sanity check the file, if good, store it
 	   so that the send to ecu button can deliver it.
 	   */
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 	printf("filename selected: %s\n",filename);
+	chan = g_io_channel_new_file(filename, "r", NULL);
 	g_free(filename);
-	return TRUE;
+	if (!chan)
+		return FALSE;
+	res = read_import_file(chan);
+	if (!res)
+		DATA_SET(global_data,"import_file_table",NULL);
+	g_io_channel_shutdown(chan,FALSE,NULL);
+        g_io_channel_unref(chan);
 
+	return TRUE;
+}
+
+
+/* This is hacky and should be redone to be much better than its ugly hacky 
+   state
+   */
+gboolean read_import_file(GIOChannel *chan)
+{
+	Firmware_Details *firmware = NULL;
+	GIOStatus status = G_IO_STATUS_ERROR;
+	gchar *tmpstr = NULL;
+	gchar *tmpbuf = NULL;
+	gsize len = 0;
+	gint value = 0;
+	gint lines = 0;
+	gchar **vector = NULL;
+	gchar **fields = NULL;
+	gint16 *table;
+
+	firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(chan,FALSE);
+	g_return_val_if_fail(firmware,FALSE);
+
+	table = g_new0(gint16, 1024);
+	while (g_io_channel_read_line(chan,&tmpbuf,&len,NULL,NULL) == G_IO_STATUS_NORMAL)
+	{
+		/* Search for comment symbols */
+		if (g_strstr_len(tmpbuf,len,"#"))
+		{
+			vector = g_strsplit(tmpbuf,"#",1);
+			tmpstr = vector[0];
+		}
+		else
+			tmpstr = tmpbuf;
+		value = atoi(tmpstr);
+		g_free(tmpbuf);
+		if (vector)
+			g_strfreev(vector);
+		if (lines >= 1024)
+		{
+			printf("TABLE TOO LONG!!\n");
+			g_free(table);
+			return FALSE;
+		}
+		if (firmware->bigendian)
+			table[lines] = GINT16_TO_BE((gint16)value);
+		else
+			table[lines] = GINT16_TO_LE((gint16)value);
+		lines++;
+	}
+	if (lines != 1024)
+	{
+		printf("total lines %i != 1024, ERROR! not accepting file.\n", lines);
+		g_free(table);
+		return FALSE;
+	}
+	else
+	{
+		DATA_SET(global_data,"import_file_table",(gpointer)table);
+		return TRUE;
+	}
 }
 
 
@@ -68,7 +141,7 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	gdouble res1,res2,res3;
 	gdouble bias;
 	guint8 tabletype = 0;
-	gint16 table[1024];
+	gint16 *table = NULL;
 	gint i = 0;
 	gint adcCount = 0;
 	gdouble res = 0;
@@ -78,7 +151,6 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	gchar * filename = NULL;
 	time_t tim;
 	FILE *f = NULL;
-	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -86,12 +158,13 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	/* OK Button pressed,  we need to validate all input and calculate
 	 * and build the tables and send to the ECU
 	 */
-	
+
 	tabletype = gtk_combo_box_get_active(GTK_COMBO_BOX(lookup_widget_f("thermister_sensor_combo")));
 
 	/* If using the parameters... */
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lookup_widget("use_params_rbutton"))))
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lookup_widget_f("use_params_rbutton"))))
 	{
+		table = g_new0(gint16, 1024);
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lookup_widget_f("thermister_celsius_rbutton"))))
 			celsius = TRUE;
 		else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lookup_widget_f("thermister_kelvin_rbutton"))))
@@ -188,19 +261,24 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	else
 	{
 		printf("Using data from file\n");
-		return TRUE;
+		table = DATA_GET(global_data,"import_file_table");
+		if (!table)
+			return FALSE;
 	}
 
 	if (tabletype == CTS)
 		ms_table_write(firmware->clt_table_page,
-			firmware->page_params[firmware->clt_table_page]->length,
-		       	(guint8 *)table);
+				firmware->page_params[firmware->clt_table_page]->length,
+				(guint8 *)table);
 	else if (tabletype == MAT)
 		ms_table_write(firmware->mat_table_page,
-			firmware->page_params[firmware->mat_table_page]->length,
-		       	(guint8 *)table);
+				firmware->page_params[firmware->mat_table_page]->length,
+				(guint8 *)table);
 	else
 		printf(_("Serious ERROR!, tabletype is not CTS or MAT\n"));
+
+	g_free(table);
+	DATA_SET(global_data,"import_file_table",NULL);
 
 	return TRUE;
 }
