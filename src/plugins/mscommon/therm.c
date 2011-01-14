@@ -49,7 +49,8 @@ G_MODULE_EXPORT gboolean import_table_from_file(GtkWidget *widget, gpointer data
 	   so that the send to ecu button can deliver it.
 	   */
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
-	printf("filename selected: %s\n",filename);
+	if (!filename)
+		return;
 	chan = g_io_channel_new_file(filename, "r", NULL);
 	g_free(filename);
 	if (!chan)

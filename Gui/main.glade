@@ -2485,7 +2485,7 @@
                     <property name="n_columns">2</property>
                     <property name="column_spacing">15</property>
                     <child>
-                      <widget class="GtkFileChooserButton" id="filechooserbutton">
+                      <widget class="GtkFileChooserButton" id="import_filechooser_button">
                         <property name="visible">True</property>
                         <signal name="file_set" handler="import_table_from_file"/>
                       </widget>

@@ -103,6 +103,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
+	static GtkWidget *chooser = NULL;
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
@@ -120,6 +121,7 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 		glade_xml_signal_autoconnect(xml);
 
 		/* Default to params not a file */
+		chooser = glade_xml_get_widget(xml,"import_filechooser_button");
 		item = glade_xml_get_widget(xml,"use_params_rbutton");
 		register_widget_f("use_params_rbutton",item);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),TRUE);
@@ -195,11 +197,14 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_get_visible(GTK_WIDGET(window)))
 #else
-	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+		if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-		gtk_widget_hide_all(GTK_WIDGET(window));
-	else
-		gtk_widget_show_all(GTK_WIDGET(window));
+			gtk_widget_hide_all(GTK_WIDGET(window));
+		else
+		{
+			gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(chooser));
+			gtk_widget_show_all(GTK_WIDGET(window));
+		}
 	return TRUE;
 }
 
