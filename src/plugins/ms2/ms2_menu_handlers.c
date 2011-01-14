@@ -122,6 +122,7 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 
 		/* Default to params not a file */
 		chooser = glade_xml_get_widget(xml,"import_filechooser_button");
+		register_widget_f("import_filechooser_button",chooser);
 		item = glade_xml_get_widget(xml,"use_params_rbutton");
 		register_widget_f("use_params_rbutton",item);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),TRUE);

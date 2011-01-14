@@ -50,7 +50,7 @@ G_MODULE_EXPORT gboolean import_table_from_file(GtkWidget *widget, gpointer data
 	   */
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 	if (!filename)
-		return;
+		return FALSE;
 	chan = g_io_channel_new_file(filename, "r", NULL);
 	g_free(filename);
 	if (!chan)
@@ -85,6 +85,9 @@ gboolean read_import_file(GIOChannel *chan)
 	g_return_val_if_fail(chan,FALSE);
 	g_return_val_if_fail(firmware,FALSE);
 
+	table = DATA_GET(global_data,"import_file_table");
+	if (table)
+		g_free(table);
 	table = g_new0(gint16, 1024);
 	while (g_io_channel_read_line(chan,&tmpbuf,&len,NULL,NULL) == G_IO_STATUS_NORMAL)
 	{
@@ -92,17 +95,18 @@ gboolean read_import_file(GIOChannel *chan)
 		if (g_strstr_len(tmpbuf,len,"#"))
 		{
 			vector = g_strsplit(tmpbuf,"#",1);
-			tmpstr = vector[0];
+			tmpstr = g_strdup(vector[0]);
+			g_strfreev(vector);
 		}
 		else
-			tmpstr = tmpbuf;
+			tmpstr = g_strdup(tmpbuf);
+
 		value = atoi(tmpstr);
 		g_free(tmpbuf);
-		if (vector)
-			g_strfreev(vector);
+		g_free(tmpstr);
 		if (lines >= 1024)
 		{
-			printf("TABLE TOO LONG!!\n");
+			warn_user_f("Import table exceeds appropriate number of lines (1024), The CPU/GPU and the rest of this computer refuse to accept this file...\n");
 			g_free(table);
 			return FALSE;
 		}
@@ -114,7 +118,7 @@ gboolean read_import_file(GIOChannel *chan)
 	}
 	if (lines != 1024)
 	{
-		printf("total lines %i != 1024, ERROR! not accepting file.\n", lines);
+		warn_user_f("Import table is NOT the appropriate number of lines (1024), The CPU/GPU and the rest of this computer refuse to accept this file...\n");
 		g_free(table);
 		return FALSE;
 	}
@@ -130,6 +134,7 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 {
 #define CTS 0
 #define MAT 1
+	GtkWidget *chooser = NULL;
 	gboolean celsius = FALSE;
 	gboolean fahrenheit = FALSE;
 	gboolean kelvin = FALSE;
@@ -280,6 +285,9 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 
 	g_free(table);
 	DATA_SET(global_data,"import_file_table",NULL);
+	chooser = lookup_widget_f("import_filechooser_button");
+	if (chooser)
+		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(chooser));
 
 	return TRUE;
 }
