@@ -54,15 +54,16 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
 		{"Port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use this serial port ONLY",NULL},
-		{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},
-		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Connect to Network socket instead of serial","host[:port]"},
+		/*{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},*/
+		{"inhibit-tabs",'i',0,G_OPTION_ARG_NONE,&args->inhibit_tabs,"Prevent loading of tabs (debug option)",NULL},
+		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Network connect instead of serial","host[:port]"},
 		{"no-rttext",'r',0,G_OPTION_ARG_NONE,&args->hide_rttext,"Hide RealTime Vars Text window",NULL},
 		{"no-status",'s',0,G_OPTION_ARG_NONE,&args->hide_status,"Hide ECU Status window",NULL},
 		{"no-maingui",'m',0,G_OPTION_ARG_NONE,&args->hide_maingui,"Hide Main Gui window (i.e, dash only)",NULL},
 		{"autolog",'a',0,G_OPTION_ARG_NONE,&args->autolog_dump,"Automatically dump datalog to file every N minutes",NULL},
-		{"minutes",'t',0,G_OPTION_ARG_INT,&args->autolog_minutes,"How many minutes of data logged per logfile (default 5 minutes)","Minutes per log (integer)"},
-		{"log_dir",'l',0,G_OPTION_ARG_FILENAME,&args->autolog_dump_dir,"Directory to put datalogs into","Directory to place logs in"},
-		{"log_basename",'b',0,G_OPTION_ARG_FILENAME,&args->autolog_basename,"Base filename for logs.","Root of logfile name"},
+		{"minutes",'t',0,G_OPTION_ARG_INT,&args->autolog_minutes,"Minutes of data logged per logfile (default 5 minutes)",NULL},
+		{"log_dir",'l',0,G_OPTION_ARG_FILENAME,&args->autolog_dump_dir,"Directory to put datalogs into","/path/to/file"},
+		{"log_basename",'b',0,G_OPTION_ARG_FILENAME,&args->autolog_basename,"Base filename for logs.",NULL},
 		{ NULL },
 	};
 
@@ -164,6 +165,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		printf(_("version option \"%i\"\n"),args->version);
 		printf(_("Port option \"%s\"\n"),args->port);
 		printf(_("quiet option \"%i\"\n"),args->be_quiet);
+		printf(_("inhibit tabs \"%i\"\n"),args->inhibit_tabs);
 		printf(_("no rttext option \"%i\"\n"),args->hide_rttext);
 		printf(_("no status option \"%i\"\n"),args->hide_status);
 		printf(_("no maingui option \"%i\"\n"),args->hide_maingui);

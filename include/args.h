@@ -30,6 +30,7 @@ struct _CmdLineArgs
 	gboolean be_quiet;	/* No error popups */
 	gboolean autolog_dump;	/* Automatically dump full logs periodically */
 	gboolean force_port;	/* Forced port, no autoscanning */
+	gboolean inhibit_tabs;	/* Don't load tabs specified in interrogation profile */
 	gboolean hide_rttext;	/* Hide Runtime Variable Window */
 	gboolean hide_status;	/* Hide Status Window */
 	gboolean hide_maingui;	/* Hide Main Gui (Dash only mode */

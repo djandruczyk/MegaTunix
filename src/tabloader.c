@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <configfile.h>
 #include <combo_loader.h>
@@ -61,8 +62,10 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	extern GdkColor red;
 	gboolean * hidden_list = NULL;
 	Firmware_Details *firmware = NULL;
+	CmdLineArgs *args = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	args = DATA_GET(global_data,"args");
 
 	if (DATA_GET(global_data,"tabs_loaded"))
 		return FALSE;
@@ -71,6 +74,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	if (!firmware->tab_list)
 		return FALSE;
 	if (!firmware->tab_confs)
+		return FALSE;
+	if (args->inhibit_tabs)
 		return FALSE;
 
 	gdk_threads_enter();

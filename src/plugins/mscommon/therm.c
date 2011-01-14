@@ -39,10 +39,16 @@ G_MODULE_EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer d
 
 G_MODULE_EXPORT gboolean import_table_from_file(GtkWidget *widget, gpointer data)
 {
+	gchar * filename = NULL;
 	printf("import table from file\n");
 	/* This should load and sanity check the file, if good, store it
 	   so that the send to ecu button can deliver it.
 	   */
+	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
+	printf("filename selected: %s\n",filename);
+	g_free(filename);
+	return TRUE;
+
 }
 
 
