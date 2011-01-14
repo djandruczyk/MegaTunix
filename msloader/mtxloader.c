@@ -209,7 +209,7 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 		gtk_show_about_dialog(NULL,
 				"name","MegaTunix Firmware Loading Software",
 				"version",VERSION,
-				"copyright","David J. Andruczyk(2010)",
+				"copyright","David J. Andruczyk(2011)",
 				"comments","MTXloader is a Graphical Firmware Loader designed to make it easy and (hopefully) intuitive to upgrade the firmware on your MS-I or MS-II MegaSquirt powered vehicle. This tool is capable of loading any firmware version for both series of ECUs.  This is based upon code provided by James Murray, Ken Culver from the MS2-Extra project.  Please send suggestions to the author for ways to improve mtxloader.",
 				"license","GPL v2",
 				"website","http://megatunix.sourceforge.net",
