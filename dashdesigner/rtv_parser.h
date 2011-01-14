@@ -30,7 +30,7 @@ struct Rtv_Data
 enum
 {
 	VARNAME_COL,
-	TYPE_COL,
+	PERSONA_COL,
 	DATASOURCE_COL,
 	NUM_COLS
 };

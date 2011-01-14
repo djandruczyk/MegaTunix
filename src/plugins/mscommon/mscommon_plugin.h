@@ -98,6 +98,8 @@ EXTERN gboolean (*jump_to_tab_f)(GtkWidget *, gpointer );
 EXTERN void (*add_additional_rtt_f)(GtkWidget *);
 EXTERN gdouble (*temp_to_ecu_f)(gdouble);
 EXTERN gdouble (*temp_to_host_f)(gdouble);
+EXTERN gdouble (*c_to_k_f)(gdouble);
+EXTERN gdouble (*f_to_k_f)(gdouble);
 
 /* Function Pointers */
 

@@ -364,7 +364,7 @@ G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");
 	if (GTK_IS_WIDGET(info_label))
-		gtk_label_set_markup(GTK_LABEL(info_label),"<b>Ready...<b>");
+		gtk_label_set_markup(GTK_LABEL(info_label),"<b>Ready...</b>");
 	return FALSE;
 }
 

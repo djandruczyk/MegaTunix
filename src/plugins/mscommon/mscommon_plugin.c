@@ -42,6 +42,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("add_additional_rtt",(void *)&add_additional_rtt_f);
 	get_symbol_f("alter_widget_state",(void *)&alter_widget_state_f);
 	get_symbol_f("bind_to_lists",(void *)&bind_to_lists_f);
+	get_symbol_f("c_to_k",(void *)&c_to_k_f);
 	get_symbol_f("check_tab_existance",(void *)&check_tab_existance_f);
 	get_symbol_f("cleanup",(void *)&cleanup_f);
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
@@ -54,6 +55,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("evaluator_create_w",(void *)&evaluator_create_f);
 	get_symbol_f("evaluator_destroy_w",(void *)&evaluator_destroy_f);
 	get_symbol_f("evaluator_evaluate_x_w",(void *)&evaluator_evaluate_x_f);
+	get_symbol_f("f_to_k",(void *)&f_to_k_f);
 	get_symbol_f("free_multi_source",(void *)&free_multi_source_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
 	get_symbol_f("focus_out_handler",(void *)&focus_out_handler_f);

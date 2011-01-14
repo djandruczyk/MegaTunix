@@ -148,7 +148,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			{
 				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
 				if ((notifies) && ((j % notif_divisor) == 0))
-					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("Sending %i of %i bytes"),j,block->len));
+					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<b>Sending %i of %i bytes</b>"),j,block->len));
 				if (i == 0)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else
@@ -168,7 +168,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	}
 	if (notifies)
 	{
-		thread_update_widget("info_label",MTX_LABEL,g_strdup("Transfer Completed"));
+		thread_update_widget("info_label",MTX_LABEL,g_strdup("<b>Transfer Completed</b>"));
 		gdk_threads_add_timeout(2000,(GSourceFunc)reset_infolabel,NULL);
 	}
 	/* If sucessfull update ecu_data as well, this way, current 

@@ -119,12 +119,16 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 		window = glade_xml_get_widget(xml,"table_generator_window");
 		glade_xml_signal_autoconnect(xml);
 
+		/* Default to params not a file */
+		item = glade_xml_get_widget(xml,"use_params_rbutton");
+		register_widget_f("use_params_rbutton",item);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),TRUE);
+		g_signal_emit_by_name(item,"toggled",NULL);
+
 		item = glade_xml_get_widget(xml,"sensor_combo");
 		gtk_combo_box_set_active(GTK_COMBO_BOX(item),0);
 		register_widget_f("thermister_sensor_combo",item);
 		item = glade_xml_get_widget(xml,"temp_label");
-		OBJ_SET(item,"c_label",g_strdup("Temperature(\302\260 C)"));
-		OBJ_SET(item,"f_label",g_strdup("Temperature(\302\260 F)"));
 		register_widget_f("temp_label",item);
 		if (firmware->capabilities & PIS)
 			gtk_widget_destroy(glade_xml_get_widget(xml,"bias_resistor_table"));
@@ -173,10 +177,17 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 		OBJ_SET(item,"raw_upper",g_strdup("500000"));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
-		item = glade_xml_get_widget(xml,"celsius_radiobutton");
-		register_widget_f("thermister_celsius_radiobutton",item);
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),FALSE);
+		item = glade_xml_get_widget(xml,"celsius_rbutton");
+		OBJ_SET(item,"temp_label",g_strdup("Temperature(\302\260 C)"));
+		register_widget_f("thermister_celsius_rbutton",item);
+		item = glade_xml_get_widget(xml,"fahrenheit_rbutton");
+		OBJ_SET(item,"temp_label",g_strdup("Temperature(\302\260 F)"));
+		register_widget_f("thermister_fahrenheit_rbutton",item);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),TRUE);
 		g_signal_emit_by_name(item,"toggled",NULL);
+		item = glade_xml_get_widget(xml,"kelvin_rbutton");
+		OBJ_SET(item,"temp_label",g_strdup("Temperature(\302\260 K)"));
+		register_widget_f("thermister_kelvin_rbutton",item);
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
@@ -679,3 +690,16 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	return TRUE;
 }
 
+
+G_MODULE_EXPORT gboolean therm_set_state(gpointer data, GtkWidget *widget)
+{
+	GtkWidget *dest = (GtkWidget *)data;
+	
+	g_return_val_if_fail(GTK_IS_WIDGET(dest),FALSE);
+
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+		gtk_widget_set_sensitive(dest,TRUE);
+	else
+		gtk_widget_set_sensitive(dest,FALSE);
+	return TRUE;
+}

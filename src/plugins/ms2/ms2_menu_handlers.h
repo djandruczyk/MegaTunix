@@ -29,6 +29,7 @@ gboolean show_sensor_calibrator_window(GtkWidget *, gpointer);
 gboolean show_battery_calibrator_window(GtkWidget *, gpointer);
 gboolean ms2_reinit(GtkWidget *, gpointer);
 gboolean ms2_reboot(GtkWidget *, gpointer);
+gboolean therm_set_state(gpointer, GtkWidget *);
 /* Prototypes */
 
 #endif
