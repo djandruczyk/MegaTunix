@@ -3,7 +3,7 @@ major=1
 minor=7
 
 [interrogation_profile]
-name=MS-II-Extra V2.1.0e series
+name=MS2-Extra V2.1.0e series
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_
@@ -36,7 +36,7 @@ TrigmonPage=10
 CompositemonPage=11
 
 [table_0]
-_table_name=VE-Table 1, MS-II-Extra 12x12
+_table_name=VE-Table 1, MS2-Extra 12x12
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -82,7 +82,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_1]
-_table_name=VE-Table 2, MS-II-Extra 12x12
+_table_name=VE-Table 2, MS2-Extra 12x12
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -128,7 +128,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_2]
-_table_name=VE-Table 3, MS-II-Extra 12x12
+_table_name=VE-Table 3, MS2-Extra 12x12
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -174,7 +174,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_3]
-_table_name=VE-Table 1, MS-II-Extra 16x16
+_table_name=VE-Table 1, MS2-Extra 16x16
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -220,7 +220,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_4]
-_table_name=VE-Table 2, MS-II-Extra 16x16
+_table_name=VE-Table 2, MS2-Extra 16x16
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -266,7 +266,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_5]
-_table_name=VE-Table 3, MS-II-Extra 16x16
+_table_name=VE-Table 3, MS2-Extra 16x16
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -312,7 +312,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_6]
-_table_name=Spark Advance Table 1, MS-II-Extra 12x12
+_table_name=Spark Advance Table 1, MS2-Extra 12x12
 is_spark=TRUE
 is_fuel=FALSE
 x_page=2
@@ -343,7 +343,7 @@ z_dl_conv_expr=x*10
 z_precision=1
 
 [table_7]
-_table_name=Spark Advance Table 2, MS-II-Extra 12x12
+_table_name=Spark Advance Table 2, MS2-Extra 12x12
 is_spark=TRUE
 is_fuel=FALSE
 x_page=2
@@ -374,7 +374,7 @@ z_dl_conv_expr=x*10
 z_precision=1
 
 [table_8]
-_table_name=Spark Advance Table 3, MS-II-Extra 12x12
+_table_name=Spark Advance Table 3, MS2-Extra 12x12
 is_spark=TRUE
 is_fuel=FALSE
 x_page=3
@@ -405,7 +405,7 @@ z_dl_conv_expr=x*10
 z_precision=1
 
 [table_9]
-_table_name=AFR Table 1, MS-II-Extra 12x12
+_table_name=AFR Table 1, MS2-Extra 12x12
 is_fuel=FALSE
 x_page=0
 x_base_offset=374
@@ -435,7 +435,7 @@ z_dl_conv_expr=x*10
 z_precision=1
 
 [table_10]
-_table_name=AFR Table 2, MS-II-Extra 12x12
+_table_name=AFR Table 2, MS2-Extra 12x12
 is_fuel=FALSE
 x_page=0
 x_base_offset=398
@@ -1548,7 +1548,7 @@ RuntimeTextMapFile=MS2-Extra
 StatusMapFile=MS2-Extra
 
 LoadTabs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-globals,ms2-e-accel,ms2-e-crank_idle_warmup,ms2-e-ignition,ms2-e-noise_lag,ms2-e-boost_knock_launch,ms2-e-ego_rev,ms2-e-nitrous_staging_orfc,ms2-e-corrections_misc,vetable_12x12x3,vetable_16x16x3,sparktable_12x12x3,afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger,ms2-user_outputs,ms2-e-debugging
-TabConfs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-globals,ms2-e-accel,ms2-e-crank_idle_warmup,ms2-e-ignition,ms2-e-noise_lag,ms2-e-boost_knock_launch,ms2-e-ego_rev,ms2-e-nitrous_staging_orfc,ms2-e-corrections_misc,vetable_12x12x3-MS-II-Extra,vetable_16x16x3-MS-II-Extra,sparktable_12x12x3-MS-II-Extra,afrtable_12x12x2-MS-II-Extra,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger-2.1.x,ms2-user_outputs,ms2-e-debugging
+TabConfs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-globals,ms2-e-accel,ms2-e-crank_idle_warmup,ms2-e-ignition,ms2-e-noise_lag,ms2-e-boost_knock_launch,ms2-e-ego_rev,ms2-e-nitrous_staging_orfc,ms2-e-corrections_misc,vetable_12x12x3-MS2-Extra,vetable_16x16x3-MS2-Extra,sparktable_12x12x3-MS2-Extra,afrtable_12x12x2-MS2-Extra,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger-2.1.x,ms2-user_outputs,ms2-e-debugging
 #LoadTabs=runtime,ms2-user_outputs,ms2-e-debugging
 #TabConfs=runtime,ms2-user_outputs,ms2-e-debugging
 

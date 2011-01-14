@@ -4,7 +4,7 @@ minor=5
 
 [realtime_map]
 persona=MS-2
-applicable_firmwares=MS-II V2.8x
+applicable_firmwares=MS2 V2.8x
 applicable_revisions=** V2.88Embedded Code by B&G **,** V2.89Embedded Code by B&G **
 derived_total=70
 raw_list=raw_secl
@@ -26,7 +26,7 @@ log_by_default=TRUE
 [derived_1]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=raw_secl
-_dlog_gui_name=MS-II Clock
+_dlog_gui_name=MS2 Clock
 dlog_field_name=SecL
 offset=0
 size=_U16_

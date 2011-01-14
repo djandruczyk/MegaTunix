@@ -10,7 +10,7 @@
 		</arg>
 		<arg>
 			<name>MS2_TABLE_INDEX</name>
-			<desc>This is the table index in the firmware,  0-3 are lookuptables, 4-5 are data, and 6 is rtvars, these are analagous to pages from MS-I extra</desc>
+			<desc>This is the table index in the firmware,  0-3 are lookuptables, 4-5 are data, and 6 is rtvars, these are analagous to pages from MS1-extra</desc>
 			<type>_DATA_</type>
 			<internal_name>phys_ecu_page</internal_name>
 			<size>_U08_</size>

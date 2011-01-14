@@ -34,7 +34,7 @@ TrigmonPage=10
 TotalPages=11
 
 [table_0]
-_table_name=Fuel VE-Table 1, MSnSpark-Extra
+_table_name=Fuel VE-Table 1, MS1-Extra
 is_fuel=TRUE
 dtmode_page=0
 dtmode_offset=33
@@ -87,7 +87,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_1]
-_table_name=Fuel VE-Table 2, MSnSpark-Extra
+_table_name=Fuel VE-Table 2, MS1-Extra
 bind_to_list=dt_controls
 is_fuel=TRUE
 dtmode_page=0
@@ -141,7 +141,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_2]
-_table_name=Fuel VE-Table 3, MSnSpark-Extra
+_table_name=Fuel VE-Table 3, MS1-Extra
 x_page=5
 x_base_offset=144
 x_bincount=12
@@ -173,7 +173,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_3]
-_table_name=Spark Table 1, MSnSpark-Extra
+_table_name=Spark Table 1, MS1-Extra
 bind_to_list=spark_controls
 is_spark=TRUE
 x_page=3
@@ -207,7 +207,7 @@ z_dl_conv_expr=(x+10)/(352/1000)
 z_precision=1
 
 [table_4]
-_table_name=Spark Table 2, MSnSpark-Extra
+_table_name=Spark Table 2, MS1-Extra
 bind_to_list=spark_controls,spark_switch
 is_spark=TRUE
 x_page=4
@@ -241,7 +241,7 @@ z_dl_conv_expr=(x+10)/(352/1000)
 z_precision=1
 
 [table_5]
-_table_name=AFR Table 1, MSnSpark-Extra
+_table_name=AFR Table 1, MS1-Extra
 bind_to_list=afr1
 x_page=6
 x_base_offset=64
@@ -278,7 +278,7 @@ z_o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 z_precision=2
 
 [table_6]
-_table_name=AFR Table 2, MSnSpark-Extra
+_table_name=AFR Table 2, MS1-Extra
 bind_to_list=afr2,dt_controls
 x_page=6
 x_base_offset=144
@@ -315,7 +315,7 @@ z_o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
 z_precision=2
 
 [table_7]
-_table_name=Boost Table 1, KPA target: RPM vs TPS, MSnSpark-Extra
+_table_name=Boost Table 1, KPA target: RPM vs TPS, MS1-Extra
 bind_to_list=boost_controls
 x_page=7
 x_base_offset=36
@@ -349,7 +349,7 @@ z_precisions=0,0,0,0
 
 
 [table_8]
-_table_name=Boost Table 2, DC Target: RPM vs TPS, MSnSpark-Extra
+_table_name=Boost Table 2, DC Target: RPM vs TPS, MS1-Extra
 bind_to_list=boost_controls
 x_page=7
 x_base_offset=84
@@ -379,7 +379,7 @@ z_dl_conv_expr=(x/100)*255
 z_precision=1
 
 [table_9]
-_table_name=Boost Table 3, switched on demand, MSnSpark-Extra
+_table_name=Boost Table 3, switched on demand, MS1-Extra
 bind_to_list=boost_controls,boost2
 x_page=7
 x_base_offset=132
@@ -412,7 +412,7 @@ z_dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(1619778
 z_precisions=0,0,0,0
 
 [table_10]
-_table_name=Rotary Trailing, MSnSpark-Extra
+_table_name=Rotary Trailing, MS1-Extra
 bind_to_list=rotary_trailing
 x_page=8
 x_base_offset=99
@@ -542,11 +542,11 @@ phys_ecu_page=243
 length=256
 
 [interrogation]
-match_on=MS-I_Clock,MS-I_RTVars,MSnS-E_RTVars,MS-I_VEconst,MS_Signature
-MS-I_Clock=_COUNT_,1
-MS-I_RTVars=_COUNT_,22
-MSnS-E_RTVars=_COUNT_,42
-MS-I_VEconst=_COUNT_,189
+match_on=MS1_Clock,MS1_RTVars,MS1-E_RTVars,MS1_VEconst,MS_Signature
+MS1_Clock=_COUNT_,1
+MS1_RTVars=_COUNT_,22
+MS1-E_RTVars=_COUNT_,42
+MS1_VEconst=_COUNT_,189
 MS_Signature=_REGEX_,format hr_11[ab]
 
 [gui]

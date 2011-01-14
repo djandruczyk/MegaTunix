@@ -80,11 +80,11 @@ phys_ecu_page=0
 length=125
 
 [interrogation]
-match_on=MS-I_Clock,MS-I_RTVars,MS_VerNum,MS-I_VEconst
-MS-I_Clock=_COUNT_,1
-MS-I_RTVars=_COUNT_,22
+match_on=MS1_Clock,MS1_RTVars,MS_VerNum,MS1_VEconst
+MS1_Clock=_COUNT_,1
+MS1_RTVars=_COUNT_,22
 MS_VerNum=_NUMMATCH_,0
-MS-I_VEconst=_COUNT_,125
+MS1_VEconst=_COUNT_,125
 
 [gui]
 RealtimeMapFile=MS1-BnG-Std

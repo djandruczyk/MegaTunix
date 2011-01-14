@@ -3,7 +3,7 @@ major=1
 minor=7
 
 [interrogation_profile]
-name=MS-II-Extra V3.0.3w series
+name=MS2-Extra V3.0.3w series
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_
@@ -36,7 +36,7 @@ TrigmonPage=11
 CompositemonPage=12
 
 [table_0]
-_table_name=VE-Table 1, MS-II-Extra 12x12
+_table_name=VE-Table 1, MS2-Extra 12x12
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -82,7 +82,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_1]
-_table_name=VE-Table 2, MS-II-Extra 12x12
+_table_name=VE-Table 2, MS2-Extra 12x12
 bind_to_list=dualtable,second_fuel
 match_type=_OR_
 is_fuel=TRUE
@@ -130,7 +130,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_2]
-_table_name=VE-Table 3, MS-II-Extra 12x12
+_table_name=VE-Table 3, MS2-Extra 12x12
 bind_to_list=fuel_switching,seq_inj
 match_type=_OR_
 is_fuel=TRUE
@@ -178,7 +178,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_3]
-_table_name=VE-Table 1, MS-II-Extra 16x16
+_table_name=VE-Table 1, MS2-Extra 16x16
 is_fuel=TRUE
 reqfuel_page=0
 reqfuel_offset=608
@@ -224,7 +224,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_4]
-_table_name=VE-Table 2, MS-II-Extra 16x16
+_table_name=VE-Table 2, MS2-Extra 16x16
 bind_to_list=dual_table,second_fuel
 match_type=_OR_
 is_fuel=TRUE
@@ -272,7 +272,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_5]
-_table_name=VE-Table 3, MS-II-Extra 16x16
+_table_name=VE-Table 3, MS2-Extra 16x16
 bind_to_list=fuel_switching,seq_inj
 match_type=_OR_
 is_fuel=TRUE
@@ -320,7 +320,7 @@ z_dl_conv_expr=x*1
 z_precision=0
 
 [table_6]
-_table_name=Spark Advance Table 1, MS-II-Extra 12x12
+_table_name=Spark Advance Table 1, MS2-Extra 12x12
 bind_to_list=ign
 is_spark=TRUE
 is_fuel=FALSE
@@ -352,7 +352,7 @@ z_dl_conv_expr=x*10
 z_precision=1
 
 [table_7]
-_table_name=Spark Advance Table 2, MS-II-Extra 12x12
+_table_name=Spark Advance Table 2, MS2-Extra 12x12
 bind_to_list=secondary_ign,spark_switching
 match_type=_OR_
 is_spark=TRUE
@@ -385,7 +385,7 @@ z_dl_conv_expr=x*10
 z_precision=1
 
 [table_8]
-_table_name=Spark Advance Table 3, MS-II-Extra 12x12
+_table_name=Spark Advance Table 3, MS2-Extra 12x12
 bind_to_list=spark_switching
 is_spark=TRUE
 is_fuel=FALSE
@@ -417,7 +417,7 @@ z_dl_conv_expr=x*10
 z_precision=1
 
 [table_9]
-_table_name=AFR Table 1, MS-II-Extra 12x12
+_table_name=AFR Table 1, MS2-Extra 12x12
 bind_to_list=wb_ego
 is_fuel=FALSE
 x_page=0
@@ -448,7 +448,7 @@ z_dl_conv_expr=x*10
 z_precision=1
 
 [table_10]
-_table_name=AFR Table 2, MS-II-Extra 12x12
+_table_name=AFR Table 2, MS2-Extra 12x12
 bind_to_list=wb_ego,dualtable
 is_fuel=FALSE
 x_page=0
@@ -1961,7 +1961,7 @@ RuntimeTextMapFile=MS2-Extra
 StatusMapFile=MS2-Extra
 
 LoadTabs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.x-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-3.0.3v-nitrous_staging_orfc,ms2-e-3.0.3v-ego_rev,ms2-e-3.x-corrections_misc,vetable_12x12x2,vetable_16x16x3,vetrim_16x16x4,sparktable_12x12x3,afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-3.x-sequential,inj_timing_6x6x3,ms2-e-3.x-can,ms2-user_outputs,ms2-e-3.x-remote_outputs,ms2-e-3.x-debugging,ms2-e-toothtrigger
-TabConfs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-3.x-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.0.3v-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-3.x-nitrous_staging_orfc,ms2-e-3.0.3v-ego_rev,ms2-e-3.x-corrections_misc,vetable_12x12x3-MS-II-Extra,vetable_16x16x3-MS-II-Extra,vetrim_16x16x4-MS-II-Extra-3.x,sparktable_12x12x3-MS-II-Extra,afrtable_12x12x2-MS-II-Extra,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-3.x-sequential,ms2-e-3.x-inj_timing_6x6x3,ms2-e-3.x-can,ms2-e-3.x-local_outputs,ms2-e-3.x-remote_outputs,ms2-e-3.x-debugging,ms2-e-toothtrigger-3.x
+TabConfs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-3.x-globals,ms2-e-3.x-accel,ms2-e-3.x-crank_idle_warmup,ms2-e-3.0.3v-ignition,ms2-e-3.x-noise_lag,ms2-e-3.x-boost_knock_launch,ms2-e-3.x-nitrous_staging_orfc,ms2-e-3.0.3v-ego_rev,ms2-e-3.x-corrections_misc,vetable_12x12x3-MS2-Extra,vetable_16x16x3-MS2-Extra,vetrim_16x16x4-MS2-Extra-3.x,sparktable_12x12x3-MS2-Extra,afrtable_12x12x2-MS2-Extra,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-3.x-sequential,ms2-e-3.x-inj_timing_6x6x3,ms2-e-3.x-can,ms2-e-3.x-local_outputs,ms2-e-3.x-remote_outputs,ms2-e-3.x-debugging,ms2-e-toothtrigger-3.x
 #LoadTabs=runtime,ms2-user_outputs,ms2-e-debugging
 #TabConfs=runtime,ms2-user_outputs,ms2-e-debugging
 

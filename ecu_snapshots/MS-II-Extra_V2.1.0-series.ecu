@@ -19,7 +19,7 @@ data=8,3,21,1,46,10,9,60,80,100,120,140,160,250,124,84,64,51,44,2,1,44,0,60,0,50
 num_variables=1024
 
 [Firmware]
-name=MS-II-Extra_V2.1.0 series
+name=MS2-Extra_V2.1.0 series
 
 [API]
 minor=0

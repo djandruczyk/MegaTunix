@@ -118,8 +118,8 @@ gui_in_files = 	\
 		PIS-runtime.datamap.in \
 		PIS-settings.datamap.in \
 		afrtable_8x8x2-029x.datamap.in \
-		afrtable_12x12x2-MS-II.datamap.in \
-		afrtable_12x12x2-MS-II-Extra.datamap.in \
+		afrtable_12x12x2-MS2.datamap.in \
+		afrtable_12x12x2-MS2-Extra.datamap.in \
 		boost_6x6x3-029x.datamap.in \
 		datalogging.datamap.in \
 		dt-params.datamap.in \
@@ -195,22 +195,22 @@ gui_in_files = 	\
 		raweditor.datamap.in \
 		rotary-trail-029x.datamap.in \
 		runtime.datamap.in \
-		sparktable_12x12x1-MS-II.datamap.in \
+		sparktable_12x12x1-MS2.datamap.in \
 		sparktable_12x12x2-029x.datamap.in \
-		sparktable_12x12x3-MS-II-Extra.datamap.in \
+		sparktable_12x12x3-MS2-Extra.datamap.in \
 		sparktable_8x8e-EDIS.datamap.in \
 		sparktable_8x8e-Std.datamap.in \
 		template.datamap.in \
 		test.datamap.in \
 		tools.datamap.in \
-		vetable_12x12x2-MS-II.datamap.in \
+		vetable_12x12x2-MS2.datamap.in \
 		vetable_12x12x3-029x.datamap.in \
-		vetable_12x12x3-MS-II-Extra.datamap.in \
-		vetable_16x16x3-MS-II-Extra.datamap.in \
+		vetable_12x12x3-MS2-Extra.datamap.in \
+		vetable_16x16x3-MS2-Extra.datamap.in \
 		vetable_8x8e-BnG.datamap.in \
 		vetable_8x8e-DT_1.datamap.in \
 		vetable_8x8e-DT_2.datamap.in \
-		vetrim_16x16x4-MS-II-Extra-3.x.datamap.in \
+		vetrim_16x16x4-MS2-Extra-3.x.datamap.in \
 		warmupwizard.datamap.in 
 
 
