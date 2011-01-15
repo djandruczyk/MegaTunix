@@ -375,7 +375,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 	GtkWidget *tmpwidget = NULL;
 	gint handler = (GINT)OBJ_GET(widget, "handler");
 
-	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{       /* It's pressed (or checked) */
 		switch ((ToggleButton)handler)
 		{

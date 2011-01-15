@@ -26,7 +26,6 @@ static TTMon_Data *ttm_data;
 #define CTR 187
 #define UNITS 188
 
-static gboolean restart_realtime = FALSE;
 
 /*!
  \brief 
@@ -45,9 +44,6 @@ G_MODULE_EXPORT void reset_ttm_buttons(void)
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 	widget = lookup_widget_f("triggerlogger_disable_radio_button");
-	if (GTK_IS_WIDGET(widget))
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
-	widget = lookup_widget_f("compositelogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 }
@@ -484,7 +480,7 @@ void start(EcuPluginTickler type)
 			if (DATA_GET(global_data,"realtime_id"))
 			{
 				stop_tickler_f(RTV_TICKLER);
-				restart_realtime = TRUE;
+				DATA_SET(global_data,"restart_realtime",GINT_TO_POINTER(TRUE));
 			}
 			if (!DATA_GET(global_data,"toothmon_id"))
 			{
@@ -501,7 +497,7 @@ void start(EcuPluginTickler type)
 			if (DATA_GET(global_data,"realtime_id"))
 			{
 				stop_tickler_f(RTV_TICKLER);
-				restart_realtime = TRUE;
+				DATA_SET(global_data,"restart_realtime",GINT_TO_POINTER(TRUE));
 			}
 			if (!DATA_GET(global_data,"trigmon_id"))
 			{
@@ -528,10 +524,10 @@ void stop(EcuPluginTickler type)
 				g_source_remove((gint)DATA_GET(global_data,"toothmon_id"));
 				DATA_SET(global_data,"toothmon_id",NULL);
 			}
-			if (restart_realtime)
+			if (DATA_GET(global_data,"restart_realtime"))
 			{
 				start_tickler_f(RTV_TICKLER);
-				restart_realtime = FALSE;
+				DATA_SET(global_data,"restart_realtime",GINT_TO_POINTER(FALSE));
 			}
 			break;
 		case TRIGMON_TICKLER:
@@ -540,10 +536,10 @@ void stop(EcuPluginTickler type)
 				g_source_remove((gint)DATA_GET(global_data,"trigmon_id"));
 				DATA_SET(global_data,"trigmon_id",NULL);
 			}
-			if (restart_realtime)
+			if (DATA_GET(global_data,"restart_realtime"))
 			{
 				start_tickler_f(RTV_TICKLER);
-				restart_realtime = FALSE;
+				DATA_SET(global_data,"restart_realtime",GINT_TO_POINTER(FALSE));
 			}
 			break;
 	}

@@ -33,7 +33,6 @@
 #include <threads.h>
 #include <widgetmgmt.h>
 
-static gboolean restart_realtime = FALSE;
 
 
 /*!
@@ -55,7 +54,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 				break;
 			if (!DATA_GET(global_data,"rtvars_loaded"))
 				break;
-			if (restart_realtime)
+			if (DATA_GET(global_data,"restart_realtime"))
 			{
 				update_logbar("comms_view",NULL,_("TTM is active, Realtime Reader suspended\n"),FALSE,FALSE,FALSE);
 				break;

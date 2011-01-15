@@ -550,7 +550,7 @@ MS1_VEconst=_COUNT_,189
 MS_Signature=_REGEX_,format hr_11[ab]
 
 [gui]
-RealtimeMapFile=MS1-Extra-HR-029x
+RealtimeMapFile=MS1-Extra-HR-08x
 SliderMapFile=MS1-Extra
 RuntimeTextMapFile=MS1-Extra
 StatusMapFile=MS1-Extra
