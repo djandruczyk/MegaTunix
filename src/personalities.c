@@ -86,7 +86,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" baud string undefined!, was MegaTunix installed properly?\n\n"));
 		element->dirname = g_strdup(dirs[i]);
 		element->filename = g_path_get_basename(dirs[i]);
-		if (g_strcasecmp(element->filename,(gchar *)DATA_GET(global_data,"previous_ecu_family")) == 0)
+		if (g_strcasecmp(element->filename,(gchar *)DATA_GET(global_data,"last_ecu_family")) == 0)
 			element->def = TRUE;
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)

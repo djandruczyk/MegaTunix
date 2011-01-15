@@ -55,10 +55,14 @@ G_MODULE_EXPORT void load_status_pf(void)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	GladeXML *main_xml;
-	CmdLineArgs *args = DATA_GET(global_data,"args");
 	Firmware_Details *firmware = NULL;
-
+	CmdLineArgs *args =  NULL;
+	
+	args = DATA_GET(global_data,"args");
 	firmware = DATA_GET(global_data,"firmware");
+
+	g_return_if_fail(firmware);
+	g_return_if_fail(args);
 
 	if (!(DATA_GET(global_data,"interrogated")))
 		return;
@@ -90,8 +94,13 @@ G_MODULE_EXPORT void load_status_pf(void)
 	w = (GINT)DATA_GET(global_data,"status_width");
 	h = (GINT)DATA_GET(global_data,"status_height");
 	gtk_window_set_default_size(GTK_WINDOW(window),w,h);
-	gtk_window_resize(GTK_WINDOW(window),w,h);
-//	gtk_window_set_default_size(GTK_WINDOW(window),1,1);
+	/*
+	if (g_strcasecmp(firmware->actual_signature,DATA_GET(global_data,"last_signature")) == 0)
+		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
+	else
+		gtk_window_set_default_size(GTK_WINDOW(window),-1,-1);
+		*/
+//	gtk_window_resize(GTK_WINDOW(window),w,h);
 //	g_object_set(window, "resizable", FALSE, NULL);
 	parent = glade_xml_get_widget(xml,"status_vbox");
 	glade_xml_signal_autoconnect(xml);

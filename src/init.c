@@ -102,7 +102,8 @@ G_MODULE_EXPORT void init(void)
 	DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(-1));
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(-1));
-	DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup("MS-2"),cleanup);
+	DATA_SET_FULL(global_data,"last_ecu_family",g_strdup("MS-2"),cleanup);
+	DATA_SET_FULL(global_data,"last_signature",g_strdup(""),cleanup);
 	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-2"),cleanup);
 	DATA_SET_FULL(global_data,"hidden_list",hidden_list,cleanup);
 	DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(""),cleanup);
@@ -179,9 +180,14 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
 //		if(cfg_read_boolean(cfgfile, "Global", "NetworkAccess", &tmpi))
 //			DATA_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
-		if(cfg_read_string(cfgfile, "Global", "Previous_ECU_Family", &tmpbuf))
+		if(cfg_read_string(cfgfile, "Global", "Last_ECU_Family", &tmpbuf))
 		{
-			DATA_SET_FULL(global_data,"previous_ecu_family",g_strdup(tmpbuf),cleanup);
+			DATA_SET_FULL(global_data,"last_ecu_family",g_strdup(tmpbuf),cleanup);
+			cleanup(tmpbuf);
+		}
+		if(cfg_read_string(cfgfile, "Global", "Last_Signature", &tmpbuf))
+		{
+			DATA_SET_FULL(global_data,"last_signature",g_strdup(tmpbuf),cleanup);
 			cleanup(tmpbuf);
 		}
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
@@ -339,8 +345,10 @@ G_MODULE_EXPORT void save_config(void)
 	gboolean * hidden_list;
 	GString *string = NULL;
 	Serial_Params *serial_params = NULL;
+	Firmware_Details *firmware = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
+	firmware = DATA_GET(global_data,"firmware");
 
 	g_static_mutex_lock(&mutex);
 
@@ -358,7 +366,8 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(global_data,"network_access"));
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)DATA_GET(global_data,"temp_units"));
-	cfg_write_string(cfgfile, "Global", "Previous_ECU_Family",DATA_GET(global_data,"ecu_family"));
+	cfg_write_string(cfgfile, "Global", "Last_ECU_Family",DATA_GET(global_data,"ecu_family"));
+	cfg_write_string(cfgfile, "Global", "Last_Signature",firmware->actual_signature);
 	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (GINT)DATA_GET(global_data,"rtslider_fps"));
 	cfg_write_int(cfgfile, "Global", "RTText_FPS", (GINT)DATA_GET(global_data,"rttext_fps"));
 	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)DATA_GET(global_data,"dashboard_fps"));
