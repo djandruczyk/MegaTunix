@@ -367,8 +367,9 @@ G_MODULE_EXPORT void save_config(void)
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)DATA_GET(global_data,"temp_units"));
 	cfg_write_string(cfgfile, "Global", "Last_ECU_Family",DATA_GET(global_data,"ecu_family"));
-	if (firmware->actual_signature)
-		cfg_write_string(cfgfile, "Global", "Last_Signature",firmware->actual_signature);
+	if (firmware)
+		if (firmware->actual_signature)
+			cfg_write_string(cfgfile, "Global", "Last_Signature",firmware->actual_signature);
 	cfg_write_int(cfgfile, "Global", "RTSlider_FPS", (GINT)DATA_GET(global_data,"rtslider_fps"));
 	cfg_write_int(cfgfile, "Global", "RTText_FPS", (GINT)DATA_GET(global_data,"rttext_fps"));
 	cfg_write_int(cfgfile, "Global", "Dashboard_FPS", (GINT)DATA_GET(global_data,"dashboard_fps"));
