@@ -48,6 +48,7 @@ void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 	MtxProgressBarPrivate *priv = NULL; 
 	g_return_if_fail ((MTX_IS_PROGRESS_BAR (pbar)));
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
+	g_return_if_fail(priv);
 
 	if (fraction > priv->peak)
 	{
@@ -75,7 +76,8 @@ gboolean mtx_progress_bar_peak_reset(gpointer data)
 		return FALSE;
 
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
-	priv->peak =0;
+	g_return_val_if_fail(priv,FALSE);
+	priv->peak = 0;
 	priv->hold_id = 0;
 	mtx_progress_bar_real_update(GTK_PROGRESS(pbar));
 	return FALSE;
@@ -102,6 +104,7 @@ gint mtx_progress_bar_get_hold_time (MtxProgressBar *pbar)
 	MtxProgressBarPrivate *priv = NULL; 
 	g_return_val_if_fail ((MTX_IS_PROGRESS_BAR (pbar)),0.0);
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
+	g_return_val_if_fail(priv,0);
 	return priv->hold_time;
 }
 
@@ -115,5 +118,6 @@ void mtx_progress_bar_set_hold_time (MtxProgressBar *pbar, gint hold_time)
 	MtxProgressBarPrivate *priv = NULL; 
 	g_return_if_fail ((MTX_IS_PROGRESS_BAR (pbar)));
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
+	g_return_if_fail(priv);
 	priv->hold_time = hold_time;
 }

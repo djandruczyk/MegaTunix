@@ -699,7 +699,7 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	ve_view->mesh_created = FALSE;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
-	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
+	g_timeout_add(500,delayed_expose,ve_view);
 }
 
 /*!
@@ -744,6 +744,8 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	GLfloat h = widget->allocation.height;
 
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
+	g_return_val_if_fail(glcontext,FALSE);
+	g_return_val_if_fail(gldrawable,FALSE);
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"));
 
@@ -784,6 +786,10 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 
 	glcontext = gtk_widget_get_gl_context(widget);
 	gldrawable = gtk_widget_get_gl_drawable(widget);
+
+	g_return_val_if_fail(glcontext,FALSE);
+	g_return_val_if_fail(gldrawable,FALSE);
+	
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
 	/*printf("expose event \n");*/
 
@@ -924,6 +930,8 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	GdkGLProc proc = NULL;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
+	g_return_if_fail(glcontext);
+	g_return_if_fail(gldrawable);
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return;
@@ -2572,7 +2580,7 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->fixed_scale = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	ve_view->mesh_created=FALSE;
-	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
+	g_timeout_add(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -2586,7 +2594,7 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->wireframe = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
+	g_timeout_add(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -2600,7 +2608,7 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->opacity = gtk_range_get_value(GTK_RANGE(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
+	g_timeout_add(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
