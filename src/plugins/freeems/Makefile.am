@@ -18,6 +18,8 @@ libfreeems_la_SOURCES = \
 	freeems_globaldefs.h \
 	freeems_comms.c \
 	freeems_comms.h \
+	freeems_menu_handlers.c \
+	freeems_menu_handlers.h \
 	freeems_gui_handlers.c \
 	freeems_gui_handlers.h \
 	freeems_helpers.c \

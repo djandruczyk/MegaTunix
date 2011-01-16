@@ -13,6 +13,8 @@ plugin_LTLIBRARIES = libnull.la
 
 libnull_la_SOURCES = \
 	Makefile \
+	null_menu_handlers.c \
+	null_menu_handlers.h \
 	null_gui_handlers.c \
 	null_gui_handlers.h \
 	null_plugin.c \

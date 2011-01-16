@@ -120,6 +120,9 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
+	if (DATA_GET(global_data,"offline"))
+		return g_strdup("Offline");
+
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_FIRMWARE_VERSION & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_FIRMWARE_VERSION & 0x00ff );
@@ -178,6 +181,9 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
+
+	if (DATA_GET(global_data,"offline"))
+		return g_strdup("Offline");
 
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
@@ -239,6 +245,16 @@ G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
+	if (DATA_GET(global_data,"offline"))
+	{
+		if (major)
+			*major = 0;
+		if (minor)
+			*minor = 0;
+		if (micro)
+			*micro = 0;
+		return g_strdup("Offline");
+	}
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0x00ff );
@@ -762,7 +778,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	if (mem_alloc_f)
 		mem_alloc_f();
 	else
-		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFAILED TO LOCATE \"mem_alloc\" function within core/plugins"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFAILED TO LOCATE \"mem_alloc\" function within core/plugins\n"));
 
 	/* Display firmware version in the window... */
 

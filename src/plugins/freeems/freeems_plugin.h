@@ -104,7 +104,8 @@ EXTERN void (*close_binary_logs_f)(void);
 EXTERN gboolean (*flush_binary_logs_f)(gpointer);
 EXTERN void (*log_inbound_data_f)(const void *, size_t);
 EXTERN void (*log_outbound_data_f)(const void *, size_t);
-
+EXTERN gboolean (*jump_to_tab_f)(GtkWidget *, gpointer );
+EXTERN gboolean (*check_tab_existance_f)(gint);
 
 /* Function Pointers */
 

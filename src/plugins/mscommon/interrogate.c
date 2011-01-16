@@ -1072,7 +1072,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	if (mem_alloc_f)
 		mem_alloc_f();
 	else
-		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFAILED TO LOCATE \"mem_alloc\" function within core/plugins"));
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFAILED TO LOCATE \"mem_alloc\" function within core/plugins\n"));
 
 	/* Display firmware version in the window... */
 

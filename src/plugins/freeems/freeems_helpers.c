@@ -87,6 +87,8 @@ void soft_boot_ecu(void)
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_if_fail(serial_params);
 
+	if (DATA_GET(global_data,"offline"))
+		return;
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_SOFT_SYSTEM_RESET & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_SOFT_SYSTEM_RESET & 0x00ff );
@@ -119,6 +121,8 @@ void hard_boot_ecu(void)
 	serial_params = DATA_GET(global_data,"serial_params");
 	g_return_if_fail(serial_params);
 
+	if (DATA_GET(global_data,"offline"))
+		return;
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_HARD_SYSTEM_RESET & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_HARD_SYSTEM_RESET & 0x00ff );
