@@ -35,7 +35,7 @@ data=0,0,240,56,50,10,250,0,0,0,0,66,0,4,3,10,64,5,58,60,40,11,160,30,60,0,0,0,0
 num_variables=189
 
 [Firmware]
-name=MegaSquirtnSpark-Extra_Highres_010a
+name=MegaSquirtnSpark-Extra_Highres_010x
 
 [API]
 minor=0
