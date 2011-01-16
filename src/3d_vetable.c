@@ -833,12 +833,12 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	else
 		ve3d_grey_window(ve_view);
 
+	gdk_gl_drawable_gl_end (gldrawable);
 	gdk_gl_drawable_swap_buffers (gldrawable);
 	glFlush ();
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 
 	return TRUE;
