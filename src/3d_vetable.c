@@ -705,7 +705,7 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 /*!
  \brief get_gl_config gets the OpenGL mode creates a GL config and returns it
  */
-G_MODULE_EXPORT GdkGLConfig* get_gl_config(void)
+GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
 	/* Try double-buffered visual */
@@ -757,7 +757,6 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	glViewport (0, 0, w, h);
 	glMatrixMode(GL_MODELVIEW);
 
-	ve3d_load_font_metrics(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	return TRUE;
@@ -833,13 +832,15 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	else
 		ve3d_grey_window(ve_view);
 
-	gdk_gl_drawable_gl_end (gldrawable);
-	gdk_gl_drawable_swap_buffers (gldrawable);
-	glFlush ();
+	if (gdk_gl_drawable_is_double_buffered (gldrawable))
+		gdk_gl_drawable_swap_buffers (gldrawable);
+	else
+		glFlush ();
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	/*** OpenGL END ***/
+	gdk_gl_drawable_gl_end (gldrawable);
 
 	return TRUE;
 }
@@ -958,6 +959,7 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	ve3d_load_font_metrics(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 }
