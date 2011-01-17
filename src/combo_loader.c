@@ -88,6 +88,7 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 		gtk_list_store_set(store,&iter,CHOICE_COL,g_strdup(choices[i]),BITVAL_COL,(guchar)g_ascii_strtoull(vector[i],NULL,10),-1);
 
 	}
+	OBJ_SET_FULL(object,"model",store,gtk_list_store_clear);
 	g_strfreev(vector);
 	g_strfreev(choices);
 
