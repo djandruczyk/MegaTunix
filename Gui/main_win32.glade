@@ -397,6 +397,44 @@
                                       </packing>
                                     </child>
                                     <child>
+                                      <widget class="GtkFrame" id="frame4">
+                                        <property name="visible">True</property>
+                                        <property name="label_xalign">0</property>
+                                        <child>
+                                          <widget class="GtkHBox" id="hbox12">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <widget class="GtkCheckButton" id="log_raw_cbutton">
+                                                <property name="label" translatable="yes">Log Raw DataStream</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="border_width">5</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal name="toggled" handler="toggle_button_handler"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label4">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Binary Logging</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="type">label_item</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <widget class="GtkFrame" id="frame2">
                                         <property name="visible">True</property>
                                         <property name="label_xalign">0</property>
@@ -465,7 +503,7 @@
                                         </child>
                                       </widget>
                                       <packing>
-                                        <property name="position">1</property>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                   </widget>

@@ -325,6 +325,7 @@ typedef enum
 typedef enum
 {
 	TOOLTIPS_STATE=0x500,
+	LOG_RAW_DATASTREAM,
 	TRACKING_FOCUS,
 	COMMA,
 	TAB,

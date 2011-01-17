@@ -212,6 +212,11 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOOLTIPS_STATE));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(global_data,"tips_in_use"));
 
+	/* General Tab, Log Datastreams */
+	button = glade_xml_get_widget(xml,"log_raw_cbutton");
+	OBJ_SET(button,"handler",GINT_TO_POINTER(LOG_RAW_DATASTREAM));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(global_data,"log_raw_datastream"));
+
 	/* General Tab, Temp Scales */
 	button = glade_xml_get_widget(xml,"fahrenheit_rbutton");
 	OBJ_SET(button,"handler",GINT_TO_POINTER(FAHRENHEIT));

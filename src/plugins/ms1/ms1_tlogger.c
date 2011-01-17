@@ -526,8 +526,8 @@ void stop(EcuPluginTickler type)
 			}
 			if (DATA_GET(global_data,"restart_realtime"))
 			{
-				start_tickler_f(RTV_TICKLER);
 				DATA_SET(global_data,"restart_realtime",GINT_TO_POINTER(FALSE));
+				start_tickler_f(RTV_TICKLER);
 			}
 			break;
 		case TRIGMON_TICKLER:
@@ -538,8 +538,8 @@ void stop(EcuPluginTickler type)
 			}
 			if (DATA_GET(global_data,"restart_realtime"))
 			{
-				start_tickler_f(RTV_TICKLER);
 				DATA_SET(global_data,"restart_realtime",GINT_TO_POINTER(FALSE));
+				start_tickler_f(RTV_TICKLER);
 			}
 			break;
 	}

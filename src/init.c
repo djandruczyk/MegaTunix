@@ -178,6 +178,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 	{
 		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))
 			DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
+		if(cfg_read_boolean(cfgfile, "Global", "LogRawDatastream", &tmpi))
+			DATA_SET(global_data,"log_raw_datastream",GINT_TO_POINTER(tmpi));
 //		if(cfg_read_boolean(cfgfile, "Global", "NetworkAccess", &tmpi))
 //			DATA_SET(global_data,"network_access",GINT_TO_POINTER(tmpi));
 		if(cfg_read_string(cfgfile, "Global", "Last_ECU_Family", &tmpbuf))
@@ -363,6 +365,7 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
 	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
 	cfg_write_boolean(cfgfile, "Global", "Tooltips",(GBOOLEAN)DATA_GET(global_data,"tips_in_use"));
+	cfg_write_boolean(cfgfile, "Global", "LogRawDatastream",(GBOOLEAN)DATA_GET(global_data,"log_raw_datastream"));
 	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(global_data,"network_access"));
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)DATA_GET(global_data,"temp_units"));

@@ -316,7 +316,7 @@ G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_n
 
 	label = gtk_entry_new();
 	gtk_entry_set_has_frame(GTK_ENTRY(label),FALSE);
-	gtk_entry_set_width_chars(GTK_ENTRY(label),5);
+	gtk_entry_set_width_chars(GTK_ENTRY(label),6);
 	gtk_entry_set_alignment(GTK_ENTRY(label),1);
 	gtk_entry_set_editable(GTK_ENTRY(label),FALSE);
 	gtk_widget_modify_base(GTK_WIDGET(label),GTK_STATE_NORMAL,&table->style->bg[GTK_STATE_NORMAL]);

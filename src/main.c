@@ -117,7 +117,6 @@ gint main(gint argc, gchar ** argv)
 	init();			/* Initialize global vars */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 	/* Build table of strings to enum values */
-	open_binary_logs();
 
 	/* Create Message passing queues */
 	queue = g_async_queue_new();
