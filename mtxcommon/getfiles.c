@@ -602,6 +602,7 @@ void free_mtxfileio(MtxFileIO *data)
 		g_free(data->default_filename);
 	if (data->default_extension)
 		g_free(data->default_extension);
+	g_free(data);
 	return;
 }
 
