@@ -164,6 +164,7 @@ G_MODULE_EXPORT void free_multi_expr(gpointer data)
 		evaluator_destroy(multi->dl_eval);
 	if (multi->ul_eval)
 		evaluator_destroy(multi->ul_eval);
+	g_free(multi);
 }
 
 

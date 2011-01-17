@@ -692,12 +692,14 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GHashTable *dynamic_widgets = NULL;
 	Rtv_Map *rtv_map = NULL;
 	GList ***ecu_widgets = NULL;
+	GList **tab_gauges = NULL;
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	rtv_map = DATA_GET(global_data,"rtv_map");
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	firmware = DATA_GET(global_data,"firmware");
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
@@ -712,17 +714,24 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	{
 		for (i=0;i<firmware->total_pages;i++)
 		{
-			if (ecu_widgets[i])
+			if (ecu_widgets)
 			{
-				for (j=0;j<firmware->page_params[i]->length;j++)
+				if (ecu_widgets[i])
 				{
-					g_list_foreach(ecu_widgets[i][j],dealloc_widget,NULL);
-					g_list_free(ecu_widgets[i][j]);
-				}
+					for (j=0;j<firmware->page_params[i]->length;j++)
+					{
+						g_list_foreach(ecu_widgets[i][j],dealloc_widget,NULL);
+						g_list_free(ecu_widgets[i][j]);
+					}
 
+				}
 			}
 			cleanup(ecu_widgets[i]);
+			if (tab_gauges)
+				if (tab_gauges[i])
+					g_list_free(tab_gauges[i]);
 		}
+		cleanup(tab_gauges);
 		cleanup (firmware->name);
 		cleanup (firmware->profile_filename);
 		cleanup (firmware->actual_signature);
@@ -746,6 +755,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup (firmware->SignatureVia);
 		cleanup (firmware->TextVerVia);
 		cleanup (firmware->NumVerVia);
+		cleanup(ecu_widgets);
 
 		for (i=0;i<firmware->total_pages;i++)
 		{
@@ -889,8 +899,16 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 	message->sequence = NULL;
 	cleanup (message->recv_buf);
 	if (message->command)
+	{
 		if (message->command->dynamic)
+		{
+			if (message->command->post_functions)
+			{
+				/*dealloc_array(message->command->post_functions,POST_FUNCTIONS);*/
+			}
 			cleanup(message->command);
+		}
+	}
 	message->command = NULL;
         if (message->payload)
 	{
@@ -1047,6 +1065,7 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 	cleanup(table_params->x_dl_conv_expr);
 	cleanup(table_params->y_dl_conv_expr);
 	cleanup(table_params->z_dl_conv_expr);
+	cleanup(table_params->z_depend_on);
 	if (table_params->x_multi_hash)
 		g_hash_table_destroy(table_params->x_multi_hash);
 	if (table_params->y_multi_hash)
@@ -1096,6 +1115,7 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 	/* This should release everything else bound via a DATA_SET_FULL */
 	//g_dataset_foreach(object,dataset_dealloc,NULL);
 	g_dataset_destroy(object);
+	g_free(object);
 }
 
 

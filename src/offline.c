@@ -46,10 +46,9 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
 	gboolean tmp = TRUE;
-	GModule *module = NULL;
 	GArray *pfuncs = NULL;
 	PostFunction *pf = NULL;
-        GAsyncQueue *io_repair_queue = NULL;
+	GAsyncQueue *io_repair_queue = NULL;
 	Firmware_Details *firmware = NULL;
 	void (*load_firmware_details)(void *,const gchar *) = NULL;
 
@@ -98,100 +97,86 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	if (get_symbol("load_firmware_details",(void*)&load_firmware_details))
 		load_firmware_details(firmware,filename);
 
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("update_interrogation_gui_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_realtime_map_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_status_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_rt_text_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_gui_tabs_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_sliders_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("start_statuscounts_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("disable_burner_buttons_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("offline_ecu_restore_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("setup_menu_handlers_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("enable_3d_buttons_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("ready_msg_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
-	g_module_close(module);
+
 
 	io_cmd(NULL,pfuncs);
 
 	/*
-	io_cmd(firmware->get_all_command,NULL);
-	*/
+	   io_cmd(firmware->get_all_command,NULL);
+	 */
 
 	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
@@ -201,16 +186,13 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("reset_temps_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
 	gdk_threads_leave();
@@ -430,6 +412,10 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	get_symbol("restore_all_ecu_settings",(void *)&restore_all_f);
+
+	g_return_if_fail(firmware);
+	g_return_if_fail(restore_all_f);
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
@@ -446,17 +432,17 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 
 	gdk_threads_enter();
 	filename = choose_file(fileio);
+	free_mtxfileio(fileio);
 	if (filename)
 	{
 		DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(filename),g_free);
 		update_logbar("tools_view",NULL,_("Full Restore of ECU Initiated\n"),FALSE,FALSE,FALSE);
-		get_symbol("restore_all_ecu_settings",(void *)&restore_all_f);
 		restore_all_f(filename);
 		g_free(filename);
 	}
 	else
 		io_cmd(firmware->get_all_command,NULL);
-	free_mtxfileio(fileio);
+
 	gdk_threads_leave();
 	return;
 }

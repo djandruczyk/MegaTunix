@@ -97,10 +97,9 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 		}
 		message = initialize_io_message();
 		message->command = command;
+		message->command->dynamic = FALSE;
 		if (data)
-		{
 			message->payload = data;
-		}
 		if (command->type == WRITE_CMD)
 			build_output_message_f(message,command,data);
 	}

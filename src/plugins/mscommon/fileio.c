@@ -209,10 +209,11 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 		if (major != BACKUP_MAJOR_API) 
 		{
 			update_logbar_f("tools_view","warning",g_strdup_printf(_(":restore_all_ecu_settings()\n\tAPI MAJOR version mismatch: \"%i\" != \"%i\"\n can not load this file for restoration\n"),major,BACKUP_MAJOR_API),FALSE,FALSE,TRUE);
+			cfg_free(cfgfile);
 			return;
 		}
 		if (minor != BACKUP_MINOR_API) 
-			update_logbar_f("tools_view","warning",g_strdup_printf(_(": restore_all_ecu_settings()\n\tAPI MINOR version mismatch: \"%i\" != \"%i\"\n can not load this file for restoration\n"),minor,BACKUP_MINOR_API),FALSE,FALSE,TRUE);
+			update_logbar_f("tools_view","warning",g_strdup_printf(_(": restore_all_ecu_settings()\n\tAPI MINOR version mismatch: \"%i\" != \"%i\"\n Will try to load this file for restoration, expect issues\n"),minor,BACKUP_MINOR_API),FALSE,FALSE,TRUE);
 
 		cfg_read_string(cfgfile,"Firmware","name",&tmpbuf);
 		if (g_ascii_strcasecmp(g_strdelimit(tmpbuf," ,",'_'),g_strdelimit(firmware->name," ,",'_')) != 0)
@@ -225,6 +226,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 			cfg_free(cfgfile);
 			return;
 		}
+		g_free(tmpbuf);
 		set_title_f(g_strdup(_("Restoring ECU settings from File")));
 		if (DATA_GET(global_data,"realtime_id"))
 		{
@@ -282,15 +284,17 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 								ms_send_to_ecu(canID,page,offset,size,dload_val, FALSE);
 							}
 						}
-					queue_burn_ecu_flash(page);
+						queue_burn_ecu_flash(page);
 					}
 				}
 				g_strfreev(keys);
 				g_free(tmpbuf);
 			}
+			g_free(section);
 		}
 		start_restore_monitor();
 	}
+	cfg_free(cfgfile);
 	if (DATA_GET(global_data,"offline"))
 	{
 		pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));

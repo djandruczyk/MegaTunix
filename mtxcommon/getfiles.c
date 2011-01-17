@@ -517,6 +517,7 @@ afterfilter:
 		}
 		else
 			filename = g_strdup(tmpbuf);
+		g_free(tmpbuf);
 	}
 	gtk_widget_destroy (dialog);
 

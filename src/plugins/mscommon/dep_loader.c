@@ -79,6 +79,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 		else
 		{
 			vector = g_strsplit(tmpbuf,",",-1);
+			g_free(tmpbuf);
 			len = g_strv_length(vector);
 			/* 7 args is ECU_EMB_BIT, 4 args is ECU_VAR */
 			if (!((len == 7) || (len == 4)))
@@ -259,6 +260,7 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		else
 		{
 			vector = g_strsplit(tmpbuf,",",-1);
+			g_free(tmpbuf);
 			len = g_strv_length(vector);
 			/* 7 args is ECU_EMB_BIT, 4 args is ECU_VAR */
 			if (!((len == 7) || (len == 4)))

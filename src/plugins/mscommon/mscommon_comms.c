@@ -318,27 +318,27 @@ G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
  int ECU byte order if there is an endianness thing..
  a horrible stall when doing an ECU restore or batch load...
  */
-G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * data)
+G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * block)
 {
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": ms_chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
+	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": ms_chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,block));
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
 	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
 	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
 	DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(num_bytes));
-	DATA_SET_FULL(output->data,"data", (gpointer)data, g_free);
+	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
 	/* save it otherwise the burn checker can miss it due to a potential
 	 * race condition
 	 */
-	ms_store_new_block(canID,page,offset,data,num_bytes);
+	ms_store_new_block(canID,page,offset,block,num_bytes);
 
 	if (firmware->multi_page)
 		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));

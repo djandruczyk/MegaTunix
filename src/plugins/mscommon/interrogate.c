@@ -806,14 +806,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"z_alt_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
 				else
 				{
-					OBJ_SET(firmware->table_params[i]->z_object,"alt_lookuptable",g_strdup(tmpbuf));
+					OBJ_SET_FULL(firmware->table_params[i]->z_object,"alt_lookuptable",g_strdup(tmpbuf),g_free);
 					g_free(tmpbuf);
 				}
 				if(!cfg_read_string(cfgfile,section,"z_lookuptable",&tmpbuf))
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"z_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
 				else
 				{
-					OBJ_SET(firmware->table_params[i]->z_object,"lookuptable",g_strdup(tmpbuf));
+					OBJ_SET_FULL(firmware->table_params[i]->z_object,"lookuptable",g_strdup(tmpbuf),g_free);
 					g_free(tmpbuf);
 				}
 			}

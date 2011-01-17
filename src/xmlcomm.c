@@ -129,6 +129,7 @@ G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"cmd") == 0)
 			{
 				cmd = g_new0(Command, 1);
+				cmd->dynamic = FALSE;
 				cmd->post_functions = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 				cmd->args = g_array_new(FALSE,TRUE,sizeof(PotentialArg *));
 				load_cmd_details(cmd, cur_node);
