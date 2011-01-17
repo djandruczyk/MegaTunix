@@ -29,13 +29,24 @@ G_MODULE_EXPORT void open_binary_logs(void)
 	GIOChannel *ichan = NULL;
 	GIOChannel *ochan = NULL;
 	GError *err = NULL;
+	time_t *t = NULL;
+	struct tm *tm = NULL;
+	gchar *tmpbuf = NULL;
+
+	t = g_malloc(sizeof(time_t));
+	time(t);
+	tm = localtime(t);
+	g_free(t);
+	tmpbuf = g_strdup_printf("%i-%.2i-%.2i_%.2i%.2i",1900+(tm->tm_year),1+(tm->tm_mon),tm->tm_mday,tm->tm_hour,tm->tm_min);
+
 #ifdef __WIN32__
-	gchar *ifilename = "C:\\program files\\megatunix\\inputlog.bin";
-	gchar *ofilename = "C:\\program files\\megatunix\\outputlog.bin";
+	gchar *ifilename = g_strdup_printf("C:\\program files\\megatunix\\inputlog-%s.bin",tmpbuf);
+	gchar *ofilename = g_strdup_printf("C:\\program files\\megatunix\\outputlog-%s.bin",tmpbuf);
 #else
-	gchar *ifilename = "/tmp/inputlog.bin";
-	gchar *ofilename = "/tmp/outputlog.bin";
+	gchar *ifilename = g_strdup_printf("/tmp/inputlog-%s.bin",tmpbuf);
+	gchar *ofilename = g_strdup_printf("/tmp/outputlog-%s.bin",tmpbuf);
 #endif
+	g_free(tmpbuf);
 
 	g_static_mutex_lock(&mutex);
 	ichan = g_io_channel_new_file(ifilename,"w",&err);
