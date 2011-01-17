@@ -129,7 +129,8 @@ G_MODULE_EXPORT void plugins_init()
 			NULL, /* Thread args */
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
-	DATA_SET(global_data,"thread_dispatcher_id",id);
+	if (id)
+		DATA_SET(global_data,"thread_dispatcher_id",id);
 }
 
 
@@ -140,10 +141,11 @@ G_MODULE_EXPORT void plugins_shutdown()
 	void (*plugin_shutdown)(void);
 
 	id = DATA_GET(global_data,"thread_dispatcher_id");
-	if (id)
+	if (id != NULL)
 	{
 		DATA_SET(global_data,"thread_dispatcher_exit",GINT_TO_POINTER(TRUE));
 		g_thread_join(id);
+		DATA_SET(global_data,"thread_dispatcher_id",NULL);
 	}
 	/* Shutdown ECU module */
 	module = DATA_GET(global_data,"ecu_module");

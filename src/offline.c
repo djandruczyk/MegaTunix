@@ -231,6 +231,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	GtkWidget *hbox = NULL;
 	GtkWidget *ebox = NULL;
 	GtkWidget *sep = NULL;
+	GtkWidget *dummybutton = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
 	ListElement *element = NULL;
@@ -270,6 +271,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		{
 			thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,cfgfile->filename),FALSE,FALSE);
 			i++;
+			cfg_free(cfgfile);
 			continue;
 		}
 		cfg_read_string(cfgfile,"interrogation_profile","name",&tmpbuf);
@@ -316,8 +318,8 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),vbox,TRUE,TRUE,0);
 	group = NULL;
 	/* Dummies */
-	button = gtk_radio_button_new(group);
-	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+	dummybutton = gtk_radio_button_new(group);
+	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(dummybutton));
 	if (g_list_length(p_list) > 0)
 	{
 		label = gtk_label_new("Custom (personal) Profiles");
@@ -332,11 +334,11 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 			hbox = gtk_hbox_new(FALSE,10);
 			gtk_container_add(GTK_CONTAINER(ebox),hbox);
-			label = gtk_label_new(g_strdup(element->name));
+			label = gtk_label_new(element->name);
 			gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 			button = gtk_radio_button_new(group);
 			g_free(OBJ_GET(button,"filename"));
-			OBJ_SET(button,"filename",g_strdup(element->filename));
+			OBJ_SET_FULL(button,"filename",g_strdup(element->filename),g_free);
 			OBJ_SET(button,"handler",
 					GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
 			g_signal_connect(button,
@@ -364,11 +366,11 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 		hbox = gtk_hbox_new(FALSE,10);
 		gtk_container_add(GTK_CONTAINER(ebox),hbox);
-		label = gtk_label_new(g_strdup(element->name));
+		label = gtk_label_new(element->name);
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 		button = gtk_radio_button_new(group);
 		g_free(OBJ_GET(button,"filename"));
-		OBJ_SET(button,"filename",g_strdup(element->filename));
+		OBJ_SET_FULL(button,"filename",g_strdup(element->filename),g_free);
 		OBJ_SET(button,"handler",
 				GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
 		g_signal_connect(button,
@@ -396,6 +398,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
+	gtk_widget_destroy(dummybutton);
 	g_list_foreach(p_list,free_element,NULL);
 	g_list_foreach(s_list,free_element,NULL);
 	g_list_free(p_list);

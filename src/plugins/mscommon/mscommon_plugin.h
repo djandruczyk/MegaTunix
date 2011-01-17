@@ -107,6 +107,7 @@ EXTERN gdouble (*f_to_k_f)(gdouble);
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
 void register_common_enums(void);
+void deregister_common_enums(void);
 /* Prototypes */
 
 #endif
