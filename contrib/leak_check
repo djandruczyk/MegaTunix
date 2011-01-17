@@ -1,3 +1,4 @@
 #!/bin/bash
 
-G_SLICE=always-malloc G_DEBUG=gc-friendly,resident-modules valgrind --tool=memcheck --num-callers=45 -v --leak-check=full --suppressions=~/git/MegaTunix/contrib/mtx.supp --log-file=/tmp/log ./$*
+
+G_SLICE=always-malloc G_DEBUG=gc-friendly,resident-modules valgrind --tool=memcheck --num-callers=45 -v --leak-check=full --suppressions=${HOME}/git/MegaTunix/contrib/mtx.supp --log-file=/tmp/log ./$*
