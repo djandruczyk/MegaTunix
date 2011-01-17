@@ -316,9 +316,9 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	vbox = gtk_vbox_new(TRUE,2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),vbox,TRUE,TRUE,0);
-	group = NULL;
 	/* Dummies */
-	dummybutton = gtk_radio_button_new(group);
+	dummybutton = gtk_radio_button_new(NULL);
+	g_object_ref_sink(dummybutton);
 	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(dummybutton));
 	if (g_list_length(p_list) > 0)
 	{
@@ -398,7 +398,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
-	gtk_widget_destroy(dummybutton);
+	g_object_unref(dummybutton);
 	g_list_foreach(p_list,free_element,NULL);
 	g_list_foreach(s_list,free_element,NULL);
 	g_list_free(p_list);

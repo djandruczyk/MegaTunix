@@ -349,3 +349,14 @@
 	...
 	fun:main
 }
+{
+	g_get_lang_names
+	Memcheck:Leak
+	fun:*alloc
+        ...
+	fun:g_get_language_names
+	...
+	fun:g_thread_init
+	fun:main
+}
+
