@@ -752,7 +752,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		default:
 			if (!common_handler)
 			{
-				if (get_symbol("common_button_handler",(void *)&common_handler))
+				if (get_symbol("common_std_button_handler",(void *)&common_handler))
 					return common_handler(widget,data);
 				else
 					dbg_func(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\tDefault case, common handler NOT found in plugins, BUG!\n"));
