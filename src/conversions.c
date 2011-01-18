@@ -629,7 +629,7 @@ G_MODULE_EXPORT void reset_temps(gpointer type)
 }
 
 
-gdouble temp_to_host(gdouble in)
+G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 {
 	gdouble res = 0.0;
 	static Firmware_Details *firmware = NULL;
@@ -654,7 +654,7 @@ gdouble temp_to_host(gdouble in)
 	return res;
 }
 
-gdouble temp_to_ecu(gdouble in)
+G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 {
 	gdouble res = 0.0;
 	static Firmware_Details *firmware = NULL;
@@ -680,37 +680,37 @@ gdouble temp_to_ecu(gdouble in)
 }
 
 
-gdouble c_to_f(gdouble in)
+G_MODULE_EXPORT gdouble c_to_f(gdouble in)
 {
 	return ((in *(9.0/5.0))+32.0)+0.001;
 }
 
 
-gdouble c_to_k(gdouble in)
+G_MODULE_EXPORT gdouble c_to_k(gdouble in)
 {
 	return (in+273.0);
 }
 
 
-gdouble f_to_c(gdouble in)
+G_MODULE_EXPORT gdouble f_to_c(gdouble in)
 {
 	return ((in-32.0)*(5.0/9.0))+0.001;
 }
 
 
-gdouble f_to_k(gdouble in)
+G_MODULE_EXPORT gdouble f_to_k(gdouble in)
 {
 	return ((in-32.0)*(5.0/9.0))+273.001;
 }
 
 
-gdouble k_to_f(gdouble in)
+G_MODULE_EXPORT gdouble k_to_f(gdouble in)
 {
 	return (((in-273) *(9.0/5.0))+32.0)+0.001;
 }
 
 
-gdouble k_to_c(gdouble in)
+G_MODULE_EXPORT gdouble k_to_c(gdouble in)
 {
 	return (in-273.0);
 }

@@ -126,7 +126,7 @@ gint setup_port(gint fd, gint baud)
 	newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
 	/* MS2 quirk */
 
-	tcsetattr(fd,TCSAFLUSH,&newtio);
+	tcsetattr(fd,TCSANOW,&newtio);
 
 #endif
 	return 0;

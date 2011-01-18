@@ -1957,7 +1957,7 @@ G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTr
 	return FALSE;
 }
 
-void get_essential_bits(GtkWidget *widget, gint *canID, gint *page, gint *offset, gint *bitval, gint *bitmask, gint *bitshift)
+G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *canID, gint *page, gint *offset, gint *bitval, gint *bitmask, gint *bitshift)
 {
 	if (!GTK_IS_WIDGET(widget))
 		return;
@@ -1976,7 +1976,7 @@ void get_essential_bits(GtkWidget *widget, gint *canID, gint *page, gint *offset
 }
 
 
-void get_essentials(GtkWidget *widget, gint *canID, gint *page, gint *offset, DataSize *size, gint *precision)
+G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *canID, gint *page, gint *offset, DataSize *size, gint *precision)
 {
 	if (!GTK_IS_WIDGET(widget))
 		return;
