@@ -493,7 +493,10 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (!widget)
+	g_return_if_fail(ecu_widgets);
+	g_return_if_fail(firmware);
+
+	if (!GTK_IS_WIDGET(widget))
 		return;
 
 	if (GTK_IS_WIDGET(widget))
@@ -737,18 +740,15 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	g_free(section);
 	g_strfreev(keys);
-	if (GTK_IS_WIDGET(widget))
+	if (GTK_IS_ENTRY(widget))
 	{
-		if (GTK_IS_ENTRY(widget))
+		if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
 		{
-			if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
-			{
-				table_num = (gint)strtol(tmpbuf,NULL,10);
-				page = (gint)OBJ_GET(widget,"page");
-				offset = (gint)OBJ_GET(widget,"offset");
-				if ((page == firmware->table_params[table_num]->z_page) && ((offset >= firmware->table_params[table_num]->z_base) && (offset < firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount)))
-					g_array_append_val(firmware->table_params[table_num]->table,widget);
-			}
+			table_num = (gint)strtol(tmpbuf,NULL,10);
+			page = (gint)OBJ_GET(widget,"page");
+			offset = (gint)OBJ_GET(widget,"offset");
+			if ((page == firmware->table_params[table_num]->z_page) && ((offset >= firmware->table_params[table_num]->z_base) && (offset < firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount)))
+				g_array_append_val(firmware->table_params[table_num]->table,widget);
 		}
 	}
 	dbg_func(TABLOADER,g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));

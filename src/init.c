@@ -1208,10 +1208,13 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 	cleanup (OBJ_GET(widget,"ul_conv_expr"));
 	cleanup (OBJ_GET(widget,"ul_conv_exprs"));
 */
+	/*
 	if (OBJ_GET(widget,"dl_evaluator"))
 		evaluator_destroy (OBJ_GET(widget,"dl_evaluator"));
 	if (OBJ_GET(widget,"ul_evaluator"))
 		evaluator_destroy (OBJ_GET(widget,"ul_evaluator"));
+		*/
+	gtk_widget_destroy(widget);
 }
 
 

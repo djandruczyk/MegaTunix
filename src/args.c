@@ -186,7 +186,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 			printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
 		exit(0);
 	}
-	DATA_SET_FULL(global_data,"args",args,g_free);
+	DATA_SET_FULL(global_data,"args",args,args_free);
 	g_option_context_free(context);
 }
 
@@ -211,4 +211,18 @@ G_MODULE_EXPORT CmdLineArgs * init_args(void)
 	args->network_port = 0;
 	
 	return (args);
+}
+
+
+G_MODULE_EXPORT void args_free(gpointer data)
+{
+	CmdLineArgs *args = (CmdLineArgs *)data;
+
+	g_return_if_fail(args);
+	cleanup(args->dbglog);
+	cleanup(args->autolog_dump_dir);
+	cleanup(args->autolog_basename);
+	cleanup(args->network_host);
+	cleanup(args->port);
+	cleanup(args);
 }

@@ -100,7 +100,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			g_strfreev(keys);
 			g_strfreev(exprs);
 
-			OBJ_SET(widget,"dl_eval_hash",hash);
+			OBJ_SET_FULL(widget,"dl_eval_hash",hash,g_hash_table_destroy);
 		}
 		hash = OBJ_GET(widget,"dl_eval_hash");
 		source_key = OBJ_GET(widget,"source_key");
@@ -155,7 +155,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		{
 			evaluator = evaluator_create(conv_expr);
 			assert(evaluator);
-			OBJ_SET(widget,"dl_evaluator",(gpointer)evaluator);
+			OBJ_SET_FULL(widget,"dl_evaluator",(gpointer)evaluator,evaluator_destroy);
 		}
 	}
 	if (!evaluator)
@@ -267,7 +267,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			g_strfreev(keys);
 			g_strfreev(exprs);
 
-			OBJ_SET(widget,"ul_eval_hash",hash);
+			OBJ_SET_FULL(widget,"ul_eval_hash",hash,g_hash_table_destroy);
 		}
 		hash = OBJ_GET(widget,"ul_eval_hash");
 		source_key = OBJ_GET(widget,"source_key");
@@ -322,7 +322,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		{
 			evaluator = evaluator_create(conv_expr);
 			assert(evaluator);
-			OBJ_SET(widget,"ul_evaluator",(gpointer)evaluator);
+			OBJ_SET_FULL(widget,"ul_evaluator",(gpointer)evaluator,evaluator_destroy);
 		}
 
 	}

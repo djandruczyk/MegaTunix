@@ -754,7 +754,8 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	 */
 	static gboolean serial_is_open = FALSE; /* Assume never opened */
 	static GAsyncQueue *io_repair_queue = NULL;
-	gchar * potential_ports;
+	gchar * active = NULL;
+	gchar * potential_ports = NULL;
 	gint len = 0;
 	gboolean autodetect = FALSE;
 	guchar buf [1024];
@@ -774,6 +775,13 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	get_symbol_f("close_serial",(void *)&close_serial_f);
 	get_symbol_f("lock_serial",(void *)&lock_serial_f);
 	get_symbol_f("unlock_serial",(void *)&unlock_serial_f);
+
+	g_return_val_if_fail(setup_serial_params_f,NULL);
+	g_return_val_if_fail(open_serial_f,NULL);
+	g_return_val_if_fail(close_serial_f,NULL);
+	g_return_val_if_fail(lock_serial_f,NULL);
+	g_return_val_if_fail(unlock_serial_f,NULL);
+
 	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread created!\n"));
 
 	if (DATA_GET(global_data,"offline"))
@@ -868,6 +876,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 					{       /* We have a winner !!  Abort loop */
 						thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Search successfull\n")),FALSE,FALSE);
 						serial_is_open = TRUE;
+						active = g_strdup(vector[i]);
 						break;
 					}
 					else
@@ -893,7 +902,8 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	if (serial_is_open)
 	{
 		queue_function_f("kill_conn_warning");
-		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
+		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(active));
+		g_free(active);
 	}
 	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, device found!\n"));
 	g_thread_exit(0);

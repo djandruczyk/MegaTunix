@@ -49,6 +49,7 @@ struct _CmdLineArgs
 /* Prototypes */
 CmdLineArgs * init_args(void);
 void handle_args(gint, gchar ** );
+void args_free(gpointer);
 /* Prototypes */
 
 #endif

@@ -257,6 +257,7 @@ G_MODULE_EXPORT void set_fixed_size( GtkWidget *widget, int nchars )
 			geo.height );
 }
 
+
 G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 {
 	GtkComboBox *box = GTK_COMBO_BOX(widget);
@@ -265,7 +266,6 @@ G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 	if (GTK_IS_ENTRY(entry))
 		gtk_editable_set_editable(GTK_EDITABLE(entry),FALSE);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget),0);
-
 }
 
 

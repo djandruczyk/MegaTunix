@@ -243,9 +243,8 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		deps = parse_keys_f(tmpbuf,&num_deps,",");
 		g_free(tmpbuf);
 	}
-	/* Store list of deps.... */
-
 	dep_obj = g_new0(gconstpointer, 1);
+	/* Store list of deps.... */
 	DATA_SET_FULL(dep_obj,"deps",deps,g_strfreev);
 	DATA_SET(dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
 
@@ -377,10 +376,8 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 			else
 				DATA_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
-
 		}
 		g_strfreev(vector);
-
 	}
 	OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,g_dataset_destroy);
 }
