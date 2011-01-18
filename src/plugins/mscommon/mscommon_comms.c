@@ -877,7 +877,6 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 						close_serial_f();
 						unlock_serial_f();
 						/*g_usleep(100000);*/
-
 					}
 				}
 				g_usleep(100000);
@@ -889,15 +888,13 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			}
 		}
 		queue_function_f("conn_warning");
+		g_strfreev(vector);
 	}
-
 	if (serial_is_open)
 	{
 		queue_function_f("kill_conn_warning");
 		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
 	}
-	if (vector)
-		g_strfreev(vector);
 	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, device found!\n"));
 	g_thread_exit(0);
 	return NULL;

@@ -1191,7 +1191,13 @@ G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gin
 	gint count = 0;
 	gint i = 0;
 	GtkEditable *editable = GTK_EDITABLE(entry);
-	gchar *result = g_new (gchar, len);
+	gchar *result = NULL;
+
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
+		return;
+
+	result = g_new (gchar, len);
 	for (i=0; i < len; i++) 
 	{
 		if ((g_ascii_isdigit(text[i])) || g_ascii_ispunct(text[i]))
