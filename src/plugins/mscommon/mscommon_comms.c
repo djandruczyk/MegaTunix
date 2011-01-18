@@ -369,14 +369,14 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 		canID = (GINT)OBJ_GET(widget,"canID");
 		page = (GINT)OBJ_GET(widget,"page");
 		offset = (GINT)OBJ_GET(widget,"offset");
-		size = (DataSize)OBJ_GET(widget,"datasize");
+		size = (DataSize)OBJ_GET(widget,"size");
 	}
 	else
 	{
 		canID = (GINT)DATA_GET(gptr,"canID");
 		page = (GINT)DATA_GET(gptr,"page");
 		offset = (GINT)DATA_GET(gptr,"offset");
-		size = (DataSize)DATA_GET(gptr,"datasize");
+		size = (DataSize)DATA_GET(gptr,"size");
 	}
 	ms_send_to_ecu(canID,page,offset,size,value,queue_update);
 }
