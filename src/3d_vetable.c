@@ -1673,14 +1673,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	Ve_View_3D *ve_view = NULL;
 	Firmware_Details *firmware = NULL;
 	static gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize) = NULL;
-	static void (*send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;
+	static void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	if (!ms_get_ecu_data_f)
 		get_symbol("ms_get_ecu_data",(void*)&ms_get_ecu_data_f);
 
-	if (!send_to_ecu_f)
-		get_symbol("send_to_ecu",(void*)&send_to_ecu_f);
+	if (!ms_send_to_ecu_f)
+		get_symbol("ms_send_to_ecu",(void*)&ms_send_to_ecu_f);
 
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
@@ -1829,7 +1829,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1846,7 +1846,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 
 					}
@@ -1884,7 +1884,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1901,7 +1901,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1933,7 +1933,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1950,7 +1950,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 10;
 						page = z_page;
 						size = z_size;
-						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1985,7 +1985,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -2002,7 +2002,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 1;
 						page = z_page;
 						size = z_size;
-						send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 						update_widgets = TRUE;
 
 					}
@@ -2040,7 +2040,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	{
 		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
 
-		send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+		ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 		ve_view->mesh_created=FALSE;
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
