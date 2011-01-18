@@ -228,17 +228,18 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				break;
 
 		}
-		/* Send rest of message back up to main context for gui
-		 * updates via asyncqueue
+		/* If set to defer post functions, it means they were passed 
+		   via a function fall, thus dealloc it here., Otherwise
+		   push up the queue to the postfunction dispatcher
 		 */
-		if (!message->command->defer_post_functions)
+		if (message->command->defer_post_functions)
+			dealloc_message(message);
+		else
 		{
 			g_async_queue_ref(pf_dispatch_queue);
 			g_async_queue_push(pf_dispatch_queue,(gpointer)message);
 			g_async_queue_unref(pf_dispatch_queue);
 		}
-		else
-			dealloc_message(message);
 	}
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\texiting!!\n"));
 }

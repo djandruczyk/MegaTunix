@@ -1846,10 +1846,10 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	/* First TURN OFF all non active groups */
 	for (i=0;i<num_choices;i++)
 	{
-		groups = parse_keys_f(choices[i],&num_groups,":");
-		/*printf("Choice %i, has %i groups\n",i,num_groups);*/
 		if (i == active)
 			continue;
+		groups = parse_keys_f(choices[i],&num_groups,":");
+		/*printf("Choice %i, has %i groups\n",i,num_groups);*/
 		state = FALSE;
 		for (j=0;j<num_groups;j++)
 		{
