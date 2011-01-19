@@ -164,6 +164,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	 * other dynamic bits that can't be set via glade statically 
 	 */
 	GtkTextBuffer * textbuffer = NULL;
+	GtkTextTag *tag = NULL;
 	GtkWidget *alignment = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *cbutton = NULL;
@@ -329,14 +330,18 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"interr_view");
 	register_widget("interr_view",widget);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
-	gtk_text_buffer_create_tag(textbuffer,
+	tag = gtk_text_buffer_create_tag(textbuffer,
 			"warning",
 			"foreground",
 			"red", NULL);
-	gtk_text_buffer_create_tag(textbuffer,
+	g_object_ref(tag);
+	DATA_SET_FULL(global_data,"inter_warning_tag",tag,g_object_unref);
+	tag = gtk_text_buffer_create_tag(textbuffer,
 			"info",
 			"foreground",
 			"dark green", NULL);
+	g_object_ref(tag);
+	DATA_SET_FULL(global_data,"inter_info_tag",tag,g_object_unref);
 
 	/* COMMS Tab Commport frame */
 	ebox = glade_xml_get_widget(xml,"commport_ebox");
@@ -434,13 +439,17 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"serial_status_view");
 	register_widget("comms_view",widget);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
-	gtk_text_buffer_create_tag(textbuffer,
+	tag = gtk_text_buffer_create_tag(textbuffer,
 			"warning",
 			"foreground",
 			"red", NULL);
-	gtk_text_buffer_create_tag(textbuffer,
+	g_object_ref(tag);
+	DATA_SET_FULL(global_data,"comms_warning_tag",tag,g_object_unref);
+	tag = gtk_text_buffer_create_tag(textbuffer,
 			"info",
 			"foreground",
 			"dark green", NULL);
+	g_object_ref(tag);
+	DATA_SET_FULL(global_data,"comms_info_tag",tag,g_object_unref);
 
 }

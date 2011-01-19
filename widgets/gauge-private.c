@@ -98,7 +98,7 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 
 
 /*!
- \brief Initializes the gauge attributes to sane defaults
+ \brief Free's data
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
 void mtx_gauge_face_finalize (GObject *gauge)

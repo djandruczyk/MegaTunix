@@ -74,7 +74,7 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data)
 		DATA_SET_FULL(global_data,"dynamic_widgets",dynamic_widgets,g_hash_table_destroy);
 	}
 	fullname = g_strdup_printf("%s%s",prefix,name);
-	OBJ_SET(widget,"fullname",g_strdup(fullname));
+	OBJ_SET_FULL(widget,"fullname",g_strdup(fullname),g_free);
 	if (!lookup_widget(fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else

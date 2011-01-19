@@ -19,6 +19,7 @@
 #include <defines.h>
 #include <errno.h>
 #include <glib.h>
+#include <init.h>
 #include <offline.h>
 #include <stdlib.h>
 #include <sys/stat.h>

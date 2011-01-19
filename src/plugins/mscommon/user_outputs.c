@@ -83,13 +83,11 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 	views = g_list_append(views,view);
 	OBJ_SET(model,"view",(gpointer)view);
 	gtk_container_add(GTK_CONTAINER(widget),view);
-	g_object_unref(model);
+	//g_object_unref(model);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
 	add_columns(GTK_TREE_VIEW(view), widget);
-
 	update_model_from_view((GtkWidget *)view);
-
 }
 
 
