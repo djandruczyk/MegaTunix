@@ -198,6 +198,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	alignment = glade_xml_get_widget(xml,"logo_alignment");
 	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
+	DATA_SET_FULL(global_data,"logo_pixbuf",pixbuf,g_object_unref);
 	g_object_unref(pixbuf);
 	gtk_container_add (GTK_CONTAINER (alignment), image);
 
