@@ -712,9 +712,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	/* Firmware datastructure.... */
 	if (firmware)
 	{
-		for (i=0;i<firmware->total_pages;i++)
+		if (ecu_widgets)
 		{
-			if (ecu_widgets)
+			for (i=0;i<firmware->total_pages;i++)
 			{
 				if (ecu_widgets[i])
 				{
@@ -725,13 +725,23 @@ G_MODULE_EXPORT void mem_dealloc(void)
 					}
 
 				}
+				cleanup(ecu_widgets[i]);
 			}
-			cleanup(ecu_widgets[i]);
-			if (tab_gauges)
-				if (tab_gauges[i])
-					g_list_free(tab_gauges[i]);
+			cleanup(ecu_widgets);
 		}
-		cleanup(tab_gauges);
+
+		if (tab_gauges)
+		{
+			for (i=0;i<firmware->total_tables;i++)
+			{
+				if (tab_gauges[i])
+				{
+					g_list_foreach(tab_gauges[i],dealloc_gauge,NULL);
+					g_list_free(tab_gauges[i]);
+				}
+			}
+			cleanup(tab_gauges);
+		}
 		cleanup (firmware->name);
 		cleanup (firmware->profile_filename);
 		cleanup (firmware->actual_signature);
@@ -755,7 +765,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup (firmware->SignatureVia);
 		cleanup (firmware->TextVerVia);
 		cleanup (firmware->NumVerVia);
-		cleanup(ecu_widgets);
 
 		for (i=0;i<firmware->total_pages;i++)
 		{
@@ -1164,6 +1173,14 @@ G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 	cleanup(table->filename);
 	cleanup(table);
 	return;
+}
+
+
+G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
+{
+	GtkWidget * widget = (GtkWidget *) data;
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_destroy(widget);
 }
 
 

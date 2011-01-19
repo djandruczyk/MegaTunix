@@ -35,15 +35,15 @@ void dealloc_array(GArray *, ArrayType );
 void dealloc_rtv_object(gconstpointer *);
 void dealloc_lists_hash(gpointer);
 void dealloc_list(gpointer, gpointer, gpointer);
-
-gboolean dealloc_rtt_model(GtkTreeModel *, GtkTreePath *, GtkTreeIter *,gpointer);
 void dealloc_rtt(gpointer);
 void dealloc_slider(gpointer);
 void dealloc_lookuptable(gpointer data);
 void dealloc_widget(gpointer, gpointer);
+void dealloc_gauge(gpointer, gpointer);
 void xml_cmd_free(gpointer);
 void xml_arg_free(gpointer);
 void cleanup(void *);
+gboolean dealloc_rtt_model(GtkTreeModel *, GtkTreePath *, GtkTreeIter *,gpointer);
 Io_Message * initialize_io_message(void);
 OutputData * initialize_outputdata(void);
 Text_Message * initialize_text_message(void);

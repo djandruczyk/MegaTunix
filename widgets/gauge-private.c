@@ -136,6 +136,48 @@ void mtx_gauge_face_finalize (GObject *gauge)
 		mtx_gauge_face_cleanup_tick_groups(priv->tick_groups);
 	if (priv->polygons)
 		mtx_gauge_face_cleanup_polygons(priv->polygons);
+	g_object_set_data(G_OBJECT(gauge),"bg_color_alt", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_color", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_color_alt", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color_alt", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color_alt", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color_alt", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_length", NULL);
+	g_object_set_data(G_OBJECT(gauge),"bg_color_day", NULL);
+	g_object_set_data(G_OBJECT(gauge),"bg_color_nite", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_color_day", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_color_nite", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color_day", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_font_color_nite", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color_day", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gradient_begin_color_nite", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color_day", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gradient_end_color_nite", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_length", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_tip_width", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_tail_width", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_width", NULL);
+	g_object_set_data(G_OBJECT(gauge),"needle_tail", NULL);
+	g_object_set_data(G_OBJECT(gauge),"show_tattletale", NULL);
+	g_object_set_data(G_OBJECT(gauge),"tattletale_alpha", NULL);
+	g_object_set_data(G_OBJECT(gauge),"precision", NULL);
+	g_object_set_data(G_OBJECT(gauge),"width", NULL);
+	g_object_set_data(G_OBJECT(gauge),"height", NULL);
+	g_object_set_data(G_OBJECT(gauge),"main_start_angle", NULL);
+	g_object_set_data(G_OBJECT(gauge),"main_sweep_angle", NULL);
+	g_object_set_data(G_OBJECT(gauge),"rotation", NULL);
+	g_object_set_data(G_OBJECT(gauge),"lbound", NULL);
+	g_object_set_data(G_OBJECT(gauge),"ubound", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_font", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_font_scale", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_str_xpos", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_str_ypos", NULL);
+	g_object_set_data(G_OBJECT(gauge),"antialias", NULL);
+	g_object_set_data(G_OBJECT(gauge),"show_value", NULL);
+	g_object_set_data(G_OBJECT(gauge),"datasource", NULL);
 }
 
 
@@ -286,7 +328,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	* dash designer to do drag and move placement 
 	*/ 
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	gtk_widget_add_events (GTK_WIDGET (gauge),
+	gtk_widget_set_events (GTK_WIDGET (gauge),
 			GDK_KEY_PRESS_MASK |
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
@@ -342,7 +384,6 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
 	/* Compat with older gauges */
-	g_object_set_data(G_OBJECT(gauge),"bg_color", &priv->colors[GAUGE_COL_BG_DAY]);
 	g_object_set_data(G_OBJECT(gauge),"bg_color_alt", &priv->colors[GAUGE_COL_BG_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"needle_color", &priv->colors[GAUGE_COL_NEEDLE_DAY]);
 	g_object_set_data(G_OBJECT(gauge),"needle_color_alt", &priv->colors[GAUGE_COL_NEEDLE_NITE]);
@@ -1498,7 +1539,10 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 				break;
 			case 3: /* right button */
 				if (GTK_IS_WINDOW(widget->parent))
+				{
+					gtk_widget_destroy(widget);
 					gtk_main_quit();
+				}
 				/* Added api call to do this*/
 				else if (priv->show_tattletale)
 				{

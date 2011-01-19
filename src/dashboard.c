@@ -1190,7 +1190,6 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		g_free(filename);
 	}
-	g_free(OBJ_GET(gauge,"datasource"));
 	OBJ_SET(gauge,"datasource",OBJ_GET(widget,"datasource"));
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
