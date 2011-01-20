@@ -91,6 +91,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	gboolean tmp = TRUE;
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
+	GtkWidget *main_window = NULL;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	GMutex *mutex = g_mutex_new();
@@ -115,6 +116,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		}
 		prompt_to_save();
 	}
+	main_window = lookup_widget("main_window");
 
 	/* Stop timeout functions */
 	stop_tickler(RTV_TICKLER);
@@ -243,6 +245,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
+	gtk_main_quit();
 	exit(0);
 	return TRUE;
 }
@@ -315,7 +318,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
 				break;
 			case OFFLINE_FIRMWARE_CHOICE:
-				DATA_SET(global_data,"offline_firmware_choice", g_strdup(OBJ_GET(widget,"filename")));
+				DATA_SET_FULL(global_data,"offline_firmware_choice", g_strdup(OBJ_GET(widget,"filename")),g_free);
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
@@ -828,12 +831,8 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint source = 0;
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
-	GHashTable **interdep_vars = NULL;
 	Serial_Params *serial_params = NULL;
-	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	interdep_vars = DATA_GET(global_data,"interdep_vars");
 	serial_params = DATA_GET(global_data,"serial_params");
 
 	if (!GTK_IS_WIDGET(widget))
@@ -947,7 +946,6 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	gboolean retval = FALSE;
 	gboolean reverse_keys = FALSE;
 	gboolean *tracking_focus = NULL;
-	Firmware_Details *firmware = NULL;
 
 	if (!ecu_widgets)
 		ecu_widgets = DATA_GET(global_data,"ecu_widgets");
@@ -962,9 +960,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	if (!update_widget_f)
 		get_symbol("update_widget",(void *)&update_widget_f);
 
-	firmware = DATA_GET(global_data,"firmware");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
-
 
 	size = (DataSize) OBJ_GET(widget,"size");
 	reverse_keys = (GBOOLEAN) OBJ_GET(widget,"reverse_keys");
@@ -1241,9 +1237,6 @@ G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, g
 	GtkWidget *frame = NULL;
 	GtkWidget *parent = NULL;
 	gchar * frame_name = NULL;
-	Firmware_Details *firmware = NULL;
-
-	firmware = DATA_GET(global_data,"firmware");
 
 	/* Select all chars on click */
 	/*
@@ -1678,7 +1671,6 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-
 	widget_name = OBJ_GET(widget,"fullname");
 	if (!widget_name)
 		return;
@@ -1686,7 +1678,7 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 		table_num = (gint) strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	else
 		return;
-	
+
 	ptr = g_strrstr_len(widget_name,strlen(widget_name),"_of_");
 	ptr = g_strrstr_len(widget_name,ptr-widget_name,"_");
 	tmpbuf = g_strdelimit(g_strdup(ptr),"_",' ');

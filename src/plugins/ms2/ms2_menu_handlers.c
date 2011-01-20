@@ -140,57 +140,57 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 		{
 			item = glade_xml_get_widget(xml,"bias_entry");
 			register_widget_f("bias_entry",item);
-			OBJ_SET(item,"raw_lower",g_strdup("0"));
-			OBJ_SET(item,"raw_upper",g_strdup("100000"));
+			OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("100000"),g_free);
 			OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		}
 
 		item = glade_xml_get_widget(xml,"temp1_entry");
 		register_widget_f("temp1_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("-40"));
-		OBJ_SET(item,"raw_upper",g_strdup("300"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("-40"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("300"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"temp2_entry");
 		register_widget_f("temp2_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("-40"));
-		OBJ_SET(item,"raw_upper",g_strdup("300"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("-40"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("300"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"temp3_entry");
 		register_widget_f("temp3_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("-40"));
-		OBJ_SET(item,"raw_upper",g_strdup("300"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("-40"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("300"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"resistance1_entry");
 		register_widget_f("resistance1_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("500000"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("500000"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"resistance2_entry");
 		register_widget_f("resistance2_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("500000"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("500000"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"resistance3_entry");
 		register_widget_f("resistance3_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("500000"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("500000"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"celsius_rbutton");
-		OBJ_SET(item,"temp_label",g_strdup("Temperature(\302\260 C)"));
+		OBJ_SET_FULL(item,"temp_label",g_strdup("Temperature(\302\260 C)"),g_free);
 		register_widget_f("thermister_celsius_rbutton",item);
 		item = glade_xml_get_widget(xml,"fahrenheit_rbutton");
-		OBJ_SET(item,"temp_label",g_strdup("Temperature(\302\260 F)"));
+		OBJ_SET_FULL(item,"temp_label",g_strdup("Temperature(\302\260 F)"),g_free);
 		register_widget_f("thermister_fahrenheit_rbutton",item);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(item),TRUE);
 		g_signal_emit_by_name(item,"toggled",NULL);
 		item = glade_xml_get_widget(xml,"kelvin_rbutton");
-		OBJ_SET(item,"temp_label",g_strdup("Temperature(\302\260 K)"));
+		OBJ_SET_FULL(item,"temp_label",g_strdup("Temperature(\302\260 K)"),g_free);
 		register_widget_f("thermister_kelvin_rbutton",item);
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -245,26 +245,26 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 
 		item = glade_xml_get_widget(xml,"voltage1_entry");
 		register_widget_f("voltage1_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("5"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("5"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"voltage2_entry");
 		register_widget_f("voltage2_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("5"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("5"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"afr1_entry");
 		register_widget_f("afr1_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("99"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("99"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		item = glade_xml_get_widget(xml,"afr2_entry");
 		register_widget_f("afr2_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
-		OBJ_SET(item,"raw_upper",g_strdup("99"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("99"),g_free);
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
@@ -315,27 +315,27 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		register_widget_f("map0_entry",item);
 		if (firmware->capabilities & PIS)
 		{
-			OBJ_SET(item,"raw_lower",g_strdup("0"));
-			OBJ_SET(item,"raw_upper",g_strdup("600"));
+			OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("600"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
 			OBJ_SET(item,"offset",GINT_TO_POINTER(2702));
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_U16));
-			OBJ_SET(item,"dl_conv_expr",g_strdup("x/1"));
-			OBJ_SET(item,"ul_conv_expr",g_strdup("x*1"));
+			OBJ_SET_FULL(item,"dl_conv_expr",g_strdup("x/1"),g_free);
+			OBJ_SET_FULL(item,"ul_conv_expr",g_strdup("x*1"),g_free);
 			ecu_widgets[0][2702] = g_list_prepend(
 					ecu_widgets[0][2702],
 					(gpointer)item);
 		}
 		else
 		{
-			OBJ_SET(item,"raw_lower",g_strdup("-1"));
-			OBJ_SET(item,"raw_upper",g_strdup("327"));
+			OBJ_SET_FULL(item,"raw_lower",g_strdup("-1"),g_free);
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("327"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
 			OBJ_SET(item,"offset",GINT_TO_POINTER(506));
 			OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-			OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
-			OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+			OBJ_SET_FULL(item,"dl_conv_expr",g_strdup("x*10"),g_free);
+			OBJ_SET_FULL(item,"ul_conv_expr",g_strdup("x/10"),g_free);
 			ecu_widgets[0][506] = g_list_prepend(
 					ecu_widgets[0][506],
 					(gpointer)item);
@@ -345,27 +345,27 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		register_widget_f("map5_entry",item);
 		if (firmware->capabilities & PIS)
 		{
-			OBJ_SET(item,"raw_lower",g_strdup("0"));
-			OBJ_SET(item,"raw_upper",g_strdup("600"));
+			OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("600"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
 			OBJ_SET(item,"offset",GINT_TO_POINTER(2704));
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_U16));
-			OBJ_SET(item,"dl_conv_expr",g_strdup("x/1"));
-			OBJ_SET(item,"ul_conv_expr",g_strdup("x*1"));
+			OBJ_SET_FULL(item,"dl_conv_expr",g_strdup("x/1"),g_free);
+			OBJ_SET_FULL(item,"ul_conv_expr",g_strdup("x*1"),g_free);
 			ecu_widgets[0][2704] = g_list_prepend(
 					ecu_widgets[0][2704],
 					(gpointer)item);
 		}
 		else
 		{
-			OBJ_SET(item,"raw_lower",g_strdup("-1"));
-			OBJ_SET(item,"raw_upper",g_strdup("327"));
+			OBJ_SET_FULL(item,"raw_lower",g_strdup("-1"),g_free);
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("327"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
 			OBJ_SET(item,"offset",GINT_TO_POINTER(508));
 			OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-			OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
-			OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+			OBJ_SET_FULL(item,"dl_conv_expr",g_strdup("x*10"),g_free);
+			OBJ_SET_FULL(item,"ul_conv_expr",g_strdup("x/10"),g_free);
 			ecu_widgets[0][508] = g_list_prepend(
 					ecu_widgets[0][508],
 					(gpointer)item);
@@ -373,14 +373,14 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 
 		item = glade_xml_get_widget(xml,"baro0_entry");
 		register_widget_f("baro0_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("-1"));
-		OBJ_SET(item,"raw_upper",g_strdup("327"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("-1"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("327"),g_free);
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(530));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
-		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		OBJ_SET_FULL(item,"dl_conv_expr",g_strdup("x*10"),g_free);
+		OBJ_SET_FULL(item,"ul_conv_expr",g_strdup("x/10"),g_free);
 		ecu_widgets[0][530] = g_list_prepend(
 				ecu_widgets[0][530],
 				(gpointer)item);
@@ -390,14 +390,14 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 
 		item = glade_xml_get_widget(xml,"baro5_entry");
 		register_widget_f("baro5_entry",item);
-		OBJ_SET(item,"raw_lower",g_strdup("-1"));
-		OBJ_SET(item,"raw_upper",g_strdup("327"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("-1"),g_free);
+		OBJ_SET_FULL(item,"raw_upper",g_strdup("327"),g_free);
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(532));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
-		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		OBJ_SET_FULL(item,"dl_conv_expr",g_strdup("x*10"),g_free);
+		OBJ_SET_FULL(item,"ul_conv_expr",g_strdup("x/10"),g_free);
 		ecu_widgets[0][532] = g_list_prepend(
 				ecu_widgets[0][532],
 				(gpointer)item);
@@ -419,11 +419,11 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 
 		item = glade_xml_get_widget(xml,"get_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(READ_VE_CONST));
-		OBJ_SET(item,"bind_to_list",g_strdup("get_data_buttons"));
+		OBJ_SET_FULL(item,"bind_to_list",g_strdup("get_data_buttons"),g_free);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
-		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
+		OBJ_SET_FULL(item,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(item,"burners");
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -477,8 +477,8 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
-		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		OBJ_SET_FULL(item,"dl_conv_expr",g_strdup("x*10"),g_free);
+		OBJ_SET_FULL(item,"ul_conv_expr",g_strdup("x/10"),g_free);
 		ecu_widgets[0][522] = g_list_prepend(
 				ecu_widgets[0][522],
 				(gpointer)item);
@@ -490,8 +490,8 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"dl_conv_expr",g_strdup("x*10"));
-		OBJ_SET(item,"ul_conv_expr",g_strdup("x/10"));
+		OBJ_SET_FULL(item,"dl_conv_expr",g_strdup("x*10"),g_free);
+		OBJ_SET_FULL(item,"ul_conv_expr",g_strdup("x/10"),g_free);
 		ecu_widgets[0][524] = g_list_prepend(
 				ecu_widgets[0][524],
 				(gpointer)item);
@@ -502,11 +502,11 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 
 		item = glade_xml_get_widget(xml,"get_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(READ_VE_CONST));
-		OBJ_SET(item,"bind_to_list",g_strdup("get_data_buttons"));
+		OBJ_SET_FULL(item,"bind_to_list",g_strdup("get_data_buttons"),g_free);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
-		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
+		OBJ_SET_FULL(item,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(item,"burners");
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -611,10 +611,10 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		else
 			OBJ_SET(item,"offset",GINT_TO_POINTER(518));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
 		if (firmware->capabilities & PIS)
 		{
-			OBJ_SET(item,"raw_upper",g_strdup("255"));
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("255"),g_free);
 			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
 			ecu_widgets[0][2676] = g_list_prepend(
 					ecu_widgets[0][2676],
@@ -622,7 +622,7 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		}
 		else
 		{
-			OBJ_SET(item,"raw_upper",g_strdup("2047"));
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("2047"),g_free);
 			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
 			ecu_widgets[0][518] = g_list_prepend(
 					ecu_widgets[0][518],
@@ -639,10 +639,10 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		else
 			OBJ_SET(item,"offset",GINT_TO_POINTER(520));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET(item,"raw_lower",g_strdup("0"));
+		OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
 		if (firmware->capabilities & PIS)
 		{
-			OBJ_SET(item,"raw_upper",g_strdup("255"));
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("255"),g_free);
 			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
 			ecu_widgets[0][2678] = g_list_prepend(
 					ecu_widgets[0][2678],
@@ -655,7 +655,7 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		}
 		else
 		{
-			OBJ_SET(item,"raw_upper",g_strdup("2047"));
+			OBJ_SET_FULL(item,"raw_upper",g_strdup("2047"),g_free);
 			OBJ_SET(item,"precision",GINT_TO_POINTER(0));
 			ecu_widgets[0][520] = g_list_prepend(
 					ecu_widgets[0][520],
@@ -670,18 +670,18 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		item = glade_xml_get_widget(xml,"get_tps_button_min");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GET_CURR_TPS));
 		if (firmware->capabilities & PIS)
-			OBJ_SET(item,"source",g_strdup("status_adc_tps"));
+			OBJ_SET_FULL(item,"source",g_strdup("status_adc_tps"),g_free);
 		else
-			OBJ_SET(item,"source",g_strdup("tpsADC"));
-		OBJ_SET(item,"dest_widget",g_strdup("tpsMin_entry"));
+			OBJ_SET_FULL(item,"source",g_strdup("tpsADC"),g_free);
+		OBJ_SET_FULL(item,"dest_widget",g_strdup("tpsMin_entry"),g_free);
 
 		item = glade_xml_get_widget(xml,"get_tps_button_max");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GET_CURR_TPS));
 		if (firmware->capabilities & PIS)
-			OBJ_SET(item,"source",g_strdup("status_adc_tps"));
+			OBJ_SET_FULL(item,"source",g_strdup("status_adc_tps"),g_free);
 		else
-			OBJ_SET(item,"source",g_strdup("tpsADC"));
-		OBJ_SET(item,"dest_widget",g_strdup("tpsMax_entry"));
+			OBJ_SET_FULL(item,"source",g_strdup("tpsADC"),g_free);
+		OBJ_SET_FULL(item,"dest_widget",g_strdup("tpsMax_entry"),g_free);
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;

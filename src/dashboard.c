@@ -311,7 +311,7 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 		gtk_widget_set_size_request(gauge,width,height);
 		g_free(filename);
 		g_free(OBJ_GET(gauge,"datasource"));
-		OBJ_SET(gauge,"datasource",g_strdup(datasource));
+		OBJ_SET_FULL(gauge,"datasource",g_strdup(datasource),g_free);
 		OBJ_SET(gauge,"orig_width",GINT_TO_POINTER(width));
 		OBJ_SET(gauge,"orig_height",GINT_TO_POINTER(height));
 		OBJ_SET(gauge,"orig_x_offset",GINT_TO_POINTER(x_offset));

@@ -219,7 +219,7 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 		{
 			OBJ_SET(label,"bitval",GINT_TO_POINTER(bitval));
 			OBJ_SET(label,"bitmask",GINT_TO_POINTER(bitmask));
-			OBJ_SET(label,"source",g_strdup(source));
+			OBJ_SET_FULL(label,"source",g_strdup(source),g_free);
 			g_free(source);
 		}
 		if (bind_to_list)

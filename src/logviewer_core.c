@@ -248,7 +248,7 @@ read_again:
 			array = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 			DATA_SET(object,"data_array",(gpointer)array);
 			g_free(DATA_GET(object,"lview_name"));
-			DATA_SET(object,"lview_name",g_strdup(g_strstrip(fields[i])));
+			DATA_SET_FULL(object,"lview_name",g_strdup(g_strstrip(fields[i])),g_free);
 			g_ptr_array_add(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
@@ -299,9 +299,9 @@ G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 
 		}
 		tmpi = floor(lower) -1.0;
-		DATA_SET(object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi));
+		DATA_SET_FULL(object,"real_lower", (gpointer)g_strdup_printf("%i",tmpi),g_free);
 		tmpi = ceil(upper) + 1.0;
-		DATA_SET(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi));
+		DATA_SET_FULL(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi),g_free);
 
 	}
 }

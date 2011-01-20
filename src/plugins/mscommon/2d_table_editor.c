@@ -100,13 +100,13 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 
 	widget = glade_xml_get_widget(xml,"get_data_button");
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
-	OBJ_SET(widget,"bind_to_list",g_strdup("get_data_buttons"));
+	OBJ_SET_FULL(widget,"bind_to_list",g_strdup("get_data_buttons"),g_free);
 	bind_to_lists_f(widget,"get_data_buttons");
 	widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
 	widget = glade_xml_get_widget(xml,"burn_data_button");
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
-	OBJ_SET(widget,"bind_to_list",g_strdup("burners"));
+	OBJ_SET_FULL(widget,"bind_to_list",g_strdup("burners"),g_free);
 	bind_to_lists_f(widget,"burners");
 	widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
@@ -150,11 +150,11 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 		if (firmware->te_params[table_num]->bind_to_list)
 		{
-			OBJ_SET(widget,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+			OBJ_SET_FULL(widget,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list),g_free);
 			OBJ_SET(widget,"match_type", GINT_TO_POINTER(firmware->te_params[table_num]->match_type));
 			bind_to_lists_f(widget,firmware->te_params[table_num]->bind_to_list);
 			widget_list = g_list_prepend(widget_list,(gpointer)widget);
-			OBJ_SET(label,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+			OBJ_SET_FULL(label,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list),g_free);
 			OBJ_SET(label,"match_type", GINT_TO_POINTER(firmware->te_params[table_num]->match_type));
 			bind_to_lists_f(label,firmware->te_params[table_num]->bind_to_list);
 			widget_list = g_list_prepend(widget_list,(gpointer)label);
@@ -244,10 +244,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_X_));
 			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-			OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)));
-			OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)));
-			OBJ_SET(entry,"dl_conv_expr",g_strdup(firmware->te_params[table_num]->x_dl_conv_expr));
-			OBJ_SET(entry,"ul_conv_expr",g_strdup(firmware->te_params[table_num]->x_ul_conv_expr));
+			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)),g_free);
+			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)),g_free);
+			OBJ_SET_FULL(entry,"dl_conv_expr",g_strdup(firmware->te_params[table_num]->x_dl_conv_expr),g_free);
+			OBJ_SET_FULL(entry,"ul_conv_expr",g_strdup(firmware->te_params[table_num]->x_ul_conv_expr),g_free);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -257,7 +257,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			if(firmware->te_params[table_num]->x_temp_dep)
 			{
 				OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
-				OBJ_SET(entry,"bind_to_list", g_strdup("temperature"));
+				OBJ_SET_FULL(entry,"bind_to_list", g_strdup("temperature"),g_free);
 				bind_to_lists_f(entry,"temperature");
 			}
 
@@ -296,10 +296,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_Y_));
 			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-			OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)));
-			OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)));
-			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
-			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
+			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)),g_free);
+			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)),g_free);
+			OBJ_SET_FULL(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr,g_free);
+			OBJ_SET_FULL(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr,g_free);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -309,7 +309,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			if(firmware->te_params[table_num]->y_temp_dep)
 			{
 				OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
-				OBJ_SET(entry,"bind_to_list", g_strdup("temperature"));
+				OBJ_SET_FULL(entry,"bind_to_list", g_strdup("temperature"),g_free);
 				bind_to_lists_f(entry,"temperature");
 			}
 			offset = (i*y_mult) + firmware->te_params[table_num]->y_base;
@@ -446,7 +446,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		window = glade_xml_get_widget(xml,"table_editor_window");
 		if (firmware->te_params[table_num]->bind_to_list)
 		{
-			OBJ_SET(window,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list));
+			OBJ_SET_FULL(window,"bind_to_list", g_strdup(firmware->te_params[table_num]->bind_to_list),g_free);
 			OBJ_SET(window,"match_type", GINT_TO_POINTER(firmware->te_params[table_num]->match_type));
 			bind_to_lists_f(window,firmware->te_params[table_num]->bind_to_list);
 			widget_list = g_list_prepend(widget_list,(gpointer)window);
@@ -468,13 +468,13 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 
 		widget = glade_xml_get_widget(xml,"get_data_button");
 		OBJ_SET(widget,"handler",GINT_TO_POINTER(READ_VE_CONST));
-		OBJ_SET(widget,"bind_to_list",g_strdup("get_data_buttons"));
+		OBJ_SET_FULL(widget,"bind_to_list",g_strdup("get_data_buttons"),g_free);
 		bind_to_lists_f(widget,"get_data_buttons");
 		widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
 		widget = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
-		OBJ_SET(widget,"bind_to_list",g_strdup("burners"));
+		OBJ_SET_FULL(widget,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(widget,"burners");
 		widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
@@ -580,10 +580,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_X_));
 		OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-		OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)));
-		OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)));
-		OBJ_SET(entry,"dl_conv_expr",g_strdup(firmware->te_params[table_num]->x_dl_conv_expr));
-		OBJ_SET(entry,"ul_conv_expr",g_strdup(firmware->te_params[table_num]->x_ul_conv_expr));
+		OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)),g_free);
+		OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)),g_free);
+		OBJ_SET_FULL(entry,"dl_conv_expr",g_strdup(firmware->te_params[table_num]->x_dl_conv_expr),g_free);
+		OBJ_SET_FULL(entry,"ul_conv_expr",g_strdup(firmware->te_params[table_num]->x_ul_conv_expr),g_free);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -594,7 +594,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		if(firmware->te_params[table_num]->x_temp_dep)
 		{
 			OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
-			OBJ_SET(entry,"bind_to_list",g_strdup("temperature"));
+			OBJ_SET_FULL(entry,"bind_to_list",g_strdup("temperature"),g_free);
 			bind_to_lists_f(entry,"temperature");
 		}
 
@@ -634,10 +634,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"curve_axis",GINT_TO_POINTER(_Y_));
 		OBJ_SET(entry,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
-		OBJ_SET(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)));
-		OBJ_SET(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)));
-		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
-		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
+		OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)),g_free);
+		OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)),g_free);
+		OBJ_SET_FULL(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr,g_free);
+		OBJ_SET_FULL(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr,g_free);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -648,7 +648,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		if(firmware->te_params[table_num]->y_temp_dep)
 		{
 			OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
-			OBJ_SET(entry,"bind_to_list",g_strdup("temperature"));
+			OBJ_SET_FULL(entry,"bind_to_list",g_strdup("temperature"),g_free);
 			bind_to_lists_f(entry,"temperature");
 		}
 		offset = (i*y_mult) + firmware->te_params[table_num]->y_base;

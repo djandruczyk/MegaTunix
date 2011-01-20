@@ -113,6 +113,9 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		if (cfgfile)
 		{
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
+			tmpbuf = g_strdup_printf("%s_xml",tab_name);
+			DATA_SET_FULL(global_data,tmpbuf,xml,g_object_unref);
+			g_free(tmpbuf);
 
 			label = gtk_label_new(NULL);
 			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
@@ -182,9 +185,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				g_free(tmpbuf);
 			}
 			cfg_free(cfgfile);
-#ifndef DEBUG
-			g_object_unref(xml);
-#endif
 			update_logbar("interr_view",NULL,_(" completed.\n"),FALSE,FALSE,FALSE);
 		}
 		else

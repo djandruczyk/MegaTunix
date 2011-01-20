@@ -204,7 +204,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 
 		if (DATA_GET(global_data,"might_be_leaving"))
 		{
-			g_usleep(serial_params->read_wait*1000);
+			g_usleep(1000000);
 			continue;
 		}
 		 dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));

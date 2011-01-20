@@ -66,6 +66,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,FALSE);
 
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
@@ -223,6 +224,8 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 		firmware = DATA_GET(global_data,"firmware");
 	if (!interdep_vars)
 		interdep_vars = DATA_GET(global_data,"interdep_vars");
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(interdep_vars,FALSE);
 
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
 		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
@@ -479,7 +482,6 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 }
 
 
-
 /*!
  \brief common_combo_handler() handles all combo boxes
  \param widget (GtkWidget *) the widget being modified
@@ -530,6 +532,10 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 		firmware = DATA_GET(global_data,"firmware");
 	if (!interdep_vars)
 		interdep_vars = DATA_GET(global_data,"interdep_vars");
+
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(interdep_vars,FALSE);
+
 	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
 
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
@@ -887,8 +893,10 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
-	canID = firmware->canID;
 
+	g_return_if_fail(firmware);
+
+	canID = firmware->canID;
 	if (DATA_GET(global_data,"leaving"))
 		return;
 /*	if (!((DATA_GET(global_data,"connected")) ||
@@ -1124,6 +1132,8 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 		firmware = DATA_GET(global_data,"firmware");
 	if (!interdep_vars)
 		interdep_vars = DATA_GET(global_data,"interdep_vars");
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(interdep_vars,FALSE);
 
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
@@ -1423,6 +1433,8 @@ void update_entry(GtkWidget *widget)
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(firmware);
+
 	value = convert_after_upload_f(widget);
 	handler = (GINT)OBJ_GET(widget,"handler");
 	precision = (GINT)OBJ_GET(widget,"precision");
@@ -1677,6 +1689,8 @@ void handle_group_2_update(GtkWidget *widget)
 
 	if (!sources_hash)
 		sources_hash = DATA_GET(global_data,"sources_hash");
+	g_return_if_fail(sources_hash);
+
 	if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_value")))
 	{
 		/*      printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
@@ -2018,6 +2032,8 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
+
+	g_return_if_fail(firmware);
 
 	/* Limit check */
 	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))

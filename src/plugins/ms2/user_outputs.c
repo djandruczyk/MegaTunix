@@ -193,7 +193,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
 						if (tmpbuf)
 							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+						OBJ_SET_FULL(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf),g_free);
 						/*printf("update_widget thresh has dl conv expr and upper limit of %f\n",tmpf);*/
 					}
 					if (lower)
@@ -203,7 +203,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
 						if (tmpbuf)
 							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+						OBJ_SET_FULL(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf),g_free);
 						/*printf("update_widget thresh has dl conv expr and lower limit of %f\n",tmpf);*/
 					}
 				}
@@ -254,7 +254,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
 						if (tmpbuf)
 							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+						OBJ_SET_FULL(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf),g_free);
 						/*printf("update_widget hyst has dl conv expr and upper limit of %f\n",tmpf);*/
 					}
 					if (lower)
@@ -264,7 +264,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
 						if (tmpbuf)
 							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+						OBJ_SET_FULL(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf),g_free);
 						/*printf("update_widget hyst has dl conv expr and lower limit of %f\n",tmpf);*/
 					}
 				}
