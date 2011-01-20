@@ -211,9 +211,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			}
 			gtk_main_iteration();
 		}
-
-
-
 	}
 	update_logbar("interr_view","warning",_("Tab Loading Complete!"),FALSE,FALSE,FALSE);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
@@ -600,10 +597,10 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
-	/* If this widget  has "tooltip" set the tip on the widget */
+	/* If this widget has "tooltip" set the tip on the widget */
 	if (cfg_read_string(cfgfile,section,"tooltip",&tmpbuf))
 	{
-		gtk_widget_set_tooltip_text(widget,_(tmpbuf));
+		gtk_widget_set_tooltip_text(widget,tmpbuf);
 		g_free(tmpbuf);
 	}
 
