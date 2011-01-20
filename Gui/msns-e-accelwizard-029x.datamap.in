@@ -49,22 +49,25 @@ bind_to_list=ae_tpsdot_controls,ae_normal_controls
 keys=tab_ident
 tab_ident=_ACCEL_WIZ_TAB_
 
-[tpsdot_pbar]
-keys=post_functions_with_arg,source,tab_ident
+[tpsdot_pbar_container]
+keys=post_functions_with_arg,source,tab_ident,orientation
 post_functions_with_arg=register_rt_range
 source=tpsdot
+orientation=_B_TO_T_
 tab_ident=_ACCEL_WIZ_TAB_
 
-[mapdot_pbar]
-keys=post_functions_with_arg,source,tab_ident
+[mapdot_pbar_container]
+keys=post_functions_with_arg,source,tab_ident,orientation
 post_functions_with_arg=register_rt_range
 source=mapdot
+orientation=_B_TO_T_
 tab_ident=_ACCEL_WIZ_TAB_
 
-#[rpmdot_pbar]
-#keys=post_functions_with_arg,source,tab_ident
+#[rpmdot_pbar_container]
+#keys=post_functions_with_arg,source,tab_ident,orientation
 #post_functions_with_arg=register_rt_range
 #source=rpmdot
+#orientation=_B_TO_T_
 #tab_ident=_ACCEL_WIZ_TAB_
 
 [accel_map_layout_table]

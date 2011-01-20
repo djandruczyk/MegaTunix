@@ -374,6 +374,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"offset",
 			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"orientation",
+			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,"output_num",
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"page",
@@ -474,6 +476,15 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(CELSIUS));
 	g_hash_table_insert(str_2_enum,"_FAHRENHEIT_",
 			GINT_TO_POINTER(FAHRENHEIT));
+	/* MtxPbar orientations */
+	g_hash_table_insert(str_2_enum,"_L_TO_R_",
+			GINT_TO_POINTER(GTK_PROGRESS_LEFT_TO_RIGHT));
+	g_hash_table_insert(str_2_enum,"_R_TO_L_",
+			GINT_TO_POINTER(GTK_PROGRESS_RIGHT_TO_LEFT));
+	g_hash_table_insert(str_2_enum,"_B_TO_T_",
+			GINT_TO_POINTER(GTK_PROGRESS_BOTTOM_TO_TOP));
+	g_hash_table_insert(str_2_enum,"_T_TO_B_",
+			GINT_TO_POINTER(GTK_PROGRESS_TOP_TO_BOTTOM));
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 

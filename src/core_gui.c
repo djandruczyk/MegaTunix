@@ -105,7 +105,7 @@ G_MODULE_EXPORT int setup_gui(void)
 			G_CALLBACK(leave),NULL);
 	g_signal_connect(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(leave),NULL);
-	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
+//	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 	top_box = glade_xml_get_widget(xml,"mtx_top_vbox");
 	gtk_container_add(GTK_CONTAINER(window),top_box);
 
@@ -153,7 +153,6 @@ G_MODULE_EXPORT int setup_gui(void)
 			gtk_widget_hide(label);
 		}
 	}
-
 	return TRUE;
 }
 

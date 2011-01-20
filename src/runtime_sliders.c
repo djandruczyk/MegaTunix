@@ -367,7 +367,6 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 {
 	gconstpointer *object = NULL;
 	Rtv_Map *rtv_map = NULL;
-	GtkWidget *parent = NULL;
 	GtkProgressBarOrientation orient;
 	GHashTable *rt_sliders = NULL;
 	GHashTable *aw_sliders = NULL;
@@ -432,25 +431,24 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	slider->object = object;
 	slider->textval = NULL;
 	if (GTK_IS_SCALE(widget))
+	{
 		slider->class = MTX_RANGE;
-	else if (GTK_IS_PROGRESS(widget))
+		slider->pbar = widget;
+	}
+	/* generic container (Table/box HOLDING a mtx pbar */
+	else if (GTK_IS_CONTAINER(widget))
 	{
 		/* We don't like GTK+'s progress bar, so rip it out and 
 		 * stick in my custom version instead.  Get the orientation
 		 * first...
 		 */
-		orient = gtk_progress_bar_get_orientation(GTK_PROGRESS_BAR(widget));
-		parent = gtk_widget_get_parent(widget);
-		gtk_widget_destroy(widget);
-		widget = mtx_progress_bar_new();
-		/* 1.1 Seconds peak hold time */
-		mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(widget),1100);
-		gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(widget),
-				orient);
-		gtk_container_add(GTK_CONTAINER(parent),widget);
+		orient = (GtkProgressBarOrientation)OBJ_GET(widget,"orientation");
+		slider->pbar = mtx_progress_bar_new();
+		mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(slider->pbar),(gint)DATA_GET(global_data,"pbar_hold_time"));
+		gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(slider->pbar),orient);
+		gtk_container_add(GTK_CONTAINER(widget),slider->pbar);
 		slider->class = MTX_PROGRESS;
 	}
-	slider->pbar = widget;
 
 	switch (ident)
 	{

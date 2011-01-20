@@ -115,7 +115,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
 
 			label = gtk_label_new(NULL);
-			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),_(tab_name));
+			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
 			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
 			{
 				if (tmpi)
@@ -380,7 +380,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 			case MTX_STRING:
 				OBJ_SET_FULL(object,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])),g_free);
 				if (OBJ_GET(object,"tooltip") != NULL)
-					gtk_widget_set_tooltip_text(OBJ_GET(object,"self"),(gchar *)_(OBJ_GET(object,"tooltip")));
+					gtk_widget_set_tooltip_text(OBJ_GET(object,"self"),(gchar *)OBJ_GET(object,"tooltip"));
 				if (OBJ_GET(group->object, "bind_to_list"))
 					bind_to_lists(OBJ_GET(object,"self"),(gchar *)OBJ_GET(group->object, "bind_to_list"));
 				break;
