@@ -65,6 +65,7 @@ G_MODULE_EXPORT void plugin_shutdown()
 {
 	stop(TOOTHMON_TICKLER);
 	stop(TRIGMON_TICKLER);
+	deregister_ecu_enums();
 }
 
 
@@ -91,3 +92,20 @@ void register_ecu_enums(void)
 	}
 }
 
+
+void deregister_ecu_enums(void)
+{
+	GHashTable *str_2_enum = NULL;
+	str_2_enum = DATA_GET(global_data,"str_2_enum");
+	if (str_2_enum)
+	{
+		/* MSnS-E Tooth/Trigger monitor */
+		g_hash_table_remove(str_2_enum,"_START_TOOTHMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_STOP_TOOTHMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_START_TRIGMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_STOP_TRIGMON_LOGGER_");
+		/* Oddball Trigger angle/oddfire angle special handlers */
+		g_hash_table_remove(str_2_enum,"_TRIGGER_ANGLE_");
+		g_hash_table_remove(str_2_enum,"_ODDFIRE_ANGLE_");
+	}
+}

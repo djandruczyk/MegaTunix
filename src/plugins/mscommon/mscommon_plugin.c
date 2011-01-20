@@ -106,6 +106,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("update_ve3d_if_necessary",(void *)&update_ve3d_if_necessary_f);
 	get_symbol_f("warn_user",(void *)&warn_user_f);
 	get_symbol_f("write_wrapper",(void *)&write_wrapper_f);
+
 	register_common_enums();
 }
 
@@ -216,16 +217,24 @@ void register_common_enums(void)
 				GINT_TO_POINTER (NUM_INJECTORS_1));
 		g_hash_table_insert (str_2_enum, "_NUM_INJECTORS_2_",
 				GINT_TO_POINTER (NUM_INJECTORS_2));
-		g_hash_table_insert(str_2_enum,"_LOCKED_REQ_FUEL_",
+		g_hash_table_insert (str_2_enum, "_LOCKED_REQ_FUEL_",
 				GINT_TO_POINTER(LOCKED_REQ_FUEL));
-		g_hash_table_insert(str_2_enum,"_REQ_FUEL_1_",
+		g_hash_table_insert (str_2_enum, "_REQ_FUEL_1_",
 				GINT_TO_POINTER(REQ_FUEL_1));
-		g_hash_table_insert(str_2_enum,"_REQ_FUEL_2_",
+		g_hash_table_insert (str_2_enum, "_REQ_FUEL_2_",
 				GINT_TO_POINTER(REQ_FUEL_2));
-		g_hash_table_insert(str_2_enum,"_MULTI_EXPRESSION_",
+		g_hash_table_insert (str_2_enum, "_MULTI_EXPRESSION_",
 				GINT_TO_POINTER(MULTI_EXPRESSION));
-		g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
+		g_hash_table_insert (str_2_enum, "_ALT_SIMUL_",
 				GINT_TO_POINTER(ALT_SIMUL));
+		g_hash_table_insert (str_2_enum, "_INCREMENT_VALUE_",
+				GINT_TO_POINTER(INCREMENT_VALUE));
+		g_hash_table_insert (str_2_enum, "_DECREMENT_VALUE_",
+				GINT_TO_POINTER(DECREMENT_VALUE));
+		g_hash_table_insert (str_2_enum, "_REQFUEL_RESCALE_TABLE_",
+				GINT_TO_POINTER(REQFUEL_RESCALE_TABLE));
+		g_hash_table_insert (str_2_enum, "_REQ_FUEL_POPUP_",
+				GINT_TO_POINTER(REQ_FUEL_POPUP));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
@@ -288,13 +297,16 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_NUM_CYLINDERS_2_");
 		g_hash_table_remove (str_2_enum, "_NUM_INJECTORS_1_");
 		g_hash_table_remove (str_2_enum, "_NUM_INJECTORS_2_");
-		g_hash_table_remove(str_2_enum,"_LOCKED_REQ_FUEL_");
-		g_hash_table_remove(str_2_enum,"_REQ_FUEL_1_");
-		g_hash_table_remove(str_2_enum,"_REQ_FUEL_2_");
-		g_hash_table_remove(str_2_enum,"_MULTI_EXPRESSION_");
-		g_hash_table_remove(str_2_enum,"_ALT_SIMUL_");
+		g_hash_table_remove (str_2_enum, "_LOCKED_REQ_FUEL_");
+		g_hash_table_remove (str_2_enum, "_REQ_FUEL_1_");
+		g_hash_table_remove (str_2_enum, "_REQ_FUEL_2_");
+		g_hash_table_remove (str_2_enum, "_MULTI_EXPRESSION_");
+		g_hash_table_remove (str_2_enum, "_ALT_SIMUL_");
+		g_hash_table_remove (str_2_enum, "_INCREMENT_VALUE_");
+		g_hash_table_remove (str_2_enum, "_DECREMENT_VALUE_");
+		g_hash_table_remove (str_2_enum, "_REQFUEL_RESCALE_TABLE_");
+		g_hash_table_remove (str_2_enum, "_REQ_FUEL_POPUP_");
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
 }
-

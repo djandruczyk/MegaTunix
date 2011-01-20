@@ -19,8 +19,38 @@
 
 extern gconstpointer *global_data;
 
-G_MODULE_EXPORT void ecu_gui_init(GladeXML *xml)
+G_MODULE_EXPORT void ecu_gui_init(void)
 {
 	/* We don't need anything specific to this ecu initialized */
+}
+
+
+G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer data)
+{
+	        return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean ecu_button_handler(GtkWidget *widget, gpointer data)
+{
+	        return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean ecu_bitmask_button_handler(GtkWidget *widget, gpointer data)
+{
+	        return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer data)
+{
+	        return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean ecu_sntry_handler(GtkWidget *widget, gpointer data)
+{
+	        return TRUE;
 }
 

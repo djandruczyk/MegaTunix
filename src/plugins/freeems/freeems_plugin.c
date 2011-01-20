@@ -68,6 +68,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 	get_symbol_f("warn_user",(void *)&warn_user_f);
 	get_symbol_f("write_wrapper",(void *)&write_wrapper_f);
+
 	register_common_enums();
 
 	/* Packet handling queue */
@@ -122,6 +123,8 @@ G_MODULE_EXPORT void plugin_shutdown()
 	if (mutex)
 		g_mutex_free(mutex);
 	DATA_SET(global_data,"queue_mutex",NULL);
+
+	deregister_common_enums();
 	return;
 }
 
@@ -156,25 +159,60 @@ void register_common_enums(void)
 		/* Special Common Handlers */
 
 		/* XMLcomm processing */
-		g_hash_table_insert(str_2_enum,"_SEQUENCE_NUM_",
+		g_hash_table_insert (str_2_enum, "_SEQUENCE_NUM_",
 				GINT_TO_POINTER(SEQUENCE_NUM));
-		g_hash_table_insert(str_2_enum,"_PAYLOAD_ID_",
+		g_hash_table_insert (str_2_enum, "_PAYLOAD_ID_",
 				GINT_TO_POINTER(PAYLOAD_ID));
-		g_hash_table_insert(str_2_enum,"_LOCATION_ID_",
+		g_hash_table_insert (str_2_enum, "_LOCATION_ID_",
 				GINT_TO_POINTER(LOCATION_ID));
-		g_hash_table_insert(str_2_enum,"_OFFSET_",
+		g_hash_table_insert (str_2_enum, "_OFFSET_",
 				GINT_TO_POINTER(OFFSET));
-		g_hash_table_insert(str_2_enum,"_LENGTH_",
+		g_hash_table_insert (str_2_enum, "_LENGTH_",
 				GINT_TO_POINTER(LENGTH));
-		g_hash_table_insert(str_2_enum,"_DATABYTE_",
+		g_hash_table_insert (str_2_enum, "_DATABYTE_",
 				GINT_TO_POINTER(DATABYTE));
 		/* Firmware Specific button handlers*/
-		g_hash_table_insert(str_2_enum,"_SOFT_BOOT_ECU_",
+		g_hash_table_insert (str_2_enum, "_SOFT_BOOT_ECU_",
 				GINT_TO_POINTER(SOFT_BOOT_ECU));
-		g_hash_table_insert(str_2_enum,"_HARD_BOOT_ECU_",
+		g_hash_table_insert (str_2_enum, "_HARD_BOOT_ECU_",
 				GINT_TO_POINTER(HARD_BOOT_ECU));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
 }
 
+
+void deregister_common_enums(void)
+{
+	GHashTable *str_2_enum = NULL;
+
+	str_2_enum = DATA_GET (global_data, "str_2_enum");
+	if (str_2_enum)
+	{
+		/* Firmware capabilities */
+		g_hash_table_remove (str_2_enum, "_FREEEMS_");
+		g_hash_table_remove (str_2_enum, "_COUNT_");
+		g_hash_table_remove (str_2_enum, "_SUBMATCH_");
+		g_hash_table_remove (str_2_enum, "_NUMMATCH_");
+		g_hash_table_remove (str_2_enum, "_FULLMATCH_");
+		g_hash_table_remove (str_2_enum, "_REGEX_");
+		/* Interrogation Test Results */
+		g_hash_table_remove (str_2_enum, "_RESULT_DATA_");
+		g_hash_table_remove (str_2_enum, "_RESULT_TEXT_");
+		g_hash_table_remove (str_2_enum, "_RESULT_LIST_");
+		/* Special Common Handlers */
+
+		/* XMLcomm processing */
+		g_hash_table_remove (str_2_enum, "_SEQUENCE_NUM_");
+		g_hash_table_remove (str_2_enum, "_PAYLOAD_ID_");
+		g_hash_table_remove (str_2_enum, "_LOCATION_ID_");
+		g_hash_table_remove (str_2_enum, "_OFFSET_");
+		g_hash_table_remove (str_2_enum, "_LENGTH_");
+		g_hash_table_remove (str_2_enum, "_DATABYTE_");
+		/* Firmware Specific button handlers*/
+		g_hash_table_remove (str_2_enum, "_SOFT_BOOT_ECU_");
+		g_hash_table_remove (str_2_enum, "_HARD_BOOT_ECU_");
+	}
+	else
+		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+}

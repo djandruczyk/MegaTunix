@@ -55,6 +55,7 @@ EXTERN void (*bind_to_lists_f)(GtkWidget * , gchar * );
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
 void register_ecu_enums(void);
+void deregister_ecu_enums(void);
 /* Prototypes */
 
 

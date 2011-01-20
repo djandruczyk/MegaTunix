@@ -23,6 +23,7 @@
 
 /* Prototypes */
 void ecu_gui_init(void);
+gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_button_handler(GtkWidget *, gpointer);
 gboolean ecu_bitmask_button_handler(GtkWidget *, gpointer);
 gboolean ecu_spin_button_handler(GtkWidget *, gpointer);

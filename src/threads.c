@@ -153,10 +153,8 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
 			/* drain queue and exit thread */
-			while (message = g_async_queue_try_pop(io_data_queue) != NULL)
-			{
+			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
 				dealloc_message(message);
-			}
 
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tMegaTunix is closing, Thread exiting !!\n"));
 			g_cond_signal(io_dispatch_cond);

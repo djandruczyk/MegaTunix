@@ -236,7 +236,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	/* If it's a check button then it's state is dependant on the button's state*/
 	if (!GTK_IS_RADIO_BUTTON(widget))
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	switch ((MtxButton)handler)
+	switch ((MSCommonMtxButton)handler)
 	{
 		case MULTI_EXPRESSION:
 			/*printf("MULTI_EXPRESSION CHANGE\n");*/
@@ -426,9 +426,9 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 
-	handler = (StdButton)OBJ_GET(widget,"handler");
+	handler = (MSCommonStdButton)OBJ_GET(widget,"handler");
 
-	switch ((StdButton)handler)
+	switch ((MSCommonStdButton)handler)
 	{
 		case INCREMENT_VALUE:
 		case DECREMENT_VALUE:
@@ -452,15 +452,6 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 			else
 				tmpi = tmpi-tmp2 < raw_lower? raw_lower:tmpi-tmp2;
 			ms_send_to_ecu(canID, page, offset, size, tmpi, TRUE);
-			break;
-		case GET_CURR_TPS:
-			tmpbuf = OBJ_GET(widget,"source");
-			lookup_current_value_f(tmpbuf,&tmpf);
-			dest = OBJ_GET(widget,"dest_widget");
-			tmpbuf = g_strdup_printf("%.0f",tmpf);
-			gtk_entry_set_text(GTK_ENTRY(lookup_widget_f(dest)),tmpbuf);
-			g_signal_emit_by_name(lookup_widget_f(dest),"activate",NULL);
-			g_free(tmpbuf);
 			break;
 		case REQFUEL_RESCALE_TABLE:
 			reqfuel_rescale_table(widget);
@@ -561,7 +552,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 			BITVAL_COL,&bitval,-1);
 
 	/*printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );*/
-	switch ((MtxButton)handler)
+	switch ((MSCommonMtxButton)handler)
 	{
 		case MULTI_EXPRESSION:
 			if (!sources_hash)

@@ -113,6 +113,7 @@ EXTERN gboolean (*check_tab_existance_f)(gint);
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
 void register_common_enums(void);
+void deregister_common_enums(void);
 /* Prototypes */
 
 #endif

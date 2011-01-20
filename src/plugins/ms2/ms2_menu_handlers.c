@@ -16,6 +16,7 @@
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
+#include <ms2_gui_handlers.h>
 #include <ms2_menu_handlers.h>
 #include <ms2_plugin.h>
 

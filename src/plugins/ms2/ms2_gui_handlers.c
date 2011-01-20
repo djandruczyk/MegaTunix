@@ -39,7 +39,28 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 
 G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
-	dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_std_button_handler()\n\tERROR handler NOT found for widget %s, command aborted! BUG!!!\n",glade_get_widget_name(widget)));
+	gint handler = 0;
+	gchar *tmpbuf = NULL;
+	gfloat tmpf = 0.0;
+	const gchar *dest = NULL;
+
+	handler = (MS2StdButton)OBJ_GET(widget,"handler");
+
+	switch ((MS2StdButton)handler)
+	{
+		case GET_CURR_TPS:
+			tmpbuf = OBJ_GET(widget,"source");
+			lookup_current_value_f(tmpbuf,&tmpf);
+			dest = OBJ_GET(widget,"dest_widget");
+			tmpbuf = g_strdup_printf("%.0f",tmpf);
+			gtk_entry_set_text(GTK_ENTRY(lookup_widget_f(dest)),tmpbuf);
+			g_signal_emit_by_name(lookup_widget_f(dest),"activate",NULL);
+			g_free(tmpbuf);
+			break;
+		default:
+			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_std_button_handler()\n\tERROR handler NOT found for widget %s, command aborted! BUG!!!\n",glade_get_widget_name(widget)));
+			break;
+	}
 	return TRUE;
 }
 
