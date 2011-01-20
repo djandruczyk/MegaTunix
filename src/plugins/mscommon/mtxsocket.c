@@ -456,7 +456,7 @@ close_binary2:
 				switch (buf)
 				{
 					case '!': /* Potential reinit/reboot */
-						if ((firmware->capabilities & MS2) || (firmware->capabilities & MSNS_E))
+						if ((firmware->capabilities & MS2) || (firmware->capabilities & MS1_E))
 							state = GET_REINIT_OR_REBOOT;
 						continue;
 					case 'a':/* MS2 table full table read */
@@ -480,7 +480,7 @@ close_binary2:
 						continue;
 					case 'A':/* MS1 RTvars */
 						/*						printf("'A' received\n");*/
-						if (firmware->capabilities & MSNS_E)
+						if (firmware->capabilities & MS1_E)
 							res = net_send (client->socket,(guint8 *)firmware->rt_data,22);
 						else 
 							res = net_send (client->socket,(guint8 *)firmware->rt_data,firmware->rtvars_size);
@@ -566,7 +566,7 @@ close_binary2:
 						/*						printf("numeric/text revision sent, %i bytes delivered\n",res);*/
 						continue;
 					case 'R':/* MSnS Extra (MS1) RTvars */
-						if (firmware->capabilities & MSNS_E)
+						if (firmware->capabilities & MS1_E)
 						{
 							/*							printf ("'R' (MS1 extra RTvars)\n");*/
 							res = net_send (client->socket,(guint8 *)firmware->rt_data,firmware->rtvars_size);
@@ -627,7 +627,7 @@ close_binary2:
 			case GET_REINIT_OR_REBOOT:
 				if ((buf == '!') && (firmware->capabilities & MS2))
 					state = GET_MS2_REBOOT;
-				else if ((buf == '!') && (firmware->capabilities & MSNS_E))
+				else if ((buf == '!') && (firmware->capabilities & MS1_E))
 					state = GET_MS1_EXTRA_REBOOT;
 				if (buf == 'x')
 				{
@@ -2454,7 +2454,7 @@ close_binary:
 				switch (buf)
 				{
 					case '!': /* Potential reinit/reboot */
-						if ((firmware->capabilities & MS2) || (firmware->capabilities & MSNS_E))
+						if ((firmware->capabilities & MS2) || (firmware->capabilities & MS1_E))
 							state = GET_REINIT_OR_REBOOT;
 						continue;
 					case 'a':/* MS2 table full table read */
@@ -2478,7 +2478,7 @@ close_binary:
 						continue;
 					case 'A':/* MS1 RTvars */
 						/*						printf("'A' received\n");*/
-						if (firmware->capabilities & MSNS_E)
+						if (firmware->capabilities & MS1_E)
 							res = net_send (fd,(guint8 *)firmware->rt_data,22,0);
 						else 
 							res = net_send (fd,(guint8 *)firmware->rt_data,firmware->rtvars_size,0);
@@ -2564,7 +2564,7 @@ close_binary:
 						/*						printf("numeric/text revision sent, %i bytes delivered\n",res);*/
 						continue;
 					case 'R':/* MSnS Extra (MS1) RTvars */
-						if (firmware->capabilities & MSNS_E)
+						if (firmware->capabilities & MS1_E)
 						{
 							/*							printf ("'R' (MS1 extra RTvars)\n");*/
 							res = net_send (fd,(guint8 *)firmware->rt_data,firmware->rtvars_size,0);
@@ -2625,7 +2625,7 @@ close_binary:
 			case GET_REINIT_OR_REBOOT:
 				if ((buf == '!') && (firmware->capabilities & MS2))
 					state = GET_MS2_REBOOT;
-				else if ((buf == '!') && (firmware->capabilities & MSNS_E))
+				else if ((buf == '!') && (firmware->capabilities & MS1_E))
 					state = GET_MS1_EXTRA_REBOOT;
 				if (buf == 'x')
 				{

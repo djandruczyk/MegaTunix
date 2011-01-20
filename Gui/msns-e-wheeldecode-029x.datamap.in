@@ -362,10 +362,13 @@ ul_conv_expr=(x-(284/10))*(352/1000)
 _tooltip=This control locks out the Spark table and holds the timing ridgly at this value. Setting this to -10 UNLOCKS the timing control and lets it use the spark tables.
 
 [trim_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,size,offset,raw_lower,raw_upper,precision,dl_conv_expr,ul_conv_expr,tooltip
+size=_S08_
 page=3
 offset=170
 precision=2
+raw_lower=-127
+raw_upper=128
 dl_conv_expr=x/(352/1000)
 ul_conv_expr=x*(352/1000)
 _tooltip=This is global offset for the crank table, to shift all values one way or another.

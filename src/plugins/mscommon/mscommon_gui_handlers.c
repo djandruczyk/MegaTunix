@@ -262,7 +262,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 
 		case ALT_SIMUL:
 			/* Alternate or simultaneous */
-			if (firmware->capabilities & MSNS_E)
+			if (firmware->capabilities & MS1_E)
 			{
 				table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 				tmp = ms_get_ecu_data(canID,page,offset,size);
@@ -588,7 +588,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 			break;
 		case ALT_SIMUL:
 			/* Alternate or simultaneous */
-			if (firmware->capabilities & MSNS_E)
+			if (firmware->capabilities & MS1_E)
 			{
 				if (!OBJ_GET(widget,"table_num"))
 				{
@@ -1012,7 +1012,7 @@ G_MODULE_EXPORT void update_ve_const_pf(void)
 			 */
 			tmpf = (float)(firmware->rf_params[i]->num_inj)/(float)(firmware->rf_params[i]->divider);
 		}
-		else if (firmware->capabilities & MSNS_E)
+		else if (firmware->capabilities & MS1_E)
 		{
 			shift = get_bitshift_f(firmware->table_params[i]->dtmode_mask);
 			if ((ms_get_ecu_data(canID,firmware->table_params[i]->dtmode_page,firmware->table_params[i]->dtmode_offset,size) & firmware->table_params[i]->dtmode_mask) >> shift)

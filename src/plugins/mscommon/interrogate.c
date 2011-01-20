@@ -385,14 +385,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		firmware->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
 		/*
-		   printf("CAP #'s MS1 %i MS1_STD %i MSNS_E %i MS1_DT %i MS2 %i MS2_STD %i, MS2_E %i, MS2_E_COMPMON %i, PIS %i, JIMSTIM %i\n",MS1,MS1_STD,MSNS_E,MS1_DT,MS2,MS2_STD,MS2_E,MS2_E_COMPMON,PIS,JIMSTIM);
+		   printf("CAP #'s MS1 %i MS1_STD %i MS1_E %i MS1_DT %i MS2 %i MS2_STD %i, MS2_E %i, MS2_E_COMPMON %i, PIS %i, JIMSTIM %i\n",MS1,MS1_STD,MS1_E,MS1_DT,MS2,MS2_STD,MS2_E,MS2_E_COMPMON,PIS,JIMSTIM);
 
 		   if (firmware->capabilities & MS1)
 		   printf("MS1\n");
 		   if (firmware->capabilities & MS1_STD)
 		   printf("MS1_STD\n");
-		   if (firmware->capabilities & MSNS_E)
-		   printf("MSNS_E\n");
+		   if (firmware->capabilities & MS1_E)
+		   printf("MS1_E\n");
 		   if (firmware->capabilities & MS1_DT)
 		   printf("MS1_DT\n");
 		   if (firmware->capabilities & MS2)
@@ -493,7 +493,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"TotalTables\" value not found in interrogation profile, ERROR\n"));
 	cfg_read_int(cfgfile,"parameters","TotalTETables",
 			&firmware->total_te_tables);
-	if ((firmware->capabilities & MS2_E) || (firmware->capabilities & MSNS_E))
+	if ((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1_E))
 	{
 		if(!cfg_read_int(cfgfile,"parameters","TrigmonPage",&firmware->trigmon_page))
 			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"TrigmonPage\" value not found in interrogation profile, ERROR\n"));
@@ -640,7 +640,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				if(!cfg_read_int(cfgfile,section,"alternate_offset",&firmware->table_params[i]->alternate_offset))
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"alternate_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));
 			}
-			if (firmware->capabilities & MSNS_E)
+			if (firmware->capabilities & MS1_E)
 			{
 				if(!cfg_read_int(cfgfile,section,"dtmode_offset",&firmware->table_params[i]->dtmode_offset))
 					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"dtmode_offset\" flag not found in \"%s\" section in interrogation profile, ERROR\n",section));

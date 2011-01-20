@@ -177,8 +177,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER (MS1_STD));
 		g_hash_table_insert (str_2_enum, "_MS1_DT_", 
 				GINT_TO_POINTER (MS1_DT));
-		g_hash_table_insert (str_2_enum, "_MSNS_E_", 
-				GINT_TO_POINTER (MSNS_E));
+		g_hash_table_insert (str_2_enum, "_MS1_E_", 
+				GINT_TO_POINTER (MS1_E));
 		g_hash_table_insert (str_2_enum, "_MS2_", 
 				GINT_TO_POINTER (MS2));
 		g_hash_table_insert (str_2_enum, "_MS2_STD_",
@@ -276,7 +276,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_MS1_"); 
 		g_hash_table_remove (str_2_enum, "_MS1_STD_");
 		g_hash_table_remove (str_2_enum, "_MS1_DT_"); 
-		g_hash_table_remove (str_2_enum, "_MSNS_E_"); 
+		g_hash_table_remove (str_2_enum, "_MS1_E_"); 
 		g_hash_table_remove (str_2_enum, "_MS2_"); 
 		g_hash_table_remove (str_2_enum, "_MS2_STD_");
 		g_hash_table_remove (str_2_enum, "_MS2_E_"); 

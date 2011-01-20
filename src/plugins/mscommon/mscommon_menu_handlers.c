@@ -360,6 +360,7 @@ G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdo
 G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
+	static Firmware_Details *firmware = NULL;
 	GtkWidget *item = NULL;
 	GtkWidget *partner = NULL;
 	GladeXML *main_xml = NULL;
@@ -369,6 +370,8 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 
 	if (!update_widget_f)
 		get_symbol_f("update_widget",(void *)&update_widget_f);
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
 
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
@@ -383,13 +386,19 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 
 		item = glade_xml_get_widget(xml,"plus_button");
 		register_widget_f("plus_button",item);
-		OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
+		if (firmware->capabilities & MS1_E)
+			OBJ_SET(item,"partner_widget",lookup_widget_f("WD_trim_angle_entry"));
+		else /* MS2 */
+			OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
 		OBJ_SET(item,"handler",GINT_TO_POINTER(INCREMENT_VALUE));
 		OBJ_SET(item,"amount",GINT_TO_POINTER(5));
 
 		item = glade_xml_get_widget(xml,"minus_button");
 		register_widget_f("minus_button",item);
-		OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
+		if (firmware->capabilities & MS1_E)
+			OBJ_SET(item,"partner_widget",lookup_widget_f("WD_trim_angle_entry"));
+		else /* MS2 */
+			OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
 		OBJ_SET(item,"handler",GINT_TO_POINTER(DECREMENT_VALUE));
 		OBJ_SET(item,"amount",GINT_TO_POINTER(5));
 
@@ -403,7 +412,10 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 
 		item = glade_xml_get_widget(xml,"offset_entry");
 		register_widget_f("offset_entry",item);
-		partner = lookup_widget_f("IGN_trigger_offset_entry");
+		if (firmware->capabilities & MS1_E)
+			partner = lookup_widget_f("WD_trim_angle_entry");
+		else /* MS2 */
+			partner = lookup_widget_f("IGN_trigger_offset_entry");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(item,"page",OBJ_GET(partner,"page"));

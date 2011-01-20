@@ -568,11 +568,11 @@ gboolean signal_toothtrig_read(EcuPluginTickler type)
 	switch (type)
 	{
 		case TOOTHMON_TICKLER:
-			if (firmware->capabilities & MSNS_E)
+			if (firmware->capabilities & MS1_E)
 				io_cmd_f("ms1_e_read_toothmon",NULL);
 			break;
 		case TRIGMON_TICKLER:
-			if (firmware->capabilities & MSNS_E)
+			if (firmware->capabilities & MS1_E)
 				io_cmd_f("ms1_e_read_trigmon",NULL);
 			break;
 		default:

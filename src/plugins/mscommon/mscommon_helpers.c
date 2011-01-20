@@ -79,7 +79,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall type)
 	if (!DATA_GET(global_data,"offline"))
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
-		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
+		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MS1_E)))
 		{
 	/*		printf("paged burn\n");*/
 			output = initialize_outputdata_f();

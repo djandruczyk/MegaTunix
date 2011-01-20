@@ -589,7 +589,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 		 */
 		tmp = (float)num_inj/(float)divider;
 	}
-	else if (firmware->capabilities & MSNS_E)
+	else if (firmware->capabilities & MS1_E)
 	{	
 		shift = get_bitshift_f(firmware->table_params[table_num]->dtmode_mask);
 		if ((ms_get_ecu_data(canID,firmware->table_params[table_num]->dtmode_page,firmware->table_params[table_num]->dtmode_offset,size) & firmware->table_params[table_num]->dtmode_mask) >> shift) 
