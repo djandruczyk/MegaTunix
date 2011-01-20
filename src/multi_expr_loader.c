@@ -17,6 +17,7 @@
 #include <configfile.h>
 #include <debugging.h>
 #include <defines.h>
+#include <init.h>
 #include <multi_expr_loader.h>
 #include <mtxmatheval.h>
 #include <enums.h>
@@ -154,34 +155,27 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
 	MultiExpr *multi = (MultiExpr *)data;
-	if (multi->dl_conv_expr)
-		g_free(multi->dl_conv_expr);	
-	if (multi->ul_conv_expr)
-		g_free(multi->ul_conv_expr);	
-	if (multi->lookuptable)
-		g_free(multi->lookuptable);	
+	cleanup(multi->dl_conv_expr);	
+	cleanup(multi->ul_conv_expr);	
+	cleanup(multi->lookuptable);	
 	if (multi->dl_eval)
 		evaluator_destroy(multi->dl_eval);
 	if (multi->ul_eval)
 		evaluator_destroy(multi->ul_eval);
-	g_free(multi);
+	cleanup(multi);
 }
 
 
 G_MODULE_EXPORT void free_multi_source(gpointer data)
 {
 	MultiSource *multi = (MultiSource *)data;
-	if (multi->source)
-		g_free(multi->source);	
-	if (multi->ul_conv_expr)
-		g_free(multi->ul_conv_expr);	
-	if (multi->dl_conv_expr)
-		g_free(multi->dl_conv_expr);	
+	cleanup(multi->source);	
+	cleanup(multi->ul_conv_expr);	
+	cleanup(multi->dl_conv_expr);	
+	cleanup(multi->suffix);
 	if (multi->ul_eval)
 		evaluator_destroy(multi->ul_eval);
 	if (multi->dl_eval)
 		evaluator_destroy(multi->dl_eval);
-	if (multi->suffix)
-		g_free(multi->suffix);
-	g_free(multi);
+	cleanup(multi);
 }

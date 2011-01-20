@@ -402,7 +402,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				else
 					text = (gchar *)OBJ_GET(widget,"f_label");
 				gtk_label_set_text(GTK_LABEL(widget),text);
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				//gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 
 			}
@@ -428,12 +428,6 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 
 				gtk_adjustment_changed(adj);
-				/*
-				   gtk_spin_button_set_value(
-				   GTK_SPIN_BUTTON(widget),
-				   adj->value);
-				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-				 */
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 				update_widget_f(widget,NULL);
 			}
@@ -475,7 +469,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				else
 					text = (gchar *)OBJ_GET(widget,"c_label");
 				gtk_label_set_text(GTK_LABEL(widget),text);
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				//gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 
 			}
@@ -501,12 +495,6 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 
 				gtk_adjustment_changed(adj);
-				/*
-				   gtk_spin_button_set_value(
-				   GTK_SPIN_BUTTON(widget),
-				   adj->value);
-				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-				 */
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 				update_widget_f(widget,NULL);
 			}
@@ -548,7 +536,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				else
 					text = (gchar *)OBJ_GET(widget,"k_label");
 				gtk_label_set_text(GTK_LABEL(widget),text);
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				//gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 
 			}
@@ -574,12 +562,6 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 
 				gtk_adjustment_changed(adj);
-				/*
-				   gtk_spin_button_set_value(
-				   GTK_SPIN_BUTTON(widget),
-				   adj->value);
-				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-				 */
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 				update_widget_f(widget,NULL);
 			}

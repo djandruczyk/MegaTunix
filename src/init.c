@@ -836,9 +836,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	if (defaults)
 		g_list_foreach(defaults,(GFunc)cleanup,NULL);
 	/* Free all global data and structures */
+	g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	g_dataset_destroy(global_data);
 	cleanup(global_data);
-	//g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	/* Dynamic widgets master hash  */
 
 	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
@@ -849,10 +849,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 G_MODULE_EXPORT void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
-
-	printf("going to free %s\n",g_quark_to_string(key_id));
 	g_dataset_remove_data(global_data,g_quark_to_string(key_id));
-	/* This should trigger a bug at some point */
 }
 
 
@@ -1081,23 +1078,23 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 		g_hash_table_destroy(table_params->y_multi_hash);
 	if (table_params->z_multi_hash)
 		g_hash_table_destroy(table_params->z_multi_hash);
-	if(table_params->x_ul_eval)
+	if (table_params->x_ul_eval)
 		evaluator_destroy(table_params->x_ul_eval);
-	if(table_params->y_ul_eval)
+	if (table_params->y_ul_eval)
 		evaluator_destroy(table_params->y_ul_eval);
-	if(table_params->z_ul_eval)
+	if (table_params->z_ul_eval)
 		evaluator_destroy(table_params->z_ul_eval);
-	if(table_params->x_dl_eval)
+	if (table_params->x_dl_eval)
 		evaluator_destroy(table_params->x_dl_eval);
-	if(table_params->y_dl_eval)
+	if (table_params->y_dl_eval)
 		evaluator_destroy(table_params->y_dl_eval);
-	if(table_params->z_dl_eval)
+	if (table_params->z_dl_eval)
 		evaluator_destroy(table_params->z_dl_eval);
-	if(table_params->x_object)
+	if (table_params->x_object)
 		g_object_unref(table_params->x_object);
-	if(table_params->y_object)
+	if (table_params->y_object)
 		g_object_unref(table_params->y_object);
-	if(table_params->z_object)
+	if (table_params->z_object)
 		g_object_unref(table_params->z_object);
 	g_array_free(table_params->table,TRUE);
 
@@ -1122,7 +1119,7 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 	if (array)
 		g_array_free(DATA_GET(object,"history"),TRUE);
 	/* This should release everything else bound via a DATA_SET_FULL */
-	//g_dataset_foreach(object,dataset_dealloc,NULL);
+	g_dataset_foreach(object,dataset_dealloc,NULL);
 	g_dataset_destroy(object);
 	g_free(object);
 }

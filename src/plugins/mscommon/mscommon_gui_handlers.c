@@ -1297,6 +1297,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 {
 	static gint upd_count = 0;
+	static void (*insert_text_handler)(GtkEntry *, const gchar *, gint, gint *, gpointer);
 	GtkWidget * widget = object;
 	gdouble value = 0.0;
 
@@ -1304,6 +1305,10 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 		return;
 	if (!GTK_IS_WIDGET(widget))
 		return;
+	if (!insert_text_handler)
+		get_symbol_f("insert_text_handler",(void *)&insert_text_handler);
+
+	g_return_if_fail(insert_text_handler);
 	/* If passed widget and user data are identical,  break out as
 	 * we already updated the widget.
 	 */
@@ -1330,7 +1335,11 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	value = convert_after_upload_f(widget);
 	
 	if (GTK_IS_ENTRY(widget) || GTK_IS_SPIN_BUTTON(widget))
+	{
+		g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler,NULL);
 		update_entry(widget);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler,NULL);
+	}
 	else if (GTK_IS_COMBO_BOX(widget))
 		update_combo(widget);
 	else if (GTK_IS_CHECK_BUTTON(widget))

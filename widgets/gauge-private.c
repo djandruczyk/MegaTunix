@@ -178,6 +178,7 @@ void mtx_gauge_face_finalize (GObject *gauge)
 	g_object_set_data(G_OBJECT(gauge),"antialias", NULL);
 	g_object_set_data(G_OBJECT(gauge),"show_value", NULL);
 	g_object_set_data(G_OBJECT(gauge),"datasource", NULL);
+	g_object_set_data(G_OBJECT(gauge),"gtk-event-mask",NULL);
 }
 
 
