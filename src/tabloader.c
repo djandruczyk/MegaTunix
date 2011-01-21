@@ -241,6 +241,7 @@ G_MODULE_EXPORT void group_free(gpointer value)
 	}
 	g_object_unref(group->object);
 	g_strfreev(group->keys);
+	g_free(group->keytypes);
 	g_free(group);
 }
 
@@ -717,6 +718,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 
 	bind_keys(G_OBJECT(widget), cfgfile, section, keys, num_keys);
+	g_strfreev(keys);
 
 	/* If this widget has the "choices" key (combobox)
 	*/
@@ -738,7 +740,6 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 	g_free(section);
-	g_strfreev(keys);
 	if (GTK_IS_ENTRY(widget))
 	{
 		if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
@@ -777,8 +778,8 @@ G_MODULE_EXPORT void run_post_functions(const gchar * functions)
  */
 G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
-	void (*f_widget)(GtkWidget *) = NULL;
-	void (*f_void)(void) = NULL;
+	void (*post_func_w_arg)(GtkWidget *) = NULL;
+	void (*post_func)(void) = NULL;
 	gchar ** vector = NULL;
 	guint i = 0;
 	vector = g_strsplit(functions,",",-1);
@@ -787,15 +788,15 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 		/* If widget defined, pass to post function */
 		if (widget)
 		{
-			if (get_symbol(vector[i],(void *)&f_widget))
-				f_widget(widget);
+			if (get_symbol(vector[i],(void *)&post_func_w_arg))
+				post_func_w_arg(widget);
 			else
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
 		}
 		else /* If no widget find funct with no args.. */
 		{
-			if (get_symbol(vector[i],(void *)&f_void))
-				f_void();
+			if (get_symbol(vector[i],(void *)&post_func))
+				post_func();
 			else
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
 		}

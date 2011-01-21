@@ -729,6 +729,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 				cleanup(ecu_widgets[i]);
 			}
 			cleanup(ecu_widgets);
+			DATA_SET(global_data,"ecu_widgets",NULL);
 		}
 
 		if (tab_gauges)
@@ -742,6 +743,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 				}
 			}
 			cleanup(tab_gauges);
+			DATA_SET(global_data,"tab_gauges",NULL);
 		}
 		cleanup (firmware->name);
 		cleanup (firmware->profile_filename);
@@ -800,27 +802,30 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		}
 		cleanup(firmware->table_params);
 		cleanup(interdep_vars);
+		DATA_SET(global_data,"interdep_vars",NULL);
 		cleanup(firmware->rf_params);
 		cleanup(firmware->rt_data);
 		cleanup(firmware->rt_data_last);
 		cleanup(firmware);
+		DATA_SET(global_data,"firmware",NULL);
 	}
 	if (rtv_map)
 	{
 		if (rtv_map->raw_list)
 			g_strfreev(rtv_map->raw_list);
 		cleanup (rtv_map->applicable_revisions);
-		g_array_free(rtv_map->ts_array,TRUE);
 		for(i=0;i<rtv_map->rtv_list->len;i++)
 		{
 			data = g_ptr_array_index(rtv_map->rtv_list,i);
 			dealloc_rtv_object(data);
 		}
+		g_array_free(rtv_map->ts_array,TRUE);
+		g_ptr_array_free(rtv_map->rtv_list,TRUE);
 		g_hash_table_destroy(rtv_map->rtv_hash);
 		g_hash_table_foreach(rtv_map->offset_hash,dealloc_list,NULL);
 		g_hash_table_destroy(rtv_map->offset_hash);
-		g_ptr_array_free(rtv_map->rtv_list,TRUE);
 		cleanup(rtv_map);
+		DATA_SET(global_data,"rtv_map",NULL);
 	}
 	/* Runtime Text*/
 	g_mutex_lock(rtt_mutex);
@@ -829,13 +834,17 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	{
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
 		gtk_list_store_clear(GTK_LIST_STORE(store));
+		DATA_SET(global_data,"rtt_model",NULL);
 	}
 	g_mutex_unlock(rtt_mutex);
 
 	/* Logviewer settings */
 	defaults = get_list("logviewer_defaults");
 	if (defaults)
+	{
 		g_list_foreach(defaults,(GFunc)cleanup,NULL);
+		g_list_free(defaults);
+	}
 	/* Free all global data and structures */
 	g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	g_dataset_destroy(global_data);
@@ -850,6 +859,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 G_MODULE_EXPORT void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
+	/*printf("removing data for %s\n",g_quark_to_string(key_id));*/
 	g_dataset_remove_data(global_data,g_quark_to_string(key_id));
 }
 
@@ -1263,6 +1273,12 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 	 * as those are just ptr's to the actual
 	 * data in the rtv object and that gets freed elsewhere
 	 */
+	if (slider->label)
+		gtk_widget_destroy(slider->label);
+	if (slider->textval)
+		gtk_widget_destroy(slider->textval);
+	if (slider->pbar)
+		gtk_widget_destroy(slider->pbar);
 	cleanup(slider);
 	return;
 }

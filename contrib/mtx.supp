@@ -83,6 +83,13 @@
 	...
 	fun:gtk_tooltip*
 }
+{
+	tooltips
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:gtk_widget_set_tooltip*
+}
 
 {
 	rc styles
@@ -359,4 +366,23 @@
 	fun:g_thread_init
 	fun:main
 }
-
+{
+	gtk_rc_style
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:gtk_rc_style_*
+	...
+	fun:main
+}
+{
+	gtk_entry_completion
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:g_object_new*
+	...
+	fun:gtk_entry_completion_new*
+	...
+	fun:bind_data
+}

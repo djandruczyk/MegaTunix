@@ -110,6 +110,7 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 		gtk_container_add (GTK_CONTAINER (object), entry);
 
 		completion = gtk_entry_completion_new();
+		OBJ_SET_FULL(object,"completion",completion,g_object_unref);
 		gtk_entry_set_completion(GTK_ENTRY(entry),completion);
 		gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
 		gtk_entry_completion_set_text_column(completion,CHOICE_COL);

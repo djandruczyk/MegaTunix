@@ -72,6 +72,7 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 
 	model = create_model ();
 
+	OBJ_SET_FULL(widget,"model",model,gtk_list_store_clear);
 	OBJ_SET(model,"lim_offset",OBJ_GET(widget,"lim_offset"));
 	OBJ_SET(model,"src_offset",OBJ_GET(widget,"src_offset"));
 	OBJ_SET(model,"hys_offset",OBJ_GET(widget,"hys_offset"));
@@ -83,7 +84,6 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 	views = g_list_append(views,view);
 	OBJ_SET(model,"view",(gpointer)view);
 	gtk_container_add(GTK_CONTAINER(widget),view);
-	//g_object_unref(model);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
 	add_columns(GTK_TREE_VIEW(view), widget);
