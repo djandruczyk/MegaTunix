@@ -88,9 +88,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	glade_xml_signal_autoconnect(xml);
 
 	g_signal_connect(G_OBJECT(window),"destroy_event",
-			G_CALLBACK(close_2d_editor),window);
+			G_CALLBACK(close_2d_editor),NULL);
 	g_signal_connect(G_OBJECT(window),"delete_event",
-			G_CALLBACK(close_2d_editor),window);
+			G_CALLBACK(close_2d_editor),NULL);
 	gtk_window_set_title(GTK_WINDOW(window),_("2D Table Group Editor"));
 	gtk_window_resize(GTK_WINDOW(window),800,530);
 
@@ -454,9 +454,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		glade_xml_signal_autoconnect(xml);
 
 		g_signal_connect(G_OBJECT(window),"destroy_event",
-				G_CALLBACK(close_2d_editor),window);
+				G_CALLBACK(close_2d_editor),NULL);
 		g_signal_connect(G_OBJECT(window),"delete_event",
-				G_CALLBACK(close_2d_editor),window);
+				G_CALLBACK(close_2d_editor),NULL);
 		tmpbuf = g_strdup_printf("%s (%s)",_("2D Table Editor"),firmware->te_params[table_num]->title);
 		gtk_window_set_title(GTK_WINDOW(window),tmpbuf);
 		g_free(tmpbuf);
@@ -487,7 +487,11 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		curve_parent = glade_xml_get_widget(xml,"te_right_frame");
 	}
 	else
+	{
 		curve_parent = parent;
+		g_signal_connect(G_OBJECT(parent),"destroy_event",
+				G_CALLBACK(close_2d_editor),NULL);
+	}
 	curve = mtx_curve_new();
 	curve_list = g_list_prepend(curve_list,(gpointer)curve);
 	mtx_curve_set_title(MTX_CURVE(curve),(gchar *)_(firmware->te_params[table_num]->title));
@@ -725,6 +729,13 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(window,"curve_list",curve_list);
 		OBJ_SET(window,"x_entries",x_entries);
 		OBJ_SET(window,"y_entries",y_entries);
+	}
+	else
+	{
+		OBJ_SET(parent,"widget_list",widget_list);
+		OBJ_SET(parent,"curve_list",curve_list);
+		OBJ_SET(parent,"x_entries",x_entries);
+		OBJ_SET(parent,"y_entries",y_entries);
 	}
 	OBJ_SET(curve,"x_entries",x_entries);
 	OBJ_SET(curve,"y_entries",y_entries);

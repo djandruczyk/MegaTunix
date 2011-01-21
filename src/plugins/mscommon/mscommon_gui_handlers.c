@@ -518,7 +518,6 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	gint table_num = 0;
 	gchar * range = NULL;
 	DataSize size = MTX_U08;
-	gchar * choice = NULL;
 	guint8 tmp = 0;
 	gint dload_val = 0;
 	gint dl_type = 0;
@@ -554,10 +553,8 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 		if (!search_model(model,widget,&iter))
 			return FALSE;
 	}
-	gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
-			BITVAL_COL,&bitval,-1);
-
-	/*printf("choice %s, bitmask %i, bitshift %i bitval %i\n",choice,bitmask,bitshift, bitval );*/
+	gtk_tree_model_get(model,&iter,BITVAL_COL,&bitval,-1);
+			
 	switch ((MSCommonMtxButton)handler)
 	{
 		case MULTI_EXPRESSION:
@@ -1733,7 +1730,6 @@ void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
 
 G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
 {
-	gchar *choice = NULL;
 	gboolean valid = TRUE;
 	GtkTreeIter iter;
 	gint i = 0;
@@ -1964,8 +1960,10 @@ G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTr
 		if (g_ascii_strcasecmp(cur_text,choice) == 0)
 		{
 			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(box),iter);
+			g_free(choice);
 			return TRUE;
 		}
+		g_free(choice);
 		valid = gtk_tree_model_iter_next (model, iter);
 	}
 	return FALSE;

@@ -45,6 +45,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gchar * data = NULL;
 	gchar * name = NULL;
 	gchar *regex = NULL;
+	GString *string = NULL;
 	GtkWidget *entry = NULL;
 	GtkEntryCompletion *completion = NULL;
 	GtkListStore *store = NULL;
@@ -60,6 +61,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	*/
 	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR);
 	/* Iterate across valid variables */
+	string = g_string_sized_new(32);
+
 	while ((data = rtv_map->raw_list[i])!= NULL)
 	{
 		i++;
@@ -86,9 +89,10 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		else
 			range = g_strdup_printf("Valid Range: %s <-> %s",lower,upper);
 
-		regex = g_strconcat(name,NULL);
+		string = g_string_append(string,name);
 		if (rtv_map->raw_list[i])
-			regex = g_strconcat("|",NULL);
+			string = g_string_append(string,"|");
+
 		gtk_list_store_append(store,&iter);
 		gtk_list_store_set(store,&iter,
 				UO_CHOICE_COL,name,
@@ -101,12 +105,14 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 				UO_SIZE_COL,size,
 				UO_PRECISION_COL,precision,
 				-1);
+		g_free(range);
 	}
 	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
 	if (GTK_IS_COMBO_BOX_ENTRY(widget))
 	{
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(widget),UO_CHOICE_COL);
-		entry = mask_entry_new_with_mask_f(regex);
+		entry = mask_entry_new_with_mask_f(string->str);
+		g_string_free(string,TRUE);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
 		if ((width = (GINT)OBJ_GET((GtkWidget *)widget,"max_chars")) > 0)
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);
@@ -174,18 +180,11 @@ void update_ms2_user_outputs(GtkWidget *widget)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"dl_evaluator");
-				if (eval)
-				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-					eval = NULL;
-				}
+				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
 				if (dl_conv)
 				{
 					eval = evaluator_create_f(dl_conv);
-					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
 						tmpf2 = g_ascii_strtod(upper,NULL);
@@ -210,18 +209,11 @@ void update_ms2_user_outputs(GtkWidget *widget)
 				else
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"ul_evaluator");
-				if (eval)
-				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-					eval = NULL;
-				}
+				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
 				if (ul_conv)
 				{
 					eval = evaluator_create_f(ul_conv);
-					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
 				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
@@ -235,18 +227,11 @@ void update_ms2_user_outputs(GtkWidget *widget)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"dl_evaluator");
-				if (eval)
-				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-					eval = NULL;
-				}
+				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
 				if (dl_conv)
 				{
 					eval = evaluator_create_f(dl_conv);
-					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
 						tmpf2 = g_ascii_strtod(upper,NULL);
@@ -271,18 +256,11 @@ void update_ms2_user_outputs(GtkWidget *widget)
 				else
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"ul_evaluator");
-				if (eval)
-				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-					eval = NULL;
-				}
+				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
 				if (ul_conv)
 				{
 					eval = evaluator_create_f(ul_conv);
-					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
 				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
@@ -291,10 +269,13 @@ void update_ms2_user_outputs(GtkWidget *widget)
 				/*printf ("update widgets setting hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
+			g_free(lower);
+			g_free(upper);
+			g_free(range);
+			g_free(dl_conv);
+			g_free(ul_conv);
 		}
 		valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
 		i++;
 	}
 }
-
-                             

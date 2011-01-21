@@ -19,6 +19,7 @@
 #include <enums.h>
 #include <debugging.h>
 #include <glib.h>
+#include <glade/glade.h>
 #include <glib/gstdio.h>
 #include <gui_handlers.h>
 #include <init.h>
@@ -724,7 +725,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 						g_list_foreach(ecu_widgets[i][j],dealloc_widget,NULL);
 						g_list_free(ecu_widgets[i][j]);
 					}
-
 				}
 				cleanup(ecu_widgets[i]);
 			}
@@ -1236,7 +1236,9 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 	if (OBJ_GET(widget,"ul_evaluator"))
 		evaluator_destroy (OBJ_GET(widget,"ul_evaluator"));
 		*/
+	printf("Going to destroy %s\n",glade_get_widget_name(widget));
 	gtk_widget_destroy(widget);
+	widget = NULL;
 }
 
 
