@@ -264,7 +264,6 @@ G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 
 	port = gtk_editable_get_chars(editable,0,-1);
 	gtk_widget_modify_text(GTK_WIDGET(editable),GTK_STATE_NORMAL,&black);
-	g_free(DATA_GET(global_data,"override_port"));
 	DATA_SET_FULL(global_data,"override_port",g_strdup(port),g_free);
 	g_free(port);
 	close_serial();
