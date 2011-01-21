@@ -841,10 +841,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	/* Logviewer settings */
 	defaults = get_list("logviewer_defaults");
 	if (defaults)
-	{
 		g_list_foreach(defaults,(GFunc)cleanup,NULL);
-		g_list_free(defaults);
-	}
 	/* Free all global data and structures */
 	g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	g_dataset_destroy(global_data);
