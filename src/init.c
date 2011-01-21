@@ -537,39 +537,62 @@ G_MODULE_EXPORT void save_config(void)
  */
 G_MODULE_EXPORT void make_megasquirt_dirs(void)
 {
-	gchar *filename = NULL;
+	gchar *dirname = NULL;
+	const gchar *subdir = NULL;
+	gchar *path = NULL;
+	GDir *dir = NULL;
 	const gchar *mtx = ".MegaTunix";
 
-	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,GUI_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,GAUGES_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,DASHES_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,INTERROGATOR_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,LOOKUPTABLES_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,REALTIME_MAPS_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,RTSLIDERS_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,RTSTATUS_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
+	dirname = g_build_path(PSEP, HOME(), mtx, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	
+	dirname = g_build_path(PSEP, HOME(),mtx,GUI_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_strconcat(PSEP,HOME(),mtx,GAUGES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_strconcat(PSEP,HOME(),mtx,DASHES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_strconcat(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_strconcat(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+
+#ifdef __WIN32__
+	path = g_build_path(PSEP,get_home(),"dist",INTERROGATOR_DATA_DIR,"Profiles",NULL);
+#else
+	path = g_build_path(PSEP,DATA_DIR,INTERROGATOR_DATA_DIR,"Profiles",NULL);
+#endif
+	dir = g_dir_open(path,0,NULL);
+	g_free(path);
+	if (dir)
+	{
+		while (NULL != (subdir = g_dir_read_name(dir)))
+		{
+			dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR,"Profiles",subdir, NULL);
+			g_mkdir(dirname, S_IRWXU);
+			cleanup(dirname);
+		}
+		g_dir_close(dir);
+	}
+
+	dirname = g_build_path(PSEP,HOME(),mtx,LOOKUPTABLES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,REALTIME_MAPS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,RTSLIDERS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,RTSTATUS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
 
 	return;
 }
@@ -722,7 +745,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 				{
 					for (j=0;j<firmware->page_params[i]->length;j++)
 					{
-						g_list_foreach(ecu_widgets[i][j],dealloc_widget,NULL);
+						g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)g_strdup_printf("[%i][%i]",i,j));
 						g_list_free(ecu_widgets[i][j]);
 					}
 				}
@@ -1192,9 +1215,14 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
 	GtkWidget * widget = (GtkWidget *) data;
+	printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
+	cleanup(user_data);
 
 	if (!GTK_IS_WIDGET(widget))
+	{
+		printf("NOT A WIDGET!!!\n");
 		return;
+	}
 	/*printf("dealloc_widget\n");*/
 /*
 	cleanup (OBJ_GET(widget,"algorithms"));

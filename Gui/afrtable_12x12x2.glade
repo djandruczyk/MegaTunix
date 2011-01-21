@@ -86,7 +86,7 @@
                                             <property name="row_spacing">0</property>
                                             <property name="column_spacing">0</property>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_0">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_0_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -114,7 +114,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_1">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_1_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -142,7 +142,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_2">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_2_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -170,7 +170,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_3">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_3_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -198,7 +198,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_4">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_4_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -226,7 +226,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_5">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_5_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -254,7 +254,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_6">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_6_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -282,7 +282,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_7">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_7_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -310,7 +310,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_8">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_8_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -338,7 +338,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_9">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_9_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -366,7 +366,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_10">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_10_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -394,7 +394,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_load_entry_11">
+                                              <widget class="GtkEntry" id="AFR1_load_entry_11_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -2488,8 +2488,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2518,8 +2518,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2548,8 +2548,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2578,8 +2578,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2608,8 +2608,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2638,8 +2638,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2668,8 +2668,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2698,8 +2698,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2728,10 +2728,10 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">7</property>
-                                                <property name="bottom_attach">8</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">6</property>
+                                                <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -2758,8 +2758,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2788,8 +2788,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2818,8 +2818,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">2</property>
-                                                <property name="right_attach">3</property>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2848,8 +2848,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2878,8 +2878,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2908,8 +2908,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2938,8 +2938,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2968,8 +2968,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -2998,8 +2998,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3028,8 +3028,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3058,8 +3058,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3088,10 +3088,10 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">6</property>
-                                                <property name="bottom_attach">7</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">5</property>
+                                                <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -3118,8 +3118,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3148,8 +3148,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3178,8 +3178,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">2</property>
-                                                <property name="right_attach">3</property>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3208,8 +3208,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3238,8 +3238,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3268,8 +3268,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3298,8 +3298,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3328,8 +3328,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3358,8 +3358,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3388,8 +3388,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3418,8 +3418,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3448,10 +3448,10 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">5</property>
-                                                <property name="bottom_attach">6</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -3478,8 +3478,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3508,8 +3508,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3538,8 +3538,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">2</property>
-                                                <property name="right_attach">3</property>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3568,8 +3568,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3598,8 +3598,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3628,8 +3628,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3658,8 +3658,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3688,8 +3688,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3718,8 +3718,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3748,8 +3748,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3778,8 +3778,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3808,10 +3808,10 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">4</property>
-                                                <property name="bottom_attach">5</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -3838,8 +3838,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3868,8 +3868,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3898,8 +3898,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">2</property>
-                                                <property name="right_attach">3</property>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3928,8 +3928,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3958,8 +3958,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -3988,8 +3988,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4018,8 +4018,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4048,8 +4048,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4078,8 +4078,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4108,8 +4108,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4138,8 +4138,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4168,10 +4168,10 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">3</property>
-                                                <property name="bottom_attach">4</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -4198,8 +4198,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">2</property>
                                                 <property name="bottom_attach">3</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4228,36 +4228,6 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
-                                                <property name="top_attach">2</property>
-                                                <property name="bottom_attach">3</property>
-                                                <property name="x_options">expand|shrink|fill</property>
-                                                <property name="y_options"/>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_123_of_143">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
-                                                <property name="editable">True</property>
-                                                <property name="visibility">True</property>
-                                                <property name="max_length">5</property>
-                                                <property name="text" translatable="yes">0</property>
-                                                <property name="has_frame">False</property>
-                                                <property name="invisible_char">*</property>
-                                                <property name="activates_default">False</property>
-                                                <property name="width_chars">3</property>
-                                                <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
-                                                <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
-                                                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
-                                                <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
-                                                <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
-                                                <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-                                                <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-                                              </widget>
-                                              <packing>
                                                 <property name="left_attach">2</property>
                                                 <property name="right_attach">3</property>
                                                 <property name="top_attach">2</property>
@@ -4267,7 +4237,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_124_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_123_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4297,7 +4267,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_125_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_124_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4327,7 +4297,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_126_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_125_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4357,7 +4327,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_127_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_126_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4387,7 +4357,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_128_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_127_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4417,7 +4387,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_129_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_128_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4447,7 +4417,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_130_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_129_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4477,7 +4447,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_131_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_130_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4507,7 +4477,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_132_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_131_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4537,7 +4507,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_133_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_132_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4567,7 +4537,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_134_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_133_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4597,7 +4567,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_135_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_134_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4627,7 +4597,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_136_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_135_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4657,7 +4627,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_137_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_136_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4687,7 +4657,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_138_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_137_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4717,7 +4687,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_139_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_138_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4747,7 +4717,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_140_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_139_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4777,7 +4747,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_afr_entry_141_of_143">
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_140_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -4807,6 +4777,36 @@
                                               </packing>
                                             </child>
                                             <child>
+                                              <widget class="GtkEntry" id="AFR1_afr_entry_141_of_143">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+                                                <property name="editable">True</property>
+                                                <property name="visibility">True</property>
+                                                <property name="max_length">5</property>
+                                                <property name="text" translatable="yes">0</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">*</property>
+                                                <property name="activates_default">False</property>
+                                                <property name="width_chars">3</property>
+                                                <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
+                                                <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+                                                <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+                                                <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+                                                <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options">expand|shrink|fill</property>
+                                                <property name="y_options"/>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <widget class="GtkEntry" id="AFR1_afr_entry_142_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
@@ -4828,8 +4828,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4858,8 +4858,8 @@
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -4916,7 +4916,7 @@
                                             <property name="row_spacing">0</property>
                                             <property name="column_spacing">0</property>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_0">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_0_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -4944,7 +4944,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_1">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_1_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -4972,7 +4972,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_2">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_2_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5000,7 +5000,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_3">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_3_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5028,7 +5028,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_4">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_4_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5056,7 +5056,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_5">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_5_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5084,7 +5084,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_6">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_6_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5112,7 +5112,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_7">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_7_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5140,7 +5140,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_8">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_8_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5168,7 +5168,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_9">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_9_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5196,7 +5196,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_10">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_10_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -5224,7 +5224,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR1_rpm_entry_11">
+                                              <widget class="GtkEntry" id="AFR1_rpm_entry_11_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6009,7 +6009,7 @@ maintain same PW</property>
                                             <property name="row_spacing">0</property>
                                             <property name="column_spacing">0</property>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_0">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_0_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6037,7 +6037,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_1">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_1_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6065,7 +6065,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_2">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_2_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6093,7 +6093,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_3">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_3_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6121,7 +6121,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_4">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_4_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6149,7 +6149,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_5">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_5_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6177,7 +6177,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_6">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_6_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6205,7 +6205,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_7">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_7_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6233,7 +6233,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_8">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_8_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6261,7 +6261,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_9">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_9_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6289,7 +6289,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_10">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_10_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6317,7 +6317,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_load_entry_11">
+                                              <widget class="GtkEntry" id="AFR2_load_entry_11_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6443,7 +6443,7 @@ maintain same PW</property>
                                             <property name="row_spacing">0</property>
                                             <property name="column_spacing">0</property>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_0">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_0_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6471,7 +6471,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_1">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_1_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6499,7 +6499,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_2">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_2_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6527,7 +6527,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_3">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_3_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6555,7 +6555,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_4">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_4_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6583,7 +6583,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_5">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_5_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6611,7 +6611,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_6">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_6_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6639,7 +6639,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_7">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_7_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6667,7 +6667,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_8">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_8_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6695,7 +6695,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_9">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_9_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6723,7 +6723,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_10">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_10_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -6751,7 +6751,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_rpm_entry_11">
+                                              <widget class="GtkEntry" id="AFR2_rpm_entry_11_of_11">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="editable">True</property>
@@ -8796,8 +8796,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -8826,8 +8826,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -8856,8 +8856,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -8886,8 +8886,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -8916,8 +8916,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -8946,8 +8946,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -8976,8 +8976,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9006,8 +9006,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">7</property>
                                                 <property name="bottom_attach">8</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9036,10 +9036,10 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">7</property>
-                                                <property name="bottom_attach">8</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">6</property>
+                                                <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -9066,8 +9066,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9096,8 +9096,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9126,8 +9126,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">2</property>
-                                                <property name="right_attach">3</property>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9156,8 +9156,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9186,8 +9186,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9216,8 +9216,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9246,8 +9246,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9276,8 +9276,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9306,8 +9306,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9336,8 +9336,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9366,8 +9366,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">6</property>
                                                 <property name="bottom_attach">7</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9396,10 +9396,10 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">6</property>
-                                                <property name="bottom_attach">7</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">5</property>
+                                                <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -9426,8 +9426,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9456,8 +9456,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9486,8 +9486,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">2</property>
-                                                <property name="right_attach">3</property>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9516,8 +9516,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9546,8 +9546,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9576,8 +9576,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9606,8 +9606,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9636,8 +9636,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9666,8 +9666,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9696,8 +9696,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9726,8 +9726,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">5</property>
                                                 <property name="bottom_attach">6</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9756,10 +9756,10 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">5</property>
-                                                <property name="bottom_attach">6</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">4</property>
+                                                <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -9786,8 +9786,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9816,8 +9816,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9846,8 +9846,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">2</property>
-                                                <property name="right_attach">3</property>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9876,8 +9876,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9906,8 +9906,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9936,8 +9936,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9966,8 +9966,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -9996,8 +9996,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10026,8 +10026,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10056,8 +10056,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10086,8 +10086,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">4</property>
                                                 <property name="bottom_attach">5</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10116,10 +10116,10 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">4</property>
-                                                <property name="bottom_attach">5</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">3</property>
+                                                <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -10146,8 +10146,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10176,8 +10176,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10206,8 +10206,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">2</property>
-                                                <property name="right_attach">3</property>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10236,8 +10236,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">3</property>
-                                                <property name="right_attach">4</property>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10266,8 +10266,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">4</property>
-                                                <property name="right_attach">5</property>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10296,8 +10296,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">5</property>
-                                                <property name="right_attach">6</property>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10326,8 +10326,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">6</property>
-                                                <property name="right_attach">7</property>
+                                                <property name="left_attach">7</property>
+                                                <property name="right_attach">8</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10356,8 +10356,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">7</property>
-                                                <property name="right_attach">8</property>
+                                                <property name="left_attach">8</property>
+                                                <property name="right_attach">9</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10386,8 +10386,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">8</property>
-                                                <property name="right_attach">9</property>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10416,8 +10416,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10446,8 +10446,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">3</property>
                                                 <property name="bottom_attach">4</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10476,10 +10476,10 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">11</property>
-                                                <property name="right_attach">12</property>
-                                                <property name="top_attach">3</property>
-                                                <property name="bottom_attach">4</property>
+                                                <property name="left_attach">0</property>
+                                                <property name="right_attach">1</property>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
                                                 <property name="x_options">expand|shrink|fill</property>
                                                 <property name="y_options"/>
                                               </packing>
@@ -10506,8 +10506,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">0</property>
-                                                <property name="right_attach">1</property>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
                                                 <property name="top_attach">2</property>
                                                 <property name="bottom_attach">3</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -10536,36 +10536,6 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">1</property>
-                                                <property name="right_attach">2</property>
-                                                <property name="top_attach">2</property>
-                                                <property name="bottom_attach">3</property>
-                                                <property name="x_options">expand|shrink|fill</property>
-                                                <property name="y_options"/>
-                                              </packing>
-                                            </child>
-                                            <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_123_of_143">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
-                                                <property name="editable">True</property>
-                                                <property name="visibility">True</property>
-                                                <property name="max_length">5</property>
-                                                <property name="text" translatable="yes">0</property>
-                                                <property name="has_frame">False</property>
-                                                <property name="invisible_char">*</property>
-                                                <property name="activates_default">False</property>
-                                                <property name="width_chars">3</property>
-                                                <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
-                                                <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
-                                                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
-                                                <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
-                                                <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
-                                                <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-                                                <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
-                                              </widget>
-                                              <packing>
                                                 <property name="left_attach">2</property>
                                                 <property name="right_attach">3</property>
                                                 <property name="top_attach">2</property>
@@ -10575,7 +10545,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_124_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_123_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10605,7 +10575,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_125_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_124_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10635,7 +10605,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_126_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_125_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10665,7 +10635,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_127_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_126_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10695,7 +10665,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_128_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_127_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10725,7 +10695,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_129_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_128_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10755,7 +10725,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_130_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_129_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10785,7 +10755,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_131_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_130_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10815,7 +10785,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_132_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_131_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10845,7 +10815,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_133_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_132_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10875,7 +10845,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_134_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_133_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10905,7 +10875,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_135_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_134_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10935,7 +10905,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_136_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_135_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10965,7 +10935,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_137_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_136_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -10995,7 +10965,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_138_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_137_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -11025,7 +10995,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_139_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_138_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -11055,7 +11025,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_140_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_139_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -11085,7 +11055,7 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
-                                              <widget class="GtkEntry" id="AFR2_afr_entry_141_of_143">
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_140_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -11115,6 +11085,36 @@ maintain same PW</property>
                                               </packing>
                                             </child>
                                             <child>
+                                              <widget class="GtkEntry" id="AFR2_afr_entry_141_of_143">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
+                                                <property name="editable">True</property>
+                                                <property name="visibility">True</property>
+                                                <property name="max_length">5</property>
+                                                <property name="text" translatable="yes">0</property>
+                                                <property name="has_frame">False</property>
+                                                <property name="invisible_char">*</property>
+                                                <property name="activates_default">False</property>
+                                                <property name="width_chars">3</property>
+                                                <signal name="activate" handler="std_entry_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler" last_modification_time="Sun, 05 Sep 2004 15:23:24 GMT"/>
+                                                <signal name="insert_text" handler="insert_text_handler" last_modification_time="Sun, 17 Sep 2010 15:23:24 GMT"/>
+                                                <signal name="changed" handler="entry_changed_handler" last_modification_time="Mon, 31 Jan 2005 18:17:48 GMT"/>
+                                                <signal name="button_press_event" handler="widget_grab" last_modification_time="Sun, 05 Sep 2004 15:23:59 GMT"/>
+                                                <signal name="key_press_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+                                                <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">9</property>
+                                                <property name="right_attach">10</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options">expand|shrink|fill</property>
+                                                <property name="y_options"/>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <widget class="GtkEntry" id="AFR2_afr_entry_142_of_143">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
@@ -11136,8 +11136,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">9</property>
-                                                <property name="right_attach">10</property>
+                                                <property name="left_attach">10</property>
+                                                <property name="right_attach">11</property>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
                                                 <property name="x_options">expand|shrink|fill</property>
@@ -11166,8 +11166,8 @@ maintain same PW</property>
                                                 <signal name="key_release_event" handler="key_event" last_modification_time="Mon, 06 Sep 2004 19:35:51 GMT"/>
                                               </widget>
                                               <packing>
-                                                <property name="left_attach">10</property>
-                                                <property name="right_attach">11</property>
+                                                <property name="left_attach">11</property>
+                                                <property name="right_attach">12</property>
                                                 <property name="top_attach">1</property>
                                                 <property name="bottom_attach">2</property>
                                                 <property name="x_options">expand|shrink|fill</property>
