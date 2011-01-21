@@ -15,7 +15,8 @@ snapshots_files = 	\
 			MS-II-Extra_V2.1.0-series.ecu \
 			MS-II-Extra_V2.1.0e-series.ecu \
 			MS-II-Extra_V3.0.x-series.ecu \
-			MS-II-Extra_V3.0.3w_series.ecu
+			MS-II-Extra_V3.0.3w_series.ecu \
+			MS-II-Extra_V3.1.0_series.ecu
 
 snapshots_DATA = $(snapshots_files)
 
