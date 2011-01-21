@@ -67,7 +67,10 @@ ConfigFile *cfg_open_file(gchar * filename)
 
 	iochannel = g_io_channel_new_file(filename,"r",&error);
 	if(error)
+	{
+		g_error_free(error);
 		return NULL;
+	}
 
 	cfg = g_malloc0(sizeof (ConfigFile));
 

@@ -708,6 +708,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 {
 	gint i = 0;
 	gint j = 0;
+	gchar *tmpbuf = NULL;
 	gpointer data;
 	GtkListStore *store = NULL;
 	GList *defaults = NULL;
@@ -745,8 +746,14 @@ G_MODULE_EXPORT void mem_dealloc(void)
 				{
 					for (j=0;j<firmware->page_params[i]->length;j++)
 					{
-						g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)g_strdup_printf("[%i][%i]",i,j));
-						g_list_free(ecu_widgets[i][j]);
+						if (g_list_length(ecu_widgets[i][j]) > 0)
+						{
+							printf("Deallocating widgets in  array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
+							tmpbuf = g_strdup_printf("[%i][%i]",i,j);
+							g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
+							g_free(tmpbuf);
+							g_list_free(ecu_widgets[i][j]);
+						}
 					}
 				}
 				cleanup(ecu_widgets[i]);
@@ -1215,56 +1222,14 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
 	GtkWidget * widget = (GtkWidget *) data;
+	printf("widget name %s pointer %p\n",glade_get_widget_name(widget),widget);
 	printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
-	cleanup(user_data);
 
 	if (!GTK_IS_WIDGET(widget))
 	{
 		printf("NOT A WIDGET!!!\n");
 		return;
 	}
-	/*printf("dealloc_widget\n");*/
-/*
-	cleanup (OBJ_GET(widget,"algorithms"));
-	cleanup (OBJ_GET(widget,"alt_lookuptable"));
-	cleanup (OBJ_GET(widget,"applicable_tables"));
-	cleanup (OBJ_GET(widget,"bind_to_list"));
-	cleanup (OBJ_GET(widget,"bitvals"));
-	cleanup (OBJ_GET(widget,"choices"));
-	cleanup (OBJ_GET(widget,"complex_expr"));
-	cleanup (OBJ_GET(widget,"data"));
-	cleanup (OBJ_GET(widget,"depend_on"));
-	cleanup (OBJ_GET(widget,"dl_conv_expr"));
-	cleanup (OBJ_GET(widget,"dl_conv_exprs"));
-	cleanup (OBJ_GET(widget,"fullname"));
-	cleanup (OBJ_GET(widget,"group"));
-	cleanup (OBJ_GET(widget,"group_2_update"));
-	cleanup (OBJ_GET(widget,"initializer"));
-	cleanup (OBJ_GET(widget,"lookuptable"));
-	cleanup (OBJ_GET(widget,"multi_expr_keys"));
-	cleanup (OBJ_GET(widget,"post_function_with_arg"));
-	cleanup (OBJ_GET(widget,"post_functions_with_arg"));
-	cleanup (OBJ_GET(widget,"raw_lower"));
-	cleanup (OBJ_GET(widget,"raw_upper"));
-	cleanup (OBJ_GET(widget,"register_as"));
-	cleanup (OBJ_GET(widget,"source"));
-	cleanup (OBJ_GET(widget,"sources"));
-	cleanup (OBJ_GET(widget,"source_key"));
-	cleanup (OBJ_GET(widget,"source_value"));
-	cleanup (OBJ_GET(widget,"source_values"));
-	cleanup (OBJ_GET(widget,"table_num"));
-	cleanup (OBJ_GET(widget,"te_table_num"));
-	cleanup (OBJ_GET(widget,"tooltip"));
-	cleanup (OBJ_GET(widget,"ul_conv_expr"));
-	cleanup (OBJ_GET(widget,"ul_conv_exprs"));
-*/
-	/*
-	if (OBJ_GET(widget,"dl_evaluator"))
-		evaluator_destroy (OBJ_GET(widget,"dl_evaluator"));
-	if (OBJ_GET(widget,"ul_evaluator"))
-		evaluator_destroy (OBJ_GET(widget,"ul_evaluator"));
-		*/
-	printf("Going to destroy %s\n",glade_get_widget_name(widget));
 	gtk_widget_destroy(widget);
 	widget = NULL;
 }

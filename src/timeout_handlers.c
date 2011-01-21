@@ -202,28 +202,35 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 				(g_async_queue_length(pf_dispatch_queue) > 8))
 			g_usleep(5000);
 
-		if (DATA_GET(global_data,"might_be_leaving"))
-		{
-			g_usleep(1000000);
-			continue;
-		}
-		 dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
+		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
 
 		signal_read_rtvars();
+
+
+		/* If going to close, start watching leaving var
+		   and quit if it gets set, otherwise just keep
+		   on truckin...
+		   */
+		while (DATA_GET(global_data,"might_be_leaving"))
+		{
+			g_usleep(500000);
+			if (DATA_GET(global_data,"leaving"))
+				goto breakout;
+		}
 
 		g_get_current_time(&time);
 		g_time_val_add(&time,serial_params->read_wait*1000);
 		if (g_cond_timed_wait(rtv_thread_cond,mutex,&time))
-		{
-			g_async_queue_unref(io_data_queue);
-			g_async_queue_unref(pf_dispatch_queue);
-			g_mutex_unlock(mutex);
-			g_mutex_free(mutex);
-			if (teardown_rtv)
-				teardown_rtv();
-			g_thread_exit(0);
-		}
+			goto breakout;
 	}
+breakout:
+	g_async_queue_unref(io_data_queue);
+	g_async_queue_unref(pf_dispatch_queue);
+	g_mutex_unlock(mutex);
+	g_mutex_free(mutex);
+	if (teardown_rtv)
+		teardown_rtv();
+	g_thread_exit(0);
 }
 
 
