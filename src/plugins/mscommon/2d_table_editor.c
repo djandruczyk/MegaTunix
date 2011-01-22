@@ -246,8 +246,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)),g_free);
 			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)),g_free);
-			OBJ_SET_FULL(entry,"dl_conv_expr",g_strdup(firmware->te_params[table_num]->x_dl_conv_expr),g_free);
-			OBJ_SET_FULL(entry,"ul_conv_expr",g_strdup(firmware->te_params[table_num]->x_ul_conv_expr),g_free);
+			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
+			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -298,8 +298,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)),g_free);
 			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)),g_free);
-			OBJ_SET_FULL(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr,g_free);
-			OBJ_SET_FULL(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr,g_free);
+			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
+			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -487,13 +487,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		curve_parent = glade_xml_get_widget(xml,"te_right_frame");
 	}
 	else
-	{
 		curve_parent = parent;
-		g_signal_connect(G_OBJECT(parent),"destroy_event",
-				G_CALLBACK(close_2d_editor),NULL);
-	}
 	curve = mtx_curve_new();
-	curve_list = g_list_prepend(curve_list,(gpointer)curve);
+	if (!embedded)
+		curve_list = g_list_prepend(curve_list,(gpointer)curve);
 	mtx_curve_set_title(MTX_CURVE(curve),(gchar *)_(firmware->te_params[table_num]->title));
 	mtx_curve_set_x_axis_label(MTX_CURVE(curve),_(firmware->te_params[table_num]->x_axis_label));
 	mtx_curve_set_y_axis_label(MTX_CURVE(curve),_(firmware->te_params[table_num]->y_axis_label));
@@ -586,8 +583,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)),g_free);
 		OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)),g_free);
-		OBJ_SET_FULL(entry,"dl_conv_expr",g_strdup(firmware->te_params[table_num]->x_dl_conv_expr),g_free);
-		OBJ_SET_FULL(entry,"ul_conv_expr",g_strdup(firmware->te_params[table_num]->x_ul_conv_expr),g_free);
+		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
+		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -626,7 +623,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 					0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 		page = firmware->te_params[table_num]->x_page;
 		ecu_widgets[page][offset] = g_list_prepend(ecu_widgets[page][offset],(gpointer)entry);
-		widget_list = g_list_prepend(widget_list,(gpointer)entry);
+		if (!embedded)
+			widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 		update_widget(G_OBJECT(entry),NULL);
 
@@ -640,8 +638,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)),g_free);
 		OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)),g_free);
-		OBJ_SET_FULL(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr,g_free);
-		OBJ_SET_FULL(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr,g_free);
+		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
+		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -679,7 +677,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 					0,1,i,i+1, GTK_SHRINK,GTK_SHRINK,0,0);
 		page = firmware->te_params[table_num]->y_page;
 		ecu_widgets[page][offset] = g_list_prepend(ecu_widgets[page][offset],(gpointer)entry);
-		widget_list = g_list_prepend(widget_list,(gpointer)entry);
+		if (!embedded)
+			widget_list = g_list_prepend(widget_list,(gpointer)entry);
 
 		update_widget(G_OBJECT(entry),NULL);
 	}
@@ -730,6 +729,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(window,"x_entries",x_entries);
 		OBJ_SET(window,"y_entries",y_entries);
 	}
+	/*
 	else
 	{
 		OBJ_SET(parent,"widget_list",widget_list);
@@ -737,6 +737,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(parent,"x_entries",x_entries);
 		OBJ_SET(parent,"y_entries",y_entries);
 	}
+	*/
 	OBJ_SET(curve,"x_entries",x_entries);
 	OBJ_SET(curve,"y_entries",y_entries);
 	gtk_container_add(GTK_CONTAINER(curve_parent),curve);
@@ -756,7 +757,7 @@ G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 	list = OBJ_GET(widget, "widget_list");
 	if (list)
 	{
-		g_list_foreach(list,remove_widget,(gpointer)list);
+		g_list_foreach(list,remove_widget,NULL);
 		g_list_free(list);
 		list = NULL;
 	}
