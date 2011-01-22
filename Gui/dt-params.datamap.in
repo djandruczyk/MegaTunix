@@ -94,39 +94,39 @@ _tooltip=Sets the boost controller PWM frequency
 #----- SpinButtons -----------------------------------------------------------
 
 [cranking_thresh_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr
 page=1
 offset=127
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 
 [hard_revlimit_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr
 page=1
 offset=123
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 
 [launch_ctrl_revlimit_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr
 page=1
 offset=124
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 
 [shift_light_lower_thresh_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr
 page=1
 offset=125
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 
 [shift_light_upper_thresh_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr
 page=1
 offset=126
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 
 [update_rate_entry]
 keys=page,offset
@@ -144,33 +144,33 @@ page=1
 offset=122
 
 [fast_idle_temp_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list
+keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list
 offset=121
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature
 
 [fast_idle_speed_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list
 offset=125
-dl_conv_expr=x/10
-ul_conv_expr=x*10
+toecu_conv_expr=x/10
+fromecu_conv_expr=x*10
 bind_to_list=enh_idle
 
 [slow_idle_temp_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list
+keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list
 offset=124
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,enh_idle
 
 [slow_idle_speed_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list
 offset=126
-dl_conv_expr=x/10
-ul_conv_expr=x*10
+toecu_conv_expr=x/10
+fromecu_conv_expr=x*10
 bind_to_list=enh_idle
 
 [idle_tps_threshold_entry]

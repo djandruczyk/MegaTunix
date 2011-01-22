@@ -197,63 +197,63 @@ _tooltip=Enables or Disables constant baro correction in Alpha-N mode
 #----- Spinbuttons ----------------------------------------------------------
 
 [barocorr_max_adc_entry]
-keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+keys=offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
 offset=82
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression
 _tooltip=The upper limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
 [barocorr_min_adc_entry]
-keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+keys=offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
 offset=83
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression
 _tooltip=The lower limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
 [soft_revlimit_rpm_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=2
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 bind_to_list=spark_controls
 _tooltip=The soft revlimit point where only spark is retarded to try to limit engien RPM.
 
 [soft_revlimit_sparkangle_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=3
 precision=2
-dl_conv_expr=(x/(352/1000))+(284/10)
-ul_conv_expr=(x-(284/10))*(352/1000)
+toecu_conv_expr=(x/(352/1000))+(284/10)
+fromecu_conv_expr=(x-(284/10))*(352/1000)
 bind_to_list=spark_controls
 _tooltip=The spark advance to run on the soft revlimiter.
 
 [soft_revlimit_max_time_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=157
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=spark_controls
 _tooltip=The Amount of time to run on the soft limitera. If this timeout is exceeded the hard limiter will kick in, even if the hard revlimit RPM has not yet been reached.
 
 [hard_revlimit_rpm_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=6
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 _tooltip=The Hard revlimiter RPM threshold.  when this is exceeded the hard revlimit params take effect whether that be spark drop, fuel drop or both.
 
 [hard_spark_base_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=78
-dl_conv_expr=x+1
-ul_conv_expr=x-1
+toecu_conv_expr=x+1
+fromecu_conv_expr=x-1
 raw_upper=20
 bind_to_list=spark_controls,nonedis_controls,limit_spark_ctrls
 _tooltip=This is the round robin spark drop routine.  Typically you should set this to one MORE than the total number of cylinders the engine has.
@@ -287,73 +287,73 @@ offset=179
 _tooltip=This control sets the number of engine cycles at which point staging is phased in.
 
 [sec_staging_thresh_entry]
-keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
 page=3
 offset=180
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls,multi_expression
 _tooltip=This control sets the threshold where the manifold pressure needs to be exceeded along with the above staging params to enable injector staging.
 
 [sec_staging_delta_entry]
-keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
 page=3
 offset=181
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls,multi_expression
 _tooltip=This control sets the Off delta where the manifold pressure needs to drop by this amount below the above threshold before injector staging is turned off.
 
 [orfc_rpm_entry]
-keys=offset,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=71
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 raw_lower=10
 raw_upper=60
 _tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.
 
 [orfc_map_entry]
-keys=offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+keys=offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
 offset=72
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression
 _tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.  This value is in KPa.
 
 [orfc_tps_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=73
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 _tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in RAW ADC counts
 
 [orfc_clt_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,temp_dep,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,temp_dep,tooltip
 offset=182
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in Degrees (check general tab for temp scale in use )
 
 [orfc_time_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=130
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 _tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.. This value is in seconds
 
 [adv_latency_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=34
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 _tooltip=Hardware Latency Compensation (ignition latency compensator)
 

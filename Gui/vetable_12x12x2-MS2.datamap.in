@@ -17,11 +17,11 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load_1]
-keys=raw_upper,size,dl_conv_expr,ul_conv_expr,use_color,precision,tooltip
+keys=raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,precision,tooltip
 size=_S16_
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 use_color=TRUE
 precision=1
 _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -42,11 +42,11 @@ use_color=TRUE
 _tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_2]
-keys=raw_upper,size,dl_conv_expr,ul_conv_expr,use_color,precision,tooltip
+keys=raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,precision,tooltip
 size=_S16_
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 use_color=TRUE
 precision=1
 _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -160,7 +160,7 @@ data=VE2_rescale_entry,VE2_rescale_combo
 #----- Spinners -------------------------------------------------------------
 
 [VE1_curr_reqfuel_entry]
-keys=size,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision,register_as
+keys=size,offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,precision,register_as
 size=_U16_
 offset=608
 precision=3
@@ -168,8 +168,8 @@ table_num=0
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
 bind_to_list=interdep_0_ctrl
-ul_complex=TRUE
-ul_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
+fromecu_complex=TRUE
+fromecu_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
 expr_types=_ECU_VAR_,_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_
 reqfuel_1_page=0
@@ -186,16 +186,16 @@ alternate_bitmask=1
 register_as=VE1_curr_reqfuel_entry
 
 [VE2_curr_reqfuel_entry]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,precision,register_as
+keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,precision,register_as
 size=_U16_
 offset=608
 table_num=1
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
 bind_to_list=interdep_1_ctrl
-ul_complex=TRUE
+fromecu_complex=TRUE
 precision=3
-ul_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
+fromecu_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
 expr_types=_ECU_VAR_,_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_
 reqfuel_1_page=0

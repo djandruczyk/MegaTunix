@@ -503,8 +503,8 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
-	gchar * dl_conv = NULL;
-	gchar * ul_conv = NULL;
+	gchar * toecu_conv = NULL;
+	gchar * fromecu_conv = NULL;
 	gint precision = 0;
 	gchar ** vector = NULL;
 	guint i = 0;

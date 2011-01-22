@@ -31,8 +31,8 @@ struct _MultiExpr
 	gint lower_limit;	/* Lower limit */	
 	gint upper_limit;	/* Upper limit */
 	gchar *lookuptable;	/* textual lookuptable name */
-	gchar *dl_conv_expr;	/* download (to ecu) conv expression */
-	gchar *ul_conv_expr;	/* upload (from ecu) conv expression */
+	gchar *toecu_conv_expr;	/* download (to ecu) conv expression */
+	gchar *fromecu_conv_expr;	/* upload (from ecu) conv expression */
 	void *dl_eval;		/* evaluator for download */
 	void *ul_eval;		/* evalutator for upload */
 };
@@ -47,8 +47,8 @@ struct _MultiExpr
 struct _MultiSource
 {
 	gchar *source;		/* name of rtvars datasource */
-	gchar *ul_conv_expr;	/* conversion expression ms units to real */
-	gchar *dl_conv_expr;	/* conversion expression ms units to real */
+	gchar *fromecu_conv_expr;	/* conversion expression ms units to real */
+	gchar *toecu_conv_expr;	/* conversion expression ms units to real */
 	void * ul_eval;		/* evaluator pointer */
 	void * dl_eval;		/* evaluator pointer */
 	gchar * suffix;		/* textual suffix for this evaluator*/

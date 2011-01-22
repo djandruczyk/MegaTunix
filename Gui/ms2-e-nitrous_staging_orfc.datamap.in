@@ -241,12 +241,12 @@ raw_upper=30
 _tooltip=See MS-2 Extra Manuals
 
 [secondary_enrichment_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
 offset=741
 size=_U16_
 raw_upper=10000
-dl_conv_expr=x*1000
-ul_conv_expr=x/1000
+toecu_conv_expr=x*1000
+fromecu_conv_expr=x/1000
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
@@ -287,35 +287,35 @@ raw_upper=15000
 _tooltip=See MS-2 Extra Manuals
 
 [orfc_map_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,size,raw_upper,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,size,raw_upper,tooltip
 page=1
 offset=1007
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=4000
 precision=1
 _tooltip=See MS-2 Extra Manuals
 
 [orfc_tps_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,size,raw_upper,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,size,raw_upper,tooltip
 page=1
 offset=1009
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=1000
 precision=1
 _tooltip=See MS-2 Extra Manuals
 
 [orfc_clt_entry]
-keys=page,temp_dep,offset,dl_conv_expr,ul_conv_expr,size,raw_lower,raw_upper,bind_to_list,tooltip
+keys=page,temp_dep,offset,toecu_conv_expr,fromecu_conv_expr,size,raw_lower,raw_upper,bind_to_list,tooltip
 page=1
 temp_dep=TRUE
 offset=1011
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_lower=-400
 raw_upper=4500
 precision=1
@@ -323,11 +323,11 @@ bind_to_list=temperature
 _tooltip=See MS-2 Extra Manuals
 
 [orfc_delay_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=1
 offset=1013
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=See MS-2 Extra Manuals
 
@@ -348,25 +348,25 @@ raw_upper=25000
 _tooltip=See MS-2 Extra Manuals
 
 [no2_enable_clt_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,precision,tooltip
 offset=714
 size=_S16_
 raw_lower=-400
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=See MS-2 Extra Manuals
 
 [no2_enable_tps_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
 size=_S16_
 offset=712
 raw_upper=1000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=See MS-2 Extra Manuals
 
@@ -379,50 +379,50 @@ raw_upper=25000
 _tooltip=See MS-2 Extra Manuals
 
 [pw_at_no2_min_rpm_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
 size=_U16_
 offset=718
-dl_conv_expr=x/0.000666
-ul_conv_expr=x*0.000666
+toecu_conv_expr=x/0.000666
+fromecu_conv_expr=x*0.000666
 raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
 [pw_at_no2_max_rpm_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
 size=_U16_
 offset=720
-dl_conv_expr=x/0.000666
-ul_conv_expr=x*0.000666
+toecu_conv_expr=x/0.000666
+fromecu_conv_expr=x*0.000666
 raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
 [n2o_retard_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,bind_to_list,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,bind_to_list,tooltip
 size=_S16_
 offset=716
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=500
 precision=1
 bind_to_list=ign
 _tooltip=See MS-2 Extra Manuals
 
 [n2o_launch_delay_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
 offset=722
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 precision=2
 bind_to_list=launch_control
 _tooltip=See MS-2 Extra Manuals
 
 [n2o_flatshift_delay_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
 offset=723
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 precision=2
 bind_to_list=flatshift
 _tooltip=See MS-2 Extra Manuals
@@ -444,41 +444,41 @@ raw_upper=25000
 _tooltip=See MS-2 Extra Manuals
 
 [stage2_delay_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,precision,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
 offset=729
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 precision=2
 bind_to_list=flatshift
 _tooltip=See MS-2 Extra Manuals
 
 [stage2_retard_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,bind_to_list,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,bind_to_list,tooltip
 size=_S16_
 offset=730
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=500
 precision=1
 bind_to_list=ign
 _tooltip=See MS-2 Extra Manuals
 
 [stage2_pw_at_no2_min_rpm_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
 size=_U16_
 offset=732
-dl_conv_expr=x/0.000666
-ul_conv_expr=x*0.000666
+toecu_conv_expr=x/0.000666
+fromecu_conv_expr=x*0.000666
 raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
 [stage2_pw_at_no2_max_rpm_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
 size=_U16_
 offset=734
-dl_conv_expr=x/0.000666
-ul_conv_expr=x*0.000666
+toecu_conv_expr=x/0.000666
+fromecu_conv_expr=x*0.000666
 raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals

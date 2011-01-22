@@ -145,11 +145,11 @@ _tooltip=Sets the Number of MAP sampling events
 #----- Entries ----------------------------------------------------------------
 
 [crank_time_mask_entry]
-keys=precision,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=precision,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=971
 precision=1
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 _tooltip=See MS2-Extra Manuals
 
 [crank_percent_mask_entry]
@@ -159,11 +159,11 @@ raw_upper=90
 _tooltip=See MS2-Extra Manuals
 
 [cam_time_mask_entry]
-keys=precision,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=precision,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=982
 precision=1
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 _tooltip=See MS2-Extra Manuals
 
 [cam_percent_mask_entry]
@@ -173,20 +173,20 @@ raw_upper=90
 _tooltip=See MS2-Extra Manuals
 
 [cam_time_period_entry]
-keys=size,dl_conv_expr,ul_conv_expr,raw_upper,offset,tooltip
+keys=size,toecu_conv_expr,fromecu_conv_expr,raw_upper,offset,tooltip
 offset=1
 size=_U16_
 raw_upper=7500
-dl_conv_expr=x/0.66667
-ul_conv_expr=x*0.66667
+toecu_conv_expr=x/0.66667
+fromecu_conv_expr=x*0.66667
 _tooltip=See MS2-Extra Manuals
 
 [edis_time_mask_entry]
-keys=precision,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=precision,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=971
 precision=1
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 _tooltip=See MS2-Extra Manuals
 
 [edis_percent_mask_entry]
@@ -242,13 +242,13 @@ raw_upper=50
 _tooltip=How long to sample the MAP sensor looking for the lowest value.
 
 [mapsample_angle_entry]
-keys=offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=584
 size=_S16_
 raw_lower=-3600
 raw_upper=3600
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=See The angle when to start MAP sampling
 
 [noise_rpm_entry_0]
@@ -280,42 +280,42 @@ size=_U16_
 _tooltip=See MS2-Extra Manuals
 
 [noise_period_entry_0]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=2
 offset=974
 size=_U16_
-dl_conv_expr=x/0.6667
-ul_conv_expr=x*0.6667
+toecu_conv_expr=x/0.6667
+fromecu_conv_expr=x*0.6667
 raw_upper=64449
 _tooltip=See MS2-Extra Manuals
 
 [noise_period_entry_1]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=2
 offset=976
 size=_U16_
-dl_conv_expr=x/0.6667
-ul_conv_expr=x*0.6667
+toecu_conv_expr=x/0.6667
+fromecu_conv_expr=x*0.6667
 raw_upper=64449
 _tooltip=See MS2-Extra Manuals
 
 [noise_period_entry_2]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=2
 offset=978
 size=_U16_
-dl_conv_expr=x/0.6667
-ul_conv_expr=x*0.6667
+toecu_conv_expr=x/0.6667
+fromecu_conv_expr=x*0.6667
 raw_upper=64449
 _tooltip=See MS2-Extra Manuals
 
 [noise_period_entry_3]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=2
 offset=980
 size=_U16_
-dl_conv_expr=x/0.6667
-ul_conv_expr=x*0.6667
+toecu_conv_expr=x/0.6667
+fromecu_conv_expr=x*0.6667
 raw_upper=64449
 _tooltip=See MS2-Extra Manuals
 

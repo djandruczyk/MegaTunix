@@ -359,10 +359,10 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 
 		if (!evaluator)
 		{
-			evaluator = evaluator_create_f(DATA_GET(object,"dl_conv_expr"));
+			evaluator = evaluator_create_f(DATA_GET(object,"toecu_conv_expr"));
 			if (!evaluator)
 			{
-				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(object,"dl_conv_expr")));
+				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(object,"toecu_conv_expr")));
 				DATA_SET_FULL(object,"dl_evaluator",(gpointer)evaluator,evaluator_destroy_f);
 			}
 		}
@@ -540,10 +540,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 				evaluator =(void *)DATA_GET(object,"ul_evaluator");
 				if (!evaluator) /* Not created yet */
 				{
-					expr = DATA_GET(object,"ul_conv_expr");
+					expr = DATA_GET(object,"fromecu_conv_expr");
 					if (expr == NULL)
 					{
-						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_name")));
+						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_name")));
 						exit (-3);
 					}
 					evaluator = evaluator_create_f(expr);

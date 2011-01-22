@@ -108,14 +108,14 @@ _tooltip=See http://www.megamanual.com/mt28.htm#ia
 #----- Entries ----------------------------------------------------------------
 
 [trigger_offset_entry]
-keys=precision,raw_lower,raw_upper,offset,size,dl_conv_expr,ul_conv_expr,tooltip
+keys=precision,raw_lower,raw_upper,offset,size,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=42
 size=_S16_
 precision=2
 raw_lower=-3590
 raw_upper=3590
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 _tooltip=Trigger Offset (deg) (adv_offset in the code) is the advance before (or after) top dead center (BTDC) that the engine gets in it's signal from the engine's variable reluctor (VR) or Hall sensor. In many cases, this will be used as the 'base timing' for cranking as well as if the module loses its connection the ECU.
 
 [skip_pulses_entry]
@@ -143,11 +143,11 @@ raw_upper=50
 _tooltip=gamma (γ) should be < 50% (default is 10%). The gamma gain term helps to track changes with less sensitivity to input data and helps to maintain consistency between the velocity and acceleration variables.  A typical value is around 10%. 
 
 [time_mask_entry]
-keys=precision,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=precision,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=971
 precision=1
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 _tooltip=Time Mask time (milliseconds) after tach input capture during which further interrupts are inhibited to mask coil ring or VR noise.
 
 [percent_mask_entry]
@@ -198,14 +198,14 @@ require_reboot=TRUE
 _tooltip=Delay Teeth (Delay_Teeth): Number of teeth to delay after 1st tooth after the missing teeth before 1st tach synch declared. You get synch as soon as you detect "first real tooth after the missing tooth". If that tooth is at TDC when it is detected, then there is 0 delay. If TDC doesn't occur until the next tooth is detected, then there is a delay of one tooth, and so forth.
 
 [offset_advance_entry]
-keys=precision,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=precision,offset,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=620
 size=_S16_
 precision=1
 raw_lower=-3500
 raw_upper=3500
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 _tooltip=See http://www.megamanual.com/mt28.htm#ia Offset (advance) for Output #2
 
 [mat_retard_lo_entry]

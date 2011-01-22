@@ -34,8 +34,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gint i = 0;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
-	gchar * dl_conv = NULL;
-	gchar * ul_conv = NULL;
+	gchar * toecu_conv = NULL;
+	gchar * fromecu_conv = NULL;
 	gchar * range = NULL;
 	gint bitval = 0;
 	gint width = 0;
@@ -80,8 +80,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		size = (DataSize)DATA_GET(object,"size");
 		lower = DATA_GET(object,"real_lower");
 		upper = DATA_GET(object,"real_upper");
-		dl_conv = DATA_GET(object,"dl_conv_expr");
-		ul_conv = DATA_GET(object,"ul_conv_expr");
+		toecu_conv = DATA_GET(object,"toecu_conv_expr");
+		fromecu_conv = DATA_GET(object,"fromecu_conv_expr");
 		precision = (GINT) DATA_GET(object,"precision");
 		bitval = (GINT) DATA_GET(object,"offset");
 		if ((!lower) && (!upper))
@@ -97,8 +97,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		gtk_list_store_set(store,&iter,
 				UO_CHOICE_COL,name,
 				UO_BITVAL_COL,bitval,
-				UO_DL_CONV_COL,dl_conv,
-				UO_UL_CONV_COL,ul_conv,
+				UO_TOECU_CONV_COL,toecu_conv,
+				UO_FROMECU_CONV_COL,fromecu_conv,
 				UO_LOWER_COL,lower,
 				UO_UPPER_COL,upper,
 				UO_RANGE_COL,range,
@@ -146,8 +146,8 @@ void update_ms2_user_outputs(GtkWidget *widget)
 	gint tmpi = 0;
 	gint t_bitval = 0;
 	gboolean valid = FALSE;
-	gchar * dl_conv = NULL;
-	gchar * ul_conv = NULL;
+	gchar * toecu_conv = NULL;
+	gchar * fromecu_conv = NULL;
 	gchar *lower = NULL;
 	gchar *upper = NULL;
 	gchar *range = NULL;
@@ -169,7 +169,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 		{
 
 			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_TOECU_CONV_COL,&toecu_conv,UO_FROMECU_CONV_COL,&fromecu_conv,-1);
 			tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
 			if (tmpbuf)
 				tmpwidget = lookup_widget_f(tmpbuf);
@@ -181,9 +181,9 @@ void update_ms2_user_outputs(GtkWidget *widget)
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
 				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-				if (dl_conv)
+				if (toecu_conv)
 				{
-					eval = evaluator_create_f(dl_conv);
+					eval = evaluator_create_f(toecu_conv);
 					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
@@ -210,16 +210,16 @@ void update_ms2_user_outputs(GtkWidget *widget)
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
 				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-				if (ul_conv)
+				if (fromecu_conv)
 				{
-					eval = evaluator_create_f(ul_conv);
+					eval = evaluator_create_f(fromecu_conv);
 					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"toecu_conv_expr",toecu_conv);
+				OBJ_SET(tmpwidget,"fromecu_conv_expr",fromecu_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("update widgets setting thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				/*printf ("update widgets setting thresh widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
 			tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
@@ -228,9 +228,9 @@ void update_ms2_user_outputs(GtkWidget *widget)
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
 				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-				if (dl_conv)
+				if (toecu_conv)
 				{
-					eval = evaluator_create_f(dl_conv);
+					eval = evaluator_create_f(toecu_conv);
 					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
@@ -257,23 +257,23 @@ void update_ms2_user_outputs(GtkWidget *widget)
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
 				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-				if (ul_conv)
+				if (fromecu_conv)
 				{
-					eval = evaluator_create_f(ul_conv);
+					eval = evaluator_create_f(fromecu_conv);
 					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"toecu_conv_expr",toecu_conv);
+				OBJ_SET(tmpwidget,"fromecu_conv_expr",fromecu_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("update widgets setting hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				/*printf ("update widgets setting hyst widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
 			g_free(lower);
 			g_free(upper);
 			g_free(range);
-			g_free(dl_conv);
-			g_free(ul_conv);
+			g_free(toecu_conv);
+			g_free(fromecu_conv);
 		}
 		valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
 		i++;

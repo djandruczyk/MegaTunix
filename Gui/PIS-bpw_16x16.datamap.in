@@ -135,7 +135,7 @@ rescaler_frame=BPW_rescale_frame
 #----- Load Entries (MAP/TPS) -----------------------------------------------
 
 [BPW_load_entry]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,dl_conv_expr,ul_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
 page=0
 offset=38
 dl_type=_IMMEDIATE_
@@ -143,19 +143,19 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=350
-dl_conv_expr=x/1
-ul_conv_expr=x*1
+toecu_conv_expr=x/1
+fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The Manifold Absolute Pressure (MAP) bins in combination with the RPM bins on the bottom of the Base Pulse Width (BPW) table define the vertexes (points on the BPW map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- RPM Entries ---------------------------------------------------------
 
 [BPW_rpm_entry]
-keys=page,dl_conv_expr,ul_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=6
-dl_conv_expr=x/1
-ul_conv_expr=x*1
+toecu_conv_expr=x/1
+fromecu_conv_expr=x*1
 size=_U16_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
@@ -167,7 +167,7 @@ _tooltip=The RPM bins in combination with the Manifold Absolute Pressure (MAP) b
 #----- BPW-Table Entries -----------------------------------------------------
 
 [BPW_entry]
-keys=page,dl_type,handler,raw_lower,raw_upper,use_color,tooltip,size,ul_conv_expr,dl_conv_expr,precision
+keys=page,dl_type,handler,raw_lower,raw_upper,use_color,tooltip,size,fromecu_conv_expr,toecu_conv_expr,precision
 page=0
 offset=1602
 dl_type=_IMMEDIATE_
@@ -175,8 +175,8 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1320
 size=_U16_
-dl_conv_expr=x*66
-ul_conv_expr=x/66
+toecu_conv_expr=x*66
+fromecu_conv_expr=x/66
 precision=2
 use_color=TRUE
 _tooltip=The Base Pulse Width (BPW) Entries control how much fuel is injected into the engine. They refer to the fuelling portion and exclude the open time which is derived from the opening voltage correction table. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.

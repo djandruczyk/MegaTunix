@@ -89,7 +89,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		{
 			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
 			key_list = OBJ_GET(widget,"multi_expr_keys");
-			expr_list = OBJ_GET(widget,"dl_conv_exprs");
+			expr_list = OBJ_GET(widget,"toecu_conv_exprs");
 			keys = g_strsplit(key_list,",",-1);
 			exprs = g_strsplit(expr_list,",",-1);
 			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(exprs));i++)
@@ -148,7 +148,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	else
 	{
-		conv_expr = (gchar *)OBJ_GET(widget,"dl_conv_expr");
+		conv_expr = (gchar *)OBJ_GET(widget,"toecu_conv_expr");
 		evaluator = (void *)OBJ_GET(widget,"dl_evaluator");
 
 		if ((conv_expr) && (!evaluator))
@@ -256,7 +256,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		{
 			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
 			key_list = OBJ_GET(widget,"multi_expr_keys");
-			expr_list = OBJ_GET(widget,"ul_conv_exprs");
+			expr_list = OBJ_GET(widget,"fromecu_conv_exprs");
 			keys = g_strsplit(key_list,",",-1);
 			exprs = g_strsplit(expr_list,",",-1);
 			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(exprs));i++)
@@ -316,7 +316,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	}
 	else
 	{
-		conv_expr = (gchar *)OBJ_GET(widget,"ul_conv_expr");
+		conv_expr = (gchar *)OBJ_GET(widget,"fromecu_conv_expr");
 		evaluator = (void *)OBJ_GET(widget,"ul_evaluator");
 		if ((conv_expr) && (!evaluator)) 	/* if no evaluator create one */
 		{

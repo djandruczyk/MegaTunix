@@ -176,58 +176,58 @@ bind_to_list=boost_controls
 _tooltip=How often the boost algorithm calculations are run. 
 
 [bc_pgain_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=16
 precision=1
-dl_conv_expr=x/(3922/10000)
-ul_conv_expr=x*(3922/10000)
+toecu_conv_expr=x/(3922/10000)
+fromecu_conv_expr=x*(3922/10000)
 bind_to_list=boost_controls
 _tooltip=This is the Proportional Gain used in the PD controller algorithm
 
 [bc_dgain_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=17
 precision=1
-dl_conv_expr=x/(3922/10000)
-ul_conv_expr=x*(3922/10000)
+toecu_conv_expr=x/(3922/10000)
+fromecu_conv_expr=x*(3922/10000)
 bind_to_list=boost_controls
 _tooltip=This is the Differential Gain used in the PD controller algorithm
 
 [bc_closed_loop_limit_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
 offset=125
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,boost_controls
 _tooltip=If boost deviates more than this limit from the target as defined by the boost kpa target tables (1 or 3) we wll switch to open loop mode and use the dutycycle table 2.
 
 [bc_ambient_pressure_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
 offset=185
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,boost_controls
 _tooltip=Typical ambient pressure for your location.  Used by boost control to accurate calculate boost levels.
 
 [bc_overboost_cutoff_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
 offset=44
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,boost_controls
 _tooltip=OverBoost cutoff at which point fuel is shutdown completely to avoid engine destruction.
 
 [bc_iat_start_temp_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 offset=135
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=boost_controls,temperature
 _tooltip=If intake air temp exceeds this temperature AND the Throtle position exceeds the TPS setpoint below the ECU will start reducing boost based on the value of the next control. 
@@ -246,99 +246,99 @@ bind_to_list=boost_controls
 _tooltip=If the throttle position is higher than this value (measured in RAW ADC counts) then the boost_iat controls take effect.  If TPS is below this threshold those controls have NO EFFECT.
 
 [bc_remove_when_knock_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=107
 precision=2
 raw_upper=136
 # MT INI is wrong,  these controls are PSI
 #multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-#dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-#ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+#toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+#fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 #bind_to_list=multi_expression,knock_controls
-dl_conv_expr=x/(147/1000)
-ul_conv_expr=x*(147/1000)
+toecu_conv_expr=x/(147/1000)
+fromecu_conv_expr=x*(147/1000)
 bind_to_list=boost_controls,knock_controls
 _tooltip=When the knock controller is enabled and knock is detected, boost will be reduced by this amount in psi
 
 [bc_max_remove_when_knock_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=108
 precision=2
 # MT INI is wrong,  these controls are PSI
 #multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-#dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-#ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+#toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+#fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 #bind_to_list=multi_expression,knock_controls
-dl_conv_expr=x/(147/1000)
-ul_conv_expr=x*(147/1000)
+toecu_conv_expr=x/(147/1000)
+fromecu_conv_expr=x*(147/1000)
 raw_upper=136
 bind_to_list=boost_controls,knock_controls
 _tooltip=When knock is sustained, the controller will pull out this much boost at most in PSI.
 
 [ignore_knocks_above_rpm_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=53
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 raw_upper=120
 bind_to_list=knock_controls
 _tooltip=When RPM is ABOVE this threshold Knock detection is disabled
 
 [ignore_knocks_below_rpm_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=54
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 raw_upper=120
 bind_to_list=knock_controls
 _tooltip=When RPM is BELOW this threshold Knock detection is disabled
 
 [ignore_knocks_above_map_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
 offset=55
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,knock_controls
 _tooltip=When MAP is ABOVE this threshold Knock detection is disabled
 
 [first_knock_retard_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=56
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 raw_upper=28
 bind_to_list=knock_controls,spark_controls
 _tooltip=When knock is first detected, retard timnig by this many degrees.
 
 [subsequent_knock_retard_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=57
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 raw_upper=28
 bind_to_list=knock_controls,spark_controls
 _tooltip=When knock is sustained, retard timing by this many degrees for each knock input.
 
 [max_retard_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=59
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 raw_upper=85
 bind_to_list=knock_controls,spark_controls
 _tooltip=The maximum amount of timing to pull out when knocking is detected.
 
 [advance_when_no_knock_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=58
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 raw_upper=56
 bind_to_list=knock_controls,spark_controls
 _tooltip=The Amount of timing to try and put back in when knocking has ceased.  The controller will wait a small interval between trying to re-add timing back in. Having this set to high can lead to oscillation, too low can cause timing to be pulled out and take a LONG time for it to return to normal.
@@ -352,19 +352,19 @@ bind_to_list=knock_controls,spark_controls
 _tooltip=This wait time ties to the above control.  After knocking has ceased thecontrol will attempt to advance timing backby the amount above in steps separated by this time interval in seconds.
 
 [obp_base_sparks_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=78
-dl_conv_expr=x-1
-ul_conv_expr=x+1
+toecu_conv_expr=x-1
+fromecu_conv_expr=x+1
 raw_upper=20
 bind_to_list=obp_spark_ctrls,boost_controls,spark_controls,nonedis_controls
 _tooltip=When overboost protection is triggered, this and the next value are used to determine how much sparkdrop to do.
 
 [obp_cut_sparks_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
 offset=84
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 raw_upper=20
 bind_to_list=obp_spark_ctrls,boost_controls,spark_controls,nonedis_controls
 _tooltip=When overboost protction is triggered, this and the previous value control how many sparks to drop.  See the Staging/Revlimiter/MISC tab for more info.

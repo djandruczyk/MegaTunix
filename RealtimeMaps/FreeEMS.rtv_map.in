@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=5
+minor=6
 
 [realtime_map]
 persona=FreeEMS
@@ -21,7 +21,7 @@ _tooltip="HR Clock" is a High resolution clock recorded to the logfile by this p
 log_by_default=TRUE
 
 [derived_1]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,temp_dep,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,temp_dep,precision,log_by_default
 size=_U16_
 internal_names=IAT
 _dlog_gui_name=Intake Air Temp
@@ -29,15 +29,15 @@ dlog_field_name=IAT
 offset=0
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 temp_dep=TRUE
 precision=2
 _tooltip="IAT" is the Intake Air temp in the current MtX units
 log_by_default=TRUE
 
 [derived_2]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,temp_dep,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,temp_dep,precision,log_by_default
 size=_U16_
 internal_names=CHT,CLT
 _dlog_gui_name=Coolant/Head Temp
@@ -45,15 +45,15 @@ dlog_field_name=CHT/CLT
 offset=2
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 temp_dep=TRUE
 precision=2
 _tooltip="CHT/CLT" is the Cyl head and/or coolant temp in the current MtX units
 log_by_default=TRUE
 
 [derived_3]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=TPS
 _dlog_gui_name=Throttle Pos.
@@ -61,14 +61,14 @@ dlog_field_name=TPS
 offset=4
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*640
-ul_conv_expr=x/640
+toecu_conv_expr=x*640
+fromecu_conv_expr=x/640
 precision=2
 _tooltip="TPS" is the Throttle position sensor value in %
 log_by_default=TRUE
 
 [derived_4]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=EGO,LAMBDA
 _dlog_gui_name=Lambda
@@ -76,14 +76,14 @@ dlog_field_name=EGO
 offset=6
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*32768
-ul_conv_expr=x/32768
+toecu_conv_expr=x*32768
+fromecu_conv_expr=x/32768
 precision=3
 _tooltip="EGO" is the EGO lambda value, 0-2
 log_by_default=TRUE
 
 [derived_5]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=MAP
 _dlog_gui_name=Manifold Pressure
@@ -91,14 +91,14 @@ dlog_field_name=MAP
 offset=8
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 precision=2
 _tooltip="MAP" is the Manifold absolute pressure in kPa
 log_by_default=TRUE
 
 [derived_6]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=AAP
 _dlog_gui_name=Atmospheric Pressure
@@ -106,14 +106,14 @@ dlog_field_name=AAP
 offset=10
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 precision=2
 _tooltip="AAP" is the Atmospheric pressure in kPa
 log_by_default=TRUE
 
 [derived_7]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=BRV
 _dlog_gui_name=Batt. Volts
@@ -121,14 +121,14 @@ dlog_field_name=BRV
 offset=12
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1000
-ul_conv_expr=x/1000
+toecu_conv_expr=x*1000
+fromecu_conv_expr=x/1000
 precision=3
 _tooltip="BRV" is the Battery Reference Voltage
 log_by_default=TRUE
 
 [derived_8]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,temp_dep,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,temp_dep,log_by_default
 size=_U16_
 internal_names=MAT
 _dlog_gui_name=Manifold Air Temp
@@ -136,15 +136,15 @@ dlog_field_name=MAT
 offset=14
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 precision=2
 temp_dep=TRUE
 _tooltip="MAT" is the Manifold Air Temp in MtX units
 log_by_default=TRUE
 
 [derived_9]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=EGO2,LAMBDA2
 _dlog_gui_name=Lambda2
@@ -152,14 +152,14 @@ dlog_field_name=EGO2
 offset=16
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*32768
-ul_conv_expr=x/32768
+toecu_conv_expr=x*32768
+fromecu_conv_expr=x/32768
 precision=2
 _tooltip="EGO2" is the secondary EGO sensor lambda reading
 log_by_default=TRUE
 
 [derived_10]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=IAP
 _dlog_gui_name=Intercooler Air Pressure
@@ -167,14 +167,14 @@ dlog_field_name=IAP
 offset=18
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 precision=2
 _tooltip="IAP" is the intercooler absolute pressure in kPa
 log_by_default=TRUE
 
 [derived_11]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=MAF
 _dlog_gui_name=Mass AirFlow
@@ -182,14 +182,14 @@ dlog_field_name=MAF
 offset=20
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="MAF" is the MAF sensor output, raw 0-65535
 log_by_default=TRUE
 
 [derived_12]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=DMAP
 _dlog_gui_name=1st Deriv MAP
@@ -197,14 +197,14 @@ dlog_field_name=DMAP
 offset=22
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="DMAP" is the Delta MAP kPA/second or similar
 log_by_default=TRUE
 
 [derived_13]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=DTPS
 _dlog_gui_name=1st Deriv TPS
@@ -212,14 +212,14 @@ dlog_field_name=DTPS
 offset=24
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="DTPS" is the Delta TPS %/second or similar
 log_by_default=TRUE
 
 [derived_14]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=RPM
 _dlog_gui_name=RPM
@@ -227,14 +227,14 @@ dlog_field_name=RPM
 offset=26
 real_lower=0
 real_upper=65535
-dl_conv_expr=x+32767.5
-ul_conv_expr=x-32767.5
+toecu_conv_expr=x+32767.5
+fromecu_conv_expr=x-32767.5
 precision=1
 _tooltip="RPM" is the Engine RPM 
 log_by_default=TRUE
 
 [derived_15]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=DRPM
 _dlog_gui_name=1st deriv RPM
@@ -242,14 +242,14 @@ dlog_field_name=DRPM
 offset=28
 real_lower=0
 real_upper=65535
-dl_conv_expr=x+32767.5
-ul_conv_expr=x-32767.5
+toecu_conv_expr=x+32767.5
+fromecu_conv_expr=x-32767.5
 precision=1
 _tooltip="DRPM" is the Delta Engine RPM
 log_by_default=TRUE
 
 [derived_16]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=DDRPM
 _dlog_gui_name=2nd deriv RPM
@@ -257,14 +257,14 @@ dlog_field_name=DDRPM
 offset=30
 real_lower=0
 real_upper=65535
-dl_conv_expr=x+32767.5
-ul_conv_expr=x-32767.5
+toecu_conv_expr=x+32767.5
+fromecu_conv_expr=x-32767.5
 precision=1
 _tooltip="DDRPM" is the Delta Delta Engine RPM
 log_by_default=TRUE
 
 [derived_17]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=LoadMain
 _dlog_gui_name=LoadMain
@@ -272,14 +272,14 @@ dlog_field_name=LoadMain
 offset=32
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=1
 _tooltip="LoadMain" is the configurable unit of engine load
 log_by_default=TRUE
 
 [derived_18]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=VEMain
 _dlog_gui_name=VEMain
@@ -287,14 +287,14 @@ dlog_field_name=VEMain
 offset=34
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*512
-ul_conv_expr=x/512
+toecu_conv_expr=x*512
+fromecu_conv_expr=x/512
 precision=3
 _tooltip="VEMain" is the current VE in %
 log_by_default=TRUE
 
 [derived_19]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=LambdaTgt
 _dlog_gui_name=Lambda Tgt
@@ -302,14 +302,14 @@ dlog_field_name=LambdaTgt
 offset=36
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*32768
-ul_conv_expr=x/32768
+toecu_conv_expr=x*32768
+fromecu_conv_expr=x/32768
 precision=3
 _tooltip="Lambda" is the lambda we are aiming for, maybe, fred's not clear
 log_by_default=TRUE
 
 [derived_20]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=AirFlow
 _dlog_gui_name=AirFlow
@@ -317,14 +317,14 @@ dlog_field_name=AirFlow
 offset=38
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="AirFlow" is the Top half of the equation
 log_by_default=TRUE
 
 [derived_21]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=DensityAndFuel
 _dlog_gui_name=DensityAndFuel
@@ -332,14 +332,14 @@ dlog_field_name=DensityAndFuel
 offset=40
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="DensityAndFuel" is the Bottom half of the equation
 log_by_default=TRUE
 
 [derived_22]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=BasePW
 _dlog_gui_name=BasePW
@@ -347,14 +347,14 @@ dlog_field_name=BasePW
 offset=42
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1250
-ul_conv_expr=x/1250
+toecu_conv_expr=x*1250
+fromecu_conv_expr=x/1250
 precision=3
 _tooltip="BasePW" is the raw PW before corrections
 log_by_default=TRUE
 
 [derived_23]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=ETE
 _dlog_gui_name=Engine Temp Enrich
@@ -362,14 +362,14 @@ dlog_field_name=ETE
 offset=44
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1250
-ul_conv_expr=x/1250
+toecu_conv_expr=x*1250
+fromecu_conv_expr=x/1250
 precision=3
 _tooltip="ETE" is the additional PW for ETE (Engine Temp Enrich)  correction
 log_by_default=TRUE
 
 [derived_24]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_S16_
 internal_names=TFCTotal
 _dlog_gui_name=Transient Fuel Total
@@ -377,14 +377,14 @@ dlog_field_name=TFCTotal
 offset=46
 real_lower=-32767
 real_upper=32768
-dl_conv_expr=x*1250
-ul_conv_expr=x/1250
+toecu_conv_expr=x*1250
+fromecu_conv_expr=x/1250
 precision=3
 _tooltip="TFCTotal" is the transient fuel correction in PW
 log_by_default=TRUE
 
 [derived_25]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=EffectivePW
 _dlog_gui_name=Actual PW
@@ -392,14 +392,14 @@ dlog_field_name=EffectivePW
 offset=48
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1250
-ul_conv_expr=x/1250
+toecu_conv_expr=x*1250
+fromecu_conv_expr=x/1250
 precision=3
 _tooltip="EffectivePW" is the actual fuel PW delivered in mS.
 log_by_default=TRUE
 
 [derived_26]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=IDT
 _dlog_gui_name=Min PW
@@ -407,14 +407,14 @@ dlog_field_name=IDT
 offset=50
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1250
-ul_conv_expr=x/1250
+toecu_conv_expr=x*1250
+fromecu_conv_expr=x/1250
 precision=3
 _tooltip="IDT" is the minimum PW before fuel flow begins in mS
 log_by_default=TRUE
 
 [derived_27]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=RefPW
 _dlog_gui_name=RefPW
@@ -422,14 +422,14 @@ dlog_field_name=RefPW
 offset=52
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1250
-ul_conv_expr=x/1250
+toecu_conv_expr=x*1250
+fromecu_conv_expr=x/1250
 precision=3
 _tooltip="RefPW" is the reference electrical PW ???
 log_by_default=TRUE
 
 [derived_28]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=sp1
 _dlog_gui_name=sp1
@@ -437,14 +437,14 @@ dlog_field_name=sp1
 offset=54
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="sp1" is a spare output
 log_by_default=FALSE
 
 [derived_29]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=sp2
 _dlog_gui_name=sp2
@@ -452,14 +452,14 @@ dlog_field_name=sp2
 offset=56
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="sp2" is a spare output
 log_by_default=FALSE
 
 [derived_30]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=sp3,clock
 _dlog_gui_name=sp3
@@ -467,14 +467,14 @@ dlog_field_name=sp3
 offset=58
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="sp3" is a spare output
 log_by_default=FALSE
 
 [derived_31]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=sp4
 _dlog_gui_name=sp4
@@ -482,14 +482,14 @@ dlog_field_name=sp4
 offset=60
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="sp4" is a spare output
 log_by_default=FALSE
 
 [derived_32]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=sp5
 _dlog_gui_name=sp5
@@ -497,14 +497,14 @@ dlog_field_name=sp5
 offset=62
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="sp5" is a spare output
 log_by_default=FALSE
 
 [derived_33]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawIAT
 _dlog_gui_name=raw IAT
@@ -512,14 +512,14 @@ dlog_field_name=rawIAT
 offset=64
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawIAT" is raw IAT ADC value
 log_by_default=TRUE
 
 [derived_34]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawCHT,rawCLT
 _dlog_gui_name=raw CLT
@@ -527,14 +527,14 @@ dlog_field_name=rawCHT
 offset=66
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawCHT" is raw CHT/CLT ADC value
 log_by_default=TRUE
 
 [derived_35]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawTPS
 _dlog_gui_name=raw TPS
@@ -542,14 +542,14 @@ dlog_field_name=rawTPS
 offset=68
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawTPS" is raw TPS ADC value
 log_by_default=TRUE
 
 [derived_36]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawEGO
 _dlog_gui_name=raw EGO
@@ -557,14 +557,14 @@ dlog_field_name=rawEGO
 offset=70
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawEGO" is raw EGO ADC value
 log_by_default=TRUE
 
 [derived_37]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawMAP
 _dlog_gui_name=raw MAP
@@ -572,14 +572,14 @@ dlog_field_name=rawMAP
 offset=72
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawMAP" is raw MAP ADC value
 log_by_default=TRUE
 
 [derived_38]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawAAP
 _dlog_gui_name=raw AAP
@@ -587,14 +587,14 @@ dlog_field_name=rawAAP
 offset=74
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawAAP" is raw AAP ADC value
 log_by_default=TRUE
 
 [derived_39]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawBRV
 _dlog_gui_name=raw BRV
@@ -602,14 +602,14 @@ dlog_field_name=rawBRV
 offset=76
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawBRV" is raw Battery Reference Voltage ADC value
 log_by_default=TRUE
 
 [derived_40]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawMAT
 _dlog_gui_name=raw MAT
@@ -617,14 +617,14 @@ dlog_field_name=rawMAT
 offset=78
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawMAT" is raw Manifold Air Temp ADC value
 log_by_default=TRUE
 
 [derived_41]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawEGO2
 _dlog_gui_name=raw EGO2
@@ -632,14 +632,14 @@ dlog_field_name=rawEGO2
 offset=80
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawEGO2" is raw EGO2 ADC value
 log_by_default=TRUE
 
 [derived_42]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawIAP
 _dlog_gui_name=raw IAP
@@ -647,14 +647,14 @@ dlog_field_name=rawIAP
 offset=82
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawIAP" is raw IAP ADC value
 log_by_default=TRUE
 
 [derived_43]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawMAF
 _dlog_gui_name=Raw MAF value
@@ -662,14 +662,14 @@ dlog_field_name=rawMAF
 offset=84
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawMAF" is raw MAF ADC value
 log_by_default=TRUE
 
 [derived_44]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawADC3
 _dlog_gui_name=raw ADC3
@@ -677,14 +677,14 @@ dlog_field_name=rawADC3
 offset=86
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawADC3" is raw ADC3 value
 log_by_default=FALSE
 
 [derived_45]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawADC4
 _dlog_gui_name=raw ADC4
@@ -692,14 +692,14 @@ dlog_field_name=rawADC4
 offset=88
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawADC4" is raw ADC4 value
 log_by_default=FALSE
 
 [derived_46]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawADC5
 _dlog_gui_name=raw ADC5
@@ -707,14 +707,14 @@ dlog_field_name=rawADC5
 offset=90
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawADC5" is raw ADC5 value
 log_by_default=FALSE
 
 [derived_47]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawADC6
 _dlog_gui_name=raw ADC6
@@ -722,14 +722,14 @@ dlog_field_name=rawADC6
 offset=92
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawADC6" is raw ADC6 value
 log_by_default=FALSE
 
 [derived_48]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,dl_conv_expr,ul_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,toecu_conv_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=rawADC7
 _dlog_gui_name=raw ADC7
@@ -737,8 +737,8 @@ dlog_field_name=rawADC7
 offset=94
 real_lower=0
 real_upper=65535
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 precision=0
 _tooltip="rawADC7" is raw ADC7 value
 log_by_default=FALSE

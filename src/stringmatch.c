@@ -318,9 +318,9 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"depend_on",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"dl_conv_expr",
+	g_hash_table_insert(str_2_enum,"toecu_conv_expr",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"dl_conv_exprs",
+	g_hash_table_insert(str_2_enum,"toecu_conv_exprs",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"dl_type",
 			GINT_TO_POINTER(MTX_ENUM));
@@ -448,11 +448,11 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"tooltip",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"ul_complex",
+	g_hash_table_insert(str_2_enum,"fromecu_complex",
 			GINT_TO_POINTER(MTX_BOOL));
-	g_hash_table_insert(str_2_enum,"ul_conv_expr",
+	g_hash_table_insert(str_2_enum,"fromecu_conv_expr",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"ul_conv_exprs",
+	g_hash_table_insert(str_2_enum,"fromecu_conv_exprs",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"ulimit_offset",
 			GINT_TO_POINTER(MTX_INT));

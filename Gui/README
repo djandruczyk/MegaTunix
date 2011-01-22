@@ -118,17 +118,17 @@ keys themselves are not, as the string compare functions are case insensitive.
 			MSnS (NOT Extra series) and MSnEDIS, as they used a
 			different command to write ignition variables to the
 			ECU.
-	ul_complex	(bool) A Flag signaling that the upload conversion is
+	fromecu_complex	(bool) A Flag signaling that the upload conversion is
 			"complex" meaning that and extended parser is called to
 			load the data. Required strings are ul_conv_expr,
 			expr_symbols, and expr_types.  
-	dl_complex	(bool) A Flag signalling that the download conversion 
+	toecu_complex	(bool) A Flag signalling that the download conversion 
 			is "complex" (same rules as ul_complex)
-	dl_conv_expr	(string)  A string representation of a mathematical
+	toecu_conv_expr	(string)  A string representation of a mathematical
 			expression. (something like x*60)  Used when a control
 			is modified and the value needs conversion BEFORE
 			sending to the ECU.
-	ul_conv_expr	(string)  A string representation of a mathematical
+	fromecu_conv_expr	(string)  A string representation of a mathematical
 			expression. (something like x*60)  Used when reading a
 			variable FROM the ecu and converting it to a value for
 			the on-screen control. USUALLY a converse function to

@@ -21,9 +21,9 @@ use_color=TRUE
 _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
-keys=dl_conv_expr,ul_conv_expr,use_color,tooltip
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+keys=toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
@@ -194,15 +194,15 @@ offset=0
 group=vetable
 
 [curr_reqfuel_entry]
-keys=offset,precision,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr
+keys=offset,precision,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr
 offset=90
 table_num=0
 precision=1
 dl_type=_IGNORED_
 handler=_LOCKED_REQ_FUEL_
 bind_to_list=interdep_1_ctrl
-ul_complex=TRUE
-ul_conv_expr=(reqfuel_1*((injectors_1+1)/(divider_1*(alternate+1))))/10
+fromecu_complex=TRUE
+fromecu_conv_expr=(reqfuel_1*((injectors_1+1)/(divider_1*(alternate+1))))/10
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
 expr_types=_ECU_VAR_,_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_
 reqfuel_1_page=0

@@ -246,8 +246,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)),g_free);
 			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)),g_free);
-			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
-			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
+			OBJ_SET(entry,"toecu_conv_expr",firmware->te_params[table_num]->x_toecu_conv_expr);
+			OBJ_SET(entry,"fromecu_conv_expr",firmware->te_params[table_num]->x_fromecu_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -298,8 +298,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)),g_free);
 			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)),g_free);
-			OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
-			OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
+			OBJ_SET(entry,"toecu_conv_expr",firmware->te_params[table_num]->y_toecu_conv_expr);
+			OBJ_SET(entry,"fromecu_conv_expr",firmware->te_params[table_num]->y_fromecu_conv_expr);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -583,8 +583,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)),g_free);
 		OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)),g_free);
-		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->x_dl_conv_expr);
-		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->x_ul_conv_expr);
+		OBJ_SET(entry,"toecu_conv_expr",firmware->te_params[table_num]->x_toecu_conv_expr);
+		OBJ_SET(entry,"fromecu_conv_expr",firmware->te_params[table_num]->x_fromecu_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -638,8 +638,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)),g_free);
 		OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)),g_free);
-		OBJ_SET(entry,"dl_conv_expr",firmware->te_params[table_num]->y_dl_conv_expr);
-		OBJ_SET(entry,"ul_conv_expr",firmware->te_params[table_num]->y_ul_conv_expr);
+		OBJ_SET(entry,"toecu_conv_expr",firmware->te_params[table_num]->y_toecu_conv_expr);
+		OBJ_SET(entry,"fromecu_conv_expr",firmware->te_params[table_num]->y_fromecu_conv_expr);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -701,12 +701,12 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 
-	evaluator = evaluator_create_f(firmware->te_params[table_num]->x_ul_conv_expr);
+	evaluator = evaluator_create_f(firmware->te_params[table_num]->x_fromecu_conv_expr);
 	firmware->te_params[table_num]->x_2d_lower_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->x_raw_lower);
 	firmware->te_params[table_num]->x_2d_upper_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->x_raw_upper);
 	evaluator_destroy_f(evaluator);
 
-	evaluator = evaluator_create_f(firmware->te_params[table_num]->y_ul_conv_expr);
+	evaluator = evaluator_create_f(firmware->te_params[table_num]->y_fromecu_conv_expr);
 	firmware->te_params[table_num]->y_2d_lower_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->y_raw_lower);
 	firmware->te_params[table_num]->y_2d_upper_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->y_raw_upper);
 	evaluator_destroy_f(evaluator);

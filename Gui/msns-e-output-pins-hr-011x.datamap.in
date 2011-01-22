@@ -238,37 +238,37 @@ _tooltip=Enables or Disables the antilag PWM Latching
 #------ Entries ------------------------------------------------------------
 
 [shift_lower_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 offset=18
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 temp_dep=TRUE
 bind_to_list=shift_controls
 _tooltip=The lower threshold for the Shiftlight.
 
 [shift_high_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 offset=19
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 temp_dep=TRUE
 bind_to_list=shift_controls
 _tooltip=The lower threshold for the Shiftlight.
 
 [efan_ontemp_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 offset=74
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=The temp at which the cooling fan turns ON at.
 
 [efan_offtemp_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 offset=75
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=The temp at which the cooling fan turns OFF at.
@@ -280,11 +280,11 @@ offset=125
 _tooltip=The TPS value in ADC to enable AntiLag
 
 [als_timeout_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=8
 offset=129
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=The Timeout to disable in seconds
 
@@ -302,35 +302,35 @@ offset=128
 _tooltip=The Dutycycle to pulse the IAC actuator at during antilag.
 
 [als_rpm1_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=8
 offset=117
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 _tooltip=See MSnS-Extra HR Manuals
 
 [als_rpm2_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=8
 offset=118
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 _tooltip=See MSnS-Extra HR Manuals
 
 [als_rpm3_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=8
 offset=119
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 _tooltip=See MSnS-Extra HR Manuals
 
 [als_rpm4_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=8
 offset=120
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 _tooltip=See MSnS-Extra HR Manuals
 
 [als_fuel1_entry]
@@ -358,34 +358,34 @@ offset=124
 _tooltip=See MSnS-Extra HR Manuals
 
 [als_retard1_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=8
 offset=113
-ul_conv_expr=(x-156.25)*0.352
-dl_conv_expr=(x/0.352)+156.25
+fromecu_conv_expr=(x-156.25)*0.352
+toecu_conv_expr=(x/0.352)+156.25
 _tooltip=See MSnS-Extra HR Manuals
 
 [als_retard2_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=8
 offset=114
-ul_conv_expr=(x-156.25)*0.352
-dl_conv_expr=(x/0.352)+156.25
+fromecu_conv_expr=(x-156.25)*0.352
+toecu_conv_expr=(x/0.352)+156.25
 _tooltip=See MSnS-Extra HR Manuals
 
 [als_retard3_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=8
 offset=115
-ul_conv_expr=(x-156.25)*0.352
-dl_conv_expr=(x/0.352)+156.25
+fromecu_conv_expr=(x-156.25)*0.352
+toecu_conv_expr=(x/0.352)+156.25
 _tooltip=See MSnS-Extra HR Manuals
 
 [als_retard4_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=8
 offset=116
-ul_conv_expr=(x-156.25)*0.352
-dl_conv_expr=(x/0.352)+156.25
+fromecu_conv_expr=(x-156.25)*0.352
+toecu_conv_expr=(x/0.352)+156.25
 _tooltip=See MSnS-Extra HR Manuals
 

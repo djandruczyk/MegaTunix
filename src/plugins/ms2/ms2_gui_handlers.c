@@ -141,8 +141,8 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * group_2_update = NULL;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
-	gchar * dl_conv = NULL;
-	gchar * ul_conv = NULL;
+	gchar * toecu_conv = NULL;
+	gchar * fromecu_conv = NULL;
 	gint precision = 0;
 	gchar ** vector = NULL;
 	guint i = 0;
@@ -203,7 +203,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | (bitval << bitshift);
 			ms_send_to_ecu_f(canID, page, offset, size, tmp, TRUE);
 			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_TOECU_CONV_COL,&toecu_conv,UO_FROMECU_CONV_COL,&fromecu_conv,-1);
 
 			/* Send the "size" of the offset to the ecu */
 			if (OBJ_GET(widget,"size_offset"))
@@ -226,9 +226,9 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
 				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-				if (dl_conv)
+				if (toecu_conv)
 				{
-					eval = evaluator_create_f(dl_conv);
+					eval = evaluator_create_f(toecu_conv);
 					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
@@ -255,16 +255,16 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
 				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-				if (ul_conv)
+				if (fromecu_conv)
 				{
-					eval = evaluator_create_f(ul_conv);
+					eval = evaluator_create_f(fromecu_conv);
 					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"toecu_conv_expr",toecu_conv);
+				OBJ_SET(tmpwidget,"fromecu_conv_expr",fromecu_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("combo_handler thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				/*printf ("combo_handler thresh widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
 			tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
@@ -273,9 +273,9 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
 				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-				if (dl_conv)
+				if (toecu_conv)
 				{
-					eval = evaluator_create_f(dl_conv);
+					eval = evaluator_create_f(toecu_conv);
 					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
@@ -302,23 +302,23 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
 				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-				if (ul_conv)
+				if (fromecu_conv)
 				{
-					eval = evaluator_create_f(ul_conv);
+					eval = evaluator_create_f(fromecu_conv);
 					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"toecu_conv_expr",toecu_conv);
+				OBJ_SET(tmpwidget,"fromecu_conv_expr",fromecu_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("combo_handler hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				/*printf ("combo_handler hyst widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
 			g_free(lower);
 			g_free(upper);
 			g_free(range);
-			g_free(dl_conv);
-			g_free(ul_conv);
+			g_free(toecu_conv);
+			g_free(fromecu_conv);
 			return TRUE;
 			break;
 

@@ -303,9 +303,9 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		}
 		eval = NULL;
 		expr = NULL;
-		if (DATA_GET(object,"ul_conv_expr") && !(DATA_GET(object,"ul_evaluator")))
+		if (DATA_GET(object,"fromecu_conv_expr") && !(DATA_GET(object,"ul_evaluator")))
 		{
-			expr = (gchar *)DATA_GET(object,"ul_conv_expr");
+			expr = (gchar *)DATA_GET(object,"fromecu_conv_expr");
 			eval = evaluator_create(expr);
 			if (!eval)
 			{
@@ -316,9 +316,9 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		}
 		eval = NULL;
 		expr = NULL;
-		if (DATA_GET(object,"dl_conv_expr") && !(DATA_GET(object,"dl_evaluator")))
+		if (DATA_GET(object,"toecu_conv_expr") && !(DATA_GET(object,"dl_evaluator")))
 		{
-			expr = (gchar *)DATA_GET(object,"dl_conv_expr");
+			expr = (gchar *)DATA_GET(object,"toecu_conv_expr");
 			eval = evaluator_create(expr);
 			if (!eval)
 			{
@@ -336,10 +336,10 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			eval = (void *)DATA_GET(object,"ul_evaluator");
 			if (!eval)
 			{
-				expr = DATA_GET(object,"ul_conv_expr");
+				expr = DATA_GET(object,"fromecu_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
 					exit (-3);
 				}
 				eval = evaluator_create(expr);
@@ -364,10 +364,10 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			eval = (void *)DATA_GET(object,"ul_evaluator");
 			if (!eval)
 			{
-				expr = DATA_GET(object,"ul_conv_expr");
+				expr = DATA_GET(object,"fromecu_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
 					exit (-3);
 				}
 				eval = evaluator_create(expr);
