@@ -748,10 +748,16 @@ G_MODULE_EXPORT void mem_dealloc(void)
 					{
 						if (g_list_length(ecu_widgets[i][j]) > 0)
 						{
+							/*
 							printf("Deallocating widgets in  array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
 							tmpbuf = g_strdup_printf("[%i][%i]",i,j);
+							*/
+#ifdef DEBUG
 							g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
+#endif
+							/*
 							g_free(tmpbuf);
+							*/
 							g_list_free(ecu_widgets[i][j]);
 						}
 					}
@@ -1222,8 +1228,10 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
 	GtkWidget * widget = (GtkWidget *) data;
+	/*
 	printf("widget name %s pointer %p\n",glade_get_widget_name(widget),widget);
 	printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
+	*/
 
 	if (!GTK_IS_WIDGET(widget))
 	{
