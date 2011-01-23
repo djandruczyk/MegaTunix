@@ -1,4 +1,4 @@
-megatunix (0.9.24-modular_0.4) stable; urgency=low
+megatunix (0.9.24-modular-0.4) stable; urgency=low
   * Major memory leaks all throughout the code were repaired.
   * Added debug widget deallocation to  checkverify if anything is being
     double deallocated.
@@ -9,7 +9,7 @@ megatunix (0.9.24-modular_0.4) stable; urgency=low
 
  -- David Andruczyk <djandruczyk@yahoo.com>  Sat, 22 Jan 2011 21:21:08 -0500
 
-megatunix (0.9.24-modular_0.3) stable; urgency=low
+megatunix (0.9.24-modular-0.3) stable; urgency=low
   * Nasty Memory leak on datalog dumper fixed
   * JimStim tabs enhanced significantly, sweeper bugs fixed
   * Tooltips (being able to disable them) now work again
