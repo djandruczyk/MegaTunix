@@ -618,7 +618,10 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		}
 	}
 	else
+	{
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return common_handler(widget,data);
+	}
 }
 
 

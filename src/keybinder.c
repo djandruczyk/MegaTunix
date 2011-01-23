@@ -88,7 +88,6 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 					if ((tmpstr) && (g_strrstr(keys[i],"bind_to_list")!= NULL))
 					{
 						tmpstr = g_strconcat(tmpstr,",",tmpbuf,NULL);
-						g_free(DATA_GET(object,keys[i]));
 						OBJ_SET_FULL(object,
 								keys[i],
 								g_strdup(tmpstr),

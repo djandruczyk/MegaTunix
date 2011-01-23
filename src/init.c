@@ -18,6 +18,7 @@
 #include <defines.h>
 #include <enums.h>
 #include <debugging.h>
+#include <getfiles.h>
 #include <glib.h>
 #include <glade/glade.h>
 #include <glib/gstdio.h>
@@ -48,7 +49,7 @@ GdkColor white = { 0, 65535, 65535, 65535};
 extern gconstpointer *global_data;
 
 
-void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
+static void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
 /*!
  * init(void)
  * \brief Sets sane values to global variables for a clean startup of 
@@ -173,9 +174,11 @@ G_MODULE_EXPORT gboolean read_config(void)
 
 	serial_params = DATA_GET(global_data,"serial_params");
 
-	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	filename = g_build_path(PSEP,HOME(), ".MegaTunix","config", NULL);
 	args = DATA_GET(global_data,"args");
 	cfgfile = cfg_open_file(filename);
+	if (!cfgfile)
+		cfgfile = cfg_new();
 	if (cfgfile)
 	{
 		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))
@@ -356,12 +359,10 @@ G_MODULE_EXPORT void save_config(void)
 
 	g_static_mutex_lock(&mutex);
 
-	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
+	filename = g_build_path(PSEP, HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
-
 	if (!cfgfile)
 		cfgfile = cfg_new();
-
 
 	cfg_write_int(cfgfile, "Global", "major_ver", _MAJOR_);
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
@@ -550,21 +551,21 @@ G_MODULE_EXPORT void make_megasquirt_dirs(void)
 	dirname = g_build_path(PSEP, HOME(),mtx,GUI_DATA_DIR, NULL);
 	g_mkdir(dirname, S_IRWXU);
 	cleanup(dirname);
-	dirname = g_strconcat(PSEP,HOME(),mtx,GAUGES_DATA_DIR, NULL);
+	dirname = g_build_path(PSEP,HOME(),mtx,GAUGES_DATA_DIR, NULL);
 	g_mkdir(dirname, S_IRWXU);
 	cleanup(dirname);
-	dirname = g_strconcat(PSEP,HOME(),mtx,DASHES_DATA_DIR, NULL);
+	dirname = g_build_path(PSEP,HOME(),mtx,DASHES_DATA_DIR, NULL);
 	g_mkdir(dirname, S_IRWXU);
 	cleanup(dirname);
-	dirname = g_strconcat(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR, NULL);
+	dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR, NULL);
 	g_mkdir(dirname, S_IRWXU);
 	cleanup(dirname);
-	dirname = g_strconcat(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
+	dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
 	g_mkdir(dirname, S_IRWXU);
 	cleanup(dirname);
 
 #ifdef __WIN32__
-	path = g_build_path(PSEP,get_home(),"dist",INTERROGATOR_DATA_DIR,"Profiles",NULL);
+	path = g_build_path(PSEP,(gchar *)get_home(),"dist",INTERROGATOR_DATA_DIR,"Profiles",NULL);
 #else
 	path = g_build_path(PSEP,DATA_DIR,INTERROGATOR_DATA_DIR,"Profiles",NULL);
 #endif
@@ -748,16 +749,12 @@ G_MODULE_EXPORT void mem_dealloc(void)
 					{
 						if (g_list_length(ecu_widgets[i][j]) > 0)
 						{
-							/*
+#ifdef DEBUG
 							printf("Deallocating widgets in  array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
 							tmpbuf = g_strdup_printf("[%i][%i]",i,j);
-							*/
-#ifdef DEBUG
 							g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
-#endif
-							/*
 							g_free(tmpbuf);
-							*/
+#endif
 							g_list_free(ecu_widgets[i][j]);
 						}
 					}
@@ -890,7 +887,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 }
 
 
-G_MODULE_EXPORT void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
+void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 	/*printf("removing data for %s\n",g_quark_to_string(key_id));*/
 	g_dataset_remove_data(global_data,g_quark_to_string(key_id));
@@ -1228,10 +1225,10 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
 	GtkWidget * widget = (GtkWidget *) data;
-	/*
+#ifdef DEBUG
 	printf("widget name %s pointer %p\n",glade_get_widget_name(widget),widget);
 	printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
-	*/
+#endif
 
 	if (!GTK_IS_WIDGET(widget))
 	{

@@ -17,9 +17,6 @@
 #include <libxml/tree.h>
 #include <xmlbase.h>
 
-extern gint dbg_lvl;
-
-
 void generic_xml_gint_import(xmlNode *node, gpointer dest)
 {
 	gint * val = (gint *)dest;

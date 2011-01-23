@@ -86,7 +86,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Realtime Map...")));
-	filename = get_file(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
+	filename = get_file(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
 	if (!filename)
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\t File \"%s.rtv_map\" not found!!, exiting function\n",firmware->rtv_map_file));

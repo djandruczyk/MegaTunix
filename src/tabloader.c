@@ -86,8 +86,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 	while (firmware->tab_list[i])
 	{
-		glade_file = get_file(g_strconcat(GUI_DATA_DIR,PSEP,firmware->tab_list[i],NULL),g_strdup("glade"));
-		map_file = get_file(g_strconcat(GUI_DATA_DIR,PSEP,firmware->tab_confs[i],NULL),g_strdup("datamap"));
+		glade_file = get_file(g_build_path(PSEP,GUI_DATA_DIR,firmware->tab_list[i],NULL),g_strdup("glade"));
+		map_file = get_file(g_build_path(PSEP,GUI_DATA_DIR,firmware->tab_confs[i],NULL),g_strdup("datamap"));
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));

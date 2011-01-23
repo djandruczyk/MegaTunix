@@ -131,10 +131,9 @@ G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(filename);
 
 	cfgfile = cfg_open_file(filename);
-	if (!cfgfile)
-		cfgfile = cfg_new();
 
 	set_file_api_f(cfgfile,BACKUP_MAJOR_API,BACKUP_MINOR_API);
 

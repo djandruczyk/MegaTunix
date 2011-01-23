@@ -74,7 +74,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Status...")));
-	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("xml"));
+	filename = get_file(g_build_path(PSEP,RTSTATUS_DATA_DIR,firmware->status_map_file,NULL),g_strdup("xml"));
 	if (!filename)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->status_map_file));

@@ -24,7 +24,7 @@
 extern gconstpointer *global_data;
 
 
-void common_plugin_menu_setup(GladeXML *xml)
+G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 {
 	void (*ecu_plugin_menu_setup)(GladeXML *) = NULL;
 	GtkWidget *menu = NULL;

@@ -13,12 +13,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <assert.h>
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
-#include <enums.h>
-#include <keyparser.h>
 #include <ms2_plugin.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>

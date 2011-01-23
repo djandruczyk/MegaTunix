@@ -306,7 +306,7 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,x_offset,y_offset);
 		xml_name = g_strdelimit(xml_name,"\\",'/');
-		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,xml_name,NULL),NULL);
+		filename = get_file(g_build_path(PSEP,GAUGES_DATA_DIR,xml_name,NULL),NULL);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_set_size_request(gauge,width,height);
 		g_free(filename);
@@ -1184,7 +1184,7 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 	gtk_container_add(GTK_CONTAINER(widget),gauge);
 	xml_name = OBJ_GET(widget,"gaugexml");
 	if (xml_name)
-		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,xml_name,NULL),NULL);
+		filename = get_file(g_build_path(PSEP,GAUGES_DATA_DIR,xml_name,NULL),NULL);
 	if (filename)
 	{
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);

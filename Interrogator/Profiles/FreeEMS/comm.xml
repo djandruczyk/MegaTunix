@@ -127,6 +127,7 @@
 				<function>load_rt_text_pf</function>
 				<function>load_gui_tabs_pf</function>
 				<function>load_sliders_pf</function>
+				<function>setup_menu_handlers_pf</function>
 				<function>start_statuscounts_pf</function>
 				<function>populate_dlog_choices_pf</function>
 			<!--

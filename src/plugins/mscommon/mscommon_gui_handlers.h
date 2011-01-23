@@ -24,8 +24,13 @@ typedef enum
 	DECREMENT_VALUE,
 	REQFUEL_RESCALE_TABLE,
 	REQ_FUEL_POPUP,
-	LAST_STD_COMMON_BUTTON_ENUM
+	LAST_COMMON_STD_BUTTON_ENUM
 }MSCommonStdButton;
+
+typedef enum
+{
+	LAST_COMMON_TOGGLE_BUTTON_ENUM = LAST_TOGGLE_BUTTON_ENUM + 1,
+}MSCommonToggleButton;
 
 typedef enum
 {
@@ -39,7 +44,8 @@ typedef enum
 	REQ_FUEL_1,
 	REQ_FUEL_2,
 	MULTI_EXPRESSION,
-	ALT_SIMUL
+	ALT_SIMUL,
+	LAST_COMMON_BUTTON_ENUM
 }MSCommonMtxButton;
 /* Prototypes */
 gboolean common_entry_handler(GtkWidget *, gpointer);

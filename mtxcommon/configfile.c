@@ -20,6 +20,7 @@
  */
 
 #include <configfile.h>
+#include <gtk/gtk.h>
 #include <glib/gprintf.h>
 #include <stdio.h>
 #include <stdlib.h>

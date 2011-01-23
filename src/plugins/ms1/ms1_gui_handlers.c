@@ -14,7 +14,6 @@
 #include <config.h>
 #include <debugging.h>
 #include <defines.h>
-#include <enums.h>
 #include <glade/glade.h>
 #include <ms1_plugin.h>
 #include <ms1_gui_handlers.h>

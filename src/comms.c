@@ -65,6 +65,8 @@ G_MODULE_EXPORT void update_comms_status(void)
 G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
 	static GMutex *serio_mutex = NULL;
+	static Serial_Params *serial_params = NULL;
+	static Firmware_Details *firmware = NULL;
 	OutputData *output = message->payload;
 	gint res = 0;
 	gchar * err_text = NULL;
@@ -76,16 +78,20 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	WriteMode mode = MTX_CMD_WRITE;
 	gboolean retval = TRUE;
 	DBlock *block = NULL;
-	Serial_Params *serial_params;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	Firmware_Details *firmware = NULL;
 	static void (*store_new_block)(gconstpointer *) = NULL;
 	static void (*set_ecu_data)(gconstpointer *) = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	serial_params = DATA_GET(global_data,"serial_params");
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!serial_params)
+		serial_params = DATA_GET(global_data,"serial_params");
 	if (!serio_mutex)
 		serio_mutex = DATA_GET(global_data,"serio_mutex");
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(serial_params,FALSE);
+	g_return_val_if_fail(serio_mutex,FALSE);
+
 	if (!set_ecu_data)
 		get_symbol("set_ecu_data",(void*)&set_ecu_data);
 	if (!set_ecu_data)

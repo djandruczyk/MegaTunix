@@ -14,7 +14,6 @@
 #ifndef __JIMSTIM_GUI_HANDLERS_H__
 #define __JIMSTIM_GUI_HANDLERS_H__
 
-#include <enums.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 

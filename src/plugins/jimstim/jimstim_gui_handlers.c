@@ -15,6 +15,7 @@
 #include <enums.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
+#include <jimstim_gui_handlers.h>
 
 
 extern gconstpointer *global_data;

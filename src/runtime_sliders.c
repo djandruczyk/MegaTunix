@@ -90,7 +90,7 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 	}
 
 
-	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("xml"));
+	filename = get_file(g_build_path(PSEP,RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL),g_strdup("xml"));
 	LIBXML_TEST_VERSION
 		doc = xmlReadFile(filename, NULL, 0);
 	g_free(filename);
@@ -215,7 +215,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 
-	filename = get_file(g_strconcat(RTSLIDERS_DATA_DIR,PSEP,firmware->sliders_map_file,NULL),g_strdup("xml"));
+	filename = get_file(g_build_path(PSEP,RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL),g_strdup("xml"));
 	LIBXML_TEST_VERSION
 		doc = xmlReadFile(filename, NULL, 0);
 	g_free(filename);

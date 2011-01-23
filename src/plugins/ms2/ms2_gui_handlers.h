@@ -14,7 +14,7 @@
 #ifndef __MS2_GUI_HANDLERS_H__
 #define __MS2_GUI_HANDLERS_H__
 
-#include <enums.h>
+#include <../mscommon/mscommon_gui_handlers.h>
 #include <gtk/gtk.h>
 
 typedef enum
@@ -30,7 +30,7 @@ typedef enum
 
 typedef enum
 {
-	GET_CURR_TPS = LAST_STD_BUTTON_ENUM + 1
+	GET_CURR_TPS = LAST_COMMON_STD_BUTTON_ENUM + 1
 }MS2StdButton;
 
 /* Prototypes */

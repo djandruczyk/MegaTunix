@@ -14,7 +14,6 @@
 #include <config.h>
 #include <cairo/cairo.h>
 #include <debugging.h>
-#include <enums.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <math.h>
