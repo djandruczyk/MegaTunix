@@ -67,6 +67,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	static GMutex *serio_mutex = NULL;
 	static Serial_Params *serial_params = NULL;
 	static Firmware_Details *firmware = NULL;
+	static gfloat *factor = NULL;
 	OutputData *output = message->payload;
 	gint res = 0;
 	gchar * err_text = NULL;
@@ -88,9 +89,12 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		serial_params = DATA_GET(global_data,"serial_params");
 	if (!serio_mutex)
 		serio_mutex = DATA_GET(global_data,"serio_mutex");
+	if (!factor)
+		factor = DATA_GET(global_data,"sleep_correction");
 	g_return_val_if_fail(firmware,FALSE);
 	g_return_val_if_fail(serial_params,FALSE);
 	g_return_val_if_fail(serio_mutex,FALSE);
+	g_return_val_if_fail(factor,FALSE);
 
 	if (!set_ecu_data)
 		get_symbol("set_ecu_data",(void*)&set_ecu_data);
@@ -142,7 +146,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			{
 				/*			printf("Sleeping for %i usec\n", block->arg);*/
 				dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tSleeping for %i microseconds \n",block->arg));
-				g_usleep(block->arg);
+				g_usleep(*factor * block->arg);
 			}
 		}
 		else if (block->type == DATA)
@@ -168,7 +172,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 				}
 				if (firmware)
 					if (firmware->capabilities & MS2)
-						g_usleep(firmware->interchardelay*1000);
+						g_usleep(*factor * firmware->interchardelay*1000);
 			}
 		}
 	}

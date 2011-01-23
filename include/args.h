@@ -25,7 +25,8 @@ typedef struct _CmdLineArgs CmdLineArgs;
  */
 struct _CmdLineArgs
 {
-	gboolean debug;		/* Debug to console */
+	gboolean debugargs;	/* Debug arg processing to console */
+	gboolean verbose;	/* Show Version */
 	gboolean version;	/* Show Version */
 	gboolean be_quiet;	/* No error popups */
 	gboolean autolog_dump;	/* Automatically dump full logs periodically */

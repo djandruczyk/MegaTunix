@@ -49,9 +49,10 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	args = init_args();
 	GOptionEntry entries[] =
 	{
-		{"debugargs",'d',0,G_OPTION_ARG_NONE,&args->debug,"Dump argument debugging info to console",NULL},
+		{"verbose",'v',0,G_OPTION_ARG_NONE,&args->verbose,"Make MegaTunix be more verbose (debug option)",NULL},
+		{"debugargs",'d',0,G_OPTION_ARG_NONE,&args->debugargs,"Dump argument debugging info to console",NULL},
 		{"DEBUG Log",'D',0,G_OPTION_ARG_FILENAME,&args->dbglog,"Debug logfile name (referenced from homedir)",NULL},
-		{"version",'v',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
+		{"Version",'V',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
 		{"Port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use this serial port ONLY",NULL},
@@ -159,11 +160,12 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		DATA_SET(global_data,"status_visible",GINT_TO_POINTER(FALSE));
 	if (args->hide_maingui)
 		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
-	if (args->debug)
+	if (args->debugargs)
 	{
-		printf(_("debug option \"%i\"\n"),args->debug);
+		printf(_("verbose option \"%i\"\n"),args->verbose);
+		printf(_("debug option \"%i\"\n"),args->debugargs);
 		printf(_("Global debug filename\"%s\"\n"),args->dbglog);
-		printf(_("version option \"%i\"\n"),args->version);
+		printf(_("Version option \"%i\"\n"),args->version);
 		printf(_("Port option \"%s\"\n"),args->port);
 		printf(_("quiet option \"%i\"\n"),args->be_quiet);
 		printf(_("inhibit tabs \"%i\"\n"),args->inhibit_tabs);
@@ -196,7 +198,8 @@ G_MODULE_EXPORT CmdLineArgs * init_args(void)
 {
 	CmdLineArgs *args;
 	args = g_new0(CmdLineArgs, 1);
-	args->debug = FALSE;
+	args->debugargs = FALSE;
+	args->verbose = FALSE;
 	args->dbglog = NULL;
 	args->be_quiet = FALSE;
 	args->autolog_dump = FALSE;

@@ -34,6 +34,7 @@
 #include <locking.h>
 #include <main.h>
 #include <serialio.h>
+#include <sleep_calib.h>
 #include <stringmatch.h>
 #include <threads.h>
 #include <timeout_handlers.h>
@@ -143,6 +144,7 @@ gint main(gint argc, gchar ** argv)
         DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
 
 	/* Kickoff fast interrogation */
+	sleep_calib();
 	gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
 	
 

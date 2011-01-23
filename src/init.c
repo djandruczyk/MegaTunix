@@ -722,7 +722,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GList **tab_gauges = NULL;
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
+	CmdLineArgs *args = NULL;
 
+	args = DATA_GET(global_data,"args");
 	serial_params = DATA_GET(global_data,"serial_params");
 	rtv_map = DATA_GET(global_data,"rtv_map");
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
@@ -749,8 +751,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 					{
 						if (g_list_length(ecu_widgets[i][j]) > 0)
 						{
+							if (args->verbose)
+								printf("Deallocating widgets in  array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
 #ifdef DEBUG
-							printf("Deallocating widgets in  array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
 							tmpbuf = g_strdup_printf("[%i][%i]",i,j);
 							g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
 							g_free(tmpbuf);
@@ -1224,11 +1227,17 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 
 G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
+	static CmdLineArgs *args = NULL;
 	GtkWidget * widget = (GtkWidget *) data;
+	if (!args)
+		args = DATA_GET(global_data,"args");
+	if (args->verbose)
+	{
+		printf("widget name %s pointer %p\n",glade_get_widget_name(widget),widget);
 #ifdef DEBUG
-	printf("widget name %s pointer %p\n",glade_get_widget_name(widget),widget);
-	printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
+		printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
 #endif
+	}
 
 	if (!GTK_IS_WIDGET(widget))
 	{
