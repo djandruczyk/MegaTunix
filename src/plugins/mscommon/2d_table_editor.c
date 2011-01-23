@@ -1154,6 +1154,7 @@ G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 
 G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
+	GdkColor white = {0,65535,65535,65535};
 #ifdef __WIN32__
 	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
 	{
@@ -1170,7 +1171,6 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 	return;
 #else
 	GdkGC *gc = OBJ_GET(widget,"hl_gc");
-	extern GdkColor white;
 	if (!GDK_IS_DRAWABLE(widget->window))
 		return;
 	if (!gc)
