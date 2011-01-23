@@ -1,4 +1,15 @@
-megatunix (0.9.24) stable; urgency=low
+megatunix (0.9.24-modular_0.4) stable; urgency=low
+  * Major memory leaks all throughout the code were repaired.
+  * Added debug widget deallocation to  checkverify if anything is being
+    double deallocated.
+  * MS-1/MS-2 plugins completed
+  * FreeEMS basic comms work
+  * MS-3 plugin skeleton code created
+  * MS2-Extra 3.1 full support completed
+
+ -- David Andruczyk <djandruczyk@yahoo.com>  Sat, 22 Jan 2011 21:21:08 -0500
+
+megatunix (0.9.24-modular_0.3) stable; urgency=low
   * Nasty Memory leak on datalog dumper fixed
   * JimStim tabs enhanced significantly, sweeper bugs fixed
   * Tooltips (being able to disable them) now work again
@@ -10,6 +21,9 @@ megatunix (0.9.24) stable; urgency=low
     solves most of the win32 issues.
   * Most of the MS speciifc junk has been moved into the MS common and family
     specific plugins
+
+ -- David Andruczyk <djandruczyk@yahoo.com>  Tue, 28 Dec 2010 11:01:08 -0500
+
 megatunix (0.9.23) stable; urgency=low
   * Numerous memory leaks fixed
   * converted to GDataSet from GObject for many internal data storage sections
@@ -20,6 +34,7 @@ megatunix (0.9.23) stable; urgency=low
   * Windows network mode deadlocks fixed 
 
  -- David Andruczyk <djandruczyk@yahoo.com>  Wed, 17 Nov 2010 17:02:08 -0500
+
 megatunix (0.9.22) stable; urgency=low
   * Dash issues resolver,  3.03u seq injector issue fixed, 3.03 alpha TTM
   fixed up
