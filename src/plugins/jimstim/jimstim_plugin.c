@@ -40,12 +40,12 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 
-	regiser_ecu_enums();
+	register_ecu_enums();
 }
 
 G_MODULE_EXPORT void plugin_shutdown(void)
 {
-	deregiser_ecu_enums();
+	deregister_ecu_enums();
 	return;
 }
 
