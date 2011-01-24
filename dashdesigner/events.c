@@ -783,10 +783,11 @@ void update_properties(GtkWidget * widget, Choice choice)
 	gchar **vector = NULL;
 	GtkWidget *entry = NULL;
 	GtkWidget *sep = NULL;
+	GtkEntryCompletion *completion = NULL;
 	gint len = 0;
 
-	if(!GTK_IS_WIDGET(widget))
-		return;
+	g_return_if_fail(store);
+	g_return_if_fail(GTK_IS_WIDGET(widget));
 
 	if (choice == GAUGE_ADD)
 	{
@@ -811,19 +812,31 @@ void update_properties(GtkWidget * widget, Choice choice)
 		g_strfreev(vector);
 		gtk_table_attach(GTK_TABLE(table),entry,0,1,0,1,GTK_FILL|GTK_EXPAND,GTK_FILL,0,0);
 
-		combo_box = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+		//combo_box = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
+		combo_box = gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(store),VARNAME_COL);
+		completion = gtk_entry_completion_new();
+		gtk_entry_set_completion(GTK_ENTRY(GTK_BIN (combo_box)->child),completion);
+		gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
+		gtk_entry_completion_set_text_column(completion,VARNAME_COL);
+                gtk_entry_completion_set_popup_single_match(completion,TRUE);
+                gtk_entry_completion_set_inline_completion(completion,TRUE);
+                gtk_entry_completion_set_inline_selection(completion,TRUE);
+		OBJ_SET(combo_box,"arrow-size",GINT_TO_POINTER(1));
 		gtk_table_attach(GTK_TABLE(table),combo_box,0,2,1,2,GTK_FILL|GTK_EXPAND,GTK_FILL,0,0);
 		OBJ_SET((widget),"combo",combo_box);
+		OBJ_SET((combo_box),"model",store);
 
 		sep = gtk_hseparator_new();
 		gtk_table_attach(GTK_TABLE(table),sep,0,2,1,2,GTK_FILL|GTK_EXPAND,GTK_FILL,0,5);
+		/*
 
 		renderer = gtk_cell_renderer_text_new();
 		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
 		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"markup",0,NULL);
+		*/
 		renderer = gtk_cell_renderer_text_new();
 		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
-		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",1,NULL);
+		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",DATASOURCE_COL,NULL);
 		if (OBJ_GET((widget),"datasource"))
 			set_combo_to_source(combo_box,OBJ_GET((widget),"datasource"));
 
@@ -855,7 +868,10 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 	gboolean found = FALSE;
 	gchar * potential;
 
+	g_return_if_fail(combo);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
+	g_return_if_fail(model);
+
 	valid = gtk_tree_model_get_iter_first (model, &iter);
 	while ((valid) && (!found))
 	{
