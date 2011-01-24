@@ -202,9 +202,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	g_mutex_lock(mutex);
 	g_async_queue_ref(io_data_queue);
 	g_async_queue_ref(pf_dispatch_queue);
-	printf("inside thread, going to lock mutex\n");
 	g_mutex_lock(rtv_thread_mutex);
-	printf("locked\n");
 	while (TRUE)
 	{
 		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
@@ -213,10 +211,10 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 
 		/* Auto-throttling if gui gets sluggish */
 		while (( g_async_queue_length(io_data_queue) > 2) || 
-				(g_async_queue_length(pf_dispatch_queue) > 8))
+				(g_async_queue_length(pf_dispatch_queue) > 3))
 		{
 			g_get_current_time(&time);
-			g_time_val_add(&time,5000);
+			g_time_val_add(&time,1000*g_async_queue_length(pf_dispatch_queue));
 			if (g_cond_timed_wait(rtv_thread_cond,rtv_thread_mutex,&time))
 				goto breakout;
 		}

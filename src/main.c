@@ -94,6 +94,14 @@ gint main(gint argc, gchar ** argv)
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"dash_mutex",mutex);
 	mutex = g_mutex_new();
+	DATA_SET(global_data,"statuscounts_mutex",mutex);
+	mutex = g_mutex_new();
+	DATA_SET(global_data,"io_dispatch_mutex",mutex);
+	mutex = g_mutex_new();
+	DATA_SET(global_data,"gui_dispatch_mutex",mutex);
+	mutex = g_mutex_new();
+	DATA_SET(global_data,"pf_dispatch_mutex",mutex);
+	mutex = g_mutex_new();
 	DATA_SET(global_data,"rtv_thread_mutex",mutex);
 
 	gdk_threads_enter();

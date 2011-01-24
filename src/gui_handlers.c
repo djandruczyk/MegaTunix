@@ -99,6 +99,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GCond *gui_dispatch_cond = NULL;
 	GCond *io_dispatch_cond = NULL;
 	GCond *statuscounts_cond = NULL;
+	GMutex *statuscounts_mutex = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -179,7 +180,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	statuscounts_cond = DATA_GET(global_data,"statuscounts_cond");
-	g_cond_timed_wait(statuscounts_cond,mutex,&now);
+	statuscounts_mutex = DATA_GET(global_data,"statuscounts_mutex");
+	g_mutex_lock(statuscounts_mutex);
+	g_cond_timed_wait(statuscounts_cond,statuscounts_mutex,&now);
+	g_mutex_unlock(statuscounts_mutex);
 
 	/* GUI Dispatch timeout */
 	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");

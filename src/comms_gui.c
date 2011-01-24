@@ -58,6 +58,7 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 	static GAsyncQueue *pf_dispatch_queue = NULL;
         static GAsyncQueue *gui_dispatch_queue = NULL;
 	static GCond *statuscounts_cond = NULL;
+	static GMutex *statuscounts_mutex = NULL;
 	gchar *tmpbuf = NULL;
 	gint tmp = 0;
 	GtkWidget * widget = NULL;
@@ -71,10 +72,19 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	if (!statuscounts_cond)
 		statuscounts_cond = DATA_GET(global_data,"statuscounts_cond");
+	if (!statuscounts_mutex)
+		statuscounts_mutex = DATA_GET(global_data,"statuscounts_mutex");
 	
+	g_return_val_if_fail(pf_dispatch_queue,FALSE);
+	g_return_val_if_fail(gui_dispatch_queue,FALSE);
+	g_return_val_if_fail(statuscounts_cond,FALSE);
+	g_return_val_if_fail(statuscounts_mutex,FALSE);
+
 	if (DATA_GET(global_data,"leaving"))
 	{
+		g_mutex_lock(statuscounts_mutex);
 		g_cond_signal(statuscounts_cond);
+		g_mutex_unlock(statuscounts_mutex);
 		return TRUE;
 	}
 
@@ -150,6 +160,8 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 	g_free(tmpbuf);
 	gdk_threads_leave();
 
+	g_mutex_lock(statuscounts_mutex);
 	g_cond_signal(statuscounts_cond);
+	g_mutex_unlock(statuscounts_mutex);
 	return TRUE;
 }
