@@ -31,7 +31,7 @@ G_MODULE_EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer data)
 	if ((!GTK_IS_WIDGET(gauge)) || poly_event_active)
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"polygon.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"polygon.ui",NULL),NULL);
 	if (filename)
 	{
 		polygons = gtk_builder_new();
@@ -44,7 +44,7 @@ G_MODULE_EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer data)
 	}
 	else
 	{
-		printf("Can't locate primary glade file!!!!\n");
+		printf("Can't locate primary ui file!!!!\n");
 		exit(-1);
 	}
 

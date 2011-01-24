@@ -28,7 +28,7 @@ G_MODULE_EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer da
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"a_range.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"a_range.ui",NULL),NULL);
 	if (filename)
 	{
 		alerts = gtk_builder_new();
@@ -42,7 +42,7 @@ G_MODULE_EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer da
 	}
 	else
 	{
-		printf("Can't locate primary glade file!!!!\n");
+		printf("Can't locate primary ui file!!!!\n");
 		exit(-1);
 	}
 
@@ -206,7 +206,7 @@ gboolean alter_a_range_data(GtkWidget *widget, gpointer data)
 
 GtkWidget * build_a_range(MtxAlertRange *range, gint index)
 {
-	/* MUCH faster that the glade way unfortunately */
+	/* MUCH faster that the ui way unfortunately */
 	GtkWidget *notebook = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *subtable = NULL;
