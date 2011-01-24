@@ -385,6 +385,7 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
 	/* Compat with older gauges */
+	g_object_set_data(G_OBJECT(gauge),"bg_color", &priv->colors[GAUGE_COL_BG_DAY]);
 	g_object_set_data(G_OBJECT(gauge),"bg_color_alt", &priv->colors[GAUGE_COL_BG_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"needle_color", &priv->colors[GAUGE_COL_NEEDLE_DAY]);
 	g_object_set_data(G_OBJECT(gauge),"needle_color_alt", &priv->colors[GAUGE_COL_NEEDLE_NITE]);

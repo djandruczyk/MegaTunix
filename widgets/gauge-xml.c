@@ -37,7 +37,12 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 {
 	xmlNode *cur_node = NULL;
 	MtxXMLFuncs *xml_funcs = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	g_return_if_fail(gauge);
+
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail(priv);
 
 	for (cur_node = a_node; cur_node; cur_node = cur_node->next) 
 	{
@@ -55,7 +60,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 			 * this in the handler by detecting that the node 
 			 * passed is null and handle it appropriately
 			 */ 
-			if (xml_funcs) 
+			if (xml_funcs)
 			{
 				xml_funcs->import_func(gauge,cur_node,xml_funcs->dest_var,xml_funcs->api_compat);
 			}
@@ -79,7 +84,12 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	gchar *tmpbuf = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	g_return_if_fail(gauge);
+	g_return_if_fail(filename);
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail(priv);
 
 	/*
 	 * this initialize the library and check potential ABI mismatches
@@ -143,7 +153,12 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
 	MtxDispatchHelper *helper = NULL;
 	MtxXMLFuncs * xml_funcs = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	g_return_if_fail(gauge);
+	g_return_if_fail(filename);
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail(priv);
 
 	LIBXML_TEST_VERSION;
 
@@ -214,6 +229,7 @@ void mtx_gauge_color_import(MtxGaugeFace *gauge,xmlNode *node,gpointer dest,gboo
 {
 	gpointer alt_widget;
 	gchar *tmpbuf = NULL;
+
 	generic_xml_color_import(node,dest);
 	if (api_compat)
 	{
@@ -245,7 +261,11 @@ void mtx_gauge_warning_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer
 {
 	xmlNode *cur_node = NULL;
 	MtxWarningRange *range = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail(priv);
+
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_warning_range_import, xml node is empty!!\n");
@@ -290,7 +310,11 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 {
 	xmlNode *cur_node = NULL;
 	MtxAlertRange *range = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail(priv);
+
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_alert_range_import, xml node is empty!!\n");
@@ -338,7 +362,11 @@ void mtx_gauge_text_block_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 {
 	xmlNode *cur_node = NULL;
 	MtxTextBlock *tblock = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail(priv);
+
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_text_block_import, xml node is empty!!\n");
@@ -384,7 +412,11 @@ void mtx_gauge_tick_group_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 {
 	xmlNode *cur_node = NULL;
 	MtxTickGroup *tgroup = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail(priv);
+
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_tick_group_import, xml node is empty!!\n");
@@ -465,7 +497,11 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,
 {
 	xmlNode *cur_node = NULL;
 	MtxPolygon *poly = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail(priv);
+
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_polygon_import, xml node is empty!!\n");
@@ -533,6 +569,7 @@ void mtx_gauge_poly_circle_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 {
 	xmlNode *cur_node = NULL;
 	MtxCircle *data = NULL;
+
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_poly_circle_import, xml node is empty!!\n");
@@ -561,6 +598,7 @@ void mtx_gauge_poly_rectangle_import(MtxGaugeFace *gauge, xmlNode *node, gpointe
 {
 	xmlNode *cur_node = NULL;
 	MtxRectangle *data = NULL;
+
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_poly_rect_import, xml node is empty!!\n");
@@ -591,6 +629,7 @@ void mtx_gauge_poly_arc_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest
 {
 	xmlNode *cur_node = NULL;
 	MtxArc *data = NULL;
+
 	if (!node->children)
 	{
 		printf("ERROR, mtx_gauge_poly_arc_import, xml node is empty!!\n");
@@ -682,9 +721,13 @@ void mtx_gauge_warning_range_export(MtxDispatchHelper * helper)
 {
 	guint i = 0;
 	gchar * tmpbuf = NULL;
-	MtxWarningRange *range = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 	xmlNodePtr node = NULL;
+	MtxWarningRange *range = NULL;
+	MtxGaugeFacePrivate *priv = NULL;
+
+	g_return_if_fail(helper);
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
+	g_return_if_fail(priv);
 
 	for (i=0;i<priv->w_ranges->len;i++)
 	{
@@ -722,9 +765,14 @@ void mtx_gauge_alert_range_export(MtxDispatchHelper * helper)
 {
 	guint i = 0;
 	gchar * tmpbuf = NULL;
-	MtxAlertRange *range = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
 	xmlNodePtr node = NULL;
+	MtxAlertRange *range = NULL;
+	MtxGaugeFacePrivate *priv = NULL;
+
+	g_return_if_fail(helper);
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
+	g_return_if_fail(priv);
+
 
 	for (i=0;i<priv->a_ranges->len;i++)
 	{
@@ -771,7 +819,11 @@ void mtx_gauge_text_block_export(MtxDispatchHelper * helper)
 	gchar * tmpbuf = NULL;
 	MtxTextBlock *tblock = NULL;
 	xmlNodePtr node = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	g_return_if_fail(helper);
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
+	g_return_if_fail(priv);
 
 	for (i=0;i<priv->t_blocks->len;i++)
 	{
@@ -814,7 +866,11 @@ void mtx_gauge_tick_group_export(MtxDispatchHelper * helper)
 	gchar * tmpbuf = NULL;
 	MtxTickGroup *tgroup = NULL;
 	xmlNodePtr node = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	g_return_if_fail(helper);
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
+	g_return_if_fail(priv);
 
 	for (i=0;i<priv->tick_groups->len;i++)
 	{
@@ -1028,7 +1084,11 @@ void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 	gchar * tmpbuf = NULL;
 	MtxPolygon *poly = NULL;
 	xmlNodePtr node = NULL;
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
+	MtxGaugeFacePrivate *priv = NULL;
+
+	g_return_if_fail(helper);
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(helper->gauge);
+	g_return_if_fail(priv);
 
 	for (i=0;i<priv->polygons->len;i++)
 	{
@@ -1080,30 +1140,37 @@ void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 
 void mtx_gauge_color_export(MtxDispatchHelper * helper)
 {
+	g_return_if_fail(helper);
 	generic_xml_color_export(helper->root_node,helper->element_name,helper->src);
 }
 
 
 void mtx_gauge_gfloat_export(MtxDispatchHelper * helper)
 {
+	g_return_if_fail(helper);
 	generic_xml_gfloat_export(helper->root_node,helper->element_name,helper->src);
 }
 
 void mtx_gauge_gint_export(MtxDispatchHelper * helper)
 {
+	g_return_if_fail(helper);
 	generic_xml_gint_export(helper->root_node,helper->element_name,helper->src);
 }
 
 void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 {
+	g_return_if_fail(helper);
 	generic_xml_gchar_export(helper->root_node,helper->element_name,helper->src);
 }
 
 
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge)
 {
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	MtxGaugeFacePrivate *priv = NULL;
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge), NULL);
+
+	priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_val_if_fail(priv,NULL);
 	return g_strdup(priv->xml_filename);
 }
 

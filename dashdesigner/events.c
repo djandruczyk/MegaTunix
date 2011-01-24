@@ -56,12 +56,13 @@ typedef enum
 
 G_MODULE_EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 {
+	extern GtkWidget *main_window;
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
 	{
 		gchar *authors[] = {"David Andruczyk",NULL};
 		gchar *artists[] = {"Dale Anderson",NULL};
-		gtk_show_about_dialog(NULL,
+		gtk_show_about_dialog(GTK_WINDOW(main_window),
 				"name","MegaTunix Dashboard Designer",
 				"version",VERSION,
 				"copyright","David J. Andruczyk(2006)",
@@ -114,7 +115,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-	        filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"preview.glade",NULL),NULL);
+	        filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"preview.ui",NULL),NULL);
 		if (filename)
 		{
 			previews = gtk_builder_new();
@@ -135,7 +136,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-	        filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"propeditor.glade",NULL),NULL);
+	        filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"propeditor.ui",NULL),NULL);
 		if (filename)
 		{
 			properties = gtk_builder_new();
@@ -157,7 +158,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		printf("critical error, notbook not found, EXITING!\n");
 		exit (-1);
 	}
-	/* get rid of default empty page from glade... */
+	/* get rid of default empty page from ui... */
 	gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
 #ifdef __WIN32__
 	path = g_build_path(PSEP,HOME(),"dist",GAUGES_DATA_DIR,NULL);
@@ -491,9 +492,9 @@ G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventBu
 		g_free(filename);
 		update_properties(gauge,GAUGE_ADD);
 		changed = TRUE;
-	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
-	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
-	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
+	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);
+	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
 	}
 
 	/*printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);*/
@@ -576,9 +577,9 @@ G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, 
 			}
 		}
 		changed =  TRUE;
-	        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
-	        gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
-	        gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
+	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
+	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);
+	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
 	}
 
 	return TRUE;
@@ -649,9 +650,9 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 				update_properties(grabbed_widget,GAUGE_REMOVE);
 				gtk_widget_destroy(grabbed_widget);
 				changed =  TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
+				gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
+				gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);
+				gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
 			}
 			if (event->button == 1)
 			{
@@ -838,9 +839,9 @@ void update_properties(GtkWidget * widget, Choice choice)
 		table = OBJ_GET((widget),"prop_table");
 		gtk_widget_destroy(table);
 	}
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
 
 	/*printf("update_properties\n");*/
 }
@@ -868,9 +869,9 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 
 	}
 	changed =  TRUE;
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
 }
 
 
@@ -890,10 +891,10 @@ G_MODULE_EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 	topwidget = gtk_widget_get_toplevel(GTK_WIDGET(dash));
 	gtk_window_resize(GTK_WINDOW(topwidget),320,200);
 	changed = FALSE;
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"load_dash_menuitem")),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"load_dash_menuitem"),TRUE);
 	return TRUE;
 }
 
@@ -967,9 +968,9 @@ G_MODULE_EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
 	topwidget = gtk_widget_get_toplevel(GTK_WIDGET(dash));
 	gtk_window_resize(GTK_WINDOW(topwidget),topwidget->allocation.width-x_shrink,topwidget->allocation.height-y_shrink);
 	changed = TRUE;
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"close_dash_menuitem")),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
 
 	return TRUE;
 }
