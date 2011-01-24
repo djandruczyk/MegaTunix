@@ -93,6 +93,8 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"rtv_mutex",mutex);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"dash_mutex",mutex);
+	mutex = g_mutex_new();
+	DATA_SET(global_data,"rtv_thread_mutex",mutex);
 
 	gdk_threads_enter();
 	gtk_init(&argc, &argv);
