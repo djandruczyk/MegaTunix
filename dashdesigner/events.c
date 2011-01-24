@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Linux Megasquirt tuning software
+ * Linux Electronic Fuel Injection tuning software
  * 
  * 
  * This software comes under the GPL (GNU Public License)
@@ -65,8 +65,8 @@ G_MODULE_EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 		gtk_show_about_dialog(GTK_WINDOW(main_window),
 				"name","MegaTunix Dashboard Designer",
 				"version",VERSION,
-				"copyright","David J. Andruczyk(2006)",
-				"comments","Dashboard Designer is a tool to design custom Dash gauge layouts for the MegaTunix Megasquirt tuning software",
+				"copyright","David J. Andruczyk(2011)",
+				"comments","Dashboard Designer is a tool to design custom Dash gauge layouts for the MegaTunix Tuning Software",
 				"license","GNU GPL v2",
 				"website","http://megatunix.sourceforge.net",
 				"authors",authors,

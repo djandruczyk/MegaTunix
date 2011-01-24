@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * Linux Megasquirt tuning software
+ * Linux Electronic Fuel Injection tuning software
  * 
  * 
  * This software comes under the GPL (GNU Public License)
