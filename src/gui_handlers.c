@@ -99,6 +99,9 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GCond *gui_dispatch_cond = NULL;
 	GCond *io_dispatch_cond = NULL;
 	GCond *statuscounts_cond = NULL;
+	GMutex *pf_dispatch_mutex = NULL;
+	GMutex *gui_dispatch_mutex = NULL;
+	GMutex *io_dispatch_mutex = NULL;
 	GMutex *statuscounts_mutex = NULL;
 	Firmware_Details *firmware = NULL;
 
@@ -148,13 +151,15 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
 	g_static_mutex_lock(&leave_mutex);
 
-	g_mutex_lock(mutex);
 
 	/* IO dispatch queue */
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
-	g_cond_timed_wait(io_dispatch_cond,mutex,&now);
+	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
+	g_mutex_lock(io_dispatch_mutex);
+	g_cond_timed_wait(io_dispatch_cond,io_dispatch_mutex,&now);
+	g_mutex_unlock(io_dispatch_mutex);
 
 	/* Binary Log flusher */
 	id = (GINT)DATA_GET(global_data,"binlog_flush_id");
@@ -170,7 +175,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
-	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
+	pf_dispatch_mutex = DATA_GET(global_data,"pf_dispatch_mutex");
+	g_mutex_lock(pf_dispatch_mutex);
+	g_cond_timed_wait(pf_dispatch_cond,pf_dispatch_mutex,&now);
+	g_mutex_unlock(pf_dispatch_mutex);
 
 	/* Statuscounts timeout */
 	id = (GINT)DATA_GET(global_data,"statuscounts_id");
@@ -193,9 +201,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
-	g_cond_timed_wait(gui_dispatch_cond,mutex,&now);
-
-	g_mutex_unlock(mutex);
+	gui_dispatch_mutex = DATA_GET(global_data,"gui_dispatch_mutex");
+	g_mutex_lock(gui_dispatch_mutex);
+	g_cond_timed_wait(gui_dispatch_cond,gui_dispatch_mutex,&now);
+	g_mutex_unlock(gui_dispatch_mutex);
 
 
 	save_config();

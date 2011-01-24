@@ -128,6 +128,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	GAsyncQueue *io_data_queue = NULL;
 	GAsyncQueue *pf_dispatch_queue = NULL;
 	GCond * io_dispatch_cond = NULL;
+	GMutex * io_dispatch_mutex = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
 /*	GTimer *clock;*/
@@ -135,12 +136,21 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
-	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
+	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
+	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	args = DATA_GET(global_data,"args");
 	serial_params = DATA_GET(global_data,"serial_params");
 	get_symbol("network_repair_thread",(void*)&network_repair_thread);
 	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
+
+	g_return_val_if_fail(io_data_queue,NULL);
+	g_return_val_if_fail(io_dispatch_cond,NULL);
+	g_return_val_if_fail(io_dispatch_mutex,NULL);
+	g_return_val_if_fail(pf_dispatch_queue,NULL);
+	g_return_val_if_fail(args,NULL);
+	g_return_val_if_fail(serial_params,NULL);
+	g_return_val_if_fail(serial_repair_thread,NULL);
 /*	clock = g_timer_new();*/
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
@@ -157,7 +167,9 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				dealloc_message(message);
 
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tMegaTunix is closing, Thread exiting !!\n"));
+			g_mutex_lock(io_dispatch_mutex);
 			g_cond_signal(io_dispatch_cond);
+			g_mutex_unlock(io_dispatch_mutex);
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */

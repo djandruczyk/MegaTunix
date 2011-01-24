@@ -29,7 +29,7 @@ typedef enum
 
 typedef enum
 {
-	LAST_COMMON_TOGGLE_BUTTON_ENUM = LAST_TOGGLE_BUTTON_ENUM + 1,
+	LAST_COMMON_TOGGLE_BUTTON_ENUM = LAST_TOGGLE_BUTTON_ENUM + 1
 }MSCommonToggleButton;
 
 typedef enum
