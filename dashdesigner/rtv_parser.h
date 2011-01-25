@@ -19,12 +19,23 @@
 
 
 /* Datastructures */
-struct Rtv_Data
+
+typedef struct _Rtv_Data Rtv_Data;
+typedef struct _Persona_Info Persona_Info;
+
+struct _Rtv_Data
 {
-	GList *rtv_list;
-	GHashTable *rtv_hash;
-	GHashTable *int_ext_hash;
+	GHashTable *persona_hash;
+	GArray *persona_array;
 	gint total_files;
+};
+
+struct _Persona_Info
+{
+	GHashTable *hash;
+	GHashTable *int_ext_hash;
+	GList *rtv_list;
+	gchar *persona;
 };
 
 enum
@@ -38,7 +49,7 @@ enum
 /* Prototypes */
 
 void retrieve_rt_vars(void);
-void load_rtvars(gchar **, struct Rtv_Data *);
+void load_rtvars(gchar **, Rtv_Data *);
 gint sort(gconstpointer , gconstpointer );
 			 
 /* Prototypes */

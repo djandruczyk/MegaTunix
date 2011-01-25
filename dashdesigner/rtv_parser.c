@@ -14,31 +14,32 @@ void retrieve_rt_vars(void)
 {
 	gchar **files = NULL;
 	GArray *classes = NULL;
-	struct Rtv_Data *rtv_data = NULL;
+	Rtv_Data *rtv_data = NULL;
 	gint i = 0;
 	/*printf("retrieve rt_vars from mtx realtime maps\n");*/
-	files = get_files(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,NULL),g_strdup("rtv_map"),&classes);
+	files = get_files(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,NULL),g_strdup("rtv_map"),&classes);
 	if (!files)
 		return;
 	while(files[i])
 		i++;
-	rtv_data = g_new0(struct Rtv_Data, 1);
-	rtv_data->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
-	rtv_data->int_ext_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
-	rtv_data->rtv_list = NULL;
+	rtv_data = g_new0(Rtv_Data, 1);
+	rtv_data->persona_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+	rtv_data->persona_array = g_array_new(FALSE,TRUE,sizeof(Persona_Info *));
 	rtv_data->total_files = i;
 	load_rtvars(files,rtv_data);
 	g_array_free(classes,TRUE);
 
 }
 
-void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
+void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 {
 	GtkTreeIter iter;
 	ConfigFile *cfgfile;
+	Persona_Info *info = NULL;
 	gint total = 0;
 	gpointer orig = NULL;
 	gpointer value = NULL;
+	gchar * persona = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
 	gchar ** vector = NULL;
@@ -51,12 +52,31 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 	gint i = 0;
 	gint j = 0;
 	guint k = 0;
+	gint rtvcount = 0;
+	gint personas = 0;
 
 	while (files[i])
 	{
 		cfgfile = cfg_open_file(files[i]);
 		if (cfgfile)
 		{
+			cfg_read_string(cfgfile,"realtime_map", "persona",&persona);
+			value = NULL;
+			info = NULL;
+			/* Check if we already know about it */
+			if (g_hash_table_lookup_extended(rtv_data->persona_hash,persona,&orig,&value))
+				info = (Persona_Info *)value;
+			else /* We just disovered this persona,  CREATE the hashtable for it and store */
+			{
+				info = g_new0(Persona_Info, 1);
+				info->hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+				info->int_ext_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+				info->rtv_list = NULL;
+				info->persona = g_strdup(persona);
+				g_hash_table_insert(rtv_data->persona_hash,g_strdup(persona),(gpointer)info);
+				g_array_append_val(rtv_data->persona_array,info);
+			}
+			g_free(persona);
 			cfg_read_int(cfgfile,"realtime_map", "derived_total",&total);
 			for (j=0;j<total;j++)
 			{
@@ -68,19 +88,18 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 					g_free(tmpbuf);
 					for (k=0;k<g_strv_length(vector);k++)
 					{
-
-						if (g_hash_table_lookup_extended(rtv_data->rtv_hash,vector[k],&orig,&value))
+						/* If we know about it, increase it's ref count */
+						if (g_hash_table_lookup_extended(info->hash,vector[k],&orig,&value))
 						{
 							tmpi = (GINT)value + 1;
-							/*printf("Value on pre-existing var %s is %i\n",(gchar *)orig,(gint)value);*/
-							g_hash_table_replace(rtv_data->rtv_hash,g_strdup(vector[k]),GINT_TO_POINTER(tmpi));
+							g_hash_table_replace(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(tmpi));
 						}
 						else
 						{
 							/*printf("inserting var %s with value %i\n",vector[k],1);*/
-							g_hash_table_insert(rtv_data->rtv_hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
-							g_hash_table_insert(rtv_data->int_ext_hash,g_strdup(dlog_name),g_strdup(vector[k]));
-							rtv_data->rtv_list = g_list_prepend(rtv_data->rtv_list,g_strdup(dlog_name));
+							g_hash_table_insert(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
+							g_hash_table_insert(info->int_ext_hash,g_strdup(dlog_name),g_strdup(vector[k]));
+							info->rtv_list = g_list_prepend(info->rtv_list,g_strdup(dlog_name));
 						}
 					}
 					g_strfreev(vector);
@@ -89,32 +108,30 @@ void load_rtvars(gchar **files, struct Rtv_Data *rtv_data)
 				g_free(dlog_name);
 				g_free(int_name);
 			}
+			info->rtv_list = g_list_sort(info->rtv_list,sort);
 		}
 		cfg_free(cfgfile);
 		i++;
 	}
 
-	rtv_data->rtv_list = g_list_sort(rtv_data->rtv_list,sort);
 	store = gtk_list_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
-	len = g_list_length(rtv_data->rtv_list);
 	/*printf("Total number of uniq vars is %i\n",len);*/
-	for (i=0;i<len;i++)
+
+	for (i=0;i<rtv_data->persona_array->len;i++)
 	{
-		element = g_list_nth_data(rtv_data->rtv_list,i);
-		/*printf("element %s\n",element);*/
-		int_name = g_hash_table_lookup(rtv_data->int_ext_hash,element);
-		icount = (GINT)g_hash_table_lookup(rtv_data->rtv_hash,int_name);
-		/*printf("int name %s\n",int_name);*/
-		gtk_list_store_append(store,&iter);
-		/*printf("var %s, %s, icount %i, total %i\n",element,int_name,icount,rtv_data->total_files);*/
-//		if (icount == rtv_data->total_files)
-//			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (common)",DATASOURCE_COL,g_strdup(int_name),-1);
-//		else
-//			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),TYPE_COL,"  (FW Specific)", DATASOURCE_COL,g_strdup(int_name),-1);
-		gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),PERSONA_COL,"", DATASOURCE_COL,g_strdup(int_name),-1);
-	
+		info = NULL;
+		info = g_array_index(rtv_data->persona_array,Persona_Info *,i);
+		for (j=0;j<g_list_length(info->rtv_list);j++)
+		{
+			gtk_list_store_append(store,&iter);
+			element = g_list_nth_data(info->rtv_list,j);
+			int_name = g_hash_table_lookup(info->int_ext_hash,element);
+			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),PERSONA_COL,g_strdup(info->persona), DATASOURCE_COL,g_strdup(int_name),-1);
+		}
+
 	}
 }
+
 
 gint sort(gconstpointer a, gconstpointer b)
 {

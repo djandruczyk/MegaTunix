@@ -828,12 +828,12 @@ void update_properties(GtkWidget * widget, Choice choice)
 
 		sep = gtk_hseparator_new();
 		gtk_table_attach(GTK_TABLE(table),sep,0,2,1,2,GTK_FILL|GTK_EXPAND,GTK_FILL,0,5);
-		/*
+		
 
 		renderer = gtk_cell_renderer_text_new();
 		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
-		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"markup",0,NULL);
-		*/
+		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",PERSONA_COL,NULL);
+		
 		renderer = gtk_cell_renderer_text_new();
 		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
 		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",DATASOURCE_COL,NULL);
