@@ -6,6 +6,7 @@
 #include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <rtv_parser.h>
 #include <xml.h>
 #include <xmlbase.h>
 
@@ -22,6 +23,9 @@ void import_dash_xml(gchar * filename)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	gint result = 0;
+
+	g_return_if_fail(filename);
+
 	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 
 	children = GTK_FIXED(dash)->children;
@@ -200,11 +204,14 @@ void export_dash_xml(gchar * filename)
 	xmlNodePtr root_node = NULL;/* node pointers */
 	xmlNodePtr node = NULL;/* node pointers */
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
+	GtkTreeIter parent;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gboolean state = FALSE;
 	gchar * iname = NULL;
 	gchar ** vector = NULL;
+
+	g_return_if_fail(filename);
 
 	doc = xmlNewDoc(BAD_CAST "1.0");
 	root_node = xmlNewNode(NULL,BAD_CAST "dashboard");
@@ -237,7 +244,7 @@ void export_dash_xml(gchar * filename)
 		g_strfreev(vector);
 		state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(OBJ_GET((child->widget),"combo")),&iter);
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(OBJ_GET((child->widget),"combo")));
-		gtk_tree_model_get(model,&iter,2,&iname,-1);
+		gtk_tree_model_get(model,&iter,DATASOURCE_COL,&iname,-1);
 		generic_xml_gchar_export(node,"datasource",&iname);
 	}
 	xmlSaveFormatFileEnc(filename, doc, "utf-8", 1);

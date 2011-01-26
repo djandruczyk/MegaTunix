@@ -812,7 +812,6 @@ void update_properties(GtkWidget * widget, Choice choice)
 		g_strfreev(vector);
 		gtk_table_attach(GTK_TABLE(table),entry,0,1,0,1,GTK_FILL|GTK_EXPAND,GTK_FILL,0,0);
 
-		//combo_box = gtk_combo_box_new_with_model(GTK_TREE_MODEL(store));
 		combo_box = gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(store),VARNAME_COL);
 		completion = gtk_entry_completion_new();
 		gtk_entry_set_completion(GTK_ENTRY(GTK_BIN (combo_box)->child),completion);
