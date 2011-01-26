@@ -41,7 +41,6 @@ struct _Persona_Info
 enum
 {
 	VARNAME_COL,
-	PERSONA_COL,
 	DATASOURCE_COL,
 	NUM_COLS
 };

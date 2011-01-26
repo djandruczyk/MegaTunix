@@ -9,7 +9,7 @@
 #include <rtv_parser.h>
 #include <string.h>
 
-GtkListStore *store = NULL;
+GtkTreeStore *store = NULL;
 void retrieve_rt_vars(void)
 {
 	gchar **files = NULL;
@@ -34,6 +34,7 @@ void retrieve_rt_vars(void)
 void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 {
 	GtkTreeIter iter;
+	GtkTreeIter parent;
 	ConfigFile *cfgfile;
 	Persona_Info *info = NULL;
 	gint total = 0;
@@ -114,21 +115,22 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 		i++;
 	}
 
-	store = gtk_list_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING);
+	store = gtk_tree_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_STRING);
 	/*printf("Total number of uniq vars is %i\n",len);*/
 
-	for (i=0;i<rtv_data->persona_array->len;i++)
+	for (i=0;i<(gint)rtv_data->persona_array->len;i++)
 	{
 		info = NULL;
 		info = g_array_index(rtv_data->persona_array,Persona_Info *,i);
-		for (j=0;j<g_list_length(info->rtv_list);j++)
+		gtk_tree_store_append(store,&parent,NULL);
+		gtk_tree_store_set(store,&parent,VARNAME_COL,g_strdup(info->persona),-1);
+		for (j=0;j<(gint)g_list_length(info->rtv_list);j++)
 		{
-			gtk_list_store_append(store,&iter);
+			gtk_tree_store_append(store,&iter,&parent);
 			element = g_list_nth_data(info->rtv_list,j);
 			int_name = g_hash_table_lookup(info->int_ext_hash,element);
-			gtk_list_store_set(store,&iter,VARNAME_COL,g_strdup(element),PERSONA_COL,g_strdup(info->persona), DATASOURCE_COL,g_strdup(int_name),-1);
+			gtk_tree_store_set(store,&iter,VARNAME_COL,g_strdup(element),DATASOURCE_COL,g_strdup(int_name),-1);
 		}
-
 	}
 }
 

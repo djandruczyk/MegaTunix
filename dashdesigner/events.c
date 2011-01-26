@@ -774,7 +774,7 @@ void raise_fixed_child (GtkWidget * widget)
 
 void update_properties(GtkWidget * widget, Choice choice)
 {
-	extern GtkListStore *store;
+	extern GtkTreeStore *store;
 	GtkCellRenderer *renderer;
 	GtkWidget * combo_box = NULL;
 	GtkWidget *vbox = NULL;
@@ -829,14 +829,6 @@ void update_properties(GtkWidget * widget, Choice choice)
 		sep = gtk_hseparator_new();
 		gtk_table_attach(GTK_TABLE(table),sep,0,2,1,2,GTK_FILL|GTK_EXPAND,GTK_FILL,0,5);
 		
-
-		renderer = gtk_cell_renderer_text_new();
-		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
-		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",PERSONA_COL,NULL);
-		
-		renderer = gtk_cell_renderer_text_new();
-		gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo_box),renderer,FALSE);
-		gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo_box),renderer,"text",DATASOURCE_COL,NULL);
 		if (OBJ_GET((widget),"datasource"))
 			set_combo_to_source(combo_box,OBJ_GET((widget),"datasource"));
 
@@ -864,6 +856,7 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 {
 	GtkTreeModel *model = NULL;
 	GtkTreeIter iter;
+	GtkTreeIter parent;
 	gboolean valid = FALSE;
 	gboolean found = FALSE;
 	gchar * potential;
@@ -872,17 +865,25 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(combo));
 	g_return_if_fail(model);
 
-	valid = gtk_tree_model_get_iter_first (model, &iter);
+	valid = gtk_tree_model_get_iter_first (model, &parent);
 	while ((valid) && (!found))
 	{
-		gtk_tree_model_get(model,&iter,DATASOURCE_COL,&potential,-1);
-		if (g_strcasecmp(potential,source) == 0)
+		if (gtk_tree_model_iter_has_child(model,&parent))
+			valid = gtk_tree_model_iter_children(model,&iter,&parent);
+		while ((valid) && (!found))
 		{
-			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo),&iter);
-			found = TRUE;
+			gtk_tree_model_get(model,&iter,DATASOURCE_COL,&potential,-1);
+			if (!potential)
+				goto again;
+			if (g_strcasecmp(potential,source) == 0)
+			{
+				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo),&iter);
+				found = TRUE;
+			}
+again:
+			valid = gtk_tree_model_iter_next (model, &iter);
 		}
-		valid = gtk_tree_model_iter_next (model, &iter);
-
+		valid = gtk_tree_model_iter_next (model, &parent);
 	}
 	changed =  TRUE;
 	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
