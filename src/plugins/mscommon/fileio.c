@@ -132,8 +132,11 @@ G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 
 	firmware = DATA_GET(global_data,"firmware");
 	g_return_if_fail(filename);
+	g_return_if_fail(firmware);
 
 	cfgfile = cfg_open_file(filename);
+	if(!cfgfile)
+		cfgfile = cfg_new();
 
 	set_file_api_f(cfgfile,BACKUP_MAJOR_API,BACKUP_MINOR_API);
 
@@ -199,9 +202,16 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(filename);
+	g_return_if_fail(firmware);
 	canID = firmware->canID;
 
 	cfgfile = cfg_open_file(filename);
+	if (!cfgfile)
+	{
+		update_logbar_f("tools_view","warning",g_strdup_printf(_(":restore_all_ecu_settings()\n\t Unable to open this file (%s)\n"),filename),FALSE,FALSE,TRUE);
+		return FALSE;
+	}
 	if (cfgfile)
 	{
 		get_file_api_f(cfgfile,&major,&minor);
@@ -292,8 +302,8 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 			g_free(section);
 		}
 		start_restore_monitor();
+		cfg_free(cfgfile);
 	}
-	cfg_free(cfgfile);
 	if (DATA_GET(global_data,"offline"))
 	{
 		pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));

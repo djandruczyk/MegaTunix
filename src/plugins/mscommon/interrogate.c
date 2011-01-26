@@ -344,10 +344,15 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	gint len6 = 0;
 	gint j = 0;
 
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(filename,FALSE);
 
 	cfgfile = cfg_open_file((gchar *)filename);
 	if (!cfgfile)
+	{
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tFile \"%s\" NOT OPENED successfully\n",filename));
+		return FALSE;
+	}
 	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
@@ -1117,7 +1122,10 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
+	{
+		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s unable to be opened!\n"),filename),FALSE,FALSE,TRUE);
 		return NULL;
+	}
 	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
