@@ -42,6 +42,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	static void **y_eval;
 	static void **x_eval;
 	static gfloat last_z_weight[4] = {0,0,0,0};
+	static GdkColormap *colormap = NULL;
 	gfloat x_source = 0.0;
 	gfloat y_source = 0.0;
 	gfloat x_raw = 0.0;
@@ -51,6 +52,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 #ifndef __WIN32__
 	GdkGC *gc = NULL;
 #endif
+	cairo_t *cr = NULL;
 	gint i = 0;
 	gint table = 0;
 	gint page = 0;
@@ -88,6 +90,13 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 		ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
+	if (!colormap)
+		colormap = gdk_colormap_get_system();
+
+	g_return_if_fail(ecu_widgets);
+	g_return_if_fail(firmware);
+	g_return_if_fail(colormap);
+
 	canID = firmware->canID;
 	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
@@ -363,16 +372,12 @@ redraw:
 #else
 			if (GDK_IS_DRAWABLE(widget->window))
 			{
-				gc = OBJ_GET(widget, "old_gc");
-				gdk_gc_set_rgb_fg_color(gc,&old_colors[table][last[table][i]]);
-				/* Top */
-				gdk_draw_rectangle(widget->window,gc,TRUE,0,0,widget->allocation.width,2);
-				/* Bottom */
-				gdk_draw_rectangle(widget->window,gc,TRUE,0,widget->allocation.height-3,widget->allocation.width,3);
-				/* Left */
-				gdk_draw_rectangle(widget->window,gc,TRUE,0,0,2,widget->allocation.height);
-				/* Right */
-				gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-2,0,2,widget->allocation.height);
+				cr = gdk_cairo_create(widget->window);
+				gdk_cairo_set_source_color(cr,&old_colors[table][last[table][i]]);
+				cairo_set_line_width(cr,2);
+				cairo_rectangle(cr,1,1,widget->allocation.width-1,widget->allocation.height-1);
+				cairo_stroke(cr);
+				cairo_destroy(cr);
 			}
 #endif
 		}
@@ -426,34 +431,24 @@ redraw:
 		color.red = z_weight[i]*32768 +32767;
 		color.green = (1.0-z_weight[i])*65535 +0;
 		color.blue = (1.0-z_weight[i])*32768 +0;
+		if (!gdk_colormap_alloc_color(colormap,&color,FALSE,TRUE))
+			printf("unable to allocate color!\n");
 
-		/* modify_base is REALLY REALLY slow, as it triggers a size recalc all the
-		 * way thru the widget tree, which is atrociously expensive!
-		 gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+		/* modify_base is REALLY REALLY slow, as it triggers a size 
+		 * recalc all the way thru the widget tree, which is 
+		 * atrociously expensive!
 		 */
 #ifdef __WIN32__
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 #else
 		if (GDK_IS_DRAWABLE(widget->window))
 		{
-			if (OBJ_GET(widget,"old_gc"))
-				gc = OBJ_GET(widget,"old_gc");
-			else
-			{
-				gc = gdk_gc_new(widget->window);
-				gdk_gc_set_subwindow(gc,GDK_INCLUDE_INFERIORS);
-			}
-
-			gdk_gc_set_rgb_fg_color(gc,&color);
-			/* Top */
-			gdk_draw_rectangle(widget->window,gc,TRUE,0,0,widget->allocation.width,2);
-			/* Bottom */
-			gdk_draw_rectangle(widget->window,gc,TRUE,0,widget->allocation.height-3,widget->allocation.width,3);
-			/* Left */
-			gdk_draw_rectangle(widget->window,gc,TRUE,0,0,2,widget->allocation.height);
-			/* Right */
-			gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-2,0,2,widget->allocation.height);
-			OBJ_SET(widget,"old_gc",(gpointer)gc);
+			cr = gdk_cairo_create(widget->window);
+			gdk_cairo_set_source_color(cr,&color);
+			cairo_set_line_width(cr,2);
+			cairo_rectangle(cr,1,1,widget->allocation.width-1,widget->allocation.height-1);
+			cairo_stroke(cr);
+			cairo_destroy(cr);
 		}
 #endif
 	}
