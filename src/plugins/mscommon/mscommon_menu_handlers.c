@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -23,7 +23,7 @@
 extern gconstpointer *global_data;
 
 
-void common_plugin_menu_setup(GladeXML *xml)
+G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 {
 	void (*ecu_plugin_menu_setup)(GladeXML *) = NULL;
 	GtkWidget *menu = NULL;
@@ -93,8 +93,6 @@ void common_plugin_menu_setup(GladeXML *xml)
 	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_trigger_offset_window),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 	gtk_widget_show_all(menu);
-
-
 
 	if (get_symbol_f("ecu_plugin_menu_setup",(void *)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);
@@ -203,7 +201,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	size = firmware->table_params[table]->x_size;
 	mult = get_multiplier_f(size);
 
-	evaluator = evaluator_create_f(firmware->table_params[table]->x_ul_conv_expr);
+	evaluator = evaluator_create_f(firmware->table_params[table]->x_fromecu_conv_expr);
 
 	/* fetch us a copy of the x bins */
 	for (i=0; i != firmware->table_params[table]->x_bincount; i++)
@@ -217,7 +215,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	size = firmware->table_params[table]->y_size;
 	mult = get_multiplier_f(size);
 
-	evaluator = evaluator_create_f(firmware->table_params[table]->y_ul_conv_expr);
+	evaluator = evaluator_create_f(firmware->table_params[table]->y_fromecu_conv_expr);
 
 	/* fetch us a copy of the y bins */
 	for (i=0; i != firmware->table_params[table]->y_bincount; i++)
@@ -362,6 +360,7 @@ G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdo
 G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
+	static Firmware_Details *firmware = NULL;
 	GtkWidget *item = NULL;
 	GtkWidget *partner = NULL;
 	GladeXML *main_xml = NULL;
@@ -371,6 +370,8 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 
 	if (!update_widget_f)
 		get_symbol_f("update_widget",(void *)&update_widget_f);
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
 
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
@@ -385,27 +386,36 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 
 		item = glade_xml_get_widget(xml,"plus_button");
 		register_widget_f("plus_button",item);
-		OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
+		if (firmware->capabilities & MS1_E)
+			OBJ_SET(item,"partner_widget",lookup_widget_f("WD_trim_angle_entry"));
+		else /* MS2 */
+			OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
 		OBJ_SET(item,"handler",GINT_TO_POINTER(INCREMENT_VALUE));
 		OBJ_SET(item,"amount",GINT_TO_POINTER(5));
 
 		item = glade_xml_get_widget(xml,"minus_button");
 		register_widget_f("minus_button",item);
-		OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
+		if (firmware->capabilities & MS1_E)
+			OBJ_SET(item,"partner_widget",lookup_widget_f("WD_trim_angle_entry"));
+		else /* MS2 */
+			OBJ_SET(item,"partner_widget",lookup_widget_f("IGN_trigger_offset_entry"));
 		OBJ_SET(item,"handler",GINT_TO_POINTER(DECREMENT_VALUE));
 		OBJ_SET(item,"amount",GINT_TO_POINTER(5));
 
 		item = glade_xml_get_widget(xml,"advance_parent_box");
-		OBJ_SET(item,"ctrl_name",g_strdup("trigger_offset_tool_advance_rtt"));
-		OBJ_SET(item,"source",g_strdup("sparkangle"));
-		OBJ_SET(item,"label_prefix",g_strdup("<span font_desc=\"Sans 64\">"));
-		OBJ_SET(item,"label_suffix",g_strdup("</span>"));
+		OBJ_SET_FULL(item,"ctrl_name",g_strdup("trigger_offset_tool_advance_rtt"),g_free);
+		OBJ_SET_FULL(item,"source",g_strdup("sparkangle"),g_free);
+		OBJ_SET_FULL(item,"label_prefix",g_strdup("<span font_desc=\"Sans 64\">"),g_free);
+		OBJ_SET_FULL(item,"label_suffix",g_strdup("</span>"),g_free);
 		OBJ_SET(item,"markup",GINT_TO_POINTER(TRUE));
 		add_additional_rtt_f(item);
 
 		item = glade_xml_get_widget(xml,"offset_entry");
 		register_widget_f("offset_entry",item);
-		partner = lookup_widget_f("IGN_trigger_offset_entry");
+		if (firmware->capabilities & MS1_E)
+			partner = lookup_widget_f("WD_trim_angle_entry");
+		else /* MS2 */
+			partner = lookup_widget_f("IGN_trigger_offset_entry");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(item,"page",OBJ_GET(partner,"page"));
@@ -413,15 +423,15 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		OBJ_SET(item,"size",OBJ_GET(partner,"size"));
 		OBJ_SET(item,"raw_lower",OBJ_GET(partner,"raw_lower"));
 		OBJ_SET(item,"raw_upper",OBJ_GET(partner,"raw_upper"));
-		OBJ_SET(item,"dl_conv_expr",OBJ_GET(partner,"dl_conv_expr"));
-		OBJ_SET(item,"ul_conv_expr",OBJ_GET(partner,"ul_conv_expr"));
+		OBJ_SET(item,"toecu_conv_expr",OBJ_GET(partner,"toecu_conv_expr"));
+		OBJ_SET(item,"fromecu_conv_expr",OBJ_GET(partner,"fromecu_conv_expr"));
 		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
 		ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
 		g_list_foreach(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
-		OBJ_SET(item,"bind_to_list",g_strdup("burners"));
+		OBJ_SET_FULL(item,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(item,"burners");
 		/* Force them to update */
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));

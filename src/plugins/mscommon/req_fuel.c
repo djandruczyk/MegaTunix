@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -411,6 +411,8 @@ G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_for_Table_%i",reqd_fuel->table_num);
 	cfgfile = cfg_open_file(filename);
+	if (!cfgfile)
+		cfgfile = cfg_new();
 	if (cfgfile)	/* If it opened nicely  */
 	{
 		cfg_write_int(cfgfile,tmpbuf,"Displacement",reqd_fuel->disp);
@@ -589,7 +591,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 		 */
 		tmp = (float)num_inj/(float)divider;
 	}
-	else if (firmware->capabilities & MSNS_E)
+	else if (firmware->capabilities & MS1_E)
 	{	
 		shift = get_bitshift_f(firmware->table_params[table_num]->dtmode_mask);
 		if ((ms_get_ecu_data(canID,firmware->table_params[table_num]->dtmode_page,firmware->table_params[table_num]->dtmode_offset,size) & firmware->table_params[table_num]->dtmode_mask) >> shift) 
@@ -718,7 +720,6 @@ G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
 	reqd_fuel = g_new0(Reqd_Fuel, 1);
 	reqd_fuel->table_num = table_num;
 	tmpbuf = g_strdup_printf("Req_Fuel_for_Table_%i",table_num);
-	cfgfile = cfg_open_file(filename);
 	/* Set defaults */
 	reqd_fuel->visible = FALSE;
 	reqd_fuel->disp = 350;
@@ -729,6 +730,7 @@ G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
 	reqd_fuel->actual_pressure = 3.0;
 	reqd_fuel->target_afr = 14.7;
 
+	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
 		cfg_read_int(cfgfile,tmpbuf,"Displacement",&reqd_fuel->disp);

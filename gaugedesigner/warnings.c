@@ -31,7 +31,7 @@ G_MODULE_EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer 
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"w_range.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"w_range.ui",NULL),NULL);
 	if (filename)
 	{
 		warnings = gtk_builder_new();
@@ -45,7 +45,7 @@ G_MODULE_EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer 
 	}
 	else
 	{
-		printf("Can't locate primary glade file!!!!\n");
+		printf("Can't locate primary ui file!!!!\n");
 		exit(-1);
 	}
 

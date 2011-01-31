@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -113,21 +113,26 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
 	GCond *rtv_thread_cond = NULL;
+	GMutex *rtv_thread_mutex = NULL;
 	extern gconstpointer *global_data;
 	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
-	g_return_if_fail(rtv_thread_cond);
+	rtv_thread_mutex = DATA_GET(global_data,"rtv_thread_mutex");
+	g_return_if_fail(rtv_thread_mutex);
 
 	switch (type)
 	{
 		case RTV_TICKLER:
 			if (DATA_GET(global_data,"realtime_id"))
 			{
+				DATA_SET(global_data,"realtime_id",NULL);
+				g_mutex_lock(rtv_thread_mutex);
 				g_cond_signal(rtv_thread_cond);
+				g_mutex_unlock(rtv_thread_mutex);
 				update_logbar("comms_view",NULL,_("Realtime Reader stopped\n"),FALSE,FALSE,FALSE);
 				DATA_SET(global_data,"realtime_id",NULL);
 			}
 			else
-				update_logbar("comms_view","warning",_("Realtime Reader ALREADY stopped\n"),FALSE,FALSE,FALSE);
+				update_logbar("comms_view",NULL,_("Realtime Reader ALREADY stopped\n"),FALSE,FALSE,FALSE);
 
 			if (!DATA_GET(global_data,"leaving"))
 				reset_runtime_status();
@@ -172,12 +177,14 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	GAsyncQueue *io_data_queue = NULL;
 	GAsyncQueue *pf_dispatch_queue = NULL;
 	GCond *rtv_thread_cond = NULL;
+	GMutex *rtv_thread_mutex = NULL;
 	extern gconstpointer *global_data;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
 	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
+	rtv_thread_mutex = DATA_GET(global_data,"rtv_thread_mutex");
 	get_symbol("signal_read_rtvars",(void *)&signal_read_rtvars);
 	get_symbol("setup_rtv",(void *)&setup_rtv);
 	get_symbol("teardown_rtv",(void *)&teardown_rtv);
@@ -187,6 +194,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	g_return_val_if_fail(io_data_queue,NULL);
 	g_return_val_if_fail(pf_dispatch_queue,NULL);
 	g_return_val_if_fail(rtv_thread_cond,NULL);
+	g_return_val_if_fail(rtv_thread_mutex,NULL);
 
 	if (setup_rtv)
 		if (!setup_rtv())
@@ -194,30 +202,37 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	g_mutex_lock(mutex);
 	g_async_queue_ref(io_data_queue);
 	g_async_queue_ref(pf_dispatch_queue);
+	g_mutex_lock(rtv_thread_mutex);
 	while (TRUE)
 	{
+		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
+
+		signal_read_rtvars();
 
 		/* Auto-throttling if gui gets sluggish */
 		while (( g_async_queue_length(io_data_queue) > 2) || 
-				(g_async_queue_length(pf_dispatch_queue) > 8))
-			g_usleep(5000);
-
-		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
-		signal_read_rtvars();
-
+				(g_async_queue_length(pf_dispatch_queue) > 3))
+		{
+			g_get_current_time(&time);
+			g_time_val_add(&time,1000*g_async_queue_length(pf_dispatch_queue));
+			if (g_cond_timed_wait(rtv_thread_cond,rtv_thread_mutex,&time))
+				goto breakout;
+		}
 		g_get_current_time(&time);
 		g_time_val_add(&time,serial_params->read_wait*1000);
-		if (g_cond_timed_wait(rtv_thread_cond,mutex,&time))
-		{
-			g_async_queue_unref(io_data_queue);
-			g_async_queue_unref(pf_dispatch_queue);
-			g_mutex_unlock(mutex);
-			g_mutex_free(mutex);
-			if (teardown_rtv)
-				teardown_rtv();
-			g_thread_exit(0);
-		}
+		if (g_cond_timed_wait(rtv_thread_cond,rtv_thread_mutex,&time))
+			goto breakout;
 	}
+breakout:
+	g_mutex_unlock(rtv_thread_mutex);
+	g_async_queue_unref(io_data_queue);
+	g_async_queue_unref(pf_dispatch_queue);
+	g_mutex_unlock(mutex);
+	g_mutex_free(mutex);
+	if (teardown_rtv)
+		teardown_rtv();
+	g_thread_exit(0);
+	return NULL;
 }
 
 

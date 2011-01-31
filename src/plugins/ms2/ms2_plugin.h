@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -16,7 +16,6 @@
 
 #include <gtk/gtk.h>
 #include <defines.h>
-#include <enums.h>
 #include <enums.h>
 
 #ifdef __MS2_PLUGIN_C__
@@ -55,6 +54,7 @@ EXTERN void (*bind_to_lists_f)(GtkWidget * , gchar * );
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
 void register_ecu_enums(void);
+void deregister_ecu_enums(void);
 /* Prototypes */
 
 

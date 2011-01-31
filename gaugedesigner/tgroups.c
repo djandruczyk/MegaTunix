@@ -34,7 +34,7 @@ G_MODULE_EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer da
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tgroup.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tgroup.ui",NULL),NULL);
 	if (filename)
 	{
 		tgroups = gtk_builder_new();
@@ -48,7 +48,7 @@ G_MODULE_EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer da
 	}
 	else
 	{
-		printf("Can't locate primary glade file!!!!\n");
+		printf("Can't locate primary ui file!!!!\n");
 		exit(-1);
 	}
 
@@ -275,7 +275,7 @@ gboolean remove_tgroup(GtkWidget * widget, gpointer data)
 
 GtkWidget * build_tgroup(MtxTickGroup *tgroup, gint index)
 {
-	/* MUCH faster that the glade way unfortunately */
+	/* MUCH faster that the ui way unfortunately */
 	GtkWidget *notebook = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *subtable = NULL;

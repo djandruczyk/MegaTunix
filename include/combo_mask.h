@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -45,6 +45,7 @@ struct _MaskEntryClass
 void mask_entry_editable_init (GtkEditableClass *iface);
 GtkWidget *mask_entry_new (void);
 GtkWidget *mask_entry_new_with_mask (gchar *mask);
+void mask_entry_finalize(GObject *);
 
 G_END_DECLS
 

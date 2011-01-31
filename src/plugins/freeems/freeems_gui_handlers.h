@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -24,10 +24,17 @@ typedef enum
 	SOFT_BOOT_ECU = LAST_STD_BUTTON_ENUM + 1,
 	HARD_BOOT_ECU
 }FreeEMSStdButton;
+
+
+typedef enum
+{
+	FREEEMS_TOGGLE = LAST_TOGGLE_BUTTON_ENUM + 1
+}FreeEMSToggleButton;
 /* Enumerations */
 
 /* Prototypes */
-gboolean common_button_handler(GtkWidget *, gpointer);
+gboolean common_std_button_handler(GtkWidget *, gpointer);
+gboolean common_toggle_button_handler(GtkWidget *, gpointer);
 gboolean common_bitmask_button_handler(GtkWidget *, gpointer);
 void common_gui_init(void);
 /* Prototypes */

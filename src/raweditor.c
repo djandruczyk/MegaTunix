@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -109,8 +109,8 @@ G_MODULE_EXPORT void finish_raweditor(void)
 			OBJ_SET(entry,"page",GINT_TO_POINTER(i));
 			OBJ_SET(entry,"offset",GINT_TO_POINTER(j));
 			OBJ_SET(entry,"base",GINT_TO_POINTER(16));
-			OBJ_SET(entry,"raw_lower",g_strdup("0"));
-			OBJ_SET(entry,"raw_upper",g_strdup("255"));
+			OBJ_SET_FULL(entry,"raw_lower",g_strdup("0"),g_free);
+			OBJ_SET_FULL(entry,"raw_upper",g_strdup("255"),g_free);
 			ecu_widgets[i][j] = g_list_prepend(ecu_widgets[i][j],(gpointer)entry);
 			OBJ_SET(entry,"handler",
 					GINT_TO_POINTER(GENERIC));

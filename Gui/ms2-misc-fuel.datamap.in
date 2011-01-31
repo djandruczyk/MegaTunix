@@ -156,14 +156,14 @@ offset=912
 _tooltip=This is the fuel correction at the low frequency, with GM sensors  this is for pure gasoline, (typically 100%)
 
 [ff_timing_corr_low_entry]
-keys=offset,precision,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=978
 precision=1
 size=_S16_
 raw_lower=-450
 raw_upper=450
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=This is the ignition timing correction at the low frequency, with GM sensors this is for pure gasoline, (typically 0.0 degrees)
 
 [ff_freq_high_entry]
@@ -177,14 +177,14 @@ offset=913
 _tooltip=This is the fuel correction at the high frequency, with GM sensors  this is for pure ethanol (typically 163%)
 
 [ff_timing_corr_high_entry]
-keys=offset,precision,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=980
 precision=1
 size=_S16_
 raw_lower=-450
 raw_upper=450
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=This is the ignition timing correction at the high frequency, with GM sensors  this is for pure ethanol, (typically -13 deg, i.e. subtract 13 deg from timing advnace)
 
 [amc_step_entry]
@@ -205,13 +205,13 @@ raw_upper=15000
 _tooltip=The furthest that the nearest rpm bin can be away and still have the AMC change applied to that entry. 
 
 [amc_vertex_map_entry]
-keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=918
 size=_U16_
 precision=1
 raw_upper=3000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=The furthest that the nearest kPa bin can be away and still have the AMC change applied to that entry. 
 
 [amc_table_change_entry]
@@ -245,20 +245,20 @@ raw_upper=3000
 _tooltip=This is the cranking RPM threshold.  this should be set slightly higher than your maximum engine cranking speed,  but below idle speed.,  typical value is around 300.
 
 [nb_afr_stoich_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip,bind_to_list
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip,bind_to_list
 offset=633
 precision=2
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 bind_to_list=afr_nb
 _tooltip=This is the narrowband O<sub>2</sub> stoich voltage
 
 [wb_afr_stoich_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip,bind_to_list
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip,bind_to_list
 offset=633
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=afr_wb
 _tooltip=This is the wideband O<sub>2</sub> stoich AFR
 
@@ -268,12 +268,12 @@ offset=746
 _tooltip=The N2O enrichment input is a percentage which multiplies the Δtime between tach pulses. This provides a fixed fuel flow rate for the constant N2O flow rather than a fixed pulse width. Since the same variable is also used for the fuel response test impulse, which is in milliseconds, a change in the settings.ini file is required if you want to use N2O enrichment.
 
 [nos_spark_retard_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=1
 offset=677
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=Amount of spark retard when NOS active via the E0 input being low.
 
 [map_above_rpm_entry]
@@ -309,12 +309,12 @@ bind_to_list=an_controls
 _tooltip=The RPM threshold to change between Blended mode and pure SD mode
 
 [baro_spark_adv_entry]
-keys=precision,offset,size,dl_conv_expr,ul_conv_expr,tooltip,bind_to_list
+keys=precision,offset,size,toecu_conv_expr,fromecu_conv_expr,tooltip,bind_to_list
 offset=631
 size=_U08_
 precision=2
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 bind_to_list=an_controls
 _tooltip=This factor is to allow spark advance with baro (when less than 100 kPa) for alpha-N mode. This isn't allowed in speed density since map in the spark table accounts for it. The rate of advance versus baro under 100 kPa is a user input. 
 

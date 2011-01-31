@@ -58,6 +58,7 @@ megatunix_SOURCES = \
 	runtime_status.c \
 	runtime_text.c \
 	serialio.c \
+	sleep_calib.c \
 	stringmatch.c \
 	tabloader.c \
 	tag_loader.c \

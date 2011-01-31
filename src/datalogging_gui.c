@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -286,6 +286,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 
 	string = g_strdup_printf("\"%s\"\r\n",firmware->actual_signature);
 	output = g_string_append(output,string); 
+	g_free(string);
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_ptr_array_index(rtv_map->rtv_list,i);
@@ -372,6 +373,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 
 		tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precision),",",'.');
 		g_string_append(output,tmpbuf);
+		g_free(tmpbuf);
 		j++;
 
 		/* Print delimiter to log here so there isnt an extra
@@ -648,8 +650,8 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 			/*tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%1$.*2$f",value,precisions[i]);*/
 			tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precisions[i]),",",'.');
 			g_string_append(output,tmpbuf);
-			j++;
 			g_free(tmpbuf);
+			j++;
 
 			/* Print delimiter to log here so there isnt an extra
 			 * char at the end fo the line 

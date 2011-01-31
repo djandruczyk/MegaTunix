@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -25,7 +25,8 @@ typedef struct _CmdLineArgs CmdLineArgs;
  */
 struct _CmdLineArgs
 {
-	gboolean debug;		/* Debug to console */
+	gboolean debugargs;	/* Debug arg processing to console */
+	gboolean verbose;	/* Show Version */
 	gboolean version;	/* Show Version */
 	gboolean be_quiet;	/* No error popups */
 	gboolean autolog_dump;	/* Automatically dump full logs periodically */
@@ -49,6 +50,7 @@ struct _CmdLineArgs
 /* Prototypes */
 CmdLineArgs * init_args(void);
 void handle_args(gint, gchar ** );
+void args_free(gpointer);
 /* Prototypes */
 
 #endif

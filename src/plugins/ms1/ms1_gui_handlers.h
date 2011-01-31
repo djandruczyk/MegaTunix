@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -14,8 +14,23 @@
 #ifndef __MS1_GUI_HANDLERS_H__
 #define __MS1_GUI_HANDLERS_H__
 
-#include <enums.h>
+#include <../mscommon/mscommon_gui_handlers.h>
 #include <gtk/gtk.h>
+
+typedef enum
+{
+        START_TOOTHMON_LOGGER = LAST_COMMON_TOGGLE_BUTTON_ENUM + 1,
+        STOP_TOOTHMON_LOGGER,
+        START_TRIGMON_LOGGER,
+        STOP_TRIGMON_LOGGER
+}MS1ToggleButton;
+
+typedef enum
+{
+        TRIGGER_ANGLE = LAST_COMMON_BUTTON_ENUM + 1,
+        ODDFIRE_ANGLE
+}MS1MtxButton;
+
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
@@ -27,19 +42,6 @@ void ecu_update_entry(GtkWidget *);
 void ecu_gui_init(void);
 /* Prototypes */
 
-typedef enum
-{
-        START_TOOTHMON_LOGGER = LAST_TOGGLE_ENUM + 1,
-        STOP_TOOTHMON_LOGGER,
-        START_TRIGMON_LOGGER,
-        STOP_TRIGMON_LOGGER
-}MS1ToggleButton;
-
-typedef enum
-{
-        TRIGGER_ANGLE = LAST_BUTTON_ENUM + 1,
-        ODDFIRE_ANGLE
-}MS1MtxButton;
 
 #endif
 

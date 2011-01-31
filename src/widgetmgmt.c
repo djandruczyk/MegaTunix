@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -74,7 +74,7 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data)
 		DATA_SET_FULL(global_data,"dynamic_widgets",dynamic_widgets,g_hash_table_destroy);
 	}
 	fullname = g_strdup_printf("%s%s",prefix,name);
-	OBJ_SET(widget,"fullname",g_strdup(fullname));
+	OBJ_SET_FULL(widget,"fullname",g_strdup(fullname),g_free);
 	if (!lookup_widget(fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
@@ -257,6 +257,7 @@ G_MODULE_EXPORT void set_fixed_size( GtkWidget *widget, int nchars )
 			geo.height );
 }
 
+
 G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 {
 	GtkComboBox *box = GTK_COMBO_BOX(widget);
@@ -265,7 +266,6 @@ G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 	if (GTK_IS_ENTRY(entry))
 		gtk_editable_set_editable(GTK_EDITABLE(entry),FALSE);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget),0);
-
 }
 
 

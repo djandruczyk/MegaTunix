@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -86,7 +86,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Realtime Map...")));
-	filename = get_file(g_strconcat(REALTIME_MAPS_DATA_DIR,PSEP,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
+	filename = get_file(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
 	if (!filename)
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\t File \"%s.rtv_map\" not found!!, exiting function\n",firmware->rtv_map_file));
@@ -303,9 +303,9 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		}
 		eval = NULL;
 		expr = NULL;
-		if (DATA_GET(object,"ul_conv_expr") && !(DATA_GET(object,"ul_evaluator")))
+		if (DATA_GET(object,"fromecu_conv_expr") && !(DATA_GET(object,"ul_evaluator")))
 		{
-			expr = (gchar *)DATA_GET(object,"ul_conv_expr");
+			expr = (gchar *)DATA_GET(object,"fromecu_conv_expr");
 			eval = evaluator_create(expr);
 			if (!eval)
 			{
@@ -316,9 +316,9 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		}
 		eval = NULL;
 		expr = NULL;
-		if (DATA_GET(object,"dl_conv_expr") && !(DATA_GET(object,"dl_evaluator")))
+		if (DATA_GET(object,"toecu_conv_expr") && !(DATA_GET(object,"dl_evaluator")))
 		{
-			expr = (gchar *)DATA_GET(object,"dl_conv_expr");
+			expr = (gchar *)DATA_GET(object,"toecu_conv_expr");
 			eval = evaluator_create(expr);
 			if (!eval)
 			{
@@ -336,10 +336,10 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			eval = (void *)DATA_GET(object,"ul_evaluator");
 			if (!eval)
 			{
-				expr = DATA_GET(object,"ul_conv_expr");
+				expr = DATA_GET(object,"fromecu_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
 					exit (-3);
 				}
 				eval = evaluator_create(expr);
@@ -364,10 +364,10 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			eval = (void *)DATA_GET(object,"ul_evaluator");
 			if (!eval)
 			{
-				expr = DATA_GET(object,"ul_conv_expr");
+				expr = DATA_GET(object,"fromecu_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_map_loader()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
 					exit (-3);
 				}
 				eval = evaluator_create(expr);

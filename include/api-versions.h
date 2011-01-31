@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -20,11 +20,11 @@
 
 /* INTERROGATE API VERSIONS */
 #define INTERROGATE_MAJOR_API 1
-#define INTERROGATE_MINOR_API 7
+#define INTERROGATE_MINOR_API 9
 
 /* REALTIME MAP API VERSIONS */
 #define RTV_MAP_MAJOR_API 1
-#define RTV_MAP_MINOR_API 5
+#define RTV_MAP_MINOR_API 6
 
 /* REALTIME SLIDERS API VERSIONS */
 #define RT_SLIDERS_MAJOR_API 1

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -17,6 +17,7 @@
 #include <configfile.h>
 #include <debugging.h>
 #include <defines.h>
+#include <init.h>
 #include <multi_expr_loader.h>
 #include <mtxmatheval.h>
 #include <enums.h>
@@ -96,7 +97,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		ltables = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
-	if (!cfg_read_string(cfgfile,section,"dl_conv_exprs",&tmpbuf))
+	if (!cfg_read_string(cfgfile,section,"toecu_conv_exprs",&tmpbuf))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
@@ -106,7 +107,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		dl_exprs = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
-	if (!cfg_read_string(cfgfile,section,"ul_conv_exprs",&tmpbuf))
+	if (!cfg_read_string(cfgfile,section,"fromecu_conv_exprs",&tmpbuf))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
@@ -134,10 +135,10 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 			multi->lookuptable = NULL;
 		else
 			multi->lookuptable = g_strdup(ltables[i]);
-		multi->dl_conv_expr = g_strdup(dl_exprs[i]);
-		multi->ul_conv_expr = g_strdup(ul_exprs[i]);
-		multi->dl_eval = evaluator_create(multi->dl_conv_expr);
-		multi->ul_eval = evaluator_create(multi->ul_conv_expr);
+		multi->toecu_conv_expr = g_strdup(dl_exprs[i]);
+		multi->fromecu_conv_expr = g_strdup(ul_exprs[i]);
+		multi->dl_eval = evaluator_create(multi->toecu_conv_expr);
+		multi->ul_eval = evaluator_create(multi->fromecu_conv_expr);
 		g_hash_table_insert(hash,g_strdup(keys[i]),multi);
 	}
 	DATA_SET_FULL(object,"real_lower",g_strdup_printf("%i",lowest),g_free);
@@ -154,33 +155,27 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
 	MultiExpr *multi = (MultiExpr *)data;
-	if (multi->dl_conv_expr)
-		g_free(multi->dl_conv_expr);	
-	if (multi->ul_conv_expr)
-		g_free(multi->ul_conv_expr);	
-	if (multi->lookuptable)
-		g_free(multi->lookuptable);	
+	cleanup(multi->toecu_conv_expr);	
+	cleanup(multi->fromecu_conv_expr);	
+	cleanup(multi->lookuptable);	
 	if (multi->dl_eval)
 		evaluator_destroy(multi->dl_eval);
 	if (multi->ul_eval)
 		evaluator_destroy(multi->ul_eval);
+	cleanup(multi);
 }
 
 
 G_MODULE_EXPORT void free_multi_source(gpointer data)
 {
 	MultiSource *multi = (MultiSource *)data;
-	if (multi->source)
-		g_free(multi->source);	
-	if (multi->ul_conv_expr)
-		g_free(multi->ul_conv_expr);	
-	if (multi->dl_conv_expr)
-		g_free(multi->dl_conv_expr);	
+	cleanup(multi->source);	
+	cleanup(multi->fromecu_conv_expr);	
+	cleanup(multi->toecu_conv_expr);	
+	cleanup(multi->suffix);
 	if (multi->ul_eval)
 		evaluator_destroy(multi->ul_eval);
 	if (multi->dl_eval)
 		evaluator_destroy(multi->dl_eval);
-	if (multi->suffix)
-		g_free(multi->suffix);
-	g_free(multi);
+	cleanup(multi);
 }

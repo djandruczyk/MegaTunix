@@ -133,51 +133,51 @@ _tooltip=The PWM idle mode drives a FORD 2 wire idle actuator.  This requires th
 #----- Entries ----------------------------------------------------------
 
 [bng_fast_idle_cutoff_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=1
 offset=186
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,bng_idle_controls
 _tooltip=This is the temp at which if the engine is below, the fast idle output is active, and if the engine temp is above the fast idle output is shutoff.
 
 [fast_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=8
 offset=17
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,pwm_idle_controls,cloop_idle_controls
 _tooltip=This is the temp at which the fast idle RPM is set to.  If engine temp is below this temp the fast idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
 
 [slow_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=8
 offset=18
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,pwm_idle_controls,cloop_idle_controls
 _tooltip=This is the temp at which the slow RPM is set to.  If engine temp is above this temp the slow idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
 
 [w_fast_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=8
 offset=17
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,warmup_idle_controls,pwm_idle_controls
 _tooltip=This is the temp at which the fast idle RPM is set to.  If engine temp is below this temp the fast idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
 
 [w_slow_idle_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=8
 offset=18
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,warmup_idle_controls,pwm_idle_controls
 _tooltip=This is the temp at which the slow RPM is set to.  If engine temp is above this temp the slow idle rpm will be used as is.  The warmup algorithm interpolates between the fast and slow temps and adjusts the engine idle appropriately between the fast and slow idle rpms as well.
@@ -197,14 +197,14 @@ bind_to_list=warmup_idle_controls
 _tooltip=This is the DutyCycle the PWM Idle valve will be run at at the High (hot) engine temperature. The Dutycycle is interpolated between the low and high temp span in order to gradually reduce the idle RPM as the motor warms up.
 
 [idle_frequency_entry]
-keys=page,offset,raw_upper,precision,reverse_keys,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,raw_upper,precision,reverse_keys,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=11
 raw_upper=255
 precision=1
 reverse_keys=TRUE
-dl_conv_expr=10000/x
-ul_conv_expr=10000/x
+toecu_conv_expr=10000/x
+fromecu_conv_expr=10000/x
 bind_to_list=pwm_idle_controls
 _tooltip=This is the frequency in hertz that the ECU will drive the PWM idle valve. Range of 39hz to 10khz. PgUp/PgDown/+/- can be used to navigate.  Control will jump to nearest point.
 
@@ -223,23 +223,23 @@ bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=The Throttle has to be set at this value OR BELOW for idle control to become active.  This value is in ADC counts for the TPS input.
 
 [idle_restore_rpm_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
 page=8
 offset=14
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 raw_lower=1
 raw_upper=60
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=Needs work
 
 [dashpot_settle_time_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=3
 precision=2
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=The amount of time the dashpot takes to settle to the idle target. Units are in seconds
 
@@ -251,87 +251,87 @@ bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=The Amount of dutycycle to increase the PWM idle by  when dashpoit is active. (decel anti-stall measure)
 
 [deadband_range_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=9
-dl_conv_expr=x/10
-ul_conv_expr=x*10
+toecu_conv_expr=x/10
+fromecu_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=The amount of range the idle is allow to fluctuate without PMW idle trying to counteract it. (to minimize overcompensation and/or hunting)
 
 [upper_limit_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=8
-dl_conv_expr=x/10
-ul_conv_expr=x*10
+toecu_conv_expr=x/10
+fromecu_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=Part of Adaptive Idle control. If current RPM equals target+ upper limit, then recovery time is fast recovery below, If current RPM equals target + lower limit, then recovery time is slow receovery time. 
 
 [lower_limit_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=7
-dl_conv_expr=x/10
-ul_conv_expr=x*10
+toecu_conv_expr=x/10
+fromecu_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [fast_recovery_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=13
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [slow_recovery_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=1
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=Part of Adaptive Idle control. If current RPM equals target+upper limit, then recovery time is fast recovery below, If current RPM equals target+lower limit, then recovery time is slow recovery time. 
 
 [closure_speed_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=10
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=Controls how fast the PWM Idle valve can close in seconds.
 
 [startup_delay_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=12
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=I have no idea WTF this control does.
 
 [fast_idle_speed_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=19
-dl_conv_expr=x/10
-ul_conv_expr=x*10
+toecu_conv_expr=x/10
+fromecu_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=Fast IDLE RPM (i.e. the RPM we try to get the engineto run at when it's COLD)
 
 [slow_idle_speed_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=20
-dl_conv_expr=x/10
-ul_conv_expr=x*10
+toecu_conv_expr=x/10
+fromecu_conv_expr=x*10
 bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=Slow IDLE RPM (i.e. the RPM we try to get the engineto run at when it's HOT)
 
@@ -350,12 +350,12 @@ bind_to_list=cloop_idle_controls,pwm_idle_controls
 _tooltip=DutyCycle at which point the PWM valve can be considered closed. Odds are due to print pressure inside the valve it make take DC values of 20% or more to lift the valve off it's seat.
 
 [idle_advance_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=3
 offset=174
 precision=2
-dl_conv_expr=(x+10)/(352/1000)
-ul_conv_expr=(x*(352/1000))-10
+toecu_conv_expr=(x+10)/(352/1000)
+fromecu_conv_expr=(x*(352/1000))-10
 _tooltip=The Timing advance to use at idle if the next 3 conditions match. Set to -10 to disable this function and use the sparkmap entirely. Useful to keep a stable timing at idle to minimize hunting.
 
 [idle_tps_entry]
@@ -365,19 +365,19 @@ offset=175
 _tooltip=The TPS threshold that can NOT be exceeded to enable Idle timing advance override. Set to this to a value to slighly higher than the TPS value at idle.
 
 [idle_rpm_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=3
 offset=176
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 _tooltip=The RPM Value which the engine needs to be BELOW to enable fixed idle timing.
 
 [idle_clt_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=3
 offset=177
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=true
 bind_to_list=temperature
 _tooltip=The CLT Value which the engine needs to be ABOVE to enable fixed idle timing.

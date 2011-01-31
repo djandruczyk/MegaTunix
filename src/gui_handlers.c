@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -91,6 +91,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	gboolean tmp = TRUE;
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
+	GtkWidget *main_window = NULL;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 	GMutex *mutex = g_mutex_new();
@@ -98,6 +99,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GCond *gui_dispatch_cond = NULL;
 	GCond *io_dispatch_cond = NULL;
 	GCond *statuscounts_cond = NULL;
+	GMutex *pf_dispatch_mutex = NULL;
+	GMutex *gui_dispatch_mutex = NULL;
+	GMutex *io_dispatch_mutex = NULL;
+	GMutex *statuscounts_mutex = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -115,6 +120,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		}
 		prompt_to_save();
 	}
+	main_window = lookup_widget("main_window");
 
 	/* Stop timeout functions */
 	stop_tickler(RTV_TICKLER);
@@ -145,13 +151,15 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
 	g_static_mutex_lock(&leave_mutex);
 
-	g_mutex_lock(mutex);
 
 	/* IO dispatch queue */
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
-	g_cond_timed_wait(io_dispatch_cond,mutex,&now);
+	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
+	g_mutex_lock(io_dispatch_mutex);
+	g_cond_timed_wait(io_dispatch_cond,io_dispatch_mutex,&now);
+	g_mutex_unlock(io_dispatch_mutex);
 
 	/* Binary Log flusher */
 	id = (GINT)DATA_GET(global_data,"binlog_flush_id");
@@ -167,7 +175,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
-	g_cond_timed_wait(pf_dispatch_cond,mutex,&now);
+	pf_dispatch_mutex = DATA_GET(global_data,"pf_dispatch_mutex");
+	g_mutex_lock(pf_dispatch_mutex);
+	g_cond_timed_wait(pf_dispatch_cond,pf_dispatch_mutex,&now);
+	g_mutex_unlock(pf_dispatch_mutex);
 
 	/* Statuscounts timeout */
 	id = (GINT)DATA_GET(global_data,"statuscounts_id");
@@ -177,7 +188,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	statuscounts_cond = DATA_GET(global_data,"statuscounts_cond");
-	g_cond_timed_wait(statuscounts_cond,mutex,&now);
+	statuscounts_mutex = DATA_GET(global_data,"statuscounts_mutex");
+	g_mutex_lock(statuscounts_mutex);
+	g_cond_timed_wait(statuscounts_cond,statuscounts_mutex,&now);
+	g_mutex_unlock(statuscounts_mutex);
 
 	/* GUI Dispatch timeout */
 	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");
@@ -187,9 +201,10 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
-	g_cond_timed_wait(gui_dispatch_cond,mutex,&now);
-
-	g_mutex_unlock(mutex);
+	gui_dispatch_mutex = DATA_GET(global_data,"gui_dispatch_mutex");
+	g_mutex_lock(gui_dispatch_mutex);
+	g_cond_timed_wait(gui_dispatch_cond,gui_dispatch_mutex,&now);
+	g_mutex_unlock(gui_dispatch_mutex);
 
 
 	save_config();
@@ -243,6 +258,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
+	gtk_main_quit();
 	exit(0);
 	return TRUE;
 }
@@ -261,7 +277,6 @@ G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 
 	port = gtk_editable_get_chars(editable,0,-1);
 	gtk_widget_modify_text(GTK_WIDGET(editable),GTK_STATE_NORMAL,&black);
-	g_free(DATA_GET(global_data,"override_port"));
 	DATA_SET_FULL(global_data,"override_port",g_strdup(port),g_free);
 	g_free(port);
 	close_serial();
@@ -315,7 +330,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
 				break;
 			case OFFLINE_FIRMWARE_CHOICE:
-				DATA_SET(global_data,"offline_firmware_choice", g_strdup(OBJ_GET(widget,"filename")));
+				DATA_SET_FULL(global_data,"offline_firmware_choice", g_strdup(OBJ_GET(widget,"filename")),g_free);
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
@@ -616,7 +631,10 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 		}
 	}
 	else
+	{
+		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return common_handler(widget,data);
+	}
 }
 
 
@@ -828,12 +846,8 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	gint source = 0;
 	gfloat value = 0.0;
 	GtkWidget * tmpwidget = NULL;
-	GHashTable **interdep_vars = NULL;
 	Serial_Params *serial_params = NULL;
-	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	interdep_vars = DATA_GET(global_data,"interdep_vars");
 	serial_params = DATA_GET(global_data,"serial_params");
 
 	if (!GTK_IS_WIDGET(widget))
@@ -947,7 +961,6 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	gboolean retval = FALSE;
 	gboolean reverse_keys = FALSE;
 	gboolean *tracking_focus = NULL;
-	Firmware_Details *firmware = NULL;
 
 	if (!ecu_widgets)
 		ecu_widgets = DATA_GET(global_data,"ecu_widgets");
@@ -962,9 +975,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	if (!update_widget_f)
 		get_symbol("update_widget",(void *)&update_widget_f);
 
-	firmware = DATA_GET(global_data,"firmware");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
-
 
 	size = (DataSize) OBJ_GET(widget,"size");
 	reverse_keys = (GBOOLEAN) OBJ_GET(widget,"reverse_keys");
@@ -1191,7 +1202,13 @@ G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gin
 	gint count = 0;
 	gint i = 0;
 	GtkEditable *editable = GTK_EDITABLE(entry);
-	gchar *result = g_new (gchar, len);
+	gchar *result = NULL;
+
+	if ((DATA_GET(global_data,"paused_handlers")) ||
+			(!DATA_GET(global_data,"ready")))
+		return;
+
+	result = g_new (gchar, len);
 	for (i=0; i < len; i++) 
 	{
 		if ((g_ascii_isdigit(text[i])) || g_ascii_ispunct(text[i]))
@@ -1235,9 +1252,6 @@ G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, g
 	GtkWidget *frame = NULL;
 	GtkWidget *parent = NULL;
 	gchar * frame_name = NULL;
-	Firmware_Details *firmware = NULL;
-
-	firmware = DATA_GET(global_data,"firmware");
 
 	/* Select all chars on click */
 	/*
@@ -1672,7 +1686,6 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-
 	widget_name = OBJ_GET(widget,"fullname");
 	if (!widget_name)
 		return;
@@ -1680,7 +1693,7 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 		table_num = (gint) strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	else
 		return;
-	
+
 	ptr = g_strrstr_len(widget_name,strlen(widget_name),"_of_");
 	ptr = g_strrstr_len(widget_name,ptr-widget_name,"_");
 	tmpbuf = g_strdelimit(g_strdup(ptr),"_",' ');

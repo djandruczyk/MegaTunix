@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -695,12 +695,24 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	gtk_tree_model_get_iter_from_string(model,&iter,path);
 	gtk_tree_model_get(model,&iter,INTERNAL_NAME_COL,&int_name,FILENAME_COL,&old,-1);
 	if (g_strcasecmp(old,new_text) == 0) /* If no change, return */
+	{
+		g_free(int_name);
+		g_free(old);
 		return TRUE;
+	}
 	
 	if (g_strcasecmp(new_text,"Personal") == 0)
+	{
+		g_free(int_name);
+		g_free(old);
 		return TRUE;
+	}
 	if (g_strcasecmp(new_text,"System") == 0)
+	{
+		g_free(int_name);
+		g_free(old);
 		return TRUE;
+	}
 	if (DATA_GET(global_data,"realtime_id"))
 	{
 		restart_tickler = TRUE;
@@ -722,7 +734,11 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 
 		cfgfile = cfg_open_file(firmware->profile_filename);
 		if (!cfgfile)
+		{
+			g_free(int_name);
+			g_free(old);
 			return FALSE;
+		}
 		g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),update_lt_config,cfgfile);
 	if (g_strrstr(firmware->profile_filename,".MegaTunix"))
 		cfg_write_file(cfgfile, firmware->profile_filename);
@@ -739,8 +755,9 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	cfg_free(cfgfile);
 		
 	/*printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);*/
+	g_free(int_name);
+	g_free(old);
 	return TRUE;
-
 }
 
 G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)

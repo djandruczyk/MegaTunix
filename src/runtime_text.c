@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -82,7 +82,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Text...")));
 
-	filename = get_file(g_strconcat(RTTEXT_DATA_DIR,PSEP,firmware->rtt_map_file,NULL),g_strdup("xml"));
+	filename = get_file(g_build_path(PSEP,RTTEXT_DATA_DIR,firmware->rtt_map_file,NULL),g_strdup("xml"));
 	if (!filename)
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->rtt_map_file));

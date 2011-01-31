@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -14,7 +14,6 @@
 #include <config.h>
 #include <cairo/cairo.h>
 #include <debugging.h>
-#include <enums.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <math.h>
@@ -568,11 +567,11 @@ gboolean signal_toothtrig_read(EcuPluginTickler type)
 	switch (type)
 	{
 		case TOOTHMON_TICKLER:
-			if (firmware->capabilities & MSNS_E)
+			if (firmware->capabilities & MS1_E)
 				io_cmd_f("ms1_e_read_toothmon",NULL);
 			break;
 		case TRIGMON_TICKLER:
-			if (firmware->capabilities & MSNS_E)
+			if (firmware->capabilities & MS1_E)
 				io_cmd_f("ms1_e_read_trigmon",NULL);
 			break;
 		default:

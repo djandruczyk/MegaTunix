@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -107,6 +107,7 @@ EXTERN gdouble (*f_to_k_f)(gdouble);
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
 void register_common_enums(void);
+void deregister_common_enums(void);
 /* Prototypes */
 
 #endif

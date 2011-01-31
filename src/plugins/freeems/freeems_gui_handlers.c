@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -37,8 +37,35 @@ G_MODULE_EXPORT void common_gui_init(void)
 
 
 
-G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
+	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
+	FreeEMSToggleButton handler;
+
+	handler = (FreeEMSToggleButton)OBJ_GET(widget,"handler");
+
+	switch (handler)
+	{
+		default:
+			if (!ecu_handler)
+			{
+				if (get_symbol_f("ecu_toggle_button_handler",(void *)&ecu_handler))
+					return ecu_handler(widget,data);
+				else
+					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_toggle_button_handler()\n\tDefault case, but there is NO ecu_toggle_button_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+			}
+			else
+				return ecu_handler(widget,data);
+			break;
+
+	}
+	return TRUE;
+ }
+
+
+G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer data)
+{
+	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	FreeEMSStdButton handler;
 
 	handler = (FreeEMSStdButton)OBJ_GET(widget,"handler");
@@ -51,6 +78,18 @@ G_MODULE_EXPORT gboolean common_button_handler(GtkWidget *widget, gpointer data)
 		case HARD_BOOT_ECU:
 			hard_boot_ecu();
 			break;
+		default:
+			if (!ecu_handler)
+			{
+				if (get_symbol_f("ecu_std_button_handler",(void *)&ecu_handler))
+					return ecu_handler(widget,data);
+				else
+					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_std_button_handler()\n\tDefault case, but there is NO ecu_std_button_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+			}
+			else
+				return ecu_handler(widget,data);
+			break;
+
 	}
 	return TRUE;
 }

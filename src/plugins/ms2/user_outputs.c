@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -13,12 +13,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <assert.h>
 #include <config.h>
 #include <defines.h>
 #include <debugging.h>
-#include <enums.h>
-#include <keyparser.h>
 #include <ms2_plugin.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
@@ -34,8 +31,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gint i = 0;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
-	gchar * dl_conv = NULL;
-	gchar * ul_conv = NULL;
+	gchar * toecu_conv = NULL;
+	gchar * fromecu_conv = NULL;
 	gchar * range = NULL;
 	gint bitval = 0;
 	gint width = 0;
@@ -45,6 +42,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gchar * data = NULL;
 	gchar * name = NULL;
 	gchar *regex = NULL;
+	GString *string = NULL;
 	GtkWidget *entry = NULL;
 	GtkEntryCompletion *completion = NULL;
 	GtkListStore *store = NULL;
@@ -60,6 +58,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	*/
 	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR);
 	/* Iterate across valid variables */
+	string = g_string_sized_new(32);
+
 	while ((data = rtv_map->raw_list[i])!= NULL)
 	{
 		i++;
@@ -77,8 +77,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		size = (DataSize)DATA_GET(object,"size");
 		lower = DATA_GET(object,"real_lower");
 		upper = DATA_GET(object,"real_upper");
-		dl_conv = DATA_GET(object,"dl_conv_expr");
-		ul_conv = DATA_GET(object,"ul_conv_expr");
+		toecu_conv = DATA_GET(object,"toecu_conv_expr");
+		fromecu_conv = DATA_GET(object,"fromecu_conv_expr");
 		precision = (GINT) DATA_GET(object,"precision");
 		bitval = (GINT) DATA_GET(object,"offset");
 		if ((!lower) && (!upper))
@@ -86,27 +86,30 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		else
 			range = g_strdup_printf("Valid Range: %s <-> %s",lower,upper);
 
-		regex = g_strconcat(name,NULL);
+		string = g_string_append(string,name);
 		if (rtv_map->raw_list[i])
-			regex = g_strconcat("|",NULL);
+			string = g_string_append(string,"|");
+
 		gtk_list_store_append(store,&iter);
 		gtk_list_store_set(store,&iter,
 				UO_CHOICE_COL,name,
 				UO_BITVAL_COL,bitval,
-				UO_DL_CONV_COL,dl_conv,
-				UO_UL_CONV_COL,ul_conv,
+				UO_TOECU_CONV_COL,toecu_conv,
+				UO_FROMECU_CONV_COL,fromecu_conv,
 				UO_LOWER_COL,lower,
 				UO_UPPER_COL,upper,
 				UO_RANGE_COL,range,
 				UO_SIZE_COL,size,
 				UO_PRECISION_COL,precision,
 				-1);
+		g_free(range);
 	}
 	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
 	if (GTK_IS_COMBO_BOX_ENTRY(widget))
 	{
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(widget),UO_CHOICE_COL);
-		entry = mask_entry_new_with_mask_f(regex);
+		entry = mask_entry_new_with_mask_f(string->str);
+		g_string_free(string,TRUE);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
 		if ((width = (GINT)OBJ_GET((GtkWidget *)widget,"max_chars")) > 0)
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);
@@ -140,8 +143,8 @@ void update_ms2_user_outputs(GtkWidget *widget)
 	gint tmpi = 0;
 	gint t_bitval = 0;
 	gboolean valid = FALSE;
-	gchar * dl_conv = NULL;
-	gchar * ul_conv = NULL;
+	gchar * toecu_conv = NULL;
+	gchar * fromecu_conv = NULL;
 	gchar *lower = NULL;
 	gchar *upper = NULL;
 	gchar *range = NULL;
@@ -163,7 +166,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 		{
 
 			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_TOECU_CONV_COL,&toecu_conv,UO_FROMECU_CONV_COL,&fromecu_conv,-1);
 			tmpbuf = (gchar *)OBJ_GET(widget,"range_label");
 			if (tmpbuf)
 				tmpwidget = lookup_widget_f(tmpbuf);
@@ -174,18 +177,11 @@ void update_ms2_user_outputs(GtkWidget *widget)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"dl_evaluator");
-				if (eval)
+				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+				if (toecu_conv)
 				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-					eval = NULL;
-				}
-				if (dl_conv)
-				{
-					eval = evaluator_create_f(dl_conv);
-					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					eval = evaluator_create_f(toecu_conv);
+					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
 						tmpf2 = g_ascii_strtod(upper,NULL);
@@ -193,7 +189,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
 						if (tmpbuf)
 							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+						OBJ_SET_FULL(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf),g_free);
 						/*printf("update_widget thresh has dl conv expr and upper limit of %f\n",tmpf);*/
 					}
 					if (lower)
@@ -203,31 +199,24 @@ void update_ms2_user_outputs(GtkWidget *widget)
 						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
 						if (tmpbuf)
 							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+						OBJ_SET_FULL(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf),g_free);
 						/*printf("update_widget thresh has dl conv expr and lower limit of %f\n",tmpf);*/
 					}
 				}
 				else
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"ul_evaluator");
-				if (eval)
+				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+				if (fromecu_conv)
 				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-					eval = NULL;
-				}
-				if (ul_conv)
-				{
-					eval = evaluator_create_f(ul_conv);
-					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+					eval = evaluator_create_f(fromecu_conv);
+					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"toecu_conv_expr",toecu_conv);
+				OBJ_SET(tmpwidget,"fromecu_conv_expr",fromecu_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("update widgets setting thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				/*printf ("update widgets setting thresh widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
 			tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
@@ -235,18 +224,11 @@ void update_ms2_user_outputs(GtkWidget *widget)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"dl_evaluator");
-				if (eval)
+				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+				if (toecu_conv)
 				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-					eval = NULL;
-				}
-				if (dl_conv)
-				{
-					eval = evaluator_create_f(dl_conv);
-					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					eval = evaluator_create_f(toecu_conv);
+					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
 						tmpf2 = g_ascii_strtod(upper,NULL);
@@ -254,7 +236,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
 						if (tmpbuf)
 							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
+						OBJ_SET_FULL(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf),g_free);
 						/*printf("update_widget hyst has dl conv expr and upper limit of %f\n",tmpf);*/
 					}
 					if (lower)
@@ -264,37 +246,33 @@ void update_ms2_user_outputs(GtkWidget *widget)
 						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
 						if (tmpbuf)
 							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
+						OBJ_SET_FULL(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf),g_free);
 						/*printf("update_widget hyst has dl conv expr and lower limit of %f\n",tmpf);*/
 					}
 				}
 				else
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"ul_evaluator");
-				if (eval)
+				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+				if (fromecu_conv)
 				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-					eval = NULL;
-				}
-				if (ul_conv)
-				{
-					eval = evaluator_create_f(ul_conv);
-					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+					eval = evaluator_create_f(fromecu_conv);
+					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"toecu_conv_expr",toecu_conv);
+				OBJ_SET(tmpwidget,"fromecu_conv_expr",fromecu_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("update widgets setting hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				/*printf ("update widgets setting hyst widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
+			g_free(lower);
+			g_free(upper);
+			g_free(range);
+			g_free(toecu_conv);
+			g_free(fromecu_conv);
 		}
 		valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
 		i++;
 	}
 }
-
-                             

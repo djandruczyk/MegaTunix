@@ -20,10 +20,10 @@ keys=use_color
 use_color=TRUE
 
 [crank]
-keys=precision,dl_conv_expr,ul_conv_expr,use_color
+keys=precision,toecu_conv_expr,fromecu_conv_expr,use_color
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 use_color=TRUE
 
 [ase]
@@ -32,9 +32,9 @@ page=5
 use_color=TRUE
 
 [IATCTemp]
-keys=temp_dep,bind_to_list,dl_conv_expr,ul_conv_expr,use_color
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+keys=temp_dep,bind_to_list,toecu_conv_expr,fromecu_conv_expr,use_color
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,IAT_controls
 use_color=TRUE
@@ -393,18 +393,18 @@ choices=INVALID,CLT,MAT,Avg of Both
 #----- Entries -------------------------------------------------------------
 
 [RPMRedLo_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=54
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 bind_to_list=IAT_controls
 _tooltip=This is the Lower RPM limit of IAT CLT/IAT based correction. (where correction begins)
 
 [RPMRedHi_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=55
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 bind_to_list=IAT_controls
 _tooltip=This is the Upper RPM limit of IAT CLT/IAT based correction. (where correction ends)
 
@@ -436,26 +436,26 @@ choices=INVALID,CLT,MAT,Avg of Both
 #----- Entries -------------------------------------------------------------
 
 [RPMRedLo_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=54
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 bind_to_list=IAT_controls
 _tooltip=This is the Lower RPM limit of IAT CLT/IAT based correction. (where correction begins)
 
 [RPMRedHi_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=55
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 bind_to_list=IAT_controls
 _tooltip=This is the Upper RPM limit of IAT CLT/IAT based correction. (where correction ends)
 
 [crank_rpm_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
 offset=43
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 raw_lower=1
 raw_upper=10
 _tooltip=This is the RPM at which the ECU considers the engine to be Running, below this rpm the engine is considered cranking.  This is important as during cranking the injectors are fired based on the cranking table alone.  During normal engine running the pulsewidth of the injectors is based on all the other sensor inputs and  the VEtable, NOT the fixed cranking table.
@@ -466,11 +466,11 @@ offset=44
 _tooltip=The Flood Clear TPS Threshold is the value at which if the throttle is above this point (in ADC counts) during cranking (only!) the ECU will stop all injection events in order to allow the engine to recover from a flooded situation.
 
 [fixed_prime_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=45
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=fixed_priming
 _tooltip=The amount of fuel injected as a priming pulse before engine is even started. This can aid cold starting for some engine/injection configurations.
 
@@ -488,11 +488,11 @@ bind_to_list=fixed_decay,fixed_map
 _tooltip=This is the amount of time to hold ASE FIXED after engien start.  Once this timer expires, ASE will decay to zero in the remaining time left as defined by ASE Total Decay Time as long as that is greater than the value of this control
 
 [clt_setpoint_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,tooltip
 page=5
 offset=181
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 raw_lower=30
 raw_upper=160
 bind_to_list=fixed_decay,fixed_map,temperature
@@ -500,13 +500,13 @@ temp_dep=TRUE
 _tooltip=The coolant temp must be BELOW this value for MAP hold to be enabled during startup.  If the temp is above this value MAP holding will not be used. MAP holding is used to stabilize the afterstart period when the engine is cold to prevent stalling,  after the ASE hold time expires the running MAP value will be used.
 
 [fixed_map_ase_entry]
-keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs
+keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
 page=5
 offset=182
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=(x*(965/1000))+9,(x*(965/1000))+9,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=(x/(965/1000))-9,(x/(965/1000))-9,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=(x*(965/1000))+9,(x*(965/1000))+9,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=(x/(965/1000))-9,(x/(965/1000))-9,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,fixed_map
 _tooltip=This is the Fixed MAP Value to use during ASE decay hold.
 
@@ -517,64 +517,64 @@ bind_to_list=xtra_crank
 _tooltip=Increases the cranking fuel by the following percentage.  i.e if cranking PW is 10 ms and you set the control to 150%, the the cranking pulsewidth becomes 15ms.
 
 [iat_ign_adv_temp_entry]
-keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=0
 offset=48
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 raw_upper=120
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=When below the cooltant setpoint the ignition timing will be advanced 1 degree for each amount below this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 60 deg, the timing will be advanced by 4 degrees.
 
 [iat_ret_temp_entry]
-keys=page,offset,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=0
 offset=50
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 raw_upper=120
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=When above the Intake Air Temp (IAT) setpoint the ignition timing will be retarded 1 degree for each amount above this threshold.  So if the threshold is 100deg, and this control is set to 10 deg, and the actual temp is 160 deg, the timing will be retarded by 6 degrees.
 
 [iat_ign_adv_clt_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=0
 offset=47
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=This is the coolant temp setpoint for CLT Based advanced. CLT Advance won't take effect unless the coolant temp is BELOW this setpoint by at least the amount of the "Add 1 deg adv every...." control above.
 
 [iat_temp_thresh_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=0
 offset=52
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=This is the Intake Air temp setpoint for IAT Based ignition retard. IAT Retard won't take effect unless the Intake air temp is above the this threshold by the amount above AND the Manifold (MAP) pressure exceeeds the setpoint above.
 
 [iat_max_adv_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=0
 offset=49
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 _tooltip=This is the Maximum allowed additional timing advance to be added on by the clt based advance.
 
 [iat_ret_map_setpoint_entry]
-keys=page,offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+keys=page,offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
 page=0
 offset=51
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression
 _tooltip=This is the MAP setpoint which must be exceeded along with the Intake Air temp value before IAT based retard will become active.
 

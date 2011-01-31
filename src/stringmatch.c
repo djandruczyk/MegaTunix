@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -90,8 +90,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 
 	/* Signal handler mapping */
-	g_hash_table_insert(str_2_enum,"_REQFUEL_RESCALE_TABLE_",
-			GINT_TO_POINTER(REQFUEL_RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,"_RESCALE_TABLE_",
 			GINT_TO_POINTER(RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,"_EXPORT_SINGLE_TABLE_",
@@ -104,8 +102,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(TE_TABLE_GROUP));
 	g_hash_table_insert(str_2_enum,"_GENERIC_",
 			GINT_TO_POINTER(GENERIC));
-	g_hash_table_insert(str_2_enum,"_REQ_FUEL_POPUP_",
-			GINT_TO_POINTER(REQ_FUEL_POPUP));
 	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",
 			GINT_TO_POINTER(READ_VE_CONST));
 	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",
@@ -322,9 +318,9 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"depend_on",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"dl_conv_expr",
+	g_hash_table_insert(str_2_enum,"toecu_conv_expr",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"dl_conv_exprs",
+	g_hash_table_insert(str_2_enum,"toecu_conv_exprs",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"dl_type",
 			GINT_TO_POINTER(MTX_ENUM));
@@ -378,6 +374,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"offset",
 			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"orientation",
+			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,"output_num",
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"page",
@@ -450,11 +448,11 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"tooltip",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"ul_complex",
+	g_hash_table_insert(str_2_enum,"fromecu_complex",
 			GINT_TO_POINTER(MTX_BOOL));
-	g_hash_table_insert(str_2_enum,"ul_conv_expr",
+	g_hash_table_insert(str_2_enum,"fromecu_conv_expr",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"ul_conv_exprs",
+	g_hash_table_insert(str_2_enum,"fromecu_conv_exprs",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"ulimit_offset",
 			GINT_TO_POINTER(MTX_INT));
@@ -478,6 +476,15 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(CELSIUS));
 	g_hash_table_insert(str_2_enum,"_FAHRENHEIT_",
 			GINT_TO_POINTER(FAHRENHEIT));
+	/* MtxPbar orientations */
+	g_hash_table_insert(str_2_enum,"_L_TO_R_",
+			GINT_TO_POINTER(GTK_PROGRESS_LEFT_TO_RIGHT));
+	g_hash_table_insert(str_2_enum,"_R_TO_L_",
+			GINT_TO_POINTER(GTK_PROGRESS_RIGHT_TO_LEFT));
+	g_hash_table_insert(str_2_enum,"_B_TO_T_",
+			GINT_TO_POINTER(GTK_PROGRESS_BOTTOM_TO_TOP));
+	g_hash_table_insert(str_2_enum,"_T_TO_B_",
+			GINT_TO_POINTER(GTK_PROGRESS_TOP_TO_BOTTOM));
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 

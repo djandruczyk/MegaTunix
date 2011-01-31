@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -89,7 +89,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		{
 			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
 			key_list = OBJ_GET(widget,"multi_expr_keys");
-			expr_list = OBJ_GET(widget,"dl_conv_exprs");
+			expr_list = OBJ_GET(widget,"toecu_conv_exprs");
 			keys = g_strsplit(key_list,",",-1);
 			exprs = g_strsplit(expr_list,",",-1);
 			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(exprs));i++)
@@ -100,7 +100,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			g_strfreev(keys);
 			g_strfreev(exprs);
 
-			OBJ_SET(widget,"dl_eval_hash",hash);
+			OBJ_SET_FULL(widget,"dl_eval_hash",hash,g_hash_table_destroy);
 		}
 		hash = OBJ_GET(widget,"dl_eval_hash");
 		source_key = OBJ_GET(widget,"source_key");
@@ -148,14 +148,14 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	else
 	{
-		conv_expr = (gchar *)OBJ_GET(widget,"dl_conv_expr");
+		conv_expr = (gchar *)OBJ_GET(widget,"toecu_conv_expr");
 		evaluator = (void *)OBJ_GET(widget,"dl_evaluator");
 
 		if ((conv_expr) && (!evaluator))
 		{
 			evaluator = evaluator_create(conv_expr);
 			assert(evaluator);
-			OBJ_SET(widget,"dl_evaluator",(gpointer)evaluator);
+			OBJ_SET_FULL(widget,"dl_evaluator",(gpointer)evaluator,evaluator_destroy);
 		}
 	}
 	if (!evaluator)
@@ -256,7 +256,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		{
 			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
 			key_list = OBJ_GET(widget,"multi_expr_keys");
-			expr_list = OBJ_GET(widget,"ul_conv_exprs");
+			expr_list = OBJ_GET(widget,"fromecu_conv_exprs");
 			keys = g_strsplit(key_list,",",-1);
 			exprs = g_strsplit(expr_list,",",-1);
 			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(exprs));i++)
@@ -267,7 +267,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			g_strfreev(keys);
 			g_strfreev(exprs);
 
-			OBJ_SET(widget,"ul_eval_hash",hash);
+			OBJ_SET_FULL(widget,"ul_eval_hash",hash,g_hash_table_destroy);
 		}
 		hash = OBJ_GET(widget,"ul_eval_hash");
 		source_key = OBJ_GET(widget,"source_key");
@@ -316,13 +316,13 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	}
 	else
 	{
-		conv_expr = (gchar *)OBJ_GET(widget,"ul_conv_expr");
+		conv_expr = (gchar *)OBJ_GET(widget,"fromecu_conv_expr");
 		evaluator = (void *)OBJ_GET(widget,"ul_evaluator");
 		if ((conv_expr) && (!evaluator)) 	/* if no evaluator create one */
 		{
 			evaluator = evaluator_create(conv_expr);
 			assert(evaluator);
-			OBJ_SET(widget,"ul_evaluator",(gpointer)evaluator);
+			OBJ_SET_FULL(widget,"ul_evaluator",(gpointer)evaluator,evaluator_destroy);
 		}
 
 	}
@@ -402,7 +402,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				else
 					text = (gchar *)OBJ_GET(widget,"f_label");
 				gtk_label_set_text(GTK_LABEL(widget),text);
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				//gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 
 			}
@@ -428,12 +428,6 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 
 				gtk_adjustment_changed(adj);
-				/*
-				   gtk_spin_button_set_value(
-				   GTK_SPIN_BUTTON(widget),
-				   adj->value);
-				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-				 */
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 				update_widget_f(widget,NULL);
 			}
@@ -475,7 +469,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				else
 					text = (gchar *)OBJ_GET(widget,"c_label");
 				gtk_label_set_text(GTK_LABEL(widget),text);
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				//gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 
 			}
@@ -501,12 +495,6 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 
 				gtk_adjustment_changed(adj);
-				/*
-				   gtk_spin_button_set_value(
-				   GTK_SPIN_BUTTON(widget),
-				   adj->value);
-				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-				 */
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 				update_widget_f(widget,NULL);
 			}
@@ -548,7 +536,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				else
 					text = (gchar *)OBJ_GET(widget,"k_label");
 				gtk_label_set_text(GTK_LABEL(widget),text);
-				gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+				//gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 
 			}
@@ -574,12 +562,6 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 
 				gtk_adjustment_changed(adj);
-				/*
-				   gtk_spin_button_set_value(
-				   GTK_SPIN_BUTTON(widget),
-				   adj->value);
-				   gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-				 */
 				OBJ_SET(widget,"widget_temp",GINT_TO_POINTER(units));
 				update_widget_f(widget,NULL);
 			}
@@ -629,7 +611,7 @@ G_MODULE_EXPORT void reset_temps(gpointer type)
 }
 
 
-gdouble temp_to_host(gdouble in)
+G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 {
 	gdouble res = 0.0;
 	static Firmware_Details *firmware = NULL;
@@ -654,7 +636,7 @@ gdouble temp_to_host(gdouble in)
 	return res;
 }
 
-gdouble temp_to_ecu(gdouble in)
+G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 {
 	gdouble res = 0.0;
 	static Firmware_Details *firmware = NULL;
@@ -680,37 +662,37 @@ gdouble temp_to_ecu(gdouble in)
 }
 
 
-gdouble c_to_f(gdouble in)
+G_MODULE_EXPORT gdouble c_to_f(gdouble in)
 {
 	return ((in *(9.0/5.0))+32.0)+0.001;
 }
 
 
-gdouble c_to_k(gdouble in)
+G_MODULE_EXPORT gdouble c_to_k(gdouble in)
 {
 	return (in+273.0);
 }
 
 
-gdouble f_to_c(gdouble in)
+G_MODULE_EXPORT gdouble f_to_c(gdouble in)
 {
 	return ((in-32.0)*(5.0/9.0))+0.001;
 }
 
 
-gdouble f_to_k(gdouble in)
+G_MODULE_EXPORT gdouble f_to_k(gdouble in)
 {
 	return ((in-32.0)*(5.0/9.0))+273.001;
 }
 
 
-gdouble k_to_f(gdouble in)
+G_MODULE_EXPORT gdouble k_to_f(gdouble in)
 {
 	return (((in-273) *(9.0/5.0))+32.0)+0.001;
 }
 
 
-gdouble k_to_c(gdouble in)
+G_MODULE_EXPORT gdouble k_to_c(gdouble in)
 {
 	return (in-273.0);
 }

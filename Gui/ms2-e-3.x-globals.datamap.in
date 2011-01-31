@@ -325,15 +325,15 @@ _tooltip=Sets the Launch Control feature
 #----- Spinbuttons -----------------------------------------------------------
 
 [req_fuel_per_cycle_0_spin]
-keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=offset,size,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 offset=608
 size=_U16_
 table_num=3
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_1_
 bind_to_list=interdep_3_ctrl
-ul_complex=TRUE
-ul_conv_expr=((reqfuel_1)*((injectors_1)/(divider_1*(alternate+1))))/1000
+fromecu_complex=TRUE
+fromecu_conv_expr=((reqfuel_1)*((injectors_1)/(divider_1*(alternate+1))))/1000
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
 expr_types=_ECU_VAR_,_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_
 reqfuel_1_page=0
@@ -350,11 +350,11 @@ alternate_bitmask=1
 register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,size,table_num,ul_conv_expr,bind_to_list,register_as
+keys=offset,size,table_num,fromecu_conv_expr,bind_to_list,register_as
 offset=608
 size=_U16_
 table_num=3
-ul_conv_expr=x/1000
+fromecu_conv_expr=x/1000
 bind_to_list=interdep_3_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
@@ -380,14 +380,14 @@ bind_to_list=interdep_3_ctrl
 register_as=num_cylinders_0_spin
 
 [inj_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 offset=610
 table_num=3
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_1_
 bind_to_list=interdep_3_ctrl
-ul_complex=TRUE
-ul_conv_expr=cylinders_1/divider_1
+fromecu_complex=TRUE
+fromecu_conv_expr=cylinders_1/divider_1
 expr_symbols=cylinders_1,divider_1
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_
 cylinders_1_page=0
@@ -409,32 +409,32 @@ bind_to_list=maf,maf2
 _tooltip=Engine displacement in Cubic Inches (specific to MAF only)
 
 [stoich_afr_entry]
-keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=662
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=255
 precision=1
 _tooltip=This is the stoich AFR
 
 [inj1_open_time_entry]
-keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=566
 size=_U16_
-dl_conv_expr=x/0.001
-ul_conv_expr=x*0.001
+toecu_conv_expr=x/0.001
+fromecu_conv_expr=x*0.001
 raw_upper=25000
 precision=3
 _tooltip=This is the amount of time the injector spends in the opening or closing phase.  It's used to tweake the fuel equations to compensate for the fact that fuel flow doesn't go from 0 to max instantaneously
 
 [inj1_batt_corr_entry]
-keys=offset,precision,size,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,size,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=568
 precision=3
 size=_U16_
-dl_conv_expr=x/0.000166667
-ul_conv_expr=x*0.000166667
+toecu_conv_expr=x/0.000166667
+fromecu_conv_expr=x*0.000166667
 _tooltip=This compensates for battery voltage, at lower voltages the injectors open slower, skewing fuel flow slightly. this corrects for that.
 
 [inj1_pwm_limit_entry]
@@ -444,10 +444,10 @@ raw_upper=100
 _tooltip=This sets the PWM current limit DutyCycle %, 100 being no limit.
 
 [inj1_pwm_thresh_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=613
-dl_conv_expr=x/0.128
-ul_conv_expr=x*0.128
+toecu_conv_expr=x/0.128
+fromecu_conv_expr=x*0.128
 precision=1
 _tooltip=This sets the PWM Time Threshold, when the injector is on for this ammount,  current limit is kicked in.  Thsi should beset to 25.5 for high impedance injectors where PWM is unneeded.
 
@@ -460,22 +460,22 @@ precision=1
 _tooltip=This sets the PWM Period in us.
 
 [inj2_open_time_entry]
-keys=offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=641
 size=_U16_
-dl_conv_expr=x/0.001
-ul_conv_expr=x*0.001
+toecu_conv_expr=x/0.001
+fromecu_conv_expr=x*0.001
 raw_upper=25000
 precision=3
 _tooltip=This is the amount of time the injector spends in the opening or closing phase.  It's used to tweake the fuel equations to compensate for the fact that fuel flow doesn't go from 0 to max instantaneously
 
 [inj2_batt_corr_entry]
-keys=offset,precision,size,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,size,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=643
 precision=3
 size=_U16_
-dl_conv_expr=x/0.000166667
-ul_conv_expr=x*0.000166667
+toecu_conv_expr=x/0.000166667
+fromecu_conv_expr=x*0.000166667
 _tooltip=This compensates for battery voltage, at lower voltages the injectors open slower, skewing fuel flow slightly. this corrects for that.
 
 [inj2_pwm_limit_entry]
@@ -485,10 +485,10 @@ raw_upper=100
 _tooltip=This sets the PWM current limit DutyCycle %, 100 being no limit.
 
 [inj2_pwm_thresh_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=638
-dl_conv_expr=x/0.128
-ul_conv_expr=x*0.128
+toecu_conv_expr=x/0.128
+fromecu_conv_expr=x*0.128
 precision=1
 _tooltip=This sets the PWM Time Threshold, when the injector is on for this ammount,  current limit is kicked in.  Thsi should beset to 25.5 for high impedance injectors where PWM is unneeded.
 
@@ -547,32 +547,32 @@ raw_upper=100
 _tooltip=This sets the Knock Lag Factor. Values below 100 causes the variable to change slower than their input (analagous to a low pass filter of sorts)
 
 [low_baro_entry]
-keys=precision,offset,size,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=precision,offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 precision=1
 offset=648
 size=_S16_
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=This sets the Low baro limit in kPa for baro correction (clamp point)
 
 [high_baro_entry]
-keys=precision,offset,size,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=precision,offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 precision=1
 offset=646
 size=_S16_
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=This sets the High baro limit in kPa for baro correction (clamp point)
 
 [def_baro_entry]
-keys=precision,offset,size,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=precision,offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 precision=1
 offset=650
 size=_S16_
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=This sets the default baro value used when no baro correction is used
 

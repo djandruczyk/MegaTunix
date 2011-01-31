@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -26,7 +26,6 @@
 #include <tabloader.h>
 #include <widgetmgmt.h>
 
-static GTimer *ticker;
 
 /*!
  \brief pf_dispatcher() is a GTK+ timeout that runs 10 times per second checking
@@ -40,6 +39,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 {
 	static GAsyncQueue *pf_dispatch_queue = NULL;
 	static GCond *pf_dispatch_cond = NULL;
+	static GMutex *pf_dispatch_mutex = NULL;
  	gint len=0;
 	gint i=0;
 	PostFunction *pf=NULL;
@@ -49,23 +49,22 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 
 	if (!pf_dispatch_cond)
 		pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
+	if (!pf_dispatch_mutex)
+		pf_dispatch_mutex = DATA_GET(global_data,"pf_dispatch_mutex");
 	if (!pf_dispatch_queue)
 		pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
-	if (!ticker)
-		ticker = g_timer_new();
-	else	
-		g_timer_start(ticker);
 
-	if (!pf_dispatch_queue) /*queue not built yet... */
-	{
-		g_cond_signal(pf_dispatch_cond);
-		return TRUE;
-	}
+	g_return_val_if_fail(pf_dispatch_cond,FALSE);
+	g_return_val_if_fail(pf_dispatch_mutex,FALSE);
+	g_return_val_if_fail(global_data,FALSE);
+
 	if (DATA_GET(global_data,"might_be_leaving"))
 		return TRUE;
-	if (DATA_GET(global_data,"leaving"))
+	if ((!pf_dispatch_queue) || (DATA_GET(global_data,"leaving")))
 	{
+		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
+		g_mutex_unlock(pf_dispatch_mutex);
 		return TRUE;
 	}
 
@@ -76,7 +75,9 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
+		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
+		g_mutex_unlock(pf_dispatch_mutex);
 		return TRUE;
 	}
 	if (!message->status)
@@ -85,7 +86,9 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		 * in this case.
 		 */
 		dealloc_message(message);
+		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
+		g_mutex_unlock(pf_dispatch_mutex);
 		return TRUE;
 	}
 
@@ -94,13 +97,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		len = message->command->post_functions->len;
 		for (i=0;i<len;i++)
 		{
-			if (DATA_GET(global_data,"leaving"))
-			{
-				dealloc_message(message);
-				g_cond_signal(pf_dispatch_cond);
-				return TRUE;
-			}
-
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
 			/*printf("dispatching post function %s\n",pf->name);*/
 			if (!pf)
@@ -138,8 +134,9 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	//gdk_flush();
 fast_exit:
 	gdk_threads_leave();
+	g_mutex_lock(pf_dispatch_mutex);
 	g_cond_signal(pf_dispatch_cond);
-	g_timer_stop(ticker);
+	g_mutex_unlock(pf_dispatch_mutex);
 	return TRUE;
 }
 
@@ -156,6 +153,7 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
 	static GCond *gui_dispatch_cond = NULL;
+	static GMutex *gui_dispatch_mutex = NULL;
 	static void (*update_widget_f)(gpointer,gpointer) = NULL;
 	static GList ***ecu_widgets = NULL;
 	gint len = 0;
@@ -173,19 +171,20 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 
 	if (!gui_dispatch_cond)
 		gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
+	if (!gui_dispatch_mutex)
+		gui_dispatch_mutex = DATA_GET(global_data,"gui_dispatch_mutex");
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
-	if (!gui_dispatch_queue) /*queue not built yet... */
-	{
-		g_cond_signal(gui_dispatch_cond);
-		return TRUE;
-	}
-	/* Endless Loop, wait for message, processs and repeat... */
+
+	g_return_val_if_fail(gui_dispatch_cond,FALSE);
+	g_return_val_if_fail(gui_dispatch_mutex,FALSE);
+	g_return_val_if_fail(global_data,FALSE);
 trypop:
-	/*printf("gui_dispatch queue length is %i\n",g_async_queue_length(gui_dispatch_queue));*/
-	if (DATA_GET(global_data,"leaving"))
+	if ((!gui_dispatch_queue) || (DATA_GET(global_data,"leaving")))
 	{
+		g_mutex_lock(gui_dispatch_mutex);
 		g_cond_signal(gui_dispatch_cond);
+		g_mutex_unlock(gui_dispatch_mutex);
 		return TRUE;
 	}
 	if (DATA_GET(global_data,"might_be_leaving"))
@@ -194,7 +193,9 @@ trypop:
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
+		g_mutex_lock(gui_dispatch_mutex);
 		g_cond_signal(gui_dispatch_cond);
+		g_mutex_unlock(gui_dispatch_mutex);
 		return TRUE;
 	}
 
@@ -203,13 +204,6 @@ trypop:
 		len = message->functions->len;
 		for (i=0;i<len;i++)
 		{
-			if (DATA_GET(global_data,"leaving"))
-			{
-				dealloc_message(message);
-				g_cond_signal(gui_dispatch_cond);
-				return TRUE;
-			}
-
 			val = g_array_index(message->functions,UpdateFunction, i);
 			/*printf("gui_dispatcher\n");*/
 			switch ((UpdateFunction)val)
@@ -241,7 +235,7 @@ trypop:
 					for (i=range->offset;i<range->offset +range->len;i++)
 					{
 						for (j=0;j<g_list_length(ecu_widgets[range->page][i]);j++)
-						update_widget_f(g_list_nth_data(ecu_widgets[range->page][i],j),NULL);
+							update_widget_f(g_list_nth_data(ecu_widgets[range->page][i],j),NULL);
 					}
 					gdk_threads_leave();
 					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
@@ -339,17 +333,9 @@ dealloc:
 		goto trypop;
 	}
 	/*printf("returning\n");*/
+	g_mutex_lock(gui_dispatch_mutex);
 	g_cond_signal(gui_dispatch_cond);
+	g_mutex_unlock(gui_dispatch_mutex);
 	return TRUE;
 }
 
-
-G_MODULE_EXPORT void *clock_watcher(gpointer data)
-{
-	while(TRUE)
-	{
-		g_usleep(500000);
-		printf ("Dispatcher time consumed over 0.5 seconds %.2f %%\n",100.0*(g_timer_elapsed(ticker,NULL)/0.5));
-		g_timer_reset(ticker);
-	}
-}

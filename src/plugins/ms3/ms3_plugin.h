@@ -29,7 +29,8 @@
 /* Prototypes */
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
-void register_common_enums(void);
+void register_enums(void);
+void deregister_enums(void);
 /* Prototypes */
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -79,6 +79,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 		else
 		{
 			vector = g_strsplit(tmpbuf,",",-1);
+			g_free(tmpbuf);
 			len = g_strv_length(vector);
 			/* 7 args is ECU_EMB_BIT, 4 args is ECU_VAR */
 			if (!((len == 7) || (len == 4)))
@@ -242,9 +243,8 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		deps = parse_keys_f(tmpbuf,&num_deps,",");
 		g_free(tmpbuf);
 	}
-	/* Store list of deps.... */
-
 	dep_obj = g_new0(gconstpointer, 1);
+	/* Store list of deps.... */
 	DATA_SET_FULL(dep_obj,"deps",deps,g_strfreev);
 	DATA_SET(dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
 
@@ -259,6 +259,7 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		else
 		{
 			vector = g_strsplit(tmpbuf,",",-1);
+			g_free(tmpbuf);
 			len = g_strv_length(vector);
 			/* 7 args is ECU_EMB_BIT, 4 args is ECU_VAR */
 			if (!((len == 7) || (len == 4)))
@@ -375,10 +376,8 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 			else
 				DATA_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
 			g_free(key);
-
 		}
 		g_strfreev(vector);
-
 	}
 	OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,g_dataset_destroy);
 }

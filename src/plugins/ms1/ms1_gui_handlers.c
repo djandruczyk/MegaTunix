@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -14,7 +14,6 @@
 #include <config.h>
 #include <debugging.h>
 #include <defines.h>
-#include <enums.h>
 #include <glade/glade.h>
 #include <ms1_plugin.h>
 #include <ms1_gui_handlers.h>
@@ -116,7 +115,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 			offset = (GINT)OBJ_GET(widget,"oddfire_bit_offset");
 			if (offset == 0)
 			{
-				dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_button_handler()\n\tERROR Offset Angle entry changed call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
+				dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_entry_handler()\n\tERROR Offset Angle entry changed call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;
 				break;
 
@@ -322,7 +321,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 
 			break;
 		default:
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_spinbutton_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins, BUG!\n"));
+			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_spin_button_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
 
 			break;
 	}
@@ -347,7 +346,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 
 	handler = (GINT)OBJ_GET(widget,"handler");
 
-	switch (handler)
+	switch ((MS1MtxButton)handler)
 	{
 		case REBOOT_GETERR:
 			if (DATA_GET(global_data,"offline"))
@@ -363,7 +362,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 				start_tickler_f(RTV_TICKLER);
 			break;
 		default:
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_std_button_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins, BUG!\n"));
+			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_std_button_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
 			break;
 	}
 	return TRUE;
@@ -377,7 +376,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{       /* It's pressed (or checked) */
-		switch ((ToggleButton)handler)
+		switch ((MS1ToggleButton)handler)
 		{
 
 			case START_TOOTHMON_LOGGER:
@@ -407,7 +406,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
 				break;
 			default:
-				dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_toggle_button_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins, BUG!\n"));
+				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_toggle_button_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
 				break;
 		}
 	}
@@ -447,7 +446,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	switch (handler)
 	{
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_combo_handler()\n\tdefault case reached,  i.e. handler (%i) on widget %s not found in global, common or ECU plugins, BUG!\n",handler,glade_get_widget_name(widget)));
+			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_combo_button_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
 			return TRUE;
 			break;
 	}
@@ -534,7 +533,7 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 			break;
 
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_update_entry()\n\tdefault case reached widget %s, handler %i, i.e. handler not found in global, common or ECU plugins, BUG!\n",glade_get_widget_name(widget),handler));
+			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_update_entry()\n\tERROR handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
 	}
 
 }

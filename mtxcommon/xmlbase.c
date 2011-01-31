@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -17,12 +17,14 @@
 #include <libxml/tree.h>
 #include <xmlbase.h>
 
-extern gint dbg_lvl;
-
-
 void generic_xml_gint_import(xmlNode *node, gpointer dest)
 {
-	gint * val = (gint *)dest;
+	gint *val = NULL;
+
+	g_return_if_fail(node);
+	g_return_if_fail(dest);
+
+	val = (gint *)dest;
 	if (!node->children)
 	{
 		printf("ERROR, generic_xml_gint_import, xml node is empty!!\n");
@@ -39,7 +41,12 @@ void generic_xml_gint_import(xmlNode *node, gpointer dest)
 
 void generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 {
-	gboolean * val = (gboolean *)dest;
+	gboolean *val = NULL;
+
+	g_return_if_fail(node);
+	g_return_if_fail(dest);
+
+	val = (gboolean *)dest;
 	if (!node->children)
 	{
 		printf("ERROR, generic_xml_gboolean_import, xml node is empty!!\n");
@@ -57,6 +64,11 @@ void generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 void generic_xml_gint_export(xmlNode *parent, gchar *element_name, gint *val)
 {
 	gchar * tmpbuf = NULL;
+
+	g_return_if_fail(parent);
+	g_return_if_fail(element_name);
+	g_return_if_fail(val);
+
 	tmpbuf = g_strdup_printf("%i",*val);
 	xmlNewChild(parent, NULL, BAD_CAST element_name,
 			BAD_CAST tmpbuf);
@@ -66,6 +78,10 @@ void generic_xml_gint_export(xmlNode *parent, gchar *element_name, gint *val)
 
 void generic_xml_gboolean_export(xmlNode *parent, gchar *element_name, gboolean *val)
 {
+	g_return_if_fail(parent);
+	g_return_if_fail(element_name);
+	g_return_if_fail(val);
+
 	if (*val)
 		xmlNewChild(parent, NULL, BAD_CAST element_name,
 				BAD_CAST "TRUE");
@@ -77,7 +93,12 @@ void generic_xml_gboolean_export(xmlNode *parent, gchar *element_name, gboolean 
 
 void generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 {
-	gfloat *val = (gfloat *)dest;
+	gfloat *val = NULL;
+
+	g_return_if_fail(node);
+	g_return_if_fail(dest);
+
+	val = (gfloat *)dest;
 	if (!node->children)
 	{
 		printf("ERROR, generic_xml_gfloat_import, xml node is empty!!\n");
@@ -93,6 +114,11 @@ void generic_xml_gfloat_export(xmlNode *parent, gchar *element_name, gfloat *val
 {
 	gchar tmpbuf[10];
 	gchar * buf = NULL;
+
+	g_return_if_fail(parent);
+	g_return_if_fail(element_name);
+	g_return_if_fail(val);
+
 	buf = g_ascii_dtostr(tmpbuf,10,*val);
 	/*tmpbuf = g_strdup_printf("%f",*val); */
 	xmlNewChild(parent, NULL, BAD_CAST element_name,
@@ -102,7 +128,13 @@ void generic_xml_gfloat_export(xmlNode *parent, gchar *element_name, gfloat *val
 
 void generic_xml_gchar_import(xmlNode *node, gpointer dest)
 {
-	gchar **val = (gchar **)dest;
+	gchar **val = NULL;
+
+	g_return_if_fail(node);
+	g_return_if_fail(dest);
+
+	val = (gchar **)dest;
+
 	if (!node->children) /* EMPTY node, thus, clear the var on the gauge */
 	{
 		if (*val)
@@ -124,8 +156,11 @@ void generic_xml_gchar_import(xmlNode *node, gpointer dest)
 
 void generic_xml_gchar_export(xmlNode *parent, gchar *element_name, gchar **val)
 {
-	/* If the data to export is NOT null export it otherwise export and
-	 *          * empty var */
+	g_return_if_fail(parent);
+	g_return_if_fail(element_name);
+
+	/* If the data to export is NOT null export it otherwise export an
+	 * empty var */
 	if (*(gchar **)val)
 		xmlNewChild(parent, NULL, BAD_CAST element_name,BAD_CAST *(gchar **)val);
 	else
@@ -140,6 +175,7 @@ void generic_xml_color_import(xmlNode *node, gpointer dest)
 	gchar **vector = NULL;
 	gint tmp = 0;
 
+	g_return_if_fail(node);
 	if (!node->children)
 	{
 		printf("ERROR, generic_xml_color_import, xml node is empty!!\n");
@@ -188,6 +224,10 @@ void generic_xml_color_export(xmlNode *parent,gchar * element_name, GdkColor *co
 	gchar * tmpbuf =  NULL;
 	xmlNode *child = NULL;
 
+	g_return_if_fail(parent);
+	g_return_if_fail(element_name);
+	g_return_if_fail(color);
+
 	child = xmlNewChild(parent, NULL, BAD_CAST element_name,NULL);
 
 	tmpbuf = g_strdup_printf("%i",color->red);
@@ -207,6 +247,8 @@ gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 	gint maj = -1;
 	gint min = -1;
 	xmlNode *cur_node = NULL;
+
+	g_return_val_if_fail(node,FALSE);
 
 	if (!node->children)
 	{

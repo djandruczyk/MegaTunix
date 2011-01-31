@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -18,6 +18,35 @@
 #include <enums.h>
 #include <gtk/gtk.h>
 
+typedef enum
+{
+	INCREMENT_VALUE = LAST_STD_BUTTON_ENUM + 1,
+	DECREMENT_VALUE,
+	REQFUEL_RESCALE_TABLE,
+	REQ_FUEL_POPUP,
+	LAST_COMMON_STD_BUTTON_ENUM
+}MSCommonStdButton;
+
+typedef enum
+{
+	LAST_COMMON_TOGGLE_BUTTON_ENUM = LAST_TOGGLE_BUTTON_ENUM + 1
+}MSCommonToggleButton;
+
+typedef enum
+{
+	NUM_SQUIRTS_1 = LAST_BUTTON_ENUM + 3,
+	NUM_SQUIRTS_2,
+	NUM_CYLINDERS_1,
+	NUM_CYLINDERS_2,
+	NUM_INJECTORS_1,
+	NUM_INJECTORS_2,
+	LOCKED_REQ_FUEL,
+	REQ_FUEL_1,
+	REQ_FUEL_2,
+	MULTI_EXPRESSION,
+	ALT_SIMUL,
+	LAST_COMMON_BUTTON_ENUM
+}MSCommonMtxButton;
 /* Prototypes */
 gboolean common_entry_handler(GtkWidget *, gpointer);
 gboolean common_bitmask_button_handler(GtkWidget *, gpointer);
@@ -55,21 +84,5 @@ void common_gui_init(void);
 /* Prototypes */
 
 
-typedef enum
-{
-        NUM_SQUIRTS_1 = LAST_BUTTON_ENUM + 3,
-        NUM_SQUIRTS_2,
-        NUM_CYLINDERS_1,
-        NUM_CYLINDERS_2,
-        NUM_INJECTORS_1,
-        NUM_INJECTORS_2,
-	LOCKED_REQ_FUEL,
-	REQ_FUEL_1,
-	REQ_FUEL_2,
-	MULTI_EXPRESSION,
-	ALT_SIMUL
-
-
-}CommonMtxButton;
 
 #endif

@@ -231,190 +231,190 @@ _tooltip=If set to cycle count only, traction control takes effect only until th
 #----- Spin Buttons ----------------------------------------------------------
 
 [traction_rpm1s_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=94
 precision=1
 raw_upper=200
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_rpm2s_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=95
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=200
 _tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_rpm3s_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=96
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=200
 _tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_rpm4s_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=97
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=200
 _tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), add this much fuel to the default pulsewidth in order to cut back power (flood the engine essentially). These values are interpolated between bins for a smooth transition
 
 [traction_retard1_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,raw_upper,tooltip
 offset=99
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 raw_upper=85
 bind_to_list=spark_controls
 _tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard2_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,raw_upper,tooltip
 offset=100
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 raw_upper=85
 bind_to_list=spark_controls
 _tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard3_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,raw_upper,tooltip
 offset=101
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 raw_upper=85
 bind_to_list=spark_controls
 _tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_retard4_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,raw_upper,tooltip
 offset=102
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 raw_upper=85
 bind_to_list=spark_controls
 _tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), then retard the ignition output by this amount (degrees).  If the value is between two points, the controller smoothly interpolates between the two points.
 
 [traction_sp_cut1_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,raw_upper,tooltip
 offset=103
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 raw_upper=2
 bind_to_list=spark_controls,nonedis_controls
 _tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).
 
 [traction_sp_cut2_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,raw_upper,tooltip
 offset=104
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 raw_upper=2
 bind_to_list=spark_controls,nonedis_controls
 _tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).
 
 [traction_sp_cut3_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,raw_upper,tooltip
 offset=105
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 raw_upper=2
 bind_to_list=spark_controls,nonedis_controls
 _tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS),  then drop this many sparks from the Base Value (See the Revlimiter Tab).
 
 [traction_sp_cut4_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,raw_upper,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,raw_upper,tooltip
 offset=106
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 raw_upper=2
 bind_to_list=spark_controls,nonedis_controls
 _tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), then drop this many sparks from the Base Value (See the Revlimiter Tab).
 
 [traction_cyc1_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=112
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 _tooltip=If the traction slip level is above 3000RPM/Sec(RPMdot) or above 5% slip (VSS), then hold traction control active for this many engine cycles OR until conditions are met below.
 
 [traction_cyc2_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=113
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 _tooltip=If the traction slip level is above 4000RPM/Sec(RPMdot) or above 15% slip (VSS), then hold traction control active for this many engine cycles OR until conditions are met below.
 
 [traction_cyc3_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=114
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 _tooltip=If the traction slip level is above 6000RPM/Sec(RPMdot) or above 30% slip (VSS), then hold traction control active for this many engine cycles OR until conditions are met below.
 
 [traction_cyc4_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=115
-dl_conv_expr=x*1
-ul_conv_expr=x*1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x*1
 _tooltip=If the traction slip level is above 10000RPM/Sec(RPMdot) or above 70% slip (VSS), then hold traction control active for this many engine cycles OR until conditions are met below.
 
 [vss_sensor_diff_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=119
 precision=2
-dl_conv_expr=x/(39216/100000)
-ul_conv_expr=x*(39216/100000)
+toecu_conv_expr=x/(39216/100000)
+fromecu_conv_expr=x*(39216/100000)
 _tooltip=Sets the differential (%) in VSS inputs (from drive to undriven wheels) to trigger traction control activation.
 
 [vss_low_slip_thresh_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=120
 precision=2
-dl_conv_expr=x/(39216/100000)
-ul_conv_expr=x*(39216/100000)
+toecu_conv_expr=x/(39216/100000)
+fromecu_conv_expr=x*(39216/100000)
 _tooltip=Sets the low slip threshold
 
 [vss_half_slip_thresh_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=123
 precision=2
-dl_conv_expr=x/(39216/100000)
-ul_conv_expr=x*(39216/100000)
+toecu_conv_expr=x/(39216/100000)
+fromecu_conv_expr=x*(39216/100000)
 _tooltip=Sets the half slip threshold (I'm not too sure on this one)
 
 [vss_max_undriven_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=118
 precision=3
-dl_conv_expr=x/(196/10000)
-ul_conv_expr=x*(196/10000)
+toecu_conv_expr=x/(196/10000)
+fromecu_conv_expr=x*(196/10000)
 _tooltip=Sets the undriven VSS sensor maximum input voltage.  This is useful to constrain traction control within a low and high speed range. (see http://megasquirt.sf.net/extra/antirev.html
 
 [vss_min_undriven_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=117
 precision=3
-dl_conv_expr=x/(196/10000)
-ul_conv_expr=x*(196/10000)
+toecu_conv_expr=x/(196/10000)
+fromecu_conv_expr=x*(196/10000)
 _tooltip=Sets the undriven VSS sensor minimum input voltage.  This is useful to constrain traction control within a low and high speed range. (see http://megasquirt.sf.net/extra/antirev.html
 
 [rpmdot_threshold_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
 offset=98
-dl_conv_expr=x/1000
-ul_conv_expr=x*1000
+toecu_conv_expr=x/1000
+fromecu_conv_expr=x*1000
 raw_lower=1
 raw_upper=25
 _tooltip=This is the RPMdot threshold that has to be exceeded to enable traction control in RPM/second.

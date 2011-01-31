@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -86,8 +86,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 	while (firmware->tab_list[i])
 	{
-		glade_file = get_file(g_strconcat(GUI_DATA_DIR,PSEP,firmware->tab_list[i],NULL),g_strdup("glade"));
-		map_file = get_file(g_strconcat(GUI_DATA_DIR,PSEP,firmware->tab_confs[i],NULL),g_strdup("datamap"));
+		glade_file = get_file(g_build_path(PSEP,GUI_DATA_DIR,firmware->tab_list[i],NULL),g_strdup("glade"));
+		map_file = get_file(g_build_path(PSEP,GUI_DATA_DIR,firmware->tab_confs[i],NULL),g_strdup("datamap"));
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));
@@ -113,9 +113,12 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		if (cfgfile)
 		{
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
+			tmpbuf = g_strdup_printf("%s_xml",tab_name);
+			DATA_SET_FULL(global_data,tmpbuf,xml,g_object_unref);
+			g_free(tmpbuf);
 
 			label = gtk_label_new(NULL);
-			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),_(tab_name));
+			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
 			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
 			{
 				if (tmpi)
@@ -129,6 +132,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			}
 			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 			topframe = glade_xml_get_widget(xml,"topframe");
+
+			OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
 			OBJ_SET_FULL(topframe,"glade_file",g_strdup(glade_file),g_free);
 			OBJ_SET_FULL(label,"glade_file",g_strdup(glade_file),g_free);
 			/* bind_data() is recursive and will take 
@@ -180,9 +185,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				g_free(tmpbuf);
 			}
 			cfg_free(cfgfile);
-#ifndef DEBUG
-			g_object_unref(xml);
-#endif
 			update_logbar("interr_view",NULL,_(" completed.\n"),FALSE,FALSE,FALSE);
 		}
 		else
@@ -209,9 +211,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			}
 			gtk_main_iteration();
 		}
-
-
-
 	}
 	update_logbar("interr_view","warning",_("Tab Loading Complete!"),FALSE,FALSE,FALSE);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
@@ -242,6 +241,7 @@ G_MODULE_EXPORT void group_free(gpointer value)
 	}
 	g_object_unref(group->object);
 	g_strfreev(group->keys);
+	g_free(group->keytypes);
 	g_free(group);
 }
 
@@ -381,7 +381,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 			case MTX_STRING:
 				OBJ_SET_FULL(object,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])),g_free);
 				if (OBJ_GET(object,"tooltip") != NULL)
-					gtk_widget_set_tooltip_text(OBJ_GET(object,"self"),(gchar *)_(OBJ_GET(object,"tooltip")));
+					gtk_widget_set_tooltip_text(OBJ_GET(object,"self"),(gchar *)OBJ_GET(object,"tooltip"));
 				if (OBJ_GET(group->object, "bind_to_list"))
 					bind_to_lists(OBJ_GET(object,"self"),(gchar *)OBJ_GET(group->object, "bind_to_list"));
 				break;
@@ -493,11 +493,15 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (!widget)
+	g_return_if_fail(ecu_widgets);
+	g_return_if_fail(firmware);
+
+	if (!GTK_IS_WIDGET(widget))
 		return;
 
-	if (GTK_IS_CONTAINER(widget))
-		gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
+	if (GTK_IS_WIDGET(widget))
+		if (GTK_IS_CONTAINER(widget))
+			gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
 	if (widget->name == NULL)
 		return;
 
@@ -594,10 +598,10 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 
-	/* If this widget  has "tooltip" set the tip on the widget */
+	/* If this widget has "tooltip" set the tip on the widget */
 	if (cfg_read_string(cfgfile,section,"tooltip",&tmpbuf))
 	{
-		gtk_widget_set_tooltip_text(widget,_(tmpbuf));
+		gtk_widget_set_tooltip_text(widget,tmpbuf);
 		g_free(tmpbuf);
 	}
 
@@ -698,10 +702,17 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
 			else
 			{
-				/*printf("adding widget %s to ecu_widgets[%i][%i]\n",glade_get_widget_name(widget),page,offset);*/
+				/*
+				printf("ecu_widgets[%i][%i] is %p\n",page,offset,ecu_widgets[page][offset]);
+				printf("adding widget %s (%p) to ecu_widgets[%i][%i]\n",glade_get_widget_name(widget),widget,page,offset);
+				*/
+
 				ecu_widgets[page][offset] = g_list_prepend(
 						ecu_widgets[page][offset],
 						(gpointer)widget);
+				/*
+				printf("after append: ecu_widgets[%i][%i] is %p\n",page,offset,ecu_widgets[page][offset]);
+				*/
 			}
 		}
 		else
@@ -714,6 +725,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 
 	bind_keys(G_OBJECT(widget), cfgfile, section, keys, num_keys);
+	g_strfreev(keys);
 
 	/* If this widget has the "choices" key (combobox)
 	*/
@@ -735,7 +747,6 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 	g_free(section);
-	g_strfreev(keys);
 	if (GTK_IS_ENTRY(widget))
 	{
 		if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
@@ -774,8 +785,8 @@ G_MODULE_EXPORT void run_post_functions(const gchar * functions)
  */
 G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
-	void (*f_widget)(GtkWidget *) = NULL;
-	void (*f_void)(void) = NULL;
+	void (*post_func_w_arg)(GtkWidget *) = NULL;
+	void (*post_func)(void) = NULL;
 	gchar ** vector = NULL;
 	guint i = 0;
 	vector = g_strsplit(functions,",",-1);
@@ -784,15 +795,15 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 		/* If widget defined, pass to post function */
 		if (widget)
 		{
-			if (get_symbol(vector[i],(void *)&f_widget))
-				f_widget(widget);
+			if (get_symbol(vector[i],(void *)&post_func_w_arg))
+				post_func_w_arg(widget);
 			else
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
 		}
 		else /* If no widget find funct with no args.. */
 		{
-			if (get_symbol(vector[i],(void *)&f_void))
-				f_void();
+			if (get_symbol(vector[i],(void *)&post_func))
+				post_func();
 			else
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
 		}

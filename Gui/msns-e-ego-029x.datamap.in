@@ -183,55 +183,55 @@ _tooltip=Jump to Open Loop mode when TPS or MAP threshold below is exceeded. (se
 #----- Spin Buttons ----------------------------------------------------------
 
 [ego1_active_temp_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 offset=144
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=The engine temp hasto EXCEED this temperature (CLT Sensor) to enable EGO control
 
 [ego2_active_temp_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=2
 offset=144
-dl_conv_expr=x+40
-ul_conv_expr=x-40
+toecu_conv_expr=x+40
+fromecu_conv_expr=x-40
 temp_dep=TRUE
 bind_to_list=temperature,dual_sensors
 _tooltip=The engine temp hasto EXCEED this temperature (CLT Sensor) to enable EGO control
 
 [ego1_active_rpm_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=185
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 _tooltip=The Engine RPM must be higher than this point to enable O<sub>2</sub> control
 
 [ego2_active_rpm_entry]
-keys=page,offset,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,bind_to_list,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=2
 offset=185
-dl_conv_expr=x/100
-ul_conv_expr=x*100
+toecu_conv_expr=x/100
+fromecu_conv_expr=x*100
 bind_to_list=dual_sensors
 _tooltip=The Engine RPM must be higher than this point to enable O<sub>2</sub> control
 
 [ego1_switching_voltage_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=187
 precision=2
-dl_conv_expr=x*(512/10)
-ul_conv_expr=x/(512/10)
+toecu_conv_expr=x*(512/10)
+fromecu_conv_expr=x/(512/10)
 _tooltip=This is typically set to the target voltage that you want the mixture to result in. i.e. Stoichiometric mix, 14.7:1 occuras about 0.475 volts on a narrowband O2 sensor,  but beware wideband sensors typically have a 0-5 Volt range, and work with a reversed slope to a narrowband
 
 [ego2_switching_voltage_entry]
-keys=page,offset,precision,bind_to_list,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,bind_to_list,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=2
 offset=187
 precision=2
-dl_conv_expr=x*(512/10)
-ul_conv_expr=x/(512/10)
+toecu_conv_expr=x*(512/10)
+fromecu_conv_expr=x/(512/10)
 bind_to_list=dual_sensors
 _tooltip=This is typically set to the target voltage that you want the mixture to result in. i.e. Stoichiometric mix, 14.7:1 occuras about 0.475 volts on a narrowband O2 sensor,  but beware wideband sensors typically have a 0-5 Volt range, and work with a reversed slope to a narrowband
 
@@ -272,13 +272,13 @@ bind_to_list=dual_sensors
 _tooltip=This limits how far the controller can alter the mix from what the VEtable says. Setting this high is used for rough-in tuning, Setting it lower prevents the controller for over-richening or over-leaning the mixture.
 
 [alt_ego_kpa_entry]
-keys=page,offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+keys=page,offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
 page=0
 offset=39
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression
 _tooltip=When the Manifold pressure exceeds this value change the EGO +/- Limit to what the following control is set to. 
 
@@ -304,13 +304,13 @@ bind_to_list=tps_oloop
 _tooltip=When this TPS point is reached we jump to OpenLoop. This value is in ADC counts. Set to 255 to disable going to OpenLoop
 
 [kpa_oloop_thresh_entry]
-keys=page,offset,tooltip,source_key,multi_expr_keys,dl_conv_exprs,ul_conv_exprs,bind_to_list
+keys=page,offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
 page=0
 offset=64
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-dl_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-ul_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
+fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 bind_to_list=multi_expression,kpa_oloop
 _tooltip=When this MAP point is reached we jump to OpenLoop. This value is in kPa. Set to MAX (use 1024 and it'll pick the max) to disable going to OpenLoop.
 

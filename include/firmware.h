@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -24,7 +24,7 @@ typedef enum
 	/* No capabilities == Standard B&G code with no modifications */
 	MS1		= 1<<0,
 	MS1_STD		= 1<<1,
-	MSNS_E		= 1<<2,
+	MS1_E		= 1<<2,
 	MS1_DT		= 1<<3,
 	MS2		= 1<<4,
 	MS2_STD		= 1<<5,
@@ -204,14 +204,14 @@ struct _Table_Params
 	gchar *x_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *x_sources;	/*! comma sep list of sources */
 	gchar *x_suffixes;	/*! comma sep list of suffixes */
-	gchar *x_ul_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *x_dl_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *x_fromecu_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *x_toecu_conv_exprs;	/*! comma sep list of x conv. expressions */
 	gchar *x_precisions;	/*! comma sep list of precisions */
 	GHashTable *x_multi_hash;/*! Hash table to store the above */
 	gchar *x_source;	/*! X datasource for 3d displays */
 	gchar *x_suffix;	/*! text suffix used on 3D view */
-	gchar *x_ul_conv_expr;	/*! x conversion expression */
-	gchar *x_dl_conv_expr;	/*! x conversion expression */
+	gchar *x_fromecu_conv_expr;	/*! x conversion expression */
+	gchar *x_toecu_conv_expr;	/*! x conversion expression */
 	void *x_ul_eval;	/*! evaluator for x variable */
 	void *x_dl_eval;	/*! evaluator for x variable */
 	gint x_precision;	/*! how many decimal places */
@@ -228,14 +228,14 @@ struct _Table_Params
 	gchar *y_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *y_sources;	/*! comma sep list of sources */
 	gchar *y_suffixes;	/*! comma sep list of suffixes */
-	gchar *y_ul_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *y_dl_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *y_fromecu_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *y_toecu_conv_exprs;	/*! comma sep list of x conv. expressions */
 	gchar *y_precisions;	/*! comma sep list of precisions */
 	GHashTable *y_multi_hash;/*! Hash table to store the above */
 	gchar *y_source;	/*! Y datasource for 3d displays */
 	gchar *y_suffix;	/*! text suffix used on 3D view */
-	gchar *y_ul_conv_expr;	/*! y conversion expression */
-	gchar *y_dl_conv_expr;	/*! y conversion expression */
+	gchar *y_fromecu_conv_expr;	/*! y conversion expression */
+	gchar *y_toecu_conv_expr;	/*! y conversion expression */
 	void *y_ul_eval;	/*! evaluator for y variable */
 	void *y_dl_eval;	/*! evaluator for y variable */
 	gint y_precision;	/*! how many decimal places */
@@ -251,14 +251,14 @@ struct _Table_Params
 	gchar *z_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *z_sources;	/*! comma sep list of sources */
 	gchar *z_suffixes;	/*! comma sep list of suffixes */
-	gchar *z_ul_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *z_dl_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *z_fromecu_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *z_toecu_conv_exprs;	/*! comma sep list of x conv. expressions */
 	gchar *z_precisions;	/*! comma sep list of precisions */
 	GHashTable *z_multi_hash;/*! Hash table to store the above */
 	gchar *z_source;	/*! Z datasource for 3d displays */
 	gchar *z_suffix;	/*! text suffix used on 3D view */
-	gchar *z_ul_conv_expr;	/*! z conversion expression */
-	gchar *z_dl_conv_expr;	/*! z conversion expression */
+	gchar *z_fromecu_conv_expr;	/*! z conversion expression */
+	gchar *z_toecu_conv_expr;	/*! z conversion expression */
 	void *z_ul_eval;	/*! evaluator for z variable */
 	void *z_dl_eval;	/*! evaluator for z variable */
 	gint z_precision;	/*! how many decimal places */
@@ -329,8 +329,8 @@ struct _TE_Params
 	gint x_2d_lower_limit;
 	gint x_2d_upper_limit;
 	DataSize x_size;	/*! enumeration size for the var */
-	gchar *x_dl_conv_expr;	/*! dl conv expr */
-	gchar *x_ul_conv_expr;	/*! ul conv expr */
+	gchar *x_toecu_conv_expr;	/*! dl conv expr */
+	gchar *x_fromecu_conv_expr;	/*! ul conv expr */
 	gchar *x_source;	/*! column datsource */
 	gint x_precision;	/*! column precisions */
 	gchar *x_name;	/*! column name */
@@ -346,8 +346,8 @@ struct _TE_Params
 	gint y_2d_lower_limit;
 	gint y_2d_upper_limit;
 	DataSize y_size;	/*! enumeration size for the var */
-	gchar *y_dl_conv_expr;	/*! dl conv expr */
-	gchar *y_ul_conv_expr;	/*! ul conv expr */
+	gchar *y_toecu_conv_expr;	/*! dl conv expr */
+	gchar *y_fromecu_conv_expr;	/*! ul conv expr */
 	gchar *y_source;	/*! column datsource */
 	gint y_precision;	/*! column precisions */
 	gchar *y_name;	/*! column name */

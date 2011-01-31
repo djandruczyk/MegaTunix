@@ -242,34 +242,34 @@ dont_backup=TRUE
 _tooltip=Set this to 12345 and hit enter, then Burn. This enables output test mode.  Set to 0 and hit burn to return to normal. (or power cycle ECU)
 
 [output_interval_entry]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,dont_backup,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,dont_backup,tooltip
 page=3
 offset=4
 size=_U16_
-dl_conv_expr=x/0.128
-ul_conv_expr=x*0.128
+toecu_conv_expr=x/0.128
+fromecu_conv_expr=x*0.128
 raw_upper=65535
 dont_backup=TRUE
 precision=1
 _tooltip=Sets output interval in ms. (i.e. how often it runs the test, i.e. 1000 means once per second, 10 means 100x per second)
 
 [test_dwell_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,precision,dont_backup,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,dont_backup,tooltip
 page=3
 offset=3
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 dont_backup=TRUE
 precision=1
 _tooltip=Sets output dwell in ms.
 
 [inj_test_pw_entry]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,dont_backup,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,dont_backup,tooltip
 page=3
 offset=7
 size=_U16_
-dl_conv_expr=x/0.000666
-ul_conv_expr=x*0.000666
+toecu_conv_expr=x/0.000666
+fromecu_conv_expr=x*0.000666
 raw_upper=65535
 dont_backup=TRUE
 precision=3
@@ -293,11 +293,11 @@ dont_backup=TRUE
 _tooltip=Sets inj output PWM current limit percentage
 
 [inj_test_pwm_time_entry]
-keys=page,offset,dl_conv_expr,ul_conv_expr,precision,dont_backup,tooltip
+keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,dont_backup,tooltip
 page=3
 offset=347
-dl_conv_expr=x/0.128
-ul_conv_expr=x*0.128
+toecu_conv_expr=x/0.128
+fromecu_conv_expr=x*0.128
 dont_backup=TRUE
 precision=1
 _tooltip=Sets inj output PWM time threshold

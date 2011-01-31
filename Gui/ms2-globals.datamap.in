@@ -231,15 +231,15 @@ _tooltip=Sets the Fuel Injector placement.
 #----- Spinbuttons -----------------------------------------------------------
 
 [req_fuel_per_cycle_0_spin]
-keys=offset,size,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=offset,size,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 offset=608
 size=_U16_
 table_num=0
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_1_
 bind_to_list=interdep_0_ctrl
-ul_complex=TRUE
-ul_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
+fromecu_complex=TRUE
+fromecu_conv_expr=(reqfuel_1*((injectors_1)/(divider_1*(alternate+1))))/1000
 expr_symbols=reqfuel_1,injectors_1,divider_1,alternate
 expr_types=_ECU_VAR_,_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_
 reqfuel_1_page=0
@@ -256,11 +256,11 @@ alternate_bitmask=1
 register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,size,table_num,ul_conv_expr,bind_to_list,register_as
+keys=offset,size,table_num,fromecu_conv_expr,bind_to_list,register_as
 offset=608
 size=_U16_
 table_num=0
-ul_conv_expr=x/1000
+fromecu_conv_expr=x/1000
 bind_to_list=interdep_0_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
@@ -285,14 +285,14 @@ bind_to_list=interdep_0_ctrl
 register_as=num_cylinders_0_spin
 
 [inj_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 offset=610
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_1_
 bind_to_list=interdep_0_ctrl
-ul_complex=TRUE
-ul_conv_expr=cylinders_1/divider_1
+fromecu_complex=TRUE
+fromecu_conv_expr=cylinders_1/divider_1
 expr_symbols=cylinders_1,divider_1
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_
 cylinders_1_page=0
@@ -316,19 +316,19 @@ offset=752
 _tooltip=This is used to offset injector firing a certain percentage of degrees from the TACH PULSE input. It's useful  in some cases to help smooth out a lumpy idle, in case an injector is firing at overlap on one cylinder.
 
 [inj_open_time_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=612
-dl_conv_expr=x/0.10
-ul_conv_expr=x*0.10
+toecu_conv_expr=x/0.10
+fromecu_conv_expr=x*0.10
 precision=1
 _tooltip=This is the amount of time the injector spends in the opening or closing phase.  It's used to tweake the fuel equations to compensate for the fact that fuel flow doesn't go from 0 to max instantaneously
 
 [batt_corr_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=616
 precision=2
-dl_conv_expr=x/0.0166667
-ul_conv_expr=x*0.0166667
+toecu_conv_expr=x/0.0166667
+fromecu_conv_expr=x*0.0166667
 _tooltip=This compensates for battery voltage, at lower voltages the injectors open slower, skewing fuel flow slightly. this corrects for that.
 
 [pwm_limit_entry]
@@ -338,10 +338,10 @@ raw_upper=100
 _tooltip=This sets the PWM current limit DutyCycle %, 100 being no limit.
 
 [pwm_thresh_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=613
-dl_conv_expr=x/0.10
-ul_conv_expr=x*0.10
+toecu_conv_expr=x/0.10
+fromecu_conv_expr=x*0.10
 precision=1
 _tooltip=This sets the PWM Time Threshold, when the injector is on for this ammount,  current limit is kicked in.  Thsi should beset to 25.5 for high impedance injectors where PWM is unneeded.
 

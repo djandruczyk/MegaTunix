@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <menu_handlers.h>
 #include <rtv_parser.h>
 #include <xml.h>
 
@@ -21,7 +22,7 @@ int main (int argc, char ** argv )
 
 	gtk_init (&argc, &argv);
 
-	filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"main.glade",NULL),NULL);
+	filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"main.ui",NULL),NULL);
 	if (filename)
 	{
 		toplevel = gtk_builder_new();
@@ -35,17 +36,17 @@ int main (int argc, char ** argv )
 	}
 	else
 	{
-		printf("Can't locate primary glade file!!!!\n");
+		printf("Can't locate primary ui file!!!!\n");
 		exit(-1);
 	}
 	
 	gtk_builder_connect_signals(toplevel,NULL);
 	main_window = GTK_WIDGET (gtk_builder_get_object(toplevel,"main_window"));
+	menu_setup(toplevel);
 	gtk_window_set_resizable(GTK_WINDOW(main_window),TRUE);
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_dash_menuitem")),FALSE);
-        gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_dash_as_menuitem")),FALSE);
-        gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_dash_menuitem")),FALSE);
-
+        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),FALSE);
+        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),FALSE);
+        gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),FALSE);
 
 	retrieve_rt_vars();
 	gtk_widget_show_all(main_window);

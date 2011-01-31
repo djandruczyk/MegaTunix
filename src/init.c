@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -18,7 +18,9 @@
 #include <defines.h>
 #include <enums.h>
 #include <debugging.h>
+#include <getfiles.h>
 #include <glib.h>
+#include <glade/glade.h>
 #include <glib/gstdio.h>
 #include <gui_handlers.h>
 #include <init.h>
@@ -47,7 +49,7 @@ GdkColor white = { 0, 65535, 65535, 65535};
 extern gconstpointer *global_data;
 
 
-void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
+static void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
 /*!
  * init(void)
  * \brief Sets sane values to global variables for a clean startup of 
@@ -102,6 +104,7 @@ G_MODULE_EXPORT void init(void)
 	DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(-1));
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(-1));
+	DATA_SET(global_data,"pbar_hold_time",GINT_TO_POINTER(1100));
 	DATA_SET_FULL(global_data,"last_ecu_family",g_strdup("MS-2"),cleanup);
 	DATA_SET_FULL(global_data,"last_signature",g_strdup(""),cleanup);
 	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-2"),cleanup);
@@ -171,9 +174,11 @@ G_MODULE_EXPORT gboolean read_config(void)
 
 	serial_params = DATA_GET(global_data,"serial_params");
 
-	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	filename = g_build_path(PSEP,HOME(), ".MegaTunix","config", NULL);
 	args = DATA_GET(global_data,"args");
 	cfgfile = cfg_open_file(filename);
+	if (!cfgfile)
+		cfgfile = cfg_new();
 	if (cfgfile)
 	{
 		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))
@@ -354,12 +359,10 @@ G_MODULE_EXPORT void save_config(void)
 
 	g_static_mutex_lock(&mutex);
 
-	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
+	filename = g_build_path(PSEP, HOME(), "/.MegaTunix/config", NULL);
 	cfgfile = cfg_open_file(filename);
-
 	if (!cfgfile)
 		cfgfile = cfg_new();
-
 
 	cfg_write_int(cfgfile, "Global", "major_ver", _MAJOR_);
 	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
@@ -535,39 +538,62 @@ G_MODULE_EXPORT void save_config(void)
  */
 G_MODULE_EXPORT void make_megasquirt_dirs(void)
 {
-	gchar *filename = NULL;
+	gchar *dirname = NULL;
+	const gchar *subdir = NULL;
+	gchar *path = NULL;
+	GDir *dir = NULL;
 	const gchar *mtx = ".MegaTunix";
 
-	filename = g_strconcat(HOME(), "/.MegaTunix", NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,GUI_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,GAUGES_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,DASHES_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,INTERROGATOR_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,LOOKUPTABLES_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,REALTIME_MAPS_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,RTSLIDERS_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
-	filename = g_strconcat(HOME(),PSEP,mtx,PSEP,RTSTATUS_DATA_DIR, NULL);
-	g_mkdir(filename, S_IRWXU);
-	cleanup(filename);
+	dirname = g_build_path(PSEP, HOME(), mtx, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	
+	dirname = g_build_path(PSEP, HOME(),mtx,GUI_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,GAUGES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,DASHES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+
+#ifdef __WIN32__
+	path = g_build_path(PSEP,(gchar *)get_home(),"dist",INTERROGATOR_DATA_DIR,"Profiles",NULL);
+#else
+	path = g_build_path(PSEP,DATA_DIR,INTERROGATOR_DATA_DIR,"Profiles",NULL);
+#endif
+	dir = g_dir_open(path,0,NULL);
+	g_free(path);
+	if (dir)
+	{
+		while (NULL != (subdir = g_dir_read_name(dir)))
+		{
+			dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR,"Profiles",subdir, NULL);
+			g_mkdir(dirname, S_IRWXU);
+			cleanup(dirname);
+		}
+		g_dir_close(dir);
+	}
+
+	dirname = g_build_path(PSEP,HOME(),mtx,LOOKUPTABLES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,REALTIME_MAPS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,RTSLIDERS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,RTSTATUS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU);
+	cleanup(dirname);
 
 	return;
 }
@@ -683,6 +709,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 {
 	gint i = 0;
 	gint j = 0;
+	gchar *tmpbuf = NULL;
 	gpointer data;
 	GtkListStore *store = NULL;
 	GList *defaults = NULL;
@@ -692,12 +719,16 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GHashTable *dynamic_widgets = NULL;
 	Rtv_Map *rtv_map = NULL;
 	GList ***ecu_widgets = NULL;
+	GList **tab_gauges = NULL;
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
+	CmdLineArgs *args = NULL;
 
+	args = DATA_GET(global_data,"args");
 	serial_params = DATA_GET(global_data,"serial_params");
 	rtv_map = DATA_GET(global_data,"rtv_map");
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	firmware = DATA_GET(global_data,"firmware");
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
@@ -710,18 +741,45 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	/* Firmware datastructure.... */
 	if (firmware)
 	{
-		for (i=0;i<firmware->total_pages;i++)
+		if (ecu_widgets)
 		{
-			if (ecu_widgets[i])
+			for (i=0;i<firmware->total_pages;i++)
 			{
-				for (j=0;j<firmware->page_params[i]->length;j++)
+				if (ecu_widgets[i])
 				{
-					g_list_foreach(ecu_widgets[i][j],dealloc_widget,NULL);
-					g_list_free(ecu_widgets[i][j]);
+					for (j=0;j<firmware->page_params[i]->length;j++)
+					{
+						if (g_list_length(ecu_widgets[i][j]) > 0)
+						{
+							if (args->verbose)
+								printf("Deallocating widgets in  array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
+#ifdef DEBUG
+							tmpbuf = g_strdup_printf("[%i][%i]",i,j);
+							g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
+							g_free(tmpbuf);
+#endif
+							g_list_free(ecu_widgets[i][j]);
+						}
+					}
 				}
-
+				cleanup(ecu_widgets[i]);
 			}
-			cleanup(ecu_widgets[i]);
+			cleanup(ecu_widgets);
+			DATA_SET(global_data,"ecu_widgets",NULL);
+		}
+
+		if (tab_gauges)
+		{
+			for (i=0;i<firmware->total_tables;i++)
+			{
+				if (tab_gauges[i])
+				{
+					g_list_foreach(tab_gauges[i],dealloc_gauge,NULL);
+					g_list_free(tab_gauges[i]);
+				}
+			}
+			cleanup(tab_gauges);
+			DATA_SET(global_data,"tab_gauges",NULL);
 		}
 		cleanup (firmware->name);
 		cleanup (firmware->profile_filename);
@@ -780,27 +838,30 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		}
 		cleanup(firmware->table_params);
 		cleanup(interdep_vars);
+		DATA_SET(global_data,"interdep_vars",NULL);
 		cleanup(firmware->rf_params);
 		cleanup(firmware->rt_data);
 		cleanup(firmware->rt_data_last);
 		cleanup(firmware);
+		DATA_SET(global_data,"firmware",NULL);
 	}
 	if (rtv_map)
 	{
 		if (rtv_map->raw_list)
 			g_strfreev(rtv_map->raw_list);
 		cleanup (rtv_map->applicable_revisions);
-		g_array_free(rtv_map->ts_array,TRUE);
 		for(i=0;i<rtv_map->rtv_list->len;i++)
 		{
 			data = g_ptr_array_index(rtv_map->rtv_list,i);
 			dealloc_rtv_object(data);
 		}
+		g_array_free(rtv_map->ts_array,TRUE);
+		g_ptr_array_free(rtv_map->rtv_list,TRUE);
 		g_hash_table_destroy(rtv_map->rtv_hash);
 		g_hash_table_foreach(rtv_map->offset_hash,dealloc_list,NULL);
 		g_hash_table_destroy(rtv_map->offset_hash);
-		g_ptr_array_free(rtv_map->rtv_list,TRUE);
 		cleanup(rtv_map);
+		DATA_SET(global_data,"rtv_map",NULL);
 	}
 	/* Runtime Text*/
 	g_mutex_lock(rtt_mutex);
@@ -809,6 +870,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	{
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
 		gtk_list_store_clear(GTK_LIST_STORE(store));
+		DATA_SET(global_data,"rtt_model",NULL);
 	}
 	g_mutex_unlock(rtt_mutex);
 
@@ -817,9 +879,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	if (defaults)
 		g_list_foreach(defaults,(GFunc)cleanup,NULL);
 	/* Free all global data and structures */
+	g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	g_dataset_destroy(global_data);
 	cleanup(global_data);
-	//g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	/* Dynamic widgets master hash  */
 
 	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
@@ -828,12 +890,10 @@ G_MODULE_EXPORT void mem_dealloc(void)
 }
 
 
-G_MODULE_EXPORT void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
+void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
-
-	printf("going to free %s\n",g_quark_to_string(key_id));
+	/*printf("removing data for %s\n",g_quark_to_string(key_id));*/
 	g_dataset_remove_data(global_data,g_quark_to_string(key_id));
-	/* This should trigger a bug at some point */
 }
 
 
@@ -889,8 +949,16 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 	message->sequence = NULL;
 	cleanup (message->recv_buf);
 	if (message->command)
+	{
 		if (message->command->dynamic)
+		{
+			if (message->command->post_functions)
+			{
+				/*dealloc_array(message->command->post_functions,POST_FUNCTIONS);*/
+			}
 			cleanup(message->command);
+		}
+	}
 	message->command = NULL;
         if (message->payload)
 	{
@@ -1026,12 +1094,12 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 	cleanup(table_params->x_suffixes);
 	cleanup(table_params->y_suffixes);
 	cleanup(table_params->z_suffixes);
-	cleanup(table_params->x_ul_conv_exprs);
-	cleanup(table_params->y_ul_conv_exprs);
-	cleanup(table_params->z_ul_conv_exprs);
-	cleanup(table_params->x_dl_conv_exprs);
-	cleanup(table_params->y_dl_conv_exprs);
-	cleanup(table_params->z_dl_conv_exprs);
+	cleanup(table_params->x_fromecu_conv_exprs);
+	cleanup(table_params->y_fromecu_conv_exprs);
+	cleanup(table_params->z_fromecu_conv_exprs);
+	cleanup(table_params->x_toecu_conv_exprs);
+	cleanup(table_params->y_toecu_conv_exprs);
+	cleanup(table_params->z_toecu_conv_exprs);
 	cleanup(table_params->x_precisions);
 	cleanup(table_params->y_precisions);
 	cleanup(table_params->z_precisions);
@@ -1041,35 +1109,36 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 	cleanup(table_params->x_suffix);
 	cleanup(table_params->y_suffix);
 	cleanup(table_params->z_suffix);
-	cleanup(table_params->x_ul_conv_expr);
-	cleanup(table_params->y_ul_conv_expr);
-	cleanup(table_params->z_ul_conv_expr);
-	cleanup(table_params->x_dl_conv_expr);
-	cleanup(table_params->y_dl_conv_expr);
-	cleanup(table_params->z_dl_conv_expr);
+	cleanup(table_params->x_fromecu_conv_expr);
+	cleanup(table_params->y_fromecu_conv_expr);
+	cleanup(table_params->z_fromecu_conv_expr);
+	cleanup(table_params->x_toecu_conv_expr);
+	cleanup(table_params->y_toecu_conv_expr);
+	cleanup(table_params->z_toecu_conv_expr);
+	cleanup(table_params->z_depend_on);
 	if (table_params->x_multi_hash)
 		g_hash_table_destroy(table_params->x_multi_hash);
 	if (table_params->y_multi_hash)
 		g_hash_table_destroy(table_params->y_multi_hash);
 	if (table_params->z_multi_hash)
 		g_hash_table_destroy(table_params->z_multi_hash);
-	if(table_params->x_ul_eval)
+	if (table_params->x_ul_eval)
 		evaluator_destroy(table_params->x_ul_eval);
-	if(table_params->y_ul_eval)
+	if (table_params->y_ul_eval)
 		evaluator_destroy(table_params->y_ul_eval);
-	if(table_params->z_ul_eval)
+	if (table_params->z_ul_eval)
 		evaluator_destroy(table_params->z_ul_eval);
-	if(table_params->x_dl_eval)
+	if (table_params->x_dl_eval)
 		evaluator_destroy(table_params->x_dl_eval);
-	if(table_params->y_dl_eval)
+	if (table_params->y_dl_eval)
 		evaluator_destroy(table_params->y_dl_eval);
-	if(table_params->z_dl_eval)
+	if (table_params->z_dl_eval)
 		evaluator_destroy(table_params->z_dl_eval);
-	if(table_params->x_object)
+	if (table_params->x_object)
 		g_object_unref(table_params->x_object);
-	if(table_params->y_object)
+	if (table_params->y_object)
 		g_object_unref(table_params->y_object);
-	if(table_params->z_object)
+	if (table_params->z_object)
 		g_object_unref(table_params->z_object);
 	g_array_free(table_params->table,TRUE);
 
@@ -1094,8 +1163,9 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 	if (array)
 		g_array_free(DATA_GET(object,"history"),TRUE);
 	/* This should release everything else bound via a DATA_SET_FULL */
-	//g_dataset_foreach(object,dataset_dealloc,NULL);
+	g_dataset_foreach(object,dataset_dealloc,NULL);
 	g_dataset_destroy(object);
+	g_free(object);
 }
 
 
@@ -1120,10 +1190,10 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 	cleanup(te_params->bind_to_list);
 	cleanup(te_params->x_axis_label);
 	cleanup(te_params->y_axis_label);
-	cleanup(te_params->x_dl_conv_expr);
-	cleanup(te_params->y_dl_conv_expr);
-	cleanup(te_params->x_ul_conv_expr);
-	cleanup(te_params->y_ul_conv_expr);
+	cleanup(te_params->x_toecu_conv_expr);
+	cleanup(te_params->y_toecu_conv_expr);
+	cleanup(te_params->x_fromecu_conv_expr);
+	cleanup(te_params->y_fromecu_conv_expr);
 	cleanup(te_params->x_source);
 	cleanup(te_params->y_source);
 	cleanup(te_params->x_name);
@@ -1147,51 +1217,35 @@ G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 }
 
 
-G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
+G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 {
 	GtkWidget * widget = (GtkWidget *) data;
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_destroy(widget);
+}
+
+
+G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
+{
+	static CmdLineArgs *args = NULL;
+	GtkWidget * widget = (GtkWidget *) data;
+	if (!args)
+		args = DATA_GET(global_data,"args");
+	if (args->verbose)
+	{
+		printf("widget name %s pointer %p\n",glade_get_widget_name(widget),widget);
+#ifdef DEBUG
+		printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
+#endif
+	}
 
 	if (!GTK_IS_WIDGET(widget))
+	{
+		printf("NOT A WIDGET!!!\n");
 		return;
-	/*printf("dealloc_widget\n");*/
-/*
-	cleanup (OBJ_GET(widget,"algorithms"));
-	cleanup (OBJ_GET(widget,"alt_lookuptable"));
-	cleanup (OBJ_GET(widget,"applicable_tables"));
-	cleanup (OBJ_GET(widget,"bind_to_list"));
-	cleanup (OBJ_GET(widget,"bitvals"));
-	cleanup (OBJ_GET(widget,"choices"));
-	cleanup (OBJ_GET(widget,"complex_expr"));
-	cleanup (OBJ_GET(widget,"data"));
-	cleanup (OBJ_GET(widget,"depend_on"));
-	cleanup (OBJ_GET(widget,"dl_conv_expr"));
-	cleanup (OBJ_GET(widget,"dl_conv_exprs"));
-	cleanup (OBJ_GET(widget,"fullname"));
-	cleanup (OBJ_GET(widget,"group"));
-	cleanup (OBJ_GET(widget,"group_2_update"));
-	cleanup (OBJ_GET(widget,"initializer"));
-	cleanup (OBJ_GET(widget,"lookuptable"));
-	cleanup (OBJ_GET(widget,"multi_expr_keys"));
-	cleanup (OBJ_GET(widget,"post_function_with_arg"));
-	cleanup (OBJ_GET(widget,"post_functions_with_arg"));
-	cleanup (OBJ_GET(widget,"raw_lower"));
-	cleanup (OBJ_GET(widget,"raw_upper"));
-	cleanup (OBJ_GET(widget,"register_as"));
-	cleanup (OBJ_GET(widget,"source"));
-	cleanup (OBJ_GET(widget,"sources"));
-	cleanup (OBJ_GET(widget,"source_key"));
-	cleanup (OBJ_GET(widget,"source_value"));
-	cleanup (OBJ_GET(widget,"source_values"));
-	cleanup (OBJ_GET(widget,"table_num"));
-	cleanup (OBJ_GET(widget,"te_table_num"));
-	cleanup (OBJ_GET(widget,"tooltip"));
-	cleanup (OBJ_GET(widget,"ul_conv_expr"));
-	cleanup (OBJ_GET(widget,"ul_conv_exprs"));
-*/
-	if (OBJ_GET(widget,"dl_evaluator"))
-		evaluator_destroy (OBJ_GET(widget,"dl_evaluator"));
-	if (OBJ_GET(widget,"ul_evaluator"))
-		evaluator_destroy (OBJ_GET(widget,"ul_evaluator"));
+	}
+	gtk_widget_destroy(widget);
+	widget = NULL;
 }
 
 
@@ -1225,6 +1279,12 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 	 * as those are just ptr's to the actual
 	 * data in the rtv object and that gets freed elsewhere
 	 */
+	if (slider->label)
+		gtk_widget_destroy(slider->label);
+	if (slider->textval)
+		gtk_widget_destroy(slider->textval);
+	if (slider->pbar)
+		gtk_widget_destroy(slider->pbar);
 	cleanup(slider);
 	return;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -106,12 +106,14 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("update_ve3d_if_necessary",(void *)&update_ve3d_if_necessary_f);
 	get_symbol_f("warn_user",(void *)&warn_user_f);
 	get_symbol_f("write_wrapper",(void *)&write_wrapper_f);
+
 	register_common_enums();
 }
 
 
 G_MODULE_EXPORT void plugin_shutdown()
 {
+	deregister_common_enums();
 	return;
 }
 
@@ -175,8 +177,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER (MS1_STD));
 		g_hash_table_insert (str_2_enum, "_MS1_DT_", 
 				GINT_TO_POINTER (MS1_DT));
-		g_hash_table_insert (str_2_enum, "_MSNS_E_", 
-				GINT_TO_POINTER (MSNS_E));
+		g_hash_table_insert (str_2_enum, "_MS1_E_", 
+				GINT_TO_POINTER (MS1_E));
 		g_hash_table_insert (str_2_enum, "_MS2_", 
 				GINT_TO_POINTER (MS2));
 		g_hash_table_insert (str_2_enum, "_MS2_STD_",
@@ -215,18 +217,96 @@ void register_common_enums(void)
 				GINT_TO_POINTER (NUM_INJECTORS_1));
 		g_hash_table_insert (str_2_enum, "_NUM_INJECTORS_2_",
 				GINT_TO_POINTER (NUM_INJECTORS_2));
-		g_hash_table_insert(str_2_enum,"_LOCKED_REQ_FUEL_",
+		g_hash_table_insert (str_2_enum, "_LOCKED_REQ_FUEL_",
 				GINT_TO_POINTER(LOCKED_REQ_FUEL));
-		g_hash_table_insert(str_2_enum,"_REQ_FUEL_1_",
+		g_hash_table_insert (str_2_enum, "_REQ_FUEL_1_",
 				GINT_TO_POINTER(REQ_FUEL_1));
-		g_hash_table_insert(str_2_enum,"_REQ_FUEL_2_",
+		g_hash_table_insert (str_2_enum, "_REQ_FUEL_2_",
 				GINT_TO_POINTER(REQ_FUEL_2));
-		g_hash_table_insert(str_2_enum,"_MULTI_EXPRESSION_",
+		g_hash_table_insert (str_2_enum, "_MULTI_EXPRESSION_",
 				GINT_TO_POINTER(MULTI_EXPRESSION));
-		g_hash_table_insert(str_2_enum,"_ALT_SIMUL_",
+		g_hash_table_insert (str_2_enum, "_ALT_SIMUL_",
 				GINT_TO_POINTER(ALT_SIMUL));
+		g_hash_table_insert (str_2_enum, "_INCREMENT_VALUE_",
+				GINT_TO_POINTER(INCREMENT_VALUE));
+		g_hash_table_insert (str_2_enum, "_DECREMENT_VALUE_",
+				GINT_TO_POINTER(DECREMENT_VALUE));
+		g_hash_table_insert (str_2_enum, "_REQFUEL_RESCALE_TABLE_",
+				GINT_TO_POINTER(REQFUEL_RESCALE_TABLE));
+		g_hash_table_insert (str_2_enum, "_REQ_FUEL_POPUP_",
+				GINT_TO_POINTER(REQ_FUEL_POPUP));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
 }
 
+
+void deregister_common_enums(void)
+{
+	GHashTable *str_2_enum = NULL;
+
+	str_2_enum = DATA_GET (global_data, "str_2_enum");
+	if (str_2_enum)
+	{
+		/* TCP Socket Commands */
+		g_hash_table_remove (str_2_enum, "HELP");
+		g_hash_table_remove (str_2_enum, "QUIT");
+		g_hash_table_remove (str_2_enum, "GET_REVISION");
+		g_hash_table_remove (str_2_enum, "GET_SIGNATURE");
+		g_hash_table_remove (str_2_enum, "GET_RT_VARS");
+		g_hash_table_remove (str_2_enum, "GET_RTV_LIST");
+		g_hash_table_remove (str_2_enum, "GET_ECU_VARS");
+		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_U08");
+		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_S08");
+		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_U16");
+		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_S16");
+		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_U32");
+		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_S32");
+		g_hash_table_remove (str_2_enum, "SET_ECU_VAR_U08");
+		g_hash_table_remove (str_2_enum, "SET_ECU_VAR_S08");
+		g_hash_table_remove (str_2_enum, "SET_ECU_VAR_U16");
+		g_hash_table_remove (str_2_enum, "SET_ECU_VAR_S16");
+		g_hash_table_remove (str_2_enum, "SET_ECU_VAR_U32");
+		g_hash_table_remove (str_2_enum, "SET_ECU_VAR_S32");
+		g_hash_table_remove (str_2_enum, "BURN_FLASH");
+		g_hash_table_remove (str_2_enum, "GET_RAW_ECU");
+		g_hash_table_remove (str_2_enum, "SET_RAW_ECU");
+		/* Firmware capabilities */
+		g_hash_table_remove (str_2_enum, "_PIS_");
+		g_hash_table_remove (str_2_enum, "_MS1_"); 
+		g_hash_table_remove (str_2_enum, "_MS1_STD_");
+		g_hash_table_remove (str_2_enum, "_MS1_DT_"); 
+		g_hash_table_remove (str_2_enum, "_MS1_E_"); 
+		g_hash_table_remove (str_2_enum, "_MS2_"); 
+		g_hash_table_remove (str_2_enum, "_MS2_STD_");
+		g_hash_table_remove (str_2_enum, "_MS2_E_"); 
+		g_hash_table_remove (str_2_enum, "_MS2_E_COMPMON_");
+		g_hash_table_remove (str_2_enum, "_JIMSTIM_");
+		g_hash_table_remove (str_2_enum, "_COUNT_"); 
+		g_hash_table_remove (str_2_enum, "_SUBMATCH_");
+		g_hash_table_remove (str_2_enum, "_NUMMATCH_");
+		g_hash_table_remove (str_2_enum, "_FULLMATCH_");
+		g_hash_table_remove (str_2_enum, "_REGEX_"); 
+		/* Interrogation Test Results */
+		g_hash_table_remove (str_2_enum, "_RESULT_DATA_");
+		g_hash_table_remove (str_2_enum, "_RESULT_TEXT_");
+		/* Common Handlers */
+		g_hash_table_remove (str_2_enum, "_NUM_SQUIRTS_1_");
+		g_hash_table_remove (str_2_enum, "_NUM_SQUIRTS_2_");
+		g_hash_table_remove (str_2_enum, "_NUM_CYLINDERS_1_");
+		g_hash_table_remove (str_2_enum, "_NUM_CYLINDERS_2_");
+		g_hash_table_remove (str_2_enum, "_NUM_INJECTORS_1_");
+		g_hash_table_remove (str_2_enum, "_NUM_INJECTORS_2_");
+		g_hash_table_remove (str_2_enum, "_LOCKED_REQ_FUEL_");
+		g_hash_table_remove (str_2_enum, "_REQ_FUEL_1_");
+		g_hash_table_remove (str_2_enum, "_REQ_FUEL_2_");
+		g_hash_table_remove (str_2_enum, "_MULTI_EXPRESSION_");
+		g_hash_table_remove (str_2_enum, "_ALT_SIMUL_");
+		g_hash_table_remove (str_2_enum, "_INCREMENT_VALUE_");
+		g_hash_table_remove (str_2_enum, "_DECREMENT_VALUE_");
+		g_hash_table_remove (str_2_enum, "_REQFUEL_RESCALE_TABLE_");
+		g_hash_table_remove (str_2_enum, "_REQ_FUEL_POPUP_");
+	}
+	else
+		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -34,6 +34,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 
 G_MODULE_EXPORT void plugin_shutdown()
 {
+	deregister_common_enums();
 	return;
 }
 
@@ -50,3 +51,15 @@ void register_common_enums(void)
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
 }
 
+
+void deregister_common_enums(void)
+{
+	GHashTable *str_2_enum = NULL;
+
+	str_2_enum = DATA_GET (global_data, "str_2_enum");
+	if (str_2_enum)
+	{
+	}
+	else
+		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+}

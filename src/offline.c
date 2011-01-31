@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -46,10 +46,9 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	GtkWidget * widget = NULL;
 	gchar * filename = NULL;
 	gboolean tmp = TRUE;
-	GModule *module = NULL;
 	GArray *pfuncs = NULL;
 	PostFunction *pf = NULL;
-        GAsyncQueue *io_repair_queue = NULL;
+	GAsyncQueue *io_repair_queue = NULL;
 	Firmware_Details *firmware = NULL;
 	void (*load_firmware_details)(void *,const gchar *) = NULL;
 
@@ -98,100 +97,86 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	if (get_symbol("load_firmware_details",(void*)&load_firmware_details))
 		load_firmware_details(firmware,filename);
 
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("update_interrogation_gui_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_realtime_map_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_status_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_rt_text_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_gui_tabs_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_sliders_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("start_statuscounts_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("disable_burner_buttons_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("offline_ecu_restore_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("setup_menu_handlers_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("enable_3d_buttons_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
+
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("ready_msg_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	
-	g_module_close(module);
+
 
 	io_cmd(NULL,pfuncs);
 
 	/*
-	io_cmd(firmware->get_all_command,NULL);
-	*/
+	   io_cmd(firmware->get_all_command,NULL);
+	 */
 
 	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
@@ -201,16 +186,13 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 
-	module = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("reset_temps_pf");
-	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-	g_module_close(module);
 
 	io_cmd(NULL,pfuncs);
 	gdk_threads_leave();
@@ -231,6 +213,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	GtkWidget *hbox = NULL;
 	GtkWidget *ebox = NULL;
 	GtkWidget *sep = NULL;
+	GtkWidget *dummybutton = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *label = NULL;
 	ListElement *element = NULL;
@@ -270,6 +253,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		{
 			thread_update_logbar("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,cfgfile->filename),FALSE,FALSE);
 			i++;
+			cfg_free(cfgfile);
 			continue;
 		}
 		cfg_read_string(cfgfile,"interrogation_profile","name",&tmpbuf);
@@ -314,10 +298,10 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	vbox = gtk_vbox_new(TRUE,2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),vbox,TRUE,TRUE,0);
-	group = NULL;
 	/* Dummies */
-	button = gtk_radio_button_new(group);
-	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(button));
+	dummybutton = gtk_radio_button_new(NULL);
+	g_object_ref_sink(dummybutton);
+	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(dummybutton));
 	if (g_list_length(p_list) > 0)
 	{
 		label = gtk_label_new("Custom (personal) Profiles");
@@ -332,11 +316,11 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 			hbox = gtk_hbox_new(FALSE,10);
 			gtk_container_add(GTK_CONTAINER(ebox),hbox);
-			label = gtk_label_new(g_strdup(element->name));
+			label = gtk_label_new(element->name);
 			gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 			button = gtk_radio_button_new(group);
 			g_free(OBJ_GET(button,"filename"));
-			OBJ_SET(button,"filename",g_strdup(element->filename));
+			OBJ_SET_FULL(button,"filename",g_strdup(element->filename),g_free);
 			OBJ_SET(button,"handler",
 					GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
 			g_signal_connect(button,
@@ -364,11 +348,11 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 		hbox = gtk_hbox_new(FALSE,10);
 		gtk_container_add(GTK_CONTAINER(ebox),hbox);
-		label = gtk_label_new(g_strdup(element->name));
+		label = gtk_label_new(element->name);
 		gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,TRUE,0);
 		button = gtk_radio_button_new(group);
 		g_free(OBJ_GET(button,"filename"));
-		OBJ_SET(button,"filename",g_strdup(element->filename));
+		OBJ_SET_FULL(button,"filename",g_strdup(element->filename),g_free);
 		OBJ_SET(button,"handler",
 				GINT_TO_POINTER(OFFLINE_FIRMWARE_CHOICE));
 		g_signal_connect(button,
@@ -396,6 +380,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
+	g_object_unref(dummybutton);
 	g_list_foreach(p_list,free_element,NULL);
 	g_list_foreach(s_list,free_element,NULL);
 	g_list_free(p_list);
@@ -427,6 +412,10 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	get_symbol("restore_all_ecu_settings",(void *)&restore_all_f);
+
+	g_return_if_fail(firmware);
+	g_return_if_fail(restore_all_f);
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
@@ -443,17 +432,17 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 
 	gdk_threads_enter();
 	filename = choose_file(fileio);
+	free_mtxfileio(fileio);
 	if (filename)
 	{
 		DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(filename),g_free);
 		update_logbar("tools_view",NULL,_("Full Restore of ECU Initiated\n"),FALSE,FALSE,FALSE);
-		get_symbol("restore_all_ecu_settings",(void *)&restore_all_f);
 		restore_all_f(filename);
 		g_free(filename);
 	}
 	else
 		io_cmd(firmware->get_all_command,NULL);
-	free_mtxfileio(fileio);
+
 	gdk_threads_leave();
 	return;
 }

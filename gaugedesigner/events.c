@@ -46,15 +46,15 @@ G_MODULE_EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"tab_notebook")),TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_frame")),TRUE);
 
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"new_gauge_menuitem")),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"new_gauge_menuitem"),FALSE);
 
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_gauge_menuitem")),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_gauge_menuitem"),TRUE);
 
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"load_gauge_menuitem")),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"load_gauge_menuitem"),FALSE);
 
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_gauge_menuitem")),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_gauge_menuitem"),TRUE);
 
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_as_menuitem")),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_as_menuitem"),TRUE);
 
 	update_attributes();
 	return (TRUE);
@@ -80,11 +80,11 @@ G_MODULE_EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
 	tmp = GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_frame"));
 	gtk_widget_set_sensitive(tmp,FALSE);
 
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"new_gauge_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"load_gauge_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_gauge_menuitem")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_gauge_menuitem")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_as_menuitem")),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"new_gauge_menuitem"),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"load_gauge_menuitem"),TRUE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_gauge_menuitem"),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_gauge_menuitem"),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_as_menuitem"),FALSE);
 
 	tmp = GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_button"));
 	gtk_widget_set_sensitive(tmp,TRUE);

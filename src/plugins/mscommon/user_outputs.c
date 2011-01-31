@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -72,6 +72,7 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 
 	model = create_model ();
 
+	OBJ_SET_FULL(widget,"model",model,gtk_list_store_clear);
 	OBJ_SET(model,"lim_offset",OBJ_GET(widget,"lim_offset"));
 	OBJ_SET(model,"src_offset",OBJ_GET(widget,"src_offset"));
 	OBJ_SET(model,"hys_offset",OBJ_GET(widget,"hys_offset"));
@@ -83,13 +84,10 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 	views = g_list_append(views,view);
 	OBJ_SET(model,"view",(gpointer)view);
 	gtk_container_add(GTK_CONTAINER(widget),view);
-	g_object_unref(model);
 	gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (view), TRUE);
 	gtk_tree_view_set_search_column (GTK_TREE_VIEW (view),COL_NAME);
 	add_columns(GTK_TREE_VIEW(view), widget);
-
 	update_model_from_view((GtkWidget *)view);
-
 }
 
 
@@ -361,10 +359,10 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 
 		if (!evaluator)
 		{
-			evaluator = evaluator_create_f(DATA_GET(object,"dl_conv_expr"));
+			evaluator = evaluator_create_f(DATA_GET(object,"toecu_conv_expr"));
 			if (!evaluator)
 			{
-				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(object,"dl_conv_expr")));
+				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(object,"toecu_conv_expr")));
 				DATA_SET_FULL(object,"dl_evaluator",(gpointer)evaluator,evaluator_destroy_f);
 			}
 		}
@@ -542,10 +540,10 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 				evaluator =(void *)DATA_GET(object,"ul_evaluator");
 				if (!evaluator) /* Not created yet */
 				{
-					expr = DATA_GET(object,"ul_conv_expr");
+					expr = DATA_GET(object,"fromecu_conv_expr");
 					if (expr == NULL)
 					{
-						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_name")));
+						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_name")));
 						exit (-3);
 					}
 					evaluator = evaluator_create_f(expr);

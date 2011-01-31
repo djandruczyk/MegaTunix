@@ -18,7 +18,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags1</source>
+		<source>flags1</source>
 		<bitval>1</bitval>
 		<bitmask>128</bitmask>
 	</status>
@@ -27,7 +27,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags1</source>
+		<source>flags1</source>
 		<bitval>1</bitval>
 		<bitmask>64</bitmask>
 	</status>
@@ -36,7 +36,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags1</source>
+		<source>flags1</source>
 		<bitval>1</bitval>
 		<bitmask>32</bitmask>
 	</status>
@@ -45,7 +45,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags1</source>
+		<source>flags1</source>
 		<bitval>1</bitval>
 		<bitmask>16</bitmask>
 	</status>
@@ -54,7 +54,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags1</source>
+		<source>flags1</source>
 		<bitval>1</bitval>
 		<bitmask>8</bitmask>
 	</status>
@@ -63,7 +63,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags1</source>
+		<source>flags1</source>
 		<bitval>1</bitval>
 		<bitmask>4</bitmask>
 	</status>
@@ -72,7 +72,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags1</source>
+		<source>flags1</source>
 		<bitval>1</bitval>
 		<bitmask>2</bitmask>
 	</status>
@@ -81,7 +81,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags1</source>
+		<source>flags1</source>
 		<bitval>1</bitval>
 		<bitmask>1</bitmask>
 	</status>
@@ -90,7 +90,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags2</source>
+		<source>flags2</source>
 		<bitval>1</bitval>
 		<bitmask>128</bitmask>
 	</status>
@@ -99,7 +99,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags2</source>
+		<source>flags2</source>
 		<bitval>1</bitval>
 		<bitmask>64</bitmask>
 	</status>
@@ -108,7 +108,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags2</source>
+		<source>flags2</source>
 		<bitval>1</bitval>
 		<bitmask>32</bitmask>
 	</status>
@@ -117,7 +117,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags2</source>
+		<source>flags2</source>
 		<bitval>1</bitval>
 		<bitmask>16</bitmask>
 	</status>
@@ -126,7 +126,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags2</source>
+		<source>flags2</source>
 		<bitval>1</bitval>
 		<bitmask>8</bitmask>
 	</status>
@@ -135,7 +135,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags2</source>
+		<source>flags2</source>
 		<bitval>1</bitval>
 		<bitmask>4</bitmask>
 	</status>
@@ -144,7 +144,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags2</source>
+		<source>flags2</source>
 		<bitval>1</bitval>
 		<bitmask>2</bitmask>
 	</status>
@@ -153,7 +153,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags2</source>
+		<source>flags2</source>
 		<bitval>1</bitval>
 		<bitmask>1</bitmask>
 	</status>
@@ -162,7 +162,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags3</source>
+		<source>flags3</source>
 		<bitval>1</bitval>
 		<bitmask>128</bitmask>
 	</status>
@@ -171,7 +171,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags3</source>
+		<source>flags3</source>
 		<bitval>1</bitval>
 		<bitmask>64</bitmask>
 	</status>
@@ -180,7 +180,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags3</source>
+		<source>flags3</source>
 		<bitval>1</bitval>
 		<bitmask>32</bitmask>
 	</status>
@@ -189,7 +189,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>status_flags3</source>
+		<source>flags3</source>
 		<bitval>1</bitval>
 		<bitmask>16</bitmask>
 	</status>

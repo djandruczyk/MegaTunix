@@ -17,28 +17,28 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [dwellv]
-keys=raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 raw_lower=60
 raw_upper=180
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Dwell Battery voltage compensation voltage values
 
 [dwellc]
-keys=raw_lower,dl_conv_expr,ul_conv_expr,tooltip
+keys=raw_lower,toecu_conv_expr,fromecu_conv_expr,tooltip
 raw_lower=10
-dl_conv_expr=x/2
-ul_conv_expr=x*2
+toecu_conv_expr=x/2
+fromecu_conv_expr=x*2
 _tooltip=Dwell correction/compensation value corresponding to voltage at the left
 
 [NLbaro]
-keys=page,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=1
 size=_S16_
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Nonlinear Baro correction/compensation barometer reading,  compensation at the right
 
@@ -51,14 +51,14 @@ raw_upper=120
 _tooltip=Nonlinear Baro correction/compensation value, corresponds to baro reading at the left
 
 [NLmat]
-keys=page,size,use_color,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,size,use_color,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=1
 size=_S16_
 use_color=TRUE
 raw_lower=-400
 raw_upper=3000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 temp_dep=TRUE
 bind_to_list=temperature
@@ -73,46 +73,46 @@ raw_upper=120
 _tooltip=NON-Linear MAT correction
 
 [mat]
-keys=page,size,use_color,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,size,use_color,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
 page=1
 size=_S16_
 use_color=TRUE
 raw_lower=-400
 raw_upper=3000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=MAT-Based Timing retard temp values
 
 [matretard]
-keys=page,size,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,size,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=1
 size=_U08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=MAT-Based Timing retard retard values in degrees
 
 [iafuel]
-keys=page,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=3
 size=_S16_
 raw_upper=1000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Idle Advance Timing (FuelLoad %)
 
 [iadeg]
-keys=page,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=3
 size=_S16_
 raw_lower=-100
 raw_upper=900
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Idle Advance Timing (degrees)
 
@@ -369,24 +369,24 @@ raw_upper=15000
 _tooltip=Fuel Table Switching RPM threshold
 
 [fuel_switch_kpa_entry]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=1
 offset=922
 size=_S16_
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Fuel Table Switching kPa threshold
 
 [fuel_switch_tps_entry]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=1
 offset=924
 size=_S16_
 raw_upper=1000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Fuel Table Switching TPS threshold
 
@@ -399,35 +399,35 @@ raw_upper=15000
 _tooltip=Fuel Table Switching RPM threshold
 
 [spark_switch_kpa_entry]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=1
 offset=928
 size=_S16_
 raw_upper=4000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Fuel Table Switching kPa threshold
 
 [spark_switch_tps_entry]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=1
 offset=930
 size=_S16_
 raw_upper=1000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Fuel Table Switching TPS threshold
 
 [ia_tps_entry]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=3
 offset=388
 size=_S16_
 raw_upper=1000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Idle Advance TPS threshold
 
@@ -440,25 +440,25 @@ raw_upper=3000
 _tooltip=Idle Advance TPS threshold
 
 [ia_load_entry]
-keys=page,offset,size,raw_upper,dl_conv_expr,ul_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
 page=3
 offset=392
 size=_S16_
 raw_upper=1000
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 _tooltip=Idle Advance Load (fuelload) threshold
 
 [ia_clt_entry]
-keys=page,offset,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,precision,temp_dep,bind_to_list,tooltip
+keys=page,offset,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,temp_dep,bind_to_list,tooltip
 page=3
 offset=394
 size=_S16_
 raw_lower=-400
 raw_upper=4500
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 temp_dep=TRUE
 bind_to_list=temperature
@@ -492,22 +492,22 @@ offset=912
 _tooltip=This is Flexfuel high frequency limit, see MS2-Extra manuals for more information
 
 [ff_low_timing_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,precision,tooltip
 offset=978
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_lower=-450
 raw_upper=450
 precision=1
 _tooltip=This is Flexfuel high frequency limit, see MS2-Extra manuals for more information
 
 [ff_high_timing_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,precision,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,precision,tooltip
 offset=980
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_lower=-450
 raw_upper=450
 precision=1

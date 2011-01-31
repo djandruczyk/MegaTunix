@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -105,7 +105,7 @@ G_MODULE_EXPORT int setup_gui(void)
 			G_CALLBACK(leave),NULL);
 	g_signal_connect(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(leave),NULL);
-	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
+//	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 	top_box = glade_xml_get_widget(xml,"mtx_top_vbox");
 	gtk_container_add(GTK_CONTAINER(window),top_box);
 
@@ -153,7 +153,6 @@ G_MODULE_EXPORT int setup_gui(void)
 			gtk_widget_hide(label);
 		}
 	}
-
 	return TRUE;
 }
 
@@ -164,6 +163,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	 * other dynamic bits that can't be set via glade statically 
 	 */
 	GtkTextBuffer * textbuffer = NULL;
+	GtkTextTag *tag = NULL;
 	GtkWidget *alignment = NULL;
 	GtkWidget *button = NULL;
 	GtkWidget *cbutton = NULL;
@@ -197,6 +197,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	alignment = glade_xml_get_widget(xml,"logo_alignment");
 	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
+	DATA_SET_FULL(global_data,"logo_pixbuf",pixbuf,g_object_unref);
 	g_object_unref(pixbuf);
 	gtk_container_add (GTK_CONTAINER (alignment), image);
 
@@ -329,14 +330,18 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"interr_view");
 	register_widget("interr_view",widget);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
-	gtk_text_buffer_create_tag(textbuffer,
+	tag = gtk_text_buffer_create_tag(textbuffer,
 			"warning",
 			"foreground",
 			"red", NULL);
-	gtk_text_buffer_create_tag(textbuffer,
+	g_object_ref(tag);
+	DATA_SET_FULL(global_data,"inter_warning_tag",tag,g_object_unref);
+	tag = gtk_text_buffer_create_tag(textbuffer,
 			"info",
 			"foreground",
 			"dark green", NULL);
+	g_object_ref(tag);
+	DATA_SET_FULL(global_data,"inter_info_tag",tag,g_object_unref);
 
 	/* COMMS Tab Commport frame */
 	ebox = glade_xml_get_widget(xml,"commport_ebox");
@@ -434,13 +439,17 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"serial_status_view");
 	register_widget("comms_view",widget);
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
-	gtk_text_buffer_create_tag(textbuffer,
+	tag = gtk_text_buffer_create_tag(textbuffer,
 			"warning",
 			"foreground",
 			"red", NULL);
-	gtk_text_buffer_create_tag(textbuffer,
+	g_object_ref(tag);
+	DATA_SET_FULL(global_data,"comms_warning_tag",tag,g_object_unref);
+	tag = gtk_text_buffer_create_tag(textbuffer,
 			"info",
 			"foreground",
 			"dark green", NULL);
+	g_object_ref(tag);
+	DATA_SET_FULL(global_data,"comms_info_tag",tag,g_object_unref);
 
 }

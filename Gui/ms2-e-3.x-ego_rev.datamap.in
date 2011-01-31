@@ -190,11 +190,11 @@ _tooltip=Sets the EGO Sensor type and configuration
 #----- Entries --------------------------------------------------------------
 
 [max_retard_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,precision,bind_to_list,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
 offset=637
 size=_S08_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 bind_to_list=revlimit,rev_retard
 _tooltip=This is Maximum amount of retard permitted( +/- 12.7 deg)
@@ -227,11 +227,11 @@ bind_to_list=revlimit,rev_clt
 _tooltip=This is not documented yet
 
 [revlimit_bypass_entry]
-keys=offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
 offset=44
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_lower=0
 raw_upper=1000
 precision=1
@@ -262,11 +262,11 @@ bind_to_list=revlimit,rev_cut
 _tooltip=Number of sparks (X) to cut from (Y) events
 
 [nb_switching_voltage_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 precision=3
 offset=598
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=This is the AFR that the Narrow-Band O<sub>2</sub> sensor(s) toggles between rich and lean, typically 14/7 AFR.
 
 [ign_events_entry]
@@ -275,10 +275,10 @@ offset=595
 _tooltip=This is the number of ignition events that must take place before an EGO correction can occur.  This limits the correction speed, to avoid oscillation.
 
 [ego_step_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=596
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 bind_to_list=wb_simple
 _tooltip=This is the percentage max percentage change in fueling the EGO control algorithm can make per "step".  This controls how fast the algorithm can alter fueling.   beware of setting this too high as it can cause oscillation. Too low and it takes a long time to reach the "goal.
 
@@ -288,11 +288,11 @@ offset=597
 _tooltip=This is the max correction allowed in percentage of change, So even if the target isn't reached, it won't exceed this value.
 
 [ego_clt_entry]
-keys=offset,precision,size,temp_dep,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,precision,size,temp_dep,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
 offset=604
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_lower=-400
 raw_upper=3000
 temp_dep=TRUE
@@ -309,61 +309,61 @@ bind_to_list=ego_ctrl
 _tooltip=This is the minimum RPM to be reched before closed loop EGO correction will take place. NOTE: other conditions below and above must ALSO be met.
 
 [ego_tps_entry]
-keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=590
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=1000
 precision=1
 bind_to_list=ego_ctrl
 _tooltip=This is the level which the TPS must be BELOW before closed loop EGO correction will take place. NOTE: other conditions below and above must ALSO be met.
 
 [ego_low_map_entry]
-keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=738
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=3000
 precision=1
 bind_to_list=ego_ctrl
 _tooltip=This is the level which the Manifold Pressure (MAP) must be BELOW before closed loop EGO correction will take place. NOTE: other conditions above must ALSO be met.
 
 [ego_high_map_entry]
-keys=offset,precision,size,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=753
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=3000
 precision=1
 bind_to_list=ego_ctrl
 _tooltip=This is the level which the Manifold Pressure (MAP) must be ABOVE before closed loop EGO correction will take place. NOTE: other conditions above must ALSO be met.
 
 [wb_prop_entry]
-keys=offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=901
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 raw_upper=200
 bind_to_list=wb_pid
 _tooltip=This is the Proportional gain for the EGO feedback loop. The constant that defines the proportional relationship between the EGO set-point and the range of values seen from the sensor. 100% is a typical value. It defines the response to the immediate difference between the set-point AFR and that measured from the sensor.
 
 [wb_integ_entry]
-keys=offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=902
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 raw_upper=200
 bind_to_list=wb_pid
 _tooltip=This is the Integral gain for the EGO feedback loop. This corrects for a portion of the on-going average correction over time (the integral), allowing the loop to set into a stable value, rather than oscillating. A typical value is 20%.
 
 [wb_deriv_entry]
-keys=offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=903
-dl_conv_expr=x*1
-ul_conv_expr=x/1
+toecu_conv_expr=x*1
+fromecu_conv_expr=x/1
 raw_upper=200
 bind_to_list=wb_pid
 _tooltip=This is the Derivative gain for the EGO feedback loop. This predicts the future difference between the AFR target and the set-point, based on the rate of change of the error at present. The larger the derivative term, the more rapidly the controller responds to changes in the process's output. However, for relatively slow processes,lower numbers mean more stable output, and a value of 0 is typical for MegaSquirt® (i.e., don't use the derivative term at all).

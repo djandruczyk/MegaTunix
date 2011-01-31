@@ -310,14 +310,14 @@ _tooltip=See http://msextra.com/doc/ms2extra/MS2-Extra_Gen_Ignition.htm
 #----- Entries ----------------------------------------------------------------
 
 [trigger_offset_entry]
-keys=precision,raw_lower,raw_upper,offset,size,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=precision,raw_lower,raw_upper,offset,size,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=42
 size=_S16_
 precision=1
 raw_lower=-900
 raw_upper=1800
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 bind_to_list=ign
 _tooltip=Trigger Offset (deg) (adv_offset in the code) is the advance before (or after) top dead center (BTDC) that the engine gets in it's signal from the engine's variable reluctor (VR) or Hall sensor. In many cases, this will be used as the 'base timing' for cranking as well as if the module loses its connection the ECU.
 
@@ -327,57 +327,57 @@ offset=1
 _tooltip=Skip Pulses (no_skip_pulses) is the number of ignition pulses at start-up that MegaSquirt-II uses to calculate the rpm before sending calculated advance signals.  This allows the starter to get the engine up to a semi-stable speed first.
 
 [main_return_angle_entry]
-keys=offset,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,size,precision,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=634
 size=_U16_
 raw_lower=50
 raw_upper=1800
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 precision=1
 bind_to_list=trigger_return
 _tooltip=See http://msextra.com/doc/ms2extra/MS2-Extra_Gen_Ignition.htm
 
 [cranking_advance_entry]
-keys=offset,precision,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=1020
 size=_S16_
 raw_lower=-100
 raw_upper=900
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=ign
 precision=1
 _tooltip=Cranking Timing Advance
 
 [oddfire_small_angle_entry]
-keys=offset,size,precision,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,size,precision,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=620
 size=_U16_
 raw_upper=7200
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 precision=1
 bind_to_list=oddfire
 _tooltip=For oddfire engines, this is the smaller of the two angles between ignition events
 
 [spark_latency_entry]
-keys=offset,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=732
 raw_upper=170
-dl_conv_expr=x/0.66667
-ul_conv_expr=x*0.66667
+toecu_conv_expr=x/0.66667
+fromecu_conv_expr=x*0.66667
 bind_to_list=ign
 _tooltip=This is only to be used to compensat for spark retarding with increasing RPM, otherwise leave at zero.
 
 [fixed_timing_entry]
-keys=offset,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,size,precision,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=1022
 size=_S16_
 raw_lower=-100
 raw_upper=900
-dl_conv_expr=x/0.1
-ul_conv_expr=x*0.1
+toecu_conv_expr=x/0.1
+fromecu_conv_expr=x*0.1
 precision=1
 bind_to_list=fixed_advance
 _tooltip=Fixed timing, to be used when not using spark table (debug tool to 
@@ -397,20 +397,20 @@ bind_to_list=missing
 _tooltip=Number of missing teeth on the trigger wheel
 
 [tooth_1_angle_entry]
-keys=offset,size,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,size,precision,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=969
 size=_U16_
 raw_upper=7200
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=Angle BTDC for missing tooth (or tooth #1)
 
 [max_dwell_entry]
-keys=offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=4
-dl_conv_expr=x/0.0666
-ul_conv_expr=x*0.0666
+toecu_conv_expr=x/0.0666
+fromecu_conv_expr=x*0.0666
 raw_lower=15
 raw_upper=120
 precision=1
@@ -418,46 +418,46 @@ bind_to_list=std_dwell
 _tooltip=Dwell time from 1-8ms
 
 [accel_compensation_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=6
-dl_conv_expr=x/0.0666
-ul_conv_expr=x*0.0666
+toecu_conv_expr=x/0.0666
+fromecu_conv_expr=x*0.0666
 precision=1
 bind_to_list=std_dwell
 _tooltip=Dwell acceleration compensation 
 
 [max_spark_duration_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=5
-dl_conv_expr=x/0.0666
-ul_conv_expr=x*0.0666
+toecu_conv_expr=x/0.0666
+fromecu_conv_expr=x*0.0666
 precision=1
 bind_to_list=std_dwell
 _tooltip=Dwell Max spark duration in ms.
 
 [dwell_time_entry]
-keys=offset,precision,raw_lower,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,raw_lower,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=633
-dl_conv_expr=x/0.0666
-ul_conv_expr=x*0.0666
+toecu_conv_expr=x/0.0666
+fromecu_conv_expr=x*0.0666
 raw_lower=1
 precision=1
 bind_to_list=time_dwell
 _tooltip=Dwell Time in ms.
 
 [dwell_duty_entry]
-keys=offset,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=551
-dl_conv_expr=x/0.39
-ul_conv_expr=x*0.39
+toecu_conv_expr=x/0.39
+fromecu_conv_expr=x*0.39
 bind_to_list=duty_dwell
 _tooltip=Dwell Dutycycle in %
 
 [cranking_dwell_entry]
-keys=offset,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=1019
-dl_conv_expr=x/0.0666
-ul_conv_expr=x*0.0666
+toecu_conv_expr=x/0.0666
+fromecu_conv_expr=x*0.0666
 raw_lower=15
 raw_upper=120
 precision=1

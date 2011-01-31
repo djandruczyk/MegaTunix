@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -39,7 +39,28 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 
 G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
-	dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_std_button_handler()\n\tERROR handler NOT found for widget %s, command aborted! BUG!!!\n",glade_get_widget_name(widget)));
+	gint handler = 0;
+	gchar *tmpbuf = NULL;
+	gfloat tmpf = 0.0;
+	const gchar *dest = NULL;
+
+	handler = (MS2StdButton)OBJ_GET(widget,"handler");
+
+	switch ((MS2StdButton)handler)
+	{
+		case GET_CURR_TPS:
+			tmpbuf = OBJ_GET(widget,"source");
+			lookup_current_value_f(tmpbuf,&tmpf);
+			dest = OBJ_GET(widget,"dest_widget");
+			tmpbuf = g_strdup_printf("%.0f",tmpf);
+			gtk_entry_set_text(GTK_ENTRY(lookup_widget_f(dest)),tmpbuf);
+			g_signal_emit_by_name(lookup_widget_f(dest),"activate",NULL);
+			g_free(tmpbuf);
+			break;
+		default:
+			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_std_button_handler()\n\tERROR handler NOT found for widget %s, command aborted! BUG!!!\n",glade_get_widget_name(widget)));
+			break;
+	}
 	return TRUE;
 }
 
@@ -120,8 +141,8 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * group_2_update = NULL;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
-	gchar * dl_conv = NULL;
-	gchar * ul_conv = NULL;
+	gchar * toecu_conv = NULL;
+	gchar * fromecu_conv = NULL;
 	gint precision = 0;
 	gchar ** vector = NULL;
 	guint i = 0;
@@ -132,7 +153,6 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	gint table_num = 0;
 	gchar * range = NULL;
 	DataSize size = MTX_U08;
-	gchar * choice = NULL;
 	guint8 tmp = 0;
 	gint dload_val = 0;
 	gint dl_type = 0;
@@ -172,8 +192,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 		if (!search_model_f(model,widget,&iter))
 			return FALSE;
 	}
-	gtk_tree_model_get(model,&iter,CHOICE_COL,&choice, \
-			BITVAL_COL,&bitval,-1);
+	gtk_tree_model_get(model,&iter,BITVAL_COL,&bitval,-1);
 
 	switch (handler)
 	{
@@ -184,7 +203,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | (bitval << bitshift);
 			ms_send_to_ecu_f(canID, page, offset, size, tmp, TRUE);
 			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_DL_CONV_COL,&dl_conv,UO_UL_CONV_COL,&ul_conv,-1);
+			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_TOECU_CONV_COL,&toecu_conv,UO_FROMECU_CONV_COL,&fromecu_conv,-1);
 
 			/* Send the "size" of the offset to the ecu */
 			if (OBJ_GET(widget,"size_offset"))
@@ -206,18 +225,11 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"dl_evaluator");
-				if (eval)
+				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+				if (toecu_conv)
 				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-					eval = NULL;
-				}
-				if (dl_conv)
-				{
-					eval = evaluator_create_f(dl_conv);
-					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					eval = evaluator_create_f(toecu_conv);
+					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
 						tmpf2 = g_ascii_strtod(upper,NULL);
@@ -242,24 +254,17 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 				else
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"ul_evaluator");
-				if (eval)
+				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+				if (fromecu_conv)
 				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-					eval = NULL;
-				}
-				if (ul_conv)
-				{
-					eval = evaluator_create_f(ul_conv);
-					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+					eval = evaluator_create_f(fromecu_conv);
+					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"toecu_conv_expr",toecu_conv);
+				OBJ_SET(tmpwidget,"fromecu_conv_expr",fromecu_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("combo_handler thresh widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				/*printf ("combo_handler thresh widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
 			tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
@@ -267,18 +272,11 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"dl_evaluator");
-				if (eval)
+				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
+				if (toecu_conv)
 				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-					eval = NULL;
-				}
-				if (dl_conv)
-				{
-					eval = evaluator_create_f(dl_conv);
-					OBJ_SET(tmpwidget,"dl_evaluator",eval);
+					eval = evaluator_create_f(toecu_conv);
+					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
 					if (upper)
 					{
 						tmpf2 = g_ascii_strtod(upper,NULL);
@@ -303,26 +301,24 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 				else
 					OBJ_SET(tmpwidget,"raw_upper",upper);
 
-				eval = NULL;
-				eval = OBJ_GET(tmpwidget,"ul_evaluator");
-				if (eval)
+				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
+				if (fromecu_conv)
 				{
-					evaluator_destroy_f(eval);
-					OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-					eval = NULL;
-				}
-				if (ul_conv)
-				{
-					eval = evaluator_create_f(ul_conv);
-					OBJ_SET(tmpwidget,"ul_evaluator",eval);
+					eval = evaluator_create_f(fromecu_conv);
+					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
 				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"dl_conv_expr",dl_conv);
-				OBJ_SET(tmpwidget,"ul_conv_expr",ul_conv);
+				OBJ_SET(tmpwidget,"toecu_conv_expr",toecu_conv);
+				OBJ_SET(tmpwidget,"fromecu_conv_expr",fromecu_conv);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("combo_handler hyst widget to size '%i', dl_conv '%s' ul_conv '%s' precision '%i'\n",size,dl_conv,ul_conv,precision);*/
+				/*printf ("combo_handler hyst widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
 				update_widget_f(tmpwidget,NULL);
 			}
+			g_free(lower);
+			g_free(upper);
+			g_free(range);
+			g_free(toecu_conv);
+			g_free(fromecu_conv);
 			return TRUE;
 			break;
 

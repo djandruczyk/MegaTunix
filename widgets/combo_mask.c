@@ -20,6 +20,7 @@
 #include <gtk/gtk.h>
 
 
+/* Macro that creates a lot of boilerplate for us */
 G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,mask_entry_editable_init))
 
 /*!
@@ -84,10 +85,12 @@ void mask_entry_init (MaskEntry *entry)
 }
 
 
-
 void mask_entry_class_init (MaskEntryClass *klass)
-{ }
-
+{ 
+        GObjectClass *obj_class = NULL;
+        obj_class = G_OBJECT_CLASS (klass);
+        obj_class->finalize = mask_entry_finalize;
+}
 
 
 void mask_entry_editable_init (GtkEditableClass *iface)
@@ -95,3 +98,11 @@ void mask_entry_editable_init (GtkEditableClass *iface)
 	iface->changed = mask_entry_changed;
 }
 
+
+void mask_entry_finalize(GObject *object)
+{
+	MaskEntry *entry = MASK_ENTRY(object);
+	if (entry->mask)
+		g_free(entry->mask);
+	G_OBJECT_CLASS(mask_entry_parent_class)->finalize(object);
+}

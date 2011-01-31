@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -20,8 +20,8 @@ typedef enum
 {
         UO_CHOICE_COL,
         UO_BITVAL_COL,
-	UO_DL_CONV_COL,
-	UO_UL_CONV_COL,
+	UO_TOECU_CONV_COL,
+	UO_FROMECU_CONV_COL,
 	UO_LOWER_COL,
 	UO_UPPER_COL,
 	UO_RANGE_COL,

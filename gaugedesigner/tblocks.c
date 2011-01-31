@@ -26,7 +26,7 @@ G_MODULE_EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer da
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tblock.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tblock.ui",NULL),NULL);
 	if (filename)
 	{
 		tblocks = gtk_builder_new();
@@ -40,7 +40,7 @@ G_MODULE_EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer da
 	}
 	else
 	{
-		printf("Can't locate primary glade file!!!!\n");
+		printf("Can't locate primary ui file!!!!\n");
 		exit(-1);
 	}
 
@@ -213,7 +213,7 @@ gboolean remove_tblock(GtkWidget * widget, gpointer data)
 
 GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 {
-	/* MUCH faster that the glade way unfortunately */
+	/* MUCH faster that the ui way unfortunately */
 	GtkWidget *notebook = NULL;
 	GtkWidget *table = NULL;
 	GtkWidget *subtable = NULL;

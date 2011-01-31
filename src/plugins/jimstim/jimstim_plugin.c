@@ -40,15 +40,37 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 
+	register_ecu_enums();
 }
 
-void plugin_shutdown(void)
+G_MODULE_EXPORT void plugin_shutdown(void)
 {
+	deregister_ecu_enums();
 	return;
 }
 
-
-void register_enums(void)
+void register_ecu_enums(void)
 {
-	return;
+	GHashTable *str_2_enum = NULL;
+
+	str_2_enum = DATA_GET (global_data, "str_2_enum");
+	if (str_2_enum)
+	{
+	}
+	else
+		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
 }
+
+
+void deregister_ecu_enums(void)
+{
+	GHashTable *str_2_enum = NULL;
+
+	str_2_enum = DATA_GET (global_data, "str_2_enum");
+	if (str_2_enum)
+	{
+	}
+	else
+		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+}
+

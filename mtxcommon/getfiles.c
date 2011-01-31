@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -517,6 +517,7 @@ afterfilter:
 		}
 		else
 			filename = g_strdup(tmpbuf);
+		g_free(tmpbuf);
 	}
 	gtk_widget_destroy (dialog);
 
@@ -601,6 +602,7 @@ void free_mtxfileio(MtxFileIO *data)
 		g_free(data->default_filename);
 	if (data->default_extension)
 		g_free(data->default_extension);
+	g_free(data);
 	return;
 }
 

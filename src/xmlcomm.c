@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -129,6 +129,7 @@ G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"cmd") == 0)
 			{
 				cmd = g_new0(Command, 1);
+				cmd->dynamic = FALSE;
 				cmd->post_functions = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 				cmd->args = g_array_new(FALSE,TRUE,sizeof(PotentialArg *));
 				load_cmd_details(cmd, cur_node);

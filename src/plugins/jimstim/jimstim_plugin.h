@@ -18,12 +18,6 @@
 #include <threads.h>
 
 
-/* Prototypes */
-void plugin_init(gconstpointer *data);
-void plugin_shutdown(void);
-void register_enums(void);
-/* Prototypes */
-
 /* Function Pointers */
 void (*error_msg_f)(const gchar *);
 gboolean (*get_symbol_f)(const gchar *, void **);
@@ -37,5 +31,12 @@ GList *(*get_list_f)(gchar *);
 void (*set_widget_sensitive_f)(gpointer, gpointer);
 void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
 /* Function Pointers */
+
+/* Prototypes */
+void plugin_init(gconstpointer *data);
+void plugin_shutdown(void);
+void register_ecu_enums(void);
+void deregister_ecu_enums(void);
+/* Prototypes */
 
 #endif

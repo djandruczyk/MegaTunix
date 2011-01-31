@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -24,7 +24,7 @@
 extern gconstpointer *global_data;
 
 
-void common_plugin_menu_setup(GladeXML *xml)
+G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 {
 	void (*ecu_plugin_menu_setup)(GladeXML *) = NULL;
 	GtkWidget *menu = NULL;

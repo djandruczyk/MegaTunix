@@ -9,15 +9,15 @@
 	</info>
 	<rtt>
 		<internal_name>Seconds</internal_name>
-		<datasource>status_seconds</datasource>
+		<datasource>seconds</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>RPM</internal_name>
-		<datasource>status_rpm_rpm</datasource>
+		<datasource>rpm</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>RPM Limit</internal_name>
-		<datasource>status_rpm_limit</datasource>
+		<datasource>rpm_limit</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>CTS (deg)</internal_name>
@@ -25,11 +25,11 @@
 	</rtt>
 	<rtt>
 		<internal_name>CTS Correction %</internal_name>
-		<datasource>status_cts_correction</datasource>
+		<datasource>cts_correction</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>CTS IAR (+adv/-ret)</internal_name>
-		<datasource>status_cts_iar</datasource>
+		<datasource>cts_iar</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>MAT (deg)</internal_name>
@@ -37,39 +37,39 @@
 	</rtt>
 	<rtt>
 		<internal_name>MAT (%)</internal_name>
-		<datasource>status_mat_correction</datasource>
+		<datasource>mat_correction</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>MAT IAR (+adv/-ret)</internal_name>
-		<datasource>status_mat_iar</datasource>
+		<datasource>mat_iar</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>MAP (kPa)</internal_name>
-		<datasource>status_map_map</datasource>
+		<datasource>map</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>TPS (%)</internal_name>
-		<datasource>status_tps_tps</datasource>
+		<datasource>tps</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>TPS ROC (%)</internal_name>
-		<datasource>status_tps_roc</datasource>
+		<datasource>DTPS</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>ACC CTS (%)</internal_name>
-		<datasource>status_ae_cts_factor</datasource>
+		<datasource>ae_cts_factor</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>ACC ROC (%)</internal_name>
-		<datasource>status_ae_roc_factor</datasource>
+		<datasource>ae_roc_factor</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>ACC BPW (ms)</internal_name>
-		<datasource>status_ae_BPW</datasource>
+		<datasource>ae_BPW</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>ACC APW (ms)</internal_name>
-		<datasource>status_ae_APW</datasource>
+		<datasource>ae_APW</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>Lambda</internal_name>
@@ -81,30 +81,30 @@
 	</rtt>
 	<rtt>
 		<internal_name>Lambda (%)</internal_name>
-		<datasource>status_ego_correction</datasource>
+		<datasource>ego_correction</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>Final APW (ms)</internal_name>
-		<datasource>status_APW</datasource>
+		<datasource>APW</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>IAR (+adv/-ret)</internal_name>
-		<datasource>status_ign_AIAR</datasource>
+		<datasource>ign_AIAR</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>Voltage (V)</internal_name>
-		<datasource>status_adc_volt</datasource>
+		<datasource>adc_volt</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>Injector Open (ms)</internal_name>
-		<datasource>status_open_delay</datasource>
+		<datasource>open_delay</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>IAC RPM</internal_name>
-		<datasource>status_iac_idle_rpm</datasource>
+		<datasource>iac_idle_rpm</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>IAC POS</internal_name>
-		<datasource>status_iac_position</datasource>
+		<datasource>iac_position</datasource>
 	</rtt>
 </runtimetext>

@@ -1,4 +1,4 @@
-dashdir = $(datadir)/MegaTunix/$(DASHDESIGNER_GLADE_DIR)
+dashdesignerdir = $(datadir)/MegaTunix/$(DASHDESIGNER_GLADE_DIR)
 
 SUBDIRS = dashboards
 
@@ -19,7 +19,18 @@ AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused -pedantic
 CLEANFILES = *~ core gmon.out nohup.out 
 DISTCLEANFILES = *~ core gmon.out nohup.out  *.bak *.gladep
 
-dashdesigner_SOURCES = main.c events.c events.h xml.c xml.h rtv_parser.c rtv_parser.h loadsave.c loadsave.h
+dashdesigner_SOURCES = \
+		       main.c \
+		       events.c \
+		       events.h \
+		       xml.c \
+		       xml.h \
+		       rtv_parser.c \
+		       rtv_parser.h \
+		       loadsave.c \
+		       loadsave.h \
+		       menu_handlers.c \
+		       menu_handlers.h 
 
 dashdesigner_DEPENDENCIES = @WIN32_RESOURCES@ ../widgets/libmtxgauge.la ../mtxcommon/libmtxcommon.la
 
@@ -28,8 +39,10 @@ resources.o:
 
 bin_PROGRAMS = dashdesigner 
 
-glade_files = main.glade preview.glade propeditor.glade
+ui_files = main.ui \
+	   preview.ui \
+	   propeditor.ui 
 
-dash_DATA = $(glade_files)
+dashdesigner_DATA = $(ui_files)
 
-EXTRA_DIST = $(dash_DATA) dashdesigner.ico
+EXTRA_DIST = $(dashdesigner_DATA) dashdesigner.ico

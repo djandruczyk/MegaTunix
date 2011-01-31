@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -74,7 +74,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Status...")));
-	filename = get_file(g_strconcat(RTSTATUS_DATA_DIR,PSEP,firmware->status_map_file,NULL),g_strdup("xml"));
+	filename = get_file(g_build_path(PSEP,RTSTATUS_DATA_DIR,firmware->status_map_file,NULL),g_strdup("xml"));
 	if (!filename)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->status_map_file));
@@ -219,7 +219,7 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 		{
 			OBJ_SET(label,"bitval",GINT_TO_POINTER(bitval));
 			OBJ_SET(label,"bitmask",GINT_TO_POINTER(bitmask));
-			OBJ_SET(label,"source",g_strdup(source));
+			OBJ_SET_FULL(label,"source",g_strdup(source),g_free);
 			g_free(source);
 		}
 		if (bind_to_list)

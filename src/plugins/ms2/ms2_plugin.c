@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -14,7 +14,6 @@
 #define __MS2_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
-#include <enums.h>
 #include <ms2_plugin.h>
 #include <ms2_gui_handlers.h>
 #include <ms2_tlogger.h>
@@ -67,6 +66,7 @@ G_MODULE_EXPORT void plugin_shutdown(void)
 	extern MS2_TTMon_Data *ttm_data;
 	if (ttm_data)
 		ttm_data->stop = TRUE;
+	deregister_ecu_enums();
 }
 
 void register_ecu_enums(void)
@@ -88,5 +88,25 @@ void register_ecu_enums(void)
 				GINT_TO_POINTER(START_COMPOSITEMON_LOGGER));
 		g_hash_table_insert(str_2_enum,"_STOP_COMPOSITEMON_LOGGER_",
 				GINT_TO_POINTER(STOP_COMPOSITEMON_LOGGER));
+		g_hash_table_insert(str_2_enum,"_GET_CURR_TPS_",
+				GINT_TO_POINTER(GET_CURR_TPS));
 	}
 }
+
+void deregister_ecu_enums(void)
+{
+	GHashTable *str_2_enum = NULL;
+
+	str_2_enum = DATA_GET(global_data,"str_2_enum");
+	if (str_2_enum)
+	{
+		g_hash_table_remove(str_2_enum,"_START_TOOTHMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_STOP_TOOTHMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_START_TRIGMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_STOP_TRIGMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_START_COMPOSITEMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_STOP_COMPOSITEMON_LOGGER_");
+		g_hash_table_remove(str_2_enum,"_GET_CURR_TPS_");
+	}
+}
+

@@ -26,10 +26,10 @@ bind_to_list=trigger_return
 _tooltip=The trigger return points are ONLY used for cranking if you select "Trigger Return" based cranking below. These points (depending on your wheel used) should end up at around 10deg BTDC for easy starting. See http://megasquirt.sf.net/extra/setup-wheel.html for more information regarding the tooth wheel decoder.
 
 [oddfire]
-keys=page,handler,modspecific,dl_conv_expr,ul_conv_expr,precision,bind_to_list,tooltip
+keys=page,handler,modspecific,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
 page=6
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 precision=2
 handler=_ODDFIRE_ANGLE_
 modspecific=TRUE
@@ -332,42 +332,45 @@ offset=90
 _tooltip=The total number of teeth including the "missing" ones.  I.e a 36-1 tooth wheel has spaces for 36 evenly spaced teeth, even though 1 is missing, so it technically has 35 teeth,  but you would enter "36" in this field, as the wheel is spaced out for 36 teeth.
 
 [trigger_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,handler,modspecific,spconfig_offset,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,handler,modspecific,spconfig_offset,tooltip
 page=3
 offset=168
 precision=2
-dl_conv_expr=x*(284/100)
-ul_conv_expr=x/(284/100)
+toecu_conv_expr=x*(284/100)
+fromecu_conv_expr=x/(284/100)
 handler=_TRIGGER_ANGLE_
 modspecific=TRUE
 spconfig_offset=173
 _tooltip=This the amount of degree's BTDC that the triggers come at. i.e. to allow the maxiumum timing advance you want the trigger to arrive before your maximum spark advance plus a cushion of 10-20 deg. So if you max advance is 40 deg, a trigger angle of 60deg is safe.  NOTE: this differs somewhat from megatune which has only a 0-90 deg angle range of this control and an additional bitfield.  MegaTunix handles this cleanly with one control with a 0-135 deg range.
 
 [crank_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=3
 offset=171
 precision=2
-dl_conv_expr=(x/(352/1000))+(284/10)
-ul_conv_expr=(x-(284/10))*(352/1000)
+toecu_conv_expr=(x/(352/1000))+(284/10)
+fromecu_conv_expr=(x-(284/10))*(352/1000)
 _tooltip=This is the Crank Timing (when not using trigger return)
 
 [fixed_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=3
 offset=169
 precision=2
-dl_conv_expr=(x/(352/1000))+(284/10)
-ul_conv_expr=(x-(284/10))*(352/1000)
+toecu_conv_expr=(x/(352/1000))+(284/10)
+fromecu_conv_expr=(x-(284/10))*(352/1000)
 _tooltip=This control locks out the Spark table and holds the timing ridgly at this value. Setting this to -10 UNLOCKS the timing control and lets it use the spark tables.
 
 [trim_angle_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,size,offset,raw_lower,raw_upper,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+size=_S08_
 page=3
 offset=170
 precision=2
-dl_conv_expr=x/(352/1000)
-ul_conv_expr=x*(352/1000)
+raw_lower=-127
+raw_upper=128
+toecu_conv_expr=x/(352/1000)
+fromecu_conv_expr=x*(352/1000)
 _tooltip=This is global offset for the crank table, to shift all values one way or another.
 
 [ign_hold_entry]
@@ -378,29 +381,29 @@ raw_upper=100
 _tooltip=Holds off ignition for x number of triggers to allow engine RPM to stabilize a bit when cranking just starts.  Helps eliminiate screwy initial spark timing
 
 [crankdwell_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=110
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=This is the ignition dwell during cranking. 
 
 [rundwell_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=111
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=80
 _tooltip=This is the ignition dwell during normal engine running. 
 
 [min_discharge_entry]
-keys=offset,precision,raw_upper,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=143
 precision=1
 raw_upper=15
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=This is the time allowed between ignition events for the plug to fire before the coil is allowed to recharge. This can limit dwell at high RPM's.
 
 [s4w_num_steps_entry]

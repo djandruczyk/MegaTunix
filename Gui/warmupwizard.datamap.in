@@ -145,27 +145,27 @@ bind_to_list=temperature
 #----- Spin Buttons ----------------------------------------------------------
 
 [ww_cpulse_neg40_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=64
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=Crank pulse at lower temp extreme,this combined with the lower pulse at the lower temp is used to determine the cranking pulse when in between these limits
 
 [ww_cpulse_pos170_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=65
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=Crank pulse at upper temp extreme,this combined with the lower pulse at the lower temp is used to determine the cranking pulse when in between these limits
 
 [ww_prime_pulse_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=119
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 _tooltip=Priming pulse entry, fired on ecu power up
 
 [ww_ase_%_entry]

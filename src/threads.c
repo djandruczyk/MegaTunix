@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -97,10 +97,9 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 		}
 		message = initialize_io_message();
 		message->command = command;
+		message->command->dynamic = FALSE;
 		if (data)
-		{
 			message->payload = data;
-		}
 		if (command->type == WRITE_CMD)
 			build_output_message_f(message,command,data);
 	}
@@ -129,6 +128,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	GAsyncQueue *io_data_queue = NULL;
 	GAsyncQueue *pf_dispatch_queue = NULL;
 	GCond * io_dispatch_cond = NULL;
+	GMutex * io_dispatch_mutex = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
 /*	GTimer *clock;*/
@@ -136,12 +136,21 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
-	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
+	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
+	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	args = DATA_GET(global_data,"args");
 	serial_params = DATA_GET(global_data,"serial_params");
 	get_symbol("network_repair_thread",(void*)&network_repair_thread);
 	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
+
+	g_return_val_if_fail(io_data_queue,NULL);
+	g_return_val_if_fail(io_dispatch_cond,NULL);
+	g_return_val_if_fail(io_dispatch_mutex,NULL);
+	g_return_val_if_fail(pf_dispatch_queue,NULL);
+	g_return_val_if_fail(args,NULL);
+	g_return_val_if_fail(serial_params,NULL);
+	g_return_val_if_fail(serial_repair_thread,NULL);
 /*	clock = g_timer_new();*/
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
@@ -154,10 +163,13 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
 			/* drain queue and exit thread */
-			while (g_async_queue_try_pop(io_data_queue) != NULL)
-			{}
+			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
+				dealloc_message(message);
+
 			dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tMegaTunix is closing, Thread exiting !!\n"));
+			g_mutex_lock(io_dispatch_mutex);
 			g_cond_signal(io_dispatch_cond);
+			g_mutex_unlock(io_dispatch_mutex);
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
@@ -229,17 +241,18 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				break;
 
 		}
-		/* Send rest of message back up to main context for gui
-		 * updates via asyncqueue
+		/* If set to defer post functions, it means they were passed 
+		   via a function fall, thus dealloc it here., Otherwise
+		   push up the queue to the postfunction dispatcher
 		 */
-		if (!message->command->defer_post_functions)
+		if (message->command->defer_post_functions)
+			dealloc_message(message);
+		else
 		{
 			g_async_queue_ref(pf_dispatch_queue);
 			g_async_queue_push(pf_dispatch_queue,(gpointer)message);
 			g_async_queue_unref(pf_dispatch_queue);
 		}
-		else
-			dealloc_message(message);
 	}
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\texiting!!\n"));
 }

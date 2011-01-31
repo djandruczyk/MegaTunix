@@ -1,6 +1,7 @@
-#include "events.h"
-#include "../widgets/gauge.h"
+#include <events.h>
+#include <../widgets/gauge.h>
 #include <getfiles.h>
+#include <menu_handlers.h>
 #include <glib.h>
 #include <gd_init.h>
 #include <stdio.h>
@@ -27,7 +28,7 @@ int main (int argc, char ** argv )
 
 	gtk_init (&argc, &argv);
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"main.glade",NULL),NULL);
+	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"main.ui",NULL),NULL);
 	if (filename)
 	{
 		toplevel = gtk_builder_new();
@@ -40,17 +41,18 @@ int main (int argc, char ** argv )
 	}
 	else
 	{
-		printf("Can't locate primary glade file!!!!\n");
+		printf("Can't locate primary ui file!!!!\n");
 		exit(-1);
 	}
 	gtk_builder_connect_signals (toplevel,NULL);
+	menu_setup(toplevel);
 	main_window = GTK_WIDGET (gtk_builder_get_object(toplevel,"main_window"));
 
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(toplevel,"save_gauge_menuitem")),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_gauge_menuitem"),FALSE);
 
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"save_as_menuitem")),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_as_menuitem"),FALSE);
 
-	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"close_gauge_menuitem")),FALSE);
+	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_gauge_menuitem"),FALSE);
 
 	init_text_attributes(toplevel);
 	init_general_attributes(toplevel);

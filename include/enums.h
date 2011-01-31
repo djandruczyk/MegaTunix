@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -338,7 +338,7 @@ typedef enum
 	ECU_PERSONA,
 	COMM_AUTODETECT,
 	TOGGLE_NETMODE,
-	LAST_TOGGLE_ENUM
+	LAST_TOGGLE_BUTTON_ENUM
 }ToggleButton;
 
 
@@ -369,16 +369,11 @@ typedef enum
 	BACKUP_ALL,
 	RESTORE_ALL,
 	SELECT_PARAMS,
-	REQ_FUEL_POPUP,
 	RESCALE_TABLE,
-	REQFUEL_RESCALE_TABLE,
 	EXPORT_SINGLE_TABLE,
 	IMPORT_SINGLE_TABLE,
 	TE_TABLE,
 	TE_TABLE_GROUP,
-	GET_CURR_TPS,
-	INCREMENT_VALUE,
-	DECREMENT_VALUE,
 	PHONE_HOME,
 	LAST_STD_BUTTON_ENUM
 }StdButton;

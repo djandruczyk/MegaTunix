@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -318,27 +318,27 @@ G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
  int ECU byte order if there is an endianness thing..
  a horrible stall when doing an ECU restore or batch load...
  */
-G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * data)
+G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * block)
 {
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": ms_chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,data));
+	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": ms_chunk_write()\n\t Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n",canID,page,offset,num_bytes,block));
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
 	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
 	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
 	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
 	DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(num_bytes));
-	DATA_SET_FULL(output->data,"data", (gpointer)data, g_free);
+	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
 	/* save it otherwise the burn checker can miss it due to a potential
 	 * race condition
 	 */
-	ms_store_new_block(canID,page,offset,data,num_bytes);
+	ms_store_new_block(canID,page,offset,block,num_bytes);
 
 	if (firmware->multi_page)
 		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
@@ -369,14 +369,14 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 		canID = (GINT)OBJ_GET(widget,"canID");
 		page = (GINT)OBJ_GET(widget,"page");
 		offset = (GINT)OBJ_GET(widget,"offset");
-		size = (DataSize)OBJ_GET(widget,"datasize");
+		size = (DataSize)OBJ_GET(widget,"size");
 	}
 	else
 	{
 		canID = (GINT)DATA_GET(gptr,"canID");
 		page = (GINT)DATA_GET(gptr,"page");
 		offset = (GINT)DATA_GET(gptr,"offset");
-		size = (DataSize)DATA_GET(gptr,"datasize");
+		size = (DataSize)DATA_GET(gptr,"size");
 	}
 	ms_send_to_ecu(canID,page,offset,size,value,queue_update);
 }
@@ -754,7 +754,8 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	 */
 	static gboolean serial_is_open = FALSE; /* Assume never opened */
 	static GAsyncQueue *io_repair_queue = NULL;
-	gchar * potential_ports;
+	gchar * active = NULL;
+	gchar * potential_ports = NULL;
 	gint len = 0;
 	gboolean autodetect = FALSE;
 	guchar buf [1024];
@@ -774,6 +775,13 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	get_symbol_f("close_serial",(void *)&close_serial_f);
 	get_symbol_f("lock_serial",(void *)&lock_serial_f);
 	get_symbol_f("unlock_serial",(void *)&unlock_serial_f);
+
+	g_return_val_if_fail(setup_serial_params_f,NULL);
+	g_return_val_if_fail(open_serial_f,NULL);
+	g_return_val_if_fail(close_serial_f,NULL);
+	g_return_val_if_fail(lock_serial_f,NULL);
+	g_return_val_if_fail(unlock_serial_f,NULL);
+
 	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread created!\n"));
 
 	if (DATA_GET(global_data,"offline"))
@@ -868,6 +876,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 					{       /* We have a winner !!  Abort loop */
 						thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Search successfull\n")),FALSE,FALSE);
 						serial_is_open = TRUE;
+						active = g_strdup(vector[i]);
 						break;
 					}
 					else
@@ -877,7 +886,6 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 						close_serial_f();
 						unlock_serial_f();
 						/*g_usleep(100000);*/
-
 					}
 				}
 				g_usleep(100000);
@@ -889,15 +897,14 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			}
 		}
 		queue_function_f("conn_warning");
+		g_strfreev(vector);
 	}
-
 	if (serial_is_open)
 	{
 		queue_function_f("kill_conn_warning");
-		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
+		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(active));
+		g_free(active);
 	}
-	if (vector)
-		g_strfreev(vector);
 	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, device found!\n"));
 	g_thread_exit(0);
 	return NULL;

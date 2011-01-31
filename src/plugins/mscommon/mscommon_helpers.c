@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -79,7 +79,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall type)
 	if (!DATA_GET(global_data,"offline"))
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
-		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MSNS_E)))
+		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MS1_E)))
 		{
 	/*		printf("paged burn\n");*/
 			output = initialize_outputdata_f();

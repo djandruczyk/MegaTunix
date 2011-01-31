@@ -210,14 +210,14 @@ _tooltip=Sets the Type of MAP Sensor in use.
 #----- SpinButtons -----------------------------------------------------------
 
 [req_fuel_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 offset=148
 table_num=0
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_1_
 bind_to_list=interdep_0_ctrl
-ul_complex=TRUE
-ul_conv_expr=(reqfuel*((injectors+1)/(divider*((alternate+1)/((dtmode*alternate)+1)))))/10
+fromecu_complex=TRUE
+fromecu_conv_expr=(reqfuel*((injectors+1)/(divider*((alternate+1)/((dtmode*alternate)+1)))))/10
 expr_symbols=reqfuel,injectors,divider,alternate,dtmode
 expr_types=_ECU_VAR_,_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_ECU_EMB_BIT_
 reqfuel_page=1
@@ -236,15 +236,15 @@ dtmode_bitmask=16
 register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_cycle_1_spin]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=page,offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 page=2
 offset=148
 table_num=1
 dl_type=_DEFERRED_
 handler=_REQ_FUEL_2_
 bind_to_list=interdep_1_ctrl
-ul_complex=TRUE
-ul_conv_expr=(reqfuel*((injectors+1)/divider))/10
+fromecu_complex=TRUE
+fromecu_conv_expr=(reqfuel*((injectors+1)/divider))/10
 expr_symbols=reqfuel,injectors,divider
 expr_types=_ECU_VAR_,_ECU_EMB_BIT_,_ECU_VAR_
 reqfuel_page=2
@@ -257,51 +257,51 @@ divider_offset=149
 register_as=req_fuel_per_cycle_1_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,table_num,ul_conv_expr,bind_to_list,register_as
+keys=offset,table_num,fromecu_conv_expr,bind_to_list,register_as
 offset=148
 table_num=0
-ul_conv_expr=x/10
+fromecu_conv_expr=x/10
 bind_to_list=interdep_0_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
 [req_fuel_per_squirt_1_spin]
-keys=page,offset,table_num,ul_conv_expr,bind_to_list,register_as
+keys=page,offset,table_num,fromecu_conv_expr,bind_to_list,register_as
 page=2
 offset=148
 table_num=1
-ul_conv_expr=x/10
+fromecu_conv_expr=x/10
 bind_to_list=interdep_1_ctrl
 register_as=req_fuel_per_squirt_1_spin
 
 [inj_open_time_1_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
 offset=151
 precision=2
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 
 [inj_open_time_2_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr
 page=2
 offset=151
 precision=2
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 
 [batt_correction_1_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
 offset=155
 precision=2
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 
 [batt_correction_2_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr
 page=2
 offset=155
 precision=2
-dl_conv_expr=x*100
-ul_conv_expr=x/100
+toecu_conv_expr=x*100
+fromecu_conv_expr=x/100
 
 [pwm_limit_1_entry]
 keys=offset
@@ -313,29 +313,29 @@ page=2
 offset=153
 
 [pwm_time_thresh_1_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
 offset=154
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 
 [pwm_time_thresh_2_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr
 page=2
 offset=154
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 
 [inj_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 offset=149
 table_num=0
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_1_
 bind_to_list=interdep_0_ctrl,reqfuel_0_ctrl
-ul_complex=TRUE
-ul_conv_expr=(cylinders+1)/divider
+fromecu_complex=TRUE
+fromecu_conv_expr=(cylinders+1)/divider
 expr_symbols=cylinders,divider
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_
 cylinders_page=1
@@ -346,15 +346,15 @@ divider_offset=149
 register_as=inj_per_cycle_0_spin
 
 [inj_per_cycle_1_spin]
-keys=page,offset,table_num,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=page,offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 page=2
 offset=149
 table_num=1
 dl_type=_DEFERRED_
 handler=_NUM_SQUIRTS_2_
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
-ul_complex=TRUE
-ul_conv_expr=(cylinders+1)/divider
+fromecu_complex=TRUE
+fromecu_conv_expr=(cylinders+1)/divider
 expr_symbols=cylinders,divider
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_
 cylinders_page=2
@@ -365,15 +365,15 @@ divider_offset=149
 register_as=inj_per_cycle_1_spin
 
 [num_injectors_0_spin]
-keys=offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=offset,table_num,bitmask,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 offset=183
 table_num=0
 bitmask=240
 dl_type=_DEFERRED_
 handler=_NUM_INJECTORS_1_
 bind_to_list=interdep_0_ctrl
-ul_complex=TRUE
-ul_conv_expr=injectors+1
+fromecu_complex=TRUE
+fromecu_conv_expr=injectors+1
 expr_symbols=injectors
 expr_types=_ECU_EMB_BIT_
 injectors_page=1
@@ -382,7 +382,7 @@ injectors_bitmask=240
 register_as=num_injectors_0_spin
 
 [num_injectors_1_spin]
-keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 page=2
 offset=183
 table_num=1
@@ -390,8 +390,8 @@ bitmask=240
 dl_type=_DEFERRED_
 handler=_NUM_INJECTORS_2_
 bind_to_list=interdep_1_ctrl
-ul_complex=TRUE
-ul_conv_expr=injectors+1
+fromecu_complex=TRUE
+fromecu_conv_expr=injectors+1
 expr_symbols=injectors
 expr_types=_ECU_EMB_BIT_
 injectors_page=2
@@ -400,7 +400,7 @@ injectors_bitmask=240
 register_as=num_injectors_1_spin
 
 [num_cylinders_0_spin]
-keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 page=1
 offset=182
 table_num=0
@@ -408,8 +408,8 @@ bitmask=240
 dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_1_
 bind_to_list=interdep_0_ctrl,reqfuel_0_ctrl
-ul_complex=TRUE
-ul_conv_expr=cylinders+1
+fromecu_complex=TRUE
+fromecu_conv_expr=cylinders+1
 expr_symbols=cylinders
 expr_types=_ECU_EMB_BIT_
 cylinders_page=1
@@ -418,7 +418,7 @@ cylinders_bitmask=240
 register_as=num_cylinders_0_spin
 
 [num_cylinders_1_spin]
-keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,ul_complex,ul_conv_expr,register_as
+keys=page,offset,table_num,bitmask,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
 page=2
 offset=182
 table_num=1
@@ -426,8 +426,8 @@ bitmask=240
 dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_2_
 bind_to_list=interdep_1_ctrl,reqfuel_1_ctrl
-ul_complex=TRUE
-ul_conv_expr=cylinders+1
+fromecu_complex=TRUE
+fromecu_conv_expr=cylinders+1
 expr_symbols=cylinders
 expr_types=_ECU_EMB_BIT_
 cylinders_page=2

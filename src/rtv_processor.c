@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -148,10 +148,10 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 			evaluator = (void *)DATA_GET(object,"ul_evaluator");
 			if (!evaluator)
 			{
-				expr = DATA_GET(object,"ul_conv_expr");
+				expr = DATA_GET(object,"fromecu_conv_expr");
 				if (expr == NULL)
 				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": process_rt_vars()\n\t \"ul_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
+					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": process_rt_vars()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
 					exit (-3);
 				}
 				evaluator = evaluator_create(expr);
@@ -312,7 +312,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		evaluator = (void *)DATA_GET(object,"ul_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(DATA_GET(object,"ul_conv_expr"));
+			evaluator = evaluator_create(DATA_GET(object,"fromecu_conv_expr"));
 			DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 
 		}
@@ -322,7 +322,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		evaluator = (void *)DATA_GET(object,"dl_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(DATA_GET(object,"dl_conv_expr"));
+			evaluator = evaluator_create(DATA_GET(object,"toecu_conv_expr"));
 			DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}
@@ -460,7 +460,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		evaluator = (void *)OBJ_GET(object,"ul_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(OBJ_GET(object,"ul_conv_expr"));
+			evaluator = evaluator_create(OBJ_GET(object,"fromecu_conv_expr"));
 			OBJ_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 
 		}
@@ -470,7 +470,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(OBJ_GET(object,"dl_conv_expr"));
+			evaluator = evaluator_create(OBJ_GET(object,"toecu_conv_expr"));
 			OBJ_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}

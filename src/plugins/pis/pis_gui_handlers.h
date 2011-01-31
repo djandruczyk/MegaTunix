@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -23,6 +23,7 @@
 
 /* Prototypes */
 void ecu_gui_init(void);
+gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_button_handler(GtkWidget *, gpointer);
 gboolean ecu_bitmask_button_handler(GtkWidget *, gpointer);
 gboolean ecu_spin_button_handler(GtkWidget *, gpointer);

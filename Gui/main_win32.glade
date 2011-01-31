@@ -414,6 +414,7 @@
                                                 <signal name="toggled" handler="toggle_button_handler"/>
                                               </widget>
                                               <packing>
+                                                <property name="fill">False</property>
                                                 <property name="position">0</property>
                                               </packing>
                                             </child>

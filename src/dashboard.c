@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -306,12 +306,12 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,x_offset,y_offset);
 		xml_name = g_strdelimit(xml_name,"\\",'/');
-		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,xml_name,NULL),NULL);
+		filename = get_file(g_build_path(PSEP,GAUGES_DATA_DIR,xml_name,NULL),NULL);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_set_size_request(gauge,width,height);
 		g_free(filename);
 		g_free(OBJ_GET(gauge,"datasource"));
-		OBJ_SET(gauge,"datasource",g_strdup(datasource));
+		OBJ_SET_FULL(gauge,"datasource",g_strdup(datasource),g_free);
 		OBJ_SET(gauge,"orig_width",GINT_TO_POINTER(width));
 		OBJ_SET(gauge,"orig_height",GINT_TO_POINTER(height));
 		OBJ_SET(gauge,"orig_x_offset",GINT_TO_POINTER(x_offset));
@@ -1184,13 +1184,12 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 	gtk_container_add(GTK_CONTAINER(widget),gauge);
 	xml_name = OBJ_GET(widget,"gaugexml");
 	if (xml_name)
-		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,xml_name,NULL),NULL);
+		filename = get_file(g_build_path(PSEP,GAUGES_DATA_DIR,xml_name,NULL),NULL);
 	if (filename)
 	{
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		g_free(filename);
 	}
-	g_free(OBJ_GET(gauge,"datasource"));
 	OBJ_SET(gauge,"datasource",OBJ_GET(widget,"datasource"));
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt tuning software
  * 
@@ -59,7 +59,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	gint result = 0;
 	extern gconstpointer *global_data;
 
-	dirs = get_dirs(g_strconcat(INTERROGATOR_DATA_DIR,PSEP,"Profiles",PSEP,NULL),&classes);
+	dirs = get_dirs(g_build_path(PSEP,INTERROGATOR_DATA_DIR,"Profiles",NULL),&classes);
 	if (!dirs)
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
@@ -73,7 +73,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		g_free(tmpbuf);
 		if (!cfgfile)
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" file missing!, was MegaTunix installed properly?\n\n"));
+	//		dbg_func(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" file missing!, was MegaTunix installed properly?\n\n"));
 			i++;
 			continue;
 

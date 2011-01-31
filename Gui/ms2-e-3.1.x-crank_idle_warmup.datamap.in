@@ -17,13 +17,13 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [temp]
-keys=page,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,precision,temp_dep,bind_to_list,tooltip
+keys=page,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,use_color,precision,temp_dep,bind_to_list,tooltip
 page=1
 size=_S16_
 raw_lower=-400
 raw_upper=4500
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 use_color=TRUE
 precision=1
 temp_dep=TRUE
@@ -31,22 +31,22 @@ bind_to_list=temperature
 _tooltip=The temp table is common to the cranking pulse, priming pulse, ase, ase taper, idle step, idle pwm, cold advance and X-Tau compensation tables.
 
 [cp]
-keys=page,precision,size,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
+keys=page,precision,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,use_color,tooltip
 page=1
 size=_U16_
-dl_conv_expr=x-1
-ul_conv_expr=x+1
+toecu_conv_expr=x-1
+fromecu_conv_expr=x+1
 precision=0
 raw_upper=10000
 use_color=FALSE
 _tooltip=The Crank pulse bins are the amount in % of injected fuel per crank pulse at the specified temp (far left column)
 
 [pp]
-keys=page,precision,size,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
+keys=page,precision,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,use_color,tooltip
 page=1
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 raw_upper=650
 use_color=FALSE
@@ -69,12 +69,12 @@ use_color=FALSE
 _tooltip=The ASE count bins are the total number of cycles that ASE will be enabled for right after engine start.
 
 [wue_temp]
-keys=size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,precision,temp_dep,bind_to_list,tooltip
+keys=size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,use_color,precision,temp_dep,bind_to_list,tooltip
 size=_S16_
 raw_lower=-400
 raw_upper=4500
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 use_color=TRUE
 precision=1
 temp_dep=TRUE
@@ -88,12 +88,12 @@ use_color=FALSE
 _tooltip=The WUE bins determine the amount of enrichment (%) during engine warmup. Values over 100% mean, add more, less than 100% means to reduce fuel.
 
 [coldadv]
-keys=page,size,precision,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
+keys=page,size,precision,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
 page=0
 size=_S16_
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_lower=-100
 raw_upper=100
 use_color=FALSE
@@ -109,23 +109,23 @@ use_color=FALSE
 _tooltip=The IACstep bins determine the IAC actuator position based on temperature. 
 
 [ipwm]
-keys=page,size,precision,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
+keys=page,size,precision,raw_upper,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
 page=0
 size=_S16_
 raw_upper=255
-dl_conv_expr=x/0.39063
-ul_conv_expr=x*0.39063
+toecu_conv_expr=x/0.39063
+fromecu_conv_expr=x*0.39063
 precision=1
 use_color=FALSE
 _tooltip=The Idle PWM Dutycycle bins determine the IAC actuator position based on temperature. 
 
 [duty]
-keys=page,size,precision,precision,raw_upper,dl_conv_expr,ul_conv_expr,use_color,tooltip
+keys=page,size,precision,precision,raw_upper,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
 page=1
 size=_U16_
 precision=0
-dl_conv_expr=x/0.39063
-ul_conv_expr=x*0.39063
+toecu_conv_expr=x/0.39063
+fromecu_conv_expr=x*0.39063
 precision=1
 raw_upper=512
 use_color=FALSE
@@ -133,24 +133,24 @@ _tooltip=The Duty bins are what the Idle actuator is set to  during cranking.
 to assist with startup.
 
 [steps]
-keys=page,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,use_color,tooltip
+keys=page,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,use_color,tooltip
 page=1
 size=_U16_
-dl_conv_expr=x/1
-ul_conv_expr=x*1
+toecu_conv_expr=x/1
+fromecu_conv_expr=x*1
 precision=0
 raw_upper=512
 use_color=FALSE
 _tooltip=The step bins determine the IAC actuator position for cranking based on temperature. 
 
 [idletemp]
-keys=page,size,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,use_color,precision,temp_dep,bind_to_list,tooltip
+keys=page,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,use_color,precision,temp_dep,bind_to_list,tooltip
 page=1
 size=_S16_
 raw_lower=-400
 raw_upper=4500
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 use_color=TRUE
 precision=1
 temp_dep=TRUE
@@ -506,11 +506,11 @@ raw_upper=3000
 _tooltip=Cranking RPM threshold, above this, engine is considered running, and will use the VEtable, below and it'll use the cranking tables
 
 [flood_clear_tps_entry]
-keys=offset,precision,size,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=offset,precision,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 offset=588
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=1000
 precision=1
 _tooltip=Throttle position in percentage, where if above this level during cranking, fuel is shutoff (Flood clear mode)
@@ -541,57 +541,57 @@ bitmask=15
 _tooltip=Sets Idle control algorithm
 
 [fast_idle_temp_entry]
-keys=offset,size,precision,temp_dep,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,size,precision,temp_dep,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=602
 size=_S16_
 temp_dep=TRUE
 raw_lower=-400
 raw_upper=4500
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 bind_to_list=temperature,solenoid_common
 _tooltip=Fast idle cutoff temperature for on/off idle dashpot valve
 
 [solenoid_hysteresis_entry]
-keys=offset,precision,size,temp_dep,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,size,temp_dep,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=554
 size=_S16_
 temp_dep=TRUE
 raw_lower=-400
 raw_upper=4500
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 bind_to_list=temperature,solenoid_common
 _tooltip=Fast idle cutoff temperature hystersis for on/off idle dashpot valve.  This keeps the idle valve from oscillating,  typical value would be 5 deg.
 
 [iac_hysteresis_entry]
-keys=offset,precision,size,temp_dep,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,size,temp_dep,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=554
 size=_S16_
 temp_dep=TRUE
 raw_lower=-400
 raw_upper=4500
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 bind_to_list=temperature,iac_openloop
 _tooltip=Hysteresis value to keep PWM valve from hunting excessively.  Values around 5deg are typical.
 
 [idle_time_step_size_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 offset=548
-dl_conv_expr=x/0.128
-ul_conv_expr=x*0.128
+toecu_conv_expr=x/0.128
+fromecu_conv_expr=x*0.128
 precision=1
 _tooltip=Unknown, see MegaManual
 
 [idle_initial_time_step_size_entry]
-keys=offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=549
-dl_conv_expr=x/0.128
-ul_conv_expr=x*0.128
+toecu_conv_expr=x/0.128
+fromecu_conv_expr=x*0.128
 precision=1
 bind_to_list=iac_moving
 _tooltip=Unknown, see MegaManual
@@ -623,15 +623,15 @@ raw_upper=32767
 _tooltip=Unknown, see MegaManual
 
 [idle_cold_temp_entry]
-keys=offset,size,precision,temp_dep,raw_lower,raw_upper,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=offset,size,precision,temp_dep,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 offset=560
 size=_S16_
 temp_dep=TRUE
 raw_lower=-400
 raw_upper=4500
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 bind_to_list=temperature
 _tooltip=Unknown, see MegaManual
 
@@ -694,29 +694,29 @@ raw_upper=100
 _tooltip=Unknown, see MegaManual
 
 [idle_open_duty_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=1
 offset=35
-dl_conv_expr=x/0.39063
-ul_conv_expr=x*0.39063
+toecu_conv_expr=x/0.39063
+fromecu_conv_expr=x*0.39063
 precision=1
 _tooltip=Unknown, see MegaManual
 
 [idle_closed_duty_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=1
 offset=36
-dl_conv_expr=x/0.39063
-ul_conv_expr=x*0.39063
+toecu_conv_expr=x/0.39063
+fromecu_conv_expr=x*0.39063
 precision=1
 _tooltip=Unknown, see MegaManual
 
 [dashpot_adder_duty_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
 page=1
 offset=43
-dl_conv_expr=x/0.39063
-ul_conv_expr=x*0.39063
+toecu_conv_expr=x/0.39063
+fromecu_conv_expr=x*0.39063
 precision=1
 _tooltip=Unknown, see MegaManual
 
@@ -747,13 +747,13 @@ raw_upper=32000
 _tooltip=Unknown, see MegaManual
 
 [idle_activation_tps_entry]
-keys=page,offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=page,offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 page=1
 offset=41
 size=_U16_
 precision=1
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_upper=10000
 _tooltip=Unknown, see MegaManual
 
@@ -781,11 +781,11 @@ raw_upper=10
 _tooltip=Unknown, see MegaManual
 
 [min_duty_pid_entry]
-keys=page,offset,precision,dl_conv_expr,ul_conv_expr,bind_to_list,tooltip
+keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=1
 offset=38
-dl_conv_expr=x/0.39063
-ul_conv_expr=x*0.39063
+toecu_conv_expr=x/0.39063
+fromecu_conv_expr=x*0.39063
 precision=1
 bind_to_list=pwm_closedloop
 _tooltip=Unknown, see MegaManual
@@ -839,66 +839,66 @@ raw_upper=500
 _tooltip=Unknown, see MegaManual
 
 [pid_prop_gain_entry]
-keys=page,offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=page,offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 page=1
 offset=48
 size=_U16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 raw_upper=2000
 _tooltip=PID Proportional Gain
 
 [pid_int_gain_entry]
-keys=page,offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=page,offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 page=1
 offset=50
 size=_U16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 raw_upper=2000
 _tooltip=PID Integral Gain
 
 [pid_diff_gain_entry]
-keys=page,offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=page,offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 page=1
 offset=52
 size=_U16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 raw_upper=2000
 _tooltip=PID Differential Gain
 
 [lockout_rpmdot_thresh_entry]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=page,offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 page=1
 offset=44
 size=_U16_
-ul_conv_expr=x*10
-dl_conv_expr=x/10
+fromecu_conv_expr=x*10
+toecu_conv_expr=x/10
 raw_upper=100
 _tooltip=See MegaManual
 
 [lockout_max_decel_load_entry]
-keys=page,offset,size,precision,dl_conv_expr,ul_conv_expr,raw_upper,tooltip
+keys=page,offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
 page=1
 offset=46
 size=_U16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 precision=1
 raw_upper=1000
 _tooltip=See MegaManual
 
 [pwmidle_rpmdot_disablepid_entry]
-keys=page,offset,size,dl_conv_expr,ul_conv_expr,raw_lower,raw_upper,tooltip
+keys=page,offset,size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
 page=1
 offset=60
 size=_S16_
-dl_conv_expr=x*10
-ul_conv_expr=x/10
+toecu_conv_expr=x*10
+fromecu_conv_expr=x/10
 raw_lower=10
 raw_upper=100
 _tooltip=See MegaManual
