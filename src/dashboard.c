@@ -22,6 +22,7 @@
 #include <gauge.h>
 #include <gdk/gdkkeysyms.h>
 #include <gui_handlers.h>
+#include <math.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <rtv_map_loader.h>
@@ -77,7 +78,7 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	gtk_window_set_title(GTK_WINDOW(window),_("Dash Cluster"));
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 
-	g_signal_connect(G_OBJECT (window), "configure_event",
+	g_signal_connect (G_OBJECT (window), "configure_event",
 			G_CALLBACK (dash_configure_event), NULL);
 	g_signal_connect (G_OBJECT (window), "delete_event",
 			G_CALLBACK (dummy), NULL);
@@ -88,6 +89,7 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 
 	gtk_widget_add_events(GTK_WIDGET(ebox),
 			GDK_POINTER_MOTION_MASK|
+			GDK_POINTER_MOTION_HINT_MASK|
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
 			GDK_KEY_PRESS_MASK 
@@ -184,8 +186,8 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	y_ratio = (float)cur_height/(float)orig_height;
 	ratio = x_ratio > y_ratio ? y_ratio:x_ratio;
 	w_constricted = x_ratio > y_ratio ? FALSE:TRUE;
-	
-	/*printf("dash_config_event\n");*/
+
+	printf("dash_config_event\n");
 	g_signal_handlers_block_by_func(G_OBJECT(widget),(gpointer)dash_configure_event,NULL);
 	children = GTK_FIXED(dash)->children;
 	for (i=0;i<g_list_length(children);i++)
@@ -412,10 +414,8 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 
 G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 {
-	static GdkColormap *colormap = NULL;
-	static GdkColor black;
-	static GdkColor white;
 	GtkFixedChild *child = NULL;
+	cairo_t *cr = NULL;
 	gint x = 0;
 	gint y = 0;
 	gint w = 0;
@@ -425,7 +425,6 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	gint radius = 0;
 	guint i = 0;
 	GList *children = NULL;
-	GdkGC *gc1 = NULL;
 	GdkBitmap *bitmap = NULL;
 	GtkRequisition req;
 	gint width = 0;
@@ -439,37 +438,30 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	g_mutex_lock(dash_mutex);
 
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
-	if (!colormap)
-	{
-		colormap = gdk_colormap_get_system ();
-		gdk_color_parse ("black", & black);
-		gdk_colormap_alloc_color(colormap, &black,TRUE,TRUE);
-		gdk_color_parse ("white", & white);
-		gdk_colormap_alloc_color(colormap, &white,TRUE,TRUE);
-	}
 	bitmap = gdk_pixmap_new(NULL,width,height,1);
-	gc1 = gdk_gc_new (bitmap);
-	gdk_gc_set_foreground (gc1, &black);
-	gdk_draw_rectangle(bitmap,gc1,TRUE,0,0,width,height);
-
+	cr = gdk_cairo_create(bitmap);
+	cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
+	cairo_paint(cr);
+	cairo_set_operator(cr,CAIRO_OPERATOR_SOURCE);
+	cairo_set_source_rgb(cr, 1.0,1.0,1.0);
 	if (hide_resizers == FALSE)
 	{
-		gdk_gc_set_foreground (gc1, &white);
-		gdk_draw_rectangle(bitmap,gc1,TRUE,width-16,0,16,16);
-		gdk_draw_rectangle(bitmap,gc1,TRUE,0,0,16,16);
-		gdk_draw_rectangle(bitmap,gc1,TRUE,0,height-16,16,16);
-		gdk_draw_rectangle(bitmap,gc1,TRUE,width-16,height-16,16,16);
+		cairo_rectangle(cr,width-16,0,16,16);
+		cairo_rectangle(cr,0,0,16,16);
+		cairo_rectangle(cr,0,height-16,16,16);
+		cairo_rectangle(cr,width-16,height-16,16,16);
+		cairo_set_source_rgb(cr, 0.0,0.0,0.0);
 
-		gdk_gc_set_foreground (gc1, &black);
-		gdk_draw_rectangle(bitmap,gc1,TRUE,width-16,3,13,13);
-		gdk_draw_rectangle(bitmap,gc1,TRUE,3,3,13,13);
-		gdk_draw_rectangle(bitmap,gc1,TRUE,3,height-16,13,13);
-		gdk_draw_rectangle(bitmap,gc1,TRUE,width-16,height-16,13,13);
+		cairo_rectangle(cr,width-16,0,13,13);
+		cairo_rectangle(cr,3,3,13,13);
+		cairo_rectangle(cr,3,height-16,13,13);
+		cairo_rectangle(cr,width-16,height-16,13,13);
+		cairo_fill(cr);
 	}
+	cairo_set_source_rgb(cr, 1.0,1.0,1.0);
 
-	gdk_gc_set_foreground (gc1, &white);
 	if ((gboolean)DATA_GET(global_data,"dash_fullscreen"))
-		gdk_draw_rectangle(bitmap,gc1,TRUE,0,0,width,height);
+		cairo_rectangle(cr,0,0,width,height);
 	else
 	{
 		children = GTK_FIXED(dash)->children;
@@ -484,17 +476,13 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 			radius = MIN(w,h)/2;
 			xc = x+w/2;
 			yc = y+h/2;
-			gdk_draw_arc (bitmap,
-					gc1,
-					TRUE,     /* filled */
-					xc-radius,
-					yc-radius,
-					2*radius,
-					2*radius,
-					0,        /* angle 1 */
-					360*64);  /* angle 2: full circle */
+			
+			cairo_arc(cr,xc,yc,radius,0,2 * M_PI);
+			cairo_fill(cr);
+			cairo_stroke(cr);
 		}
 	}
+	cairo_destroy(cr);
 	if (GTK_IS_WINDOW(gtk_widget_get_toplevel(dash)))
 	{
 #if GTK_MINOR_VERSION >= 10
@@ -515,8 +503,6 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 #endif
 		gdk_window_shape_combine_mask(dash->window,bitmap,0,0);
 	}
-	g_object_unref(colormap);
-	g_object_unref(gc1);
 	g_object_unref(bitmap);
 	g_mutex_unlock(dash_mutex);
 	return;
@@ -531,7 +517,7 @@ G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *ev
 		gdk_threads_add_timeout(4000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
-	return TRUE;
+	return FALSE;
 }
 
 G_MODULE_EXPORT gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -980,6 +966,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 					event->x_root,
 					event->y_root,
 					event->time);
+			g_signal_handlers_unblock_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),(gpointer)dash_configure_event,NULL);
 			return TRUE;
 		}
 		else if (GTK_IS_WINDOW(widget->parent))
