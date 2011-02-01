@@ -98,7 +98,11 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
 			G_CALLBACK (dash_motion_event), NULL);
 	g_signal_connect (G_OBJECT (window), "focus-in-event",
-			G_CALLBACK (focus_event), NULL);
+			G_CALLBACK (focus_in_event), NULL);
+	g_signal_connect (G_OBJECT (window), "focus-out-event",
+			G_CALLBACK (focus_out_event), NULL);
+	g_signal_connect (G_OBJECT (ebox), "button_release_event",
+			G_CALLBACK (dash_button_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_press_event",
 			G_CALLBACK (dash_button_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "popup-menu",
@@ -177,6 +181,9 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	if (!GTK_IS_WIDGET(dash))
 		return FALSE;
 
+	if ((moving) && (!resizing))
+		return FALSE;
+
 	orig_width = (GINT) OBJ_GET(dash,"orig_width");
 	orig_height = (GINT) OBJ_GET(dash,"orig_height");
 	cur_width = event->width;
@@ -207,7 +214,7 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	dash_shape_combine(dash,FALSE);
 	if (!timer_active)
 	{
-		gdk_threads_add_timeout(4000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(3000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
 
@@ -514,7 +521,7 @@ G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *ev
 	if (!timer_active)
 	{
 		dash_shape_combine(dash,FALSE);
-		gdk_threads_add_timeout(4000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(3000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
 	return FALSE;
@@ -916,8 +923,15 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 	if (!timer_active)
 	{
 		dash_shape_combine(dash,FALSE);
-		gdk_threads_add_timeout(4000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(3000,hide_dash_resizers,dash);
 		timer_active = TRUE;
+	}
+	if ((event->type == GDK_BUTTON_RELEASE) && (event->button == 1))
+	{
+		printf("button release!\n");
+		moving = FALSE;
+		resizing = FALSE;
+		return TRUE;
 	}
 
 	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 3))
@@ -955,23 +969,20 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		else
 			edge = -1;
 
-
 		if ((edge == -1 ) && (GTK_IS_WINDOW(widget->parent)))
 		{
-			/*printf("MOVE drag\n"); */
+			printf("MOVE drag\n"); 
 			moving = TRUE;
-			g_signal_handlers_block_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),(gpointer)dash_configure_event,NULL);
 			gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					event->button,
 					event->x_root,
 					event->y_root,
 					event->time);
-			g_signal_handlers_unblock_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),(gpointer)dash_configure_event,NULL);
 			return TRUE;
 		}
 		else if (GTK_IS_WINDOW(widget->parent))
 		{
-			/*printf("RESIZE drag\n"); */
+			printf("RESIZE drag\n"); 
 			resizing = TRUE;
 			gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					edge,
@@ -1242,26 +1253,31 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 
 G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 {
+	moving = FALSE;
+	resizing = FALSE;
 	if (GTK_IS_WIDGET(data))
 		dash_shape_combine(data,TRUE);
 	timer_active = FALSE;
 	return FALSE;
 }
 
-G_MODULE_EXPORT gboolean focus_event(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean focus_in_event(GtkWidget *widget, gpointer data)
 {
+	printf("Focus in event!\n");
+	return FALSE;
+}
+
+G_MODULE_EXPORT gboolean focus_out_event(GtkWidget *widget, gpointer data)
+{
+	printf("Focus out event!\n");
 	if (moving)
-	{
-		g_signal_handlers_unblock_by_func(G_OBJECT(gtk_widget_get_toplevel(widget)),(gpointer)dash_configure_event,NULL);
 		moving = FALSE;
-	}
 	if (resizing)
 	{
 		resizing = FALSE;
 		gtk_widget_queue_draw(widget);
 	}
 	return FALSE;
-
 }
 
 
