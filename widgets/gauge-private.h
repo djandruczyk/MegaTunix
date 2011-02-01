@@ -47,9 +47,6 @@ struct _MtxGaugeFacePrivate
         cairo_font_options_t * font_options;
         PangoLayout *layout;    /*! Pango TextLayout object */
         PangoFontDescription *font_desc;/*! Pango Font description */
-        GdkGC * bm_gc;          /*! Graphics Context for bitmap */
-        GdkGC * gc;             /*! Graphics Context for drawing */
-        GdkColormap *colormap;  /*! Colormap for GC's */
         gchar *value_font;      /*! Array of Font name strings */
         GArray *xmlfunc_array; /*! Array list mapping varnames to xml */
         GHashTable * xmlfunc_hash; /*! Hashtable mapping varnames to xml

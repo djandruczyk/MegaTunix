@@ -85,7 +85,6 @@ struct _MtxCurvePrivate
 	gboolean y_blocked_from_edit;	/* Prevent mouse edit of an axis */
 	MarkerClamp x_marker_clamp;
 	MarkerClamp y_marker_clamp;
-	GdkGC *gc;              /*! Graphics Context */
 	cairo_t *cr;            /*! Cairo context,  not sure if this is good
 				  too hold onto or not */
 	cairo_font_options_t * font_options;
@@ -97,8 +96,6 @@ struct _MtxCurvePrivate
 	gchar * title;          /*! Title to use */
 	gchar * x_axis_label;	/*! X Axis Label */
 	gchar * y_axis_label;	/*! X Axis Label */
-
-	GdkColormap *colormap;  /*! Colormap for GC's */
 };
 
 enum

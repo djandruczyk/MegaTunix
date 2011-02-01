@@ -53,15 +53,10 @@ struct _MtxStripChartPrivate
 	gboolean update_pending;/*! If true, don't schedule another */
 	GArray *traces;		/*! Array of trace specific data */
         gchar *font;		/*! Font string for value */
-        cairo_t *cr;            /*! Cairo context,  not sure if this is good
-                                   too hold onto or not */
         cairo_font_options_t * font_options;
-        GdkGC * gc;             /*! Graphics Context for drawing */
-        GdkColormap *colormap;  /*! Colormap for GC's */
         GdkColor colors[NUM_COLORS];
         GdkColor tcolors[6];	/*! Trace colors */
 	GtkJustification justification;	/*! Where to put the trace names */
-
 };
 
 

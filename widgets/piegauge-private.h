@@ -46,10 +46,7 @@ struct _MtxPieGaugePrivate
         cairo_t *cr;            /*! Cairo context,  not sure if this is good
                                    too hold onto or not */
         cairo_font_options_t * font_options;
-        GdkGC * gc;             /*! Graphics Context for drawing */
-        GdkColormap *colormap;  /*! Colormap for GC's */
         GdkColor colors[NUM_COLORS];
-
 };
 
 
