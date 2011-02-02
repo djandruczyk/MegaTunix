@@ -92,15 +92,17 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 			GDK_POINTER_MOTION_HINT_MASK|
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
-			GDK_KEY_PRESS_MASK 
+			GDK_KEY_PRESS_MASK |
+//			GDK_ENTER_NOTIFY_MASK |
+			GDK_LEAVE_NOTIFY_MASK
 			);
 
-	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
-			G_CALLBACK (dash_motion_event), NULL);
-	g_signal_connect (G_OBJECT (window), "focus-in-event",
-			G_CALLBACK (focus_in_event), NULL);
-	g_signal_connect (G_OBJECT (window), "focus-out-event",
-			G_CALLBACK (focus_out_event), NULL);
+//	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
+//			G_CALLBACK (dash_motion_event), NULL);
+//	g_signal_connect (G_OBJECT (window), "enter-notify-event",
+//			G_CALLBACK (enter_leave_event), NULL);
+	g_signal_connect (G_OBJECT (window), "leave-notify-event",
+			G_CALLBACK (enter_leave_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_release_event",
 			G_CALLBACK (dash_button_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_press_event",
@@ -181,7 +183,7 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	if (!GTK_IS_WIDGET(dash))
 		return FALSE;
 
-	if ((moving) && (!resizing))
+	if (moving)
 		return FALSE;
 
 	orig_width = (GINT) OBJ_GET(dash,"orig_width");
@@ -194,7 +196,6 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	ratio = x_ratio > y_ratio ? y_ratio:x_ratio;
 	w_constricted = x_ratio > y_ratio ? FALSE:TRUE;
 
-	printf("dash_config_event\n");
 	g_signal_handlers_block_by_func(G_OBJECT(widget),(gpointer)dash_configure_event,NULL);
 	children = GTK_FIXED(dash)->children;
 	for (i=0;i<g_list_length(children);i++)
@@ -457,8 +458,9 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 		cairo_rectangle(cr,0,0,16,16);
 		cairo_rectangle(cr,0,height-16,16,16);
 		cairo_rectangle(cr,width-16,height-16,16,16);
-		cairo_set_source_rgb(cr, 0.0,0.0,0.0);
+		cairo_fill(cr);
 
+		cairo_set_source_rgb(cr, 0.0,0.0,0.0);
 		cairo_rectangle(cr,width-16,0,13,13);
 		cairo_rectangle(cr,3,3,13,13);
 		cairo_rectangle(cr,3,height-16,13,13);
@@ -467,9 +469,12 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	}
 	cairo_set_source_rgb(cr, 1.0,1.0,1.0);
 
+	/*
 	if ((gboolean)DATA_GET(global_data,"dash_fullscreen"))
 		cairo_rectangle(cr,0,0,width,height);
 	else
+	*/
+	if (!(GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
 	{
 		children = GTK_FIXED(dash)->children;
 		for (i=0;i<g_list_length(children);i++)
@@ -928,7 +933,6 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 	}
 	if ((event->type == GDK_BUTTON_RELEASE) && (event->button == 1))
 	{
-		printf("button release!\n");
 		moving = FALSE;
 		resizing = FALSE;
 		return TRUE;
@@ -971,7 +975,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 
 		if ((edge == -1 ) && (GTK_IS_WINDOW(widget->parent)))
 		{
-			printf("MOVE drag\n"); 
+			/*printf("MOVE drag\n"); */
 			moving = TRUE;
 			gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					event->button,
@@ -982,7 +986,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		}
 		else if (GTK_IS_WINDOW(widget->parent))
 		{
-			printf("RESIZE drag\n"); 
+			/*printf("RESIZE drag\n"); */
 			resizing = TRUE;
 			gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					edge,
@@ -1253,30 +1257,18 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 
 G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 {
-	moving = FALSE;
-	resizing = FALSE;
 	if (GTK_IS_WIDGET(data))
 		dash_shape_combine(data,TRUE);
 	timer_active = FALSE;
 	return FALSE;
 }
 
-G_MODULE_EXPORT gboolean focus_in_event(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 {
-	printf("Focus in event!\n");
-	return FALSE;
-}
-
-G_MODULE_EXPORT gboolean focus_out_event(GtkWidget *widget, gpointer data)
-{
-	printf("Focus out event!\n");
-	if (moving)
-		moving = FALSE;
-	if (resizing)
-	{
-		resizing = FALSE;
-		gtk_widget_queue_draw(widget);
-	}
+	if (event->state & GDK_BUTTON1_MASK)
+		return TRUE;
+	moving = FALSE;
+	resizing = FALSE;
 	return FALSE;
 }
 

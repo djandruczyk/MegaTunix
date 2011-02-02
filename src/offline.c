@@ -112,6 +112,12 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("initialize_dashboards_pf");
+	get_symbol(pf->name,(void *)&pf->function);
+	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+
+	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_status_pf");
 	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
