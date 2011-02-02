@@ -215,7 +215,7 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	dash_shape_combine(dash,FALSE);
 	if (!timer_active)
 	{
-		gdk_threads_add_timeout(3000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
 
@@ -454,20 +454,25 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	cairo_set_source_rgb(cr, 1.0,1.0,1.0);
 	if (hide_resizers == FALSE)
 	{
-		cairo_rectangle(cr,width-16,0,16,16);
-		cairo_rectangle(cr,0,0,16,16);
-		cairo_rectangle(cr,0,height-16,16,16);
-		cairo_rectangle(cr,width-16,height-16,16,16);
+		cairo_rectangle(cr,0,0,16,3);
+		cairo_rectangle(cr,0,0,3,16);
+		cairo_rectangle(cr,width-16,0,16,3);
+		cairo_rectangle(cr,width-3,0,3,16);
+		cairo_rectangle(cr,width-16,height-3,16,3);
+		cairo_rectangle(cr,width-3,height-16,3,16);
+		cairo_rectangle(cr,0,height-3,16,3);
+		cairo_rectangle(cr,0,height-16,3,16);
 		cairo_fill(cr);
 
+		/*
 		cairo_set_source_rgb(cr, 0.0,0.0,0.0);
 		cairo_rectangle(cr,width-16,0,13,13);
 		cairo_rectangle(cr,3,3,13,13);
 		cairo_rectangle(cr,3,height-16,13,13);
 		cairo_rectangle(cr,width-16,height-16,13,13);
 		cairo_fill(cr);
+		*/
 	}
-	cairo_set_source_rgb(cr, 1.0,1.0,1.0);
 
 	/*
 	if ((gboolean)DATA_GET(global_data,"dash_fullscreen"))
@@ -526,7 +531,7 @@ G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *ev
 	if (!timer_active)
 	{
 		dash_shape_combine(dash,FALSE);
-		gdk_threads_add_timeout(3000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
 	return FALSE;
@@ -928,7 +933,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 	if (!timer_active)
 	{
 		dash_shape_combine(dash,FALSE);
-		gdk_threads_add_timeout(3000,hide_dash_resizers,dash);
+		gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
 		timer_active = TRUE;
 	}
 	if ((event->type == GDK_BUTTON_RELEASE) && (event->button == 1))
