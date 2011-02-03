@@ -32,9 +32,6 @@
 
 
 
-static gboolean timer_active = FALSE;
-static volatile gboolean moving = FALSE;
-static volatile gboolean resizing = FALSE;
 extern gconstpointer *global_data;
 
 /*!
@@ -101,7 +98,7 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 //			G_CALLBACK (dash_motion_event), NULL);
 //	g_signal_connect (G_OBJECT (window), "enter-notify-event",
 //			G_CALLBACK (enter_leave_event), NULL);
-	g_signal_connect (G_OBJECT (window), "leave-notify-event",
+	g_signal_connect (G_OBJECT (ebox), "leave-notify-event",
 			G_CALLBACK (enter_leave_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_release_event",
 			G_CALLBACK (dash_button_event), NULL);
@@ -183,7 +180,7 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	if (!GTK_IS_WIDGET(dash))
 		return FALSE;
 
-	if (moving)
+	if (OBJ_GET(dash,"moving"))
 		return FALSE;
 
 	orig_width = (GINT) OBJ_GET(dash,"orig_width");
@@ -213,11 +210,6 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 		gtk_widget_set_size_request(gauge,child_w*ratio,child_h*ratio);
 	}
 	dash_shape_combine(dash,FALSE);
-	if (!timer_active)
-	{
-		gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
-		timer_active = TRUE;
-	}
 
 	g_signal_handlers_unblock_by_func(G_OBJECT(widget),(gpointer)dash_configure_event,NULL);
 	return FALSE;
@@ -527,13 +519,6 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 
 G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
-	GtkWidget *dash = GTK_BIN(widget)->child;
-	if (!timer_active)
-	{
-		dash_shape_combine(dash,FALSE);
-		gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
-		timer_active = TRUE;
-	}
 	return FALSE;
 }
 
@@ -926,20 +911,18 @@ G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer dat
 
 G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
-	/*printf("button event\n"); */
 	gint edge = -1;
 
 	GtkWidget *dash = GTK_BIN(widget)->child;
-	if (!timer_active)
+	if (!OBJ_GET(dash,"resizers_visible"))
 	{
 		dash_shape_combine(dash,FALSE);
-		gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
-		timer_active = TRUE;
+		OBJ_SET(dash,"resizers_visible",GINT_TO_POINTER(TRUE));
 	}
 	if ((event->type == GDK_BUTTON_RELEASE) && (event->button == 1))
 	{
-		moving = FALSE;
-		resizing = FALSE;
+		OBJ_SET(dash,"moving",GINT_TO_POINTER(FALSE));
+		OBJ_SET(dash,"resizing",GINT_TO_POINTER(FALSE));
 		return TRUE;
 	}
 
@@ -981,7 +964,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		if ((edge == -1 ) && (GTK_IS_WINDOW(widget->parent)))
 		{
 			/*printf("MOVE drag\n"); */
-			moving = TRUE;
+			OBJ_SET(dash,"moving",GINT_TO_POINTER(TRUE));
 			gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					event->button,
 					event->x_root,
@@ -992,7 +975,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		else if (GTK_IS_WINDOW(widget->parent))
 		{
 			/*printf("RESIZE drag\n"); */
-			resizing = TRUE;
+			OBJ_SET(dash,"resizing",GINT_TO_POINTER(TRUE));
 			gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 					edge,
 					event->button,
@@ -1262,18 +1245,27 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 
 G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 {
-	if (GTK_IS_WIDGET(data))
+	if ((GTK_IS_WIDGET(data)) && (OBJ_GET(data,"resizers_visible")))
 		dash_shape_combine(data,TRUE);
-	timer_active = FALSE;
+	OBJ_SET(data,"timer_active",GINT_TO_POINTER(FALSE));
+	OBJ_SET(data,"resizers_visible",GINT_TO_POINTER(FALSE));
 	return FALSE;
 }
 
 G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 {
+	GtkWidget *dash = GTK_BIN(widget)->child;
+
 	if (event->state & GDK_BUTTON1_MASK)
 		return TRUE;
-	moving = FALSE;
-	resizing = FALSE;
+	OBJ_SET(dash,"moving",GINT_TO_POINTER(FALSE));
+	OBJ_SET(dash,"resizing",GINT_TO_POINTER(FALSE));
+	/* If "leaving" the window, set timeout to hide the resizers */
+	if ((!OBJ_GET(dash,"timer_active")) && (OBJ_GET(dash,"resizers_visible")))
+	{
+		gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
+		OBJ_SET(dash,"timer_active",GINT_TO_POINTER(TRUE));
+	}
 	return FALSE;
 }
 
