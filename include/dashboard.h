@@ -67,6 +67,7 @@ gboolean reset_dash_tattletales(GtkWidget *, gpointer);
 gboolean toggle_dash_daytime(GtkWidget *, gpointer);
 gboolean set_dash_time_mode(GtkWidget *, gpointer);
 gboolean get_dash_daytime_mode(GtkWidget *);
+gboolean ebox_expose(GtkWidget *, GdkEventExpose *, gpointer);
 void set_dash_daytime_mode(GtkWidget *, gboolean);
 gboolean close_dash(GtkWidget *, gpointer );
 void toggle_main_visible(void);

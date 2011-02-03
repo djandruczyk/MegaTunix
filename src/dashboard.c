@@ -85,19 +85,15 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	gtk_container_add(GTK_CONTAINER(window),ebox);
 
 	gtk_widget_add_events(GTK_WIDGET(ebox),
-			GDK_POINTER_MOTION_MASK|
+/*			GDK_POINTER_MOTION_MASK|
 			GDK_POINTER_MOTION_HINT_MASK|
+*/
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
 			GDK_KEY_PRESS_MASK |
-//			GDK_ENTER_NOTIFY_MASK |
 			GDK_LEAVE_NOTIFY_MASK
 			);
 
-//	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
-//			G_CALLBACK (dash_motion_event), NULL);
-//	g_signal_connect (G_OBJECT (window), "enter-notify-event",
-//			G_CALLBACK (enter_leave_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "leave-notify-event",
 			G_CALLBACK (enter_leave_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_release_event",
@@ -155,6 +151,14 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	gtk_widget_show_all(window);
 	dash_shape_combine(dash,TRUE);
 }
+
+
+G_MODULE_EXPORT gboolean ebox_expose(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+{
+	printf("ebox expose!?\n");
+	return FALSE;
+}
+
 
 G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 {
@@ -312,7 +316,6 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_set_size_request(gauge,width,height);
 		g_free(filename);
-		g_free(OBJ_GET(gauge,"datasource"));
 		OBJ_SET_FULL(gauge,"datasource",g_strdup(datasource),g_free);
 		OBJ_SET(gauge,"orig_width",GINT_TO_POINTER(width));
 		OBJ_SET(gauge,"orig_height",GINT_TO_POINTER(height));
@@ -370,7 +373,7 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 		}
 		d_gauge = g_new0(Dash_Gauge, 1);
 		d_gauge->object = rtv_obj;
-		d_gauge->source = source;
+		d_gauge->source = g_strdup(source);
 		d_gauge->gauge = child->widget;
 		d_gauge->dash = dash;
 		g_hash_table_insert(dash_hash,g_strdup_printf("dash_%i_gauge_%i",(GINT)data,i),(gpointer)d_gauge);
@@ -466,12 +469,11 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 		*/
 	}
 
-	/*
-	if ((gboolean)DATA_GET(global_data,"dash_fullscreen"))
+	
+	if ((GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
 		cairo_rectangle(cr,0,0,width,height);
-	else
-	*/
-	if (!(GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
+	
+//	if (!(GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
 	{
 		children = GTK_FIXED(dash)->children;
 		for (i=0;i<g_list_length(children);i++)
@@ -689,7 +691,7 @@ G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr att
 		child = g_list_nth_data(children,i);
 		gauge = child->widget;
 		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge),attr,&tmpf);
-		if ((gboolean)tmpf)
+		if ((GBOOLEAN)tmpf)
 			t_count++;
 		else
 			f_count++;
@@ -749,19 +751,19 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_check_menu_item_new_with_label("Fullscreen");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),(gboolean)DATA_GET(global_data,"dash_fullscreen"));
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),(GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"));
 	g_signal_connect_swapped(G_OBJECT(item),"toggled",
 		       	G_CALLBACK(toggle_dash_fullscreen),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_check_menu_item_new_with_label("Stay on Top");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),(gboolean)OBJ_GET(dash,"dash_on_top"));
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),(GBOOLEAN)OBJ_GET(dash,"dash_on_top"));
 	g_signal_connect_swapped(G_OBJECT(item),"toggled",
 		       	G_CALLBACK(toggle_dash_on_top),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_check_menu_item_new_with_label("Hide MTX Gui");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),!(gboolean)DATA_GET(global_data,"gui_visible"));
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),!(GBOOLEAN)DATA_GET(global_data,"gui_visible"));
 	g_signal_connect_swapped(G_OBJECT(item),"toggled",
 		       	G_CALLBACK(toggle_gui_visible),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
@@ -795,7 +797,7 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	GtkWidget *cbutton = NULL;
 
-	if (!(gboolean)DATA_GET(global_data,"gui_visible"))
+	if (!(GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 		toggle_gui_visible(NULL,NULL);
         DATA_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
 	index = (GINT)data;
@@ -1180,7 +1182,7 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		g_free(filename);
 	}
-	OBJ_SET(gauge,"datasource",OBJ_GET(widget,"datasource"));
+	OBJ_SET_FULL(gauge,"datasource",g_strdup(OBJ_GET(widget,"datasource")),g_free);
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
 	tab_gauges[table_num] = g_list_prepend(tab_gauges[table_num],gauge);
@@ -1274,18 +1276,18 @@ G_MODULE_EXPORT void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dash = OBJ_GET(widget,"dash");
 
-	if ((gboolean)DATA_GET(global_data,"dash_fullscreen"))
+	if ((GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
 	{
         	DATA_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
 		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 		gtk_window_unfullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
-		if ((gboolean)OBJ_GET(dash,"dash_on_top"))
+		if ((GBOOLEAN)OBJ_GET(dash,"dash_on_top"))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),GTK_WINDOW(lookup_widget("main_window")));
 	}
 	else
 	{
         	DATA_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(TRUE));
-		if ((gboolean)OBJ_GET(dash,"dash_on_top"))
+		if ((GBOOLEAN)OBJ_GET(dash,"dash_on_top"))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 		gtk_window_fullscreen(GTK_WINDOW(gtk_widget_get_toplevel(widget)));
 	}
@@ -1296,14 +1298,14 @@ G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dash = GTK_BIN(widget)->child;
 
-	if ((gboolean)OBJ_GET(dash,"dash_on_top"))
+	if ((GBOOLEAN)OBJ_GET(dash,"dash_on_top"))
 	{
         	OBJ_SET(dash,"dash_on_top",GINT_TO_POINTER(FALSE));
 		gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),NULL);
 	}
 	else
 	{
-		if (!(gboolean)DATA_GET(global_data,"dash_fullscreen"))
+		if (!(GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(widget)),GTK_WINDOW(lookup_widget("main_window")));
         	OBJ_SET(dash,"dash_on_top",GINT_TO_POINTER(TRUE));
 	}
@@ -1313,7 +1315,7 @@ G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 {
 	/* IF visible, hide them */
-	if ((gboolean)DATA_GET(global_data,"gui_visible"))
+	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 	{
 		if (DATA_GET(global_data,"main_visible"))
 			toggle_main_visible();
