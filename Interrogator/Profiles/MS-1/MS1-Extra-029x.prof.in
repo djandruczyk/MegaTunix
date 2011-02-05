@@ -3,7 +3,7 @@ major=1
 minor=9
 
 [interrogation_profile]
-name=MegaSquirtnSpark-Extra 029x
+name=MS1-Extra 029x
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_
