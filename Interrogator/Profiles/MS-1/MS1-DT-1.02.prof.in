@@ -3,7 +3,7 @@ major=1
 minor=9
 
 [interrogation_profile]
-name=Dualtable v1.02
+name=MS1-DT V1.02
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_

@@ -3,7 +3,7 @@ data=39,40,41,44,44,44,45,45,47,47,51,51,50,50,50,50,52,55,55,57,60,61,61,65,59,
 num_variables=125
 
 [Firmware]
-name=Standard Bowling & Grippo v2.0-3.01
+name=MS1-BnG V2.0-3.01
 
 [API]
 minor=0

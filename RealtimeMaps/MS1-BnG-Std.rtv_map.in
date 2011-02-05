@@ -4,7 +4,7 @@ minor=6
 
 [realtime_map]
 persona=MS-1
-applicable_firmwares=Standard Bowling & Grippo v2.0-3.01,Old Bowling & Grippo v1.0,MS-3.0 Rover IAC v3.0.x,MS-Projection 0.81
+applicable_firmwares=MS1-BnG V2.0-3.01,MS1-BnG V1.0,MS-3.0 Rover IAC v3.0.x,MS-Projection 0.81
 derived_total=38
 
 [derived_0]

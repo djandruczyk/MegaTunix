@@ -3,7 +3,7 @@ major=1
 minor=9
 
 [interrogation_profile]
-name=Old Bowling & Grippo v1.0
+name=MS1-BnG V1.0
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_

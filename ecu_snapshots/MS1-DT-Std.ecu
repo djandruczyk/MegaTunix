@@ -7,7 +7,7 @@ data=18,18,18,18,18,18,18,18,22,25,30,32,35,35,35,35,35,35,35,35,35,35,35,35,50,
 num_variables=128
 
 [Firmware]
-name=Dualtable v1.02
+name=MS1-DT V1.02
 
 [API]
 minor=0
