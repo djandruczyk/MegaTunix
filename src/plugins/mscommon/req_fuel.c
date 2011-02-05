@@ -553,6 +553,11 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	alternate = firmware->rf_params[table_num]->alternate;
 	last_alternate = firmware->rf_params[table_num]->last_alternate;
 
+	/* If we'd have a floating point exception abort here,  this may
+	   occur in offline mode prior to loading a backup
+	   */
+	if ((num_cyls == 0) && (num_squirts == 0))
+		return;
 
 	/*
 	printf("\n\n\n\n");
