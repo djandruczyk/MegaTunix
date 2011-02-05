@@ -6,6 +6,6 @@ num_variables=64
 name=JimStim_v0.x
 
 [API]
-minor=0
+minor=1
 major=1
 

@@ -6,6 +6,6 @@ num_variables=125
 name=MS1-BnG V2.0-3.01
 
 [API]
-minor=0
+minor=1
 major=1
 

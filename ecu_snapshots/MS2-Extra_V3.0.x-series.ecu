@@ -26,6 +26,6 @@ num_variables=1024
 name=MS2-Extra V3.0.x series
 
 [API]
-minor=0
+minor=1
 major=1
 

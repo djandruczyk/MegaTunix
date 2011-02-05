@@ -10,6 +10,6 @@ num_variables=128
 name=MS1-DT V1.02
 
 [API]
-minor=0
+minor=1
 major=1
 

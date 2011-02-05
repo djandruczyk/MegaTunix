@@ -35,9 +35,9 @@ data=0,0,240,56,50,10,250,0,0,0,0,66,0,4,3,10,64,5,58,60,40,11,160,30,60,0,0,0,0
 num_variables=189
 
 [Firmware]
-name=MS1-Extra Highres 08x
+name=MS1-Extra Highres 0[89]x
 
 [API]
-minor=0
+minor=1
 major=1
 

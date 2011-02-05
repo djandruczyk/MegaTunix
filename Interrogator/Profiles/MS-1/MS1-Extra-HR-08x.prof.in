@@ -3,7 +3,7 @@ major=1
 minor=9
 
 [interrogation_profile]
-name=MS1-Extra Highres 08x
+name=MS1-Extra Highres 0[89]x
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_

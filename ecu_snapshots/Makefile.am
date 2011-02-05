@@ -2,7 +2,8 @@ snapshotsdir = $(datadir)/MegaTunix/$(SNAPSHOTS_DATA_DIR)
 
 snapshots_files = 	\
 			MS1-DT-Std.ecu \
-		       	MS1-BnG.ecu \
+		       	MS1-BnG-V1.x.ecu \
+		       	MS1-BnG-V3.x.ecu \
 			JimStim_v0.x.ecu \
 			JimStim_v2.x.ecu \
 		       	MS1-Extra_029-series.ecu \
