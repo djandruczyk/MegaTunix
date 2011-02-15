@@ -365,7 +365,6 @@ G_MODULE_EXPORT void  thread_update_widget(
 	gint tmp = 0;
 
 	g_return_if_fail(widget_name);
-	g_return_if_fail(msg);
 
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");

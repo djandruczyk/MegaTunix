@@ -368,6 +368,94 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 }
 
 
+
+/*
+ \brief Queries the ECU for a location ID list
+ */
+G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	GTimeVal tval;
+	GList *list = NULL;
+	Serial_Params *serial_params = NULL;
+	guint8 *buf = NULL;
+	Location_Details *details = NULL;
+	/* Raw packet */
+	guint8 pkt[LOC_ID_DETAILS_REQ_PKT_LEN];
+	gint res = 0;
+	gint i = 0;
+	gint h = 0;
+	gint l = 0;
+	gint tmpi = 0;
+	guint8 sum = 0;
+	gint tmit_len = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_val_if_fail(serial_params,NULL);
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LOCATION_ID_DETAILS & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LOCATION_ID_DETAILS & 0x00ff );
+	pkt[L_PAYLOAD_IDX+1] = (loc_id & 0xff00) >> 8;	/* H location bits */
+	pkt[L_PAYLOAD_IDX+2] = (loc_id & 0x00ff); 	/* L location bits */
+	for (i=0;i<LOC_ID_DETAILS_REQ_PKT_LEN-1;i++)
+		sum += pkt[i];
+	pkt[LOC_ID_DETAILS_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,LOC_ID_DETAILS_REQ_PKT_LEN,&tmit_len);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LOCATION_ID_DETAILS);
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LOCATION_ID_DETAILS);
+		g_free(buf);
+		g_async_queue_unref(queue);
+		return NULL;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LOCATION_ID_DETAILS);
+	g_async_queue_unref(queue);
+	if (packet)
+	{
+		printf("packet payload length %i\n",packet->payload_length);
+		if (packet->payload_length != 12)
+			printf("ERROR in locationID details response!\n");
+		details = g_new0(Location_Details, 1);
+		tmpi = 0;
+		h = packet->data[packet->payload_base_offset];
+		l = packet->data[packet->payload_base_offset+1];
+		details->flags = (h << 8) + l;
+		printf("loc id details flags %i\n",details->flags);
+		h = packet->data[packet->payload_base_offset+2];
+		l = packet->data[packet->payload_base_offset+3];
+		details->parent = (h << 8) + l;
+		printf("loc id details parent %i\n",details->parent);
+		details->ram_page = packet->data[packet->payload_base_offset+4];
+		details->flash_page = packet->data[packet->payload_base_offset+5];
+		printf("loc id details ram_page %i\n",details->ram_page);
+		printf("loc id details flash_page %i\n",details->flash_page);
+		h = packet->data[packet->payload_base_offset+6];
+		l = packet->data[packet->payload_base_offset+7];
+		details->ram_address = (h << 8) + l;
+		printf("loc id details ram_address %0x\n",details->ram_address);
+		h = packet->data[packet->payload_base_offset+8];
+		l = packet->data[packet->payload_base_offset+9];
+		details->flash_address = (h << 8) + l;
+		printf("loc id details flash_address %0x\n",details->flash_address);
+		h = packet->data[packet->payload_base_offset+10];
+		l = packet->data[packet->payload_base_offset+11];
+		details->length = (h << 8) + l;
+		printf("loc id details length %i\n",details->length);
+		freeems_packet_cleanup(packet);
+	}
+	return details;
+}
+
+
 /*!
  \brief validate_and_load_tests() loads the list of tests from the system
  checks them for validity, populates and array and returns it
@@ -683,9 +771,12 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 {
 	ConfigFile *cfgfile;
-	gchar * tmpbuf = NULL;
-	gchar * section = NULL;
+	Location_Details *details = NULL;
+	GList *locations = NULL;
+	gchar *tmpbuf = NULL;
+	gchar *section = NULL;
 	gchar ** list = NULL;
+	gint i = 0;
 	gint major = 0;
 	gint minor = 0;
 
@@ -766,30 +857,38 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 				&firmware->sliders_map_file))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
-			&firmware->rtt_map_file))
+				&firmware->rtt_map_file))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"gui","StatusMapFile",
-			&firmware->status_map_file))
+				&firmware->status_map_file))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));
 
 
 	/* Megatunix Doesn't yet know how to deal with FreeEMS's locationID's
 	   which are semi-analagous to Pages in MS-land
 	 */
-	/*
-	list = request_location_ids(NULL);
-	if (list)
+	locations = request_location_ids(NULL);
+	if (locations)
 	{
-		firmware->total_pages = g_list_length(list);
+		firmware->total_pages = g_list_length(locations);
 		firmware->page_params = g_new0(Page_Params *, firmware->total_pages);
 		for (i=0;i<firmware->total_pages;i++)
 		{
 			firmware->page_params[i] = initialize_page_params();
-			request_location_id_details(g_list_nth_data(list,i),
+			firmware->page_params[i]->phys_ecu_page = (gint)g_list_nth_data(locations,i);
+			printf("requesting details for loc ID %i\n",(gint)g_list_nth_data(locations,i));
+			details = request_location_id_details((gint)g_list_nth_data(locations,i));
+			printf("received details %p\n",details);
+			if (details)
+			{
+				firmware->page_params[i]->length = details->length;
+				firmware->page_params[i]->dl_by_default = (details->flags & BLOCK_IS_INDEXABLE);
 
+			}
+			g_free(details);
 		}
+		g_list_free(locations);
 	}
-	*/
 	if (mem_alloc_f)
 		mem_alloc_f();
 	else

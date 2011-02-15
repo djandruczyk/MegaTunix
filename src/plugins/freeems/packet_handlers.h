@@ -36,6 +36,7 @@ typedef enum
 #define INTVER_REQ_PKT_LEN 4
 #define DATALOG_REQ_PKT_LEN 5
 #define LOC_ID_LIST_REQ_PKT_LEN 7
+#define LOC_ID_DETAILS_REQ_PKT_LEN 6
 #define SOFT_SYSTEM_RESET_PKT_LEN 4
 #define HARD_SYSTEM_RESET_PKT_LEN 4
 
@@ -172,7 +173,6 @@ struct _FreeEMS_Packet
 	guint16 payload_base_offset;
 	guint16 payload_length;
 };
-
 
 #define	ESCAPE_BYTE			0xBB
 #define	START_BYTE			0xAA

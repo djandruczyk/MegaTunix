@@ -18,6 +18,7 @@
 #include <defines.h>
 #include <configfile.h>
 #include <enums.h>
+#include <firmware.h>
 #include <threads.h>
 
 
@@ -57,6 +58,18 @@ struct _Detection_Test
 	gint num_bytes;		/* number of bytes in returned string */
 };
 
+typedef struct _Location_Details Location_Details;
+struct _Location_Details
+{
+	guint16 flags;
+	guint16 parent;
+	guint8 ram_page;
+	guint8 flash_page;
+	guint16 ram_address;
+	guint16 flash_address;
+	guint16 length;
+};
+
 /* Prototypes */
 void test_cleanup(gpointer);
 gboolean interrogate_ecu(void);
@@ -64,12 +77,15 @@ gchar *request_firmware_version(gint *);
 gchar *request_interface_version(gint *);
 GList *request_location_ids(gint *);
 gchar *request_detailed_interface_version(guint8 *, guint8 *, guint8 *);
+Location_Details *request_location_id_details(guint16);
 gboolean validate_and_load_tests(GArray **, GHashTable **);
 gboolean determine_ecu(GArray *, GHashTable *);
 gboolean check_for_match(GHashTable *, gchar *);
 void update_interrogation_gui_pf(void);
 gboolean load_firmware_details(Firmware_Details *, gchar *);
 gint translate_capabilities(const gchar *);
+Page_Params * initialize_page_params(void);
+
 
 /* Prototypes */
 
