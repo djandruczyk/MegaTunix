@@ -765,16 +765,31 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	if(!cfg_read_string(cfgfile,"gui","SliderMapFile",
 				&firmware->sliders_map_file))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
-	cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
-			&firmware->rtt_map_file);
-	/*              dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));*/
-	cfg_read_string(cfgfile,"gui","StatusMapFile",
-			&firmware->status_map_file);
-	/*              dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));*/
+	if(!cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
+			&firmware->rtt_map_file))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_string(cfgfile,"gui","StatusMapFile",
+			&firmware->status_map_file))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));
+
 
 	/* Megatunix Doesn't yet know how to deal with FreeEMS's locationID's
 	   which are semi-analagous to Pages in MS-land
 	 */
+	/*
+	list = request_location_ids(NULL);
+	if (list)
+	{
+		firmware->total_pages = g_list_length(list);
+		firmware->page_params = g_new0(Page_Params *, firmware->total_pages);
+		for (i=0;i<firmware->total_pages;i++)
+		{
+			firmware->page_params[i] = initialize_page_params();
+			request_location_id_details(g_list_nth_data(list,i),
+
+		}
+	}
+	*/
 	if (mem_alloc_f)
 		mem_alloc_f();
 	else
@@ -825,5 +840,18 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 
 	g_strfreev(vector);
 	return value;
+}
+
+/*!
+ \brief initialize_page_params() creates and initializes the page_params
+ datastructure to sane defaults and returns it
+ */
+G_MODULE_EXPORT Page_Params * initialize_page_params(void)
+{
+	Page_Params *page_params = NULL;
+	page_params = g_malloc0(sizeof(Page_Params));
+	page_params->length = 0;
+	page_params->spconfig_offset = -1;
+	return page_params;
 }
 

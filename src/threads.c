@@ -284,6 +284,9 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	Text_Message *t_message = NULL;
 	gint tmp = 0;
 
+	g_return_if_fail(view_name);
+	g_return_if_fail(msg);
+
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_io_message();
@@ -361,8 +364,12 @@ G_MODULE_EXPORT void  thread_update_widget(
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
+	g_return_if_fail(widget_name);
+	g_return_if_fail(msg);
+
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+	g_return_if_fail(gui_dispatch_queue);
 	message = initialize_io_message();
 
 	w_update = g_new0(Widget_Update, 1);

@@ -249,7 +249,9 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	{
 		if ((packet->payload_length - 3) > packet->raw_length)
 		{
+			printf("BAD PACKET!\n");
 			printf("payload length + header/payload EXCEEDS packet length, BUGGY PACKET!!\n");
+			printf("Payload ID: %i, Payload Length %i, raw pkt len %i\n",packet->payload_id,packet->payload_length,packet->raw_length);
 			return FALSE;
 		}
 		else

@@ -280,10 +280,10 @@ G_MODULE_EXPORT void freeems_backup_current_data(gint canID, gint page)
  \brief find_mtx_page() is a func to return the data requested.
  \param tableID, Table Identified (physical ecu page)
  \param mtx_page, The symbolic page mtx uses to get around the nonlinear
- nature of the page layout in certain MS firmwares
+ nature of the page layout in certain firmwares
  \returns true on success, false on failure
  */
-G_MODULE_EXPORT gboolean freeems_find_mtx_page(gint tableID,gint *mtx_page)
+G_MODULE_EXPORT gboolean freeems_find_mtx_page(gint tableID, gint *mtx_page)
 {
 	Firmware_Details *firmware = NULL;
 	gint i = 0;
