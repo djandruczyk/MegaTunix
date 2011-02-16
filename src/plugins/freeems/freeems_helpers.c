@@ -166,7 +166,6 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 	GAsyncQueue *queue = NULL;
 	gint i = 0;
 
-	printf("read_freeems_data\n");
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	if (!rand)
@@ -188,7 +187,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
-					seq = g_rand_int_range(rand,0,32767);
+					seq = g_rand_int_range(rand,0,255);
 
 					output = initialize_outputdata_f();
 					DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
@@ -222,31 +221,44 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 	FreeEMS_Packet *packet = NULL;
 	gint seq = 0;
 	gint tmpi = 0;
+	gint locID = 0;
+	gint offset = 0;
+	gint length = 0;
+	gint page = 0;
 	GTimeVal tval;
 
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
 
+	printf("Simple read postfunction!\n");
 	switch (type)
 	{
 		case READ_ALL:
-			seq = (GINT)DATA_GET(output->data,"sequence_id");
+		case GENERIC_READ:
+			seq = (GINT)DATA_GET(output->data,"sequence_num");
+			locID = (GINT)DATA_GET(output->data,"location_id");
+			offset = (GINT)DATA_GET(output->data,"offset");
+			length = (GINT)DATA_GET(output->data,"length");
 			queue = DATA_GET(output->data,"queue");
 			g_get_current_time(&tval);
-			g_time_val_add(&tval,500000);
+			g_time_val_add(&tval,250000);
 			packet = g_async_queue_timed_pop(queue,&tval);
 			deregister_packet_queue(SEQUENCE_NUM,queue,seq);
 			g_async_queue_unref(queue);
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				printf("Packet arrived for READ ALL case\n");
+				printf("Packet arrived for GENERIC_READ/READ_ALL case with sequence %i\n",seq);
+				freeems_store_new_block(locID,offset,packet->data+packet->payload_base_offset,length);
 				freeems_packet_cleanup(packet);
 	                        tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 	                        DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			}
+			else
+				printf("timeout, no packet found in queue for sequence %i\n",seq);
 			break;
 		default:
+			printf("Don't know how to handle this type..\n");
 			break;
 
 	}

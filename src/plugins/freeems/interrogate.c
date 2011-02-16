@@ -421,7 +421,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	g_async_queue_unref(queue);
 	if (packet)
 	{
-		printf("packet payload length %i\n",packet->payload_length);
+		/*printf("packet payload length %i\n",packet->payload_length);*/
 		if (packet->payload_length != 12)
 			printf("ERROR in locationID details response!\n");
 		details = g_new0(Location_Details, 1);
@@ -429,27 +429,27 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 		h = packet->data[packet->payload_base_offset];
 		l = packet->data[packet->payload_base_offset+1];
 		details->flags = (h << 8) + l;
-		printf("loc id details flags %i\n",details->flags);
+		/*printf("loc id details flags %i\n",details->flags);*/
 		h = packet->data[packet->payload_base_offset+2];
 		l = packet->data[packet->payload_base_offset+3];
 		details->parent = (h << 8) + l;
-		printf("loc id details parent %i\n",details->parent);
+		/*printf("loc id details parent %i\n",details->parent);*/
 		details->ram_page = packet->data[packet->payload_base_offset+4];
 		details->flash_page = packet->data[packet->payload_base_offset+5];
-		printf("loc id details ram_page %i\n",details->ram_page);
-		printf("loc id details flash_page %i\n",details->flash_page);
+		/*printf("loc id details ram_page %i\n",details->ram_page);*/
+		/*printf("loc id details flash_page %i\n",details->flash_page);*/
 		h = packet->data[packet->payload_base_offset+6];
 		l = packet->data[packet->payload_base_offset+7];
 		details->ram_address = (h << 8) + l;
-		printf("loc id details ram_address %0x\n",details->ram_address);
+		/*printf("loc id details ram_address %0x\n",details->ram_address);*/
 		h = packet->data[packet->payload_base_offset+8];
 		l = packet->data[packet->payload_base_offset+9];
 		details->flash_address = (h << 8) + l;
-		printf("loc id details flash_address %0x\n",details->flash_address);
+		/*printf("loc id details flash_address %0x\n",details->flash_address);*/
 		h = packet->data[packet->payload_base_offset+10];
 		l = packet->data[packet->payload_base_offset+11];
 		details->length = (h << 8) + l;
-		printf("loc id details length %i\n",details->length);
+		/*printf("loc id details length %i\n",details->length);*/
 		freeems_packet_cleanup(packet);
 	}
 	return details;
@@ -879,9 +879,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		{
 			firmware->page_params[i] = initialize_page_params();
 			firmware->page_params[i]->phys_ecu_page = (gint)g_list_nth_data(locations,i);
-			printf("requesting details for loc ID %i\n",(gint)g_list_nth_data(locations,i));
 			details = request_location_id_details((gint)g_list_nth_data(locations,i));
-			printf("received details %p\n",details);
 			if (details)
 			{
 				firmware->page_params[i]->length = details->length;
@@ -919,9 +917,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->x_suffix = g_strdup("RPM");
 	firmware->table_params[0]->y_suffix = g_strdup("kPa");
 	firmware->table_params[0]->z_suffix = g_strdup("%");
-	firmware->table_params[0]->x_precision = 1;
-	firmware->table_params[0]->y_precision = 2;
-	firmware->table_params[0]->z_precision = 2;
+	firmware->table_params[0]->x_precision = 0;
+	firmware->table_params[0]->y_precision = 1;
+	firmware->table_params[0]->z_precision = 1;
 	firmware->table_params[0]->table_name = g_strdup("FreeEMS very alpha fuel table");;
 
 
