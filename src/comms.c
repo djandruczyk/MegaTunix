@@ -80,8 +80,8 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	gboolean retval = TRUE;
 	DBlock *block = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-	static void (*store_new_block)(gconstpointer *) = NULL;
-	static void (*set_ecu_data)(gconstpointer *) = NULL;
+	static void (*store_new_block)(gpointer) = NULL;
+	static void (*set_ecu_data)(gpointer,gint *) = NULL;
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
@@ -91,19 +91,17 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		serio_mutex = DATA_GET(global_data,"serio_mutex");
 	if (!factor)
 		factor = DATA_GET(global_data,"sleep_correction");
+	if (!set_ecu_data)
+		get_symbol("set_ecu_data",(void*)&set_ecu_data);
+	if (!store_new_block)
+		get_symbol("store_new_block",(void*)&store_new_block);
+
 	g_return_val_if_fail(firmware,FALSE);
 	g_return_val_if_fail(serial_params,FALSE);
 	g_return_val_if_fail(serio_mutex,FALSE);
 	g_return_val_if_fail(factor,FALSE);
-
-	if (!set_ecu_data)
-		get_symbol("set_ecu_data",(void*)&set_ecu_data);
-	if (!set_ecu_data)
-		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"set_ecu_data\" was NOT found in plugins, BUG!\n"));
-	if (!store_new_block)
-		get_symbol("store_new_block",(void*)&store_new_block);
-	if (!store_new_block)
-		dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tFunction pointer for \"store_new_block\" was NOT found in plugins, BUG!\n"));
+	g_return_val_if_fail(set_ecu_data,FALSE);
+	g_return_val_if_fail(store_new_block,FALSE);
 
 	g_static_mutex_lock(&mutex);
 	g_mutex_lock(serio_mutex);
@@ -116,7 +114,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		switch (mode)
 		{
 			case MTX_SIMPLE_WRITE:
-				set_ecu_data(output->data);
+				set_ecu_data(output->data,NULL);
 				break;
 			case MTX_CHUNK_WRITE:
 				store_new_block(output->data);
@@ -187,7 +185,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	if ((output) && (retval))
 	{
 		if (mode == MTX_SIMPLE_WRITE)
-			set_ecu_data(output->data);
+			set_ecu_data(output->data,NULL);
 		else if (mode == MTX_CHUNK_WRITE)
 			store_new_block(output->data);
 	}

@@ -27,7 +27,7 @@ void freeems_store_new_block_pending(gint, gint, void *, gint );
 void freeems_store_new_block(gint, gint, void *, gint );
 void freeems_backup_current_data(gint );
 gboolean freeems_find_mtx_page(gint, gint *);
-void set_ecu_data(gpointer, gint);
+void set_ecu_data(gpointer, gint *);
 gint get_ecu_data(gpointer);
 void store_new_block(gpointer);
 /* Prototypes */

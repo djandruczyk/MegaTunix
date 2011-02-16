@@ -46,7 +46,6 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gint tmp = -1;
 	gint page = -1;
 	gint canID = 0;
-	gint base = -1;
 	gint old = -1;
 	gint offset = -1;
 	gint dload_val = -1;
@@ -75,19 +74,13 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (GINT)strtol(text,NULL,10);
 	tmpf = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
-	/*
-	 * printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",base,text,tmpi,tmpf,precision);
-	 */
 
 	g_free(text);
-	/* This isn't quite correct, as the base can either be base10 
-	 * or base16, the problem is the limits are in base10
-	 */
 
 	if ((tmpf != (gfloat)tmpi) && (precision == 0))
 	{
-		/* Pause signals while we change the value */
-		/*              printf("resetting\n");*/
+		/* Pause signals while we change the value 
+		              printf("resetting\n");*/
 		g_signal_handlers_block_by_func (widget,(gpointer)std_entry_handler_f, data);
 		g_signal_handlers_block_by_func (widget,(gpointer)entry_changed_handler_f, data);
 		tmpbuf = g_strdup_printf("%i",tmpi);

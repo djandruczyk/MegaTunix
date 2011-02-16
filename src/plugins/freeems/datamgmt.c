@@ -142,11 +142,12 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint locID, gint offset, DataSi
 }
 
 
-G_MODULE_EXPORT void set_ecu_data(gpointer data, gint value)
+G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 {
 	gint locID = 0;
 	gint page = 0;
 	gint offset = 0;
+	gint value = 0;
 	DataSize size = MTX_U08;
 	GtkWidget *widget = NULL;
 	gconstpointer *container = NULL;
@@ -163,12 +164,20 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint value)
 		locID = (GINT)OBJ_GET(widget,"location_id");
 		offset = (GINT)OBJ_GET(widget,"offset");
 		size = (DataSize)OBJ_GET(widget,"size");
+		if (new)
+			value = *new;
+		else
+			value = (GINT)OBJ_GET(widget,"value");
 	}
 	else
 	{
 		locID = (GINT)DATA_GET(container,"location_id");
 		offset = (GINT)DATA_GET(container,"offset");
 		size = (DataSize)DATA_GET(container,"size");
+		if (new)
+			value = *new;
+		else
+			value = (GINT)DATA_GET(container,"value");
 	}
 
 	g_return_if_fail(freeems_find_mtx_page(locID, &page));

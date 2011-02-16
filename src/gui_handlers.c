@@ -945,7 +945,6 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 {
 	static gint (*get_ecu_data_f)(gpointer) = NULL;
 	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
-	/*static void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;*/
 	static void (*update_widget_f)(gpointer, gpointer);
 	static GList ***ecu_widgets = NULL;
 	DataSize size = 0;
@@ -967,12 +966,12 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		get_symbol("get_ecu_data",(void *)&get_ecu_data_f);
 	if (!send_to_ecu_f)
 		get_symbol("send_to_ecu",(void *)&send_to_ecu_f);
-	/*
-	if (!ms_send_to_ecu_f)
-		get_symbol("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
-		*/
 	if (!update_widget_f)
 		get_symbol("update_widget",(void *)&update_widget_f);
+	g_return_val_if_fail(ecu_widgets,FALSE);
+	g_return_val_if_fail(get_ecu_data_f,FALSE);
+	g_return_val_if_fail(send_to_ecu_f,FALSE);
+	g_return_val_if_fail(update_widget_f,FALSE);
 
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
 
@@ -995,6 +994,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	lower = lower < hardlower ? hardlower:lower;
 	value = get_ecu_data_f(widget);
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
+	printf("current value %i\n",value);
 
 	if (event->keyval == GDK_Control_L)
 	{
@@ -1191,7 +1191,10 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			break;
 	}
 	if (send)
+	{
+		printf("sending new value %i\n",dload_val);
 		send_to_ecu_f(widget,dload_val,TRUE);
+	}
 	return retval;
 }
 
