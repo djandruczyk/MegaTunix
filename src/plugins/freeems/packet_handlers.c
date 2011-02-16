@@ -519,7 +519,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				have_location_id = TRUE;
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
 				printf("Location ID number present %i\n",location_id);
-				payload_length += 2;
+				payload_length += 4; /*location + payload len */
 				break;
 			case OFFSET:
 				have_offset = TRUE;
@@ -545,7 +545,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		}
 	}
 
-	pos = 1;
+	pos = 1; /* Header */
 	packet_length += payload_length;
 	printf("total raw packet length (-start/end markers) %i\n",packet_length);
 	/* Raw Packet */
@@ -554,14 +554,14 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	/* Payload ID */
 	buf[H_PAYLOAD_IDX] = (guint8)((payload_id & 0xff00) >> 8);
 	buf[L_PAYLOAD_IDX] = (guint8)(payload_id & 0x00ff);
-	pos += 2;
+	pos += 2; /* 3, header+payload_id*/
 
 	/* Sequence number if present */
 	if (have_sequence > 0)
 	{
 		buf[HEADER_IDX] |= HAS_SEQUENCE_MASK;
 		buf[SEQ_IDX] = (guint8)seq_num;
-		pos += 1;
+		pos += 1; /* 4, header+payload_id+seq */
 	}
 
 	/* Payload Length if present */
@@ -579,7 +579,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			buf[H_LEN_IDX - 1] = (guint8)((payload_length & 0xff00) >> 8);
 			buf[L_LEN_IDX - 1] = (guint8)(payload_length & 0x00ff); 
 		}
-		pos += 2;
+		pos += 2; /* 5 or 6, header+payload_id+seq+payload_len */
 
 		/* Location ID */
 		buf[pos++] = (guint8)((location_id & 0xff00) >> 8); 
@@ -590,13 +590,14 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		/* Sub Length */
 		buf[pos++] = (guint8)((length & 0xff00) >> 8); 
 		buf[pos++] = (guint8)(length & 0x00ff); 
+		/* pos = 11 or 12 depending on if seq or not */
 
 		g_memmove(buf+pos,payload_data,payload_data_length);
 		pos += payload_data_length;
 	}
 
 	/* Checksum it */
-	for (i=0;i<packet_length;i++)
+	for (i=0;i<packet_length-1;i++)
 		sum += buf[i];
 	buf[pos] = sum;
 	pos++;
