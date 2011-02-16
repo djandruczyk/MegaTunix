@@ -505,32 +505,32 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			case SEQUENCE_NUM:
 				have_sequence = TRUE;
 				seq_num = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Sequence number present %i\n",seq_num);
+				/*printf("Sequence number present %i\n",seq_num);*/
 				packet_length += 1;
 				break;
 			case PAYLOAD_ID:
 				have_payload_id = TRUE;
 				payload_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Payload ID number present %i\n",payload_id);
+				/*printf("Payload ID number present %i\n",payload_id);*/
 				packet_length += 2;
 				break;
 				/* Payload specific stuff */
 			case LOCATION_ID:
 				have_location_id = TRUE;
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Location ID number present %i\n",location_id);
+				/*printf("Location ID number present %i\n",location_id);*/
 				payload_length += 4; /*location + payload len */
 				break;
 			case OFFSET:
 				have_offset = TRUE;
 				offset = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Offset present %i\n",offset);
+				/*printf("Offset present %i\n",offset);*/
 				payload_length += 2;
 				break;
 			case LENGTH:
 				have_length = TRUE;
 				length = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Payload length present %i\n",length);
+				/*printf("Payload length present %i\n",length);*/
 				packet_length += 2;
 				break;
 			case DATA:
@@ -547,7 +547,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 
 	pos = 1; /* Header */
 	packet_length += payload_length;
-	printf("total raw packet length (-start/end markers) %i\n",packet_length);
+	/*printf("total raw packet length (-start/end markers) %i\n",packet_length);*/
 	/* Raw Packet */
 	buf = g_new0(guint8, packet_length);
 

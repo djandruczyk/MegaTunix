@@ -68,6 +68,7 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 	firmware = DATA_GET(global_data,"firmware");
 	if (!slaves_set_color_f)
 		get_symbol("slaves_set_color",(void *)&slaves_set_color_f);
+	g_return_if_fail(slaves_set_color_f);
 
 	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
