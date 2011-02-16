@@ -206,10 +206,10 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			 * we can reset the display to a sane value...
 			 */
 			old = get_ecu_data(widget);
-			set_ecu_data(widget,dload_val);
+			set_ecu_data(widget,&dload_val);
 
 			real_value = convert_after_upload_f(widget);
-			set_ecu_data(widget,old);
+			set_ecu_data(widget,&old);
 
 			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
 			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);

@@ -892,6 +892,39 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		}
 		g_list_free(locations);
 	}
+	/* MAJOR HACK ALERT,  hardcoded for fred! */
+	firmware->total_tables = 1;
+        firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
+        firmware->table_params[0] = initialize_table_params();
+	firmware->table_params[0]->x_page = 0;
+	firmware->table_params[0]->y_page = 0;
+	firmware->table_params[0]->z_page = 0;
+	firmware->table_params[0]->x_bincount = 16;
+	firmware->table_params[0]->y_bincount = 16;
+	firmware->table_params[0]->x_base = 4;
+	firmware->table_params[0]->y_base = 58;
+	firmware->table_params[0]->z_base = 100;
+	firmware->table_params[0]->x_size = MTX_U16;
+	firmware->table_params[0]->y_size = MTX_U16;
+	firmware->table_params[0]->z_size = MTX_U16;
+	firmware->table_params[0]->x_source = g_strdup("RPM");
+	firmware->table_params[0]->x_toecu_conv_expr = g_strdup("x*2");
+	firmware->table_params[0]->x_fromecu_conv_expr = g_strdup("x/2");
+	firmware->table_params[0]->y_source = g_strdup("LoadMain");
+	firmware->table_params[0]->y_toecu_conv_expr = g_strdup("x*100");
+	firmware->table_params[0]->y_fromecu_conv_expr = g_strdup("x/100");
+	firmware->table_params[0]->z_source = g_strdup("VEMain");
+	firmware->table_params[0]->z_toecu_conv_expr = g_strdup("x*512");
+	firmware->table_params[0]->z_fromecu_conv_expr = g_strdup("x/512");
+	firmware->table_params[0]->x_suffix = g_strdup("RPM");
+	firmware->table_params[0]->y_suffix = g_strdup("kPa");
+	firmware->table_params[0]->z_suffix = g_strdup("%");
+	firmware->table_params[0]->x_precision = 1;
+	firmware->table_params[0]->y_precision = 2;
+	firmware->table_params[0]->z_precision = 2;
+	firmware->table_params[0]->table_name = g_strdup("FreeEMS very alpha fuel table");;
+
+
 	if (mem_alloc_f)
 		mem_alloc_f();
 	else
@@ -955,5 +988,61 @@ G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 	page_params->length = 0;
 	page_params->spconfig_offset = -1;
 	return page_params;
+}
+
+
+/*!
+ \brief initialize_table_params() creates and initializes the Table_Params
+ datastructure to sane defaults and returns it
+ */
+G_MODULE_EXPORT Table_Params * initialize_table_params(void)
+{
+	Table_Params *table_params = NULL;
+	table_params = g_malloc0(sizeof(Table_Params));
+	table_params->table = g_array_sized_new(FALSE,TRUE,sizeof(GtkWidget *),36);
+	table_params->is_fuel = FALSE;
+	table_params->alternate_offset = -1;
+	table_params->divider_offset = -1;
+	table_params->rpmk_offset = -1;
+	table_params->reqfuel_offset = -1;
+	table_params->x_page = -1;
+	table_params->y_page = -1;
+	table_params->z_page = -1;
+	table_params->x_base = -1;
+	table_params->y_base = -1;
+	table_params->z_base = -1;
+	table_params->x_bincount = -1;
+	table_params->y_bincount = -1;
+	table_params->x_precision = 0;
+	table_params->y_precision = 0;
+	table_params->z_precision = 0;
+	table_params->bind_to_list = NULL;
+	table_params->x_suffix = NULL;
+	table_params->y_suffix = NULL;
+	table_params->z_suffix = NULL;
+	table_params->x_fromecu_conv_expr = NULL;
+	table_params->x_toecu_conv_expr = NULL;
+	table_params->y_fromecu_conv_expr = NULL;
+	table_params->y_toecu_conv_expr = NULL;
+	table_params->z_fromecu_conv_expr = NULL;
+	table_params->z_toecu_conv_expr = NULL;
+	table_params->x_fromecu_conv_exprs = NULL;
+	table_params->x_toecu_conv_exprs = NULL;
+	table_params->y_fromecu_conv_exprs = NULL;
+	table_params->y_toecu_conv_exprs = NULL;
+	table_params->z_fromecu_conv_exprs = NULL;
+	table_params->z_toecu_conv_exprs = NULL;
+	table_params->x_source_key = NULL;
+	table_params->y_source_key = NULL;
+	table_params->z_source_key = NULL;
+	table_params->table_name = NULL;
+	table_params->x_ul_eval = NULL;
+	table_params->y_ul_eval = NULL;
+	table_params->z_ul_eval = NULL;
+	table_params->x_dl_eval = NULL;
+	table_params->y_dl_eval = NULL;
+	table_params->z_dl_eval = NULL;
+
+	return table_params;
 }
 

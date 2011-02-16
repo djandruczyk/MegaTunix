@@ -85,6 +85,7 @@ void update_interrogation_gui_pf(void);
 gboolean load_firmware_details(Firmware_Details *, gchar *);
 gint translate_capabilities(const gchar *);
 Page_Params * initialize_page_params(void);
+Table_Params * initialize_table_params(void);
 
 
 /* Prototypes */

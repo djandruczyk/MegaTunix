@@ -206,6 +206,7 @@ gui_in_files = 	\
 		vetable_12x12x2-MS2.datamap.in \
 		vetable_12x12x3-029x.datamap.in \
 		vetable_12x12x3-MS2-Extra.datamap.in \
+		vetable_16x16x3-FreeEMS.datamap.in \
 		vetable_16x16x3-MS2-Extra.datamap.in \
 		vetable_8x8e-BnG.datamap.in \
 		vetable_8x8e-DT_1.datamap.in \

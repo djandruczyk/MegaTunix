@@ -829,7 +829,8 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		{
 			if (firmware->table_params[i])
 				dealloc_table_params(firmware->table_params[i]);
-			cleanup (firmware->rf_params[i]);
+			if (firmware->rf_params)
+				cleanup (firmware->rf_params[i]);
 			if (interdep_vars[i])
 			{
 				g_hash_table_destroy(interdep_vars[i]);

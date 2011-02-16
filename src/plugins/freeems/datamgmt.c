@@ -59,7 +59,7 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
-	g_return_val_if_fail((offset < 0) || (offset > firmware->page_params[page]->length),0);
+	g_return_val_if_fail((offset >= 0) && (offset < firmware->page_params[page]->length),0);
 
 	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
@@ -86,7 +86,7 @@ G_MODULE_EXPORT gint freeems_get_ecu_data(gint locID, gint offset, DataSize size
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
-	g_return_val_if_fail((offset < 0) || (offset > firmware->page_params[page]->length),0);
+	g_return_val_if_fail((offset >= 0) && (offset < firmware->page_params[page]->length),0);
 
 	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
@@ -112,7 +112,7 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint locID, gint offset, DataSize
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
-	g_return_val_if_fail((offset < 0) || (offset > firmware->page_params[page]->length),0);
+	g_return_val_if_fail((offset >= 0) && (offset < firmware->page_params[page]->length),0);
 	return _get_sized_data(firmware->ecu_data_last[page],offset,size,firmware->bigendian);
 }
 
@@ -137,7 +137,7 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint locID, gint offset, DataSi
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
-	g_return_val_if_fail((offset < 0) || (offset > firmware->page_params[page]->length),0);
+	g_return_val_if_fail((offset >= 0) && (offset < firmware->page_params[page]->length),0);
 	return _get_sized_data(firmware->ecu_data_backup[page],offset,size,firmware->bigendian);
 }
 
@@ -184,7 +184,7 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 	g_return_if_fail(firmware);
 	g_return_if_fail(firmware->page_params);
 	g_return_if_fail(firmware->page_params[page]);
-	g_return_if_fail((offset < 0) || (offset > firmware->page_params[page]->length));
+	g_return_if_fail((offset >= 0) && (offset < firmware->page_params[page]->length));
 	_set_sized_data(firmware->ecu_data[page],offset,size,value,firmware->bigendian);
 }
 
@@ -203,7 +203,7 @@ G_MODULE_EXPORT void freeems_set_ecu_data(gint locID, gint offset, DataSize size
 	g_return_if_fail(firmware);
 	g_return_if_fail(firmware->page_params);
 	g_return_if_fail(firmware->page_params[page]);
-	g_return_if_fail((offset < 0) || (offset > firmware->page_params[page]->length));
+	g_return_if_fail((offset >= 0) && (offset < firmware->page_params[page]->length));
 
 	_set_sized_data(firmware->ecu_data[page],offset,size,new,firmware->bigendian);
 }
