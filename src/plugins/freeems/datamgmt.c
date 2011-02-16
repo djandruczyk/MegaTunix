@@ -26,7 +26,7 @@ extern gconstpointer *global_data;
 
 G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 {
-	gint canID = 0;
+	gint locID = 0;
 	gint page = 0;
 	gint offset = 0;
 	DataSize size = MTX_U08;
@@ -41,29 +41,25 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 	firmware = DATA_GET(global_data,"firmware");
 	widget = (GtkWidget *)data;
 	container = (gconstpointer *)data;
-	/* Sanity checking */
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
-	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
-		return 0;
 	if (GTK_IS_WIDGET(widget))
 	{
-		canID = (GINT)OBJ_GET(widget,"canID");
-		page = (GINT)OBJ_GET(widget,"page");
+		locID = (GINT)OBJ_GET(widget,"location_id");
 		offset = (GINT)OBJ_GET(widget,"offset");
 		size = (DataSize)OBJ_GET(widget,"size");
 	}
 	else
 	{
-		canID = (GINT)DATA_GET(container,"canID");
-		page = (GINT)DATA_GET(container,"page");
+		locID = (GINT)DATA_GET(container,"location_id");
 		offset = (GINT)DATA_GET(container,"offset");
 		size = (DataSize)DATA_GET(container,"size");
 	}
+	/* Sanity checking */
+
+	g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);
+	g_return_val_if_fail(firmware,0);
+	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail((offset < 0) || (offset > firmware->page_params[page]->length),0);
 
 	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
@@ -71,29 +67,26 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 
 /*!
  \brief freeems_get_ecu_data() is a func to return the data requested.
- \param canID, CAN Identifier (currently unused)
- \param page, (ecu firmware page)
+ \param locID, Location ID (internal to ECU)
  \param offset, (RAW BYTE offset)
  \param size, (size to be returned)
  */
-G_MODULE_EXPORT gint freeems_get_ecu_data(gint canID, gint page, gint offset, DataSize size) 
+G_MODULE_EXPORT gint freeems_get_ecu_data(gint locID, gint offset, DataSize size) 
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
+	gint page = 0;
 	if (!_get_sized_data)
 		get_symbol_f("_get_sized_data",(void*)&_get_sized_data);
  
 
 	firmware = DATA_GET(global_data,"firmware");
 	/* Sanity checking */
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
-	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
-		return 0;
+	g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);
+	g_return_val_if_fail(firmware,0);
+	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail((offset < 0) || (offset > firmware->page_params[page]->length),0);
 
 	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
@@ -101,13 +94,13 @@ G_MODULE_EXPORT gint freeems_get_ecu_data(gint canID, gint page, gint offset, Da
 
 /*!
  \brief freeems_get_ecu_data_last() is a func to return the data requested.
- \param canID, CAN Identifier (currently unused)
- \param page, (ecu firmware page)
+ \param locID, Location ID (internal to ECU)
  \param offset, (RAW BYTE offset)
  \param size, (size to be returned)
  */
-G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint canID, gint page, gint offset, DataSize size) 
+G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint locID, gint offset, DataSize size) 
 {
+	gint page = 0;
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
 	if (!_get_sized_data)
@@ -115,27 +108,24 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint canID, gint page, gint offse
  
 
 	firmware = DATA_GET(global_data,"firmware");
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
-	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
-		return 0;
+	g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);
+	g_return_val_if_fail(firmware,0);
+	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail((offset < 0) || (offset > firmware->page_params[page]->length),0);
 	return _get_sized_data(firmware->ecu_data_last[page],offset,size,firmware->bigendian);
 }
 
 
 /*!
  \brief freeems_get_ecu_data_backup() is a func to return the data requested.
- \param canID, canIdentifier (currently unused)
- \param page ( ecu firmware page)
+ \param locID, Location ID (internal to ECU)
  \param offset (RAW BYTE offset)
  \param size (size to be returned...
  */
-G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint canID, gint page, gint offset, DataSize size) 
+G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint locID, gint offset, DataSize size) 
 {
+	gint page = 0;
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
 	if (!_get_sized_data)
@@ -143,54 +133,56 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint canID, gint page, gint off
  
 
 	firmware = DATA_GET(global_data,"firmware");
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
-	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
-		return 0;
+	g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);
+	g_return_val_if_fail(firmware,0);
+	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail((offset < 0) || (offset > firmware->page_params[page]->length),0);
 	return _get_sized_data(firmware->ecu_data_backup[page],offset,size,firmware->bigendian);
 }
 
 
-G_MODULE_EXPORT void set_ecu_data(gconstpointer *data)
+G_MODULE_EXPORT void set_ecu_data(gpointer data, gint value)
 {
-	gint canID = 0;
+	gint locID = 0;
 	gint page = 0;
 	gint offset = 0;
 	DataSize size = MTX_U08;
-	gint value = 0 ;
+	GtkWidget *widget = NULL;
+	gconstpointer *container = NULL;
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
 	if (!_set_sized_data)
 		get_symbol_f("_set_sized_data",(void*)&_set_sized_data);
 
 	firmware = DATA_GET(global_data,"firmware");
+	widget = (GtkWidget *)data;
+	container = (gconstpointer *)data;
 	if (GTK_IS_WIDGET(data))
 	{
-		canID = (GINT)OBJ_GET(data,"canID");
-		page = (GINT)OBJ_GET(data,"page");
-		offset = (GINT)OBJ_GET(data,"offset");
-		value = (GINT)OBJ_GET(data,"value");                
-		size = (DataSize)OBJ_GET(data,"size");
+		locID = (GINT)OBJ_GET(widget,"location_id");
+		offset = (GINT)OBJ_GET(widget,"offset");
+		size = (DataSize)OBJ_GET(widget,"size");
 	}
 	else
 	{
-		canID = (GINT)DATA_GET(data,"canID");
-		page = (GINT)DATA_GET(data,"page");
-		offset = (GINT)DATA_GET(data,"offset");
-		value = (GINT)DATA_GET(data,"value");                
-		size = (DataSize)DATA_GET(data,"size");
+		locID = (GINT)DATA_GET(container,"location_id");
+		offset = (GINT)DATA_GET(container,"offset");
+		size = (DataSize)DATA_GET(container,"size");
 	}
 
+	g_return_if_fail(freeems_find_mtx_page(locID, &page));
+	g_return_if_fail(firmware);
+	g_return_if_fail(firmware->page_params);
+	g_return_if_fail(firmware->page_params[page]);
+	g_return_if_fail((offset < 0) || (offset > firmware->page_params[page]->length));
 	_set_sized_data(firmware->ecu_data[page],offset,size,value,firmware->bigendian);
 }
 
 
-G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new) 
+G_MODULE_EXPORT void freeems_set_ecu_data(gint locID, gint offset, DataSize size, gint new) 
 {
+	gint page = 0;
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
 	if (!_set_sized_data)
@@ -198,92 +190,93 @@ G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint page, gint offset, Da
 
 
 	firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(freeems_find_mtx_page(locID, &page));
+	g_return_if_fail(firmware);
+	g_return_if_fail(firmware->page_params);
+	g_return_if_fail(firmware->page_params[page]);
+	g_return_if_fail((offset < 0) || (offset > firmware->page_params[page]->length));
+
 	_set_sized_data(firmware->ecu_data[page],offset,size,new,firmware->bigendian);
 }
 
 
-G_MODULE_EXPORT void store_new_block(gconstpointer *block)
+G_MODULE_EXPORT void store_new_block(gpointer block)
 {
-	gint canID = 0;
+	gint locID = 0;
 	gint page = 0;
 	gint offset = 0;
 	gint count = 0;
+	GtkWidget *widget = NULL;
+	gconstpointer *container = NULL;
 	guint8 *data = NULL;
 	Firmware_Details *firmware = NULL;
 	guint8 ** ecu_data = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-
-	if (!firmware)
-		return;
-	if (!firmware->ecu_data)
-		return;
-	if (!firmware->ecu_data[page])
-		return;
-
 	ecu_data = firmware->ecu_data;
 
-	canID = (GINT)DATA_GET(block,"canID");
-	page = (GINT)DATA_GET(block,"page");
+	g_return_if_fail(firmware);
+	g_return_if_fail(ecu_data);
+
+	locID = (GINT)DATA_GET(block,"location_id");
 	offset = (GINT)DATA_GET(block,"offset");
 	data = (guint8 *)DATA_GET(block,"data");
+
+	g_return_if_fail(freeems_find_mtx_page(locID, &page));
+	g_return_if_fail(ecu_data[page]);
 
 	memcpy (ecu_data[page]+offset,data,count);
 }
 
 
-G_MODULE_EXPORT void freeems_store_new_block(gint canID, gint page, gint offset, void * buf, gint count)
+G_MODULE_EXPORT void freeems_store_new_block(gint locID, gint offset, void * buf, gint count)
 {
+	gint page = 0;
 	Firmware_Details *firmware = NULL;
 	guint8 ** ecu_data = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-
-	if (!firmware)
-		return;
-	if (!firmware->ecu_data)
-		return;
-	if (!firmware->ecu_data[page])
-		return;
-
 	ecu_data = firmware->ecu_data;
+
+	g_return_if_fail(firmware);
+	g_return_if_fail(freeems_find_mtx_page(locID, &page));
+	g_return_if_fail(ecu_data);
+	g_return_if_fail(ecu_data[page]);
+
 	memcpy (ecu_data[page]+offset,buf,count);
 }
 
 
-G_MODULE_EXPORT void freeems_backup_current_data(gint canID, gint page)
+G_MODULE_EXPORT void freeems_backup_current_data(gint locID)
 {
+	gint page = 0;
 	guint8 ** ecu_data = NULL;
 	guint8 ** ecu_data_last = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-
-	if (!firmware)
-		return;
-	if (!firmware->ecu_data)
-		return;
-	if (!firmware->ecu_data_last)
-		return;
-	if (!firmware->ecu_data[page])
-		return;
-	if (!firmware->ecu_data_last[page])
-		return;
-
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
+
+	g_return_if_fail(firmware);
+	g_return_if_fail(freeems_find_mtx_page(locID, &page));
+	g_return_if_fail(firmware->ecu_data);
+	g_return_if_fail(firmware->ecu_data_last);
+	g_return_if_fail(firmware->ecu_data[page]);
+	g_return_if_fail(firmware->ecu_data_last[page]);
+
 	memcpy (ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length);
 }
 
 
 /*!
- \brief find_mtx_page() is a func to return the data requested.
+ \brief freeems_find_mtx_page() is a func to return the data requested.
  \param tableID, Table Identified (physical ecu page)
  \param mtx_page, The symbolic page mtx uses to get around the nonlinear
  nature of the page layout in certain firmwares
  \returns true on success, false on failure
  */
-G_MODULE_EXPORT gboolean freeems_find_mtx_page(gint tableID, gint *mtx_page)
+G_MODULE_EXPORT gboolean freeems_find_mtx_page(gint locID, gint *mtx_page)
 {
 	Firmware_Details *firmware = NULL;
 	gint i = 0;
@@ -299,7 +292,7 @@ G_MODULE_EXPORT gboolean freeems_find_mtx_page(gint tableID, gint *mtx_page)
 	{
 		if (!firmware->page_params[i])
 			return FALSE;
-		if (firmware->page_params[i]->phys_ecu_page == tableID)
+		if (firmware->page_params[i]->phys_ecu_page == locID)
 		{
 			*mtx_page = i;
 			return TRUE;

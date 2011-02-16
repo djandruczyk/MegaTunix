@@ -60,11 +60,11 @@ struct _Command
 	GArray *post_functions;	/* Argument list array of PostFunctions */
 	gchar *helper_func_name;/* Return data function name */
 	gboolean defer_post_functions;	/* deferred post functions */
-	FuncCall helper_func_arg;/* Return data arg (ENUM) */
-	void  (*helper_function) (void *, FuncCall);/* Helper Function Pointer */
+	gint helper_func_arg;/* Return data arg (ENUM) */
+	void  (*helper_function) (void *, gint);/* Helper Function Pointer */
 	gchar *func_call_name;	/* FUNC_CALL function name */
-	FuncCall func_call_arg;/* Enum arg to function call */
-	gboolean (*function) (void *, FuncCall); /* Function call pointer */
+	gint func_call_arg;/* Enum arg to function call */
+	gboolean (*function) (void *, gint); /* Function call pointer */
 };
 
 

@@ -827,6 +827,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	if(!cfg_read_string(cfgfile,"parameters","Get_All_Command",
 				&firmware->get_all_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_string(cfgfile,"parameters","Read_Command",
+                                 &firmware->read_command))
+                 dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Read_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Write_Command",
 				&firmware->write_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Write_Command\" variable not found in interrogation profile, ERROR\n"));

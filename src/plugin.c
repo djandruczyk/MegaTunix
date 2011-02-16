@@ -186,7 +186,10 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 			printf("module %i is not found!\n",i);
 		if ((module[i]) && (!found))
 			if (g_module_symbol(module[i],name,function_p))
+			{
 				found = TRUE;
+				/*printf("FOUND symbol %s (%p) in module %i\n",name,function_p,i);*/
+			}
 	}
 	if (!found)
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tError finding symbol \"%s\" in any plugins\n",name));

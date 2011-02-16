@@ -39,17 +39,14 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 		get_symbol_f("_get_sized_data",(void*)&_get_sized_data);
 
 	firmware = DATA_GET(global_data,"firmware");
+	/* Sanity checking */
+	g_return_val_if_fail(firmware,0);
+	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail(((offset < 0 ) || (offset > firmware->page_params[page]->length)),0);
+
 	widget = (GtkWidget *)data;
 	container = (gconstpointer *)data;
-	/* Sanity checking */
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
-	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
-		return 0;
 	if (GTK_IS_WIDGET(widget))
 	{
 		canID = (GINT)OBJ_GET(widget,"canID");
@@ -86,14 +83,10 @@ G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSiz
 
 	firmware = DATA_GET(global_data,"firmware");
 	/* Sanity checking */
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
-	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
-		return 0;
+	g_return_val_if_fail(firmware,0);
+	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail(((offset < 0 ) || (offset > firmware->page_params[page]->length)),0);
 
 	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
@@ -115,14 +108,10 @@ G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, Da
  
 
 	firmware = DATA_GET(global_data,"firmware");
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
-	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
-		return 0;
+	g_return_val_if_fail(firmware,0);
+	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail(((offset < 0 ) || (offset > firmware->page_params[page]->length)),0);
 	return _get_sized_data(firmware->ecu_data_last[page],offset,size,firmware->bigendian);
 }
 
@@ -143,46 +132,45 @@ G_MODULE_EXPORT gint ms_get_ecu_data_backup(gint canID, gint page, gint offset, 
  
 
 	firmware = DATA_GET(global_data,"firmware");
-	if (!firmware)
-		return 0;
-	if (!firmware->page_params)
-		return 0;
-	if (!firmware->page_params[page])
-		return 0;
-	if ((offset < 0 ) || (offset > firmware->page_params[page]->length))
-		return 0;
+	g_return_val_if_fail(firmware,0);
+	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail(((offset < 0 ) || (offset > firmware->page_params[page]->length)),0);
 	return _get_sized_data(firmware->ecu_data_backup[page],offset,size,firmware->bigendian);
 }
 
 
-G_MODULE_EXPORT void set_ecu_data(gconstpointer *data)
+G_MODULE_EXPORT void set_ecu_data(gpointer data, gint value)
 {
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
 	DataSize size = MTX_U08;
-	gint value = 0 ;
+	gconstpointer *container = NULL;
+	GtkWidget *widget = NULL;
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
 	if (!_set_sized_data)
 		get_symbol_f("_set_sized_data",(void*)&_set_sized_data);
 
 	firmware = DATA_GET(global_data,"firmware");
-	if (GTK_IS_WIDGET(data))
+	g_return_if_fail(firmware);
+
+	widget = (GtkWidget *)data;
+	container = (gconstpointer *)data;
+	if (GTK_IS_WIDGET(widget))
 	{
-		canID = (GINT)OBJ_GET(data,"canID");
-		page = (GINT)OBJ_GET(data,"page");
-		offset = (GINT)OBJ_GET(data,"offset");
-		value = (GINT)OBJ_GET(data,"value");                
-		size = (DataSize)OBJ_GET(data,"size");
+		canID = (GINT)OBJ_GET(widget,"canID");
+		page = (GINT)OBJ_GET(widget,"page");
+		offset = (GINT)OBJ_GET(widget,"offset");
+		size = (DataSize)OBJ_GET(widget,"size");
 	}
 	else
 	{
-		canID = (GINT)DATA_GET(data,"canID");
-		page = (GINT)DATA_GET(data,"page");
-		offset = (GINT)DATA_GET(data,"offset");
-		value = (GINT)DATA_GET(data,"value");                
-		size = (DataSize)DATA_GET(data,"size");
+		canID = (GINT)DATA_GET(container,"canID");
+		page = (GINT)DATA_GET(container,"page");
+		offset = (GINT)DATA_GET(container,"offset");
+		size = (DataSize)DATA_GET(container,"size");
 	}
 
 	_set_sized_data(firmware->ecu_data[page],offset,size,value,firmware->bigendian);

@@ -366,7 +366,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	GtkAdjustment * adj = NULL;
 	gboolean state = FALSE;
 	gint widget_temp = -1;
-	extern GdkColor black;
+	/*extern GdkColor black;*/
 	extern gconstpointer *global_data;
 
 	/* If this widgt depends on anything call check_dependancy which will

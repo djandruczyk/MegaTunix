@@ -210,7 +210,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	if (!cfgfile)
 	{
 		update_logbar_f("tools_view","warning",g_strdup_printf(_(":restore_all_ecu_settings()\n\t Unable to open this file (%s)\n"),filename),FALSE,FALSE,TRUE);
-		return FALSE;
+		return;
 	}
 	if (cfgfile)
 	{
@@ -308,7 +308,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	{
 		pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 		pf = g_new0(PostFunction,1);
-		pf->name = g_strdup("update_ve_const_pf");
+		pf->name = g_strdup("update_ecu_controls_pf");
 		get_symbol_f(pf->name,(void *)&pf->function);
 		pf->w_arg = FALSE;
 		pfuncs = g_array_append_val(pfuncs,pf);

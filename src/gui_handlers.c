@@ -1740,3 +1740,368 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 	g_free(tmpbuf);
 }
 
+
+/*!
+ \brief set_widget_labels takes a passed string which is a comma 
+ separated string of name/value pairs, first being the widget name 
+ (global name) and the second being the string to set on this widget
+ */
+G_MODULE_EXPORT void set_widget_labels(const gchar *input)
+{
+	gchar ** vector = NULL;
+	gint count = 0;
+	gint i = 0;
+	GtkWidget * widget = NULL;
+
+	if (!input)
+		return;
+
+	vector = parse_keys(input,&count,",");
+	if (count%2 != 0)
+	{
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input));
+
+		return;
+	}
+	for(i=0;i<count;i+=2)
+	{
+		widget = lookup_widget(vector[i]);
+		if ((widget) && (GTK_IS_LABEL(widget)))
+			gtk_label_set_text(GTK_LABEL(widget),vector[i+1]);
+		else
+			dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]));
+
+	}
+	g_strfreev(vector);
+
+}
+
+
+/*!
+ \brief swap_labels() is a utility function that extracts the list passed to 
+ it, and kicks off a subfunction to do the swapping on each widget in the list
+ \param input (gchar *) name of list to enumeration and run the subfunction on
+ \param state (gboolean) passed on to subfunction
+ the default label
+ */
+G_MODULE_EXPORT void swap_labels(GtkWidget *widget, gboolean state)
+{
+	GList *list = NULL;
+	GtkWidget *tmpwidget = NULL;
+	gchar **fields = NULL;
+	gint i = 0;
+	gint num_widgets = 0;
+
+	fields = parse_keys(OBJ_GET(widget,"swap_labels"),&num_widgets,",");
+
+	for (i=0;i<num_widgets;i++)
+	{
+		tmpwidget = NULL;
+		tmpwidget = lookup_widget(fields[i]);
+		if (GTK_IS_WIDGET(tmpwidget))
+			switch_labels((gpointer)tmpwidget,GINT_TO_POINTER(state));
+		else if ((list = get_list(fields[i])) != NULL)
+			g_list_foreach(list,switch_labels,GINT_TO_POINTER(state));
+	}
+	g_strfreev(fields);
+}
+
+
+/*!
+ \brief switch_labels() swaps labels that depend on the state of another 
+ control. Handles temp dependant labels as well..
+ \param key (gpointer) gpointer encapsulation of the widget
+ \param data (gpointer)  gpointer encapsulation of the target state if TRUE 
+ we use the alternate label, if FALSE we use
+ the default label
+ */
+G_MODULE_EXPORT void switch_labels(gpointer key, gpointer data)
+{
+	GtkWidget * widget = (GtkWidget *) key;
+	gboolean state = (GBOOLEAN) data;
+	gint mtx_temp_units;
+
+	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
+	if (GTK_IS_WIDGET(widget))
+	{
+		if ((GBOOLEAN)OBJ_GET(widget,"temp_dep") == TRUE)
+		{
+			if (state)
+			{
+				if (mtx_temp_units == FAHRENHEIT)
+					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_f_label"));
+				else if (mtx_temp_units == KELVIN)
+					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_k_label"));
+				else
+					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_c_label"));
+			}
+			else
+			{
+				if (mtx_temp_units == FAHRENHEIT)
+					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"f_label"));
+				else if (mtx_temp_units == KELVIN)
+					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"k_label"));
+				else
+					gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"c_label"));
+			}
+		}
+		else
+		{
+			if (state)
+				gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"alt_label"));
+			else
+				gtk_label_set_text(GTK_LABEL(widget),OBJ_GET(widget,"label"));
+		}
+	}
+}
+
+
+/*!
+ * \brief toggle_groups_linked is used to change the state of controls that
+ * are "linked" to various other controls for the purpose of making the 
+ * UI more intuitive.  i.e. if u uncheck a feature, this can be used to 
+ * grey out a group of related controls.
+ * \param toggle_groups, comms sep list of group names
+ * \param new_state,  new state of the button linking to these groups
+ */
+G_MODULE_EXPORT void toggle_groups_linked(GtkWidget *widget,gboolean new_state)
+{
+	gint num_choices = 0;
+	gint num_groups = 0;
+	gint i = 0;
+	gboolean state = FALSE;
+	gchar **choices = NULL;
+	gchar **groups = NULL;
+	gchar * toggle_groups = NULL;
+	gchar * tmpbuf = NULL;
+	GHashTable *widget_group_states = NULL;
+
+	if (!DATA_GET(global_data,"ready"))
+		return;
+	widget_group_states = DATA_GET(global_data,"widget_group_states");
+	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
+	/*      printf("groups to toggle %s to state %i\n",toggle_groups,new_state);*/
+
+	choices = parse_keys(toggle_groups,&num_choices,",");
+	if (num_choices != 2)
+		printf(_("toggle_groups_linked, numeber of choices is out of range, it should be 2, it is %i"),num_choices);
+
+	/*printf("toggle groups defined for widget %p at page %i, offset %i\n",widget,page,offset);*/
+
+	/* Turn off */
+	groups = parse_keys(choices[0],&num_groups,":");
+	/*      printf("Choice %i, has %i groups\n",0,num_groups);*/
+	state = FALSE;
+	for (i=0;i<num_groups;i++)
+	{
+		/*              printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
+		tmpbuf = g_strdup_printf("!%s",groups[i]);
+		g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
+		g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
+		g_free(tmpbuf);
+
+		g_hash_table_replace(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
+		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
+	}
+	g_strfreev(groups);
+	/* Turn on */
+	groups = parse_keys(choices[1],&num_groups,":");
+	/*      printf("Choice %i, has %i groups\n",1,num_groups);*/
+	state = new_state;
+	for (i=0;i<num_groups;i++)
+	{
+		/*              printf("setting all widgets in group %s to state %i\n\n",groups[i],state);*/
+		tmpbuf = g_strdup_printf("!%s",groups[i]);
+		g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
+		g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
+		g_free(tmpbuf);
+		g_hash_table_replace(widget_group_states,g_strdup(groups[i]),GINT_TO_POINTER(state));
+		g_list_foreach(get_list(groups[i]),alter_widget_state,NULL);
+	}
+	g_strfreev(groups);
+	g_strfreev(choices);
+}
+
+
+/*!
+ * \brief combo_toggle_groups_linked is used to change the state of 
+ * controls that
+ * are "linked" to various other controls for the purpose of making the 
+ * UI more intuitive.  i.e. if u uncheck a feature, this can be used to 
+ * grey out a group of related controls.
+ * \param widget, combo button
+ * \param active, which entry in list was selected
+ */
+G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
+{
+	gint num_groups = 0;
+	gint num_choices = 0;
+	gint i = 0;
+	gint j = 0;
+	gboolean state = FALSE;
+	gint page = 0;
+	gint offset = 0;
+
+	gchar **choices = NULL;
+	gchar **groups = NULL;
+	gchar * toggle_groups = NULL;
+	gchar * tmpbuf = NULL;
+	GHashTable *widget_group_states = NULL;
+
+	if (!DATA_GET(global_data,"ready"))
+		return;
+	widget_group_states = DATA_GET(global_data,"widget_group_states");
+	toggle_groups = (gchar *)OBJ_GET(widget,"toggle_groups");
+	page = (GINT)OBJ_GET(widget,"page");
+	offset = (GINT)OBJ_GET(widget,"offset");
+
+	/*printf("toggling combobox groups\n");*/
+	choices = parse_keys(toggle_groups,&num_choices,",");
+	if (active >= num_choices)
+	{
+		printf(_("active is %i, num_choices is %i\n"),active,num_choices);
+		printf(_("active is out of bounds for widget %s\n"),glade_get_widget_name(widget));
+	}
+	/*printf("toggle groups defined for combo box %p at page %i, offset %i\n",widget,page,offset);*/
+
+	/* First TURN OFF all non active groups */
+	for (i=0;i<num_choices;i++)
+	{
+		if (i == active)
+			continue;
+		groups = parse_keys(choices[i],&num_groups,":");
+		/*printf("Choice %i, has %i groups\n",i,num_groups);*/
+		state = FALSE;
+		for (j=0;j<num_groups;j++)
+		{
+			/*printf("setting all widgets in group %s to state %i\n\n",groups[j],state);*/
+			tmpbuf = g_strdup_printf("!%s",groups[j]);
+			g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
+			g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
+			g_free(tmpbuf);
+			g_hash_table_replace(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
+			g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
+		}
+		g_strfreev(groups);
+	}
+
+	/* Then TURN ON all active groups */
+	groups = parse_keys(choices[active],&num_groups,":");
+	state = TRUE;
+	for (j=0;j<num_groups;j++)
+	{
+		/*printf("setting all widgets for %s in group %s to state %i\n\n",glade_get_widget_name(widget),groups[j],state);*/
+		tmpbuf = g_strdup_printf("!%s",groups[j]);
+		g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
+		g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
+		g_free(tmpbuf);
+		g_hash_table_replace(widget_group_states,g_strdup(groups[j]),GINT_TO_POINTER(state));
+		g_list_foreach(get_list(groups[j]),alter_widget_state,NULL);
+	}
+	g_strfreev(groups);
+
+	/*printf ("DONE!\n\n\n");*/
+	g_strfreev(choices);
+}
+
+
+void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
+{
+	gint total = 0;
+	gint tmpi = 0;
+	gint i = 0;
+	gchar *tmpbuf = NULL;
+	gchar **vector = NULL;
+	gchar * set_labels = NULL;
+
+	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
+
+	total = get_choice_count(model);
+	tmpi = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+	vector = g_strsplit(set_labels,",",-1);
+	if ((g_strv_length(vector)%(total+1)) != 0)
+	{
+		dbg_func(CRITICAL,g_strdup(__FILE__": combo_set_labels()\n\tProblem wiht set_labels, counts don't match up\n"));
+		return;
+	}
+	for (i=0;i<(g_strv_length(vector)/(total+1));i++)
+	{
+		tmpbuf = g_strconcat(vector[i*(total+1)],",",vector[(i*(total+1))+1+tmpi],NULL);
+		set_widget_labels(tmpbuf);
+		g_free(tmpbuf);
+	}
+	g_strfreev(vector);
+}
+
+
+G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
+{
+	gboolean valid = TRUE;
+	GtkTreeIter iter;
+	gint i = 0;
+
+	valid = gtk_tree_model_get_iter_first(model,&iter);
+	while (valid)
+	{
+		gtk_tree_model_get(model,&iter,-1);
+		valid = gtk_tree_model_iter_next (model, &iter);
+		i++;
+	}
+	return i;
+}
+
+
+/*!
+ * \brief combo_toggle_labels_linked is used to change the state of 
+ * controls that
+ * are "linked" to various other controls for the purpose of making the 
+ * UI more intuitive.  i.e. if u uncheck a feature, this can be used to 
+ * grey out a group of related controls.
+ * \param widget, combo button
+ * \param active, which entry in list was selected
+ */
+       G_MODULE_EXPORT void combo_toggle_labels_linked(GtkWidget *widget,gint active)
+{
+	gint num_groups = 0;
+	gint i = 0;
+	gchar **groups = NULL;
+	gchar * toggle_labels = NULL;
+
+	if (!DATA_GET(global_data,"ready"))
+		return;
+	toggle_labels = (gchar *)OBJ_GET(widget,"toggle_labels");
+
+	groups = parse_keys(toggle_labels,&num_groups,",");
+	/* toggle_labels is a list of groups of widgets that need to have their 
+	 * label reset to a specific one from an array bound to that widget.
+	 * So we get the names of those groups, and call "set_widget_label_from_array"
+	 * passing in the index of the one in the array we want
+	 */
+	for (i=0;i<num_groups;i++)
+		g_list_foreach(get_list(groups[i]),set_widget_label_from_array,GINT_TO_POINTER(active));
+
+	g_strfreev(groups);
+}
+
+
+
+G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
+{
+	gchar *labels = NULL;
+	gchar **vector = NULL;
+	GtkWidget *label = (GtkWidget *)key;
+	gint index = (GINT)data;
+
+	if (!GTK_IS_LABEL(label))
+		return;
+	labels = OBJ_GET(label,"labels");
+	if (!labels)
+		return;
+	vector = g_strsplit(labels,",",-1);
+	if (index > g_strv_length(vector))
+		return;
+	gtk_label_set_text(GTK_LABEL(label),vector[index]);
+	g_strfreev(vector);
+	return;
+}
+

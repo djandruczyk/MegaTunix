@@ -29,6 +29,9 @@ gboolean setup_rtv(void);
 void signal_read_rtvars(void);
 void *rtv_subscriber(gpointer);
 void *serial_repair_thread(gpointer);
+void send_to_ecu(gpointer, gint, gboolean);
+void freeems_send_to_ecu(gint, gint, DataSize, gint, gboolean);
+void send_to_ecu(gpointer, gint, gboolean);
 /* Prototypes */
 
 #endif

@@ -35,6 +35,7 @@ EXTERN void (*dbg_func_f)(gint,gchar *);
 EXTERN GList *(*get_list_f)(gchar *);
 EXTERN OutputData *(*initialize_outputdata_f)(void);
 EXTERN void (*set_title_f)(const gchar *);
+EXTERN void (*set_widget_labels_f)(const gchar *);
 EXTERN void (*set_widget_sensitive_f)(gpointer, gpointer);
 EXTERN void (*thread_update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean);
 EXTERN void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
@@ -106,7 +107,13 @@ EXTERN void (*log_inbound_data_f)(const void *, size_t);
 EXTERN void (*log_outbound_data_f)(const void *, size_t);
 EXTERN gboolean (*jump_to_tab_f)(GtkWidget *, gpointer );
 EXTERN gboolean (*check_tab_existance_f)(gint);
-
+EXTERN gdouble (*temp_to_ecu_f)(gdouble);
+EXTERN gdouble (*temp_to_host_f)(gdouble);
+EXTERN void (*swap_labels_f)(GtkWidget *, gboolean);
+EXTERN void (*combo_toggle_groups_linked_f)(GtkWidget *,gint);
+EXTERN void (*combo_toggle_labels_linked_f)(GtkWidget *,gint);
+EXTERN void (*toggle_groups_linked_f)(GtkWidget *, gboolean);
+EXTERN void (*combo_set_labels_f)(GtkWidget *, GtkTreeModel *);
 /* Function Pointers */
 
 /* Prototypes */

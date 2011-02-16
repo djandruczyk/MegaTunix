@@ -1380,7 +1380,7 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
 	pf = g_new0(PostFunction,1);
-	pf->name = g_strdup("update_ve_const_pf");
+	pf->name = g_strdup("update_ecu_controls_pf");
 	if (module)
 		g_module_symbol(module,pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;

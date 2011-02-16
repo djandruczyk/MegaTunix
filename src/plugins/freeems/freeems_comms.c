@@ -12,6 +12,7 @@
  */
 
 #include <config.h>
+#include <datamgmt.h>
 #include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
@@ -511,5 +512,150 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_BASIC_DATALOG));
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd_f(firmware->rt_command,output);
+	return;
+}
+
+
+/*!
+ \brief send_to_ecu() gets called to send a value to the ECU.  This function
+ is has an ECU agnostic interface and is for sending single 8-32 bit bits of 
+ data to the ECU. This one extracts the important things from the passed ptr
+ and sends to the real function which is ecu specific
+ */
+G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_update)
+{
+	gint locID = 0;
+	gint offset = 0;
+	DataSize size = MTX_U08;
+	GtkWidget *widget = (GtkWidget *)data;
+	gconstpointer *gptr = (gconstpointer *)data;
+
+	if (GTK_IS_WIDGET(widget))
+	{
+		locID = (GINT)OBJ_GET(widget,"locID");
+		offset = (GINT)OBJ_GET(widget,"offset");
+		size = (DataSize)OBJ_GET(widget,"size");
+	}
+	else
+	{
+		locID = (GINT)DATA_GET(gptr,"locID");
+		offset = (GINT)DATA_GET(gptr,"offset");
+		size = (DataSize)DATA_GET(gptr,"size");
+	}
+	freeems_send_to_ecu(locID,offset,size,value,queue_update);
+}
+
+
+/*!
+ \brief ms_send_to_ecu() gets called to send a value to the ECU.  This function
+ will check if the value sent is NOT the reqfuel_offset (that has special
+ interdependancy issues) and then will check if there are more than 1 widgets
+ that are associated with this page/offset and update those widgets before
+ sending the value to the ECU.
+ \param widget (GtkWidget *) pointer to the widget that was modified or NULL
+ \param page (gint) page in which the value refers to.
+ \param offset (gint) offset from the beginning of the page that this data
+ refers to.
+ \param value (gint) the value that should be sent to the ECU At page.offset
+ \param queue_update (gboolean), if true queues a gui update, used to prevent
+ a horrible stall when doing an ECU restore or batch load...
+ */
+G_MODULE_EXPORT void freeems_send_to_ecu(gint locID, gint offset, DataSize size, gint value, gboolean queue_update)
+{
+	OutputData *output = NULL;
+	guint8 *data = NULL;
+	guint16 u16 = 0;
+	gint16 s16 = 0;
+	guint32 u32 = 0;
+	gint32 s32 = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+
+	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": freeems_send_to_ecu()\n\t Sending locID %i, offset %i, value %i \n",locID,offset,value));
+
+	switch (size)
+	{
+		case MTX_CHAR:
+		case MTX_S08:
+		case MTX_U08:
+			printf("8 bit var %i at offset %i\n",value,offset);
+			break;
+		case MTX_S16:
+		case MTX_U16:
+			printf("16 bit var %i at offset %i\n",value,offset);
+			break;
+		case MTX_S32:
+		case MTX_U32:
+			printf("32 bit var %i at offset %i\n",value,offset);
+			break;
+		default:
+			printf(_("freeems_send_to_ecu() ERROR!!! Size undefined for variable at canID %i, offset %i\n"),locID,offset);
+	}
+	output = initialize_outputdata_f();
+	DATA_SET(output->data,"location_id", GINT_TO_POINTER(locID));
+	DATA_SET(output->data,"payload_id", GINT_TO_POINTER(REQUEST_UPDATE_BLOCK_IN_RAM));
+	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
+	DATA_SET(output->data,"size", GINT_TO_POINTER(size));
+	DATA_SET(output->data,"length", GINT_TO_POINTER(get_multiplier_f(size)));
+	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
+	/* Get memory */
+	data = g_new0(guint8,get_multiplier_f(size));
+	switch (size)
+	{
+		case MTX_CHAR:
+		case MTX_U08:
+			data[0] = (guint8)value;
+			break;
+		case MTX_S08:
+			data[0] = (gint8)value;
+			break;
+		case MTX_U16:
+			if (firmware->bigendian)
+				u16 = GUINT16_TO_BE((guint16)value);
+			else
+				u16 = GUINT16_TO_LE((guint16)value);
+			data[0] = (guint8)u16;
+			data[1] = (guint8)((guint16)u16 >> 8);
+			break;
+		case MTX_S16:
+			if (firmware->bigendian)
+				s16 = GINT16_TO_BE((gint16)value);
+			else
+				s16 = GINT16_TO_LE((gint16)value);
+			data[0] = (guint8)s16;
+			data[1] = (guint8)((gint16)s16 >> 8);
+			break;
+		case MTX_S32:
+			if (firmware->bigendian)
+				s32 = GINT32_TO_BE((gint32)value);
+			else
+				s32 = GINT32_TO_LE((gint32)value);
+			data[0] = (guint8)s32;
+			data[1] = (guint8)((gint32)s32 >> 8);
+			data[2] = (guint8)((gint32)s32 >> 16);
+			data[3] = (guint8)((gint32)s32 >> 24);
+			break;
+		case MTX_U32:
+			if (firmware->bigendian)
+				u32 = GUINT32_TO_BE((guint32)value);
+			else
+				u32 = GUINT32_TO_LE((guint32)value);
+			data[0] = (guint8)u32;
+			data[1] = (guint8)((guint32)u32 >> 8);
+			data[2] = (guint8)((guint32)u32 >> 16);
+			data[3] = (guint8)((guint32)u32 >> 24);
+			break;
+		default:
+			break;
+	}
+	DATA_SET_FULL(output->data,"data", (gpointer)data,g_free);
+	/* Set it here otherwise there's a risk of a missed burn due to 
+	 * a potential race condition in the burn checker
+	 */
+	freeems_set_ecu_data(locID,offset,size,value);
+
+	output->queue_update = queue_update;
+	io_cmd_f(firmware->write_command,output);
 	return;
 }

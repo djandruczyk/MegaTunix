@@ -225,44 +225,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"_NULL_CMD_",
 			GINT_TO_POINTER(NULL_CMD));
 
-	/* XmlCmdType's */
-	g_hash_table_insert(str_2_enum,"_WRITE_VERIFY_",
-			GINT_TO_POINTER(WRITE_VERIFY));
-	g_hash_table_insert(str_2_enum,"_MISMATCH_COUNT_",
-			GINT_TO_POINTER(MISMATCH_COUNT));
-	g_hash_table_insert(str_2_enum,"_MS1_CLOCK_",
-			GINT_TO_POINTER(MS1_CLOCK));
-	g_hash_table_insert(str_2_enum,"_MS2_CLOCK_",
-			GINT_TO_POINTER(MS2_CLOCK));
-	g_hash_table_insert(str_2_enum,"_NUM_REV_",
-			GINT_TO_POINTER(NUM_REV));
-	g_hash_table_insert(str_2_enum,"_TEXT_REV_",
-			GINT_TO_POINTER(TEXT_REV));
-	g_hash_table_insert(str_2_enum,"_SIGNATURE_",
-			GINT_TO_POINTER(SIGNATURE));
-	g_hash_table_insert(str_2_enum,"_MS1_VECONST_",
-			GINT_TO_POINTER(MS1_VECONST));
-	g_hash_table_insert(str_2_enum,"_MS2_VECONST_",
-			GINT_TO_POINTER(MS2_VECONST));
-	g_hash_table_insert(str_2_enum,"_MS2_BOOTLOADER_",
-			GINT_TO_POINTER(MS2_BOOTLOADER));
-	g_hash_table_insert(str_2_enum,"_MS1_RT_VARS_",
-			GINT_TO_POINTER(MS1_RT_VARS));
-	g_hash_table_insert(str_2_enum,"_MS2_RT_VARS_",
-			GINT_TO_POINTER(MS2_RT_VARS));
-	g_hash_table_insert(str_2_enum,"_MS1_GETERROR_",
-			GINT_TO_POINTER(MS1_GETERROR));
-	g_hash_table_insert(str_2_enum,"_MS1_E_TRIGMON_",
-			GINT_TO_POINTER(MS1_E_TRIGMON));
-	g_hash_table_insert(str_2_enum,"_MS1_E_TOOTHMON_",
-			GINT_TO_POINTER(MS1_E_TOOTHMON));
-	g_hash_table_insert(str_2_enum,"_MS2_E_TRIGMON_",
-			GINT_TO_POINTER(MS2_E_TRIGMON));
-	g_hash_table_insert(str_2_enum,"_MS2_E_TOOTHMON_",
-			GINT_TO_POINTER(MS2_E_TOOTHMON));
-	g_hash_table_insert(str_2_enum,"_MS2_E_COMPOSITEMON_",
-			GINT_TO_POINTER(MS2_E_COMPOSITEMON));
-
 	/* Action's */
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));

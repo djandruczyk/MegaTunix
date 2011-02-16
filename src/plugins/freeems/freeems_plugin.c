@@ -17,6 +17,7 @@
 #include <firmware.h>
 #include <freeems_comms.h>
 #include <freeems_gui_handlers.h>
+#include <freeems_helpers.h>
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
 #include <interrogate.h>
@@ -28,12 +29,13 @@ gconstpointer *global_data = NULL;
 
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
-	global_data = data;
 	GAsyncQueue *queue = NULL;
 	GCond *cond = NULL;
 	GThread *thread = NULL;
 	GMutex *mutex = NULL;
 	GHashTable *hash = NULL;
+
+	global_data = data;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
@@ -46,11 +48,15 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("_set_sized_data",(void *)&_set_sized_data_f);
 	get_symbol_f("check_tab_existance",(void *)&check_tab_existance_f);
 	get_symbol_f("cleanup",(void *)&cleanup_f);
+	get_symbol_f("combo_set_labels",(void *)&combo_set_labels_f);
+	get_symbol_f("combo_toggle_groups_linked",(void *)&combo_toggle_groups_linked_f);
+	get_symbol_f("combo_toggle_labels_linked",(void *)&combo_toggle_labels_linked_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	get_symbol_f("dump_output",(void *)&dump_output_f);
 	get_symbol_f("flush_binary_logs",(void *)&flush_binary_logs_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
 	get_symbol_f("get_file_api",(void *)&get_file_api_f);
+	get_symbol_f("get_list",(void *)&get_list_f);
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
 	get_symbol_f("jump_to_tab",(void *)&jump_to_tab_f);
@@ -61,6 +67,14 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("process_rt_vars",(void *)&process_rt_vars_f);
 	get_symbol_f("read_data",(void *)&read_data_f);
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
+	get_symbol_f("set_widget_labels",(void *)&set_widget_labels_f);
+	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
+	get_symbol_f("set_title",(void *)&set_title_f);
+	get_symbol_f("swap_labels",(void *)&swap_labels_f);
+	get_symbol_f("temp_to_ecu",(void *)&temp_to_ecu_f);
+	get_symbol_f("temp_to_host",(void *)&temp_to_host_f);
+	get_symbol_f("toggle_groups_linked",(void *)&toggle_groups_linked_f);
+
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
 	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);
@@ -171,6 +185,10 @@ void register_common_enums(void)
 				GINT_TO_POINTER(LENGTH));
 		g_hash_table_insert (str_2_enum, "_DATABYTE_",
 				GINT_TO_POINTER(DATABYTE));
+		g_hash_table_insert (str_2_enum, "_READ_ALL_",
+				GINT_TO_POINTER(READ_ALL));
+		g_hash_table_insert (str_2_enum, "_GENERIC_READ_",
+				GINT_TO_POINTER(GENERIC_READ));
 		/* Firmware Specific button handlers*/
 		g_hash_table_insert (str_2_enum, "_SOFT_BOOT_ECU_",
 				GINT_TO_POINTER(SOFT_BOOT_ECU));
@@ -209,6 +227,9 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_OFFSET_");
 		g_hash_table_remove (str_2_enum, "_LENGTH_");
 		g_hash_table_remove (str_2_enum, "_DATABYTE_");
+		g_hash_table_remove (str_2_enum, "_FREEEMS_ALL_");
+		g_hash_table_remove (str_2_enum, "_READ_ALL_");
+		g_hash_table_remove (str_2_enum, "_GENERIC_READ_");
 		/* Firmware Specific button handlers*/
 		g_hash_table_remove (str_2_enum, "_SOFT_BOOT_ECU_");
 		g_hash_table_remove (str_2_enum, "_HARD_BOOT_ECU_");

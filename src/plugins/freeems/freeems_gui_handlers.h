@@ -36,7 +36,20 @@ typedef enum
 gboolean common_std_button_handler(GtkWidget *, gpointer);
 gboolean common_toggle_button_handler(GtkWidget *, gpointer);
 gboolean common_bitmask_button_handler(GtkWidget *, gpointer);
+gboolean common_entry_handler(GtkWidget *, gpointer);
+gboolean common_slider_handler(GtkWidget *, gpointer);
+gboolean common_combo_handler(GtkWidget *, gpointer);
+gboolean common_spin_button_handler(GtkWidget *, gpointer);
+
 void common_gui_init(void);
+void update_ecu_controls_pf(void);
+void update_combo(GtkWidget *);
+void update_entry(GtkWidget *);
+void update_checkbutton(GtkWidget *);
+void update_widget(gpointer, gpointer);
+void get_essential_bits(GtkWidget *, gint *, gint *, gint *, gint *, gint *);
+void get_essentials(GtkWidget *, gint *, gint *, DataSize *, gint *);
+
 /* Prototypes */
 
 #endif

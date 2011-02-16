@@ -14,6 +14,7 @@
  */
 
 #include <config.h>
+#include <firmware.h>
 #include <gtk/gtk.h>
 #include <freeems_helpers.h>
 #include <freeems_plugin.h>
@@ -138,3 +139,115 @@ void hard_boot_ecu(void)
 	g_free(buf);
 	return;
 }
+
+
+G_MODULE_EXPORT void spawn_read_all_pf(void)
+{
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	if (!firmware)
+		return;
+
+	gdk_threads_enter();
+	set_title_f(g_strdup(_("Queuing read of all ECU data...")));
+	gdk_threads_leave();
+	io_cmd_f(firmware->get_all_command,NULL);
+}
+
+
+G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
+{
+	static Firmware_Details *firmware = NULL;
+	static GRand *rand = NULL;
+	OutputData *output = NULL;
+	Command *command = NULL;
+	gint seq = 0;
+	GAsyncQueue *queue = NULL;
+	gint i = 0;
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!rand)
+		rand = g_rand_new();
+	g_return_val_if_fail(firmware,FALSE);
+
+	switch (type)
+	{
+		case FREEEMS_ALL:
+			printf("sending commands to get data!\n");
+			if (!DATA_GET(global_data,"offline"))
+			{
+				g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
+				/*
+				   if ((DATA_GET(global_data,"outstanding_data")))
+				   queue_burn_ecu_flash(last_page);
+				 */
+				for (i=0;i<firmware->total_pages;i++)
+				{
+					if (!firmware->page_params[i]->dl_by_default)
+						continue;
+					seq = g_rand_int_range(rand,0,32767);
+
+					printf(" setting seq num to %i\n",seq);
+					output = initialize_outputdata_f();
+					DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
+					DATA_SET(output->data,"location_id",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
+					DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_RETRIEVE_BLOCK_FROM_RAM));
+					DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
+					DATA_SET(output->data,"length", GINT_TO_POINTER(firmware->page_params[i]->length));
+					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+					io_cmd_f(firmware->read_command,output);
+					queue = g_async_queue_new();
+					register_packet_queue(SEQUENCE_NUM,queue,seq);
+					DATA_SET(output->data,"queue",queue);
+				}
+			}
+			command = (Command *)data;
+			io_cmd_f(NULL,command->post_functions);
+			break;
+		default:
+			break;
+	}
+	return TRUE;
+}
+
+
+G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
+{
+	Io_Message *message  = NULL;
+	OutputData *output  = NULL;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	gint seq = 0;
+	gint tmpi = 0;
+	GTimeVal tval;
+
+	message = (Io_Message *)data;
+	output = (OutputData *)message->payload;
+
+	switch (type)
+	{
+		case READ_ALL:
+			seq = (GINT)DATA_GET(output->data,"sequence_id");
+			queue = DATA_GET(output->data,"queue");
+			g_get_current_time(&tval);
+			g_time_val_add(&tval,500000);
+			packet = g_async_queue_timed_pop(queue,&tval);
+			deregister_packet_queue(SEQUENCE_NUM,queue,seq);
+			g_async_queue_unref(queue);
+			DATA_SET(output->data,"queue",NULL);
+			if (packet)
+			{
+				printf("Packet arrived for READ ALL case\n");
+				freeems_packet_cleanup(packet);
+	                        tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
+	                        DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
+			}
+			break;
+		default:
+			break;
+
+	}
+}
+

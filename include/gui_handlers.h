@@ -58,6 +58,17 @@ gboolean clamp_value(GtkWidget *, gpointer);
 void refocus_cell(GtkWidget *, Direction);
 void set_widget_label_from_array(gpointer, gpointer);
 void insert_text_handler(GtkEntry *, const gchar *, gint, gint *, gpointer);
+void set_widget_labels(const gchar *);
+void swap_labels(GtkWidget *, gboolean);
+void switch_labels(gpointer, gpointer);
+void combo_toggle_groups_linked(GtkWidget *,gint);
+void combo_toggle_labels_linked(GtkWidget *,gint);
+void toggle_groups_linked(GtkWidget *, gboolean);
+void set_widget_label_from_array(gpointer, gpointer);
+void combo_set_labels(GtkWidget *, GtkTreeModel *);
+gint get_choice_count(GtkTreeModel *);
+
+
 /* Prototypes */
 
 #endif

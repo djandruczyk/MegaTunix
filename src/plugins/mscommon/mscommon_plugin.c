@@ -45,6 +45,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("c_to_k",(void *)&c_to_k_f);
 	get_symbol_f("check_tab_existance",(void *)&check_tab_existance_f);
 	get_symbol_f("cleanup",(void *)&cleanup_f);
+	get_symbol_f("combo_set_labels",(void *)&combo_set_labels_f);
+	get_symbol_f("combo_toggle_groups_linked",(void *)&combo_toggle_groups_linked_f);
+	get_symbol_f("combo_toggle_labels_linked",(void *)&combo_toggle_labels_linked_f);
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("create_value_change_watch",(void *)&create_value_change_watch_f);
@@ -89,11 +92,13 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("set_group_color",(void *)&set_group_color_f);
 	get_symbol_f("set_reqfuel_color",(void *)&set_reqfuel_color_f);
 	get_symbol_f("set_title",(void *)&set_title_f);
+	get_symbol_f("set_widget_labels",(void *)&set_widget_labels_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("spin_button_handler",(void *)&spin_button_handler_f);
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);
 	get_symbol_f("std_entry_handler",(void *)&std_entry_handler_f);
 	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
+	get_symbol_f("swap_labels",(void *)&swap_labels_f);
 	get_symbol_f("temp_to_ecu",(void *)&temp_to_ecu_f);
 	get_symbol_f("temp_to_host",(void *)&temp_to_host_f);
 	get_symbol_f("thread_refresh_widget",(void *)&thread_refresh_widget_f);
@@ -101,6 +106,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
 	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);
+	get_symbol_f("toggle_groups_linked",(void *)&toggle_groups_linked_f);
 	get_symbol_f("translate_string",(void *)&translate_string_f);
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 	get_symbol_f("update_ve3d_if_necessary",(void *)&update_ve3d_if_necessary_f);
@@ -235,6 +241,43 @@ void register_common_enums(void)
 				GINT_TO_POINTER(REQFUEL_RESCALE_TABLE));
 		g_hash_table_insert (str_2_enum, "_REQ_FUEL_POPUP_",
 				GINT_TO_POINTER(REQ_FUEL_POPUP));
+		/* XmlCmdType's */
+		g_hash_table_insert(str_2_enum,"_WRITE_VERIFY_",
+				GINT_TO_POINTER(WRITE_VERIFY));
+		g_hash_table_insert(str_2_enum,"_MISMATCH_COUNT_",
+				GINT_TO_POINTER(MISMATCH_COUNT));
+		g_hash_table_insert(str_2_enum,"_MS1_CLOCK_",
+				GINT_TO_POINTER(MS1_CLOCK));
+		g_hash_table_insert(str_2_enum,"_MS2_CLOCK_",
+				GINT_TO_POINTER(MS2_CLOCK));
+		g_hash_table_insert(str_2_enum,"_NUM_REV_",
+				GINT_TO_POINTER(NUM_REV));
+		g_hash_table_insert(str_2_enum,"_TEXT_REV_",
+				GINT_TO_POINTER(TEXT_REV));
+		g_hash_table_insert(str_2_enum,"_SIGNATURE_",
+				GINT_TO_POINTER(SIGNATURE));
+		g_hash_table_insert(str_2_enum,"_MS1_VECONST_",
+				GINT_TO_POINTER(MS1_VECONST));
+		g_hash_table_insert(str_2_enum,"_MS2_VECONST_",
+				GINT_TO_POINTER(MS2_VECONST));
+		g_hash_table_insert(str_2_enum,"_MS2_BOOTLOADER_",
+				GINT_TO_POINTER(MS2_BOOTLOADER));
+		g_hash_table_insert(str_2_enum,"_MS1_RT_VARS_",
+				GINT_TO_POINTER(MS1_RT_VARS));
+		g_hash_table_insert(str_2_enum,"_MS2_RT_VARS_",
+				GINT_TO_POINTER(MS2_RT_VARS));
+		g_hash_table_insert(str_2_enum,"_MS1_GETERROR_",
+				GINT_TO_POINTER(MS1_GETERROR));
+		g_hash_table_insert(str_2_enum,"_MS1_E_TRIGMON_",
+				GINT_TO_POINTER(MS1_E_TRIGMON));
+		g_hash_table_insert(str_2_enum,"_MS1_E_TOOTHMON_",
+				GINT_TO_POINTER(MS1_E_TOOTHMON));
+		g_hash_table_insert(str_2_enum,"_MS2_E_TRIGMON_",
+				GINT_TO_POINTER(MS2_E_TRIGMON));
+		g_hash_table_insert(str_2_enum,"_MS2_E_TOOTHMON_",
+				GINT_TO_POINTER(MS2_E_TOOTHMON));
+		g_hash_table_insert(str_2_enum,"_MS2_E_COMPOSITEMON_",
+				GINT_TO_POINTER(MS2_E_COMPOSITEMON));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
@@ -306,6 +349,25 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_DECREMENT_VALUE_");
 		g_hash_table_remove (str_2_enum, "_REQFUEL_RESCALE_TABLE_");
 		g_hash_table_remove (str_2_enum, "_REQ_FUEL_POPUP_");
+		/* XmlCmdType's */
+		g_hash_table_remove (str_2_enum, "_WRITE_VERIFY_");
+		g_hash_table_remove (str_2_enum, "_MISMATCH_COUNT_");
+		g_hash_table_remove (str_2_enum, "_MS1_CLOCK_");
+		g_hash_table_remove (str_2_enum, "_MS2_CLOCK_");
+		g_hash_table_remove (str_2_enum, "_NUM_REV_");
+		g_hash_table_remove (str_2_enum, "_TEXT_REV_");
+		g_hash_table_remove (str_2_enum, "_SIGNATURE_");
+		g_hash_table_remove (str_2_enum, "_MS1_VECONST_");
+		g_hash_table_remove (str_2_enum, "_MS2_VECONST_");
+		g_hash_table_remove (str_2_enum, "_MS2_BOOTLOADER_");
+		g_hash_table_remove (str_2_enum, "_MS1_RT_VARS_");
+		g_hash_table_remove (str_2_enum, "_MS2_RT_VARS_");
+		g_hash_table_remove (str_2_enum, "_MS1_GETERROR_");
+		g_hash_table_remove (str_2_enum, "_MS1_E_TRIGMON_");
+		g_hash_table_remove (str_2_enum, "_MS1_E_TOOTHMON_");
+		g_hash_table_remove (str_2_enum, "_MS2_E_TRIGMON_");
+		g_hash_table_remove (str_2_enum, "_MS2_E_TOOTHMON_");
+		g_hash_table_remove (str_2_enum, "_MS2_E_COMPOSITEMON_");
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");

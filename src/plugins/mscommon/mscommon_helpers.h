@@ -19,6 +19,29 @@
 #include <gtk/gtk.h>
 #include <threads.h>
 
+typedef enum
+{
+	WRITE_VERIFY=0x290,
+	MISMATCH_COUNT,
+	MS1_CLOCK,
+	MS2_CLOCK,
+	NUM_REV,
+	TEXT_REV,
+	SIGNATURE,
+	MS1_VECONST,
+	MS2_VECONST,
+	MS2_BOOTLOADER,
+	MS1_RT_VARS,
+	MS2_RT_VARS,
+	MS1_GETERROR,
+	MS1_E_TRIGMON,
+	MS1_E_TOOTHMON,
+	MS2_E_TRIGMON,
+	MS2_E_TOOTHMON,
+	MS2_E_COMPOSITEMON,
+	LAST_XML_FUNC_CALL_TYPE
+}FuncCall;
+
 /* Prototypes */
 void spawn_read_ve_const_pf(void);
 void enable_get_data_buttons_pf(void);
