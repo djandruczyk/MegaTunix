@@ -158,9 +158,9 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 				if ((notifies) && ((j % notif_divisor) == 0))
 					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<b>Sending %i of %i bytes</b>"),j,block->len));
 				if (i == 0)
-					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
+					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%.2X\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
 				else
-					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]));
+					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%.2X\"\n",i,j+1,block->len,block->data[j]));
 				/*printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);*/
 				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);	/* Send write command */
 				if (!res)

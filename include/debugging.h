@@ -36,6 +36,7 @@ typedef enum
 	COMPLEX_EXPR	= 1<<12,
 	MTXSOCKET	= 1<<13,
 	PLUGINS		= 1<<14,
+	PACKETS		= 1<<15,
 	CRITICAL	= 1<<30
 }Dbg_Class;
 
@@ -56,6 +57,7 @@ typedef enum guint
 	COMPLEX_EXPR_SHIFT	= 12,
 	MTXSOCKET_SHIFT		= 13,
 	PLUGINS_SHIFT		= 14,
+	PACKETS_SHIFT		= 15,
 	CRITICAL_SHIFT		= 30
 }Dbg_Shift;
 

@@ -14,6 +14,7 @@
  */
 
 #include <config.h>
+#include <debugging.h>
 #include <gtk/gtk.h>
 #include <freeems_plugin.h>
 #include <packet_handlers.h>
@@ -147,6 +148,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 				packet = g_new0(FreeEMS_Packet, 1);
 				packet->data = g_memdup(packetBuffer,currentPacketLength);
 				packet->raw_length = currentPacketLength;
+				mtxlog_packet(packet->data,packet->raw_length,FALSE);
 				if (!packet_decode(packet))
 				{
 					printf("Packet fields don't make sense!\n");
@@ -600,6 +602,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	for (i=0;i<packet_length-1;i++)
 		sum += buf[i];
 	buf[pos] = sum;
+	mtxlog_packet(buf,packet_length,TRUE);
 	pos++;
 
 	/* Escape + start/stop it */
@@ -663,4 +666,23 @@ guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
 		printf("packet finalize problem, length mismatch\n");
 	*final_length = len;
 	return buf;
+}
+
+
+G_MODULE_EXPORT void mtxlog_packet(const void *buf, size_t len, gboolean toecu)
+{
+	gint i = 0;
+	guint8 *ptr = (guint8 *)buf;
+
+	if (toecu)
+		dbg_func_f(PACKETS,g_strdup_printf(__FILE__": mtxlog_packet\n\tPacket TO ECU %i bytes \n\t",len));
+	else
+		dbg_func_f(PACKETS,g_strdup_printf(__FILE__": mtxlog_packet\n\tPacket FROM ECU %i bytes \n\t",len));
+	for (i=0;i<len;i++)
+	{
+		dbg_func_f(PACKETS,g_strdup_printf("%.2X ",ptr[i]));
+		if (!((i+1)%16))
+			dbg_func_f(PACKETS,g_strdup("\n\t"));
+	}
+	dbg_func_f(PACKETS,g_strdup("\n"));
 }
