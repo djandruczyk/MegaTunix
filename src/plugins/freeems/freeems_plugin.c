@@ -185,6 +185,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(LENGTH));
 		g_hash_table_insert (str_2_enum, "_DATABYTE_",
 				GINT_TO_POINTER(DATABYTE));
+		g_hash_table_insert (str_2_enum, "_FREEEMS_ALL_",
+				GINT_TO_POINTER(FREEEMS_ALL));
 		g_hash_table_insert (str_2_enum, "_READ_ALL_",
 				GINT_TO_POINTER(READ_ALL));
 		g_hash_table_insert (str_2_enum, "_GENERIC_READ_",

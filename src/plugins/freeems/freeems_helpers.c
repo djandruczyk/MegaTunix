@@ -166,6 +166,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 	GAsyncQueue *queue = NULL;
 	gint i = 0;
 
+	printf("read_freeems_data\n");
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	if (!rand)
@@ -189,7 +190,6 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 						continue;
 					seq = g_rand_int_range(rand,0,32767);
 
-					printf(" setting seq num to %i\n",seq);
 					output = initialize_outputdata_f();
 					DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 					DATA_SET(output->data,"location_id",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
@@ -207,6 +207,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 			io_cmd_f(NULL,command->post_functions);
 			break;
 		default:
+			printf("default case, nothing happening here\n");
 			break;
 	}
 	return TRUE;

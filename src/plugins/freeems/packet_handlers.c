@@ -464,7 +464,6 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	gboolean have_offset = FALSE;
 	gboolean have_length = FALSE;
 	gboolean have_datablock = FALSE;
-	gboolean have_databyte = FALSE;
 	guint8 *payload_data = NULL;
 	gint payload_data_length = 0;
 	gint byte = 0;
@@ -506,39 +505,33 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			case SEQUENCE_NUM:
 				have_sequence = TRUE;
 				seq_num = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Sequence number present %i\n",seq_num);*/
+				printf("Sequence number present %i\n",seq_num);
 				packet_length += 1;
 				break;
 			case PAYLOAD_ID:
 				have_payload_id = TRUE;
 				payload_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Payload ID number present %i\n",payload_id);*/
+				printf("Payload ID number present %i\n",payload_id);
 				packet_length += 2;
 				break;
 				/* Payload specific stuff */
 			case LOCATION_ID:
 				have_location_id = TRUE;
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Location ID number present %i\n",location_id);*/
+				printf("Location ID number present %i\n",location_id);
 				payload_length += 2;
 				break;
 			case OFFSET:
 				have_offset = TRUE;
 				offset = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Location ID number present %i\n",location_id);*/
+				printf("Offset present %i\n",offset);
 				payload_length += 2;
 				break;
 			case LENGTH:
 				have_length = TRUE;
 				length = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Payload length present %i\n",length);*/
-				payload_length += 2;
-				break;
-			case DATABYTE:
-				have_databyte = TRUE;
-				byte = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("DataByte present %i\n",byte);*/
-				packet_length += 1;
+				printf("Payload length present %i\n",length);
+				packet_length += 2;
 				break;
 			case DATA:
 				have_datablock = TRUE;
@@ -554,7 +547,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 
 	pos = 1;
 	packet_length += payload_length;
-	/*printf("total raw packet length (-start/end/cksum) %i\n",packet_length);*/
+	printf("total raw packet length (-start/end markers) %i\n",packet_length);
 	/* Raw Packet */
 	buf = g_new0(guint8, packet_length);
 
@@ -601,8 +594,6 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		g_memmove(buf+pos,payload_data,payload_data_length);
 		pos += payload_data_length;
 	}
-	else if (have_databyte) /* For odd cmds that don't have a full payload */
-		buf[pos++] = (guint8)(byte & 0x00ff); 
 
 	/* Checksum it */
 	for (i=0;i<packet_length;i++)
