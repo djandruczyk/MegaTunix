@@ -674,6 +674,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint locID, gint offset, DataSize size,
 			break;
 	}
 	DATA_SET_FULL(output->data,"data",(gpointer)data, g_free);
+	DATA_SET(output->data,"num_bytes",GINT_TO_POINTER(get_multiplier_f(size)));
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */
