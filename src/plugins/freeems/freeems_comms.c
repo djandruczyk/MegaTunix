@@ -524,24 +524,47 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
  */
 G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_update)
 {
+	static Firmware_Details *firmware = NULL;
+	gint page = 0;
 	gint locID = 0;
 	gint offset = 0;
 	DataSize size = MTX_U08;
 	GtkWidget *widget = (GtkWidget *)data;
 	gconstpointer *gptr = (gconstpointer *)data;
 
+	if (!firmware)
+        	firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(firmware);
+
 	if (GTK_IS_WIDGET(widget))
 	{
-		locID = (GINT)OBJ_GET(widget,"locID");
+		if ((!OBJ_GET(widget,"location_id")) && (!OBJ_GET(widget,"page")))
+			printf("ERROR, location id or page is NOT set!\n");
+		if (!OBJ_GET(widget,"location_id"))
+		{
+			page = (GINT)OBJ_GET(widget,"page");
+			locID = firmware->page_params[page]->phys_ecu_page;
+		}
+		else
+			locID = (GINT)OBJ_GET(widget,"location_id");
 		offset = (GINT)OBJ_GET(widget,"offset");
 		size = (DataSize)OBJ_GET(widget,"size");
 	}
 	else
 	{
-		locID = (GINT)DATA_GET(gptr,"locID");
+		if ((!DATA_GET(gptr,"location_id")) && (!DATA_GET(gptr,"page")))
+			printf("ERROR, location id or page is NOT set!\n");
+		if (!DATA_GET(gptr,"location_id"))
+		{
+			page = (GINT)DATA_GET(gptr,"page");
+			locID = firmware->page_params[page]->phys_ecu_page;
+		}
+		else
+			locID = (GINT)DATA_GET(gptr,"location_id");
 		offset = (GINT)DATA_GET(gptr,"offset");
 		size = (DataSize)DATA_GET(gptr,"size");
 	}
+	/*printf("locID %i, offset, %i, value %i\n",locID,offset,value);*/
 	freeems_send_to_ecu(locID,offset,size,value,queue_update);
 }
 
@@ -597,6 +620,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint locID, gint offset, DataSize size,
 	DATA_SET(output->data,"payload_id", GINT_TO_POINTER(REQUEST_UPDATE_BLOCK_IN_RAM));
 	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
 	DATA_SET(output->data,"size", GINT_TO_POINTER(size));
+	DATA_SET(output->data,"value", GINT_TO_POINTER(value));
 	DATA_SET(output->data,"length", GINT_TO_POINTER(get_multiplier_f(size)));
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
 	/* Get memory */
@@ -649,7 +673,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint locID, gint offset, DataSize size,
 		default:
 			break;
 	}
-	DATA_SET_FULL(output->data,"data", (gpointer)data,g_free);
+	DATA_SET_FULL(output->data,"data",(gpointer)data, g_free);
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */

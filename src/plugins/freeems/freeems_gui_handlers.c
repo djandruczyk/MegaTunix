@@ -304,6 +304,23 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	g_return_if_fail(firmware);
 	g_return_if_fail(ecu_widgets);
 
+	gdk_threads_enter();
+        set_title_f(g_strdup(_("Updating Controls...")));
+        gdk_threads_leave();
+        DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
+
+	for (i=0;i<firmware->total_tables;i++)
+	{
+		if (firmware->table_params[i]->color_update == FALSE)
+		{
+			recalc_table_limits_f(0,i);
+			if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+				firmware->table_params[i]->color_update = TRUE;
+			else
+				firmware->table_params[i]->color_update = FALSE;
+		}
+	}
+
 	/* Update all on screen controls (except bitfields (done above)*/
 	gdk_threads_enter();
 	for (page=0;page<firmware->total_pages;page++)

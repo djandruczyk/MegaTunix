@@ -162,7 +162,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 			if (firmware->table_params[table_num]->color_update == FALSE)
 			{
-				recalc_table_limits(canID,table_num);
+				recalc_table_limits_f(canID,table_num);
 				if ((firmware->table_params[table_num]->last_z_maxval != firmware->table_params[table_num]->z_maxval) || (firmware->table_params[table_num]->last_z_minval != firmware->table_params[table_num]->z_minval))
 					firmware->table_params[table_num]->color_update = TRUE;
 				else
@@ -832,7 +832,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	{
 		if (firmware->table_params[i]->color_update == FALSE)
 		{
-			recalc_table_limits(0,i);
+			recalc_table_limits_f(0,i);
 			if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 				firmware->table_params[i]->color_update = TRUE;
 			else
@@ -1637,62 +1637,6 @@ G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *canID, gint *page, 
 	}
 	if (precision)
 		*precision = (DataSize)OBJ_GET(widget,"precision");
-}
-
-
-/*!
-   \brief recalc_table_limits() Finds the minimum and maximum values for a 
-    2D table (this will be deprecated when thevetables are a custom widget)
-     */
-G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
-{
-	static Firmware_Details *firmware = NULL;
-	gint i = 0;
-	gint x_count = 0;
-	gint y_count = 0;
-	gint z_base = 0;
-	gint z_page = 0;
-	gint z_size = 0;
-	gint z_mult = 0;
-	gint tmpi = 0;
-	gint max = 0;
-	gint min = 0;
-
-	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
-
-	g_return_if_fail(firmware);
-
-	/* Limit check */
-	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
-		return;
-	firmware->table_params[table_num]->last_z_maxval = firmware->table_params[table_num]->z_maxval;
-	firmware->table_params[table_num]->last_z_minval = firmware->table_params[table_num]->z_minval;
-	x_count = firmware->table_params[table_num]->x_bincount;
-	y_count = firmware->table_params[table_num]->y_bincount;
-	z_base = firmware->table_params[table_num]->z_base;
-	z_page = firmware->table_params[table_num]->z_page;
-	z_size = firmware->table_params[table_num]->z_size;
-	z_mult = get_multiplier_f(z_size);
-	min = get_extreme_from_size_f(z_size,UPPER);
-	max = get_extreme_from_size_f(z_size,LOWER);
-
-	for (i=0;i<x_count*y_count;i++)
-	{
-		tmpi = ms_get_ecu_data(canID,z_page,z_base+(i*z_mult),z_size);
-		if (tmpi > max)
-			max = tmpi;
-		if (tmpi < min)
-			min = tmpi;
-	}
-	if (min == max) /* FLAT table, causes black screen */
-	{
-		min -= 10;
-		max += 10;
-	}
-	firmware->table_params[table_num]->z_maxval = max;
-	firmware->table_params[table_num]->z_minval = min;
-	return;
 }
 
 

@@ -59,7 +59,7 @@
 		</arg>
 		<arg>
 			<name>LENGTH</name>
-			<desc>Offset from the beginning of the table</desc>
+			<desc>Length of the block of data</desc>
 			<type>_LENGTH_</type>
 			<internal_name>length</internal_name>
 			<size>_U16_</size>

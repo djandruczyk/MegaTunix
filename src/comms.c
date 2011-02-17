@@ -144,7 +144,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			{
 				/*			printf("Sleeping for %i usec\n", block->arg);*/
 				dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tSleeping for %i microseconds \n",block->arg));
-				g_usleep(*factor * block->arg);
+				g_usleep((*factor)*block->arg);
 			}
 		}
 		else if (block->type == DATA)
@@ -169,7 +169,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 					retval = FALSE;
 				}
 				if (firmware->capabilities & MS2)
-					g_usleep(*factor * firmware->interchardelay*1000);
+					g_usleep((*factor)*firmware->interchardelay*1000);
 			}
 		}
 	}

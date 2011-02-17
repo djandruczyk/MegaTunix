@@ -248,14 +248,14 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				printf("Packet arrived for GENERIC_READ case with sequence %i, locID %i\n",seq,locID);
+				printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				freeems_store_new_block(locID,offset,packet->data+packet->payload_base_offset,length);
 				freeems_packet_cleanup(packet);
 	                        tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 	                        DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			}
 			else
-				printf("timeout, no packet found in queue for sequence %i, location id %i\n",seq,locID);
+				printf("timeout, no packet found in queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 			break;
 		default:
 			printf("Don't know how to handle this type..\n");

@@ -2108,3 +2108,72 @@ G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
 	return;
 }
 
+
+/*!
+ \brief recalc_table_limits() Finds the minimum and maximum values for a 
+ 2D table (this will be deprecated when thevetables are a custom widget)
+ */
+G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
+{
+	static Firmware_Details *firmware = NULL;
+	static gint (*get_ecu_data_f)(gpointer) = NULL;
+	gint i = 0;
+	gint x_count = 0;
+	gint y_count = 0;
+	gint z_base = 0;
+	gint z_page = 0;
+	gint z_size = 0;
+	gint z_mult = 0;
+	GObject *container = NULL;
+	gint tmpi = 0;
+	gint max = 0;
+	gint min = 0;
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!get_ecu_data_f)
+		get_symbol("get_ecu_data",(void*)&get_ecu_data_f);
+
+	g_return_if_fail(firmware);
+	g_return_if_fail(get_ecu_data_f);
+
+	container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+        g_object_ref_sink(container);
+
+	/* Limit check */
+	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
+		return;
+	firmware->table_params[table_num]->last_z_maxval = firmware->table_params[table_num]->z_maxval;
+	firmware->table_params[table_num]->last_z_minval = firmware->table_params[table_num]->z_minval;
+	x_count = firmware->table_params[table_num]->x_bincount;
+	y_count = firmware->table_params[table_num]->y_bincount;
+	z_base = firmware->table_params[table_num]->z_base;
+	z_page = firmware->table_params[table_num]->z_page;
+	z_size = firmware->table_params[table_num]->z_size;
+	OBJ_SET(container,"page",GINT_TO_POINTER(z_page));
+	OBJ_SET(container,"size",GINT_TO_POINTER(z_size));
+	OBJ_SET(container,"canID",GINT_TO_POINTER(canID));
+	z_mult = get_multiplier(z_size);
+	min = get_extreme_from_size(z_size,UPPER);
+	max = get_extreme_from_size(z_size,LOWER);
+
+	for (i=0;i<x_count*y_count;i++)
+	{
+		OBJ_SET(container,"offset",GINT_TO_POINTER(z_base+(i*z_mult)));
+		tmpi = get_ecu_data_f(container);
+		if (tmpi > max)
+			max = tmpi;
+		if (tmpi < min)
+			min = tmpi;
+	}
+	if (min == max) /* FLAT table, causes black screen */
+	{
+		min -= 10;
+		max += 10;
+	}
+	firmware->table_params[table_num]->z_maxval = max;
+	firmware->table_params[table_num]->z_minval = min;
+	g_object_unref(container);
+	return;
+}
+

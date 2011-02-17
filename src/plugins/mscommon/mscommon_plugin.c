@@ -83,6 +83,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("queue_function",(void *)&queue_function_f);
 	get_symbol_f("read_data",(void *)&read_data_f);
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
+	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
 	get_symbol_f("register_widget",(void *)&register_widget_f);
 	get_symbol_f("remove_watch",(void *)&remove_watch_f);
 	get_symbol_f("remove_from_lists",(void *)&remove_from_lists_f);

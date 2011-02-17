@@ -638,7 +638,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 						(firmware->table_params[i]->y_page == page) ||
 						(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
 			{
-				recalc_table_limits(canID,i);
+				recalc_table_limits_f(canID,i);
 				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 					firmware->table_params[i]->color_update = TRUE;
 				else

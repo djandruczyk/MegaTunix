@@ -71,6 +71,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("process_rt_vars",(void *)&process_rt_vars_f);
 	get_symbol_f("read_data",(void *)&read_data_f);
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
+	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
 	get_symbol_f("set_widget_labels",(void *)&set_widget_labels_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("set_title",(void *)&set_title_f);
