@@ -113,6 +113,9 @@ struct _Ve_View_3D
 	gchar *z_conv_expr;
 	void *z_eval;
 	gchar * z_depend_on;
+	GObject *x_container;
+	GObject *y_container;
+	GObject *z_container;
 	GObject **x_objects;
 	GObject **y_objects;
 	GObject ***z_objects;

@@ -316,22 +316,31 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			ve_view->z_depend_on = firmware->table_params[table_num]->z_depend_on;
 	}
 
-	ve_view->z_page = firmware->table_params[table_num]->z_page;
-	ve_view->z_base = firmware->table_params[table_num]->z_base;
-	ve_view->z_size = firmware->table_params[table_num]->z_size;
-	ve_view->z_mult = get_multiplier(ve_view->z_size);
-
 	ve_view->x_page = firmware->table_params[table_num]->x_page;
 	ve_view->x_base = firmware->table_params[table_num]->x_base;
 	ve_view->x_size = firmware->table_params[table_num]->x_size;
-	ve_view->x_bincount = firmware->table_params[table_num]->x_bincount;
 	ve_view->x_mult = get_multiplier(ve_view->x_size);
+	ve_view->x_bincount = firmware->table_params[table_num]->x_bincount;
+	OBJ_SET(ve_view->x_container,"page",GINT_TO_POINTER(ve_view->x_page));
+	OBJ_SET(ve_view->x_container,"size",GINT_TO_POINTER(ve_view->x_size));
+	OBJ_SET(ve_view->x_container,"canID",GINT_TO_POINTER(firmware->canID));
 
 	ve_view->y_page = firmware->table_params[table_num]->y_page;
 	ve_view->y_base = firmware->table_params[table_num]->y_base;
 	ve_view->y_size = firmware->table_params[table_num]->y_size;
 	ve_view->y_mult = get_multiplier(ve_view->y_size);
 	ve_view->y_bincount = firmware->table_params[table_num]->y_bincount;
+	OBJ_SET(ve_view->y_container,"page",GINT_TO_POINTER(ve_view->y_page));
+	OBJ_SET(ve_view->y_container,"size",GINT_TO_POINTER(ve_view->y_size));
+	OBJ_SET(ve_view->y_container,"canID",GINT_TO_POINTER(firmware->canID));
+
+	ve_view->z_page = firmware->table_params[table_num]->z_page;
+	ve_view->z_base = firmware->table_params[table_num]->z_base;
+	ve_view->z_size = firmware->table_params[table_num]->z_size;
+	OBJ_SET(ve_view->z_container,"page",GINT_TO_POINTER(ve_view->z_page));
+	OBJ_SET(ve_view->z_container,"size",GINT_TO_POINTER(ve_view->z_size));
+	OBJ_SET(ve_view->z_container,"canID",GINT_TO_POINTER(firmware->canID));
+	ve_view->z_mult = get_multiplier(ve_view->z_size);
 
 	ve_view->table_name =
 		g_strdup(firmware->table_params[table_num]->table_name);
@@ -669,6 +678,9 @@ G_MODULE_EXPORT gboolean free_ve3d_view(GtkWidget *widget)
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
+	g_object_unref(ve_view->x_container);
+	g_object_unref(ve_view->y_container);
+	g_object_unref(ve_view->z_container);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 
@@ -1646,6 +1658,8 @@ G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
 G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
                                       *event, gpointer data)
 {
+	static gint (*get_ecu_data_f)(gpointer) = NULL;
+	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
 	gint offset = 0;
 	gint x_bincount = 0;
 	gint y_bincount = 0;
@@ -1658,6 +1672,10 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gint x_mult = 0;
 	gint y_mult = 0;
 	gint z_mult = 0;
+	gint cur = 0;
+	GObject *x_container = NULL;
+	GObject *y_container = NULL;
+	GObject *z_container = NULL;
 	gint page = 0;
 	gint i = 0;
 	DataSize size = 0;
@@ -1672,15 +1690,16 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
 	Firmware_Details *firmware = NULL;
-	static gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize) = NULL;
-	static void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean) = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-	if (!ms_get_ecu_data_f)
-		get_symbol("ms_get_ecu_data",(void*)&ms_get_ecu_data_f);
+	if (!get_ecu_data_f)
+		get_symbol("get_ecu_data",(void*)&get_ecu_data_f);
 
-	if (!ms_send_to_ecu_f)
-		get_symbol("ms_send_to_ecu",(void*)&ms_send_to_ecu_f);
+	if (!send_to_ecu_f)
+		get_symbol("send_to_ecu",(void*)&send_to_ecu_f);
+
+	g_return_val_if_fail(get_ecu_data_f,FALSE);
+	g_return_val_if_fail(send_to_ecu_f,FALSE);
 
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
@@ -1708,6 +1727,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	y_size = ve_view->y_size;
 	z_size = ve_view->z_size;
 
+	x_container = ve_view->x_container;
+	y_container = ve_view->y_container;
+	z_container = ve_view->z_container;
+
+	g_return_val_if_fail(x_container,FALSE);
+	g_return_val_if_fail(y_container,FALSE);
+	g_return_val_if_fail(z_container,FALSE);
+
 	if (event->state & GDK_SHIFT_MASK)
 		step = 10;
 	else 
@@ -1727,11 +1754,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
 				max = (gint)pow(2,y_mult*8) -step;
-				if (ms_get_ecu_data_f(canID,y_page,offset,y_size) <= max)
+				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
+				cur = get_ecu_data_f(y_container);
+				if (cur <= max)
 				{
-					dload_val = ms_get_ecu_data_f(canID,y_page,offset,y_size) + step;
-					page = y_page;
-					size = y_size;
+					dload_val = cur + step;
+					send_to_ecu_f(y_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
 			}
@@ -1751,11 +1779,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
-				if (ms_get_ecu_data_f(canID,y_page,offset,y_size) > step)
+				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
+				cur = get_ecu_data_f(y_container);
+				if (cur > step)
 				{
-					dload_val = ms_get_ecu_data_f(canID,y_page,offset,y_size) - step;
-					page = y_page;
-					size = y_size;
+					dload_val = cur - step;
+					send_to_ecu_f(y_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
 			}
@@ -1776,11 +1805,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
-				if (ms_get_ecu_data_f(canID,x_page,offset,x_size) > step)
+				OBJ_SET(x_container,"offset",GINT_TO_POINTER(offset));
+				cur = get_ecu_data_f(x_container);
+				if (cur > step)
 				{
-					dload_val = ms_get_ecu_data_f(canID,x_page,offset,x_size) - step;
-					page = x_page;
-					size = x_size;
+					dload_val = cur - step;
+					send_to_ecu_f(x_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
 			}
@@ -1800,11 +1830,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
 				max = (gint)pow(2,x_mult*8) -step;
-				if (ms_get_ecu_data_f(canID,x_page,offset,x_size) <= max)
+				OBJ_SET(x_container,"offset",GINT_TO_POINTER(offset));
+				cur = get_ecu_data_f(x_container);
+				if (cur <= max)
 				{
-					dload_val = ms_get_ecu_data_f(canID,x_page,offset,x_size) + step;
-					page = x_page;
-					size = x_size;
+					dload_val = cur + step;
+					send_to_ecu_f(x_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
 			}
@@ -1824,12 +1855,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
+					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+					cur = get_ecu_data_f(z_container);
+					if (cur <= max)
 					{
-						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 10;
+						dload_val = cur + 10;
 						page = z_page;
 						size = z_size;
-						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(z_container,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1841,12 +1874,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
+					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+					cur = get_ecu_data_f(z_container);
+					if (cur <= max)
 					{
-						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 10;
+						dload_val = cur + 10;
 						page = z_page;
 						size = z_size;
-						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 
 					}
@@ -1856,11 +1891,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+				cur = get_ecu_data_f(z_container);
+				if (cur <= max)
 				{
-					dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 10;
-					page = z_page;
-					size = z_size;
+					dload_val = cur + 10;
+					send_to_ecu_f(z_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
 			}
@@ -1879,12 +1915,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
+					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+					cur = get_ecu_data_f(z_container);
+					if (cur <= max)
 					{
-						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 1;
+						dload_val = cur + 1;
 						page = z_page;
 						size = z_size;
-						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1896,12 +1934,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) <= max)
+					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+					cur = get_ecu_data_f(z_container);
+					if (cur <= max)
 					{
-						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 1;
+						dload_val = cur + 1;
 						page = z_page;
 						size = z_size;
-						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1910,11 +1950,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (ms_get_ecu_data_f(canID,z_page,offset,z_size) < max)
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+				cur = get_ecu_data_f(z_container);
+				if (cur < max)
 				{
-					page = z_page;
-					size = z_size;
-					dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) + 1;
+					dload_val = cur + 1;
+					send_to_ecu_f(z_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
 			}
@@ -1928,12 +1969,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
+					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+					cur = get_ecu_data_f(z_container);
+					if (cur >= 10)
 					{
-						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 10;
+						dload_val = cur - 10;
 						page = z_page;
 						size = z_size;
-						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(z_container,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1945,12 +1988,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
+					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+					cur = get_ecu_data_f(z_container);
+					if (cur >= 10)
 					{
-						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 10;
+						dload_val = cur - 10;
 						page = z_page;
 						size = z_size;
-						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1959,11 +2004,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (ms_get_ecu_data_f(canID,z_page,offset,z_size) >= 10)
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+				cur = get_ecu_data_f(z_container);
+				if (cur >= 10)
 				{
-					dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 10;
-					page = z_page;
-					size = z_size;
+					dload_val = cur - 10;
+					send_to_ecu_f(z_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
 			}
@@ -1980,12 +2026,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
-					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) > 0)
+					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+					cur = get_ecu_data_f(z_container);
+					if (cur > 0)
 					{
-						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 1;
+						dload_val = cur - 1;
 						page = z_page;
 						size = z_size;
-						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 					}
 				}
@@ -1997,12 +2045,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
-					if (ms_get_ecu_data_f(canID,z_page,offset,z_size) > 0)
+					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+					cur = get_ecu_data_f(z_container);
+					if (cur > 0)
 					{
-						dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 1;
+						dload_val = cur - 1;
 						page = z_page;
 						size = z_size;
-						ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
+						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 
 					}
@@ -2012,11 +2062,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else
 			{
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
-				if (ms_get_ecu_data_f(canID,z_page,offset,z_size) > 0)
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
+				cur = get_ecu_data_f(z_container);
+				if (cur > 0)
 				{
-					dload_val = ms_get_ecu_data_f(canID,z_page,offset,z_size) - 1;
-					page = z_page;
-					size = z_size;
+					dload_val = cur - 1;
+					send_to_ecu_f(z_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
 			}
@@ -2040,7 +2091,6 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	{
 		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
 
-		ms_send_to_ecu_f(canID,page,offset,size,dload_val, TRUE);
 		ve_view->mesh_created=FALSE;
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
@@ -2104,6 +2154,12 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 	ve_view->table_name = NULL;
 	ve_view->opacity = 0.85;
 	ve_view->wireframe = TRUE;
+	ve_view->x_container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	g_object_ref_sink(ve_view->x_container);
+	ve_view->y_container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	g_object_ref_sink(ve_view->y_container);
+	ve_view->z_container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	g_object_ref_sink(ve_view->z_container);
 	ve_view->mesh_created = FALSE;
 	return ve_view;
 }
@@ -2671,6 +2727,7 @@ G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 
 G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
+	static gint (*get_ecu_data_f)(gpointer) = NULL;
 	gint x = 0;
 	gint y = 0;
 	gint z_mult = 0;
@@ -2680,13 +2737,21 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gfloat scaler = 0.0;
 	gint canID = 0;
 	Quad * quad = NULL;
+	GObject *z_container = NULL;
 	Firmware_Details *firmware = NULL;
-	static gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize) = NULL;
 
-	if (!ms_get_ecu_data_f)
-		get_symbol("ms_get_ecu_data",(void*)&ms_get_ecu_data_f);
+	if (!get_ecu_data_f)
+		get_symbol("get_ecu_data",(void*)&get_ecu_data_f);
 
 	firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(get_ecu_data_f);
+	g_return_if_fail(firmware);
+
+	z_container = ve_view->z_container;
+	g_return_if_fail(get_ecu_data_f);
+	g_return_if_fail(z_container);
+	g_return_if_fail(firmware);
+
 	canID = firmware->canID;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": generate_quad_mesh() \n"));
@@ -2700,7 +2765,8 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	/* Draw QUAD MESH into stored grid (Calc'd once*/
 	for(y=0;y<ve_view->x_bincount*ve_view->y_bincount;++y)
 	{
-		tmpi = ms_get_ecu_data_f(canID,z_page,z_base+(y*z_mult),ve_view->z_size);
+		OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(y*z_mult)));
+		tmpi = get_ecu_data_f(z_container);
 		if (tmpi >ve_view->z_maxval)
 			ve_view->z_maxval = tmpi;
 		if (tmpi < ve_view->z_minval)
@@ -2723,22 +2789,26 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[0] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[0] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x)*z_mult)));
+				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[1] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[1] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x+1)*z_mult)));
+				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[2] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[2] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult)));
+				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[3] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[3] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult)));
+				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 			}
 			else
 			{
@@ -2746,22 +2816,26 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[0] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[0] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x)*z_mult)));
+				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[1] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[1] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+(((y*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x+1)*z_mult)));
+				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[2] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[2] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult)));
+				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[3] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				quad->color[3] = rgb_from_hue(256.0-((gfloat)ms_get_ecu_data_f(canID,z_page,z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult),ve_view->z_size)-ve_view->z_minval)*scaler,0.75, 1.0);
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult)));
+				quad->color[3] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 			}
 		}
 	}

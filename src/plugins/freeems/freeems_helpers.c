@@ -14,6 +14,7 @@
  */
 
 #include <config.h>
+#include <datamgmt.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <freeems_helpers.h>
@@ -230,7 +231,6 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
 
-	printf("Simple read postfunction!\n");
 	switch (type)
 	{
 		case READ_ALL:
@@ -241,21 +241,21 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 			length = (GINT)DATA_GET(output->data,"length");
 			queue = DATA_GET(output->data,"queue");
 			g_get_current_time(&tval);
-			g_time_val_add(&tval,250000);
+			g_time_val_add(&tval,500000);
 			packet = g_async_queue_timed_pop(queue,&tval);
 			deregister_packet_queue(SEQUENCE_NUM,queue,seq);
 			g_async_queue_unref(queue);
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				printf("Packet arrived for GENERIC_READ/READ_ALL case with sequence %i\n",seq);
+				printf("Packet arrived for GENERIC_READ case with sequence %i, locID %i\n",seq,locID);
 				freeems_store_new_block(locID,offset,packet->data+packet->payload_base_offset,length);
 				freeems_packet_cleanup(packet);
 	                        tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 	                        DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			}
 			else
-				printf("timeout, no packet found in queue for sequence %i\n",seq);
+				printf("timeout, no packet found in queue for sequence %i, location id %i\n",seq,locID);
 			break;
 		default:
 			printf("Don't know how to handle this type..\n");
