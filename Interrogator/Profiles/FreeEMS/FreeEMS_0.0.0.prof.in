@@ -13,7 +13,7 @@ Write_Command=generic_write
 RT_Command=basic_datalog
 RT_total_bytes=96
 Burn_Command=burn
-Capabilities=_FREEEMS
+Capabilities=_FREEEMS_
 BigEndian=TRUE
 MultiPage=FALSE
 

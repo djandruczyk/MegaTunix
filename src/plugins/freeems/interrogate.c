@@ -813,11 +813,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
 	else
 	{
-		/*printf("Capabilities %s\n",tmpbuf);*/
 		firmware->capabilities = translate_capabilities(tmpbuf);
 		g_free(tmpbuf);
 	}
-	/* Commands to map agaisnt the comm.xml */
+	/* Commands to map against the comm.xml */
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",&firmware->rt_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"RT_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_int(cfgfile,"parameters","RT_total_bytes",

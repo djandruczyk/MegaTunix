@@ -161,7 +161,13 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 	container = (gconstpointer *)data;
 	if (GTK_IS_WIDGET(data))
 	{
-		locID = (GINT)OBJ_GET(widget,"location_id");
+		if (!OBJ_GET(widget,"location_id"))
+		{
+			page = (GINT)OBJ_GET(widget,"page");
+			locID = firmware->page_params[page]->phys_ecu_page;
+		}
+		else
+			locID = (GINT)OBJ_GET(widget,"location_id");
 		offset = (GINT)OBJ_GET(widget,"offset");
 		size = (DataSize)OBJ_GET(widget,"size");
 		if (new)
@@ -171,7 +177,13 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 	}
 	else
 	{
-		locID = (GINT)DATA_GET(container,"location_id");
+		if (!DATA_GET(container,"location_id"))
+		{
+			page = (GINT)DATA_GET(container,"page");
+			locID = firmware->page_params[page]->phys_ecu_page;
+		}
+		else
+			locID = (GINT)DATA_GET(container,"location_id");
 		offset = (GINT)DATA_GET(container,"offset");
 		size = (DataSize)DATA_GET(container,"size");
 		if (new)

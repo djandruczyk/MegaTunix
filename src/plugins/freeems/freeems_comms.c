@@ -538,8 +538,6 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 
 	if (GTK_IS_WIDGET(widget))
 	{
-		if ((!OBJ_GET(widget,"location_id")) && (!OBJ_GET(widget,"page")))
-			printf("ERROR, location id or page is NOT set!\n");
 		if (!OBJ_GET(widget,"location_id"))
 		{
 			page = (GINT)OBJ_GET(widget,"page");
@@ -552,8 +550,6 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 	}
 	else
 	{
-		if ((!DATA_GET(gptr,"location_id")) && (!DATA_GET(gptr,"page")))
-			printf("ERROR, location id or page is NOT set!\n");
 		if (!DATA_GET(gptr,"location_id"))
 		{
 			page = (GINT)DATA_GET(gptr,"page");
