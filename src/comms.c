@@ -241,7 +241,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	if (a_dir)
 	{
 		while ((entry = g_dir_read_name(a_dir)) != NULL)
-			if (!g_hash_table_lookup(hash,(gconstpointer)entry))
+			if ((!g_hash_table_lookup(hash,(gconstpointer)entry)) && (g_strrstr(entry,"tty.")))
 				found = g_list_prepend(found,g_strdup(entry));
 	}
 	g_hash_table_destroy(hash);
