@@ -316,6 +316,36 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			ve_view->z_depend_on = firmware->table_params[table_num]->z_depend_on;
 	}
 
+	if (firmware->table_params[table_num]->x_dl_eval)
+	{
+		ve_view->x_smallstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->x_dl_eval,1);
+		ve_view->x_bigstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->x_dl_eval,10);
+	}
+	else
+	{
+		ve_view->x_smallstep = 1;
+		ve_view->x_bigstep = 10;
+	}
+	if (firmware->table_params[table_num]->y_dl_eval)
+	{
+		ve_view->y_smallstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->y_dl_eval,1);
+		ve_view->y_bigstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->y_dl_eval,10);
+	}
+	else
+	{
+		ve_view->y_smallstep = 1;
+		ve_view->y_bigstep = 10;
+	}
+	if (firmware->table_params[table_num]->z_dl_eval)
+	{
+		ve_view->z_smallstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->z_dl_eval,1);
+		ve_view->z_bigstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->z_dl_eval,10);
+	}
+	else
+	{
+		ve_view->z_smallstep = 1;
+		ve_view->z_bigstep = 10;
+	}
 	ve_view->x_page = firmware->table_params[table_num]->x_page;
 	ve_view->x_base = firmware->table_params[table_num]->x_base;
 	ve_view->x_size = firmware->table_params[table_num]->x_size;
@@ -1676,16 +1706,14 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	GObject *x_container = NULL;
 	GObject *y_container = NULL;
 	GObject *z_container = NULL;
-	gint page = 0;
 	gint i = 0;
-	DataSize size = 0;
 	DataSize x_size = 0;
 	DataSize y_size = 0;
 	DataSize z_size = 0;
 	gint max = 0;
 	gint dload_val = 0;
 	gint canID = 0;
-	gint step = 1;
+	gint factor = 1;
 	gboolean cur_state = FALSE;
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
@@ -1736,9 +1764,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	g_return_val_if_fail(z_container,FALSE);
 
 	if (event->state & GDK_SHIFT_MASK)
-		step = 10;
+		factor = 10;
 	else 
-		step = 1;
+		factor = 1;
 	switch (event->keyval)
 	{
 		case GDK_B:
@@ -1753,12 +1781,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
-				max = (gint)pow(2,y_mult*8) -step;
+				max = (gint)pow(2,y_mult*8) - ve_view->y_smallstep;
 				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(y_container);
 				if (cur <= max)
 				{
-					dload_val = cur + step;
+					dload_val = cur + ve_view->y_smallstep;
 					send_to_ecu_f(y_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -1781,9 +1809,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				offset = y_base + (ve_view->active_y*y_mult);
 				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(y_container);
-				if (cur > step)
+				if (cur > ve_view->y_smallstep)
 				{
-					dload_val = cur - step;
+					dload_val = cur - ve_view->y_smallstep;
 					send_to_ecu_f(y_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -1807,9 +1835,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				offset = x_base + (ve_view->active_x*x_mult);
 				OBJ_SET(x_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(x_container);
-				if (cur > step)
+				if (cur > ve_view->x_smallstep)
 				{
-					dload_val = cur - step;
+					dload_val = cur - ve_view->x_smallstep;
 					send_to_ecu_f(x_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -1829,12 +1857,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
-				max = (gint)pow(2,x_mult*8) -step;
+				max = (gint)pow(2,x_mult*8) - ve_view->x_smallstep;
 				OBJ_SET(x_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(x_container);
 				if (cur <= max)
 				{
-					dload_val = cur + step;
+					dload_val = cur + ve_view->x_smallstep;
 					send_to_ecu_f(x_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -1848,7 +1876,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;
 		case GDK_Page_Up:
 			dbg_func(OPENGL,g_strdup("\t\"Page Up\"\n"));
-			max = (gint)pow(2,z_mult*8) -10;
+			max = (gint)pow(2,z_mult*8) - ve_view->z_bigstep;
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				/*printf("Ctrl-PgUp, big increase ROW!\n");*/
@@ -1859,9 +1887,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					cur = get_ecu_data_f(z_container);
 					if (cur <= max)
 					{
-						dload_val = cur + 10;
-						page = z_page;
-						size = z_size;
+						dload_val = cur + ve_view->z_bigstep;
 						send_to_ecu_f(z_container,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
@@ -1878,9 +1904,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					cur = get_ecu_data_f(z_container);
 					if (cur <= max)
 					{
-						dload_val = cur + 10;
-						page = z_page;
-						size = z_size;
+						dload_val = cur + ve_view->z_bigstep;
 						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 
@@ -1895,7 +1919,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				cur = get_ecu_data_f(z_container);
 				if (cur <= max)
 				{
-					dload_val = cur + 10;
+					dload_val = cur + ve_view->z_bigstep;
 					send_to_ecu_f(z_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -1908,7 +1932,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_q:
 		case GDK_equal:
 			dbg_func(OPENGL,g_strdup("\t\"PLUS\"\n"));
-			max = (gint)pow(2,z_mult*8)-1;
+			max = (gint)pow(2,z_mult*8) - ve_view->z_smallstep;
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				/*printf("Ctrl-q/+/=, increase ROW!\n");*/
@@ -1919,9 +1943,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					cur = get_ecu_data_f(z_container);
 					if (cur <= max)
 					{
-						dload_val = cur + 1;
-						page = z_page;
-						size = z_size;
+						dload_val = cur + ve_view->z_smallstep;
 						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 					}
@@ -1938,9 +1960,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					cur = get_ecu_data_f(z_container);
 					if (cur <= max)
 					{
-						dload_val = cur + 1;
-						page = z_page;
-						size = z_size;
+						dload_val = cur + ve_view->z_smallstep;
 						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 					}
@@ -1954,7 +1974,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				cur = get_ecu_data_f(z_container);
 				if (cur < max)
 				{
-					dload_val = cur + 1;
+					dload_val = cur + ve_view->z_smallstep;
 					send_to_ecu_f(z_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -1971,11 +1991,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
-					if (cur >= 10)
+					if (cur >= ve_view->z_bigstep)
 					{
-						dload_val = cur - 10;
-						page = z_page;
-						size = z_size;
+						dload_val = cur - ve_view->z_bigstep;
 						send_to_ecu_f(z_container,dload_val, TRUE);
 						update_widgets = TRUE;
 					}
@@ -1990,11 +2008,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
-					if (cur >= 10)
+					if (cur >= ve_view->z_bigstep)
 					{
-						dload_val = cur - 10;
-						page = z_page;
-						size = z_size;
+						dload_val = cur - ve_view->z_bigstep;
 						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 					}
@@ -2006,9 +2022,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(z_container);
-				if (cur >= 10)
+				if (cur >= ve_view->z_bigstep)
 				{
-					dload_val = cur - 10;
+					dload_val = cur - ve_view->z_bigstep;
 					send_to_ecu_f(z_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -2028,11 +2044,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
-					if (cur > 0)
+					if (cur > ve_view->z_smallstep)
 					{
-						dload_val = cur - 1;
-						page = z_page;
-						size = z_size;
+						dload_val = cur - ve_view->z_smallstep;
 						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 					}
@@ -2047,11 +2061,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
-					if (cur > 0)
+					if (cur > ve_view->z_smallstep)
 					{
-						dload_val = cur - 1;
-						page = z_page;
-						size = z_size;
+						dload_val = cur - ve_view->z_smallstep;
 						send_to_ecu_f(z_container, dload_val, TRUE);
 						update_widgets = TRUE;
 
@@ -2064,9 +2076,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(z_container);
-				if (cur > 0)
+				if (cur > ve_view->z_smallstep)
 				{
-					dload_val = cur - 1;
+					dload_val = cur - ve_view->z_smallstep;
 					send_to_ecu_f(z_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -2149,6 +2161,12 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 	ve_view->z_mult = 0;
 	ve_view->z_minval = 0;
 	ve_view->z_maxval = 0;
+	ve_view->x_smallstep = 0;
+	ve_view->x_bigstep = 0;
+	ve_view->y_smallstep = 0;
+	ve_view->y_bigstep = 0;
+	ve_view->z_smallstep = 0;
+	ve_view->z_bigstep = 0;
 	ve_view->x_bincount = 0;
 	ve_view->y_bincount = 0;
 	ve_view->table_name = NULL;

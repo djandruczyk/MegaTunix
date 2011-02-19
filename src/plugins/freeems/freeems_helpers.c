@@ -191,6 +191,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 					seq = g_rand_int_range(rand,0,255);
 
 					output = initialize_outputdata_f();
+					DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 					DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 					DATA_SET(output->data,"location_id",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_RETRIEVE_BLOCK_FROM_RAM));
@@ -222,6 +223,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 	FreeEMS_Packet *packet = NULL;
 	gint seq = 0;
 	gint tmpi = 0;
+	gint canID = 0;
 	gint locID = 0;
 	gint offset = 0;
 	gint length = 0;
@@ -236,6 +238,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 		case READ_ALL:
 		case GENERIC_READ:
 			seq = (GINT)DATA_GET(output->data,"sequence_num");
+			canID = (GINT)DATA_GET(output->data,"canID");
 			locID = (GINT)DATA_GET(output->data,"location_id");
 			offset = (GINT)DATA_GET(output->data,"offset");
 			length = (GINT)DATA_GET(output->data,"length");
@@ -249,7 +252,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 			if (packet)
 			{
 				printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
-				freeems_store_new_block(locID,offset,packet->data+packet->payload_base_offset,length);
+				freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,length);
 				freeems_packet_cleanup(packet);
 	                        tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 	                        DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));

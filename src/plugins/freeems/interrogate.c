@@ -920,6 +920,21 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->y_precision = 1;
 	firmware->table_params[0]->z_precision = 1;
 	firmware->table_params[0]->table_name = g_strdup("FreeEMS very alpha fuel table");;
+	/* X */
+	firmware->table_params[0]->x_ul_eval = evaluator_create_f(firmware->table_params[0]->x_fromecu_conv_expr);
+	g_assert(firmware->table_params[0]->x_ul_eval);
+	firmware->table_params[0]->x_dl_eval = evaluator_create_f(firmware->table_params[0]->x_toecu_conv_expr);
+	g_assert(firmware->table_params[0]->x_dl_eval);
+	/* Y */
+	firmware->table_params[0]->y_ul_eval = evaluator_create_f(firmware->table_params[0]->y_fromecu_conv_expr);
+	g_assert(firmware->table_params[0]->y_ul_eval);
+	firmware->table_params[0]->y_dl_eval = evaluator_create_f(firmware->table_params[0]->y_toecu_conv_expr);
+	g_assert(firmware->table_params[0]->y_dl_eval);
+	/* Z */
+	firmware->table_params[0]->z_ul_eval = evaluator_create_f(firmware->table_params[0]->z_fromecu_conv_expr);
+	g_assert(firmware->table_params[0]->z_ul_eval);
+	firmware->table_params[0]->z_dl_eval = evaluator_create_f(firmware->table_params[0]->z_toecu_conv_expr);
+	g_assert(firmware->table_params[0]->z_dl_eval);
 
 
 	if (mem_alloc_f)

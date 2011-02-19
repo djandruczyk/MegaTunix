@@ -18,13 +18,11 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gint freeems_get_ecu_data(gint, gint, DataSize); 
-gint freeems_get_ecu_data_last(gint, gint, DataSize); 
-gint freeems_get_ecu_data_backup(gint, gint, DataSize); 
-void freeems_set_ecu_data(gint, gint, DataSize, gint); 
-void freeems_set_ecu_data_pending(gint, gint, DataSize, gint); 
-void freeems_store_new_block_pending(gint, gint, void *, gint );
-void freeems_store_new_block(gint, gint, void *, gint );
+gint freeems_get_ecu_data(gint, gint, gint, DataSize); 
+gint freeems_get_ecu_data_last(gint, gint, gint, DataSize); 
+gint freeems_get_ecu_data_backup(gint, gint, gint, DataSize); 
+void freeems_set_ecu_data(gint, gint, gint, DataSize, gint); 
+void freeems_store_new_block(gint, gint, gint, void *, gint );
 void freeems_backup_current_data(gint );
 gboolean freeems_find_mtx_page(gint, gint *);
 void set_ecu_data(gpointer, gint *);

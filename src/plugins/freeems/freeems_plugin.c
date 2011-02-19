@@ -55,12 +55,16 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	get_symbol_f("dump_output",(void *)&dump_output_f);
+	get_symbol_f("evaluator_create",(void *)&evaluator_create_f);
+	get_symbol_f("evaluator_destroy",(void *)&evaluator_destroy_f);
+	get_symbol_f("evaluator_evaluate_x",(void *)&evaluator_evaluate_x_f);
 	get_symbol_f("flush_binary_logs",(void *)&flush_binary_logs_f);
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
 	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
 	get_symbol_f("get_file_api",(void *)&get_file_api_f);
 	get_symbol_f("get_list",(void *)&get_list_f);
 	get_symbol_f("get_multiplier",(void *)&get_multiplier_f);
+	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
 	get_symbol_f("jump_to_tab",(void *)&jump_to_tab_f);

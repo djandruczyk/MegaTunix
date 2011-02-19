@@ -526,6 +526,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 {
 	static Firmware_Details *firmware = NULL;
 	gint page = 0;
+	gint canID = 0;
 	gint locID = 0;
 	gint offset = 0;
 	DataSize size = MTX_U08;
@@ -545,6 +546,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 		}
 		else
 			locID = (GINT)OBJ_GET(widget,"location_id");
+		canID = (GINT)OBJ_GET(widget,"canID");
 		offset = (GINT)OBJ_GET(widget,"offset");
 		size = (DataSize)OBJ_GET(widget,"size");
 	}
@@ -557,11 +559,12 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 		}
 		else
 			locID = (GINT)DATA_GET(gptr,"location_id");
+		canID = (GINT)DATA_GET(gptr,"canID");
 		offset = (GINT)DATA_GET(gptr,"offset");
 		size = (DataSize)DATA_GET(gptr,"size");
 	}
 	/*printf("locID %i, offset, %i, value %i\n",locID,offset,value);*/
-	freeems_send_to_ecu(locID,offset,size,value,queue_update);
+	freeems_send_to_ecu(canID,locID,offset,size,value,queue_update);
 }
 
 
@@ -572,14 +575,14 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
  that are associated with this page/offset and update those widgets before
  sending the value to the ECU.
  \param widget (GtkWidget *) pointer to the widget that was modified or NULL
- \param page (gint) page in which the value refers to.
+ \param locID (gint) Location ID to where this value belongs
  \param offset (gint) offset from the beginning of the page that this data
  refers to.
  \param value (gint) the value that should be sent to the ECU At page.offset
  \param queue_update (gboolean), if true queues a gui update, used to prevent
  a horrible stall when doing an ECU restore or batch load...
  */
-G_MODULE_EXPORT void freeems_send_to_ecu(gint locID, gint offset, DataSize size, gint value, gboolean queue_update)
+G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, DataSize size, gint value, gboolean queue_update)
 {
 	OutputData *output = NULL;
 	guint8 *data = NULL;
@@ -674,7 +677,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint locID, gint offset, DataSize size,
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */
-	freeems_set_ecu_data(locID,offset,size,value);
+	freeems_set_ecu_data(canID, locID,offset,size,value);
 
 	output->queue_update = queue_update;
 	io_cmd_f(firmware->write_command,output);

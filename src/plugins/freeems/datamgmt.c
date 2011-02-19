@@ -67,11 +67,12 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 
 /*!
  \brief freeems_get_ecu_data() is a func to return the data requested.
+ \param canID, CANbus ID (unused currently)
  \param locID, Location ID (internal to ECU)
  \param offset, (RAW BYTE offset)
  \param size, (size to be returned)
  */
-G_MODULE_EXPORT gint freeems_get_ecu_data(gint locID, gint offset, DataSize size) 
+G_MODULE_EXPORT gint freeems_get_ecu_data(gint canID, gint locID, gint offset, DataSize size) 
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
@@ -94,11 +95,12 @@ G_MODULE_EXPORT gint freeems_get_ecu_data(gint locID, gint offset, DataSize size
 
 /*!
  \brief freeems_get_ecu_data_last() is a func to return the data requested.
+ \param canID, CANbus ID (unused currently)
  \param locID, Location ID (internal to ECU)
  \param offset, (RAW BYTE offset)
  \param size, (size to be returned)
  */
-G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint locID, gint offset, DataSize size) 
+G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint canID, gint locID, gint offset, DataSize size) 
 {
 	gint page = 0;
 	Firmware_Details *firmware = NULL;
@@ -119,11 +121,12 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint locID, gint offset, DataSize
 
 /*!
  \brief freeems_get_ecu_data_backup() is a func to return the data requested.
+ \param canID, CANbus ID (unused currently)
  \param locID, Location ID (internal to ECU)
  \param offset (RAW BYTE offset)
  \param size (size to be returned...
  */
-G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint locID, gint offset, DataSize size) 
+G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint canID, gint locID, gint offset, DataSize size) 
 {
 	gint page = 0;
 	Firmware_Details *firmware = NULL;
@@ -144,6 +147,7 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint locID, gint offset, DataSi
 
 G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 {
+	gint canID = 0;
 	gint locID = 0;
 	gint page = 0;
 	gint offset = 0;
@@ -168,6 +172,7 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 		}
 		else
 			locID = (GINT)OBJ_GET(widget,"location_id");
+		canID = (GINT)OBJ_GET(widget,"canID");
 		offset = (GINT)OBJ_GET(widget,"offset");
 		size = (DataSize)OBJ_GET(widget,"size");
 		if (new)
@@ -184,6 +189,7 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 		}
 		else
 			locID = (GINT)DATA_GET(container,"location_id");
+		canID = (GINT)DATA_GET(container,"canID");
 		offset = (GINT)DATA_GET(container,"offset");
 		size = (DataSize)DATA_GET(container,"size");
 		if (new)
@@ -201,7 +207,7 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 }
 
 
-G_MODULE_EXPORT void freeems_set_ecu_data(gint locID, gint offset, DataSize size, gint new) 
+G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint locID, gint offset, DataSize size, gint new) 
 {
 	gint page = 0;
 	Firmware_Details *firmware = NULL;
@@ -250,7 +256,7 @@ G_MODULE_EXPORT void store_new_block(gpointer block)
 }
 
 
-G_MODULE_EXPORT void freeems_store_new_block(gint locID, gint offset, void * buf, gint count)
+G_MODULE_EXPORT void freeems_store_new_block(gint canID, gint locID, gint offset, void * buf, gint count)
 {
 	gint page = 0;
 	Firmware_Details *firmware = NULL;
