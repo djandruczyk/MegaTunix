@@ -1835,9 +1835,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				offset = x_base + (ve_view->active_x*x_mult);
 				OBJ_SET(x_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(x_container);
-				if (cur > ve_view->x_smallstep)
+				if (cur > (ve_view->x_smallstep * factor))
 				{
-					dload_val = cur - ve_view->x_smallstep;
+					dload_val = cur - (ve_view->x_smallstep * factor);
 					send_to_ecu_f(x_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -1857,12 +1857,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
-				max = (gint)pow(2,x_mult*8) - ve_view->x_smallstep;
+				max = (gint)pow(2,x_mult*8) - (ve_view->x_smallstep * factor);
 				OBJ_SET(x_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(x_container);
 				if (cur <= max)
 				{
-					dload_val = cur + ve_view->x_smallstep;
+					dload_val = cur + (ve_view->x_smallstep * factor);
 					send_to_ecu_f(x_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
