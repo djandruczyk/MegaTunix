@@ -605,15 +605,15 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 		case MTX_CHAR:
 		case MTX_S08:
 		case MTX_U08:
-			printf("8 bit var %i at offset %i\n",value,offset);
+			/*printf("8 bit var %i at offset %i\n",value,offset);*/
 			break;
 		case MTX_S16:
 		case MTX_U16:
-			printf("16 bit var %i at offset %i\n",value,offset);
+			/*printf("16 bit var %i at offset %i\n",value,offset);*/
 			break;
 		case MTX_S32:
 		case MTX_U32:
-			printf("32 bit var %i at offset %i\n",value,offset);
+			/*printf("32 bit var %i at offset %i\n",value,offset);*/
 			break;
 		default:
 			printf(_("freeems_send_to_ecu() ERROR!!! Size undefined for variable at canID %i, offset %i\n"),locID,offset);

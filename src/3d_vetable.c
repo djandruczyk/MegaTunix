@@ -1780,6 +1780,8 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			/* Ctrl+Up moves the Load axis up */
 			if (event->state & GDK_CONTROL_MASK)
 			{
+				printf("UP factor %i\n",factor);
+				printf("smallstep %i\n",ve_view->y_smallstep);
 				offset = y_base + (ve_view->active_y*y_mult);
 				max = (gint)pow(2,y_mult*8) - (ve_view->y_smallstep * factor);
 				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
@@ -1806,6 +1808,8 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			/* Ctrl+Down moves the Load axis down */
 			if (event->state & GDK_CONTROL_MASK)
 			{
+				printf("DOWN factor %i\n",factor);
+				printf("smallstep %i\n",ve_view->y_smallstep);
 				offset = y_base + (ve_view->active_y*y_mult);
 				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(y_container);
