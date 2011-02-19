@@ -1781,12 +1781,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
-				max = (gint)pow(2,y_mult*8) - ve_view->y_smallstep;
+				max = (gint)pow(2,y_mult*8) - (ve_view->y_smallstep * factor);
 				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(y_container);
 				if (cur <= max)
 				{
-					dload_val = cur + ve_view->y_smallstep;
+					dload_val = cur + (ve_view->y_smallstep *factor);
 					send_to_ecu_f(y_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -1809,9 +1809,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				offset = y_base + (ve_view->active_y*y_mult);
 				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(y_container);
-				if (cur > ve_view->y_smallstep)
+				if (cur > (ve_view->y_smallstep * factor))
 				{
-					dload_val = cur - ve_view->y_smallstep;
+					dload_val = cur - (ve_view->y_smallstep * factor);
 					send_to_ecu_f(y_container,dload_val, TRUE);
 					update_widgets = TRUE;
 				}
@@ -2122,7 +2122,7 @@ intialize it's
 G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 {
 	Ve_View_3D *ve_view = NULL;
-	ve_view= g_new0(Ve_View_3D,1);
+	ve_view= g_new0(Ve_View_3D,1) ;
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
@@ -2251,9 +2251,9 @@ G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 	static gint flag;
 
 
-	if (flag == 0)
+	if (flag == FALSE)
 	{
-		flag = 1;
+		flag = TRUE;
 		ve_view->mesh_created=FALSE;
 		gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 		gdk_threads_add_timeout(3000,sleep_and_reset,&flag);
