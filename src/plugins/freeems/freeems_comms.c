@@ -584,15 +584,19 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
  */
 G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, DataSize size, gint value, gboolean queue_update)
 {
+	static Firmware_Details *firmware = NULL;
 	OutputData *output = NULL;
 	guint8 *data = NULL;
 	guint16 u16 = 0;
 	gint16 s16 = 0;
 	guint32 u32 = 0;
 	gint32 s32 = 0;
-	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+
+	g_return_if_fail(firmware);
+	g_return_if_fail(offset >= 0);
 
 	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": freeems_send_to_ecu()\n\t Sending locID %i, offset %i, value %i \n",locID,offset,value));
 

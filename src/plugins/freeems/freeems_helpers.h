@@ -21,8 +21,9 @@
 typedef enum
 {
 	FREEEMS_ALL = 0x290,
-	READ_ALL,
 	GENERIC_READ,
+	GENERIC_RAM_WRITE,
+	GENERIC_FLASH_WRITE,
 	LAST_XML_FUNC_CALL_TYPE
 }FuncCall;
 
@@ -32,7 +33,7 @@ void stop_streaming(void);
 void soft_boot_ecu(void);
 void hard_boot_ecu(void);
 gboolean read_freeems_data(void *, FuncCall);
-void simple_read_pf(void *, FuncCall);
+void handle_transaction(void *, FuncCall);
 
 /* Prototypes */
 

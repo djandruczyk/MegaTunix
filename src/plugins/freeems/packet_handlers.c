@@ -505,10 +505,13 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				g_array_append_val(message->sequence,block);
 				break;
 			case SEQUENCE_NUM:
-				have_sequence = TRUE;
-				seq_num = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Sequence number present %i\n",seq_num);*/
-				packet_length += 1;
+				if (DATA_GET(output->data,arg->internal_name))
+				{
+					seq_num = (GINT)DATA_GET(output->data,arg->internal_name);
+					have_sequence = TRUE;
+					/*printf("Sequence number present %i\n",seq_num);*/
+					packet_length += 1;
+				}
 				break;
 			case PAYLOAD_ID:
 				have_payload_id = TRUE;

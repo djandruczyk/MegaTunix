@@ -88,8 +88,8 @@
 			</post_functions>
 		</cmd>
 		<cmd>
-			<name>generic_write</name>
-			<desc>Generic write function</desc>
+			<name>generic_RAM_write</name>
+			<desc>Generic RAM write function</desc>
 			<type>_WRITE_CMD_</type>
 			<args>
 				<arg>SEQUENCE_NUM</arg>
@@ -99,6 +99,23 @@
 				<arg>LENGTH</arg>
 				<arg>DATACHUNK</arg>
 			</args>
+			<helper_func>handle_transaction</helper_func>
+                        <helper_func_arg>_GENERIC_RAM_WRITE_</helper_func_arg>
+		</cmd>
+		<cmd>
+			<name>generic_FLASH_write</name>
+			<desc>Generic FLASH write function</desc>
+			<type>_WRITE_CMD_</type>
+			<args>
+				<arg>SEQUENCE_NUM</arg>
+				<arg>PAYLOAD_ID</arg>
+				<arg>LOCATION_ID</arg>
+				<arg>OFFSET</arg>
+				<arg>LENGTH</arg>
+				<arg>DATACHUNK</arg>
+			</args>
+			<helper_func>handle_transaction</helper_func>
+                        <helper_func_arg>_GENERIC_FLASH_WRITE_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>generic_read</name>
@@ -111,22 +128,8 @@
 				<arg>OFFSET</arg>
 				<arg>LENGTH</arg>
 			</args>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>handle_transaction</helper_func>
                         <helper_func_arg>_GENERIC_READ_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>generic_read_all</name>
-			<desc>Generic read function</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg>
-				<arg>PAYLOAD_ID</arg>
-				<arg>LOCATION_ID</arg>
-				<arg>OFFSET</arg>
-				<arg>LENGTH</arg>
-			</args>
-			<helper_func>simple_read_pf</helper_func>
-                        <helper_func_arg>_READ_ALL_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>freeems_read_all</name>

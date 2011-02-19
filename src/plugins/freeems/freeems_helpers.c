@@ -176,7 +176,6 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 	switch (type)
 	{
 		case FREEEMS_ALL:
-			printf("sending commands to get data!\n");
 			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
@@ -188,7 +187,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
-					seq = g_rand_int_range(rand,0,255);
+					seq = g_rand_int_range(rand,1,255);
 
 					output = initialize_outputdata_f();
 					DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
@@ -215,7 +214,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 }
 
 
-G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
+G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 {
 	Io_Message *message  = NULL;
 	OutputData *output  = NULL;
@@ -235,7 +234,6 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 
 	switch (type)
 	{
-		case READ_ALL:
 		case GENERIC_READ:
 			seq = (GINT)DATA_GET(output->data,"sequence_num");
 			canID = (GINT)DATA_GET(output->data,"canID");
@@ -251,7 +249,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
+				/*printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);*/
 				freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,length);
 				freeems_packet_cleanup(packet);
 	                        tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
@@ -260,10 +258,30 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 			else
 				printf("timeout, no packet found in queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 			break;
+		case GENERIC_FLASH_WRITE:
+		case GENERIC_RAM_WRITE:
+			canID = (GINT)DATA_GET(output->data,"canID");
+			locID = (GINT)DATA_GET(output->data,"location_id");
+			offset = (GINT)DATA_GET(output->data,"offset");
+			length = (GINT)DATA_GET(output->data,"length");
+			queue = DATA_GET(global_data,"RAM_write_queue");
+			g_get_current_time(&tval);
+			g_time_val_add(&tval,500000);
+			packet = g_async_queue_timed_pop(queue,&tval);
+			DATA_SET(output->data,"queue",NULL);
+			if (packet)
+			{
+				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
+				if (packet->header_bits &ACK_TYPE_MASK)
+					printf("PACKET ERROR!!!!\n");
+				freeems_packet_cleanup(packet);
+			}
+			else
+				printf("timeout, no packet found in generic RAM write queue, locID %i\n",locID);
+			break;
 		default:
 			printf("Don't know how to handle this type..\n");
 			break;
-
 	}
 }
 

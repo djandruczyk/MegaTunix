@@ -95,8 +95,6 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	register_common_enums();
 
 	/* Packet handling queue */
-	queue = g_async_queue_new();
-	DATA_SET(global_data,"packet_queue",queue);
 	cond = g_cond_new();
 	DATA_SET(global_data,"serial_reader_cond",cond);
 	cond = g_cond_new();
@@ -110,6 +108,17 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	DATA_SET(global_data,"payload_id_queue_hash",hash);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"queue_mutex",mutex);
+	queue = g_async_queue_new();
+	DATA_SET(global_data,"packet_queue",queue);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_UPDATE_BLOCK_IN_RAM);
+	DATA_SET(global_data,"RAM_write_queue",queue);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_REPLACE_BLOCK_IN_FLASH);
+	DATA_SET(global_data,"FLASH_write_queue",queue);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BURN_BLOCK_FROM_RAM_TO_FLASH);
+	DATA_SET(global_data,"burn_queue",queue);
 	return;
 }
 
@@ -117,6 +126,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 G_MODULE_EXPORT void plugin_shutdown()
 {
 	GCond *cond = NULL;
+	GAsyncQueue *queue = NULL;
 	GHashTable *hash = NULL;
 	GMutex *mutex = NULL;
 	gint id = 0;
@@ -146,6 +156,21 @@ G_MODULE_EXPORT void plugin_shutdown()
 	if (mutex)
 		g_mutex_free(mutex);
 	DATA_SET(global_data,"queue_mutex",NULL);
+
+	queue = DATA_GET(global_data,"RAM_write_queue");
+	if (queue)
+		g_async_queue_unref(queue);
+	DATA_SET(global_data,"RAM_write_queue",NULL);
+
+	queue = DATA_GET(global_data,"FLASH_write_queue");
+	if (queue)
+		g_async_queue_unref(queue);
+	DATA_SET(global_data,"FLASH_write_queue",NULL);
+
+	queue = DATA_GET(global_data,"burn_queue");
+	if (queue)
+		g_async_queue_unref(queue);
+	DATA_SET(global_data,"burn_queue",NULL);
 
 	deregister_common_enums();
 	return;
@@ -196,10 +221,12 @@ void register_common_enums(void)
 				GINT_TO_POINTER(DATABYTE));
 		g_hash_table_insert (str_2_enum, "_FREEEMS_ALL_",
 				GINT_TO_POINTER(FREEEMS_ALL));
-		g_hash_table_insert (str_2_enum, "_READ_ALL_",
-				GINT_TO_POINTER(READ_ALL));
 		g_hash_table_insert (str_2_enum, "_GENERIC_READ_",
 				GINT_TO_POINTER(GENERIC_READ));
+		g_hash_table_insert (str_2_enum, "_GENERIC_FLASH_WRITE_",
+				GINT_TO_POINTER(GENERIC_FLASH_WRITE));
+		g_hash_table_insert (str_2_enum, "_GENERIC_RAM_WRITE_",
+				GINT_TO_POINTER(GENERIC_RAM_WRITE));
 		/* Firmware Specific button handlers*/
 		g_hash_table_insert (str_2_enum, "_SOFT_BOOT_ECU_",
 				GINT_TO_POINTER(SOFT_BOOT_ECU));
@@ -239,8 +266,9 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_LENGTH_");
 		g_hash_table_remove (str_2_enum, "_DATABYTE_");
 		g_hash_table_remove (str_2_enum, "_FREEEMS_ALL_");
-		g_hash_table_remove (str_2_enum, "_READ_ALL_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_READ_");
+		g_hash_table_remove (str_2_enum, "_GENERIC_RAM_WRITE_");
+		g_hash_table_remove (str_2_enum, "_GENERIC_FLASH_WRITE_");
 		/* Firmware Specific button handlers*/
 		g_hash_table_remove (str_2_enum, "_SOFT_BOOT_ECU_");
 		g_hash_table_remove (str_2_enum, "_HARD_BOOT_ECU_");
