@@ -207,6 +207,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	GHashTable *hash = NULL;
 	const gchar * entry = NULL;
 	gchar *ports = NULL;
+	gchar *tmpbuf = NULL;
 	GtkWidget *dialog = NULL;
 	GtkWidget *check = NULL;
 	GtkWidget *label = NULL;
@@ -284,17 +285,6 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 		label = gtk_label_new(_("Please select the ports that you wish\nto be used to locate your ECU\n"));
 		gtk_box_pack_start(GTK_BOX(parent),label,TRUE,TRUE,0);
 		gtk_widget_show_all(parent);
-		/*
-		entry = g_strdup("MegaTunix detected the following devices:\n\n");
-		for (i=0;i<g_list_length(found);i++)
-			entry = g_strconcat(entry,g_list_nth_data(found,i),"\n",NULL);
-		entry = g_strconcat(entry,"\nWould you like to add these to the ports to be scanned?",NULL);
-		dialog = gtk_message_dialog_new (top,
-				GTK_DIALOG_DESTROY_WITH_PARENT,
-				GTK_MESSAGE_QUESTION,
-				GTK_BUTTONS_YES_NO,
-				entry,NULL);
-		*/
 		result = gtk_dialog_run (GTK_DIALOG (dialog));
 		if (result == GTK_RESPONSE_APPLY)
 		{
@@ -303,9 +293,9 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 			{
 				check = g_list_nth_data(buttons,i);
 				if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check)))
-					ports = g_strconcat(ports,",/dev/",g_list_nth_data(found,i),NULL);
+					tmpbuf = g_strdup_printf("/dev/%s,%s",g_list_nth_data(found,i),ports);
 			}
-			DATA_SET_FULL(global_data,"potential_ports",ports,g_free);
+			DATA_SET_FULL(global_data,"potential_ports",tmpbuf,g_free);
 		}
 		gtk_widget_destroy (dialog);
 	}
