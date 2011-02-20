@@ -262,7 +262,11 @@ G_MODULE_EXPORT void kill_conn_warning(void)
 	if (!warning_present)
 		return;
 	if (GTK_IS_WIDGET(warning_dialog))
-		close_dialog(warning_dialog,warning_dialog);
+	{
+		gtk_widget_destroy(warning_dialog);
+		warning_dialog = NULL;
+		warning_present = FALSE;
+	}
 }
 
 
@@ -287,6 +291,11 @@ G_MODULE_EXPORT void warn_user(const gchar *message)
 	g_signal_connect (G_OBJECT(warning_dialog),
 			"response",
 			G_CALLBACK (get_response),
+			warning_dialog);
+
+	g_signal_connect_swapped (G_OBJECT(warning_dialog),
+			"response",
+			G_CALLBACK (gtk_widget_destroy),
 			warning_dialog);
 
 	warning_present = TRUE;
@@ -327,30 +336,12 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 	gint response = (GINT)data;
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		close_dialog(widget,NULL);
 		set_title(g_strdup(_("Offline Mode...")));
 		g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
 	}
 	if (response == GTK_RESPONSE_CLOSE)
 		leave(NULL,NULL);
-	if (response == GTK_RESPONSE_CANCEL)
-		close_dialog(widget,NULL);
-	return TRUE;
-}
-
-
-/*!
- \brief close_dialog() is a handler to close the dialog and reset the flag
- showing if it was up or not so it prevents displaying the error multiple
- times
- \param widget (GtkWidget *) widget to destroy
- \param data (gpointer) unused
- */
-G_MODULE_EXPORT gboolean close_dialog(GtkWidget *widget, gpointer data)
-{
-	gtk_widget_destroy(widget);
 	gdk_threads_add_timeout(1500,set_warning_flag,NULL);
-	warning_dialog = NULL;
 	return TRUE;
 }
 
