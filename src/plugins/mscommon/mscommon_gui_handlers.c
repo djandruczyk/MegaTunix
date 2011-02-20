@@ -828,6 +828,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 		mult = 1;
 	}
 
+	printf("firmare->total_tables is %i\n",firmware->total_tables);
 	for (i=0;i<firmware->total_tables;i++)
 	{
 		if (firmware->table_params[i]->color_update == FALSE)
@@ -865,15 +866,15 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 		firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
 		/*printf("alternate for table %i in the firmware is %i\n",i,firmware->rf_params[i]->alternate);*/
 		reqfuel = ms_get_ecu_data(canID,firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset,firmware->table_params[i]->reqfuel_size);
-		/*printf("reqfuel for table %i in the firmware is %i\n",i,reqfuel);*/
+		printf("reqfuel for table %i in the firmware is %i\n",i,reqfuel);
 
-		/*
+		
 		   printf("reqfuel_page %i, reqfuel_offset %i\n",firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset);
 
 		   printf("num_inj %i, divider %i\n",firmware->rf_params[i]->num_inj,firmware->rf_params[i]->divider);
 		   printf("num_cyls %i, alternate %i\n",firmware->rf_params[i]->num_cyls,firmware->rf_params[i]->alternate);
 		   printf("req_fuel_per_1_squirt is %i\n",reqfuel);
-		 */
+	
 
 		/* Calcs vary based on firmware. 
 		 * DT uses num_inj/divider
@@ -921,15 +922,14 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 		tmpf /= (10.0*mult);
 		firmware->rf_params[i]->req_fuel_total = tmpf;
 		firmware->rf_params[i]->last_req_fuel_total = tmpf;
-		/*
-		 * printf("req_fuel_total for table number %i is %f\n",i,tmpf);
-		 */
+		
+		 printf("req_fuel_total for table number %i is %f\n",i,tmpf);
 
 		/* Injections per cycle */
 		firmware->rf_params[i]->num_squirts = (float)(firmware->rf_params[i]->num_cyls)/(float)(firmware->rf_params[i]->divider);
-		/*
-		 * printf("num_squirts for table number %i is %i\n",i,firmware->rf_params[i]->num_squirts);
-		 */
+		
+		printf("num_squirts for table number %i is %i\n",i,firmware->rf_params[i]->num_squirts);
+		
 		if (firmware->rf_params[i]->num_squirts < 1 )
 			firmware->rf_params[i]->num_squirts = 1;
 		firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
@@ -1312,6 +1312,8 @@ void update_entry(GtkWidget *widget)
 	value = convert_after_upload_f(widget);
 	handler = (GINT)OBJ_GET(widget,"handler");
 	precision = (GINT)OBJ_GET(widget,"precision");
+	if ((GINT)OBJ_GET(widget,"offset") == 182)
+		printf("updating entry/spin at page %i, offset 182! to value %f\n",(GINT)OBJ_GET(widget,"page"),value);
 
 	/* Fringe case for module specific handlers */
 	if (OBJ_GET(widget,"modspecific"))
@@ -1337,7 +1339,6 @@ void update_entry(GtkWidget *widget)
 	}
 	else
 	{
-
 		widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 		tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 		/* If different, update it */

@@ -96,6 +96,10 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 
+	g_return_val_if_fail(firmware,0.0);
+	g_return_val_if_fail(object,0.0);
+	g_return_val_if_fail(symbol,0.0);
+
 	switch (type)
 	{
 		case ECU_EMB_BIT:
@@ -112,10 +116,10 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 			bitmask = (GINT) OBJ_GET(object,tmpbuf);
 			g_free(tmpbuf);
 			bitshift = get_bitshift_f(bitmask);
-			/*
+			
 			   printf("raw ecu at page %i, offset %i is %i\n",page,offset,ms_get_ecu_data(canID,page,offset,size));
 			   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(ms_get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
-			 */
+			 
 			return ((ms_get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
 			break;
 		case ECU_VAR:

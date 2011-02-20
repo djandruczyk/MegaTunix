@@ -111,10 +111,9 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 {
 	gsize count = 0;
 	GError *error = NULL;
-	static gint dbg_lvl = -1;
+	gint dbg_lvl = -1;
 
-	if (dbg_lvl == -1)
-		dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
+	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 	/*
 	static struct tm *tm = NULL;
 	static time_t *t = NULL;

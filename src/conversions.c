@@ -216,7 +216,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	void *evaluator = NULL;
 	gint tmpi = 0;
 	DataSize size = 0;
-	gboolean ul_complex = FALSE;
+	gboolean fromecu_complex = FALSE;
 	guint i = 0;
 	gint table_num = -1;
 	GHashTable *hash = NULL;
@@ -237,11 +237,12 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_after_upload()\n\tCan NOT locate \"get_ecu_data\" function pointer in plugins, BUG!\n"));
 	g_static_mutex_lock(&mutex);
 
-	ul_complex = (GBOOLEAN)OBJ_GET(widget,"ul_complex");
-	if (ul_complex)
+	fromecu_complex = (GBOOLEAN)OBJ_GET(widget,"fromecu_complex");
+	if (fromecu_complex)
 	{
 		g_static_mutex_unlock(&mutex);
-		/*printf("Complex upload conversion for widget %s\n",glade_get_widget_name(widget));*/
+		/*printf("Complex upload conversion for widget at page %i, offset %i, name %s\n",(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset"),glade_get_widget_name(widget));
+		  */
 		return handle_complex_expr_obj(G_OBJECT(widget),NULL,UPLOAD);
 	}
 

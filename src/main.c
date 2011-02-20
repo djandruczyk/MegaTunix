@@ -153,9 +153,11 @@ gint main(gint argc, gchar ** argv)
 	id = g_timeout_add(1000,(GSourceFunc)flush_binary_logs,NULL);
         DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
 
-	/* Kickoff fast interrogation */
 	sleep_calib();
-	gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
+	/* Check for first_time flag, if so, run first tiem wizard, otherwise
+	   load personality choice
+	   */
+	gdk_threads_add_timeout(500,(GSourceFunc)check_for_first_time,NULL);
 	
 
 	DATA_SET(global_data,"ready",GINT_TO_POINTER(TRUE));

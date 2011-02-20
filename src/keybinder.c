@@ -72,7 +72,7 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 					OBJ_SET(object,
 							keys[i],
 							GINT_TO_POINTER(tmpi));	
-					if (strstr(keys[i],"ul_complex"))
+					if (strstr(keys[i],"fromecu_complex"))
 						load_complex_params_obj(object,cfgfile,section);
 				}
 				else

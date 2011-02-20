@@ -178,7 +178,10 @@ G_MODULE_EXPORT gboolean read_config(void)
 	args = DATA_GET(global_data,"args");
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
+	{
+		DATA_SET(global_data,"first_time",GINT_TO_POINTER(TRUE));
 		cfgfile = cfg_new();
+	}
 	if (cfgfile)
 	{
 		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))

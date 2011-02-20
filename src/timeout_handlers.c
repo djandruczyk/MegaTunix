@@ -34,6 +34,7 @@
 #include <widgetmgmt.h>
 
 
+extern gconstpointer *global_data;
 
 /*!
  \brief start_tickler() starts up a GTK+ timeout function based on the
@@ -44,7 +45,6 @@
  */
 G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
-	extern gconstpointer *global_data;
 	gint id = 0;
 	GThread *realtime_id = NULL;
 	switch (type)
@@ -114,7 +114,6 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
 	GCond *rtv_thread_cond = NULL;
 	GMutex *rtv_thread_mutex = NULL;
-	extern gconstpointer *global_data;
 	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
 	rtv_thread_mutex = DATA_GET(global_data,"rtv_thread_mutex");
 	g_return_if_fail(rtv_thread_mutex);
@@ -178,7 +177,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	GAsyncQueue *pf_dispatch_queue = NULL;
 	GCond *rtv_thread_cond = NULL;
 	GMutex *rtv_thread_mutex = NULL;
-	extern gconstpointer *global_data;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
@@ -249,3 +247,12 @@ G_MODULE_EXPORT gboolean early_interrogation(void)
 	return FALSE;
 }
 
+
+G_MODULE_EXPORT gboolean check_for_first_time(void)
+{
+	if (DATA_GET(global_data,"first_time"))
+		printf("should run first_time_wizard\n");
+        gdk_threads_add_timeout(100,(GSourceFunc)personality_choice,NULL);
+	return FALSE;
+
+}

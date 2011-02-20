@@ -23,6 +23,7 @@ void stop_tickler(TicklerType);
 void *signal_read_rtvars_thread(gpointer);
 gboolean early_interrogation(void);
 gboolean personality_choice(void);
+gboolean check_for_first_time(void);
 /* Prototypes */
 
 #endif

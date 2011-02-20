@@ -245,6 +245,9 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		firmware = DATA_GET(global_data,"firmware");
 	if (!common_rtv_processor)
 		get_symbol("common_rtv_processor",(void *)&common_rtv_processor);
+	g_return_val_if_fail(firmware,0.0);
+	g_return_val_if_fail(common_rtv_processor,0.0);
+
 	symbols = (gchar **)DATA_GET(object,"expr_symbols");
 	expr_types = (gint *)DATA_GET(object,"expr_types");
 	total_symbols = (GINT)DATA_GET(object,"total_symbols");
@@ -360,7 +363,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 /*!
  \brief handle_complex_expr_obj() handles a complex mathematcial expression for
  an variable represented by a gconstpointer.
- \param object (gconstpointer *) pointer to the object containing the conversion 
+ \param object (GObject *) pointer to the object containing the conversion 
  expression and other relevant data
  \param incoming (void *) pointer to the raw data
  \param type (ConvType) enumeration stating if this is an upload or
@@ -392,6 +395,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		firmware = DATA_GET(global_data,"firmware");
 	if (!common_rtv_processor_obj)
 		get_symbol("common_rtv_processor_obj",(void *)&common_rtv_processor_obj);
+	g_return_val_if_fail(firmware,0.0);
+	g_return_val_if_fail(common_rtv_processor_obj,0.0);
 
 	symbols = (gchar **)OBJ_GET(object,"expr_symbols");
 	expr_types = (gint *)OBJ_GET(object,"expr_types");
@@ -463,7 +468,6 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		{
 			evaluator = evaluator_create(OBJ_GET(object,"fromecu_conv_expr"));
 			OBJ_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
-
 		}
 	}
 	else if (type == DOWNLOAD)
@@ -484,7 +488,6 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
 		exit (-1);
 	}
-
 	assert(evaluator);
 
 	result = evaluator_evaluate(evaluator,total_symbols,names,values);
