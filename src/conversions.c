@@ -613,15 +613,16 @@ G_MODULE_EXPORT void reset_temps(gpointer type)
 
 G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 {
-	gdouble res = 0.0;
 	static Firmware_Details *firmware = NULL;
+	gdouble res = 0.0;
+
 	TempUnits mtx_temp_units = (TempUnits)DATA_GET(global_data,"mtx_temp_units");
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,in);
 
-	if(firmware->ecu_temp_units == mtx_temp_units)
+	if (firmware->ecu_temp_units == mtx_temp_units)
 		res = in;
 	else if ((firmware->ecu_temp_units == CELSIUS) && (mtx_temp_units == FAHRENHEIT))
 		res = c_to_f(in);
@@ -631,8 +632,15 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 		res = f_to_k(in);
 	else if ((firmware->ecu_temp_units == FAHRENHEIT) && (mtx_temp_units == CELSIUS))
 		res = f_to_c(in);
+	else if ((firmware->ecu_temp_units == KELVIN) && (mtx_temp_units == CELSIUS))
+		res = k_to_c(in);
+	else if ((firmware->ecu_temp_units == KELVIN) && (mtx_temp_units == FAHRENHEIT))
+		res = k_to_f(in);
 	else 
+	{
+		printf("BUG couldn't figure out temp conversion!\n");
 		res = in;
+	}
 	return res;
 }
 
@@ -656,8 +664,15 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 		res = k_to_f(in);
 	else if ((firmware->ecu_temp_units == FAHRENHEIT) && (mtx_temp_units == CELSIUS))
 		res = c_to_f(in);
+	else if ((firmware->ecu_temp_units == KELVIN) && (mtx_temp_units == CELSIUS))
+		res = c_to_k(in);
+	else if ((firmware->ecu_temp_units == KELVIN) && (mtx_temp_units == FAHRENHEIT))
+		res = f_to_k(in);
 	else
+	{
+		printf("BUG couldn't figure out temp conversion!\n");
 		res = in;
+	}
 	return res;
 }
 

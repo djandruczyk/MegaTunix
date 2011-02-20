@@ -121,6 +121,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 			history = NULL;
 			special = NULL;
 			hash = NULL;
+			temp_dep = FALSE;
 			object=(gconstpointer *)g_list_nth_data(list,j);
 			/*
 			printf("Dumping datalist for objects\n");

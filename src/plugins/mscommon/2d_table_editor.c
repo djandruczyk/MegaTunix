@@ -173,6 +173,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			{
 				if ((GINT)DATA_GET(global_data,"mtx_temp_units") == CELSIUS)
 					tmpbuf = g_strdelimit(firmware->te_params[table_num]->c_gauge,"\\",'/');
+				else if ((GINT)DATA_GET(global_data,"mtx_temp_units") == KELVIN)
+					tmpbuf = g_strdelimit(firmware->te_params[table_num]->c_gauge,"\\",'/');
 				else
 					tmpbuf = g_strdelimit(firmware->te_params[table_num]->f_gauge,"\\",'/');
 			}
@@ -505,6 +507,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		if (firmware->te_params[table_num]->gauge_temp_dep)
 		{
 			if ((GINT)DATA_GET(global_data,"mtx_temp_units") == CELSIUS)
+				tmpbuf = g_strdelimit(firmware->te_params[table_num]->c_gauge,"\\",'/');
+			else if ((GINT)DATA_GET(global_data,"mtx_temp_units") == KELVIN)
 				tmpbuf = g_strdelimit(firmware->te_params[table_num]->c_gauge,"\\",'/');
 			else
 				tmpbuf = g_strdelimit(firmware->te_params[table_num]->f_gauge,"\\",'/');
