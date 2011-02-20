@@ -346,7 +346,6 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 			ms_store_new_block(canID,page,0,
 					message->recv_buf,
 					firmware->page_params[page]->length);
-			printf("Value at page 1 offset 182 is %i\n",ms_get_ecu_data(0,1,182,MTX_U08));
 			ms_backup_current_data(canID,page);
 			tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 			DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));

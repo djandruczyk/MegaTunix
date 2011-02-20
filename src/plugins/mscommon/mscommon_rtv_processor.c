@@ -117,9 +117,10 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 			g_free(tmpbuf);
 			bitshift = get_bitshift_f(bitmask);
 			
+			/*
 			   printf("raw ecu at page %i, offset %i is %i\n",page,offset,ms_get_ecu_data(canID,page,offset,size));
 			   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(ms_get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
-			 
+			*/ 
 			return ((ms_get_ecu_data(canID,page,offset,size) & bitmask) >> bitshift);
 			break;
 		case ECU_VAR:
