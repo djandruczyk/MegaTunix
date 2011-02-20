@@ -201,7 +201,7 @@ G_MODULE_EXPORT gboolean read_config(void)
 			cleanup(tmpbuf);
 		}
 		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
-			DATA_SET(global_data,"temp_units",GINT_TO_POINTER(tmpi));
+			DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))
 			DATA_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTText_FPS", &tmpi))
@@ -374,7 +374,7 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "LogRawDatastream",(GBOOLEAN)DATA_GET(global_data,"log_raw_datastream"));
 	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(global_data,"network_access"));
 		
-	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)DATA_GET(global_data,"temp_units"));
+	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)DATA_GET(global_data,"mtx_temp_units"));
 	cfg_write_string(cfgfile, "Global", "Last_ECU_Family",DATA_GET(global_data,"ecu_family"));
 	if (firmware)
 		if (firmware->actual_signature)
