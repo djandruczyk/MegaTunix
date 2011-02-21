@@ -17,6 +17,8 @@
 #include <gtk/gtk.h>
 #include <enums.h>
 
+#define PRINT_TOKEN(token) printf(#token" is %i\n", token);
+
 /* Prototypes */
 void build_string_2_enum_table(void);
 gint translate_string(const gchar *);
