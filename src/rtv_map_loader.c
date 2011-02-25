@@ -350,7 +350,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 				assert(eval);
 				DATA_SET_FULL(object,"ul_evaluator",eval,evaluator_destroy);
 			}
-			tmpi = (gint)evaluator_evaluate_x(eval,tmp);
+			tmpi = (GINT)evaluator_evaluate_x(eval,tmp);
 			DATA_SET_FULL(object,"real_lower",g_strdup_printf("%i",tmpi),g_free);
 
 		}
@@ -378,7 +378,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 				assert(eval);
 				DATA_SET_FULL(object,"ul_evaluator",eval,evaluator_destroy);
 			}
-			tmpi = (gint)evaluator_evaluate_x(eval,tmp);
+			tmpi = (GINT)evaluator_evaluate_x(eval,tmp);
 			DATA_SET_FULL(object,"real_upper",g_strdup_printf("%i",tmpi),g_free);
 
 		}

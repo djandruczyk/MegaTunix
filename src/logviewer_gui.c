@@ -268,7 +268,7 @@ G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 	{
 		tmpwidget = g_list_nth_data(list,i);
 		object = OBJ_GET(tmpwidget,"object");
-		if ((gboolean)DATA_GET(object,"being_viewed"))
+		if ((GBOOLEAN)DATA_GET(object,"being_viewed"))
 		{
 			if (DATA_GET(global_data,"playback_mode"))
 				name = DATA_GET(object,"lview_name");
@@ -390,21 +390,21 @@ G_MODULE_EXPORT void populate_viewer(void)
 			{
 				v_value = (Viewable_Value *)g_hash_table_lookup(lv_data->traces,name);
 				lv_data->tlist = g_list_remove(lv_data->tlist,(gpointer)v_value);
-				if ((hue > 0) && ((gint)hue%1110 == 0))
+				if ((hue > 0) && ((GINT)hue%1110 == 0))
 				{
 					hue-= 30;
 					col_sat = 1.0;
 					col_val = 0.75;
 					/*printf("hue at 1110 deg, reducing to 1080, sat at 1.0, val at 0.75\n");*/
 				}
-				if ((hue > 0) && ((gint)hue%780 == 0))
+				if ((hue > 0) && ((GINT)hue%780 == 0))
 				{
 					hue-= 30;
 					col_sat = 0.5;
 					col_val = 1.0;
 					/*printf("hue at 780 deg, reducing to 750, sat at 0.5, val at 1.0\n");*/
 				}
-				if ((hue > 0) && ((gint)hue%390 == 0)) /* phase shift */
+				if ((hue > 0) && ((GINT)hue%390 == 0)) /* phase shift */
 				{
 					hue-=30.0;
 					col_sat=1.0;
@@ -529,8 +529,8 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 	v_value->object = object;
 	/* IS it a floating point value? */
 	v_value->precision = (GINT)DATA_GET(object,"precision");
-	v_value->lower = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
-	v_value->upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
+	v_value->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
+	v_value->upper = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 
@@ -598,13 +598,13 @@ G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			hue += 60;
 			/*printf("angle at %f, sat %f, val %f\n",hue,col_sat,col_val);*/
 
-			if ((hue > 0) && ((gint)hue%360 == 0))
+			if ((hue > 0) && ((GINT)hue%360 == 0))
 			{
 				hue+=30.0;
 				col_sat=0.5;
 				col_val=1.0;
 			}
-			if ((hue > 0) && ((gint)hue%750 == 0))
+			if ((hue > 0) && ((GINT)hue%750 == 0))
 			{
 				hue+=30;
 				col_sat=1.0;
@@ -777,7 +777,7 @@ G_MODULE_EXPORT void draw_infotext(void)
 	if (!lv_data->highlight_gc)
 		lv_data->highlight_gc = initialize_gc(lv_data->pixmap,HIGHLIGHT);
 	
-	lv_data->spread = (gint)((float)h/(float)lv_data->active_traces);
+	lv_data->spread = (GINT)((float)h/(float)lv_data->active_traces);
 	name_x = text_border;
 	layout = gtk_widget_create_pango_layout(lv_data->darea,NULL);
 	for (i=0;i<lv_data->active_traces;i++)
@@ -978,7 +978,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	log_pos = (gfloat)((GINT)OBJ_GET(lv_data->darea,"log_pos_x100"))/100.0;
 	/*printf("log_pos is %f\n",log_pos);*/
 	/* Full screen redraw, only with configure events (usually) */
-	if ((gboolean)redraw_all)
+	if ((GBOOLEAN)redraw_all)
 	{
 		lo_width = lv_data->darea->allocation.width-lv_data->info_width;
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
@@ -1008,7 +1008,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 				val = g_array_index(array,gfloat,len-1-x);
 				percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
 				pts[x].x = w-(x*lv_zoom)-1;
-				pts[x].y = (gint) (percent*(h-2))+1;
+				pts[x].y = (GINT) (percent*(h-2))+1;
 			}
 			gdk_draw_lines(pixmap,
 					v_value->trace_gc,
@@ -1061,10 +1061,10 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			gdk_draw_line(pixmap,
 					v_value->trace_gc,
 					w-lv_zoom-1,v_value->last_y,
-					w-1,(gint)(percent*(h-2))+1);
-			/*printf("drawing from %i,%i to %i,%i\n",w-lv_zoom-1,v_value->last_y,w-1,(gint)(percent*(h-2))+1);*/
+					w-1,(GINT)(percent*(h-2))+1);
+			/*printf("drawing from %i,%i to %i,%i\n",w-lv_zoom-1,v_value->last_y,w-1,(GINT)(percent*(h-2))+1);*/
 
-			v_value->last_y = (gint)((percent*(h-2))+1);
+			v_value->last_y = (GINT)((percent*(h-2))+1);
 
 			v_value->last_index = last_index + 1;
 			if (adj_scale)
@@ -1073,22 +1073,22 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 				blocked=TRUE;
 				gtk_range_set_value(GTK_RANGE(scale),newpos);
 				blocked=FALSE;
-				OBJ_SET(lv_data->darea,"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
+				OBJ_SET(lv_data->darea,"log_pos_x100",GINT_TO_POINTER((GINT)(newpos*100.0)));
 				adj_scale = FALSE;
 				if (newpos >= 100)
 					stop_tickler(LV_PLAYBACK_TICKLER);
-				/*	printf("playback reset slider to position %i\n",(gint)(newpos*100.0));*/
+				/*	printf("playback reset slider to position %i\n",(GINT)(newpos*100.0));*/
 			}
 			if (v_value->highlight)
 			{
 				gdk_draw_line(pixmap,
 						lv_data->darea->style->white_gc,
 						w-lv_zoom-1,v_value->last_y-1,
-						w-1,(gint)(percent*(h-2)));
+						w-1,(GINT)(percent*(h-2)));
 				gdk_draw_line(pixmap,
 						lv_data->darea->style->white_gc,
 						w-lv_zoom-1,v_value->last_y+1,
-						w-1,(gint)(percent*(h-2))+2);
+						w-1,(GINT)(percent*(h-2))+2);
 			}
 		}
 		draw_valtext(FALSE);
@@ -1108,7 +1108,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			v_value->min = val;
 
 		if (v_value->last_y == -1)
-			v_value->last_y = (gint)((percent*(h-2))+1);
+			v_value->last_y = (GINT)((percent*(h-2))+1);
 
 		/* If watching at the edge (full realtime) */
 		if (log_pos == 100)
@@ -1118,7 +1118,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			gdk_draw_line(pixmap,
 					v_value->trace_gc,
 					w-lv_zoom-1,v_value->last_y,
-					w-1,(gint)(percent*(h-2))+1);
+					w-1,(GINT)(percent*(h-2))+1);
 		}
 		else
 		{	/* Watching somewhat behind realtime... */
@@ -1133,29 +1133,29 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			gdk_draw_line(pixmap,
 					v_value->trace_gc,
 					w-lv_zoom-1,(last_percent*(h-2))+1,
-					w-1,(gint)(percent*(h-2))+1);
+					w-1,(GINT)(percent*(h-2))+1);
 			if (adj_scale)
 			{
 				newpos = 100.0*((gfloat)v_value->last_index/(gfloat)array->len);
 				blocked = TRUE;
 				gtk_range_set_value(GTK_RANGE(scale),newpos);
 				blocked = FALSE;
-				OBJ_SET(lv_data->darea,"log_pos_x100",GINT_TO_POINTER((gint)(newpos*100.0)));
+				OBJ_SET(lv_data->darea,"log_pos_x100",GINT_TO_POINTER((GINT)(newpos*100.0)));
 				adj_scale = FALSE;
 			}
 		}
 		/* Draw the data.... */
-		v_value->last_y = (gint)((percent*(h-2))+1);
+		v_value->last_y = (GINT)((percent*(h-2))+1);
 		if (v_value->highlight)
 		{
 			gdk_draw_line(pixmap,
 					lv_data->darea->style->white_gc,
 					w-lv_zoom-1,v_value->last_y-1,
-					w-1,(gint)(percent*(h-2)));
+					w-1,(GINT)(percent*(h-2)));
 			gdk_draw_line(pixmap,
 					lv_data->darea->style->white_gc,
 					w-lv_zoom-1,v_value->last_y+1,
-					w-1,(gint)(percent*(h-2))+2);
+					w-1,(GINT)(percent*(h-2))+2);
 		}
 	}
 	/* Update textual data */
@@ -1312,7 +1312,7 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 	val = gtk_range_get_value(GTK_RANGE(widget));
 	darea = lookup_widget("logviewer_trace_darea");
 	if (GTK_IS_WIDGET(darea))
-		OBJ_SET(darea,"log_pos_x100",GINT_TO_POINTER((gint)(val*100)));
+		OBJ_SET(darea,"log_pos_x100",GINT_TO_POINTER((GINT)(val*100)));
 	lv_configure_event(darea,NULL,NULL);
 	scroll_logviewer_traces();
 	if ((val >= 100.0) && (DATA_GET(global_data,"playback_mode")))

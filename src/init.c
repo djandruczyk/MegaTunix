@@ -511,7 +511,7 @@ G_MODULE_EXPORT void save_config(void)
 		cleanup(tmpbuf);
 
 	}
-	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", (gint)DATA_GET(global_data,"preferred_delimiter"));
+	cfg_write_int(cfgfile, "DataLogger", "preferred_delimiter", (GINT)DATA_GET(global_data,"preferred_delimiter"));
 	if (serial_params->port_name)
 		cfg_write_string(cfgfile, "Serial", "override_port", 
 					serial_params->port_name);

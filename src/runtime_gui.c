@@ -140,11 +140,11 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	}
 
 	if (lookup_current_value(source,&tmpf))
-		value = (gint) tmpf;
+		value = (GINT) tmpf;
 	else
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get current value for %s\n",source));
 	if (lookup_previous_value(source,&tmpf))
-		previous_value = (gint) tmpf;
+		previous_value = (GINT) tmpf;
 	else
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get previous value for %s\n",source));
 
@@ -202,7 +202,7 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	history = (GArray *)DATA_GET(slider->object,"history");
 	if (!history)
 		return;
-	if ((gint)history->len-1 <= 0)
+	if ((GINT)history->len-1 <= 0)
 		return;
 	precision = (GINT)DATA_GET(slider->object,"precision");
 	g_mutex_lock(rtv_mutex);

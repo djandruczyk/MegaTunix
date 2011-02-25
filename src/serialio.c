@@ -428,9 +428,9 @@ G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits,
 		return FALSE;
 	}
 	if (baud)
-		*baud = (gint)strtol(vector[0],NULL,10);
+		*baud = (GINT)strtol(vector[0],NULL,10);
 	if (bits)
-		*bits = (gint)strtol(vector[1],NULL,10);
+		*bits = (GINT)strtol(vector[1],NULL,10);
 	if (parity)
 	{
 		if (g_ascii_strncasecmp(vector[2],"N",1) == 0)
@@ -443,7 +443,7 @@ G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits,
 			*parity = NONE;
 	}
 	if (stop)
-		*stop = (gint)strtol(vector[3],NULL,10);
+		*stop = (GINT)strtol(vector[3],NULL,10);
 	g_strfreev(vector);
 	return TRUE;
 }

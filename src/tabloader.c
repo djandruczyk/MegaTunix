@@ -752,9 +752,9 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	{
 		if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
 		{
-			table_num = (gint)strtol(tmpbuf,NULL,10);
-			page = (gint)OBJ_GET(widget,"page");
-			offset = (gint)OBJ_GET(widget,"offset");
+			table_num = (GINT)strtol(tmpbuf,NULL,10);
+			page = (GINT)OBJ_GET(widget,"page");
+			offset = (GINT)OBJ_GET(widget,"offset");
 			if ((page == firmware->table_params[table_num]->z_page) && ((offset >= firmware->table_params[table_num]->z_base) && (offset < firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount)))
 				g_array_append_val(firmware->table_params[table_num]->table,widget);
 		}

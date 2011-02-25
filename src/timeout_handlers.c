@@ -140,14 +140,14 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 		case LV_PLAYBACK_TICKLER:
 			if (DATA_GET(global_data,"playback_id"))
 			{
-				g_source_remove((gint)DATA_GET(global_data,"playback_id"));
+				g_source_remove((GINT)DATA_GET(global_data,"playback_id"));
 				DATA_SET(global_data,"playback_id",GINT_TO_POINTER(0));
 			}
 			break;
 		case SCOUNTS_TICKLER:
 			if (DATA_GET(global_data,"statuscounts_id"))
 			{
-				g_source_remove((gint)DATA_GET(global_data,"statuscounts_id"));
+				g_source_remove((GINT)DATA_GET(global_data,"statuscounts_id"));
 				DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(0));
 			}
 			break;

@@ -153,7 +153,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 /*!
  \brief dump_output() dumps the newly read data to the console in HEX for
  debugging purposes
- \param total_read (gint) total bytesto printout
+ \param total_read (GINT) total bytesto printout
  \param buf (guchar *) pointer to data to write to console
  */
 G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
@@ -162,7 +162,7 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 	gchar * tmpbuf = NULL;
 	gint j = 0;
 	gint dbg_lvl = 0;
-	dbg_lvl = (gint)DATA_GET(global_data,"dbg_lvl");
+	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 
 	p = buf;
 	if (total_read > 0)

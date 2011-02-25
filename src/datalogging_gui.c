@@ -95,7 +95,7 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 
 	/* Update status of the delimiter buttons... */
 
-	switch ((gint)DATA_GET(global_data,"preferred_delimiter"))
+	switch ((GINT)DATA_GET(global_data,"preferred_delimiter"))
 	{
 		case COMMA:
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(lookup_widget("dlog_comma_delimit_radio_button")),TRUE);
@@ -366,7 +366,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 
 		history = (GArray *)DATA_GET(object,"history");
 		precision = (GINT)DATA_GET(object,"precision");
-		if ((gint)history->len-1 <= 0)
+		if ((GINT)history->len-1 <= 0)
 			value = 0.0;
 		else
 			value = g_array_index(history, gfloat, history->len-1);

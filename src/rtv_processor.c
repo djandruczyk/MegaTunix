@@ -102,7 +102,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 		tmpf -= hours*3600.0;
 		minutes = tmpf > 60.0 ? floor(tmpf/60.0) : 0;
 		tmpf -= minutes*60.0;
-		seconds = (gint)tmpf;
+		seconds = (GINT)tmpf;
 
 		thread_update_logbar("dlog_view",NULL,g_strdup_printf(_("Currently %i samples stored, Total Logged Time (HH:MM:SS) (%02i:%02i:%02i)\n"),rtv_map->ts_array->len,hours,minutes,seconds),FALSE,FALSE);
 	}
@@ -633,7 +633,7 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
 	if (!history)
 		return FALSE;
 
-	if ((gint)history->len-1 <= 0)
+	if ((GINT)history->len-1 <= 0)
 		return TRUE;
 
 	g_mutex_lock(rtv_mutex);
@@ -672,7 +672,7 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
 	if (!history)
 		return FALSE;
 
-	if ((gint)history->len-2 <= 0)
+	if ((GINT)history->len-2 <= 0)
 		return TRUE;
 
 	g_mutex_lock(rtv_mutex);
@@ -713,7 +713,7 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
 	if (!history)
 		return FALSE;
 
-	if ((gint)history->len-n <= 0)
+	if ((GINT)history->len-n <= 0)
 		return TRUE;
 
 	g_mutex_lock(rtv_mutex);
@@ -760,7 +760,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 	if (!history)
 		return FALSE;
 
-	if ((gint)history->len-n <= 0)
+	if ((GINT)history->len-n <= 0)
 		return TRUE;
 
 	g_mutex_lock(rtv_mutex);
@@ -811,7 +811,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 	if (!history)
 		return FALSE;
 
-	if ((gint)history->len-(n*skip) <= 0)
+	if ((GINT)history->len-(n*skip) <= 0)
 		return TRUE;
 
 	g_mutex_lock(rtv_mutex);

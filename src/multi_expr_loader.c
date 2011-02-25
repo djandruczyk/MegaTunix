@@ -124,8 +124,8 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	for (i=0;i<num_keys;i++)
 	{
 		multi = g_new0(MultiExpr, 1);
-		multi->lower_limit = (gint)strtol(l_limits[i],NULL,10);
-		multi->upper_limit = (gint)strtol(u_limits[i],NULL,10);
+		multi->lower_limit = (GINT)strtol(l_limits[i],NULL,10);
+		multi->upper_limit = (GINT)strtol(u_limits[i],NULL,10);
 		if (multi->lower_limit < lowest)
 			lowest = multi->lower_limit;
 		if (multi->upper_limit > highest)

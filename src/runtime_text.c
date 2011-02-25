@@ -394,7 +394,7 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 
 	if (!history)
 		return;
-	if ((gint)history->len-2 <= 0)
+	if ((GINT)history->len-2 <= 0)
 		return;
 	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
@@ -490,7 +490,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 
 	if (!history)
 		return FALSE;
-	if ((gint)history->len-1 <= 0)
+	if ((GINT)history->len-1 <= 0)
 		return FALSE;
 	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);

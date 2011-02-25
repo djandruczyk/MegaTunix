@@ -310,7 +310,7 @@ G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_d
 		case MTX_BOOL:
 		case MTX_ENUM:
 		case MTX_INT:
-			printf("key %s, %i\n",key,(gint)data);
+			printf("key %s, %i\n",key,(GINT)data);
 			break;
 		default:
 			printf("Key %s is complex, ptr %p\n",key,data);

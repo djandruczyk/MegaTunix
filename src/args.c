@@ -31,7 +31,7 @@
 extern gconstpointer *global_data;
 /*!
  \brief handle_args() handles parsing of cmd line arguments to megatunix
- \param argc (gint) count of command line arguments
+ \param argc (GINT) count of command line arguments
  \param argv (char **) array of command line args
  \returns void
  */

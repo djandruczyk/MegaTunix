@@ -333,7 +333,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				tracking_focus[(gint)strtol(tmpbuf,NULL,10)] = TRUE;
+				tracking_focus[(GINT)strtol(tmpbuf,NULL,10)] = TRUE;
 				break;
 			case TOOLTIPS_STATE:
 				if (!settings)
@@ -412,7 +412,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case TRACKING_FOCUS:
 				tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-				tracking_focus[(gint)strtol(tmpbuf,NULL,10)] = FALSE;
+				tracking_focus[(GINT)strtol(tmpbuf,NULL,10)] = FALSE;
 				break;
 			case TOOLTIPS_STATE:
 				if (!settings)
@@ -653,7 +653,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	void *obj_data = NULL;
 	gint handler = -1;
 	Firmware_Details *firmware = NULL;
-	void (*select_for)(gint) = NULL;
+	void (*select_for)(GINT) = NULL;
 	void (*revert)(void) = NULL;
 	gboolean (*create_2d_table_editor)(gint,GtkWidget *) = NULL;
 	gboolean (*create_2d_table_editor_group)(GtkWidget *) = NULL;
@@ -680,12 +680,12 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case EXPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
 				if(get_symbol("select_table_for_export",(void*)&select_for))
-					select_for((gint)strtol(OBJ_GET(widget,"table_num"),NULL,10));
+					select_for((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
 			break;
 		case IMPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
 				if(get_symbol("select_table_for_import",(void*)&select_for))
-					select_for((gint)strtol(OBJ_GET(widget,"table_num"),NULL,10));
+					select_for((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
 			break;
 		case RESCALE_TABLE:
 			rescale_table(widget);
@@ -767,7 +767,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case TE_TABLE:
 			if (OBJ_GET(widget,"te_table_num"))
 				if (get_symbol("create_2d_table_editor",(void *)&create_2d_table_editor))
-					create_2d_table_editor((gint)strtol(OBJ_GET(widget,"te_table_num"),NULL,10), NULL);
+					create_2d_table_editor((GINT)strtol(OBJ_GET(widget,"te_table_num"),NULL,10), NULL);
 			break;
 		case TE_TABLE_GROUP:
 			if (get_symbol("create_2d_table_editor_group",(void *)&create_2d_table_editor_group))
@@ -870,17 +870,17 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	switch ((MtxButton)handler)
 	{
 		case SER_INTERVAL_DELAY:
-			serial_params->read_wait = (gint)value;
+			serial_params->read_wait = (GINT)value;
 			break;
 		case SER_READ_TIMEOUT:
-			DATA_SET(global_data,"read_timeout",GINT_TO_POINTER((gint)value));
+			DATA_SET(global_data,"read_timeout",GINT_TO_POINTER((GINT)value));
 			break;
 		case RTSLIDER_FPS:
 			DATA_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
 			source = (GINT)DATA_GET(global_data,"rtslider_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000/(float)tmpi),(GSourceFunc)update_rtsliders,NULL);
+			tmpi = g_timeout_add((GINT)(1000/(float)tmpi),(GSourceFunc)update_rtsliders,NULL);
 			DATA_SET(global_data,"rtslider_id",GINT_TO_POINTER(tmpi));
 			break;
 		case RTTEXT_FPS:
@@ -888,7 +888,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)DATA_GET(global_data,"rttext_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_rttext,NULL);
+			tmpi = g_timeout_add((GINT)(1000.0/(float)tmpi),(GSourceFunc)update_rttext,NULL);
 			DATA_SET(global_data,"rttext_id",GINT_TO_POINTER(tmpi));
 			break;
 		case DASHBOARD_FPS:
@@ -896,7 +896,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)DATA_GET(global_data,"dashboard_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_dashboards,NULL);
+			tmpi = g_timeout_add((GINT)(1000.0/(float)tmpi),(GSourceFunc)update_dashboards,NULL);
 			DATA_SET(global_data,"dashboard_id",GINT_TO_POINTER(tmpi));
 			break;
 		case VE3D_FPS:
@@ -904,7 +904,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			source = (GINT)DATA_GET(global_data,"ve3d_id");
 			if (source)
 				g_source_remove(source);
-			tmpi = g_timeout_add((gint)(1000.0/(float)tmpi),(GSourceFunc)update_ve3ds,NULL);
+			tmpi = g_timeout_add((GINT)(1000.0/(float)tmpi),(GSourceFunc)update_ve3ds,NULL);
 			DATA_SET(global_data,"ve3d_id",GINT_TO_POINTER(tmpi));
 			break;
 		case LOGVIEW_ZOOM:
@@ -978,13 +978,13 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	size = (DataSize) OBJ_GET(widget,"size");
 	reverse_keys = (GBOOLEAN) OBJ_GET(widget,"reverse_keys");
 	if (OBJ_GET(widget,"table_num"))
-		active_table = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+		active_table = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	if (OBJ_GET(widget,"raw_lower"))
-		lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+		lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
 		lower = get_extreme_from_size(size,LOWER);
 	if (OBJ_GET(widget,"raw_upper"))
-		upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+		upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		upper = get_extreme_from_size(size,UPPER);
 	hardlower = get_extreme_from_size(size,LOWER);
@@ -1334,7 +1334,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 #else
 	if ((OBJ_GET(widget,"table_num")) && (GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE))
 #endif
-		active_table = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+		active_table = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	else
 		active_table = -1;
 
@@ -1353,7 +1353,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 			if ((OBJ_GET(widget,"table_num")) && (GTK_WIDGET_SENSITIVE(widget) != GTK_STATE_INSENSITIVE))
 #endif
 			{
-				active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
+				active_table = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 				/*printf("found it,  active table %i\n",active_table);*/
 			}
 			else
@@ -1387,7 +1387,7 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page
 
 	if (OBJ_GET(widget,"table_num"))
 	{
-		active_table = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
+		active_table = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 		DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
 	}
 	else
@@ -1439,7 +1439,7 @@ G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 		i = 0;
 		while (vector[i])
 		{
-			tmpi = (gint)strtol(vector[i],NULL,10);
+			tmpi = (GINT)strtol(vector[i],NULL,10);
 			algorithm[tmpi]=(Algorithm)algo;
 			i++;
 		}
@@ -1644,11 +1644,11 @@ G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 	gboolean clamped = FALSE;
 
 	if (OBJ_GET(widget,"raw_lower"))
-		lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+		lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
 		lower = get_extreme_from_size((DataSize)OBJ_GET(widget,"size"),LOWER);
 	if (OBJ_GET(widget,"raw_upper"))
-		upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+		upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		upper = get_extreme_from_size((DataSize)OBJ_GET(widget,"size"),UPPER);
 	precision = (GINT)OBJ_GET(widget,"precision");
@@ -1692,7 +1692,7 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 	if (!widget_name)
 		return;
 	if (OBJ_GET(widget,"table_num"))
-		table_num = (gint) strtol(OBJ_GET(widget,"table_num"),NULL,10);
+		table_num = (GINT) strtol(OBJ_GET(widget,"table_num"),NULL,10);
 	else
 		return;
 

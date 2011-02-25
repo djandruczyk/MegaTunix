@@ -160,7 +160,10 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 			multi = g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
+		{
+			printf("X multi source set, but undefined, BUG!\n");
 			return;
+		}
 		x_eval[table] = multi->dl_eval;
 		lookup_current_value_f(multi->source,&x_source);
 	}
@@ -194,7 +197,10 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 			multi = g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
+		{
+			printf("Y multi source set, but undefined, BUG!\n");
 			return;
+		}
 
 		y_eval[table] = multi->dl_eval;
 		lookup_current_value_f(multi->source,&y_source);
@@ -205,10 +211,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 		lookup_current_value_f(firmware->table_params[table]->y_source,&y_source);
 	}
 	if ((x_source == prev_x_source[table]) && (y_source == prev_y_source[table]))
-	{
-		/*printf("table marker,  values haven't changed\n"); */
 		return;
-	}
 	else
 	{
 		/*printf("values have changed, continuing\n"); */
@@ -431,14 +434,14 @@ redraw:
 		color.red = z_weight[i]*32768 +32767;
 		color.green = (1.0-z_weight[i])*65535 +0;
 		color.blue = (1.0-z_weight[i])*32768 +0;
-		if (!gdk_colormap_alloc_color(colormap,&color,FALSE,TRUE))
-			printf("unable to allocate color!\n");
 
 		/* modify_base is REALLY REALLY slow, as it triggers a size 
 		 * recalc all the way thru the widget tree, which is 
 		 * atrociously expensive!
 		 */
 #ifdef __WIN32__
+		if (!gdk_colormap_alloc_color(colormap,&color,FALSE,TRUE))
+			printf("unable to allocate color!\n");
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 #else
 		if (GDK_IS_DRAWABLE(widget->window))

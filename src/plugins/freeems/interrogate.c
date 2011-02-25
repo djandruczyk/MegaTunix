@@ -57,7 +57,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	   Now we need to figure out its variant and adapt to it
 	 */
 	/* Send stream disable command */
-	stop_streaming();
+	//stop_streaming();
 
 	/* Load tests from tests.cfg file */
 	if (!validate_and_load_tests(&tests,&tests_hash))
@@ -706,7 +706,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 					pass=TRUE;
 				break;
 			case NUMMATCH:
-				if ((gint)(test->result_str[0]) == atoi(vector[1]))
+				if ((GINT)(test->result_str[0]) == atoi(vector[1]))
 					pass=TRUE;
 				break;
 			case SUBMATCH:
@@ -877,8 +877,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		for (i=0;i<firmware->total_pages;i++)
 		{
 			firmware->page_params[i] = initialize_page_params();
-			firmware->page_params[i]->phys_ecu_page = (gint)g_list_nth_data(locations,i);
-			details = request_location_id_details((gint)g_list_nth_data(locations,i));
+			firmware->page_params[i]->phys_ecu_page = (GINT)g_list_nth_data(locations,i);
+			details = request_location_id_details((GINT)g_list_nth_data(locations,i));
 			if (details)
 			{
 				firmware->page_params[i]->length = details->length;

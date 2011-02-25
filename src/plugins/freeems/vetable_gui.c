@@ -101,7 +101,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
 
-	active_table = (gint)DATA_GET(global_data,"active_table");
+	active_table = (GINT)DATA_GET(global_data,"active_table");
 
 	if ((active_table < 0 ) || (active_table > (firmware->total_tables-1)))
 		return;

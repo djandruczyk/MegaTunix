@@ -58,7 +58,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	get_essentials_f(widget,&canID,&page,&offset,&size,&precision);
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
-	tmpi = (gint)strtol(text,NULL,10);
+	tmpi = (GINT)strtol(text,NULL,10);
 	tmpf = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
 	g_free(text);
 	if ((tmpf != (gfloat)tmpi) && (precision == 0))
@@ -192,11 +192,11 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 		else
 		{
 			if (OBJ_GET(widget,"raw_lower"))
-				raw_lower = (gint)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+				raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 			else
 				raw_lower = get_extreme_from_size_f(size,LOWER);
 			if (OBJ_GET(widget,"raw_upper"))
-				raw_upper = (gint)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+				raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 			else
 				raw_upper = get_extreme_from_size_f(size,UPPER);
 
@@ -431,7 +431,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	GHashTable **interdep_vars = NULL;
 	Firmware_Details *firmware = NULL;
-	void (*check_limits)(gint);
+	void (*check_limits)(GINT);
 
 	firmware = DATA_GET(global_data,"firmware");
 	handler = (GINT)OBJ_GET(widget,"handler");

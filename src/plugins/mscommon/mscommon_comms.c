@@ -194,7 +194,7 @@ G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 	ms_store_new_block(0,page,0,data,num_bytes);
 
 	if (firmware->multi_page)
-		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
+		ms_handle_page_change(page,(GINT)DATA_GET(global_data,"last_page"));
 	output->queue_update = TRUE;
 	io_cmd_f(firmware->table_write_command,output);
 
@@ -341,7 +341,7 @@ G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num
 	ms_store_new_block(canID,page,offset,block,num_bytes);
 
 	if (firmware->multi_page)
-		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
+		ms_handle_page_change(page,(GINT)DATA_GET(global_data,"last_page"));
 	output->queue_update = TRUE;
 	io_cmd_f(firmware->chunk_write_command,output);
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
@@ -502,7 +502,7 @@ G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize
 	 * burns and/or page changing
 	 */
 	if (firmware->multi_page)
-		ms_handle_page_change(page,(gint)DATA_GET(global_data,"last_page"));
+		ms_handle_page_change(page,(GINT)DATA_GET(global_data,"last_page"));
 
 	output->queue_update = queue_update;
 	io_cmd_f(firmware->write_command,output);
@@ -527,7 +527,7 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 
 	if (!slave_msg_queue)
 		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
-	if (!(gboolean)DATA_GET(global_data,"network_access"))
+	if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 		return;
 	if (!output) /* If no data, don't bother the slaves */
 		return;
@@ -566,7 +566,7 @@ G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
 
 	if (!slave_msg_queue)
 		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
-	if (!(gboolean)DATA_GET(global_data,"network_access"))
+	if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 		return;
 
 	msg = g_new0(SlaveMessage, 1);

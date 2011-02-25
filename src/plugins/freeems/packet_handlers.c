@@ -394,7 +394,7 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	/* If sequence set, look for it and dispatch if found */
 	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
 	{
-		list = g_hash_table_lookup(sequences,GINT_TO_POINTER((gint)packet->seq_num));
+		list = g_hash_table_lookup(sequences,GINT_TO_POINTER((GINT)packet->seq_num));
 		if (list)
 		{
 			for (i=0;i<g_list_length(list);i++)
@@ -412,7 +412,7 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	if (payloads)
 	{
 		/* If payload ID matches, dispatch if found */
-		list = g_hash_table_lookup(payloads,GINT_TO_POINTER((gint)packet->payload_id));
+		list = g_hash_table_lookup(payloads,GINT_TO_POINTER((GINT)packet->payload_id));
 		if (list)
 		{
 			for (i=0;i<g_list_length(list);i++)

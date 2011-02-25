@@ -145,7 +145,7 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	/*printf("move/resize to %i,%i, %ix%i\n",x,y,width,height); */
 	gtk_window_move(GTK_WINDOW(window), x,y);
 	if (ratio)
-		gtk_window_set_default_size(GTK_WINDOW(window), (gint)(width*(*ratio)),(gint)(height*(*ratio)));
+		gtk_window_set_default_size(GTK_WINDOW(window), (GINT)(width*(*ratio)),(GINT)(height*(*ratio)));
 	else
 		gtk_window_set_default_size(GTK_WINDOW(window), width,height);
 	gtk_widget_show_all(window);
@@ -395,7 +395,7 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 	gauge = d_gauge->gauge;
 
 	history = (GArray *)DATA_GET(d_gauge->object,"history");
-	if ((gint)history->len-1 <= 0)
+	if ((GINT)history->len-1 <= 0)
 		return;
 	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
@@ -1184,7 +1184,7 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 	}
 	OBJ_SET_FULL(gauge,"datasource",g_strdup(OBJ_GET(widget,"datasource")),g_free);
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+	table_num = (GINT)g_ascii_strtod(tmpbuf,NULL);
 	tab_gauges[table_num] = g_list_prepend(tab_gauges[table_num],gauge);
 }
 
@@ -1200,9 +1200,9 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 
 	tab_gauges = DATA_GET(global_data,"tab_gauges");
 	
-	if ((!tab_gauges) || ((gint)DATA_GET(global_data,"active_table") < 0))
+	if ((!tab_gauges) || ((GINT)DATA_GET(global_data,"active_table") < 0))
 		return;
-	list = g_list_first(tab_gauges[(gint)DATA_GET(global_data,"active_table")]);
+	list = g_list_first(tab_gauges[(GINT)DATA_GET(global_data,"active_table")]);
 	for (i=0;i<g_list_length(list);i++)
 	{
 		gauge = g_list_nth_data(list,i);

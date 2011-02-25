@@ -251,8 +251,8 @@ void _crunch_trigtooth_data(gint page)
 			if ((ttm_data->current[i] > (1.5*min)) && (min != 0))
 				ttm_data->captures[cap_idx++] = i;
 		}
-		upper = (gint)ceil(ratio);
-		lower = (gint)floor(ratio);
+		upper = (GINT)ceil(ratio);
+		lower = (GINT)floor(ratio);
 		if ((ratio-lower) < 0.5)
 			ttm_data->missing = lower - 1;
 		else 
@@ -285,7 +285,7 @@ void _crunch_trigtooth_data(gint page)
 
 		if (DATA_GET(global_data,"toothmon_id"))
 		{
-			g_source_remove((gint)DATA_GET(global_data,"toothmon_id"));
+			g_source_remove((GINT)DATA_GET(global_data,"toothmon_id"));
 			id = g_timeout_add(ttm_data->sample_time,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			DATA_SET(global_data,"toothmon_id",GINT_TO_POINTER(id));
 		}
@@ -368,9 +368,9 @@ G_MODULE_EXPORT void update_trigtooth_display(gint page)
 	/*g_printf("peak %f, divisor, %i\n",ttm_data->peak, ttm_data->vdivisor);*/
 	/* Get width of largest value and save it */
 	if (ttm_data->units == 1)
-		message = g_strdup_printf("%i",(gint)(ttm_data->peak));
+		message = g_strdup_printf("%i",(GINT)(ttm_data->peak));
 	else
-		message = g_strdup_printf("%i",(gint)((ttm_data->peak)/10.0));
+		message = g_strdup_printf("%i",(GINT)((ttm_data->peak)/10.0));
 	cairo_text_extents (cr, message, &extents);
 	tmpx = extents.x_advance;
 	y_shift = extents.height;
@@ -382,9 +382,9 @@ G_MODULE_EXPORT void update_trigtooth_display(gint page)
 	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
 	{
 		if (ttm_data->units == 1)
-			message = g_strdup_printf("%i",(gint)ctr);
+			message = g_strdup_printf("%i",(GINT)ctr);
 		else
-			message = g_strdup_printf("%i",(gint)(ctr/10.0));
+			message = g_strdup_printf("%i",(GINT)(ctr/10.0));
 		/*g_printf("marker \"%s\"\n",message);*/
 		cairo_text_extents (cr, message, &extents);
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+y_shift;
@@ -520,7 +520,7 @@ void stop(EcuPluginTickler type)
 		case TOOTHMON_TICKLER:
 			if (DATA_GET(global_data,"toothmon_id"))
 			{
-				g_source_remove((gint)DATA_GET(global_data,"toothmon_id"));
+				g_source_remove((GINT)DATA_GET(global_data,"toothmon_id"));
 				DATA_SET(global_data,"toothmon_id",NULL);
 			}
 			if (DATA_GET(global_data,"restart_realtime"))
@@ -532,7 +532,7 @@ void stop(EcuPluginTickler type)
 		case TRIGMON_TICKLER:
 			if (DATA_GET(global_data,"trigmon_id"))
 			{
-				g_source_remove((gint)DATA_GET(global_data,"trigmon_id"));
+				g_source_remove((GINT)DATA_GET(global_data,"trigmon_id"));
 				DATA_SET(global_data,"trigmon_id",NULL);
 			}
 			if (DATA_GET(global_data,"restart_realtime"))

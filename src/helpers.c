@@ -121,19 +121,19 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	set_title(g_strdup(_("Starting up data renderers...")));
 	gdk_threads_leave();
 	rate = (GINT)DATA_GET(global_data,"rtslider_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_rtsliders,NULL);
+	source = g_timeout_add((GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rtsliders,NULL);
 	DATA_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"rttext_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL);
+	source = g_timeout_add((GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL);
 	DATA_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"dashboard_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL);
+	source = g_timeout_add((GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL);
 	DATA_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"ve3d_fps");
-	source = g_timeout_add((gint)(1000.0/(gfloat)rate),(GSourceFunc)update_ve3ds,NULL);
+	source = g_timeout_add((GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_ve3ds,NULL);
 	DATA_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
 }
 

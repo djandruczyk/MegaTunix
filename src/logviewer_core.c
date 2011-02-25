@@ -65,11 +65,11 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 		else
 			name = g_strdup("undefined!\n");
 		if (DATA_GET(object,"real_lower"))
-			min = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
+			min = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
 		else
 			min = get_extreme_from_size(size,LOWER);
 		if (DATA_GET(object,"real_upper"))
-			max = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
+			max = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
 		else
 			max = get_extreme_from_size(size,UPPER);
 		if (DATA_GET(object,"precision"))
@@ -418,7 +418,7 @@ G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpoint
 	extern gconstpointer *global_data;
 
 	tmpf = gtk_range_get_value(GTK_RANGE(widget));
-	DATA_SET(global_data,"lv_scroll_delay", GINT_TO_POINTER((gint)tmpf));
+	DATA_SET(global_data,"lv_scroll_delay", GINT_TO_POINTER((GINT)tmpf));
 	if (DATA_GET(global_data,"playback_id"))
 	{
 		stop_tickler(LV_PLAYBACK_TICKLER);

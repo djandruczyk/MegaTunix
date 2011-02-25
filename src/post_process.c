@@ -70,7 +70,7 @@ G_MODULE_EXPORT void update_raw_memory_view(ToggleButton type, gint page_offset)
 				(DATA_GET(global_data,"interrogated"))))
 		return;
 
-	mem_view_style[page_offset] = (gint)type;
+	mem_view_style[page_offset] = (GINT)type;
 
 	for (i=0;i<256;i++)
 	{

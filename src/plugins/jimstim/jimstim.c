@@ -64,15 +64,15 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 
 	OBJ_SET(jsdata.stop_b,"jsdata", (gpointer)&jsdata);
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.start_e),0,-1); 
-	jsdata.start = (gint)g_strtod(text,NULL);
+	jsdata.start = (GINT)g_strtod(text,NULL);
 	g_free(text);
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.end_e),0,-1); 
-	jsdata.end = (gint)g_strtod(text,NULL);
+	jsdata.end = (GINT)g_strtod(text,NULL);
 	g_free(text);
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.step_e),0,-1); 
-	jsdata.step = (gint)g_strtod(text,NULL);
+	jsdata.step = (GINT)g_strtod(text,NULL);
 	g_free(text);
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.sweep_e),0,-1); 
@@ -80,8 +80,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	g_free(text);
 
 	/* Validate data */
-	lower = (gint)strtol(OBJ_GET(jsdata.start_e,"raw_lower"),NULL,10);
-	upper = (gint)strtol(OBJ_GET(jsdata.start_e,"raw_upper"),NULL,10);
+	lower = (GINT)strtol(OBJ_GET(jsdata.start_e,"raw_lower"),NULL,10);
+	upper = (GINT)strtol(OBJ_GET(jsdata.start_e,"raw_upper"),NULL,10);
 	if ((jsdata.start <= lower) || (jsdata.start >= upper))
 	{
 		fault = TRUE;
@@ -90,8 +90,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&black);
-	lower = (gint)strtol(OBJ_GET(jsdata.end_e,"raw_lower"),NULL,10);
-	upper = (gint)strtol(OBJ_GET(jsdata.end_e,"raw_upper"),NULL,10);
+	lower = (GINT)strtol(OBJ_GET(jsdata.end_e,"raw_lower"),NULL,10);
+	upper = (GINT)strtol(OBJ_GET(jsdata.end_e,"raw_upper"),NULL,10);
 	if ((jsdata.end <= lower) || (jsdata.end >= upper))
 	{	
 		fault = TRUE;
@@ -114,8 +114,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
 	}
-	lower = (gint)strtol(OBJ_GET(jsdata.step_e,"raw_lower"),NULL,10);
-	upper = (gint)strtol(OBJ_GET(jsdata.step_e,"raw_upper"),NULL,10);
+	lower = (GINT)strtol(OBJ_GET(jsdata.step_e,"raw_lower"),NULL,10);
+	upper = (GINT)strtol(OBJ_GET(jsdata.step_e,"raw_upper"),NULL,10);
 	if ((jsdata.step <= lower) || (jsdata.step >= upper))
 	{
 		fault = TRUE;

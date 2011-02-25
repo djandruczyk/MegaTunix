@@ -255,7 +255,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	}
 	firmware = DATA_GET(global_data,"firmware");
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
-	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+	table_num = (GINT)g_ascii_strtod(tmpbuf,NULL);
 
 	if (winstat == NULL)
 		winstat = g_hash_table_new(NULL,NULL);
@@ -1521,14 +1521,14 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 
 
 	/* Live X axis marker */
-	label = g_strdup_printf("%i",(gint)cur_val->x_val);
+	label = g_strdup_printf("%i",(GINT)cur_val->x_val);
 
 	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
 	g_free(label);
 
 
 	/* Live Y axis marker */
-	label = g_strdup_printf("%i",(gint)cur_val->y_val);
+	label = g_strdup_printf("%i",(GINT)cur_val->y_val);
 
 	ve3d_draw_text(label,-0.05,tmpf2,-0.05);
 	g_free(label);
@@ -1781,7 +1781,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
-				max = (gint)pow(2,y_mult*8) - (ve_view->y_smallstep * factor);
+				max = (GINT)pow(2,y_mult*8) - (ve_view->y_smallstep * factor);
 				OBJ_SET(y_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(y_container);
 				if (cur <= max)
@@ -1857,7 +1857,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
-				max = (gint)pow(2,x_mult*8) - (ve_view->x_smallstep * factor);
+				max = (GINT)pow(2,x_mult*8) - (ve_view->x_smallstep * factor);
 				OBJ_SET(x_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(x_container);
 				if (cur <= max)
@@ -1876,7 +1876,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			break;
 		case GDK_Page_Up:
 			dbg_func(OPENGL,g_strdup("\t\"Page Up\"\n"));
-			max = (gint)pow(2,z_mult*8) - ve_view->z_bigstep;
+			max = (GINT)pow(2,z_mult*8) - ve_view->z_bigstep;
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				/*printf("Ctrl-PgUp, big increase ROW!\n");*/
@@ -1932,7 +1932,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_q:
 		case GDK_equal:
 			dbg_func(OPENGL,g_strdup("\t\"PLUS\"\n"));
-			max = (gint)pow(2,z_mult*8) - ve_view->z_smallstep;
+			max = (GINT)pow(2,z_mult*8) - ve_view->z_smallstep;
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				/*printf("Ctrl-q/+/=, increase ROW!\n");*/

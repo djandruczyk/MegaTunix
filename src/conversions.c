@@ -109,7 +109,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
 		tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 		if (tmpbuf)
-			table_num = (gint)strtol(tmpbuf,NULL,10);
+			table_num = (GINT)strtol(tmpbuf,NULL,10);
 		if (table_num == -1)
 		{
 			if (!hash_key)
@@ -160,7 +160,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	if (!evaluator)
 	{
-		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for widget %s value %i\n",glade_get_widget_name(widget), (gint)value));
+		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for widget %s value %i\n",glade_get_widget_name(widget), (GINT)value));
 		if(value > upper)
 		{
 			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",upper));
@@ -171,7 +171,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",lower));
 			value = lower;
 		}
-		return_value = (gint)value;
+		return_value = (GINT)value;
 	}
 	else
 	{
@@ -193,7 +193,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	tmpi = return_value;
 	 if (OBJ_GET(widget,"lookuptable"))
-		return_value = (gint)reverse_lookup_obj(G_OBJECT(widget),tmpi);
+		return_value = (GINT)reverse_lookup_obj(G_OBJECT(widget),tmpi);
 
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
@@ -277,7 +277,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
 		tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 		if (tmpbuf)
-			table_num = (gint)strtol(tmpbuf,NULL,10);
+			table_num = (GINT)strtol(tmpbuf,NULL,10);
 		if (table_num == -1)
 		{
 			if (!hash_key)

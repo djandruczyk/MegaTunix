@@ -208,7 +208,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			/* Send the "size" of the offset to the ecu */
 			if (OBJ_GET(widget,"size_offset"))
 			{
-				offset = (gint)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
+				offset = (GINT)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
 				ms_send_to_ecu_f(canID, page, offset, MTX_U08, size, TRUE);
 			}
 			else

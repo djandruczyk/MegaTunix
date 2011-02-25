@@ -176,8 +176,8 @@ void _ms2_crunch_trigtooth_data(gint page)
 			if ((ttm_data->current[i] > (1.5*min)) && (min != 0))
 				ttm_data->captures[cap_idx++] = i;
 		}
-		upper = (gint)ceil(ratio);
-		lower = (gint)floor(ratio);
+		upper = (GINT)ceil(ratio);
+		lower = (GINT)floor(ratio);
 		if ((ratio-lower) < 0.5)
 			ttm_data->missing = lower - 1;
 		else 
@@ -266,7 +266,7 @@ void ms2_update_trigtooth_display(gint page)
 	cairo_set_line_width(cr,1);
 
 	/* Get width of largest value and save it */
-	message = g_strdup_printf("%i",(gint)(ttm_data->peak));
+	message = g_strdup_printf("%i",(GINT)(ttm_data->peak));
 	cairo_text_extents (cr, message, &extents);
 	tmpx = extents.x_advance;
 	y_shift = extents.height;
@@ -277,7 +277,7 @@ void ms2_update_trigtooth_display(gint page)
 	/* Draw left side axis scale */
 	for (ctr=0.0;ctr < ttm_data->peak;ctr+=ttm_data->vdivisor)
 	{
-		message = g_strdup_printf("%i",(gint)ctr);
+		message = g_strdup_printf("%i",(GINT)ctr);
 		/*g_printf("marker \"%s\"\n",message);*/
 		cairo_text_extents (cr, message, &extents);
 		cur_pos = (h-y_shift)*(1-(ctr/ttm_data->peak))+y_shift;
@@ -309,7 +309,7 @@ void ms2_update_trigtooth_display(gint page)
 	
 	/*g_printf("ttm_data->peak is %f line width %f\n",ttm_data->peak,w/186.0);*/
 	/* Draw the bars, left to right */
-	for (i=0;i<(gint)(341.0/ttm_data->zoom);i++)
+	for (i=0;i<(GINT)(341.0/ttm_data->zoom);i++)
 	{
 		/*g_printf("moved to %f %i\n",ttm_data->usable_begin+(i*w/341.0),0);*/
 		cairo_move_to(cr,ttm_data->usable_begin+(i*w/(341.0/ttm_data->zoom)),h-(y_shift/2));

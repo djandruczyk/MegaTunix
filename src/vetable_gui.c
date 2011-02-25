@@ -78,7 +78,7 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 	g_strfreev(vector);
 
 	tmpbuf = (gchar *)OBJ_GET(scaler,"table_num");
-	table_num = (gint)g_ascii_strtod(tmpbuf,NULL);
+	table_num = (GINT)g_ascii_strtod(tmpbuf,NULL);
 
 	z_base = firmware->table_params[table_num]->z_base;
 	x_bins = firmware->table_params[table_num]->x_bincount;

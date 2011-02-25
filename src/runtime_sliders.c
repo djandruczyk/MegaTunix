@@ -297,11 +297,11 @@ G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_n
 	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
 	if ((gchar *)DATA_GET(object,"real_lower"))
-		slider->lower = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
+		slider->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
 	else
 		dbg_func(CRITICAL,g_strdup_printf(_(__FILE__"No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source));
 	if ((gchar *)DATA_GET(object,"real_upper"))
-		slider->upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
+		slider->upper = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
 	else
 		dbg_func(CRITICAL,g_strdup_printf(_(__FILE__"No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source));
 	slider->history = (GArray *) DATA_GET(object,"history");
@@ -421,11 +421,11 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	slider->history = (GArray *) DATA_GET(object,"history");
 	slider->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
 	if ((gchar *)DATA_GET(object,"real_lower"))
-		slider->lower = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
+		slider->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
 	else
 		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
 	if ((gchar *)DATA_GET(object,"real_upper"))
-		slider->upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
+		slider->upper = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
 	else
 		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
 	slider->object = object;
@@ -444,7 +444,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 		 */
 		orient = (GtkProgressBarOrientation)OBJ_GET(widget,"orientation");
 		slider->pbar = mtx_progress_bar_new();
-		mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(slider->pbar),(gint)DATA_GET(global_data,"pbar_hold_time"));
+		mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(slider->pbar),(GINT)DATA_GET(global_data,"pbar_hold_time"));
 		gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(slider->pbar),orient);
 		gtk_container_add(GTK_CONTAINER(widget),slider->pbar);
 		slider->class = MTX_PROGRESS;

@@ -223,7 +223,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 //			printf("read existing lock\n");
 			vector = g_strsplit(g_strchug(contents)," ", -1);
 //			printf("lock had %i fields\n",g_strv_length(vector));
-			pid = (gint)g_ascii_strtoull(vector[0],NULL,10);
+			pid = (GINT)g_ascii_strtoull(vector[0],NULL,10);
 //			printf("pid in lock \"%i\"\n",pid);
 			cleanup(contents);
 			g_strfreev(vector);
