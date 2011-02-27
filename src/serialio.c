@@ -363,7 +363,6 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	}
 
 #endif
-	//tcsetattr(serial_params->fd, TCSAFLUSH, &serial_params->newtio);
 	tcsetattr(serial_params->fd, TCSANOW, &serial_params->newtio);
 #endif
 	g_mutex_unlock(serio_mutex);
@@ -391,15 +390,17 @@ G_MODULE_EXPORT void close_serial(void)
 
 	/*printf("Closing serial port\n");*/
 #ifndef __WIN32__
-#ifdef __PIS_SUPPORT
+#ifdef __PIS_SUPPORT__
 	if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->oldctl) != 0)
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tError restoring ioctl\n"));
 	else
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tioctl restored OK\n"));
 
-#endif
-	tcsetattr(serial_params->fd,TCSAFLUSH,&serial_params->oldtio);
-#endif
+#else
+	tcsetattr(serial_params->fd,TCSANOW,&serial_params->oldtio);
+#endif /* PIS_SUPPORT */
+#endif /* __WIN32___ */
+
 	close(serial_params->fd);
 	serial_params->fd = -1;
 	serial_params->open = FALSE;

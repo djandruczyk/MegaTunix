@@ -99,8 +99,6 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	DATA_SET(global_data,"serial_reader_cond",cond);
 	cond = g_cond_new();
 	DATA_SET(global_data,"packet_handler_cond",cond);
-	thread = g_thread_create(packet_handler,NULL,TRUE,NULL);
-	DATA_SET(global_data,"packet_handler_thread",thread);
 	/* Packet subscribers */
 	hash =  g_hash_table_new(g_direct_hash,g_direct_equal);
 	DATA_SET(global_data,"sequence_num_queue_hash",hash);
@@ -119,6 +117,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BURN_BLOCK_FROM_RAM_TO_FLASH);
 	DATA_SET(global_data,"burn_queue",queue);
+	thread = g_thread_create(packet_handler,NULL,TRUE,NULL);
+	DATA_SET(global_data,"packet_handler_thread",thread);
 	return;
 }
 
