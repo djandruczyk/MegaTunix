@@ -57,8 +57,18 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 		g_object_set(item,"image",image,NULL);
 		if (gtk_minor_version >= 16)
 			g_object_set(item,"always-show-image",TRUE,NULL);
-		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_table_generator_window),NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_ms2_therm_table_generator_window),NULL);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+		/*
+		item = gtk_image_menu_item_new_with_mnemonic("Calibrate _MAF Tables");
+		image = gtk_image_new_from_stock("gtk-preferences",GTK_ICON_SIZE_MENU);
+		g_object_set(item,"image",image,NULL);
+		if (gtk_minor_version >= 16)
+			g_object_set(item,"always-show-image",TRUE,NULL);
+		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_ms2_maf_table_generator_window),NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+		*/
 
 		item = gtk_image_menu_item_new_with_mnemonic("MS-2 _AFR Calibrator");
 		image = gtk_image_new_from_stock("gtk-preferences",GTK_ICON_SIZE_MENU);
@@ -101,7 +111,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 /*!
    \brief General purpose handler to hide/show Sensor calibrate window
     */
-G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;
 	static GtkWidget *chooser = NULL;
@@ -112,7 +122,10 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 
 	firmware = DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(main_xml,FALSE);
+	
+	if (DATA_GET(global_data,"leaving"))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
@@ -212,8 +225,8 @@ G_MODULE_EXPORT gboolean show_table_generator_window(GtkWidget *widget, gpointer
 
 
 /*!
-   \brief General purpose handler to hide/show Sensor calibrate window
-    */
+ \brief General purpose handler to hide/show Sensor calibrate window
+ */
 G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
 {
 	static GtkWidget *window = NULL;

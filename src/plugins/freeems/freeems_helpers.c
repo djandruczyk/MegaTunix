@@ -197,10 +197,10 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 					DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
 					DATA_SET(output->data,"length", GINT_TO_POINTER(firmware->page_params[i]->length));
 					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
-					io_cmd_f(firmware->read_command,output);
 					queue = g_async_queue_new();
 					register_packet_queue(SEQUENCE_NUM,queue,seq);
 					DATA_SET(output->data,"queue",queue);
+					io_cmd_f(firmware->read_command,output);
 				}
 			}
 			command = (Command *)data;
@@ -216,8 +216,11 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 
 G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 {
-	Io_Message *message  = NULL;
-	OutputData *output  = NULL;
+	static GRand *rand = NULL;
+	static Firmware_Details *firmware = NULL;
+	Io_Message *message = NULL;
+	OutputData *output = NULL;
+	OutputData *retry = NULL;
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
 	gint seq = 0;
@@ -229,8 +232,16 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 	gint page = 0;
 	GTimeVal tval;
 
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
+	g_return_if_fail(firmware);
+	g_return_if_fail(message);
+	g_return_if_fail(output);
+
+	if (!rand)
+		rand = g_rand_new();
 
 	switch (type)
 	{
@@ -249,14 +260,31 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				/*printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);*/
+				printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,length);
 				freeems_packet_cleanup(packet);
 	                        tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 	                        DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			}
 			else
+			{
 				printf("timeout, no packet found in queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
+				printf("Re-issuing command!\n");
+				retry = initialize_outputdata_f();
+				seq = g_rand_int_range(rand,1,255);
+				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
+				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
+				DATA_SET(retry->data,"location_id",DATA_GET(output->data,"location_id"));
+				DATA_SET(retry->data,"payload_id",DATA_GET(output->data,"payload_id"));
+				DATA_SET(retry->data,"offset",DATA_GET(output->data,"offset"));
+				DATA_SET(retry->data,"length",DATA_GET(output->data,"length"));
+				DATA_SET(retry->data,"mode",DATA_GET(output->data,"mode"));
+				queue = g_async_queue_new();
+				register_packet_queue(SEQUENCE_NUM,queue,seq);
+				DATA_SET(retry->data,"queue",queue);
+				io_cmd_f(firmware->read_command,retry);
+				printf("Re-issued command sent, seq %i!\n",seq);
+			}
 			break;
 		case GENERIC_FLASH_WRITE:
 		case GENERIC_RAM_WRITE:
