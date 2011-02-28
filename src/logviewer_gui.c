@@ -67,6 +67,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	gint table_cols = 5;
 	gchar * name = NULL;
 	gchar * tooltip = NULL;
+	gboolean playback = FALSE;
 	Rtv_Map *rtv_map = NULL;
 	Log_Info *log_info;
 
@@ -74,6 +75,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	rtv_map = DATA_GET(global_data,"rtv_map");
 	darea = lookup_widget("logviewer_trace_darea");
 	lv_data->darea = darea;
+	playback = (GBOOLEAN)DATA_GET(global_data,"playback_mode");
 
 	if (!darea)
 	{
@@ -84,7 +86,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
 	/* Playback mode..... */
-	if (DATA_GET(global_data,"playback_mode"))
+	if (playback)
 	{
 		gtk_window_set_title(GTK_WINDOW(window),
 				_("Playback Mode: Logviewer Choices"));
@@ -143,12 +145,12 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 
 	for (i=0;i<max_viewables;i++)
 	{
-		if (DATA_GET(global_data,"playback_mode"))
+		if (playback)
 			list = g_list_prepend(list,(gpointer)g_ptr_array_index(log_info->log_list,i));
 		else
 			list = g_list_prepend(list,(gpointer)g_ptr_array_index(rtv_map->rtv_list,i));
 	}
-	if (DATA_GET(global_data,"playback_mode"))
+	if (playback)
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"lview_name");
 	else
 		list=g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
@@ -161,7 +163,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 
 		object = g_list_nth_data(list,i);
 
-		if (DATA_GET(global_data,"playback_mode"))
+		if (playback)
 			name = g_strdup(DATA_GET(object,"lview_name"));
 		else
 		{
@@ -293,7 +295,6 @@ G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
 	gconstpointer *object = NULL;
 	gboolean state = FALSE;
-
 
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
 
