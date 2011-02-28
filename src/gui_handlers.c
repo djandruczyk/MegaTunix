@@ -757,7 +757,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			if (!DATA_GET(global_data,"interrogated"))
 				break;
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
-			gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_logfile_button")),FALSE);
+			//gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_logfile_button")),FALSE);
 			present_viewer_choices();
 			break;
 		case OFFLINE_MODE:

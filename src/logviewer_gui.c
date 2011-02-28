@@ -1338,9 +1338,10 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 	if (mode == LV_PLAYBACK)
 	{
 		DATA_SET(global_data,"playback_mode",GINT_TO_POINTER(TRUE));
-		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), FALSE);
 		gtk_widget_set_sensitive(lookup_widget("logviewer_select_logfile_button"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), FALSE);
 		gtk_widget_hide(lookup_widget("logviewer_rt_control_vbox1"));
+		/* This one should NOT be enabled until at least 1 var is selected */
 		gtk_widget_show(lookup_widget("logviewer_playback_control_vbox1"));
 		gtk_widget_show(lookup_widget("scroll_speed_vbox"));
 		widget = lookup_widget("logviewer_log_position_hscale");
@@ -1430,11 +1431,18 @@ G_MODULE_EXPORT void finish_logviewer(void)
 	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
 	lv_data->info_width = 120;
 
-	if (DATA_GET(global_data,"playback_mode"))
+	if ((DATA_GET(global_data,"playback_mode")) || (DATA_GET(global_data,"offline")))
 		set_logviewer_mode(LV_PLAYBACK);
 	else
 		set_logviewer_mode(LV_REALTIME);
 
+	if (DATA_GET(global_data,"offline"))
+	{
+		widget = lookup_widget("logviewer_realtime_radio_button");
+		gtk_widget_set_sensitive(widget,FALSE);
+		widget = lookup_widget("logviewer_playback_radio_button");
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+	}
 	widget = lookup_widget("logviewer_zoom_spinner");
 	if (GTK_IS_SPIN_BUTTON(widget))
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),lv_zoom);
