@@ -66,7 +66,6 @@ void combo_handle_group_2_update(GtkWidget *);
 void combo_handle_algorithms(GtkWidget *);
 void handle_group_2_update(GtkWidget *);
 void handle_algorithm(GtkWidget *);
-gint get_choice_count(GtkTreeModel *);
 void combo_set_labels(GtkWidget *, GtkTreeModel *);
 gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 void toggle_groups_linked(GtkWidget *, gboolean);

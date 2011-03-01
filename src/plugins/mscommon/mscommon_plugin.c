@@ -63,6 +63,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("flush_serial",(void *)&flush_serial_f);
 	get_symbol_f("focus_out_handler",(void *)&focus_out_handler_f);
 	get_symbol_f("get_bitshift",(void *)&get_bitshift_f);
+	get_symbol_f("get_choice_count_f",(void *)&get_choice_count_f);
 	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
 	get_symbol_f("get_extreme_from_size",(void *)&get_extreme_from_size_f);
 	get_symbol_f("get_file_api",(void *)&get_file_api_f);

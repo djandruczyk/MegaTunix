@@ -650,7 +650,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 		gdk_threads_add_timeout(2000,force_update_table,OBJ_GET(widget,"table_2_update"));
 	if (set_labels)
 	{
-		total = get_choice_count(model);
+		total = get_choice_count_f(model);
 		tmpi = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 		vector = g_strsplit(set_labels,",",-1);
 		if ((g_strv_length(vector)%(total+1)) != 0)
