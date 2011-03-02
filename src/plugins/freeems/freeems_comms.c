@@ -677,13 +677,60 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 			break;
 	}
 	DATA_SET_FULL(output->data,"data",(gpointer)data, g_free);
-	DATA_SET(output->data,"num_bytes",GINT_TO_POINTER(get_multiplier_f(size)));
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */
-	freeems_set_ecu_data(canID, locID,offset,size,value);
+	freeems_set_ecu_data(canID,locID,offset,size,value);
 
 	output->queue_update = queue_update;
 	io_cmd_f(firmware->write_command,output);
 	return;
 }
+
+
+/*!
+ \brief freeems_chunk_write() gets called to send a block of values to the ECU.
+ \param canID (gint) can identifier (0-14)
+ \param locID (gint) locationID in which the value refers to.
+ \param offset (gint) offset from the beginning of the page that this data
+ refers to.
+ \param len (gint) length of block to sent
+ \param data (guint8) the block of data to be sent which better damn well be
+ int ECU byte order if there is an endianness thing..
+ a horrible stall when doing an ECU restore or batch load...
+ */
+G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gint num_bytes, guint8 * block)
+{
+	OutputData *output = NULL;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+
+	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": freeems_chunk_write()\n\t Sending canID %i, locID %i, offset %i, num_bytes %i, data %p\n",canID,locID,offset,num_bytes,block));
+	output = initialize_outputdata_f();
+	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
+	DATA_SET(output->data,"location_id", GINT_TO_POINTER(locID));
+	DATA_SET(output->data,"payload_id", GINT_TO_POINTER(REQUEST_UPDATE_BLOCK_IN_RAM));
+	DATA_SET(output->data,"length", GINT_TO_POINTER(num_bytes));
+	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
+	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
+	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
+
+	/* save it otherwise the burn checker can miss it due to a potential
+	 * race condition
+	 */
+	/* This should be stored in the ACK for the packet NOT here*/
+	freeems_store_new_block(canID,locID,offset,block,num_bytes);
+
+	/*
+	if (firmware->multi_page)
+		ms_handle_page_change(page,(GINT)DATA_GET(global_data,"last_page"));
+	*/
+	output->queue_update = TRUE;
+	io_cmd_f(firmware->write_command,output);
+	/*
+	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
+	*/
+	return;
+}
+

@@ -15,6 +15,8 @@ libfreeems_la_SOURCES = \
 	Makefile \
 	datamgmt.c \
 	datamgmt.h \
+	fileio.c \
+	fileio.h \
 	freeems_globaldefs.h \
 	freeems_comms.c \
 	freeems_comms.h \

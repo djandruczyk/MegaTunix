@@ -31,6 +31,8 @@ void *rtv_subscriber(gpointer);
 void *serial_repair_thread(gpointer);
 void send_to_ecu(gpointer, gint, gboolean);
 void freeems_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
+void freeems_chunk_write(gint, gint, gint, gint, guint8 *);
+
 void send_to_ecu(gpointer, gint, gboolean);
 /* Prototypes */
 

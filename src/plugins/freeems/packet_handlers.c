@@ -473,7 +473,6 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	gint payload_id = -1;
 	gint location_id = -1;
 	gint offset = -1;
-	gint length = -1;
 	gint packet_length = 2; /* Header + cksum, rest come in below */
 	gint payload_length = 0;
 	guint i = 0;
@@ -524,7 +523,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				have_location_id = TRUE;
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
 				/*printf("Location ID number present %i\n",location_id);*/
-				payload_length += 4; /*location + payload len */
+				payload_length += 4; /* locID + payload len */
 				break;
 			case OFFSET:
 				have_offset = TRUE;
@@ -534,15 +533,14 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				break;
 			case LENGTH:
 				have_length = TRUE;
-				length = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Payload length present %i\n",length);*/
+				payload_data_length = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("Payload length present %i\n",payload_data_length);*/
+				payload_length += payload_data_length;
 				packet_length += 2;
 				break;
 			case DATA:
 				have_datablock = TRUE;
 				payload_data = (guint8 *)DATA_GET(output->data,arg->internal_name);
-				payload_data_length = (GINT)DATA_GET(output->data,"num_bytes");
-				payload_length += payload_data_length;
 				break;
 			default:
 				printf("FreeEMS doesn't handle this type %s\n",arg->name);
@@ -593,8 +591,8 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		buf[pos++] = (guint8)((offset & 0xff00) >> 8); 
 		buf[pos++] = (guint8)(offset & 0x00ff); 
 		/* Sub Length */
-		buf[pos++] = (guint8)((length & 0xff00) >> 8); 
-		buf[pos++] = (guint8)(length & 0x00ff); 
+		buf[pos++] = (guint8)((payload_data_length & 0xff00) >> 8); 
+		buf[pos++] = (guint8)(payload_data_length & 0x00ff); 
 		/* pos = 11 or 12 depending on if seq or not */
 
 		g_memmove(buf+pos,payload_data,payload_data_length);
