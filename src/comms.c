@@ -199,6 +199,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 
 G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 {
+#ifndef __WIN32__
 	gint i = 0;
 	gint result = 0;
 	GDir *a_dir = NULL;
@@ -293,7 +294,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 			{
 				check = g_list_nth_data(buttons,i);
 				if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check)))
-					tmpbuf = g_strdup_printf("/dev/%s,%s",g_list_nth_data(found,i),ports);
+					tmpbuf = g_strdup_printf("/dev/%s,%s",(gchar *)g_list_nth_data(found,i),ports);
 			}
 			DATA_SET_FULL(global_data,"potential_ports",tmpbuf,g_free);
 		}
@@ -304,7 +305,9 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	g_list_free(found);
 	
 	return TRUE;
-
+#else
+	return TRUE;
+#endif
 }
 
 

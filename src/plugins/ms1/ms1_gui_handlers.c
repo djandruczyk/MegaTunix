@@ -431,7 +431,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	GHashTable **interdep_vars = NULL;
 	Firmware_Details *firmware = NULL;
-	void (*check_limits)(GINT);
+	void (*check_limits)(gint);
 
 	firmware = DATA_GET(global_data,"firmware");
 	handler = (GINT)OBJ_GET(widget,"handler");
