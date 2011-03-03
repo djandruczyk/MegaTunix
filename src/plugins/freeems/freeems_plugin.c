@@ -65,17 +65,20 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("get_list",(void *)&get_list_f);
 	get_symbol_f("get_multiplier",(void *)&get_multiplier_f);
 	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
+	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
 	get_symbol_f("jump_to_tab",(void *)&jump_to_tab_f);
 	get_symbol_f("log_inbound_data",(void *)&log_inbound_data_f);
 	get_symbol_f("log_outbound_data",(void *)&log_outbound_data_f);
 	get_symbol_f("mem_alloc",(void *)&mem_alloc_f);
+	get_symbol_f("parse_keys",(void *)&parse_keys_f);
 	get_symbol_f("queue_function",(void *)&queue_function_f);
 	get_symbol_f("process_rt_vars",(void *)&process_rt_vars_f);
 	get_symbol_f("read_data",(void *)&read_data_f);
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
 	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
+	get_symbol_f("set_file_api",(void *)&set_file_api_f);
 	get_symbol_f("set_widget_labels",(void *)&set_widget_labels_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("set_title",(void *)&set_title_f);
@@ -132,45 +135,55 @@ G_MODULE_EXPORT void plugin_shutdown()
 	gint id = 0;
 
 	freeems_serial_disable();
-	cond = DATA_GET(global_data,"serial_reader_cond");
-	if (cond)
-		g_cond_free(cond);
-	DATA_SET(global_data,"serial_reader_cond",NULL);
-	cond = NULL;
-	cond = DATA_GET(global_data,"packet_handler_cond");
-	if (cond)
-		g_cond_free(cond);
-	DATA_SET(global_data,"packet_handler_cond",NULL);
-	cond = NULL;
-	hash = DATA_GET(global_data,"sequence_num_queue_hash");
-	if (hash)
-		g_hash_table_destroy(hash);
-	DATA_SET(global_data,"sequence_num_queue_hash",NULL);
-	hash = NULL;
-	hash = DATA_GET(global_data,"payload_id_queue_hash");
-	if (hash)
-		g_hash_table_destroy(hash);
-	DATA_SET(global_data,"payload_id_queue_hash",NULL);
-	hash = NULL;
+
+	queue = DATA_GET(global_data,"burn_queue");
+	if (queue)
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BURN_BLOCK_FROM_RAM_TO_FLASH);
+		g_async_queue_unref(queue);
+		DATA_SET(global_data,"burn_queue",NULL);
+	}
+	queue = DATA_GET(global_data,"FLASH_write_queue");
+	if (queue)
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_REPLACE_BLOCK_IN_FLASH);
+		g_async_queue_unref(queue);
+		DATA_SET(global_data,"FLASH_write_queue",NULL);
+	}
+	queue = DATA_GET(global_data,"RAM_write_queue");
+	if (queue)
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_UPDATE_BLOCK_IN_RAM);
+		g_async_queue_unref(queue);
+		DATA_SET(global_data,"RAM_write_queue",NULL);
+	}
+	queue = DATA_GET(global_data,"packet_queue");
+	if (queue)
+	{
+		g_async_queue_unref(queue);
+		DATA_SET(global_data,"packet_queue",NULL);
+	}
 	mutex = DATA_GET(global_data,"queue_mutex");
 	if (mutex)
 		g_mutex_free(mutex);
 	DATA_SET(global_data,"queue_mutex",NULL);
+	hash = DATA_GET(global_data,"payload_id_queue_hash");
+	if (hash)
+		g_hash_table_destroy(hash);
+	DATA_SET(global_data,"payload_id_queue_hash",NULL);
+	hash = DATA_GET(global_data,"sequence_num_queue_hash");
+	if (hash)
+		g_hash_table_destroy(hash);
+	DATA_SET(global_data,"sequence_num_queue_hash",NULL);
 
-	queue = DATA_GET(global_data,"RAM_write_queue");
-	if (queue)
-		g_async_queue_unref(queue);
-	DATA_SET(global_data,"RAM_write_queue",NULL);
-
-	queue = DATA_GET(global_data,"FLASH_write_queue");
-	if (queue)
-		g_async_queue_unref(queue);
-	DATA_SET(global_data,"FLASH_write_queue",NULL);
-
-	queue = DATA_GET(global_data,"burn_queue");
-	if (queue)
-		g_async_queue_unref(queue);
-	DATA_SET(global_data,"burn_queue",NULL);
+	cond = DATA_GET(global_data,"packet_handler_cond");
+	if (cond)
+		g_cond_free(cond);
+	DATA_SET(global_data,"packet_handler_cond",NULL);
+	cond = DATA_GET(global_data,"serial_reader_cond");
+	if (cond)
+		g_cond_free(cond);
+	DATA_SET(global_data,"serial_reader_cond",NULL);
 
 	deregister_common_enums();
 	return;
@@ -215,6 +228,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(LOCATION_ID));
 		g_hash_table_insert (str_2_enum, "_OFFSET_",
 				GINT_TO_POINTER(OFFSET));
+		g_hash_table_insert (str_2_enum, "_DATA_LENGTH_",
+				GINT_TO_POINTER(DATA_LENGTH));
 		g_hash_table_insert (str_2_enum, "_LENGTH_",
 				GINT_TO_POINTER(LENGTH));
 		g_hash_table_insert (str_2_enum, "_DATABYTE_",
@@ -263,6 +278,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_PAYLOAD_ID_");
 		g_hash_table_remove (str_2_enum, "_LOCATION_ID_");
 		g_hash_table_remove (str_2_enum, "_OFFSET_");
+		g_hash_table_remove (str_2_enum, "_DATA_LENGTH_");
 		g_hash_table_remove (str_2_enum, "_LENGTH_");
 		g_hash_table_remove (str_2_enum, "_DATABYTE_");
 		g_hash_table_remove (str_2_enum, "_FREEEMS_ALL_");

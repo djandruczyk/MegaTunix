@@ -459,9 +459,6 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 	GThread *thread = NULL;
 
 	/* This sends packets to the rtv_subscriber queue */
-	queue = DATA_GET(global_data,"rtv_subscriber_queue");
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
-	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
 	thread = DATA_GET(global_data,"rtv_subscriber_thread");
 	if (thread)
 	{
@@ -470,6 +467,9 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 		DATA_SET(global_data,"rtv_subscriber_thread",NULL);
 		DATA_SET(global_data,"rtv_subscriber_thread_exit",NULL);
 	}
+	queue = DATA_GET(global_data,"rtv_subscriber_queue");
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
 	return TRUE;
 }
 
@@ -624,7 +624,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
 	DATA_SET(output->data,"size", GINT_TO_POINTER(size));
 	DATA_SET(output->data,"value", GINT_TO_POINTER(value));
-	DATA_SET(output->data,"length", GINT_TO_POINTER(get_multiplier_f(size)));
+	DATA_SET(output->data,"data_length", GINT_TO_POINTER(get_multiplier_f(size)));
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
 	/* Get memory */
 	data = g_new0(guint8,get_multiplier_f(size));
@@ -711,11 +711,12 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
 	DATA_SET(output->data,"location_id", GINT_TO_POINTER(locID));
 	DATA_SET(output->data,"payload_id", GINT_TO_POINTER(REQUEST_UPDATE_BLOCK_IN_RAM));
-	DATA_SET(output->data,"length", GINT_TO_POINTER(num_bytes));
+	DATA_SET(output->data,"data_length", GINT_TO_POINTER(num_bytes));
 	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
 	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
+	printf("chunk write, num_bytes %i\n",num_bytes);
 	/* save it otherwise the burn checker can miss it due to a potential
 	 * race condition
 	 */

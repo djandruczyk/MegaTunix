@@ -136,6 +136,7 @@ void mtx_gauge_face_finalize (GObject *gauge)
 		mtx_gauge_face_cleanup_tick_groups(priv->tick_groups);
 	if (priv->polygons)
 		mtx_gauge_face_cleanup_polygons(priv->polygons);
+	g_object_set_data(G_OBJECT(gauge),"bg_color", NULL);
 	g_object_set_data(G_OBJECT(gauge),"bg_color_alt", NULL);
 	g_object_set_data(G_OBJECT(gauge),"needle_color", NULL);
 	g_object_set_data(G_OBJECT(gauge),"needle_color_alt", NULL);

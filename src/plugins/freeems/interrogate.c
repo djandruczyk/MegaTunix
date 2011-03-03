@@ -827,14 +827,23 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 				&firmware->get_all_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Read_Command",
-                                 &firmware->read_command))
-                 dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Read_Command\" variable not found in interrogation profile, ERROR\n"));
+				&firmware->read_command))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Read_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Write_Command",
 				&firmware->write_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Write_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
 				&firmware->burn_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_boolean(cfgfile,"parameters","ChunkWriteSupport",
+				&firmware->chunk_support))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"ChunkWriteSupport\" flag not found in parameters section in interrogation profile, ERROR\n"));
+	if (firmware->chunk_support)
+	{
+		if(!cfg_read_string(cfgfile,"parameters","Chunk_Write_Command",
+					&firmware->chunk_write_command))
+			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Chunk_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
+	}
 
 	/* Gui Section */
 	if(!cfg_read_string(cfgfile,"gui","LoadTabs",&tmpbuf))
@@ -891,8 +900,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	}
 	/* MAJOR HACK ALERT,  hardcoded for fred! */
 	firmware->total_tables = 1;
-        firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
-        firmware->table_params[0] = initialize_table_params();
+	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
+	firmware->table_params[0] = initialize_table_params();
 	firmware->table_params[0]->x_page = 0;
 	firmware->table_params[0]->y_page = 0;
 	firmware->table_params[0]->z_page = 0;

@@ -226,6 +226,7 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 	gint seq = 0;
 	gint tmpi = 0;
 	gint canID = 0;
+	gint data_length = 0;
 	gint locID = 0;
 	gint offset = 0;
 	gint length = 0;
@@ -260,11 +261,19 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
-				freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,length);
-				freeems_packet_cleanup(packet);
-	                        tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
-	                        DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
+				if (packet->nack)
+					printf("packet ACK FAILURE!\n");
+				else
+				{
+
+					printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
+					printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, length %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,length);
+					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,length);
+
+					freeems_packet_cleanup(packet);
+					tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
+					DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
+				}
 			}
 			else
 			{
@@ -291,7 +300,7 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			canID = (GINT)DATA_GET(output->data,"canID");
 			locID = (GINT)DATA_GET(output->data,"location_id");
 			offset = (GINT)DATA_GET(output->data,"offset");
-			length = (GINT)DATA_GET(output->data,"length");
+			data_length = (GINT)DATA_GET(output->data,"data_length");
 			queue = DATA_GET(global_data,"RAM_write_queue");
 			g_get_current_time(&tval);
 			g_time_val_add(&tval,500000);
@@ -299,13 +308,16 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
+				printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);
 				if (packet->header_bits &ACK_TYPE_MASK)
 					printf("PACKET ERROR!!!!\n");
 				freeems_packet_cleanup(packet);
 			}
 			else
+			{
 				printf("timeout, no packet found in generic RAM write queue, locID %i\n",locID);
+				printf("DATA_SET REISSUE NOT WRITTEN YET");
+			}
 			break;
 		default:
 			printf("Don't know how to handle this type..\n");

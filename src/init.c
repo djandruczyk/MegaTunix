@@ -957,9 +957,7 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 		if (message->command->dynamic)
 		{
 			if (message->command->post_functions)
-			{
 				/*dealloc_array(message->command->post_functions,POST_FUNCTIONS);*/
-			}
 			cleanup(message->command);
 		}
 	}

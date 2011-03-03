@@ -234,6 +234,9 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	}
 	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
 	packet->payload_base_offset = tmpi;
+	packet->nack = ((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0;
+	if (packet->nack)
+		printf("WARNING packet NACK received for payload ID %i\n",packet->payload_id);
 
 	if (PKT_DEBUG)
 	{
@@ -461,12 +464,8 @@ void freeems_packet_cleanup(FreeEMS_Packet *packet)
 G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command, gpointer data)
 {
 	gboolean have_sequence = FALSE;
-	gboolean have_payload_id = FALSE;
-	gboolean have_location_id = FALSE;
-	gboolean have_offset = FALSE;
-	gboolean have_length = FALSE;
-	gboolean have_datablock = FALSE;
 	guint8 *payload_data = NULL;
+	gint length = 0;
 	gint payload_data_length = 0;
 	gint byte = 0;
 	gint seq_num = -1;
@@ -513,33 +512,32 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				}
 				break;
 			case PAYLOAD_ID:
-				have_payload_id = TRUE;
 				payload_id = (GINT)DATA_GET(output->data,arg->internal_name);
 				/*printf("Payload ID number present %i\n",payload_id);*/
 				packet_length += 2;
 				break;
 				/* Payload specific stuff */
 			case LOCATION_ID:
-				have_location_id = TRUE;
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
 				/*printf("Location ID number present %i\n",location_id);*/
 				payload_length += 4; /* locID + payload len */
 				break;
 			case OFFSET:
-				have_offset = TRUE;
 				offset = (GINT)DATA_GET(output->data,arg->internal_name);
 				/*printf("Offset present %i\n",offset);*/
 				payload_length += 2;
 				break;
 			case LENGTH:
-				have_length = TRUE;
-				payload_data_length = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Payload length present %i\n",payload_data_length);*/
-				payload_length += payload_data_length;
+				length = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("Payload length present %i\n",length);*/
 				packet_length += 2;
 				break;
+			case DATA_LENGTH:
+				payload_data_length = (GINT)DATA_GET(output->data,arg->internal_name);
+				printf("Payload write DATA length present %i\n",payload_data_length);
+				payload_length += payload_data_length;
+				break;
 			case DATA:
-				have_datablock = TRUE;
 				payload_data = (guint8 *)DATA_GET(output->data,arg->internal_name);
 				break;
 			default:
@@ -591,8 +589,8 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		buf[pos++] = (guint8)((offset & 0xff00) >> 8); 
 		buf[pos++] = (guint8)(offset & 0x00ff); 
 		/* Sub Length */
-		buf[pos++] = (guint8)((payload_data_length & 0xff00) >> 8); 
-		buf[pos++] = (guint8)(payload_data_length & 0x00ff); 
+		buf[pos++] = (guint8)((length & 0xff00) >> 8); 
+		buf[pos++] = (guint8)(length & 0x00ff); 
 		/* pos = 11 or 12 depending on if seq or not */
 
 		g_memmove(buf+pos,payload_data,payload_data_length);
