@@ -653,7 +653,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	void *obj_data = NULL;
 	gint handler = -1;
 	Firmware_Details *firmware = NULL;
-	void (*select_for)(GINT) = NULL;
+	void (*select_for)(gint) = NULL;
 	void (*revert)(void) = NULL;
 	gboolean (*create_2d_table_editor)(gint,GtkWidget *) = NULL;
 	gboolean (*create_2d_table_editor_group)(GtkWidget *) = NULL;
