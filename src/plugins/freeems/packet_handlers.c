@@ -235,13 +235,13 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
 	packet->payload_base_offset = tmpi;
 	packet->nack = ((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0;
-	if (packet->nack)
-		printf("WARNING packet NACK received for payload ID %i\n",packet->payload_id);
 
-	if (PKT_DEBUG)
+	if ((PKT_DEBUG) || (packet->nack))
 	{
 		printf("Full packet received, %i bytes!\n",packet->raw_length);
-		printf("Ack/Nack Flag: %i\n",((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0);
+		printf("Ack/Nack Flag: %i\n",packet->nack);
+		if (packet->nack)
+			printf("WARNING packet NACK received for payload ID %i\n",packet->payload_id);
 		printf("Has Sequence Flag: %i\n",((packet->header_bits & HAS_SEQUENCE_MASK) > 0) ? 1:0);
 		printf("Sequence id: %i\n",packet->seq_num); 
 		printf("Payload id: %i\n",packet->payload_id);
