@@ -519,6 +519,11 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				/*printf("Payload ID number present %i\n",payload_id);*/
 				packet_length += 2;
 				break;
+			case LENGTH:
+				length = (GINT)DATA_GET(output->data,arg->internal_name);
+				/*printf("Payload length present %i\n",length);*/
+				packet_length += 2;
+				break;
 				/* Payload specific stuff */
 			case LOCATION_ID:
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
@@ -529,11 +534,6 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				offset = (GINT)DATA_GET(output->data,arg->internal_name);
 				/*printf("Offset present %i\n",offset);*/
 				payload_length += 2;
-				break;
-			case LENGTH:
-				length = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Payload length present %i\n",length);*/
-				packet_length += 2;
 				break;
 			case DATA_LENGTH:
 				payload_data_length = (GINT)DATA_GET(output->data,arg->internal_name);
@@ -596,6 +596,8 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		buf[pos++] = (guint8)(length & 0x00ff); 
 		/* pos = 11 or 12 depending on if seq or not */
 
+		if ((!payload_data) && (payload_data_length >0))
+			printf("MAJOR ISSUE, payload_data is null, but layload data length is %i\n",payload_data_length);
 		g_memmove(buf+pos,payload_data,payload_data_length);
 		pos += payload_data_length;
 	}
