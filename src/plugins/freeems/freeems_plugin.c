@@ -230,8 +230,6 @@ void register_common_enums(void)
 				GINT_TO_POINTER(OFFSET));
 		g_hash_table_insert (str_2_enum, "_DATA_LENGTH_",
 				GINT_TO_POINTER(DATA_LENGTH));
-		g_hash_table_insert (str_2_enum, "_LENGTH_",
-				GINT_TO_POINTER(LENGTH));
 		g_hash_table_insert (str_2_enum, "_DATABYTE_",
 				GINT_TO_POINTER(DATABYTE));
 		g_hash_table_insert (str_2_enum, "_FREEEMS_ALL_",
@@ -279,7 +277,6 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_LOCATION_ID_");
 		g_hash_table_remove (str_2_enum, "_OFFSET_");
 		g_hash_table_remove (str_2_enum, "_DATA_LENGTH_");
-		g_hash_table_remove (str_2_enum, "_LENGTH_");
 		g_hash_table_remove (str_2_enum, "_DATABYTE_");
 		g_hash_table_remove (str_2_enum, "_FREEEMS_ALL_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_READ_");

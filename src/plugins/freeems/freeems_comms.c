@@ -711,8 +711,8 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
 	DATA_SET(output->data,"location_id", GINT_TO_POINTER(locID));
 	DATA_SET(output->data,"payload_id", GINT_TO_POINTER(REQUEST_UPDATE_BLOCK_IN_RAM));
-	DATA_SET(output->data,"data_length", GINT_TO_POINTER(num_bytes));
 	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
+	DATA_SET(output->data,"data_length", GINT_TO_POINTER(num_bytes));
 	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 

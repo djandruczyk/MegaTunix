@@ -27,7 +27,6 @@ typedef enum
 	PAYLOAD_ID,
 	LOCATION_ID,
 	OFFSET,
-	LENGTH,
 	DATA_LENGTH,
 	DATABYTE
 }FreeEMSArgTypes;

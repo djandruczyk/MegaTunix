@@ -58,15 +58,8 @@
 			<size>_U16_</size>
 		</arg>
 		<arg>
-			<name>LENGTH</name>
-			<desc>Length of the block to be READ</desc>
-			<type>_LENGTH_</type>
-			<internal_name>length</internal_name>
-			<size>_U16_</size>
-		</arg>
-		<arg>
 			<name>DATA_LENGTH</name>
-			<desc>Length of the block in _DATA_ segment</desc>
+			<desc>Length of the block requested or sent</desc>
 			<type>_DATA_LENGTH_</type>
 			<internal_name>data_length</internal_name>
 			<size>_U16_</size>
@@ -133,7 +126,7 @@
 				<arg>PAYLOAD_ID</arg>
 				<arg>LOCATION_ID</arg>
 				<arg>OFFSET</arg>
-				<arg>LENGTH</arg>
+				<arg>DATA_LENGTH</arg>
 			</args>
 			<helper_func>handle_transaction</helper_func>
                         <helper_func_arg>_GENERIC_READ_</helper_func_arg>

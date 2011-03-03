@@ -195,7 +195,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 					DATA_SET(output->data,"location_id",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 					DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_RETRIEVE_BLOCK_FROM_RAM));
 					DATA_SET(output->data,"offset", GINT_TO_POINTER(0));
-					DATA_SET(output->data,"length", GINT_TO_POINTER(firmware->page_params[i]->length));
+					DATA_SET(output->data,"num_wanted", GINT_TO_POINTER(firmware->page_params[i]->length));
 					DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 					queue = g_async_queue_new();
 					register_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -229,7 +229,7 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 	gint data_length = 0;
 	gint locID = 0;
 	gint offset = 0;
-	gint length = 0;
+	gint size = 0;
 	gint page = 0;
 	GTimeVal tval;
 
@@ -251,7 +251,7 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			canID = (GINT)DATA_GET(output->data,"canID");
 			locID = (GINT)DATA_GET(output->data,"location_id");
 			offset = (GINT)DATA_GET(output->data,"offset");
-			length = (GINT)DATA_GET(output->data,"length");
+			size = (GINT)DATA_GET(output->data,"num_wanted");
 			queue = DATA_GET(output->data,"queue");
 			g_get_current_time(&tval);
 			g_time_val_add(&tval,500000);
@@ -267,8 +267,8 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 				{
 
 					printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
-					printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, length %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,length);
-					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,length);
+					printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
+					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
 
 					freeems_packet_cleanup(packet);
 					tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
@@ -286,7 +286,7 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 				DATA_SET(retry->data,"location_id",DATA_GET(output->data,"location_id"));
 				DATA_SET(retry->data,"payload_id",DATA_GET(output->data,"payload_id"));
 				DATA_SET(retry->data,"offset",DATA_GET(output->data,"offset"));
-				DATA_SET(retry->data,"length",DATA_GET(output->data,"length"));
+				DATA_SET(retry->data,"num_wanted",DATA_GET(output->data,"num_wanted"));
 				DATA_SET(retry->data,"mode",DATA_GET(output->data,"mode"));
 				queue = g_async_queue_new();
 				register_packet_queue(SEQUENCE_NUM,queue,seq);
