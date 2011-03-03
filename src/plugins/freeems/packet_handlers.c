@@ -248,6 +248,9 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 		printf("Has Length Flag: %i\n",((packet->header_bits & HAS_LENGTH_MASK) > 0) ? 1:0);
 		printf("Payload length %i\n",packet->payload_length);
 		printf("Payload base offset: %i\n",packet->payload_base_offset);
+		printf("RAW PACKET: ->> ");
+		for (i=0;i<packet->raw_length;i++)
+			printf("%.2X ",(guint8)(packet->data)[i]);
 		printf("\n");
 	}
 	if (packet->header_bits & HAS_LENGTH_MASK)
