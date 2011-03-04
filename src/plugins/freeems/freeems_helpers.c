@@ -266,8 +266,9 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 				else
 				{
 
-					printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
+					/*printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
 					printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
+					*/
 					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
 
 					freeems_packet_cleanup(packet);
@@ -308,9 +309,9 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);
+				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
 				if (packet->header_bits &ACK_TYPE_MASK)
-					printf("PACKET ERROR!!!!\n");
+					printf("DATA Write Resposne PACKET NACK ERROR!!!!\n");
 				freeems_packet_cleanup(packet);
 			}
 			else

@@ -238,15 +238,18 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 
 	if ((PKT_DEBUG) || (packet->nack))
 	{
-		printf("Full packet received, %i bytes!\n",packet->raw_length);
-		printf("Ack/Nack Flag: %i\n",packet->nack);
+		if (PKT_DEBUG)
+			printf("Full packet received, %i bytes!\n",packet->raw_length);
 		if (packet->nack)
 			printf("WARNING packet NACK received for payload ID %i\n",packet->payload_id);
+		printf("Ack/Nack Flag: %i\n",packet->nack);
 		printf("Has Sequence Flag: %i\n",((packet->header_bits & HAS_SEQUENCE_MASK) > 0) ? 1:0);
-		printf("Sequence id: %i\n",packet->seq_num); 
+		if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
+			printf("Sequence id: %i\n",packet->seq_num); 
 		printf("Payload id: %i\n",packet->payload_id);
 		printf("Has Length Flag: %i\n",((packet->header_bits & HAS_LENGTH_MASK) > 0) ? 1:0);
-		printf("Payload length %i\n",packet->payload_length);
+		if ((packet->header_bits & HAS_LENGTH_MASK) > 0)
+			printf("Payload length %i\n",packet->payload_length);
 		printf("Payload base offset: %i\n",packet->payload_base_offset);
 		printf("RAW PACKET: ->> ");
 		for (i=0;i<packet->raw_length;i++)
@@ -511,29 +514,29 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				{
 					seq_num = (GINT)DATA_GET(output->data,arg->internal_name);
 					have_sequence = TRUE;
-					printf("Sequence number present %i\n",seq_num);
+					/*printf("Sequence number present %i\n",seq_num);*/
 					packet_length += 1;
 				}
 				break;
 			case PAYLOAD_ID:
 				payload_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Payload ID number present %i\n",payload_id);
+				/*printf("Payload ID number present %i\n",payload_id);*/
 				packet_length += 2;
 				break;
 				/* Payload specific stuff */
 			case LOCATION_ID:
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Location ID number present %i\n",location_id);
+				/*printf("Location ID number present %i\n",location_id);*/
 				payload_length += 4;
 				break;
 			case OFFSET:
 				offset = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Offset present %i\n",offset);
+				/*printf("Offset present %i\n",offset);*/
 				payload_length += 2;
 				break;
 			case DATA_LENGTH:
 				length = (GINT)DATA_GET(output->data,arg->internal_name);
-				printf("Payload write DATA length present %i\n",payload_data_length);
+				/*printf("Payload write DATA length present %i\n",payload_data_length);*/
 				packet_length += 2;
 				break;
 			case DATA:
@@ -553,7 +556,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	}
 	pos = 1; /* Header */
 	packet_length += payload_length;
-	printf("total raw packet length (-start/end markers) %i\n",packet_length);
+	/*printf("total raw packet length (-start/end markers) %i\n",packet_length);*/
 	/* Raw Packet */
 	buf = g_new0(guint8, packet_length);
 
@@ -573,7 +576,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	/* Payload Length if present */
 	if (payload_length > 0)
 	{
-		printf("payload length is %i\n",payload_length);
+		/*printf("payload length is %i\n",payload_length);*/
 		buf[HEADER_IDX] |= HAS_LENGTH_MASK;
 		if (have_sequence > 0)
 		{
@@ -602,7 +605,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		{
 			if ((!payload_data) && (payload_data_length > 0))
 				printf("MAJOR ISSUE, payload_data is null, but layload data length is %i\n",payload_data_length);
-			printf("position before appending blob is %i, len %i\n",pos, payload_data_length); 
+			/*printf("position before appending blob is %i, len %i\n",pos, payload_data_length); */
 			g_memmove(buf+pos,payload_data,payload_data_length);
 			pos += payload_data_length;
 		}
@@ -615,17 +618,19 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	mtxlog_packet(buf,packet_length,TRUE);
 	pos++;
 
+	/*
 	printf("RAW PACKET -> ");
 	for (i=0;i<packet_length;i++)
 		printf("%.2X ",buf[i]);
 	printf("\n\n");
+	*/
 	/* Escape + start/stop it */
 	block = g_new0(DBlock, 1);
 	block->type = DATA;
 	block->data = finalize_packet(buf,packet_length,&block->len);
 	g_free(buf);
 	g_array_append_val(message->sequence,block);
-	printf("\n\n\n");
+	/*printf("\n\n\n");*/
 }
 
 

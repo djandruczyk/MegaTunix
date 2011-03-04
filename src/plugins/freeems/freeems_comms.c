@@ -716,7 +716,6 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
-	printf("chunk write, num_bytes %i\n",num_bytes);
 	/* save it otherwise the burn checker can miss it due to a potential
 	 * race condition
 	 */

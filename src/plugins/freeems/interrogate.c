@@ -317,7 +317,7 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 	gint tmpi = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
-	guint8 flag = BLOCK_BITS_OR;
+	guint8 flag = BLOCK_BITS_AND;
 	guint16 bits = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -327,7 +327,7 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 	pkt[H_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LIST_OF_LOCATION_IDS & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LIST_OF_LOCATION_IDS & 0x00ff );
 	pkt[L_PAYLOAD_IDX+1] = flag;	/* AND/OR */
-	bits |= BLOCK_IS_INDEXABLE;
+	bits |= BLOCK_IS_INDEXABLE | BLOCK_IN_RAM;
 	pkt[L_PAYLOAD_IDX+2] = (bits & 0xff00) >> 8;	/* H bits */
 	pkt[L_PAYLOAD_IDX+3] = (bits & 0x00ff); 	/* L bits */
 	for (i=0;i<LOC_ID_LIST_REQ_PKT_LEN-1;i++)
