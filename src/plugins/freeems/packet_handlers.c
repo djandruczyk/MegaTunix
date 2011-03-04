@@ -16,6 +16,7 @@
 #include <config.h>
 #include <debugging.h>
 #include <gtk/gtk.h>
+#include <freeems_errors.h>
 #include <freeems_plugin.h>
 #include <packet_handlers.h>
 #include <string.h>
@@ -211,6 +212,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
 	gint i = 0;
+	gint error = 0;
 	gint tmpi = 3; /* header and payload Are ALWAYS present */
 
 	packet->header_bits = ptr[0];
@@ -221,6 +223,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	 */
 	if ((packet->header_bits & HAS_LENGTH_MASK) > 0)
 	{
+		packet->has_length = TRUE;
 		tmpi += 2;
 		if (packet->header_bits & HAS_SEQUENCE_MASK)
 			packet->payload_length = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
@@ -229,20 +232,21 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	}
 	if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
 	{
+		packet->has_sequence = TRUE;
 		tmpi += 1;
 		packet->seq_num = ptr[SEQ_IDX];
 	}
 	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
 	packet->payload_base_offset = tmpi;
-	packet->nack = ((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0;
+	packet->is_nack = ((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0;
 
-	if ((PKT_DEBUG) || (packet->nack))
+	/*if ((PKT_DEBUG) || (packet->is_nack))*/
+	if (PKT_DEBUG)
 	{
-		if (PKT_DEBUG)
 			printf("Full packet received, %i bytes!\n",packet->raw_length);
-		if (packet->nack)
+		if (packet->is_nack)
 			printf("WARNING packet NACK received for payload ID %i\n",packet->payload_id);
-		printf("Ack/Nack Flag: %i\n",packet->nack);
+		printf("Ack/Nack Flag: %i\n",packet->is_nack);
 		printf("Has Sequence Flag: %i\n",((packet->header_bits & HAS_SEQUENCE_MASK) > 0) ? 1:0);
 		if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
 			printf("Sequence id: %i\n",packet->seq_num); 
@@ -255,6 +259,11 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 		for (i=0;i<packet->raw_length;i++)
 			printf("%.2X ",(guint8)(packet->data)[i]);
 		printf("\n");
+	}
+	if (packet->is_nack)
+	{
+		error = ((guint8)packet->data[tmpi] << 8) + (guint8)packet->data[tmpi+1];
+		printf("Packet ERROR Code 0x%.4X, \"%s\"\n",packet->payload_id,lookup_error(error));
 	}
 	if (packet->header_bits & HAS_LENGTH_MASK)
 	{

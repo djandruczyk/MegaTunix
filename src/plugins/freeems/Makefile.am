@@ -17,6 +17,7 @@ libfreeems_la_SOURCES = \
 	datamgmt.h \
 	fileio.c \
 	fileio.h \
+	freeems_errors.c \
 	freeems_errors.h \
 	freeems_globaldefs.h \
 	freeems_comms.c \

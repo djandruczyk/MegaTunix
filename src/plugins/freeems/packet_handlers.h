@@ -168,7 +168,9 @@ struct _FreeEMS_Packet
 	guchar *data;		/* Raw packet data */
 	guint16 raw_length;	/* Raw packet length */
 	guint8 header_bits;
-	guint8 nack;
+	gboolean has_sequence;
+	gboolean has_length;
+	gboolean is_nack;
 	guint8 seq_num;
 	guint16 payload_id;
 	guint16 payload_base_offset;

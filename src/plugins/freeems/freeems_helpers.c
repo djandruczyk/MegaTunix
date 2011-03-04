@@ -261,7 +261,7 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			DATA_SET(output->data,"queue",NULL);
 			if (packet)
 			{
-				if (packet->nack)
+				if (packet->is_nack)
 					printf("packet ACK FAILURE!\n");
 				else
 				{

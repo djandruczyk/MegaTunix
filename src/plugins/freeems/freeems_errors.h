@@ -22,11 +22,11 @@
 #include <threads.h>
 
 typedef struct _FreeEMS_Errors FreeEMS_Errors;
-struct _FreeEMS_Errors
+static struct _FreeEMS_Errors
 {
 	guint code;
 	gchar *message;
-} = {
+}Errors[] = {
 	{0x0666,"No Error"},
 	/* Unconfiugred Options */
 	{0x1000,"IAT not Configured!"},
@@ -96,5 +96,9 @@ struct _FreeEMS_Errors
 	{0x6011,"Invalid 2D table axis order!"},
 	{0x6012,"Invalid 2D table index!"}
 };
+
+/* Prototypes */
+const gchar * lookup_error(gint);
+/* Prototypes */
 
 #endif
