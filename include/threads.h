@@ -116,7 +116,9 @@ void thread_update_logbar(const gchar *, const gchar *, gchar *, gboolean, gbool
 void thread_update_widget(const gchar *, WidgetType, gchar *);
 void thread_refresh_widget(GtkWidget *);
 void thread_refresh_widget_range(gint, gint, gint);
+void thread_refresh_widgets_at_offset(gint, gint);
 void thread_widget_set_sensitive(const gchar * widget_name, gboolean state);
+
 gboolean queue_function(const gchar * );
 
 /* Prototypes */

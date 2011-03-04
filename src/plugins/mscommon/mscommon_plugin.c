@@ -105,6 +105,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("temp_to_host",(void *)&temp_to_host_f);
 	get_symbol_f("thread_refresh_widget",(void *)&thread_refresh_widget_f);
 	get_symbol_f("thread_refresh_widget_range",(void *)&thread_refresh_widget_range_f);
+	get_symbol_f("thread_refresh_widgets_at_offset",(void *)&thread_refresh_widgets_at_offset_f);
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
 	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);

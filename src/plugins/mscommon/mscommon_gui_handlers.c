@@ -1636,21 +1636,6 @@ G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *canID, gint *page, 
 }
 
 
-G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
-{
-	guint i = 0;
-	Firmware_Details *firmware = NULL;
-	GList ***ecu_widgets = NULL;
-
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-
-	firmware = DATA_GET(global_data,"firmware");
-
-	for (i=0;i<g_list_length(ecu_widgets[page][offset]);i++)
-		thread_refresh_widget_f(g_list_nth_data(ecu_widgets[page][offset],i));
-	/*update_ve3d_if_necessary_f(page,offset);*/
-}
-
 
 G_MODULE_EXPORT void common_gui_init(void)
 {

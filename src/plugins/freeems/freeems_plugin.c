@@ -79,6 +79,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
 	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
 	get_symbol_f("set_file_api",(void *)&set_file_api_f);
+	get_symbol_f("set_group_color",(void *)&set_group_color_f);
 	get_symbol_f("set_widget_labels",(void *)&set_widget_labels_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("set_title",(void *)&set_title_f);
@@ -87,6 +88,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("temp_to_host",(void *)&temp_to_host_f);
 	get_symbol_f("toggle_groups_linked",(void *)&toggle_groups_linked_f);
 
+	get_symbol_f("thread_refresh_widgets_at_offset",(void *)&thread_refresh_widgets_at_offset_f);
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
 	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);

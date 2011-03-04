@@ -27,6 +27,7 @@
 #include <sys/select.h>
 #endif
 #include <serialio.h>
+#include <string.h>
 #include <unistd.h>
 
 
@@ -731,6 +732,108 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	/*
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
 	*/
+	return;
+}
+
+
+/*!
+ \brief update_write_status() checks the differences between the current ECU
+ data snapshot and the last one, if there are any differences (things need to
+ be burnt) then it turns all the widgets in the "burners" group to RED
+ \param data (OutputData *) pointer to data sent to ECU used to
+ update other widgets that refer to that Page/Offset
+ */
+G_MODULE_EXPORT void update_write_status(void *data)
+{
+	Io_Message *message = (Io_Message *)data;
+	OutputData *output = (OutputData *)message->payload;
+	guint8 **ecu_data = NULL;
+	guint8 **ecu_data_last = NULL;
+	gint i = 0;
+	gint canID = 0;
+	gint page = 0;
+	gint locID = 0;
+	gint offset = 0;
+	gint length = 0;
+	WriteMode mode = MTX_CMD_WRITE;
+	gint z = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+	ecu_data = firmware->ecu_data;
+	ecu_data_last = firmware->ecu_data_last;
+
+	if (!output)
+		goto red_or_black;
+	else
+	{
+		canID = (GINT)DATA_GET(output->data,"canID");
+		locID = (GINT)DATA_GET(output->data,"location_id");
+		offset = (GINT)DATA_GET(output->data,"offset");
+		length = (GINT)DATA_GET(output->data,"data_length");
+		mode = (WriteMode)DATA_GET(output->data,"mode");
+		freeems_find_mtx_page(locID,&page);
+
+		if (!message->status) /* Bad write! */
+		{
+			dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
+			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
+		}
+	}
+
+	if (output->queue_update)
+	{
+		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
+		for (i=0;i<firmware->total_tables;i++)
+		{
+			/* This at least only recalcs the limits on one... */
+			if (((firmware->table_params[i]->x_page == page) ||
+						(firmware->table_params[i]->y_page == page) ||
+						(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
+			{
+				recalc_table_limits_f(canID,i);
+				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+					firmware->table_params[i]->color_update = TRUE;
+				else
+					firmware->table_params[i]->color_update = FALSE;
+			}
+		}
+
+		if (mode == MTX_CHUNK_WRITE)
+			thread_refresh_widget_range_f(page,offset,length);
+		else
+			for (z=offset;z<offset+length;z++)
+				thread_refresh_widgets_at_offset(page,z);
+		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
+	}
+	/* We check to see if the last burn copy of the VE/constants matches 
+	 * the currently set, if so take away the "burn now" notification.
+	 * avoid unnecessary burns to the FLASH 
+	 */
+
+	if (DATA_GET(global_data,"offline"))
+		return;
+red_or_black:
+	for (i=0;i<firmware->total_pages;i++)
+	{
+		if (!firmware->page_params[i]->dl_by_default)
+			continue;
+
+		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
+		{
+//			gdk_threads_enter();
+			set_group_color_f(RED,"burners");
+//			slaves_set_color(RED,"burners");
+//			gdk_threads_leave();
+			DATA_SET(global_data,"outstanding_data",GINT_TO_POINTER(TRUE));
+			return;
+		}
+	}
+	DATA_SET(global_data,"outstanding_data",GINT_TO_POINTER(FALSE));
+//	gdk_threads_enter();
+	set_group_color_f(BLACK,"burners");
+//	slaves_set_color(BLACK,"burners");
+//	gdk_threads_leave();
 	return;
 }
 

@@ -88,6 +88,7 @@ EXTERN guint32 (*create_value_change_watch_f)(const gchar *, gboolean, const gch
 EXTERN void (*remove_from_lists_f)(gchar *, gpointer);
 EXTERN void (*remove_watch_f)(guint32);
 EXTERN void (*thread_refresh_widget_range_f)(gint, gint, gint);
+EXTERN void (*thread_refresh_widgets_at_offset_f)(gint, gint);
 EXTERN void (*update_ve3d_if_necessary_f)(gint, gint);
 EXTERN void (*thread_refresh_widget_f)(GtkWidget *);
 EXTERN void (*register_widget_f)(gchar *, GtkWidget *);

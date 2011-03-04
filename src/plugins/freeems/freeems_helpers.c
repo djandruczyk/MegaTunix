@@ -17,6 +17,7 @@
 #include <datamgmt.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
+#include <freeems_comms.h>
 #include <freeems_helpers.h>
 #include <freeems_plugin.h>
 #include <packet_handlers.h>
@@ -310,8 +311,11 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			if (packet)
 			{
 				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
-				if (packet->header_bits &ACK_TYPE_MASK)
+				if (packet->is_nack)
 					printf("DATA Write Resposne PACKET NACK ERROR!!!!\n");
+				else
+					update_write_status(data);
+
 				freeems_packet_cleanup(packet);
 			}
 			else
