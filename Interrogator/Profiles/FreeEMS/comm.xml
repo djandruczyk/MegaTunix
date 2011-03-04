@@ -76,6 +76,35 @@
 			</args>
 		</cmd>
 		<cmd>
+                        <name>burn_all</name>
+                        <desc>Calls a function to burn ALL applicable pages to flash</desc>
+                        <type>_FUNC_CALL_</type>
+                        <func_call_name>freeems_burn_all</func_call_name>
+                        <defer_post_functions>TRUE</defer_post_functions>
+                </cmd>
+		<cmd>
+                        <name>burn</name>
+                        <desc>burns the RAM to flash</desc>
+                        <type>_WRITE_CMD_</type>
+                        <args>
+				<arg>SEQUENCE_NUM</arg> 
+				<arg>PAYLOAD_ID</arg>
+				<arg>LOCATION_ID</arg>
+				<arg>OFFSET</arg>
+				<arg>DATA_LENGTH</arg>
+                        </args>
+                </cmd>
+		<cmd>
+			<name>burn_post_functions</name>
+			<desc>flash burn post functions</desc>
+			<type>_NULL_CMD_</type>
+			<defer_post_functions>FALSE</defer_post_functions>
+			<post_functions>
+                                <function_w_arg>post_single_burn_pf</function_w_arg>
+                                <function_w_arg>update_write_status</function_w_arg>
+			</post_functions>
+		</cmd>
+		<cmd>
 			<name>datalog_post_functions</name>
 			<desc>datalog stream post functions</desc>
 			<type>_NULL_CMD_</type>
