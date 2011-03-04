@@ -950,10 +950,14 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	DataSize size = 0;
 	gint value = 0;
 	gint active_table = -1;
+	gint smallstep = 0;
+	gint bigstep = 0;
 	glong lower = 0;
 	glong upper = 0;
 	glong hardlower = 0;
 	glong hardupper = 0;
+	gchar *expr = NULL;
+	void *eval = NULL;
 	gint dload_val = 0;
 	gboolean send = FALSE;
 	gboolean retval = FALSE;
@@ -987,6 +991,36 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		upper = get_extreme_from_size(size,UPPER);
+	expr = OBJ_GET(widget,"toecu_conv_expr");
+	eval = OBJ_GET(widget,"dl_evaluator");
+	if ((expr) && (!eval))
+	{
+		eval = evaluator_create(expr);
+		OBJ_SET(widget,"dl_evaluator",eval);
+	}
+	smallstep = (GINT)OBJ_GET(widget,"smallstep");
+	bigstep = (GINT)OBJ_GET(widget,"bigstep");
+	if (smallstep == 0)
+	{
+		if (eval)
+		{
+			smallstep = (GINT)evaluator_evaluate_x(eval,1);
+			OBJ_SET(widget,"smallstep",GINT_TO_POINTER(smallstep));
+		}
+		else
+			smallstep = 1;
+	}
+	if (bigstep == 0)
+	{
+		if (eval)
+		{
+			bigstep = (GINT)evaluator_evaluate_x(eval,10);
+			OBJ_SET(widget,"bigstep",GINT_TO_POINTER(bigstep));
+		}
+		else
+			bigstep = 10;
+	}
+
 	hardlower = get_extreme_from_size(size,LOWER);
 	hardupper = get_extreme_from_size(size,UPPER);
 
@@ -994,7 +1028,6 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	lower = lower < hardlower ? hardlower:lower;
 	value = get_ecu_data_f(widget);
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
-	printf("current value %i\n",value);
 
 	if (event->keyval == GDK_Control_L)
 	{
@@ -1025,15 +1058,15 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		case GDK_Page_Up:
 			if (reverse_keys)
 			{
-				if (value >= (lower+10))
-					dload_val = value - 10;
+				if (value >= (lower+bigstep))
+					dload_val = value - bigstep;
 				else
 					return FALSE;
 			}
 			else 
 			{
-				if (value <= (upper-10))
-					dload_val = value + 10;
+				if (value <= (upper-bigstep))
+					dload_val = value + bigstep;
 				else
 					return FALSE;
 			}
@@ -1043,15 +1076,15 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		case GDK_Page_Down:
 			if (reverse_keys)
 			{
-				if (value <= (upper-10))
-					dload_val = value + 10;
+				if (value <= (upper-bigstep))
+					dload_val = value + bigstep;
 				else
 					return FALSE;
 			}
 			else 
 			{
-				if (value >= (lower+10))
-					dload_val = value - 10;
+				if (value >= (lower+bigstep))
+					dload_val = value - bigstep;
 				else
 					return FALSE;
 			}
@@ -1066,15 +1099,15 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		case GDK_q:
 			if (reverse_keys)
 			{
-				if (value >= (lower+1))
-					dload_val = value - 1;
+				if (value >= (lower+smallstep))
+					dload_val = value - smallstep;
 				else
 					return FALSE;
 			}
 			else 
 			{
-				if (value <= (upper-1))
-					dload_val = value + 1;
+				if (value <= (upper-smallstep))
+					dload_val = value + smallstep;
 				else
 					return FALSE;
 			}
@@ -1085,15 +1118,15 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		case GDK_w:
 			if (reverse_keys)
 			{
-				if (value <= (upper-1))
-					dload_val = value + 1;
+				if (value <= (upper-smallstep))
+					dload_val = value + smallstep;
 				else
 					return FALSE;
 			}
 			else 
 			{
-				if (value >= (lower+1))
-					dload_val = value - 1;
+				if (value >= (lower+smallstep))
+					dload_val = value - smallstep;
 				else
 					return FALSE;
 			}
@@ -1106,15 +1139,15 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			{
 				if (reverse_keys)
 				{
-					if (value <= (upper-1))
-						dload_val = value + 1;
+					if (value <= (upper-smallstep))
+						dload_val = value + smallstep;
 					else
 						return FALSE;
 				}
 				else 
 				{
-					if (value >= (lower+1))
-						dload_val = value - 1;
+					if (value >= (lower+smallstep))
+						dload_val = value - smallstep;
 					else
 						return FALSE;
 				}
