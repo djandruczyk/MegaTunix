@@ -180,10 +180,6 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
-				/*
-				   if ((DATA_GET(global_data,"outstanding_data")))
-				   queue_burn_ecu_flash(last_page);
-				 */
 				for (i=0;i<firmware->total_pages;i++)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
@@ -253,10 +249,8 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			locID = (GINT)DATA_GET(output->data,"location_id");
 			offset = (GINT)DATA_GET(output->data,"offset");
 			size = (GINT)DATA_GET(output->data,"num_wanted");
+			packet = retrieve_packet(output->data,NULL);
 			queue = DATA_GET(output->data,"queue");
-			g_get_current_time(&tval);
-			g_time_val_add(&tval,500000);
-			packet = g_async_queue_timed_pop(queue,&tval);
 			deregister_packet_queue(SEQUENCE_NUM,queue,seq);
 			g_async_queue_unref(queue);
 			DATA_SET(output->data,"queue",NULL);
@@ -271,6 +265,7 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 					printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
 					*/
 					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
+					freeems_backup_current_data(canID,locID);
 
 					freeems_packet_cleanup(packet);
 					tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
@@ -303,16 +298,12 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			locID = (GINT)DATA_GET(output->data,"location_id");
 			offset = (GINT)DATA_GET(output->data,"offset");
 			data_length = (GINT)DATA_GET(output->data,"data_length");
-			queue = DATA_GET(global_data,"RAM_write_queue");
-			g_get_current_time(&tval);
-			g_time_val_add(&tval,500000);
-			packet = g_async_queue_timed_pop(queue,&tval);
-			DATA_SET(output->data,"queue",NULL);
+			packet = retrieve_packet(output->data,"RAM_write_queue");
 			if (packet)
 			{
 				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
 				if (packet->is_nack)
-					printf("DATA Write Resposne PACKET NACK ERROR!!!!\n");
+					printf("DATA Write Response PACKET NACK ERROR!!!!\n");
 				else
 					update_write_status(data);
 
@@ -324,9 +315,90 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 				printf("DATA_SET REISSUE NOT WRITTEN YET");
 			}
 			break;
+		case GENERIC_BURN:
+			canID = (GINT)DATA_GET(output->data,"canID");
+			locID = (GINT)DATA_GET(output->data,"location_id");
+			offset = (GINT)DATA_GET(output->data,"offset");
+			data_length = (GINT)DATA_GET(output->data,"data_length");
+			packet = retrieve_packet(output->data,"burn_queue");
+			if (packet)
+			{
+				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
+				if (packet->is_nack)
+					printf("BURN Flash Response PACKET NACK ERROR!!!!\n");
+				else
+				{
+					/*printf("burn success!\n");*/
+					post_single_burn_pf(data);
+					update_write_status(data);
+				}
+
+				freeems_packet_cleanup(packet);
+			}
+			else
+			{
+				printf("timeout, no packet found in generic BURN to flash queue, locID %i\n",locID);
+				printf("BURN REISSUE NOT WRITTEN YET");
+			}
+			break;
 		default:
 			printf("Don't know how to handle this type..\n");
 			break;
 	}
 }
 
+
+G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
+{
+	OutputData *output = NULL;
+	Command *command = NULL;
+	gint i = 0;
+	gint last_page = 0;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+
+	/*printf("burn all helper\n");*/
+	if (!DATA_GET(global_data,"offline"))
+	{
+		/* FreeEMS allows all pages to be in ram at will*/
+		for (i=0;i<firmware->total_pages;i++)
+		{
+			if (!firmware->page_params[i]->dl_by_default)
+				continue;
+			if (firmware->page_params[i]->needs_burn)
+			{
+				output = initialize_outputdata_f();
+				/*printf("Burning page %i (locid %i)\n",i,firmware->page_params[i]->phys_ecu_page);*/
+				DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
+				DATA_SET(output->data,"page",GINT_TO_POINTER(i));
+				DATA_SET(output->data,"location_id",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
+				DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_BURN_BLOCK_FROM_RAM_TO_FLASH));
+				DATA_SET(output->data,"offset",GINT_TO_POINTER(0));
+				DATA_SET(output->data,"data_length",GINT_TO_POINTER(firmware->page_params[i]->length));
+				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
+				io_cmd_f(firmware->burn_command,output);
+			}
+		}
+	}
+	return TRUE;
+}
+
+
+G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gchar * queue_name)
+{
+	GTimeVal tval;
+	FreeEMS_Packet *packet = NULL;
+	GAsyncQueue *queue = NULL;
+
+	g_return_val_if_fail(object,NULL);
+
+	if (queue_name) 
+		queue = DATA_GET(global_data,queue_name);
+	else /* Use "queue" key via DATA_GET */
+		queue = DATA_GET(object,"queue");
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	return packet;
+}

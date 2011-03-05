@@ -57,7 +57,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	   Now we need to figure out its variant and adapt to it
 	 */
 	/* Send stream disable command */
-	//stop_streaming();
+	/*stop_streaming();*/
 
 	/* Load tests from tests.cfg file */
 	if (!validate_and_load_tests(&tests,&tests_hash))
@@ -835,6 +835,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
 				&firmware->burn_command))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
+	if(!cfg_read_string(cfgfile,"parameters","Burn_All_Command",
+				&firmware->burn_all_command))
+		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"Burn_All_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_boolean(cfgfile,"parameters","ChunkWriteSupport",
 				&firmware->chunk_support))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"ChunkWriteSupport\" flag not found in parameters section in interrogation profile, ERROR\n"));
@@ -1008,6 +1011,7 @@ G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 	page_params = g_malloc0(sizeof(Page_Params));
 	page_params->length = 0;
 	page_params->spconfig_offset = -1;
+	page_params->needs_burn = FALSE;
 	return page_params;
 }
 

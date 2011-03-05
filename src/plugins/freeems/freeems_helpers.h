@@ -17,6 +17,7 @@
 #include <defines.h>
 #include <enums.h>
 #include <gtk/gtk.h>
+#include <packet_handlers.h>
 
 typedef enum
 {
@@ -24,6 +25,7 @@ typedef enum
 	GENERIC_READ,
 	GENERIC_RAM_WRITE,
 	GENERIC_FLASH_WRITE,
+	GENERIC_BURN,
 	LAST_XML_FUNC_CALL_TYPE
 }FuncCall;
 
@@ -32,8 +34,11 @@ typedef enum
 void stop_streaming(void);
 void soft_boot_ecu(void);
 void hard_boot_ecu(void);
+gboolean freeems_burn_all(void *, FuncCall);
 gboolean read_freeems_data(void *, FuncCall);
 void handle_transaction(void *, FuncCall);
+FreeEMS_Packet * retrieve_packet(gconstpointer *, const gchar *);
+
 
 /* Prototypes */
 

@@ -725,6 +725,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GList **tab_gauges = NULL;
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
+	GMutex *dash_mutex = NULL;
 	CmdLineArgs *args = NULL;
 
 	args = DATA_GET(global_data,"args");
@@ -735,6 +736,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	firmware = DATA_GET(global_data,"firmware");
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
+	dash_mutex = DATA_GET(global_data,"dash_mutex");
 
 	g_mutex_lock(serio_mutex);
 	cleanup(serial_params->port_name);
@@ -877,11 +879,16 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		DATA_SET(global_data,"rtt_model",NULL);
 	}
 	g_mutex_unlock(rtt_mutex);
+	g_mutex_free(rtt_mutex);
+	g_mutex_free(dash_mutex);
 
 	/* Logviewer settings */
 	defaults = get_list("logviewer_defaults");
 	if (defaults)
 		g_list_foreach(defaults,(GFunc)cleanup,NULL);
+
+	DATA_SET(global_data,"offline",NULL);
+	DATA_SET(global_data,"interrogated",NULL);
 	/* Free all global data and structures */
 	g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	g_dataset_destroy(global_data);

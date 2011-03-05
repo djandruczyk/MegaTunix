@@ -1224,10 +1224,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			break;
 	}
 	if (send)
-	{
-		printf("sending new value %i\n",dload_val);
 		send_to_ecu_f(widget,dload_val,TRUE);
-	}
 	return retval;
 }
 

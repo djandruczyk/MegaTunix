@@ -681,7 +681,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */
-	freeems_set_ecu_data(canID,locID,offset,size,value);
+	/*freeems_set_ecu_data(canID,locID,offset,size,value);*/
 
 	output->queue_update = queue_update;
 	io_cmd_f(firmware->write_command,output);
@@ -721,7 +721,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	 * race condition
 	 */
 	/* This should be stored in the ACK for the packet NOT here*/
-	freeems_store_new_block(canID,locID,offset,block,num_bytes);
+	//freeems_store_new_block(canID,locID,offset,block,num_bytes);
 
 	/*
 	if (firmware->multi_page)
@@ -755,6 +755,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	gint locID = 0;
 	gint offset = 0;
 	gint length = 0;
+	guint8 *block = NULL;
 	WriteMode mode = MTX_CMD_WRITE;
 	gint z = 0;
 	Firmware_Details *firmware = NULL;
@@ -771,6 +772,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		locID = (GINT)DATA_GET(output->data,"location_id");
 		offset = (GINT)DATA_GET(output->data,"offset");
 		length = (GINT)DATA_GET(output->data,"data_length");
+		block = (guint8 *)DATA_GET(output->data,"data");
 		mode = (WriteMode)DATA_GET(output->data,"mode");
 		freeems_find_mtx_page(locID,&page);
 
@@ -779,6 +781,8 @@ G_MODULE_EXPORT void update_write_status(void *data)
 			dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
 			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
 		}
+		else if (block)
+			freeems_store_new_block(canID,locID,offset,block,length);
 	}
 
 	if (output->queue_update)
@@ -799,11 +803,8 @@ G_MODULE_EXPORT void update_write_status(void *data)
 			}
 		}
 
-		if (mode == MTX_CHUNK_WRITE)
-			thread_refresh_widget_range_f(page,offset,length);
-		else
-			for (z=offset;z<offset+length;z++)
-				thread_refresh_widgets_at_offset(page,z);
+		thread_refresh_widget_range_f(page,offset,length);
+
 		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 	}
 	/* We check to see if the last burn copy of the VE/constants matches 
@@ -821,19 +822,39 @@ red_or_black:
 
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
-//			gdk_threads_enter();
+			firmware->page_params[i]->needs_burn = TRUE;
 			set_group_color_f(RED,"burners");
 //			slaves_set_color(RED,"burners");
-//			gdk_threads_leave();
-			DATA_SET(global_data,"outstanding_data",GINT_TO_POINTER(TRUE));
 			return;
 		}
+		else
+			firmware->page_params[i]->needs_burn = FALSE;
 	}
-	DATA_SET(global_data,"outstanding_data",GINT_TO_POINTER(FALSE));
-//	gdk_threads_enter();
 	set_group_color_f(BLACK,"burners");
 //	slaves_set_color(BLACK,"burners");
-//	gdk_threads_leave();
+	return;
+}
+
+
+G_MODULE_EXPORT void post_single_burn_pf(void *data)
+{
+	Io_Message *message = (Io_Message *)data;
+	OutputData *output = (OutputData *)message->payload;
+	Firmware_Details *firmware = NULL;
+	gint locID = 0;
+	gint page = 0;
+
+	firmware = DATA_GET(global_data,"firmware");
+	locID = (GINT)DATA_GET(output->data,"location_id");
+	page = (GINT)DATA_GET(output->data,"page");
+
+	/* sync temp buffer with current burned settings */
+	if (!firmware->page_params[page]->dl_by_default)
+		return;
+	freeems_backup_current_data(firmware->canID,locID);
+
+	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
+
 	return;
 }
 

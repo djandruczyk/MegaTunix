@@ -128,8 +128,10 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
-				if (DATA_GET(global_data,"outstanding_data"))
-					queue_burn_ecu_flash(last_page);
+
+				for (i=0;i<firmware->total_pages;i++)
+					if (firmware->page_params[i]->needs_burn)
+						queue_burn_ecu_flash(i);
 				for (i=0;i<firmware->total_pages;i++)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
@@ -149,9 +151,9 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
-				if ((firmware->capabilities & MS2_E) && 
-						(DATA_GET(global_data,"outstanding_data")))
-					queue_burn_ecu_flash(last_page);
+				for (i=0;i<firmware->total_pages;i++)
+					if (firmware->page_params[i]->needs_burn)
+						queue_burn_ecu_flash(i);
 				for (i=0;i<firmware->total_pages;i++)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
@@ -172,9 +174,12 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 		case MS2_E_COMPOSITEMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if ((firmware->capabilities & MS2_E) && 
-						(DATA_GET(global_data,"outstanding_data")))
-					queue_burn_ecu_flash(last_page);
+				if (firmware->capabilities & MS2_E)
+				{
+					for (i=0;i<firmware->total_pages;i++)
+						if (firmware->page_params[i]->needs_burn)
+							queue_burn_ecu_flash(i);
+				}
 				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->compositemon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->compositemon_page]->phys_ecu_page));
@@ -190,9 +195,12 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 		case MS2_E_TRIGMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if ((firmware->capabilities & MS2_E) && 
-						(DATA_GET(global_data,"outstanding_data")))
-					queue_burn_ecu_flash(last_page);
+				if (firmware->capabilities & MS2_E)
+				{
+					for (i=0;i<firmware->total_pages;i++)
+						if (firmware->page_params[i]->needs_burn)
+							queue_burn_ecu_flash(i);
+				}
 				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->trigmon_page]->phys_ecu_page));
@@ -208,9 +216,12 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 		case MS2_E_TOOTHMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if ((firmware->capabilities & MS2_E) && 
-						(DATA_GET(global_data,"outstanding_data")))
-					queue_burn_ecu_flash(last_page);
+				if (firmware->capabilities & MS2_E)
+				{
+					for (i=0;i<firmware->total_pages;i++)
+						if (firmware->page_params[i]->needs_burn)
+							queue_burn_ecu_flash(i);
+				}
 				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));
 				DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[firmware->toothmon_page]->phys_ecu_page));
@@ -226,8 +237,9 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 		case MS1_E_TRIGMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if (DATA_GET(global_data,"outstanding_data"))
-					queue_burn_ecu_flash(last_page);
+				for (i=0;i<firmware->total_pages;i++)
+					if (firmware->page_params[i]->needs_burn)
+						queue_burn_ecu_flash(i);
 				queue_ms1_page_change(firmware->trigmon_page);
 				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->trigmon_page));
@@ -241,8 +253,9 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 		case MS1_E_TOOTHMON:
 			if (!DATA_GET(global_data,"offline"))
 			{
-				if (DATA_GET(global_data,"outstanding_data"))
-					queue_burn_ecu_flash(last_page);
+				for (i=0;i<firmware->total_pages;i++)
+					if (firmware->page_params[i]->needs_burn)
+						queue_burn_ecu_flash(i);
 				queue_ms1_page_change(firmware->toothmon_page);
 				output = initialize_outputdata_f();
 				DATA_SET(output->data,"page",GINT_TO_POINTER(firmware->toothmon_page));

@@ -673,15 +673,16 @@ red_or_black:
 
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
+			firmware->page_params[i]->needs_burn = TRUE;
 			gdk_threads_enter();
 			set_group_color_f(RED,"burners");
 			slaves_set_color(RED,"burners");
 			gdk_threads_leave();
-			DATA_SET(global_data,"outstanding_data",GINT_TO_POINTER(TRUE));
 			return;
 		}
+		else
+			firmware->page_params[i]->needs_burn = FALSE;
 	}
-	DATA_SET(global_data,"outstanding_data",GINT_TO_POINTER(FALSE));
 	gdk_threads_enter();
 	set_group_color_f(BLACK,"burners");
 	slaves_set_color(BLACK,"burners");

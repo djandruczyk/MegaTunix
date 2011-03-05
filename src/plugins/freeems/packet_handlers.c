@@ -192,7 +192,7 @@ void *packet_handler(gpointer data)
 
 	while(TRUE)
 	{
-		if (DATA_GET(global_data,"leaving"))
+		if ((DATA_GET(global_data,"leaving") || (DATA_GET(global_data,"packet_handler_thread_exit"))))
 		{
 			cond = DATA_GET(global_data,"packet_handler_cond");
 			if (cond)
@@ -200,11 +200,13 @@ void *packet_handler(gpointer data)
                         g_thread_exit(0);
 		}
 		g_get_current_time(&tval);
-		g_time_val_add(&tval,100000);
+		g_time_val_add(&tval,250000);
 		packet = g_async_queue_timed_pop(queue,&tval);
 		if (packet)
 			dispatch_packet_queues(packet);
 	}
+	g_thread_exit(0);
+	return NULL;
 }
 
 
@@ -299,6 +301,7 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 	if (!sequences)
 		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
 	g_return_if_fail(mutex);
+	g_return_if_fail(queue);
 	g_mutex_lock(mutex);
 
 	switch ((FreeEMSArgTypes)type)
@@ -341,10 +344,8 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 	if (!sequences)
 		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
 
-	if (!queue)
-		return;
-
 	g_return_if_fail(mutex);
+	g_return_if_fail(queue);
 	g_mutex_lock(mutex);
 	switch ((FreeEMSArgTypes)type)
 	{
@@ -352,8 +353,8 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
 			if (list)
 			{
-				g_async_queue_unref(queue);
 				list = g_list_remove(list,queue);
+				g_async_queue_unref(queue);
 				if (g_list_length(list) == 0)
 				{
 					g_list_free(list);
@@ -366,8 +367,8 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
 			if (list)
 			{
-				g_async_queue_unref(queue);
 				list = g_list_remove(list,queue);
+				g_async_queue_unref(queue);
 				if (g_list_length(list) == 0)
 				{
 					g_list_free(list);

@@ -33,6 +33,7 @@ void send_to_ecu(gpointer, gint, gboolean);
 void freeems_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
 void freeems_chunk_write(gint, gint, gint, gint, guint8 *);
 void update_write_status(void *);
+void post_single_burn_pf(void *);
 
 void send_to_ecu(gpointer, gint, gboolean);
 /* Prototypes */

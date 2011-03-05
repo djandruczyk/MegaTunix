@@ -274,7 +274,7 @@ G_MODULE_EXPORT void freeems_store_new_block(gint canID, gint locID, gint offset
 }
 
 
-G_MODULE_EXPORT void freeems_backup_current_data(gint locID)
+G_MODULE_EXPORT void freeems_backup_current_data(gint canID,gint locID)
 {
 	gint page = 0;
 	guint8 ** ecu_data = NULL;

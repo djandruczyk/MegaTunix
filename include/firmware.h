@@ -284,6 +284,8 @@ struct _Page_Params
 	gboolean dl_by_default;	/*! Download this page or not? */
 	gint is_spark;		/*! does this require alt write cmd? (hacky) */
 	gint spconfig_offset;	/*! Where spconfig value is located (hacky) */
+	gboolean needs_burn;	/*! Flag to indicate burn needed */
+	gint checksum;		/*! Page 32 bit checksum */
 };
 
 

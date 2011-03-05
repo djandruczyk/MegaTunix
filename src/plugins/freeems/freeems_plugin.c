@@ -88,6 +88,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("temp_to_host",(void *)&temp_to_host_f);
 	get_symbol_f("toggle_groups_linked",(void *)&toggle_groups_linked_f);
 
+	get_symbol_f("thread_refresh_widget_range",(void *)&thread_refresh_widget_range_f);
 	get_symbol_f("thread_refresh_widgets_at_offset",(void *)&thread_refresh_widgets_at_offset_f);
 	get_symbol_f("thread_update_logbar",(void *)&thread_update_logbar_f);
 	get_symbol_f("thread_update_widget",(void *)&thread_update_widget_f);
@@ -130,6 +131,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 
 G_MODULE_EXPORT void plugin_shutdown()
 {
+	GThread *thread = NULL;
 	GCond *cond = NULL;
 	GAsyncQueue *queue = NULL;
 	GHashTable *hash = NULL;
@@ -138,12 +140,21 @@ G_MODULE_EXPORT void plugin_shutdown()
 
 	freeems_serial_disable();
 
+	thread = DATA_GET(global_data,"packet_handler_thread");
+	if (thread)
+	{
+		DATA_SET(global_data,"packet_handler_thread_exit",GINT_TO_POINTER(TRUE));
+		g_thread_join(thread);
+		DATA_SET(global_data,"packet_handler_thread",NULL);
+		DATA_SET(global_data,"packet_handler_thread_exit",NULL);
+	}
 	queue = DATA_GET(global_data,"burn_queue");
 	if (queue)
 	{
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BURN_BLOCK_FROM_RAM_TO_FLASH);
 		g_async_queue_unref(queue);
 		DATA_SET(global_data,"burn_queue",NULL);
+		queue = NULL;
 	}
 	queue = DATA_GET(global_data,"FLASH_write_queue");
 	if (queue)
@@ -151,6 +162,7 @@ G_MODULE_EXPORT void plugin_shutdown()
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_REPLACE_BLOCK_IN_FLASH);
 		g_async_queue_unref(queue);
 		DATA_SET(global_data,"FLASH_write_queue",NULL);
+		queue = NULL;
 	}
 	queue = DATA_GET(global_data,"RAM_write_queue");
 	if (queue)
@@ -158,34 +170,41 @@ G_MODULE_EXPORT void plugin_shutdown()
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_UPDATE_BLOCK_IN_RAM);
 		g_async_queue_unref(queue);
 		DATA_SET(global_data,"RAM_write_queue",NULL);
+		queue = NULL;
 	}
 	queue = DATA_GET(global_data,"packet_queue");
 	if (queue)
 	{
 		g_async_queue_unref(queue);
 		DATA_SET(global_data,"packet_queue",NULL);
+		queue = NULL;
 	}
-	mutex = DATA_GET(global_data,"queue_mutex");
-	if (mutex)
-		g_mutex_free(mutex);
-	DATA_SET(global_data,"queue_mutex",NULL);
 	hash = DATA_GET(global_data,"payload_id_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
+	hash = NULL;
 	DATA_SET(global_data,"payload_id_queue_hash",NULL);
+
 	hash = DATA_GET(global_data,"sequence_num_queue_hash");
 	if (hash)
 		g_hash_table_destroy(hash);
+	hash = NULL;
 	DATA_SET(global_data,"sequence_num_queue_hash",NULL);
 
 	cond = DATA_GET(global_data,"packet_handler_cond");
 	if (cond)
 		g_cond_free(cond);
+	cond = NULL;
 	DATA_SET(global_data,"packet_handler_cond",NULL);
 	cond = DATA_GET(global_data,"serial_reader_cond");
 	if (cond)
 		g_cond_free(cond);
+	cond = NULL;
 	DATA_SET(global_data,"serial_reader_cond",NULL);
+	mutex = DATA_GET(global_data,"queue_mutex");
+	if (mutex)
+		g_mutex_free(mutex);
+	DATA_SET(global_data,"queue_mutex",NULL);
 
 	deregister_common_enums();
 	return;
@@ -242,6 +261,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(GENERIC_FLASH_WRITE));
 		g_hash_table_insert (str_2_enum, "_GENERIC_RAM_WRITE_",
 				GINT_TO_POINTER(GENERIC_RAM_WRITE));
+		g_hash_table_insert (str_2_enum, "_GENERIC_BURN_",
+				GINT_TO_POINTER(GENERIC_BURN));
 		/* Firmware Specific button handlers*/
 		g_hash_table_insert (str_2_enum, "_SOFT_BOOT_ECU_",
 				GINT_TO_POINTER(SOFT_BOOT_ECU));
@@ -284,6 +305,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_GENERIC_READ_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_RAM_WRITE_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_FLASH_WRITE_");
+		g_hash_table_remove (str_2_enum, "_GENERIC_BURN_");
 		/* Firmware Specific button handlers*/
 		g_hash_table_remove (str_2_enum, "_SOFT_BOOT_ECU_");
 		g_hash_table_remove (str_2_enum, "_HARD_BOOT_ECU_");
