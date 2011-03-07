@@ -902,8 +902,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		g_list_free(locations);
 	}
 	/* MAJOR HACK ALERT,  hardcoded for fred! */
-	firmware->total_tables = 1;
+	firmware->total_tables = 3;
 	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
+	/* Fuel Table */
 	firmware->table_params[0] = initialize_table_params();
 	firmware->table_params[0]->x_page = 0;
 	firmware->table_params[0]->y_page = 0;
@@ -947,6 +948,97 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	g_assert(firmware->table_params[0]->z_ul_eval);
 	firmware->table_params[0]->z_dl_eval = evaluator_create_f(firmware->table_params[0]->z_toecu_conv_expr);
 	g_assert(firmware->table_params[0]->z_dl_eval);
+
+	/* Lambda Table */
+	firmware->table_params[1] = initialize_table_params();
+	firmware->table_params[1]->x_page = 0;
+	firmware->table_params[1]->y_page = 0;
+	/* Assumes location ID's from 0-6 are contiguous */
+	firmware->table_params[1]->z_page = 6;
+	firmware->table_params[1]->x_bincount = 16;
+	firmware->table_params[1]->y_bincount = 16;
+	firmware->table_params[1]->x_base = 4;
+	firmware->table_params[1]->y_base = 58;
+	firmware->table_params[1]->z_base = 100;
+	firmware->table_params[1]->x_size = MTX_U16;
+	firmware->table_params[1]->y_size = MTX_U16;
+	firmware->table_params[1]->z_size = MTX_U16;
+	firmware->table_params[1]->x_source = g_strdup("RPM");
+	firmware->table_params[1]->x_toecu_conv_expr = g_strdup("x*2");
+	firmware->table_params[1]->x_fromecu_conv_expr = g_strdup("x/2");
+	firmware->table_params[1]->y_source = g_strdup("LoadMain");
+	firmware->table_params[1]->y_toecu_conv_expr = g_strdup("x*100");
+	firmware->table_params[1]->y_fromecu_conv_expr = g_strdup("x/100");
+	firmware->table_params[1]->z_source = g_strdup("LAMBDA");
+	firmware->table_params[1]->z_toecu_conv_expr = g_strdup("x*32768");
+	firmware->table_params[1]->z_fromecu_conv_expr = g_strdup("x/32768");
+	firmware->table_params[1]->x_suffix = g_strdup("RPM");
+	firmware->table_params[1]->y_suffix = g_strdup("kPa");
+	firmware->table_params[1]->z_suffix = g_strdup("Lambda");
+	firmware->table_params[1]->x_precision = 0;
+	firmware->table_params[1]->y_precision = 1;
+	firmware->table_params[1]->z_precision = 2;
+	firmware->table_params[1]->table_name = g_strdup("FreeEMS very alpha lambda table");;
+	/* X */
+	firmware->table_params[1]->x_ul_eval = evaluator_create_f(firmware->table_params[1]->x_fromecu_conv_expr);
+	g_assert(firmware->table_params[1]->x_ul_eval);
+	firmware->table_params[1]->x_dl_eval = evaluator_create_f(firmware->table_params[1]->x_toecu_conv_expr);
+	g_assert(firmware->table_params[1]->x_dl_eval);
+	/* Y */
+	firmware->table_params[1]->y_ul_eval = evaluator_create_f(firmware->table_params[1]->y_fromecu_conv_expr);
+	g_assert(firmware->table_params[1]->y_ul_eval);
+	firmware->table_params[1]->y_dl_eval = evaluator_create_f(firmware->table_params[1]->y_toecu_conv_expr);
+	g_assert(firmware->table_params[1]->y_dl_eval);
+	/* Z */
+	firmware->table_params[1]->z_ul_eval = evaluator_create_f(firmware->table_params[1]->z_fromecu_conv_expr);
+	g_assert(firmware->table_params[1]->z_ul_eval);
+	firmware->table_params[1]->z_dl_eval = evaluator_create_f(firmware->table_params[1]->z_toecu_conv_expr);
+	g_assert(firmware->table_params[1]->z_dl_eval);
+
+	firmware->table_params[2] = initialize_table_params();
+	firmware->table_params[2]->x_page = 0;
+	firmware->table_params[2]->y_page = 0;
+	/* Assumes location ID's from 0-8 are contiguous */
+	firmware->table_params[2]->z_page = 8;
+	firmware->table_params[2]->x_bincount = 16;
+	firmware->table_params[2]->y_bincount = 16;
+	firmware->table_params[2]->x_base = 4;
+	firmware->table_params[2]->y_base = 58;
+	firmware->table_params[2]->z_base = 100;
+	firmware->table_params[2]->x_size = MTX_U16;
+	firmware->table_params[2]->y_size = MTX_U16;
+	firmware->table_params[2]->z_size = MTX_U16;
+	firmware->table_params[2]->x_source = g_strdup("RPM");
+	firmware->table_params[2]->x_toecu_conv_expr = g_strdup("x*2");
+	firmware->table_params[2]->x_fromecu_conv_expr = g_strdup("x/2");
+	firmware->table_params[2]->y_source = g_strdup("LoadMain");
+	firmware->table_params[2]->y_toecu_conv_expr = g_strdup("x*100");
+	firmware->table_params[2]->y_fromecu_conv_expr = g_strdup("x/100");
+	firmware->table_params[2]->z_source = g_strdup("BROKEN");
+	firmware->table_params[2]->z_toecu_conv_expr = g_strdup("x*1024");
+	firmware->table_params[2]->z_fromecu_conv_expr = g_strdup("x/1024");
+	firmware->table_params[2]->x_suffix = g_strdup("RPM");
+	firmware->table_params[2]->y_suffix = g_strdup("kPa");
+	firmware->table_params[2]->z_suffix = g_strdup("\302\260BTDC");
+	firmware->table_params[2]->x_precision = 0;
+	firmware->table_params[2]->y_precision = 1;
+	firmware->table_params[2]->z_precision = 2;
+	firmware->table_params[2]->table_name = g_strdup("FreeEMS very alpha spark table");;
+	/* X */
+	firmware->table_params[2]->x_ul_eval = evaluator_create_f(firmware->table_params[2]->x_fromecu_conv_expr);
+	g_assert(firmware->table_params[2]->x_ul_eval);
+	firmware->table_params[2]->x_dl_eval = evaluator_create_f(firmware->table_params[2]->x_toecu_conv_expr);
+	g_assert(firmware->table_params[2]->x_dl_eval);
+	/* Y */
+	firmware->table_params[2]->y_ul_eval = evaluator_create_f(firmware->table_params[2]->y_fromecu_conv_expr);
+	g_assert(firmware->table_params[2]->y_ul_eval);
+	firmware->table_params[2]->y_dl_eval = evaluator_create_f(firmware->table_params[2]->y_toecu_conv_expr);
+	g_assert(firmware->table_params[2]->y_dl_eval);
+	/* Z */
+	firmware->table_params[2]->z_ul_eval = evaluator_create_f(firmware->table_params[2]->z_fromecu_conv_expr);
+	g_assert(firmware->table_params[2]->z_ul_eval);
+	firmware->table_params[2]->z_dl_eval = evaluator_create_f(firmware->table_params[2]->z_toecu_conv_expr);
+	g_assert(firmware->table_params[2]->z_dl_eval);
 
 
 	if (mem_alloc_f)
