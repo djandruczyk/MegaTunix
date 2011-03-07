@@ -118,7 +118,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 			break;
 		}
 
-		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",res,total_read));
+		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",len,total_read));
 	}
 	g_mutex_unlock(serio_mutex);
 	if ((bad_read) && (!ignore_errors))
