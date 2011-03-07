@@ -49,9 +49,6 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	gfloat y_raw = 0.0;
 	GtkWidget *widget = NULL;
 	GtkRcStyle *style = NULL;
-#ifndef __WIN32__
-	GdkGC *gc = NULL;
-#endif
 	cairo_t *cr = NULL;
 	gint i = 0;
 	gint table = 0;
@@ -366,8 +363,9 @@ redraw:
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
 			widget = last_widgets[table][last[table][i]];
-#ifdef __WIN32__
+//#ifdef __WIN32__
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
+			/*
 #else
 			if (GDK_IS_DRAWABLE(widget->window))
 			{
@@ -379,6 +377,7 @@ redraw:
 				cairo_destroy(cr);
 			}
 #endif
+*/
 		}
 	}
 
@@ -437,8 +436,9 @@ redraw:
 		 * recalc all the way thru the widget tree, which is 
 		 * atrociously expensive!
 		 */
-#ifdef __WIN32__
+//#ifdef __WIN32__
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+		/*
 #else
 		if (GDK_IS_DRAWABLE(widget->window))
 		{
@@ -450,5 +450,6 @@ redraw:
 			cairo_destroy(cr);
 		}
 #endif
+*/
 	}
 }
