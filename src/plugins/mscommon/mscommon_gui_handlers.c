@@ -1458,25 +1458,29 @@ void combo_handle_group_2_update(GtkWidget *widget)
 	static GHashTable *sources_hash = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
+	gchar * source_key = NULL;
+	gchar * source_values = NULL;
 	
 	if (!sources_hash)
 		sources_hash = DATA_GET(global_data,"sources_hash");
-	
 
-	if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_values")))
+	source_key = OBJ_GET(widget,"source_key");
+	source_values = OBJ_GET(widget,"source_values");
+
+	g_return_if_fail(sources_hash);	
+	g_return_if_fail(source_key);	
+	g_return_if_fail(source_values);	
+
+	vector = g_strsplit(source_values,",",-1);
+	if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
 	{
-		tmpbuf = OBJ_GET(widget,"source_values");
-		vector = g_strsplit(tmpbuf,",",-1);
-		if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
-		{
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with source_values,  length mismatch, check datamap\n"));
-			return ;
-		}
-		/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
-		g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
-		g_list_foreach(get_list_f("multi_expression"),update_widget,NULL);
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with source_values,  length mismatch, check datamap\n"));
 		g_strfreev(vector);
+		return ;
 	}
+	g_hash_table_replace(sources_hash,g_strdup(source_key),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
+	g_list_foreach(get_list_f("multi_expression"),update_widget,NULL);
+	g_strfreev(vector);
 }
 
 
@@ -1498,6 +1502,7 @@ void combo_handle_algorithms(GtkWidget *widget)
 		if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
 		{
 			dbg_func_f(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with algorithms, length mismatch, check datamap\n"));
+			g_free(vector);
 			return ;
 		}
 		algo = translate_string_f(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);
@@ -1556,17 +1561,21 @@ void handle_algorithm(GtkWidget *widget)
 void handle_group_2_update(GtkWidget *widget)
 {
 	static GHashTable *sources_hash = NULL;
+	gchar * source_key = NULL;
+	gchar * source_value = NULL;
 
 	if (!sources_hash)
 		sources_hash = DATA_GET(global_data,"sources_hash");
+
+	source_key = OBJ_GET(widget,"source_key");
+	source_value = OBJ_GET(widget,"source_value");
+
 	g_return_if_fail(sources_hash);
+	g_return_if_fail(source_key);
+	g_return_if_fail(source_value);
 
-	if ((OBJ_GET(widget,"source_key")) && (OBJ_GET(widget,"source_value")))
-	{
-		/*      printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
-		g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(OBJ_GET(widget,"source_value")));
+	g_hash_table_replace(sources_hash,g_strdup(source_key),g_strdup(source_value));
 
-	}
 	gdk_threads_add_timeout(2000,force_view_recompute,NULL);
 	gdk_threads_add_timeout(2000,trigger_group_update,OBJ_GET(widget,"group_2_update"));
 

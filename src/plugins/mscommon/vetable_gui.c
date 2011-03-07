@@ -49,11 +49,9 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	gfloat y_raw = 0.0;
 	GtkWidget *widget = NULL;
 	GtkRcStyle *style = NULL;
-#ifndef __WIN32__
-	GdkGC *gc = NULL;
-#endif
 	cairo_t *cr = NULL;
 	gint i = 0;
+	gint j = 0;
 	gint table = 0;
 	gint page = 0;
 	gint base = 0;
@@ -161,7 +159,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 
 		if (!multi)
 		{
-			printf("X multi source set, but undefined, BUG!\n");
+			/*printf("X multi source set, but undefined, BUG!\n");*/
 			return;
 		}
 		x_eval[table] = multi->dl_eval;
@@ -198,7 +196,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 
 		if (!multi)
 		{
-			printf("Y multi source set, but undefined, BUG!\n");
+			/*printf("Y multi source set, but undefined, BUG!\n");*/
 			return;
 		}
 
@@ -370,9 +368,9 @@ redraw:
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
 			widget = last_widgets[table][last[table][i]];
-#ifdef __WIN32__
+//#ifdef __WIN32__
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
-#else
+/*#else
 			if (GDK_IS_DRAWABLE(widget->window))
 			{
 				cr = gdk_cairo_create(widget->window);
@@ -383,6 +381,7 @@ redraw:
 				cairo_destroy(cr);
 			}
 #endif
+*/
 		}
 	}
 
@@ -413,8 +412,16 @@ redraw:
 		 * offset 0 of that list.  (assumptions are bad practice!)
 		 */
 		list = ecu_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+(z_bin[i]*z_mult)];
-		widget = g_list_nth_data(list,0);
 
+		j = 0;
+		while (j<g_list_length(list))
+		{
+			widget = g_list_nth_data(list,j);
+			if (GTK_IS_ENTRY(widget))
+				break;
+			else
+				j++;
+		}
 		if (!GTK_IS_WIDGET(widget))
 			return;
 		if ((i == heaviest) && (tracking_focus[table]))
@@ -434,18 +441,21 @@ redraw:
 		color.red = z_weight[i]*32768 +32767;
 		color.green = (1.0-z_weight[i])*65535 +0;
 		color.blue = (1.0-z_weight[i])*32768 +0;
+		color.pixel=65535;
 
 		/* modify_base is REALLY REALLY slow, as it triggers a size 
 		 * recalc all the way thru the widget tree, which is 
 		 * atrociously expensive!
 		 */
-#ifdef __WIN32__
+//#ifdef __WIN32__
 		if (!gdk_colormap_alloc_color(colormap,&color,FALSE,TRUE))
 			printf("unable to allocate color!\n");
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+		/*
 #else
 		if (GDK_IS_DRAWABLE(widget->window))
 		{
+			printf("coloring the window!\n");
 			cr = gdk_cairo_create(widget->window);
 			gdk_cairo_set_source_color(cr,&color);
 			cairo_set_line_width(cr,2);
@@ -454,5 +464,6 @@ redraw:
 			cairo_destroy(cr);
 		}
 #endif
+*/
 	}
 }
