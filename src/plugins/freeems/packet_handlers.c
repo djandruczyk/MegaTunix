@@ -137,33 +137,33 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 				if(checksum != lastChar)
 				{
 					badChecksums++;
-					/*printf("Packet number %u ending of length %u at char number %u failed checksum! Received %u Calculated %u\n", packets, currentPacketLength, processed, lastChar, checksum);*/
+					printf("Packet number %u ending of length %u at char number %u failed checksum! Received %u Calculated %u\n", packets, currentPacketLength, processed, lastChar, checksum);
 				}
 				else
 				{
 					goodChecksums++;
 					/* Add the length to the SUM */
 					sumOfGoodPacketLengths += currentPacketLength;
+					/* Clear the state */
+					packet = g_new0(FreeEMS_Packet, 1);
+					packet->data = g_memdup(packetBuffer,currentPacketLength);
+					packet->raw_length = currentPacketLength;
+					mtxlog_packet(packet->data,packet->raw_length,FALSE);
+					if (!packet_decode(packet))
+					{
+						printf("Packet fields don't make sense!\n");
+						freeems_packet_cleanup(packet);
+						badPackets++;
+					}
+					else if (queue)
+					{
+						g_async_queue_ref(queue);
+						g_async_queue_push(queue,(gpointer)packet);
+						g_async_queue_unref(queue);
+					}
+					else
+						printf("packet queue not found!?!!\n");
 				}
-				/* Clear the state */
-				packet = g_new0(FreeEMS_Packet, 1);
-				packet->data = g_memdup(packetBuffer,currentPacketLength);
-				packet->raw_length = currentPacketLength;
-				mtxlog_packet(packet->data,packet->raw_length,FALSE);
-				if (!packet_decode(packet))
-				{
-					printf("Packet fields don't make sense!\n");
-					freeems_packet_cleanup(packet);
-					badPackets++;
-				}
-				else if (queue)
-				{
-					g_async_queue_ref(queue);
-					g_async_queue_push(queue,(gpointer)packet);
-					g_async_queue_unref(queue);
-				}
-				else
-					printf("packet queue not found!?!!\n");
 				insidePacket = FALSE;
 				currentPacketLength= 0;
 				checksum = 0;
