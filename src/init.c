@@ -200,7 +200,7 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET_FULL(global_data,"last_signature",g_strdup(tmpbuf),cleanup);
 			cleanup(tmpbuf);
 		}
-		if(cfg_read_int(cfgfile, "Global", "Temp_Scale", &tmpi))
+		if(cfg_read_int(cfgfile, "Global", "Temp_Units", &tmpi))
 			DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))
 			DATA_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
@@ -374,7 +374,7 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "LogRawDatastream",(GBOOLEAN)DATA_GET(global_data,"log_raw_datastream"));
 	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(global_data,"network_access"));
 		
-	cfg_write_int(cfgfile, "Global", "Temp_Scale", (GINT)DATA_GET(global_data,"mtx_temp_units"));
+	cfg_write_int(cfgfile, "Global", "Temp_Units", (GINT)DATA_GET(global_data,"mtx_temp_units"));
 	cfg_write_string(cfgfile, "Global", "Last_ECU_Family",DATA_GET(global_data,"ecu_family"));
 	if (firmware)
 		if (firmware->actual_signature)
@@ -757,7 +757,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 						if (g_list_length(ecu_widgets[i][j]) > 0)
 						{
 							if (args->verbose)
-								printf("Deallocating widgets in  array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
+								printf("Deallocating widgets in array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
 #ifdef DEBUG
 							tmpbuf = g_strdup_printf("[%i][%i]",i,j);
 							g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
@@ -1248,12 +1248,10 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 #endif
 	}
 
-	if (!GTK_IS_WIDGET(widget))
-	{
-		printf("NOT A WIDGET!!!\n");
+	if ((!GTK_IS_WIDGET(widget)) || (!glade_get_widget_name(widget)))
 		return;
-	}
-	gtk_widget_destroy(widget);
+	else
+		gtk_widget_destroy(widget);
 	widget = NULL;
 }
 

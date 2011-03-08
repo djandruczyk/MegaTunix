@@ -622,6 +622,7 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,in);
+	g_return_val_if_fail(DATA_GET(global_data,"mtx_temp_units"),in);
 
 	if (firmware->ecu_temp_units == mtx_temp_units)
 		res = in;
@@ -639,7 +640,7 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 		res = k_to_f(in);
 	else 
 	{
-		printf("BUG couldn't figure out temp conversion!\n");
+		printf("temp_to_host(): BUG couldn't figure out temp conversion!\n");
 		res = in;
 	}
 	return res;
@@ -654,6 +655,7 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,in);
+	g_return_val_if_fail(DATA_GET(global_data,"mtx_temp_units"),in);
 
 	if(firmware->ecu_temp_units == mtx_temp_units)
 		res = in;
@@ -671,7 +673,7 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 		res = f_to_k(in);
 	else
 	{
-		printf("BUG couldn't figure out temp conversion!\n");
+		printf("temp_to_ecu(): BUG couldn't figure out temp conversion!\n");
 		res = in;
 	}
 	return res;

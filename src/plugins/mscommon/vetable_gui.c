@@ -50,11 +50,6 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	GtkWidget *widget = NULL;
 	GtkRcStyle *style = NULL;
 	GdkWindow *window = NULL;
-	/*
-#ifndef __WIN32_
-	GdkGC *gc = NULL;
-#endif
-*/
 	cairo_t *cr = NULL;
 	gint i = 0;
 	gint j = 0;
@@ -374,11 +369,9 @@ redraw:
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
 			widget = last_widgets[table][last[table][i]];
-			/*
 #ifdef __WIN32__
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
 #else
-*/
 			window = gtk_entry_get_text_window(GTK_ENTRY(widget));
 			if (GDK_IS_DRAWABLE(window))
 			{
@@ -389,7 +382,7 @@ redraw:
 				cairo_stroke(cr);
 				cairo_destroy(cr);
 			}
-//#endif
+#endif
 		}
 	}
 
@@ -455,13 +448,11 @@ redraw:
 		 * recalc all the way thru the widget tree, which is 
 		 * atrociously expensive!
 		 */
-		/*
 #ifdef __WIN32__
 		if (!gdk_colormap_alloc_color(colormap,&color,FALSE,TRUE))
 			printf("unable to allocate color!\n");
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 #else
-*/
 		window = gtk_entry_get_text_window(GTK_ENTRY(widget));
 		if (GDK_IS_DRAWABLE(window))
 		{
@@ -472,6 +463,6 @@ redraw:
 			cairo_stroke(cr);
 			cairo_destroy(cr);
 		}
-//#endif
+#endif
 	}
 }

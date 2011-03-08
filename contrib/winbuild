@@ -3,7 +3,7 @@
 . cross
 
 make distclean
-cross-configure --prefix=/target/dest $* && \
+cross-configure ./configure --prefix=/target/dest $* && \
 	make -j3  && rm -rf /target/dest/* && make install && \
 	./contrib/builder && \
 . uncross 

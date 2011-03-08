@@ -653,7 +653,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 			for (z=offset;z<offset+length;z++)
 			{
 				/*printf("refreshing widgets at page %i, offset %i\n",page,z);*/
-				thread_refresh_widgets_at_offset(page,z);
+				thread_refresh_widgets_at_offset_f(page,z);
 			}
 		}
 		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
