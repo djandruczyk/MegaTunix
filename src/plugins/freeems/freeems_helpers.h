@@ -32,6 +32,7 @@ typedef enum
 
 /* Prototypes */
 void stop_streaming(void);
+void start_streaming(void);
 void soft_boot_ecu(void);
 void hard_boot_ecu(void);
 gboolean freeems_burn_all(void *, FuncCall);

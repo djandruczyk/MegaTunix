@@ -49,6 +49,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	gfloat y_raw = 0.0;
 	GtkWidget *widget = NULL;
 	GtkRcStyle *style = NULL;
+	GdkWindow *window = NULL;
 	cairo_t *cr = NULL;
 	gint i = 0;
 	gint table = 0;
@@ -363,13 +364,13 @@ redraw:
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
 			widget = last_widgets[table][last[table][i]];
-//#ifdef __WIN32__
+#ifdef __WIN32__
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
-			/*
 #else
-			if (GDK_IS_DRAWABLE(widget->window))
+			window = gtk_entry_get_text_window(GTK_ENTRY(widget));
+			if (GDK_IS_DRAWABLE(window))
 			{
-				cr = gdk_cairo_create(widget->window);
+				cr = gdk_cairo_create(window);
 				gdk_cairo_set_source_color(cr,&old_colors[table][last[table][i]]);
 				cairo_set_line_width(cr,2);
 				cairo_rectangle(cr,1,1,widget->allocation.width-1,widget->allocation.height-1);
@@ -377,7 +378,6 @@ redraw:
 				cairo_destroy(cr);
 			}
 #endif
-*/
 		}
 	}
 
@@ -436,13 +436,13 @@ redraw:
 		 * recalc all the way thru the widget tree, which is 
 		 * atrociously expensive!
 		 */
-//#ifdef __WIN32__
+#ifdef __WIN32__
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
-		/*
 #else
-		if (GDK_IS_DRAWABLE(widget->window))
+		window = gtk_entry_get_text_window(GTK_ENTRY(widget));
+		if (GDK_IS_DRAWABLE(window))
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_color(cr,&color);
 			cairo_set_line_width(cr,2);
 			cairo_rectangle(cr,1,1,widget->allocation.width-1,widget->allocation.height-1);
@@ -450,6 +450,5 @@ redraw:
 			cairo_destroy(cr);
 		}
 #endif
-*/
 	}
 }

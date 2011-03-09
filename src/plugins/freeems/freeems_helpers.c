@@ -75,6 +75,55 @@ G_MODULE_EXPORT void stop_streaming(void)
 }
 
 
+G_MODULE_EXPORT void start_streaming(void)
+{
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	GTimeVal tval;
+	gint seq = 6;
+	Serial_Params *serial_params = NULL;
+	guint8 *buf = NULL;
+	guint8 pkt[DATALOG_REQ_PKT_LEN]; 
+	gint res = 0;
+	gint tmit_len = 0;
+	gint len = 0;
+	guint8 sum = 0;
+	gint i = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_if_fail(serial_params);
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (REQUEST_SET_ASYNC_DATALOG_TYPE & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (REQUEST_SET_ASYNC_DATALOG_TYPE & 0x00ff );
+	/* Turn on normal streaming */
+	pkt[L_PAYLOAD_IDX+1] = 1;
+	for (i=0;i<DATALOG_REQ_PKT_LEN-1;i++)
+		sum += pkt[i];
+	pkt[DATALOG_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,DATALOG_REQ_PKT_LEN,&tmit_len);
+
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
+	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
+	{
+		g_free(buf);
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
+		g_async_queue_unref(queue);
+		return;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
+	g_async_queue_unref(queue);
+	if (packet)
+		freeems_packet_cleanup(packet);
+	return;
+}
+
+
 void soft_boot_ecu(void)
 {
 	GTimeVal tval;
@@ -184,7 +233,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
-					seq = g_rand_int_range(rand,1,255);
+					seq = g_rand_int_range(rand,2,255);
 
 					output = initialize_outputdata_f();
 					DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
@@ -277,7 +326,7 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 				printf("timeout, no packet found in queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				printf("Re-issuing command!\n");
 				retry = initialize_outputdata_f();
-				seq = g_rand_int_range(rand,1,255);
+				seq = g_rand_int_range(rand,2,255);
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
 				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
 				DATA_SET(retry->data,"location_id",DATA_GET(output->data,"location_id"));

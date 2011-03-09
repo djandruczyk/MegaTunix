@@ -449,7 +449,7 @@ G_MODULE_EXPORT gboolean setup_rtv(void)
 	thread = g_thread_create(rtv_subscriber,queue,TRUE,NULL);
 	DATA_SET(global_data,"rtv_subscriber_thread", thread);
 	/* This sends packets to the rtv_subscriber queue */
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	register_packet_queue(SEQUENCE_NUM,queue,1);
 	return TRUE;
 }
 
@@ -469,7 +469,7 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 		DATA_SET(global_data,"rtv_subscriber_thread_exit",NULL);
 	}
 	queue = DATA_GET(global_data,"rtv_subscriber_queue");
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	deregister_packet_queue(SEQUENCE_NUM,queue,1);
 	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
 	return TRUE;
 }
@@ -509,7 +509,7 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	g_return_if_fail(firmware);
 
 	output = initialize_outputdata_f();
-	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(77));
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(1));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_BASIC_DATALOG));
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd_f(firmware->rt_command,output);
@@ -775,7 +775,6 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		block = (guint8 *)DATA_GET(output->data,"data");
 		mode = (WriteMode)DATA_GET(output->data,"mode");
 		freeems_find_mtx_page(locID,&page);
-		printf("location ID %i, page %i\n",locID,page);
 
 		if (!message->status) /* Bad write! */
 		{
