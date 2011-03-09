@@ -239,7 +239,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *scale;
 	GtkWidget *drawing_area;
 	GdkGLConfig *gl_config;
-	GtkObject * object = NULL;
 	gchar * tmpbuf = NULL;
 	gint i = 0;
 	gint j = 0;
@@ -377,8 +376,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->table_num = table_num;
 
 	ve_view->x_objects = g_new0(GObject *, firmware->table_params[table_num]->x_bincount);
-	ve_view->y_objects = g_new0(GObject *, firmware->table_params[table_num]->y_bincount);
-	ve_view->z_objects = g_new0(GObject **, firmware->table_params[table_num]->x_bincount);
 	for (i=0;i<firmware->table_params[table_num]->x_bincount;i++)
 	{
 		ve_view->x_objects[i] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
@@ -394,6 +391,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			OBJ_SET_FULL(ve_view->x_objects[i],"fromecu_conv_exprs",g_strdup(firmware->table_params[table_num]->x_fromecu_conv_exprs),g_free);
 		}
 	}
+	ve_view->y_objects = g_new0(GObject *, firmware->table_params[table_num]->y_bincount);
 	for (i=0;i<firmware->table_params[table_num]->y_bincount;i++)
 	{
 		ve_view->y_objects[i] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
@@ -410,6 +408,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		}
 	}
 
+	ve_view->z_objects = g_new0(GObject **, firmware->table_params[table_num]->x_bincount);
 	ve_view->quad_mesh = g_new0(Quad **, firmware->table_params[table_num]->x_bincount);
 	for (i=0;i<firmware->table_params[table_num]->x_bincount;i++)
 	{
@@ -454,13 +453,9 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		bind_to_lists(window,firmware->table_params[table_num]->bind_to_list);
 	}
 
-	/* Bind pointer to veview to an object for retrieval elsewhere */
-	object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
-	g_object_ref_sink(object);
-	OBJ_SET(object,"ve_view",(gpointer)ve_view);
-
+	/* Store it in global_data by name */
 	tmpbuf = g_strdup_printf("ve_view_%i",table_num);
-	register_widget(tmpbuf,(gpointer)object);
+	DATA_SET(global_data,tmpbuf,ve_view);
 	g_free(tmpbuf);
 
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
@@ -701,8 +696,7 @@ G_MODULE_EXPORT gboolean free_ve3d_view(GtkWidget *widget)
 	g_hash_table_remove(winstat,GINT_TO_POINTER(ve_view->table_num));
 
 	tmpbuf = g_strdup_printf("ve_view_%i",ve_view->table_num);
-	OBJ_SET(lookup_widget(tmpbuf),"ve_view",NULL);
-	deregister_widget(tmpbuf);
+	DATA_SET(global_data,tmpbuf,NULL);
 	g_free(tmpbuf);
 
 	g_free(ve_view->x_source);
@@ -2199,73 +2193,90 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	gboolean need_update = FALSE;
 	gint i = 0;
 	gchar * string = NULL;
-	GtkWidget * tmpwidget = NULL;
 	Ve_View_3D *ve_view = NULL;
 	gint count = 0;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	total_tables = firmware->total_tables;
-	gint table_list[total_tables];
+	gboolean table_list[total_tables];
 
+	printf("update if necessary, page %i, offset %i\n",page,offset);
 	for (i=0;i<total_tables;i++)
 	{
 		if (firmware->table_params[i]->x_page == page)
+		{
 			if ((offset >= (firmware->table_params[i]->x_base)) && (offset <= (firmware->table_params[i]->x_base + firmware->table_params[i]->x_bincount)))
 			{
 				need_update = TRUE;
-				table_list[count++] = i;
+				table_list[i] = TRUE;
 			}
-		if (firmware->table_params[i]->y_page == page)
+			else
+				table_list[i] = FALSE;
+		}
+		if ((firmware->table_params[i]->y_page == page) && (table_list[i] != i))
+		{
 			if ((offset >= (firmware->table_params[i]->y_base)) && (offset <= (firmware->table_params[i]->y_base + firmware->table_params[i]->y_bincount)))
 			{
 				need_update = TRUE;
-				table_list[count++] = i;
+				table_list[i] = TRUE;
 			}
-		if (firmware->table_params[i]->z_page == page)
+			else
+				table_list[i] = FALSE;
+		}
+		if ((firmware->table_params[i]->z_page == page) && (table_list[i] != i))
+		{
 			if ((offset >= (firmware->table_params[i]->z_base)) && (offset <= (firmware->table_params[i]->z_base + (firmware->table_params[i]->x_bincount * firmware->table_params[i]->y_bincount))))
 			{
 				need_update = TRUE;
-				table_list[count++] = i;
+				table_list[i] = TRUE;
 			}
+			else
+				table_list[i] = FALSE;
+		}
 	}
 	if (!need_update)
+	{
+		printf("no updated needed!\n");
 		return;
+	}
 	for (i=0;i<count;i++)
 	{
-		string = g_strdup_printf("ve_view_%i",table_list[i]);
-		tmpwidget = lookup_widget(string);
-		g_free(string);
-		if (GTK_IS_WIDGET(tmpwidget))
+		printf("checking if we need to update table %i\n",i);
+		if (table_list[i])
 		{
-			ve_view = (Ve_View_3D *)OBJ_GET(tmpwidget,"ve_view");
-
+			printf("should update table %i\n",i);
+			string = g_strdup_printf("ve_view_%i",i);
+			ve_view = DATA_GET(global_data,string);
+			g_free(string);
 			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+			{
+				printf("queing update\n");
 				queue_ve3d_update(ve_view);
+			}
 		}
 	}
 }
 
 G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 {
-	static gint flag;
-
-
-	if (flag == FALSE)
+	if (!DATA_GET(global_data,"ve3d_redraw_queued"))
 	{
-		flag = TRUE;
-		ve_view->mesh_created=FALSE;
-		gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
-		gdk_threads_add_timeout(3000,sleep_and_reset,&flag);
+		DATA_SET(global_data,"ve3d_redraw_queued",GINT_TO_POINTER(TRUE));
+		gdk_threads_add_timeout(1500,sleep_and_redraw,ve_view);
 	}
 
 	return;
 }
 
-G_MODULE_EXPORT gboolean sleep_and_reset(gpointer data)
+G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
 {
-	gint *flag = (gint *)data;
-	*flag = 0;
+	Ve_View_3D *ve_view = (Ve_View_3D *)data;
+
+	g_return_val_if_fail(ve_view,FALSE);
+	ve_view->mesh_created = FALSE;
+	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+	DATA_SET(global_data,"ve3d_redraw_queued",GINT_TO_POINTER(FALSE));
 	return FALSE;
 }
 

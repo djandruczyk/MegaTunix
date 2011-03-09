@@ -462,7 +462,7 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 
 	for (i=0;i<g_list_length(ecu_widgets[page][offset]);i++)
 		thread_refresh_widget(g_list_nth_data(ecu_widgets[page][offset],i));
-	/*update_ve3d_if_necessary(page,offset);*/
+	update_ve3d_if_necessary(page,offset);
 }
 
 
@@ -494,6 +494,7 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	g_async_queue_ref(gui_dispatch_queue);
 	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
 	g_async_queue_unref(gui_dispatch_queue);
+	update_ve3d_if_necessary(page,offset);
 	return;
 }
 

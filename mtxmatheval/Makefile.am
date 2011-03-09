@@ -31,7 +31,7 @@ COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@
 
 AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused -pedantic
 
-INCLUDES = -I$(top_builddir) -I$(top_srcdir)
+INCLUDES = -I$(top_builddir) -I$(top_srcdir) @GTK_CFLAGS@
 
 noinst_LTLIBRARIES = libmtxmatheval.la
 

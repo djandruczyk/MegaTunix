@@ -951,8 +951,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 
 	/* Lambda Table */
 	firmware->table_params[1] = initialize_table_params();
-	firmware->table_params[1]->x_page = 0;
-	firmware->table_params[1]->y_page = 0;
+	firmware->table_params[1]->x_page = 6;
+	firmware->table_params[1]->y_page = 6;
 	/* Assumes location ID's from 0-6 are contiguous */
 	firmware->table_params[1]->z_page = 6;
 	firmware->table_params[1]->x_bincount = 16;
@@ -996,8 +996,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	g_assert(firmware->table_params[1]->z_dl_eval);
 
 	firmware->table_params[2] = initialize_table_params();
-	firmware->table_params[2]->x_page = 0;
-	firmware->table_params[2]->y_page = 0;
+	firmware->table_params[2]->x_page = 8;
+	firmware->table_params[2]->y_page = 8;
 	/* Assumes location ID's from 0-8 are contiguous */
 	firmware->table_params[2]->z_page = 8;
 	firmware->table_params[2]->x_bincount = 16;

@@ -25,6 +25,7 @@ void update_write_status(void *);	/* gui updater for write status */
 void readfrom_ecu(Io_Message *);	/* Function to get data FROM ecu */
 void writeto_ecu(Io_Message *);		/* Func to send data to the ECU */
 gboolean write_data(Io_Message *);
+gboolean check_potential_ports(const gchar *);
 gboolean enumerate_dev(GtkWidget *, gpointer);	/* Help find usb/serial adapter */
 /* Prototypes */
 

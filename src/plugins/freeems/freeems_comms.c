@@ -775,6 +775,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		block = (guint8 *)DATA_GET(output->data,"data");
 		mode = (WriteMode)DATA_GET(output->data,"mode");
 		freeems_find_mtx_page(locID,&page);
+		printf("location ID %i, page %i\n",locID,page);
 
 		if (!message->status) /* Bad write! */
 		{

@@ -1020,12 +1020,20 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		else
 			bigstep = 10;
 	}
-
 	hardlower = get_extreme_from_size(size,LOWER);
 	hardupper = get_extreme_from_size(size,UPPER);
 
 	upper = upper > hardupper ? hardupper:upper;
 	lower = lower < hardlower ? hardlower:lower;
+	/* In the rare case where bigstep exceeds the limit, reset to more
+	   sane values.  Only should happen on extreme conversions
+	   */
+	if (bigstep > upper)
+	{
+		bigstep = upper/10;
+		smallstep = bigstep/10;
+	}
+
 	value = get_ecu_data_f(widget);
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
 

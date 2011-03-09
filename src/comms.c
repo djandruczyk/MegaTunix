@@ -41,7 +41,6 @@
 
 extern gconstpointer *global_data;
 
-static gboolean check_potential_ports(const gchar *);
 /*!
  \brief update_comms_status updates the Gui with the results of the comms
  test.  This is decoupled from the comms_test due to threading constraints.

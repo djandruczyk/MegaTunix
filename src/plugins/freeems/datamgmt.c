@@ -43,19 +43,30 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 	container = (gconstpointer *)data;
 	if (GTK_IS_WIDGET(widget))
 	{
-		locID = (GINT)OBJ_GET(widget,"location_id");
 		offset = (GINT)OBJ_GET(widget,"offset");
 		size = (DataSize)OBJ_GET(widget,"size");
+		if (OBJ_GET(widget,"location_id"))
+		{
+			locID = (GINT)OBJ_GET(widget,"location_id");
+			g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);;
+		}
+		else if (OBJ_GET(widget,"page"))
+			page = (GINT)OBJ_GET(widget,"page");
 	}
 	else
 	{
-		locID = (GINT)DATA_GET(container,"location_id");
 		offset = (GINT)DATA_GET(container,"offset");
 		size = (DataSize)DATA_GET(container,"size");
+		if (DATA_GET(container,"location_id"))
+		{
+			locID = (GINT)DATA_GET(container,"location_id");
+			g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);;
+		}
+		else if (DATA_GET(container,"page"))
+			page = (GINT)DATA_GET(container,"page");
 	}
-	/* Sanity checking */
 
-	g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);
+	/* Sanity checking */
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
@@ -165,13 +176,13 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 	container = (gconstpointer *)data;
 	if (GTK_IS_WIDGET(data))
 	{
-		if (!OBJ_GET(widget,"location_id"))
+		if (OBJ_GET(widget,"location_id"))
 		{
-			page = (GINT)OBJ_GET(widget,"page");
-			locID = firmware->page_params[page]->phys_ecu_page;
-		}
-		else
 			locID = (GINT)OBJ_GET(widget,"location_id");
+			g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);;
+		}
+		else if (OBJ_GET(widget,"page"))
+			page = (GINT)OBJ_GET(widget,"page");
 		canID = (GINT)OBJ_GET(widget,"canID");
 		offset = (GINT)OBJ_GET(widget,"offset");
 		size = (DataSize)OBJ_GET(widget,"size");
@@ -182,13 +193,13 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 	}
 	else
 	{
-		if (!DATA_GET(container,"location_id"))
+		if (DATA_GET(container,"location_id"))
 		{
-			page = (GINT)DATA_GET(container,"page");
-			locID = firmware->page_params[page]->phys_ecu_page;
-		}
-		else
 			locID = (GINT)DATA_GET(container,"location_id");
+			g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);;
+		}
+		else if (DATA_GET(container,"page"))
+			page = (GINT)DATA_GET(container,"page");
 		canID = (GINT)DATA_GET(container,"canID");
 		offset = (GINT)DATA_GET(container,"offset");
 		size = (DataSize)DATA_GET(container,"size");
@@ -198,7 +209,6 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 			value = (GINT)DATA_GET(container,"value");
 	}
 
-	g_return_if_fail(freeems_find_mtx_page(locID, &page));
 	g_return_if_fail(firmware);
 	g_return_if_fail(firmware->page_params);
 	g_return_if_fail(firmware->page_params[page]);

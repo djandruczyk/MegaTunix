@@ -165,19 +165,17 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 
 	handler = (MtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
+	precision = (GINT) OBJ_GET(widget,"precision");
 	get_essentials(widget,&locID,&offset,&size,&precision);
 
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (GINT)strtol(text,NULL,10);
 	tmpf = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
 	/*
-	 * printf("base \"%i\", text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",base,text,tmpi,tmpf,precision);
+	 printf("text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",text,tmpi,tmpf,precision);
 	 */
 
 	g_free(text);
-	/* This isn't quite correct, as the base can either be base10 
-	 * or base16, the problem is the limits are in base10
-	 */
 
 	if ((tmpf != (gfloat)tmpi) && (precision == 0))
 	{
@@ -205,14 +203,13 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			 * if the user inputs something in between,  thus 
 			 * we can reset the display to a sane value...
 			 */
+			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
+			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);
 			old = get_ecu_data(widget);
 			set_ecu_data(widget,&dload_val);
 
 			real_value = convert_after_upload_f(widget);
 			set_ecu_data(widget,&old);
-
-			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
-			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);
 
 			if (OBJ_GET(widget,"temp_dep"))
 				value = temp_to_host_f(real_value);
