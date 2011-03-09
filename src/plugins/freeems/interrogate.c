@@ -57,7 +57,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	   Now we need to figure out its variant and adapt to it
 	 */
 	/* Send stream disable command */
-	/*stop_streaming();*/
+	stop_streaming();
 
 	/* Load tests from tests.cfg file */
 	if (!validate_and_load_tests(&tests,&tests_hash))
