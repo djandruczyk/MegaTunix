@@ -2097,9 +2097,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	{
 		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n\tupdating widget data in ECU\n"));
 
-		ve_view->mesh_created=FALSE;
+		queue_ve3d_update(ve_view);
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+		/*
+		ve_view->mesh_created=FALSE;
 		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
+		*/
 	}
 
 	g_static_mutex_unlock(&key_mutex);
@@ -2192,21 +2195,27 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	gint total_tables = 0;
 	gboolean need_update = FALSE;
 	gint i = 0;
+	gint base = 0;
+	gint mult = 0;
+	DataSize size = MTX_U08;
+	gint len = 0;
 	gchar * string = NULL;
 	Ve_View_3D *ve_view = NULL;
-	gint count = 0;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	total_tables = firmware->total_tables;
 	gboolean table_list[total_tables];
 
-	printf("update if necessary, page %i, offset %i\n",page,offset);
 	for (i=0;i<total_tables;i++)
 	{
 		if (firmware->table_params[i]->x_page == page)
 		{
-			if ((offset >= (firmware->table_params[i]->x_base)) && (offset <= (firmware->table_params[i]->x_base + firmware->table_params[i]->x_bincount)))
+			base = firmware->table_params[i]->x_base;
+			size = firmware->table_params[i]->x_size;
+			len = firmware->table_params[i]->x_bincount;
+			mult = get_multiplier(size);
+			if ((offset >= (base)) && (offset <= (base + (len * mult))))
 			{
 				need_update = TRUE;
 				table_list[i] = TRUE;
@@ -2214,9 +2223,13 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 			else
 				table_list[i] = FALSE;
 		}
-		if ((firmware->table_params[i]->y_page == page) && (table_list[i] != i))
+		if ((firmware->table_params[i]->y_page == page) && (!table_list[i]))
 		{
-			if ((offset >= (firmware->table_params[i]->y_base)) && (offset <= (firmware->table_params[i]->y_base + firmware->table_params[i]->y_bincount)))
+			base = firmware->table_params[i]->y_base;
+			size = firmware->table_params[i]->y_size;
+			len = firmware->table_params[i]->y_bincount;
+			mult = get_multiplier(size);
+			if ((offset >= (base)) && (offset <= (base + (len * mult))))
 			{
 				need_update = TRUE;
 				table_list[i] = TRUE;
@@ -2224,9 +2237,13 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 			else
 				table_list[i] = FALSE;
 		}
-		if ((firmware->table_params[i]->z_page == page) && (table_list[i] != i))
+		if ((firmware->table_params[i]->z_page == page) && (!table_list[i]))
 		{
-			if ((offset >= (firmware->table_params[i]->z_base)) && (offset <= (firmware->table_params[i]->z_base + (firmware->table_params[i]->x_bincount * firmware->table_params[i]->y_bincount))))
+			base = firmware->table_params[i]->z_base;
+			size = firmware->table_params[i]->z_size;
+			len = firmware->table_params[i]->y_bincount *firmware->table_params[i]->x_bincount;
+			mult = get_multiplier(size);
+			if ((offset >= (base)) && (offset <= (base + (len * mult))))
 			{
 				need_update = TRUE;
 				table_list[i] = TRUE;
@@ -2236,23 +2253,18 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 		}
 	}
 	if (!need_update)
-	{
-		printf("no updated needed!\n");
 		return;
-	}
-	for (i=0;i<count;i++)
+	else
 	{
-		printf("checking if we need to update table %i\n",i);
-		if (table_list[i])
+		for (i=0;i<total_tables;i++)
 		{
-			printf("should update table %i\n",i);
-			string = g_strdup_printf("ve_view_%i",i);
-			ve_view = DATA_GET(global_data,string);
-			g_free(string);
-			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+			if (table_list[i] == TRUE)
 			{
-				printf("queing update\n");
-				queue_ve3d_update(ve_view);
+				string = g_strdup_printf("ve_view_%i",i);
+				ve_view = DATA_GET(global_data,string);
+				g_free(string);
+				if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+					queue_ve3d_update(ve_view);
 			}
 		}
 	}
@@ -2263,7 +2275,7 @@ G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 	if (!DATA_GET(global_data,"ve3d_redraw_queued"))
 	{
 		DATA_SET(global_data,"ve3d_redraw_queued",GINT_TO_POINTER(TRUE));
-		gdk_threads_add_timeout(1500,sleep_and_redraw,ve_view);
+		gdk_threads_add_timeout(300,sleep_and_redraw,ve_view);
 	}
 
 	return;

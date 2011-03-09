@@ -108,7 +108,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_image_menu_item_new_with_mnemonic("_Soft Boot ECU");
-	image = gtk_image_new_from_stock("gtk-justify-fill",GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_stock("gtk-refresh",GTK_ICON_SIZE_MENU);
 	g_object_set(item,"image",image,NULL);
 	if (gtk_minor_version >= 16)
 		g_object_set(item,"always-show-image",TRUE,NULL);
@@ -116,7 +116,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_image_menu_item_new_with_mnemonic("_Hard Boot ECU");
-	image = gtk_image_new_from_stock("gtk-justify-fill",GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_stock("gtk-help",GTK_ICON_SIZE_MENU);
 	g_object_set(item,"image",image,NULL);
 	if (gtk_minor_version >= 16)
 		g_object_set(item,"always-show-image",TRUE,NULL);
