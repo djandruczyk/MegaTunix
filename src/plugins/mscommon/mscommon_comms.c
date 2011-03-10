@@ -107,7 +107,7 @@ G_MODULE_EXPORT gint comms_test(void)
 	if (!serial_params)
 		return FALSE;
 
-	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock (\"C\" cmd)\n"));
+	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock\n"));
 
 	if ((GINT)DATA_GET(global_data,"ecu_baud") < 115200)
 	{
