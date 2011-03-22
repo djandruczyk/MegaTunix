@@ -63,7 +63,7 @@ keys themselves are not, as the string compare functions are case insensitive.
 			locales that use comma's instead of periods.  For 
 			expressions that require floating point convert as 
 			follows. i.e. x*0.352 becomes x*(352/1000).
-	complex_expr	(bool) If complex, call a handler that looks for the 
+	fromecu_complex	(bool) If complex, call a handler that looks for the 
 			following:
 	expr_symbols	(string) comma seperated list of variable names used
 			in the complex expression

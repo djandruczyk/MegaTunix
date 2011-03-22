@@ -167,7 +167,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 				assert(evaluator);
 			offset = (GINT)DATA_GET(object,"offset");
 			size = (DataSize)DATA_GET(object,"size");
-			if (DATA_GET(object,"complex_expr"))
+			if (DATA_GET(object,"fromecu_complex"))
 			{
 				tmpf = handle_complex_expr(object,incoming,UPLOAD);
 				goto store_it;

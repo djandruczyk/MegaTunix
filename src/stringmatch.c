@@ -268,8 +268,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"c_label",
 			GINT_TO_POINTER(MTX_STRING));
-	g_hash_table_insert(str_2_enum,"complex_expr",
-			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"create_tags",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"ctrl_name",
@@ -413,6 +411,10 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"fromecu_complex",
 			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"fromecu_conv_expr",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"fromecu_mult",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"fromecu_add",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"fromecu_conv_exprs",
 			GINT_TO_POINTER(MTX_STRING));

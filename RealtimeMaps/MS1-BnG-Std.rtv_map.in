@@ -481,14 +481,14 @@ _tooltip="PW" is the pulsewidth in milliseconds for the injectors.
 log_by_default=TRUE
 
 [derived_34]
-keys=internal_names,dlog_gui_name,offset,complex_expr,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,offset,fromecu_complex,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=dcycle1
 _dlog_gui_name=Dutycycle 1
 dlog_field_name=DutyCycle1
 offset=19
 real_lower=0
 real_upper=100
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=100*(((cyls+1)/divider)/(alternate+1))*((raw_pw1/10)/((1200/(stroke+1))/raw_rpm))
 expr_symbols=cyls,divider,alternate,raw_pw1,stroke,raw_rpm
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_

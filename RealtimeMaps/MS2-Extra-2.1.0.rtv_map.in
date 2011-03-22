@@ -348,14 +348,14 @@ _tooltip="Knock" is the amount of spark retard due to knocking
 log_by_default=FALSE
 
 [derived_23]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=egocorr
 _dlog_gui_name=EGO Corr
 dlog_field_name=Gego
 offset=34
 real_lower=0
 real_upper=255
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=((egocorr1/10)+(egocorr2/10))/2
 expr_symbols=egocorr1,egocorr2
 expr_types=_RAW_VAR_,_RAW_VAR_
@@ -1146,7 +1146,7 @@ _tooltip="gpioport2" is undefined
 log_by_default=FALSE
 
 [derived_84]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,complex_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_complex,fromecu_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=accdecenrich
 _dlog_gui_name=AccDecEnrich
 dlog_field_name=TPSacc
@@ -1154,7 +1154,7 @@ offset=42
 size=_S16_
 real_lower=0
 real_upper=255
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=(accelEnrich/10) + (step(tpsden - 1) * step(1 - tpsden) * tpsfuelcut + (1 - step(tpsden - 1) * step(1 - tpsden)) * 100)
 # This SHOULD work, but it does not..  weird..
 #fromecu_conv_expr=(accelEnrich/10) + (tspden * tspfuelcut) + ((1 - tspden) * 100)
@@ -1182,14 +1182,14 @@ _tooltip="rpm100" is RPM/100
 log_by_default=FALSE
 
 [derived_86]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=dcycle1
 _dlog_gui_name=Dutycycle 1
 dlog_field_name=DutyCycle1
 offset=2
 real_lower=0
 real_upper=100
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=100*(cyls/divider)/(alternate+1)*(raw_pw1*0.000666)/(60000/raw_rpm*(2.0-stroke))
 expr_symbols=cyls,divider,alternate,raw_pw1,stroke,raw_rpm
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_
@@ -1214,14 +1214,14 @@ _tooltip="Dcycle1" is the injector Duty cycle for injector channel 1.
 log_by_default=TRUE
 
 [derived_87]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=dcycle2
 _dlog_gui_name=Dutycycle 2
 dlog_field_name=DutyCycle2
 offset=4
 real_lower=0
 real_upper=100
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=100*(cyls/divider)/(alternate+1)*(raw_pw2*0.000666)/(60000/raw_rpm*(2.0-stroke))
 expr_symbols=cyls,divider,alternate,raw_pw2,stroke,raw_rpm
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_
@@ -1246,14 +1246,14 @@ _tooltip="Dcycle2" is the injector Duty cycle for injector channel 2.
 log_by_default=TRUE
 
 [derived_88]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afr_err_l
 _dlog_gui_name=AFR Error Left
 dlog_field_name=AfrErrL
 offset=12
 real_lower=-25
 real_upper=25
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=(afr/10)-(afrtgt/10)
 expr_symbols=afr,afrtgt
 expr_types=_RAW_VAR_,_RAW_VAR_
@@ -1266,14 +1266,14 @@ _tooltip="AFR Error Left" is the difference between target AFR and actual AFR fo
 log_by_default=FALSE
 
 [derived_89]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=afr_err_r
 _dlog_gui_name=AFR Error right
 dlog_field_name=AfrErrR
 offset=13
 real_lower=-25
 real_upper=25
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=(afr/10)-(afrtgt/10)
 expr_symbols=afr,afrtgt
 expr_types=_RAW_VAR_,_RAW_VAR_

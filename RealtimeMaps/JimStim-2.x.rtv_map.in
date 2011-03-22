@@ -98,12 +98,12 @@ _tooltip="FineADC" is the reading from the fine RPM ADC pot in ADC counts
 log_by_default=TRUE
 
 [derived_7]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,tooltip,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,tooltip,log_by_default
 internal_names=myrpm
 _dlog_gui_name=My RPM
 dlog_field_name=CommandedRPM
 offset=6
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=(((rtcoarse/4.0)*256.0) + (2*rtfine))
 expr_symbols=rtcoarse,rtfine
 expr_types=_RAW_VAR_,_RAW_VAR_

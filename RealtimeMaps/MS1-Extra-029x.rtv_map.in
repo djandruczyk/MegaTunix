@@ -49,14 +49,14 @@ _tooltip="RAW RPM" Is the engine RPM, as sent from the ECU in units of rpm/100
 log_by_default=TRUE
 
 [derived_3]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_conv_expr,complex_expr,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_conv_expr,fromecu_complex,tooltip,real_lower,real_upper,log_by_default
 internal_names=rpm
 _dlog_gui_name=RPM
 dlog_field_name=RPM
 offset=13
 real_lower=0
 real_upper=25500
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=(60000000 *(2-stroke))/(((iTimeX*65536)+(iTime))*(cyls+1))
 expr_symbols=stroke,cyls,iTimeX,iTime
 expr_types=_ECU_EMB_BIT_,_ECU_EMB_BIT_,_RAW_VAR_,_RAW_VAR_
@@ -494,14 +494,14 @@ _tooltip="PW 1" is the pulsewidth in milliseconds for the injectors tied to inje
 log_by_default=TRUE
 
 [derived_34]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=dcycle1
 _dlog_gui_name=Dutycycle 1 
 dlog_field_name=DutyCycle1
 offset=14
 real_lower=0
 real_upper=100
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=100*(((cyls+1)/divider)/(alternate+1))*((raw_pw1/10)/((1200/(stroke+1))/raw_rpm))
 expr_symbols=cyls,divider,alternate,raw_pw1,stroke,raw_rpm
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_
@@ -526,14 +526,14 @@ _tooltip="Dcycle1" is the injector Duty cycle for injector channel 1.
 log_by_default=TRUE
 
 [derived_35]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,precision,tooltip,real_lower,real_upper,log_by_default
 internal_names=dcycle2
 _dlog_gui_name=Dutycycle 2
 dlog_field_name=DutyCycle2
 offset=19
 real_lower=0
 real_upper=100
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=100*(((cyls+1)/divider)/(alternate+1))*((raw_pw2/10)/((1200/(stroke+1))/raw_rpm))
 expr_symbols=cyls,divider,alternate,raw_pw2,stroke,raw_rpm
 expr_types=_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_
@@ -797,7 +797,7 @@ _tooltip="Boost DC" is the Duty Cycle of the Bost Controller Ouput signal.
 log_by_default=FALSE
 
 [derived_54]
-keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,log_by_default
+keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=tpsdot
 _dlog_gui_name=tpsDOT
 dlog_field_name=tpsDOT
@@ -805,7 +805,7 @@ offset=7
 real_lower=0
 real_upper=25.5
 precision=2
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=(step((1-mapProportion)-0.5) * (tpsadc-tpslast)*0.19 )
 expr_symbols=mapProportion,tpsadc,tpslast
 expr_types=_ECU_EMB_BIT_,_RAW_VAR_,_RAW_VAR_
@@ -820,7 +820,7 @@ _tooltip="tpsDOT" Is the current TPS rate of change
 log_by_default=FALSE
 
 [derived_55]
-keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,complex_expr,fromecu_conv_expr,tooltip,real_lower,real_upper,log_by_default
+keys=precision,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_complex,fromecu_conv_expr,tooltip,real_lower,real_upper,log_by_default
 internal_names=mapdot
 _dlog_gui_name=mapDOT
 dlog_field_name=mapDOT
@@ -828,7 +828,7 @@ offset=4
 real_lower=0
 real_upper=255
 precision=2
-complex_expr=TRUE
+fromecu_complex=TRUE
 fromecu_conv_expr=(step(mapProportion-0.5) * (mapadc-tpslast)*0.1 )
 expr_symbols=mapProportion,mapadc,tpslast
 expr_types=_ECU_EMB_BIT_,_RAW_VAR_,_RAW_VAR_
