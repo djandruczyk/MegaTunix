@@ -19,18 +19,19 @@
 
 
 /* Function Pointers */
-void (*error_msg_f)(const gchar *);
-gboolean (*get_symbol_f)(const gchar *, void **);
-GtkWidget *(*lookup_widget_f)(const gchar *);
-void (*io_cmd_f)(const gchar *,void *);
-OutputData *(*initialize_outputdata_f)(void);
-void *(*dbg_func_f)(int,gchar *);
-void (*start_tickler_f)(gint);
-void (*stop_tickler_f)(gint);
-GList *(*get_list_f)(gchar *);
-void (*set_widget_sensitive_f)(gpointer, gpointer);
-void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
+void (*error_msg_f)(const gchar *) = NULL;
+gboolean (*get_symbol_f)(const gchar *, void **) = NULL;
+GtkWidget *(*lookup_widget_f)(const gchar *) = NULL;
+void (*io_cmd_f)(const gchar *,void *) = NULL;
+OutputData *(*initialize_outputdata_f)(void) = NULL;
+void *(*dbg_func_f)(int,gchar *) = NULL;
+void (*start_tickler_f)(gint) = NULL;
+void (*stop_tickler_f)(gint) = NULL;
+GList *(*get_list_f)(gchar *) = NULL;
+void (*set_widget_sensitive_f)(gpointer, gpointer) = NULL;
+void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean) = NULL;
 /* Function Pointers */
+
 
 /* Prototypes */
 void plugin_init(gconstpointer *data);
