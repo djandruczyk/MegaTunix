@@ -63,6 +63,8 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	gint major = 0;
 	gint minor = 0;
 	gint offset = 0;
+	gfloat tmpf = 0.0;
+	gfloat *newfloat = NULL;
 	gchar * section = NULL;
 	gconstpointer *object = NULL;
 	GList * list = NULL;
@@ -269,6 +271,20 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 					else
 						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
 					break;
+				case MTX_FLOAT:
+					if (cfg_read_float(cfgfile,section,keys[j],&tmpf))
+					{
+						newfloat = NULL;
+						newfloat = g_new0(gfloat, 1);
+						*newfloat = tmpf;
+						DATA_SET_FULL(object,
+								keys[j],
+								(gpointer)newfloat,g_free);
+					}
+					else
+						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_FLOAT: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+					break;
+
 				case MTX_STRING:
 					if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{

@@ -413,9 +413,9 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"fromecu_conv_expr",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"fromecu_mult",
-			GINT_TO_POINTER(MTX_STRING));
+			GINT_TO_POINTER(MTX_FLOAT));
 	g_hash_table_insert(str_2_enum,"fromecu_add",
-			GINT_TO_POINTER(MTX_STRING));
+			GINT_TO_POINTER(MTX_FLOAT));
 	g_hash_table_insert(str_2_enum,"fromecu_conv_exprs",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"ulimit_offset",
