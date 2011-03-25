@@ -62,6 +62,8 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 	DataSize size = MTX_U08;
 	gfloat result = 0.0;
 	gfloat tmpf = 0.0;
+	gfloat *add = NULL;
+	gfloat *mult = NULL;
 	gboolean temp_dep = FALSE;
 	void *evaluator = NULL;
 	GTimeVal timeval;
@@ -146,6 +148,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 				tmpf = handle_multi_expression(object,raw_realtime,hash);
 				goto store_it;
 			}
+			/*
 			evaluator = (void *)DATA_GET(object,"ul_evaluator");
 			if (!evaluator)
 			{
@@ -165,6 +168,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 			}
 			else
 				assert(evaluator);
+				*/
 			offset = (GINT)DATA_GET(object,"offset");
 			size = (DataSize)DATA_GET(object,"size");
 			if (DATA_GET(object,"fromecu_complex"))
@@ -185,7 +189,20 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 			}
 
 			/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator))); */
-			tmpf = evaluator_evaluate_x(evaluator,x);
+			/*tmpf = evaluator_evaluate_x(evaluator,x);*/
+
+			/* MS Simple math without the complex math... */
+			mult = NULL;
+			add = NULL;
+			mult = DATA_GET(object,"fromecu_mult");
+			add = DATA_GET(object,"fromecu_add");
+			if ((mult) && (add))
+				tmpf = (x * (*mult)) + (*add);
+			else if (mult)
+				tmpf = x * (*mult);
+			else
+				tmpf = x;
+
 store_it:
 			if (temp_dep)
 			{
