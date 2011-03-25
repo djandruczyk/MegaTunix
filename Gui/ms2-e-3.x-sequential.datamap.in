@@ -34,7 +34,7 @@ _tooltip=This button will turn red when a value is changed in the ECU's RAM but 
 
 [seq_frame]
 keys=bind_to_list
-bind_to_list=ign,!edis,!basic_trigger,!trigger_return
+bind_to_list=ign,!edis,!basic_trigger
 
 [seq_main_params_table]
 keys=bind_to_list
