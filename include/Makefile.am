@@ -39,7 +39,6 @@ headers = \
 	main.h \
 	menu_handlers.h \
 	mem_mgmt.h \
-	memory_gui.h \
 	mode_select.h \
 	ms1_loader.h \
 	ms2_loader.h \

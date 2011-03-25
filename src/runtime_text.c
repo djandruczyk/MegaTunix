@@ -301,7 +301,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *so
 	/* Value label */
 	label = gtk_label_new(NULL);
 
-	//set_fixed_size(label,6);
+	//set_fixed_size(label,11);
 	rtt->textval = label;
 	if (show_prefix)
 		gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
@@ -445,13 +445,13 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 	style = gtk_widget_get_style(parent);
 
 	renderer = gtk_cell_renderer_text_new();
-//	gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);
+	/*gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);*/
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_INT_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
 	renderer = gtk_cell_renderer_text_new();
-//	gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);
+	/*gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),65, 1);*/
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "markup", COL_RTT_DATA,  NULL);
 	g_object_set(column, "alignment", 1.0, NULL);
@@ -459,7 +459,6 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview), FALSE);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(treeview), TRUE);
-	
 }
 
 

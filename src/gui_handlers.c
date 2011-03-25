@@ -42,7 +42,6 @@
 #include <offline.h>
 #include <mode_select.h>
 #include <notifications.h>
-#include <post_process.h>
 #include <plugin.h>
 #include <rtv_processor.h>
 #include <runtime_gui.h>
@@ -377,11 +376,6 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case PLAYBACK_VIEW:
 				set_logviewer_mode(LV_PLAYBACK);
 				break;
-			case HEX_VIEW:
-			case DECIMAL_VIEW:
-			case BINARY_VIEW:
-				update_raw_memory_view((ToggleButton)handler,(GINT)obj_data);
-				break;	
 			default:
 				if (!common_handler)
 				{
@@ -431,9 +425,6 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case COMMA:
 			case TAB:
 			case OFFLINE_FIRMWARE_CHOICE:
-			case HEX_VIEW:
-			case DECIMAL_VIEW:
-			case BINARY_VIEW:
 			case REALTIME_VIEW:
 			case PLAYBACK_VIEW:
 				/* Not pressed, just break */

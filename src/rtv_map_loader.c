@@ -265,7 +265,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 						DATA_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
-						if (strstr(keys[j],"complex_expr") != NULL)
+						if (strstr(keys[j],"fromecu_complex") != NULL)
 							load_complex_params(object,cfgfile,section);
 					}
 					else
@@ -450,6 +450,8 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 	if (!common_rtv_loader)
 		get_symbol("common_rtv_loader",(void *)&common_rtv_loader);
 
+	g_return_if_fail(firmware);
+	g_return_if_fail(common_rtv_loader);
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{
 		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tRead of \"expr_symbols\" from section \"[%s]\" failed ABORTING!!!\n\n",section));

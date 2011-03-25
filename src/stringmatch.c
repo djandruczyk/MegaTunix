@@ -150,12 +150,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(RESTORE_ALL));
 	g_hash_table_insert(str_2_enum,"_READ_RAW_MEMORY_",
 			GINT_TO_POINTER(READ_RAW_MEMORY));
-	g_hash_table_insert(str_2_enum,"_HEX_VIEW_",
-			GINT_TO_POINTER(HEX_VIEW));
-	g_hash_table_insert(str_2_enum,"_BINARY_VIEW_",
-			GINT_TO_POINTER(BINARY_VIEW));
-	g_hash_table_insert(str_2_enum,"_DECIMAL_VIEW_",
-			GINT_TO_POINTER(DECIMAL_VIEW));
 	g_hash_table_insert(str_2_enum,"_TRACKING_FOCUS_",
 			GINT_TO_POINTER(TRACKING_FOCUS));
 	g_hash_table_insert(str_2_enum,"_MS2_USER_OUTPUTS_",

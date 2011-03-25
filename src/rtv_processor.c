@@ -338,6 +338,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		result = lower_limit;
 	if (result > upper_limit)
 		result = upper_limit;
+
+	dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\tTotal symbols is %i\n",total_symbols));
 	for (i=0;i<total_symbols;i++)
 	{
 		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\tkey %s value %f\n",names[i],values[i]));
@@ -415,12 +417,12 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				size = MTX_U08;
 				names[i] = g_strdup(symbols[i]);
 				values[i] = common_rtv_processor_obj(object,symbols[i],ECU_EMB_BIT);
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\t Embedded bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case ECU_VAR:
 				names[i] = g_strdup(symbols[i]);
 				values[i] = (gdouble)common_rtv_processor_obj(object,symbols[i], ECU_VAR);
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]));
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\t VE Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_VAR:
 				tmpbuf = g_strdup_printf("%s_offset",symbols[i]);
@@ -431,7 +433,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)_get_sized_data(raw_data,offset,size,firmware->bigendian);
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\t RAW Variable, name: %s, value %f\n",names[i],values[i]));
 				break;
 			case RAW_EMB_BIT:
 				size = MTX_U08;
@@ -444,10 +446,10 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				bitshift = get_bitshift(bitmask);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)(((_get_sized_data(raw_data,offset,size,firmware->bigendian)) & bitmask) >> bitshift);
-				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
+				dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\t RAW Embedded Bit, name: %s, value %f\n",names[i],values[i]));
 				break;
 			default:
-				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\t UNDEFINE Variable, this will cause a crash!!!!\n"));
+				dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\t UNDEFINE Variable, this will cause a crash!!!!\n"));
 				break;
 		}
 
@@ -472,11 +474,11 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	}
 	else
 	{
-		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
 	}
 	if (!evaluator)
 	{
-		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
 		exit (-1);
 	}
 	assert(evaluator);
@@ -488,10 +490,10 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		result = upper_limit;
 	for (i=0;i<total_symbols;i++)
 	{
-		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\tkey %s value %f\n",names[i],values[i]));
+		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\tkey %s value %f\n",names[i],values[i]));
 		g_free(names[i]);
 	}
-	dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr()\n\texpression is %s\n",evaluator_get_string(evaluator)));
+	dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\texpression is %s\n",evaluator_get_string(evaluator)));
 	g_free(names);
 	g_free(values);
 	return result;
