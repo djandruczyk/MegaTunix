@@ -53,7 +53,6 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 	gint mtx_temp_units;
 	guchar *raw_realtime = incoming;
 	gconstpointer * object = NULL;
-	gchar * expr = NULL;
 	GList * list= NULL;
 	guint i = 0;
 	guint j = 0;
@@ -65,7 +64,6 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 	gfloat *add = NULL;
 	gfloat *mult = NULL;
 	gboolean temp_dep = FALSE;
-	void *evaluator = NULL;
 	GTimeVal timeval;
 	GArray *history = NULL;
 	gchar *special = NULL;
@@ -148,27 +146,6 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 				tmpf = handle_multi_expression(object,raw_realtime,hash);
 				goto store_it;
 			}
-			/*
-			evaluator = (void *)DATA_GET(object,"ul_evaluator");
-			if (!evaluator)
-			{
-				expr = DATA_GET(object,"fromecu_conv_expr");
-				if (expr == NULL)
-				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": process_rt_vars()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_names")));
-					exit (-3);
-				}
-				evaluator = evaluator_create(expr);
-				if (!evaluator)
-				{
-					dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": rtv_processor()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
-				}
-				assert(evaluator);
-				DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
-			}
-			else
-				assert(evaluator);
-				*/
 			offset = (GINT)DATA_GET(object,"offset");
 			size = (DataSize)DATA_GET(object,"size");
 			if (DATA_GET(object,"fromecu_complex"))
@@ -187,9 +164,6 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));*/
 				x = _get_sized_data((guint8 *)incoming,offset,size,firmware->bigendian);
 			}
-
-			/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\texpression is %s\n",evaluator_get_string(evaluator))); */
-			/*tmpf = evaluator_evaluate_x(evaluator,x);*/
 
 			/* MS Simple math without the complex math... */
 			mult = NULL;
