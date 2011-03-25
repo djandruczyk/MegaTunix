@@ -86,7 +86,6 @@ gui_glade_files = 	\
 		msns-e-wheeldecode-029yx.glade \
 		msns-e-wheeldecode-hr-11d.glade \
 		mtxloader.glade \
-		raweditor.glade \
 		rotary-trail.glade \
 		runtime.glade \
 		sparktable_12x12x1.glade \
@@ -193,7 +192,6 @@ gui_in_files = 	\
 		msns-e-wheeldecode-029x.datamap.in \
 		msns-e-wheeldecode-hr_10x.datamap.in \
 		msns-e-wheeldecode-hr_11d.datamap.in \
-		raweditor.datamap.in \
 		rotary-trail-029x.datamap.in \
 		runtime.datamap.in \
 		sparktable_12x12x1-MS2.datamap.in \

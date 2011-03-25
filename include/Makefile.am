@@ -49,8 +49,6 @@ headers = \
 	offline.h \
 	personalities.h \
 	plugin.h \
-	post_process.h \
-	raweditor.h \
 	rtv_map_loader.h \
 	rtv_processor.h \
 	runtime_gui.h \

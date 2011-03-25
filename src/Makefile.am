@@ -49,8 +49,6 @@ megatunix_SOURCES = \
 	offline.c \
 	personalities.c \
 	plugin.c \
-	post_process.c \
-	raweditor.c \
 	rtv_map_loader.c \
 	rtv_processor.c \
 	runtime_gui.c \
