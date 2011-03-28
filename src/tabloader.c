@@ -379,6 +379,9 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 					OBJ_SET(object,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
 				}
 				break;
+			case MTX_FLOAT:
+				OBJ_SET_FULL(object,group->keys[i],g_memdup(OBJ_GET(group->object,group->keys[i]),sizeof(gfloat)),g_free);
+				break;
 			case MTX_STRING:
 				OBJ_SET_FULL(object,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])),g_free);
 				if (OBJ_GET(object,"tooltip") != NULL)

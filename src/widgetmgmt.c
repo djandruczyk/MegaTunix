@@ -301,6 +301,7 @@ G_MODULE_EXPORT gint get_multiplier(DataSize size)
 G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
 {
 	const gchar * key = NULL;
+	gfloat *val = NULL;
 	key = g_quark_to_string(key_id);
 	switch (translate_string((char *)key))
 	{
@@ -312,6 +313,9 @@ G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_d
 		case MTX_INT:
 			printf("key %s, %i\n",key,(GINT)data);
 			break;
+		case MTX_FLOAT:
+			val = (gfloat *) data;
+			printf("key %s, %f\n",key,*val);
 		default:
 			printf("Key %s is complex, ptr %p\n",key,data);
 			break;

@@ -61,8 +61,8 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 	DataSize size = MTX_U08;
 	gfloat result = 0.0;
 	gfloat tmpf = 0.0;
-	gfloat *add = NULL;
-	gfloat *mult = NULL;
+	gfloat *adder = NULL;
+	gfloat *multiplier = NULL;
 	gboolean temp_dep = FALSE;
 	GTimeVal timeval;
 	GArray *history = NULL;
@@ -166,14 +166,14 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 			}
 
 			/* MS Simple math without the complex math... */
-			mult = NULL;
-			add = NULL;
-			mult = DATA_GET(object,"fromecu_mult");
-			add = DATA_GET(object,"fromecu_add");
-			if ((mult) && (add))
-				tmpf = (x * (*mult)) + (*add);
-			else if (mult)
-				tmpf = x * (*mult);
+			multiplier = NULL;
+			adder = NULL;
+			multiplier = DATA_GET(object,"fromecu_mult");
+			adder = DATA_GET(object,"fromecu_add");
+			if ((multiplier) && (adder))
+				tmpf = (x * (*multiplier)) + (*adder);
+			else if (multiplier)
+				tmpf = x * (*multiplier);
 			else
 				tmpf = x;
 

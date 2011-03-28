@@ -50,6 +50,8 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	DataSize size = MTX_U08;
 	float lower = 0.0;
 	float upper = 0.0;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
 	guint i = 0;
 	GHashTable *hash = NULL;
 	gchar *key_list = NULL;
@@ -83,6 +85,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	else
 		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
+	/* MULTI EXPRESSION ONLY! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
 		if (!OBJ_GET(widget,"dl_eval_hash"))
@@ -146,39 +149,35 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			}
 		}
 	}
-	else
+	else /* NON Multi Expression */
 	{
 		conv_expr = (gchar *)OBJ_GET(widget,"toecu_conv_expr");
 		evaluator = (void *)OBJ_GET(widget,"dl_evaluator");
+		multiplier = (gfloat *)OBJ_GET(widget,"fromecu_mult");
+		adder = (gfloat *)OBJ_GET(widget,"fromecu_add");
 
-		if ((conv_expr) && (!evaluator))
+		/* Expression is NOT multi expression but has more complex math*/
+		if (conv_expr)
 		{
-			evaluator = evaluator_create(conv_expr);
-			assert(evaluator);
-			OBJ_SET_FULL(widget,"dl_evaluator",(gpointer)evaluator,evaluator_destroy);
+			if (!evaluator)
+			{
+				evaluator = evaluator_create(conv_expr);
+				assert(evaluator);
+				OBJ_SET_FULL(widget,"dl_evaluator",(gpointer)evaluator,evaluator_destroy);
+			}
+			return_value = (GINT)evaluator_evaluate_x(evaluator,value); 
 		}
-	}
-	if (!evaluator)
-	{
-		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl()\n\tNO CONVERSION defined for widget %s value %i\n",glade_get_widget_name(widget), (GINT)value));
-		if(value > upper)
+		else
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",upper));
-			value = upper;
+			/* Handle all cases of with or without multiplier/adder*/
+			if ((multiplier) && (adder))
+				return_value = (GINT)((value - (*adder))/(*multiplier));
+			else if (multiplier)
+				return_value = (GINT)(value/(*multiplier));
+			else
+				return_value = (GINT)value;
 		}
-		if (value < lower)
-		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (no eval)!!\n",lower));
-			value = lower;
-		}
-		return_value = (GINT)value;
-	}
-	else
-	{
-		return_value = evaluator_evaluate_x(evaluator,value); 
-
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",glade_get_widget_name(widget),value,return_value));
-
 		if (return_value > upper)
 		{
 			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (ecu units, evaluated)!!\n",upper));
@@ -192,7 +191,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 
 	tmpi = return_value;
-	 if (OBJ_GET(widget,"lookuptable"))
+	if (OBJ_GET(widget,"lookuptable"))
 		return_value = (GINT)reverse_lookup_obj(G_OBJECT(widget),tmpi);
 
 	g_static_mutex_unlock(&mutex);
@@ -227,6 +226,8 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gchar * tmpbuf = NULL;
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
 	gint *algorithm = NULL;
 	GHashTable *sources_hash = NULL;
 	extern gconstpointer *global_data;
@@ -250,6 +251,11 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	if (size == 0)
 		printf(_("BIG PROBLEM, size undefined! widget %s \n"),(gchar *)glade_get_widget_name(widget));
 
+	if (OBJ_GET(widget,"lookuptable"))
+		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data_f(widget));
+	else
+		tmpi = get_ecu_data_f(widget);
+	/* MULTI EXPRESSION ONLY! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
 		sources_hash = DATA_GET(global_data,"sources_hash");
@@ -314,34 +320,38 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 					break;
 			}
 		}
+		return_value = evaluator_evaluate_x(evaluator,tmpi);
 	}
 	else
 	{
 		conv_expr = (gchar *)OBJ_GET(widget,"fromecu_conv_expr");
 		evaluator = (void *)OBJ_GET(widget,"ul_evaluator");
-		if ((conv_expr) && (!evaluator)) 	/* if no evaluator create one */
+		multiplier = OBJ_GET(widget,"fromecu_mult");
+		adder = OBJ_GET(widget,"fromecu_add");
+
+		if (conv_expr)
 		{
-			evaluator = evaluator_create(conv_expr);
-			assert(evaluator);
-			OBJ_SET_FULL(widget,"ul_evaluator",(gpointer)evaluator,evaluator_destroy);
+			if (!evaluator)
+			{
+				evaluator = evaluator_create(conv_expr);
+				assert(evaluator);
+				OBJ_SET_FULL(widget,"ul_evaluator",(gpointer)evaluator,evaluator_destroy);
+			}
+			return_value = evaluator_evaluate_x(evaluator,tmpi);
+		}
+		else
+		{
+			/* Handle all cases of with or without multiplier/adder*/
+			if ((multiplier) && (adder))
+				return_value = (((gfloat)tmpi * (*multiplier))+ (*adder));
+			else if (multiplier)
+				return_value = ((gfloat)tmpi *(*multiplier));
+			else
+				return_value = (gfloat)tmpi;
+			/*dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNo/Fast CONVERSION defined for  widget %s, value %f\n",(gchar *)glade_get_widget_name(widget), return_value));*/
 		}
 
 	}
-	if (OBJ_GET(widget,"lookuptable"))
-		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data_f(widget));
-	else
-		tmpi = get_ecu_data_f(widget);
-
-	if (!evaluator)
-	{
-		return_value = tmpi;
-		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNO CONVERSION defined for  widget %s, value %f\n",(gchar *)glade_get_widget_name(widget), return_value));
-		g_static_mutex_unlock(&mutex);
-		return (return_value);		
-	}
-	/*return_value = evaluator_evaluate_x(evaluator,tmpi)+0.0001; */
-	return_value = evaluator_evaluate_x(evaluator,tmpi);
-
 //	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,tmpi,return_value));
 	g_static_mutex_unlock(&mutex);
 	return (return_value);

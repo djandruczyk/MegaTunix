@@ -30,6 +30,8 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 {
 	gint i = 0;
 	gint tmpi = 0;
+	gfloat tmpf = 0.0;
+	gfloat *newfloat = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * tmpstr = NULL;
 	DataType keytype = MTX_STRING;
@@ -78,6 +80,20 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 				else
 					dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n",keys[i],section,cfgfile->filename));
 				break;
+			case MTX_FLOAT:
+				if (cfg_read_float(cfgfile,section,keys[i],&tmpf))
+				{
+					newfloat = NULL;
+					newfloat = g_new0(gfloat, 1);
+					*newfloat = tmpf;
+					OBJ_SET_FULL(object,
+							keys[i],
+							(gpointer)newfloat,g_free);
+				}
+				else
+					dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_FLOAT: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n",keys[i],section,cfgfile->filename));
+				break;
+
 			case MTX_STRING:
 				if(cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
 				{

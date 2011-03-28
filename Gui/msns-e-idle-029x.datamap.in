@@ -202,12 +202,13 @@ bind_to_list=warmup_idle_controls
 _tooltip=This is the DutyCycle the PWM Idle valve will be run at at the High (hot) engine temperature. The Dutycycle is interpolated between the low and high temp span in order to gradually reduce the idle RPM as the motor warms up.
 
 [idle_frequency_entry]
-keys=page,offset,raw_upper,precision,reverse_keys,fromecu_conv_expr,bind_to_list,tooltip
+keys=page,offset,raw_upper,precision,reverse_keys,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
 page=8
 offset=11
 raw_upper=255
 precision=1
 reverse_keys=TRUE
+toecu_conv_expr=x/10000
 fromecu_conv_expr=10000/x
 bind_to_list=pwm_idle_controls
 _tooltip=This is the frequency in hertz that the ECU will drive the PWM idle valve. Range of 39hz to 10khz. PgUp/PgDown/+/- can be used to navigate.  Control will jump to nearest point.
