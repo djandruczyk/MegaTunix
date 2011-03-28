@@ -157,241 +157,205 @@ _tooltip=Sets whether we disable decel enrich or not
 #----- Spinbuttons ----------------------------------------------------------
 
 [map_ae_rate_4_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=168
-toecu_conv_expr=x/10
-fromecu_conv_expr=x*10
+fromecu_mult=10
 
 [map_ae_rate_3_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=167
-toecu_conv_expr=x/10
-fromecu_conv_expr=x*10
+fromecu_mult=10
 
 [map_ae_rate_2_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=166
-toecu_conv_expr=x/10
-fromecu_conv_expr=x*10
+fromecu_mult=10
 
 [map_ae_rate_1_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=165
-toecu_conv_expr=x/10
-fromecu_conv_expr=x*10
+fromecu_mult=10
 
 [map_ae_pw_4_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=172
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [map_ae_pw_3_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=171
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [map_ae_pw_2_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=170
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [map_ae_pw_1_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=169
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [tps_ae_rate_4_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=164
 precision=1
-toecu_conv_expr=x/(1953125/10000000)
-fromecu_conv_expr=x*(1953125/10000000)
+fromecu_mult=0.1953125
 
 [tps_ae_rate_3_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=163
 precision=1
-toecu_conv_expr=x/(1953125/10000000)
-fromecu_conv_expr=x*(1953125/10000000)
+fromecu_mult=0.1953125
 
 [tps_ae_rate_2_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=162
 precision=1
-toecu_conv_expr=x/(1953125/10000000)
-fromecu_conv_expr=x*(1953125/10000000)
+fromecu_mult=0.1953125
 
 [tps_ae_rate_1_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=161
 precision=1
-toecu_conv_expr=x/(1953125/10000000)
-fromecu_conv_expr=x*(1953125/10000000)
+fromecu_mult=0.1953125
 
 [tps_ae_pw_4_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=176
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [tps_ae_pw_3_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=175
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [tps_ae_pw_2_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=174
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [tps_ae_pw_1_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=173
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [rpm_ae_rate_4_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=152
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 
 [rpm_ae_rate_3_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=151
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 
 [rpm_ae_rate_2_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=150
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 
 [rpm_ae_rate_1_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=149
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 
 [rpm_ae_pw_4_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=156
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [rpm_ae_pw_3_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=155
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [rpm_ae_pw_2_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=154
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [rpm_ae_pw_1_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=153
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [ae_end_decay_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,precision,fromecu_mult,tooltip
 offset=183
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=Accel Value at end of AE pulse decay.
 
 [ae_rpm_mapdot_thresh_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,fromecu_mult,tooltip
 offset=91
-toecu_conv_expr=x/10
-fromecu_conv_expr=x*10
+fromecu_mult=10
 _tooltip=FIXME
 
 [mapdot_thresh_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,fromecu_mult,bind_to_list,tooltip
 offset=91
-toecu_conv_expr=x/10
-fromecu_conv_expr=x*10
+fromecu_mult=10
 bind_to_list=map_ae_controls
 _tooltip=FIXME
 
 [ae_rpm_accel_time_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,precision,fromecu_mult,tooltip
 offset=179
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=Accel enrichment time.
 
 [accel_time_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,precision,fromecu_mult,tooltip
 offset=179
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=Accel enrichment time.
 
 [ae_rpm_tps_thresh_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,precision,fromecu_mult,tooltip
 offset=178
 precision=1
-toecu_conv_expr=x/(1953125/10000000)
-fromecu_conv_expr=x*(1953125/10000000)
+fromecu_mult=0.1953125
 _tooltip=Minimum TPS rate of change to trigger accel enrichment. Helps to minimize false triggers from noise.
 
 [tpsdot_thresh_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,bind_to_list,tooltip
 offset=178
 precision=1
-toecu_conv_expr=x/(1953125/10000000)
-fromecu_conv_expr=x*(1953125/10000000)
+fromecu_mult=0.1953125
 bind_to_list=ae_tpsdot_controls,ae_normal_controls
 _tooltip=Minimum TPS rate of change to trigger accel enrichment. Helps to minimize false triggers from noise.
 
 [decel_fuel_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,tooltip
 offset=180
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 _tooltip=The amount of fuel to cut during decel.  100% means cut NO fuel, 0% means cut ALL fuel, anything OVER 100 means ADD fuel.
 
 [cold_enrich_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,precision,fromecu_mult,tooltip
 offset=177
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=Amount of enrich to add in MS when cold.
 
 [cold_accel_mult_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,tooltip
 offset=181
-toecu_conv_expr=x*1
-fromecu_conv_expr=x*1
 _tooltip=Cold Accel multiplier (percentage), 100 equals NO change, greater than 100 means more fuel, less than 100 means less fuel.
 
 [ae_decel_setpoint_entry]

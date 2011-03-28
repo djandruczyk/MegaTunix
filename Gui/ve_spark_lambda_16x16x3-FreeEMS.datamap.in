@@ -19,94 +19,85 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load_1]
-keys=size,toecu_conv_expr,fromecu_conv_expr,use_color,precision,tooltip
+keys=size,fromecu_mult,use_color,precision,tooltip
 size=_U16_
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 precision=1
 use_color=TRUE
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_1]
-keys=size,precision,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=size,precision,fromecu_mult,use_color,tooltip
 size=_U16_
-toecu_conv_expr=x*2
-fromecu_conv_expr=x/2
+fromecu_mult=0.5
 precision=0
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [ve_1]
-keys=size,use_color,precision,table_num,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=size,use_color,precision,table_num,fromecu_mult,tooltip
 size=_U16_
 table_num=0
 use_color=TRUE
-toecu_conv_expr=x*512
-fromecu_conv_expr=x/512
+fromecu_mult=0.001953125
 precision=1
 _tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_2]
-keys=page,size,toecu_conv_expr,fromecu_conv_expr,use_color,precision,tooltip
+keys=page,size,fromecu_mult,use_color,precision,tooltip
 page=6
 size=_U16_
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 precision=1
 use_color=TRUE
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_2]
-keys=page,size,precision,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,size,precision,fromecu_mult,use_color,tooltip
 page=6
 size=_U16_
-toecu_conv_expr=x*2
-fromecu_conv_expr=x/2
+fromecu_mult=0.5
 precision=0
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [lambda_1]
-#keys=size,use_color,precision,table_num,toecu_conv_expr,fromecu_conv_expr,tooltip
-keys=page,size,use_color,precision,table_num,toecu_conv_expr,fromecu_conv_expr
+#keys=size,use_color,precision,table_num,fromecu_mult,tooltip
+keys=page,size,use_color,precision,table_num,fromecu_mult
 page=6
 size=_U16_
 table_num=1
 use_color=TRUE
-toecu_conv_expr=x*32768
-fromecu_conv_expr=x/32768
+fromecu_mult=0.000030518
 precision=2
 #_tooltip=The Lambd Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_3]
-keys=page,size,toecu_conv_expr,fromecu_conv_expr,use_color,precision,tooltip
+keys=page,size,fromecu_mult,use_color,precision,tooltip
 page=8
 size=_U16_
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 precision=1
 use_color=TRUE
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_3]
-keys=page,size,precision,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,size,precision,fromecu_mult,use_color,tooltip
 page=8
 size=_U16_
-toecu_conv_expr=x*2
-fromecu_conv_expr=x/2
+fromecu_mult=0.5
 precision=0
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_1]
-#keys=size,use_color,precision,table_num,toecu_conv_expr,fromecu_conv_expr,tooltip
-keys=page,size,use_color,precision,table_num,toecu_conv_expr,fromecu_conv_expr
+#keys=size,use_color,precision,table_num,fromecu_mult,tooltip
+keys=page,size,use_color,precision,table_num,fromecu_mult
 page=8
 size=_U16_
 table_num=2
 use_color=TRUE
-toecu_conv_expr=x*1024
-fromecu_conv_expr=x/1024
+fromecu_mult=0.000976563
 precision=1
 #_tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 

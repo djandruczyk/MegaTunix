@@ -19,17 +19,15 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load]
-keys=toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
-toecu_conv_expr=(x/100)*255
-fromecu_conv_expr=(x/255)*100
+keys=fromecu_mult,precision,use_color,tooltip
+fromecu_mult=0.392156863
 precision=0
 use_color=TRUE
 _tooltip=The LOAD (TPS) bins in combination with the RPM bins on the bottom of the Boost Table define the vertexes (points on the Boost map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
-keys=toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+keys=fromecu_mult,use_color,tooltip
+fromecu_mult=100
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Boost-Table define the vertexes (points on the Boost map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 

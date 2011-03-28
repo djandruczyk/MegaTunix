@@ -158,43 +158,40 @@ alternate_bitmask=1
 register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,table_num,fromecu_conv_expr,bind_to_list,register_as
+keys=offset,table_num,fromecu_mult,bind_to_list,register_as
 offset=90
 table_num=0
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 bind_to_list=interdep_0_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
 [inj_open_time_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=93
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [batt_correction_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=97
 precision=1
-toecu_conv_expr=x*60
-fromecu_conv_expr=x/60
+fromecu_mult=0.016666667
 
 [pwm_limit_entry]
 keys=offset
 offset=95
 
 [pwm_time_thresh_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=96
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [fast_idle_thresh_temp_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list
+keys=offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list
 offset=121
-toecu_conv_expr=x+40
-fromecu_conv_expr=x-40
+fromecu_mult=1
+fromecu_add=-40
 temp_dep=TRUE
 bind_to_list=temperature
 

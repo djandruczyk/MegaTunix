@@ -19,10 +19,9 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load]
-keys=size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,use_color,tooltip
+keys=size,fromecu_mult,raw_upper,precision,use_color,tooltip
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=1000
 precision=1
 use_color=TRUE
@@ -43,12 +42,11 @@ raw_upper=100
 _tooltip=The Boost Entries are the values of PWM drive to the boost actuator, This is an OPEN LOOP system.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [table_2]
-keys=use_color,size,table_num,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=use_color,size,table_num,fromecu_mult,raw_upper,precision,tooltip
 size=_S16_
 table_num=13
 use_color=TRUE
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=4000
 precision=1
 _tooltip=The Boost Entries are the values of Boost in KPA that the ECU should try to maintain.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.

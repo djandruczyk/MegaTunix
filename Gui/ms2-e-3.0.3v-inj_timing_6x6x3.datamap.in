@@ -18,10 +18,9 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load_12]
-keys=size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,precision,use_color,tooltip
+keys=size,fromecu_mult,raw_lower,raw_upper,precision,use_color,tooltip
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_lower=0
 raw_upper=4000
 precision=1
@@ -29,11 +28,10 @@ use_color=TRUE
 _tooltip=The LOAD (%) bins in combination with the RPM bins on the bottom of the Injection Timing Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_3]
-keys=page,size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,precision,use_color,tooltip
+keys=page,size,fromecu_mult,raw_lower,raw_upper,precision,use_color,tooltip
 page=1
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_lower=0
 raw_upper=4000
 precision=1
@@ -41,50 +39,44 @@ use_color=TRUE
 _tooltip=The LOAD (%) bins in combination with the RPM bins on the bottom of the Injection Timing Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_12]
-keys=size,toecu_conv_expr,fromecu_conv_expr,raw_upper,use_color,tooltip
+keys=size,raw_upper,use_color,tooltip
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 raw_upper=15000
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Injection Timing-Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_3]
-keys=page,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,use_color,tooltip
+keys=page,size,raw_upper,use_color,tooltip
 page=1
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 raw_upper=15000
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Injection Timing-Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [table_1]
-keys=size,precision,use_color,table_num,tooltip,toecu_conv_expr,fromecu_conv_expr
+keys=size,precision,use_color,table_num,tooltip,fromecu_mult
 size=_S16_
 precision=1
 raw_lower=-3600
 raw_upper=7200
 use_color=TRUE
 table_num=14
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=See MS2-Extra Manuals
 
 [table_2]
-keys=size,precision,use_color,table_num,tooltip,toecu_conv_expr,fromecu_conv_expr
+keys=size,precision,use_color,table_num,tooltip,fromecu_mult
 size=_S16_
 precision=1
 raw_lower=-3600
 raw_upper=7200
 use_color=TRUE
 table_num=14
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=See MS2-Extra Manuals
 
 [table_3]
-keys=size,precision,page,use_color,table_num,tooltip,toecu_conv_expr,fromecu_conv_expr,raw_upper
+keys=size,precision,page,use_color,table_num,tooltip,fromecu_mult,raw_upper
 page=1
 precision=1
 size=_S16_
@@ -92,8 +84,7 @@ raw_lower=-3600
 raw_upper=7200
 use_color=TRUE
 table_num=16
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=See MS2-Extra Manuals
 
 #----- Gauges --------------------------------------------------------------

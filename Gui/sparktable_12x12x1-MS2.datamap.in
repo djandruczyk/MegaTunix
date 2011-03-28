@@ -17,12 +17,11 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load_1]
-keys=raw_upper,size,precision,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=raw_upper,size,precision,fromecu_mult,use_color,tooltip
 raw_upper=4000
 size=_S16_
 use_color=TRUE
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 #source_key=map_sensor
 #multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
@@ -39,11 +38,10 @@ use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_1]
-keys=page,table_num,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,size,precision,use_color,tooltip
+keys=page,table_num,fromecu_mult,raw_lower,raw_upper,size,precision,use_color,tooltip
 page=1
 table_num=2
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_lower=-100
 raw_upper=900
 size=_S16_
@@ -190,13 +188,12 @@ rescaler_frame=SP_SP1_rescale_frame
 #----- Timing Controls -------------------------------------------------------
 
 [SP1_triggerangle_entry]
-keys=size,offset,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,use_color
+keys=size,offset,raw_lower,raw_upper,fromecu_mult,precision,use_color
 size=_S16_
 offset=42
 raw_lower=-3590
 raw_upper=3590
-toecu_conv_expr=x/0.1
-fromecu_conv_expr=x*0.1
+fromecu_mult=0.1
 precision=2
 use_color=FALSE
 

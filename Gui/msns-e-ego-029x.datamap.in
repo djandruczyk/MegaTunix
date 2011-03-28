@@ -183,55 +183,51 @@ _tooltip=Jump to Open Loop mode when TPS or MAP threshold below is exceeded. (se
 #----- Spin Buttons ----------------------------------------------------------
 
 [ego1_active_temp_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list,tooltip
 offset=144
-toecu_conv_expr=x+40
-fromecu_conv_expr=x-40
+fromecu_mult=1
+fromecu_add=-40
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=The engine temp hasto EXCEED this temperature (CLT Sensor) to enable EGO control
 
 [ego2_active_temp_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
+keys=page,offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list,tooltip
 page=2
 offset=144
-toecu_conv_expr=x+40
-fromecu_conv_expr=x-40
+fromecu_mult=1
+fromecu_add=-40
 temp_dep=TRUE
 bind_to_list=temperature,dual_sensors
 _tooltip=The engine temp hasto EXCEED this temperature (CLT Sensor) to enable EGO control
 
 [ego1_active_rpm_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,fromecu_mult,tooltip
 offset=185
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 _tooltip=The Engine RPM must be higher than this point to enable O<sub>2</sub> control
 
 [ego2_active_rpm_entry]
-keys=page,offset,bind_to_list,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=page,offset,bind_to_list,fromecu_mult,tooltip
 page=2
 offset=185
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 bind_to_list=dual_sensors
 _tooltip=The Engine RPM must be higher than this point to enable O<sub>2</sub> control
 
 [ego1_switching_voltage_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,precision,fromecu_mult,tooltip
 offset=187
 precision=2
-toecu_conv_expr=x*(512/10)
-fromecu_conv_expr=x/(512/10)
+fromecu_mult=0.01953125
 _tooltip=This is typically set to the target voltage that you want the mixture to result in. i.e. Stoichiometric mix, 14.7:1 occuras about 0.475 volts on a narrowband O2 sensor,  but beware wideband sensors typically have a 0-5 Volt range, and work with a reversed slope to a narrowband
 
 [ego2_switching_voltage_entry]
-keys=page,offset,precision,bind_to_list,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=page,offset,precision,bind_to_list,fromecu_mult,tooltip
 page=2
 offset=187
 precision=2
-toecu_conv_expr=x*(512/10)
-fromecu_conv_expr=x/(512/10)
+fromecu_mult=0.01953125
 bind_to_list=dual_sensors
 _tooltip=This is typically set to the target voltage that you want the mixture to result in. i.e. Stoichiometric mix, 14.7:1 occuras about 0.475 volts on a narrowband O2 sensor,  but beware wideband sensors typically have a 0-5 Volt range, and work with a reversed slope to a narrowband
 

@@ -257,30 +257,27 @@ _tooltip=Traction control is accomplished by multiple levels of control.  Spark 
 #----- Entries ----------------------------------------------------------------
 
 [edis_multispark_limit_entry]
-keys=offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,fromecu_mult,bind_to_list,tooltip
 offset=21
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 raw_upper=25
 bind_to_list=edis_controls,multispark
 _tooltip=This sets the rpm limit at which EDIS multispark is turned off.  Multispark helps improve combustion and emissions at low RPM's.
 
 [fuel_switch_delay_entry]
-keys=offset,precision,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,raw_upper,fromecu_mult,bind_to_list,tooltip
 offset=93
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=250
 bind_to_list=ve_switch
 _tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the fuel tables are transitioned from VE1 to VE3.
 
 [spark_switch_delay_entry]
-keys=offset,precision,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,raw_upper,fromecu_mult,bind_to_list,tooltip
 offset=87
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=250
 bind_to_list=spark_switch
 _tooltip=This sets the time delay after NOS is enabled or Pin 6 goe's low that the spark tables are transitioned from SP1 to SP2.

@@ -137,7 +137,7 @@ rescaler_frame=ANBIAR_rescale_frame
 #----- Load Entries (MAP/TPS) -----------------------------------------------
 
 [ANBIAR_load_entry]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,precision
+keys=page,fromecu_mult,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,precision
 page=0
 offset=2682
 dl_type=_IMMEDIATE_
@@ -145,8 +145,7 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=1000
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 use_color=TRUE
 _tooltip=The Throttle Position Sensor (TPS) bins in combination with the RPM bins on the bottom of the Alpha-N Base Ignition +Advance / -Retard (ANBIAR) table define the vertexes (points on the ANBIAR map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -154,11 +153,9 @@ _tooltip=The Throttle Position Sensor (TPS) bins in combination with the RPM bin
 #----- RPM Entries ---------------------------------------------------------
 
 [ANBIAR_rpm_entry]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=6
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 size=_U16_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
@@ -170,7 +167,7 @@ _tooltip=The RPM bins in combination with the Throttle Position Sensor (TPS) bin
 #----- ANBIAR-Table Entries -----------------------------------------------------
 
 [ANBIAR_entry]
-keys=page,dl_type,handler,raw_lower,raw_upper,use_color,tooltip,size,fromecu_conv_expr,toecu_conv_expr,precision
+keys=page,dl_type,handler,raw_lower,raw_upper,use_color,tooltip,size,fromecu_mult,precision
 page=0
 offset=3744
 dl_type=_IMMEDIATE_
@@ -178,8 +175,7 @@ handler=_GENERIC_
 raw_lower=-30
 raw_upper=255
 size=_S16_
-toecu_conv_expr=x*(28444/10000)
-fromecu_conv_expr=x/(28444/10000)
+fromecu_mult=0.352112676
 precision=1
 use_color=TRUE
 _tooltip=The Alpha-N Base Ignition +Advance / -Retard (ANBIAR) Entries control the base ignition timing. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.

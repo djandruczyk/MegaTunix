@@ -17,14 +17,13 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load]
-keys=use_color,size,precision,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=use_color,size,precision,raw_lower,raw_upper,fromecu_mult,tooltip
 use_color=TRUE
 size=_S16_
 precision=1
 raw_lower=0
 raw_upper=2500
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=Load Values for staging percentage table
 
 [rpm]
@@ -403,12 +402,11 @@ raw_upper=30
 _tooltip=See MS-2 Extra Manuals
 
 [secondary_enrichment_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
 offset=741
 size=_U16_
 raw_upper=10000
-toecu_conv_expr=x*1000
-fromecu_conv_expr=x/1000
+fromecu_mult=0.001
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
@@ -449,35 +447,32 @@ raw_upper=15000
 _tooltip=See MS-2 Extra Manuals
 
 [orfc_map_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,size,raw_upper,tooltip
+keys=page,offset,fromecu_mult,size,raw_upper,tooltip
 page=1
 offset=835
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=4000
 precision=1
 _tooltip=See MS-2 Extra Manuals
 
 [orfc_tps_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,size,raw_upper,tooltip
+keys=page,offset,fromecu_mult,size,raw_upper,tooltip
 page=1
 offset=837
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=1000
 precision=1
 _tooltip=See MS-2 Extra Manuals
 
 [orfc_clt_entry]
-keys=page,temp_dep,offset,toecu_conv_expr,fromecu_conv_expr,size,raw_lower,raw_upper,bind_to_list,tooltip
+keys=page,temp_dep,offset,fromecu_mult,size,raw_lower,raw_upper,bind_to_list,tooltip
 page=1
 temp_dep=TRUE
 offset=839
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_lower=-400
 raw_upper=4500
 precision=1
@@ -485,11 +480,10 @@ bind_to_list=temperature
 _tooltip=See MS-2 Extra Manuals
 
 [orfc_delay_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=page,offset,fromecu_mult,tooltip
 page=1
 offset=841
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS-2 Extra Manuals
 
@@ -518,25 +512,23 @@ raw_upper=25000
 _tooltip=See MS-2 Extra Manuals
 
 [no2_enable_clt_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,precision,tooltip
+keys=offset,size,fromecu_mult,raw_lower,raw_upper,temp_dep,bind_to_list,precision,tooltip
 offset=714
 size=_S16_
 raw_lower=-400
 raw_upper=4000
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 temp_dep=TRUE
 bind_to_list=temperature
 _tooltip=See MS-2 Extra Manuals
 
 [no2_enable_tps_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
 size=_S16_
 offset=712
 raw_upper=1000
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS-2 Extra Manuals
 
@@ -549,50 +541,45 @@ raw_upper=25000
 _tooltip=See MS-2 Extra Manuals
 
 [pw_at_no2_min_rpm_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
 size=_U16_
 offset=718
-toecu_conv_expr=x/0.000666
-fromecu_conv_expr=x*0.000666
+fromecu_mult=0.000666
 raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
 [pw_at_no2_max_rpm_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
 size=_U16_
 offset=720
-toecu_conv_expr=x/0.000666
-fromecu_conv_expr=x*0.000666
+fromecu_mult=0.000666
 raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
 [n2o_retard_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,bind_to_list,tooltip
+keys=offset,size,fromecu_mult,raw_upper,precision,bind_to_list,tooltip
 size=_S16_
 offset=716
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=500
 precision=1
 bind_to_list=ign
 _tooltip=See MS-2 Extra Manuals
 
 [n2o_launch_delay_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
+keys=offset,fromecu_mult,precision,bind_to_list,tooltip
 offset=722
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 precision=2
 bind_to_list=launch_control
 _tooltip=See MS-2 Extra Manuals
 
 [n2o_flatshift_delay_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
+keys=offset,fromecu_mult,precision,bind_to_list,tooltip
 offset=723
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 precision=2
 bind_to_list=flatshift
 _tooltip=See MS-2 Extra Manuals
@@ -614,41 +601,37 @@ raw_upper=25000
 _tooltip=See MS-2 Extra Manuals
 
 [stage2_delay_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
+keys=offset,fromecu_mult,precision,bind_to_list,tooltip
 offset=729
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 precision=2
 bind_to_list=flatshift
 _tooltip=See MS-2 Extra Manuals
 
 [stage2_retard_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,bind_to_list,tooltip
+keys=offset,size,fromecu_mult,raw_upper,precision,bind_to_list,tooltip
 size=_S16_
 offset=730
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=500
 precision=1
 bind_to_list=ign
 _tooltip=See MS-2 Extra Manuals
 
 [stage2_pw_at_no2_min_rpm_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
 size=_U16_
 offset=732
-toecu_conv_expr=x/0.000666
-fromecu_conv_expr=x*0.000666
+fromecu_mult=0.000666
 raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals
 
 [stage2_pw_at_no2_max_rpm_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
 size=_U16_
 offset=734
-toecu_conv_expr=x/0.000666
-fromecu_conv_expr=x*0.000666
+fromecu_mult=0.000666
 raw_upper=25000
 precision=3
 _tooltip=See MS-2 Extra Manuals

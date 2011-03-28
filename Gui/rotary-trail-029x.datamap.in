@@ -26,17 +26,16 @@ bind_to_list=multi_expression
 _tooltip=The LOAD (TPS/KPA) bins in combination with the RPM bins on the bottom of the Rotary Trailing Table define the vertexes (points on the map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
-keys=toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+keys=fromecu_mult,use_color,tooltip
+fromecu_mult=100
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Rotary Trailing-Table define the vertexes (points on the Rotary Trailing map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [table]
-keys=table_num,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=table_num,fromecu_mult,fromecu_add,precision,use_color,tooltip
 table_num=10
-toecu_conv_expr=(x+10)/(352/1000)
-fromecu_conv_expr=(x*(352/1000))-10
+fromecu_mult=0.352
+fromecu_add=-10
 precision=1
 use_color=TRUE
 _tooltip=The Rotary Trailing Entries are the values of Rotary Trailing in degrees that the ECU should try to maintain.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -445,10 +444,10 @@ bitmask=16
 _tooltip=When FC Trailing is selected, Spark output C controls the Coil-Select input (See http://www.msextra.com/manuals/MS_Extra_Ignition_Hardware_Manual.htm#2rotormod for drawings), and Spark output B will send the trailing timing signal, which also looks like a dizzy signal, but will follow the offset of the main spark map from the above 6x6 table. When FD Trailing is selected this uses Spark output B as rotor 1's trailing spark signal and Spark output C as rotor 2's trailing spark signal rather than using a Coil-Select output.
 
 [fixed_split_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,fromecu_add,bind_to_list,tooltip
 offset=112
 precision=2
-toecu_conv_expr=(x+10)/(352/1000)
-fromecu_conv_expr=(x*(352/1000))-10
+fromecu_mult=0.352
+fromecu_add=-10
 bind_to_list=rotary_trailing
 _tooltip=This is an override to override the split table for testing purposes..

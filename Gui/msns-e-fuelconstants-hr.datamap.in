@@ -257,51 +257,47 @@ divider_offset=149
 register_as=req_fuel_per_cycle_1_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,table_num,fromecu_conv_expr,bind_to_list,register_as
+keys=offset,table_num,fromecu_mult,bind_to_list,register_as
 offset=148
 table_num=0
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 bind_to_list=interdep_0_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
 [req_fuel_per_squirt_1_spin]
-keys=page,offset,table_num,fromecu_conv_expr,bind_to_list,register_as
+keys=page,offset,table_num,fromecu_mult,bind_to_list,register_as
 page=2
 offset=148
 table_num=1
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 bind_to_list=interdep_1_ctrl
 register_as=req_fuel_per_squirt_1_spin
 
 [inj_open_time_1_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=151
 precision=2
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 
 [inj_open_time_2_entry]
-keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=page,offset,precision,fromecu_mult
 page=2
 offset=151
 precision=2
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 
 [batt_correction_1_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=155
 precision=2
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 
 [batt_correction_2_entry]
-keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=page,offset,precision,fromecu_mult
 page=2
 offset=155
 precision=2
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 
 [pwm_limit_1_entry]
 keys=offset
@@ -313,19 +309,17 @@ page=2
 offset=153
 
 [pwm_time_thresh_1_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=154
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [pwm_time_thresh_2_entry]
-keys=page,offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=page,offset,precision,fromecu_mult
 page=2
 offset=154
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [inj_per_cycle_0_spin]
 keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as

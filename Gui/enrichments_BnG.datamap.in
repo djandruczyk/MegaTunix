@@ -22,10 +22,9 @@ keys=use_color
 use_color=TRUE
 
 [accel]
-keys=precision,toecu_conv_expr,fromecu_conv_expr
+keys=precision,fromecu_mult
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -156,25 +155,22 @@ bind_to_list=temperature
 #----- Spin Buttons ----------------------------------------------------------
 
 [cpulse_neg40_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=64
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [cpulse_pos170_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=65
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [prime_pulse_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=119
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [afterstart_enrich_%_entry]
 keys=offset
@@ -190,25 +186,22 @@ offset=68
 group=warmup_bins
 
 [accel_tpstrigthresh_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=83
 precision=1
-toecu_conv_expr=x*(512/100)
-fromecu_conv_expr=x/(512/100)
+fromecu_mult=0.1953125
 
 [accel_enrich_duration_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=84
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [accel_cold_enrich_addon_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=82
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 
 [accel_cold_enrich_multiplier_entry]
 keys=offset
@@ -224,25 +217,23 @@ keys=offset
 offset=85
 
 [ego_active_temp_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list
+keys=offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list
 offset=86
-toecu_conv_expr=x+40
-fromecu_conv_expr=x-40
+fromecu_mult=1
+fromecu_add=-40
 temp_dep=TRUE
 bind_to_list=temperature
 
 [ego_active_rpm_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr
+keys=offset,fromecu_mult
 offset=120
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 
 [ego_switching_voltage_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr
+keys=offset,precision,fromecu_mult
 offset=122
 precision=2
-toecu_conv_expr=x*(512/10)
-fromecu_conv_expr=x/(512/10)
+fromecu_mult=0.01953125
 
 [ego_step_percent_entry]
 keys=offset

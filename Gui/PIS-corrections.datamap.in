@@ -147,7 +147,7 @@ datasource=lambda
 #----- CTS Settings / Corrections ---------------------------------------------
 
 [CTS_bin]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,temp_dep,bind_to_list
+keys=page,fromecu_mult,fromecu_add,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,temp_dep,bind_to_list
 page=0
 offset=414
 dl_type=_IMMEDIATE_
@@ -155,15 +155,15 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=1000
-toecu_conv_expr=(x+459.67)*(5/9)
-fromecu_conv_expr=x*(9/5)-459.67
+fromecu_mult=1.8
+fromecu_add=-459.67
 use_color=TRUE
 _tooltip=The CTS bins are used to determine what corrections or settings are to be applied according to the Coolant Temperature Sensor. NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [CPW]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=394
 dl_type=_IMMEDIATE_
@@ -171,14 +171,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1320
 size=_U16_
-toecu_conv_expr=x*66
-fromecu_conv_expr=x/66
+fromecu_mult=0.015151515
 precision=2
 use_color=TRUE
 _tooltip=The cranking pulse width is used whilst the engines rpm is below the cranking threshold as there is no stable input from sensors during this period. NOTE: every injection event, even when skips are set will inject fuel. No additional opening period will be added. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [ASC_correction]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=1562
 dl_type=_IMMEDIATE_
@@ -186,14 +185,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=65535
 size=_U16_
-toecu_conv_expr=x*(32768/100)
-fromecu_conv_expr=x/(32768/100)
+fromecu_mult=0.003051758
 precision=2
 use_color=TRUE
 _tooltip=The After Start Correction % is a tempory fuel adjustment to help stabilise the engine. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [ASC_duration]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=1582
 dl_type=_IMMEDIATE_
@@ -201,13 +199,11 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=65535
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The After Start Correction duration is the number of injection cycles over which the correction will be tapered to nothing. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [RPM_limit]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2762
 dl_type=_IMMEDIATE_
@@ -215,13 +211,11 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=16384
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The engine speed will be restricted to the entered rpm limits in an effort to prevent destroying cold or cooking engines (requested by engine tuner). Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [CTS_BPW]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=434
 dl_type=_IMMEDIATE_
@@ -229,14 +223,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=65535
 size=_U16_
-toecu_conv_expr=x*(32768/100)
-fromecu_conv_expr=x/(32768/100)
+fromecu_mult=0.003051758
 precision=2
 use_color=TRUE
 _tooltip=The fuel base pulse width can be adjusted to compensate for Coolant Temperature Sensor by entering the amount of correction. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [CTS_IAR]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=454
 dl_type=_IMMEDIATE_
@@ -244,14 +237,13 @@ handler=_GENERIC_
 raw_lower=-30
 raw_upper=30
 size=_S16_
-toecu_conv_expr=x*(28444/10000)
-fromecu_conv_expr=x/(28444/10000)
+fromecu_mult=0.352112676
 precision=1
 use_color=TRUE
 _tooltip=The ignition advance can be adjusted to compensate for Coolant Temperature Sensor by entering the amount of correction required +Advance / -Retard. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [CTS_AE_factor]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=3368
 dl_type=_IMMEDIATE_
@@ -259,8 +251,7 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=65535
 size=_U16_
-toecu_conv_expr=x*(32768/100)
-fromecu_conv_expr=x/(32768/100)
+fromecu_mult=0.003051758
 precision=2
 use_color=TRUE
 _tooltip=The ROC factor determines what proportion of the AE BPW will actually be used. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -268,7 +259,7 @@ _tooltip=The ROC factor determines what proportion of the AE BPW will actually b
 #----- MAT Corrections --------------------------------------------------------
 
 [MAT_bin]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,temp_dep,bind_to_list
+keys=page,fromecu_mult,fromecu_add,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,temp_dep,bind_to_list
 page=0
 offset=990
 dl_type=_IMMEDIATE_
@@ -276,15 +267,15 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=1000
-toecu_conv_expr=(x+459.67)*(5/9)
-fromecu_conv_expr=x*(9/5)-459.67
+fromecu_mult=1.8
+fromecu_add=-459.67
 use_color=TRUE
 _tooltip=The MAT bins are used to determine what corrections or settings are to be applied according to the Coolant Temperature Sensor. NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 temp_dep=TRUE
 bind_to_list=temperature
 
 [MAT_BPW]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=1010
 dl_type=_IMMEDIATE_
@@ -292,14 +283,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=65535
 size=_U16_
-toecu_conv_expr=x*(32768/100)
-fromecu_conv_expr=x/(32768/100)
+fromecu_mult=0.003051758
 precision=2
 use_color=TRUE
 _tooltip=The fuel base pulse width can be adjusted to compensate for Manifold Air Temperature enter the amount of correction. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [MAT_IAR]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=1030
 dl_type=_IMMEDIATE_
@@ -307,8 +297,7 @@ handler=_GENERIC_
 raw_lower=-30
 raw_upper=30
 size=_S16_
-toecu_conv_expr=x*(28444/10000)
-fromecu_conv_expr=x/(28444/10000)
+fromecu_mult=0.352112676
 precision=1
 use_color=TRUE
 _tooltip=The ignition advance can be adjusted to compensate for Manifold Air Temperature enter the amount of correction required +Advance / -Retard. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -316,7 +305,7 @@ _tooltip=The ignition advance can be adjusted to compensate for Manifold Air Tem
 #----- Voltage ----------------------------------------------------------------
 
 [open_delay]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=2114
 dl_type=_IMMEDIATE_
@@ -324,14 +313,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=198
 size=_U16_
-toecu_conv_expr=x*66
-fromecu_conv_expr=x/66
+fromecu_mult=0.015151515
 precision=2
 use_color=TRUE
 _tooltip=The injector pintle takes a finite period of time to fully open that is in proportion to the applied voltage. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [dwell]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=2138
 dl_type=_IMMEDIATE_
@@ -339,18 +327,15 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=660
 size=_U16_
-toecu_conv_expr=x*66
-fromecu_conv_expr=x/66
+fromecu_mult=0.015151515
 precision=2
 use_color=TRUE
 _tooltip=The dwell period of your igntion system is related to the voltage of the charging system. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
-<<<<<<< HEAD:Gui/PIS-corrections.datamap
-=======
 #----- IAC Settings -----------------------------------------------------------
 
 [IAC_CTS_bin]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,fromecu_mult,fromecu_add,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2712
 dl_type=_IMMEDIATE_
@@ -358,13 +343,13 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=300
-toecu_conv_expr=x+273
-fromecu_conv_expr=x-273
+fromecu_mult=1
+fromecu_add=-273
 use_color=TRUE
 _tooltip=The IAC CTS bins are used to determine what idle target and stepper control is to be applied according to the Coolant Temperature Sensor. NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_cranking]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2728
 dl_type=_IMMEDIATE_
@@ -372,13 +357,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=250
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The IAC will be moved to the cranking position during engine crank mode and is applied according to the Coolant Temperature Sensor. NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_minimum]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2746
 dl_type=_IMMEDIATE_
@@ -386,13 +369,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=250
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The IAC minimum acts like a throttle stop and at no time will the stepper move beyond this point and is applied according to the Coolant Temperature Sensor. NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_start]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2736
 dl_type=_IMMEDIATE_
@@ -400,13 +381,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=250
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The IAC start is the return point when the throttle is released and is the step position where idle control will begin to overtake and is applied according to the Coolant Temperature Sensor. NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_idle_rpm]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2720
 dl_type=_IMMEDIATE_
@@ -414,13 +393,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=250
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The IAC idle target is the disired engine rpm and is applied according to the Coolant Temperature Sensor. NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_range]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2708
 dl_type=_IMMEDIATE_
@@ -428,13 +405,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=250
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The IAC range is the maximum number of steps the pintle can move. Typical for GM is 196. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_update]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2710
 dl_type=_IMMEDIATE_
@@ -442,13 +417,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=999
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The IAC will update and take a step at this interval. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_on_throttle]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2744
 dl_type=_IMMEDIATE_
@@ -456,13 +429,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=250
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The IAC will be stepped towards this position (interpolated from the start position at the idle control max tps) until 100% tps. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_hysterisis]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2754
 dl_type=_IMMEDIATE_
@@ -470,13 +441,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=999
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=This is the amount in RPM that the engines idle must deviate from the idle target before action is take to correct the idle. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_rpm_roc]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2756
 dl_type=_IMMEDIATE_
@@ -484,13 +453,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=999
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=This is the maximum RPM rate of change that is to be detected over the update interval otherwise idle control will not be entered. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_max_tps]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,precision
+keys=page,fromecu_mult,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,precision
 page=0
 offset=2758
 dl_type=_IMMEDIATE_
@@ -499,13 +466,12 @@ size=_U16_
 raw_lower=0
 raw_upper=100
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 use_color=TRUE
 _tooltip=The throttle must be returned below this position in order to enter idle control. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [IAC_delay]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2760
 dl_type=_IMMEDIATE_
@@ -513,8 +479,6 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=999
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=The delay period when all circumstances have been met until idle control begins. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
@@ -522,7 +486,7 @@ _tooltip=The delay period when all circumstances have been met until idle contro
 #----- Acceleration Enrichment ------------------------------------------------
 
 [AE_BPW]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=3388
 dl_type=_IMMEDIATE_
@@ -530,14 +494,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1320
 size=_U16_
-toecu_conv_expr=x*66
-fromecu_conv_expr=x/66
+fromecu_mult=0.015151515
 precision=2
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [AE_TPS_bin]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=3336
 dl_type=_IMMEDIATE_
@@ -545,14 +508,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1000
 size=_U16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [AE_RPM_bin]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=3344
 dl_type=_IMMEDIATE_
@@ -560,13 +522,11 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=16384
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [AE_ROC_bin]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=3352
 dl_type=_IMMEDIATE_
@@ -574,14 +534,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1000
 size=_U16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [AE_ROC_factor]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=3360
 dl_type=_IMMEDIATE_
@@ -589,14 +548,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=65535
 size=_U16_
-toecu_conv_expr=x*(32768/100)
-fromecu_conv_expr=x/(32768/100)
+fromecu_mult=0.003051758
 precision=2
 use_color=TRUE
 _tooltip=The ROC factor determines what proportion of the AE BPW will actually be used. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [AE_threshold]
-keys=offset,page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip,precision
+keys=offset,page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip,precision
 page=0
 offset=3334
 dl_type=_IMMEDIATE_
@@ -604,17 +562,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=100
 size=_U16_
-<<<<<<< HEAD:Gui/PIS-corrections.datamap
-=======
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- EGO Settings -----------------------------------------------------------
 
 [EGO_update]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2792
 dl_type=_IMMEDIATE_
@@ -622,13 +576,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=999
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_min_rpm]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2794
 dl_type=_IMMEDIATE_
@@ -636,13 +588,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=16384
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_max_rpm]
-keys=page,toecu_conv_expr,fromecu_conv_expr,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2796
 dl_type=_IMMEDIATE_
@@ -650,13 +600,11 @@ handler=_GENERIC_
 size=_U16_
 raw_lower=0
 raw_upper=16384
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_min_tps]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=2798
 dl_type=_IMMEDIATE_
@@ -665,20 +613,19 @@ raw_lower=0
 raw_upper=1000
 size=_U16_
 >>>>>>> daves:Gui/PIS-corrections.datamap.in
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 use_color=TRUE
 <<<<<<< HEAD:Gui/PIS-corrections.datamap
 precision=1
 tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [AE_cycles]
-keys=offset,page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=offset,page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,use_color,tooltip
 =======
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_max_tps]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=2800
 dl_type=_IMMEDIATE_
@@ -686,14 +633,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1000
 size=_U16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_max_map]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2802
 dl_type=_IMMEDIATE_
@@ -701,13 +647,11 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1000
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_max_map]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2804
 dl_type=_IMMEDIATE_
@@ -715,13 +659,11 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1000
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_uptime]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2806
 dl_type=_IMMEDIATE_
@@ -729,13 +671,11 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1000
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_min_cts]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=2808
 dl_type=_IMMEDIATE_
@@ -743,13 +683,11 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=1000
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_min]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=2810
 dl_type=_IMMEDIATE_
@@ -757,14 +695,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=65535
 size=_U16_
-toecu_conv_expr=x*(32768/100)
-fromecu_conv_expr=x/(32768/100)
+fromecu_mult=0.003051758
 precision=2
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_max]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,precision,use_color,tooltip
 page=0
 offset=2812
 dl_type=_IMMEDIATE_
@@ -772,15 +709,13 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=65535
 size=_U16_
-toecu_conv_expr=x*(32768/100)
-fromecu_conv_expr=x/(32768/100)
+fromecu_mult=0.003051758
 precision=2
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_transient]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
->>>>>>> daves:Gui/PIS-corrections.datamap.in
+keys=page,dl_type,handler,raw_lower,raw_upper,size,use_color,tooltip
 page=0
 offset=3332
 dl_type=_IMMEDIATE_
@@ -788,15 +723,11 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=100
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
-<<<<<<< HEAD:Gui/PIS-corrections.datamap
-=======
 [EGO_proportional]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,use_color,tooltip
 page=0
 offset=2816
 dl_type=_IMMEDIATE_
@@ -804,13 +735,12 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=255
 size=_U16_
-toecu_conv_expr=(128/100)*x
-fromecu_conv_expr=(x*256)/(32768/100)
+fromecu_mult=0.78125
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [EGO_integral]
-keys=page,dl_type,handler,raw_lower,raw_upper,size,toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
+keys=page,dl_type,handler,raw_lower,raw_upper,size,fromecu_mult,use_color,tooltip
 page=0
 offset=2818
 dl_type=_IMMEDIATE_
@@ -818,8 +748,7 @@ handler=_GENERIC_
 raw_lower=0
 raw_upper=255
 size=_U16_
-toecu_conv_expr=(128/100)*x
-fromecu_conv_expr=(x*256)/(32768/100)
+fromecu_mult=0.78125
 use_color=TRUE
 _tooltip=Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 

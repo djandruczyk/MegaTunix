@@ -186,37 +186,35 @@ _tooltip=Enables or Disables the shiftlight function
 #------ Spin Buttons --------------------------------------------------------
 
 [shift_lower_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,fromecu_mult,temp_dep,bind_to_list,tooltip
 offset=18
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 temp_dep=TRUE
 bind_to_list=shift_controls,shiftlight_controller
 _tooltip=The lower threshold for the Shiftlight.
 
 [shift_high_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,fromecu_mult,temp_dep,bind_to_list,tooltip
 offset=19
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 temp_dep=TRUE
 bind_to_list=shift_controls,shiftlight_controller
 _tooltip=The lower threshold for the Shiftlight.
 
 [efan_ontemp_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list,tooltip
 offset=74
-toecu_conv_expr=x+40
-fromecu_conv_expr=x-40
+fromecu_mult=1
+fromecu_add=-40
 temp_dep=TRUE
 bind_to_list=fan_controls,temperature
 _tooltip=The temp at which the cooling fan turns ON at.
 
 [efan_offtemp_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list,tooltip
 offset=75
-toecu_conv_expr=x+40
-fromecu_conv_expr=x-40
+fromecu_mult=1
+fromecu_add=-40
 temp_dep=TRUE
 bind_to_list=fan_controls,temperature
 _tooltip=The temp at which the cooling fan turns OFF at.

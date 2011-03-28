@@ -21,17 +21,16 @@ use_color=TRUE
 _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
-keys=toecu_conv_expr,fromecu_conv_expr,use_color,tooltip
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+keys=fromecu_mult,use_color,tooltip
+fromecu_mult=100
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [sparktable]
-keys=table_num,toecu_conv_expr,fromecu_conv_expr,precision,use_color,tooltip
+keys=table_num,fromecu_mult,fromecu_add,precision,use_color,tooltip
 table_num=1
-toecu_conv_expr=(x+10)/(352/1000)
-fromecu_conv_expr=(x*(352/1000))-10
+fromecu_mult=0.352
+fromecu_add=-10
 precision=1
 use_color=TRUE
 _tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.

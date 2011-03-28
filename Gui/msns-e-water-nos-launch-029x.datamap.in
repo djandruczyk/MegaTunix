@@ -202,10 +202,10 @@ _tooltip=Sets the launch control revlimiter style to be either fuel drop, spark 
 #----- Spinbuttons ----------------------------------------------------------
 
 [water_inj_iat_setpoint_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,temp_dep,bind_to_list,tooltip
+keys=offset,fromecu_mult,fromecu_add,raw_lower,raw_upper,temp_dep,bind_to_list,tooltip
 offset=61
-toecu_conv_expr=x+40
-fromecu_conv_expr=x-40
+fromecu_mult=1
+fromecu_add=-40
 raw_lower=30
 raw_upper=160
 temp_dep=TRUE
@@ -223,19 +223,18 @@ bind_to_list=multi_expression,water_controls
 _tooltip=When the intake manifold pressure is above this point (in KPA) and the IAT setpoint and RPM setpoitns have been reached for water injection, the water injection output will turn on.
 
 [water_inj_rpm_setpoint_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,fromecu_mult,raw_upper,bind_to_list,tooltip
 offset=63
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 raw_upper=120
 bind_to_list=water_controls
 _tooltip=When the engine RPM exceeds this value and the setpoints for the IAT temp and manifold pressure are also reached for water injection, the water injection output will turn on.
 
 [nos_min_clt_temp_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,temp_dep,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,fromecu_mult,fromecu_add,temp_dep,raw_lower,raw_upper,bind_to_list,tooltip
 offset=22
-toecu_conv_expr=x+40
-fromecu_conv_expr=x-40
+fromecu_mult=1
+fromecu_add=-40
 temp_dep=TRUE
 raw_lower=30
 raw_upper=160
@@ -243,38 +242,34 @@ bind_to_list=temperature,nos_params
 _tooltip=The engine temp MUST be above this point for the NOS system to even function.
 
 [nos_min_rpm_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,bind_to_list,tooltip
+keys=offset,fromecu_mult,raw_lower,bind_to_list,tooltip
 offset=23
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 raw_lower=10
 bind_to_list=nos_params
 _tooltip=When the engine RPM is between this an MAX rpm and the other conditions are met, nitrous enrich will be added to the existing fuel pulsewidth.
 
 [nos_max_rpm_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,bind_to_list,tooltip
+keys=offset,fromecu_mult,raw_lower,bind_to_list,tooltip
 offset=24
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 raw_lower=30
 bind_to_list=nos_params
 _tooltip=When the engine RPM is between this an MAX rpm and the other conditions are met, nitrous enrich will be added to the exist fuel pulsewidth.
 
 [nos_min_pw_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,bind_to_list,tooltip
 offset=69
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 bind_to_list=nos_params
 _tooltip=The pulsewidth to add on top of the existing PW at the NOS min RPM. Pulsewidths are interpolated between the two extremes.
 
 [nos_max_pw_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,bind_to_list,tooltip
 offset=70
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 bind_to_list=nos_params
 _tooltip=The pulsewidth to add on top of the existing PW at the NOS max RPM. Pulsewidths are interpolated between the two extremes.
 
@@ -285,30 +280,27 @@ bind_to_list=nos_params
 _tooltip=The minimum TPS value in RAW ADC counts to be reached before Nitrous enrichment can be activated...
 
 [nos_spark_retard_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,raw_upper,bind_to_list,tooltip
 offset=68
 precision=2
-toecu_conv_expr=x/(352/1000)
-fromecu_conv_expr=x*(352/1000)
+fromecu_mult=0.352
 raw_upper=85
 bind_to_list=spark_controls,nos_params
 _tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a spark ECU Personality.
 
 [nos_delay_after_launch_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,bind_to_list,tooltip
 offset=157
 precision=2
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 bind_to_list=launch_controls,nos_params
 _tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a soark firmware.
 
 [nos_flat_shift_delay_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,bind_to_list,tooltip
 offset=158
 precision=2
-toecu_conv_expr=x*100
-fromecu_conv_expr=x/100
+fromecu_mult=0.01
 bind_to_list=launch_controls,nos_params
 _tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a soark firmware.
 
@@ -333,26 +325,23 @@ bind_to_list=multi_expression,nos_params,antilag_controls
 _tooltip=This control and the previous one up determine the range of manifold pressures in which NOS antilag can be used.
 
 [launch_hard_rpm_limit_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,fromecu_mult,bind_to_list,tooltip
 offset=20
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 bind_to_list=launch_controls
 _tooltip=This control Sets the hard revlimit RPM (where fuel is cutoff) for the launch limiter.
 
 [lc_sparkbase_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,fromecu_mult,fromecu_add,bind_to_list,tooltip
 offset=78
-toecu_conv_expr=x-1
-fromecu_conv_expr=x+1
+fromecu_mult=1
+fromecu_add=1
 bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
 _tooltip=This control Sets the base number of sparks used by the round robin spark drop routine.  AFAIK This should be set to 1 higher than your number of cylinders (i.e, set to 5 for a 4 cyl)
 
 [lc_sparkdrop_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,bind_to_list,tooltip
 offset=77
-toecu_conv_expr=x*1
-fromecu_conv_expr=x*1
 bind_to_list=launch_controls,lc_spark_ctrls,nonedis_controls
 _tooltip=This control Sets the number of sparks to drop for each iteration through the sparkbase control above. Thus if you have a 4 cyl , with base-sparks set to 5 and sparkdrop to 1 it'll drop 1 out of 5 ignition events and this will rotate across all cylinders, so that they are all equally dropped.  Use higher numbers for more RPM limiting.
 
@@ -363,56 +352,52 @@ bind_to_list=launch_controls
 _tooltip=This control sets the threshold where the throttle has to be opened MORE than this amount (in raw ADC counts) for Launch control to be activated...
 
 [launch_soft_angle_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,fromecu_add,bind_to_list,tooltip
 offset=42
 precision=2
-toecu_conv_expr=(x/(352/1000))+(284/10)
-fromecu_conv_expr=(x-(284/10))*(352/1000)
+fromecu_mult=0.352
+fromecu_add=-28.4
 bind_to_list=launch_controls,spark_controls
 _tooltip=This control Sets the hard revlimit RPM (where fuel is cutoff) for the launch limiter.
 
 [launch_soft_rpm_limit_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,fromecu_mult,raw_upper,bind_to_list,tooltip
 offset=43
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 raw_upper=60
 bind_to_list=launch_controls,spark_controls
 _tooltip=This control Sets the soft revlimit RPM (where ignition is cut back) for the launch limite
 
 [flat_shift_arming_rpm_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,fromecu_mult,bind_to_list,tooltip
 offset=124
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 bind_to_list=launch_controls
 _tooltip=This is the arming RPM for flat shift mode. Allows you to hold the throttle wide open during shifting as it'll try to control engine revs to prevent turbo spooldown during shifting.  NOTE: This is rather hard on turbo's
 
 [flat_shift_retard_above_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,fromecu_mult,raw_lower,raw_upper,bind_to_list,tooltip
 offset=140
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 raw_lower=30
 raw_upper=60
 bind_to_list=launch_controls,spark_controls
 _tooltip=This control and the previous one work together and this enables a timing retard if the engine goes above this RPM (at least that's what I think it does, but the docs are iffy on that point)
 
 [flat_shift_retard_angle_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,fromecu_add,raw_upper,bind_to_list,tooltip
 offset=141
 precision=2
-toecu_conv_expr=(x/(352/1000))+(284/10)
-fromecu_conv_expr=(x-(284/10))*(352/1000)
+fromecu_mult=0.352
+fromecu_add=-28.4
 raw_upper=156
 bind_to_list=launch_controls,spark_controls
 _tooltip=This control and the previous two work together and this is the amount that timnig is pulled back during flat shift to control engine RPM.
 
 [flat_shift_hard_revlimit_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,fromecu_mult,raw_lower,raw_upper,bind_to_list,tooltip
 offset=128
-toecu_conv_expr=x/100
-fromecu_conv_expr=x*100
+fromecu_mult=100
 raw_lower=30
 raw_upper=60
 bind_to_list=launch_controls

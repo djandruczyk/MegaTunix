@@ -196,50 +196,44 @@ _tooltip=Sets the EGO Sensor type and configuration
 #----- Entries --------------------------------------------------------------
 
 [fidle_temp_entry]
-keys=offset,precision,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,temp_dep,bind_to_list,tooltip
+keys=offset,precision,size,raw_lower,raw_upper,fromecu_mult,temp_dep,bind_to_list,tooltip
 offset=602
 size=_S16_
 raw_lower=-400
 raw_upper=3000
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 temp_dep=TRUE
 bind_to_list=temperature,solenoid_common
 _tooltip=This sets point when fast idle valve changes state. Below this temp it's active, above it it's not.
 
 [time_step_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,bind_to_list,tooltip
 offset=548
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 bind_to_list=iac_specific
 _tooltip=This sets the nominal time between steps. (too low and the stepper motor misses steps and looses position)
 
 [accel_step_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,fromecu_mult,bind_to_list,tooltip
 offset=549
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 bind_to_list=iac_specific
 _tooltip=According to the docs this isn't used yet.
 
 [min_steps_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,bind_to_list,tooltip
 offset=550
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 precision=1
 bind_to_list=iac_specific
 _tooltip=This is the minimum number of steps for the IAC actuator to move, so it isn't jiggling betwen steps and potentially loosing position or count.
 
 [pwm_freq_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,require_reboot,tooltip
+keys=offset,fromecu_mult,raw_lower,raw_upper,bind_to_list,require_reboot,tooltip
 offset=551
-toecu_conv_expr=x/80
-fromecu_conv_expr=x*80
+fromecu_mult=80
 raw_lower=1
 raw_upper=10
 precision=1
@@ -248,11 +242,9 @@ bind_to_list=pwm_specific
 _tooltip=This is the PWM Drive frequency from 80-800 hertz in 80Hz steps.
 
 [start_val_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,require_reboot,tooltip
+keys=offset,size,raw_upper,bind_to_list,require_reboot,tooltip
 offset=552
 size=_S16_
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 raw_upper=4000
 precision=1
 require_reboot=TRUE
@@ -260,31 +252,26 @@ bind_to_list=iac_common
 _tooltip=This is the number of steps the pintle is retracted to the "wide-open" position when MegaSquirt is powered up, It it used in all temperatures.
 
 [cranking_pos_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,size,raw_upper,bind_to_list,tooltip
 offset=556
 size=_S16_
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 raw_upper=4000
 bind_to_list=iac_common
 _tooltip=This is the start value position for cranking. If set below the values in the warmup table, then this is used, and once the engine is started it will taper to the run value over the time set in the fields below. 
 
 [crank_to_run_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,size,raw_upper,bind_to_list,tooltip
 offset=558
 size=_S16_
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 raw_upper=32767
 bind_to_list=iac_common
 _tooltip=This is the amount of time spent tapering from the cranking position to the run position once the engine has started.  Higher times means it takes longer for the high idle to taper off.
 
 [hysteresis_entry]
-keys=offset,precision,size,temp_dep,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,precision,size,temp_dep,fromecu_mult,raw_lower,raw_upper,bind_to_list,tooltip
 offset=554
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_lower=-400
 raw_upper=3000
 precision=1
@@ -293,11 +280,10 @@ bind_to_list=iac_common,temperature
 _tooltip=This refers to the amount the temp has to change before the motor is moved to the new position. It prevents excessive wear by having the motor constantly adjust, 5-10 deg is a good default.
 
 [cold_temp_entry]
-keys=offset,precision,size,temp_dep,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,precision,size,temp_dep,fromecu_mult,raw_lower,raw_upper,bind_to_list,tooltip
 offset=560
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_lower=-400
 raw_upper=3000
 temp_dep=TRUE
@@ -306,31 +292,26 @@ bind_to_list=iac_common,temperature
 _tooltip=This defines the initial coolant temp below which afterstart taper will be extended based on the cold position and cold taper time. It should be set fairly cold, generally not more than 20degF.
 
 [cold_position_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,size,raw_upper,bind_to_list,tooltip
 offset=562
 size=_S16_
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 raw_upper=4000
 bind_to_list=iac_common
 _tooltip=This defines the idle PWM values at which time based afterstart tapering is initiated. Note that this value must be higher than the lowest value in your IAC PWM table or you can get strange results
 
 [cold_taper_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,bind_to_list,tooltip
+keys=offset,size,raw_upper,bind_to_list,tooltip
 offset=564
 size=_S16_
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 raw_upper=32768
 bind_to_list=iac_common
 _tooltip=This defines the number of second the megasquirt takes to move from the cold position to the position indicated in the IAC step table for the current coolant temp. See http://www.megamanual.com/mt28.htm#sg
 
 [max_retard_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,precision,fromecu_mult,tooltip
 offset=18
 precision=1
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=This sets the maximum spark retard used for the revlimiter when the ECU is controlling spark
 
 [lower_revlimit_entry]
@@ -348,11 +329,10 @@ raw_upper=15000
 _tooltip=This is the RPM at which the revlimit is initially applied
 
 [nb_switching_voltage_entry]
-keys=offset,precision,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,precision,fromecu_mult,tooltip
 precision=3
 offset=598
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 _tooltip=This is the AFR that the Narrow-Band O<sub>2</sub> sensor(s) toggles between rich and lean, typically 14.7 AFR.
 
 [ign_events_entry]
@@ -361,10 +341,8 @@ offset=595
 _tooltip=This is the number of ignition events that must take place before an EGO correction can occur.  This limits the correction speed, to avoid oscillation.
 
 [ego_step_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,tooltip
+keys=offset,tooltip
 offset=596
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 _tooltip=This is the percentage max percentage change in fueling the EGO control algorithm can make per "step".  This controls how fast the algorithm can alter fueling.   beware of setting this too high as it can cause oscillation. Too low and it takes a long time to reach the "goal.
 
 [ego_auth_entry]
@@ -373,11 +351,10 @@ offset=597
 _tooltip=This is the max correction allowed in percentage of change, So even if the target isn't reached, it won't exceed this value.
 
 [ego_clt_entry]
-keys=offset,precision,size,temp_dep,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,bind_to_list,tooltip
+keys=offset,precision,size,temp_dep,fromecu_mult,raw_lower,raw_upper,bind_to_list,tooltip
 offset=604
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_lower=-400
 raw_upper=3000
 temp_dep=TRUE
@@ -394,69 +371,57 @@ bind_to_list=ego_ctrl
 _tooltip=This is the minimum RPM to be reched before closed loop EGO correction will take place. NOTE: other conditions below and above must ALSO be met.
 
 [ego_tps_entry]
-keys=offset,precision,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,size,raw_upper,fromecu_mult,bind_to_list,tooltip
 offset=590
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=1000
 precision=1
 bind_to_list=ego_ctrl
 _tooltip=This is the level which the TPS must be BELOW before closed loop EGO correction will take place. NOTE: other conditions below and above must ALSO be met.
 
 [ego_map_entry]
-keys=offset,precision,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,precision,size,raw_upper,fromecu_mult,bind_to_list,tooltip
 offset=738
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=3000
 precision=1
 bind_to_list=ego_ctrl
 _tooltip=This is the level which the Manifold PRessure (MAP) must be BELOW before closed loop EGO correction will take place. NOTE: other conditions above must ALSO be met.
 
 [wb_prop_entry]
-keys=offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,bind_to_list,tooltip
 offset=901
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 raw_upper=100
 bind_to_list=wb_ego
 _tooltip=This is the Proportional gain for the EGO feedback loop. The constant that defines the proportional relationship between the EGO set-point and the range of values seen from the sensor. 100% is a typical value. It defines the response to the immediate difference between the set-point AFR and that measured from the sensor.
 
 [wb_integ_entry]
-keys=offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,bind_to_list,tooltip
 offset=902
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 raw_upper=100
 bind_to_list=wb_pid
 _tooltip=This is the Integral gain for the EGO feedback loop. This corrects for a portion of the on-going average correction over time (the integral), allowing the loop to set into a stable value, rather than oscillating. A typical value is 20%.
 
 [wb_deriv_entry]
-keys=offset,raw_upper,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,raw_upper,bind_to_list,tooltip
 offset=903
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 raw_upper=100
 bind_to_list=wb_pid
 _tooltip=This is the Derivative gain for the EGO feedback loop. This predicts the future difference between the AFR target and the set-point, based on the rate of change of the error at present. The larger the derivative term, the more rapidly the controller responds to changes in the process's output. However, for relatively slow processes,lower numbers mean more stable output, and a value of 0 is typical for MegaSquirt® (i.e., don't use the derivative term at all).
 
 [wb_transport1_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,size,bind_to_list,tooltip
 offset=904
 size=_U16_
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 bind_to_list=wb_transport
 _tooltip=This is primarily the response time of the sensor plus the fastest time between injector and exhaust valve. 
 
 [wb_transport2_entry]
-keys=offset,size,toecu_conv_expr,fromecu_conv_expr,bind_to_list,tooltip
+keys=offset,size,bind_to_list,tooltip
 offset=906
 size=_U16_
-toecu_conv_expr=x*1
-fromecu_conv_expr=x/1
 bind_to_list=wb_transport
 _tooltip=This is the effect of rpm and map and as well as the exhaust geometry. 
 

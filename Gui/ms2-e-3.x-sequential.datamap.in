@@ -140,129 +140,117 @@ tooltip=NOTE: When set to Additional Drivers, PWM is not available for ANY injec
 #----- Entries ---------------------------------------------------------------
 
 [injadv1_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_lower,raw_upper,tooltip
 offset=416
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 raw_lower=-3600
 raw_upper=7200
 tooltip=See MS2-Extra Manuals
 
 [injadv2_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_lower,raw_upper,tooltip
 offset=418
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 raw_lower=-3600
 raw_upper=7200
 tooltip=See MS2-Extra Manuals
 
 [injadv3_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_lower,raw_upper,tooltip
 offset=420
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 raw_lower=-3600
 raw_upper=7200
 tooltip=See MS2-Extra Manuals
 
 [injstagedadv1_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_lower,raw_upper,tooltip
 offset=422
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 raw_lower=-3600
 raw_upper=7200
 tooltip=See MS2-Extra Manuals
 
 [injstagedadv2_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_lower,raw_upper,tooltip
 offset=424
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 raw_lower=-3600
 raw_upper=7200
 tooltip=See MS2-Extra Manuals
 
 [injstagedadv3_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_lower,raw_upper,tooltip
 offset=426
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 raw_lower=-3600
 raw_upper=7200
 tooltip=See MS2-Extra Manuals
 
 [injcrankadv1_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_lower,raw_upper,tooltip
 offset=620
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 raw_lower=-3600
 raw_upper=7200
 tooltip=See MS2-Extra Manuals
 
 [injcrankadv2_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_lower,raw_upper,tooltip
 offset=622
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 raw_lower=-3600
 raw_upper=7200
 tooltip=See MS2-Extra Manuals
 
 [injOpen3_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_upper,tooltip
 offset=628
 size=_U16_
-toecu_conv_expr=x*1000
-fromecu_conv_expr=x/1000
+fromecu_mult=0.001
 precision=3
 raw_upper=25500
 tooltip=See MS2-Extra Manuals
 
 [injOpen4_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_upper,tooltip
 offset=632
 size=_U16_
-toecu_conv_expr=x*1000
-fromecu_conv_expr=x/1000
+fromecu_mult=0.001
 precision=3
 raw_upper=25500
 tooltip=See MS2-Extra Manuals
 
 [battFac3_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_upper,tooltip
 offset=630
 size=_U16_
-toecu_conv_expr=x/0.000166667
-fromecu_conv_expr=x*0.000166667
+fromecu_mult=0.000166667
 precision=3
 raw_upper=6000
 tooltip=See MS2-Extra Manuals
 
 [battFac4_entry]
-keys=offset,size,precision,toecu_conv_expr,fromecu_conv_expr,raw_upper,tooltip
+keys=offset,size,precision,fromecu_mult,raw_upper,tooltip
 offset=634
 size=_U16_
-toecu_conv_expr=x/0.000166667
-fromecu_conv_expr=x*0.000166667
+fromecu_mult=0.000166667
 precision=3
 raw_upper=6000
 tooltip=See MS2-Extra Manuals

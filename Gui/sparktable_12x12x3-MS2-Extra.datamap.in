@@ -17,29 +17,25 @@ dl_type=_IMMEDIATE_
 handler=_GENERIC_
 
 [load_1n2]
-keys=size,raw_upper,toecu_conv_expr,fromecu_conv_expr,use_color,precision,tooltip
+keys=size,raw_upper,fromecu_mult,use_color,precision,tooltip
 size=_S16_
 raw_upper=4000
 use_color=TRUE
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_1n2]
-keys=size,toecu_conv_expr,fromecu_conv_expr,raw_upper,use_color,tooltip
+keys=size,raw_upper,use_color,tooltip
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 raw_upper=15000
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_1]
-keys=size,table_num,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,precision,use_color,tooltip
+keys=size,table_num,fromecu_mult,raw_lower,raw_upper,precision,use_color,tooltip
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 table_num=6
 raw_lower=-100
 raw_upper=900
@@ -48,10 +44,9 @@ use_color=TRUE
 _tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_2]
-keys=size,table_num,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,precision,use_color,tooltip
+keys=size,table_num,fromecu_mult,raw_lower,raw_upper,precision,use_color,tooltip
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 table_num=7
 raw_lower=-100
 raw_upper=900
@@ -60,33 +55,29 @@ use_color=TRUE
 _tooltip=The Spark Advance Entries control the engine igntion timing.  The values are in degrees BTDC (Before Top Dead Center), so a negative value is actually an ATDC value. The range is from 80deg BTDC to 10deg ATDC.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [load_3]
-keys=page,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,use_color,precision,tooltip
+keys=page,size,raw_upper,fromecu_mult,use_color,precision,tooltip
 page=3
 size=_S16_
 raw_upper=4000
 use_color=TRUE
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_3]
-keys=page,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,use_color,tooltip
+keys=page,size,raw_upper,use_color,tooltip
 page=3
 size=_U16_
-toecu_conv_expr=x/1
-fromecu_conv_expr=x*1
 raw_upper=15000
 use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_3]
-keys=page,table_num,size,toecu_conv_expr,fromecu_conv_expr,raw_lower,raw_upper,precision,use_color,tooltip
+keys=page,table_num,size,fromecu_mult,raw_lower,raw_upper,precision,use_color,tooltip
 page=3
 size=_S16_
 table_num=8
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_lower=-100
 raw_upper=900
 precision=1
@@ -375,29 +366,26 @@ rescaler_frame=SP_SP3_rescale_frame
 #----- Temp Timing Controls --------------------------------------------------
 
 [SP1_trimangle_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,use_color
+keys=offset,fromecu_mult,precision,use_color
 offset=170
 group=spark_1
-toecu_conv_expr=x/(352/1000)
-fromecu_conv_expr=x*(352/1000)
+fromecu_mult=0.352
 precision=2
 use_color=FALSE
 
 [SP2_trimangle_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,use_color
+keys=offset,fromecu_mult,precision,use_color
 offset=170
 group=spark_2
-toecu_conv_expr=x/(352/1000)
-fromecu_conv_expr=x*(352/1000)
+fromecu_mult=0.352
 precision=2
 use_color=FALSE
 
 [SP3_trimangle_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,use_color
+keys=offset,fromecu_mult,precision,use_color
 offset=170
 group=spark_3
-toecu_conv_expr=x/(352/1000)
-fromecu_conv_expr=x*(352/1000)
+fromecu_mult=0.352
 precision=2
 use_color=FALSE
 
@@ -423,29 +411,26 @@ precision=2
 use_color=FALSE
 
 [SP1_triggerangle_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,use_color
+keys=offset,fromecu_mult,precision,use_color
 offset=168
 group=spark_1
-toecu_conv_expr=x*(284/100)
-fromecu_conv_expr=x/(284/100)
+fromecu_mult=0.352112676
 precision=2
 use_color=FALSE
 
 [SP2_triggerangle_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,use_color
+keys=offset,fromecu_mult,precision,use_color
 offset=168
 group=spark_2
-toecu_conv_expr=x*(284/100)
-fromecu_conv_expr=x/(284/100)
+fromecu_mult=0.352112676
 precision=2
 use_color=FALSE
 
 [SP3_triggerangle_entry]
-keys=offset,toecu_conv_expr,fromecu_conv_expr,precision,use_color
+keys=offset,fromecu_mult,precision,use_color
 offset=168
 group=spark_3
-toecu_conv_expr=x*(284/100)
-fromecu_conv_expr=x/(284/100)
+fromecu_mult=0.352112676
 precision=2
 use_color=FALSE
 

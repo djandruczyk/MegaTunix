@@ -259,23 +259,21 @@ raw_upper=100
 _tooltip=See MS2-Extra Manuals
 
 [obp_max_boost_entry]
-keys=page,offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=page,offset,size,fromecu_mult,raw_upper,precision,tooltip
 page=0
 offset=571
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=10000
 precision=1
 _tooltip=See MS2-Extra Manuals
 
 [obp_hysteresis_entry]
-keys=page,offset,size,toecu_conv_expr,fromecu_conv_expr,raw_upper,precision,tooltip
+keys=page,offset,size,fromecu_mult,raw_upper,precision,tooltip
 page=0
 offset=573
 size=_S16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=1000
 precision=1
 _tooltip=See MS2-Extra Manuals
@@ -301,25 +299,23 @@ raw_upper=15000
 _tooltip=See MS2-Extra Manuals
 
 [launch_retard_to_entry]
-keys=page,offset,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,size,raw_lower,raw_upper,fromecu_mult,precision,tooltip
 page=2
 offset=676
 size=_S16_
 raw_lower=-900
 raw_upper=1800
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS2-Extra Manuals
 
 [launch_enable_tps_entry]
-keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,fromecu_mult,precision,tooltip
 page=2
 offset=680
 size=_S16_
 raw_upper=1000
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS2-Extra Manuals
 
@@ -360,14 +356,13 @@ raw_upper=15000
 _tooltip=See MS2-Extra Manuals
 
 [flatshift_retard_to_entry]
-keys=page,offset,size,raw_lower,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,size,raw_lower,raw_upper,fromecu_mult,precision,tooltip
 page=2
 offset=689
 size=_S16_
 raw_lower=-900
 raw_upper=1800
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS2-Extra Manuals
 
@@ -386,12 +381,11 @@ offset=934
 _tooltip=See MS2-Extra Manuals
 
 [knock_ignored_above_entry]
-keys=page,offset,size,raw_upper,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,size,raw_upper,fromecu_mult,precision,tooltip
 page=0
 offset=936
 size=_U16_
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 raw_upper=3000
 precision=1
 _tooltip=See MS2-Extra Manuals
@@ -413,56 +407,50 @@ raw_upper=10000
 _tooltip=See MS2-Extra Manuals
 
 [max_retard_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,fromecu_mult,precision,tooltip
 page=0
 offset=928
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS2-Extra Manuals
 
 [retard_check_time_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,fromecu_mult,precision,tooltip
 page=0
 offset=931
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS2-Extra Manuals
 
 [retard_step_size_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,fromecu_mult,precision,tooltip
 page=0
 offset=929
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS2-Extra Manuals
 
 [advance_check_time_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,fromecu_mult,precision,tooltip
 page=0
 offset=932
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS2-Extra Manuals
 
 [advance_step_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,tooltip
+keys=page,offset,fromecu_mult,precision,tooltip
 page=0
 offset=930
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 _tooltip=See MS2-Extra Manuals
 
 [recovery_advance_entry]
-keys=page,offset,toecu_conv_expr,fromecu_conv_expr,precision,bind_to_list,tooltip
+keys=page,offset,fromecu_mult,precision,bind_to_list,tooltip
 page=0
 offset=933
-toecu_conv_expr=x*10
-fromecu_conv_expr=x/10
+fromecu_mult=0.1
 precision=1
 bind_to_list=knock_aggressive
 _tooltip=See MS2-Extra Manuals
