@@ -244,7 +244,7 @@ G_MODULE_EXPORT void add_columns(GtkTreeView *view, GtkWidget *widget)
 
 /*!
  \brief cell_edited() is called whenever an editable cell on the user outputs
- treeviews are modified. This function will vheck and verify the user input
+ treeviews are modified. This function will check and verify the user input
  is valid, and process it and send it to the ECU
  \param cell (GtkCellRendererText *)  pointer to the cell that was edited
  \param path_string (const gchar *) tree_path for the treeview (see GTK+ docs)
@@ -275,6 +275,8 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	gfloat x = 0.0;
 	gfloat tmpf = 0.0;
 	void * evaluator = NULL;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
 	gint result = 0;
 	gint canID = 0;
 	gint page = 0;
@@ -347,7 +349,8 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
 		else
 			upper = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),UPPER);
-		evaluator = (void *)DATA_GET(object,"dl_evaluator");
+		multiplier = DATA_GET(object,"fromecu_mult");
+		adder = DATA_GET(object,"fromecu_add");
 		temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
 
 		if (new < lower)
@@ -357,22 +360,18 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",new,precision), -1);
 
-		if (!evaluator)
-		{
-			evaluator = evaluator_create_f(DATA_GET(object,"toecu_conv_expr"));
-			if (!evaluator)
-			{
-				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": cell_edited()\n\t Evaluator could NOT be created, expression is \"%s\"\n",(gchar *)DATA_GET(object,"toecu_conv_expr")));
-				DATA_SET_FULL(object,"dl_evaluator",(gpointer)evaluator,evaluator_destroy_f);
-			}
-		}
 		/* First conver to fahrenheit temp scale if temp dependant */
 		if (temp_dep)
 			x = temp_to_ecu_f(new);
 		else
 			x = new;
 		/* Then evaluate it in reverse.... */
-		tmpf = evaluator_evaluate_x_f(evaluator,x);
+		if ((multiplier) && (adder))
+			tmpf = (x - (*adder))/(*multiplier);
+		else if (multiplier)
+			tmpf = x/(*multiplier);
+		else
+			tmpf = x;
 		/* Then if it used a lookuptable,  reverse map it if possible
 		 * to determine the ADC reading we need to send to ECU
 		 */
@@ -426,7 +425,8 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 	gint x = 0;
 	gfloat tmpf = 0.0;
 	gfloat result = 0.0;
-	gchar * expr = NULL;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
 	gint precision = 0;
 	gboolean temp_dep = FALSE;
 	gboolean looptest = FALSE;
@@ -537,33 +537,21 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 
 			else /* Non multi-expression variable */
 			{
-				evaluator =(void *)DATA_GET(object,"ul_evaluator");
-				if (!evaluator) /* Not created yet */
-				{
-					expr = DATA_GET(object,"fromecu_conv_expr");
-					if (expr == NULL)
-					{
-						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t \"fromecu_conv_expr\" was NULL for control \"%s\", EXITING!\n",(gchar *)DATA_GET(object,"internal_name")));
-						exit (-3);
-					}
-					evaluator = evaluator_create_f(expr);
-					if (!evaluator)
-					{
-						dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_model_from_view()\n\t Creating of evaluator for function \"%s\" FAILED!!!\n\n",expr));
-						DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy_f);
-					}
-					assert(evaluator);
-
-				}
-				else
-					assert(evaluator);
-
 				/* TEXT ENTRY part */
 				if (DATA_GET(object,"lookuptable"))
 					x = lookup_data_f(object,cur_val);
 				else
 					x = cur_val;
-				tmpf = evaluator_evaluate_x_f(evaluator,x);
+
+				multiplier = DATA_GET(object,"fromecu_mult");
+				adder = DATA_GET(object,"fromecu_add");
+				if ((multiplier) && (adder))
+					tmpf = (x * (*multiplier)) + (*adder);
+				else if (multiplier)
+					tmpf = (x * (*multiplier));
+				else
+					tmpf = x;
+
 				if (temp_dep)
 					result = temp_to_host_f(tmpf);
 				else
@@ -580,7 +568,12 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = lookup_data_f(object,hys_val);
 					else
 						x = hys_val;
-					tmpf = evaluator_evaluate_x_f(evaluator,x);
+					if ((multiplier) && (adder))
+						tmpf = (x * (*multiplier)) + (*adder);
+					else if (multiplier)
+						tmpf = (x * (*multiplier));
+					else
+						tmpf = x;
 					if (temp_dep)
 						result = temp_to_host_f(tmpf);
 					else
@@ -598,7 +591,12 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = lookup_data_f(object,ulimit_val);
 					else
 						x = ulimit_val;
-					tmpf = evaluator_evaluate_x_f(evaluator,x);
+					if ((multiplier) && (adder))
+						tmpf = (x * (*multiplier)) + (*adder);
+					else if (multiplier)
+						tmpf = (x * (*multiplier));
+					else
+						tmpf = x;
 					if (temp_dep)
 						result = temp_to_host_f(tmpf);
 					else

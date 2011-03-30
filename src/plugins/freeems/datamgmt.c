@@ -179,7 +179,7 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 		if (OBJ_GET(widget,"location_id"))
 		{
 			locID = (GINT)OBJ_GET(widget,"location_id");
-			g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);;
+			g_return_if_fail(freeems_find_mtx_page(locID, &page));
 		}
 		else if (OBJ_GET(widget,"page"))
 			page = (GINT)OBJ_GET(widget,"page");
@@ -196,7 +196,7 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 		if (DATA_GET(container,"location_id"))
 		{
 			locID = (GINT)DATA_GET(container,"location_id");
-			g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);;
+			g_return_if_fail(freeems_find_mtx_page(locID, &page));
 		}
 		else if (DATA_GET(container,"page"))
 			page = (GINT)DATA_GET(container,"page");
