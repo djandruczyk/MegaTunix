@@ -74,7 +74,7 @@ _tooltip=The IAC Step bins are the position of the IAC Stepper motor at the spec
 [ipwm]
 keys=size,raw_upper,use_color,tooltip
 size=_S16_
-raw_upper=100
+raw_upper=500
 use_color=FALSE
 _tooltip=The IAC PWM bins are the dutycycle of the PWM Idle valve (DC %) at the specified temp (far left column)
 
@@ -312,24 +312,28 @@ offset=748
 group=puddling
 
 [ase_cold_percent_entry]
-keys=offset,size
+keys=offset,size,raw_upper
 size=_S16_
 offset=574
+raw_upper=400
 
 [ase_hot_percent_entry]
-keys=offset,size
+keys=offset,size,raw_upper
 size=_S16_
 offset=576
+raw_upper=400
 
 [ase_cold_count_entry]
-keys=offset,size
+keys=offset,size,raw_upper
 size=_S16_
 offset=578
+raw_upper=32767
 
 [ase_hot_count_entry]
-keys=offset,size
+keys=offset,size,raw_upper
 size=_S16_
 offset=580
+raw_upper=32767
 
 [cold_prime_entry]
 keys=offset,size,precision,raw_upper,fromecu_mult

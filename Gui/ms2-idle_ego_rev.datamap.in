@@ -412,16 +412,18 @@ bind_to_list=wb_pid
 _tooltip=This is the Derivative gain for the EGO feedback loop. This predicts the future difference between the AFR target and the set-point, based on the rate of change of the error at present. The larger the derivative term, the more rapidly the controller responds to changes in the process's output. However, for relatively slow processes,lower numbers mean more stable output, and a value of 0 is typical for MegaSquirt® (i.e., don't use the derivative term at all).
 
 [wb_transport1_entry]
-keys=offset,size,bind_to_list,tooltip
+keys=offset,size,raw_upper,bind_to_list,tooltip
 offset=904
 size=_U16_
+raw_upper=65535
 bind_to_list=wb_transport
 _tooltip=This is primarily the response time of the sensor plus the fastest time between injector and exhaust valve. 
 
 [wb_transport2_entry]
-keys=offset,size,bind_to_list,tooltip
+keys=offset,size,raw_upper,bind_to_list,tooltip
 offset=906
 size=_U16_
+raw_upper=65535
 bind_to_list=wb_transport
 _tooltip=This is the effect of rpm and map and as well as the exhaust geometry. 
 

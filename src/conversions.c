@@ -75,7 +75,6 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		printf(__FILE__"%s %s\n",_(": convert_before_download, FATAL ERROR, size undefined for widget %s "),glade_get_widget_name(widget));
 
 	size = (DataSize)OBJ_GET(widget,"size");
-
 	if (OBJ_GET(widget,"raw_lower"))
 		lower = (gfloat)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
@@ -215,6 +214,8 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	void *evaluator = NULL;
 	gint tmpi = 0;
 	DataSize size = 0;
+	gfloat lower = 0.0;
+	gfloat upper = 0.0;
 	gboolean fromecu_complex = FALSE;
 	guint i = 0;
 	gint table_num = -1;
@@ -238,6 +239,22 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_after_upload()\n\tCan NOT locate \"get_ecu_data\" function pointer in plugins, BUG!\n"));
 	g_static_mutex_lock(&mutex);
 
+	size = (DataSize)OBJ_GET(widget,"size");
+	if (size == 0)
+	{
+		printf(_("BIG PROBLEM, size undefined! widget %s, default to U08 \n"),(gchar *)glade_get_widget_name(widget));
+		size = MTX_U08;
+	}
+
+	if (OBJ_GET(widget,"raw_lower"))
+		lower = (gfloat)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+	else
+		lower = (gfloat)get_extreme_from_size(size,LOWER);
+	if (OBJ_GET(widget,"raw_upper"))
+		upper = (gfloat)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+	else
+		upper = (gfloat)get_extreme_from_size(size,UPPER);
+
 	fromecu_complex = (GBOOLEAN)OBJ_GET(widget,"fromecu_complex");
 	if (fromecu_complex)
 	{
@@ -247,14 +264,21 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		return handle_complex_expr_obj(G_OBJECT(widget),NULL,UPLOAD);
 	}
 
-	size = (DataSize)OBJ_GET(widget,"size");
-	if (size == 0)
-		printf(_("BIG PROBLEM, size undefined! widget %s \n"),(gchar *)glade_get_widget_name(widget));
 
 	if (OBJ_GET(widget,"lookuptable"))
 		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data_f(widget));
 	else
 		tmpi = get_ecu_data_f(widget);
+	if (tmpi < lower)
+	{
+		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value  out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f)!!\n",(gchar *)glade_get_widget_name(widget),lower,lower,tmpi,upper));
+		tmpi = lower;
+	}
+	if (tmpi > upper)
+	{
+		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f)!!\n",(gchar *)glade_get_widget_name(widget),lower,lower,tmpi,upper));
+		tmpi = upper;
+	}
 	/* MULTI EXPRESSION ONLY! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
