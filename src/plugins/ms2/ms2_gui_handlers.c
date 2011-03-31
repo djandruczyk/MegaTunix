@@ -141,8 +141,8 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * group_2_update = NULL;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
-	gfloat * fromecu_mult = NULL;
-	gfloat * fromecu_add = NULL;
+	gfloat * multiplier = NULL;
+	gfloat * adder = NULL;
 	gint precision = 0;
 	gchar ** vector = NULL;
 	guint i = 0;
@@ -203,7 +203,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | (bitval << bitshift);
 			ms_send_to_ecu_f(canID, page, offset, size, tmp, TRUE);
 			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_LOWER_COL,&lower,UO_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_FROMECU_MULT_COL,&fromecu_mult,UO_FROMECU_ADD_COL,&fromecu_add,-1);
+			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_RAW_LOWER_COL,&lower,UO_RAW_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_FROMECU_MULT_COL,&multiplier,UO_FROMECU_ADD_COL,&adder,-1);
 
 			/* Send the "size" of the offset to the ecu */
 			if (OBJ_GET(widget,"size_offset"))
@@ -226,47 +226,18 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
-				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-				/*if (toecu_conv)
-				{
-					eval = evaluator_create_f(toecu_conv);
-					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
-					if (upper)
-					{
-						tmpf2 = g_ascii_strtod(upper,NULL);
-						tmpf = evaluator_evaluate_x_f(eval,tmpf2);
-						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
-						if (tmpbuf)
-							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
-						//printf("combo_handler thresh has dl conv expr and upper limit of %f\n",tmpf);
-					}
-					if (lower)
-					{
-						tmpf2 = g_ascii_strtod(lower,NULL);
-						tmpf = evaluator_evaluate_x_f(eval,tmpf2);
-						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
-						if (tmpbuf)
-							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
-						//printf("combo_handler thresh has dl conv expr and lower limit of %f\n",tmpf);
-					}
-				}
-				else
-					OBJ_SET(tmpwidget,"raw_upper",upper);
-
-				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-				if (fromecu_conv)
-				{
-					eval = evaluator_create_f(fromecu_conv);
-					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
-				}
-				*/
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				OBJ_SET(tmpwidget,"fromecu_mult",fromecu_mult);
-				OBJ_SET(tmpwidget,"fromecu_add",fromecu_add);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("combo_handler thresh widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
+				OBJ_SET(tmpwidget,"raw_lower",lower);
+				OBJ_SET(tmpwidget,"raw_upper",upper);
+				if (multiplier)
+					OBJ_SET(tmpwidget,"fromecu_mult",multiplier);
+				else
+					OBJ_SET(tmpwidget,"fromecu_mult",NULL);
+				if (adder)
+					OBJ_SET(tmpwidget,"fromecu_add",adder);
+				else
+					OBJ_SET(tmpwidget,"fromecu_add",NULL);
 				update_widget_f(tmpwidget,NULL);
 			}
 			tmpbuf = (gchar *)OBJ_GET(widget,"hyst_widget");
@@ -274,52 +245,20 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
-			/*
-				OBJ_SET(tmpwidget,"dl_evaluator",NULL);
-				if (toecu_conv)
-				{
-					eval = evaluator_create_f(toecu_conv);
-					OBJ_SET_FULL(tmpwidget,"dl_evaluator",eval,evaluator_destroy_f);
-					if (upper)
-					{
-						tmpf2 = g_ascii_strtod(upper,NULL);
-						tmpf = evaluator_evaluate_x_f(eval,tmpf2);
-						tmpbuf = OBJ_GET(tmpwidget,"raw_upper");
-						if (tmpbuf)
-							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_upper",g_strdup_printf("%f",tmpf));
-						//printf("combo_handler hyst has dl conv expr and upper limit of %f\n",tmpf);
-					}
-					if (lower)
-					{
-						tmpf2 = g_ascii_strtod(lower,NULL);
-						tmpf = evaluator_evaluate_x_f(eval,tmpf2);
-						tmpbuf = OBJ_GET(tmpwidget,"raw_lower");
-						if (tmpbuf)
-							g_free(tmpbuf);
-						OBJ_SET(tmpwidget,"raw_lower",g_strdup_printf("%f",tmpf));
-						//printf("combo_handler hyst has dl conv expr and lower limit of %f\n",tmpf);
-					}
-				}
-				else
-					OBJ_SET(tmpwidget,"raw_upper",upper);
-
-				OBJ_SET(tmpwidget,"ul_evaluator",NULL);
-				if (fromecu_conv)
-				{
-					eval = evaluator_create_f(fromecu_conv);
-					OBJ_SET_FULL(tmpwidget,"ul_evaluator",eval,evaluator_destroy_f);
-				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
-				*/
-				OBJ_SET(tmpwidget,"fromecu_mult",fromecu_mult);
-				OBJ_SET(tmpwidget,"fromecu_add",fromecu_add);
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				/*printf ("combo_handler hyst widget to size '%i', toecu_conv '%s' fromecu_conv '%s' precision '%i'\n",size,toecu_conv,fromecu_conv,precision);*/
+				OBJ_SET(tmpwidget,"raw_lower",lower);
+				OBJ_SET(tmpwidget,"raw_upper",upper);
+				if (multiplier)
+					OBJ_SET(tmpwidget,"fromecu_mult",multiplier);
+				else
+					OBJ_SET(tmpwidget,"fromecu_mult",NULL);
+				if (adder)
+					OBJ_SET(tmpwidget,"fromecu_add",adder);
+				else
+					OBJ_SET(tmpwidget,"fromecu_add",NULL);
 				update_widget_f(tmpwidget,NULL);
 			}
-			g_free(lower);
-			g_free(upper);
 			g_free(range);
 			return TRUE;
 			break;

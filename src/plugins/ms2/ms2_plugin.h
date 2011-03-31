@@ -48,6 +48,8 @@ EXTERN gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 EXTERN GtkWidget *(*mask_entry_new_with_mask_f)(gchar *);
 EXTERN void (*register_widget_f)(gchar *, GtkWidget *);
 EXTERN void (*bind_to_lists_f)(GtkWidget * , gchar * );
+EXTERN void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
+EXTERN gfloat (*convert_after_upload_f)(GtkWidget *);
 /* Function pointers */
 
 /* Prototypes */

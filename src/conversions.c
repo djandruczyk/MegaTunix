@@ -178,14 +178,14 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 				return_value = (GINT)value;
 		}
 		dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",glade_get_widget_name(widget),value,return_value));
-		if (return_value > upper)
+		if (return_value > upper) 
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (ecu units, evaluated)!!\n",upper));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",upper,lower,value,upper));
 			return_value = upper;
 		}
 		if (return_value < lower)
 		{
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (ecu units, evaluated)!!\n",lower));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",lower,lower,value,upper));
 			return_value = lower;
 		}
 	}

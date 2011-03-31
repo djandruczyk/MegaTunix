@@ -296,6 +296,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,"hys_offset",
 			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"hyst_widget",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"inactive_fg",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"index",
@@ -344,6 +346,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"real_upper",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"range_label",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"raw_lower",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"raw_upper",
@@ -362,6 +366,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"show_prefix",
 			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"size_offset",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"size",
 			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,"source",
@@ -395,6 +401,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"te_table_num",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"te_tables",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"thresh_widget",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"toggle_labels",
 			GINT_TO_POINTER(MTX_STRING));
