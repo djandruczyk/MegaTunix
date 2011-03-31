@@ -209,6 +209,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 {
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	static gint (*get_ecu_data_f)(gpointer);
+	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
 	gfloat return_value = 0.0;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
@@ -235,8 +236,12 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 
 	if (!get_ecu_data_f)
-		if(!get_symbol("get_ecu_data",(void *)&get_ecu_data_f))
-			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_after_upload()\n\tCan NOT locate \"get_ecu_data\" function pointer in plugins, BUG!\n"));
+		get_symbol("get_ecu_data",(void *)&get_ecu_data_f);
+	if (!send_to_ecu_f)
+		get_symbol("send_to_ecu",(void *)&send_to_ecu_f);
+	g_return_val_if_fail(get_ecu_data_f,0.0);
+	g_return_val_if_fail(send_to_ecu_f,0.0);
+
 	g_static_mutex_lock(&mutex);
 
 	size = (DataSize)OBJ_GET(widget,"size");
@@ -271,13 +276,15 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		tmpi = get_ecu_data_f(widget);
 	if (tmpi < lower)
 	{
-		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value  out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f)!!\n",(gchar *)glade_get_widget_name(widget),lower,lower,tmpi,upper));
+		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value  out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(gchar *)glade_get_widget_name(widget),lower,lower,tmpi,upper));
 		tmpi = lower;
+		send_to_ecu_f(widget,tmpi,TRUE);
 	}
 	if (tmpi > upper)
 	{
-		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f)!!\n",(gchar *)glade_get_widget_name(widget),lower,lower,tmpi,upper));
+		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(gchar *)glade_get_widget_name(widget),lower,lower,tmpi,upper));
 		tmpi = upper;
+		send_to_ecu_f(widget,tmpi,TRUE);
 	}
 	/* MULTI EXPRESSION ONLY! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
