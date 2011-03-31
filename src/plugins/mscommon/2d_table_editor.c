@@ -23,7 +23,6 @@
 #include <mscommon_plugin.h>
 #include <mscommon_gui_handlers.h>
 #include <stdlib.h>
-#include <mtxmatheval.h>
 
 extern gconstpointer *global_data;
 
@@ -248,8 +247,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)),g_free);
 			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)),g_free);
-			OBJ_SET(entry,"toecu_conv_expr",firmware->te_params[table_num]->x_toecu_conv_expr);
-			OBJ_SET(entry,"fromecu_conv_expr",firmware->te_params[table_num]->x_fromecu_conv_expr);
+			OBJ_SET(entry,"fromecu_mult",firmware->te_params[table_num]->x_fromecu_mult);
+			OBJ_SET(entry,"fromecu_add",firmware->te_params[table_num]->x_fromecu_add);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -300,8 +299,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)),g_free);
 			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)),g_free);
-			OBJ_SET(entry,"toecu_conv_expr",firmware->te_params[table_num]->y_toecu_conv_expr);
-			OBJ_SET(entry,"fromecu_conv_expr",firmware->te_params[table_num]->y_fromecu_conv_expr);
+			OBJ_SET(entry,"fromecu_mult",firmware->te_params[table_num]->y_fromecu_mult);
+			OBJ_SET(entry,"fromecu_add",firmware->te_params[table_num]->y_fromecu_add);
 			OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 			OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -405,6 +404,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;
 	GList ***ecu_widgets = NULL;
+	gfloat *mult = NULL;
+	gfloat *adder = NULL;
+	gfloat raw_lower = 0;
+	gfloat raw_upper = 0;
 	gint x_mult = 0;
 	gint y_mult = 0;
 	gint page = 0;
@@ -414,7 +417,6 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	gfloat tmpf = 0.0;
 	gint rows = 0;
 	gboolean embedded = FALSE;
-	void *evaluator = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -587,8 +589,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_lower)),g_free);
 		OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->x_raw_upper)),g_free);
-		OBJ_SET(entry,"toecu_conv_expr",firmware->te_params[table_num]->x_toecu_conv_expr);
-		OBJ_SET(entry,"fromecu_conv_expr",firmware->te_params[table_num]->x_fromecu_conv_expr);
+		OBJ_SET(entry,"fromecu_mult",firmware->te_params[table_num]->x_fromecu_mult);
+		OBJ_SET(entry,"fromecu_add",firmware->te_params[table_num]->x_fromecu_add);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->x_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->x_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
@@ -642,8 +644,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_lower)),g_free);
 		OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",(firmware->te_params[table_num]->y_raw_upper)),g_free);
-		OBJ_SET(entry,"toecu_conv_expr",firmware->te_params[table_num]->y_toecu_conv_expr);
-		OBJ_SET(entry,"fromecu_conv_expr",firmware->te_params[table_num]->y_fromecu_conv_expr);
+		OBJ_SET(entry,"fromecu_mult",firmware->te_params[table_num]->y_fromecu_mult);
+		OBJ_SET(entry,"fromecu_add",firmware->te_params[table_num]->y_fromecu_add);
 		OBJ_SET(entry,"precision",GINT_TO_POINTER(firmware->te_params[table_num]->y_precision));
 		OBJ_SET(entry,"size",GINT_TO_POINTER(firmware->te_params[table_num]->y_size));
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
@@ -705,15 +707,56 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
 
-	evaluator = evaluator_create_f(firmware->te_params[table_num]->x_fromecu_conv_expr);
-	firmware->te_params[table_num]->x_2d_lower_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->x_raw_lower);
-	firmware->te_params[table_num]->x_2d_upper_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->x_raw_upper);
-	evaluator_destroy_f(evaluator);
+	mult = firmware->te_params[table_num]->x_fromecu_mult;
+	adder = firmware->te_params[table_num]->x_fromecu_add;
+	raw_lower = firmware->te_params[table_num]->x_raw_lower;
+	raw_upper = firmware->te_params[table_num]->x_raw_upper;
 
-	evaluator = evaluator_create_f(firmware->te_params[table_num]->y_fromecu_conv_expr);
-	firmware->te_params[table_num]->y_2d_lower_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->y_raw_lower);
-	firmware->te_params[table_num]->y_2d_upper_limit = evaluator_evaluate_x_f(evaluator,firmware->te_params[table_num]->y_raw_upper);
-	evaluator_destroy_f(evaluator);
+	if ((mult) && (adder))
+	{
+		firmware->te_params[table_num]->x_2d_lower_limit = 
+			(raw_lower * (*mult)) + (*adder);
+		firmware->te_params[table_num]->x_2d_upper_limit = 
+			(raw_upper * (*mult)) + (*adder);
+	}
+	else if (mult)
+	{
+		firmware->te_params[table_num]->x_2d_lower_limit = 
+			raw_lower * (*mult);
+		firmware->te_params[table_num]->x_2d_upper_limit = 
+			raw_upper * (*mult);
+	}
+	else
+	{
+		firmware->te_params[table_num]->x_2d_lower_limit = raw_lower;
+		firmware->te_params[table_num]->x_2d_upper_limit = raw_upper;
+	}
+
+	/* Y */
+	mult = firmware->te_params[table_num]->y_fromecu_mult;
+	adder = firmware->te_params[table_num]->y_fromecu_add;
+	raw_lower = firmware->te_params[table_num]->y_raw_lower;
+	raw_upper = firmware->te_params[table_num]->y_raw_upper;
+
+	if ((mult) && (adder))
+	{
+		firmware->te_params[table_num]->y_2d_lower_limit = 
+			(raw_lower * (*mult)) + (*adder);
+		firmware->te_params[table_num]->y_2d_upper_limit = 
+			(raw_upper * (*mult)) + (*adder);
+	}
+	else if (mult)
+	{
+		firmware->te_params[table_num]->y_2d_lower_limit = 
+			raw_lower * (*mult);
+		firmware->te_params[table_num]->y_2d_upper_limit = 
+			raw_upper * (*mult);
+	}
+	else
+	{
+		firmware->te_params[table_num]->y_2d_lower_limit = raw_lower;
+		firmware->te_params[table_num]->y_2d_upper_limit = raw_upper;
+	}
 
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),
 			firmware->te_params[table_num]->x_2d_lower_limit,

@@ -334,6 +334,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	gchar **toecu_conv_exprs = NULL;
 	gchar **precisions = NULL;
 	gchar **expr_keys = NULL;
+	gfloat tmpf = 0.0;
 	gint major = 0;
 	gint minor = 0;
 	gint len1 = 0;
@@ -888,10 +889,16 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"x_units\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_name",&firmware->te_params[i]->x_name))
 			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"x_name\" variable not found in interrogation profile, ERROR\n"));
-		if(!cfg_read_string(cfgfile,section,"x_fromecu_conv_expr",&firmware->te_params[i]->x_fromecu_conv_expr))
-			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_fromecu_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
-		if(!cfg_read_string(cfgfile,section,"x_toecu_conv_expr",&firmware->te_params[i]->x_toecu_conv_expr))
-			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_toecu_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
+		if(cfg_read_float(cfgfile,section,"x_fromecu_mult",&tmpf))
+		{
+			firmware->te_params[i]->x_fromecu_mult = g_new0(gfloat,1 );
+			*(firmware->te_params[i]->x_fromecu_mult) = tmpf;
+		}
+		if(cfg_read_float(cfgfile,section,"x_fromecu_add",&tmpf))
+		{
+			firmware->te_params[i]->x_fromecu_add = g_new0(gfloat,1 );
+			*(firmware->te_params[i]->x_fromecu_add) = tmpf;
+		}
 		if(!cfg_read_int(cfgfile,section,"x_raw_lower",&firmware->te_params[i]->x_raw_lower))
 			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_raw_lower\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"x_raw_upper",&firmware->te_params[i]->x_raw_upper))
@@ -902,10 +909,16 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"y_units\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"y_name",&firmware->te_params[i]->y_name))
 			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"y_name\" variable not found in interrogation profile, ERROR\n"));
-		if(!cfg_read_string(cfgfile,section,"y_fromecu_conv_expr",&firmware->te_params[i]->y_fromecu_conv_expr))
-			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_fromecu_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
-		if(!cfg_read_string(cfgfile,section,"y_toecu_conv_expr",&firmware->te_params[i]->y_toecu_conv_expr))
-			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_toecu_conv_expr\" variable not found in interrogation profile, te_table %i, ERROR\n",i));
+		if(cfg_read_float(cfgfile,section,"y_fromecu_mult",&tmpf))
+		{
+			firmware->te_params[i]->y_fromecu_mult = g_new0(gfloat,1 );
+			*(firmware->te_params[i]->y_fromecu_mult) = tmpf;
+		}
+		if(cfg_read_float(cfgfile,section,"y_fromecu_add",&tmpf))
+		{
+			firmware->te_params[i]->y_fromecu_add = g_new0(gfloat,1 );
+			*(firmware->te_params[i]->y_fromecu_add) = tmpf;
+		}
 		if(!cfg_read_int(cfgfile,section,"y_raw_lower",&firmware->te_params[i]->y_raw_lower))
 			dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_raw_lower\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		if(!cfg_read_int(cfgfile,section,"y_raw_upper",&firmware->te_params[i]->y_raw_upper))
@@ -1554,10 +1567,10 @@ G_MODULE_EXPORT TE_Params * initialize_te_params(void)
 	te_params->y_name = NULL;
 	te_params->x_units = NULL;
 	te_params->y_units = NULL;
-	te_params->x_toecu_conv_expr = NULL;
-	te_params->x_fromecu_conv_expr = NULL;
-	te_params->y_toecu_conv_expr = NULL;
-	te_params->y_fromecu_conv_expr = NULL;
+	te_params->x_fromecu_mult = NULL;
+	te_params->x_fromecu_add = NULL;
+	te_params->y_fromecu_mult = NULL;
+	te_params->y_fromecu_add = NULL;
 	te_params->gauge_temp_dep = FALSE;
 	te_params->title = NULL;
 

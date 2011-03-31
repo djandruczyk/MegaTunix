@@ -1199,10 +1199,10 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 	cleanup(te_params->bind_to_list);
 	cleanup(te_params->x_axis_label);
 	cleanup(te_params->y_axis_label);
-	cleanup(te_params->x_toecu_conv_expr);
-	cleanup(te_params->y_toecu_conv_expr);
-	cleanup(te_params->x_fromecu_conv_expr);
-	cleanup(te_params->y_fromecu_conv_expr);
+	cleanup(te_params->x_fromecu_mult);
+	cleanup(te_params->y_fromecu_mult);
+	cleanup(te_params->x_fromecu_add);
+	cleanup(te_params->y_fromecu_add);
 	cleanup(te_params->x_source);
 	cleanup(te_params->y_source);
 	cleanup(te_params->x_name);

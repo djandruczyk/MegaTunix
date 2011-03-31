@@ -331,8 +331,8 @@ struct _TE_Params
 	gint x_2d_lower_limit;
 	gint x_2d_upper_limit;
 	DataSize x_size;	/*! enumeration size for the var */
-	gchar *x_toecu_conv_expr;	/*! dl conv expr */
-	gchar *x_fromecu_conv_expr;	/*! ul conv expr */
+	gfloat *x_fromecu_mult;	/*! ul conv multiplier */
+	gfloat *x_fromecu_add;	/*! ul conv adder */
 	gchar *x_source;	/*! column datsource */
 	gint x_precision;	/*! column precisions */
 	gchar *x_name;	/*! column name */
@@ -348,8 +348,8 @@ struct _TE_Params
 	gint y_2d_lower_limit;
 	gint y_2d_upper_limit;
 	DataSize y_size;	/*! enumeration size for the var */
-	gchar *y_toecu_conv_expr;	/*! dl conv expr */
-	gchar *y_fromecu_conv_expr;	/*! ul conv expr */
+	gfloat *y_fromecu_mult;	/*! ul conv multiplier */
+	gfloat *y_fromecu_add;	/*! ul conv adder */
 	gchar *y_source;	/*! column datsource */
 	gint y_precision;	/*! column precisions */
 	gchar *y_name;	/*! column name */
