@@ -317,6 +317,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 			}
 		}
+		/*
 		eval = NULL;
 		expr = NULL;
 		if (DATA_GET(object,"fromecu_conv_expr") && !(DATA_GET(object,"ul_evaluator")))
@@ -398,6 +399,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			DATA_SET_FULL(object,"real_upper",g_strdup_printf("%i",tmpi),g_free);
 
 		}
+	*/
 		if(cfg_read_string(cfgfile,section,"internal_names",&tmpbuf))
 		{
 			vector = g_strsplit(tmpbuf,",",-1); 
