@@ -153,19 +153,19 @@ y_bincount
   - Integer, the size of the Y Axis (LOAD) array
 
 x_multi_source,y_mult_source,z_multi_source
-  - Boolean, mutually exclusive with {x,y,z}_source
+  - Boolean, mutually exclusive with [x,y,z]_source
 
 x_sources,y_sources,z_sources
   - textual lists of sources separated by comma. These are RT vars sourcenames
 
 x_multi_expr_keys,y_multi_expr_keys,z_multi_expr_keys
   - textual list of hashtable keys used to index the values in 
-{xyz}_sources, {xyz}_suffixes {xyz}_conv_exprs, and {xyz}_precisions
+[xyz]_sources, [xyz]_suffixes [xyz]_mults, [xyz]_adds, and [xyz]_precisions
 
 x_source_key,y_source_key,z_source_key
   - This is a special (can be anything) name of a key into the global
   sources_hash hashtable used to extract the current value from that hash.  
-  That value is the KEY to the {xyz}_multi_expr_keys hashtable, and is used
+  That value is the KEY to the [xyz]_multi_expr_keys hashtable, and is used
   so that the tables will track and update when different sensor tables are
   chosen during runtime.
 
@@ -175,15 +175,9 @@ x_suffix,y_suffix,z_suffix
 x_suffixes,y_suffixes,z_suffixes
   - comma separated list of textual suffix used for the 3D view indicators
 
-x_[du]l_conv_expr,y_[du]l_conv_expr,z_[du]l_conv_expr
-  - textual representation of a mathematical expression used for 
-  calculating the Z-axis markers and the runtime/edit value markers
-  on the 3D view.
-
-x_[du]l_conv_exprs,y_[du]l_conv_exprs,z_[du]l_conv_exprs
-  - LIST of textual representation of a mathematical expression used for 
-  calculating the Z-axis markers and the runtime/edit value markers
-  on the 3D view. Comma separated.
+[xyz]_fromecu_mult,[xyz]_fromecu_add
+  - Multiplier and adder as applied on a raw value from the ecu as follows
+   (RAW * multipler) + Adder
 
 x_disp_precision,y_disp_precision,z_disp_precision,
   - Integer, the number of decimal places to show.
