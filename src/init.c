@@ -1103,12 +1103,12 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 	cleanup(table_params->x_suffixes);
 	cleanup(table_params->y_suffixes);
 	cleanup(table_params->z_suffixes);
-	cleanup(table_params->x_fromecu_conv_exprs);
-	cleanup(table_params->y_fromecu_conv_exprs);
-	cleanup(table_params->z_fromecu_conv_exprs);
-	cleanup(table_params->x_toecu_conv_exprs);
-	cleanup(table_params->y_toecu_conv_exprs);
-	cleanup(table_params->z_toecu_conv_exprs);
+	cleanup(table_params->x_fromecu_mults);
+	cleanup(table_params->y_fromecu_mults);
+	cleanup(table_params->z_fromecu_mults);
+	cleanup(table_params->x_fromecu_adds);
+	cleanup(table_params->y_fromecu_adds);
+	cleanup(table_params->z_fromecu_adds);
 	cleanup(table_params->x_precisions);
 	cleanup(table_params->y_precisions);
 	cleanup(table_params->z_precisions);

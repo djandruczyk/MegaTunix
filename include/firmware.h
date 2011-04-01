@@ -204,12 +204,15 @@ struct _Table_Params
 	gchar *x_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *x_sources;	/*! comma sep list of sources */
 	gchar *x_suffixes;	/*! comma sep list of suffixes */
-	gchar *x_fromecu_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *x_toecu_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *x_fromecu_mults;	/*! comma sep list of x conv. multiplier */
+	gchar *x_fromecu_adds;	/*! comma sep list of x conv. adders */
+	gfloat *x_fromecu_mult;	/*! multiplier */
+	gfloat *x_fromecu_add;	/*! multiplier */
 	gchar *x_precisions;	/*! comma sep list of precisions */
 	GHashTable *x_multi_hash;/*! Hash table to store the above */
 	gchar *x_source;	/*! X datasource for 3d displays */
 	gchar *x_suffix;	/*! text suffix used on 3D view */
+	gboolean x_complex;	/*! If using complex math */
 	gchar *x_fromecu_conv_expr;	/*! x conversion expression */
 	gchar *x_toecu_conv_expr;	/*! x conversion expression */
 	void *x_ul_eval;	/*! evaluator for x variable */
@@ -228,12 +231,15 @@ struct _Table_Params
 	gchar *y_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *y_sources;	/*! comma sep list of sources */
 	gchar *y_suffixes;	/*! comma sep list of suffixes */
-	gchar *y_fromecu_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *y_toecu_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *y_fromecu_mults;	/*! comma sep list of x conv. multipliers */
+	gchar *y_fromecu_adds;	/*! comma sep list of x conv. adders */
+	gfloat *y_fromecu_mult;	/*! multiplier */
+	gfloat *y_fromecu_add;	/*! multiplier */
 	gchar *y_precisions;	/*! comma sep list of precisions */
 	GHashTable *y_multi_hash;/*! Hash table to store the above */
 	gchar *y_source;	/*! Y datasource for 3d displays */
 	gchar *y_suffix;	/*! text suffix used on 3D view */
+	gboolean y_complex;	/*! If using complex math */
 	gchar *y_fromecu_conv_expr;	/*! y conversion expression */
 	gchar *y_toecu_conv_expr;	/*! y conversion expression */
 	void *y_ul_eval;	/*! evaluator for y variable */
@@ -251,12 +257,15 @@ struct _Table_Params
 	gchar *z_multi_expr_keys;/*! keys to x_multi_hash */
 	gchar *z_sources;	/*! comma sep list of sources */
 	gchar *z_suffixes;	/*! comma sep list of suffixes */
-	gchar *z_fromecu_conv_exprs;	/*! comma sep list of x conv. expressions */
-	gchar *z_toecu_conv_exprs;	/*! comma sep list of x conv. expressions */
+	gchar *z_fromecu_mults;	/*! comma sep list of x conv. multiplies */
+	gchar *z_fromecu_adds;	/*! comma sep list of x conv. adders */
+	gfloat *z_fromecu_mult;	/*! multiplier */
+	gfloat *z_fromecu_add;	/*! multiplier */
 	gchar *z_precisions;	/*! comma sep list of precisions */
 	GHashTable *z_multi_hash;/*! Hash table to store the above */
 	gchar *z_source;	/*! Z datasource for 3d displays */
 	gchar *z_suffix;	/*! text suffix used on 3D view */
+	gboolean z_complex;	/*! If using complex math */
 	gchar *z_fromecu_conv_expr;	/*! z conversion expression */
 	gchar *z_toecu_conv_expr;	/*! z conversion expression */
 	void *z_ul_eval;	/*! evaluator for z variable */

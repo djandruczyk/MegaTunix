@@ -511,6 +511,8 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 	gint offset = 0;
 	gfloat result = 0.0;
 	gfloat x = 0.0;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
 	GHashTable *sources_hash = NULL;
@@ -547,9 +549,15 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 	else
 		x = (float)raw_realtime[offset];
 
-	 result = evaluator_evaluate_x(multi->ul_eval,x);
-
-	 return result;
+	multiplier = multi->fromecu_mult;
+	adder = multi->fromecu_add;
+	if ((multiplier) && (adder))
+		result = (x * (*multiplier)) + (*adder);
+	else if (multiplier)
+		result = (x * (*multiplier));
+	else
+		result = x;
+	return result;
 }
 
 

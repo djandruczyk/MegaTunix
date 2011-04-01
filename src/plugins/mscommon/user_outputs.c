@@ -23,7 +23,6 @@
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
 #include <multi_expr_loader.h>
-#include <mtxmatheval.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
 #include <user_outputs.h>
@@ -274,7 +273,6 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	gint precision = 0;
 	gfloat x = 0.0;
 	gfloat tmpf = 0.0;
-	void * evaluator = NULL;
 	gfloat *multiplier = NULL;
 	gfloat *adder = NULL;
 	gint result = 0;
@@ -328,7 +326,14 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",new,precision), -1);
 
 		/* Then evaluate it in reverse.... */
-		tmpf = evaluator_evaluate_x_f(multi->dl_eval,new);
+		multiplier = multi->fromecu_mult;
+		adder = multi->fromecu_add;
+		if ((multiplier) && (adder))
+			tmpf = (new - (*adder))/(*multiplier);
+		else if (multiplier)
+			tmpf = new/(*multiplier);
+		else
+			tmpf = new;
 		/* Then if it used a lookuptable, reverse map it if possible 
 		 * to determine the ADC reading we need to send to ECU
 		 */
@@ -336,7 +341,6 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			result = direct_reverse_lookup_f(multi->lookuptable,(gint)tmpf);
 		else
 			result = (gint)tmpf;
-
 	}
 	else
 	{
@@ -430,7 +434,6 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 	gint precision = 0;
 	gboolean temp_dep = FALSE;
 	gboolean looptest = FALSE;
-	void * evaluator = NULL;
 	gint mtx_temp_units;
 	gchar * tmpbuf = NULL;
 	gchar * key = NULL;
@@ -480,15 +483,22 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 				if (!multi)
 					continue;
 
-				evaluator = multi->ul_eval;
-				assert(evaluator);
 
 				/* TEXT ENTRY part */
 				if (multi->lookuptable)
 					x = direct_lookup_data_f(multi->lookuptable,cur_val);
 				else
 					x = cur_val;
-				tmpf = evaluator_evaluate_x_f(evaluator,x);
+
+				multiplier = multi->fromecu_mult;
+				adder = multi->fromecu_add;
+				if ((multiplier) && (adder))
+					tmpf = (x * (*multiplier)) + (*adder);
+				else if (multiplier)
+					tmpf = (x * (*multiplier));
+				else
+					tmpf = x;
+
 				if (temp_dep)
 					result = temp_to_host_f(tmpf);
 				else
@@ -505,7 +515,13 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = direct_lookup_data_f(multi->lookuptable,hys_val);
 					else
 						x = hys_val;
-					tmpf = evaluator_evaluate_x_f(evaluator,x);
+					if ((multiplier) && (adder))
+						tmpf = (x * (*multiplier)) + (*adder);
+					else if (multiplier)
+						tmpf = (x * (*multiplier));
+					else
+						tmpf = x;
+
 					if (temp_dep)
 						result = temp_to_host_f(tmpf);
 					else
@@ -523,7 +539,12 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 						x = direct_lookup_data_f(multi->lookuptable,ulimit_val);
 					else
 						x = ulimit_val;
-					tmpf = evaluator_evaluate_x_f(evaluator,x);
+					if ((multiplier) && (adder))
+						tmpf = (x * (*multiplier)) + (*adder);
+					else if (multiplier)
+						tmpf = (x * (*multiplier));
+					else
+						tmpf = x;
 					if (temp_dep)
 						result = temp_to_host_f(tmpf);
 					else

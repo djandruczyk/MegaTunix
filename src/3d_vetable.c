@@ -388,7 +388,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		{
 			OBJ_SET_FULL(ve_view->x_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->x_source_key),g_free);
 			OBJ_SET_FULL(ve_view->x_objects[i],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->x_multi_expr_keys),g_free);
-			OBJ_SET_FULL(ve_view->x_objects[i],"fromecu_conv_exprs",g_strdup(firmware->table_params[table_num]->x_fromecu_conv_exprs),g_free);
+			OBJ_SET_FULL(ve_view->x_objects[i],"fromecu_mults",g_strdup(firmware->table_params[table_num]->x_fromecu_mults),g_free);
+			OBJ_SET_FULL(ve_view->x_objects[i],"fromecu_adds",g_strdup(firmware->table_params[table_num]->x_fromecu_adds),g_free);
 		}
 	}
 	ve_view->y_objects = g_new0(GObject *, firmware->table_params[table_num]->y_bincount);
@@ -404,7 +405,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		{
 			OBJ_SET_FULL(ve_view->y_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->y_source_key),g_free);
 			OBJ_SET_FULL(ve_view->y_objects[i],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->y_multi_expr_keys),g_free);
-			OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_conv_exprs",g_strdup(firmware->table_params[table_num]->y_fromecu_conv_exprs),g_free);
+			OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_mults",g_strdup(firmware->table_params[table_num]->y_fromecu_adds),g_free);
+			OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_adds",g_strdup(firmware->table_params[table_num]->y_fromecu_adds),g_free);
 		}
 	}
 
@@ -430,7 +432,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			{
 				OBJ_SET_FULL(ve_view->z_objects[i][j],"source_key",g_strdup(firmware->table_params[table_num]->z_source_key),g_free);
 				OBJ_SET_FULL(ve_view->z_objects[i][j],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->z_multi_expr_keys),g_free);
-				OBJ_SET_FULL(ve_view->z_objects[i][j],"fromecu_conv_exprs",g_strdup(firmware->table_params[table_num]->z_fromecu_conv_exprs),g_free);
+				OBJ_SET_FULL(ve_view->z_objects[i][j],"fromecu_mults",g_strdup(firmware->table_params[table_num]->z_fromecu_mults),g_free);
+				OBJ_SET_FULL(ve_view->z_objects[i][j],"fromecu_adds",g_strdup(firmware->table_params[table_num]->z_fromecu_adds),g_free);
 			}
 			if (firmware->table_params[table_num]->z_depend_on)
 			{

@@ -19,7 +19,6 @@
 #include <defines.h>
 #include <init.h>
 #include <multi_expr_loader.h>
-#include <mtxmatheval.h>
 #include <enums.h>
 #include <keyparser.h>
 #include <stdlib.h>
@@ -29,7 +28,7 @@
 
 
 /*!
- \brief multi_exprt_loader() is called when a "multi_expr_keys" key is found in
+ \brief multi_expr_loader() is called when a "multi_expr_keys" key is found in
  a realtimemap, and triggers the loading of al lthe keys/values that
  will allow megatunix to process a special variable that requires handling of
  multiple circumstances
@@ -45,8 +44,8 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	gchar ** l_limits = NULL;
 	gchar ** u_limits = NULL;
 	gchar ** ltables = NULL;
-	gchar ** dl_exprs = NULL;
-	gchar ** ul_exprs = NULL;
+	gchar ** ul_mults = NULL;
+	gchar ** ul_adds = NULL;
 	gint num_keys = 0;
 	gint i = 0;
 	gint lowest = 0;
@@ -97,24 +96,24 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		ltables = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
-	if (!cfg_read_string(cfgfile,section,"toecu_conv_exprs",&tmpbuf))
+	if (!cfg_read_string(cfgfile,section,"fromecu_mults",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"fromecu_mults\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
 	{
-		dl_exprs = g_strsplit(tmpbuf,",",-1);
+		ul_mults = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
-	if (!cfg_read_string(cfgfile,section,"fromecu_conv_exprs",&tmpbuf))
+	if (!cfg_read_string(cfgfile,section,"fromecu_adds",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"fromecu_adds\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
 	{
-		ul_exprs = g_strsplit(tmpbuf,",",-1);
+		ul_adds = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
 	/* Create hash table to store structures for each one */
@@ -135,10 +134,11 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 			multi->lookuptable = NULL;
 		else
 			multi->lookuptable = g_strdup(ltables[i]);
-		multi->toecu_conv_expr = g_strdup(dl_exprs[i]);
-		multi->fromecu_conv_expr = g_strdup(ul_exprs[i]);
-		multi->dl_eval = evaluator_create(multi->toecu_conv_expr);
-		multi->ul_eval = evaluator_create(multi->fromecu_conv_expr);
+		multi->fromecu_mult = g_new0(gfloat, 1);
+		multi->fromecu_add = g_new0(gfloat, 1);
+		*multi->fromecu_mult = (gfloat)g_strtod(ul_mults[i],NULL);
+		*multi->fromecu_add = (gfloat)g_strtod(ul_adds[i],NULL);
+
 		g_hash_table_insert(hash,g_strdup(keys[i]),multi);
 	}
 	DATA_SET_FULL(object,"real_lower",g_strdup_printf("%i",lowest),g_free);
@@ -146,8 +146,8 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	g_strfreev(l_limits);
 	g_strfreev(u_limits);
 	g_strfreev(ltables);
-	g_strfreev(dl_exprs);
-	g_strfreev(ul_exprs);
+	g_strfreev(ul_mults);
+	g_strfreev(ul_adds);
 	g_strfreev(keys);
 	DATA_SET_FULL(object,"multi_expr_hash",hash,g_hash_table_destroy);
 }
@@ -155,13 +155,9 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
 	MultiExpr *multi = (MultiExpr *)data;
-	cleanup(multi->toecu_conv_expr);	
-	cleanup(multi->fromecu_conv_expr);	
+	cleanup(multi->fromecu_mult);	
+	cleanup(multi->fromecu_add);	
 	cleanup(multi->lookuptable);	
-	if (multi->dl_eval)
-		evaluator_destroy(multi->dl_eval);
-	if (multi->ul_eval)
-		evaluator_destroy(multi->ul_eval);
 	cleanup(multi);
 }
 
@@ -170,12 +166,8 @@ G_MODULE_EXPORT void free_multi_source(gpointer data)
 {
 	MultiSource *multi = (MultiSource *)data;
 	cleanup(multi->source);	
-	cleanup(multi->fromecu_conv_expr);	
-	cleanup(multi->toecu_conv_expr);	
+	cleanup(multi->fromecu_mult);	
+	cleanup(multi->fromecu_add);	
 	cleanup(multi->suffix);
-	if (multi->ul_eval)
-		evaluator_destroy(multi->ul_eval);
-	if (multi->dl_eval)
-		evaluator_destroy(multi->dl_eval);
 	cleanup(multi);
 }

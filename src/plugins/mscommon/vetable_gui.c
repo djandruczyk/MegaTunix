@@ -39,8 +39,10 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	static gint **last = NULL;
 	static GdkColor ** old_colors = NULL;
 	static GdkColor color = { 0, 0,16384,16384};
-	static void **y_eval;
-	static void **x_eval;
+	static gfloat **x_add;
+	static gfloat **y_add;
+	static gfloat **x_mult;
+	static gfloat **y_mult;
 	static gfloat last_z_weight[4] = {0,0,0,0};
 	static GdkColormap *colormap = NULL;
 	gfloat x_source = 0.0;
@@ -105,10 +107,14 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	if ((active_table < 0 ) || (active_table > (firmware->total_tables-1)))
 		return;
 
-	if (!x_eval)
-		x_eval = g_new0(void *, firmware->total_tables);
-	if (!y_eval)
-		y_eval = g_new0(void *, firmware->total_tables);
+	if (!x_mult)
+		x_mult = g_new0(gfloat *, firmware->total_tables);
+	if (!y_mult)
+		y_mult = g_new0(gfloat *, firmware->total_tables);
+	if (!x_add)
+		x_add = g_new0(gfloat *, firmware->total_tables);
+	if (!y_add)
+		y_add = g_new0(gfloat *, firmware->total_tables);
 	if (!prev_x_source)
 		prev_x_source = g_new0(gfloat, firmware->total_tables);
 	if (!prev_y_source)
@@ -163,12 +169,14 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 			/*printf("X multi source set, but undefined, BUG!\n");*/
 			return;
 		}
-		x_eval[table] = multi->dl_eval;
+		x_mult[table] = multi->fromecu_mult;
+		x_add[table] = multi->fromecu_add;
 		lookup_current_value_f(multi->source,&x_source);
 	}
 	else
 	{
-		x_eval[table] = firmware->table_params[table]->x_dl_eval;
+		x_mult[table] = firmware->table_params[table]->x_fromecu_mult;
+		x_add[table] = firmware->table_params[table]->x_fromecu_add;
 		lookup_current_value_f(firmware->table_params[table]->x_source,&x_source);
 	}
 
@@ -201,12 +209,14 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 			return;
 		}
 
-		y_eval[table] = multi->dl_eval;
+		y_mult[table] = multi->fromecu_mult;
+		y_add[table] = multi->fromecu_add;
 		lookup_current_value_f(multi->source,&y_source);
 	}
 	else
 	{
-		y_eval[table] = firmware->table_params[table]->y_dl_eval;
+		y_mult[table] = firmware->table_params[table]->y_fromecu_mult;
+		y_add[table] = firmware->table_params[table]->y_fromecu_add;
 		lookup_current_value_f(firmware->table_params[table]->y_source,&y_source);
 	}
 	if ((x_source == prev_x_source[table]) && (y_source == prev_y_source[table]))
@@ -223,7 +233,14 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	base = firmware->table_params[table]->x_base;
 	size = firmware->table_params[table]->x_size;
 	mult = get_multiplier_f(size);
-	x_raw  = evaluator_evaluate_x_f(x_eval[table],x_source);
+	/* Backwards calc (To->ECU) */
+	if ((x_mult[table]) && (x_add[table]))
+		x_raw = (x_source - (*x_add[table]))/(*x_mult[table]);
+	else if (x_mult[table])
+		x_raw = x_source/(*x_mult[table]);
+	else
+		x_raw = x_source;
+	printf("x_source %f, x_raw %f\n",x_raw,x_source);
 	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
 	{
 		if (ms_get_ecu_data(canID,page,base,size) >= x_raw)
@@ -261,7 +278,14 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	base = firmware->table_params[table]->y_base;
 	size = firmware->table_params[table]->y_size;
 	mult = get_multiplier_f(size);
-	y_raw  = evaluator_evaluate_x_f(y_eval[table],y_source);
+	/* Backwards calc (To->ECU) */
+	if ((y_mult[table]) && (y_add[table]))
+		y_raw = (y_source - (*y_add[table]))/(*y_mult[table]);
+	else if (x_mult[table])
+		y_raw = y_source/(*y_mult[table]);
+	else
+		y_raw = y_source;
+	printf("y_source %f, y_raw %f\n",y_raw,y_source);
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{
 		if (ms_get_ecu_data(canID,page,base,size) >= y_raw)

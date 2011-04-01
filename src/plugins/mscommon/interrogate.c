@@ -330,8 +330,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	MultiSource * multi = NULL;
 	gchar **sources = NULL;
 	gchar **suffixes = NULL;
-	gchar **fromecu_conv_exprs = NULL;
-	gchar **toecu_conv_exprs = NULL;
+	gchar **fromecu_mults = NULL;
+	gchar **fromecu_adds = NULL;
 	gchar **precisions = NULL;
 	gchar **expr_keys = NULL;
 	gfloat tmpf = 0.0;
@@ -708,12 +708,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"x_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_suffixes",&firmware->table_params[i]->x_suffixes))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"x_suffixes\" variable not found in interrogation profile, ERROR\n"));
-			cfg_read_string(cfgfile,section,"x_fromecu_conv_expr",&firmware->table_params[i]->x_fromecu_conv_expr);
-			cfg_read_string(cfgfile,section,"x_toecu_conv_expr",&firmware->table_params[i]->x_toecu_conv_expr);
-			if(!cfg_read_string(cfgfile,section,"x_fromecu_conv_exprs",&firmware->table_params[i]->x_fromecu_conv_exprs))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_fromecu_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
-			if(!cfg_read_string(cfgfile,section,"x_toecu_conv_exprs",&firmware->table_params[i]->x_toecu_conv_exprs))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_toecu_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+			if(!cfg_read_string(cfgfile,section,"x_fromecu_mults",&firmware->table_params[i]->x_fromecu_mults))
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_fromecu_mults\" variable not found in interrogation profile, table %i, ERROR\n",i));
+			if(!cfg_read_string(cfgfile,section,"x_fromecu_adds",&firmware->table_params[i]->x_fromecu_adds))
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_fromecu_adds\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"x_precisions",&firmware->table_params[i]->x_precisions))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"x_precisions\" variable not found in interrogation profile, ERROR\n"));
 		}
@@ -723,10 +721,19 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"x_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"x_suffix",&firmware->table_params[i]->x_suffix))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"x_suffix\" variable not found in interrogation profile, ERROR\n"));
-			if(!cfg_read_string(cfgfile,section,"x_fromecu_conv_expr",&firmware->table_params[i]->x_fromecu_conv_expr))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_fromecu_conv_expr\" variable not found in interrogation profile, table %i ERROR\n",i));
-			if(!cfg_read_string(cfgfile,section,"x_toecu_conv_expr",&firmware->table_params[i]->x_toecu_conv_expr))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_toecu_conv_expr\" variable not found in interrogation profile, table %i ERROR\n",i));
+			if(cfg_read_boolean(cfgfile,section,"x_complex",&firmware->table_params[i]->x_complex))
+			{
+				cfg_read_string(cfgfile,section,"x_fromecu_conv_expr",&firmware->table_params[i]->x_fromecu_conv_expr);
+				cfg_read_string(cfgfile,section,"x_toecu_conv_expr",&firmware->table_params[i]->x_toecu_conv_expr);
+			}
+			else
+			{
+				if(cfg_read_float(cfgfile,section,"x_fromecu_mult",&tmpf))
+				{
+					firmware->table_params[i]->x_fromecu_mult = g_new0(gfloat, 1);
+					*(firmware->table_params[i]->x_fromecu_mult) = tmpf;
+				}
+			}
 			if(!cfg_read_int(cfgfile,section,"x_precision",&firmware->table_params[i]->x_precision))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		}
@@ -747,10 +754,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"y_suffixes\" variable not found in interrogation profile, ERROR\n"));
 			cfg_read_string(cfgfile,section,"y_fromecu_conv_expr",&firmware->table_params[i]->y_fromecu_conv_expr);
 			cfg_read_string(cfgfile,section,"y_toecu_conv_expr",&firmware->table_params[i]->y_toecu_conv_expr);
-			if(!cfg_read_string(cfgfile,section,"y_fromecu_conv_exprs",&firmware->table_params[i]->y_fromecu_conv_exprs))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_fromecu_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
-			if(!cfg_read_string(cfgfile,section,"y_toecu_conv_exprs",&firmware->table_params[i]->y_toecu_conv_exprs))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_toecu_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+			if(!cfg_read_string(cfgfile,section,"y_fromecu_mults",&firmware->table_params[i]->y_fromecu_mults))
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_fromecu_mults\" variable not found in interrogation profile, table %i, ERROR\n",i));
+			if(!cfg_read_string(cfgfile,section,"y_fromecu_adds",&firmware->table_params[i]->y_fromecu_adds))
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_fromecu_adds\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"y_precisions",&firmware->table_params[i]->y_precisions))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"y_precisions\" variable not found in interrogation profile, ERROR\n"));
 
@@ -761,10 +768,19 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"y_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_suffix",&firmware->table_params[i]->y_suffix))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"y_suffix\" variable not found in interrogation profile, ERROR\n"));
-			if(!cfg_read_string(cfgfile,section,"y_fromecu_conv_expr",&firmware->table_params[i]->y_fromecu_conv_expr))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_fromecu_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
-			if(!cfg_read_string(cfgfile,section,"y_toecu_conv_expr",&firmware->table_params[i]->y_toecu_conv_expr))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_toecu_conv_expr\" variable not found in interrogation profile, table, %i ERROR\n",i));
+			if(cfg_read_boolean(cfgfile,section,"y_complex",&firmware->table_params[i]->y_complex))
+			{
+				cfg_read_string(cfgfile,section,"y_fromecu_conv_expr",&firmware->table_params[i]->y_fromecu_conv_expr);
+				cfg_read_string(cfgfile,section,"y_toecu_conv_expr",&firmware->table_params[i]->y_toecu_conv_expr);
+			}
+			else
+			{
+				if(cfg_read_float(cfgfile,section,"y_fromecu_mult",&tmpf))
+				{
+					firmware->table_params[i]->y_fromecu_mult = g_new0(gfloat, 1);
+					*(firmware->table_params[i]->y_fromecu_mult) = tmpf;
+				}
+			}
 			if(!cfg_read_int(cfgfile,section,"y_precision",&firmware->table_params[i]->y_precision))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 		}
@@ -783,10 +799,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"z_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_suffixes",&firmware->table_params[i]->z_suffixes))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"z_suffixes\" variable not found in interrogation profile, ERROR\n"));
-			if(!cfg_read_string(cfgfile,section,"z_fromecu_conv_exprs",&firmware->table_params[i]->z_fromecu_conv_exprs))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"z_fromecu_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
-			if(!cfg_read_string(cfgfile,section,"z_toecu_conv_exprs",&firmware->table_params[i]->z_toecu_conv_exprs))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"z_toecu_conv_exprs\" variable not found in interrogation profile, table %i, ERROR\n",i));
+			if(!cfg_read_string(cfgfile,section,"z_fromecu_mults",&firmware->table_params[i]->z_fromecu_mults))
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"z_fromecu_mults\" variable not found in interrogation profile, table %i, ERROR\n",i));
+			if(!cfg_read_string(cfgfile,section,"z_fromecu_adds",&firmware->table_params[i]->z_fromecu_adds))
+				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"z_fromecu_adds\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"z_precisions",&firmware->table_params[i]->z_precisions))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"z_precisions\" variable not found in interrogation profile, ERROR\n"));
 
@@ -797,10 +813,19 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"z_source\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"z_suffix",&firmware->table_params[i]->z_suffix))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"z_suffix\" variable not found in interrogation profile, ERROR\n"));
-			if(!cfg_read_string(cfgfile,section,"z_fromecu_conv_expr",&firmware->table_params[i]->z_fromecu_conv_expr))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"z_fromecu_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
-			if(!cfg_read_string(cfgfile,section,"z_toecu_conv_expr",&firmware->table_params[i]->z_toecu_conv_expr))
-				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"z_toecu_conv_expr\" variable not found in interrogation profile, table %i, ERROR\n",i));
+			if(cfg_read_boolean(cfgfile,section,"z_complex",&firmware->table_params[i]->z_complex))
+			{
+				cfg_read_string(cfgfile,section,"z_fromecu_conv_expr",&firmware->table_params[i]->z_fromecu_conv_expr);
+				cfg_read_string(cfgfile,section,"z_toecu_conv_expr",&firmware->table_params[i]->z_toecu_conv_expr);
+			}
+			else
+			{
+				if(cfg_read_float(cfgfile,section,"z_fromecu_mult",&tmpf))
+				{
+					firmware->table_params[i]->z_fromecu_mult = g_new0(gfloat, 1);
+					*(firmware->table_params[i]->z_fromecu_mult) = tmpf;
+				}
+			}
 			if(!cfg_read_int(cfgfile,section,"z_precision",&firmware->table_params[i]->z_precision))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"z_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
 			if(cfg_read_string(cfgfile,section,"z_depend_on",&firmware->table_params[i]->z_depend_on))
@@ -947,14 +972,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			expr_keys = g_strsplit(firmware->table_params[i]->x_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->x_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->x_suffixes,",",-1);
-			fromecu_conv_exprs = g_strsplit(firmware->table_params[i]->x_fromecu_conv_exprs,",",-1);
-			toecu_conv_exprs = g_strsplit(firmware->table_params[i]->x_toecu_conv_exprs,",",-1);
+			fromecu_mults = g_strsplit(firmware->table_params[i]->x_fromecu_mults,",",-1);
+			fromecu_adds = g_strsplit(firmware->table_params[i]->x_fromecu_adds,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->x_precisions,",",-1);
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(fromecu_conv_exprs);
-			len5 = g_strv_length(toecu_conv_exprs);
+			len4 = g_strv_length(fromecu_mults);
+			len5 = g_strv_length(fromecu_adds);
 			len6 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf(_("X multi_sources length mismatch!\n"));
@@ -962,16 +987,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->fromecu_conv_expr = g_strdup(fromecu_conv_exprs[j]);
-				multi->toecu_conv_expr = g_strdup(toecu_conv_exprs[j]);
-				if (multi->fromecu_conv_expr)
-					multi->ul_eval = evaluator_create_f(multi->fromecu_conv_expr);
-				else
-					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX fromecu_conv_exprs is NULL for table %i\n",i));
-				if (multi->toecu_conv_expr)
-					multi->dl_eval = evaluator_create_f(multi->toecu_conv_expr);
-				else
-					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tX toecu_conv_exprs is NULL for table %i\n",i));
+				multi->fromecu_mult = g_new0(gfloat, 1);
+				multi->fromecu_add = g_new0(gfloat, 1);
+				*multi->fromecu_mult = (gfloat)g_strtod(fromecu_mults[j],NULL);
+				*multi->fromecu_add = (gfloat)g_strtod(fromecu_adds[j],NULL);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -979,16 +998,17 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
-			g_strfreev(fromecu_conv_exprs);
-			g_strfreev(toecu_conv_exprs);
+			g_strfreev(fromecu_mults);
+			g_strfreev(fromecu_adds);
 			g_strfreev(precisions);
 		}
 		else
 		{
-			firmware->table_params[i]->x_ul_eval = evaluator_create_f(firmware->table_params[i]->x_fromecu_conv_expr);
-			g_assert(firmware->table_params[i]->x_ul_eval);
-			firmware->table_params[i]->x_dl_eval = evaluator_create_f(firmware->table_params[i]->x_toecu_conv_expr);
-			g_assert(firmware->table_params[i]->x_dl_eval);
+			if (firmware->table_params[i]->x_complex)
+			{
+				firmware->table_params[i]->x_ul_eval = evaluator_create_f(firmware->table_params[i]->x_fromecu_conv_expr);
+				firmware->table_params[i]->x_dl_eval = evaluator_create_f(firmware->table_params[i]->x_toecu_conv_expr);
+			}
 		}
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->y_multi_source)
@@ -998,14 +1018,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			expr_keys = g_strsplit(firmware->table_params[i]->y_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->y_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->y_suffixes,",",-1);
-			fromecu_conv_exprs = g_strsplit(firmware->table_params[i]->y_fromecu_conv_exprs,",",-1);
-			toecu_conv_exprs = g_strsplit(firmware->table_params[i]->y_toecu_conv_exprs,",",-1);
+			fromecu_mults = g_strsplit(firmware->table_params[i]->y_fromecu_mults,",",-1);
+			fromecu_adds = g_strsplit(firmware->table_params[i]->y_fromecu_adds,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->y_precisions,",",-1);
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(fromecu_conv_exprs);
-			len5 = g_strv_length(toecu_conv_exprs);
+			len4 = g_strv_length(fromecu_mults);
+			len5 = g_strv_length(fromecu_adds);
 			len6 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf(_("Y multi_sources length mismatch!\n"));
@@ -1013,16 +1033,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->fromecu_conv_expr = g_strdup(fromecu_conv_exprs[j]);
-				multi->toecu_conv_expr = g_strdup(toecu_conv_exprs[j]);
-				if (multi->fromecu_conv_expr)
-					multi->ul_eval = evaluator_create_f(multi->fromecu_conv_expr);
-				else
-					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY fromecu_conv_exprs is NULL for table %i\n",i));
-				if (multi->toecu_conv_expr)
-					multi->dl_eval = evaluator_create_f(multi->toecu_conv_expr);
-				else
-					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tY toecu_conv_exprs is NULL for table %i\n",i));
+				multi->fromecu_mult = g_new0(gfloat, 1);
+				multi->fromecu_add = g_new0(gfloat, 1);
+				*multi->fromecu_mult = (gfloat)g_strtod(fromecu_mults[j],NULL);
+				*multi->fromecu_add = (gfloat)g_strtod(fromecu_adds[j],NULL);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -1030,14 +1044,17 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
-			g_strfreev(fromecu_conv_exprs);
-			g_strfreev(toecu_conv_exprs);
+			g_strfreev(fromecu_mults);
+			g_strfreev(fromecu_adds);
 			g_strfreev(precisions);
 		}
 		else
 		{
-			firmware->table_params[i]->y_ul_eval = evaluator_create_f(firmware->table_params[i]->y_fromecu_conv_expr);
-			firmware->table_params[i]->y_dl_eval = evaluator_create_f(firmware->table_params[i]->y_toecu_conv_expr);
+			if (firmware->table_params[i]->y_complex)
+			{
+				firmware->table_params[i]->y_ul_eval = evaluator_create_f(firmware->table_params[i]->y_fromecu_conv_expr);
+				firmware->table_params[i]->y_dl_eval = evaluator_create_f(firmware->table_params[i]->y_toecu_conv_expr);
+			}
 		}
 
 		/* Check for multi source table handling */
@@ -1048,14 +1065,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			expr_keys = g_strsplit(firmware->table_params[i]->z_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->z_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->z_suffixes,",",-1);
-			fromecu_conv_exprs = g_strsplit(firmware->table_params[i]->z_fromecu_conv_exprs,",",-1);
-			toecu_conv_exprs = g_strsplit(firmware->table_params[i]->z_toecu_conv_exprs,",",-1);
+			fromecu_mults = g_strsplit(firmware->table_params[i]->z_fromecu_mults,",",-1);
+			fromecu_adds = g_strsplit(firmware->table_params[i]->z_fromecu_adds,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->z_precisions,",",-1);
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
-			len4 = g_strv_length(fromecu_conv_exprs);
-			len5 = g_strv_length(toecu_conv_exprs);
+			len4 = g_strv_length(fromecu_mults);
+			len5 = g_strv_length(fromecu_adds);
 			len6 = g_strv_length(precisions);
 			if ((len1 != len2) || (len1 != len3) || (len1 != len4) || (len1 != len5) || (len1 != len6))
 				printf(_("Z multi_sources length mismatch!\n"));
@@ -1063,16 +1080,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->fromecu_conv_expr = g_strdup(fromecu_conv_exprs[j]);
-				multi->toecu_conv_expr = g_strdup(toecu_conv_exprs[j]);
-				if (multi->fromecu_conv_expr)
-					multi->ul_eval = evaluator_create_f(multi->fromecu_conv_expr);
-				else
-					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ fromecu_conv_exprs is NULL for table %i\n",i));
-				if (multi->toecu_conv_expr)
-					multi->dl_eval = evaluator_create_f(multi->toecu_conv_expr);
-				else
-					dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\tZ toecu_conv_exprs is NULL for table %i\n",i));
+				multi->fromecu_mult = g_new0(gfloat, 1);
+				multi->fromecu_add = g_new0(gfloat, 1);
+				*multi->fromecu_mult = (gfloat)g_strtod(fromecu_mults[j],NULL);
+				*multi->fromecu_add = (gfloat)g_strtod(fromecu_adds[j],NULL);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
 				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
@@ -1080,14 +1091,17 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
 			g_strfreev(suffixes);
-			g_strfreev(fromecu_conv_exprs);
-			g_strfreev(toecu_conv_exprs);
+			g_strfreev(fromecu_mults);
+			g_strfreev(fromecu_adds);
 			g_strfreev(precisions);
 		}
 		else
 		{
-			firmware->table_params[i]->z_ul_eval = evaluator_create_f(firmware->table_params[i]->z_fromecu_conv_expr);
-			firmware->table_params[i]->z_dl_eval = evaluator_create_f(firmware->table_params[i]->z_toecu_conv_expr);
+			if (firmware->table_params[i]->z_complex)
+			{
+				firmware->table_params[i]->z_ul_eval = evaluator_create_f(firmware->table_params[i]->z_fromecu_conv_expr);
+				firmware->table_params[i]->z_dl_eval = evaluator_create_f(firmware->table_params[i]->z_toecu_conv_expr);
+			}
 		}
 	}
 	if (mem_alloc_f)
@@ -1506,18 +1520,12 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 	table_params->x_suffix = NULL;
 	table_params->y_suffix = NULL;
 	table_params->z_suffix = NULL;
-	table_params->x_fromecu_conv_expr = NULL;
-	table_params->x_toecu_conv_expr = NULL;
-	table_params->y_fromecu_conv_expr = NULL;
-	table_params->y_toecu_conv_expr = NULL;
-	table_params->z_fromecu_conv_expr = NULL;
-	table_params->z_toecu_conv_expr = NULL;
-	table_params->x_fromecu_conv_exprs = NULL;
-	table_params->x_toecu_conv_exprs = NULL;
-	table_params->y_fromecu_conv_exprs = NULL;
-	table_params->y_toecu_conv_exprs = NULL;
-	table_params->z_fromecu_conv_exprs = NULL;
-	table_params->z_toecu_conv_exprs = NULL;
+	table_params->x_fromecu_mults = NULL;
+	table_params->y_fromecu_mults = NULL;
+	table_params->z_fromecu_mults = NULL;
+	table_params->x_fromecu_adds = NULL;
+	table_params->y_fromecu_adds = NULL;
+	table_params->z_fromecu_adds = NULL;
 	table_params->x_source_key = NULL;
 	table_params->y_source_key = NULL;
 	table_params->z_source_key = NULL;
