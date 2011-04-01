@@ -116,7 +116,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	gint base = 0;
 	DataSize size = MTX_U08;
 	gint mult = 0;
-	void *evaluator = NULL;
+	gint raw = 0;
 	gdouble light_advance = 0.0;
 	gdouble idle_rpm = 0.0;
 	gdouble idle_load = 0.0;
@@ -128,6 +128,8 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	gdouble maximum_rpm_advance = 0.0;
 	gdouble maximum_retard = 0.0;
 	gdouble retard_start_load = 0.0;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
 	GList ***ecu_widgets = NULL;
 	GList *list = NULL;
 	gchar * tmpbuf = NULL;
@@ -201,13 +203,20 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	size = firmware->table_params[table]->x_size;
 	mult = get_multiplier_f(size);
 
-	evaluator = evaluator_create_f(firmware->table_params[table]->x_fromecu_conv_expr);
+	multiplier = firmware->table_params[table]->x_fromecu_mult;
+	adder = firmware->table_params[table]->x_fromecu_mult;
 
 	/* fetch us a copy of the x bins */
 	for (i=0; i != firmware->table_params[table]->x_bincount; i++)
-		x_bin[i] = evaluator_evaluate_x_f(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
-
-	evaluator_destroy_f(evaluator);
+	{
+		raw = ms_get_ecu_data(canID, page, base+(i*mult), size);
+		if ((multiplier) && (adder))
+			x_bin[i] = (raw * (*multiplier)) + (*adder);
+		else if (multiplier)
+			x_bin[i] = (raw * (*multiplier));
+		else
+			x_bin[i] = raw;
+	}
 
 	/* Find bin corresponding to load  */
 	page = firmware->table_params[table]->y_page;
@@ -215,13 +224,20 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	size = firmware->table_params[table]->y_size;
 	mult = get_multiplier_f(size);
 
-	evaluator = evaluator_create_f(firmware->table_params[table]->y_fromecu_conv_expr);
+	multiplier = firmware->table_params[table]->y_fromecu_mult;
+	adder = firmware->table_params[table]->y_fromecu_mult;
 
 	/* fetch us a copy of the y bins */
 	for (i=0; i != firmware->table_params[table]->y_bincount; i++)
-		y_bin[i] = evaluator_evaluate_x_f(evaluator, ms_get_ecu_data(canID, page, base+(i*mult), size));
-
-	evaluator_destroy_f(evaluator);
+	{
+		raw = ms_get_ecu_data(canID, page, base+(i*mult), size);
+		if ((multiplier) && (adder))
+			x_bin[i] = (raw * (*multiplier)) + (*adder);
+		else if (multiplier)
+			x_bin[i] = (raw * (*multiplier));
+		else
+			x_bin[i] = raw;
+	}
 
 	page = firmware->table_params[table]->z_page;
 	base = firmware->table_params[table]->z_base;
@@ -423,8 +439,8 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		OBJ_SET(item,"size",OBJ_GET(partner,"size"));
 		OBJ_SET(item,"raw_lower",OBJ_GET(partner,"raw_lower"));
 		OBJ_SET(item,"raw_upper",OBJ_GET(partner,"raw_upper"));
-		OBJ_SET(item,"toecu_conv_expr",OBJ_GET(partner,"toecu_conv_expr"));
-		OBJ_SET(item,"fromecu_conv_expr",OBJ_GET(partner,"fromecu_conv_expr"));
+		OBJ_SET(item,"fromecu_mult",OBJ_GET(partner,"toecu_mult"));
+		OBJ_SET(item,"fromecu_add",OBJ_GET(partner,"fromecu_add"));
 		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
 		ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
 		g_list_foreach(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);

@@ -947,8 +947,8 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	glong upper = 0;
 	glong hardlower = 0;
 	glong hardupper = 0;
-	gchar *expr = NULL;
-	void *eval = NULL;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
 	gint dload_val = 0;
 	gboolean send = FALSE;
 	gboolean retval = FALSE;
@@ -982,34 +982,29 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		upper = get_extreme_from_size(size,UPPER);
-	expr = OBJ_GET(widget,"toecu_conv_expr");
-	eval = OBJ_GET(widget,"dl_evaluator");
-	if ((expr) && (!eval))
-	{
-		eval = evaluator_create(expr);
-		OBJ_SET(widget,"dl_evaluator",eval);
-	}
+	multiplier = OBJ_GET(widget,"fromecu_mult");
+	adder = OBJ_GET(widget,"fromecu_add");
 	smallstep = (GINT)OBJ_GET(widget,"smallstep");
 	bigstep = (GINT)OBJ_GET(widget,"bigstep");
 	if (smallstep == 0)
 	{
-		if (eval)
-		{
-			smallstep = (GINT)evaluator_evaluate_x(eval,1);
-			OBJ_SET(widget,"smallstep",GINT_TO_POINTER(smallstep));
-		}
+		if ((multiplier) && (adder))
+			smallstep = (GINT)(1 - (*adder))/(*multiplier);
+		else if (adder)
+			smallstep = (GINT)(1 - (*adder));
 		else
 			smallstep = 1;
+		OBJ_SET(widget,"smallstep",GINT_TO_POINTER(smallstep));
 	}
 	if (bigstep == 0)
 	{
-		if (eval)
-		{
-			bigstep = (GINT)evaluator_evaluate_x(eval,10);
-			OBJ_SET(widget,"bigstep",GINT_TO_POINTER(bigstep));
-		}
+		if ((multiplier) && (adder))
+			bigstep = (GINT)(10 - (*adder))/(*multiplier);
+		else if (adder)
+			bigstep = (GINT)(10 - (*adder));
 		else
 			bigstep = 10;
+		OBJ_SET(widget,"bigstep",GINT_TO_POINTER(bigstep));
 	}
 	hardlower = get_extreme_from_size(size,LOWER);
 	hardupper = get_extreme_from_size(size,UPPER);
