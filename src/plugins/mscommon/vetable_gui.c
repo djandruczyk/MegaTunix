@@ -240,7 +240,6 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 		x_raw = x_source/(*x_mult[table]);
 	else
 		x_raw = x_source;
-	printf("x_source %f, x_raw %f\n",x_raw,x_source);
 	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
 	{
 		if (ms_get_ecu_data(canID,page,base,size) >= x_raw)
@@ -285,7 +284,6 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 		y_raw = y_source/(*y_mult[table]);
 	else
 		y_raw = y_source;
-	printf("y_source %f, y_raw %f\n",y_raw,y_source);
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{
 		if (ms_get_ecu_data(canID,page,base,size) >= y_raw)
