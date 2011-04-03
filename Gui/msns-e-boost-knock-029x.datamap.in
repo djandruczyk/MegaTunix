@@ -192,34 +192,34 @@ bind_to_list=boost_controls
 _tooltip=This is the Differential Gain used in the PD controller algorithm
 
 [bc_closed_loop_limit_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 offset=125
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=multi_expression,boost_controls
 _tooltip=If boost deviates more than this limit from the target as defined by the boost kpa target tables (1 or 3) we wll switch to open loop mode and use the dutycycle table 2.
 
 [bc_ambient_pressure_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 offset=185
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=multi_expression,boost_controls
 _tooltip=Typical ambient pressure for your location.  Used by boost control to accurate calculate boost levels.
 
 [bc_overboost_cutoff_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 offset=44
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=multi_expression,boost_controls
-_tooltip=OverBoost cutoff at which point fuel is shutdown completely to avoid engine destruction.
+_tooltip=OverBoost cutoff (in kPa) at which point fuel is shutdown completely to avoid engine destruction.
 
 [bc_iat_start_temp_entry]
 keys=offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list,tooltip
@@ -250,9 +250,9 @@ precision=2
 raw_upper=136
 # MT INI is wrong,  these controls are PSI
 #multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-#toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-#fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
-#bind_to_list=multi_expression,knock_controls
+#fromecu_mults=1,1,1.213675,1.6197783
+#fromecu_adds=0,0,1.53,2.147
+#bind_to_list=multi_expression,boost_controls,knock_controls
 fromecu_mult=0.147
 bind_to_list=boost_controls,knock_controls
 _tooltip=When the knock controller is enabled and knock is detected, boost will be reduced by this amount in psi
@@ -263,9 +263,9 @@ offset=108
 precision=2
 # MT INI is wrong,  these controls are PSI
 #multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-#toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-#fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
-#bind_to_list=multi_expression,knock_controls
+#fromecu_mults=1,1,1.213675,1.6197783
+#fromecu_adds=0,0,1.53,2.147
+#bind_to_list=multi_expression,boost_controls,knock_controls
 fromecu_mult=0.147
 raw_upper=136
 bind_to_list=boost_controls,knock_controls
@@ -288,12 +288,12 @@ bind_to_list=knock_controls
 _tooltip=When RPM is BELOW this threshold Knock detection is disabled
 
 [ignore_knocks_above_map_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 offset=55
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=multi_expression,knock_controls
 _tooltip=When MAP is ABOVE this threshold Knock detection is disabled
 

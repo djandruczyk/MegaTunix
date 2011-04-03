@@ -197,22 +197,22 @@ _tooltip=Enables or Disables constant baro correction in Alpha-N mode
 #----- Spinbuttons ----------------------------------------------------------
 
 [barocorr_max_adc_entry]
-keys=offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
+keys=offset,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds,bind_to_list
 offset=82
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=multi_expression
 _tooltip=The upper limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
 [barocorr_min_adc_entry]
-keys=offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
+keys=offset,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds,bind_to_list
 offset=83
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=(x-10)/(433/1000),(x-8)/(9837/10000),(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*(433/1000)+10,x*(9837/10000)+8,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=multi_expression
 _tooltip=The lower limit for the barocorrection factor in ADC Counts. useful to prevent bad running in case of ECU hiccup/reset.
 
@@ -284,24 +284,24 @@ offset=179
 _tooltip=This control sets the number of engine cycles at which point staging is phased in.
 
 [sec_staging_thresh_entry]
-keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 page=3
 offset=180
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls,multi_expression
 _tooltip=This control sets the threshold where the manifold pressure needs to be exceeded along with the above staging params to enable injector staging.
 
 [sec_staging_delta_entry]
-keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=page,offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 page=3
 offset=181
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=map_second_staging,staging_ctrls,sec_stage_ctrls,multi_expression
 _tooltip=This control sets the Off delta where the manifold pressure needs to drop by this amount below the above threshold before injector staging is turned off.
 
@@ -314,12 +314,12 @@ raw_upper=60
 _tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.
 
 [orfc_map_entry]
-keys=offset,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs,bind_to_list
+keys=offset,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds,bind_to_list
 offset=72
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.53,2.147
 bind_to_list=multi_expression
 _tooltip=For Over-Run Fuel Cut ALL conditions must be met to enable it.  This value is in KPa.
 

@@ -213,14 +213,14 @@ bind_to_list=temperature,water_controls
 _tooltip=When IAT (Intake Air Temp, MAT) is ABOVE this value and the next two conditions are met, water injection will be enabled...
 
 [water_inj_kpa_setpoint_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 offset=62
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.54,2.147
 bind_to_list=multi_expression,water_controls
-_tooltip=When the intake manifold pressure is above this point (in KPA) and the IAT setpoint and RPM setpoitns have been reached for water injection, the water injection output will turn on.
+_tooltip=When the intake manifold pressure is above this point (in kPa) and the IAT setpoint and RPM setpoints have been reached for water injection, the water injection output will turn on.
 
 [water_inj_rpm_setpoint_entry]
 keys=offset,fromecu_mult,raw_upper,bind_to_list,tooltip
@@ -305,22 +305,22 @@ bind_to_list=launch_controls,nos_params
 _tooltip=The Amount of spark to pull out when nitrous enrich is active. This ONLY takes effect when using a soark firmware.
 
 [nos_antilag_min_kpa_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 offset=85
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.54,2.147
 bind_to_list=multi_expression,nos_params,antilag_controls
 _tooltip=This control and the next one down determine the range of manifold pressures in which NOS antilag can be used.
 
 [nos_antilag_max_kpa_entry]
-keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,toecu_conv_exprs,fromecu_conv_exprs
+keys=offset,bind_to_list,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds
 offset=86
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
-toecu_conv_exprs=x*1,x*1,(x-(153/100))/(1213675/1000000),(x-(2147/1000))/(16197783/10000000)
-fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
+fromecu_mults=1,1,1.213675,1.6197783
+fromecu_adds=0,0,1.54,2.147
 bind_to_list=multi_expression,nos_params,antilag_controls
 _tooltip=This control and the previous one up determine the range of manifold pressures in which NOS antilag can be used.
 
