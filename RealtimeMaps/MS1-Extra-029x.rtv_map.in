@@ -238,7 +238,6 @@ upper_limits=115,250,308,416
 multi_lookuptables=na_map,boosted_map,,
 fromecu_mults=1,1,1.213675,1.6197783
 fromecu_adds=0,0,1.53,2.147
-;fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 _tooltip="MAP KPA" is the Manifold Absolute Pressure in KPA (Kilopascals), 100KPA is atmospheric pressure at sea level.
 log_by_default=TRUE
 
@@ -255,7 +254,6 @@ upper_limits=115,250,308,416
 multi_lookuptables=na_map,boosted_map,,
 fromecu_mults=1,1,1.213675,1.6197783
 fromecu_adds=0,0,1.53,2.147
-;fromecu_conv_exprs=x*1,x*1,(x*(1213675/1000000))+(153/100),(x*(16197783/10000000))+(2147/1000)
 _tooltip="BARO KPA" is the Barometer Pressure in KPA (Kilopascals) This is read by the MAP sensor at ecu powerup and us used for Barometer correction, 100KPA is atmospheric pressure at sea level.
 log_by_default=FALSE
 

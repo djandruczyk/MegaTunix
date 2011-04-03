@@ -64,8 +64,6 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		g_free(tmpbuf);
 	}
 
-
-
 	if (!cfg_read_string(cfgfile,section,"lower_limits",&tmpbuf))
 	{
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"lower_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));

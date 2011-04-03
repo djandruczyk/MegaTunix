@@ -56,9 +56,11 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	GHashTable *mhash = NULL;
 	GHashTable *ahash = NULL;
 	gchar *key_list = NULL;
-	gchar *expr_list = NULL;
+	gchar *mult_list = NULL;
+	gchar *add_list = NULL;
 	gchar **keys = NULL;
-	gchar **exprs = NULL;
+	gchar **mults = NULL;
+	gchar **adds = NULL;
 	gint table_num = 0;
 	gchar *tmpbuf = NULL;
 	gchar * source_key = NULL;
@@ -90,8 +92,8 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	{
 		if ((!OBJ_GET(widget,"mhash")) && (!OBJ_GET(widget,"ahash")))
 		{
-			mhash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
-			ahash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
+			mhash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+			ahash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 			key_list = OBJ_GET(widget,"multi_expr_keys");
 			mult_list = OBJ_GET(widget,"fromecu_mults");
 			add_list = OBJ_GET(widget,"fromecu_addds");
@@ -178,8 +180,6 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	else /* NON Multi Expression */
 	{
 		conv_expr = (gchar *)OBJ_GET(widget,"toecu_conv_expr");
-		multiplier = (gfloat *)OBJ_GET(widget,"fromecu_mult");
-		adder = (gfloat *)OBJ_GET(widget,"fromecu_add");
 
 		/* Expression is NOT multi expression but has more complex math*/
 		if (conv_expr)
@@ -195,6 +195,8 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		}
 		else
 		{
+			multiplier = (gfloat *)OBJ_GET(widget,"fromecu_mult");
+			adder = (gfloat *)OBJ_GET(widget,"fromecu_add");
 			/* Handle all cases of with or without multiplier/adder*/
 			if (!multiplier)
 				*multiplier = 1;
@@ -249,9 +251,11 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	GHashTable *mhash = NULL;
 	GHashTable *ahash = NULL;
 	gchar *key_list = NULL;
-	gchar *expr_list = NULL;
+	gchar *mult_list = NULL;
+	gchar *add_list = NULL;
 	gchar **keys = NULL;
-	gchar **exprs = NULL;
+	gchar **mults = NULL;
+	gchar **adds = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
@@ -296,7 +300,6 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		return handle_complex_expr_obj(G_OBJECT(widget),NULL,UPLOAD);
 	}
 
-
 	if (OBJ_GET(widget,"lookuptable"))
 		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data_f(widget));
 	else
@@ -317,24 +320,34 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
 		sources_hash = DATA_GET(global_data,"sources_hash");
-		if (!OBJ_GET(widget,"ul_eval_hash"))
+		if ((!OBJ_GET(widget,"mhash")) && (!OBJ_GET(widget,"ahash")))
 		{
-			hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,evaluator_destroy);
+			mhash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+			ahash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 			key_list = OBJ_GET(widget,"multi_expr_keys");
-			expr_list = OBJ_GET(widget,"fromecu_conv_exprs");
+			mult_list = OBJ_GET(widget,"fromecu_mults");
+			add_list = OBJ_GET(widget,"fromecu_adds");
 			keys = g_strsplit(key_list,",",-1);
-			exprs = g_strsplit(expr_list,",",-1);
-			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(exprs));i++)
+			mults = g_strsplit(mult_list,",",-1);
+			adds = g_strsplit(add_list,",",-1);
+			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(mults));i++)
 			{
-				evaluator = evaluator_create(exprs[i]);
-				g_hash_table_insert(hash,g_strdup(keys[i]),evaluator);
+				multiplier = g_new0(gfloat, 1);
+				*multiplier = (gfloat)g_strtod(mults[i],NULL);
+				g_hash_table_insert(mhash,g_strdup(keys[i]),multiplier);
+				adder = g_new0(gfloat, 1);
+				*adder = (gfloat)g_strtod(adds[i],NULL);
+				g_hash_table_insert(ahash,g_strdup(keys[i]),adder);
 			}
 			g_strfreev(keys);
-			g_strfreev(exprs);
+			g_strfreev(mults);
+			g_strfreev(adds);
 
-			OBJ_SET_FULL(widget,"ul_eval_hash",hash,g_hash_table_destroy);
+			OBJ_SET_FULL(widget,"mhash",mhash,g_hash_table_destroy);
+			OBJ_SET_FULL(widget,"ahash",ahash,g_hash_table_destroy);
 		}
-		hash = OBJ_GET(widget,"ul_eval_hash");
+		mhash = OBJ_GET(widget,"mhash");
+		ahash = OBJ_GET(widget,"ahash");
 		source_key = OBJ_GET(widget,"source_key");
 		if (!source_key)
 			printf(_("big problem, source key is undefined!!\n"));
@@ -345,12 +358,14 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		if (table_num == -1)
 		{
 			if (!hash_key)
-				evaluator = g_hash_table_lookup(hash,"DEFAULT");
+			{
+				multiplier = g_hash_table_lookup(mhash,"DEFAULT");
+				adder = g_hash_table_lookup(ahash,"DEFAULT");
+			}
 			else
 			{
-				evaluator = g_hash_table_lookup(hash,hash_key);
-				if (!evaluator)
-					evaluator = g_hash_table_lookup(hash,"DEFAULT");
+				multiplier = g_hash_table_lookup(mhash,(gchar *)hash_key);
+				adder = g_hash_table_lookup(ahash,(gchar *)hash_key);
 			}
 		}
 		else
@@ -360,35 +375,44 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			{
 				case SPEED_DENSITY:
 					if (!hash_key)
-						evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					{
+						multiplier = g_hash_table_lookup(mhash,"DEFAULT");
+						adder = g_hash_table_lookup(ahash,"DEFAULT");
+					}
 					else
 					{
-						evaluator = g_hash_table_lookup(hash,hash_key);
-						if (!evaluator)
-							evaluator = g_hash_table_lookup(hash,"DEFAULT");
+						multiplier = g_hash_table_lookup(mhash,hash_key);
+						adder = g_hash_table_lookup(ahash,hash_key);
 					}
 					break;
 				case ALPHA_N:
-					evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					multiplier = g_hash_table_lookup(mhash,"DEFAULT");
+					adder = g_hash_table_lookup(ahash,"DEFAULT");
 					break;
 				case MAF:
-					evaluator = g_hash_table_lookup(hash,"AFM_VOLTS");
-					if (!evaluator)
-						evaluator = g_hash_table_lookup(hash,"DEFAULT");
+					multiplier = g_hash_table_lookup(mhash,"AFM_VOLTS");
+					adder = g_hash_table_lookup(ahash,"AFM_VOLTS");
 					break;
 			}
 		}
-		return_value = evaluator_evaluate_x(evaluator,tmpi);
+		if (!multiplier)
+		{
+			printf("ERROR, no multiplier for hash key %s\n",hash_key);
+			*multiplier = 1;
+		}
+		if (!adder)
+		{
+			printf("ERROR, no adder for hash key %s\n",hash_key);
+			*adder = 0;
+		}
+		return_value = (GINT)((tmpi - (*adder))/(*multiplier));
 	}
 	else
 	{
 		conv_expr = (gchar *)OBJ_GET(widget,"fromecu_conv_expr");
-		evaluator = (void *)OBJ_GET(widget,"ul_evaluator");
-		multiplier = OBJ_GET(widget,"fromecu_mult");
-		adder = OBJ_GET(widget,"fromecu_add");
-
 		if (conv_expr)
 		{
+			evaluator = (void *)OBJ_GET(widget,"ul_evaluator");
 			if (!evaluator)
 			{
 				evaluator = evaluator_create(conv_expr);
@@ -399,13 +423,13 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		}
 		else
 		{
-			/* Handle all cases of with or without multiplier/adder*/
-			if ((multiplier) && (adder))
-				return_value = (((gfloat)tmpi * (*multiplier))+ (*adder));
-			else if (multiplier)
-				return_value = ((gfloat)tmpi *(*multiplier));
-			else
-				return_value = (gfloat)tmpi;
+			multiplier = OBJ_GET(widget,"fromecu_mult");
+			adder = OBJ_GET(widget,"fromecu_add");
+			if (!multiplier)
+				*multiplier = 1;
+			if (!adder)
+				*adder = 0;
+			return_value = (((gfloat)tmpi * (*multiplier))+ (*adder));
 			/*dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNo/Fast CONVERSION defined for  widget %s, value %f\n",(gchar *)glade_get_widget_name(widget), return_value));*/
 		}
 
