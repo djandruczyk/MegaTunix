@@ -361,7 +361,6 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	static gfloat xl,yl,zl = 9999.9;
 	gint i = 0;
 	Ve_View_3D * ve_view = NULL;
-	GtkWidget * tmpwidget=NULL;
 	gfloat x,y,z = 0.0;
 	gchar * string = NULL;
 	GHashTable *hash = NULL;
@@ -388,136 +387,132 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	for (i=0;i<firmware->total_tables;i++)
 	{
 		string = g_strdup_printf("ve_view_%i",i);
-		tmpwidget = lookup_widget(string);
+		ve_view = DATA_GET(global_data,string);
 		g_free(string);
-		if (GTK_IS_WIDGET(tmpwidget))
+		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 		{
-			ve_view = (Ve_View_3D *)OBJ_GET(tmpwidget,"ve_view");
-			if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+			/* Get X values */
+			if (ve_view->x_multi_source)
 			{
-				/* Get X values */
-				if (ve_view->x_multi_source)
+				hash = ve_view->x_multi_hash;
+				key = ve_view->x_source_key;
+				hash_key = g_hash_table_lookup(sources_hash,key);
+				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 				{
-					hash = ve_view->x_multi_hash;
-					key = ve_view->x_source_key;
-					hash_key = g_hash_table_lookup(sources_hash,key);
-					if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-					{
-						if (hash_key)
-							multi = g_hash_table_lookup(hash,hash_key);
-						else
-							multi = g_hash_table_lookup(hash,"DEFAULT");
-					}
-					else if (algorithm[ve_view->table_num] == ALPHA_N)
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-					else if (algorithm[ve_view->table_num] == MAF)
-					{
-						multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-						if(!multi)
-							multi = g_hash_table_lookup(hash,"DEFAULT");
-					}
+					if (hash_key)
+						multi = g_hash_table_lookup(hash,hash_key);
 					else
 						multi = g_hash_table_lookup(hash,"DEFAULT");
-
-					if (!multi)
-						printf(_("multi is null!!\n"));
-
-					lookup_current_value(multi->source,&x);
+				}
+				else if (algorithm[ve_view->table_num] == ALPHA_N)
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+				else if (algorithm[ve_view->table_num] == MAF)
+				{
+					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+					if(!multi)
+						multi = g_hash_table_lookup(hash,"DEFAULT");
 				}
 				else
-					lookup_current_value(ve_view->x_source,&x);
+					multi = g_hash_table_lookup(hash,"DEFAULT");
 
-				/* Test X values, redraw if needed */
-				if (((fabs(x-xl)/x) > 0.001) || (DATA_GET(global_data,"forced_update")))
-				{
-					xl = x;
-					goto redraw;
-				}
+				if (!multi)
+					printf(_("multi is null!!\n"));
 
-				/* Get Y values */
-				if (ve_view->y_multi_source)
+				lookup_current_value(multi->source,&x);
+			}
+			else
+				lookup_current_value(ve_view->x_source,&x);
+
+			/* Test X values, redraw if needed */
+			if (((fabs(x-xl)/x) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				xl = x;
+				goto redraw;
+			}
+
+			/* Get Y values */
+			if (ve_view->y_multi_source)
+			{
+				hash = ve_view->y_multi_hash;
+				key = ve_view->y_source_key;
+				hash_key = g_hash_table_lookup(sources_hash,key);
+				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 				{
-					hash = ve_view->y_multi_hash;
-					key = ve_view->y_source_key;
-					hash_key = g_hash_table_lookup(sources_hash,key);
-					if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-					{
-						if (hash_key)
-							multi = g_hash_table_lookup(hash,hash_key);
-						else
-							multi = g_hash_table_lookup(hash,"DEFAULT");
-					}
-					else if (algorithm[ve_view->table_num] == ALPHA_N)
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-					else if (algorithm[ve_view->table_num] == MAF)
-					{
-						multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-						if(!multi)
-							multi = g_hash_table_lookup(hash,"DEFAULT");
-					}
+					if (hash_key)
+						multi = g_hash_table_lookup(hash,hash_key);
 					else
 						multi = g_hash_table_lookup(hash,"DEFAULT");
-
-					if (!multi)
-						printf(_("multi is null!!\n"));
-
-					lookup_current_value(multi->source,&y);
+				}
+				else if (algorithm[ve_view->table_num] == ALPHA_N)
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+				else if (algorithm[ve_view->table_num] == MAF)
+				{
+					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+					if(!multi)
+						multi = g_hash_table_lookup(hash,"DEFAULT");
 				}
 				else
-					lookup_current_value(ve_view->y_source,&y);
+					multi = g_hash_table_lookup(hash,"DEFAULT");
 
-				/* Test Y values, redraw if needed */
-				if (((fabs(y-yl)/y) > 0.001) || (DATA_GET(global_data,"forced_update")))
-				{
-					yl = y;
-					goto redraw;
-				}
+				if (!multi)
+					printf(_("multi is null!!\n"));
 
-				/* Get Z values */
-				if (ve_view->z_multi_source)
+				lookup_current_value(multi->source,&y);
+			}
+			else
+				lookup_current_value(ve_view->y_source,&y);
+
+			/* Test Y values, redraw if needed */
+			if (((fabs(y-yl)/y) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				yl = y;
+				goto redraw;
+			}
+
+			/* Get Z values */
+			if (ve_view->z_multi_source)
+			{
+				hash = ve_view->z_multi_hash;
+				key = ve_view->z_source_key;
+				hash_key = g_hash_table_lookup(sources_hash,key);
+				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 				{
-					hash = ve_view->z_multi_hash;
-					key = ve_view->z_source_key;
-					hash_key = g_hash_table_lookup(sources_hash,key);
-					if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-					{
-						if (hash_key)
-							multi = g_hash_table_lookup(hash,hash_key);
-						else
-							multi = g_hash_table_lookup(hash,"DEFAULT");
-					}
-					else if (algorithm[ve_view->table_num] == ALPHA_N)
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-					else if (algorithm[ve_view->table_num] == MAF)
-					{
-						multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-						if(!multi)
-							multi = g_hash_table_lookup(hash,"DEFAULT");
-					}
+					if (hash_key)
+						multi = g_hash_table_lookup(hash,hash_key);
 					else
 						multi = g_hash_table_lookup(hash,"DEFAULT");
-
-					if (!multi)
-						printf(_("multi is null!!\n"));
-
-					lookup_current_value(multi->source,&y);
+				}
+				else if (algorithm[ve_view->table_num] == ALPHA_N)
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+				else if (algorithm[ve_view->table_num] == MAF)
+				{
+					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+					if(!multi)
+						multi = g_hash_table_lookup(hash,"DEFAULT");
 				}
 				else
-					lookup_current_value(ve_view->z_source,&z);
+					multi = g_hash_table_lookup(hash,"DEFAULT");
 
-				/* Test Z values, redraw if needed */
-				if (((fabs(z-zl)/z) > 0.001) || (DATA_GET(global_data,"forced_update")))
-				{
-					zl = z;
-					goto redraw;
-				}
-				goto breakout;
+				if (!multi)
+					printf(_("multi is null!!\n"));
+
+				lookup_current_value(multi->source,&z);
+			}
+			else
+				lookup_current_value(ve_view->z_source,&z);
+
+			/* Test Z values, redraw if needed */
+			if (((fabs(z-zl)/z) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				zl = z;
+				goto redraw;
+			}
+			goto breakout;
 
 redraw:
-				gdk_threads_enter();
-				gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
-				gdk_threads_leave();
-			}
+			gdk_threads_enter();
+			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+			gdk_threads_leave();
 		}
 	}
 breakout:

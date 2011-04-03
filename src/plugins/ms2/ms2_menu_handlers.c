@@ -305,6 +305,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
+	gfloat *tmpf = NULL;
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets;
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
@@ -333,8 +334,6 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
 			OBJ_SET(item,"offset",GINT_TO_POINTER(2702));
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_U16));
-			OBJ_SET_FULL(item,"toecu_conv_expr",g_strdup("x/1"),g_free);
-			OBJ_SET_FULL(item,"fromecu_conv_expr",g_strdup("x*1"),g_free);
 			ecu_widgets[0][2702] = g_list_prepend(
 					ecu_widgets[0][2702],
 					(gpointer)item);
@@ -347,8 +346,9 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			OBJ_SET(item,"offset",GINT_TO_POINTER(506));
 			OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-			OBJ_SET_FULL(item,"toecu_conv_expr",g_strdup("x*10"),g_free);
-			OBJ_SET_FULL(item,"fromecu_conv_expr",g_strdup("x/10"),g_free);
+			tmpf = g_new0(gfloat, 1);
+			*tmpf = 0.1;
+			OBJ_SET_FULL(item,"fromecu_mult",tmpf,g_free);
 			ecu_widgets[0][506] = g_list_prepend(
 					ecu_widgets[0][506],
 					(gpointer)item);
@@ -363,8 +363,6 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
 			OBJ_SET(item,"offset",GINT_TO_POINTER(2704));
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_U16));
-			OBJ_SET_FULL(item,"toecu_conv_expr",g_strdup("x/1"),g_free);
-			OBJ_SET_FULL(item,"fromecu_conv_expr",g_strdup("x*1"),g_free);
 			ecu_widgets[0][2704] = g_list_prepend(
 					ecu_widgets[0][2704],
 					(gpointer)item);
@@ -377,8 +375,9 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			OBJ_SET(item,"offset",GINT_TO_POINTER(508));
 			OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 			OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-			OBJ_SET_FULL(item,"toecu_conv_expr",g_strdup("x*10"),g_free);
-			OBJ_SET_FULL(item,"fromecu_conv_expr",g_strdup("x/10"),g_free);
+			tmpf = g_new0(gfloat, 1);
+			*tmpf = 0.1;
+			OBJ_SET_FULL(item,"fromecu_mult",tmpf,g_free);
 			ecu_widgets[0][508] = g_list_prepend(
 					ecu_widgets[0][508],
 					(gpointer)item);
@@ -392,8 +391,9 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		OBJ_SET(item,"offset",GINT_TO_POINTER(530));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET_FULL(item,"toecu_conv_expr",g_strdup("x*10"),g_free);
-		OBJ_SET_FULL(item,"fromecu_conv_expr",g_strdup("x/10"),g_free);
+		tmpf = g_new0(gfloat, 1);
+		*tmpf = 0.1;
+		OBJ_SET_FULL(item,"fromecu_mult",tmpf,g_free);
 		ecu_widgets[0][530] = g_list_prepend(
 				ecu_widgets[0][530],
 				(gpointer)item);
@@ -409,8 +409,9 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		OBJ_SET(item,"offset",GINT_TO_POINTER(532));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET_FULL(item,"toecu_conv_expr",g_strdup("x*10"),g_free);
-		OBJ_SET_FULL(item,"fromecu_conv_expr",g_strdup("x/10"),g_free);
+		tmpf = g_new0(gfloat, 1);
+		*tmpf = 0.1;
+		OBJ_SET_FULL(item,"fromecu_mult",tmpf,g_free);
 		ecu_widgets[0][532] = g_list_prepend(
 				ecu_widgets[0][532],
 				(gpointer)item);
@@ -464,6 +465,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 	GtkWidget *item = NULL;
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
+	gfloat *tmpf = NULL;
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets;
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
@@ -490,8 +492,9 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET_FULL(item,"toecu_conv_expr",g_strdup("x*10"),g_free);
-		OBJ_SET_FULL(item,"fromecu_conv_expr",g_strdup("x/10"),g_free);
+		tmpf = g_new0(gfloat, 1);
+		*tmpf = 0.1;
+		OBJ_SET_FULL(item,"fromecu_mult",tmpf,g_free);
 		ecu_widgets[0][522] = g_list_prepend(
 				ecu_widgets[0][522],
 				(gpointer)item);
@@ -503,8 +506,9 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		OBJ_SET_FULL(item,"toecu_conv_expr",g_strdup("x*10"),g_free);
-		OBJ_SET_FULL(item,"fromecu_conv_expr",g_strdup("x/10"),g_free);
+		tmpf = g_new0(gfloat, 1);
+		*tmpf = 0.1;
+		OBJ_SET_FULL(item,"fromecu_mult",tmpf,g_free);
 		ecu_widgets[0][524] = g_list_prepend(
 				ecu_widgets[0][524],
 				(gpointer)item);

@@ -556,7 +556,7 @@ fromecu_mult=0.352
 _tooltip=This is the Maximum allowed additional timing advance to be added on by the clt based advance.
 
 [iat_ret_map_setpoint_entry]
-keys=page,offset,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_add,bind_to_list
+keys=page,offset,tooltip,source_key,multi_expr_keys,fromecu_mults,fromecu_adds,bind_to_list
 page=0
 offset=51
 source_key=map_sensor

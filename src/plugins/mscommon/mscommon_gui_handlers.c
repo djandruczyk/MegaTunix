@@ -242,6 +242,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 			{
 				/*              printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
 				g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(widget,"source_key")),g_strdup(OBJ_GET(widget,"source_value")));
+				gdk_threads_add_timeout(2000,update_multi_expression,NULL);
 			}
 			/* FAll Through */
 		case GENERIC:
@@ -330,6 +331,8 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	if (OBJ_GET(widget,"table_2_update"))
 		gdk_threads_add_timeout(2000,force_update_table,OBJ_GET(widget,"table_2_update"));
 
+	if (OBJ_GET(widget,"algorithm"))
+		handle_algorithm(widget);
 	/* Update controls that are dependant on a controls state...
 	 * In this case, MAP sensor related ctrls */
 	if (OBJ_GET(widget,"group_2_update"))
@@ -496,8 +499,6 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
-	gchar * toecu_conv = NULL;
-	gchar * fromecu_conv = NULL;
 	gint precision = 0;
 	gchar ** vector = NULL;
 	guint i = 0;
@@ -644,6 +645,8 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 			break;
 	}
 
+	if (OBJ_GET(widget,"algorithms"))
+		combo_handle_algorithms(widget);
 	if (OBJ_GET(widget,"swap_labels"))
 		swap_labels_f(widget,bitval);
 	if (OBJ_GET(widget,"table_2_update"))
@@ -1272,10 +1275,10 @@ void update_checkbutton(GtkWidget *widget)
 		set_widget_labels_f(set_labels);
 	if (OBJ_GET(widget,"swap_labels"))
 		swap_labels_f(widget,new_state);
-	if ((new_state) && (OBJ_GET(widget,"group_2_update")))
-		handle_group_2_update(widget);
 	if (new_state)
 		handle_algorithm(widget);
+	if ((new_state) && (OBJ_GET(widget,"group_2_update")))
+		handle_group_2_update(widget);
 	if (OBJ_GET(widget,"toggle_groups"))
 		toggle_groups_linked_f(widget,new_state);
 }
@@ -1427,10 +1430,10 @@ void update_combo(GtkWidget *widget)
 		{
 			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 			gtk_widget_modify_base(GTK_BIN (widget)->child,GTK_STATE_NORMAL,&white);
-			if (OBJ_GET(widget,"group_2_update"))
-				combo_handle_group_2_update(widget);
 			if (OBJ_GET(widget,"algorithms"))
 				combo_handle_algorithms(widget);
+			if (OBJ_GET(widget,"group_2_update"))
+				combo_handle_group_2_update(widget);
 			goto combo_toggle;
 		}
 		valid = gtk_tree_model_iter_next (GTK_TREE_MODEL(model), &iter);
@@ -1460,27 +1463,28 @@ void combo_handle_group_2_update(GtkWidget *widget)
 	gchar **vector = NULL;
 	gchar * source_key = NULL;
 	gchar * source_values = NULL;
-	
+
 	if (!sources_hash)
 		sources_hash = DATA_GET(global_data,"sources_hash");
 
 	source_key = OBJ_GET(widget,"source_key");
 	source_values = OBJ_GET(widget,"source_values");
 
-	g_return_if_fail(sources_hash);	
-	g_return_if_fail(source_key);	
-	g_return_if_fail(source_values);	
+	g_return_if_fail(sources_hash);
+	g_return_if_fail(source_key);
+	g_return_if_fail(source_values);
 
 	vector = g_strsplit(source_values,",",-1);
 	if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
 	{
-		dbg_func_f(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with source_values,  length mismatch, check datamap\n"));
+		dbg_func_f(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with source_values, length mismatch, check datamap\n"));
 		g_strfreev(vector);
 		return ;
 	}
 	g_hash_table_replace(sources_hash,g_strdup(source_key),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
 	g_list_foreach(get_list_f("multi_expression"),update_widget,NULL);
 	g_strfreev(vector);
+
 }
 
 

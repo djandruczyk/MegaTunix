@@ -164,18 +164,13 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 					break;
 			}
 		}
-		if (!multiplier)
-		{
-			printf("ERROR, no multiplier for hash key %s\n",hash_key);
-			*multiplier = 1;
-		}
-		if (!adder)
-		{
-			printf("ERROR, no adder for hash key %s\n",hash_key);
-			*adder = 0;
-		}
-		/* Reverse calc due to this bing TO the ecu */
-		return_value = (GINT)((value - (*adder))/(*multiplier));
+		/* Reverse calc due to this being TO the ecu */
+		if ((multiplier) && (adder))
+			return_value = (GINT)((value - (*adder))/(*multiplier));
+		else if (multiplier)
+			return_value = (GINT)(value/(*multiplier));
+		else
+			return_value = (GINT)value;
 	}
 	else /* NON Multi Expression */
 	{
@@ -198,11 +193,12 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			multiplier = (gfloat *)OBJ_GET(widget,"fromecu_mult");
 			adder = (gfloat *)OBJ_GET(widget,"fromecu_add");
 			/* Handle all cases of with or without multiplier/adder*/
-			if (!multiplier)
-				*multiplier = 1;
-			if (!adder)
-				*adder = 0;
-			return_value = (GINT)((value - (*adder))/(*multiplier));
+			if ((multiplier) && (adder))
+				return_value = (GINT)((value - (*adder))/(*multiplier));
+			else if (multiplier)
+				return_value = (GINT)(value/(*multiplier));
+			else
+				return_value = (GINT)value;
 		}
 	}
 	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",glade_get_widget_name(widget),value,return_value));
@@ -327,6 +323,10 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			key_list = OBJ_GET(widget,"multi_expr_keys");
 			mult_list = OBJ_GET(widget,"fromecu_mults");
 			add_list = OBJ_GET(widget,"fromecu_adds");
+			if (!mult_list)
+				printf("BUG, widget %s is multi_expression but doesn't have fromecu_mults defined!\n",glade_get_widget_name(widget));
+			if (!add_list)
+				printf("BUG, widget %s is multi_expression but doesn't have fromecu_adds defined!\n",glade_get_widget_name(widget));
 			keys = g_strsplit(key_list,",",-1);
 			mults = g_strsplit(mult_list,",",-1);
 			adds = g_strsplit(add_list,",",-1);
@@ -395,17 +395,12 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 					break;
 			}
 		}
-		if (!multiplier)
-		{
-			printf("ERROR, no multiplier for hash key %s\n",hash_key);
-			*multiplier = 1;
-		}
-		if (!adder)
-		{
-			printf("ERROR, no adder for hash key %s\n",hash_key);
-			*adder = 0;
-		}
-		return_value = (GINT)((tmpi - (*adder))/(*multiplier));
+		if ((multiplier) && (adder))
+			return_value = (((gfloat)tmpi * (*multiplier)) + (*adder));
+		else if (multiplier)
+			return_value = (gfloat)tmpi * (*multiplier);
+		else
+			return_value = (gfloat)tmpi;
 	}
 	else
 	{
@@ -425,11 +420,12 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		{
 			multiplier = OBJ_GET(widget,"fromecu_mult");
 			adder = OBJ_GET(widget,"fromecu_add");
-			if (!multiplier)
-				*multiplier = 1;
-			if (!adder)
-				*adder = 0;
-			return_value = (((gfloat)tmpi * (*multiplier))+ (*adder));
+			if ((multiplier) && (adder))
+				return_value = (((gfloat)tmpi * (*multiplier)) + (*adder));
+			else if (multiplier)
+				return_value = (gfloat)tmpi * (*multiplier);
+			else
+				return_value = (gfloat)tmpi;
 			/*dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNo/Fast CONVERSION defined for  widget %s, value %f\n",(gchar *)glade_get_widget_name(widget), return_value));*/
 		}
 

@@ -733,6 +733,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 					firmware->table_params[i]->x_fromecu_mult = g_new0(gfloat, 1);
 					*(firmware->table_params[i]->x_fromecu_mult) = tmpf;
 				}
+				if(cfg_read_float(cfgfile,section,"x_fromecu_add",&tmpf))
+				{
+					firmware->table_params[i]->x_fromecu_add = g_new0(gfloat, 1);
+					*(firmware->table_params[i]->x_fromecu_add) = tmpf;
+				}
 			}
 			if(!cfg_read_int(cfgfile,section,"x_precision",&firmware->table_params[i]->x_precision))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n",i));
@@ -752,8 +757,6 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"y_sources\" variable not found in interrogation profile, ERROR\n"));
 			if(!cfg_read_string(cfgfile,section,"y_suffixes",&firmware->table_params[i]->y_suffixes))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"y_suffixes\" variable not found in interrogation profile, ERROR\n"));
-			cfg_read_string(cfgfile,section,"y_fromecu_conv_expr",&firmware->table_params[i]->y_fromecu_conv_expr);
-			cfg_read_string(cfgfile,section,"y_toecu_conv_expr",&firmware->table_params[i]->y_toecu_conv_expr);
 			if(!cfg_read_string(cfgfile,section,"y_fromecu_mults",&firmware->table_params[i]->y_fromecu_mults))
 				dbg_func_f(INTERROGATOR|CRITICAL,g_strdup_printf(__FILE__": load_firmware_details()\n\t\"y_fromecu_mults\" variable not found in interrogation profile, table %i, ERROR\n",i));
 			if(!cfg_read_string(cfgfile,section,"y_fromecu_adds",&firmware->table_params[i]->y_fromecu_adds))
@@ -779,6 +782,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				{
 					firmware->table_params[i]->y_fromecu_mult = g_new0(gfloat, 1);
 					*(firmware->table_params[i]->y_fromecu_mult) = tmpf;
+				}
+				if(cfg_read_float(cfgfile,section,"y_fromecu_add",&tmpf))
+				{
+					firmware->table_params[i]->y_fromecu_add = g_new0(gfloat, 1);
+					*(firmware->table_params[i]->y_fromecu_add) = tmpf;
 				}
 			}
 			if(!cfg_read_int(cfgfile,section,"y_precision",&firmware->table_params[i]->y_precision))
@@ -824,6 +832,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				{
 					firmware->table_params[i]->z_fromecu_mult = g_new0(gfloat, 1);
 					*(firmware->table_params[i]->z_fromecu_mult) = tmpf;
+				}
+				if(cfg_read_float(cfgfile,section,"z_fromecu_add",&tmpf))
+				{
+					firmware->table_params[i]->z_fromecu_add = g_new0(gfloat, 1);
+					*(firmware->table_params[i]->z_fromecu_add) = tmpf;
 				}
 			}
 			if(!cfg_read_int(cfgfile,section,"z_precision",&firmware->table_params[i]->z_precision))

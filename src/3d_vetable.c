@@ -47,7 +47,6 @@
 #include <gtk/gtkgl.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
-#include <mtxmatheval.h>
 #include <math.h>
 #include <multi_expr_loader.h>
 #include <notifications.h>
@@ -238,6 +237,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	GtkWidget *label;
 	GtkWidget *scale;
 	GtkWidget *drawing_area;
+	gfloat *mult = NULL;
+	gfloat *add = NULL;
 	GdkGLConfig *gl_config;
 	gchar * tmpbuf = NULL;
 	gint i = 0;
@@ -315,30 +316,51 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			ve_view->z_depend_on = firmware->table_params[table_num]->z_depend_on;
 	}
 
-	if (firmware->table_params[table_num]->x_dl_eval)
+	mult = firmware->table_params[table_num]->x_fromecu_mult;	
+	add = firmware->table_params[table_num]->x_fromecu_add;	
+	if ((mult) && (add))
 	{
-		ve_view->x_smallstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->x_dl_eval,1);
-		ve_view->x_bigstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->x_dl_eval,10);
+		ve_view->x_smallstep = (1 * (*mult)) + (*add);
+		ve_view->x_bigstep = (10 * (*mult)) + (*add);
+	}
+	else if (mult)
+	{
+		ve_view->x_smallstep = (1 * (*mult));
+		ve_view->x_bigstep = (10 * (*mult));
 	}
 	else
 	{
 		ve_view->x_smallstep = 1;
 		ve_view->x_bigstep = 10;
 	}
-	if (firmware->table_params[table_num]->y_dl_eval)
+	mult = firmware->table_params[table_num]->y_fromecu_mult;	
+	add = firmware->table_params[table_num]->y_fromecu_add;	
+	if ((mult) && (add))
 	{
-		ve_view->y_smallstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->y_dl_eval,1);
-		ve_view->y_bigstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->y_dl_eval,10);
+		ve_view->y_smallstep = (1 * (*mult)) + (*add);
+		ve_view->y_bigstep = (10 * (*mult)) + (*add);
+	}
+	else if (mult)
+	{
+		ve_view->y_smallstep = (1 * (*mult));
+		ve_view->y_bigstep = (10 * (*mult));
 	}
 	else
 	{
 		ve_view->y_smallstep = 1;
 		ve_view->y_bigstep = 10;
 	}
-	if (firmware->table_params[table_num]->z_dl_eval)
+	mult = firmware->table_params[table_num]->z_fromecu_mult;	
+	add = firmware->table_params[table_num]->z_fromecu_add;	
+	if ((mult) && (add))
 	{
-		ve_view->z_smallstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->z_dl_eval,1);
-		ve_view->z_bigstep = (GINT)evaluator_evaluate_x(firmware->table_params[table_num]->z_dl_eval,10);
+		ve_view->z_smallstep = (1 * (*mult)) + (*add);
+		ve_view->z_bigstep = (10 * (*mult)) + (*add);
+	}
+	else if (mult)
+	{
+		ve_view->z_smallstep = (1 * (*mult));
+		ve_view->z_bigstep = (10 * (*mult));
 	}
 	else
 	{
@@ -383,7 +405,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		OBJ_SET(ve_view->x_objects[i],"page",GINT_TO_POINTER(ve_view->x_page));
 		OBJ_SET(ve_view->x_objects[i],"offset",GINT_TO_POINTER(ve_view->x_base+(ve_view->x_mult * i)));
 		OBJ_SET(ve_view->x_objects[i],"size",GINT_TO_POINTER(ve_view->x_size));
-		OBJ_SET_FULL(ve_view->x_objects[i],"fromecu_conv_expr",g_strdup(firmware->table_params[table_num]->x_fromecu_conv_expr),g_free);
+		OBJ_SET(ve_view->x_objects[i],"fromecu_mult",firmware->table_params[table_num]->x_fromecu_mult);
+		OBJ_SET(ve_view->x_objects[i],"fromecu_add",firmware->table_params[table_num]->x_fromecu_add);
 		if (firmware->table_params[table_num]->x_multi_source)
 		{
 			OBJ_SET_FULL(ve_view->x_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->x_source_key),g_free);
@@ -400,12 +423,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		OBJ_SET(ve_view->y_objects[i],"page",GINT_TO_POINTER(ve_view->y_page));
 		OBJ_SET(ve_view->y_objects[i],"offset",GINT_TO_POINTER(ve_view->y_base+(ve_view->y_mult * i)));
 		OBJ_SET(ve_view->y_objects[i],"size",GINT_TO_POINTER(ve_view->y_size));
-		OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_conv_expr",g_strdup(firmware->table_params[table_num]->y_fromecu_conv_expr),g_free);
+		OBJ_SET(ve_view->y_objects[i],"fromecu_mult",firmware->table_params[table_num]->y_fromecu_mult);
+		OBJ_SET(ve_view->y_objects[i],"fromecu_add",firmware->table_params[table_num]->y_fromecu_add);
 		if (firmware->table_params[table_num]->y_multi_source)
 		{
 			OBJ_SET_FULL(ve_view->y_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->y_source_key),g_free);
 			OBJ_SET_FULL(ve_view->y_objects[i],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->y_multi_expr_keys),g_free);
-			OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_mults",g_strdup(firmware->table_params[table_num]->y_fromecu_adds),g_free);
+			OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_mults",g_strdup(firmware->table_params[table_num]->y_fromecu_mults),g_free);
 			OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_adds",g_strdup(firmware->table_params[table_num]->y_fromecu_adds),g_free);
 		}
 	}
@@ -427,7 +451,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			else
 				OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((j*ve_view->y_bincount)+i))));
 			OBJ_SET(ve_view->z_objects[i][j],"size",GINT_TO_POINTER(ve_view->z_size));
-			OBJ_SET_FULL(ve_view->z_objects[i][j],"fromecu_conv_expr",g_strdup(firmware->table_params[table_num]->z_fromecu_conv_expr),g_free);
+			OBJ_SET(ve_view->z_objects[i][j],"fromecu_mult",firmware->table_params[table_num]->z_fromecu_mult);
+			OBJ_SET(ve_view->z_objects[i][j],"fromecu_add",firmware->table_params[table_num]->z_fromecu_add);
 			if (firmware->table_params[table_num]->z_multi_source)
 			{
 				OBJ_SET_FULL(ve_view->z_objects[i][j],"source_key",g_strdup(firmware->table_params[table_num]->z_source_key),g_free);

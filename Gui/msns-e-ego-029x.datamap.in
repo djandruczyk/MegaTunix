@@ -148,7 +148,8 @@ toggle_groups=,afr2
 _tooltip=Enables or Disables Target AFR functionality for VETable(s) 2 only (DT).  NOTE: This is only really to be used with Wideband O<sub>2</sub> sensors.
 
 [tafr_strat_combo]
-keys=page,offset,choices,bitvals,bitmask,group_2_update,algorithms,applicable_tables,swap_labels,tooltip
+;keys=page,offset,choices,bitvals,bitmask,group_2_update,algorithms,applicable_tables,swap_labels,tooltip
+keys=page,offset,choices,bitvals,bitmask,algorithms,applicable_tables,swap_labels,tooltip
 page=0
 offset=109
 bitvals=0,1
@@ -156,7 +157,7 @@ bitmask=16
 choices=Speed Density,Alpha-N
 algorithms=_SPEED_DENSITY_,_ALPHA_N_
 applicable_tables=5,6
-group_2_update=multi_expression
+;group_2_update=multi_expression
 swap_labels=AFR_AFR1_load_tbl_lab,AFR_AFR1_load_tbl_units,AFR_AFR2_load_tbl_lab,AFR_AFR2_load_tbl_units
 _tooltip=This is to determine the scales on the AFR tables whether they are in RPM vs MAP (Speed density) or RPM vs TPS (Alpha-N).
 
