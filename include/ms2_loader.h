@@ -20,11 +20,11 @@
 /* Prototypes */
 void do_ms2_load(gint, gint);
 gint read_s19(gint);
-void enter_boot_mode(gint);
+void ms2_enter_boot_mode(gint);
 gboolean wakeup_S12(gint);
 gboolean check_status(gint, gint *);
 void erase_S12(gint);
-void send_S12(gint, guint);
+gboolean send_S12(gint, guint);
 void free_s19(guint);
 void reset_proc(gint);
 void output(gchar *, gboolean);

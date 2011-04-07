@@ -92,11 +92,12 @@ void do_ms2_load(gint port_fd, gint file_fd)
 	count = read_s19(file_fd);
 	if (count == 0)
 		return;
-	enter_boot_mode(port_fd);
+	ms2_enter_boot_mode(port_fd);
 	if (!wakeup_S12(port_fd))
 		return;
 	erase_S12(port_fd);
-	send_S12(port_fd,count);
+	if (!send_S12(port_fd,count))
+		output("Device update FAILURE!!!\n",FALSE);
 	free_s19(count);
 	reset_proc(port_fd);
 	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
@@ -221,13 +222,14 @@ gboolean wakeup_S12(gint port_fd)
 		}
 
 		g_usleep(LONG_DELAY);
-		if (check_status(port_fd,&abort))
-			break;
+		check_status(port_fd,&abort);
 		if (abort)
 		{
 			output("Serial Read failure, try unplugging\nand replugging your Serial adapter/cable\n",FALSE);
 			return FALSE;
 		}
+		else 
+			break;
 
 	}
 
@@ -247,26 +249,26 @@ gboolean check_status(gint port_fd,gint *abort)
 	guchar errorCode = 0;
 	guchar statusCode = 0;
 	guchar prompt = 0;
+	guchar buf[3];
 	gint res = 0;
 	gboolean retval = TRUE;
 
-	res = read(port_fd, &errorCode, 1);
+	res = read(port_fd, &buf, 3);
 	if (res == -1)
 	{
+		printf("READ FAILURE in check_status!\n");
+		flush_serial(port_fd, BOTH);
 		*abort = TRUE;
 		return FALSE;
 	}
-	if (res != 1)
-		output("error reading errorCode\n",FALSE);
-	res = read(port_fd, &statusCode, 1);
-	if (res != 1)
-		output("error reading statusCode\n",FALSE);
-	res = read(port_fd, &prompt, 1);
-	if (res != 1)
-		output("error reading prompt\n",FALSE);
+	if (res != 3)
+		output("error reading error/status/prompt Code\n",FALSE);
+	errorCode = buf[0];
+	statusCode = buf[1];
+	prompt = buf[2];
 
 	if (debug >= 4) {
-		output(g_strdup_printf("RX: %02x %02x %02xn", errorCode,statusCode, prompt),TRUE);
+		output(g_strdup_printf("RX: %02x %02x %02x\n", errorCode,statusCode, prompt),TRUE);
 	}
 
 	switch(errorCode) 
@@ -342,7 +344,7 @@ gboolean check_status(gint port_fd,gint *abort)
 
 	if (prompt != '>') 
 	{
-		output(g_strdup_printf("Prompt was expected to be \">\" but returned as \"%c\" \n\n",prompt),TRUE);
+		output(g_strdup_printf("Prompt was expected to be \"3e\" but returned as \"%.2x\" \n\n",prompt),TRUE);
 		retval = FALSE;
 	} 
 	else
@@ -350,7 +352,7 @@ gboolean check_status(gint port_fd,gint *abort)
 	return retval;
 }
 
-void sendPPAGE(gint port_fd, guint a, guchar erasing)
+void sendPPAGE(gint port_fd, guint a, gboolean erasing)
 {
 	guchar c;
 	gboolean abort = FALSE;
@@ -386,17 +388,18 @@ void sendPPAGE(gint port_fd, guint a, guchar erasing)
 			output(g_strdup_printf("Page 0x%02x erased...\n",page),TRUE);
 			check_status(port_fd,&abort);
 		}
-
 	}
 }
 
-void send_block(gint port_fd, guint a, guchar *b, guint n)
+gboolean send_block(gint port_fd, guint a, guchar *b, guint n)
 {
 	guchar command[4];
+	gint errcount = 0;
 	gboolean abort = FALSE;
 	guchar i;
 	guint res = 0;
 
+retry:
 	if ((a < 0x400)) {
 		if (debug) {
 			output(g_strdup_printf("Skipping block %04x\n", a),TRUE);
@@ -409,7 +412,7 @@ void send_block(gint port_fd, guint a, guchar *b, guint n)
 	command[2] = 0;
 	command[3] = 0;
 
-	sendPPAGE(port_fd,a, 1);
+	sendPPAGE(port_fd,a, TRUE);
 
 	command[1] = 0xFF & (a >> 8);
 	command[2] = 0xFF & a;
@@ -433,7 +436,18 @@ void send_block(gint port_fd, guint a, guchar *b, guint n)
 	if (res != n)
 		output(g_strdup_printf("send_block(): SHORT WRITE %i of %i",res,n),TRUE);
 	total_bytes += n;
-	check_status(port_fd,&abort);
+	if (!check_status(port_fd,&abort))
+	{
+		printf("send_block error, retrying\n");
+		flush_serial(port_fd,BOTH);
+		errcount++;
+		if (errcount > 5)
+		{
+			printf("too many errors, aborting!\n");
+			return FALSE;
+		}
+		goto retry;
+	}
 }
 
 void erase_S12(gint port_fd)
@@ -442,7 +456,7 @@ void erase_S12(gint port_fd)
 	gboolean abort = FALSE;
 	gint res = 0;
 
-	if (debug) {
+	if (debug > 0) {
 		output( "Erasing main flash!\n",FALSE);
 	}
 	c = C_ERASE_ALL;
@@ -453,7 +467,9 @@ void erase_S12(gint port_fd)
 	g_usleep(5*LONG_DELAY);
 	check_status(port_fd,&abort);
 }
-void send_S12(gint port_fd, guint count)
+
+
+gboolean send_S12(gint port_fd, guint count)
 {
 	guint i = 0;
 	guint j = 0;
@@ -521,34 +537,31 @@ void send_S12(gint port_fd, guint count)
 				nn = 0x8000 - addr;
 			}
 
-			send_block(port_fd,addr, thisRecPtr, nn);
+			if (!send_block(port_fd,addr, thisRecPtr, nn))
+				return FALSE;
 			dataSize -= nn;
 			thisRecPtr += nn;
 			addr += nn;
 			if (addr >= 0x8000 && addr <= 0xBFFF) addr += 0x4000;
 		}
-
 		free(thisRec);
 	}
+	return TRUE;
 }
 
-void enter_boot_mode(gint port_fd)
+void ms2_enter_boot_mode(gint port_fd)
 {
-	/* The target cpu is VERY prone to timing issues, this is flakey and I 
-	 * do NOT like this design.
-	 */
 	gint res = 0;
-	res = write(port_fd, "!", 1);
+	gint abort = FALSE;
+	printf("enter boot mode\n");
+	res = write(port_fd, "!!!SafetyFirst", 14);
+	if (res != 14)
+		output(g_strdup_printf("ms2_enter_boot_mode() SHORT WRITE, sent %i of 14\n",res),TRUE);
 	g_usleep(LONG_DELAY);
-	res = write(port_fd, "!", 1);
-	g_usleep(LONG_DELAY);
-	res = write(port_fd, "!", 1);
-	g_usleep(LONG_DELAY);
-	res = write(port_fd, "SafetyFirst", 11);
-	if (res != 11)
-		output(g_strdup_printf("enter_boot_mode() SHORT WRITE, sent %i of 14\n",res),TRUE);
-	g_usleep(LONG_DELAY);
+	check_status(port_fd,&abort);
+	//printf("status %i\n",abort);
 	flush_serial(port_fd, BOTH);
+	printf("flush\n");
 }
 
 void reset_proc(gint port_fd)

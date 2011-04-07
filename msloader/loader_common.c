@@ -71,7 +71,7 @@ gint setup_port(gint fd, gint baud)
 
 	/* Save serial port status */
 	tcgetattr(fd,&oldtio);
-	flush_serial(fd, TCIOFLUSH);
+	flush_serial(fd, BOTH);
 
 	memset(&newtio, 0, sizeof(newtio));
 	/* 
@@ -123,7 +123,7 @@ gint setup_port(gint fd, gint baud)
 	newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	newtio.c_cc[VEOL]     = 0;     /* '\0' */
 	newtio.c_cc[VMIN]     = 0;
-	newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
+	newtio.c_cc[VTIME]    = 2;     /* 100ms timeout */
 	/* MS2 quirk */
 
 	tcsetattr(fd,TCSANOW,&newtio);
@@ -138,6 +138,7 @@ void close_port(gint fd)
 {
 #ifndef __WIN32__
 	tcsetattr(fd,TCSAFLUSH,&oldtio);
+	flush_serial(fd,BOTH);
 #endif
 	close(fd);
 	return;
