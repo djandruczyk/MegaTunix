@@ -358,4 +358,11 @@ typedef enum
 	FAHRENHEIT,
 	CELSIUS
 }TempUnits;
+
+typedef enum 
+{
+	FROMECU=0xffaa,
+	TOECU
+}ConvDir;
+
 #endif

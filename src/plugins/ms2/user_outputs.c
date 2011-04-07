@@ -46,6 +46,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gchar *raw_upper_str = NULL;
 	gfloat real_lower = 0.0;
 	gfloat real_upper = 0.0;
+	gfloat tmpf = 0.0;
 	gchar * name = NULL;
 	gchar *regex = NULL;
 	GString *string = NULL;
@@ -81,18 +82,35 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		if (DATA_GET(object,"special"))
 			continue;
 		size = (DataSize)DATA_GET(object,"size");
-		lower = DATA_GET(object,"real_lower");
-		upper = DATA_GET(object,"real_upper");
 		multiplier = DATA_GET(object,"fromecu_mult");
 		adder = DATA_GET(object,"fromecu_add");
 		precision = (GINT) DATA_GET(object,"precision");
 		bitval = (GINT) DATA_GET(object,"offset");
-		if ((!lower) && (!upper))
-			range = g_strdup_printf("Valid Range: undefined");
+		if (DATA_GET(object,"real_lower"))
+		{
+			lower = DATA_GET(object,"real_lower");
+			real_lower = g_strtod(lower,NULL);
+			raw_lower = calc_value_f(real_lower,multiplier,adder,TOECU);
+		}
 		else
-			range = g_strdup_printf("Valid Range: %s <-> %s",lower,upper);
-		real_lower = g_strtod(lower,NULL);
-		real_upper = g_strtod(upper,NULL);
+		{
+			raw_lower = get_extreme_from_size_f(size,LOWER);
+			tmpf = calc_value_f(raw_lower,multiplier,adder,FROMECU);
+			lower = g_strdup_printf("%i",(gint)tmpf);
+		}
+		if (DATA_GET(object,"real_upper"))
+		{
+			upper = DATA_GET(object,"real_upper");
+			real_upper = g_strtod(upper,NULL);
+			raw_upper = calc_value_f(real_upper,multiplier,adder,TOECU);
+		}
+		else
+		{
+			raw_upper = get_extreme_from_size_f(size,UPPER);
+			tmpf = calc_value_f(raw_upper,multiplier,adder,FROMECU);
+			lower = g_strdup_printf("%i",(gint)tmpf);
+		}
+		range = g_strdup_printf("Valid Range: %s <-> %s",lower,upper);
 		if ((multiplier) && (adder))
 		{
 			raw_lower = (GINT)((real_lower - (*adder))/(*multiplier));

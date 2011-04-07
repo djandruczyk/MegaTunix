@@ -435,7 +435,6 @@ retry:
 	res = write(port_fd, b, n);
 	if (res != n)
 		output(g_strdup_printf("send_block(): SHORT WRITE %i of %i",res,n),TRUE);
-	total_bytes += n;
 	if (!check_status(port_fd,&abort))
 	{
 		printf("send_block error, retrying\n");
@@ -448,6 +447,7 @@ retry:
 		}
 		goto retry;
 	}
+	total_bytes += n;
 }
 
 void erase_S12(gint port_fd)

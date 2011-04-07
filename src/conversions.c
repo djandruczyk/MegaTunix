@@ -802,3 +802,31 @@ G_MODULE_EXPORT gdouble k_to_c(gdouble in)
 {
 	return (in-273.0);
 }
+
+
+G_MODULE_EXPORT gfloat calc_value(gfloat in, gfloat *mult, gfloat *add, ConvDir dir)
+{
+	gfloat result = 0.0;
+
+	g_return_val_if_fail(((dir == FROMECU)||(dir == TOECU)),0.0);
+	if (dir == FROMECU)
+	{
+		if ((mult) && (add))
+			result = (in * (*mult)) + (*add);
+		else if (mult)
+			result = (in * (*mult));
+		else
+			result = in;
+	}
+	else if (dir == TOECU)
+	{
+		if ((mult) && (add))
+			result = (in - (*add))/(*mult);
+		else if (mult)
+			result = in/(*mult);
+		else
+			result = in;
+	}
+	return result;
+}
+

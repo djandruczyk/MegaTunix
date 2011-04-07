@@ -1038,10 +1038,12 @@ _tooltip="PW4" is the pulsewidth for injector channel 4. Resolution of 1 us.
 log_by_default=TRUE
 
 [derived_85]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=vetrim1curr
 dlog_gui_name=vetrim1curr
 dlog_field_name=vetrim1curr
+real_lower=-320
+real_upper=320
 offset=150
 size=_S16_
 fromecu_mult=0.00976562500
@@ -1049,10 +1051,12 @@ _tooltip="vetrim1curr" is the current trim value associated with injector channe
 log_by_default=TRUE
 
 [derived_86]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=vetrim2curr
 dlog_gui_name=vetrim2curr
 dlog_field_name=vetrim2curr
+real_lower=-320
+real_upper=320
 offset=152
 size=_S16_
 fromecu_mult=0.00976562500
@@ -1060,10 +1064,12 @@ _tooltip="vetrim2curr" is the current trim value associated with injector channe
 log_by_default=TRUE
 
 [derived_87]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=vetrim3curr
 dlog_gui_name=vetrim3curr
 dlog_field_name=vetrim3curr
+real_lower=-320
+real_upper=320
 offset=154
 size=_S16_
 fromecu_mult=0.00976562500
@@ -1071,10 +1077,12 @@ _tooltip="vetrim3curr" is the current trim value associated with injector channe
 log_by_default=TRUE
 
 [derived_88]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=vetrim4curr
 dlog_gui_name=vetrim4curr
 dlog_field_name=vetrim4curr
+real_lower=-320
+real_upper=320
 offset=156
 size=_S16_
 fromecu_mult=0.00976562500
@@ -1082,10 +1090,12 @@ _tooltip="vetrim4curr" is the current trim value associated with injector channe
 log_by_default=TRUE
 
 [derived_89]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=maf
 dlog_gui_name=maf
 dlog_field_name=MAF
+real_lower=0
+real_upper=655
 offset=158
 size=_U16_
 fromecu_mult=0.01
@@ -1093,10 +1103,12 @@ _tooltip="maf" is the MAF sensor flow rate in grams/sec
 log_by_default=FALSE
 
 [derived_90]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=eaeload1
 dlog_gui_name=eaeload1
 dlog_field_name=eaeload1
+real_lower=0
+real_upper=655
 offset=160
 size=_S16_
 fromecu_mult=0.1
@@ -1104,10 +1116,12 @@ _tooltip="eaeload1" is undefined
 log_by_default=TRUE
 
 [derived_91]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=afrload1
 dlog_gui_name=afrload1
 dlog_field_name=afrload1
+real_lower=0
+real_upper=655
 offset=162
 size=_S16_
 fromecu_mult=0.1
@@ -1115,10 +1129,12 @@ _tooltip="afrload1" is undefined
 log_by_default=TRUE
 
 [derived_92]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=rpmdot
 dlog_gui_name=rpmdot
 dlog_field_name=rpmdot
+real_lower=0
+real_upper=32768
 offset=164
 size=_S16_
 fromecu_mult=10
@@ -1126,30 +1142,36 @@ _tooltip="rpmdot" is undefined
 log_by_default=TRUE
 
 [derived_93]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,tooltip,log_by_default
 internal_names=gpioport0
 dlog_gui_name=gpioport0
 dlog_field_name=gpioport0
+real_lower=0
+real_upper=255
 offset=166
 size=_U08_
 _tooltip="gpioport0" is undefined
 log_by_default=FALSE
 
 [derived_94]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,tooltip,log_by_default
 internal_names=gpioport1
 dlog_gui_name=gpioport1
 dlog_field_name=gpioport1
+real_lower=0
+real_upper=255
 offset=167
 size=_U08_
 _tooltip="gpioport1" is undefined
 log_by_default=FALSE
 
 [derived_95]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,tooltip,log_by_default
 internal_names=gpioport2
 dlog_gui_name=gpioport2
 dlog_field_name=gpioport2
+real_lower=0
+real_upper=255
 offset=168
 size=_U08_
 _tooltip="gpioport2" is undefined
@@ -1180,10 +1202,12 @@ _tooltip="AccDecEnrich" Is the current accel/decel enrichment
 log_by_default=TRUE
 
 [derived_97]
-keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
+keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
 internal_names=rpm100
 dlog_gui_name=rpm100
 dlog_field_name=rpm100
+real_lower=0
+real_upper=655
 offset=6
 size=_U16_
 fromecu_mult=0.01

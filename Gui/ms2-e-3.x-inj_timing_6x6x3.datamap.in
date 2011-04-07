@@ -54,7 +54,7 @@ use_color=TRUE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Injection Timing-Table define the vertexes (points on the Injection Timing map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [table_1]
-keys=size,precision,use_color,table_num,tooltip,fromecu_mult
+keys=size,precision,use_color,raw_lower,raw_upper,table_num,tooltip,fromecu_mult
 size=_S16_
 precision=1
 raw_lower=-3600
@@ -65,7 +65,7 @@ fromecu_mult=0.1
 _tooltip=See MS2-Extra Manuals
 
 [table_2]
-keys=size,precision,use_color,table_num,tooltip,fromecu_mult
+keys=size,precision,use_color,raw_lower,raw_upper,table_num,tooltip,fromecu_mult
 size=_S16_
 precision=1
 raw_lower=-3600
@@ -76,7 +76,7 @@ fromecu_mult=0.1
 _tooltip=See MS2-Extra Manuals
 
 [table_3]
-keys=size,precision,page,use_color,table_num,tooltip,fromecu_mult,raw_upper
+keys=size,precision,page,use_color,raw_lower,raw_upper,table_num,tooltip,fromecu_mult
 page=1
 precision=1
 size=_S16_
