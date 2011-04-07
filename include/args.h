@@ -41,6 +41,7 @@ struct _CmdLineArgs
 	gchar *autolog_dump_dir;/* What dir to put logs into */
 	gchar *autolog_basename;/* Autolog base filename */
 	gchar *network_host;	/* Network host */
+	gchar *persona;		/* ECU Persona to default to */
 	gchar *port;		/* Serial port override */
 	gint network_port;	/* Network port */
 	gboolean network_mode;	/* Network mode */

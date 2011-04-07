@@ -54,6 +54,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		{"DEBUG Log",'D',0,G_OPTION_ARG_FILENAME,&args->dbglog,"Debug logfile name (referenced from homedir)",NULL},
 		{"Version",'V',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
+		{"persona",'p',0,G_OPTION_ARG_STRING,&args->persona,"ECU Personality <MS1|MS2|MS3|FreeEMS|Secu3|JimStim|PIS|OBDII>",NULL},
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
 		{"Port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use this serial port ONLY",NULL},
 		/*{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},*/
@@ -119,6 +120,8 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(FALSE));
 		DATA_SET_FULL(global_data,"override_port",g_strdup(args->port),g_free);
 	}
+	if (args->persona)
+		DATA_SET_FULL(global_data,"cli_persona",g_strdup(args->persona),g_free);
 	if (args->autolog_dump)
 	{
 
@@ -167,6 +170,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		printf(_("Global debug filename\"%s\"\n"),args->dbglog);
 		printf(_("Version option \"%i\"\n"),args->version);
 		printf(_("Port option \"%s\"\n"),args->port);
+		printf(_("Persona option \"%s\"\n"),args->persona);
 		printf(_("quiet option \"%i\"\n"),args->be_quiet);
 		printf(_("inhibit tabs \"%i\"\n"),args->inhibit_tabs);
 		printf(_("no rttext option \"%i\"\n"),args->hide_rttext);
@@ -228,5 +232,6 @@ G_MODULE_EXPORT void args_free(gpointer data)
 	cleanup(args->autolog_basename);
 	cleanup(args->network_host);
 	cleanup(args->port);
+	cleanup(args->persona);
 	cleanup(args);
 }

@@ -21,6 +21,7 @@ typedef struct _PersonaElement PersonaElement;
 struct _PersonaElement 
 {
 	gchar *filename;	/* Filename */
+	gchar *persona;		/* To match against CLI options */
 	gchar *dirname;		/* Dirname */
 	gchar *name;		/* Shortname in choice box */
 	gchar *ecu_lib;		/* ECU specific library */

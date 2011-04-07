@@ -49,6 +49,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	gchar * filename = NULL;
 	PersonaElement *element = NULL;
 	gchar *tmpbuf = NULL;
+	gboolean shouldjump = FALSE;
 	gchar *name = NULL;
 	GArray *classes = NULL;
 	GSList *group = NULL;
@@ -80,6 +81,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		}
 		element = g_new0(PersonaElement, 1);
 		cfg_read_string(cfgfile,"Family","friendly_name",&element->name);
+		cfg_read_string(cfgfile,"Family","persona",&element->persona);
 		cfg_read_string(cfgfile,"Family","ecu_lib",&element->ecu_lib);
 		cfg_read_string(cfgfile,"Family","common_lib",&element->common_lib);
 		if (!cfg_read_string(cfgfile,"Family","baud",&element->baud_str))
@@ -88,6 +90,17 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		element->filename = g_path_get_basename(dirs[i]);
 		if (g_strcasecmp(element->filename,(gchar *)DATA_GET(global_data,"last_ecu_family")) == 0)
 			element->def = TRUE;
+		if ((DATA_GET(global_data,"cli_persona")) && (element->persona))
+		{
+			if (g_strcasecmp(element->persona, (gchar *)DATA_GET(global_data,"cli_persona")) == 0)
+			{
+				printf("element persona %s, cli persona %s\n",element->persona, (gchar *)DATA_GET(global_data,"cli_persona"));
+				button = gtk_toggle_button_new();
+				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+				persona_selection(button,(gpointer)element);
+				shouldjump = TRUE;
+			}
+		}
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)
 			p_list = g_list_append(p_list,(gpointer)element);
@@ -96,6 +109,15 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		g_free(name);
 		i++;
 		cfg_free(cfgfile);	
+	}
+	g_strfreev(dirs);
+	g_array_free(classes,TRUE);
+	if (shouldjump)
+	{
+		g_list_foreach(p_list,free_persona_element,NULL);
+		g_list_foreach(s_list,free_persona_element,NULL);
+		DATA_SET(global_data,"cli_persona",NULL);
+		goto jumpahead;
 	}
 	p_list = g_list_sort(p_list,list_sort);
 	s_list = g_list_sort(s_list,list_sort);
@@ -122,7 +144,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
 
 		group = NULL;
-		/* Cycle list for PERSONAL interogation files */
+		/* Cycle list for PERSONAL profile files */
 		for (i=0;i<g_list_length(p_list);i++)
 		{
 			element = g_list_nth_data(p_list,i);
@@ -192,8 +214,6 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		}
 	}
 
-	g_strfreev(dirs);
-	g_array_free(classes,TRUE);
 	gtk_widget_show_all(dialog);
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
@@ -208,6 +228,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			break;
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK: /* Normal mode */
+jumpahead:
 			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);
