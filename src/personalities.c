@@ -80,6 +80,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 
 		}
 		element = g_new0(PersonaElement, 1);
+		cfg_read_string(cfgfile,"Family","sequence",&element->sequence);
 		cfg_read_string(cfgfile,"Family","friendly_name",&element->name);
 		cfg_read_string(cfgfile,"Family","persona",&element->persona);
 		cfg_read_string(cfgfile,"Family","ecu_lib",&element->ecu_lib);
@@ -110,6 +111,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		i++;
 		cfg_free(cfgfile);	
 	}
+	p_list = g_list_sort(p_list,persona_list_sort);
+	s_list = g_list_sort(s_list,persona_list_sort);
 	g_strfreev(dirs);
 	g_array_free(classes,TRUE);
 	if (shouldjump)
@@ -119,8 +122,6 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		DATA_SET(global_data,"cli_persona",NULL);
 		goto jumpahead;
 	}
-	p_list = g_list_sort(p_list,list_sort);
-	s_list = g_list_sort(s_list,list_sort);
 
 	set_title(g_strdup(_("Choose an ECU family?")));
 	update_logbar("interr_view","warning",_("Prompting user for ECU family to interrogate...\n"),FALSE,FALSE,FALSE);
@@ -292,3 +293,10 @@ G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
 	cleanup(e);
 }
 
+
+G_MODULE_EXPORT gint persona_list_sort(gconstpointer a, gconstpointer b)
+{
+	PersonaElement *a1 = (PersonaElement *)a;
+	PersonaElement *b1 = (PersonaElement *)b;
+	return g_ascii_strcasecmp(a1->sequence,b1->sequence);
+}

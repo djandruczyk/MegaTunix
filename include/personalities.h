@@ -21,6 +21,7 @@ typedef struct _PersonaElement PersonaElement;
 struct _PersonaElement 
 {
 	gchar *filename;	/* Filename */
+	gchar *sequence;	/* Sequence number */
 	gchar *persona;		/* To match against CLI options */
 	gchar *dirname;		/* Dirname */
 	gchar *name;		/* Shortname in choice box */
@@ -33,6 +34,7 @@ struct _PersonaElement
 gboolean personality_choice(void);
 gboolean persona_selection(GtkWidget *, gpointer);
 void free_persona_element(gpointer, gpointer);
+gint persona_list_sort(gconstpointer a, gconstpointer b);
 /* Prototypes */
 
 #endif
