@@ -444,10 +444,11 @@ raw_upper=1000
 _tooltip=Threshold in units/sec for lag compensation source
 
 [eae_max_rpm_entry]
-keys=page,size,offset,tooltip
+keys=page,raw_upper,size,offset,tooltip
 page=1
 size=_U16_
 offset=1018
+raw_upper=65535
 _tooltip=RPM above which EAE lag compensation is no longer active
 
 [EAEAWCKPA_entry]

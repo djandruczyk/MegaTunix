@@ -350,11 +350,12 @@ alternate_bitmask=1
 register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,size,table_num,fromecu_mult,bind_to_list,register_as
+keys=offset,size,raw_upper,table_num,fromecu_mult,bind_to_list,register_as
 offset=608
 size=_U16_
 table_num=3
 fromecu_mult=0.001
+raw_upper=65535
 bind_to_list=interdep_3_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
@@ -427,10 +428,11 @@ precision=3
 _tooltip=This is the amount of time the injector spends in the opening or closing phase.  It's used to tweake the fuel equations to compensate for the fact that fuel flow doesn't go from 0 to max instantaneously
 
 [inj1_batt_corr_entry]
-keys=offset,precision,size,fromecu_mult,tooltip
+keys=offset,precision,size,raw_upper,fromecu_mult,tooltip
 offset=568
 precision=3
 size=_U16_
+raw_upper=65535
 fromecu_mult=0.000166667
 _tooltip=This compensates for battery voltage, at lower voltages the injectors open slower, skewing fuel flow slightly. this corrects for that.
 
@@ -465,10 +467,11 @@ precision=3
 _tooltip=This is the amount of time the injector spends in the opening or closing phase.  It's used to tweake the fuel equations to compensate for the fact that fuel flow doesn't go from 0 to max instantaneously
 
 [inj2_batt_corr_entry]
-keys=offset,precision,size,fromecu_mult,tooltip
+keys=offset,raw_upper,precision,size,fromecu_mult,tooltip
 offset=643
 precision=3
 size=_U16_
+raw_upper=65535
 fromecu_mult=0.000166667
 _tooltip=This compensates for battery voltage, at lower voltages the injectors open slower, skewing fuel flow slightly. this corrects for that.
 
