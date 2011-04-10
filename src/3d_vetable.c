@@ -407,6 +407,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		OBJ_SET(ve_view->x_objects[i],"size",GINT_TO_POINTER(ve_view->x_size));
 		OBJ_SET(ve_view->x_objects[i],"fromecu_mult",firmware->table_params[table_num]->x_fromecu_mult);
 		OBJ_SET(ve_view->x_objects[i],"fromecu_add",firmware->table_params[table_num]->x_fromecu_add);
+		OBJ_SET_FULL(ve_view->x_objects[i],"table_num",g_strdup_printf("%i",table_num),g_free);
 		if (firmware->table_params[table_num]->x_multi_source)
 		{
 			OBJ_SET_FULL(ve_view->x_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->x_source_key),g_free);
@@ -425,6 +426,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		OBJ_SET(ve_view->y_objects[i],"size",GINT_TO_POINTER(ve_view->y_size));
 		OBJ_SET(ve_view->y_objects[i],"fromecu_mult",firmware->table_params[table_num]->y_fromecu_mult);
 		OBJ_SET(ve_view->y_objects[i],"fromecu_add",firmware->table_params[table_num]->y_fromecu_add);
+		OBJ_SET_FULL(ve_view->y_objects[i],"table_num",g_strdup_printf("%i",table_num),g_free);
 		if (firmware->table_params[table_num]->y_multi_source)
 		{
 			OBJ_SET_FULL(ve_view->y_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->y_source_key),g_free);
@@ -453,6 +455,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			OBJ_SET(ve_view->z_objects[i][j],"size",GINT_TO_POINTER(ve_view->z_size));
 			OBJ_SET(ve_view->z_objects[i][j],"fromecu_mult",firmware->table_params[table_num]->z_fromecu_mult);
 			OBJ_SET(ve_view->z_objects[i][j],"fromecu_add",firmware->table_params[table_num]->z_fromecu_add);
+			OBJ_SET_FULL(ve_view->z_objects[i][j],"table_num",g_strdup_printf("%i",table_num),g_free);
 			if (firmware->table_params[table_num]->z_multi_source)
 			{
 				OBJ_SET_FULL(ve_view->z_objects[i][j],"source_key",g_strdup(firmware->table_params[table_num]->z_source_key),g_free);
@@ -2596,7 +2599,9 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 				multi = g_hash_table_lookup(hash,"DEFAULT");
 		}
 		else if (algorithm[ve_view->table_num] == ALPHA_N)
+		{
 			multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
 		else if (algorithm[ve_view->table_num] == MAF)
 		{
 			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
@@ -2604,10 +2609,13 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 				multi = g_hash_table_lookup(hash,"DEFAULT");
 		}
 		else
+		{
 			multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
 
 		if (!multi)
 			printf("BUG! multi is null!!\n");
+
 		/* Edit value */
 		tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
 		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
