@@ -45,6 +45,7 @@ gboolean leave (GtkWidget *, gpointer);
 gboolean about_popup (GtkWidget *, gpointer);
 gboolean use_sensor (GtkWidget *, gpointer);
 gboolean get_sensor_info (GtkWidget *, gpointer);
+gboolean persona_choice (GtkWidget *, gpointer);
 void load_defaults(void);
 void save_defaults(void);
 void init_controls(void);

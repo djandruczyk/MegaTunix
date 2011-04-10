@@ -145,7 +145,7 @@
                     <child>
                       <object class="GtkTable" id="persona_table">
                         <property name="visible">True</property>
-                        <property name="n_columns">3</property>
+                        <property name="n_columns">4</property>
                         <child>
                           <object class="GtkRadioButton" id="ms1_rbutton">
                             <property name="label" translatable="yes">MS1</property>
@@ -154,8 +154,12 @@
                             <property name="receives_default">False</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
+                            <property name="group">undef_rbutton</property>
+                            <signal name="toggled" handler="persona_choice"/>
                           </object>
                           <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
                             <property name="x_options">GTK_EXPAND</property>
                           </packing>
                         </child>
@@ -167,11 +171,12 @@
                             <property name="receives_default">False</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">ms1_rbutton</property>
+                            <property name="group">undef_rbutton</property>
+                            <signal name="toggled" handler="persona_choice"/>
                           </object>
                           <packing>
-                            <property name="left_attach">1</property>
-                            <property name="right_attach">2</property>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
                             <property name="x_options">GTK_EXPAND</property>
                           </packing>
                         </child>
@@ -184,11 +189,25 @@
                             <property name="receives_default">False</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">ms1_rbutton</property>
+                            <property name="group">undef_rbutton</property>
+                            <signal name="toggled" handler="persona_choice"/>
                           </object>
                           <packing>
-                            <property name="left_attach">2</property>
-                            <property name="right_attach">3</property>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
+                            <property name="x_options">GTK_EXPAND</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRadioButton" id="undef_rbutton">
+                            <property name="label" translatable="yes">Undefined</property>
+                            <property name="can_focus">False</property>
+                            <property name="receives_default">False</property>
+                            <property name="no_show_all">True</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
+                          </object>
+                          <packing>
                             <property name="x_options">GTK_EXPAND</property>
                           </packing>
                         </child>
@@ -207,6 +226,7 @@
                 <child>
                   <object class="GtkButton" id="load_button">
                     <property name="visible">True</property>
+                    <property name="sensitive">False</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <signal name="clicked" handler="load_firmware" after="yes"/>

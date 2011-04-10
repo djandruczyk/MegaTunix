@@ -404,7 +404,7 @@ retry:
 		if (debug) {
 			output(g_strdup_printf("Skipping block %04x\n", a),TRUE);
 		}
-		return;
+		return TRUE;
 	}
 
 	command[0] = C_WRITE_BLOCK;
@@ -448,6 +448,7 @@ retry:
 		goto retry;
 	}
 	total_bytes += n;
+	return TRUE;
 }
 
 void erase_S12(gint port_fd)
@@ -559,9 +560,7 @@ void ms2_enter_boot_mode(gint port_fd)
 		output(g_strdup_printf("ms2_enter_boot_mode() SHORT WRITE, sent %i of 14\n",res),TRUE);
 	g_usleep(LONG_DELAY);
 	check_status(port_fd,&abort);
-	//printf("status %i\n",abort);
 	flush_serial(port_fd, BOTH);
-	printf("flush\n");
 }
 
 void reset_proc(gint port_fd)

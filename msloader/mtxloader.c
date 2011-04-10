@@ -15,8 +15,7 @@
 #include <unistd.h>
 
 
-GtkBuilder *builder = NULL;
-GtkWidget *main_window = NULL;
+gconstpointer *global_data = NULL;
 
 int main (int argc, char *argv[])
 {
@@ -24,8 +23,12 @@ int main (int argc, char *argv[])
 	gchar * filename = NULL;
 	gchar * fname = NULL;
 	GError *error = NULL;
+	GtkBuilder *builder = NULL;
+	GtkWidget *main_window = NULL;
 
 	gtk_init (&argc, &argv);
+        global_data = g_new0(gconstpointer, 1);
+
 	fname = g_build_filename(GUI_DATA_DIR,"mtxloader.glade",NULL);
 	filename = get_file(g_strdup(fname),NULL);
 	if (!filename)
@@ -51,9 +54,11 @@ int main (int argc, char *argv[])
 			exit(-1);
 		}
 	}
+	main_window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
+	DATA_SET(global_data,"main_window",main_window);
+	DATA_SET(global_data,"builder",builder);
 	g_free(fname);
 	g_free(filename);
-	main_window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
 	gtk_builder_connect_signals (builder,NULL);
 	load_defaults();
 	gtk_widget_show_all (main_window);
@@ -66,13 +71,20 @@ int main (int argc, char *argv[])
  * multiple lines, the string is split with g_strsplit(). */
 void output (gchar *line, gboolean free_it)
 {
-	GtkWidget *textview;
+	static GtkBuilder *builder = NULL;
+	static GtkWidget *textview = NULL;
 	GtkTextBuffer * textbuffer = NULL;
 	GtkTextIter iter;
 	GtkWidget *parent = NULL;
 	GtkAdjustment * adj = NULL;
+	
+	if (!builder)
+		builder = DATA_GET(global_data,"builder");
+	g_return_if_fail(builder);
+	if (!textview)
+		textview = GTK_WIDGET(gtk_builder_get_object(builder, "textview"));
+	g_return_if_fail(textview);
 
-	textview = GTK_WIDGET(gtk_builder_get_object(builder, "textview"));
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
 	gtk_text_buffer_get_end_iter (textbuffer, &iter);
 	gtk_text_buffer_insert(textbuffer,&iter,line,-1);
@@ -96,7 +108,7 @@ G_MODULE_EXPORT gboolean get_signature (GtkButton *button)
 	gchar * port = NULL;
 	gint port_fd = 0;
 
-	widget = GTK_WIDGET(gtk_builder_get_object(builder, "port_entry"));
+	widget = GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"), "port_entry"));
 	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 	if (g_utf8_strlen(port, -1) == 0)
 		return FALSE;
@@ -122,6 +134,18 @@ G_MODULE_EXPORT gboolean get_signature (GtkButton *button)
 }
 
 
+G_MODULE_EXPORT gboolean persona_choice (GtkWidget *widget, gpointer data)
+{
+	gint persona = 0;
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
+	{
+		DATA_SET(global_data,"persona",OBJ_GET(widget,"persona"));
+		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),TRUE);
+	}
+	return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 {
 	GtkWidget *widget = NULL;
@@ -131,9 +155,9 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 	gint file_fd = 0;
 	FirmwareType type = MS1;
 
-	widget = GTK_WIDGET(gtk_builder_get_object(builder, "port_entry"));
+	widget = GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"), "port_entry"));
 	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-	widget = GTK_WIDGET(gtk_builder_get_object (builder, "filechooser_button"));
+	widget = GTK_WIDGET(gtk_builder_get_object (DATA_GET(global_data,"builder"), "filechooser_button"));
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
 	if (g_utf8_strlen(port, -1) == 0)
@@ -170,6 +194,17 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 		unlock_port();
 		return FALSE;
 	}
+	if ((GINT)DATA_GET(global_data,"persona") == MS1)
+	{
+		setup_port(port_fd, 9600);
+		do_ms1_load(port_fd,file_fd);
+	}
+	else if ((GINT)DATA_GET(global_data,"persona") == MS2)
+	{
+		setup_port(port_fd, 115200);
+		do_ms2_load(port_fd,file_fd);
+	}
+	/*
 	type = detect_firmware(filename);
 	if (type == MS1)
 	{
@@ -181,6 +216,7 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 		setup_port(port_fd,115200);
 		do_ms2_load(port_fd,file_fd);
 	}
+	*/
 
 	close_port(port_fd);
 	unlock_port();
@@ -225,10 +261,16 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 
 void load_defaults()
 {
+	GtkBuilder *builder = NULL;
 	ConfigFile *cfgfile;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
 	GtkFileFilter *filter = NULL;
+	GObject *object = NULL;
+
+	builder = DATA_GET(global_data,"builder");
+	g_return_if_fail(builder);
+
 	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
@@ -248,6 +290,15 @@ void load_defaults()
 
 			g_free(tmpbuf);
 		}
+		object = gtk_builder_get_object(builder,"ms1_rbutton");
+		if (G_IS_OBJECT(object))
+			OBJ_SET(object,"persona",GINT_TO_POINTER(MS1));
+		object = gtk_builder_get_object(builder,"ms2_rbutton");
+		if (G_IS_OBJECT(object))
+			OBJ_SET(object,"persona",GINT_TO_POINTER(MS2));
+		object = gtk_builder_get_object(builder,"freeems_rbutton");
+		if (G_IS_OBJECT(object))
+			OBJ_SET(object,"persona",GINT_TO_POINTER(FREEEMS));
 		cfg_free(cfgfile);
 		g_free(filename);
 	}
@@ -263,7 +314,7 @@ void save_defaults()
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		tmpbuf = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(gtk_builder_get_object (builder, "filechooser_button")));
+		tmpbuf = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(gtk_builder_get_object (DATA_GET(global_data,"builder"), "filechooser_button")));
 		if (tmpbuf)
 			cfg_write_string(cfgfile, "MTXLoader", "last_file", tmpbuf);
 		g_free(tmpbuf);
@@ -292,7 +343,7 @@ void textbuffer_changed(GtkTextBuffer *buffer, gpointer data)
 void boot_jumper_prompt()
 {
 	GtkWidget *dialog = NULL;
-		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(main_window),GTK_DIALOG_MODAL,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,"\nPlease jumper the boot jumper on\nthe ECU and power cycle it\nand click OK when done");
+		dialog = gtk_message_dialog_new_with_markup(GTK_WINDOW(DATA_GET(global_data,"main_window")),GTK_DIALOG_MODAL,GTK_MESSAGE_WARNING,GTK_BUTTONS_OK,"\nPlease jumper the boot jumper on\nthe ECU and power cycle it\nand click OK when done");
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 }
