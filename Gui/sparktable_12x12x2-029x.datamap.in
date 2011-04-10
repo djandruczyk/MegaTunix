@@ -324,53 +324,50 @@ rescaler_frame=SP_SP2_rescale_frame
 [SP1_trimangle_entry]
 keys=size,offset,fromecu_mult,precision,use_color
 offset=170
-group=spark_1
 size=_S08_
 fromecu_mult=0.352
 raw_lower=-127
 raw_upper=128
-precision=2
+precision=1
 use_color=FALSE
 
 [SP1_fixedangle_entry]
 keys=offset,precision,use_color
 offset=169
 group=spark_1
-precision=2
+precision=1
 use_color=FALSE
 
 [SP1_triggerangle_entry]
 keys=offset,fromecu_mult,precision,use_color
 offset=168
-group=spark_1
 fromecu_mult=0.352
-precision=2
+precision=1
 use_color=FALSE
 
 [SP2_trimangle_entry]
 keys=size,offset,fromecu_mult,precision,use_color
 offset=170
-group=spark_2
 size=_S08_
 fromecu_mult=0.352
 raw_lower=-127
 raw_upper=128
-precision=2
+precision=1
 use_color=FALSE
 
 [SP2_fixedangle_entry]
 keys=offset,precision,use_color
 offset=169
 group=spark_2
-precision=2
+precision=1
 use_color=FALSE
 
 [SP2_triggerangle_entry]
 keys=offset,fromecu_mult,precision,use_color
 offset=168
 group=spark_2
-fromecu_mult=0.352112676
-precision=2
+fromecu_mult=0.352
+precision=1
 use_color=FALSE
 
 #----- Load Entries (MAP/TPS) -----------------------------------------------

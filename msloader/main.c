@@ -108,20 +108,20 @@ void verify_args(gint argc, gchar **argv)
 		usage_and_exit(g_strdup("Invalid number of arguments!"));
 
 	
-	if (strcmp(argv[1],"MS1") == 0)
+	if (g_strcasecmp(argv[1],"MS1") == 0)
 		type = MS1;
-	else if (strcmp(argv[1],"MS2") == 0)
+	else if (g_strcasecmp(argv[1],"MS2") == 0)
 		type = MS2;
-	else if (strcmp(argv[1],"FEEEMS") == 0)
+	else if (g_strcasecmp(argv[1],"FEEEMS") == 0)
 		type = FREEEMS;
 	else
 		usage_and_exit(g_strdup_printf("Device type \"%s\" not recognized",argv[1]));
 
 	if (!g_file_test(argv[2], G_FILE_TEST_EXISTS))
-		usage_and_exit(g_strdup_printf("Port \"%s\" does NOT exist...",argv[1]));
+		usage_and_exit(g_strdup_printf("Port \"%s\" does NOT exist...",argv[2]));
 
 	if (!g_file_test(argv[3], G_FILE_TEST_IS_REGULAR))
-		usage_and_exit(g_strdup_printf("Filename \"%s\" does NOT exist...",argv[2]));
+		usage_and_exit(g_strdup_printf("Filename \"%s\" does NOT exist...",argv[3]));
 }
 
 void usage_and_exit(gchar * msg)

@@ -142,12 +142,16 @@ choices=Disabled,Enabled
 _tooltip=Enables or Disables Hybrid A/N mode
 
 [maf_x7_combo]
+;keys=offset,choices,bitvals,bitmask,toggle_groups,algorithms,applicable_tables,swap_labels,tooltip
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 offset=184
 bitvals=0,1
 bitmask=32
 choices=Disabled,Enabled
 toggle_groups=,maf_controls
+;algorithms=_SPEED_DENSITY_,_AFM_VOLTS_
+;applicable_tables=0,1,2,3,4,10
+;swap_labels=VE_VE1_load_tbl_lab,VE_VE1_load_tbl_units,VE_VE2_load_tbl_lab,VE_VE2_load_tbl_units,VE_VE3_load_tbl_lab,VE_VE3_load_tbl_units,SP_SP1_load_tbl_lab,SP_SP1_load_tbl_units,SP_SP2_load_tbl_lab,SP_SP2_load_tbl_units,Rot_load_tbl_lab,Rot_load_tbl_units
 _tooltip=Enables or Disables use of MAF sensor on X7 input pin
 
 [maf_corr_combo]
