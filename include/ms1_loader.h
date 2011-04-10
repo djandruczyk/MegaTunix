@@ -25,7 +25,7 @@ typedef enum
 }EcuState;
 
 /* Prototypes */
-void do_ms1_load(gint, gint);
+gboolean do_ms1_load(gint, gint);
 EcuState detect_ecu(gint);
 gboolean jump_to_bootloader(gint);
 gboolean prepare_for_upload(gint);

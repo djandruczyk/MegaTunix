@@ -51,6 +51,8 @@ void save_defaults(void);
 void init_controls(void);
 void output(gchar *, gboolean);
 void boot_jumper_prompt(void);
+void lock_buttons(void);
+void unlock_buttons(void);
 
 
 #endif

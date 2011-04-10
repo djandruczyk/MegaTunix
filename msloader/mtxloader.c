@@ -120,15 +120,20 @@ G_MODULE_EXPORT gboolean get_signature (GtkButton *button)
 		output("Could NOT open Port, You should check perms.\n",FALSE);
 		return FALSE;
 	}
-	setup_port(port_fd,9600);
-	if (!get_ecu_signature(port_fd))
+	if ((GINT)DATA_GET(global_data,"persona") == MS1)
 	{
+		setup_port(port_fd,9600);
+		if (!get_ecu_signature(port_fd))
+			output("Could NOT determine signature!\nDo you have the device type set properly?\n",FALSE);
 		close_port(port_fd);
-		port_fd = open_port(port);
-		setup_port(port_fd,115200);
-		get_ecu_signature(port_fd);
 	}
-	close_port(port_fd);
+	if ((GINT)DATA_GET(global_data,"persona") == MS2)
+	{
+		setup_port(port_fd,115200);
+		if (!get_ecu_signature(port_fd))
+			output("Could NOT determine signature!\nDo you have the device type set properly?\n",FALSE);
+		close_port(port_fd);
+	}
 
 	return TRUE;
 }
@@ -194,6 +199,7 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 		unlock_port();
 		return FALSE;
 	}
+	lock_buttons();
 	if ((GINT)DATA_GET(global_data,"persona") == MS1)
 	{
 		setup_port(port_fd, 9600);
@@ -204,6 +210,7 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 		setup_port(port_fd, 115200);
 		do_ms2_load(port_fd,file_fd);
 	}
+	unlock_buttons();
 	/*
 	type = detect_firmware(filename);
 	if (type == MS1)
@@ -222,6 +229,26 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 	unlock_port();
 	return TRUE;
 }
+
+
+void lock_buttons()
+{
+	GtkBuilder *builder = NULL;
+	builder = DATA_GET(global_data,"builder");
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_firmware_menuitem")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"get_signature_menuitem")),FALSE);
+}
+
+void unlock_buttons()
+{
+	GtkBuilder *builder = NULL;
+	builder = DATA_GET(global_data,"builder");
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_firmware_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"get_signature_menuitem")),TRUE);
+}
+
 
 
 G_MODULE_EXPORT gboolean leave(GtkWidget * widget, gpointer data)

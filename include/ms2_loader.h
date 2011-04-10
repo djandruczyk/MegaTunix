@@ -18,7 +18,7 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void do_ms2_load(gint, gint);
+gboolean do_ms2_load(gint, gint);
 gint read_s19(gint);
 void ms2_enter_boot_mode(gint);
 gboolean wakeup_S12(gint);

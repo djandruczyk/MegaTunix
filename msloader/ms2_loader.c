@@ -86,15 +86,15 @@ int debug = 3;
 5 = + comments
 */
 
-void do_ms2_load(gint port_fd, gint file_fd)
+gboolean do_ms2_load(gint port_fd, gint file_fd)
 {
 	total_bytes = 0;
 	count = read_s19(file_fd);
 	if (count == 0)
-		return;
+		return FALSE;
 	ms2_enter_boot_mode(port_fd);
 	if (!wakeup_S12(port_fd))
-		return;
+		return FALSE;
 	erase_S12(port_fd);
 	if (!send_S12(port_fd,count))
 		output("Device update FAILURE!!!\n",FALSE);
@@ -103,7 +103,7 @@ void do_ms2_load(gint port_fd, gint file_fd)
 	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
 	output("Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
 	output("All Done!\n",FALSE);
-	return;
+	return TRUE;
 }
 
 void ms2_chomp(gchar *inBuf)

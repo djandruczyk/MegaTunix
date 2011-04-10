@@ -44,7 +44,7 @@ struct termios newtio;
 
 void boot_jumper_prompt(void);
 
-void do_ms1_load(gint port_fd, gint file_fd)
+gboolean do_ms1_load(gint port_fd, gint file_fd)
 {
 	gboolean result = FALSE;
 	EcuState ecu_state = NOT_LISTENING;
@@ -93,14 +93,14 @@ void do_ms1_load(gint port_fd, gint file_fd)
 	if (!result)
 	{
 		output("Failure getting ECU into a state to accept the new firmware\n",FALSE);
-		exit (-1);
+		return FALSE;
 	}
 	upload_firmware(port_fd,file_fd);
 	output("Firmware upload completed...\n",FALSE);
 	reboot_ecu(port_fd);
 	output("ECU reboot complete\n",FALSE);
 
-	return;
+	return TRUE;
 }
 
 
