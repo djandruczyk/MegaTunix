@@ -326,7 +326,8 @@ z_source_key=map_sensor
 z_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 z_sources=mapkpa,mapkpa,mapkpa,mapkpa
 z_suffixes=KPa,KPa,KPa,KPa
-z_fromecu_mults=1,1,1.213675,1.6197783fromecu_adds=0,0,1.53,2.147
+z_fromecu_mults=1,1,1.213675,1.6197783
+z_fromecu_adds=0,0,1.53,2.147
 z_precisions=0,0,0,0
 
 [table_8]
@@ -383,7 +384,8 @@ z_source_key=map_sensor
 z_multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400
 z_sources=mapkpa,mapkpa,mapkpa,mapkpa
 z_suffixes=KPa,KPa,KPa,KPa
-z_fromecu_mults=1,1,1.213675,1.6197783fromecu_adds=0,0,1.53,2.147
+z_fromecu_mults=1,1,1.213675,1.6197783
+z_fromecu_adds=0,0,1.53,2.147
 z_precisions=0,0,0,0
 
 [table_10]
