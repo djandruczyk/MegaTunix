@@ -101,6 +101,12 @@ void output (gchar *line, gboolean free_it)
 }
 
 
+G_MODULE_EXPORT void gui_progress_update(gfloat fraction)
+{
+	printf("Progress is %i %% completed\n",(gint)(fraction*100.0));
+}
+
+
 /* Perform a ping operation when the Ping button is clicked. */
 G_MODULE_EXPORT gboolean get_signature (GtkButton *button)
 {
@@ -238,6 +244,7 @@ void lock_buttons()
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_firmware_menuitem")),FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"get_signature_menuitem")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"persona_table")),FALSE);
 }
 
 void unlock_buttons()
@@ -247,6 +254,7 @@ void unlock_buttons()
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_firmware_menuitem")),TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"get_signature_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"persona_table")),TRUE);
 }
 
 
@@ -376,3 +384,25 @@ void boot_jumper_prompt()
 }
 
 
+G_MODULE_EXPORT void progress_update(gfloat fraction)
+{
+	gint value = (gint)(fraction*100.0);
+	gchar * tmpbuf = NULL;
+	static gint last = 0.0;
+	static GtkWidget *pbar = NULL;
+
+	if (!pbar)
+		pbar = GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"), "progressbar"));
+	g_return_if_fail(pbar);
+
+	if (value != last)
+	{
+		tmpbuf = g_strdup_printf("%i%% complete",value);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(pbar),tmpbuf);
+		g_free(tmpbuf);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar),fraction);
+	}
+	last = value;
+	while (gtk_events_pending())
+		gtk_main_iteration();
+}

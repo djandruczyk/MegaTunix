@@ -76,7 +76,7 @@ guint total_bytes = 0;
 
 char **fileBuf;
 guint count = 0;
-int debug = 3;
+int debug = 0;
 /* debug levels
 0 = Quiet
 1 = Some progress
@@ -89,6 +89,7 @@ int debug = 3;
 gboolean do_ms2_load(gint port_fd, gint file_fd)
 {
 	total_bytes = 0;
+	flush_serial(port_fd, BOTH);
 	count = read_s19(file_fd);
 	if (count == 0)
 		return FALSE;
@@ -256,7 +257,7 @@ gboolean check_status(gint port_fd,gint *abort)
 	res = read(port_fd, &buf, 3);
 	if (res == -1)
 	{
-		printf("READ FAILURE in check_status!\n");
+		output("READ FAILURE in check_status!\n",FALSE);
 		flush_serial(port_fd, BOTH);
 		*abort = TRUE;
 		return FALSE;
@@ -344,7 +345,7 @@ gboolean check_status(gint port_fd,gint *abort)
 
 	if (prompt != '>') 
 	{
-		output(g_strdup_printf("Prompt was expected to be \"3e\" but returned as \"%.2x\" \n\n",prompt),TRUE);
+		output(g_strdup_printf("Prompt was expected to be \"3e\" but returned as \"%.2x\" \n",prompt),TRUE);
 		retval = FALSE;
 	} 
 	else
@@ -396,6 +397,7 @@ gboolean send_block(gint port_fd, guint a, guchar *b, guint n)
 	guchar command[4];
 	gint errcount = 0;
 	gboolean abort = FALSE;
+	gboolean was_a_retry = FALSE;
 	guchar i;
 	guint res = 0;
 
@@ -437,15 +439,21 @@ retry:
 		output(g_strdup_printf("send_block(): SHORT WRITE %i of %i",res,n),TRUE);
 	if (!check_status(port_fd,&abort))
 	{
-		printf("send_block error, retrying\n");
+		output("send_block error, retrying\n",FALSE);
+		was_a_retry = TRUE;
 		flush_serial(port_fd,BOTH);
 		errcount++;
 		if (errcount > 5)
 		{
-			printf("too many errors, aborting!\n");
+			output("too many errors, aborting!\n",FALSE);
 			return FALSE;
 		}
 		goto retry;
+	}
+	else if (was_a_retry)
+	{
+		output("Retry was successful!\n",FALSE);
+		was_a_retry = FALSE;
 	}
 	total_bytes += n;
 	return TRUE;
@@ -546,6 +554,7 @@ gboolean send_S12(gint port_fd, guint count)
 			if (addr >= 0x8000 && addr <= 0xBFFF) addr += 0x4000;
 		}
 		free(thisRec);
+		progress_update ((gfloat)i/(gfloat)(count-2));
 	}
 	return TRUE;
 }
@@ -554,7 +563,6 @@ void ms2_enter_boot_mode(gint port_fd)
 {
 	gint res = 0;
 	gint abort = FALSE;
-	printf("enter boot mode\n");
 	res = write(port_fd, "!!!SafetyFirst", 14);
 	if (res != 14)
 		output(g_strdup_printf("ms2_enter_boot_mode() SHORT WRITE, sent %i of 14\n",res),TRUE);

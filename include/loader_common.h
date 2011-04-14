@@ -34,6 +34,7 @@ void close_port(gint);
 void unlock_port(void);
 gboolean lock_port(gchar *);
 FirmwareType detect_firmware(gchar *);
+void progress_update(gfloat);
 
 
 #endif

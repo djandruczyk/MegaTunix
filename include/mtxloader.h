@@ -53,6 +53,7 @@ void output(gchar *, gboolean);
 void boot_jumper_prompt(void);
 void lock_buttons(void);
 void unlock_buttons(void);
+void gui_progress_update(gfloat);
 
 
 #endif

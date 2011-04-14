@@ -146,3 +146,13 @@ void boot_jumper_prompt(void)
 	printf("Press any key when done..\n");
 	getc(stdin);
 }
+
+G_MODULE_EXPORT void progress_update(gfloat fraction)
+{
+	gint value = (gint)(fraction*100.0);
+	static gint last = 0.0;
+
+	if (value != last)
+		printf("%i%% complete\n",value);
+	last = value;
+}

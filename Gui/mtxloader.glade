@@ -5,7 +5,6 @@
   <object class="GtkUIManager" id="uimanager1"/>
   <object class="GtkWindow" id="main_window">
     <property name="width_request">400</property>
-    <property name="height_request">250</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">MegaTunix Firmware Loader</property>
     <signal name="destroy_event" handler="leave"/>
@@ -321,12 +320,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkStatusbar" id="statusbar">
+          <object class="GtkProgressBar" id="progressbar">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="show_text">True</property>
+            <property name="text" translatable="yes">% complete.</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
             <property name="position">3</property>
           </packing>
         </child>
