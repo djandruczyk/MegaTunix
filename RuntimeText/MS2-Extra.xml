@@ -24,6 +24,10 @@
 		<datasource>tpspercent</datasource>
 	</rtt>
 	<rtt>
+		<internal_name>fuelload</internal_name>
+		<datasource>fuelload</datasource>
+	</rtt>
+	<rtt>
 		<internal_name>cltdeg</internal_name>
 		<datasource>cltdeg</datasource>
 	</rtt>

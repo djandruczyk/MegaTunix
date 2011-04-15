@@ -280,10 +280,11 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	/* Backwards calc (To->ECU) */
 	if ((y_mult[table]) && (y_add[table]))
 		y_raw = (y_source - (*y_add[table]))/(*y_mult[table]);
-	else if (x_mult[table])
+	else if (y_mult[table])
 		y_raw = y_source/(*y_mult[table]);
 	else
 		y_raw = y_source;
+
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{
 		if (ms_get_ecu_data(canID,page,base,size) >= y_raw)
@@ -400,7 +401,7 @@ redraw:
 				cr = gdk_cairo_create(window);
 				gdk_cairo_set_source_color(cr,&old_colors[table][last[table][i]]);
 				cairo_set_line_width(cr,2);
-				cairo_rectangle(cr,1,1,widget->allocation.width-1,widget->allocation.height-1);
+				cairo_rectangle(cr,1,1,widget->allocation.width-2,widget->allocation.height-2);
 				cairo_stroke(cr);
 				cairo_destroy(cr);
 			}
@@ -481,7 +482,7 @@ redraw:
 			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_color(cr,&color);
 			cairo_set_line_width(cr,2);
-			cairo_rectangle(cr,1,1,widget->allocation.width-1,widget->allocation.height-1);
+			cairo_rectangle(cr,1,1,widget->allocation.width-2,widget->allocation.height-2);
 			cairo_stroke(cr);
 			cairo_destroy(cr);
 		}
