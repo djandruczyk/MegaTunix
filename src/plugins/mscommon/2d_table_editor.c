@@ -1202,6 +1202,8 @@ G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
 	cairo_t *cr = NULL;
+	gint w = 0;
+	gint h = 0;
 	GdkWindow *window = NULL;
 	GdkColor white = {0,65535,65535,65535};
 #ifdef __WIN32__
@@ -1233,7 +1235,8 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 				gdk_cairo_set_source_color(cr,&white);
 		}
 		cairo_set_line_width(cr,2);
-		cairo_rectangle(cr,1,1,widget->allocation.width-1,widget->allocation.height-1);
+		gdk_drawable_get_size(GDK_DRAWABLE(window),&w,&h);
+		cairo_rectangle(cr,1,1,w-2,h-2);
 		cairo_stroke(cr);
 		cairo_destroy(cr);
 	}
