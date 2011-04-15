@@ -62,6 +62,7 @@ G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 
 G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
+	cairo_t *cr = NULL;
 	gint w = 0;
 	gint h = 0;
 
@@ -73,23 +74,16 @@ G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, Gdk
 		h=widget->allocation.height;
 		if (ttm_data->layout)
 			g_object_unref(ttm_data->layout);
-		if (ttm_data->axis_gc)
-			g_object_unref(ttm_data->axis_gc);
-		if (ttm_data->trace_gc)
-			g_object_unref(ttm_data->trace_gc);
-
 		if (ttm_data->pixmap)
 			g_object_unref(ttm_data->pixmap);
 		ttm_data->pixmap=gdk_pixmap_new(widget->window,
 				w,h,
 				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(ttm_data->pixmap,
-				widget->style->white_gc,
-				TRUE, 0,0,
-				w,h);
+		cr = gdk_cairo_create(ttm_data->pixmap);
+		cairo_set_source_rgb(cr,1.0,1.0,1.0);
+                cairo_paint(cr);
+                cairo_destroy(cr);
 		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
-		ttm_data->axis_gc = initialize_gc_f(ttm_data->pixmap,TTM_AXIS);
-		ttm_data->trace_gc = initialize_gc_f(ttm_data->pixmap,TTM_TRACE);
 		ttm_data->layout = gtk_widget_create_pango_layout(ttm_data->darea,NULL);
 
 	}
@@ -235,6 +229,7 @@ void ms2_update_trigtooth_display(gint page)
 	gint w = 0;
 	gint h = 0;
 	gint i = 0;
+	cairo_t *cr = NULL;
 	gfloat tmpf = 0;
 	gint space = 0;
 	gfloat tmpx = 0.0;
@@ -243,7 +238,6 @@ void ms2_update_trigtooth_display(gint page)
 	gfloat y_shift = 0.0;
 	gushort val = 0;
 	gchar * message = NULL;
-	cairo_t *cr;
 	cairo_text_extents_t extents;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware;
@@ -253,13 +247,11 @@ void ms2_update_trigtooth_display(gint page)
 	w=ttm_data->darea->allocation.width;
 	h=ttm_data->darea->allocation.height;
 
-	gdk_draw_rectangle(ttm_data->pixmap,
-			ttm_data->darea->style->white_gc,
-			TRUE, 0,0,
-			w,h);
-
 	cr = gdk_cairo_create(ttm_data->pixmap);
+	cairo_set_source_rgb(cr,1.0,1.0,1.0);
+	cairo_paint(cr);
 
+	cairo_set_source_rgb(cr,0.0,0.0,0.0);
 	/* get our font */
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
 	cairo_set_font_size(cr,h/30);
@@ -398,22 +390,30 @@ G_MODULE_EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 
 G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
-#if GTK_MINOR_VERSION < 18
-	gdk_draw_drawable(widget->window,
-			widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			ttm_data->pixmap,
-			event->area.x, event->area.y,
-			event->area.x, event->area.y,
-			event->area.width, event->area.height);
+	cairo_t *cr = NULL;
+#if GTK_MINOR_VERSION >= 18
+	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
 #else
-	gdk_draw_drawable(widget->window,
-			widget->style->fg_gc[gtk_widget_get_state (widget)],
-			ttm_data->pixmap,
-			event->area.x, event->area.y,
-			event->area.x, event->area.y,
-			event->area.width, event->area.height);
+	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
-
+	{
+		cr = gdk_cairo_create(widget->window);
+		gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
+		cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+	}
+	else	/* INSENSITIVE display so grey it */
+	{
+		cr = gdk_cairo_create(widget->window);
+		gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
+		cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+		cairo_fill(cr);
+		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+		cairo_rectangle(cr,0,0,widget->allocation.width, widget->allocation.height);
+		cairo_fill(cr);
+		cairo_destroy(cr);
+	}
 	return TRUE;
 }
 
