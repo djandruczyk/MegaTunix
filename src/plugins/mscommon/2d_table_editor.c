@@ -1201,6 +1201,8 @@ G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 
 G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
+	cairo_t *cr = NULL;
+	GdkWindow *window = NULL;
 	GdkColor white = {0,65535,65535,65535};
 #ifdef __WIN32__
 	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
@@ -1216,33 +1218,25 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
 	}
 	return;
-#else
-	GdkGC *gc = OBJ_GET(widget,"hl_gc");
-	if (!GDK_IS_DRAWABLE(widget->window))
-		return;
-	if (!gc)
+#else /* cairo impl for newer Gtk+ */
+	window = gtk_entry_get_text_window(GTK_ENTRY(widget));
+	if (GDK_IS_DRAWABLE(window))
 	{
-		gc = gdk_gc_new(widget->window);
-		gdk_gc_set_subwindow(gc,GDK_INCLUDE_INFERIORS);
-		OBJ_SET(widget,"hl_gc",(gpointer)gc);
-	}
-	if (color)
-		gdk_gc_set_rgb_fg_color(gc,color);
-	else
-	{
-		if (OBJ_GET(widget, "use_color"))
-			gdk_gc_set_rgb_fg_color(gc,&widget->style->base[GTK_STATE_NORMAL]);
+		cr = gdk_cairo_create(window);
+		if (color)
+			gdk_cairo_set_source_color(cr,color);
 		else
-			gdk_gc_set_rgb_fg_color(gc,&white);
+		{
+			if (OBJ_GET(widget, "use_color"))
+				gdk_cairo_set_source_color(cr,&widget->style->base[GTK_STATE_NORMAL]);
+			else
+				gdk_cairo_set_source_color(cr,&white);
+		}
+		cairo_set_line_width(cr,2);
+		cairo_rectangle(cr,1,1,widget->allocation.width-1,widget->allocation.height-1);
+		cairo_stroke(cr);
+		cairo_destroy(cr);
 	}
-	/* Top */
-	gdk_draw_rectangle(widget->window,gc,TRUE,2,2,widget->allocation.width-4,2);
-	/* Bottom */
-	gdk_draw_rectangle(widget->window,gc,TRUE,2,widget->allocation.height-5,widget->allocation.width-4,2);
-	/* Left */
-	gdk_draw_rectangle(widget->window,gc,TRUE,2,2,2,widget->allocation.height-6);
-	/* Right */
-	gdk_draw_rectangle(widget->window,gc,TRUE,widget->allocation.width-4,2,2,widget->allocation.height-6);
 #endif
 }
 
