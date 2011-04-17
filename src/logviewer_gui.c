@@ -1322,30 +1322,16 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 }
 
 
-/*!
- \brief set_logviewer_mode() sets things up for playback mode
- */
-G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
-{
+G_MODULE_EXPORT void enable_playback_controls(gboolean state)
+{	
+	static GtkWidget * playback_controls_window = NULL;
+	gchar *fname = NULL;
+	gchar * filename = NULL;
+	GladeXML *xml = NULL;
 	GtkWidget *widget = NULL;
 	GtkAdjustment *adj = NULL;
-	gchar *fname = NULL;
-	gchar *filename = NULL;
-	GladeXML *xml = NULL;
-	static GtkWidget * playback_controls_window = NULL;
-
-	reset_logviewer_state();
-	free_log_info(DATA_GET(global_data,"log_info"));
-	if (mode == LV_PLAYBACK)
+	if (state) /* show the controls */
 	{
-		DATA_SET(global_data,"playback_mode",GINT_TO_POINTER(TRUE));
-		gtk_widget_set_sensitive(lookup_widget("logviewer_select_logfile_button"), TRUE);
-		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), FALSE);
-		gtk_widget_hide(lookup_widget("logviewer_rt_control_vbox1"));
-		/* This one should NOT be enabled until at least 1 var is selected */
-		gtk_widget_show(lookup_widget("logviewer_playback_control_vbox1"));
-		gtk_widget_show(lookup_widget("scroll_speed_vbox"));
-		widget = lookup_widget("logviewer_log_position_hscale");
 		if (!GTK_IS_WIDGET(playback_controls_window))
 		{
 			fname = g_build_filename(GUI_DATA_DIR,"logviewer.glade",NULL);
@@ -1376,12 +1362,39 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 					adj = gtk_range_get_adjustment(GTK_RANGE(widget));
 					gtk_range_set_adjustment(GTK_RANGE(glade_xml_get_widget(xml,"log_position_hscale")),adj);
 				}
-
 			}
-
+			register_widget("playback_controls_window",playback_controls_window);
 		}
 		else
 			gtk_widget_show_all(playback_controls_window);
+	}
+	else
+	{
+		if (GTK_IS_WIDGET(playback_controls_window))
+			gtk_widget_hide(playback_controls_window);
+	}
+	return;
+}
+
+
+/*!
+ \brief set_logviewer_mode() sets things up for playback mode
+ */
+G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
+{
+	GtkWidget *widget = NULL;
+
+	reset_logviewer_state();
+	free_log_info(DATA_GET(global_data,"log_info"));
+	if (mode == LV_PLAYBACK)
+	{
+		DATA_SET(global_data,"playback_mode",GINT_TO_POINTER(TRUE));
+		gtk_widget_set_sensitive(lookup_widget("logviewer_select_logfile_button"), TRUE);
+		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), FALSE);
+		gtk_widget_hide(lookup_widget("logviewer_rt_control_vbox1"));
+		/* This one should NOT be enabled until at least 1 var is selected */
+		gtk_widget_show(lookup_widget("logviewer_playback_control_vbox1"));
+		gtk_widget_show(lookup_widget("scroll_speed_vbox"));
 
 		widget = lookup_widget("logviewer_log_position_hscale");
 		if (GTK_IS_RANGE(widget))
@@ -1392,13 +1405,7 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 	}
 	else if (mode == LV_REALTIME)
 	{
-
-		if (GTK_IS_WIDGET(playback_controls_window))
-		{
-			widget = lookup_widget("logviewer_controls_hbox");
-			gtk_widget_set_sensitive(widget,FALSE);
-			gtk_widget_hide(playback_controls_window);
-		}
+		enable_playback_controls(FALSE);
 
 		stop_tickler(LV_PLAYBACK_TICKLER);
 		DATA_SET(global_data,"playback_mode",GINT_TO_POINTER(FALSE));
@@ -1432,7 +1439,8 @@ G_MODULE_EXPORT void finish_logviewer(void)
 	lv_data->traces = g_hash_table_new(g_str_hash,g_str_equal);
 	lv_data->info_width = 120;
 
-	if ((DATA_GET(global_data,"playback_mode")) || (DATA_GET(global_data,"offline")))
+	//if ((DATA_GET(global_data,"playback_mode")) || (DATA_GET(global_data,"offline")))
+	if ((DATA_GET(global_data,"playback_mode")))
 		set_logviewer_mode(LV_PLAYBACK);
 	else
 		set_logviewer_mode(LV_REALTIME);

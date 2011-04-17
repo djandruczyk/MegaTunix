@@ -133,6 +133,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 
 	update_logbar("dlog_view",NULL,_("LogView File Closed\n"),FALSE,FALSE,FALSE);
 	gtk_widget_set_sensitive(lookup_widget("logviewer_controls_hbox"),TRUE);
+	enable_playback_controls(TRUE);
 	free_mtxfileio(fileio);
 	return TRUE;
 }

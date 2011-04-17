@@ -745,7 +745,7 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	else
 	{
 		vector = g_strsplit(firmware->profile_filename,PSEP,-1);
-		new_name = g_build_filename(HOME(),".MegaTunix",INTERROGATOR_DATA_DIR,"Profiles",vector[g_strv_length(vector)-1],NULL);
+		new_name = g_build_filename(HOME(),".MegaTunix",INTERROGATOR_DATA_DIR,"Profiles",vector[g_strv_length(vector)-2],vector[g_strv_length(vector)-1],NULL);
 		g_strfreev(vector);
 		cfg_write_file(cfgfile, new_name);
 		g_free(firmware->profile_filename);

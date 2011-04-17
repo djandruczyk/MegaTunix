@@ -73,6 +73,7 @@ gboolean save_default_choices(GtkWidget *);
 void set_default_lview_choices_state(void);
 void write_logviewer_defaults(ConfigFile *);
 void read_logviewer_defaults(ConfigFile *);
+void enable_playback_controls(gboolean );
 /* Prototypes */
 
 #endif

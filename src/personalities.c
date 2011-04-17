@@ -95,7 +95,6 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		{
 			if (g_strcasecmp(element->persona, (gchar *)DATA_GET(global_data,"cli_persona")) == 0)
 			{
-				printf("element persona %s, cli persona %s\n",element->persona, (gchar *)DATA_GET(global_data,"cli_persona"));
 				button = gtk_toggle_button_new();
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 				persona_selection(button,(gpointer)element);
@@ -120,7 +119,10 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		g_list_foreach(p_list,free_persona_element,NULL);
 		g_list_foreach(s_list,free_persona_element,NULL);
 		DATA_SET(global_data,"cli_persona",NULL);
-		goto jumpahead;
+		if (DATA_GET(global_data,"offline"))
+			goto jumpahead_offline;
+		else
+			goto jumpahead;
 	}
 
 	set_title(g_strdup(_("Choose an ECU family?")));
@@ -237,6 +239,7 @@ jumpahead:
 			io_cmd("interrogation",NULL);
 			break;
 		default: /* Offline */
+jumpahead_offline:
 			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
 			load_comm_xml(filename);

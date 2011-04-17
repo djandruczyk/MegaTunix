@@ -173,6 +173,8 @@ G_MODULE_EXPORT void start_datalogging(void)
 {
 	if (logging_active)
 		return;   /* Logging already running ... */
+	if (DATA_GET(global_data,"offline"))
+		return;
 	if (lookup_widget("dlog_logable_vars_vbox1"))
 		gtk_widget_set_sensitive(lookup_widget("dlog_logable_vars_vbox1"),FALSE);
 	if (lookup_widget("dlog_format_delimit_hbox1"))
@@ -201,6 +203,8 @@ G_MODULE_EXPORT void stop_datalogging(void)
 	if (!logging_active)
 		return;
 
+	if (DATA_GET(global_data,"offline"))
+		return;
 	logging_active = FALSE;
 
 	if (lookup_widget("dlog_logable_vars_vbox1"))

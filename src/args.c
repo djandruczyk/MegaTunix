@@ -151,7 +151,8 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	if (args->offline)
 	{
 		DATA_SET(global_data,"offline",GINT_TO_POINTER(TRUE));
-		g_timeout_add(1000,(GSourceFunc)set_offline_mode,NULL);
+		if (!(args->persona))
+			printf("Suggest specifying a persona with the  \"-p\" option when using offline mode\n");
 	}
 	if (args->listen_mode)
 	{
