@@ -11,10 +11,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <defines.h>
 #include <about_gui.h>
-#include <args.h>
 #include <comms_gui.h>
 #include <configfile.h>
 #include <core_gui.h>
@@ -47,7 +47,7 @@ extern gconstpointer *global_data;
  \brief setup_gui() creates the main window, main notebook, and the static
  tabs and populates them with data
  */
-G_MODULE_EXPORT int setup_gui(void)
+G_MODULE_EXPORT gboolean setup_gui(void)
 {
 	gchar *fname = NULL;
 	gchar *filename = NULL;
@@ -67,8 +67,11 @@ G_MODULE_EXPORT int setup_gui(void)
 	gint w = 0;
 	gint h = 0;
 	GtkSettings *settings = gtk_settings_get_default();
-	CmdLineArgs *args = DATA_GET(global_data,"args");
+	CmdLineArgs *args =  NULL;
 
+
+	args = DATA_GET(global_data,"args");
+	g_return_val_if_fail(args,FALSE);
 #ifdef __WIN32__
 	fname = g_build_filename(GUI_DATA_DIR,"main_win32.glade",NULL);
 #else
@@ -105,7 +108,7 @@ G_MODULE_EXPORT int setup_gui(void)
 			G_CALLBACK(leave),NULL);
 	g_signal_connect(G_OBJECT(window),"destroy_event",
 			G_CALLBACK(leave),NULL);
-//	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
+	//	gtk_window_set_focus_on_map((GtkWindow *)window,FALSE);
 	top_box = glade_xml_get_widget(xml,"mtx_top_vbox");
 	gtk_container_add(GTK_CONTAINER(window),top_box);
 
@@ -175,10 +178,8 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	gchar * tmpbuf = NULL;
 	gint mtx_temp_units;
 	Serial_Params *serial_params = NULL;
-	CmdLineArgs *args = NULL;;
 
 	serial_params = DATA_GET(global_data,"serial_params");
-	args = DATA_GET(global_data,"args");
 	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
@@ -412,7 +413,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_NETMODE));
 
 	widget = glade_xml_get_widget(xml,"netaccess_table");
-	if (args->network_mode)
+	if (DATA_GET(global_data,"network_mode"))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 
 	widget = glade_xml_get_widget(xml,"connected_clients_entry");

@@ -107,10 +107,10 @@ G_MODULE_EXPORT gint comms_test(void)
 	if (!serial_params)
 		return FALSE;
 
-	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting ECU Clock\n"));
 
 	if ((GINT)DATA_GET(global_data,"ecu_baud") < 115200)
 	{
+		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting MS-1 ECU Clock\n"));
 		/*printf("MS-1 comms test\n");*/
 		if (!write_wrapper_f(serial_params->fd,"C",1,&len))
 		{
@@ -124,6 +124,7 @@ G_MODULE_EXPORT gint comms_test(void)
 	}
 	else
 	{
+		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting MS-2 ECU Clock\n"));
 		/*printf("MS-2 comms test\n");*/
 		if (!write_wrapper_f(serial_params->fd,"c",1,&len))
 		{
@@ -133,7 +134,7 @@ G_MODULE_EXPORT gint comms_test(void)
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			return FALSE;
 		}
-		result = read_data_f(-1,NULL,FALSE);
+		result = read_data_f(2,NULL,FALSE);
 	}
 	if (result)     /* Success */
 	{

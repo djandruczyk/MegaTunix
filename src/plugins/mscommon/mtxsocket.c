@@ -430,8 +430,11 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 		if (res < 0)
 		{
 close_binary:
-			dbg_func_f(THREADS|CRITICAL,g_strdup_printf(__FILE__": binary_socket_server()\n\trecv error \"%s\"\n",error->message));
-			g_error_free(error);
+			if (error)
+			{
+				dbg_func_f(THREADS|CRITICAL,g_strdup_printf(__FILE__": binary_socket_server()\n\trecv error \"%s\"\n",error->message));
+				g_error_free(error);
+			}
 			error = NULL;
 close_binary2:
 			g_socket_close(client->socket,NULL);
@@ -1288,6 +1291,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	 */
 	static gboolean network_is_open = FALSE; /* Assume never opened */
 	static GAsyncQueue *io_repair_queue;
+	void (*setup_serial_params_f)(void) = NULL;
 	volatile gboolean autodetect = TRUE;
 	gchar * host = NULL;
 	gint port = 0;
@@ -1295,7 +1299,10 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	CmdLineArgs *args = NULL;
 	gint i = 0;
 
+	get_symbol_f("setup_serial_params",(void *)&setup_serial_params_f);
 	args = DATA_GET(global_data,"args");
+	g_return_val_if_fail(args,NULL);
+	g_return_val_if_fail(setup_serial_params_f,NULL);
 
 	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": network_repair_thread()\n\tThread created!\n"));
 	if (DATA_GET(global_data,"offline"))
@@ -1360,6 +1367,8 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 		thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open connection to %s:%i\n"),host,port),FALSE,FALSE);
 		if (open_network(host,port))
 		{
+			setup_serial_params_f();
+
 			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Network Connection established to %s:%i\n"),host,port),FALSE,FALSE);
 			if (comms_test())
 			{

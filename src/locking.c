@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <args.h>
 #include <config.h>
 #include <defines.h>
 #include <errno.h>
@@ -42,8 +41,7 @@ extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void remove_mtx_lock(void)
 {
-	CmdLineArgs * args = DATA_GET(global_data,"args");
-	if (args->network_mode)
+	if (DATA_GET(global_data,"network_mode"))
 		return;
 #ifdef __WIN32__
 	win32_remove_mtx_lock();
@@ -55,8 +53,7 @@ G_MODULE_EXPORT void remove_mtx_lock(void)
 
 G_MODULE_EXPORT void create_mtx_lock(void)
 {
-	CmdLineArgs * args = DATA_GET(global_data,"args");
-	if (args->network_mode)
+	if (DATA_GET(global_data,"network_mode"))
 		return;
 #ifdef __WIN32__
 	win32_create_mtx_lock();

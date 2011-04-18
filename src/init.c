@@ -246,7 +246,7 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET_FULL(global_data,"dash_2_size_ratio",g_memdup(&tmpf,sizeof(gfloat)),cleanup);
 		if (cfg_read_int(cfgfile, "DataLogger", "preferred_delimiter", &tmpi))
 			DATA_SET(global_data,"preferred_delimiter",GINT_TO_POINTER(tmpi));	
-		if (args->network_mode)
+		if (DATA_GET(global_data,"network_mode"))
 			DATA_SET(global_data,"read_timeout",GINT_TO_POINTER(250));
 		else
 		{

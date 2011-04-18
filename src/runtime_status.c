@@ -123,7 +123,9 @@ G_MODULE_EXPORT void load_status_pf(void)
 
 	if (xml_result == FALSE)
 		gtk_widget_destroy(window);
-	else if ((!args->hide_status) && (xml_result))
+	else if (args->hide_status)
+		gtk_widget_hide_all(window);
+	else
 		gtk_widget_show_all(window);
 
 	set_title(g_strdup(_("RT Status Loaded...")));

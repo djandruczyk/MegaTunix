@@ -194,6 +194,11 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	DATA_SET(global_data,"ecu_baud",GINT_TO_POINTER(baudrate));
 	if (serial_params->open == FALSE)
 		return;
+	if (DATA_GET(global_data,"network_mode"))
+	{
+		printf("network mode, exiting!\n");
+		return;
+	}
 	/*printf("setup_serial_params entered\n");*/
 	g_mutex_lock(serio_mutex);
 

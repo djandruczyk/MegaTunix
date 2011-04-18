@@ -11,9 +11,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+#include <args.h>
 #include <config.h>
 #include <defines.h>
-#include <args.h>
 #include <3d_vetable.h>
 #include <comms.h>
 #include <comms_gui.h>
@@ -122,13 +122,13 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
 	Serial_Params *serial_params = NULL;
-	CmdLineArgs *args = NULL;
 	GTimeVal cur;
 	Io_Message *message = NULL;	
 	GAsyncQueue *io_data_queue = NULL;
 	GAsyncQueue *pf_dispatch_queue = NULL;
 	GCond * io_dispatch_cond = NULL;
 	GMutex * io_dispatch_mutex = NULL;
+	CmdLineArgs *args  = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
 /*	GTimer *clock;*/
@@ -139,16 +139,16 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
 	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
 	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
-	args = DATA_GET(global_data,"args");
 	serial_params = DATA_GET(global_data,"serial_params");
 	get_symbol("network_repair_thread",(void*)&network_repair_thread);
 	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
+	args = DATA_GET(global_data,"args");
 
+	g_return_val_if_fail(args,NULL);
 	g_return_val_if_fail(io_data_queue,NULL);
 	g_return_val_if_fail(io_dispatch_cond,NULL);
 	g_return_val_if_fail(io_dispatch_mutex,NULL);
 	g_return_val_if_fail(pf_dispatch_queue,NULL);
-	g_return_val_if_fail(args,NULL);
 	g_return_val_if_fail(serial_params,NULL);
 	g_return_val_if_fail(serial_repair_thread,NULL);
 /*	clock = g_timer_new();*/
