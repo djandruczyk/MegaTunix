@@ -88,8 +88,9 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming,gint len)
 	/* Store timestamps in ringbuffer */
 
 	/* Backup current rtv copy */
-	//memcpy(firmware->rt_data_last,firmware->rt_data,len);
-	//memcpy(firmware->rt_data,incoming,len);
+	memcpy(firmware->rt_data_last,firmware->rt_data,len);
+	/* Needed for Socket Mode */
+	memcpy(firmware->rt_data,incoming,len);
 	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 	g_get_current_time(&timeval);
 	g_array_append_val(rtv_map->ts_array,timeval);
