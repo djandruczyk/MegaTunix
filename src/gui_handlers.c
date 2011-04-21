@@ -1340,6 +1340,9 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 	GtkWidget *sub = NULL;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
+	printf("notebook page changed\n");
+	if (OBJ_GET(gtk_notebook_get_tab_label(notebook,widget),"not_rendered"))
+		printf("This tab is NOT rendered yet, should load it!!\n");
 	tab_ident = (TabIdent)OBJ_GET(widget,"tab_ident");
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(tab_ident));
 

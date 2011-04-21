@@ -107,15 +107,16 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			i++;
 			continue;
 		}
+		/*
 		thread_update_logbar("interr_view",NULL,g_strdup(_("Load of tab: ")),FALSE,FALSE);
 		thread_update_logbar("interr_view","info", g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
 		xml = glade_xml_new(glade_file,"topframe",NULL);
+		*/
 		cfgfile = cfg_open_file(map_file);
 		if (cfgfile)
 		{
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
 			tmpbuf = g_strdup_printf("%s_xml",tab_name);
-			DATA_SET_FULL(global_data,tmpbuf,xml,g_object_unref);
 			g_free(tmpbuf);
 
 			label = gtk_label_new(NULL);
@@ -132,14 +133,32 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				g_free(tmpbuf);
 			}
 			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
+			topframe = gtk_frame_new(NULL);
+			OBJ_SET_FULL(label,"glade_file",g_strdup(glade_file),g_object_unref);
+			OBJ_SET_FULL(label,"datamap_file",g_strdup(map_file),g_object_unref);
+			OBJ_SET(label,"not_rendered",GINT_TO_POINTER(TRUE));
+			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),topframe,label);
+			gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),topframe,TRUE);
+			gtk_widget_show_all(topframe);
+			cur = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook))-1;
+			if (hidden_list[cur] == TRUE)
+			{
+				child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),cur);
+				label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
+				gtk_widget_hide(child);
+				gtk_widget_hide(label);
+				item = lookup_widget("show_tab_visibility_menuitem");
+				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
+			}
+			/*
 			topframe = glade_xml_get_widget(xml,"topframe");
 
 			OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
 			OBJ_SET_FULL(topframe,"glade_file",g_strdup(glade_file),g_free);
 			OBJ_SET_FULL(label,"glade_file",g_strdup(glade_file),g_free);
-			/* bind_data() is recursive and will take 
-			 * care of all children
-			 */
+			// bind_data() is recursive and will take 
+			// care of all children
+
 			groups = load_groups(cfgfile);
 			bindgroup->cfgfile = cfgfile;
 			bindgroup->groups = groups;
@@ -178,7 +197,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				gtk_widget_hide(label);
 				item = lookup_widget("show_tab_visibility_menuitem");
 				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
-
 			}
 			if (cfg_read_string(cfgfile,"global","post_functions",&tmpbuf))
 			{
@@ -187,6 +205,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			}
 			cfg_free(cfgfile);
 			thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
+			*/
 		}
 		else
 		{
