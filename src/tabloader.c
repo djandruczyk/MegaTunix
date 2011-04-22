@@ -54,7 +54,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	gchar * tab_name = NULL;
 	gboolean tmpi = FALSE;
 	GtkWidget *label = NULL;
-	GtkWidget *topframe = NULL;
+	GtkWidget *container = NULL;
 	GHashTable *groups = NULL;
 	BindGroup *bindgroup = NULL;
 	GtkWidget *child = NULL;
@@ -133,13 +133,13 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				g_free(tmpbuf);
 			}
 			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
-			topframe = gtk_frame_new(NULL);
+			container = gtk_vbox_new(1,0);
 			OBJ_SET_FULL(label,"glade_file",g_strdup(glade_file),g_object_unref);
 			OBJ_SET_FULL(label,"datamap_file",g_strdup(map_file),g_object_unref);
 			OBJ_SET(label,"not_rendered",GINT_TO_POINTER(TRUE));
-			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),topframe,label);
-			gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),topframe,TRUE);
-			gtk_widget_show_all(topframe);
+			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),container,label);
+			gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),container,TRUE);
+			gtk_widget_show_all(container);
 			cur = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook))-1;
 			if (hidden_list[cur] == TRUE)
 			{
@@ -150,69 +150,15 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				item = lookup_widget("show_tab_visibility_menuitem");
 				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 			}
-			/*
-			topframe = glade_xml_get_widget(xml,"topframe");
-
-			OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
-			OBJ_SET_FULL(topframe,"glade_file",g_strdup(glade_file),g_free);
-			OBJ_SET_FULL(label,"glade_file",g_strdup(glade_file),g_free);
-			// bind_data() is recursive and will take 
-			// care of all children
-
-			groups = load_groups(cfgfile);
-			bindgroup->cfgfile = cfgfile;
-			bindgroup->groups = groups;
-			bindgroup->map_file = g_strdup(map_file);
-			bind_data(topframe,(gpointer)bindgroup);
-			g_free(bindgroup->map_file);
-			if (groups)
-				g_hash_table_destroy(groups);
-			groups = NULL;
-
-			populate_master(topframe,(gpointer)cfgfile);
-
-			dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
-			g_free(tab_name);
-
-			if (topframe == NULL)
-			{
-				dbg_func(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
-				set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
-				gdk_threads_leave();
-				return FALSE;
-			}
-			else
-			{
-				gtk_notebook_append_page(GTK_NOTEBOOK(notebook),topframe,label);
-				gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),topframe,TRUE);
-				glade_xml_signal_autoconnect(xml);
-				gtk_widget_show_all(topframe);
-			}
-			cur = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook))-1;
-			if (hidden_list[cur] == TRUE)
-			{
-				child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),cur);
-				label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
-				gtk_widget_hide(child);
-				gtk_widget_hide(label);
-				item = lookup_widget("show_tab_visibility_menuitem");
-				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
-			}
-			if (cfg_read_string(cfgfile,"global","post_functions",&tmpbuf))
-			{
-				run_post_functions(tmpbuf);
-				g_free(tmpbuf);
-			}
-			cfg_free(cfgfile);
-			thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
-			*/
 		}
+		/*
 		else
 		{
 			thread_update_logbar("interr_view","warning",g_strdup(_("\nDatamap File: ")),FALSE,FALSE);
 			thread_update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
 			thread_update_logbar("interr_view","warning",g_strdup(_(" Could not be processed!\n")),FALSE,FALSE);
 		}
+		*/
 		g_free(map_file);
 		g_free(glade_file);
 
@@ -232,12 +178,109 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			gtk_main_iteration();
 		}
 	}
+	/*
 	thread_update_logbar("interr_view","warning",g_strdup(_("Tab Loading Complete!")),FALSE,FALSE);
+	*/
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
 	gdk_threads_leave();
+	return TRUE;
+}
+
+
+/*!
+ \brief load_gui_tabs_pf() is called after interrogation completes successfully.
+ It's purpose is to load all the glade files and datamaps as specified in the
+ interrogation profile of the detected firmware. 
+ */
+G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
+{
+	gint i = 0;
+	gint cur = 0;
+	ConfigFile *cfgfile = NULL;
+	gchar * map_file = NULL;
+	gchar * glade_file = NULL;
+	gchar * tmpbuf = NULL;
+	GladeXML *xml = NULL;
+	gchar * tab_name = NULL;
+	gboolean tmpi = FALSE;
+	GtkWidget *label = NULL;
+	GtkWidget *topframe = NULL;
+	GtkWidget *placeholder = NULL;
+	GHashTable *groups = NULL;
+	BindGroup *bindgroup = NULL;
+	GtkWidget *child = NULL;
+	GtkWidget *item = NULL;
+	extern GdkColor red;
+	gboolean * hidden_list = NULL;
+	Firmware_Details *firmware = NULL;
+	CmdLineArgs *args = NULL;
+
+	placeholder =  gtk_notebook_get_nth_page(notebook,page);
+	label = gtk_notebook_get_tab_label(notebook,placeholder);
+
+	bindgroup = g_new0(BindGroup,1);
+
+	glade_file = OBJ_GET(label,"glade_file");
+	map_file = OBJ_GET(label,"datamap_file");
+	thread_update_logbar("interr_view",NULL,g_strdup(_("Load of tab: ")),FALSE,FALSE);
+	thread_update_logbar("interr_view","info", g_strdup_printf("\"%s\"",glade_file),FALSE,FALSE);
+	xml = glade_xml_new(glade_file,"topframe",NULL);
+	cfgfile = cfg_open_file(map_file);
+	if (cfgfile)
+	{
+		topframe = glade_xml_get_widget(xml,"topframe");
+
+		OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
+		// bind_data() is recursive and will take 
+		// care of all children
+
+		groups = load_groups(cfgfile);
+		bindgroup->cfgfile = cfgfile;
+		bindgroup->groups = groups;
+		bindgroup->map_file = g_strdup(map_file);
+		bind_data(topframe,(gpointer)bindgroup);
+		g_free(bindgroup->map_file);
+		if (groups)
+			g_hash_table_destroy(groups);
+		groups = NULL;
+
+		populate_master(topframe,(gpointer)cfgfile);
+
+		dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
+		g_free(tab_name);
+
+		if (topframe == NULL)
+		{
+			dbg_func(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
+			set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
+			return FALSE;
+		}
+		else
+		{
+			gtk_box_pack_start(GTK_BOX(placeholder),topframe,TRUE,TRUE,0);
+			glade_xml_signal_autoconnect(xml);
+			gtk_widget_show_all(topframe);
+		}
+		if (cfg_read_string(cfgfile,"global","post_functions",&tmpbuf))
+		{
+			run_post_functions(tmpbuf);
+			g_free(tmpbuf);
+		}
+		cfg_free(cfgfile);
+		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
+		OBJ_SET(label,"not_rendered",NULL);
+	}
+	/* Allow gui to update as it should.... */
+	while (gtk_events_pending())
+	{
+		if (DATA_GET(global_data,"leaving"))
+			return FALSE;
+		gtk_main_iteration();
+	}
+	g_free(bindgroup);
 	return TRUE;
 }
 
