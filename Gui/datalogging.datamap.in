@@ -4,6 +4,7 @@ description=Object data map for Datalogging for all firmwares
 _tab_name=_DataLogging
 id_prefix=dlog_
 groups=defaults
+post_functions=populate_dlog_choices
 
 #----- Groups ----------------------------------------------------------------
 

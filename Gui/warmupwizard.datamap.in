@@ -4,6 +4,7 @@ _tab_name=_Warmup Wizard
 #id_prefix=WARMUP_WIZ_
 tab_ident=_WARMUP_WIZ_TAB_
 groups=defaults
+post_functions=load_ww_sliders
 
 #----- Groups ----------------------------------------------------------------
 

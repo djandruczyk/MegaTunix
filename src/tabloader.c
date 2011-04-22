@@ -107,11 +107,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			i++;
 			continue;
 		}
-		/*
-		thread_update_logbar("interr_view",NULL,g_strdup(_("Load of tab: ")),FALSE,FALSE);
-		thread_update_logbar("interr_view","info", g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
-		xml = glade_xml_new(glade_file,"topframe",NULL);
-		*/
 		cfgfile = cfg_open_file(map_file);
 		if (cfgfile)
 		{
@@ -151,14 +146,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 			}
 		}
-		/*
-		else
-		{
-			thread_update_logbar("interr_view","warning",g_strdup(_("\nDatamap File: ")),FALSE,FALSE);
-			thread_update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_list[i]),FALSE,FALSE);
-			thread_update_logbar("interr_view","warning",g_strdup(_(" Could not be processed!\n")),FALSE,FALSE);
-		}
-		*/
 		g_free(map_file);
 		g_free(glade_file);
 
@@ -178,9 +165,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			gtk_main_iteration();
 		}
 	}
-	/*
-	thread_update_logbar("interr_view","warning",g_strdup(_("Tab Loading Complete!")),FALSE,FALSE);
-	*/
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	g_free(bindgroup);
@@ -221,7 +205,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	placeholder =  gtk_notebook_get_nth_page(notebook,page);
 	label = gtk_notebook_get_tab_label(notebook,placeholder);
 
-	bindgroup = g_new0(BindGroup,1);
 
 	glade_file = OBJ_GET(label,"glade_file");
 	map_file = OBJ_GET(label,"datamap_file");
@@ -237,6 +220,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		// bind_data() is recursive and will take 
 		// care of all children
 
+		bindgroup = g_new0(BindGroup,1);
 		groups = load_groups(cfgfile);
 		bindgroup->cfgfile = cfgfile;
 		bindgroup->groups = groups;
@@ -246,6 +230,9 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		if (groups)
 			g_hash_table_destroy(groups);
 		groups = NULL;
+		g_free(bindgroup);
+		/* Clear not_rendered flag */
+		OBJ_SET(label,"not_rendered",NULL);
 
 		populate_master(topframe,(gpointer)cfgfile);
 
@@ -271,7 +258,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		}
 		cfg_free(cfgfile);
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
-		OBJ_SET(label,"not_rendered",NULL);
 	}
 	/* Allow gui to update as it should.... */
 	while (gtk_events_pending())
@@ -280,7 +266,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 			return FALSE;
 		gtk_main_iteration();
 	}
-	g_free(bindgroup);
 	return TRUE;
 }
 

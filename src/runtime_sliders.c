@@ -44,9 +44,69 @@ extern gconstpointer *global_data;
  from the file specified in the firmware's interrogation profile, and populate
  the gui with the newly created sliders.
  */
-G_MODULE_EXPORT void load_sliders_pf(void)
+G_MODULE_EXPORT void load_rt_sliders(void)
 {
 	GHashTable *rt_sliders = NULL;
+	gchar *filename = NULL;
+	xmlDoc * doc = NULL;
+	xmlNode *root_element = NULL;
+	gboolean res = FALSE;
+	Firmware_Details *firmware = NULL;
+
+	firmware = DATA_GET(global_data,"firmware");
+
+	if (!DATA_GET(global_data,"interrogated"))
+	{
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT interrogated, returning!\n\n"));
+		return;
+	}
+
+	if (DATA_GET(global_data,"leaving"))
+	{
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, LEAVING set, returning!\n\n"));
+		return;
+	}
+	if (!DATA_GET(global_data,"rtvars_loaded"))
+	{
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		return;
+	}
+	set_title(g_strdup(_("Loading RT Sliders...")));
+	rt_sliders = DATA_GET(global_data,"rt_sliders");
+	if (!rt_sliders)
+	{
+		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
+		DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
+	}
+	filename = get_file(g_build_path(PSEP,RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL),g_strdup("xml"));
+	LIBXML_TEST_VERSION
+		doc = xmlReadFile(filename, NULL, 0);
+	g_free(filename);
+	if (doc == NULL)
+	{
+		printf(_("error: could not parse file %s\n"),filename);
+		return;
+	}
+	root_element = xmlDocGetRootElement(doc);
+	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+	res = load_rts_xml_elements(root_element,"rt_rts",rt_sliders,0,RUNTIME_TAB);
+	if (!res)
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tRuntime Sliders XML parse/load failure\n"));
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+
+	return;
+}
+
+
+/*!
+ \brief load_sliders_pf() is called to load up the runtime slider configurations
+ from the file specified in the firmware's interrogation profile, and populate
+ the gui with the newly created sliders.
+ */
+G_MODULE_EXPORT void load_ww_sliders(void)
+{
 	GHashTable *ww_sliders = NULL;
 	gchar *filename = NULL;
 	xmlDoc * doc = NULL;
@@ -58,37 +118,27 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT connected and not interrogated, returning!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT interrogated, returning!\n\n"));
 		return;
 	}
 
-	if ((!DATA_GET(global_data,"tabs_loaded")) || 
-			(DATA_GET(global_data,"leaving")))
+	if (DATA_GET(global_data,"leaving"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, tabs not loaded or leaving, returning!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, LEAVING set, returning!\n\n"));
 		return;
 	}
-	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
-			(!DATA_GET(global_data,"tabs_loaded")))
+	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
-	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Sliders...")));
-	rt_sliders = DATA_GET(global_data,"rt_sliders");
 	ww_sliders = DATA_GET(global_data,"ww_sliders");
-	if (!rt_sliders)
-	{
-		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
-		DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
-	}
 	if (!ww_sliders)
 	{
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 		DATA_SET_FULL(global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
 	}
-
 
 	filename = get_file(g_build_path(PSEP,RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL),g_strdup("xml"));
 	LIBXML_TEST_VERSION
@@ -97,15 +147,8 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
-		gdk_threads_leave();
 		return;
 	}
-	root_element = xmlDocGetRootElement(doc);
-	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	res = load_rts_xml_elements(root_element,"rt_rts",rt_sliders,0,RUNTIME_TAB);
-	if (!res)
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tRuntime Sliders XML parse/load failure\n"));
 	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"ww_rts",ww_sliders,0,WARMUP_WIZ_TAB);
@@ -114,9 +157,9 @@ G_MODULE_EXPORT void load_sliders_pf(void)
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
-	gdk_threads_leave();
 	return;
 }
+
 
 G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash, gint table_num, TabIdent tab_id)
 {

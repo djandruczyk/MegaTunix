@@ -35,7 +35,7 @@ extern gconstpointer *global_data;
  a call to glade_get_widget_name
  \param user_data (gpointer) is currently unused.
  */
-G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data)
+G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 {
 	gchar *name = NULL;
 	gchar *fullname = NULL;

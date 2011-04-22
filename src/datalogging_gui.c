@@ -49,7 +49,7 @@ static gboolean header_needed = FALSE;
  processed.  All of the logable variables are then placed here for user 
  selecting during datalogging.
  */
-G_MODULE_EXPORT void populate_dlog_choices_pf(void)
+G_MODULE_EXPORT void populate_dlog_choices(void)
 {
 	guint i,j,k;
 	GList *list = NULL;
@@ -65,8 +65,7 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
-	if ((!DATA_GET(global_data,"tabs_loaded")) || 
-			(DATA_GET(global_data,"leaving")))
+	if (DATA_GET(global_data,"leaving"))
 		return;
 	if (!((DATA_GET(global_data,"connected")) && 
 				(DATA_GET(global_data,"interrogated"))))
@@ -76,14 +75,12 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 		dbg_func(CRITICAL,g_strdup(__FILE__": populate_dlog_choices_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
-	gdk_threads_enter();
 	set_title(g_strdup(_("Populating Datalogger...")));
 
 	vbox = lookup_widget("dlog_logable_vars_vbox1");
 	if (!GTK_IS_WIDGET(vbox))
 	{
 		printf(_("datalogger windows not present, returning\n"));
-		gdk_threads_leave();
 		return;
 	}
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
@@ -160,7 +157,6 @@ G_MODULE_EXPORT void populate_dlog_choices_pf(void)
 	g_list_free(list);
 	gtk_widget_show_all(vbox);
 	set_title(g_strdup(_("Datalogger Ready...")));
-	gdk_threads_leave();
 	return;
 }
 

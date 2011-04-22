@@ -1354,7 +1354,10 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(tab_ident));
 
 	if (tab_ident == RUNTIME_TAB)
+	{
+		printf("page changed to runtime!\n");
 		DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
+	}
 
 #if GTK_MINOR_VERSION >= 18
 	if ((OBJ_GET(widget,"table_num")) && (gtk_widget_get_state(widget) != GTK_STATE_INSENSITIVE))
