@@ -46,7 +46,8 @@ struct _BindGroup
 {
 	ConfigFile *cfgfile;	/*! where the configfile ptr goes... */
 	GHashTable *groups;	/*! where the groups table goes */
-	gchar * map_file;	/*! Tab map filename for logging */
+	gchar * map_file;	/*! Tab datamap file */
+	GList *widget_list;	/*! List of widgets in this tab */
 };
 
 

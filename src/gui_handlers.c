@@ -1338,6 +1338,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 	gint sub_page = 0;
 	gint active_table = -1;
 	GtkWidget *sub = NULL;
+	GtkWidget *topframe = NULL;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 
 	if (OBJ_GET(gtk_notebook_get_tab_label(notebook,widget),"not_rendered"))
@@ -1350,28 +1351,28 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 				G_CALLBACK (notebook_page_changed),
 				data);
 	}
-	tab_ident = (TabIdent)OBJ_GET(widget,"tab_ident");
+	topframe = OBJ_GET(widget,"topframe");
+	if (!topframe)
+		topframe = widget;
+	tab_ident = (TabIdent)OBJ_GET(topframe,"tab_ident");
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(tab_ident));
 
 	if (tab_ident == RUNTIME_TAB)
-	{
-		printf("page changed to runtime!\n");
 		DATA_SET(global_data,"rt_forced_update",GINT_TO_POINTER(TRUE));
-	}
 
 #if GTK_MINOR_VERSION >= 18
-	if ((OBJ_GET(widget,"table_num")) && (gtk_widget_get_state(widget) != GTK_STATE_INSENSITIVE))
+	if ((OBJ_GET(topframe,"table_num")) && (gtk_widget_get_state(topframe) != GTK_STATE_INSENSITIVE))
 #else
-	if ((OBJ_GET(widget,"table_num")) && (GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE))
+	if ((OBJ_GET(topframe,"table_num")) && (GTK_WIDGET_STATE(topframe) != GTK_STATE_INSENSITIVE))
 #endif
-		active_table = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+		active_table = (GINT)strtol(OBJ_GET(topframe,"table_num"),NULL,10);
 	else
 		active_table = -1;
 
-	if (OBJ_GET(widget,"sub-notebook"))
+	if (OBJ_GET(topframe,"sub-notebook"))
 	{
 /*		printf(" This tab has a sub-notebook\n"); */
-		sub = lookup_widget( (OBJ_GET(widget,"sub-notebook")));
+		sub = lookup_widget( (OBJ_GET(topframe,"sub-notebook")));
 		if (GTK_IS_WIDGET(sub))
 		{
 			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));

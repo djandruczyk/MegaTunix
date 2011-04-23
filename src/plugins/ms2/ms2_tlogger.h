@@ -45,7 +45,8 @@ struct _MS2_TTMon_Data
 	gfloat rpm;		/*! Current RPM */
 	gulong *current;	/*! Current block of times */
 	gulong *last;		/*! Last block of times */
-	gulong *captures;	/*! Array of capture points */
+	guchar *flags;		/*! Array of flags per capture point */
+	guchar *sync_loss;	/*! Array of sync loss points */
 	gint wrap_pt;		/*! Wrap point */
 	gint vdivisor;		/*! Vertical scaling divisor */
 	gfloat peak;		/*! Vertical Peak Value */

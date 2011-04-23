@@ -50,13 +50,10 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	gchar * map_file = NULL;
 	gchar * glade_file = NULL;
 	gchar * tmpbuf = NULL;
-	GladeXML *xml = NULL;
 	gchar * tab_name = NULL;
 	gboolean tmpi = FALSE;
 	GtkWidget *label = NULL;
 	GtkWidget *container = NULL;
-	GHashTable *groups = NULL;
-	BindGroup *bindgroup = NULL;
 	GtkWidget *child = NULL;
 	GtkWidget *notebook = NULL;
 	GtkWidget *item = NULL;
@@ -81,7 +78,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Gui Tabs...")));
-	bindgroup = g_new0(BindGroup,1);
 	notebook = lookup_widget("toplevel_notebook");
 	hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
 
@@ -167,7 +163,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	}
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
-	g_free(bindgroup);
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
 	gdk_threads_leave();
 	return TRUE;
@@ -181,30 +176,26 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
  */
 G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 {
-	gint i = 0;
-	gint cur = 0;
+	static void (*update_widget_f)(gpointer, gpointer) = NULL;
 	ConfigFile *cfgfile = NULL;
 	gchar * map_file = NULL;
 	gchar * glade_file = NULL;
 	gchar * tmpbuf = NULL;
 	GladeXML *xml = NULL;
 	gchar * tab_name = NULL;
-	gboolean tmpi = FALSE;
 	GtkWidget *label = NULL;
 	GtkWidget *topframe = NULL;
 	GtkWidget *placeholder = NULL;
 	GHashTable *groups = NULL;
 	BindGroup *bindgroup = NULL;
-	GtkWidget *child = NULL;
-	GtkWidget *item = NULL;
 	extern GdkColor red;
-	gboolean * hidden_list = NULL;
-	Firmware_Details *firmware = NULL;
-	CmdLineArgs *args = NULL;
+
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
+	g_return_val_if_fail(update_widget_f,FALSE);
 
 	placeholder =  gtk_notebook_get_nth_page(notebook,page);
 	label = gtk_notebook_get_tab_label(notebook,placeholder);
-
 
 	glade_file = OBJ_GET(label,"glade_file");
 	map_file = OBJ_GET(label,"datamap_file");
@@ -225,12 +216,12 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		bindgroup->cfgfile = cfgfile;
 		bindgroup->groups = groups;
 		bindgroup->map_file = g_strdup(map_file);
+		bindgroup->widget_list = NULL;
 		bind_data(topframe,(gpointer)bindgroup);
 		g_free(bindgroup->map_file);
 		if (groups)
 			g_hash_table_destroy(groups);
 		groups = NULL;
-		g_free(bindgroup);
 		/* Clear not_rendered flag */
 		OBJ_SET(label,"not_rendered",NULL);
 
@@ -245,18 +236,19 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 			set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
 			return FALSE;
 		}
-		else
-		{
-			gtk_box_pack_start(GTK_BOX(placeholder),topframe,TRUE,TRUE,0);
-			glade_xml_signal_autoconnect(xml);
-			gtk_widget_show_all(topframe);
-		}
+		gtk_box_pack_start(GTK_BOX(placeholder),topframe,TRUE,TRUE,0);
+		OBJ_SET(placeholder,"topframe",topframe);
+		glade_xml_signal_autoconnect(xml);
 		if (cfg_read_string(cfgfile,"global","post_functions",&tmpbuf))
 		{
 			run_post_functions(tmpbuf);
 			g_free(tmpbuf);
 		}
 		cfg_free(cfgfile);
+		g_list_foreach(bindgroup->widget_list,update_widget_f,NULL);
+		g_list_free(bindgroup->widget_list);
+		g_free(bindgroup);
+		gtk_widget_show_all(topframe);
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
 	}
 	/* Allow gui to update as it should.... */
@@ -758,6 +750,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 				printf("adding widget %s (%p) to ecu_widgets[%i][%i]\n",glade_get_widget_name(widget),widget,page,offset);
 				*/
 
+				bindgroup->widget_list = g_list_prepend(bindgroup->widget_list, widget);
 				ecu_widgets[page][offset] = g_list_prepend(
 						ecu_widgets[page][offset],
 						(gpointer)widget);

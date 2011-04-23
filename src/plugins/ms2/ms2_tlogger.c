@@ -49,10 +49,10 @@ G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 	ttm_data->font_height = 0;
 	ttm_data->usable_begin = 0;
 	ttm_data->font_desc = NULL;
-	ttm_data->missing = 0;
 	ttm_data->sample_time = 0;
-	ttm_data->captures = g_new0(gulong, 341);
 	ttm_data->current = g_new0(gulong,341);
+	ttm_data->flags = g_new0(guchar,341);
+	ttm_data->sync_loss = g_new0(gboolean,341);
 	ttm_data->last = g_new0(gulong,341);
 	ttm_data->zoom = 1.0;
 
@@ -112,8 +112,6 @@ void _ms2_crunch_trigtooth_data(gint page)
 	gulong max = 0;
 	gint cap_idx = 0;
 	gfloat ratio = 0.0;
-	gint lower = 0;
-	gint upper = 0;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware;
  
@@ -133,6 +131,7 @@ void _ms2_crunch_trigtooth_data(gint page)
 		mid = ms_get_ecu_data_f(canID,page,(i*3)+1,MTX_U08);
 		low = ms_get_ecu_data_f(canID,page,(i*3)+2,MTX_U08);
 		ttm_data->current[i] = (((high & 0x0f) << 16) + (mid << 8) +low)*0.66;
+		ttm_data->flags[i] = (high & 0xf0) >> 4;
 		if ((ttm_data->current[i] < min) && (ttm_data->current[i] != 0))
 			min = ttm_data->current[i];
 		if (ttm_data->current[i] > max)
@@ -149,44 +148,16 @@ void _ms2_crunch_trigtooth_data(gint page)
 /*printf("Current RPM %f\n",ttm_data->rpm);*/
 	if (page == firmware->toothmon_page) /* TOOTH logger, we should search for min/max's */
 	{
-		/* ttm_data->current is the array containing the entire
-		 * sample of data organized so the beginning of the array
-		 * corresponds to the wrap point in the ECU.  Thus we should
-		 * search from here to find then number of "max" pips to see
-		 * how many wheel rotations we captured, and then try and
-		 * count the minor pips between those maxes and crunch on them
-		 * to determine the "quality" of the signal.
-		 */
-
-		/* Problems,  the wheel styles can be very complex, not just
-		 * n-m styles..
-		 */
-
-		cap_idx = 0;
 		for (i=0;i<341;i++)
 		{
-			ttm_data->captures[i] = 0;
-			/* Crude test,  ok for m-n wheels, but not complex*/
-			if ((ttm_data->current[i] > (1.5*min)) && (min != 0))
-				ttm_data->captures[cap_idx++] = i;
+			if (!(ttm_data->flags[i] & 0x01))
+				ttm_data->sync_loss[i] = TRUE;
+			else
+				ttm_data->sync_loss[i] = FALSE;
+			if (!(ttm_data->flags[i] & 0x02))
+				printf("Cam event happened at sample %i\n",i);
 		}
-		upper = (GINT)ceil(ratio);
-		lower = (GINT)floor(ratio);
-		if ((ratio-lower) < 0.5)
-			ttm_data->missing = lower - 1;
-		else 
-			ttm_data->missing = upper - 1;
 	}
-	/*
-	printf("Data for this block\n");
-	for (i=0;i<341;i++)
-	{
-		printf("%.4x ", ttm_data->current[i]);
-		if (!((i+1)%16))
-			printf("\n");
-	}
-	printf("\n");
-	*/
 	/* vertical scale calcs:
 	 * PROBLEM:  max_time can be anywhere from 0-1048576, need to 
 	 * develop a way to have nice even scale along the Y axis so you
