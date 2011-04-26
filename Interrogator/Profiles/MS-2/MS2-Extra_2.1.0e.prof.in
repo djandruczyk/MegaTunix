@@ -236,7 +236,7 @@ y_precision=1
 z_page=4
 z_base_offset=256
 z_size=_U08_
-z_source=vecurr1
+z_source=vecurr2
 z_suffix=VE %
 z_precision=0
 

@@ -362,7 +362,14 @@ G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_n
 	gtk_entry_set_width_chars(GTK_ENTRY(label),6);
 	gtk_entry_set_alignment(GTK_ENTRY(label),1);
 	gtk_entry_set_editable(GTK_ENTRY(label),FALSE);
-	gtk_widget_modify_base(GTK_WIDGET(label),GTK_STATE_NORMAL,&table->style->bg[GTK_STATE_NORMAL]);
+	/* PRELIGHT seems to not givehte box as NORMAL does, not sure why */
+	gtk_widget_modify_base(GTK_WIDGET(label),GTK_STATE_NORMAL,&slider->label->style->bg[GTK_STATE_PRELIGHT]);
+	/* For some reason GtkLabel consumes 3x the CPU to update vs an entry 
+	label = gtk_label_new(NULL);
+	gtk_label_set_width_chars(GTK_LABEL(label),6);
+	gtk_label_set_max_width_chars(GTK_LABEL(label),6);
+	gtk_misc_set_alignment(GTK_MISC(label),1.0,0.5);
+	*/
 
 	slider->textval = label;
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);

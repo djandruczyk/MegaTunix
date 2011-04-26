@@ -245,6 +245,7 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 		{
 			tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 
+			//gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 			gtk_entry_set_text(GTK_ENTRY(slider->textval),tmpbuf);
 			g_free(tmpbuf);
 			last_upd = count;
@@ -255,6 +256,7 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
 
+		//gtk_label_set_text(GTK_LABEL(slider->textval),tmpbuf);
 		gtk_entry_set_text(GTK_ENTRY(slider->textval),tmpbuf);
 		g_free(tmpbuf);
 		last_upd = count;
