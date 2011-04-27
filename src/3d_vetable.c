@@ -2927,3 +2927,189 @@ gboolean delayed_expose(gpointer data)
 	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 	return FALSE;
 }
+
+
+
+G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
+{
+	static gfloat xl,yl,zl = 9999.9;
+	gint i = 0;
+	Ve_View_3D * ve_view = NULL;
+	gfloat x,y,z = 0.0;
+	gchar * string = NULL;
+	GHashTable *hash = NULL;
+	gchar *key = NULL;
+	gchar *hash_key = NULL;
+	MultiSource *multi = NULL;
+	TabIdent active_page;
+	gint * algorithm;
+	Firmware_Details *firmware = NULL;
+	GHashTable *sources_hash = NULL;
+
+	sources_hash = DATA_GET(global_data,"sources_hash");
+	firmware = DATA_GET(global_data,"firmware");
+	algorithm = DATA_GET(global_data,"algorithm");
+	active_page = (TabIdent)DATA_GET(global_data,"active_page");
+	/* Update all the dynamic RT Sliders */
+
+	if (DATA_GET(global_data,"leaving"))
+		return FALSE;
+
+	if (!firmware)
+		return TRUE;
+	/* If OpenGL window is open, redraw it... */
+	for (i=0;i<firmware->total_tables;i++)
+	{
+		string = g_strdup_printf("ve_view_%i",i);
+		ve_view = DATA_GET(global_data,string);
+		g_free(string);
+		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+		{
+			/* Get X values */
+			if (ve_view->x_multi_source)
+			{
+				hash = ve_view->x_multi_hash;
+				key = ve_view->x_source_key;
+				hash_key = g_hash_table_lookup(sources_hash,key);
+				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+				{
+					if (hash_key)
+						multi = g_hash_table_lookup(hash,hash_key);
+					else
+						multi = g_hash_table_lookup(hash,"DEFAULT");
+				}
+				else if (algorithm[ve_view->table_num] == ALPHA_N)
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+				else if (algorithm[ve_view->table_num] == MAF)
+				{
+					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+					if(!multi)
+						multi = g_hash_table_lookup(hash,"DEFAULT");
+				}
+				else
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+
+				if (!multi)
+					printf(_("multi is null!!\n"));
+
+				lookup_current_value(multi->source,&x);
+			}
+			else
+				lookup_current_value(ve_view->x_source,&x);
+
+			/* Test X values, redraw if needed */
+			if (((fabs(x-xl)/x) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				xl = x;
+				goto redraw;
+			}
+
+			/* Get Y values */
+			if (ve_view->y_multi_source)
+			{
+				hash = ve_view->y_multi_hash;
+				key = ve_view->y_source_key;
+				hash_key = g_hash_table_lookup(sources_hash,key);
+				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+				{
+					if (hash_key)
+						multi = g_hash_table_lookup(hash,hash_key);
+					else
+						multi = g_hash_table_lookup(hash,"DEFAULT");
+				}
+				else if (algorithm[ve_view->table_num] == ALPHA_N)
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+				else if (algorithm[ve_view->table_num] == MAF)
+				{
+					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+					if(!multi)
+						multi = g_hash_table_lookup(hash,"DEFAULT");
+				}
+				else
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+
+				if (!multi)
+					printf(_("multi is null!!\n"));
+
+				lookup_current_value(multi->source,&y);
+			}
+			else
+				lookup_current_value(ve_view->y_source,&y);
+
+			/* Test Y values, redraw if needed */
+			if (((fabs(y-yl)/y) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				yl = y;
+				goto redraw;
+			}
+
+			/* Get Z values */
+			if (ve_view->z_multi_source)
+			{
+				hash = ve_view->z_multi_hash;
+				key = ve_view->z_source_key;
+				hash_key = g_hash_table_lookup(sources_hash,key);
+				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+				{
+					if (hash_key)
+						multi = g_hash_table_lookup(hash,hash_key);
+					else
+						multi = g_hash_table_lookup(hash,"DEFAULT");
+				}
+				else if (algorithm[ve_view->table_num] == ALPHA_N)
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+				else if (algorithm[ve_view->table_num] == MAF)
+				{
+					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+					if(!multi)
+						multi = g_hash_table_lookup(hash,"DEFAULT");
+				}
+				else
+					multi = g_hash_table_lookup(hash,"DEFAULT");
+
+				if (!multi)
+					printf(_("multi is null!!\n"));
+
+				lookup_current_value(multi->source,&z);
+			}
+			else
+				lookup_current_value(ve_view->z_source,&z);
+
+			/* Test Z values, redraw if needed */
+			if (((fabs(z-zl)/z) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				zl = z;
+				goto redraw;
+			}
+			goto breakout;
+
+redraw:
+			gdk_threads_enter();
+			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+			gdk_threads_leave();
+		}
+	}
+breakout:
+
+	gdk_threads_enter();
+	/*
+	   if ((active_page == RUNTIME_TAB) || 
+	   (active_page == SETTINGS_TAB ) || 
+	   (active_page == CORRECTIONS_TAB))
+	   update_tab_gauges();
+	   if ((DATA_GET(global_data,"forced_update")) || 
+	   (active_page == VETABLES_TAB) || 
+	   (active_page == SPARKTABLES_TAB) || 
+	   (active_page == AFRTABLES_TAB) || 
+	   (active_page == BOOSTTABLES_TAB) || 
+	   (active_page == ROTARYTABLES_TAB) || 
+	   (active_page == ALPHA_N_TAB) ||  
+	   (active_page == STAGING_TAB))
+	 */
+	{
+		draw_ve_marker();
+		update_tab_gauges();
+	}
+	gdk_threads_leave();
+	return TRUE;
+}

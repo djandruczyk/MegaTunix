@@ -22,11 +22,11 @@
 #include <init.h>
 #include <listmgmt.h>
 #include <offline.h>
-#include <runtime_gui.h>
 #include <logviewer_gui.h>
 #include <notifications.h>
 #include <plugin.h>
 #include <rtv_processor.h>
+#include <runtime_status.h>
 #include <serialio.h>
 #include <stringmatch.h>
 #include <timeout_handlers.h>

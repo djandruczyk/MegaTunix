@@ -39,7 +39,6 @@ headers = \
 	main.h \
 	menu_handlers.h \
 	mem_mgmt.h \
-	mode_select.h \
 	ms1_loader.h \
 	ms2_loader.h \
 	mtxloader.h \
@@ -50,7 +49,6 @@ headers = \
 	plugin.h \
 	rtv_map_loader.h \
 	rtv_processor.h \
-	runtime_gui.h \
 	runtime_sliders.h \
 	runtime_status.h \
 	runtime_text.h \

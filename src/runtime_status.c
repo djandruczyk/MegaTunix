@@ -28,6 +28,8 @@
 #include <libxml/tree.h>
 #include <listmgmt.h>
 #include <notifications.h>
+#include <rtv_map_loader.h>
+#include <rtv_processor.h>
 #include <runtime_status.h>
 #include <tabloader.h>
 #include <widgetmgmt.h>
@@ -232,4 +234,131 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 		gtk_box_pack_start(GTK_BOX(parent),frame,TRUE,TRUE,0);
 	}
 }
+
+
+/*!
+ \brief update_runtime_vars_pf() updates all of the runtime sliders on all
+ visible portions of the gui
+ */
+G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
+{
+	static gint count = 0;
+	static gboolean conn_status = FALSE;
+	gboolean curr_conn_status = (GBOOLEAN)DATA_GET(global_data,"connected");
+
+	if (DATA_GET(global_data,"leaving"))
+		return FALSE;
+
+	if (!DATA_GET(global_data,"interrogated"))
+		return FALSE;
+
+	count++;
+	if (conn_status != curr_conn_status)
+	{
+		gdk_threads_enter();
+		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,GINT_TO_POINTER(curr_conn_status));
+		gdk_threads_leave();
+		conn_status = curr_conn_status;
+		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	}
+
+	gdk_threads_enter();
+	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
+	g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
+	gdk_threads_leave();
+
+	if (count > 60 )
+		count = 0;
+
+	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(FALSE));
+	return TRUE;
+}
+
+
+/*!
+ \brief reset_runtime_statue() sets all of the status indicators to OFF
+ to reset the display
+ */
+G_MODULE_EXPORT void reset_runtime_status(void)
+{
+	/* Runtime screen */
+	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+	/* Warmup Wizard screen */
+	g_list_foreach(get_list("ww_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+}
+
+
+/*!
+ \brief rt_update_status() updates the bitfield based status lights on the 
+ runtime/warmupwizard displays
+ \param key (gpointer) pointer to a widget
+ \param data (gpointer) unused
+ */
+G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
+{
+	static gconstpointer *object = NULL;
+	static GArray * history = NULL;
+	static gchar * source = NULL;
+	static gchar * last_source = "";
+	GtkWidget *widget = (GtkWidget *) key;
+	gint bitval = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
+	gint value = 0;
+	gfloat tmpf = 0.0;
+	gint previous_value = 0;
+	Rtv_Map *rtv_map = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
+
+	if (DATA_GET(global_data,"leaving"))
+		return;
+
+	g_return_if_fail(GTK_IS_WIDGET(widget));
+
+	source = (gchar *)OBJ_GET(widget,"source");
+	if (!source)
+		return;
+	if ((g_strcasecmp(source,last_source) != 0))
+	{
+		object = NULL;
+		object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
+		if (!object)
+			return;
+		history = (GArray *)DATA_GET(object,"history");
+		if (!history)
+			return;
+	}
+	if (!DATA_GET(global_data,"connected"))
+	{
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+		return;
+	}
+
+	if (lookup_current_value(source,&tmpf))
+		value = (GINT) tmpf;
+	else
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get current value for %s\n",source));
+	if (lookup_previous_value(source,&tmpf))
+		previous_value = (GINT) tmpf;
+	else
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get previous value for %s\n",source));
+
+	bitval = (GINT)OBJ_GET(widget,"bitval");
+	bitmask = (GINT)OBJ_GET(widget,"bitmask");
+	bitshift = get_bitshift(bitmask);
+
+
+	/* if the value hasn't changed, don't bother continuing */
+	if (((value & bitmask) == (previous_value & bitmask)) && 
+			(!DATA_GET(global_data,"forced_update")))
+		return;	
+
+	if (((value & bitmask) >> bitshift) == bitval) /* enable it */
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
+	else	/* disable it.. */
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+
+	last_source = source;
+}
+
 

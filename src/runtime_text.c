@@ -251,18 +251,26 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
  it the the gui.
  \param parent (GtkWidget *) parent widget
  \param ctrl_name (gchar *) name of the rt_text as defined in the config file
- \param source (gchar *) data source for this rt_text 
  \returns a Struct Rt_Text *
  */
-G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *source, gboolean show_prefix)
+G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 {
 	Rt_Text *rtt = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *hbox = NULL;
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
+	gchar * source = NULL;
+	gboolean show_prefix = FALSE;
 
 	rtv_map = DATA_GET(global_data,"rtv_map");
+	source = OBJ_GET(parent,"source");
+	show_prefix = (GBOOLEAN)OBJ_GET(parent,"show_prefix");
+
+	g_return_val_if_fail(rtv_map,NULL);
+	g_return_val_if_fail(parent,NULL);
+	g_return_val_if_fail(ctrl_name,NULL);
+	g_return_val_if_fail(source,NULL);
 
 	rtt = g_malloc0(sizeof(Rt_Text));
 
@@ -287,8 +295,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *so
 	rtt->label_suffix = OBJ_GET(parent,"label_suffix");
 	rtt->object = object;
 	
-
-	hbox = gtk_hbox_new(FALSE,5);
+	hbox = gtk_hbox_new(FALSE,2);
 
 	/* Static prefix label.... */
 	if (show_prefix)
@@ -302,6 +309,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *so
 
 	/* Value label */
 	label = gtk_label_new(NULL);
+	gtk_label_set_width_chars(GTK_LABEL(label),5);
 
 	//set_fixed_size(label,11);
 	rtt->textval = label;
@@ -309,9 +317,9 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name, gchar *so
 		gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
 	else
 		gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
-	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
 
-	gtk_box_pack_start(GTK_BOX(parent),hbox,TRUE,TRUE,0);
+	gtk_box_pack_start(GTK_BOX(parent),hbox,FALSE,FALSE,0);
 
 	rtt->parent = hbox;
 	gtk_widget_show_all(rtt->parent);
@@ -329,14 +337,10 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 {
 	GHashTable *rtt_hash = NULL;
 	gchar * ctrl_name = NULL;
-	gchar * source = NULL;
 	Rt_Text *rt_text = NULL;
-	gboolean show_prefix = FALSE;
 
 	rtt_hash = DATA_GET(global_data,"rtt_hash");
 	ctrl_name = OBJ_GET(widget,"ctrl_name");
-	source = OBJ_GET(widget,"source");
-	show_prefix = (GBOOLEAN)OBJ_GET(widget,"show_prefix");
 
 	if (!rtt_hash)
 	{
@@ -344,8 +348,8 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 		DATA_SET_FULL(global_data,"rtt_hash",(gpointer)rtt_hash,g_hash_table_destroy);
 	}
 
-	if ((rtt_hash) && (ctrl_name) && (source))
-		rt_text = add_rtt(widget,ctrl_name,source,show_prefix);
+	if ((rtt_hash) && (ctrl_name))
+		rt_text = add_rtt(widget,ctrl_name);
 
 	if (rt_text)
 	{
@@ -511,4 +515,21 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	return FALSE;
 }
 
+
+                
+G_MODULE_EXPORT gboolean update_rttext(gpointer data)
+{       
+        static GMutex *rtt_mutex = NULL;
+        if (!rtt_mutex)
+                rtt_mutex = DATA_GET(global_data,"rtt_mutex");
+        if (DATA_GET(global_data,"leaving"))
+                return FALSE;
+        g_mutex_lock(rtt_mutex);
+        if (DATA_GET(global_data,"rtt_model"))
+                gtk_tree_model_foreach(GTK_TREE_MODEL(DATA_GET(global_data,"rtt_model")),rtt_foreach,NULL);
+        if (DATA_GET(global_data,"rtt_hash"))
+                g_hash_table_foreach(DATA_GET(global_data,"rtt_hash"),rtt_update_values,NULL);
+        g_mutex_unlock(rtt_mutex);
+        return TRUE;
+}
 

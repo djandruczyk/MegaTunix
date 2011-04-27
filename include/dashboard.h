@@ -74,6 +74,7 @@ void toggle_main_visible(void);
 void toggle_status_visible(void);
 void toggle_rtt_visible(void);
 void toggle_gui_visible(GtkWidget *widget, gpointer data);
+gboolean update_dashboards(gpointer);
 
 
 /* Prototypes */

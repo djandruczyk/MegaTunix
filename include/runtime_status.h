@@ -27,6 +27,9 @@ typedef enum
 }StatusCols;
 
 /* Prototypes */
+gboolean update_runtime_vars_pf(void);
+void reset_runtime_status(void);
+void rt_update_status(gpointer, gpointer);
 void load_status_pf(void );
 gboolean load_status_xml_elements(xmlNode *, GtkWidget *);
 void load_status(xmlNode *, GtkWidget *);

@@ -18,7 +18,6 @@
 #include <init.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
-#include <mode_select.h>
 #include <notifications.h>
 #include <plugin.h>
 #include <rtv_processor.h>

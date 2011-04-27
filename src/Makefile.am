@@ -42,7 +42,6 @@ megatunix_SOURCES = \
 	main.c \
 	menu_handlers.c \
 	mem_mgmt.c \
-	mode_select.c \
 	multi_expr_loader.c \
 	notifications.c \
 	offline.c \
@@ -50,7 +49,6 @@ megatunix_SOURCES = \
 	plugin.c \
 	rtv_map_loader.c \
 	rtv_processor.c \
-	runtime_gui.c \
 	runtime_sliders.c \
 	runtime_status.c \
 	runtime_text.c \

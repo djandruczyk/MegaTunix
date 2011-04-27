@@ -23,7 +23,6 @@
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>
-#include <mode_select.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
 #include <tabloader.h>

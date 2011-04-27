@@ -1337,3 +1337,20 @@ G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 	}
 			
 }
+
+
+G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
+{
+	static GMutex *dash_mutex = NULL;
+	if (DATA_GET(global_data,"leaving"))
+		return FALSE;
+	if (!dash_mutex)
+		dash_mutex = DATA_GET(global_data,"dash_mutex");
+
+	g_mutex_lock(dash_mutex);
+	if (DATA_GET(global_data,"dash_hash"))
+		g_hash_table_foreach(DATA_GET(global_data,"dash_hash"),update_dash_gauge,NULL);
+	g_mutex_unlock(dash_mutex);
+	return TRUE;
+}
+

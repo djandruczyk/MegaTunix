@@ -20,7 +20,6 @@
 #include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
-#include <mode_select.h>
 #include <notifications.h>
 #include <offline.h>
 #include <personalities.h>

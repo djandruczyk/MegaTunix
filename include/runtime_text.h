@@ -55,8 +55,7 @@ struct _Rt_Text
 /* Prototypes */
 void load_rt_text_pf(void );
 Rt_Text * create_rtt(gchar *, gchar *, gboolean);
-Rt_Text * add_rtt(GtkWidget *, gchar *, gchar *, gboolean);
-Rt_Text * add_custom_rtt(GtkWidget *, gchar *, gchar *, gboolean);
+Rt_Text * add_rtt(GtkWidget *, gchar *);
 void rtt_update_values(gpointer,gpointer,gpointer);
 void rtt_update_start_watches(gpointer,gpointer,gpointer);
 void add_additional_rtt(GtkWidget *);
@@ -64,6 +63,7 @@ gboolean load_rtt_xml_elements(xmlNode *, GtkListStore *, GtkWidget *);
 void load_rtt(xmlNode *, GtkListStore *, GtkWidget *);
 void setup_rtt_treeview(GtkWidget *);
 gboolean rtt_foreach(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+gboolean update_rttext(gpointer);
 
 /* Prototypes */
 

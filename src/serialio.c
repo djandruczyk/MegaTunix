@@ -29,7 +29,6 @@
 #include <listmgmt.h>
 #include <locking.h>
 #include <notifications.h>
-#include <runtime_gui.h>
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>

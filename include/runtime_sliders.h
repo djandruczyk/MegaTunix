@@ -59,8 +59,10 @@ Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );
 gboolean free_ve3d_sliders(gint);
 gboolean load_rts_xml_elements(xmlNode *, const gchar *, GHashTable *,gint, TabIdent);
 void load_rts(xmlNode *, GHashTable *, gint, TabIdent);
- gboolean rtslider_button_handler(GtkWidget *,GdkEventButton *, gpointer);
- gboolean rtslider_motion_handler(GtkWidget *, GdkEventMotion *, gpointer);
+gboolean rtslider_button_handler(GtkWidget *, GdkEventButton *, gpointer);
+gboolean rtslider_motion_handler(GtkWidget *, GdkEventMotion *, gpointer);
+gboolean update_rtsliders(gpointer);
+void rt_update_values(gpointer,gpointer,gpointer);
 /* Prototypes */
 
 #endif

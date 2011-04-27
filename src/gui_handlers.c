@@ -19,6 +19,7 @@
 #include <ctype.h>
 #include <combo_loader.h>
 #include <conversions.h>
+#include <dashboard.h>
 #include <datalogging_gui.h>
 #include <defines.h>
 #include <debugging.h>
@@ -40,11 +41,12 @@
 #include <math.h>
 #include <mtxmatheval.h>
 #include <offline.h>
-#include <mode_select.h>
 #include <notifications.h>
 #include <plugin.h>
 #include <rtv_processor.h>
-#include <runtime_gui.h>
+#include <runtime_status.h>
+#include <runtime_sliders.h>
+#include <runtime_text.h>
 #include <serialio.h>
 #include <stdio.h>
 #include <stdlib.h>
