@@ -225,10 +225,8 @@
 				<function>load_status_pf</function>
 				<function>load_rt_text_pf</function>
 				<function>load_gui_tabs_pf</function>
-				<function>load_sliders_pf</function>
 				<function>setup_menu_handlers_pf</function>
 				<function>start_statuscounts_pf</function>
-				<function>populate_dlog_choices_pf</function>
 				<function>spawn_read_ve_const_pf</function>
 				<function>reset_temps_pf</function>
 				<function>startup_default_timeouts_pf</function>

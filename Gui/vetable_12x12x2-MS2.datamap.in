@@ -4,6 +4,7 @@ _tab_name=_VE Tables
 id_prefix=VE_
 groups=defaults,load_1,rpm_1,ve_1,load_2,rpm_2,ve_2
 bind_to_list=valid_ecu_ctrls
+post_functions=enable_3d_buttons_pf
 
 #----- Groups ----------------------------------------------------------------
 

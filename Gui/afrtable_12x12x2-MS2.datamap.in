@@ -4,6 +4,7 @@ _tab_name=_AFR Tables
 id_prefix=AFR_
 groups=defaults,load_1,rpm_1,afr_1,load_2,rpm_2,afr_2
 bind_to_list=ego_ctrl,wb_ego,valid_ecu_ctrls
+post_functions=enable_3d_buttons_pf
 
 #----- Groups ----------------------------------------------------------------
 

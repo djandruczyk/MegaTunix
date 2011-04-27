@@ -3,6 +3,7 @@ description=Object data map for VE-Table 1 (page 0)
 _tab_name=_VE Table(1)
 id_prefix=VE1_
 groups=defaults,load,rpm,vetable
+post_functions=enable_3d_buttons_pf
 
 #----- Groups ----------------------------------------------------------------
 

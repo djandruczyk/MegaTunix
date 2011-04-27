@@ -5,6 +5,7 @@ description=Object data map for Dualtable (0.9-1.02)
 _tab_name=_Dualtable Constants
 id_prefix=DTCONST_
 groups=defaults
+post_functions=enable_3d_buttons_pf
 
 #----- Groups ----------------------------------------------------------------
 

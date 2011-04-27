@@ -6,6 +6,7 @@ size=_U08_
 ellipsize=TRUE
 bind_to_list=ve_12x12
 groups=defaults,load_1,rpm_1,ve_1,load_2,rpm_2,ve_2,load_3,rpm_3,ve_3
+post_functions=enable_3d_buttons_pf
 
 #----- Groups ----------------------------------------------------------------
 

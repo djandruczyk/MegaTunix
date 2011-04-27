@@ -4,6 +4,7 @@ _tab_name=_Spark Tables
 id_prefix=SP_
 groups=defaults,load_1,rpm_1,spark_1
 bind_to_list=valid_ecu_ctrls
+post_functions=enable_3d_buttons_pf
 
 #----- Groups ----------------------------------------------------------------
 
