@@ -14,8 +14,8 @@
  */
 
 #include <api-versions.h>
-#include <crx.h>
 #include <debugging.h>
+#include <crx.h>
 #include <getfiles.h>
 #include <interrogate.h>
 #include <freeems_plugin.h>

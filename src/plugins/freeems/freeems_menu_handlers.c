@@ -12,7 +12,6 @@
  */
 
 #include <freeems_helpers.h>
-#include <freeems_gui_handlers.h>
 #include <freeems_menu_handlers.h>
 #include <freeems_plugin.h>
 

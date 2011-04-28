@@ -11,10 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <datamgmt.h>
 #include <debugging.h>
-#include <defines.h>
 #include <firmware.h>
 #include <freeems_comms.h>
 #include <freeems_plugin.h>
@@ -26,7 +24,9 @@
 #include <sys/select.h>
 #endif
 #include <serialio.h>
+#include <stdio.h>
 #include <string.h>
+#include <sys/time.h>
 #include <unistd.h>
 
 
