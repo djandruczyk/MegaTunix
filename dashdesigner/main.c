@@ -1,12 +1,9 @@
-#include <gauge.h>
 #include <getfiles.h>
-#include <glib.h>
 #include <stdio.h>
-#include <gtk/gtk.h>
-#include <math.h>
 #include <menu_handlers.h>
 #include <rtv_parser.h>
 #include <xml.h>
+#include <stdlib.h>
 
 GtkWidget *main_window = NULL;
 gchar *cwd = NULL;

@@ -1,13 +1,7 @@
-#include <config.h>
 #include <configfile.h>
-#include <defines.h>
-#include <dirent.h>
-#include <getfiles.h>
-#include <gauge.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
 #include <rtv_parser.h>
-#include <string.h>
+#include <stdio.h>
+#include <strings.h>
 
 GtkTreeStore *store = NULL;
 void retrieve_rt_vars(void)

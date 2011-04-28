@@ -1,14 +1,12 @@
-#include <defines.h>
 #include <events.h>
 #include <getfiles.h>
 #include <gauge.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <rtv_parser.h>
 #include <xml.h>
 #include <xmlbase.h>
+#include <stdio.h>
 
 
 #if defined(LIBXML_TREE_ENABLED) && defined(LIBXML_OUTPUT_ENABLED)

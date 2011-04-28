@@ -11,9 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <gtk/gtk.h>
-#include <menu_handlers.h>
 #include <events.h>
 #include <loadsave.h>
 

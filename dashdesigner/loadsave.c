@@ -1,10 +1,6 @@
 
-#include "../include/defines.h"
-#include <events.h>
 #include <loadsave.h>
 #include <getfiles.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
 #include <xml.h>
 
 extern GtkWidget *main_window;

@@ -12,16 +12,14 @@
  */
 
 
-#include <config.h>
-#include <defines.h>
-#include <events.h>
 #include <getfiles.h>
+#include <events.h>
 #include <gauge.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
 #include <loadsave.h>
 #include <rtv_parser.h>
 #include <xml.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifndef M_PI 
 #define M_PI 3.1415926535897932384626433832795 
