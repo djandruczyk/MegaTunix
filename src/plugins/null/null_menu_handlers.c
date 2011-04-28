@@ -11,13 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <debugging.h>
-#include <firmware.h>
-#include <gtk/gtk.h>
-#include <null_gui_handlers.h>
 #include <null_menu_handlers.h>
-#include <null_plugin.h>
 
 extern gconstpointer *global_data;
 
