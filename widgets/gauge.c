@@ -26,16 +26,8 @@
  */
 
 
-#include <config.h>
-#include <gauge.h>
 #include <gauge-private.h>
-#include <gtk/gtk.h>
-#include <glib.h>
-#include <glib/gprintf.h>
-#include <glib-object.h>
-#include <math.h>
 #include <string.h>
-#include <time.h>
 
 /*!
  \brief sets the color for the index passed.  The index to use used is an opaque enum

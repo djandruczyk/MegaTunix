@@ -13,10 +13,7 @@
  */
 
 
-#include <gtk/gtk.h>
-#include <glib/gprintf.h>
 #include <gauge.h>
-#include <math.h>
 
 GtkWidget *gauge = NULL;
 void fix_file (const gchar * file);

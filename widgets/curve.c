@@ -11,14 +11,8 @@
  */
 
 
-#include <config.h>
-#include <cairo/cairo.h>
-#include <curve.h>
 #include <curve-private.h>
 #include <math.h>
-#include <gtk/gtk.h>
-
-
 
 
 /*!

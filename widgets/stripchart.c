@@ -13,11 +13,7 @@
  */
 
 
-#include <config.h>
-#include <cairo/cairo.h>
-#include <stripchart.h>
 #include <stripchart-private.h>
-#include <gtk/gtk.h>
 
 
 /*!

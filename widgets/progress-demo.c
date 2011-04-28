@@ -13,10 +13,7 @@
  */
 
 
-#include <gtk/gtk.h>
-#include <glib/gprintf.h>
 #include <progress.h>
-#include <math.h>
 
 gboolean update_pbar(gpointer );
 gboolean close_demo(GtkWidget *,gpointer );

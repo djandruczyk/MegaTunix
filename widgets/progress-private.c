@@ -17,18 +17,7 @@
 #undef GTK_DISABLE_DEPRECATED
 #undef GDK_DISABLE_DEPRECATED
 #undef G_DISABLE_DEPRECATED
-#include <config.h>
-#include <cairo/cairo.h>
-#include <progress.h>
 #include <progress-private.h>
-#include <gtk/gtk.h>
-#include <gtk/gtkprogressbar.h>
-#include <glib/gprintf.h>
-#include <glib-object.h>
-#include <math.h>
-#include <string.h>
-#include <time.h>
-
 
 
 G_DEFINE_TYPE (MtxProgressBar, mtx_progress_bar, GTK_TYPE_PROGRESS_BAR)

@@ -26,18 +26,10 @@
  */
 
 
-#include <config.h>
-#include <cairo/cairo.h>
-#include <gauge.h>
 #include <gauge-private.h>
 #include <gauge-xml.h>
-#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include <glib/gprintf.h>
-#include <glib-object.h>
 #include <math.h>
-#include <string.h>
-#include <time.h>
 
 
 

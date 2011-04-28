@@ -16,11 +16,7 @@
 #undef GDK_DISABLE_DEPRECATED
 #undef G_DISABLE_DEPRECATED
 
-#include <config.h>
-#include <cairo/cairo.h>
-#include <progress.h>
 #include <progress-private.h>
-#include <gtk/gtk.h>
 
 
 /* Prototypes */

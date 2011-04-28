@@ -12,12 +12,8 @@
  */
 
 
-#include <config.h>
 #include <defines.h>
-#include <gtk/gtk.h>
-#include <glib/gprintf.h>
 #include <stripchart.h>
-#include <math.h>
 
 gboolean update_stripchart(gpointer data);
 gboolean remove_trace(gpointer data);

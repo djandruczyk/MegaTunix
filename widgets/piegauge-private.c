@@ -14,16 +14,8 @@
  */
 
 
-#include <config.h>
-#include <cairo/cairo.h>
-#include <piegauge.h>
 #include <piegauge-private.h>
-#include <gtk/gtk.h>
-#include <glib/gprintf.h>
-#include <glib-object.h>
 #include <math.h>
-#include <string.h>
-#include <time.h>
 
 GType mtx_pie_gauge_get_type(void)
 {

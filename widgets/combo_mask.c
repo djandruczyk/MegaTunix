@@ -13,11 +13,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <configfile.h>
 #include <combo_mask.h>
 #include <crx.h>
-#include <gtk/gtk.h>
 
 
 /* Macro that creates a lot of boilerplate for us */

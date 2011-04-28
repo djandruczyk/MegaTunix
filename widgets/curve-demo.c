@@ -13,8 +13,6 @@
  */
 
 
-#include <gtk/gtk.h>
-#include <glib/gprintf.h>
 #include <curve.h>
 #include <math.h>
 

@@ -13,11 +13,7 @@
  */
 
 
-#include <config.h>
-#include <cairo/cairo.h>
-#include <piegauge.h>
 #include <piegauge-private.h>
-#include <gtk/gtk.h>
 
 
 /*!

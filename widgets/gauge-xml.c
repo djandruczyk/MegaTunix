@@ -12,12 +12,7 @@
  */
 
 
-#include <defines.h>
-#include <gauge.h>
 #include <gauge-xml.h>
-#include <getfiles.h>
-#include <glib.h>
-#include <gauge-private.h>
 #include <stdio.h>
 #include <xmlbase.h>
 #include <libxml/parser.h>
