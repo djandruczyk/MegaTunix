@@ -1,12 +1,9 @@
 #include <events.h>
-#include <../widgets/gauge.h>
 #include <getfiles.h>
 #include <menu_handlers.h>
-#include <glib.h>
 #include <gd_init.h>
 #include <stdio.h>
-#include <gtk/gtk.h>
-#include <math.h>
+#include <stdlib.h>
 
 
 extern GtkWidget *gauge;

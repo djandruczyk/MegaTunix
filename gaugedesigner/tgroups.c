@@ -1,12 +1,9 @@
-#include <config.h>
-#include <defines.h>
 #include <events.h>
 #include <tgroups.h>
-#include <gauge.h>
 #include <getfiles.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
 #include <handlers.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 extern GtkWidget * gauge;

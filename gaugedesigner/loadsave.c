@@ -1,15 +1,8 @@
 
-#include "../include/defines.h"
 #include <events.h>
 #include <loadsave.h>
-#include "../widgets/gauge.h"
 #include <getfiles.h>
-#include <glib/gprintf.h>
-#include <glib/gstdio.h>
-#include <gtk/gtk.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+#include <stdio.h>
 
 
 extern gboolean hold_handlers;

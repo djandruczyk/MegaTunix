@@ -1,10 +1,8 @@
-#include <config.h>
-#include <defines.h>
-#include <events.h>
-#include <gauge.h>
 #include <getfiles.h>
-#include <gtk/gtk.h>
 #include <warnings.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 
 extern GtkWidget * gauge;
 extern GdkColor black;

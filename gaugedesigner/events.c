@@ -1,17 +1,12 @@
-#include <config.h>
-#include <defines.h>
 #include <alerts.h>
 #include <events.h>
 #include <loadsave.h>
 #include <handlers.h>
-#include <gauge.h>
-#include <getfiles.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
 #include <polygons.h>
 #include <tblocks.h>
 #include <tgroups.h>
 #include <warnings.h>
+#include <stdio.h>
 
 GtkWidget * gauge = NULL;
 gboolean hold_handlers = FALSE;

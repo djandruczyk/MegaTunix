@@ -1,4 +1,5 @@
 #include <configfile.h>
+#include <getfiles.h>
 #include <rtv_parser.h>
 #include <stdio.h>
 #include <strings.h>

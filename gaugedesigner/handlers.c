@@ -1,12 +1,7 @@
-#include <config.h>
-#include <defines.h>
 #include <events.h>
 #include <handlers.h>
 #include <loadsave.h>
-#include <gauge.h>
-#include <getfiles.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
+#include <stdio.h>
 
 extern GtkBuilder *toplevel;
 extern GdkColor black;
