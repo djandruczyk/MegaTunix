@@ -12,23 +12,15 @@
  */
 
 #include <api-versions.h>
-#include <apicheck.h>
-#include <config.h>
-#include <configfile.h>
 #include <datamgmt.h>
 #include <debugging.h>
-#include <enums.h>
 #include <fileio.h>
 #include <firmware.h>
 #include <getfiles.h>
-#include <glib.h>
-#include <glib/gprintf.h>
-#include <gtk/gtk.h>
 #include <freeems_comms.h>
 #include <freeems_plugin.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include <stdio.h>
+#include <time.h>
 #ifdef __WIN32__
  #include <windows.h>
 #else

@@ -11,9 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <debugging.h>
-#include <gtk/gtk.h>
 #include <freeems_errors.h>
 
 

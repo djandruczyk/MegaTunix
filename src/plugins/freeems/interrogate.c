@@ -13,20 +13,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <apicheck.h>
 #include <api-versions.h>
-#include <config.h>
-#include <configfile.h>
 #include <crx.h>
 #include <debugging.h>
-#include <firmware.h>
 #include <getfiles.h>
-#include <gtk/gtk.h>
 #include <interrogate.h>
 #include <freeems_plugin.h>
 #include <freeems_helpers.h>
-#include <packet_handlers.h>
+#include <libgen.h>
 #include <serialio.h>
+#include <stdio.h>
 #include <string.h>
 
 extern gconstpointer *global_data;

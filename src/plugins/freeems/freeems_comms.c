@@ -18,7 +18,6 @@
 #include <firmware.h>
 #include <freeems_comms.h>
 #include <freeems_plugin.h>
-#include <gtk/gtk.h>
 #include <packet_handlers.h>
 #ifdef __WIN32__
 #include <winsock2.h>
@@ -721,7 +720,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	 * race condition
 	 */
 	/* This should be stored in the ACK for the packet NOT here*/
-	//freeems_store_new_block(canID,locID,offset,block,num_bytes);
+	/*freeems_store_new_block(canID,locID,offset,block,num_bytes);*/
 
 	/*
 	if (firmware->multi_page)
@@ -824,14 +823,14 @@ red_or_black:
 		{
 			firmware->page_params[i]->needs_burn = TRUE;
 			set_group_color_f(RED,"burners");
-//			slaves_set_color(RED,"burners");
+/*			slaves_set_color(RED,"burners");*/
 			return;
 		}
 		else
 			firmware->page_params[i]->needs_burn = FALSE;
 	}
 	set_group_color_f(BLACK,"burners");
-//	slaves_set_color(BLACK,"burners");
+/*	slaves_set_color(BLACK,"burners");*/
 	return;
 }
 

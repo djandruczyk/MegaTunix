@@ -13,16 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <datamgmt.h>
 #include <firmware.h>
-#include <gtk/gtk.h>
 #include <freeems_comms.h>
 #include <freeems_helpers.h>
 #include <freeems_plugin.h>
-#include <packet_handlers.h>
 #include <serialio.h>
-#include <threads.h>
+#include <stdio.h>
 
 extern gconstpointer *global_data;
 

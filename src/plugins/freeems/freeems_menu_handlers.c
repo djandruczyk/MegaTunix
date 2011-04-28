@@ -11,11 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <datamgmt.h>
-#include <debugging.h>
-#include <firmware.h>
-#include <gtk/gtk.h>
 #include <freeems_helpers.h>
 #include <freeems_gui_handlers.h>
 #include <freeems_menu_handlers.h>
