@@ -14,27 +14,18 @@
  */
 
 #include <api-versions.h>
-#include <apicheck.h>
-#include <config.h>
-#include <configfile.h>
 #include <crx.h>
 #include <debugging.h>
 #include <dep_loader.h>
-#include <enums.h>
-#include <errno.h>
 #include <getfiles.h>
-#include <gtk/gtk.h>
-#include <glib.h>
-#include <init.h>
 #include <interrogate.h>
+#include <libgen.h>
 #include <mscommon_plugin.h>
 #include <multi_expr_loader.h>
 #include <serialio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 extern GtkWidget *interr_view;
 

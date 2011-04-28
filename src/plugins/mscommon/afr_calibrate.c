@@ -15,14 +15,12 @@
  */
 
 #include <afr_calibrate.h>
-#include <config.h>
-#include <defines.h>
-#include <enums.h>
 #include <firmware.h>
-#include <gtk/gtk.h>
 #include <math.h>
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
+#include <stdio.h>
+#include <time.h>
 
 
 static gint afr_enum;

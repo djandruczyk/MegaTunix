@@ -11,11 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <datamgmt.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <mscommon_comms.h>

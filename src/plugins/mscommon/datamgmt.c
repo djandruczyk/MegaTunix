@@ -11,11 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <assert.h>
-#include <config.h>
-#include <configfile.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
 #include <mscommon_plugin.h>

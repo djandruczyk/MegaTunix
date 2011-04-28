@@ -11,20 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <datamgmt.h>
-#include <defines.h>
 #include <debugging.h>
 #include <errno.h>
 #include <firmware.h>
-#include <gtk/gtk.h>
 #include <mscommon_comms.h>
-#include <mscommon_gui_handlers.h>
 #include <mscommon_plugin.h>
 #include <mtxsocket.h>
 #include <serialio.h>
+#include <stdio.h>
 #include <string.h>
-#include <threads.h>
 
 
 extern gconstpointer *global_data;

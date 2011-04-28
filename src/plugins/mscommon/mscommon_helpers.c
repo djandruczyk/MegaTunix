@@ -12,19 +12,14 @@
  */
 
 #include <args.h>
-#include <config.h>
 #include <datamgmt.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
 #include <firmware.h>
 #include <mscommon_comms.h>
 #include <mscommon_helpers.h>
 #include <mscommon_plugin.h>
 #include <mtxsocket.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 extern gconstpointer *global_data;
 

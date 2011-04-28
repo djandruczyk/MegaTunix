@@ -11,18 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <datamgmt.h>
-#include <defines.h>
-#include <debugging.h>
-#include <enums.h>
 #include <firmware.h>
 #include <mscommon_plugin.h>
 #include <multi_expr_loader.h>
 #include <math.h>
-#include <plugin.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 
 extern gconstpointer *global_data;

@@ -11,15 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <configfile.h>
 #include <datamgmt.h>
-#include <debugging.h>
-#include <defines.h>
-#include <enums.h>
 #include <firmware.h>
 #include <mscommon_plugin.h>
 #include <mscommon_rtv_processor.h>
+#include <stdio.h>
 
 extern gconstpointer *global_data;
 

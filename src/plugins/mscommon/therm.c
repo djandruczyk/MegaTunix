@@ -14,14 +14,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <defines.h>
-#include <enums.h>
 #include <firmware.h>
 #include <math.h>
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
+#include <stdio.h>
 #include <therm.h>
+#include <time.h>
 
 
 

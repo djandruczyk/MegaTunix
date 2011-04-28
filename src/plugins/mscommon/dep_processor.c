@@ -13,14 +13,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <configfile.h>
 #include <datamgmt.h>
-#include <defines.h>
-#include <debugging.h>
 #include <dep_processor.h>
-#include <enums.h>
 #include <mscommon_plugin.h>
+#include <stdio.h>
 
 
 /*!
