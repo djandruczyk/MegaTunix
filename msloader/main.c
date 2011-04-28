@@ -16,6 +16,9 @@
 #include <loader_common.h>
 #include <ms1_loader.h>
 #include <ms2_loader.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 /* Prototypes */

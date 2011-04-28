@@ -6,6 +6,9 @@
 #include <ms1_loader.h>
 #include <ms2_loader.h>
 #include <mtxloader.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 

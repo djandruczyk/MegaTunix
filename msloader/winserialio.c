@@ -12,6 +12,7 @@
  */
 
 #include <winserialio.h>
+#include <stdio.h>
 #ifdef __WIN32__
  #include <io.h>
  #include <windows.h>
