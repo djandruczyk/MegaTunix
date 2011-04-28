@@ -23,8 +23,8 @@
 #include "config.h"
 #endif
 
-#include "common.h"
-#include "error.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 const char      lib_name[] = "libmatheval";	/* Library name to be
 						 * printed to standard

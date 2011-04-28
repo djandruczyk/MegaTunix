@@ -23,8 +23,11 @@
 #include "config.h"
 #endif
 
-#include "common.h"
 #include "error.h"
+#include <string.h>
+#include <strings.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 #if !HAVE_BZERO && HAVE_MEMSET
 #define bzero(buf, bytes) ((void) memset (buf, 0, bytes))

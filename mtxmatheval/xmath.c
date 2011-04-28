@@ -19,6 +19,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+#include <math.h>
 #include "xmath.h"
 
 double

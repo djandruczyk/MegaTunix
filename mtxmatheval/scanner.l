@@ -45,11 +45,9 @@
 #  include "config.h"
 #endif
 
-#include <stdlib.h>
-#include <string.h>
+#include <unistd.h>
 #include "node.h"
 #include "parser.h"
-#include "symbol_table.h"
 
 /* Redefine macro to redirect scanner input from string instead of
  * standard input.  */

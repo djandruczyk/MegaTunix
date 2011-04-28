@@ -25,9 +25,8 @@
 
 #include "gtk/gtk.h"
 #include "common.h"
-#include "mtxmatheval.h"
 #include "node.h"
-#include "symbol_table.h"
+#include <string.h>
 
 /* Minimal length of evaluator symbol table.  */
 #define MIN_TABLE_LENGTH 211

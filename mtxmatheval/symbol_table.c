@@ -25,6 +25,7 @@
 
 #include <assert.h>
 #include <stdarg.h>
+#include <string.h>
 #include "common.h"
 #include "symbol_table.h"
 #include "xmath.h"
