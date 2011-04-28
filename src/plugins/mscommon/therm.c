@@ -19,7 +19,6 @@
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
 #include <stdio.h>
-#include <therm.h>
 #include <time.h>
 
 

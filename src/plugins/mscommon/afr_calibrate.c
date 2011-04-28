@@ -14,7 +14,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <afr_calibrate.h>
 #include <firmware.h>
 #include <math.h>
 #include <mscommon_comms.h>

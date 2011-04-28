@@ -14,7 +14,6 @@
 #include <datamgmt.h>
 #include <firmware.h>
 #include <mscommon_plugin.h>
-#include <mscommon_rtv_processor.h>
 #include <stdio.h>
 
 extern gconstpointer *global_data;
