@@ -31,36 +31,22 @@
  */
 
 #include <3d_vetable.h>
-#include <assert.h>
-#include <config.h>
-#include <cairo/cairo.h>
 #include <conversions.h>
 #include <dashboard.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
-#include <firmware.h>
-#include <glib.h>
-#include <glib/gprintf.h>
 #include <gdk/gdkglglext.h>
 #include <gdk/gdkkeysyms.h>
 #include <gui_handlers.h>
-#include <gtk/gtkgl.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <math.h>
 #include <multi_expr_loader.h>
-#include <notifications.h>
-#include <pango/pango-font.h>
 #include <plugin.h>
 #include <rtv_processor.h>
 #include <runtime_sliders.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <serialio.h>
 #include <tabloader.h>
-#include <threads.h>
-#include <time.h>
 #include <vetable_gui.h>
 #include <widgetmgmt.h>
 

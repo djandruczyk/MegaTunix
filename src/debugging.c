@@ -12,15 +12,10 @@
  */
 
 #include <args.h>
-#include <config.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
-#include <glib.h>
-#include <glib/gprintf.h>
-#include <glib/gstdio.h>
 #include <gui_handlers.h>
 #include <math.h>
+#include <stdio.h>
 #include <time.h>
 
 

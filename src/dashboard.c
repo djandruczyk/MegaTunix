@@ -12,14 +12,10 @@
  */
 
 #include <args.h>
-#include <config.h>
 #include <xmlbase.h>
 #include <dashboard.h>
 #include <debugging.h>
-#include <defines.h>
-#include <enums.h>
 #include <getfiles.h>
-#include <gauge.h>
 #include <gdk/gdkkeysyms.h>
 #include <gui_handlers.h>
 #include <math.h>
@@ -27,6 +23,7 @@
 #include <libxml/tree.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
+#include <stdio.h>
 #include <string.h>
 #include <widgetmgmt.h>
 

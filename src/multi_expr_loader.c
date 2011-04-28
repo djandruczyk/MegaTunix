@@ -13,17 +13,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <configfile.h>
 #include <debugging.h>
-#include <defines.h>
 #include <init.h>
 #include <multi_expr_loader.h>
-#include <enums.h>
 #include <keyparser.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stringmatch.h>
 
 
 

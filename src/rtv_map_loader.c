@@ -15,27 +15,18 @@
 
 #include <apicheck.h>
 #include <api-versions.h>
-#include <assert.h>
-#include <config.h>
-#include <configfile.h>
-#include <defines.h>
 #include <debugging.h>
-#include <multi_expr_loader.h>
-#include <enums.h>
+#include <defines.h>
 #include <firmware.h>
+#include <multi_expr_loader.h>
 #include <getfiles.h>
-#include <gui_handlers.h>
-#include <init.h>
 #include <keyparser.h>
 #include <notifications.h>
-#include <mtxmatheval.h>
 #include <plugin.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
-#include <widgetmgmt.h>
-#include <unistd.h>
 
 
 /*!

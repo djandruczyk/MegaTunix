@@ -12,17 +12,9 @@
  */
 
 #include <args.h>
-#include <config.h>
-#include <configfile.h>
-#include <conversions.h>
-#include <defines.h>
-#include <enums.h>
 #include <debugging.h>
-#include <getfiles.h>
-#include <glib.h>
 #include <glade/glade.h>
 #include <glib/gstdio.h>
-#include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
@@ -32,14 +24,9 @@
 #include <runtime_sliders.h>
 #include <runtime_text.h>
 #include <serialio.h>
-#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-#include <stringmatch.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <threads.h>
 #include <widgetmgmt.h>
-#include <unistd.h>
 
 GdkColor red = { 0, 65535, 0, 0};
 GdkColor green = { 0, 0, 65535, 0};

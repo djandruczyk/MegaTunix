@@ -13,19 +13,12 @@
 
 
 #include <args.h>
-#include <config.h>
 #include <datalogging_gui.h>
 #include <debugging.h>
-#include <defines.h>
 #include <errno.h>
-#include <glib.h>
 #include <init.h>
-#include <offline.h>
 #include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <time.h>
-#include <unistd.h>
 
 
 extern gconstpointer *global_data;

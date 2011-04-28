@@ -11,12 +11,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <defines.h>
 #include <errno.h>
 #include <init.h>
 #include <locking.h>
-#include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

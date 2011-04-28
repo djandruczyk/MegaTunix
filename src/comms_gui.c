@@ -11,16 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <comms_gui.h>
-#include <config.h>
-#include <defines.h>
-#include <enums.h>
-#include <gui_handlers.h>
 #include <serialio.h>
-#include <stdio.h>
-#include <string.h>
-#include <tabloader.h>
-#include <unistd.h>
 #include <widgetmgmt.h>
 
 extern GdkColor black;

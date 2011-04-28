@@ -12,13 +12,9 @@
  */
 
 #include <binlogger.h>
-#include <config.h>
 #include <dataio.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
 #include <errno.h>
-#include <firmware.h>
 #include <serialio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -29,6 +25,8 @@
 #else
 #include <poll.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #endif

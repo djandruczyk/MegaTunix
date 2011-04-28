@@ -11,21 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
 #include <getfiles.h>
 #include <glade/glade.h>
-#include <gui_handlers.h>
 #include <listmgmt.h>
-#include <logviewer_core.h>
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
-#include <tabloader.h>
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
 

@@ -11,15 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <comms.h>
-#include <comms_gui.h>
-#include <config.h>
 #include <conversions.h>
-#include <defines.h>
-#include <debugging.h>
-#include <dispatcher.h>
-#include <enums.h>
-#include <gui_handlers.h>
 #include <init.h>
 #include <notifications.h>
 #include <plugin.h>

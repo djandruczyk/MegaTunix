@@ -11,32 +11,22 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <dataio.h>
-#include <defines.h>
-#include <3d_vetable.h>
 #include <comms.h>
 #include <debugging.h>
-#include <enums.h>
-#include <errno.h>
-#include <fcntl.h>
+#include <defines.h>
 #include <firmware.h>
-#include <gui_handlers.h>
-#include <init.h>
 #include <notifications.h>
 #include <plugin.h>
 #include <serialio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 #ifdef __WIN32__
 #include <winsock2.h>
 #else
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #endif
-#include <threads.h>
-#include <timeout_handlers.h>
-#include <unistd.h>
 #include <widgetmgmt.h>
 
 extern gconstpointer *global_data;

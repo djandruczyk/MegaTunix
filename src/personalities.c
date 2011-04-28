@@ -12,19 +12,14 @@
  */
 
 #include <configfile.h>
-#include <config.h>
 #include <debugging.h>
-#include <defines.h>
-#include <enums.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
 #include <init.h>
-#include <listmgmt.h>
 #include <notifications.h>
 #include <offline.h>
 #include <personalities.h>
 #include <plugin.h>
-#include <threads.h>
 #include <widgetmgmt.h>
 
 

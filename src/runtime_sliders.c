@@ -12,15 +12,10 @@
  */
 
 
-#include <apicheck.h>
 #include <api-versions.h>
-#include <configfile.h>
 #include <debugging.h>
-#include <defines.h>
-#include <firmware.h>
 #include <getfiles.h>
 #include <glade/glade-xml.h>
-#include <glib.h>
 #include <init.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>

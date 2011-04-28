@@ -11,17 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <configfile.h>
 #include <defines.h>
 #include <debugging.h>
-#include <enums.h>
-#include <keybinder.h>
-#include <notifications.h>
 #include <rtv_map_loader.h>
 #include <string.h>
 #include <stringmatch.h>
-#include <widgetmgmt.h>
 
 
 

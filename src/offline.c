@@ -13,22 +13,18 @@
 
 #include <apicheck.h>
 #include <api-versions.h>
-#include <config.h>
-#include <defines.h>
 #include <debugging.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
-#include <init.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <offline.h>
 #include <personalities.h>
 #include <plugin.h>
 #include <string.h>
-#include <stdlib.h>
-#include <tabloader.h>
 #include <threads.h>
 #include <widgetmgmt.h>
+#include <xmlcomm.h>
 
 
 extern gconstpointer *global_data;

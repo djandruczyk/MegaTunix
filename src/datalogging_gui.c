@@ -12,25 +12,15 @@
  */
 
 #include <args.h>
-#include <config.h>
 #include <datalogging_gui.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
-#include <errno.h>
-#include <firmware.h>
 #include <getfiles.h>
-#include <glib.h>
-#include <gui_handlers.h>
 #include <listmgmt.h>
 #include <math.h>
 #include <notifications.h>
 #include <rtv_map_loader.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <threads.h>
 #include <timeout_handlers.h>
-#include <unistd.h>
 #include <widgetmgmt.h>
 
 

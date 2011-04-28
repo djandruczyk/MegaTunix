@@ -14,31 +14,17 @@
 
 #include <args.h>
 #include <binlogger.h>
-#include <comms_gui.h>
-#include <config.h>
-#include <conversions.h>
 #include <core_gui.h>
-#include <defines.h>
 #include <debugging.h>
 #include <dispatcher.h>
-#include <enums.h>
-#include <errno.h>
-#include <glib.h>
-#include <gdk/gdkgl.h>
 #include <gtk/gtkgl.h>
-#include <getfiles.h>
-#include <glade/glade.h>
-#include <gui_handlers.h>
-#include <init.h>
 #include <locale.h>
-#include <locking.h>
-#include <main.h>
+#include <init.h>
 #include <serialio.h>
+#include <stdio.h>
 #include <sleep_calib.h>
 #include <stringmatch.h>
-#include <threads.h>
 #include <timeout_handlers.h>
-#include <xmlcomm.h>
 
 gboolean gl_ability = FALSE;
 gconstpointer *global_data = NULL;

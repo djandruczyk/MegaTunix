@@ -12,12 +12,7 @@
  */
 
 #include <assert.h>
-#include <config.h>
-#include <configfile.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
-#include <keyparser.h>
 #include <stringmatch.h>
 
 

@@ -11,11 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <defines.h>
-#include <enums.h>
-#include <gui_handlers.h>
-#include <warmwizard_gui.h>
 #include <widgetmgmt.h>
 
 extern GdkColor red;

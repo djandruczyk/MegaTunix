@@ -11,17 +11,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <args.h>
-#include <config.h>
-#include <comms.h>
 #include <3d_vetable.h>
 #include <conversions.h>
 #include <dashboard.h>
-#include <defines.h>
-#include <debugging.h>
-#include <enums.h>
-#include <firmware.h>
-#include <init.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <plugin.h>

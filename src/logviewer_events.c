@@ -11,13 +11,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <defines.h>
-#include <debugging.h>
-#include <enums.h>
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>
+#include <stdio.h>
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
 

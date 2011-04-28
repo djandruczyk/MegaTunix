@@ -11,19 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <configfile.h>
 #include <defines.h>
 #include <widgetmgmt.h>
 #include <debugging.h>
-#include <enums.h>
-#include <getfiles.h>
 #include <glade/glade.h>
 #include <keyparser.h>
-#include <string.h>
 #include <stringmatch.h>
-#include <tabloader.h>
-#include <tag_loader.h>
 
 extern gconstpointer *global_data;
 

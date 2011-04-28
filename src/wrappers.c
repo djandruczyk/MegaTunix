@@ -11,15 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <crx.h>
 #include <combo_mask.h>
-#include <debugging.h>
-#include <defines.h>
-#include <enums.h>
 #include <gauge.h>
-#include <gtk/gtk.h>
-#include <wrappers.h>
 #include <mtxmatheval.h>
 
 

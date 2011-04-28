@@ -12,25 +12,18 @@
  */
 
 #include <args.h>
-#include <config.h>
-#include <defines.h>
-#include <about_gui.h>
-#include <comms_gui.h>
-#include <configfile.h>
 #include <core_gui.h>
 #include <dashboard.h>
 #include <debugging.h>
-#include <enums.h>
-#include <glade/glade.h>
 #include <gui_handlers.h>
 #include <getfiles.h>
 #include <logo.h>
-#include <menu_handlers.h>
 #include <plugin.h>
 #include <serialio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <tabloader.h>
+#include <time.h>
 #include <widgetmgmt.h>
 
 

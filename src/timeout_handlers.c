@@ -11,27 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <comms_gui.h>
 #include <debugging.h>
-#include <defines.h>
-#include <enums.h>
-#include <firmware.h>
-#include <getfiles.h>
-#include <gui_handlers.h>
-#include <init.h>
-#include <listmgmt.h>
-#include <offline.h>
 #include <logviewer_gui.h>
 #include <notifications.h>
 #include <plugin.h>
 #include <rtv_processor.h>
 #include <runtime_status.h>
 #include <serialio.h>
-#include <stringmatch.h>
-#include <timeout_handlers.h>
 #include <threads.h>
-#include <widgetmgmt.h>
+#include <timeout_handlers.h>
 
 
 extern gconstpointer *global_data;

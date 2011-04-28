@@ -11,10 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <defines.h>
-#include <debugging.h>
-#include <serialio.h>
+#include <stdio.h>
 #include <winserialio.h>
 #ifdef __WIN32__
  #include <io.h>

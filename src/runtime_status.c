@@ -13,17 +13,11 @@
 
 
 #include <args.h>
-#include <apicheck.h>
 #include <api-versions.h>
-#include <configfile.h>
 #include <debugging.h>
 #include <glade/glade-xml.h>
 #include <getfiles.h>
-#include <firmware.h>
-#include <glib.h>
 #include <gui_handlers.h>
-#include <keybinder.h>
-#include <keyparser.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <listmgmt.h>
@@ -31,6 +25,7 @@
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <runtime_status.h>
+#include <stdio.h>
 #include <tabloader.h>
 #include <widgetmgmt.h>
 #include <xmlbase.h>

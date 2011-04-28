@@ -14,19 +14,12 @@
  */
 
 #include <assert.h>
-#include <config.h>
-#include <configfile.h>
 #include <combo_loader.h>
 #include <combo_mask.h>
 #include <debugging.h>
 #include <defines.h>
-#include <enums.h>
-#include <gtk/gtk.h>
 #include <glade/glade.h>
-#include <math.h>
 #include <keyparser.h>
-#include <stdlib.h>
-#include <stringmatch.h>
 
 
 

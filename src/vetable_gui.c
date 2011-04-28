@@ -11,23 +11,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <3d_vetable.h>
-#include <config.h>
-#include <conversions.h>
-#include <defines.h>
-#include <debugging.h>
-#include <enums.h>
 #include <firmware.h>
 #include <gui_handlers.h>
-#include <mtxmatheval.h>
-#include <logviewer_gui.h>
-#include <math.h>
-#include <multi_expr_loader.h>
 #include <plugin.h>
-#include <rtv_processor.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <threads.h>
 #include <vetable_gui.h>
 #include <widgetmgmt.h>
 

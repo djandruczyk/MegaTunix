@@ -12,30 +12,12 @@
  */
 
 #include <args.h>
-#include <config.h>
-#include <defines.h>
 #include <3d_vetable.h>
 #include <comms.h>
-#include <comms_gui.h>
-#include <conversions.h>
-#include <datalogging_gui.h>
 #include <debugging.h>
-#include <enums.h>
-#include <errno.h>
-#include <gui_handlers.h>
 #include <init.h>
-#include <listmgmt.h>
-#include <logviewer_gui.h>
-#include <notifications.h>
 #include <plugin.h>
 #include <serialio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <threads.h>
-#include <tabloader.h>
-#include <xmlcomm.h>
-#include <unistd.h>
-#include <widgetmgmt.h>
 
 
 extern gconstpointer *global_data;

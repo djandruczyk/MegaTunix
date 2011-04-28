@@ -14,12 +14,8 @@
  */
 
 #include <assert.h>
-#include <config.h>
-#include <configfile.h>
 #include <conversions.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
 #include <firmware.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
@@ -33,9 +29,9 @@
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <threads.h>
-#include <widgetmgmt.h>
 
 
 extern gconstpointer *global_data;

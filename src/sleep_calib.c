@@ -11,11 +11,9 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <debugging.h>
 #include <defines.h>
-#include <enums.h>
 #include <sleep_calib.h>
+#include <stdio.h>
 
 
 extern gconstpointer *global_data;

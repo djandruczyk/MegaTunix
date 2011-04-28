@@ -10,21 +10,10 @@
  * 
  * No warranty is made or implied. You use this program at your own risk.
  */
-#include <config.h>
-#include <defines.h>
-#include <debugging.h>
-#include <enums.h>
 #include <firmware.h>
-#include <gui_handlers.h>
-#include <math.h>
 #include <menu_handlers.h>
 #include <plugin.h>
-#include <runtime_text.h>
-#include <stdlib.h>
-#include <tabloader.h>
-#include <threads.h>
 #include <widgetmgmt.h>
-#include <mtxmatheval.h>
 
 extern gconstpointer *global_data;
 static struct 

@@ -12,18 +12,15 @@
  */
 
 #include <assert.h>
-#include <config.h>
 #include <configfile.h>
 #include <debugging.h>
-#include <defines.h>
-#include <enums.h>
-#include <firmware.h>
 #include <getfiles.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
 #include <plugin.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
 

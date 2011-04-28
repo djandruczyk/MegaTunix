@@ -12,22 +12,17 @@
  */
 
 #include <assert.h>
-#include <config.h>
 #include <conversions.h>
-#include <defines.h>
 #include <debugging.h>
-#include <enums.h>
 #include <glade/glade.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
 #include <lookuptables.h>
-#include <notifications.h>
 #include <mtxmatheval.h>
 #include <plugin.h>
 #include <rtv_processor.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <tabloader.h>
 
 
 extern gconstpointer *global_data;

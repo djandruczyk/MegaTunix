@@ -18,20 +18,16 @@
 #define B115200 115200
 #endif
 
-#include <comms_gui.h>
-#include <config.h>
-#include <comms.h>
-#include <defines.h>
 #include <debugging.h>
+#include <enums.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <gtk/gtk.h>
-#include <listmgmt.h>
-#include <locking.h>
-#include <notifications.h>
 #include <serialio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #ifndef __WIN32__
  #include <termios.h>
  #ifdef __PIS_SUPPORT__

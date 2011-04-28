@@ -12,16 +12,11 @@
  */
 
 #include <args.h>
-#include <config.h>
-#include <defines.h>
 #include <debugging.h>
-#include <firmware.h>
-#include <gtk/gtk.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <offline.h>
-#include <tabloader.h>
 #include <widgetmgmt.h>
 
 extern GdkColor red;

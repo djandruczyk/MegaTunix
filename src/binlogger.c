@@ -12,12 +12,7 @@
  */
 
 #include <binlogger.h>
-#include <config.h>
-#include <debugging.h>
 #include <defines.h>
-#include <enums.h>
-#include <glib.h>
-#include <mem_mgmt.h>
 
 
 extern gconstpointer *global_data;
