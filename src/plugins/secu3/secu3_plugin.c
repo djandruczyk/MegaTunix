@@ -12,10 +12,9 @@
  */
 
 #define __SECU3_PLUGIN_C__
-#include <config.h>
-#include <defines.h>
 #include <secu3_plugin.h>
 #include <gtk/gtk.h>
+#include <stdio.h>
 
 
 gconstpointer *global_data = NULL;
