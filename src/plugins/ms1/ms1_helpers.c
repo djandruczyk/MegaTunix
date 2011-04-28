@@ -11,11 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <args.h>
-#include <config.h>
-#include <defines.h>
-#include <widgetmgmt.h>
-#include <ms1_helpers.h>
 #include <ms1_plugin.h>
 
 

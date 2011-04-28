@@ -11,14 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <cairo/cairo.h>
 #include <debugging.h>
 #include <firmware.h>
-#include <gtk/gtk.h>
 #include <math.h>
 #include <ms1_plugin.h>
 #include <ms1_tlogger.h>
+#include <stdio.h>
 
 static TTMon_Data *ttm_data;
 

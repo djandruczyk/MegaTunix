@@ -11,8 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <defines.h>
 #include <firmware.h>
 #include <ms1_plugin.h>
 #include <ms1_menu_handlers.h>
