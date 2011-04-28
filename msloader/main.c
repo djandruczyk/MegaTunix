@@ -11,18 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <defines.h>
 #include <fcntl.h>
-#include <getfiles.h>
-#include <glib.h>
 #include <glib/gstdio.h>
 #include <loader_common.h>
 #include <ms1_loader.h>
 #include <ms2_loader.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 /* Prototypes */
 void usage_and_exit(gchar *);

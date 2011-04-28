@@ -15,18 +15,12 @@
 #define B115200 115200
 #endif
 
-#include <config.h>
-#include <defines.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <getfiles.h>
-#include <glib.h>
 #include <glib/gstdio.h>
 #include <loader_common.h>
 #include <ms1_loader.h>
-#include <serialio.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>

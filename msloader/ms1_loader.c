@@ -12,17 +12,7 @@
  */
 
 
-#include <config.h>
-#include <defines.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <getfiles.h>
-#include <glib.h>
-#include <glib/gstdio.h>
-#include <loader_common.h>
 #include <ms1_loader.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 #ifndef __WIN32__
  #include <termios.h>

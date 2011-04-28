@@ -12,14 +12,10 @@
 #define _POSIX_VDISABLE 0
 #endif
 
-#include <gtk/gtk.h>
 #include <loader_common.h>
 #include <ms2_loader.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
 

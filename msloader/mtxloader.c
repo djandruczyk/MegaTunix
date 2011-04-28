@@ -1,18 +1,12 @@
-#include <config.h>
 #include <configfile.h>
-#include <defines.h>
 #include <fcntl.h>
 #include <getfiles.h>
-#include <gtk/gtk.h>
 #include <glib/gstdio.h>
-#include <glib/gstring.h>
 #include <loader_common.h>
 #include <ms1_loader.h>
 #include <ms2_loader.h>
 #include <mtxloader.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 
 
 gconstpointer *global_data = NULL;
