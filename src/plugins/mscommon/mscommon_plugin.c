@@ -17,7 +17,6 @@
 #include <mscommon_plugin.h>
 #include <mscommon_helpers.h>
 #include <mscommon_gui_handlers.h>
-#include <mscommon_plugin.h>
 #include <interrogate.h>
 #include <mtxsocket.h>
 #include <gtk/gtk.h>

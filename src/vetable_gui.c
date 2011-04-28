@@ -19,7 +19,6 @@
 #include <enums.h>
 #include <firmware.h>
 #include <gui_handlers.h>
-#include <gui_handlers.h>
 #include <mtxmatheval.h>
 #include <logviewer_gui.h>
 #include <math.h>

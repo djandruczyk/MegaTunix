@@ -16,7 +16,6 @@
 #include <apicheck.h>
 #include <api-versions.h>
 #include <assert.h>
-#include <assert.h>
 #include <config.h>
 #include <configfile.h>
 #include <defines.h>
