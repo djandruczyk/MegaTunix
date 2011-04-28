@@ -1,5 +1,4 @@
 #include <events.h>
-#include <handlers.h>
 #include <loadsave.h>
 #include <stdio.h>
 

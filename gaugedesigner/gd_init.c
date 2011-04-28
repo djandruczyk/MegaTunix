@@ -1,5 +1,4 @@
 
-#include <gd_init.h>
 #include <handlers.h>
 #include <tblocks.h>
 

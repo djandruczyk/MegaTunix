@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <menu_handlers.h>
 #include <events.h>
 #include <loadsave.h>
 #include <handlers.h>

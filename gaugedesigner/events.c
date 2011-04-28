@@ -2,7 +2,6 @@
 #include <events.h>
 #include <loadsave.h>
 #include <handlers.h>
-#include <polygons.h>
 #include <tblocks.h>
 #include <tgroups.h>
 #include <warnings.h>

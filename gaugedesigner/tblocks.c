@@ -2,6 +2,7 @@
 #include <events.h>
 #include <getfiles.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 extern GtkWidget * gauge;
 extern GdkColor black;
