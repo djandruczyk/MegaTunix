@@ -30,6 +30,7 @@
 #include <gauge-xml.h>
 #include <gdk/gdkkeysyms.h>
 #include <math.h>
+#include <stdio.h>
 
 
 

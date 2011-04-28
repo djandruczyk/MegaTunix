@@ -13,6 +13,7 @@
 
 
 #include <gauge-xml.h>
+#include <gauge-private.h>
 #include <stdio.h>
 #include <xmlbase.h>
 #include <libxml/parser.h>

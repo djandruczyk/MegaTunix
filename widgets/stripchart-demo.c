@@ -14,6 +14,7 @@
 
 #include <defines.h>
 #include <stripchart.h>
+#include <stdio.h>
 
 gboolean update_stripchart(gpointer data);
 gboolean remove_trace(gpointer data);

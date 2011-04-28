@@ -16,6 +16,7 @@
 
 #include <piegauge-private.h>
 #include <math.h>
+#include <stdio.h>
 
 GType mtx_pie_gauge_get_type(void)
 {

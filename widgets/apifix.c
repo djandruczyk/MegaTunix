@@ -14,6 +14,8 @@
 
 
 #include <gauge.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 GtkWidget *gauge = NULL;
 void fix_file (const gchar * file);

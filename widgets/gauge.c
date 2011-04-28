@@ -28,6 +28,8 @@
 
 #include <gauge-private.h>
 #include <string.h>
+#include <strings.h>
+#include <stdio.h>
 
 /*!
  \brief sets the color for the index passed.  The index to use used is an opaque enum

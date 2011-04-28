@@ -15,6 +15,7 @@
 
 #include <combo_mask.h>
 #include <crx.h>
+#include <libgen.h>
 
 
 /* Macro that creates a lot of boilerplate for us */

@@ -15,6 +15,7 @@
 
 #include <curve.h>
 #include <math.h>
+#include <stdio.h>
 
 
 void coords_changed(MtxCurve *, gpointer);
