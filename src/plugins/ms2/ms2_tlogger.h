@@ -46,7 +46,7 @@ struct _MS2_TTMon_Data
 	gulong *current;	/*! Current block of times */
 	gulong *last;		/*! Last block of times */
 	guchar *flags;		/*! Array of flags per capture point */
-	guchar *sync_loss;	/*! Array of sync loss points */
+	gboolean *sync_loss;	/*! Array of sync loss points */
 	gint wrap_pt;		/*! Wrap point */
 	gint vdivisor;		/*! Vertical scaling divisor */
 	gfloat peak;		/*! Vertical Peak Value */

@@ -11,17 +11,14 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
 #include <combo_loader.h>
 #include <debugging.h>
-#include <defines.h>
-#include <enums.h>
 #include <glade/glade.h>
 #include <ms2_gui_handlers.h>
 #include <ms2_plugin.h>
 #include <ms2_tlogger.h>
 #include <firmware.h>
-#include <gtk/gtk.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <user_outputs.h>
 

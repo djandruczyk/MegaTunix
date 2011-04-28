@@ -11,10 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <cairo/cairo.h>
 #include <firmware.h>
-#include <math.h>
 #include <ms2_plugin.h>
 #include <ms2_tlogger.h>
 
