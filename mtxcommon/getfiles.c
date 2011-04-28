@@ -11,17 +11,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <debugging.h>
 #include <defines.h>
-#include <enums.h>
 #include <fcntl.h>
 #include <getfiles.h>
-#include <glib.h>
-#include <gtk/gtk.h>
 #include <glib/gstdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 
 

@@ -11,8 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <debugging.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <xmlbase.h>
