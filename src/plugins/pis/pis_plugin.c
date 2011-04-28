@@ -12,10 +12,9 @@
  */
 
 #define __PIS_PLUGIN_C__
-#include <config.h>
-#include <defines.h>
 #include <pis_plugin.h>
 #include <gtk/gtk.h>
+#include <stdio.h>
 
 
 gconstpointer *global_data = NULL;

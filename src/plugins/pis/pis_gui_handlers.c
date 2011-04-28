@@ -11,14 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <debugging.h>
-#include <defines.h>
-#include <firmware.h>
-#include <pis_plugin.h>
 #include <pis_gui_handlers.h>
-#include <glade/glade.h>
-#include <gtk/gtk.h>
 
 
 extern gconstpointer *global_data;
