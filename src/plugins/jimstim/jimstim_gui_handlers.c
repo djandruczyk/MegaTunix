@@ -11,12 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <config.h>
-#include <enums.h>
-#include <glade/glade.h>
-#include <gtk/gtk.h>
 #include <jimstim_gui_handlers.h>
-
 
 extern gconstpointer *global_data;
 
