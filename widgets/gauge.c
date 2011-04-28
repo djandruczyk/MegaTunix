@@ -36,7 +36,6 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
-#include <string.h>
 
 /*!
  \brief sets the color for the index passed.  The index to use used is an opaque enum

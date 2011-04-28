@@ -22,7 +22,6 @@
 #include <getfiles.h>
 #include <glib.h>
 #include <glib/gstdio.h>
-#include <getfiles.h>
 #include <loader_common.h>
 #include <ms1_loader.h>
 #include <serialio.h>

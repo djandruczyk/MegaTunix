@@ -21,10 +21,9 @@
 #include <glib/gprintf.h>
 #include <glib-object.h>
 #include <math.h>
-#include <string.h>
-#include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 
 static guint mtx_curve_signals[LAST_SIGNAL] = { 0 };
