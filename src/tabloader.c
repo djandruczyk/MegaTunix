@@ -22,6 +22,7 @@
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <glade/glade-parser.h>
+#include <init.h>
 #include <keybinder.h>
 #include <keyparser.h>
 #include <listmgmt.h>
@@ -49,7 +50,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 {
 	gint i = 0;
 	gint cur = 0;
-	GladeInterface *crap = NULL;
 	ConfigFile *cfgfile = NULL;
 	gchar * map_file = NULL;
 	gchar * glade_file = NULL;
@@ -61,6 +61,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	GtkWidget *child = NULL;
 	GtkWidget *notebook = NULL;
 	GtkWidget *item = NULL;
+	TabInfo *tabinfo = NULL;
+	GPtrArray *tabinfos = NULL;
 	extern GdkColor red;
 	gboolean * hidden_list = NULL;
 	Firmware_Details *firmware = NULL;
@@ -84,6 +86,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	set_title(g_strdup(_("Loading Gui Tabs...")));
 	notebook = lookup_widget("toplevel_notebook");
 	hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
+	tabinfos = g_ptr_array_new();
 
 	while (firmware->tab_list[i])
 	{
@@ -110,9 +113,11 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		cfgfile = cfg_open_file(map_file);
 		if (cfgfile)
 		{
-		 	crap = glade_parser_parse_file(glade_file,NULL);	
-			test_parse(crap);
-			glade_interface_destroy(crap);
+			tabinfo = g_new0(TabInfo, 1);
+			tabinfo->glade_file = g_strdup(glade_file);
+			tabinfo->datamap_file = g_strdup(map_file);
+			g_ptr_array_add(tabinfos,(gpointer)tabinfo);
+
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
 			tmpbuf = g_strdup_printf("%s_xml",tab_name);
 			g_free(tmpbuf);
@@ -168,6 +173,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			gtk_main_iteration();
 		}
 	}
+	g_thread_create(preload_deps,tabinfos,TRUE,NULL);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
@@ -860,6 +866,36 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 		}
 	}
 	g_strfreev(vector);
+}
+
+
+void * preload_deps(gpointer data)
+{
+	GPtrArray *array = (GPtrArray *)data;
+	TabInfo *tabinfo = NULL;
+	GladeInterface *iface = NULL;
+	GladeWidgetInfo *info = NULL;
+	gint i = 0;	
+	gint j = 0;	
+
+	printf("preload_deps thread\n");
+	for (i=0;i<array->len;i++)
+	{
+		printf("parsing tab\n");
+		tabinfo = g_ptr_array_index(array,i);
+		iface = glade_parser_parse_file(tabinfo->glade_file,NULL);
+		for(j=0;j<iface->n_toplevels;j++)
+		{
+			info = iface->toplevels[j];
+			descend_tree(info);
+		}
+		glade_interface_destroy(iface);
+		cleanup(tabinfo->glade_file);
+		cleanup(tabinfo->datamap_file);
+		cleanup(tabinfo);
+	}
+	g_ptr_array_free(array,TRUE);
+	return NULL;
 }
 
 

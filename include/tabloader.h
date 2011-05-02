@@ -15,10 +15,12 @@
 #define __TABLOADER_H__
 
 #include <configfile.h>
+#include <glade/glade-parser.h>
 #include <gtk/gtk.h>
 
 typedef struct _Group Group;
 typedef struct _BindGroup BindGroup;
+typedef struct _TabInfo TabInfo;
 
 
 /*!
@@ -51,6 +53,17 @@ struct _BindGroup
 };
 
 
+/*!
+ \brief _TabInfo is a small container used to pass the glade/datamap info into
+ a thread that does the backgroud dependancy loading.
+ */
+struct _TabInfo
+{
+	gchar *glade_file;	/*! Glade file */
+	gchar *datamap_file;	/*! Datamap file that goes with it */
+};
+
+
 /* Prototypes */
 gboolean load_gui_tabs_pf(void);
 void group_free(gpointer );
@@ -62,6 +75,7 @@ void run_post_functions_with_arg(const gchar *, GtkWidget *);
 void run_post_functions(const gchar * );
 void remove_from_lists(gchar *, gpointer);
 gboolean load_actual_tab(GtkNotebook *,gint);
+void *preload_deps(gpointer);
 
 /* Prototypes */
 
