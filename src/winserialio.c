@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <winserialio.h>
 #ifdef __WIN32__
+ #include <debugging.h>
  #include <io.h>
  #include <windows.h>
 #endif

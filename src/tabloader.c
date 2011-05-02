@@ -21,6 +21,7 @@
 #include <firmware.h>
 #include <getfiles.h>
 #include <glade/glade.h>
+#include <glade/glade-parser.h>
 #include <keybinder.h>
 #include <keyparser.h>
 #include <listmgmt.h>
@@ -36,6 +37,8 @@
 
 extern gconstpointer *global_data;
 
+void test_parse(GladeInterface *iface);
+gboolean descend_tree(GladeWidgetInfo *info);
 
 /*!
  \brief load_gui_tabs_pf() is called after interrogation completes successfully.
@@ -46,6 +49,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 {
 	gint i = 0;
 	gint cur = 0;
+	GladeInterface *crap = NULL;
 	ConfigFile *cfgfile = NULL;
 	gchar * map_file = NULL;
 	gchar * glade_file = NULL;
@@ -106,6 +110,9 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		cfgfile = cfg_open_file(map_file);
 		if (cfgfile)
 		{
+		 	crap = glade_parser_parse_file(glade_file,NULL);	
+			test_parse(crap);
+			glade_interface_destroy(crap);
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
 			tmpbuf = g_strdup_printf("%s_xml",tab_name);
 			g_free(tmpbuf);
@@ -853,4 +860,38 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 		}
 	}
 	g_strfreev(vector);
+}
+
+
+void test_parse(GladeInterface *iface)
+{
+	GladeWidgetInfo *info = NULL;
+	gint i = 0;	
+	for(i=0;i<iface->n_toplevels;i++)
+	{
+		info = iface->toplevels[i];
+		descend_tree(info);
+	}
+}
+
+
+gboolean descend_tree(GladeWidgetInfo *info)
+{
+	gint i = 0;
+	if (!info->parent)
+		printf("%s is a TOPLEVEL\n",info->name);
+	else if (info->n_children == 0)
+	{
+		printf("%s is a BOTTOM WIDGET\n",info->name);
+		return FALSE;
+	}
+	else
+		printf("%s\n",info->name);
+
+	printf("widget %s has %i children\n",info->name,info->n_children);
+	for (i=0;i<info->n_children;i++)
+	{
+		descend_tree(info->children[i].child);
+	}
+	return TRUE;
 }
