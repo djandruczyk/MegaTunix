@@ -164,7 +164,6 @@
 			<post_functions>
 				<function>update_ecu_controls_pf</function>
 				<function>setup_menu_handlers_pf</function>
-				<function>enable_3d_buttons_pf</function>
 				<function>set_store_black_pf</function>
 				<function>enable_get_data_buttons_pf</function>
 				<function>enable_ttm_buttons_pf</function>

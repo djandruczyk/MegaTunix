@@ -74,9 +74,7 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 
 G_MODULE_EXPORT void enable_3d_buttons_pf(void)
 {
-	gdk_threads_enter();
 	g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
-	gdk_threads_leave();
 }
 
 

@@ -1280,7 +1280,7 @@ void update_checkbutton(GtkWidget *widget)
 	if ((new_state) && (OBJ_GET(widget,"group_2_update")))
 		handle_group_2_update(widget);
 	if (OBJ_GET(widget,"toggle_groups"))
-		toggle_groups_linked_f(widget,new_state);
+		combo_toggle_groups_linked_f(widget,new_state);
 }
 
 

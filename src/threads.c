@@ -112,7 +112,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	CmdLineArgs *args  = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
-/*	GTimer *clock;*/
+	/*	GTimer *clock;*/
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
@@ -132,7 +132,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	g_return_val_if_fail(pf_dispatch_queue,NULL);
 	g_return_val_if_fail(serial_params,NULL);
 	g_return_val_if_fail(serial_repair_thread,NULL);
-/*	clock = g_timer_new();*/
+	/*	clock = g_timer_new();*/
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
 	{
@@ -151,6 +151,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 			g_mutex_lock(io_dispatch_mutex);
 			g_cond_signal(io_dispatch_cond);
 			g_mutex_unlock(io_dispatch_mutex);
+			DATA_SET(global_data,"thread_dispatcher_id",NULL);
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
@@ -201,9 +202,9 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				}
 				break;
 			case WRITE_CMD:
-/*				g_timer_start(clock);*/
+				/*				g_timer_start(clock);*/
 				message->status = write_data(message);
-/*				printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
+				/*				printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
 				if (message->command->helper_function)
 				{
 					gdk_threads_enter();
@@ -236,6 +237,8 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		}
 	}
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\texiting!!\n"));
+	DATA_SET(global_data,"thread_dispatcher_id",NULL);
+	g_thread_exit(0);
 }
 
 

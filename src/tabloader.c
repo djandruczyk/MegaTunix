@@ -38,8 +38,7 @@
 
 extern gconstpointer *global_data;
 
-void test_parse(GladeInterface *iface);
-gboolean descend_tree(GladeWidgetInfo *info);
+gboolean descend_tree(GladeWidgetInfo *info, ConfigFile *);
 
 /*!
  \brief load_gui_tabs_pf() is called after interrogation completes successfully.
@@ -875,21 +874,24 @@ void * preload_deps(gpointer data)
 	TabInfo *tabinfo = NULL;
 	GladeInterface *iface = NULL;
 	GladeWidgetInfo *info = NULL;
+	ConfigFile *cfgfile = NULL;
 	gint i = 0;	
 	gint j = 0;	
 
-	printf("preload_deps thread\n");
 	for (i=0;i<array->len;i++)
 	{
-		printf("parsing tab\n");
 		tabinfo = g_ptr_array_index(array,i);
 		iface = glade_parser_parse_file(tabinfo->glade_file,NULL);
+		cfgfile = cfg_open_file(tabinfo->datamap_file);
+		if ((!cfgfile) || (!iface))
+			continue;
 		for(j=0;j<iface->n_toplevels;j++)
 		{
 			info = iface->toplevels[j];
-			descend_tree(info);
+			descend_tree(info,cfgfile);
 		}
 		glade_interface_destroy(iface);
+		cfg_free(cfgfile);
 		cleanup(tabinfo->glade_file);
 		cleanup(tabinfo->datamap_file);
 		cleanup(tabinfo);
@@ -899,21 +901,15 @@ void * preload_deps(gpointer data)
 }
 
 
-void test_parse(GladeInterface *iface)
+gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 {
-	GladeWidgetInfo *info = NULL;
-	gint i = 0;	
-	for(i=0;i<iface->n_toplevels;i++)
-	{
-		info = iface->toplevels[i];
-		descend_tree(info);
-	}
-}
+	gchar *groups = NULL;
+	gchar *bitvals = NULL;
+	gint bitmask = 0;
+	gint offset = 0;
 
-
-gboolean descend_tree(GladeWidgetInfo *info)
-{
 	gint i = 0;
+	/*
 	if (!info->parent)
 		printf("%s is a TOPLEVEL\n",info->name);
 	else if (info->n_children == 0)
@@ -925,9 +921,29 @@ gboolean descend_tree(GladeWidgetInfo *info)
 		printf("%s\n",info->name);
 
 	printf("widget %s has %i children\n",info->name,info->n_children);
+	*/
 	for (i=0;i<info->n_children;i++)
 	{
-		descend_tree(info->children[i].child);
+		descend_tree(info->children[i].child,cfgfile);
+	}
+	if (cfg_read_string(cfgfile,info->name,"toggle_groups",&groups))
+	{
+		if (!cfg_read_int(cfgfile,info->name,"offset",&offset))
+		{
+			printf("%s needs offset\n",info->name);
+			return TRUE;
+		}
+		if (!cfg_read_int(cfgfile,info->name,"offset",&bitmask))
+		{
+			printf("%s needs bitmask\n",info->name);
+			return TRUE;
+		}
+		if (!cfg_read_string(cfgfile,info->name,"bitvals",&bitvals))
+		{
+			printf("%s needs bitvals\n",info->name);
+			return TRUE;
+		}
+		printf("%s needs dep handling\n",info->name);
 	}
 	return TRUE;
 }
