@@ -49,6 +49,7 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 		xml = glade_xml_new(main_xml->filename,"tab_visibility_top_vbox",NULL);
 
 		vis_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+		gtk_window_set_transient_for(GTK_WINDOW(vis_window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_window_set_title(GTK_WINDOW(vis_window),_("Tab Visibility"));
 		gtk_window_set_default_size(GTK_WINDOW(vis_window),200,300);
 		g_signal_connect(G_OBJECT(vis_window),"delete_event",

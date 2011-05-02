@@ -86,7 +86,6 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("swap_labels",(void *)&swap_labels_f);
 	get_symbol_f("temp_to_ecu",(void *)&temp_to_ecu_f);
 	get_symbol_f("temp_to_host",(void *)&temp_to_host_f);
-	get_symbol_f("toggle_groups_linked",(void *)&toggle_groups_linked_f);
 
 	get_symbol_f("thread_refresh_widget_range",(void *)&thread_refresh_widget_range_f);
 	get_symbol_f("thread_refresh_widgets_at_offset",(void *)&thread_refresh_widgets_at_offset_f);

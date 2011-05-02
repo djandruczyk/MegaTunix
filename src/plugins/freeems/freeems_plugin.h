@@ -113,7 +113,6 @@ EXTERN gdouble (*temp_to_host_f)(gdouble);
 EXTERN void (*swap_labels_f)(GtkWidget *, gboolean);
 EXTERN void (*combo_toggle_groups_linked_f)(GtkWidget *,gint);
 EXTERN void (*combo_toggle_labels_linked_f)(GtkWidget *,gint);
-EXTERN void (*toggle_groups_linked_f)(GtkWidget *, gboolean);
 EXTERN void (*combo_set_labels_f)(GtkWidget *, GtkTreeModel *);
 EXTERN void (*recalc_table_limits_f)(gint, gint);
 
