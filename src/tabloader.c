@@ -907,6 +907,8 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	gchar *bitvals = NULL;
 	gint bitmask = 0;
 	gint offset = 0;
+	gint page = 0;
+
 
 	gint i = 0;
 	/*
@@ -942,6 +944,14 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		{
 			printf("%s needs bitvals\n",info->name);
 			return TRUE;
+		}
+		if (!cfg_read_int(cfgfile,info->name,"page",&page))
+		{
+			if (!cfg_read_int(cfgfile,"defaults","page",&page))
+			{
+				printf("%s has no page defined!\n",info->name);
+			return TRUE;
+			}
 		}
 		printf("%s needs dep handling\n",info->name);
 	}
