@@ -78,7 +78,6 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 		gtk_list_store_append(store,&iter);
 		assert(choices[i]);
 		assert(vector[i]);
-		//gtk_list_store_set(store,&iter,CHOICE_COL,g_strdup(choices[i]),BITVAL_COL,(guchar)g_ascii_strtoull(vector[i],NULL,10),-1);
 		gtk_list_store_set(store,&iter,CHOICE_COL,choices[i],BITVAL_COL,(guchar)g_ascii_strtoull(vector[i],NULL,10),-1);
 
 	}

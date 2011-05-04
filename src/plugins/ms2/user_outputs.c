@@ -25,6 +25,7 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 {
 	gint i = 0;
+	GtkWidget *parent = NULL;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
 	gfloat * multiplier = NULL;
@@ -145,16 +146,10 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		g_free(raw_upper_str);
 		g_free(range);
 	}
-	gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
-#if GTK_MINOR_VERSION >= 24
-	if (GTK_IS_COMBO_BOX(widget))
-	{
-		gtk_combo_box_set_entry_text_column(GTK_COMBO_BOX(widget),UO_CHOICE_COL);
-#else
 	if (GTK_IS_COMBO_BOX_ENTRY(widget))
 	{
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(widget),UO_CHOICE_COL);
-#endif
+		gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
 		entry = mask_entry_new_with_mask_f(string->str);
 		g_string_free(string,TRUE);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
@@ -178,7 +173,6 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		OBJ_SET(widget,"arrow-size",GINT_TO_POINTER(1));
 	}
 	g_free(regex);
-
 }
 
 
