@@ -151,8 +151,10 @@ void _ms2_crunch_trigtooth_data(gint page)
 				ttm_data->sync_loss[i] = TRUE;
 			else
 				ttm_data->sync_loss[i] = FALSE;
+			/*
 			if (!(ttm_data->flags[i] & 0x02))
 				printf("Cam event happened at sample %i\n",i);
+				*/
 		}
 	}
 	/* vertical scale calcs:

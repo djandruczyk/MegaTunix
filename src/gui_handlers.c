@@ -2133,10 +2133,51 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 G_MODULE_EXPORT void update_interdependancies_pf()
 {
 	GList *list = NULL;
-	printf("update interdependancies!\n");
 	list = DATA_GET(global_data,"dep_list");
 	if (!list)
 		return;
+	g_list_foreach(list,process_interdependancy,NULL);
+}
 
 
+void process_interdependancy(gpointer data, gpointer nothing)
+{
+	GObject *object = (GObject *)data;
+	gint i = 0;
+	gint bitval = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
+	gint value = 0;
+	gchar * bitvals = NULL;
+	gchar **vector = NULL;
+
+	bitmask = (GINT)OBJ_GET(object,"bitmask");
+
+	bitshift = get_bitshift(bitmask);
+	value = (GINT)convert_after_upload((GtkWidget *)object);
+	if (OBJ_GET(object,"bitval"))
+	{
+		bitval = (GINT)OBJ_GET(object,"bitval");
+		if (((value & bitmask) >> bitshift) == bitval)
+			combo_toggle_groups_linked((GtkWidget *)object,1);
+		else
+			combo_toggle_groups_linked((GtkWidget *)object,0);
+	}
+	else /* Combo button, multiple choices */
+	{
+		bitvals = OBJ_GET(object,"bitvals");
+		vector = g_strsplit(bitvals,",",-1);
+		for (i=0;i<g_strv_length(vector);i++)
+		{
+			bitval = strtol(vector[i],NULL,10);
+			/*printf("bitval str %s, bitval %i, rawvalue %i, bitmask %i, bitshift %i\n",vector[i],bitval,value,bitmask,bitshift);*/
+			if (((value & bitmask) >> bitshift) == bitval)
+			{
+				/*printf("It was choice %i\n",i);*/
+				combo_toggle_groups_linked((GtkWidget *)object,i);
+				break;
+			}
+		}
+		g_strfreev(vector);
+	}
 }

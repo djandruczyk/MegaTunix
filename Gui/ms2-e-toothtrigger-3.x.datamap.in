@@ -2,7 +2,7 @@
 description=Object data map for MS2-Extra 2.0.x Tooth/Trigger monitor
 _tab_name=Trigger _Monitor
 #id_prefix=TMON_
-post_functions=reset_ttm_buttons,ms2_ttm_reset_zoom
+post_functions=reset_ttm_buttons,ms2_ttm_reset_zoom,enable_ttm_buttons_pf
 groups=defaults
 
 #----- Groups ----------------------------------------------------------------

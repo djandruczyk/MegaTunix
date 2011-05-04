@@ -270,9 +270,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 
 G_MODULE_EXPORT void enable_ttm_buttons_pf(void)
 {
-	gdk_threads_enter();
 	g_list_foreach(get_list_f("ttm_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
-	gdk_threads_leave();
 }
 
 

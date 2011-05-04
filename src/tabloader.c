@@ -913,6 +913,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	gint bitmask = 0;
 	gint offset = 0;
 	gint page = 0;
+	/*gint canID = 0;*/
 	DataSize size = MTX_U08;
 	GObject *object = NULL;
 	GList *list = NULL;
@@ -942,7 +943,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			printf("%s needs offset\n",info->name);
 			return TRUE;
 		}
-		if (!cfg_read_int(cfgfile,info->name,"offset",&bitmask))
+		if (!cfg_read_int(cfgfile,info->name,"bitmask",&bitmask))
 		{
 			printf("%s needs bitmask\n",info->name);
 			return TRUE;
@@ -963,11 +964,21 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 				return TRUE;
 			}
 		}
-		printf("%s needs dep handling\n",info->name);
+		/*
+		if (!cfg_read_int(cfgfile,info->name,"canID",&canID))
+		{
+			if (!cfg_read_int(cfgfile,"defaults","canID",&canID))
+			{
+				printf("%s has no canID defined!\n",info->name);
+				return TRUE;
+			}
+		}
+		*/
 		gdk_threads_enter();
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(object);
 		gdk_threads_leave();
+		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
 		OBJ_SET(object,"page",GINT_TO_POINTER(page));
 		OBJ_SET(object,"offset",GINT_TO_POINTER(offset));
 		OBJ_SET(object,"size",GINT_TO_POINTER(size));

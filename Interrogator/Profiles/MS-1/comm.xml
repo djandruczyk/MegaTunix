@@ -227,7 +227,7 @@
 				<function>load_gui_tabs_pf</function>
 				<function>setup_menu_handlers_pf</function>
 				<function>start_statuscounts_pf</function>
-				<function>spawn_read_ve_const_pf</function>
+				<!--<function>spawn_read_ve_const_pf</function>-->
 				<function>reset_temps_pf</function>
 				<function>startup_default_timeouts_pf</function>
 				<function>ready_msg_pf</function>
@@ -245,7 +245,6 @@
 				<function>update_ecu_controls_pf</function>
 				<function>set_store_black_pf</function>
 				<function>enable_get_data_buttons_pf</function>
-				<function>enable_ttm_buttons_pf</function>
 				<function>conditional_start_rtv_tickler_pf</function>
 			</post_functions>
 		</cmd>

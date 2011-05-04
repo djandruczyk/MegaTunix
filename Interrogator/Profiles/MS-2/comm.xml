@@ -325,7 +325,6 @@
 				<function>update_ecu_controls_pf</function>
 				<function>set_store_black_pf</function>
 				<function>enable_get_data_buttons_pf</function>
-				<function>enable_ttm_buttons_pf</function>
 				<function>conditional_start_rtv_tickler_pf</function>
 			</post_functions>
 		</cmd>
