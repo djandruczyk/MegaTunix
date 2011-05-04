@@ -967,6 +967,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		gdk_threads_enter();
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(object);
+		gdk_threads_leave();
 		OBJ_SET(object,"page",GINT_TO_POINTER(page));
 		OBJ_SET(object,"offset",GINT_TO_POINTER(offset));
 		OBJ_SET(object,"size",GINT_TO_POINTER(size));
@@ -979,7 +980,6 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		list = DATA_GET(global_data,"dep_list");
 		list = g_list_prepend(list,object);
 		DATA_SET(global_data,"dep_list",(gpointer)list);
-		gdk_threads_leave();
 		cleanup(groups);
 		cleanup(bitvals);
 	}
