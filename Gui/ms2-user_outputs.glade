@@ -248,6 +248,7 @@
                                         <property name="add_tearoffs">False</property>
                                         <property name="has_frame">True</property>
                                         <property name="focus_on_click">True</property>
+                                        <property name="focus_on_click">True</property>
                                         <signal name="changed" handler="std_combo_handler" last_modification_time="Wed, 03 Mar 2010 21:30:47 GMT"/>
                                       </widget>
                                       <packing>

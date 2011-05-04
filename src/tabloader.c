@@ -22,6 +22,7 @@
 #include <getfiles.h>
 #include <glade/glade.h>
 #include <glade/glade-parser.h>
+#include <gui_handlers.h>
 #include <init.h>
 #include <keybinder.h>
 #include <keyparser.h>
@@ -262,6 +263,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		gtk_widget_show_all(topframe);
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
 	}
+	update_interdependancies_pf();
 	/* Allow gui to update as it should.... */
 	while (gtk_events_pending())
 	{
