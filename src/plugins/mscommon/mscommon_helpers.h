@@ -43,7 +43,7 @@ typedef enum
 }FuncCall;
 
 /* Prototypes */
-void spawn_read_ve_const_pf(void);
+void spawn_read_all_pf(void);
 void enable_get_data_buttons_pf(void);
 void simple_read_pf(void *, FuncCall);
 gboolean read_ve_const(void *, FuncCall);

@@ -2129,3 +2129,14 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	return;
 }
 
+
+G_MODULE_EXPORT void update_interdependancies_pf()
+{
+	GList *list = NULL;
+	printf("update interdependancies!\n");
+	list = DATA_GET(global_data,"dep_list");
+	if (!list)
+		return;
+
+
+}

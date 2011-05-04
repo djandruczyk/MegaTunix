@@ -35,7 +35,7 @@ G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 		open_tcpip_sockets();
 }
 
-G_MODULE_EXPORT void spawn_read_ve_const_pf(void)
+G_MODULE_EXPORT void spawn_read_all_pf(void)
 {
 	Firmware_Details *firmware = NULL;
 

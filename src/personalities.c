@@ -93,14 +93,15 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 				button = gtk_toggle_button_new();
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 				persona_selection(button,(gpointer)element);
+				gtk_widget_destroy(button);
 				shouldjump = TRUE;
 			}
 		}
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)
-			p_list = g_list_append(p_list,(gpointer)element);
+			p_list = g_list_prepend(p_list,(gpointer)element);
 		if (g_array_index(classes,FileClass,i) == SYSTEM)
-			s_list = g_list_append(s_list,(gpointer)element);
+			s_list = g_list_prepend(s_list,(gpointer)element);
 		g_free(name);
 		i++;
 		cfg_free(cfgfile);	
@@ -288,6 +289,8 @@ G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
 	cleanup(e->common_lib);
 	cleanup(e->ecu_lib);
 	cleanup(e->baud_str);
+	cleanup(e->sequence);
+	cleanup(e->persona);
 	cleanup(e);
 }
 

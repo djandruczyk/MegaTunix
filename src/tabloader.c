@@ -118,11 +118,10 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			g_ptr_array_add(tabinfos,(gpointer)tabinfo);
 
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
-			tmpbuf = g_strdup_printf("%s_xml",tab_name);
-			g_free(tmpbuf);
 
 			label = gtk_label_new(NULL);
 			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
+			g_free(tab_name);
 			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
 			{
 				if (tmpi)
@@ -153,9 +152,9 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 			}
 		}
+		cfg_free(cfgfile);
 		g_free(map_file);
 		g_free(glade_file);
-
 		i++;
 
 		if (!firmware)
@@ -870,6 +869,7 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 
 void * preload_deps(gpointer data)
 {
+	Firmware_Details *firmware = NULL;
 	GPtrArray *array = (GPtrArray *)data;
 	TabInfo *tabinfo = NULL;
 	GladeInterface *iface = NULL;
@@ -877,6 +877,9 @@ void * preload_deps(gpointer data)
 	ConfigFile *cfgfile = NULL;
 	gint i = 0;	
 	gint j = 0;	
+
+	firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,NULL);
 
 	for (i=0;i<array->len;i++)
 	{
@@ -897,6 +900,7 @@ void * preload_deps(gpointer data)
 		cleanup(tabinfo);
 	}
 	g_ptr_array_free(array,TRUE);
+	io_cmd(firmware->get_all_command,NULL);
 	return NULL;
 }
 
@@ -905,12 +909,15 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 {
 	gchar *groups = NULL;
 	gchar *bitvals = NULL;
+	gint bitval = 0;
 	gint bitmask = 0;
 	gint offset = 0;
 	gint page = 0;
-
-
+	DataSize size = MTX_U08;
+	GObject *object = NULL;
+	GList *list = NULL;
 	gint i = 0;
+
 	/*
 	if (!info->parent)
 		printf("%s is a TOPLEVEL\n",info->name);
@@ -942,18 +949,39 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		}
 		if (!cfg_read_string(cfgfile,info->name,"bitvals",&bitvals))
 		{
-			printf("%s needs bitvals\n",info->name);
-			return TRUE;
+			if (!cfg_read_int(cfgfile,info->name,"bitval",&bitval))
+			{
+				printf("%s needs bitvals or bitval\n",info->name);
+				return TRUE;
+			}
 		}
 		if (!cfg_read_int(cfgfile,info->name,"page",&page))
 		{
 			if (!cfg_read_int(cfgfile,"defaults","page",&page))
 			{
 				printf("%s has no page defined!\n",info->name);
-			return TRUE;
+				return TRUE;
 			}
 		}
 		printf("%s needs dep handling\n",info->name);
+		gdk_threads_enter();
+		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		g_object_ref_sink(object);
+		OBJ_SET(object,"page",GINT_TO_POINTER(page));
+		OBJ_SET(object,"offset",GINT_TO_POINTER(offset));
+		OBJ_SET(object,"size",GINT_TO_POINTER(size));
+		OBJ_SET(object,"bitmask",GINT_TO_POINTER(bitmask));
+		if (bitvals)
+			OBJ_SET(object,"bitvals",g_strdup(bitvals));
+		else
+			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
+		OBJ_SET(object,"toggle_groups",g_strdup(groups));
+		list = DATA_GET(global_data,"dep_list");
+		list = g_list_prepend(list,object);
+		DATA_SET(global_data,"dep_list",(gpointer)list);
+		gdk_threads_leave();
+		cleanup(groups);
+		cleanup(bitvals);
 	}
 	return TRUE;
 }

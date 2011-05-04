@@ -1402,19 +1402,15 @@ void update_combo(GtkWidget *widget)
 	GdkColor red = {0,65535,0,0};
 	GdkColor white = {0,65535,65535,65535};
 
+	if (!update_ms2_user_outputs)
+		get_symbol_f("update_ms2_user_outputs",(void *)&update_ms2_user_outputs);
+	g_return_if_fail(update_ms2_user_outputs);
 
 	get_essential_bits(widget,&canID, &page, &offset, &bitval, &bitmask, &bitshift);
 	/*printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(GINT)value);*/
 
 	if ((GINT)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
-	{
-		if (!update_ms2_user_outputs)
-			get_symbol_f("update_ms2_user_outputs",(void *)&update_ms2_user_outputs);
-		if (update_ms2_user_outputs)
-			update_ms2_user_outputs(widget);
-		else
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": update_combo()\n\tCould NOT locate fucntion pointer for \"update_ms2_user_outputs\" BUG! \n"));
-	}
+		update_ms2_user_outputs(widget);
 
 	value = convert_after_upload_f(widget);
 	tmpi = ((GINT)value & bitmask) >> bitshift;
