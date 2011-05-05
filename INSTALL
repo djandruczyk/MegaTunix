@@ -1,26 +1,27 @@
 
-For those that downloaded a tarball. (i.e. NOT from CVS) run the compile,
-build/install three-step.
+For those that downloaded a tarball. (i.e. NOT from Git) run the compile,
+build/install four-step.
 
 untar it (you've obviously already did this if you're reading this file...)
 
 ./configure
 make
-make install (as root or via sudo) <-- required for MegaTunix to work
+sudo make install <-- required for MegaTunix to work
+sudo ldconfig     <-- required for MegaTunix to work
 
-For those that used CVS
+For those that used Git
 first update your tree:
-	cvs update -dP
-Then regenerate things that aren't in CVS (And should NOT be)
+	git pull master
+Then regenerate things that aren't in Git (And should NOT be)
 	./autogen.sh
 
-The build as above (./configure;make;make install)
+The build as above (./configure;make;sudo make install; sudo ldconfig)
 
-a "make uninstall" will remove all files created that "make install" placed
+a "sudo make uninstall" will remove all files created that "make install" placed
 on your system.  It will NOT remove directories though.  so if you want
 to get rid of everything delete /usr/local/share/MegaTunix (assumes you ran
 ./configure with no options to change the default prefix of "/usr/local")
 
 Send bugreports/suggestions/comments/flames to:
 
-djandruczyk <at> yahoo <dot> com
+dandruczyk <at> gmail <dot> com
