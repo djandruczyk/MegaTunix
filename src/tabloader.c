@@ -136,8 +136,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			}
 			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 			container = gtk_vbox_new(1,0);
-			OBJ_SET_FULL(label,"glade_file",g_strdup(glade_file),g_object_unref);
-			OBJ_SET_FULL(label,"datamap_file",g_strdup(map_file),g_object_unref);
+			OBJ_SET_FULL(label,"glade_file",g_strdup(glade_file),cleanup);
+			OBJ_SET_FULL(label,"datamap_file",g_strdup(map_file),cleanup);
 			OBJ_SET(label,"not_rendered",GINT_TO_POINTER(TRUE));
 			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),container,label);
 			gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),container,TRUE);
@@ -194,7 +194,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	gchar * glade_file = NULL;
 	gchar * tmpbuf = NULL;
 	GladeXML *xml = NULL;
-	gchar * tab_name = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *topframe = NULL;
 	GtkWidget *placeholder = NULL;
@@ -239,8 +238,10 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 
 		populate_master(topframe,(gpointer)cfgfile);
 
+		/*
 		dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
 		g_free(tab_name);
+		*/
 
 		if (topframe == NULL)
 		{
@@ -882,6 +883,9 @@ void * preload_deps(gpointer data)
 
 	firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,NULL);
+#ifdef __WIN32__
+	return NULL;
+#endif
 
 	for (i=0;i<array->len;i++)
 	{

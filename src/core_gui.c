@@ -445,5 +445,4 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 			"dark green", NULL);
 	g_object_ref(tag);
 	DATA_SET_FULL(global_data,"comms_info_tag",tag,g_object_unref);
-
 }

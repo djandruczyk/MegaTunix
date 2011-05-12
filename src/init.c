@@ -710,6 +710,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	Rtv_Map *rtv_map = NULL;
 	GList ***ecu_widgets = NULL;
 	GList **tab_gauges = NULL;
+	GList *dep_list = NULL;
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
 	GMutex *dash_mutex = NULL;
@@ -724,6 +725,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
 	dash_mutex = DATA_GET(global_data,"dash_mutex");
+	dep_list = DATA_GET(global_data,"dep_list");
 
 	g_mutex_lock(serio_mutex);
 	cleanup(serial_params->port_name);
@@ -731,6 +733,10 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	g_mutex_unlock(serio_mutex);
 
 	/* Firmware datastructure.... */
+	if (dep_list)
+		g_list_foreach(dep_list,(GFunc)g_object_unref,NULL);
+	g_list_free(dep_list);
+
 	if (firmware)
 	{
 		if (ecu_widgets)
@@ -964,7 +970,7 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 			g_dataset_destroy(payload->data);
 			cleanup(payload->data);
 		}
-                cleanup(message->payload);
+                cleanup(payload);
 	}
         cleanup(message);
 }

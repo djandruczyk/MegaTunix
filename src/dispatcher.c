@@ -50,10 +50,13 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	g_return_val_if_fail(pf_dispatch_mutex,FALSE);
 	g_return_val_if_fail(global_data,FALSE);
 
-	if (DATA_GET(global_data,"might_be_leaving"))
-		return TRUE;
-	if ((!pf_dispatch_queue) || (DATA_GET(global_data,"leaving")))
+	if ((!pf_dispatch_queue) || 
+			(DATA_GET(global_data,"leaving")) || 
+			(DATA_GET(global_data,"might_be_leaving")))
 	{
+		/* Flush the queue */
+		while (NULL != (message = g_async_queue_try_pop(pf_dispatch_queue)))
+			dealloc_message(message);
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
 		g_mutex_unlock(pf_dispatch_mutex);
@@ -172,15 +175,18 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	g_return_val_if_fail(gui_dispatch_mutex,FALSE);
 	g_return_val_if_fail(global_data,FALSE);
 trypop:
-	if ((!gui_dispatch_queue) || (DATA_GET(global_data,"leaving")))
+	if ((!gui_dispatch_queue) || 
+			(DATA_GET(global_data,"leaving")) ||
+			(DATA_GET(global_data,"might_be_leaving")))
 	{
+		/* Flush the queue */
+		while (NULL != (message = g_async_queue_try_pop(gui_dispatch_queue)))
+			dealloc_message(message);
 		g_mutex_lock(gui_dispatch_mutex);
 		g_cond_signal(gui_dispatch_cond);
 		g_mutex_unlock(gui_dispatch_mutex);
 		return TRUE;
 	}
-	if (DATA_GET(global_data,"might_be_leaving"))
-		return TRUE;
 	message = g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
 	{
