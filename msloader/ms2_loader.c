@@ -72,6 +72,8 @@ guint total_bytes = 0;
 
 char **fileBuf;
 guint count = 0;
+static gint read_wrapper(gint fd, guchar *buf, gint requested);
+static gint  POLL_ATTEMPTS = 50;
 int debug = 0;
 /* debug levels
 0 = Quiet
@@ -89,7 +91,7 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	count = read_s19(file_fd);
 	if (count == 0)
 		return FALSE;
-	ms2_enter_boot_mode(port_fd);
+	//ms2_enter_boot_mode(port_fd);
 	if (!wakeup_S12(port_fd))
 	{
 		output("Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);
@@ -215,9 +217,9 @@ gboolean wakeup_S12(gint port_fd)
 
 	c = C_WAKE_UP;
 
-#ifndef __WIN32__
-	fcntl(port_fd, F_SETFL, O_NDELAY);
-#endif
+//#ifndef __WIN32__
+//	fcntl(port_fd, F_SETFL, O_NDELAY);
+//#endif
 
 	for (i = 0; i < 6; i++) {
 		prompt = 0;
@@ -230,7 +232,6 @@ gboolean wakeup_S12(gint port_fd)
 			output(g_strdup_printf("TX: %02x\n", c),TRUE);
 		}
 
-		g_usleep(LONG_DELAY);
 		if (!check_status(port_fd))
 		{
 			output("Serial Read failure, try unplugging\nand replugging your Serial adapter/cable\n",FALSE);
@@ -240,9 +241,9 @@ gboolean wakeup_S12(gint port_fd)
 			break;
 	}
 
-#ifndef __WIN32__
-	fcntl(port_fd, F_SETFL, 0);
-#endif
+//#ifndef __WIN32__
+//	fcntl(port_fd, F_SETFL, 0);
+//#endif
 
 	if (i > 5) {
 		output("Could not wake up processor, try jumpering\nthe boot jumper and power cycling the ECU...\n",FALSE);
@@ -260,7 +261,7 @@ gboolean check_status(gint port_fd)
 	gint res = 0;
 	gboolean retval = TRUE;
 
-	res = read(port_fd, &buf, 3);
+	res = read_wrapper(port_fd, buf, 3);
 	if (res == -1)
 	{
 		output("READ FAILURE in check_status!\n",FALSE);
@@ -268,7 +269,10 @@ gboolean check_status(gint port_fd)
 		return FALSE;
 	}
 	if (res != 3)
-		output("error reading error/status/prompt Code\n",FALSE);
+	{
+		output(g_strdup_printf("error reading error/status/prompt Code, requested 3 bytes got %i\n",res),TRUE);
+		return FALSE;
+	}
 	errorCode = buf[0];
 	statusCode = buf[1];
 	prompt = buf[2];
@@ -350,7 +354,7 @@ gboolean check_status(gint port_fd)
 
 	if (prompt != '>') 
 	{
-		output(g_strdup_printf("Prompt was expected to be \"3e\" but returned as \"%.2x\" \n",prompt),TRUE);
+		output(g_strdup_printf("Prompt was expected to be \">\" but returned as \"%.2x,(%c)\" \n",prompt,prompt),TRUE);
 		retval = FALSE;
 	} 
 	else
@@ -380,7 +384,6 @@ gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 		if (debug >= 4) {
 			output(g_strdup_printf("TX: %02x %02x %02x %02x\n", command[0], command[1], command[2], command[3] ),TRUE);
 		}
-		g_usleep(LONG_DELAY);
 		if (!check_status(port_fd))
 			return FALSE;
 
@@ -390,7 +393,6 @@ gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 			res = write(port_fd, &c, 1);
 			if (res != 1)
 				output(g_strdup_printf("sendPPAGE():(erasing) SHORT WRITE %i of 1",res),TRUE);
-			g_usleep(5*LONG_DELAY);
 			output(g_strdup_printf("Page 0x%02x erased...\n",page),TRUE);
 			if(!check_status(port_fd))
 				return FALSE;
@@ -480,17 +482,14 @@ gboolean erase_S12(gint port_fd)
 	guchar c;
 	gint res = 0;
 
-	if (debug > 0) {
-		output( "Erasing main flash!\n",FALSE);
-	}
+	output("Attempting to erase main flash!\n",FALSE);
 	c = C_ERASE_ALL;
 	res = write(port_fd, &c, 1);
 	if (res != 1)
 		output(g_strdup_printf("erase_S12(): SHORT WRITE %i of 1",res),TRUE);
-	output( "Main Flash Erased...\n",FALSE);
-	g_usleep(5*LONG_DELAY);
 	if(!check_status(port_fd))
 		return FALSE;
+	output( "Main Flash Erased...\n",FALSE);
 	return TRUE;
 }
 
@@ -582,7 +581,6 @@ void ms2_enter_boot_mode(gint port_fd)
 	res = write(port_fd, "!!!SafetyFirst", 14);
 	if (res != 14)
 		output(g_strdup_printf("ms2_enter_boot_mode() SHORT WRITE, sent %i of 14\n",res),TRUE);
-	g_usleep(LONG_DELAY);
 	check_status(port_fd);
 	flush_serial(port_fd, BOTH);
 }
@@ -597,4 +595,55 @@ void reset_proc(gint port_fd)
 		output(g_strdup_printf("reset_proc() SHORT WRITE, sent %i of 1\n",res),TRUE);
 }
 
+
+
+gint read_wrapper(gint fd, guchar *buf, gint requested)
+{
+	fd_set readfds;
+	struct timeval t;
+	gint attempts = 0;
+	gint read_pos = 0;
+	gint wanted = requested;
+	gint received = 0;
+	gint res = 0;
+	gint total = 0;
+
+	while (wanted > 0)
+	{
+		FD_ZERO(&readfds);
+		t.tv_sec = 0;
+		t.tv_usec = 200000;
+		FD_SET(fd,&readfds);
+		res = select (fd+1, &readfds,NULL,NULL, &t);
+		if (res == -1)
+		{
+			output("ERROR, select() failure!\n",FALSE);
+			return -1;
+		}
+		if (res == 0) /* Timeout */
+		{
+			/*printf("timeout!\n");*/
+			attempts++;
+			if (attempts > POLL_ATTEMPTS)
+				return count;
+		}
+		/* OK we have something waiting for us, read it */
+		if (FD_ISSET(fd,&readfds))
+		{
+			/*printf("data avail!\n");*/
+			read_pos = requested - wanted;
+			received = read(fd, &buf[read_pos], wanted);
+			if (received == -1)
+			{
+				output("Serial I/O Error, read failure\n",FALSE);
+				return -1;
+			}
+			total += received;
+			/*printf("got %i bytes\n",received);*/
+			wanted -= received;
+
+		}
+	}
+	return total;
+}
 
