@@ -73,7 +73,7 @@ guint total_bytes = 0;
 char **fileBuf;
 guint count = 0;
 static gint read_wrapper(gint fd, guchar *buf, gint requested);
-static gint  POLL_ATTEMPTS = 50;
+static gint  POLL_ATTEMPTS = 15;
 int debug = 0;
 /* debug levels
 0 = Quiet
@@ -113,7 +113,7 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	free_s19(count);
 	reset_proc(port_fd);
 	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
-	output("Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
+	output("Remove boot jumper/reset or load/run switch and power cycle ECU\n",FALSE);
 	output("All Done!\n",FALSE);
 	return TRUE;
 }
@@ -406,7 +406,7 @@ gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 
 	if (a != page) {
 		page = a & 0xFF;
-		output(g_strdup_printf("Setting page to 0x%02x:\n", page),TRUE);
+		output(g_strdup_printf("Setting page to 0x%02x\n", page),TRUE);
 		command[0] = C_WRITE_BYTE;
 		command[1] = 0x00;
 		command[2] = 0x30;
@@ -422,7 +422,7 @@ gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 
 		c = C_ERASE_PAGE;
 		if (erasing) {
-			output(g_strdup_printf("Erasing page 0x%02x:\n", page),TRUE);
+			output(g_strdup_printf("Erasing page 0x%02x\n", page),TRUE);
 			res = write(port_fd, &c, 1);
 			if (res != 1)
 				output(g_strdup_printf("sendPPAGE():(erasing) SHORT WRITE %i of 1",res),TRUE);
@@ -621,11 +621,16 @@ void ms2_enter_boot_mode(gint port_fd)
 void reset_proc(gint port_fd)
 {
 	gint res = 0;
+	guchar buf[10];
 	guchar command = C_RESET;
 
 	res = write(port_fd, &command, 1);
 	if (res != 1)
 		output(g_strdup_printf("reset_proc() SHORT WRITE, sent %i of 1\n",res),TRUE);
+	/* Read out response and toss it */
+	res = read_wrapper(port_fd,buf,1);
+	if (res == 1)
+		output("Processor Reset complete\n",FALSE);
 }
 
 
@@ -658,7 +663,7 @@ gint read_wrapper(gint fd, guchar *buf, gint requested)
 			/*printf("timeout!\n");*/
 			attempts++;
 			if (attempts > POLL_ATTEMPTS)
-				return count;
+				return total;
 		}
 		/* OK we have something waiting for us, read it */
 		if (FD_ISSET(fd,&readfds))
@@ -674,9 +679,7 @@ gint read_wrapper(gint fd, guchar *buf, gint requested)
 			total += received;
 			/*printf("got %i bytes\n",received);*/
 			wanted -= received;
-
 		}
 	}
 	return total;
 }
-

@@ -117,7 +117,7 @@ gint setup_port(gint fd, gint baud)
 	newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	newtio.c_cc[VEOL]     = 0;     /* '\0' */
 	newtio.c_cc[VMIN]     = 0;     /* No min chars requirement */
-	newtio.c_cc[VTIME]    = 2;     /* 200ms timeout */
+	newtio.c_cc[VTIME]    = 1;     /* 200ms timeout */
 	/* MS2 quirk */
 
 	tcsetattr(fd,TCSANOW,&newtio);
