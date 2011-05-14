@@ -131,8 +131,7 @@ gint setup_port(gint fd, gint baud)
 void close_port(gint fd)
 {
 #ifndef __WIN32__
-	tcsetattr(fd,TCSAFLUSH,&oldtio);
-	flush_serial(fd,BOTH);
+	tcsetattr(fd,TCSANOW,&oldtio);
 #endif
 	close(fd);
 	return;
