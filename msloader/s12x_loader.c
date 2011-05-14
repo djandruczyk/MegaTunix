@@ -13,7 +13,7 @@
 #endif
 
 #include <loader_common.h>
-#include <ms2_loader.h>
+#include <s12x_loader.h>
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
@@ -91,7 +91,40 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	count = read_s19(file_fd);
 	if (count == 0)
 		return FALSE;
-	//ms2_enter_boot_mode(port_fd);
+	ms2_enter_boot_mode(port_fd);
+	if (!wakeup_S12(port_fd))
+	{
+		output("Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);
+		free_s19(count);
+		return FALSE;
+	}
+	if (!erase_S12(port_fd))
+	{
+		output("Unable to ERASE device!\n",FALSE);
+		free_s19(count);
+		return FALSE;
+	}
+	if (!send_S12(port_fd,count))
+	{
+		output("Unable to Send firmware to device!\n",FALSE);
+		free_s19(count);
+		return FALSE;
+	}
+	free_s19(count);
+	reset_proc(port_fd);
+	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
+	output("Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
+	output("All Done!\n",FALSE);
+	return TRUE;
+}
+
+gboolean do_freeems_load(gint port_fd, gint file_fd)
+{
+	total_bytes = 0;
+	flush_serial(port_fd, BOTH);
+	count = read_s19(file_fd);
+	if (count == 0)
+		return FALSE;
 	if (!wakeup_S12(port_fd))
 	{
 		output("Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);

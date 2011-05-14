@@ -12,7 +12,7 @@
  */
 
 
-#include <ms1_loader.h>
+#include <hc08_loader.h>
 #include <unistd.h>
 #ifndef __WIN32__
  #include <termios.h>

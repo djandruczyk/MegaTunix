@@ -14,8 +14,8 @@
 #include <fcntl.h>
 #include <glib/gstdio.h>
 #include <loader_common.h>
-#include <ms1_loader.h>
-#include <ms2_loader.h>
+#include <hc08_loader.h>
+#include <s12x_loader.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
@@ -77,9 +77,6 @@ gint main(gint argc, gchar ** argv)
 		unlock_port();
 		exit(-1);
 	}
-	/*
-	type = detect_firmware(argv[2]);
-	*/
 	if (type == MS1)
 	{
 		setup_port(port_fd, 9600);
@@ -89,6 +86,12 @@ gint main(gint argc, gchar ** argv)
 	{
 		setup_port(port_fd,115200);
 		do_ms2_load(port_fd,file_fd);
+	}
+
+	else if (type == FREEEMS)
+	{
+		setup_port(port_fd,115200);
+		do_freeems_load(port_fd,file_fd);
 	}
 
 	flush_serial(port_fd,BOTH);
@@ -109,7 +112,7 @@ void verify_args(gint argc, gchar **argv)
 		type = MS1;
 	else if (g_strcasecmp(argv[1],"MS2") == 0)
 		type = MS2;
-	else if (g_strcasecmp(argv[1],"FEEEMS") == 0)
+	else if (g_strcasecmp(argv[1],"FREEEMS") == 0)
 		type = FREEEMS;
 	else
 		usage_and_exit(g_strdup_printf("Device type \"%s\" not recognized",argv[1]));

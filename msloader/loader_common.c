@@ -19,7 +19,7 @@
 #include <fcntl.h>
 #include <glib/gstdio.h>
 #include <loader_common.h>
-#include <ms1_loader.h>
+#include <hc08_loader.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>

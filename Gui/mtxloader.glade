@@ -183,7 +183,6 @@
                           <object class="GtkRadioButton" id="freeems_rbutton">
                             <property name="label" translatable="yes">FreeEMS</property>
                             <property name="visible">True</property>
-                            <property name="sensitive">False</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="active">True</property>

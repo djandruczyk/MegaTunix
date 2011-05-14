@@ -24,6 +24,7 @@ headers = \
 	firmware.h \
 	getfiles.h \
 	gui_handlers.h \
+	hc08_loader.h \
 	helpers.h \
 	init.h \
 	keybinder.h \
@@ -39,8 +40,6 @@ headers = \
 	main.h \
 	menu_handlers.h \
 	mem_mgmt.h \
-	ms1_loader.h \
-	ms2_loader.h \
 	mtxloader.h \
 	multi_expr_loader.h \
 	notifications.h \
@@ -52,6 +51,7 @@ headers = \
 	runtime_sliders.h \
 	runtime_status.h \
 	runtime_text.h \
+	s12x_loader.h \
 	serialio.h \
 	stringmatch.h \
 	tabloader.h \

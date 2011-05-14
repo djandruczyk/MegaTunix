@@ -11,26 +11,23 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __MS1_LOADER_H__
-#define __MS1_LOADER_H__
+#ifndef __S12X_LOADER_H__
+#define __S12X_LOADER_H__
 
 #include <winserialio.h>
 #include <gtk/gtk.h>
 
-typedef enum
-{
-	NOT_LISTENING=0xcba,
-	IN_BOOTLOADER,
-	LIVE_MODE
-}EcuState;
-
 /* Prototypes */
-gboolean do_ms1_load(gint, gint);
-EcuState detect_ecu(gint);
-gboolean jump_to_bootloader(gint);
-gboolean prepare_for_upload(gint);
-void upload_firmware(gint, gint);
-void reboot_ecu(gint);
+gboolean do_ms2_load(gint, gint);
+gboolean do_freeems_load(gint, gint);
+gint read_s19(gint);
+void ms2_enter_boot_mode(gint);
+gboolean wakeup_S12(gint);
+gboolean check_status(gint);
+gboolean erase_S12(gint);
+gboolean send_S12(gint, guint);
+void free_s19(guint);
+void reset_proc(gint);
 void output(gchar *, gboolean);
 
 #endif

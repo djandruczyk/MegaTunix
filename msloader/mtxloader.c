@@ -3,8 +3,8 @@
 #include <getfiles.h>
 #include <glib/gstdio.h>
 #include <loader_common.h>
-#include <ms1_loader.h>
-#include <ms2_loader.h>
+#include <hc08_loader.h>
+#include <s12x_loader.h>
 #include <mtxloader.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -213,21 +213,12 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 		setup_port(port_fd, 115200);
 		do_ms2_load(port_fd,file_fd);
 	}
+	else if ((GINT)DATA_GET(global_data,"persona") == FREEEMS)
+	{
+		setup_port(port_fd, 115200);
+		do_freeems_load(port_fd,file_fd);
+	}
 	unlock_buttons();
-	/*
-	type = detect_firmware(filename);
-	if (type == MS1)
-	{
-		setup_port(port_fd, 9600);
-		do_ms1_load(port_fd,file_fd);
-	}
-	else if (type == MS2)
-	{
-		setup_port(port_fd,115200);
-		do_ms2_load(port_fd,file_fd);
-	}
-	*/
-
 	close_port(port_fd);
 	unlock_port();
 	return TRUE;
