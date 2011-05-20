@@ -26,9 +26,14 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #ifdef __WIN32__
-#include <winserialio.h>
+ #include <winserialio.h>
+ #include <winsock2.h>
 #else
-#include <termios.h>
+ #include <sys/select.h>
+ #include <sys/time.h>
+ #include <sys/types.h>
+ #include <unistd.h>
+ #include <termios.h>
 #endif
 
 #ifndef CRTSCTS
@@ -131,6 +136,8 @@ void close_port(gint fd)
 {
 #ifndef __WIN32__
 	tcsetattr(fd,TCSANOW,&oldtio);
+#else
+	WSACleanup();
 #endif
 	close(fd);
 	return;

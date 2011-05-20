@@ -16,11 +16,7 @@
 #include <loader_common.h>
 #include <unistd.h>
 #ifndef __WIN32__
- #include <sys/select.h>
- #include <sys/time.h>
- #include <sys/types.h>
  #include <termios.h>
- #include <unistd.h>
 #else
 #include <winserialio.h>
 #endif

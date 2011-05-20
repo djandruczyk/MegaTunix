@@ -27,6 +27,8 @@ void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gin
 {
 #ifdef __WIN32__
 	DCB dcb;
+	WSADATA wsaData;
+	gint res = 0;
 	COMMTIMEOUTS timeouts;
 
 	ZeroMemory(&dcb, sizeof(dcb));
@@ -98,6 +100,9 @@ void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gin
 
 	SetCommTimeouts((HANDLE) _get_osfhandle (fd) ,&timeouts);
 
+	res = WSAStartup(MAKEWORD(2,2), &wsaData);
+	if (res != 0)
+		printf(_("WSAStartup failed: %d\n"),res);
 	return;
 #endif
 }
