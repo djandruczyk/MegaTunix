@@ -98,11 +98,6 @@ void output (gchar *line, gboolean free_it)
 }
 
 
-G_MODULE_EXPORT void gui_progress_update(gfloat fraction)
-{
-	printf("Progress is %i %% completed\n",(gint)(fraction*100.0));
-}
-
 
 /* Perform a ping operation when the Ping button is clicked. */
 G_MODULE_EXPORT gboolean get_signature (GtkButton *button)

@@ -79,8 +79,6 @@ guint total_bytes = 0;
 
 char **fileBuf;
 guint count = 0;
-static gint read_wrapper(gint fd, guchar *buf, gint requested);
-static gint  POLL_ATTEMPTS = 15;
 int debug = 0;
 /* debug levels
 0 = Quiet
@@ -260,7 +258,7 @@ gboolean wakeup_S12(gint port_fd)
 	for (i = 0; i < 6; i++) {
 		prompt = 0;
 		output("Attempting Wakeup...\n",FALSE);
-		res = write(port_fd, &c, 1);
+		res = write_wrapper(port_fd, &c, 1);
 		if (res != 1)
 			output(g_strdup_printf("wakeup_S12(): SHORT WRITE! %i of 1\n", res),TRUE);
 
@@ -410,7 +408,7 @@ gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 		command[1] = 0x00;
 		command[2] = 0x30;
 		command[3] = page;
-		res = write(port_fd, command, 4);
+		res = write_wrapper(port_fd, command, 4);
 		if (res != 4)
 			output(g_strdup_printf("sendPPAGE(): SHORT WRITE %i of 4",res),TRUE);
 		if (debug >= 4) {
@@ -422,7 +420,7 @@ gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 		c = C_ERASE_PAGE;
 		if (erasing) {
 			output(g_strdup_printf("Erasing page 0x%02x\n", page),TRUE);
-			res = write(port_fd, &c, 1);
+			res = write_wrapper(port_fd, &c, 1);
 			if (res != 1)
 				output(g_strdup_printf("sendPPAGE():(erasing) SHORT WRITE %i of 1",res),TRUE);
 			output(g_strdup_printf("Page 0x%02x erased...\n",page),TRUE);
@@ -474,7 +472,7 @@ retry:
 		output(g_strdup_printf("TX: %02x %02x %02x %02x\n", command[0], command[1], command[2], command[3] ),TRUE);
 	}
 
-	res = write(port_fd, command, 4);
+	res = write_wrapper(port_fd, command, 4);
 	if (res != 4)
 		output(g_strdup_printf("send_block(): SHORT WRITE %i of 4",res),TRUE);
 	if (debug >= 4) {
@@ -484,7 +482,7 @@ retry:
 		}
 		output( "\n",FALSE);
 	}
-	res = write(port_fd, b, n);
+	res = write_wrapper(port_fd, b, n);
 	if (res != n)
 		output(g_strdup_printf("send_block(): SHORT WRITE %i of %i",res,n),TRUE);
 	if (!check_status(port_fd))
@@ -516,7 +514,7 @@ gboolean erase_S12(gint port_fd)
 
 	output("Attempting to erase main flash!\n",FALSE);
 	c = C_ERASE_ALL;
-	res = write(port_fd, &c, 1);
+	res = write_wrapper(port_fd, &c, 1);
 	if (res != 1)
 		output(g_strdup_printf("erase_S12(): SHORT WRITE %i of 1",res),TRUE);
 	if(!check_status(port_fd))
@@ -610,7 +608,7 @@ gboolean send_S12(gint port_fd, guint count)
 void ms2_enter_boot_mode(gint port_fd)
 {
 	gint res = 0;
-	res = write(port_fd, "!!!SafetyFirst", 14);
+	res = write_wrapper(port_fd, (guchar *)"!!!SafetyFirst", 14);
 	if (res != 14)
 		output(g_strdup_printf("ms2_enter_boot_mode() SHORT WRITE, sent %i of 14\n",res),TRUE);
 	check_status(port_fd);
@@ -623,7 +621,7 @@ void reset_proc(gint port_fd)
 	guchar buf[10];
 	guchar command = C_RESET;
 
-	res = write(port_fd, &command, 1);
+	res = write_wrapper(port_fd, &command, 1);
 	if (res != 1)
 		output(g_strdup_printf("reset_proc() SHORT WRITE, sent %i of 1\n",res),TRUE);
 	/* Read out response and toss it */
@@ -634,51 +632,3 @@ void reset_proc(gint port_fd)
 
 
 
-gint read_wrapper(gint fd, guchar *buf, gint requested)
-{
-	fd_set readfds;
-	struct timeval t;
-	gint attempts = 0;
-	gint read_pos = 0;
-	gint wanted = requested;
-	gint received = 0;
-	gint res = 0;
-	gint total = 0;
-
-	while (wanted > 0)
-	{
-		FD_ZERO(&readfds);
-		t.tv_sec = 0;
-		t.tv_usec = 200000;
-		FD_SET(fd,&readfds);
-		res = select (fd+1, &readfds,NULL,NULL, &t);
-		if (res == -1)
-		{
-			output("ERROR, select() failure!\n",FALSE);
-			return -1;
-		}
-		if (res == 0) /* Timeout */
-		{
-			/*printf("timeout!\n");*/
-			attempts++;
-			if (attempts > POLL_ATTEMPTS)
-				return total;
-		}
-		/* OK we have something waiting for us, read it */
-		if (FD_ISSET(fd,&readfds))
-		{
-			/*printf("data avail!\n");*/
-			read_pos = requested - wanted;
-			received = read(fd, &buf[read_pos], wanted);
-			if (received == -1)
-			{
-				output("Serial I/O Error, read failure\n",FALSE);
-				return -1;
-			}
-			total += received;
-			/*printf("got %i bytes\n",received);*/
-			wanted -= received;
-		}
-	}
-	return total;
-}

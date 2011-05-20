@@ -34,6 +34,7 @@
 #ifndef CRTSCTS
 #define CRTSCTS 0
 #endif
+#define POLL_ATTEMPTS 15
 
 
 /* Globals */
@@ -347,5 +348,106 @@ gboolean lock_port(gchar * name)
 	g_free(contents);
 #endif	
 	return TRUE;
+}
+
+
+gint read_wrapper(gint fd, guchar *buf, gint requested)
+{
+	fd_set readfds;
+	struct timeval t;
+	gint attempts = 0;
+	gint read_pos = 0;
+	gint wanted = requested;
+	gint received = 0;
+	gint res = 0;
+	gint total = 0;
+
+	while (wanted > 0)
+	{
+		FD_ZERO(&readfds);
+		t.tv_sec = 0;
+		t.tv_usec = 200000;
+		FD_SET(fd,&readfds);
+		res = select (fd+1, &readfds,NULL,NULL, &t);
+		if (res == -1)
+		{
+			output("ERROR, select() failure!\n",FALSE);
+			return -1;
+		}
+		if (res == 0) /* Timeout */
+		{
+			/*printf("timeout!\n");*/
+			attempts++;
+			if (attempts > POLL_ATTEMPTS)
+				return total;
+		}
+		/* OK we have something waiting for us, read it */
+		if (FD_ISSET(fd,&readfds))
+		{
+			/*printf("data avail!\n");*/
+			read_pos = requested - wanted;
+			received = read(fd, &buf[read_pos], wanted);
+			if (received == -1)
+			{
+				output("Serial I/O Error, read failure\n",FALSE);
+				return -1;
+			}
+			total += received;
+			/*printf("got %i bytes\n",received);*/
+			wanted -= received;
+		}
+	}
+	return total;
+}
+
+
+gint write_wrapper(gint fd, guchar *buf, gint total)
+{
+	fd_set writefds;
+	struct timeval t;
+	gint attempts = 0;
+	gint write_pos = 0;
+	gint to_send = total;
+	gint received = 0;
+	gint res = 0;
+	gint sent = 0;
+	gint count = 0;
+
+	while (to_send > 0)
+	{
+		FD_ZERO(&writefds);
+		t.tv_sec = 0;
+		t.tv_usec = 200000;
+		FD_SET(fd,&writefds);
+		res = select (fd+1, NULL,&writefds,NULL, &t);
+		if (res == -1)
+		{
+			output("ERROR, select() failure!\n",FALSE);
+			return -1;
+		}
+		if (res == 0) /* Timeout */
+		{
+			/*printf("timeout!\n");*/
+			attempts++;
+			if (attempts > POLL_ATTEMPTS)
+				return total;
+		}
+		/* OK we can now write, write it */
+		if (FD_ISSET(fd,&writefds))
+		{
+			/*printf("data avail!\n");*/
+			write_pos = total - to_send;
+			count = write(fd, &buf[write_pos], to_send);
+			if (count == -1)
+			{
+				output("Serial I/O Error, write failure\n",FALSE);
+				return -1;
+			}
+			sent += count;
+			/*printf("got %i bytes\n",received);*/
+			to_send -= count;
+		}
+	}
+	return sent;
 }
 

@@ -13,6 +13,7 @@
 
 
 #include <hc08_loader.h>
+#include <loader_common.h>
 #include <unistd.h>
 #ifndef __WIN32__
  #include <sys/select.h>
@@ -37,7 +38,6 @@ struct termios newtio;
 #define POLL_ATTEMPTS 15
 
 void boot_jumper_prompt(void);
-gint write_wrapper(gint, gchar *, gint);
 
 gboolean do_ms1_load(gint port_fd, gint file_fd)
 {
@@ -235,7 +235,7 @@ gboolean prepare_for_upload(gint fd)
 void upload_firmware(gint fd, gint file_fd)
 {
 	gint res = 0;
-	gchar buf[128];
+	guchar buf[128];
 	gint chunk = 128;
 	gint result = 0;
 	gint i = 0;
@@ -244,9 +244,12 @@ void upload_firmware(gint fd, gint file_fd)
 	GTimeVal begin;
 	gfloat elapsed = 0.0;
 	gint rate = 0;
+	gint end = 0;
 
 	g_get_current_time(&begin);
 	g_get_current_time(&now);
+	end = lseek(file_fd,0,SEEK_END);
+	lseek(file_fd,0,SEEK_SET);
 	res = read(file_fd,buf,chunk);
 	while (res > 0)
 	{
@@ -262,12 +265,14 @@ void upload_firmware(gint fd, gint file_fd)
 		if (elapsed < 0)
 			elapsed += 1000000;
 		rate = (chunk*1000000)/elapsed;
-		output(g_strdup_printf("%6i bytes written, %i bytes/sec.\n",i,rate),TRUE);
+		/*output(g_strdup_printf("%6i bytes written, %i bytes/sec.\n",i,rate),TRUE);*/
 		res = read(file_fd,buf,chunk);
+		progress_update ((gfloat)i/(gfloat)(end-2));
+
 	}
 	flush_serial(fd,BOTH);
 	g_get_current_time(&now);
-	output(g_strdup_printf("Upload completed in %li Seconds\n",now.tv_sec-begin.tv_sec),TRUE);
+	output(g_strdup_printf("Upload completed in %li Seconds at %i bytes/sec\n",now.tv_sec-begin.tv_sec,rate),TRUE);
 
 	return;
 }
@@ -287,54 +292,4 @@ void reboot_ecu(gint fd)
 	return ;
 }
 
-
-gint write_wrapper(gint fd, gchar *buf, gint total)
-{
-	fd_set writefds;
-	struct timeval t;
-	gint attempts = 0;
-	gint write_pos = 0;
-	gint to_send = total;
-	gint received = 0;
-	gint res = 0;
-	gint sent = 0;
-	gint count = 0;
-
-	while (to_send > 0)
-	{
-		FD_ZERO(&writefds);
-		t.tv_sec = 0;
-		t.tv_usec = 200000;
-		FD_SET(fd,&writefds);
-		res = select (fd+1, NULL,&writefds,NULL, &t);
-		if (res == -1)
-		{
-			output("ERROR, select() failure!\n",FALSE);
-			return -1;
-		}
-		if (res == 0) /* Timeout */
-		{
-			/*printf("timeout!\n");*/
-			attempts++;
-			if (attempts > POLL_ATTEMPTS)
-				return total;
-		}
-		/* OK we can now write, write it */
-		if (FD_ISSET(fd,&writefds))
-		{
-			/*printf("data avail!\n");*/
-			write_pos = total - to_send;
-			count = write(fd, &buf[write_pos], to_send);
-			if (count == -1)
-			{
-				output("Serial I/O Error, write failure\n",FALSE);
-				return -1;
-			}
-			sent += count;
-			/*printf("got %i bytes\n",received);*/
-			to_send -= count;
-		}
-	}
-	return sent;
-}
 
