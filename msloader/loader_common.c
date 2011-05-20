@@ -49,6 +49,7 @@ gint open_port(gchar * port_name)
 #ifdef __WIN32__
 	fd = open(port_name, O_RDWR | O_BINARY );
 #else
+	/* Open No0nblocking for OS-X, then flip to blocking */
 	fd = open(port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
 	fcntl (fd, F_SETFL, ~O_NONBLOCK);
 #endif
@@ -117,14 +118,11 @@ gint setup_port(gint fd, gint baud)
 	newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	newtio.c_cc[VEOL]     = 0;     /* '\0' */
 	newtio.c_cc[VMIN]     = 0;     /* No min chars requirement */
-	newtio.c_cc[VTIME]    = 1;     /* 200ms timeout */
-	/* MS2 quirk */
+	newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
 
 	tcsetattr(fd,TCSANOW,&newtio);
-
 #endif
 	return 0;
-
 }
 
 

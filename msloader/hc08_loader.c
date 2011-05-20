@@ -15,7 +15,11 @@
 #include <hc08_loader.h>
 #include <unistd.h>
 #ifndef __WIN32__
+ #include <sys/select.h>
+ #include <sys/time.h>
+ #include <sys/types.h>
  #include <termios.h>
+ #include <unistd.h>
 #else
 #include <winserialio.h>
 #endif
@@ -30,8 +34,10 @@
 struct termios oldtio;
 struct termios newtio;
 #endif
+#define POLL_ATTEMPTS 15
 
 void boot_jumper_prompt(void);
+gint write_wrapper(gint, gchar *, gint);
 
 gboolean do_ms1_load(gint port_fd, gint file_fd)
 {
@@ -247,7 +253,11 @@ void upload_firmware(gint fd, gint file_fd)
 		last = now;
 		g_get_current_time(&now);
 		i+=res;
-		result = write (fd,buf,chunk);
+		result = write_wrapper (fd,buf,chunk);
+		if (result != chunk)
+		{
+			output(g_strdup_printf("Write error, tried to send %i bytes, but only managed to send %i bytes.\n",chunk,result),TRUE);
+		}
 		elapsed = now.tv_usec - last.tv_usec;
 		if (elapsed < 0)
 			elapsed += 1000000;
@@ -277,4 +287,54 @@ void reboot_ecu(gint fd)
 	return ;
 }
 
+
+gint write_wrapper(gint fd, gchar *buf, gint total)
+{
+	fd_set writefds;
+	struct timeval t;
+	gint attempts = 0;
+	gint write_pos = 0;
+	gint to_send = total;
+	gint received = 0;
+	gint res = 0;
+	gint sent = 0;
+	gint count = 0;
+
+	while (to_send > 0)
+	{
+		FD_ZERO(&writefds);
+		t.tv_sec = 0;
+		t.tv_usec = 200000;
+		FD_SET(fd,&writefds);
+		res = select (fd+1, NULL,&writefds,NULL, &t);
+		if (res == -1)
+		{
+			output("ERROR, select() failure!\n",FALSE);
+			return -1;
+		}
+		if (res == 0) /* Timeout */
+		{
+			/*printf("timeout!\n");*/
+			attempts++;
+			if (attempts > POLL_ATTEMPTS)
+				return total;
+		}
+		/* OK we can now write, write it */
+		if (FD_ISSET(fd,&writefds))
+		{
+			/*printf("data avail!\n");*/
+			write_pos = total - to_send;
+			count = write(fd, &buf[write_pos], to_send);
+			if (count == -1)
+			{
+				output("Serial I/O Error, write failure\n",FALSE);
+				return -1;
+			}
+			sent += count;
+			/*printf("got %i bytes\n",received);*/
+			to_send -= count;
+		}
+	}
+	return sent;
+}
 
