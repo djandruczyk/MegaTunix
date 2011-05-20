@@ -172,7 +172,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			gtk_main_iteration();
 		}
 	}
-	g_thread_create(preload_deps,tabinfos,TRUE,NULL);
+	g_timeout_add(500,(GSourceFunc)preload_deps,tabinfos);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
@@ -870,7 +870,7 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 }
 
 
-void * preload_deps(gpointer data)
+gboolean preload_deps(gpointer data)
 {
 	Firmware_Details *firmware = NULL;
 	GPtrArray *array = (GPtrArray *)data;
@@ -882,10 +882,7 @@ void * preload_deps(gpointer data)
 	gint j = 0;	
 
 	firmware = DATA_GET(global_data,"firmware");
-	g_return_val_if_fail(firmware,NULL);
-#ifdef __WIN32__
-	return NULL;
-#endif
+	g_return_val_if_fail(firmware,FALSE);
 
 	for (i=0;i<array->len;i++)
 	{
@@ -907,7 +904,7 @@ void * preload_deps(gpointer data)
 	}
 	g_ptr_array_free(array,TRUE);
 	io_cmd(firmware->get_all_command,NULL);
-	return NULL;
+	return FALSE; /* Make it not run again... */
 }
 
 

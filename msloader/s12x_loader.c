@@ -16,8 +16,15 @@
 #include <s12x_loader.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
 #include <unistd.h>
+#ifdef __WIN32__
+#include <winsock2.h>
+#else
+#include <poll.h>
+#include <arpa/inet.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#endif
 
 #define C_WAKE_UP        0x0D
 #define C_READ_BYTE      0xA1
@@ -250,10 +257,6 @@ gboolean wakeup_S12(gint port_fd)
 
 	c = C_WAKE_UP;
 
-//#ifndef __WIN32__
-//	fcntl(port_fd, F_SETFL, O_NDELAY);
-//#endif
-
 	for (i = 0; i < 6; i++) {
 		prompt = 0;
 		output("Attempting Wakeup...\n",FALSE);
@@ -273,10 +276,6 @@ gboolean wakeup_S12(gint port_fd)
 		else 
 			break;
 	}
-
-//#ifndef __WIN32__
-//	fcntl(port_fd, F_SETFL, 0);
-//#endif
 
 	if (i > 5) {
 		output("Could not wake up processor, try jumpering\nthe boot jumper and power cycling the ECU...\n",FALSE);

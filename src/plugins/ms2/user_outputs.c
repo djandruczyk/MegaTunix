@@ -59,7 +59,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	if (!rtv_map)
 		return;
 	/* Create the store for the combo, with severla hidden values
-	*/
+	 */
 	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_POINTER,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR);
 	/* Iterate across valid variables */
 	string = g_string_sized_new(32);
@@ -176,7 +176,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 }
 
 
-void update_ms2_user_outputs(GtkWidget *widget)
+G_MODULE_EXPORT void update_ms2_user_outputs(GtkWidget *widget)
 {
 	GtkTreeModel *model = NULL;
 	DataSize size = MTX_U08;
@@ -200,7 +200,7 @@ void update_ms2_user_outputs(GtkWidget *widget)
 	void *eval = NULL;
 	GtkWidget *tmpwidget = NULL;
 
-        get_essential_bits_f(widget, NULL, NULL, NULL, NULL, &bitmask, &bitshift);
+	get_essential_bits_f(widget, NULL, NULL, NULL, NULL, &bitmask, &bitshift);
 
 	value = convert_after_upload_f(widget);
 	tmpi = ((GINT)value & bitmask) >> bitshift;

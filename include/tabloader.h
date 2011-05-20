@@ -75,7 +75,7 @@ void run_post_functions_with_arg(const gchar *, GtkWidget *);
 void run_post_functions(const gchar * );
 void remove_from_lists(gchar *, gpointer);
 gboolean load_actual_tab(GtkNotebook *,gint);
-void *preload_deps(gpointer);
+gboolean preload_deps(gpointer);
 
 /* Prototypes */
 
