@@ -96,8 +96,8 @@ void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gin
 	timeouts.ReadIntervalTimeout         = 0;
 	timeouts.ReadTotalTimeoutConstant    = 100;
 	timeouts.ReadTotalTimeoutMultiplier  = 1;
-	timeouts.WriteTotalTimeoutConstant   = 0;
-	timeouts.WriteTotalTimeoutMultiplier = 0;
+	timeouts.WriteTotalTimeoutConstant   = 100;
+	timeouts.WriteTotalTimeoutMultiplier = 1;
 
 	SetCommTimeouts((HANDLE) _get_osfhandle (fd) ,&timeouts);
 
