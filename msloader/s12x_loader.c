@@ -424,6 +424,9 @@ gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 			if (res != 1)
 				output(g_strdup_printf("sendPPAGE():(erasing) SHORT WRITE %i of 1",res),TRUE);
 			output(g_strdup_printf("Page 0x%02x erased...\n",page),TRUE);
+#ifdef __WIN32__
+	g_usleep(750000);
+#endif
 			if(!check_status(port_fd))
 				return FALSE;
 		}
@@ -517,6 +520,9 @@ gboolean erase_S12(gint port_fd)
 	res = write_wrapper(port_fd, &c, 1);
 	if (res != 1)
 		output(g_strdup_printf("erase_S12(): SHORT WRITE %i of 1",res),TRUE);
+#ifdef __WIN32__
+	g_usleep(2500000);
+#endif
 	if(!check_status(port_fd))
 		return FALSE;
 	output( "Main Flash Erased...\n",FALSE);

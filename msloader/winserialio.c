@@ -83,7 +83,6 @@ void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gin
 	/* Set timeout params in a fashion that mimics linux behavior */
 
 	GetCommTimeouts((HANDLE) _get_osfhandle (fd), &timeouts);
-	timeouts.ReadIntervalTimeout         = 0;
 	/*
 	   if (baud == 112500)
 	   timeouts.ReadTotalTimeoutConstant    = 250;
@@ -93,8 +92,10 @@ void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gin
 	   timeouts.WriteTotalTimeoutMultiplier = 1;
 	   timeouts.WriteTotalTimeoutConstant   = 25;
 	 */
+
+	timeouts.ReadIntervalTimeout         = 0;
 	timeouts.ReadTotalTimeoutConstant    = 100;
-	timeouts.ReadTotalTimeoutMultiplier  = 0;
+	timeouts.ReadTotalTimeoutMultiplier  = 1;
 	timeouts.WriteTotalTimeoutConstant   = 0;
 	timeouts.WriteTotalTimeoutMultiplier = 0;
 

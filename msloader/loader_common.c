@@ -360,6 +360,45 @@ gboolean lock_port(gchar * name)
 
 gint read_wrapper(gint fd, guchar *buf, gint requested)
 {
+#ifdef __WIN32__
+	/* Windows can't do select() on anything but network sockets which
+	   is completely braindead, and thus yoou must do overlapped IO
+	   or uglier busylooped IO.  I'm lazy and hate windows and the 
+	   overlapped IO stuff is ugly as hell, so I used the busylooped method
+	   */
+	gint received = 0;
+        gint read_pos = 0;
+	gboolean timeout = FALSE;
+	gint tries = 0;
+	gint wanted = requested;
+	gint total = 0;
+
+	while (!timeout)
+	{
+		tries++;
+		read_pos = requested - wanted;
+		received = read(fd, &buf[read_pos], wanted);
+		printf("Try %i, requested %i, got %i\n",tries,wanted,received);
+		g_usleep(10000); /* 10ms rest */
+		if (received == -1)
+		{
+			output("Serial I/O Error, read failure\n",FALSE);
+			return -1;
+		}
+		total += received;
+		wanted -= received;
+		if (tries > requested)
+			timeout = TRUE;
+		if (total == requested)
+		{
+			printf("got what was requested, returning\n");
+			return total;
+		}
+	}
+	printf("timeout, returning only %i of %i bytes\n",total,requested);
+	return total;
+	   
+#else	/* Linux/OS-X where sane IO lives */
 	fd_set readfds;
 	struct timeval t;
 	gint attempts = 0;
@@ -405,11 +444,15 @@ gint read_wrapper(gint fd, guchar *buf, gint requested)
 		}
 	}
 	return total;
+#endif
 }
 
 
 gint write_wrapper(gint fd, guchar *buf, gint total)
 {
+#ifdef __WIN32__
+	return write(fd,buf,total);
+#else	/* Linux/OS-X where sane IO lives */
 	fd_set writefds;
 	struct timeval t;
 	gint attempts = 0;
@@ -456,5 +499,6 @@ gint write_wrapper(gint fd, guchar *buf, gint total)
 		}
 	}
 	return sent;
+#endif
 }
 
