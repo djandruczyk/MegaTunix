@@ -133,6 +133,12 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				OBJ_SET_FULL(label,"bind_to_list",g_strdup(tmpbuf),g_free);
 				bind_to_lists(label,tmpbuf);
 				g_free(tmpbuf);
+				if (cfg_read_string(cfgfile,"global","match_type",&tmpbuf))
+				{
+					tmpi = translate_string(tmpbuf);
+					g_free(tmpbuf);
+					OBJ_SET(label,"match_type",GINT_TO_POINTER(tmpi));
+				}
 			}
 			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 			container = gtk_vbox_new(1,0);

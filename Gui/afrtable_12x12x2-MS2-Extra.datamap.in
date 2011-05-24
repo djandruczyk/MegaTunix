@@ -4,6 +4,8 @@ _tab_name=_AFR Tables
 id_prefix=AFR_
 groups=defaults,load_1,rpm_1,afr_1,load_2,rpm_2,afr_2
 post_functions=enable_3d_buttons_pf
+bind_to_list=incorp_afrtarget,ego_ctrl
+match_type=_OR_
 
 #----- Groups ----------------------------------------------------------------
 
@@ -68,9 +70,11 @@ _tooltip=The AFR Entries control how much fuel is injected into the engine. They
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,sub-notebook
+keys=tab_ident,sub-notebook,bind_to_list,match_type
 tab_ident=_AFRTABLES_TAB_
 sub-notebook=AFR_afrtable_notebook
+bind_to_list=incorp_afrtarget,ego_ctrl
+match_type=_OR_
 
 [AFR2_notebook_tab_label]
 keys=bind_to_list
