@@ -624,7 +624,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	if (cfg_read_boolean(cfgfile,section,"ellipsize",&tmpi))
 	{
-		if (tmpi)
+		if ((GTK_IS_LABEL(widget)) && (tmpi))
 			gtk_label_set_ellipsize(GTK_LABEL(widget),PANGO_ELLIPSIZE_END);
 	}
 
@@ -727,7 +727,6 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		/*printf("indexed widget %s\n",widget->name); */
 		if (cfg_read_string(cfgfile, section, "size", &size))
 		{
-
 			offset += index * get_multiplier (translate_string (size));
 			g_free(size);
 		}
@@ -787,7 +786,6 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 * rest of it's setting from the groupname listed.  This reduces
 	 * redundant keys all throughout the file...
 	 */
-
 	bind_keys(G_OBJECT(widget), cfgfile, section, keys, num_keys);
 	g_strfreev(keys);
 
@@ -798,7 +796,6 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		combo_setup(G_OBJECT(widget),cfgfile,section);
 		g_free(tmpbuf);
 	}
-
 
 	if (cfg_read_string(cfgfile,section,"post_functions_with_arg",&tmpbuf))
 	{
@@ -918,6 +915,8 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 {
 	gchar *groups = NULL;
 	gchar *bitvals = NULL;
+	gchar *source_key = NULL;
+	gchar *source_values = NULL;
 	gint bitval = 0;
 	gint bitmask = 0;
 	gint offset = 0;
@@ -944,6 +943,63 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	for (i=0;i<info->n_children;i++)
 	{
 		descend_tree(info->children[i].child,cfgfile);
+	}
+	if (cfg_read_string(cfgfile,info->name,"source_values",&source_values))
+	{
+		if (!cfg_read_string(cfgfile,info->name,"source_key",&source_key))
+		{
+			printf("%s needs source_key\n",info->name);
+			return TRUE;
+		}
+		if (!cfg_read_int(cfgfile,info->name,"offset",&offset))
+		{
+			printf("%s needs offset\n",info->name);
+			return TRUE;
+		}
+		if (!cfg_read_int(cfgfile,info->name,"bitmask",&bitmask))
+		{
+			printf("%s needs bitmask\n",info->name);
+			return TRUE;
+		}
+		if (!cfg_read_string(cfgfile,info->name,"bitvals",&bitvals))
+		{
+			if (!cfg_read_int(cfgfile,info->name,"bitval",&bitval))
+			{
+				printf("%s needs bitvals or bitval\n",info->name);
+				return TRUE;
+			}
+		}
+		if (!cfg_read_int(cfgfile,info->name,"page",&page))
+		{
+			if (!cfg_read_int(cfgfile,"defaults","page",&page))
+			{
+				printf("%s has no page defined!\n",info->name);
+				return TRUE;
+			}
+		}
+		gdk_threads_enter();
+		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		g_object_ref_sink(object);
+		gdk_threads_leave();
+		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
+		OBJ_SET(object,"page",GINT_TO_POINTER(page));
+		OBJ_SET(object,"offset",GINT_TO_POINTER(offset));
+		OBJ_SET(object,"size",GINT_TO_POINTER(size));
+		OBJ_SET(object,"bitmask",GINT_TO_POINTER(bitmask));
+		if (bitvals)
+			OBJ_SET(object,"bitvals",g_strdup(bitvals));
+		else
+			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
+		OBJ_SET_FULL(object,"source_key",g_strdup(source_key),cleanup);
+		OBJ_SET_FULL(object,"source_values",g_strdup(source_values),cleanup);
+		list = DATA_GET(global_data,"source_list");
+		list = g_list_prepend(list,object);
+		DATA_SET(global_data,"source_list",(gpointer)list);
+		cleanup(groups);
+		cleanup(bitvals);
+		cleanup(source_key);
+		cleanup(source_values);
+
 	}
 	if (cfg_read_string(cfgfile,info->name,"toggle_groups",&groups))
 	{
@@ -996,12 +1052,14 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			OBJ_SET(object,"bitvals",g_strdup(bitvals));
 		else
 			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
-		OBJ_SET(object,"toggle_groups",g_strdup(groups));
+		OBJ_SET_FULL(object,"toggle_groups",g_strdup(groups),cleanup);
 		list = DATA_GET(global_data,"dep_list");
 		list = g_list_prepend(list,object);
 		DATA_SET(global_data,"dep_list",(gpointer)list);
 		cleanup(groups);
 		cleanup(bitvals);
+		cleanup(source_key);
+		cleanup(source_values);
 	}
 	return TRUE;
 }

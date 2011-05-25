@@ -2140,6 +2140,16 @@ G_MODULE_EXPORT void update_interdependancies_pf()
 }
 
 
+G_MODULE_EXPORT void update_sources_pf()
+{
+	GList *list = NULL;
+	list = DATA_GET(global_data,"source_list");
+	if (!list)
+		return;
+	g_list_foreach(list,process_source,NULL);
+}
+
+
 void process_interdependancy(gpointer data, gpointer nothing)
 {
 	GObject *object = (GObject *)data;
@@ -2180,4 +2190,44 @@ void process_interdependancy(gpointer data, gpointer nothing)
 		}
 		g_strfreev(vector);
 	}
+}
+
+
+void process_source(gpointer data, gpointer nothing)
+{
+	static GHashTable *sources_hash = NULL;
+	GObject *object = (GObject *)data;
+	gint i = 0;
+	gint bitval = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
+	gint value = 0;
+	gchar * bitvals = NULL;
+	gchar * source_values = NULL;
+	gchar **vector = NULL;
+	gchar **vector2 = NULL;
+
+	if (!sources_hash)
+		sources_hash = DATA_GET(global_data,"sources_hash");
+	g_return_if_fail(sources_hash);
+
+	bitmask = (GINT)OBJ_GET(object,"bitmask");
+	source_values = OBJ_GET(object,"source_values");
+
+	bitshift = get_bitshift(bitmask);
+	value = (GINT)convert_after_upload((GtkWidget *)object);
+	bitvals = OBJ_GET(object,"bitvals");
+	vector = g_strsplit(bitvals,",",-1);
+	vector2 = g_strsplit(source_values,",",-1);
+	for (i=0;i<g_strv_length(vector);i++)
+	{
+		bitval = strtol(vector[i],NULL,10);
+		/*printf("bitval str %s, bitval %i, rawvalue %i, bitmask %i, bitshift %i\n",vector[i],bitval,value,bitmask,bitshift);*/
+		if (((value & bitmask) >> bitshift) == bitval)
+		{
+			g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(object,"source_key")),g_strdup(vector2[i]));
+			break;
+		}
+	}
+	g_strfreev(vector);
 }

@@ -68,7 +68,9 @@ void combo_set_labels(GtkWidget *, GtkTreeModel *);
 gint get_choice_count(GtkTreeModel *);
 void recalc_table_limits(gint, gint);
 void update_interdependancies_pf(void);
+void update_sources_pf(void);
 void process_interdependancy(gpointer, gpointer);
+void process_source(gpointer, gpointer);
 
 
 

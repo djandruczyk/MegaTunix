@@ -711,6 +711,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GList ***ecu_widgets = NULL;
 	GList **tab_gauges = NULL;
 	GList *dep_list = NULL;
+	GList *source_list = NULL;
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
 	GMutex *dash_mutex = NULL;
@@ -726,6 +727,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
 	dash_mutex = DATA_GET(global_data,"dash_mutex");
 	dep_list = DATA_GET(global_data,"dep_list");
+	source_list = DATA_GET(global_data,"source_list");
 
 	g_mutex_lock(serio_mutex);
 	cleanup(serial_params->port_name);
@@ -734,164 +736,171 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 	/* Firmware datastructure.... */
 	if (dep_list)
-		g_list_foreach(dep_list,(GFunc)g_object_unref,NULL);
-	g_list_free(dep_list);
-
-	if (firmware)
 	{
-		if (ecu_widgets)
+		g_list_foreach(dep_list,(GFunc)g_object_unref,NULL);
+		g_list_free(dep_list);
+	}
+	if (source_list)
+	{
+		g_list_foreach(source_list,(GFunc)g_object_unref,NULL);
+		g_list_free(source_list);
+	}
+
+		if (firmware)
 		{
-			for (i=0;i<firmware->total_pages;i++)
+			if (ecu_widgets)
 			{
-				if (ecu_widgets[i])
+				for (i=0;i<firmware->total_pages;i++)
 				{
-					for (j=0;j<firmware->page_params[i]->length;j++)
+					if (ecu_widgets[i])
 					{
-						if (g_list_length(ecu_widgets[i][j]) > 0)
+						for (j=0;j<firmware->page_params[i]->length;j++)
 						{
-							if (args->verbose)
-								printf("Deallocating widgets in array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
+							if (g_list_length(ecu_widgets[i][j]) > 0)
+							{
+								if (args->verbose)
+									printf("Deallocating widgets in array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
 #ifdef DEBUG
-							tmpbuf = g_strdup_printf("[%i][%i]",i,j);
-							g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
-							g_free(tmpbuf);
+								tmpbuf = g_strdup_printf("[%i][%i]",i,j);
+								g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
+								g_free(tmpbuf);
 #endif
-							g_list_free(ecu_widgets[i][j]);
+								g_list_free(ecu_widgets[i][j]);
+							}
 						}
 					}
+					cleanup(ecu_widgets[i]);
 				}
-				cleanup(ecu_widgets[i]);
+				cleanup(ecu_widgets);
+				DATA_SET(global_data,"ecu_widgets",NULL);
 			}
-			cleanup(ecu_widgets);
-			DATA_SET(global_data,"ecu_widgets",NULL);
-		}
 
-		if (tab_gauges)
-		{
+			if (tab_gauges)
+			{
+				for (i=0;i<firmware->total_tables;i++)
+				{
+					if (tab_gauges[i])
+					{
+						g_list_foreach(tab_gauges[i],dealloc_gauge,NULL);
+						g_list_free(tab_gauges[i]);
+					}
+				}
+				cleanup(tab_gauges);
+				DATA_SET(global_data,"tab_gauges",NULL);
+			}
+			cleanup (firmware->name);
+			cleanup (firmware->profile_filename);
+			cleanup (firmware->actual_signature);
+			cleanup (firmware->text_revision);
+			g_strfreev (firmware->tab_list);
+			g_strfreev (firmware->tab_confs);
+			cleanup (firmware->rtv_map_file);
+			cleanup (firmware->sliders_map_file);
+			cleanup (firmware->rtt_map_file);
+			cleanup (firmware->status_map_file);
+			cleanup (firmware->rt_command);
+			cleanup (firmware->get_all_command);
+			cleanup (firmware->read_command);
+			cleanup (firmware->write_command);
+			cleanup (firmware->table_write_command);
+			cleanup (firmware->chunk_write_command);
+			cleanup (firmware->burn_all_command);
+			cleanup (firmware->burn_command);
+			cleanup (firmware->raw_mem_command);
+			cleanup (firmware->page_command);
+			cleanup (firmware->SignatureVia);
+			cleanup (firmware->TextVerVia);
+			cleanup (firmware->NumVerVia);
+
+			for (i=0;i<firmware->total_pages;i++)
+			{
+				cleanup(firmware->ecu_data[i]);
+				cleanup(firmware->ecu_data_last[i]);
+				cleanup(firmware->ecu_data_backup[i]);
+				cleanup(firmware->page_params[i]);
+			}
+			cleanup(firmware->ecu_data);
+			cleanup(firmware->ecu_data_last);
+			cleanup(firmware->ecu_data_backup);
+			cleanup(firmware->page_params);
+
+			for (i=0;i<firmware->total_te_tables;i++)
+			{
+				if (firmware->te_params[i])
+					dealloc_te_params(firmware->te_params[i]);
+			}
+			cleanup(firmware->te_params);
+			interdep_vars = DATA_GET(global_data,"interdep_vars");
+
 			for (i=0;i<firmware->total_tables;i++)
 			{
-				if (tab_gauges[i])
+				if (firmware->table_params[i])
+					dealloc_table_params(firmware->table_params[i]);
+				if (firmware->rf_params)
+					cleanup (firmware->rf_params[i]);
+				if (interdep_vars[i])
 				{
-					g_list_foreach(tab_gauges[i],dealloc_gauge,NULL);
-					g_list_free(tab_gauges[i]);
+					g_hash_table_destroy(interdep_vars[i]);
+					interdep_vars[i] = NULL;
 				}
 			}
-			cleanup(tab_gauges);
-			DATA_SET(global_data,"tab_gauges",NULL);
+			cleanup(firmware->table_params);
+			cleanup(interdep_vars);
+			DATA_SET(global_data,"interdep_vars",NULL);
+			cleanup(firmware->rf_params);
+			cleanup(firmware->rt_data);
+			cleanup(firmware->rt_data_last);
+			cleanup(firmware);
+			DATA_SET(global_data,"firmware",NULL);
 		}
-		cleanup (firmware->name);
-		cleanup (firmware->profile_filename);
-		cleanup (firmware->actual_signature);
-		cleanup (firmware->text_revision);
-		g_strfreev (firmware->tab_list);
-		g_strfreev (firmware->tab_confs);
-		cleanup (firmware->rtv_map_file);
-		cleanup (firmware->sliders_map_file);
-		cleanup (firmware->rtt_map_file);
-		cleanup (firmware->status_map_file);
-		cleanup (firmware->rt_command);
-		cleanup (firmware->get_all_command);
-		cleanup (firmware->read_command);
-		cleanup (firmware->write_command);
-		cleanup (firmware->table_write_command);
-		cleanup (firmware->chunk_write_command);
-		cleanup (firmware->burn_all_command);
-		cleanup (firmware->burn_command);
-		cleanup (firmware->raw_mem_command);
-		cleanup (firmware->page_command);
-		cleanup (firmware->SignatureVia);
-		cleanup (firmware->TextVerVia);
-		cleanup (firmware->NumVerVia);
-
-		for (i=0;i<firmware->total_pages;i++)
+		if (rtv_map)
 		{
-			cleanup(firmware->ecu_data[i]);
-			cleanup(firmware->ecu_data_last[i]);
-			cleanup(firmware->ecu_data_backup[i]);
-			cleanup(firmware->page_params[i]);
-		}
-		cleanup(firmware->ecu_data);
-		cleanup(firmware->ecu_data_last);
-		cleanup(firmware->ecu_data_backup);
-		cleanup(firmware->page_params);
-
-		for (i=0;i<firmware->total_te_tables;i++)
-		{
-			if (firmware->te_params[i])
-				dealloc_te_params(firmware->te_params[i]);
-		}
-		cleanup(firmware->te_params);
-		interdep_vars = DATA_GET(global_data,"interdep_vars");
-
-		for (i=0;i<firmware->total_tables;i++)
-		{
-			if (firmware->table_params[i])
-				dealloc_table_params(firmware->table_params[i]);
-			if (firmware->rf_params)
-				cleanup (firmware->rf_params[i]);
-			if (interdep_vars[i])
+			if (rtv_map->raw_list)
+				g_strfreev(rtv_map->raw_list);
+			cleanup (rtv_map->applicable_revisions);
+			for(i=0;i<rtv_map->rtv_list->len;i++)
 			{
-				g_hash_table_destroy(interdep_vars[i]);
-				interdep_vars[i] = NULL;
+				data = g_ptr_array_index(rtv_map->rtv_list,i);
+				dealloc_rtv_object(data);
 			}
+			g_array_free(rtv_map->ts_array,TRUE);
+			g_ptr_array_free(rtv_map->rtv_list,TRUE);
+			g_hash_table_destroy(rtv_map->rtv_hash);
+			g_hash_table_foreach(rtv_map->offset_hash,dealloc_list,NULL);
+			g_hash_table_destroy(rtv_map->offset_hash);
+			cleanup(rtv_map);
+			DATA_SET(global_data,"rtv_map",NULL);
 		}
-		cleanup(firmware->table_params);
-		cleanup(interdep_vars);
-		DATA_SET(global_data,"interdep_vars",NULL);
-		cleanup(firmware->rf_params);
-		cleanup(firmware->rt_data);
-		cleanup(firmware->rt_data_last);
-		cleanup(firmware);
-		DATA_SET(global_data,"firmware",NULL);
-	}
-	if (rtv_map)
-	{
-		if (rtv_map->raw_list)
-			g_strfreev(rtv_map->raw_list);
-		cleanup (rtv_map->applicable_revisions);
-		for(i=0;i<rtv_map->rtv_list->len;i++)
+		/* Runtime Text*/
+		g_mutex_lock(rtt_mutex);
+		store = DATA_GET(global_data,"rtt_model");
+		if (store)
 		{
-			data = g_ptr_array_index(rtv_map->rtv_list,i);
-			dealloc_rtv_object(data);
+			gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
+			gtk_list_store_clear(GTK_LIST_STORE(store));
+			DATA_SET(global_data,"rtt_model",NULL);
 		}
-		g_array_free(rtv_map->ts_array,TRUE);
-		g_ptr_array_free(rtv_map->rtv_list,TRUE);
-		g_hash_table_destroy(rtv_map->rtv_hash);
-		g_hash_table_foreach(rtv_map->offset_hash,dealloc_list,NULL);
-		g_hash_table_destroy(rtv_map->offset_hash);
-		cleanup(rtv_map);
-		DATA_SET(global_data,"rtv_map",NULL);
+		g_mutex_unlock(rtt_mutex);
+		g_mutex_free(rtt_mutex);
+		g_mutex_free(dash_mutex);
+
+		/* Logviewer settings */
+		defaults = get_list("logviewer_defaults");
+		if (defaults)
+			g_list_foreach(defaults,(GFunc)cleanup,NULL);
+
+		DATA_SET(global_data,"offline",NULL);
+		DATA_SET(global_data,"interrogated",NULL);
+		/* Free all global data and structures */
+		g_dataset_foreach(global_data,dataset_dealloc,NULL);
+		g_dataset_destroy(global_data);
+		cleanup(global_data);
+		/* Dynamic widgets master hash  */
+
+		dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
+		if (dynamic_widgets)
+			g_hash_table_destroy(dynamic_widgets);
 	}
-	/* Runtime Text*/
-	g_mutex_lock(rtt_mutex);
-	store = DATA_GET(global_data,"rtt_model");
-	if (store)
-	{
-		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
-		gtk_list_store_clear(GTK_LIST_STORE(store));
-		DATA_SET(global_data,"rtt_model",NULL);
-	}
-	g_mutex_unlock(rtt_mutex);
-	g_mutex_free(rtt_mutex);
-	g_mutex_free(dash_mutex);
-
-	/* Logviewer settings */
-	defaults = get_list("logviewer_defaults");
-	if (defaults)
-		g_list_foreach(defaults,(GFunc)cleanup,NULL);
-
-	DATA_SET(global_data,"offline",NULL);
-	DATA_SET(global_data,"interrogated",NULL);
-	/* Free all global data and structures */
-	g_dataset_foreach(global_data,dataset_dealloc,NULL);
-	g_dataset_destroy(global_data);
-	cleanup(global_data);
-	/* Dynamic widgets master hash  */
-
-	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
-	if (dynamic_widgets)
-		g_hash_table_destroy(dynamic_widgets);
-}
 
 
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)

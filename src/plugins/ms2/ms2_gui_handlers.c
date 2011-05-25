@@ -13,11 +13,11 @@
 
 #include <combo_loader.h>
 #include <debugging.h>
+#include <firmware.h>
 #include <glade/glade.h>
 #include <ms2_gui_handlers.h>
 #include <ms2_plugin.h>
 #include <ms2_tlogger.h>
-#include <firmware.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <user_outputs.h>
@@ -159,12 +159,8 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	Deferred_Data *d_data = NULL;
 	GtkWidget *tmpwidget = NULL;
 	void *eval = NULL;
-	GHashTable **interdep_vars = NULL;
-	GHashTable *sources_hash = NULL;
-	Firmware_Details *firmware = NULL;
 	void (*check_limits)(gint) = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
 	handler = (GINT)OBJ_GET(widget,"handler");
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	page = (GINT)OBJ_GET(widget,"page");

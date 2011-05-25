@@ -207,37 +207,6 @@ source_values=MPX4250,MPX6300,MPX6400
 handler=_MULTI_EXPRESSION_
 _tooltip=Sets the Type of MAP Sensor in use.
 
-[250kpa_rbutton]
-keys=offset,bitval,bitmask,handler,source_key,source_value,group_2_update
-offset=182
-bitval=1
-bitmask=3
-handler=_MULTI_EXPRESSION_
-group_2_update=multi_expression
-source_key=map_sensor
-source_value=MPX4250
-
-[300kpa_rbutton]
-keys=offset,bitval,bitmask,handler,source_key,source_value,group_2_update
-offset=182
-bitval=2
-bitmask=3
-handler=_MULTI_EXPRESSION_
-group_2_update=multi_expression
-source_key=map_sensor
-source_value=MPX6300
-
-[400kpa_rbutton]
-keys=offset,bitval,bitmask,handler,source_key,source_value,group_2_update
-offset=182
-bitval=3
-bitmask=3
-handler=_MULTI_EXPRESSION_
-group_2_update=multi_expression
-source_key=map_sensor
-source_value=MPX6400
-
-
 #----- SpinButtons -----------------------------------------------------------
 
 [req_fuel_per_cycle_0_spin]

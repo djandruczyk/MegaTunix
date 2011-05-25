@@ -1384,6 +1384,7 @@ void update_entry(GtkWidget *widget)
 
 void update_combo(GtkWidget *widget)
 {
+	static Firmware_Details *firmware = NULL;
 	static void (*update_ms2_user_outputs)(GtkWidget *) = NULL;
 	gint tmpi = -1;
 	gint canID = 0;
@@ -1402,15 +1403,25 @@ void update_combo(GtkWidget *widget)
 	GdkColor red = {0,65535,0,0};
 	GdkColor white = {0,65535,65535,65535};
 
-	if (!update_ms2_user_outputs)
-		get_symbol_f("update_ms2_user_outputs",(void *)&update_ms2_user_outputs);
-	g_return_if_fail(update_ms2_user_outputs);
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(firmware);
+
+	if (firmware->capabilities & MS2)
+	{
+		if (!update_ms2_user_outputs)
+			get_symbol_f("update_ms2_user_outputs",(void *)&update_ms2_user_outputs);
+		g_return_if_fail(update_ms2_user_outputs);
+	}
 
 	get_essential_bits(widget,&canID, &page, &offset, &bitval, &bitmask, &bitshift);
 	/*printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(GINT)value);*/
 
-	if ((GINT)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
-		update_ms2_user_outputs(widget);
+	if (firmware->capabilities & MS2)
+	{
+		if ((GINT)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
+			update_ms2_user_outputs(widget);
+	}
 
 	value = convert_after_upload_f(widget);
 	tmpi = ((GINT)value & bitmask) >> bitshift;

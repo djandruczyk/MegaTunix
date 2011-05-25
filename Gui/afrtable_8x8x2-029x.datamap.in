@@ -4,6 +4,8 @@ _tab_name=_AFR Tables
 id_prefix=AFR_
 groups=defaults,load_1,load_2,rpm,afrtable1,afrtable2
 post_functions=enable_3d_buttons_pf
+bind_to_list=afr1,afr2
+match_type=_OR_
 
 #----- Groups ----------------------------------------------------------------
 

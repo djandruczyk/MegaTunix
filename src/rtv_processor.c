@@ -536,7 +536,7 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 	multi = (MultiExpr *)g_hash_table_lookup(hash,hash_key);
 	if (!multi)
 	{
-		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_multi_expression()\n\t data struct NOT found for key \"%s\"\n",hash_key));
+		dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": handle_multi_expression()\n\t multi-expression data structure NOT found for key \"%s\"\n",hash_key));
 		return 0.0;
 	}
 
