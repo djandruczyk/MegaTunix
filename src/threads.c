@@ -110,6 +110,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	GCond * io_dispatch_cond = NULL;
 	GMutex * io_dispatch_mutex = NULL;
 	CmdLineArgs *args  = NULL;
+	Firmware_Details *firmware = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
 	/*	GTimer *clock;*/
@@ -121,7 +122,10 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
 	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	serial_params = DATA_GET(global_data,"serial_params");
-	get_symbol("network_repair_thread",(void*)&network_repair_thread);
+	firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,NULL);
+	if ((firmware->capabilities & MS1) || (firmware->capabilities & MS2))
+		get_symbol("network_repair_thread",(void*)&network_repair_thread);
 	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
 	args = DATA_GET(global_data,"args");
 
