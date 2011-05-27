@@ -73,13 +73,13 @@
 #define S_COLD_RESET     0x08
 #define S_WARM_RESET     0x0C
 
-#define LONG_DELAY 500000  /* 500 ms */
+#define FUDGE 8000 /* Rough fudge factor for S12x loader */
 
-guint total_bytes = 0;
-
-char **fileBuf;
-guint count = 0;
-int debug = 0;
+static guint total_bytes = 0;
+static char **fileBuf = NULL;
+static guint count = 0;
+static int debug = 0;
+static gint s19_length = 0;
 /* debug levels
 0 = Quiet
 1 = Some progress
@@ -93,6 +93,8 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 {
 	total_bytes = 0;
 	flush_serial(port_fd, BOTH);
+	s19_length = lseek(file_fd,0,SEEK_END);
+	lseek(file_fd,0,SEEK_SET);
 	count = read_s19(file_fd);
 	if (count == 0)
 		return FALSE;
@@ -118,8 +120,7 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	free_s19(count);
 	reset_proc(port_fd);
 	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
-	output("Remove boot jumper/reset or load/run switch and power cycle ECU\n",FALSE);
-	output("All Done!\n",FALSE);
+	output("ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
 	return TRUE;
 }
 
@@ -544,6 +545,7 @@ gboolean send_S12(gint port_fd, guint count)
 	guint addrSize = 0;
 	guint nBlocks = 0;
 
+	output(g_strdup_printf("Uploading ECU firmware, eta %i seconds...\n",s19_length/FUDGE),TRUE);
 	for (i = 0; i < count; i++) {
 		switch (fileBuf[i][1]) {
 			case '0':

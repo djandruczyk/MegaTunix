@@ -247,6 +247,7 @@ void upload_firmware(gint fd, gint file_fd)
 	end = lseek(file_fd,0,SEEK_END);
 	lseek(file_fd,0,SEEK_SET);
 	res = read(file_fd,buf,chunk);
+	output(g_strdup_printf("Uploading ECU firmware, eta %i seconds...\n",end/960),TRUE);
 	while (res > 0)
 	{
 		last = now;

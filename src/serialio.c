@@ -334,8 +334,11 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	serial_params->newtio.c_cc[VKILL]    = 0;     /* @ */
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
+	/* Fredcooke say vmin = 1 solves his hang on close issue with
+	   his broken FTDI driver,  but that will break interrogation unles I
+	   completely transition to nonblocking IO */
+	serial_params->newtio.c_cc[VMIN]     = 0;     
 	serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
-	serial_params->newtio.c_cc[VMIN]     = 1;     
 
 #ifdef __PIS_SUPPORT__
 	if (ioctl(serial_params->fd, TIOCGSERIAL, &serial_params->oldctl) != 0)

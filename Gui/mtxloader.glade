@@ -36,17 +36,6 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="get_signature_menuitem">
-                        <property name="label" translatable="yes">Get _Signature</property>
-                        <property name="visible">True</property>
-                        <property name="use_underline">True</property>
-                        <property name="image">image2</property>
-                        <property name="use_stock">False</property>
-                        <property name="always_show_image">True</property>
-                        <signal name="activate" handler="get_signature"/>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkSeparatorMenuItem" id="menuitem2">
                         <property name="visible">True</property>
                       </object>
@@ -336,9 +325,5 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="stock">gtk-open</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="stock">gtk-connect</property>
   </object>
 </interface>

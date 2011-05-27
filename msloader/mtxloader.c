@@ -98,45 +98,6 @@ void output (gchar *line, gboolean free_it)
 }
 
 
-
-/* Perform a ping operation when the Ping button is clicked. */
-G_MODULE_EXPORT gboolean get_signature (GtkButton *button)
-{
-	GtkWidget *widget =  NULL;
-	gchar * port = NULL;
-	gint port_fd = 0;
-
-	widget = GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"), "port_entry"));
-	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-	if (g_utf8_strlen(port, -1) == 0)
-		return FALSE;
-	/* If we got this far, all is good argument wise */
-	
-	port_fd = open_port(port);
-	if (!(port_fd  > 0))
-	{
-		output("Could NOT open Port, You should check perms.\n",FALSE);
-		return FALSE;
-	}
-	if ((GINT)DATA_GET(global_data,"persona") == MS1)
-	{
-		setup_port(port_fd,9600);
-		if (!get_ecu_signature(port_fd))
-			output("Could NOT determine signature!\nDo you have the device type set properly?\n",FALSE);
-		close_port(port_fd);
-	}
-	if ((GINT)DATA_GET(global_data,"persona") == MS2)
-	{
-		setup_port(port_fd,115200);
-		if (!get_ecu_signature(port_fd))
-			output("Could NOT determine signature!\nDo you have the device type set properly?\n",FALSE);
-		close_port(port_fd);
-	}
-
-	return TRUE;
-}
-
-
 G_MODULE_EXPORT gboolean persona_choice (GtkWidget *widget, gpointer data)
 {
 	gint persona = 0;
@@ -226,8 +187,9 @@ void lock_buttons()
 	builder = DATA_GET(global_data,"builder");
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_firmware_menuitem")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"get_signature_menuitem")),FALSE);
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"persona_table")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"port_entry")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"filechooser_button")),FALSE);
 }
 
 void unlock_buttons()
@@ -236,8 +198,9 @@ void unlock_buttons()
 	builder = DATA_GET(global_data,"builder");
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_firmware_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"get_signature_menuitem")),TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"persona_table")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"port_entry")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"filechooser_button")),TRUE);
 }
 
 
@@ -264,7 +227,7 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 				"name","MegaTunix Firmware Loading Software",
 				"version",VERSION,
 				"copyright","David J. Andruczyk(2011)",
-				"comments","MTXloader is a Graphical Firmware Loader designed to make it easy and (hopefully) intuitive to upgrade the firmware on your MS-I or MS-II MegaSquirt powered vehicle. This tool is capable of loading any firmware version for both series of ECUs.  This is based upon code provided by James Murray, Ken Culver from the MS2-Extra project.  Please send suggestions to the author for ways to improve mtxloader.",
+				"comments","MTXloader is a Graphical Firmware Loader designed to make it easy and (hopefully) intuitive to upgrade the firmware on your MegaSquirt I,II or FreeEMS powered vehicle. This tool is capable of loading any firmware version for both series of ECUs.  This code is loosely based upon code provided by James Murray, Ken Culver from the MS2-Extra project.  Please send suggestions to the author for ways to improve mtxloader.",
 				"license","GPL v2",
 				"website","http://megatunix.sourceforge.net",
 				"authors",authors,
@@ -369,15 +332,18 @@ void boot_jumper_prompt()
 
 G_MODULE_EXPORT void progress_update(gfloat fraction)
 {
-	gint value = (gint)(fraction*100.0);
-	gchar * tmpbuf = NULL;
 	static gint last = 0.0;
 	static GtkWidget *pbar = NULL;
+	gchar * tmpbuf = NULL;
+	gint value = 0;
 
 	if (!pbar)
 		pbar = GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"), "progressbar"));
 	g_return_if_fail(pbar);
 
+	fraction = fraction > 1.0 ? 1.0:fraction;
+	fraction = fraction < 0.0 ? 0.0:fraction;
+	value = (gint)(fraction*100.0);
 	if (value != last)
 	{
 		tmpbuf = g_strdup_printf("%i%% complete",value);
