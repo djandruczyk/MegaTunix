@@ -370,11 +370,12 @@ bind_to_list=interdep_3_ctrl
 register_as=num_injectors_0_spin
 
 [num_cylinders_0_spin]
-keys=offset,bitmask,table_num,dl_type,handler,toggle_groups,bind_to_list,register_as
+keys=offset,bitmask,bitvals,table_num,dl_type,handler,toggle_groups,bind_to_list,register_as
 offset=0
 bitmask=31
 table_num=3
-toggle_groups=,,,,four_cyl,,,,,,,,,,,,,,,,,,,,,,,,,,,
+bitvals=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+toggle_groups=,,,four_cyl,,,,,,,,,,,,
 dl_type=_DEFERRED_
 handler=_NUM_CYLINDERS_1_
 bind_to_list=interdep_3_ctrl

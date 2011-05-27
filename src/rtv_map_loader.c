@@ -69,9 +69,6 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			(DATA_GET(global_data,"connected")))
 		return FALSE;
 
-	if (!load_deps)
-		get_symbol("load_dependancies",(void *)&load_deps);
-
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Realtime Map...")));
 	filename = get_file(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
@@ -202,6 +199,8 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
+			if (!load_deps)
+				get_symbol("load_dependancies",(void *)&load_deps);
 			if (load_deps)
 				load_deps(object,cfgfile,section,"depend_on");
 			else
