@@ -999,7 +999,6 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		bigstep = upper/10;
 		smallstep = bigstep/10;
 	}
-
 	value = get_ecu_data_f(widget);
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
 
