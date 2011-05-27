@@ -28,6 +28,7 @@
 #include <locking.h>
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
+#include <math.h>
 #include <offline.h>
 #include <notifications.h>
 #include <plugin.h>
@@ -923,6 +924,8 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	gint active_table = -1;
 	gint smallstep = 0;
 	gint bigstep = 0;
+	gint precision = 0;
+	gfloat tmpf = 0.0;
 	glong lower = 0;
 	glong upper = 0;
 	glong hardlower = 0;
@@ -962,28 +965,32 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		upper = get_extreme_from_size(size,UPPER);
+	precision = (GINT)OBJ_GET(widget,"precision");
 	multiplier = OBJ_GET(widget,"fromecu_mult");
 	adder = OBJ_GET(widget,"fromecu_add");
 	smallstep = (GINT)OBJ_GET(widget,"smallstep");
 	bigstep = (GINT)OBJ_GET(widget,"bigstep");
+	/* Get factor to give sane small/bigstep no matter what */
 	if (smallstep == 0)
 	{
+		tmpf = pow(10.0,(double)-precision);
 		if ((multiplier) && (adder))
-			smallstep = (GINT)(1 - (*adder))/(*multiplier);
-		else if (adder)
-			smallstep = (GINT)(1 - (*adder));
+			smallstep = (GINT)((tmpf - (*adder))/(*multiplier));
+		else if (multiplier)
+			smallstep = (GINT)(tmpf/(*multiplier));
 		else
-			smallstep = 1;
+			smallstep = (GINT)tmpf;
 		OBJ_SET(widget,"smallstep",GINT_TO_POINTER(smallstep));
 	}
 	if (bigstep == 0)
 	{
+		tmpf = pow(10.0,(double)-(precision-1));
 		if ((multiplier) && (adder))
-			bigstep = (GINT)(10 - (*adder))/(*multiplier);
-		else if (adder)
-			bigstep = (GINT)(10 - (*adder));
+			bigstep = (GINT)((tmpf - (*adder))/(*multiplier));
+		else if (multiplier)
+			bigstep = (GINT)(tmpf/(*multiplier));
 		else
-			bigstep = 10;
+			bigstep = (GINT)tmpf;
 		OBJ_SET(widget,"bigstep",GINT_TO_POINTER(bigstep));
 	}
 	hardlower = get_extreme_from_size(size,LOWER);

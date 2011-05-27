@@ -987,7 +987,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[2]->z_suffix = g_strdup("\302\260BTDC");
 	firmware->table_params[2]->x_precision = 0;
 	firmware->table_params[2]->y_precision = 1;
-	firmware->table_params[2]->z_precision = 3;
+	firmware->table_params[2]->z_precision = 1;
 	firmware->table_params[2]->table_name = g_strdup("FreeEMS very alpha spark table");;
 
 
