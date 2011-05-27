@@ -232,6 +232,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	gint i = 0;
 	gint j = 0;
+	gint smallstep = 0;
+	gint bigstep = 0;
 	Ve_View_3D *ve_view;
 	extern gboolean gl_ability;
 	Firmware_Details *firmware = NULL;
@@ -308,57 +310,48 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	mult = firmware->table_params[table_num]->x_fromecu_mult;	
 	add = firmware->table_params[table_num]->x_fromecu_add;	
 	tmpf = pow(10.0,(double)-(ve_view->x_precision));
-	if ((mult) && (add))
+	if (mult)
 	{
-		ve_view->x_smallstep = (GINT)((tmpf - (*add))/(*mult));
-		ve_view->x_bigstep = (GINT)(((10*tmpf) - (*add))/(*mult));
-	}
-	else if (mult)
-	{
-		ve_view->x_smallstep = (GINT)(tmpf / (*mult));
-		ve_view->x_bigstep = (GINT)(((10*tmpf) /(*mult)));
+		smallstep = (GINT)(tmpf / (*mult));
+		bigstep = (GINT)(((10*tmpf) /(*mult)));
 	}
 	else
 	{
-		ve_view->x_smallstep = (GINT)tmpf;
-		ve_view->x_bigstep = (GINT)(10*tmpf);
+		smallstep = (GINT)tmpf;
+		bigstep = (GINT)(10*tmpf);
 	}
+	ve_view->x_smallstep = smallstep < 1 ? 1:smallstep;
+	ve_view->x_bigstep = bigstep < 10 ? 10:bigstep;
 	mult = firmware->table_params[table_num]->y_fromecu_mult;	
 	add = firmware->table_params[table_num]->y_fromecu_add;	
 	tmpf = pow(10.0,(double)-(ve_view->y_precision));
-	if ((mult) && (add))
+	if (mult)
 	{
-		ve_view->y_smallstep = (GINT)((tmpf - (*add))/(*mult));
-		ve_view->y_bigstep = (GINT)(((10*tmpf) - (*add))/(*mult));
-	}
-	else if (mult)
-	{
-		ve_view->y_smallstep = (GINT)(tmpf / (*mult));
-		ve_view->y_bigstep = (GINT)(((10*tmpf) /(*mult)));
+		smallstep = (GINT)(tmpf / (*mult));
+		bigstep = (GINT)(((10*tmpf) /(*mult)));
 	}
 	else
 	{
-		ve_view->y_smallstep = (GINT)tmpf;
-		ve_view->y_bigstep = (GINT)(10*tmpf);
+		smallstep = (GINT)tmpf;
+		bigstep = (GINT)(10*tmpf);
 	}
+	ve_view->y_smallstep = smallstep < 1 ? 1:smallstep;
+	ve_view->y_bigstep = bigstep < 10 ? 10:bigstep;
 	mult = firmware->table_params[table_num]->z_fromecu_mult;	
 	add = firmware->table_params[table_num]->z_fromecu_add;	
 	tmpf = pow(10.0,(double)-(ve_view->z_precision));
-	if ((mult) && (add))
+	if (mult)
 	{
-		ve_view->z_smallstep = (GINT)((tmpf - (*add))/(*mult));
-		ve_view->z_bigstep = (GINT)(((10*tmpf) - (*add))/(*mult));
-	}
-	else if (mult)
-	{
-		ve_view->z_smallstep = (GINT)(tmpf / (*mult));
-		ve_view->z_bigstep = (GINT)(((10*tmpf) /(*mult)));
+		smallstep = (GINT)(tmpf / (*mult));
+		bigstep = (GINT)(((10*tmpf) /(*mult)));
 	}
 	else
 	{
-		ve_view->z_smallstep = (GINT)tmpf;
-		ve_view->z_bigstep = (GINT)(10*tmpf);
+		smallstep = (GINT)tmpf;
+		bigstep = (GINT)(10*tmpf);
 	}
+	ve_view->z_smallstep = smallstep < 1 ? 1:smallstep;
+	ve_view->z_bigstep = bigstep < 10 ? 10:bigstep;
 	ve_view->x_page = firmware->table_params[table_num]->x_page;
 	ve_view->x_base = firmware->table_params[table_num]->x_base;
 	ve_view->x_size = firmware->table_params[table_num]->x_size;

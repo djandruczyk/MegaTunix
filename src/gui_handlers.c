@@ -974,23 +974,21 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	if (smallstep == 0)
 	{
 		tmpf = pow(10.0,(double)-precision);
-		if ((multiplier) && (adder))
-			smallstep = (GINT)((tmpf - (*adder))/(*multiplier));
-		else if (multiplier)
+		if (multiplier)
 			smallstep = (GINT)(tmpf/(*multiplier));
 		else
 			smallstep = (GINT)tmpf;
+		smallstep = smallstep < 1 ? 1:smallstep;
 		OBJ_SET(widget,"smallstep",GINT_TO_POINTER(smallstep));
 	}
 	if (bigstep == 0)
 	{
 		tmpf = pow(10.0,(double)-(precision-1));
-		if ((multiplier) && (adder))
-			bigstep = (GINT)((tmpf - (*adder))/(*multiplier));
-		else if (multiplier)
+		if (multiplier)
 			bigstep = (GINT)(tmpf/(*multiplier));
 		else
 			bigstep = (GINT)tmpf;
+		bigstep = bigstep < 10 ? 10:bigstep;
 		OBJ_SET(widget,"bigstep",GINT_TO_POINTER(bigstep));
 	}
 	hardlower = get_extreme_from_size(size,LOWER);
