@@ -1201,8 +1201,9 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			}
 			glEnd();
 		}
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
+	// This runs anyway to return the mode to Fill for later operations. Only the operations in this file are affected by the line style with this change.
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 
