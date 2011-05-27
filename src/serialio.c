@@ -335,7 +335,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
 	serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
-	serial_params->newtio.c_cc[VMIN]     = 0;     
+	serial_params->newtio.c_cc[VMIN]     = 1;     
 
 #ifdef __PIS_SUPPORT__
 	if (ioctl(serial_params->fd, TIOCGSERIAL, &serial_params->oldctl) != 0)
