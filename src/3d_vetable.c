@@ -838,11 +838,12 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glcontext = gtk_widget_get_gl_context(widget);
 	gldrawable = gtk_widget_get_gl_drawable(widget);
 
+	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
 	
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
-	/*printf("expose event \n");*/
+	printf("expose event ve_view %p\n",ve_view);
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
