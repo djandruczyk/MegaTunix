@@ -1119,7 +1119,6 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint x = 0;
 	gint y = 0;
 	Quad * quad = NULL;
-	GLint poly_mode[2];
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");

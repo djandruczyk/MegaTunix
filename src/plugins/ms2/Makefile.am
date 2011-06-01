@@ -7,7 +7,6 @@ INCLUDES = \
 	@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
-#        @DEPRECATED_CFLAGS@ 
 
 plugin_LTLIBRARIES = libms2.la 
 
