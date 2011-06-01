@@ -192,7 +192,7 @@ struct _Cur_Vals
 /* Prototypes */
 RGB3f rgb_from_hue(gfloat, gfloat, gfloat);
 gboolean create_ve3d_view(GtkWidget *, gpointer );
-gboolean free_ve3d_view(GtkWidget *);
+gboolean ve3d_shutdown(GtkWidget *, gpointer);
 GdkGLConfig* get_gl_config(void);
 void ve3d_realize (GtkWidget *, gpointer );
 gboolean ve3d_configure_event(GtkWidget *, GdkEventConfigure *,gpointer);

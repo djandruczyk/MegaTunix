@@ -248,14 +248,12 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (GINT)g_ascii_strtod(tmpbuf,NULL);
 
-	if (winstat == NULL)
+	if (!winstat)
 		winstat = g_hash_table_new(NULL,NULL);
-	if ((GBOOLEAN)g_hash_table_lookup(winstat,GINT_TO_POINTER(table_num))
-			== TRUE)
+	if ((GBOOLEAN)g_hash_table_lookup(winstat,GINT_TO_POINTER(table_num)))
 		return TRUE;
 	else
 		g_hash_table_insert(winstat,GINT_TO_POINTER(table_num), GINT_TO_POINTER(TRUE));
-
 
 	ve_view = initialize_ve3d_view();
 	if (firmware->table_params[table_num]->x_multi_source)
@@ -469,11 +467,15 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		bind_to_lists(window,firmware->table_params[table_num]->bind_to_list);
 	}
 
-	/* Store it in global_data by name */
+	/* Store it in global_data by name, someone tell me why I do it this ugly way? */
 	tmpbuf = g_strdup_printf("ve_view_%i",table_num);
 	DATA_SET(global_data,tmpbuf,ve_view);
 	g_free(tmpbuf);
 
+	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
+			G_CALLBACK(ve3d_shutdown),
+			NULL);
+	/*
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(free_ve3d_sliders),
 			GINT_TO_POINTER(table_num));
@@ -483,6 +485,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer) window);
+			*/
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
@@ -587,7 +590,12 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 
 	button = gtk_button_new_with_label("Close Window");
+	OBJ_SET(button,"ve_view",ve_view);
 	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
+	g_signal_connect(G_OBJECT(button), "clicked",
+			G_CALLBACK(ve3d_shutdown),
+			NULL);
+	/*
 	g_signal_connect_swapped(G_OBJECT(button), "clicked",
 			G_CALLBACK(free_ve3d_sliders),
 			GINT_TO_POINTER(table_num));
@@ -597,6 +605,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	g_signal_connect_swapped(G_OBJECT(button), "clicked",
 			G_CALLBACK(gtk_widget_destroy),
 			(gpointer) window);
+			*/
 
 	/* Focus follows vertex toggle */
 	button = gtk_check_button_new_with_label("Focus Follows Vertex\n with most Weight");
@@ -694,27 +703,28 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
 /*!
- *\brief free_ve3d_view is called on close of the 3D vetable viewer/editor, it
+ *\brief ve3d_shutdown is called on close of the 3D vetable viewer/editor, it
  *deallocates memory disconencts handlers and then the widget is deleted 
  *with gtk_widget_destroy
- * 
  */
-G_MODULE_EXPORT gboolean free_ve3d_view(GtkWidget *widget)
+G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
+	gchar *tmpbuf = NULL;
 	Ve_View_3D *ve_view;
-	gchar * tmpbuf = NULL;
+	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
+			
+	printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
-	ve_view = (Ve_View_3D
-			*)OBJ_GET(widget,"ve_view");
 	store_list("burners",g_list_remove(
 				get_list("burners"),(gpointer)ve_view->burn_but));
 	g_hash_table_remove(winstat,GINT_TO_POINTER(ve_view->table_num));
-
 	tmpbuf = g_strdup_printf("ve_view_%i",ve_view->table_num);
 	DATA_SET(global_data,tmpbuf,NULL);
 	g_free(tmpbuf);
-
+	free_ve3d_sliders(ve_view->table_num);
+	gtk_widget_destroy(ve_view->window);
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
@@ -723,10 +733,15 @@ G_MODULE_EXPORT gboolean free_ve3d_view(GtkWidget *widget)
 	g_object_unref(ve_view->z_container);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
+	
+	printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
+	/* MUST return false otherwise other handlers won't run*/
 
-	return FALSE;  /* MUST return false otherwise
-			* other handlers WILL NOT run. */
+	return FALSE;  
+
 }
+
+
 
 /*!
  * \brief reset_3d_view resets the OpenGL widget to default position in
@@ -2906,6 +2921,7 @@ gboolean delayed_expose(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
 
+	g_return_val_if_fail(ve_view,FALSE);
 	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 	return FALSE;
 }
