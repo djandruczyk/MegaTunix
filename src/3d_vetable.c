@@ -1119,6 +1119,7 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint x = 0;
 	gint y = 0;
 	Quad * quad = NULL;
+	GLint poly_mode[2];
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -1127,6 +1128,7 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 	/*printf("draw grid\n");*/
 
+	//glGetIntegerv(GL_POLYGON_MODE,poly_mode);
 	glLineWidth(1.25);
 
 	/* Switch between solid and wireframe */
@@ -1166,7 +1168,6 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		for(y=ve_view->y_bincount-1;y>=0;y--)
 		{
 			glBegin(GL_QUADS);
-			//for(x=0;x<ve_view->x_bincount-1;++x)
 			for(x=ve_view->x_bincount-1;x>=0;x--)
 			{
 				glColor4f(0,0,0, 1);
@@ -1182,7 +1183,6 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			}
 			glEnd();
 			glBegin(GL_QUADS);
-			//for(x=0;x<ve_view->x_bincount-1;++x)
 			for(x=ve_view->x_bincount-1;x>=0;x--)
 			{
 				glColor4f(0,0,0, 1);
@@ -1199,7 +1199,6 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			glEnd();
 		}
 	}
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 
