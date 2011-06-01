@@ -37,7 +37,7 @@ extern gconstpointer *global_data;
 
 
 /*!
- \brief load_sliders_pf() is called to load up the runtime slider configurations
+ \brief load_rt_sliders() is called to load up the runtime slider configurations
  from the file specified in the firmware's interrogation profile, and populate
  the gui with the newly created sliders.
  */
@@ -54,18 +54,18 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT interrogated, returning!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_sliders()\n\tERROR, NOT interrogated, returning!\n\n"));
 		return;
 	}
 
 	if (DATA_GET(global_data,"leaving"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, LEAVING set, returning!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_sliders()\n\tERROR, LEAVING set, returning!\n\n"));
 		return;
 	}
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Sliders...")));
@@ -89,7 +89,7 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"rt_rts",rt_sliders,0,RUNTIME_TAB);
 	if (!res)
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tRuntime Sliders XML parse/load failure\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_sliders()\n\tRuntime Sliders XML parse/load failure\n"));
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
@@ -98,7 +98,7 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 
 
 /*!
- \brief load_sliders_pf() is called to load up the runtime slider configurations
+ \brief load_ww_sliders() is called to load up the runtime slider configurations
  from the file specified in the firmware's interrogation profile, and populate
  the gui with the newly created sliders.
  */
@@ -115,18 +115,18 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, NOT interrogated, returning!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_ww_sliders()\n\tERROR, NOT interrogated, returning!\n\n"));
 		return;
 	}
 
 	if (DATA_GET(global_data,"leaving"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tERROR, LEAVING set, returning!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_ww_sliders()\n\tERROR, LEAVING set, returning!\n\n"));
 		return;
 	}
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_ww_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Sliders...")));
@@ -150,7 +150,7 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"ww_rts",ww_sliders,0,WARMUP_WIZ_TAB);
 	if (!res)
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tWarmup Wizard Sliders XML parse/load failure\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_ww_sliders()\n\tWarmup Wizard Sliders XML parse/load failure\n"));
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
@@ -243,7 +243,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
 			(!(DATA_GET(global_data,"tabs_loaded"))))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tCRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_ve3d_sliders()\n\tCRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n\n"));
 		return;
 	}
 
@@ -269,7 +269,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"ve3d_rts",ve3d_sliders[table_num],table_num,VE3D_VIEWER_TAB);
 	if (!res)
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_sliders_pf()\n\tRuntime Sliders XML parse/load failure\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": load_ve3d_sliders()\n\tRuntime Sliders XML parse/load failure\n"));
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 

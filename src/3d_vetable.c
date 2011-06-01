@@ -2199,12 +2199,10 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 /*!
  \brief update_ve3d_if_necessary is called from update_write_status to 
  redraw the 3D view if a variable is changed that is represented in the 
-3D view
- This function scans through the table params to see if the passed 
-page/offset
- is part of a table and then checks if the table is visible if so it 
-forces
- a redraw of that table. (convoluted and butt ugly, but it works)
+ 3D view This function scans through the table params to see if the passed 
+ page/offset is part of a table and then checks if the table is visible 
+ if so it forces a redraw of that table. (convoluted and butt ugly, 
+ but it works)
  */
 G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 {
