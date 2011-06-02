@@ -976,7 +976,7 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
-	GdkGLProc proc = NULL;
+	/*GdkGLProc proc = NULL;*/
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
 	g_return_if_fail(glcontext);
@@ -985,11 +985,12 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return;
 
-	/* glPolygonOffsetEXT */
+	/*
+	// glPolygonOffsetEXT 
 	proc = gdk_gl_get_glPolygonOffsetEXT();
 	if (proc == NULL)
 	{
-		/* glPolygonOffset */
+		// glPolygonOffset 
 		proc = gdk_gl_get_proc_address ("glPolygonOffset");
 		if (proc == NULL)
 		{
@@ -997,6 +998,7 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 			exit (-11);
 		}
 	}
+	*/
 
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
@@ -1123,18 +1125,15 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 	/*printf("draw grid\n");*/
 
-	//glGetIntegerv(GL_POLYGON_MODE,poly_mode);
-	//glLineWidth(1.25);
-
 	/* Switch between solid and wireframe */
 	if (ve_view->wireframe)
 	{
-		glLineWidth(3.75);
+		glLineWidth(1.75);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	}
 	else
 	{
-		glLineWidth(2.25);
+		glLineWidth(1.25);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
@@ -1565,6 +1564,7 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	/* Set line thickness and color */
 	glLineWidth(1.0);
 	glColor3f(0.3,0.3,0.3);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/* Draw horizontal background grid lines
 	   starting at 0 VE and working up to VE+10% */
