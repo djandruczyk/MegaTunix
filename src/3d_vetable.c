@@ -693,7 +693,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 			
-	printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
+	//printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
 	store_list("burners",g_list_remove(
 				get_list("burners"),(gpointer)ve_view->burn_but));
@@ -712,7 +712,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 	
-	printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
+	//printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
 	/* MUST return false otherwise other handlers won't run*/
 
 	return FALSE;  
@@ -792,7 +792,7 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
 
-	printf("ve3d config event, ve_view %p gldrawable %p\n",ve_view,gldrawable);
+	//printf("ve3d config event, ve_view %p gldrawable %p\n",ve_view,gldrawable);
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"));
 
@@ -838,7 +838,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	g_return_val_if_fail(gldrawable,FALSE);
 	
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
-	printf("expose event ve_view %p gldrawable %p\n",ve_view,gldrawable);
+	//printf("expose event ve_view %p gldrawable %p\n",ve_view,gldrawable);
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
