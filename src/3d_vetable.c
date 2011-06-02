@@ -472,20 +472,9 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	DATA_SET(global_data,tmpbuf,ve_view);
 	g_free(tmpbuf);
 
-	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
+	g_signal_connect(G_OBJECT(window), "delete_event",
 			G_CALLBACK(ve3d_shutdown),
 			NULL);
-	/*
-	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
-			G_CALLBACK(free_ve3d_sliders),
-			GINT_TO_POINTER(table_num));
-	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
-			G_CALLBACK(free_ve3d_view),
-			(gpointer) window);
-	g_signal_connect_swapped(G_OBJECT(window), "delete_event",
-			G_CALLBACK(gtk_widget_destroy),
-			(gpointer) window);
-			*/
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
@@ -595,17 +584,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	g_signal_connect(G_OBJECT(button), "clicked",
 			G_CALLBACK(ve3d_shutdown),
 			NULL);
-	/*
-	g_signal_connect_swapped(G_OBJECT(button), "clicked",
-			G_CALLBACK(free_ve3d_sliders),
-			GINT_TO_POINTER(table_num));
-	g_signal_connect_swapped(G_OBJECT(button), "clicked",
-			G_CALLBACK(free_ve3d_view),
-			(gpointer) window);
-	g_signal_connect_swapped(G_OBJECT(button), "clicked",
-			G_CALLBACK(gtk_widget_destroy),
-			(gpointer) window);
-			*/
 
 	/* Focus follows vertex toggle */
 	button = gtk_check_button_new_with_label("Focus Follows Vertex\n with most Weight");
@@ -699,7 +677,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_widget_show_all(window);
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	g_timeout_add(500,delayed_expose,ve_view);
+//	g_timeout_add(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -814,6 +792,8 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
 
+	printf("ve3d config event, ve_view %p gldrawable %p\n",ve_view,gldrawable);
+
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"));
 
 	/*** OpenGL BEGIN ***/
@@ -858,7 +838,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	g_return_val_if_fail(gldrawable,FALSE);
 	
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
-	printf("expose event ve_view %p\n",ve_view);
+	printf("expose event ve_view %p gldrawable %p\n",ve_view,gldrawable);
 
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
@@ -880,35 +860,35 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 
 	/* Shift to middle of the screen or something like that */
 	glTranslatef (-0.5, -0.5, -0.5);
+	gdk_gl_drawable_gl_end (gldrawable);
 
 	/* Draw everything */
 	if (GTK_WIDGET_IS_SENSITIVE(widget))
 	{
-	cur_vals = get_current_values(ve_view);
-	ve3d_calculate_scaling(ve_view,cur_vals);
-	if (!ve_view->mesh_created)
-		generate_quad_mesh(ve_view,cur_vals);
-	ve3d_draw_runtime_indicator(ve_view,cur_vals);
-	ve3d_draw_edit_indicator(ve_view,cur_vals);
-	ve3d_draw_active_vertexes_marker(ve_view,cur_vals);
-	ve3d_draw_ve_grid(ve_view,cur_vals);
-	ve3d_draw_axis(ve_view,cur_vals);
-	free_current_values(cur_vals);
-	CalculateFrameRate();
-	/* Grey things out if we're supposed to be insensitive */
+		cur_vals = get_current_values(ve_view);
+		ve3d_calculate_scaling(ve_view,cur_vals);
+		if (!ve_view->mesh_created)
+			generate_quad_mesh(ve_view,cur_vals);
+		ve3d_draw_runtime_indicator(ve_view,cur_vals);
+		ve3d_draw_edit_indicator(ve_view,cur_vals);
+		ve3d_draw_active_vertexes_marker(ve_view,cur_vals);
+		ve3d_draw_ve_grid(ve_view,cur_vals);
+		ve3d_draw_axis(ve_view,cur_vals);
+		free_current_values(cur_vals);
+		CalculateFrameRate();
+		/* Grey things out if we're supposed to be insensitive */
 	}
 	else
 		ve3d_grey_window(ve_view);
 
 	if (gdk_gl_drawable_is_double_buffered (gldrawable))
 		gdk_gl_drawable_swap_buffers (gldrawable);
-	else
+	//else
 		glFlush ();
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	/*** OpenGL END ***/
-	gdk_gl_drawable_gl_end (gldrawable);
 
 	return TRUE;
 }
