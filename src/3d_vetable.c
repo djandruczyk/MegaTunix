@@ -1124,13 +1124,19 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	/*printf("draw grid\n");*/
 
 	//glGetIntegerv(GL_POLYGON_MODE,poly_mode);
-	glLineWidth(1.25);
+	//glLineWidth(1.25);
 
 	/* Switch between solid and wireframe */
 	if (ve_view->wireframe)
+	{
+		glLineWidth(3.75);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
 	else
+	{
+		glLineWidth(2.25);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 
 	/* Draw QUAD MESH */
 	//for(y=0;y<ve_view->y_bincount-1;++y)
@@ -1176,8 +1182,8 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				/* (0x,1y) */
 				glVertex3f(quad->x[3],quad->y[3],quad->z[3]+0.001);
 			}
-			glEnd();
-			glBegin(GL_QUADS);
+//			glEnd();
+//			glBegin(GL_QUADS);
 			for(x=ve_view->x_bincount-1;x>=0;x--)
 			{
 				glColor4f(0,0,0, 1);
