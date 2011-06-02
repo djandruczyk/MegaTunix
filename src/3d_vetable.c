@@ -54,7 +54,6 @@
 
 static GLuint font_list_base;
 
-
 #define DEFAULT_WIDTH  640
 #define DEFAULT_HEIGHT 480                                                                                  
 static GHashTable *winstat = NULL;
@@ -804,6 +803,7 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	glViewport (0, 0, w, h);
 	glMatrixMode(GL_MODELVIEW);
 
+	ve3d_load_font_metrics(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	return TRUE;
@@ -1008,7 +1008,6 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	glEnable(GL_DEPTH_TEST);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	ve3d_load_font_metrics(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
@@ -1642,6 +1641,8 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
  */
 G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 {
+	/* Experiment*/
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glColor3f(0.2,0.8,0.8);
 	/* Set rendering postition */
 	glRasterPos3f (x, y, z);
@@ -1656,17 +1657,16 @@ G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 
 
 /*!
- *  \brief ve3d_load_font_metrics is called during ve3d_realize and loads 
- *  the 
- *   fonts needed by OpenGL for rendering the text
- *    */
+ *\brief ve3d_load_font_metrics is called during ve3d_realize and loads 
+ *the fonts needed by OpenGL for rendering the text
+ */
 G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc;
 	PangoFont *font;
 	gint min = 0;
 
-	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_load_font_metrics()\n"));
+	dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_load_font_metrics(), w %i h %i PANGO_SCALE %i\n",widget->allocation.width,widget->allocation.height,PANGO_SCALE));
 	font_desc = pango_font_description_copy_static(widget->style->font_desc);
 	pango_font_description_set_family_static(font_desc,"Sans");
 
