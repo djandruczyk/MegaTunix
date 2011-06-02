@@ -62,14 +62,15 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
 				{
-					if (tmpi == 0)
-						tmpi = -1;
 					dbg_func(KEYPARSER,g_strdup_printf(__FILE__": bind_keys()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[i],tmpi,section));
-					OBJ_SET(object,
-							keys[i],
-							GINT_TO_POINTER(tmpi));	
-					if (strstr(keys[i],"fromecu_complex"))
-						load_complex_params_obj(object,cfgfile,section);
+					if (tmpi)
+					{
+						OBJ_SET(object,
+								keys[i],
+								GINT_TO_POINTER(tmpi));	
+						if (strstr(keys[i],"fromecu_complex"))
+							load_complex_params_obj(object,cfgfile,section);
+					}
 				}
 				else
 					dbg_func(KEYPARSER|CRITICAL,g_strdup_printf(__FILE__": bind_keys()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n",keys[i],section,cfgfile->filename));
