@@ -1445,13 +1445,11 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	{
 		tmpf1 = get_fixed_pos(ve_view,cur_val->x_val,_X_);
 		tmpf2 = get_fixed_pos(ve_view,cur_val->y_val,_Y_);
-		printf("fixed scale, tmpf1 %f, tmpf2 %f\n",tmpf1,tmpf2);
 	}
 	else
 	{
 		tmpf1 = (cur_val->x_val-ve_view->x_trans)*ve_view->x_scale;
 		tmpf2 = (cur_val->y_val-ve_view->y_trans)*ve_view->y_scale;
-		printf("prop scale, tmpf1 %f, tmpf2 %f\n",tmpf1,tmpf2);
 	}
 	tmpf3 = (cur_val->z_val-ve_view->z_trans)*ve_view->z_scale;
 	if ((tmpf1 > 1.0 ) || (tmpf1 < 0.0) ||(tmpf2 > 1.0 ) || (tmpf2 < 0.0))

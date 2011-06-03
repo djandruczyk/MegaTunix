@@ -223,7 +223,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
 
 	rtv_mutex = DATA_GET(global_data,"rtv_mutex");
-	g_mutex_lock(rtv_mutex);  /* <-- this makes us wait */
+	g_mutex_trylock(rtv_mutex);  /* <-- this makes us wait */
 	g_mutex_unlock(rtv_mutex); /* now unlock */
 
 	close_serial();
