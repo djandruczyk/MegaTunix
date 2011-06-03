@@ -94,7 +94,6 @@ G_MODULE_EXPORT void reset_temps_pf(void)
 	gdk_threads_enter();
 	set_title(g_strdup(_("Adjusting for local Temp units...")));
 	reset_temps(DATA_GET(global_data,"mtx_temp_units"));
-	set_title(g_strdup(_("Ready...")));
 	gdk_threads_leave();
 }
 
@@ -129,5 +128,8 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	rate = (GINT)DATA_GET(global_data,"ve3d_fps");
 	source = g_timeout_add((GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_ve3ds,NULL);
 	DATA_SET(global_data,"ve3d_id", GINT_TO_POINTER(source));
+	gdk_threads_enter();
+	set_title(g_strdup(_("Data renderers running...")));
+	gdk_threads_leave();
 }
 

@@ -1337,10 +1337,12 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 		g_signal_handlers_block_by_func (G_OBJECT (notebook),
 				G_CALLBACK (notebook_page_changed),
 				data);
+		set_title(g_strdup(_("Rendering Tab...")));
 		load_actual_tab(notebook,page_no);
 		g_signal_handlers_unblock_by_func (G_OBJECT (notebook),
 				G_CALLBACK (notebook_page_changed),
 				data);
+		set_title(g_strdup(_("Ready")));
 	}
 	topframe = OBJ_GET(widget,"topframe");
 	if (!topframe)
