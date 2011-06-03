@@ -676,7 +676,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_widget_show_all(window);
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-//	g_timeout_add(500,delayed_expose,ve_view);
+	gdk_threads_add_timeout(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -715,7 +715,6 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	/* MUST return false otherwise other handlers won't run*/
 
 	return FALSE;  
-
 }
 
 
@@ -743,7 +742,7 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	ve_view->mesh_created = FALSE;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
-	g_timeout_add(500,delayed_expose,ve_view);
+	gdk_threads_add_timeout(500,delayed_expose,ve_view);
 }
 
 /*!
@@ -802,7 +801,6 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	ve_view->aspect = 1.0;
 	glViewport (0, 0, w, h);
 	glMatrixMode(GL_MODELVIEW);
-
 	ve3d_load_font_metrics(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
@@ -812,11 +810,9 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 /*!
  \brief ve3d_expose_event is called when the part or all of the GL area
  needs to be redrawn due to being "exposed" (uncovered), this kicks off 
-all
- the other renderers for updating the axis and status indicators. This 
+ all the other renderers for updating the axis and status indicators. This 
  method is NOT like I'd like it and is a CPU pig as 99.5% of the time 
-we don't
- even need to redraw at all..  :(
+ we don't even need to redraw at all..  :(
  /bug this code is slow, and needs to be optimized or redesigned
  */
 G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -841,9 +837,8 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	//printf("expose event ve_view %p gldrawable %p\n",ve_view,gldrawable);
 
 	/*** OpenGL BEGIN ***/
-	if (!gdk_gl_drawable_gl_begin(gldrawable, glcontext))
+	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return FALSE;
-
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -860,7 +855,6 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 
 	/* Shift to middle of the screen or something like that */
 	glTranslatef (-0.5, -0.5, -0.5);
-	gdk_gl_drawable_gl_end (gldrawable);
 
 	/* Draw everything */
 	if (GTK_WIDGET_IS_SENSITIVE(widget))
@@ -869,7 +863,8 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 		ve3d_calculate_scaling(ve_view,cur_vals);
 		if (!ve_view->mesh_created)
 			generate_quad_mesh(ve_view,cur_vals);
-		ve3d_draw_runtime_indicator(ve_view,cur_vals);
+		if (!DATA_GET(global_data,"offline"))
+			ve3d_draw_runtime_indicator(ve_view,cur_vals);
 		ve3d_draw_edit_indicator(ve_view,cur_vals);
 		ve3d_draw_active_vertexes_marker(ve_view,cur_vals);
 		ve3d_draw_ve_grid(ve_view,cur_vals);
@@ -883,23 +878,20 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 
 	if (gdk_gl_drawable_is_double_buffered (gldrawable))
 		gdk_gl_drawable_swap_buffers (gldrawable);
-	//else
+	else
 		glFlush ();
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
-
 	return TRUE;
 }
 
 
 /*!
  \brief ve3d_motion_notify_event is called when the user clicks and 
-drags the 
- mouse inside the GL window, it causes the display to be 
-rotated/scaled/strafed
- depending on which button the user had held down.
+ drags the mouse inside the GL window, it causes the display to be 
+ rotated/scaled/strafed depending on which button the user had held down.
  \see ve3d_button_press_event
  */
 G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
@@ -968,15 +960,13 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
 
 /*!
  \brief ve3d_realize is called when the window is created and sets the 
-main
- OpenGL parameters of the window (this only needs to be done once I 
-think)
+ main OpenGL parameters of the window (this only needs to be done once I 
+ think)
  */
 G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
-	/*GdkGLProc proc = NULL;*/
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
 	g_return_if_fail(glcontext);
@@ -984,21 +974,6 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	/*** OpenGL BEGIN ***/
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return;
-
-	/*
-	// glPolygonOffsetEXT 
-	proc = gdk_gl_get_glPolygonOffsetEXT();
-	if (proc == NULL)
-	{
-		// glPolygonOffset 
-		proc = gdk_gl_get_proc_address ("glPolygonOffset");
-		if (proc == NULL)
-		{
-			dbg_func(OPENGL|CRITICAL,g_strdup(__FILE__": ve3d_realize()\n\tSorry, glPolygonOffset() is not supported by this renderer. EXITING!!!\n"));
-			exit (-11);
-		}
-	}
-	*/
 
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
@@ -1008,7 +983,7 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	glEnable(GL_DEPTH_TEST);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	ve3d_load_font_metrics(widget);
+	glMatrixMode(GL_MODELVIEW);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 }
@@ -1141,7 +1116,6 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	for(y=ve_view->y_bincount-1;y >= 0;y--)
 	{
 		glBegin(GL_QUADS);
-		//for(x=0;x<ve_view->x_bincount-1;++x)
 		for(x=ve_view->x_bincount-1;x >= 0;x--)
 		{
 			quad = ve_view->quad_mesh[x][y];
@@ -1163,7 +1137,6 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	if (!ve_view->wireframe)  /* render black grid on main grid */
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		//for(y=0;y<ve_view->y_bincount-1;++y)
 		for(y=ve_view->y_bincount-1;y>=0;y--)
 		{
 			glBegin(GL_QUADS);
@@ -1180,8 +1153,8 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				/* (0x,1y) */
 				glVertex3f(quad->x[3],quad->y[3],quad->z[3]+0.001);
 			}
-//			glEnd();
-//			glBegin(GL_QUADS);
+			glEnd();
+			glBegin(GL_QUADS);
 			for(x=ve_view->x_bincount-1;x>=0;x--)
 			{
 				glColor4f(0,0,0, 1);
@@ -1198,15 +1171,14 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			glEnd();
 		}
 	}
+
 }
 
 
 /*!
  \brief ve3d_draw_edit_indicator is called during rerender and draws 
-the
- red dot which tells where changes will be made to the table by the 
-user.  
- The user moves this with the arrow keys..
+ the red dot which tells where changes will be made to the table by the 
+ user.  The user moves this with the arrow keys..
  */
 G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
@@ -1473,11 +1445,13 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	{
 		tmpf1 = get_fixed_pos(ve_view,cur_val->x_val,_X_);
 		tmpf2 = get_fixed_pos(ve_view,cur_val->y_val,_Y_);
+		printf("fixed scale, tmpf1 %f, tmpf2 %f\n",tmpf1,tmpf2);
 	}
 	else
 	{
 		tmpf1 = (cur_val->x_val-ve_view->x_trans)*ve_view->x_scale;
 		tmpf2 = (cur_val->y_val-ve_view->y_trans)*ve_view->y_scale;
+		printf("prop scale, tmpf1 %f, tmpf2 %f\n",tmpf1,tmpf2);
 	}
 	tmpf3 = (cur_val->z_val-ve_view->z_trans)*ve_view->z_scale;
 	if ((tmpf1 > 1.0 ) || (tmpf1 < 0.0) ||(tmpf2 > 1.0 ) || (tmpf2 < 0.0))
@@ -1563,7 +1537,6 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	/* Set line thickness and color */
 	glLineWidth(1.0);
 	glColor3f(0.3,0.3,0.3);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/* Draw horizontal background grid lines
 	   starting at 0 VE and working up to VE+10% */
@@ -1642,7 +1615,6 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 {
 	/* Experiment*/
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glColor3f(0.2,0.8,0.8);
 	/* Set rendering postition */
 	glRasterPos3f (x, y, z);
@@ -2116,9 +2088,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		queue_ve3d_update(ve_view);
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 		/*
-		ve_view->mesh_created=FALSE;
-		gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
-		*/
+		   ve_view->mesh_created=FALSE;
+		   gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
+		 */
 	}
 
 	g_static_mutex_unlock(&key_mutex);
@@ -2698,7 +2670,7 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->fixed_scale = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	ve_view->mesh_created=FALSE;
-	g_timeout_add(500,delayed_expose,ve_view);
+	gdk_threads_add_timeout(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -2712,7 +2684,7 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->wireframe = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	g_timeout_add(500,delayed_expose,ve_view);
+	gdk_threads_add_timeout(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -2726,7 +2698,7 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 		return FALSE;
 	ve_view->opacity = gtk_range_get_value(GTK_RANGE(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	g_timeout_add(500,delayed_expose,ve_view);
+	gdk_threads_add_timeout(500,delayed_expose,ve_view);
 	return TRUE;
 }
 
@@ -2908,7 +2880,8 @@ gboolean delayed_expose(gpointer data)
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
 
 	g_return_val_if_fail(ve_view,FALSE);
-	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
+//	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
+	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 	return FALSE;
 }
 
