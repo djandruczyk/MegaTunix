@@ -257,6 +257,12 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 }
 
 
+/*
+ *\brief handle_transaction is defined in comm.xml to handle the results
+ of certain IO operations
+ \param data Io_Message structure
+ \param type FuncCall enumeration
+ */
 G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 {
 	static GRand *rand = NULL;
@@ -287,14 +293,17 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 	if (!rand)
 		rand = g_rand_new();
 
+	/* Get common data */
+	seq = (GINT)DATA_GET(output->data,"sequence_num");
+	canID = (GINT)DATA_GET(output->data,"canID");
+	locID = (GINT)DATA_GET(output->data,"location_id");
+	offset = (GINT)DATA_GET(output->data,"offset");
+	size = (GINT)DATA_GET(output->data,"num_wanted");
+	data_length = (GINT)DATA_GET(output->data,"data_length");
+
 	switch (type)
 	{
 		case GENERIC_READ:
-			seq = (GINT)DATA_GET(output->data,"sequence_num");
-			canID = (GINT)DATA_GET(output->data,"canID");
-			locID = (GINT)DATA_GET(output->data,"location_id");
-			offset = (GINT)DATA_GET(output->data,"offset");
-			size = (GINT)DATA_GET(output->data,"num_wanted");
 			packet = retrieve_packet(output->data,NULL);
 			queue = DATA_GET(output->data,"queue");
 			deregister_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -339,12 +348,12 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			}
 			break;
 		case GENERIC_FLASH_WRITE:
+			packet = retrieve_packet(output->data,"FLASH_write_queue");
+			goto handle_write;
+			break;
 		case GENERIC_RAM_WRITE:
-			canID = (GINT)DATA_GET(output->data,"canID");
-			locID = (GINT)DATA_GET(output->data,"location_id");
-			offset = (GINT)DATA_GET(output->data,"offset");
-			data_length = (GINT)DATA_GET(output->data,"data_length");
 			packet = retrieve_packet(output->data,"RAM_write_queue");
+handle_write:
 			if (packet)
 			{
 				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
@@ -362,10 +371,6 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			}
 			break;
 		case GENERIC_BURN:
-			canID = (GINT)DATA_GET(output->data,"canID");
-			locID = (GINT)DATA_GET(output->data,"location_id");
-			offset = (GINT)DATA_GET(output->data,"offset");
-			data_length = (GINT)DATA_GET(output->data,"data_length");
 			packet = retrieve_packet(output->data,"burn_queue");
 			if (packet)
 			{
