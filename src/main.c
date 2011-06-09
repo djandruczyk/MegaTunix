@@ -55,6 +55,12 @@ gint main(gint argc, gchar ** argv)
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 	gdk_threads_init();
+	gtk_init(&argc, &argv);
+	glade_init();
+
+	gdk_gl_init_check(&argc, &argv);
+	gl_ability = gtk_gl_init_check(&argc, &argv);
+
 
 	global_data = g_new0(gconstpointer, 1);
 
@@ -89,13 +95,6 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"pf_dispatch_mutex",mutex);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"rtv_thread_mutex",mutex);
-
-	gdk_threads_enter();
-	gtk_init(&argc, &argv);
-	glade_init();
-
-	gdk_gl_init_check(&argc, &argv);
-	gl_ability = gtk_gl_init_check(&argc, &argv);
 
 	/* For testing if gettext works
 	   printf(_("Hello World!\n"));
@@ -147,6 +146,7 @@ gint main(gint argc, gchar ** argv)
 	
 
 	DATA_SET(global_data,"ready",GINT_TO_POINTER(TRUE));
+	gdk_threads_enter();
 	gtk_main();
 	gdk_threads_leave();
 	return (0) ;

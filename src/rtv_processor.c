@@ -901,6 +901,6 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 		}
 
 	}
-	update_logbar("dlog_view","warning",_("Realtime Variables History buffers flushed...\n"),FALSE,FALSE,FALSE);
+	thread_update_logbar("dlog_view","warning",g_strdup(_("Realtime Variables History buffers flushed...\n")),FALSE,FALSE);
 
 }

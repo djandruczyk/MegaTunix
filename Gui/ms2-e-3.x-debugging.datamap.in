@@ -1,7 +1,7 @@
 [global]
 description=Object data map for the MS2-Extra debugging Tab
 _tab_name=_Advanced/Experimental
-id_prefix=EXP
+id_prefix=MS2_EXP_
 ellipsize=TRUE
 groups=defaults
 

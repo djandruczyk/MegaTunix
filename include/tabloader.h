@@ -61,6 +61,9 @@ struct _TabInfo
 {
 	gchar *glade_file;	/*! Glade file */
 	gchar *datamap_file;	/*! Datamap file that goes with it */
+	GtkNotebook *notebook;	/*! Ptr to notebook */
+	GtkWidget *tab_label;	/*! Tab Label widget */
+	gint page_num;		/*! The number of this tab */
 };
 
 
@@ -76,6 +79,7 @@ void run_post_functions(const gchar * );
 void remove_from_lists(gchar *, gpointer);
 gboolean load_actual_tab(GtkNotebook *,gint);
 gboolean preload_deps(gpointer);
+gboolean handle_dependant_tab_load(gchar *);
 
 /* Prototypes */
 

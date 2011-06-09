@@ -329,6 +329,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		register_widget_f("map0_entry",item);
 		if (firmware->capabilities & PIS)
 		{
+			OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
 			OBJ_SET_FULL(item,"raw_upper",g_strdup("600"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -340,6 +341,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		}
 		else
 		{
+			OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(item,"raw_lower",g_strdup("-1"),g_free);
 			OBJ_SET_FULL(item,"raw_upper",g_strdup("327"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -358,6 +360,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		register_widget_f("map5_entry",item);
 		if (firmware->capabilities & PIS)
 		{
+			OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
 			OBJ_SET_FULL(item,"raw_upper",g_strdup("600"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -369,6 +372,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		}
 		else
 		{
+			OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET_FULL(item,"raw_lower",g_strdup("-1"),g_free);
 			OBJ_SET_FULL(item,"raw_upper",g_strdup("327"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -385,6 +389,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 
 		item = glade_xml_get_widget(xml,"baro0_entry");
 		register_widget_f("baro0_entry",item);
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET_FULL(item,"raw_lower",g_strdup("-1"),g_free);
 		OBJ_SET_FULL(item,"raw_upper",g_strdup("327"),g_free);
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -403,6 +408,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 
 		item = glade_xml_get_widget(xml,"baro5_entry");
 		register_widget_f("baro5_entry",item);
+		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET_FULL(item,"raw_lower",g_strdup("-1"),g_free);
 		OBJ_SET_FULL(item,"raw_upper",g_strdup("327"),g_free);
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));

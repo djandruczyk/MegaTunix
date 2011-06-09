@@ -439,7 +439,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		OBJ_SET(item,"size",OBJ_GET(partner,"size"));
 		OBJ_SET(item,"raw_lower",OBJ_GET(partner,"raw_lower"));
 		OBJ_SET(item,"raw_upper",OBJ_GET(partner,"raw_upper"));
-		OBJ_SET(item,"fromecu_mult",OBJ_GET(partner,"toecu_mult"));
+		OBJ_SET(item,"fromecu_mult",OBJ_GET(partner,"fromecu_mult"));
 		OBJ_SET(item,"fromecu_add",OBJ_GET(partner,"fromecu_add"));
 		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
 		ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);

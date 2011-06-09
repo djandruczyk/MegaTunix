@@ -116,11 +116,11 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			tabinfo = g_new0(TabInfo, 1);
 			tabinfo->glade_file = g_strdup(glade_file);
 			tabinfo->datamap_file = g_strdup(map_file);
-			g_ptr_array_add(tabinfos,(gpointer)tabinfo);
 
 			cfg_read_string(cfgfile,"global","tab_name",&tab_name);
 
 			label = gtk_label_new(NULL);
+			tabinfo->tab_label = label;
 			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
 			g_free(tab_name);
 			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
@@ -149,6 +149,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),container,TRUE);
 			gtk_widget_show_all(container);
 			cur = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook))-1;
+			tabinfo->page_num = cur;
+			tabinfo->notebook = GTK_NOTEBOOK(notebook);
 			if (hidden_list[cur] == TRUE)
 			{
 				child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),cur);
@@ -158,6 +160,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				item = lookup_widget("show_tab_visibility_menuitem");
 				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
 			}
+			g_ptr_array_add(tabinfos,(gpointer)tabinfo);
 		}
 		cfg_free(cfgfile);
 		g_free(map_file);
@@ -179,6 +182,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		}
 	}
 	g_timeout_add(500,(GSourceFunc)preload_deps,tabinfos);
+	DATA_SET(global_data,"tabinfos",tabinfos);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
@@ -245,9 +249,9 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		populate_master(topframe,(gpointer)cfgfile);
 
 		/*
-		dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
-		g_free(tab_name);
-		*/
+		   dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
+		   g_free(tab_name);
+		 */
 
 		if (topframe == NULL)
 		{
@@ -270,7 +274,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		gtk_widget_show_all(topframe);
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
 	}
-	update_interdependancies_pf();
+		update_interdependancies_pf();
 	/* Allow gui to update as it should.... */
 	while (gtk_events_pending())
 	{
@@ -901,11 +905,7 @@ gboolean preload_deps(gpointer data)
 		}
 		glade_interface_destroy(iface);
 		cfg_free(cfgfile);
-		cleanup(tabinfo->glade_file);
-		cleanup(tabinfo->datamap_file);
-		cleanup(tabinfo);
 	}
-	g_ptr_array_free(array,TRUE);
 	io_cmd(firmware->get_all_command,NULL);
 	return FALSE; /* Make it not run again... */
 }
@@ -913,6 +913,10 @@ gboolean preload_deps(gpointer data)
 
 gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 {
+	static GHashTable *widget_2_tab_hash = NULL;
+	static ConfigFile *last_cfgfile = NULL;
+	static gchar * prefix = NULL;
+	gchar *tmpbuf = NULL;
 	gchar *groups = NULL;
 	gchar *bitvals = NULL;
 	gchar *source_key = NULL;
@@ -927,6 +931,11 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	GList *list = NULL;
 	gint i = 0;
 
+	if (!widget_2_tab_hash)
+	{
+		widget_2_tab_hash = DATA_GET(global_data,"widget_2_tab_hash");
+		g_return_val_if_fail(widget_2_tab_hash,FALSE);
+	}
 	/*
 	if (!info->parent)
 		printf("%s is a TOPLEVEL\n",info->name);
@@ -944,6 +953,27 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	{
 		descend_tree(info->children[i].child,cfgfile);
 	}
+	if (last_cfgfile != cfgfile)
+	{
+		if (prefix)
+			cleanup(prefix);
+		if(cfg_read_string(cfgfile,"global","id_prefix", &tmpbuf))
+		{
+			prefix = g_strdup(tmpbuf);
+			g_free(tmpbuf);
+		}
+		else
+			prefix = NULL;
+		last_cfgfile = cfgfile;
+	}
+	if (cfg_find_section(cfgfile,info->name)) // This widget exists 
+	{
+		if (prefix)
+			g_hash_table_insert(widget_2_tab_hash,g_strdup_printf("%s%s",prefix,info->name),g_strdup(cfgfile->filename));
+		else
+			g_hash_table_insert(widget_2_tab_hash,g_strdup(info->name),g_strdup(cfgfile->filename));
+	}
+
 	if (cfg_read_string(cfgfile,info->name,"source_values",&source_values))
 	{
 		if (!cfg_read_string(cfgfile,info->name,"source_key",&source_key))
@@ -1063,3 +1093,36 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	}
 	return TRUE;
 }
+
+
+G_MODULE_EXPORT gboolean handle_dependant_tab_load(gchar * datamap)
+{
+	GPtrArray *tabinfos = NULL;
+	gint i = 0;
+	TabInfo *tabinfo = NULL;
+
+	g_return_val_if_fail(datamap,FALSE);
+	tabinfos = DATA_GET(global_data,"tabinfos");
+	g_return_val_if_fail(tabinfos,FALSE);
+	for (i=0;i<tabinfos->len;i++)
+	{
+		tabinfo = g_ptr_array_index(tabinfos,i);
+		if (!tabinfo)
+			continue;
+		if (g_ascii_strcasecmp(tabinfo->datamap_file,datamap) == 0)
+		{
+			g_signal_handlers_block_by_func (G_OBJECT (tabinfo->notebook),
+					G_CALLBACK (notebook_page_changed),
+					NULL);
+			set_title(g_strdup(_("Rendering Tab...")));
+			load_actual_tab(tabinfo->notebook,tabinfo->page_num);
+			g_signal_handlers_unblock_by_func (G_OBJECT (tabinfo->notebook),
+					G_CALLBACK (notebook_page_changed),
+					NULL);
+			set_title(g_strdup(_("Ready")));
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+

@@ -18,6 +18,7 @@
 #include <glade/glade.h>
 #include <keyparser.h>
 #include <stringmatch.h>
+#include <tabloader.h>
 
 extern gconstpointer *global_data;
 
@@ -69,7 +70,7 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 	}
 	fullname = g_strdup_printf("%s%s",prefix,name);
 	OBJ_SET_FULL(widget,"fullname",g_strdup(fullname),g_free);
-	if (!lookup_widget(fullname))
+	if (!g_hash_table_lookup(dynamic_widgets,fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename));
@@ -96,7 +97,7 @@ G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		DATA_SET_FULL(global_data,"dynamic_widgets",dynamic_widgets,g_hash_table_destroy);
 	}
-	if (lookup_widget(name))
+	if (g_hash_table_lookup(dynamic_widgets,name))
 	{
 		
 		g_hash_table_replace(dynamic_widgets,g_strdup(name),(gpointer)widget);
@@ -125,9 +126,31 @@ G_MODULE_EXPORT gboolean deregister_widget(gchar *name)
 G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
 {
 	GHashTable *dynamic_widgets = NULL;
+	GHashTable *widget_2_tab_hash = NULL;
+	GtkWidget *widget = NULL;
+	gchar *datamap = NULL;
 	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
-	if (dynamic_widgets)
-		return (g_hash_table_lookup(dynamic_widgets,name));
+	widget_2_tab_hash = DATA_GET(global_data,"widget_2_tab_hash");
+
+	g_return_val_if_fail(name,NULL);
+	g_return_val_if_fail(dynamic_widgets,NULL);
+	g_return_val_if_fail(widget_2_tab_hash,NULL);
+
+	if (g_hash_table_lookup_extended(dynamic_widgets,name,NULL,(gpointer *)&widget))
+		return widget;
+	else if (g_hash_table_lookup_extended(widget_2_tab_hash,name,NULL,(gpointer *)&datamap))
+	{
+		/* Load the tab this depends on and then search again! */
+		if (handle_dependant_tab_load(datamap))
+		{
+			if (g_hash_table_lookup_extended(dynamic_widgets,name,NULL,(gpointer *)&widget))
+				return widget;
+		}
+		else
+			return NULL;
+
+		return NULL;
+	}
 	else
 		return NULL;
 }
@@ -189,12 +212,7 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/
 	for (i=0;i<num_groups;i++)
 	{
-//		if (groups[i][0] == '!')
-//		{
-//			value = !(GBOOLEAN)g_hash_table_lookup(widget_group_states,groups[i]+1);
-//		}
-//		else
-			value = (GBOOLEAN)g_hash_table_lookup(widget_group_states,groups[i]);
+		value = (GBOOLEAN)g_hash_table_lookup(widget_group_states,groups[i]);
 		if (type == AND)
 		{
 			if (value == FALSE)

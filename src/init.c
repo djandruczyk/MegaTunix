@@ -1074,7 +1074,10 @@ G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
 {
 	/*printf("dealloc_textmessage\n");*/
-	cleanup(message->msg);
+	if (!message)
+		return;
+	if (message->msg)
+		cleanup(message->msg);
 	cleanup(message);
 	return;
 }

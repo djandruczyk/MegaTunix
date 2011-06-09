@@ -167,6 +167,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	GCond *rtv_thread_cond = NULL;
 	GMutex *rtv_thread_mutex = NULL;
 
+	g_mutex_lock(mutex);
 	serial_params = DATA_GET(global_data,"serial_params");
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
 	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
@@ -182,11 +183,15 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	g_return_val_if_fail(pf_dispatch_queue,NULL);
 	g_return_val_if_fail(rtv_thread_cond,NULL);
 	g_return_val_if_fail(rtv_thread_mutex,NULL);
+	g_return_val_if_fail(setup_rtv,NULL);
+	g_return_val_if_fail(teardown_rtv,NULL);
 
-	if (setup_rtv)
-		if (!setup_rtv())
-			g_thread_exit(NULL);
-	g_mutex_lock(mutex);
+	if (!setup_rtv())
+	{
+		g_mutex_unlock(mutex);
+		g_mutex_free(mutex);
+		g_thread_exit(NULL);
+	}
 	g_async_queue_ref(io_data_queue);
 	g_async_queue_ref(pf_dispatch_queue);
 	g_mutex_lock(rtv_thread_mutex);
@@ -211,13 +216,12 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 			goto breakout;
 	}
 breakout:
-	g_mutex_unlock(rtv_thread_mutex);
 	g_async_queue_unref(io_data_queue);
 	g_async_queue_unref(pf_dispatch_queue);
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
-	if (teardown_rtv)
-		teardown_rtv();
+	g_mutex_unlock(rtv_thread_mutex);
+	teardown_rtv();
 	g_thread_exit(0);
 	return NULL;
 }
