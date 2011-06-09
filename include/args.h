@@ -36,6 +36,7 @@ struct _CmdLineArgs
 	gboolean hide_status;	/* Hide Status Window */
 	gboolean hide_maingui;	/* Hide Main Gui (Dash only mode */
 	gboolean offline;	/* Force offline mode */
+	gboolean dash_fullscreen;	/* Force dashboard fulscreen */
 	gint autolog_minutes;	/* How many minutes to log per file */
 	gchar *dbglog;		/* Global debug log file name */
 	gchar *autolog_dump_dir;/* What dir to put logs into */
@@ -43,6 +44,7 @@ struct _CmdLineArgs
 	gchar *network_host;	/* Network host */
 	gchar *persona;		/* ECU Persona to default to */
 	gchar *port;		/* Serial port override */
+	gchar *dashboard;	/* CLI selected dashboard */
 	gint network_port;	/* Network port */
 	gboolean network_mode;	/* Network mode */
 	gboolean listen_mode;	/* Listen mode */

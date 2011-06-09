@@ -13,6 +13,7 @@
 
 
 #include <args.h>
+#include <dashboard.h>
 #include <datalogging_gui.h>
 #include <debugging.h>
 #include <errno.h>
@@ -35,16 +36,17 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	GOptionContext *context = NULL;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
-	gint result = 0;
+	gboolean result = FALSE;
 	gchar ** vector = NULL;
 	gchar * netinfo = NULL;
+	gchar * dash = NULL;
 
 	args = init_args();
 	GOptionEntry entries[] =
 	{
 		{"verbose",'v',0,G_OPTION_ARG_NONE,&args->verbose,"Make MegaTunix be more verbose (debug option)",NULL},
 		{"debugargs",'d',0,G_OPTION_ARG_NONE,&args->debugargs,"Dump argument debugging info to console",NULL},
-		{"DEBUG Log",'D',0,G_OPTION_ARG_FILENAME,&args->dbglog,"Debug logfile name (referenced from homedir)",NULL},
+		{"DEBUG Log",'L',0,G_OPTION_ARG_FILENAME,&args->dbglog,"Debug logfile name (referenced from homedir)",NULL},
 		{"Version",'V',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
 		{"persona",'p',0,G_OPTION_ARG_STRING,&args->persona,"ECU Personality <MS1|MS2|MS3|FreeEMS|Secu3|JimStim|PIS|OBDII>",NULL},
@@ -56,6 +58,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		{"no-rttext",'r',0,G_OPTION_ARG_NONE,&args->hide_rttext,"Hide RealTime Vars Text window",NULL},
 		{"no-status",'s',0,G_OPTION_ARG_NONE,&args->hide_status,"Hide ECU Status window",NULL},
 		{"no-maingui",'m',0,G_OPTION_ARG_NONE,&args->hide_maingui,"Hide Main Gui window (i.e, dash only)",NULL},
+		{"Dashboard",'D',0,G_OPTION_ARG_STRING,&dash,"Dashboard to load","Use \"list\" to get a listing of choices"},
 		{"autolog",'a',0,G_OPTION_ARG_NONE,&args->autolog_dump,"Automatically dump datalog to file every N minutes",NULL},
 		{"minutes",'t',0,G_OPTION_ARG_INT,&args->autolog_minutes,"Minutes of data logged per logfile (default 5 minutes)",NULL},
 		{"log_dir",'l',0,G_OPTION_ARG_FILENAME,&args->autolog_dump_dir,"Directory to put datalogs into","/path/to/file"},
@@ -86,6 +89,22 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 				printf(_("not sure what the error is\n"));
 				break;
 		}
+	}
+	if (dash)
+	{
+		if (g_ascii_strcasecmp(dash,"list") == 0)
+		{
+			print_dash_choices();
+			exit(1);
+		}
+		else
+		{
+
+			args->dashboard = validate_dash_choice(dash, &result);
+			if (!result)
+				printf("Could not locate dashboard \"%s\",\ncheck spelling or use \'-D list\' to see the choices\n",dash);
+		}
+		g_free(dash);
 	}
 	if (netinfo)
 	{
@@ -156,7 +175,10 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	if (!args->hide_status)
 		DATA_SET(global_data,"status_visible",GINT_TO_POINTER(FALSE));
 	if (!args->hide_maingui)
+	{
 		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
+		DATA_SET(global_data,"gui_visible",GINT_TO_POINTER(FALSE));
+	}
 	if (args->debugargs)
 	{
 		printf(_("verbose option \"%i\"\n"),args->verbose);

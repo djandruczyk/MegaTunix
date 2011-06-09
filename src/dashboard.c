@@ -765,9 +765,18 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 		       	G_CALLBACK(toggle_gui_visible),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
-	item = gtk_menu_item_new_with_label("Close...");
-	g_signal_connect(G_OBJECT(item),"activate",
-		       	G_CALLBACK(close_dash),OBJ_GET(widget,"index"));
+	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
+	{
+		item = gtk_menu_item_new_with_label("Close Dash...");
+		g_signal_connect(G_OBJECT(item),"activate",
+				G_CALLBACK(close_dash),OBJ_GET(widget,"index"));
+	}
+	else
+	{
+		item = gtk_menu_item_new_with_label("Quit Megatunix");
+		g_signal_connect(G_OBJECT(item),"activate",
+				G_CALLBACK(leave),NULL);
+	}
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	if (event)
@@ -1003,18 +1012,34 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 	CmdLineArgs *args = DATA_GET(global_data,"args");
 
 	gdk_threads_enter();
-	label = lookup_widget("dash_1_label");
-	if (DATA_GET(global_data,"dash_1_name") != NULL)
-		tmpbuf = (gchar *)DATA_GET(global_data,"dash_1_name");
-	if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (strlen(tmpbuf) != 0))
+	if (args->dashboard)
 	{
-		gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
-		tmpstr = g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL);
-		gtk_label_set_text(GTK_LABEL(label),tmpstr);
-		g_free(tmpstr);
-		load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(1));
-		tmpbuf = NULL;
-		nodash1 = FALSE;
+		label = lookup_widget("dash_1_label");
+		if (GTK_IS_LABEL(label))
+		{
+			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
+			tmpstr = g_filename_to_utf8(args->dashboard,-1,NULL,NULL,NULL);
+			gtk_label_set_text(GTK_LABEL(label),tmpstr);
+			g_free(tmpstr);
+			load_dashboard(g_strdup(args->dashboard),GINT_TO_POINTER(1));
+			nodash1 = FALSE;
+		}
+	}
+	else
+	{
+		label = lookup_widget("dash_1_label");
+		if (DATA_GET(global_data,"dash_1_name") != NULL)
+			tmpbuf = (gchar *)DATA_GET(global_data,"dash_1_name");
+		if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (strlen(tmpbuf) != 0))
+		{
+			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
+			tmpstr = g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL);
+			gtk_label_set_text(GTK_LABEL(label),tmpstr);
+			g_free(tmpstr);
+			load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(1));
+			tmpbuf = NULL;
+			nodash1 = FALSE;
+		}
 	}
 
 	label = lookup_widget("dash_2_label");
@@ -1351,3 +1376,83 @@ G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
 	return TRUE;
 }
 
+
+G_MODULE_EXPORT void print_dash_choices(void)
+{
+	GDir * dir = NULL;
+	gchar * path = NULL;
+	gchar * file = NULL;
+	gchar **vector = NULL;
+	GError *err = NULL;
+
+	/* Personal Path */
+	path = g_build_path(PSEP,get_home(),".MegaTunix","Dashboards",NULL);
+	dir = g_dir_open(path,0,&err);
+	g_free(path);
+
+	printf("Here's the potential dash choices\n");
+	if (dir)
+	{
+		while ((file = g_dir_read_name(dir)) != NULL)
+		{
+			vector = g_strsplit(file,".xml",2);
+			printf ("%s\n",vector[0]);
+			g_strfreev(vector);
+		}
+	}
+	g_dir_close(dir);
+
+	/* System Path */
+#ifdef __WIN32__
+	path = g_build_path(PSEP,get_home(),"dist","Dashboards",NULL);
+#else
+	path = g_build_path(PSEP,DATA_DIR,"Dashboards",NULL);
+#endif
+	dir = g_dir_open(path,0,&err);
+	g_free(path);
+
+	if (dir)
+	{
+		while ((file = g_dir_read_name(dir)) != NULL)
+		{
+			vector = g_strsplit(file,".xml",2);
+			printf ("%s\n",vector[0]);
+			g_strfreev(vector);
+		}
+	}
+	g_dir_close(dir);
+}
+
+
+G_MODULE_EXPORT gchar * validate_dash_choice(gchar * choice, gboolean *result)
+{
+	gchar *path = NULL;
+	gboolean found = FALSE;
+	gchar * filename = NULL;
+
+	filename = g_strdup_printf("%s.xml",choice);
+
+	/* Check personal path first */
+	path = g_build_path(PSEP,get_home(),".MegaTunix","Dashboards",filename,NULL);
+	if (g_file_test(path,G_FILE_TEST_IS_REGULAR))
+		found = TRUE;
+	else
+	{
+
+#ifdef __WIN32__
+		path = g_build_path(PSEP,get_home(),"dist","Dashboards",filename,NULL);
+#else
+		path = g_build_path(PSEP,DATA_DIR,"Dashboards",filename,NULL);
+#endif
+	}
+	if (g_file_test(path,G_FILE_TEST_IS_REGULAR))
+		found = TRUE;
+	g_free(filename);
+	if (result)
+		*result = found;
+	if (found)
+		return (path);
+	else 
+		return NULL;
+			
+}
