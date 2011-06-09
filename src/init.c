@@ -47,6 +47,7 @@ G_MODULE_EXPORT void init(void)
 	/* defaults */
 	GHashTable *table = NULL;
 	GHashTable *commands = NULL;
+	GHashTable *widget_2_tab_hash = NULL;
 	gboolean *hidden_list = NULL;
 	GdkColormap *colormap = NULL;
 	CmdLineArgs *args = NULL;
@@ -135,6 +136,11 @@ G_MODULE_EXPORT void init(void)
 		DATA_SET_FULL(global_data,"widget_group_states",widget_group_states,g_hash_table_destroy);
 		g_hash_table_insert(widget_group_states,g_strdup("temperature"),(gpointer)TRUE);
 		g_hash_table_insert(widget_group_states,g_strdup("multi_expression"),(gpointer)TRUE);
+	}
+	if (!widget_2_tab_hash)
+	{
+		widget_2_tab_hash = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,cleanup);
+		DATA_SET_FULL(global_data,"widget_2_tab_hash",widget_2_tab_hash,g_hash_table_destroy);
 	}
 }
 
@@ -974,12 +980,15 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
         if (message->payload)
 	{
 		payload = (OutputData *)message->payload;
-		if (payload->data)
+		if (payload)
 		{
-			g_dataset_destroy(payload->data);
-			cleanup(payload->data);
+			if (payload->data)
+			{
+				g_dataset_destroy(payload->data);
+				cleanup(payload->data);
+			}
+			cleanup(payload);
 		}
-                cleanup(payload);
 	}
         cleanup(message);
 }
