@@ -310,7 +310,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 		gtk_misc_set_alignment(GTK_MISC(label),1,0.5);
 	else
 		gtk_misc_set_alignment(GTK_MISC(label),0.5,0.5);
-	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
+	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 
 	gtk_box_pack_start(GTK_BOX(parent),hbox,FALSE,FALSE,0);
 
