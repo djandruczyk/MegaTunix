@@ -59,6 +59,7 @@ ConfigFile;
 /* Prototypes */
 ConfigFile *cfg_new(void);
 ConfigFile *cfg_open_file(gchar * filename);
+ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name);
 gboolean cfg_write_file(ConfigFile * cfg, gchar * filename);
 void cfg_free(ConfigFile * cfg);
 gboolean cfg_read_string(ConfigFile * cfg, gchar * section, \

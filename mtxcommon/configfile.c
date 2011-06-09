@@ -26,7 +26,7 @@
 
 static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name);
 static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value);
-static ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name);
+
 static ConfigLine *cfg_find_string(ConfigSection * section, gchar * key);
 
 
@@ -459,7 +459,7 @@ static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar
  \param name (gchar *) section naem to search for
  \returns the ConfigSection * searched for
  */
-static ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name)
+ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name)
 {
 	ConfigSection *section;
 	GList *list;
