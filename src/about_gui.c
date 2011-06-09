@@ -13,6 +13,7 @@
 
 #include <about_gui.h>
 #include <logo.h>
+#include <widgetmgmt.h>
 
 
 
@@ -73,7 +74,7 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 	{
 		gchar *authors[] = {"David J. Andruczyk",NULL};
 		gchar *artists[] = {"Dale Anderson\nChristopher Mire\nTrent Stromkins\nWayne (TurboCamaro)\n71jeep",NULL};
-		gtk_show_about_dialog(NULL,
+		gtk_show_about_dialog(GTK_WINDOW(lookup_widget("main_window")),
 				"name","MegaTunix Tuning Software",
 				"version",VERSION,
 				"copyright","David J. Andruczyk(2011)",

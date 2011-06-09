@@ -276,6 +276,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">True</property>
                                 <property name="always_show_image">True</property>
+                                <signal name="activate" handler="about_popup"/>
                               </widget>
                             </child>
                           </widget>
