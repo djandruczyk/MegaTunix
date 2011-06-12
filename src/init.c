@@ -68,11 +68,11 @@ G_MODULE_EXPORT void init(void)
 	for (i=0;i<100;i++)
 		hidden_list[i]=FALSE;
 
-	DATA_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));	/* Don't make dash fullscreen by default */
-	DATA_SET(global_data,"gui_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
-	DATA_SET(global_data,"main_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
-	DATA_SET(global_data,"status_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
-	DATA_SET(global_data,"rtt_visible",GINT_TO_POINTER(TRUE));	/* Gui is visible on startup by default */
+//	DATA_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));	/* Don't make dash fullscreen by default */
+//	DATA_SET(global_data,"gui_visible",GINT_TO_POINTER(1));	/* Gui is visible on startup by default */
+//	DATA_SET(global_data,"main_visible",GINT_TO_POINTER(1));	/* Gui is visible on startup by default */
+//	DATA_SET(global_data,"status_visible",GINT_TO_POINTER(1));	/* Gui is visible on startup by default */
+//	DATA_SET(global_data,"rtt_visible",GINT_TO_POINTER(1));	/* Gui is visible on startup by default */
 	DATA_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));	/* Disallow network connections by default */
 	DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
 	DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */

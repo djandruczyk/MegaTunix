@@ -95,7 +95,7 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 			G_CALLBACK (enter_leave_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_release_event",
 			G_CALLBACK (dash_button_event), NULL);
-	g_signal_connect (G_OBJECT (ebox), "button_press_event",
+	g_signal_connect(G_OBJECT (ebox), "button_press_event",
 			G_CALLBACK (dash_button_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "popup-menu",
 			G_CALLBACK (dash_popup_menu_handler), NULL);
@@ -620,11 +620,12 @@ G_MODULE_EXPORT void toggle_main_visible(void)
 		return;
 	if (GTK_WIDGET_VISIBLE(tmpwidget))
 	{
-		gtk_widget_hide_all (tmpwidget);
+		gtk_widget_set_visible (tmpwidget,FALSE);
 		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{
+		gtk_widget_set_visible(tmpwidget,TRUE);
 		x = (GINT)DATA_GET(global_data,"main_x_origin");
 		y = (GINT)DATA_GET(global_data,"main_y_origin");
 		gtk_widget_show_all(tmpwidget);
@@ -700,7 +701,7 @@ G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr att
 }
 
 
-G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget)
 {
 	dash_context_popup(widget, NULL);
 	return TRUE;
@@ -709,7 +710,7 @@ G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget, gpointer dat
 
 G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 {
-	GtkWidget *menu = NULL;
+	static GtkWidget *menu = NULL;
 	GtkWidget *item = NULL;
 	GtkWidget *d_item = NULL;
 	GtkWidget *n_item = NULL;
@@ -727,42 +728,44 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(n_item),!get_dash_daytime_mode(gtk_widget_get_toplevel(widget)));
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),n_item);
 	g_signal_connect(G_OBJECT(d_item),"toggled",
-		       	G_CALLBACK(set_dash_time_mode),(gpointer)gtk_widget_get_toplevel(widget));
-	
+			G_CALLBACK(set_dash_time_mode),(gpointer)gtk_widget_get_toplevel(widget));
+
 	item = gtk_check_menu_item_new_with_label("Show Tattletales");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),dash_lookup_attribute(gtk_widget_get_toplevel(widget),TATTLETALE));
 	g_signal_connect(G_OBJECT(item),"toggled",
-		       	G_CALLBACK(toggle_dash_tattletales),(gpointer)widget);
+			G_CALLBACK(toggle_dash_tattletales),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_menu_item_new_with_label("Reset Tattletales");
 	gtk_widget_set_sensitive(item,dash_lookup_attribute(gtk_widget_get_toplevel(widget),TATTLETALE));
 	g_signal_connect(G_OBJECT(item),"activate",
-		       	G_CALLBACK(reset_dash_tattletales),(gpointer)widget);
+			G_CALLBACK(reset_dash_tattletales),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_check_menu_item_new_with_label("Antialiasing");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),dash_lookup_attribute(gtk_widget_get_toplevel(widget),ANTIALIAS));
 	g_signal_connect(G_OBJECT(item),"toggled",
-		       	G_CALLBACK(toggle_dash_antialias),(gpointer)widget);
+			G_CALLBACK(toggle_dash_antialias),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_check_menu_item_new_with_label("Fullscreen");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),(GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"));
 	g_signal_connect_swapped(G_OBJECT(item),"toggled",
-		       	G_CALLBACK(toggle_dash_fullscreen),(gpointer)widget);
+			G_CALLBACK(toggle_dash_fullscreen),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	item = gtk_check_menu_item_new_with_label("Stay on Top");
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),(GBOOLEAN)OBJ_GET(dash,"dash_on_top"));
 	g_signal_connect_swapped(G_OBJECT(item),"toggled",
-		       	G_CALLBACK(toggle_dash_on_top),(gpointer)widget);
+			G_CALLBACK(toggle_dash_on_top),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
-	item = gtk_check_menu_item_new_with_label("Hide MTX Gui");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),!(GBOOLEAN)DATA_GET(global_data,"gui_visible"));
+	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
+		item = gtk_check_menu_item_new_with_label("Hide MTX Gui");
+	else
+		item = gtk_check_menu_item_new_with_label("Show MTX Gui");
 	g_signal_connect_swapped(G_OBJECT(item),"toggled",
-		       	G_CALLBACK(toggle_gui_visible),(gpointer)widget);
+			G_CALLBACK(toggle_gui_visible),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
@@ -794,6 +797,7 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
 			button, event_time);
 	gtk_widget_show_all(menu);
+
 }
 
 
@@ -803,6 +807,7 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 	gchar * tmpbuf = NULL;
 	GtkWidget *cbutton = NULL;
 
+	/* IF gui isn't visible, make it visible */
 	if (!(GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 		toggle_gui_visible(NULL,NULL);
         DATA_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
@@ -1063,11 +1068,8 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 	{
 		retval = present_dash_filechooser(NULL,GINT_TO_POINTER(1));
 		gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
-		gdk_threads_leave();
-		return;
 		if (!retval)
 		{
-			CmdLineArgs *args = DATA_GET(global_data,"args");
 			args->be_quiet = TRUE;
 			g_signal_emit_by_name(lookup_widget("main_window"),"destroy_event");
 		}
@@ -1339,25 +1341,25 @@ G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 	/* IF visible, hide them */
 	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 	{
-		if (DATA_GET(global_data,"main_visible"))
+		if ((GBOOLEAN)DATA_GET(global_data,"main_visible"))
 			toggle_main_visible();
-		if (DATA_GET(global_data,"status_visible"))
+		if ((GBOOLEAN)DATA_GET(global_data,"status_visible"))
 			toggle_status_visible();
-		if (DATA_GET(global_data,"rtt_visible"))
+		if ((GBOOLEAN)DATA_GET(global_data,"rtt_visible"))
 			toggle_rtt_visible();
 		DATA_SET(global_data,"gui_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{
-		if (!DATA_GET(global_data,"main_visible"))
+		if (!(GBOOLEAN)DATA_GET(global_data,"main_visible"))
 			toggle_main_visible();
-		if (!DATA_GET(global_data,"status_visible"))
+		if (!(GBOOLEAN)DATA_GET(global_data,"status_visible"))
 			toggle_status_visible();
-		if (!DATA_GET(global_data,"rtt_visible"))
+		if (!(GBOOLEAN)DATA_GET(global_data,"rtt_visible"))
 			toggle_rtt_visible();
 		DATA_SET(global_data,"gui_visible",GINT_TO_POINTER(TRUE));
 	}
-			
+	return;	
 }
 
 
@@ -1381,7 +1383,7 @@ G_MODULE_EXPORT void print_dash_choices(void)
 {
 	GDir * dir = NULL;
 	gchar * path = NULL;
-	gchar * file = NULL;
+	const gchar * file = NULL;
 	gchar **vector = NULL;
 	GError *err = NULL;
 

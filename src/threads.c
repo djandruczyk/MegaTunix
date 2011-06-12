@@ -143,6 +143,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		if (DATA_GET(global_data,"leaving") || 
 				DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
+fast_exit:
 			/* drain queue and exit thread */
 			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
 				dealloc_message(message);
@@ -191,6 +192,8 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
+					if (DATA_GET(global_data,"leaving"))
+						goto fast_exit;
 					gdk_threads_enter();
 					message->status = message->command->function(message->command,message->command->func_call_arg);
 					gdk_threads_leave();
@@ -207,6 +210,8 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 				/*				printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
 				if (message->command->helper_function)
 				{
+					if (DATA_GET(global_data,"leaving"))
+						goto fast_exit;
 					gdk_threads_enter();
 					message->command->helper_function(message, message->command->helper_func_arg);
 					gdk_threads_leave();
