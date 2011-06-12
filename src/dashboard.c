@@ -37,7 +37,7 @@ extern gconstpointer *global_data;
  \param  chooser, the fileshooser that triggered the signal
  \param data, user date
  */
-G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
+G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *dash = NULL;
@@ -54,9 +54,9 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	xmlNode *root_element = NULL;
 
 	if (!DATA_GET(global_data,"interrogated"))
-		return;
+		return NULL;
 	if (filename == NULL)
-		return;
+		return NULL;
 
 	LIBXML_TEST_VERSION
 
@@ -65,7 +65,7 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	if (doc == NULL)
 	{
 		printf(_("Error: could not parse dashboard XML file %s"),filename);
-		return;
+		return NULL;
 	}
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	register_widget(filename,window);
@@ -82,9 +82,9 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 	gtk_container_add(GTK_CONTAINER(window),ebox);
 
 	gtk_widget_add_events(GTK_WIDGET(ebox),
-/*			GDK_POINTER_MOTION_MASK|
-			GDK_POINTER_MOTION_HINT_MASK|
-*/
+			/*			GDK_POINTER_MOTION_MASK|
+						GDK_POINTER_MOTION_HINT_MASK|
+			 */
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
 			GDK_KEY_PRESS_MASK |
@@ -147,6 +147,7 @@ G_MODULE_EXPORT void load_dashboard(gchar *filename, gpointer data)
 		gtk_window_set_default_size(GTK_WINDOW(window), width,height);
 	gtk_widget_show_all(window);
 	dash_shape_combine(dash,TRUE);
+	return window;
 }
 
 
@@ -455,40 +456,27 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 		cairo_rectangle(cr,0,height-3,16,3);
 		cairo_rectangle(cr,0,height-16,3,16);
 		cairo_fill(cr);
-
-		/*
-		cairo_set_source_rgb(cr, 0.0,0.0,0.0);
-		cairo_rectangle(cr,width-16,0,13,13);
-		cairo_rectangle(cr,3,3,13,13);
-		cairo_rectangle(cr,3,height-16,13,13);
-		cairo_rectangle(cr,width-16,height-16,13,13);
-		cairo_fill(cr);
-		*/
 	}
 
-	
 	if ((GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
 		cairo_rectangle(cr,0,0,width,height);
-	
-//	if (!(GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
+
+	children = GTK_FIXED(dash)->children;
+	for (i=0;i<g_list_length(children);i++)
 	{
-		children = GTK_FIXED(dash)->children;
-		for (i=0;i<g_list_length(children);i++)
-		{
-			child = g_list_nth_data(children,i);
-			x = child->x;
-			y = child->y;
-			gtk_widget_size_request(child->widget,&req);
-			w = req.width;
-			h = req.height;
-			radius = MIN(w,h)/2;
-			xc = x+w/2;
-			yc = y+h/2;
-			
-			cairo_arc(cr,xc,yc,radius,0,2 * M_PI);
-			cairo_fill(cr);
-			cairo_stroke(cr);
-		}
+		child = g_list_nth_data(children,i);
+		x = child->x;
+		y = child->y;
+		gtk_widget_size_request(child->widget,&req);
+		w = req.width;
+		h = req.height;
+		radius = MIN(w,h)/2;
+		xc = x+w/2;
+		yc = y+h/2;
+
+		cairo_arc(cr,xc,yc,radius,0,2 * M_PI);
+		cairo_fill(cr);
+		cairo_stroke(cr);
 	}
 	cairo_destroy(cr);
 	if (GTK_IS_WINDOW(gtk_widget_get_toplevel(dash)))
@@ -761,11 +749,35 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
-		item = gtk_check_menu_item_new_with_label("Hide MTX Gui");
+		item = gtk_check_menu_item_new_with_label("Hide All Windows");
 	else
-		item = gtk_check_menu_item_new_with_label("Show MTX Gui");
+		item = gtk_check_menu_item_new_with_label("Show All Windows");
 	g_signal_connect_swapped(G_OBJECT(item),"toggled",
 			G_CALLBACK(toggle_gui_visible),(gpointer)widget);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+	if ((GBOOLEAN)DATA_GET(global_data,"main_visible"))
+		item = gtk_check_menu_item_new_with_label("Hide Main Gui");
+	else
+		item = gtk_check_menu_item_new_with_label("Show Main Gui");
+	g_signal_connect_swapped(G_OBJECT(item),"toggled",
+			G_CALLBACK(toggle_main_visible),(gpointer)widget);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+	if ((GBOOLEAN)DATA_GET(global_data,"rtt_visible"))
+		item = gtk_check_menu_item_new_with_label("Hide Runtime Text");
+	else
+		item = gtk_check_menu_item_new_with_label("Show Runtime Text");
+	g_signal_connect_swapped(G_OBJECT(item),"toggled",
+			G_CALLBACK(toggle_rtt_visible),(gpointer)widget);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
+	if ((GBOOLEAN)DATA_GET(global_data,"status_visible"))
+		item = gtk_check_menu_item_new_with_label("Hide Runtime Status");
+	else
+		item = gtk_check_menu_item_new_with_label("Show Runtime Status");
+	g_signal_connect_swapped(G_OBJECT(item),"toggled",
+			G_CALLBACK(toggle_status_visible),(gpointer)widget);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
@@ -1008,6 +1020,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 
 G_MODULE_EXPORT void initialize_dashboards_pf(void)
 {
+	GtkWidget *widget = NULL;
 	GtkWidget * label = NULL;
 	gboolean retval = FALSE;
 	gchar * tmpbuf = NULL;
@@ -1026,9 +1039,11 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 			tmpstr = g_filename_to_utf8(args->dashboard,-1,NULL,NULL,NULL);
 			gtk_label_set_text(GTK_LABEL(label),tmpstr);
 			g_free(tmpstr);
-			load_dashboard(g_strdup(args->dashboard),GINT_TO_POINTER(1));
+			widget = load_dashboard(g_strdup(args->dashboard),GINT_TO_POINTER(1));
 			nodash1 = FALSE;
 		}
+		if ((GTK_IS_WIDGET(widget) && (args->dash_fullscreen)))
+			toggle_dash_fullscreen(widget,NULL);
 	}
 	else
 	{

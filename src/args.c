@@ -59,6 +59,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		{"no-status",'s',0,G_OPTION_ARG_NONE,&args->hide_status,"Hide ECU Status window",NULL},
 		{"no-maingui",'m',0,G_OPTION_ARG_NONE,&args->hide_maingui,"Hide Main Gui window (i.e, dash only)",NULL},
 		{"Dashboard",'D',0,G_OPTION_ARG_STRING,&dash,"Dashboard to load","Use \"list\" to get a listing of choices"},
+		{"FullscreenDash",'F',0,G_OPTION_ARG_NONE,&args->dash_fullscreen,"Dashboard  should go fullscreen",NULL},
 		{"autolog",'a',0,G_OPTION_ARG_NONE,&args->autolog_dump,"Automatically dump datalog to file every N minutes",NULL},
 		{"minutes",'t',0,G_OPTION_ARG_INT,&args->autolog_minutes,"Minutes of data logged per logfile (default 5 minutes)",NULL},
 		{"log_dir",'l',0,G_OPTION_ARG_FILENAME,&args->autolog_dump_dir,"Directory to put datalogs into","/path/to/file"},
@@ -200,6 +201,8 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		printf(_("Persona option \"%s\"\n"),args->persona);
 		printf(_("quiet option \"%i\"\n"),args->be_quiet);
 		printf(_("inhibit tabs \"%i\"\n"),args->inhibit_tabs);
+		printf(_("Dashboard Selected \"%s\"\n"),args->dashboard);
+		printf(_("Dashboard Fullscreen \"%i\"\n"),args->dash_fullscreen);
 		printf(_("no rttext option \"%i\"\n"),args->hide_rttext);
 		printf(_("no status option \"%i\"\n"),args->hide_status);
 		printf(_("no maingui option \"%i\"\n"),args->hide_maingui);
