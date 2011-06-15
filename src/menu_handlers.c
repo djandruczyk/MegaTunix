@@ -66,10 +66,10 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 		if (GTK_IS_WIDGET(item))
 			OBJ_SET(item,"target_tab",
 					GINT_TO_POINTER(items[i].tab));
-		if (!check_tab_existance(items[i].tab))
-			gtk_widget_set_sensitive(item,FALSE);
-		else
+		if (check_tab_existance(items[i].tab))
 			gtk_widget_set_sensitive(item,TRUE);
+		else
+			gtk_widget_set_sensitive(item,FALSE);
 	}
 	for (i=0;i< (sizeof(fio_items)/sizeof(fio_items[0]));i++)
 	{
@@ -178,9 +178,7 @@ G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 			continue;
 		c_tab = (TabIdent)OBJ_GET(child,"tab_ident");
 		if (c_tab == target)
-		{
 			return TRUE;
-		}
 	}
 	return FALSE;
 }

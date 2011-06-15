@@ -55,6 +55,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	gchar * glade_file = NULL;
 	gchar * tmpbuf = NULL;
 	gchar * tab_name = NULL;
+	gchar * tab_ident = NULL;
 	gboolean tmpi = FALSE;
 	GtkWidget *label = NULL;
 	GtkWidget *container = NULL;
@@ -122,7 +123,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			label = gtk_label_new(NULL);
 			tabinfo->tab_label = label;
 			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
-			g_free(tab_name);
 			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
 			{
 				if (tmpi)
@@ -142,6 +142,13 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			}
 			gtk_misc_set_alignment(GTK_MISC(label),0,0.5);
 			container = gtk_vbox_new(1,0);
+			if (cfg_read_string(cfgfile,"topframe","tab_ident",&tab_ident))
+			{
+				tmpi = translate_string(tab_ident);
+				g_free(tab_ident);
+				OBJ_SET(container,"tab_ident",GINT_TO_POINTER(tmpi));
+			}
+			g_free(tab_name);
 			OBJ_SET_FULL(label,"glade_file",g_strdup(glade_file),cleanup);
 			OBJ_SET_FULL(label,"datamap_file",g_strdup(map_file),cleanup);
 			OBJ_SET(label,"not_rendered",GINT_TO_POINTER(TRUE));
