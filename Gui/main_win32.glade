@@ -137,39 +137,71 @@
                                 <child>
                                   <widget class="GtkMenu" id="goto_tab1_menu">
                                     <child>
-                                      <widget class="GtkMenuItem" id="vetable_tuning_menuitem">
-                                        <property name="visible">True</property>
-                                        <property name="sensitive">False</property>
+                                      <widget class="GtkImageMenuItem" id="vetable_tuning_menuitem">
                                         <property name="label" translatable="yes">_VE Tables</property>
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="use_underline">True</property>
+					<property name="use_stock">False</property>
+                                        <property name="always_show_image">True</property>
                                         <signal name="activate" handler="jump_to_tab"/>
+					<child internal-child="image">
+                                          <widget class="GtkImage" id="image6">
+                                            <property name="visible">True</property>
+                                            <property name="stock">gtk-leave-fullscreen</property>
+                                          </widget>
+                                        </child>
                                       </widget>
                                     </child>
                                     <child>
-                                      <widget class="GtkMenuItem" id="runtime_vars_menuitem">
-                                        <property name="visible">True</property>
-                                        <property name="sensitive">False</property>
+                                      <widget class="GtkImageMenuItem" id="runtime_vars_menuitem">
                                         <property name="label" translatable="yes">_Runtime Data</property>
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="use_underline">True</property>
+					<property name="use_stock">False</property>
+                                        <property name="always_show_image">True</property>
                                         <signal name="activate" handler="jump_to_tab"/>
+					<child internal-child="image">
+                                          <widget class="GtkImage" id="image9">
+                                            <property name="visible">True</property>
+                                            <property name="stock">gtk-execute</property>
+                                          </widget>
+                                        </child>
                                       </widget>
                                     </child>
                                     <child>
-                                      <widget class="GtkMenuItem" id="spark_tuning_menuitem">
-                                        <property name="visible">True</property>
-                                        <property name="sensitive">False</property>
+                                      <widget class="GtkImageMenuItem" id="spark_tuning_menuitem">
                                         <property name="label" translatable="yes">_Spark Tables</property>
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
                                         <property name="use_underline">True</property>
+					<property name="use_stock">False</property>
+                                        <property name="always_show_image">True</property>
                                         <signal name="activate" handler="jump_to_tab"/>
+					<child internal-child="image">
+                                          <widget class="GtkImage" id="image7">
+                                            <property name="visible">True</property>
+                                            <property name="stock">gtk-fullscreen</property>
+                                          </widget>
+                                        </child>
                                       </widget>
                                     </child>
                                     <child>
-                                      <widget class="GtkMenuItem" id="afr_tuning_menuitem">
+                                      <widget class="GtkImageMenuItem" id="afr_tuning_menuitem">
+                                        <property name="label" translatable="yes">_AFR Tables</property>
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
-                                        <property name="label" translatable="yes">_AFR Tables</property>
                                         <property name="use_underline">True</property>
+					<property name="use_stock">False</property>
+                                        <property name="always_show_image">True</property>
                                         <signal name="activate" handler="jump_to_tab"/>
+					<child internal-child="image">
+                                          <widget class="GtkImage" id="image8">
+                                            <property name="visible">True</property>
+                                            <property name="stock">gtk-leave-fullscreen</property>
+                                          </widget>
+                                        </child>
                                       </widget>
                                     </child>
                                   </widget>
