@@ -181,13 +181,11 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		DATA_SET(global_data,"status_visible",GINT_TO_POINTER(TRUE));
 	if (args->hide_maingui)
 	{
-		printf("Told to hide main gui!\n");
 		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
 		DATA_SET(global_data,"gui_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{
-		printf("Told to SHOW main gui!\n");
 		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(TRUE));
 		DATA_SET(global_data,"gui_visible",GINT_TO_POINTER(TRUE));
 	}
