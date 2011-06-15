@@ -56,7 +56,6 @@ static GLuint font_list_base;
 
 #define DEFAULT_WIDTH  640
 #define DEFAULT_HEIGHT 480                                                                                  
-static GHashTable *winstat = NULL;
 static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 
@@ -234,6 +233,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gint smallstep = 0;
 	gint bigstep = 0;
 	Ve_View_3D *ve_view;
+	GHashTable *ve_view_hash = NULL;
 	extern gboolean gl_ability;
 	Firmware_Details *firmware = NULL;
 	gint table_num =  -1;
@@ -246,13 +246,14 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	firmware = DATA_GET(global_data,"firmware");
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (GINT)g_ascii_strtod(tmpbuf,NULL);
+	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
 
-	if (!winstat)
-		winstat = g_hash_table_new(NULL,NULL);
-	if ((GBOOLEAN)g_hash_table_lookup(winstat,GINT_TO_POINTER(table_num)))
+	g_return_val_if_fail(ve_view_hash,FALSE);
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(tmpbuf,FALSE);
+
+	if (g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(table_num)))
 		return TRUE;
-	else
-		g_hash_table_insert(winstat,GINT_TO_POINTER(table_num), GINT_TO_POINTER(TRUE));
 
 	ve_view = initialize_ve3d_view();
 	if (firmware->table_params[table_num]->x_multi_source)
@@ -466,10 +467,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		bind_to_lists(window,firmware->table_params[table_num]->bind_to_list);
 	}
 
-	/* Store it in global_data by name, someone tell me why I do it this ugly way? */
-	tmpbuf = g_strdup_printf("ve_view_%i",table_num);
-	DATA_SET(global_data,tmpbuf,ve_view);
-	g_free(tmpbuf);
+	/* Store it in ve_view_hash by table_num */
+	g_hash_table_insert(ve_view_hash,GINT_TO_POINTER(table_num), ve_view);
 
 	g_signal_connect(G_OBJECT(window), "delete_event",
 			G_CALLBACK(ve3d_shutdown),
@@ -688,18 +687,18 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
  */
 G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
-	gchar *tmpbuf = NULL;
+	GHashTable *ve_view_hash = NULL;
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
+	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
 			
+	g_return_val_if_fail(ve_view,FALSE);
+	g_return_val_if_fail(ve_view_hash,FALSE);
 	//printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
 	store_list("burners",g_list_remove(
 				get_list("burners"),(gpointer)ve_view->burn_but));
-	g_hash_table_remove(winstat,GINT_TO_POINTER(ve_view->table_num));
-	tmpbuf = g_strdup_printf("ve_view_%i",ve_view->table_num);
-	DATA_SET(global_data,tmpbuf,NULL);
-	g_free(tmpbuf);
+	g_hash_table_remove(ve_view_hash,GINT_TO_POINTER(ve_view->table_num));
 	free_ve3d_sliders(ve_view->table_num);
 	gtk_widget_destroy(ve_view->window);
 	g_free(ve_view->x_source);
@@ -2186,8 +2185,13 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	gchar * string = NULL;
 	Ve_View_3D *ve_view = NULL;
 	Firmware_Details *firmware = NULL;
+	GHashTable *ve_view_hash = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
+	g_return_if_fail(firmware);
+	g_return_if_fail(ve_view_hash);
+
 	total_tables = firmware->total_tables;
 	gboolean table_list[total_tables];
 
@@ -2244,9 +2248,7 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 		{
 			if (table_list[i] == TRUE)
 			{
-				string = g_strdup_printf("ve_view_%i",i);
-				ve_view = DATA_GET(global_data,string);
-				g_free(string);
+				ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
 				if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 					queue_ve3d_update(ve_view);
 			}
@@ -2900,24 +2902,27 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	gint * algorithm;
 	Firmware_Details *firmware = NULL;
 	GHashTable *sources_hash = NULL;
+	GHashTable *ve_view_hash = NULL;
 
 	sources_hash = DATA_GET(global_data,"sources_hash");
+	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
 	firmware = DATA_GET(global_data,"firmware");
 	algorithm = DATA_GET(global_data,"algorithm");
 	active_page = (TabIdent)DATA_GET(global_data,"active_page");
+
+	g_return_val_if_fail(sources_hash,TRUE);
+	g_return_val_if_fail(ve_view_hash,TRUE);
+	g_return_val_if_fail(firmware,TRUE);
+	g_return_val_if_fail(algorithm,TRUE);
 	/* Update all the dynamic RT Sliders */
 
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
-	if (!firmware)
-		return TRUE;
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		string = g_strdup_printf("ve_view_%i",i);
-		ve_view = DATA_GET(global_data,string);
-		g_free(string);
+		ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
 		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 		{
 			/* Get X values */

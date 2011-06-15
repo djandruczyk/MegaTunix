@@ -604,6 +604,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	Firmware_Details *firmware = NULL;
 	GHashTable **interdep_vars = NULL;
 	GHashTable *sources_hash = NULL;
+	GHashTable *ve_view_hash = NULL;
 	GList ***ecu_widgets = NULL;
 	GList **tab_gauges = NULL;
 
@@ -634,6 +635,11 @@ G_MODULE_EXPORT void mem_alloc(void)
 	{
 		sources_hash = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,cleanup);
 		DATA_SET_FULL(global_data,"sources_hash",sources_hash,g_hash_table_destroy);
+	}
+	if (!ve_view_hash)
+	{
+		ve_view_hash = g_hash_table_new(NULL,NULL);
+		DATA_SET_FULL(global_data,"ve_view_hash",ve_view_hash,g_hash_table_destroy);
 	}
 	/* Hash tables to store the interdependant deferred variables before
 	 * download...
