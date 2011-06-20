@@ -285,7 +285,7 @@ bitmask=255
 bitvals=0,1
 choices=0,1
 width=7
-_tooltip=Initial value for this pin at power on
+_tooltip=Value for this pin when triggered
 
 [pm3_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,width,tooltip
@@ -294,7 +294,7 @@ bitmask=255
 bitvals=0,1
 choices=0,1
 width=7
-_tooltip=Initial value for this pin at power on
+_tooltip=Value for this pin when triggered
 
 [pm4_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,width,tooltip
@@ -303,7 +303,7 @@ bitmask=255
 bitvals=0,1
 choices=0,1
 width=7
-_tooltip=Initial value for this pin at power on
+_tooltip=Value for this pin when triggered
 
 [pm5_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,width,tooltip
@@ -312,7 +312,7 @@ bitmask=255
 bitvals=0,1
 choices=0,1
 width=7
-_tooltip=Initial value for this pin at power on
+_tooltip=Value for this pin when triggered
 
 [pt6_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,width,tooltip
@@ -321,7 +321,7 @@ bitmask=255
 bitvals=0,1
 choices=0,1
 width=7
-_tooltip=Initial value for this pin at power on
+_tooltip=Value for this pin when triggered
 
 [pt7_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,width,tooltip
@@ -330,7 +330,7 @@ bitmask=255
 bitvals=0,1
 choices=0,1
 width=7
-_tooltip=Initial value for this pin at power on
+_tooltip=Value for this pin when triggered
 
 [pa0_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,width,tooltip
@@ -339,7 +339,7 @@ bitmask=255
 bitvals=0,1
 choices=0,1
 width=7
-_tooltip=Initial value for this pin at power on
+_tooltip=Value for this pin when triggered
 
 [pm2_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
