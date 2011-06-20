@@ -146,9 +146,11 @@ gui_in_files = 	\
 		ms2-e-3.x-inj_timing_6x6x3.datamap.in \
 		ms2-e-3.0.3v-inj_timing_6x6x3.datamap.in \
 		ms2-e-3.x-local_outputs.datamap.in \
+		ms2-e-3.x.als-local_outputs.datamap.in \
 		ms2-e-3.x-nitrous_staging_orfc.datamap.in \
 		ms2-e-3.x-noise_lag.datamap.in \
 		ms2-e-3.x-remote_outputs.datamap.in \
+		ms2-e-3.x.als-remote_outputs.datamap.in \
 		ms2-e-3.x-sequential.datamap.in \
 		ms2-e-accel.datamap.in \
 		ms2-e-boost_knock_launch.datamap.in \

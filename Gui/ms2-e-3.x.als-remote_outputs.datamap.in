@@ -304,7 +304,7 @@ offset=904
 bitmask=255
 bitvals=0,1
 choices=0,1
-_tooltip=Value when this output is triggered
+_tooltip=Initial value for this pin at power on
 
 [rmt2_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
@@ -312,7 +312,7 @@ offset=905
 bitmask=255
 bitvals=0,1
 choices=0,1
-_tooltip=Value when this output is triggered
+_tooltip=Initial value for this pin at power on
 
 [rmt3_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
@@ -320,7 +320,7 @@ offset=906
 bitmask=255
 bitvals=0,1
 choices=0,1
-_tooltip=Value when this output is triggered
+_tooltip=Initial value for this pin at power on
 
 [rmt4_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
@@ -328,7 +328,7 @@ offset=907
 bitmask=255
 bitvals=0,1
 choices=0,1
-_tooltip=Value when this output is triggered
+_tooltip=Initial value for this pin at power on
 
 [rmt5_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
@@ -336,7 +336,7 @@ offset=908
 bitmask=255
 bitvals=0,1
 choices=0,1
-_tooltip=Value when this output is triggered
+_tooltip=Initial value for this pin at power on
 
 [rmt6_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
@@ -344,7 +344,7 @@ offset=909
 bitmask=255
 bitvals=0,1
 choices=0,1
-_tooltip=Value when this output is triggered
+_tooltip=Initial value for this pin at power on
 
 [rmt7_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
@@ -352,7 +352,7 @@ offset=910
 bitmask=255
 bitvals=0,1
 choices=0,1
-_tooltip=Value when this output is triggered
+_tooltip=Initial value for this pin at power on
 
 [rmt8_triggerval_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
@@ -360,135 +360,135 @@ offset=911
 bitmask=255
 bitvals=0,1
 choices=0,1
-_tooltip=Value when this output is triggered
+_tooltip=Initial value for this pin at power on
 
 [rmt1_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=872
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt2_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=874
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt3_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=876
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt4_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=878
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt5_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=880
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt6_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=882
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt7_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=884
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt8_cond1_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=886
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt1_cond2_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=873
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt2_cond2_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=875
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt3_cond2_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=877
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt4_cond2_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=879
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt5_cond2_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=881
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt6_cond2_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=883
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt7_cond2_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=885
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt8_cond2_combo]
 keys=offset,bitmask,bitvals,choices,tooltip
 offset=887
 bitmask=255
-bitvals=60,61,62
-choices=Less Than,Equal To,Greater Than
-_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+bitvals=60,61,62,38
+choices=Less Than,Equal To,Greater Than,Bitwise AND
+_tooltip=Comparison Operator, Less than, Equal to, Greater Than or Bitwise AND
 
 [rmt1_output_source1_combo]
 keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
