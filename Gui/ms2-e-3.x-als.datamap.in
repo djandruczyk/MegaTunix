@@ -1,0 +1,199 @@
+[global]
+description=Object data map for MS2-E-3.x AntiLag
+_tab_name=_Antilag
+id_prefix=ALS_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=4
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
+[antilag_params_frame]
+keys=bind_to_list
+bind_to_list=antilag
+
+#----- Labels ----------------------------------------------------------------
+
+#----- Combos ----------------------------------------------------------------
+
+[als_enable_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+offset=996
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=1
+toggle_groups=,antilag
+_tooltip=Enables or Disabled the AntiLag System
+
+[als_forceidle_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=996
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=2
+_tooltip=Enables or Disabled use of the Idle Valve vs. a generic output
+
+[als_dynamic_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=996
+choices=Disabled,Enabled
+bitvals=0,1
+bitmask=4
+_tooltip=Ask Baldur
+
+[als_pin_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+offset=997
+choices=PE0/JS7,PE1,JS10,JS11,JS5,JS4,Remote Port3 Bit 0,Remote Port3 Bit 1,Remote Port3 Bit 2,Remote Port3 Bit 3,Remote Port3 Bit4,Remote Port3 Bit 5,Remote Port3 Bit 6,Remote Port3 Bit 7,Always ON
+bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,15
+bitmask=15
+_tooltip=Input Pin, active low, i.e. switched to ground enabled AntiLag
+
+#----- Entries ---------------------------------------------------------------
+
+[als_rpm_entry1]
+keys=offset,size,raw_upper,tooltip
+offset=998
+size=_U16_
+raw_upper=15000
+_tooltip=Minimum RPM
+
+[als_rpm_entry2]
+keys=offset,size,raw_upper,tooltip
+offset=1000
+size=_U16_
+raw_upper=15000
+_tooltip=Second RPM value
+
+[als_rpm_entry3]
+keys=offset,size,raw_upper,tooltip
+offset=1002
+size=_U16_
+raw_upper=15000
+_tooltip=Third RPM value
+
+[als_rpm_entry4]
+keys=offset,size,raw_upper,tooltip
+offset=1004
+size=_U16_
+raw_upper=15000
+_tooltip=Maximum RPM value
+
+[als_timing_entry1]
+keys=offset,precision,fromecu_mult,raw_upper,tooltip
+offset=1006
+raw_upper=250
+fromecu_mult=0.4
+precision=1
+_tooltip=Timing at min RPM value
+
+[als_timing_entry2]
+keys=offset,precision,fromecu_mult,raw_upper,tooltip
+offset=1007
+raw_upper=250
+fromecu_mult=0.4
+precision=1
+_tooltip=Timing at second RPM value
+
+[als_timing_entry3]
+keys=offset,precision,fromecu_mult,raw_upper,tooltip
+offset=1008
+raw_upper=250
+fromecu_mult=0.4
+precision=1
+_tooltip=Timing at third RPM value
+
+[als_timing_entry4]
+keys=offset,precision,fromecu_mult,raw_upper,tooltip
+offset=1009
+raw_upper=250
+fromecu_mult=0.4
+precision=1
+_tooltip=Timing at min RPM value
+
+[als_fuel_entry1]
+keys=offset,tooltip
+offset=1010
+_tooltip=Fuel at min RPM value
+
+[als_fuel_entry2]
+keys=offset,tooltip
+offset=1011
+_tooltip=Fuel at second RPM value
+
+[als_fuel_entry3]
+keys=offset,tooltip
+offset=1012
+_tooltip=Fuel at third RPM value
+
+[als_fuel_entry4]
+keys=offset,tooltip
+offset=1013
+_tooltip=Fuel at max RPM value
+
+[als_drop_entry]
+keys=offset,tooltip
+offset=1014
+_tooltip=Amount of Sparks to drop for Y Events (see below)
+
+[als_events_entry]
+keys=offset,tooltip
+offset=1020
+_tooltip=Amount of Sparks to drop for Y Events (see below)
+
+[als_timeout_entry]
+keys=offset,tooltip
+offset=1017
+_tooltip=Amount of Time before ALS auto-disables (seconds)
+
+[als_idle_entry]
+keys=offset,tooltip
+offset=1019
+_tooltip=Fraction of 255 (255 = 100%, PWM only), or Steps (0-255 Steps, Stepper IAC only)
+
+[als_maxtps_entry]
+keys=offset,fromecu_mult,raw_upper,precision,tooltip
+offset=1016
+fromecu_mult=0.4
+raw_upper=250
+precision=1
+_tooltip=Maximum TPS where ALS can be active
+
+[als_mintps_entry]
+keys=offset,fromecu_mult,raw_upper,precision,tooltip
+offset=1015
+fromecu_mult=0.4
+raw_upper=250
+precision=1
+_tooltip=Minimum TPS where ALS can be active.
+
+[als_cleartps_entry]
+keys=offset,fromecu_mult,raw_upper,precision,tooltip
+offset=1018
+fromecu_mult=0.4
+raw_upper=250
+precision=1
+_tooltip=the TPS position where the timeout for ALS is reset.

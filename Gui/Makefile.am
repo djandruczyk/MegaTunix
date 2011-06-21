@@ -30,6 +30,7 @@ gui_glade_files = 	\
 		memviewer.glade \
 		ms2-accel.glade \
 		ms2-alpha-n_6x6x1.glade \
+		ms2-e-3.x-als.glade \
 		ms2-e-3.x-boost_knock_launch.glade \
 		ms2-e-3.x-can.glade \
 		ms2-e-3.x-corrections_misc.glade \
@@ -132,6 +133,7 @@ gui_in_files = 	\
 		ms2-accel.datamap.in \
 		ms2-alpha-n_6x6x1.datamap.in \
 		ms2-e-3.x-accel.datamap.in \
+		ms2-e-3.x-als.datamap.in \
 		ms2-e-3.x-boost_knock_launch.datamap.in \
 		ms2-e-3.x-can.datamap.in \
 		ms2-e-3.x-corrections_misc.datamap.in \
