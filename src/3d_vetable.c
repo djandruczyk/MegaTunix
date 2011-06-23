@@ -2182,7 +2182,6 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	gint mult = 0;
 	DataSize size = MTX_U08;
 	gint len = 0;
-	gchar * string = NULL;
 	Ve_View_3D *ve_view = NULL;
 	Firmware_Details *firmware = NULL;
 	GHashTable *ve_view_hash = NULL;
@@ -2889,11 +2888,11 @@ gboolean delayed_expose(gpointer data)
 
 G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 {
-	static gfloat xl,yl,zl = 9999.9;
+	gfloat x[2] = {0.0,0.0};
+	gfloat y[2] = {0.0,0.0};
+	gfloat z[2] = {0.0,0.0};
 	gint i = 0;
 	Ve_View_3D * ve_view = NULL;
-	gfloat x,y,z = 0.0;
-	gchar * string = NULL;
 	GHashTable *hash = NULL;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
@@ -2952,17 +2951,14 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 				if (!multi)
 					printf(_("multi is null!!\n"));
 
-				lookup_current_value(multi->source,&x);
+				lookup_previous_n_values(multi->source,2,x);
 			}
 			else
-				lookup_current_value(ve_view->x_source,&x);
+				lookup_previous_n_values(ve_view->x_source,2,x);
 
 			/* Test X values, redraw if needed */
-			if (((fabs(x-xl)/x) > 0.01) || (DATA_GET(global_data,"forced_update")))
-			{
-				xl = x;
+			if (((fabs(x[0]-x[1])/x[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 				goto redraw;
-			}
 
 			/* Get Y values */
 			if (ve_view->y_multi_source)
@@ -2991,17 +2987,14 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 				if (!multi)
 					printf(_("multi is null!!\n"));
 
-				lookup_current_value(multi->source,&y);
+				lookup_previous_n_values(multi->source,2,y);
 			}
 			else
-				lookup_current_value(ve_view->y_source,&y);
+				lookup_previous_n_values(ve_view->y_source,2,y);
 
 			/* Test Y values, redraw if needed */
-			if (((fabs(y-yl)/y) > 0.01) || (DATA_GET(global_data,"forced_update")))
-			{
-				yl = y;
+			if (((fabs(y[0]-y[1])/y[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 				goto redraw;
-			}
 
 			/* Get Z values */
 			if (ve_view->z_multi_source)
@@ -3030,18 +3023,15 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 				if (!multi)
 					printf(_("multi is null!!\n"));
 
-				lookup_current_value(multi->source,&z);
+				lookup_previous_n_values(multi->source,2,z);
 			}
 			else
-				lookup_current_value(ve_view->z_source,&z);
+				lookup_previous_n_values(ve_view->z_source,2,z);
 
 			/* Test Z values, redraw if needed */
-			if (((fabs(z-zl)/z) > 0.01) || (DATA_GET(global_data,"forced_update")))
-			{
-				zl = z;
+			if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 				goto redraw;
-			}
-			goto breakout;
+			continue;
 
 redraw:
 			gdk_threads_enter();
@@ -3049,7 +3039,6 @@ redraw:
 			gdk_threads_leave();
 		}
 	}
-breakout:
 
 	gdk_threads_enter();
 	{

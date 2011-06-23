@@ -682,7 +682,7 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
 
 /*!
  \brief lookup_previous_nth_value() gets the nth previosu value of the derived
- variable requested by name. i.e. if n = 0 it gets current,  n=5 means
+ variable requested by name. i.e. if n = 0 it gets current,  n=4 means
  5 samples "back in time"
  \param internal_name (gchar *) name of the variable to get the data for.
  \param value (gflaot *) where to put the value
@@ -726,7 +726,7 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
 
 /*!
  \brief lookup_previous_n_values() gets the n previous values of the derived
- variable requested by name. i.e. if n = 0 it gets current,  n=5 means
+ variable requested by name. i.e. if n = 1 it gets current,  n=5 means
  5 samples "back in time"
  \param internal_name (gchar *) name of the variable to get the data for.
  \param value (gflaot *) where to put the value
@@ -779,7 +779,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 /*!
  \brief lookup_previous_n_skip_xvalues() gets previous data
  \param internal_name (gchar *) name of the variable to get the data for.
- \param n (gint) number of campels we want
+ \param n (gint) number of samples we want
  \param skip (gint) number to SKIP between samples
  \param value (gfloat *) where to put the value
  \returns TRUE on successful lookup, FALSE on failure
