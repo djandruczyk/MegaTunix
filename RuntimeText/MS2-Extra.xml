@@ -28,6 +28,14 @@
 		<datasource>fuelload</datasource>
 	</rtt>
 	<rtt>
+		<internal_name>afrload</internal_name>
+		<datasource>afrload</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>ignload</internal_name>
+		<datasource>ignload</datasource>
+	</rtt>
+	<rtt>
 		<internal_name>cltdeg</internal_name>
 		<datasource>cltdeg</datasource>
 	</rtt>

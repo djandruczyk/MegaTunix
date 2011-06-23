@@ -1105,13 +1105,13 @@ log_by_default=TRUE
 
 [derived_91]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
-internal_names=afrload1
-dlog_gui_name=afrload1
-dlog_field_name=afrload1
+internal_names=afrload
+dlog_gui_name=afrload
+dlog_field_name=afrload
 offset=162
 size=_S16_
 fromecu_mult=0.1
-_tooltip="afrload1" is undefined
+_tooltip="afrload" is undefined
 log_by_default=TRUE
 
 [derived_92]

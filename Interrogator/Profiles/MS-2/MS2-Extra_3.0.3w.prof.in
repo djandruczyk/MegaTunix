@@ -376,7 +376,8 @@ z_precision=1
 
 [table_9]
 _table_name=AFR Table 1, MS2-Extra 12x12
-bind_to_list=wb_ego
+bind_to_list=incorp_afrtarget,ego_ctrl
+match_type=_OR_
 is_fuel=FALSE
 x_page=0
 x_base_offset=374

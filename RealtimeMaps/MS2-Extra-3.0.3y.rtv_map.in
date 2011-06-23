@@ -1104,28 +1104,28 @@ log_by_default=FALSE
 
 [derived_90]
 keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
-internal_names=eaeload1
-dlog_gui_name=eaeload1
-dlog_field_name=eaeload1
+internal_names=eaeload
+dlog_gui_name=eaeload
+dlog_field_name=eaeload
 real_lower=0
 real_upper=655
 offset=160
 size=_S16_
 fromecu_mult=0.1
-_tooltip="eaeload1" is undefined
+_tooltip="eaeload" is undefined
 log_by_default=TRUE
 
 [derived_91]
 keys=internal_names,real_lower,real_upper,dlog_gui_name,dlog_field_name,offset,size,fromecu_mult,tooltip,log_by_default
-internal_names=afrload1
-dlog_gui_name=afrload1
-dlog_field_name=afrload1
+internal_names=afrload
+dlog_gui_name=afrload
+dlog_field_name=afrload
 real_lower=0
 real_upper=655
 offset=162
 size=_S16_
 fromecu_mult=0.1
-_tooltip="afrload1" is undefined
+_tooltip="afrload" is undefined
 log_by_default=TRUE
 
 [derived_92]
