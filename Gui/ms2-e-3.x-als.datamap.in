@@ -172,7 +172,7 @@ _tooltip=Amount of Time before ALS auto-disables (seconds)
 [als_idle_entry]
 keys=offset,tooltip
 offset=1019
-_tooltip=Fraction of 255 (255 = 100%, PWM only), or Steps (0-255 Steps, Stepper IAC only)
+_tooltip=Fraction of 255 (255 is 100%, PWM only), or Steps (0-255 Steps, Stepper IAC only)
 
 [als_maxtps_entry]
 keys=offset,fromecu_mult,raw_upper,precision,tooltip
