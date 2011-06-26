@@ -300,7 +300,6 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	}
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
 		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
-	/*printf("toggle_handler for %s\n",(gchar *)glade_get_widget_name(widget));*/
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
@@ -1907,6 +1906,7 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	gchar **groups = NULL;
 	gchar * toggle_groups = NULL;
 	gchar * tmpbuf = NULL;
+	const gchar *name = NULL;
 	GHashTable *widget_group_states = NULL;
 
 	if (!DATA_GET(global_data,"ready"))
@@ -1920,8 +1920,9 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	choices = parse_keys(toggle_groups,&num_choices,",");
 	if (active >= num_choices)
 	{
+		name = glade_get_widget_name(widget);
 		printf(_("active is %i, num_choices is %i\n"),active,num_choices);
-		printf(_("active is out of bounds for widget %s\n"),glade_get_widget_name(widget));
+		printf(_("active is out of bounds for widget %s\n"),(name == NULL ? "undefined" : name));
 	}
 	/*printf("toggle groups defined for combo box %p at page %i, offset %i\n",widget,page,offset);*/
 
@@ -1951,7 +1952,6 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	state = TRUE;
 	for (j=0;j<num_groups;j++)
 	{
-		/*printf("setting all widgets for %s in group %s to state %i\n\n",glade_get_widget_name(widget),groups[j],state);*/
 		tmpbuf = g_strdup_printf("!%s",groups[j]);
 		g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
 		g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);

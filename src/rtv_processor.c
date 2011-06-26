@@ -225,6 +225,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	gchar **names = NULL;
 	gdouble * values = NULL;
 	gchar * tmpbuf = NULL;
+	const gchar *name = NULL;
 	gdouble lower_limit = 0;
 	gdouble upper_limit = 0;
 	gdouble result = 0.0;
@@ -250,6 +251,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 
 	names = g_new0(gchar *, total_symbols);
 	values = g_new0(gdouble, total_symbols);
+	name = glade_get_widget_name(GTK_WIDGET(object));
 
 	for (i=0;i<total_symbols;i++)
 	{
@@ -320,11 +322,11 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	}
 	else
 	{
-		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator type undefined for %s\n",(name == NULL ? "undefined":name)));
 	}
 	if (!evaluator)
 	{
-		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr()\n\tevaluator missing for %s\n",(name == NULL ? "undefined":name)));
 		exit (-1);
 	}
 
@@ -377,6 +379,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	gchar **names = NULL;
 	gdouble * values = NULL;
 	gchar * tmpbuf = NULL;
+	const gchar * name = NULL;
 	gdouble lower_limit = 0;
 	gdouble upper_limit = 0;
 	gdouble result = 0.0;
@@ -402,6 +405,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 
 	names = g_new0(gchar *, total_symbols);
 	values = g_new0(gdouble, total_symbols);
+	name = glade_get_widget_name(GTK_WIDGET(object));
 
 	for (i=0;i<total_symbols;i++)
 	{
@@ -471,11 +475,11 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	}
 	else
 	{
-		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\tevaluator type undefined for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\tevaluator type undefined for %s\n",(name == NULL ? "undefined":name)));
 	}
 	if (!evaluator)
 	{
-		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\tevaluator missing for %s\n",(gchar *)glade_get_widget_name(GTK_WIDGET(object))));
+		dbg_func(COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": handle_complex_expr_obj()\n\tevaluator missing for %s\n",(name == NULL ? "undefined":name)));
 		exit (-1);
 	}
 	assert(evaluator);

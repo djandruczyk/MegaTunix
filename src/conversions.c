@@ -71,7 +71,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 
 	if (!OBJ_GET(widget,"size"))
-		printf(__FILE__"%s %s\n",_(": convert_before_download, FATAL ERROR, size undefined for widget %s "),glade_get_widget_name(widget));
+		printf(__FILE__"%s %s\n",_(": convert_before_download, FATAL ERROR, size undefined for widget %s "),(name == NULL ? "undefined" : name));
 
 	size = (DataSize)OBJ_GET(widget,"size");
 	if (OBJ_GET(widget,"raw_lower"))
@@ -198,7 +198,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		}
 	}
 	name = glade_get_widget_name(widget);
-	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",(name == NULL ? "" : name),value,return_value));
+	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",(name == NULL ? "undefined" : name),value,return_value));
 	if (return_value > upper) 
 	{
 		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",upper,lower,value,upper));
@@ -252,6 +252,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gchar * tmpbuf = NULL;
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
+	const gchar *name = NULL;
 	gfloat *multiplier = NULL;
 	gfloat *adder = NULL;
 	gint *algorithm = NULL;
@@ -265,13 +266,14 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		get_symbol("send_to_ecu",(void *)&send_to_ecu_f);
 	g_return_val_if_fail(get_ecu_data_f,0.0);
 	g_return_val_if_fail(send_to_ecu_f,0.0);
+	name = glade_get_widget_name(widget);
 
 	g_static_mutex_lock(&mutex);
 
 	size = (DataSize)OBJ_GET(widget,"size");
 	if (size == 0)
 	{
-		printf(_("BIG PROBLEM, size undefined! widget %s, default to U08 \n"),(gchar *)glade_get_widget_name(widget));
+		printf(_("BIG PROBLEM, size undefined! widget %s, default to U08 \n"),(name == NULL ? "undefined" : name));
 		size = MTX_U08;
 	}
 
@@ -288,7 +290,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	if (fromecu_complex)
 	{
 		g_static_mutex_unlock(&mutex);
-		/*printf("Complex upload conversion for widget at page %i, offset %i, name %s\n",(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset"),glade_get_widget_name(widget));
+		/*printf("Complex upload conversion for widget at page %i, offset %i, name %s\n",(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset"),(name == NULL ? "undefined" : name));
 		  */
 		return handle_complex_expr_obj(G_OBJECT(widget),NULL,UPLOAD);
 	}
@@ -299,13 +301,13 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		tmpi = get_ecu_data_f(widget);
 	if (tmpi < lower)
 	{
-		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value  out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(gchar *)glade_get_widget_name(widget),lower,lower,tmpi,upper));
+		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value  out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
 		tmpi = lower;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
 	if (tmpi > upper)
 	{
-		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(gchar *)glade_get_widget_name(widget),lower,lower,tmpi,upper));
+		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
 		tmpi = upper;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
@@ -321,9 +323,9 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			mult_list = OBJ_GET(widget,"fromecu_mults");
 			add_list = OBJ_GET(widget,"fromecu_adds");
 			if (!mult_list)
-				printf("BUG, widget %s is multi_expression but doesn't have fromecu_mults defined!\n",glade_get_widget_name(widget));
+				printf("BUG, widget %s is multi_expression but doesn't have fromecu_mults defined!\n",(name == NULL ? "undefined" : name));
 			if (!add_list)
-				printf("BUG, widget %s is multi_expression but doesn't have fromecu_adds defined!\n",glade_get_widget_name(widget));
+				printf("BUG, widget %s is multi_expression but doesn't have fromecu_adds defined!\n",(name == NULL ? "undefined" : name));
 			keys = g_strsplit(key_list,",",-1);
 			mults = g_strsplit(mult_list,",",-1);
 			adds = g_strsplit(add_list,",",-1);
@@ -423,7 +425,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 				return_value = (gfloat)tmpi * (*multiplier);
 			else
 				return_value = (gfloat)tmpi;
-			/*dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNo/Fast CONVERSION defined for  widget %s, value %f\n",(gchar *)glade_get_widget_name(widget), return_value));*/
+			/*dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNo/Fast CONVERSION defined for  widget %s, value %f\n",(name == NULL ? "undefined" : name), return_value));*/
 		}
 
 	}
@@ -449,6 +451,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	gfloat lower = 0.0;
 	gfloat value = 0.0;
 	gchar * text = NULL;
+	const gchar  *name = NULL;
 	GtkAdjustment * adj = NULL;
 	gboolean state = FALSE;
 	gint widget_temp = -1;
@@ -469,18 +472,19 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tCan NOT locate \"update_widget\" function pointer in plugins, BUG!\n"));
 	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
+	name = glade_get_widget_name(widget);
 	if (dep_obj)
 	{
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tWidget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n",glade_get_widget_name(widget)));
+			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tWidget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n",(name == NULL ? "undefined" : name)));
 	}
 
 	switch ((TempUnits)units)
 	{
 		case FAHRENHEIT:
-			/*printf("fahr %s\n",glade_get_widget_name(widget));*/
+			/*printf("fahr %s\n",(name == NULL ? "undefined" : name));*/
 			if (GTK_IS_LABEL(widget))
 			{
 				if ((dep_obj) && (state))	
@@ -547,7 +551,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			}
 			break;
 		case CELSIUS:
-			/*printf("fahr %s\n",glade_get_widget_name(widget));*/
+			/*printf("fahr %s\n",(name == NULL ? "undefined" : name));*/
 			if (GTK_IS_LABEL(widget))
 			{
 				if ((dep_obj) && (state))	
@@ -614,7 +618,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			}
 			break;
 		case KELVIN:
-			/*printf("fahr %s\n",glade_get_widget_name(widget));*/
+			/*printf("fahr %s\n",(name == NULL ? "undefined" : name));*/
 			if (GTK_IS_LABEL(widget))
 			{
 				if ((dep_obj) && (state))	

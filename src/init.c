@@ -15,6 +15,7 @@
 #include <debugging.h>
 #include <glade/glade.h>
 #include <glib/gstdio.h>
+#include <getfiles.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
@@ -1264,18 +1265,20 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
 	static CmdLineArgs *args = NULL;
+	const gchar * name = NULL;
 	GtkWidget * widget = (GtkWidget *) data;
 	if (!args)
 		args = DATA_GET(global_data,"args");
+	name = glade_get_widget_name(widget);
 	if (args->verbose)
 	{
-		printf("widget name %s pointer %p\n",glade_get_widget_name(widget),widget);
+		printf("widget name %s pointer %p\n",(name == NULL ? "undefined": name),widget);
 #ifdef DEBUG
 		printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
 #endif
 	}
 
-	if ((!GTK_IS_WIDGET(widget)) || (!glade_get_widget_name(widget)))
+	if ((!GTK_IS_WIDGET(widget)) || (!name))
 		return;
 	else
 		gtk_widget_destroy(widget);

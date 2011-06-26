@@ -781,18 +781,11 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
 			else
 			{
-				/*
-				printf("ecu_widgets[%i][%i] is %p\n",page,offset,ecu_widgets[page][offset]);
-				printf("adding widget %s (%p) to ecu_widgets[%i][%i]\n",glade_get_widget_name(widget),widget,page,offset);
-				*/
 
 				bindgroup->widget_list = g_list_prepend(bindgroup->widget_list, widget);
 				ecu_widgets[page][offset] = g_list_prepend(
 						ecu_widgets[page][offset],
 						(gpointer)widget);
-				/*
-				printf("after append: ecu_widgets[%i][%i] is %p\n",page,offset,ecu_widgets[page][offset]);
-				*/
 			}
 		}
 		else

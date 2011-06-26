@@ -922,8 +922,9 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 	ve_view->beginX = event->x;
 	ve_view->beginY = event->y;
 
-	gdk_window_invalidate_rect (widget->window, &widget->allocation,
-			FALSE);
+	//gdk_window_invalidate_rect (widget->window, &widget->allocation,FALSE);
+			
+	gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
 
 	return TRUE;
 }
@@ -2084,10 +2085,6 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 		queue_ve3d_update(ve_view);
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-		/*
-		   ve_view->mesh_created=FALSE;
-		   gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
-		 */
 	}
 
 	g_static_mutex_unlock(&key_mutex);
@@ -2879,7 +2876,6 @@ gboolean delayed_expose(gpointer data)
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
 
 	g_return_val_if_fail(ve_view,FALSE);
-//	ve3d_expose_event(ve_view->drawing_area, NULL,NULL);
 	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 	return FALSE;
 }

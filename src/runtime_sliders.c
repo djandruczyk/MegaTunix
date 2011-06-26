@@ -420,12 +420,14 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	GHashTable *ww_sliders = NULL;
 	GHashTable *enr_sliders = NULL;
 	gchar * source = NULL;
+	const gchar *name = NULL;
 	TabIdent ident = 0;
 	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
 
 	rtv_map = DATA_GET(global_data,"rtv_map");
 	source = (gchar *)OBJ_GET(widget,"source");
 	ident = (TabIdent)OBJ_GET(widget,"tab_ident");
+	name = glade_get_widget_name(widget);
 		
 	if (!rtv_map)
 		return;
@@ -458,10 +460,10 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	
 	if  (!(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_rt_range()\n\t ERROR! There is no datasource named \"%s\", Check config of widget %s\n",source,glade_get_widget_name(widget)));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_rt_range()\n\t ERROR! There is no datasource named \"%s\", Check config of widget %s\n",source,(name == NULL ? "undefined":name)));
 		return;
 	}
-	slider->ctrl_name = g_strdup(glade_get_widget_name(widget));
+	slider->ctrl_name = g_strdup((name == NULL ? "undefined":name));
 	slider->tbl = -1;
 	slider->table_num = -1;
 	slider->row = -1;

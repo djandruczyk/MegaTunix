@@ -35,6 +35,7 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 	gint width = 0;
 	gchar *tmpstr = NULL;
 	gchar *regex = NULL;
+	const gchar *name = NULL;
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
 	GtkEntryCompletion *completion = NULL;
@@ -45,7 +46,6 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 
 	choices = parse_keys(tmpbuf,&num_choices,",");
 	tmpbuf = g_strdelimit(tmpbuf,",",'|');
-//	regex = g_strdup_printf("%s",tmpstr);
 	tmpstr = g_utf8_normalize(tmpbuf,-1,G_NORMALIZE_DEFAULT);
 	regex = g_utf8_casefold(tmpbuf,-1);
 	g_free(tmpbuf);
@@ -66,7 +66,8 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 
 	if (num_bitvals != num_choices)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": combo_loader()\n\t\"bitvals\" BIG PROBLEM, combobox %s choices %i and bits %i don't match up\n",glade_get_widget_name(GTK_WIDGET(object)),num_choices,num_bitvals));
+		name = glade_get_widget_name(GTK_WIDGET(object));
+		dbg_func(CRITICAL,g_strdup_printf(__FILE__": combo_loader()\n\t\"bitvals\" BIG PROBLEM, combobox %s choices %i and bits %i don't match up\n",(name == NULL ? "undefined" : name),num_choices,num_bitvals));
 		return;
 	}
 
