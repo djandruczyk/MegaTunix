@@ -234,6 +234,12 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	if (cfgfile)
 	{
 		topframe = glade_xml_get_widget(xml,"topframe");
+		if (topframe == NULL)
+		{
+			dbg_func(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
+			set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
+			return FALSE;
+		}
 
 		OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
 		// bind_data() is recursive and will take 
@@ -254,18 +260,18 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		OBJ_SET(label,"not_rendered",NULL);
 
 		populate_master(topframe,(gpointer)cfgfile);
+	while (gtk_events_pending())
+	{
+		if (DATA_GET(global_data,"leaving"))
+			return FALSE;
+		gtk_main_iteration();
+	}
 
 		/*
 		   dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
 		   g_free(tab_name);
 		 */
 
-		if (topframe == NULL)
-		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
-			set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
-			return FALSE;
-		}
 		gtk_box_pack_start(GTK_BOX(placeholder),topframe,TRUE,TRUE,0);
 		OBJ_SET(placeholder,"topframe",topframe);
 		glade_xml_signal_autoconnect(xml);
@@ -275,13 +281,13 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 			g_free(tmpbuf);
 		}
 		cfg_free(cfgfile);
+		gtk_widget_show_all(topframe);
 		g_list_foreach(bindgroup->widget_list,update_widget_f,NULL);
 		g_list_free(bindgroup->widget_list);
 		g_free(bindgroup);
-		gtk_widget_show_all(topframe);
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
 	}
-		update_interdependancies_pf();
+	update_interdependancies_pf();
 	/* Allow gui to update as it should.... */
 	while (gtk_events_pending())
 	{
