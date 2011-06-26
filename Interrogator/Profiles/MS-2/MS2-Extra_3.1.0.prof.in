@@ -1521,7 +1521,7 @@ y_precision=0
 
 [te_table_23]
 _title=MAT Based Timing Retard
-bind_to_list=
+bind_to_list=ign
 is_fuel=FALSE
 gauge_temp_dep=TRUE
 c_gauge=MegaTune/Intake-Air-Temp_degC-Gauge.xml
@@ -1556,7 +1556,7 @@ y_precision=1
 
 [te_table_24]
 _title=Idle Advance Timing
-bind_to_list=
+bind_to_list=ign
 is_fuel=FALSE
 gauge=MegaTune/Fuel-Load-Gauge.xml
 gauge_datasource=fuelload

@@ -1049,13 +1049,13 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	}
 }
 
-gboolean setup_rtv(void)
+G_MODULE_EXPORT gboolean setup_rtv(void)
 {
 	return TRUE;
 }
 
 
-gboolean teardown_rtv(void)
+G_MODULE_EXPORT gboolean teardown_rtv(void)
 {
 	return TRUE;
 }

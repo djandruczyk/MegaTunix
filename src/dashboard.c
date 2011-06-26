@@ -608,12 +608,12 @@ G_MODULE_EXPORT void toggle_main_visible(void)
 		return;
 	if (GTK_WIDGET_VISIBLE(tmpwidget))
 	{
-		gtk_widget_set_visible (tmpwidget,FALSE);
+		gtk_widget_hide (tmpwidget);
 		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
 	{
-		gtk_widget_set_visible(tmpwidget,TRUE);
+		gtk_widget_show(tmpwidget);
 		x = (GINT)DATA_GET(global_data,"main_x_origin");
 		y = (GINT)DATA_GET(global_data,"main_y_origin");
 		gtk_widget_show_all(tmpwidget);

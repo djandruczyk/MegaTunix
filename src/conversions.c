@@ -58,6 +58,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gchar **adds = NULL;
 	gint table_num = 0;
 	gchar *tmpbuf = NULL;
+	const gchar *name = NULL;
 	gchar * source_key = NULL;
 	gchar * hash_key = NULL;
 	gint *algorithm = NULL;
@@ -196,7 +197,8 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 				return_value = (GINT)value;
 		}
 	}
-	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",glade_get_widget_name(widget),value,return_value));
+	name = glade_get_widget_name(widget);
+	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",(name == NULL ? "" : name),value,return_value));
 	if (return_value > upper) 
 	{
 		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",upper,lower,value,upper));
