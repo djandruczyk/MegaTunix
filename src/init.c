@@ -381,20 +381,23 @@ G_MODULE_EXPORT void save_config(void)
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_1_name", tmpbuf);
-		widget =  lookup_widget(tmpbuf);
-		if (GTK_IS_WIDGET(widget))
+		if (!DATA_GET(global_data,"dash_fullscreen"))
 		{
-			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
-			cfg_write_int(cfgfile, "Dashboards", "dash_1_x_origin", x);
-			cfg_write_int(cfgfile, "Dashboards", "dash_1_y_origin", y);
-			dash = OBJ_GET(widget,"dash");
-			orig_width = (GINT) OBJ_GET(dash,"orig_width");
-		        orig_height = (GINT) OBJ_GET(dash,"orig_height");
-			if (GTK_WIDGET_VISIBLE(widget))
+			widget =  lookup_widget(tmpbuf);
+			if (GTK_IS_WIDGET(widget))
 			{
-				gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
-				ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
-				cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
+				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
+				cfg_write_int(cfgfile, "Dashboards", "dash_1_x_origin", x);
+				cfg_write_int(cfgfile, "Dashboards", "dash_1_y_origin", y);
+				dash = OBJ_GET(widget,"dash");
+				orig_width = (GINT) OBJ_GET(dash,"orig_width");
+				orig_height = (GINT) OBJ_GET(dash,"orig_height");
+				if (GTK_WIDGET_VISIBLE(widget))
+				{
+					gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
+					ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
+					cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
+				}
 			}
 		}
 		tmpbuf = NULL;
@@ -410,20 +413,23 @@ G_MODULE_EXPORT void save_config(void)
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_2_name", tmpbuf);
-		widget =  lookup_widget(tmpbuf);
-		if (GTK_IS_WIDGET(widget))
+		if (!DATA_GET(global_data,"dash_fullscreen"))
 		{
-			gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
-			cfg_write_int(cfgfile, "Dashboards", "dash_2_x_origin", x);
-			cfg_write_int(cfgfile, "Dashboards", "dash_2_y_origin", y);
-			dash = OBJ_GET(widget,"dash");
-			orig_width = (GINT) OBJ_GET(dash,"orig_width");
-		        orig_height = (GINT) OBJ_GET(dash,"orig_height");
-			if (GTK_WIDGET_VISIBLE(widget))
+			widget =  lookup_widget(tmpbuf);
+			if (GTK_IS_WIDGET(widget))
 			{
-				gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
-				ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
-				cfg_write_float(cfgfile, "Dashboards", "dash_2_size_ratio", ratio);
+				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
+				cfg_write_int(cfgfile, "Dashboards", "dash_2_x_origin", x);
+				cfg_write_int(cfgfile, "Dashboards", "dash_2_y_origin", y);
+				dash = OBJ_GET(widget,"dash");
+				orig_width = (GINT) OBJ_GET(dash,"orig_width");
+				orig_height = (GINT) OBJ_GET(dash,"orig_height");
+				if (GTK_WIDGET_VISIBLE(widget))
+				{
+					gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
+					ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
+					cfg_write_float(cfgfile, "Dashboards", "dash_2_size_ratio", ratio);
+				}
 			}
 		}
 		tmpbuf = NULL;

@@ -822,6 +822,7 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 	/* IF gui isn't visible, make it visible */
 	if (!(GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 		toggle_gui_visible(NULL,NULL);
+
         DATA_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
 	index = (GINT)data;
 	tmpbuf = g_strdup_printf("dash%i_cbutton",index);
@@ -1286,6 +1287,8 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 
 G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 {
+	if (!data)
+		return;
 	if ((GTK_IS_WIDGET(data)) && (OBJ_GET(data,"resizers_visible")))
 		dash_shape_combine(data,TRUE);
 	OBJ_SET(data,"timer_active",GINT_TO_POINTER(FALSE));
