@@ -251,7 +251,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 
 	names = g_new0(gchar *, total_symbols);
 	values = g_new0(gdouble, total_symbols);
-	name = glade_get_widget_name(GTK_WIDGET(object));
+	name = DATA_GET(object,"name");
 
 	for (i=0;i<total_symbols;i++)
 	{

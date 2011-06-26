@@ -1176,6 +1176,7 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 
 G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 {
+	gint id = 0;
 	gchar *tmpbuf = NULL;
 	Dash_Gauge *d_gauge = NULL;
 
@@ -1187,7 +1188,15 @@ G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpoint
 		d_gauge = (Dash_Gauge *)value;
 		g_free(d_gauge->source);
 		if (GTK_IS_WIDGET(d_gauge->dash))
+		{
+			id = (GINT)OBJ_GET(d_gauge->dash,"timer_id");
+			if (id)
+			{
+				g_source_remove(id);
+				OBJ_SET(d_gauge->dash,"timer_id", NULL);
+			}
 			gtk_widget_destroy(gtk_widget_get_toplevel(d_gauge->dash));
+		}
 		return TRUE;
 	}
 	else
@@ -1288,10 +1297,11 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 {
 	if (!data)
-		return;
+		return FALSE;
 	if ((GTK_IS_WIDGET(data)) && (OBJ_GET(data,"resizers_visible")))
 		dash_shape_combine(data,TRUE);
 	OBJ_SET(data,"timer_active",GINT_TO_POINTER(FALSE));
+	OBJ_SET(data,"timer_id",GINT_TO_POINTER(0));
 	OBJ_SET(data,"resizers_visible",GINT_TO_POINTER(FALSE));
 	return FALSE;
 }
@@ -1299,6 +1309,7 @@ G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 {
 	GtkWidget *dash = GTK_BIN(widget)->child;
+	guint id = 0;
 
 	if (event->state & GDK_BUTTON1_MASK)
 		return TRUE;
@@ -1307,8 +1318,9 @@ G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *
 	/* If "leaving" the window, set timeout to hide the resizers */
 	if ((!OBJ_GET(dash,"timer_active")) && (OBJ_GET(dash,"resizers_visible")))
 	{
-		gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
+		id = gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
 		OBJ_SET(dash,"timer_active",GINT_TO_POINTER(TRUE));
+		OBJ_SET(dash,"timer_id",GINT_TO_POINTER(id));
 	}
 	return FALSE;
 }

@@ -1982,7 +1982,6 @@
                             <property name="label">Curve Wizard</property>
                             <property name="visible">True</property>
                             <property name="use_stock">False</property>
-                            <property name="always_show_image">True</property>
                             <child internal-child="image">
                               <widget class="GtkImage" id="image1">
                                 <property name="visible">True</property>

@@ -192,6 +192,8 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		DATA_SET(object,"size",GINT_TO_POINTER(MTX_U08));
 		/* Index */
 		DATA_SET(object,"index",GINT_TO_POINTER(i));
+		/* Object name */
+		DATA_SET_FULL(object,"name",g_strdup(section),g_free);
 		/* History Array */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		/* bind history array to object for future retrieval */
