@@ -46,7 +46,7 @@ typedef enum
   */
 struct _MtxStripChart
 {	/* public data */
-	GtkDrawingArea parent;
+	GtkDrawingArea parent;		/*!< Parent Widget */
 };
 
 /*!
@@ -54,7 +54,7 @@ struct _MtxStripChart
   */
 struct _MtxStripChartClass
 {
-	GtkDrawingAreaClass parent_class;
+	GtkDrawingAreaClass parent_class;/*!< Parent Class */
 };
 
 GType mtx_stripchart_get_type (void) G_GNUC_CONST;

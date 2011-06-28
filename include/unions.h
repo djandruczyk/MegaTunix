@@ -33,20 +33,20 @@
  */
 union squirt
 {
-        guchar   value;
+        guchar   value;			/*!< Squirt byte */
         struct
         {
-                guchar reserved  :2;
-                guchar firing2   :1;     /* 0 = not squirting 1 = squirti
+                guchar reserved  :2;	 /*!< Reserved */
+                guchar firing2   :1;     /*!< 0 = not squirting 1 = squirti
                                                    ng */
-                guchar sched2    :1;     /* 0 = nothing scheduled 1 = sch
+                guchar sched2    :1;     /*!< 0 = nothing scheduled 1 = sch
                                                    eduled to squirt */
-                guchar firing1   :1;     /* 0 = not squirting 1 = squirti
+                guchar firing1   :1;     /*!< 0 = not squirting 1 = squirti
                                                    ng */
-                guchar sched1    :1;     /* 0 = nothing scheduled 1 = sch
+                guchar sched1    :1;     /*!< 0 = nothing scheduled 1 = sch
                                                    eduled to squirt */
-                guchar inj2      :1;     /* 0 = no squirt 1 = squirt */
-                guchar inj1      :1;     /* 0 = no squirt 1 = squirt */
+                guchar inj2      :1;     /*!< 0 = no squirt 1 = squirt */
+                guchar inj1      :1;     /*!< 0 = no squirt 1 = squirt */
         } bit;
 };
 
@@ -59,23 +59,23 @@ union squirt
  */
 union engine
 {
-        guchar      value;
+        guchar      value;		/*!< Engine Byte */
         struct
         {
-                guchar reserved	:1;
-                guchar mapaccel	:1;     /* 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
+                guchar reserved	:1;	/*!< reserved */
+                guchar mapaccel	:1;     /*!< 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
                                                   
-                guchar tpsdecel	:1;     /* 0 = not in deacceleration mode 1 = in deacceleration mode */
+                guchar tpsdecel	:1;     /*!< 0 = not in deacceleration mode 1 = in deacceleration mode */
                                                   
-                guchar tpsaccel	:1;     /* 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
+                guchar tpsaccel	:1;     /*!< 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
                                                   
-                guchar warmup	:1;     /* 0 = not in warmup 1 = in warmup */
+                guchar warmup	:1;     /*!< 0 = not in warmup 1 = in warmup */
                                                   
-                guchar ase	:1;     /* 0 = not in afterstart enrich 1 = in afterstart enrichment */
+                guchar ase	:1;     /*!< 0 = not in afterstart enrich 1 = in afterstart enrichment */
                                                   
-                guchar crank	:1;     /* 0 = engine not cranking 1 = engine cranking */
+                guchar crank	:1;     /*!< 0 = engine not cranking 1 = engine cranking */
                                                   
-                guchar running	:1;     /* 0 = engine not running 1 = running */
+                guchar running	:1;     /*!< 0 = engine not running 1 = running */
                                                   
         } bit;
 };
@@ -89,10 +89,10 @@ union engine
  */
 union config11
 {
-        guchar      value;
+        guchar      value;			/*!< config11 byte */
         struct
         {
-                guchar cylinders	:4;     /* 0000 = 1 cyl 
+                guchar cylinders	:4;     /*!< 0000 = 1 cyl 
                                                  * 0001 = 2 cyl
                                                  * 0010 = 3 cyl
                                                  * 0011 = 4 cyl
@@ -105,9 +105,9 @@ union config11
                                                  * 1010 = 11 cyl
                                                  * 1011 = 12 cyl
                                                  */
-                guchar inj_type		:1;     /* 0 = multi-port, 1 = TBI */
-                guchar eng_type		:1;     /* 0 = 4-stroke, 1 = 2-stroke */
-                guchar map_type		:2;     /* 00 115KPA, 01-250kpa, 10,11
+                guchar inj_type		:1;     /*!< 0 = multi-port, 1 = TBI */
+                guchar eng_type		:1;     /*!< 0 = 4-stroke, 1 = 2-stroke */
+                guchar map_type		:2;     /*!< 00 115KPA, 01-250kpa, 10,11
                                                  * user-defined */
         } bit;
 };
@@ -120,10 +120,10 @@ union config11
  */
 union config12
 {
-        guchar      value;
+        guchar      value;			/*!< config12 byte */
         struct
         {
-                guchar injectors	:4;     /* 0000 = 1 injector 
+                guchar injectors	:4;     /*!< 0000 = 1 injector 
                                                  * 0001 = 2 injectors
                                                  * 0010 = 3 injectors
                                                  * 0011 = 4 injectors
@@ -136,9 +136,9 @@ union config12
                                                  * 1010 = 11 injectors
                                                  * 1011 = 12 injectors
                                                  */
-                guchar mat_type		:2;     /* 00 = GM,
+                guchar mat_type		:2;     /*!< 00 = GM,
                                                  * 01,10,11 = user defined */
-                guchar clt_type		:2;     /* 00 = GM, 
+                guchar clt_type		:2;     /*!< 00 = GM, 
                                                  * 01,10,11 = user defined */
         } bit;
 };
@@ -152,18 +152,18 @@ union config12
  */
 union config13
 {
-        guchar      value;
+        guchar      value;			/*!< config13 byte */
         struct
         {
-                guchar unused		:3;         /* Last 3 bits... */
+                guchar unused		:3;	/*!< Last 3 bits unused */
                 /*Idle policy is IAC or DUALTABLE CODE SPECIFIC*/
-                guchar idle_policy	:1;    /* 0 = B%G style, */
+                guchar idle_policy	:1;	/*!< 0 = B%G style, */
 						/* 1 = Brian Fielding PWM */
-                guchar baro_corr	:1;     /* 0 = Enrichment off (100%) */
+                guchar baro_corr	:1;     /*!< 0 = Enrichment off (100%) */
                                                 /* 1 = Enrichment on  */
-                guchar inj_strat	:1;     /* 0 = SD, 1 = Alpha-N */
-                guchar ego_type 	:1;     /* 0 = narrow, 1=wide */
-                guchar firing		:1;     /* 0 = normal, 1=odd fire */
+                guchar inj_strat	:1;     /*!< 0 = SD, 1 = Alpha-N */
+                guchar ego_type 	:1;     /*!< 0 = narrow, 1=wide */
+                guchar firing		:1;     /*!< 0 = normal, 1=odd fire */
 
         } bit;
 };
@@ -176,11 +176,11 @@ union config13
  */
 union bcfreq
 {
-	guchar 	value;
+	guchar 	value;			/*!< Boost frequency */
 	struct
 	{
-		guchar unused		:6;
-		guchar freq		:2;	/* 00 ERROR, 01 = 39 Hz, 
+		guchar unused		:6;	/*!< unused */
+		guchar freq		:2;	/*!< 00 ERROR, 01 = 39 Hz, 
 						 * 10 = 19Hz, 11 = 10 Hz
 						 */
 	} bit;
@@ -197,25 +197,25 @@ union bcfreq
  */
 union tblcnf
 {
-	guchar 	value;
+	guchar 	value;				/*!< Tableconf byte */
 	struct
 	{
-		guchar unused		:1;	/* not used */
-		guchar gammae2		:1;	/* 0 Gammae NOT applied to 
+		guchar unused		:1;	/*!< not used */
+		guchar gammae2		:1;	/*!< 0 Gammae NOT applied to 
 						 * Injector channel 2 */
 						/* 1 Gammae applied to inj 2 */
-		guchar gammae1		:1;	/* 0 Gammae NOT applied to 
+		guchar gammae1		:1;	/*!< 0 Gammae NOT applied to 
 						 * Injector channel 1 */
 						/* 1 Gammae applied to inj 1 */
-		guchar inj2		:2;	/* 00 injector 2 not driven */
+		guchar inj2		:2;	/*!< 00 injector 2 not driven */
 						/* 01 driven from table 1 */
 						/* 10 driven from table 2 */
 						/* 11 undefined */
-		guchar inj1		:2;	/* 00 injector 1 not drivem */
+		guchar inj1		:2;	/*!< 00 injector 1 not drivem */
 						/* 01 driven from table 1 */
 						/* 10 driven from table 2 */
 						/* 11 undefined */
-		guchar simul		:1;	/* 0 both injectors controlled
+		guchar simul		:1;	/*!< 0 both injectors controlled
 						 * from table 1, rest of byte
 						 * ignored */
 						/* 1 additional modes activated
@@ -231,14 +231,14 @@ union tblcnf
  */
 union spark_config1
 {
-	guchar 	value;
+	guchar 	value;				/*!< spkconfig1 byte */
 	struct
 	{
-		guchar unused		:4;
-		guchar boost_ret	:1;	/* (EDIS) Boost Retard ? */
-		guchar multi_sp		:1;	/* (EDIS) Multi-Spark mode ? */
-		guchar xlong_trig	:1;	/* Mask xtra long trigger ? */
-		guchar long_trig	:1;	/* Mask long trigger ? */
+		guchar unused		:4;	/*!< unused bytes */
+		guchar boost_ret	:1;	/*!< (EDIS) Boost Retard ? */
+		guchar multi_sp		:1;	/*!< (EDIS) Multi-Spark mode ? */
+		guchar xlong_trig	:1;	/*!< Mask xtra long trigger ? */
+		guchar long_trig	:1;	/*!< Mask long trigger ? */
 	} bit;
 };
 
@@ -253,21 +253,21 @@ union spark_config1
  */
 union squirt
 {
-        guchar      value;
+        guchar      value;		/*!< Squirt byte */
         struct
         {
-                guchar inj1      :1;     /* 0 = no squirt 1 = squirt */
-                guchar inj2      :1;     /* 0 = no squirt 1 = squirt */
-                guchar sched1    :1;     /* 0 = nothing scheduled 1 = sch
+                guchar inj1      :1;	/*!< 0 = no squirt 1 = squirt */
+                guchar inj2      :1;	/*!< 0 = no squirt 1 = squirt */
+                guchar sched1    :1;	/*!< 0 = nothing scheduled 1 = sch
                                                    eduled to squirt */
-                guchar firing1   :1;     /* 0 = not squirting 1 = squirti
+                guchar firing1   :1;	/*!< 0 = not squirting 1 = squirti
                                                    ng */
-                guchar sched2    :1;     /* 0 = nothing scheduled 1 = sch
+                guchar sched2    :1;	/*!< 0 = nothing scheduled 1 = sch
                                                    eduled to squirt */
-                guchar firing2   :1;     /* 0 = not squirting 1 = squirti
+                guchar firing2   :1;	/*!< 0 = not squirting 1 = squirti
                                                    ng */
-                guchar reserved  :2;
-        } bit;
+                guchar reserved  :2;	/*!< unused */
+        } bit;					/*!< bit */
 };
 
 
@@ -279,19 +279,19 @@ union squirt
  */
 union engine
 {
-        guchar      value;
+        guchar      value;		/*!< Engine byte */
         struct
         {
-                guchar running	:1;     /* 0 = engine not running 1 = running */
-                guchar crank	:1;     /* 0 = engine not cranking 1 = engine cranking */
-                guchar ase	:1;     /* 0 = not in afterstart enrich 1 = in afterstart enrichment */
-                guchar warmup	:1;     /* 0 = not in warmup 1 = in warmup */
-                guchar tpsaccel	:1;     /* 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
-                guchar tpsdecel	:1;     /* 0 = not in deacceleration mode 1 = in deacceleration mode */
-                guchar mapaccel	:1;     /* 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
+                guchar running	:1;     /*!< 0 = engine not running 1 = running */
+                guchar crank	:1;     /*!< 0 = engine not cranking 1 = engine cranking */
+                guchar ase	:1;     /*!< 0 = not in afterstart enrich 1 = in afterstart enrichment */
+                guchar warmup	:1;     /*!< 0 = not in warmup 1 = in warmup */
+                guchar tpsaccel	:1;     /*!< 0 = not in TPS acceleration mode 1 = TPS acceleration mode */
+                guchar tpsdecel	:1;     /*!< 0 = not in deacceleration mode 1 = in deacceleration mode */
+                guchar mapaccel	:1;     /*!< 0 = not in MAP acceleration mode 1 = MAP deaceeleration mode */
 
-                guchar reserved  :1;
-        } bit;
+                guchar reserved  :1;	/*!< reserved */
+        } bit;					/*!< bit */
 };
 
 
@@ -303,14 +303,14 @@ union engine
  */
 union config11
 {
-        guchar      value;
+        guchar      value;		/*!< config11 byte */
         struct
         {
-                guchar map_type  :2;     /* 00 115KPA, 01-250kpa, 10,11
+                guchar map_type  :2;     /*!< 00 115KPA, 01-250kpa, 10,11
                                                  * user-defined */
-                guchar eng_type  :1;     /* 0 = 4-stroke, 1 = 2-stroke */
-                guchar inj_type  :1;     /* 0 = multi-port, 1 = TBI */
-                guchar cylinders :4;     /* 0000 = 1 cyl 
+                guchar eng_type  :1;     /*!< 0 = 4-stroke, 1 = 2-stroke */
+                guchar inj_type  :1;     /*!< 0 = multi-port, 1 = TBI */
+                guchar cylinders :4;     /*!< 0000 = 1 cyl 
                                                  * 0001 = 2 cyl
                                                  * 0010 = 3 cyl
                                                  * 0011 = 4 cyl
@@ -323,7 +323,7 @@ union config11
                                                  * 1010 = 11 cyl
                                                  * 1011 = 12 cyl
                                                  */
-        } bit;
+        } bit;					/*!< bit */
 };
 
 
@@ -334,14 +334,14 @@ union config11
  */
 union config12
 {
-        guchar      value;
+        guchar      value;		/*!< config12 byte */
         struct
         {
-                guchar clt_type  :2;     /* 00 = GM, 
+                guchar clt_type  :2;     /*!< 00 = GM, 
                                                  * 01,10,11 = user defined */
-                guchar mat_type  :2;     /* 00 = GM,
+                guchar mat_type  :2;     /*!< 00 = GM,
                                                  * 01,10,11 = user defined */
-                guchar injectors :4;     /* 0000 = 1 injector 
+                guchar injectors :4;     /*!< 0000 = 1 injector 
                                                  * 0001 = 2 injectors
                                                  * 0010 = 3 injectors
                                                  * 0011 = 4 injectors
@@ -354,7 +354,7 @@ union config12
                                                  * 1010 = 11 injectors
                                                  * 1011 = 12 injectors
                                                  */
-        } bit;
+        } bit;					/*!< bit */
 };
 
 
@@ -366,20 +366,20 @@ union config12
  */
 union config13
 {
-        guchar      value;
+        guchar      value;			/*!< Config13 byte */
         struct
         {
-                guchar firing		:1;	/* 0 = normal, 1=odd fire */
-                guchar ego_type 	:1;	/* 0 = narrow, 1=wide */
-                guchar inj_strat	:1;	/* 0 = SD, 1 = Alpha-N */
-                guchar baro_corr	:1;	/* 0 = Enrichment off (100%) */
-                                                /* 1 = Enrichment on  */
+                guchar firing		:1;	/*! 0 = normal, 1=odd fire */
+                guchar ego_type 	:1;	/*! 0 = narrow, 1=wide */
+                guchar inj_strat	:1;	/*! 0 = SD, 1 = Alpha-N */
+                guchar baro_corr	:1;	/*! 0 = Enrichment off (100%) */
+                                                /*! 1 = Enrichment on  */
 		/* idle_policy is IAC or Dualtable CODE SPECIFIC */
-                guchar idle_policy	:1;	/* 0 = B%G style, */
-                                                /* 1 = Brian fielding PWM */
+                guchar idle_policy	:1;	/*! 0 = B%G style, */
+                                                /*! 1 = Brian fielding PWM */
 
-                guchar unused		:3;	/* Last 3 bits... */
-        } bit;
+                guchar unused		:3;	/*! Last 3 bits... */
+        } bit;					/*!< bit */
 };
 
 
@@ -390,14 +390,14 @@ union config13
  */
 union bcfreq
 {
-	guchar 	value;
+	guchar 	value;			/*!< Boost controller frequency */
 	struct
 	{
-		guchar freq		:2;	/* 00 ERROR, 01 = 39 Hz, 
+		guchar freq		:2;	/*!< 00 ERROR, 01 = 39 Hz, 
 						 * 10 = 19Hz, 11 = 10 Hz
 						 */
-		guchar unused		:6;
-	} bit;
+		guchar unused		:6;	/*!< unused */
+	} bit;					/*!< bit */
 };
 
 
@@ -411,30 +411,30 @@ union bcfreq
  */
 union tblcnf
 {
-	guchar 	value;
+	guchar 	value;				/*!< Table config byte */
 	struct
 	{
-		guchar simul		:1;	/* 0 both injectors controlled
+		guchar simul		:1;	/*!< 0 both injectors controlled
 						 * from table 1, rest of byte
 						 * ignored */
 						/* 1 additional modes activated
 						 * as bits 1-7 */
-		guchar inj1		:2;	/* 00 injector 1 not drivem */
+		guchar inj1		:2;	/*!< 00 injector 1 not drivem */
 						/* 01 driven from table 1 */
 						/* 10 driven from table 2 */
 						/* 11 undefined */
-		guchar inj2		:2;	/* 00 injector 2 not driven */
+		guchar inj2		:2;	/*!< 00 injector 2 not driven */
 						/* 01 driven from table 1 */
 						/* 10 driven from table 2 */
 						/* 11 undefined */
-		guchar gammae1		:1;	/* 0 Gammae NOT applied to 
+		guchar gammae1		:1;	/*!< 0 Gammae NOT applied to 
 						 * Injector channel 1 */
 						/* 1 Gammae applied to inj 1 */
-		guchar gammae2		:1;	/* 0 Gammae NOT applied to 
+		guchar gammae2		:1;	/*!< 0 Gammae NOT applied to 
 						 * Injector channel 2 */
 						/* 1 Gammae applied to inj 2 */
-		guchar unused		:1;	/* not used */
-	}bit;
+		guchar unused		:1;	/*!< not used */
+	}bit;					/*!< bit */
 };
 
 
@@ -446,15 +446,15 @@ union tblcnf
  */
 union spark_config1
 {
-	guchar 	value;
+	guchar 	value;				/*!< Value byte */
 	struct
 	{
-		guchar long_trig	:1;	/* Mask long trigger ? */
-		guchar xlong_trig	:1;	/* Mask xtra long trigger ? */
-		guchar multi_sp		:1;	/* (EDIS) Multi-Spark mode ? */
-		guchar boost_ret	:1;	/* (EDIS) Boost Retard ? */
+		guchar long_trig	:1;	/*!< Mask long trigger ? */
+		guchar xlong_trig	:1;	/*!< Mask xtra long trigger ? */
+		guchar multi_sp		:1;	/*!< (EDIS) Multi-Spark mode ? */
+		guchar boost_ret	:1;	/*!< (EDIS) Boost Retard ? */
 		guchar unused		:4;
-	} bit;
+	} bit;					/*!< bit */
 };
 #endif /* Endian-ness check */
 

@@ -28,33 +28,35 @@
 
 #include "symbol_table.h"
 
-/* Data structure representing function tree node.  */
+/*!
+ \brief Data structure representing function tree node.  
+ */
 typedef struct _Node {
-	char            type;	/* Node type ('n' for number, 'c' for
+	char            type;	/*!< Node type ('n' for number, 'c' for
 				 * constant, 'v' for variable, 'f' for
 				 * function, 'u' for unary operation, 'b'
 				 * for binary operation).  */
 	union {
-		double          number;	/* Number value.  */
-		Record         *constant;	/* Symbol table record for 
+		double          number;	/*!< Number value.  */
+		Record         *constant;	/*!< Symbol table record for 
 						 * constant.  */
-		Record         *variable;	/* Symbol table record for 
+		Record         *variable;	/*!< Symbol table record for 
 						 * variable.  */
 		struct {
-			Record         *record;	/* Symbol table record for 
+			Record         *record;	/*!< Symbol table record for 
 						 * function.  */
-			struct _Node   *child;	/* Function argument node. 
+			struct _Node   *child;	/*!< Function argument node. 
 						 */
-		} function;	/* Structure representing function.  */
+		} function;	/*!< Structure representing function.  */
 		struct {
-			char            operation;	/* Operation type
+			char            operation;	/*!< Operation type
 							 * ('-' for unary
 							 * minus).  */
-			struct _Node   *child;	/* Operand node.  */
-		} un_op;	/* Structure representing unary operation. 
+			struct _Node   *child;	/*!< Operand node.  */
+		} un_op;	/*!< Structure representing unary operation. 
 				 */
 		struct {
-			char            operation;	/* Operation type
+			char            operation;	/*!< Operation type
 							 * ('+' for
 							 * adition, '-'
 							 * for
@@ -67,10 +69,10 @@ typedef struct _Node {
 							 * exponentiation). 
 							 */
 			struct _Node   *left,
-			               *right;	/* Operands nodes.  */
-		} bin_op;	/* Structure representing binary
+			               *right;	/*!< Operands nodes.  */
+		} bin_op;	/*!< Structure representing binary
 				 * operation.  */
-	} data;
+	} data;	/*!< data */
 } Node;
 
 /* Create node of given type and initialize it from optional arguments.

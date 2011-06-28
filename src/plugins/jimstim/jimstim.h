@@ -38,23 +38,23 @@ typedef struct _JimStim_Data JimStim_Data;
   */
 struct _JimStim_Data
 {
-	GtkWidget *start_e;	/* start entry */
-	GtkWidget *end_e;	/* end entry */
-	GtkWidget *step_e;	/* step entry */
-	GtkWidget *sweep_e;	/* sweep time entry */
-	GtkWidget *start_b;	/* start button */
-	GtkWidget *stop_b;	/* end button */
-	GtkWidget *rpm_e;	/* commanded rpm entry */
-	GtkWidget *step_rb;	/* Favor step radiobutton */
-	GtkWidget *sweep_rb;	/* Favor sweep radiobutton */
-	GtkWidget *frame;	/* JS controls frame */
-	gint start;		/* start value */
-	gint end;		/* end value */
-	gint step;		/* step value */
-	gfloat sweep;		/* sweep value */
-	gint current;		/* Current value */
-	gint sweep_id;		/*! Timeout identifier */
-	gboolean reset;		/*! Reset*/
+	GtkWidget *start_e;	/*!< start entry */
+	GtkWidget *end_e;	/*!< end entry */
+	GtkWidget *step_e;	/*!< step entry */
+	GtkWidget *sweep_e;	/*!< sweep time entry */
+	GtkWidget *start_b;	/*!< start button */
+	GtkWidget *stop_b;	/*!< end button */
+	GtkWidget *rpm_e;	/*!< commanded rpm entry */
+	GtkWidget *step_rb;	/*!< Favor step radiobutton */
+	GtkWidget *sweep_rb;	/*!< Favor sweep radiobutton */
+	GtkWidget *frame;	/*!< JS controls frame */
+	gint start;		/*!< start value */
+	gint end;		/*!< end value */
+	gint step;		/*!< step value */
+	gfloat sweep;		/*!< sweep value */
+	gint current;		/*!< Current value */
+	gint sweep_id;		/*!< Timeout identifier */
+	gboolean reset;		/*!< Reset */
 };
 
 /* Prototypes */

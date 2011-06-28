@@ -25,15 +25,15 @@ typedef struct _PersonaElement PersonaElement;
   */
 struct _PersonaElement 
 {
-	gchar *filename;	/* Filename */
-	gchar *sequence;	/* Sequence number */
-	gchar *persona;		/* To match against CLI options */
-	gchar *dirname;		/* Dirname */
-	gchar *name;		/* Shortname in choice box */
-	gchar *ecu_lib;		/* ECU specific library */
-	gchar *common_lib;	/* Common Library */
-	gchar *baud_str;	/* Baud string, i.e. 9600,8,n,1 */
-	gboolean def;		/* Default choice */
+	gchar *filename;	/*!< Filename */
+	gchar *sequence;	/*!< Sequence number */
+	gchar *persona;		/*!< To match against CLI options */
+	gchar *dirname;		/*!< Dirname */
+	gchar *name;		/*!< Shortname in choice box */
+	gchar *ecu_lib;		/*!< ECU specific library */
+	gchar *common_lib;	/*!< Common Library */
+	gchar *baud_str;	/*!< Baud string, i.e. 9600,8,n,1 */
+	gboolean def;		/*!< Default choice */
 };
 /* Prototypes */
 gboolean personality_choice(void);

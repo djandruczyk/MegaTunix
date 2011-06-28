@@ -29,34 +29,32 @@ typedef struct _TTMon_Data TTMon_Data;
  */
 struct _TTMon_Data
 {
-	gboolean stop;		/*! Stop display */
-	gfloat zoom;		/*! Zoom */
-	gint page;		/*! page used to discern them apart */
-	GdkPixmap *pixmap;	/*! Pixmap */
-	GtkWidget *darea;	/*! Pointer to drawing area */
-	gint min_time;		/*! Minimum, trigger/tooth time */
-	gint num_maxes;		/*! Hot many long pips per block */
-	gint mins_inbetween;	/*! How many normal teeth */
-	gint max_time;		/*! Maximum, trigger/tooth time */
-	gint midpoint_time;	/*! avg between min and max */
-	gint est_teeth;		/*! Estimated number of teeth */
-	gint units;		/*! Units multiplier */
-	gint missing;		/*! Number of missing teeth */
-	gint sample_time;	/*! Time delay between reads.. */
-	gint capabilities;	/*! Enum of ECU capabilities */
-	gfloat usable_begin;	/*! Usable begin point for bars */
-	gfloat font_height;	/*! Font height needed for some calcs */
-	gfloat rpm;		/*! Current RPM */
-	gushort *current;	/*! Current block of times */
-	gushort *last;		/*! Last block of times */
-	gushort *captures;	/*! Array of capture points */
-	gint wrap_pt;		/*! Wrap point */
-	gint vdivisor;		/*! Vertical scaling divisor */
-	gfloat peak;		/*! Vertical Peak Value */
-	PangoFontDescription *font_desc;	/*! Pango Font Descr */
-	PangoLayout *layout;	/*! Pango Layout */
-	GdkGC *axis_gc;		/*! axis graphics context */
-	GdkGC *trace_gc;	/*! axis graphics context */
+	gboolean stop;		/*!< Stop display */
+	gfloat zoom;		/*!< Zoom */
+	gint page;		/*!< page used to discern them apart */
+	GdkPixmap *pixmap;	/*!< Pixmap */
+	GtkWidget *darea;	/*!< Pointer to drawing area */
+	gint min_time;		/*!< Minimum, trigger/tooth time */
+	gint num_maxes;		/*!< Hot many long pips per block */
+	gint mins_inbetween;	/*!< How many normal teeth */
+	gint max_time;		/*!< Maximum, trigger/tooth time */
+	gint midpoint_time;	/*!< avg between min and max */
+	gint est_teeth;		/*!< Estimated number of teeth */
+	gint units;		/*!< Units multiplier */
+	gint missing;		/*!< Number of missing teeth */
+	gint sample_time;	/*!< Time delay between reads.. */
+	gint capabilities;	/*!< Enum of ECU capabilities */
+	gfloat usable_begin;	/*!< Usable begin point for bars */
+	gfloat font_height;	/*!< Font height needed for some calcs */
+	gfloat rpm;		/*!< Current RPM */
+	gushort *current;	/*!< Current block of times */
+	gushort *last;		/*!< Last block of times */
+	gushort *captures;	/*!< Array of capture points */
+	gint wrap_pt;		/*!< Wrap point */
+	gint vdivisor;		/*!< Vertical scaling divisor */
+	gfloat peak;		/*!< Vertical Peak Value */
+	PangoFontDescription *font_desc;	/*!< Pango Font Descr */
+	PangoLayout *layout;	/*!< Pango Layout */
 };
 
 /* Prototypes */

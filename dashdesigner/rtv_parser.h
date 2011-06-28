@@ -29,9 +29,9 @@ typedef struct _Persona_Info Persona_Info;
   */
 struct _Rtv_Data
 {
-	GHashTable *persona_hash;
-	GArray *persona_array;
-	gint total_files;
+	GHashTable *persona_hash;	/*!< Hashtable of personas */
+	GArray *persona_array;		/*!< Array of Personas */
+	gint total_files;		/*!< File count */
 };
 
 /*!
@@ -41,10 +41,10 @@ struct _Rtv_Data
   */
 struct _Persona_Info
 {
-	GHashTable *hash;
-	GHashTable *int_ext_hash;
-	GList *rtv_list;
-	gchar *persona;
+	GHashTable *hash;		/*!< hash of all possible sources */
+	GHashTable *int_ext_hash;	/*!< int/ext name hash */
+	GList *rtv_list;		/*!< List of RT Variables */
+	gchar *persona;			/*!< Personal in use */
 };
 
 /*!

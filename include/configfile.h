@@ -27,8 +27,8 @@
  */
 typedef struct
 {
-        gchar *key;
-        gchar *value;
+        gchar *key;		/*!< Key */
+        gchar *value;		/*!< Value */
 }
 ConfigLine;
 
@@ -38,8 +38,8 @@ ConfigLine;
  */
 typedef struct
 {
-        gchar *name;
-        GList *lines;
+        gchar *name;		/*!< Section Name */
+        GList *lines;		/*!< List of Lines in that Section */
 }
 ConfigSection;
 
@@ -49,8 +49,8 @@ ConfigSection;
  */
 typedef struct
 {
-        GList *sections;
-	gchar * filename;
+        GList *sections;	/*!< List of Sections */
+	gchar * filename;	/*!< File Name */
 }
 ConfigFile;
 

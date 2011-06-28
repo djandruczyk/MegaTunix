@@ -48,12 +48,12 @@ int             ok;		/* Flag determining if parsing went OK.  */
  \brief Data structure representing evaluator.  
  */
 typedef struct {
-	Node           *root;	/* Root of tree representation of
+	Node           *root;	/*!< Root of tree representation of
 				 * function.  */
-	SymbolTable    *symbol_table;	/* Evalutor symbol table.  */
-	char           *string;	/* Evaluator textual representation. */
-	int             count;	/* Number of evaluator variables. */
-	char          **names;	/* Array of pointers to evaluator variable 
+	SymbolTable    *symbol_table;	/*!< Evalutor symbol table.  */
+	char           *string;	/*!< Evaluator textual representation. */
+	int             count;	/*!< Number of evaluator variables. */
+	char          **names;	/*!< Array of pointers to evaluator variable 
 				 * names. */
 } Evaluator;
 

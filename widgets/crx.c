@@ -21,11 +21,14 @@ typedef enum {
     TYPE_CLOSE = 32
 } CMD_TYPE;
 
+/*!
+  \brief Regex CMD structure
+  */
 typedef struct {
-    char id;
-    int span;
-    void* fcn;
-    CMD_TYPE type;
+    char id;		/*!< ID */
+    int span;		/*!< Span */
+    void* fcn;		/*!< function pointer */
+    CMD_TYPE type;	/*!< Command type enum */
 } Cmd;
 
 /* Prototypes */

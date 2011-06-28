@@ -232,21 +232,19 @@ typedef struct _MtxGenPoly		MtxGenPoly;
 
 
 /*!
-  \struct _MtxDispatchHelper
   \brief MtxDispatchHelper struct contains the information needed to call the 
   appropriate function  based on the elements name
   */
 struct _MtxDispatchHelper
 {
-	gchar * element_name;
-	gpointer src;
-	xmlNodePtr root_node;
-	MtxGaugeFace * gauge;
+	gchar * element_name;	/*!< Element name for this dispatcher */
+	gpointer src;		/*!< source pointer */
+	xmlNodePtr root_node;	/*!< XML node */
+	MtxGaugeFace * gauge;	/*!< Gauge pointer */
 };
 
 
 /*! 
- * \struct _MtxWarningRange
  * \brief
  * _MtxWarningRange is a container struct that holds all the information needed
  * for a color range span on a gauge. Any gauge can have an arbritrary number
@@ -255,17 +253,16 @@ struct _MtxDispatchHelper
  */
 struct _MtxWarningRange
 {
-	gfloat lowpoint;	/* where the range starts from */
-	gfloat highpoint; 	/* where the range ends at */
-	GdkColor color[2];	/* The colors to use */
-	gfloat lwidth;		/* % of radius to determine the line width */
-	gfloat inset;		/* % of radius to inset the line */
-	gint layer;		/* Layer number */
+	gfloat lowpoint;	/*!< where the range starts from */
+	gfloat highpoint; 	/*!< where the range ends at */
+	GdkColor color[2];	/*!< The colors to use */
+	gfloat lwidth;		/*!< % of radius to determine the line width */
+	gfloat inset;		/*!< % of radius to inset the line */
+	gint layer;		/*!< Layer number */
 };
 
 
 /*!
- * \struct _MtxAlertRange
  * \brief
  * _MtxAlertRange is a container struct that holds all the information needed
  * for an alert range span on a gauge. Any gauge can have an arbritrary number
@@ -274,19 +271,18 @@ struct _MtxWarningRange
  */
 struct _MtxAlertRange
 {
-	gfloat lowpoint;	/* where the range starts from */
-	gfloat highpoint; 	/* where the range ends at */
-	GdkColor color[2];	/* The colors to use */
-	gfloat lwidth;		/* % of radius to determine the line width */
-	gfloat inset;		/* % of radius to inset the line */
-	gfloat x_offset;	/* % of radius to offset the X origin */
-	gfloat y_offset;	/* % of radius to offset the Y origin */
-	gint layer;		/* Layer number */
+	gfloat lowpoint;	/*!< where the range starts from */
+	gfloat highpoint; 	/*!< where the range ends at */
+	GdkColor color[2];	/*!< The colors to use */
+	gfloat lwidth;		/*!< % of radius to determine the line width */
+	gfloat inset;		/*!< % of radius to inset the line */
+	gfloat x_offset;	/*!< % of radius to offset the X origin */
+	gfloat y_offset;	/*!< % of radius to offset the Y origin */
+	gint layer;		/*!< Layer number */
 };
 
 
 /*! 
- * \struct _MtxTextBlock
  * \brief
  * _MtxTextBlock is a container struct that holds information for a text
  * block to be placed somplace on a gauge.  A dynamic array holds the pointers
@@ -294,17 +290,16 @@ struct _MtxAlertRange
  */
 struct _MtxTextBlock
 {
-	gchar * font;
-	gchar * text;
-	GdkColor color[2];
-	gfloat font_scale;
-	gfloat x_pos;
-	gfloat y_pos;
-	gint layer;		/* Layer number */
+	gchar * font;		/*!< Font name */
+	gchar * text;		/*!< Text to be displayed */
+	GdkColor color[2];	/*!< Array of colors (day/nite) */
+	gfloat font_scale;	/*!< Font scale factor */
+	gfloat x_pos;		/*!< X position (-1<-x->+1) */
+	gfloat y_pos;		/*!< Y position (-1<-x->+1) */
+	gint layer;		/*!< Layer number */
 };
 
 /*! 
- * \struct _MtxTickGroup
  * \brief
  * _MtxTickGroup is a container structure that holds all the info needed for
  * a group of tickmarks.  This is added to allow multiple groups of tickmarks
@@ -314,41 +309,39 @@ struct _MtxTextBlock
  */
 struct _MtxTickGroup
 {
-	gchar *font;
-	gchar *text;
-	GdkColor text_color[2];
-	gfloat font_scale;
-	gfloat text_inset;
-	gint num_maj_ticks;
-	GdkColor maj_tick_color[2];
-	gfloat maj_tick_inset;
-	gfloat maj_tick_width;
-	gfloat maj_tick_length;
-	gint num_min_ticks;
-	GdkColor min_tick_color[2];
-	gfloat min_tick_inset;
-	gfloat min_tick_width;
-	gfloat min_tick_length;
-	gfloat start_angle;
-	gfloat sweep_angle;
-	gint layer;		/* Layer number */
+	gchar *font;		/*!< Font associated with the tickmarks */
+	gchar *text;		/*!< Text */
+	GdkColor text_color[2];	/*!< Text Day/Nite Colors */
+	gfloat font_scale;	/*!< Font scaler */
+	gfloat text_inset;	/*!< Text inset from tickmarks */
+	gint num_maj_ticks;	/*!< How many major ticks */
+	GdkColor maj_tick_color[2];	/*!< Day/nite colors for major ticks */
+	gfloat maj_tick_inset;	/*!< Major tick inset */
+	gfloat maj_tick_width;	/*!< Major tick width */
+	gfloat maj_tick_length;	/*!< Major tick length */
+	gint num_min_ticks;	/*!< Number of minor ticks between major ticks*/
+	GdkColor min_tick_color[2];	/*!< Day/nite colors for minor ticks */
+	gfloat min_tick_inset;	/*!< Minor tick inset */
+	gfloat min_tick_width;	/*!< Minor tick width */
+	gfloat min_tick_length;	/*!< Minor tick length */
+	gfloat start_angle;	/*!< Start Angle */
+	gfloat sweep_angle;	/*!< Sweep Angle */
+	gint layer;		/*!< Layer number */
 };
 
 
 /*! 
- * \struct _MtxPoint
  * \brief
  * _MtxPoint houses a coordinate in gauge space in floating point coords which
  * are percentages of radius to keep everything scalable
  */
 struct _MtxPoint
 {
-	gfloat x;		/* X val as % of gauge radius */
-	gfloat y;		/* Y val as % of gauge radius */
+	gfloat x;		/*!< X val as % of gauge radius */
+	gfloat y;		/*!< Y val as % of gauge radius */
 };
 
 /*! 
- * \struct _MtxPolygon
  * \brief
  * _MtxPolygon is a container struct that holds an identifier (enum) and a 
  * void * for the the actual polygon data (the struct will be casted in the
@@ -356,19 +349,18 @@ struct _MtxPoint
  */
 struct _MtxPolygon
 {
-	MtxPolyType type;		/* Enum type */
-	gboolean filled;		/* Filled or not? */
-	GdkColor color[2];		/* Color */
-	gfloat line_width;		/* % of radius, clamped at 1 pixel */
-	GdkLineStyle line_style;	/* Line Style */
-	GdkJoinStyle join_style;	/* Join Style */
-	void *data;			/* pointer to datastruct */
-	gint layer;			/* Layer number */
+	MtxPolyType type;		/*!< Enum type */
+	gboolean filled;		/*!< Filled or not? */
+	GdkColor color[2];		/*!< Color */
+	gfloat line_width;		/*!< % of radius, clamped at 1 pixel */
+	GdkLineStyle line_style;	/*!< Line Style */
+	GdkJoinStyle join_style;	/*!< Join Style */
+	void *data;			/*!< pointer to datastruct */
+	gint layer;			/*!< Layer number */
 };
 
 
 /*! 
- * \struct _MtxCircle 
  * \brief
  * _MtxCircle contains the info needed to create a circle on the gauge.
  * Values are in floating point as they are percentages of gauge radius so
@@ -381,14 +373,13 @@ struct _MtxCircle
 	 * so an x value of 0 is the CENTER, a value of -1 is the left border
 	 * and +1 is the right border.
 	 */
-	gfloat x;		/* X center */
-	gfloat y;		/* Y center */
-	gfloat radius;		/* radius of circle as a % fo gauge radius */
+	gfloat x;		/*!< X center */
+	gfloat y;		/*!< Y center */
+	gfloat radius;		/*!< radius of circle as a % fo gauge radius */
 };
 
 
 /*! 
- * \struct _MtxArc
  * \brief
  * _MtxArc contains the info needed to create an arc on the gauge.
  * Values are in floating point as they are percentages of gauge radius so
@@ -401,17 +392,16 @@ struct _MtxArc
 	 * so an x value of 0 is the CENTER, a value of -1 is the left border
 	 * and +1 is the right border.
 	 */
-	gfloat x;		/* Left edge of bounding rectangle */
-	gfloat y;		/* Right edge of bounding rectangle */
-	gfloat width;		/* width of bounding rectangle */
-	gfloat height;		/* height of bounding rectangle */
-	gfloat start_angle;	/* 0 deg is "3 O'Clock" CCW rotation */
-	gfloat sweep_angle;	/* Angle relative to start_angle */
+	gfloat x;		/*!< Left edge of bounding rectangle */
+	gfloat y;		/*!< Right edge of bounding rectangle */
+	gfloat width;		/*!< width of bounding rectangle */
+	gfloat height;		/*!< height of bounding rectangle */
+	gfloat start_angle;	/*!< 0 deg is "3 O'Clock" CCW rotation */
+	gfloat sweep_angle;	/*!< Angle relative to start_angle */
 };
 
 
 /*! 
- * \struct _MtxRectangle
  * \brief
  * _MtxRectangle contains the info needed to create a rect on the gauge.
  * Values are in floating point as they are percentages of gauge radius so
@@ -424,14 +414,13 @@ struct _MtxRectangle
 	 * so an x value of 0 is the CENTER, a value of -1 is the left border
 	 * and +1 is the right border.
 	 */
-	gfloat x;		/* Top left edge x coord (% of rad) */
-	gfloat y;		/* Top left edge y coord (% of rad) */
-	gfloat width;		/* Width */
-	gfloat height;		/* Height */
+	gfloat x;		/*!< Top left edge x coord (% of rad) */
+	gfloat y;		/*!< Top left edge y coord (% of rad) */
+	gfloat width;		/*!< Width */
+	gfloat height;		/*!< Height */
 };
 
 /*! 
- * \struct _MtxGenPoly
  * \brief
  * _MtxGenPoly is a container structure for generic polygons that can't be
  * described by the generic choices above. It allows for any number of points
@@ -440,8 +429,8 @@ struct _MtxRectangle
  */
 struct _MtxGenPoly
 {
-	gint num_points;	/* Number of points */
-	MtxPoint *points;	/* Dynamic array of points */
+	gint num_points;	/*!< Number of points */
+	MtxPoint *points;	/*!< Dynamic array of points */
 };
 
 /*!
@@ -449,7 +438,7 @@ struct _MtxGenPoly
   */
 struct _MtxGaugeFace
 {	/* public data */
-	GtkDrawingArea parent;
+	GtkDrawingArea parent;	/*!< Parent Widget */
 };
 
 /*!
@@ -457,7 +446,7 @@ struct _MtxGaugeFace
   */
 struct _MtxGaugeFaceClass
 {
-	GtkDrawingAreaClass parent_class;
+	GtkDrawingAreaClass parent_class;	/*!< Parent Class */
 };
 
 GType mtx_gauge_face_get_type (void);

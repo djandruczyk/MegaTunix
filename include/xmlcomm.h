@@ -32,15 +32,15 @@ typedef struct _DBlock DBlock;
  */
 struct _PotentialArg
 {
-	gchar *name;		/* Potential arg name */
-	gchar *desc;		/* Description */
-	gchar *internal_name;	/* Internal name used for linking */
-	DataSize size;		/* Size of data */
-	ArgType type;		/* Enumerated type */
-	Action action;		/* Enum action */
-	gint action_arg;	/* Action argument */
-	gchar *static_string;	/* Static string */
-	gint string_len;	/* Static String Length */
+	gchar *name;		/*!< Potential arg name */
+	gchar *desc;		/*!< Description */
+	gchar *internal_name;	/*!< Internal name used for linking */
+	DataSize size;		/*!< Size of data */
+	ArgType type;		/*!< Enumerated type */
+	Action action;		/*!< Enum action */
+	gint action_arg;	/*!< Action argument */
+	gchar *static_string;	/*!< Static string */
+	gint string_len;	/*!< Static String Length */
 };
 
 
@@ -51,20 +51,20 @@ struct _PotentialArg
  */
 struct _Command
 {
-	gboolean dynamic;	/* Hacky flag to know if this is dyn allocated*/
-	gchar *name;		/* Command Name */
-	gchar *desc;		/* Command Description */
-	gchar *base;		/* Base command charactor(s) */
-	CmdType type;		/* Command type enumeration */
-	GArray *args;		/* Argument list array of PotentialArgs */
-	GArray *post_functions;	/* Argument list array of PostFunctions */
-	gchar *helper_func_name;/* Return data function name */
-	gboolean defer_post_functions;	/* deferred post functions */
-	gint helper_func_arg;/* Return data arg (ENUM) */
-	void  (*helper_function) (void *, gint);/* Helper Function Pointer */
-	gchar *func_call_name;	/* FUNC_CALL function name */
-	gint func_call_arg;/* Enum arg to function call */
-	gboolean (*function) (void *, gint); /* Function call pointer */
+	gboolean dynamic;	/*!< Hacky flag to know if this is dyn allocated*/
+	gchar *name;		/*!< Command Name */
+	gchar *desc;		/*!< Command Description */
+	gchar *base;		/*!< Base command charactor(s) */
+	CmdType type;		/*!< Command type enumeration */
+	GArray *args;		/*!< Argument list array of PotentialArgs */
+	GArray *post_functions;	/*!< Argument list array of PostFunctions */
+	gchar *helper_func_name;/*!< Return data function name */
+	gboolean defer_post_functions;	/*!< deferred post functions */
+	gint helper_func_arg;	/*!< Return data arg (ENUM) */
+	void  (*helper_function) (void *, gint);	/*!< Helper Function Pointer */
+	gchar *func_call_name;	/*!< FUNC_CALL function name */
+	gint func_call_arg;	/*!< Enum arg to function call */
+	gboolean (*function) (void *, gint); /*!< Function call pointer */
 };
 
 
@@ -74,10 +74,10 @@ struct _Command
  */
 struct _PostFunction
 {
-	gchar *name;		/* Function name */
-	void (*function) (void); /* Pointer to function */
-	void (*function_w_arg) (void *); /* Pointer to function */
-	gboolean w_arg;		/* Does it take an arg (void *) */
+	gchar *name;		/*!< Function name */
+	void (*function) (void); /*!< Pointer to function */
+	void (*function_w_arg) (void *); /*!< Pointer to function */
+	gboolean w_arg;		/*!< Does it take an arg (void *) */
 };
 
 /*!
@@ -85,11 +85,11 @@ struct _PostFunction
  */
 struct _DBlock
 {
-	guint8 *data;		/* String of data */
-	gint len;		/* length of data */
-	ArgType type;		/* Enumerated type */
-	Action action;		/* Enum action */
-	gint arg;		/* Action argument */
+	guint8 *data;		/*!< String of data */
+	gint len;		/*!< length of data */
+	ArgType type;		/*!< Enumerated type */
+	Action action;		/*!< Enum action */
+	gint arg;		/*!< Action argument */
 
 };
 /* Prototypes */

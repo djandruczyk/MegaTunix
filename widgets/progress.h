@@ -48,7 +48,7 @@ typedef enum
   */
 struct _MtxProgressBar
 {	/* public data */
-	GtkProgressBar parent;
+	GtkProgressBar parent;		/*!< Parent Widget */
 };
 
 /*!
@@ -56,7 +56,7 @@ struct _MtxProgressBar
   */
 struct _MtxProgressBarClass
 {
-	GtkProgressBarClass parent_class;
+	GtkProgressBarClass parent_class;/*!< Parent Class */
 };
 
 GType mtx_progress_bar_get_type (void) G_GNUC_CONST;

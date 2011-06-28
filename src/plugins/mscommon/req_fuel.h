@@ -37,19 +37,19 @@ typedef struct _Reqd_Fuel Reqd_Fuel;
  */
 struct _Reqd_Fuel
 {
-	GtkWidget *popup;		/*! the popup window */
-	GtkWidget *calcd_val_spin;	/*! Preliminary value */
-	GtkWidget *reqd_fuel_spin;	/*! Used value */
-	gfloat calcd_reqd_fuel;		/*! calculated value... */
-	gint disp;			/*! Engine size  1-1000 Cu-in */
-	gint cyls;			/*! # of Cylinders  1-12 */
-	gfloat rated_inj_flow;		/*! Rated injector flow */
-	gfloat rated_pressure;		/*! Rated fuel pressure */
-	gfloat actual_pressure;		/*! Actual fuel pressure */
-	gfloat actual_inj_flow;		/*! injector flow rate (lbs/hr) */
-	gfloat target_afr;		/*! Air fuel ratio 10-25.5 */
-	gint table_num;			/*! Which table this refers to */
-	gboolean visible;		/*! Is it visible? */
+	GtkWidget *popup;		/*!< the popup window */
+	GtkWidget *calcd_val_spin;	/*!< Preliminary value */
+	GtkWidget *reqd_fuel_spin;	/*!< Used value */
+	gfloat calcd_reqd_fuel;		/*!< calculated value... */
+	gint disp;			/*!< Engine size  1-1000 Cu-in */
+	gint cyls;			/*!< # of Cylinders  1-12 */
+	gfloat rated_inj_flow;		/*!< Rated injector flow */
+	gfloat rated_pressure;		/*!< Rated fuel pressure */
+	gfloat actual_pressure;		/*!< Actual fuel pressure */
+	gfloat actual_inj_flow;		/*!< injector flow rate (lbs/hr) */
+	gfloat target_afr;		/*!< Air fuel ratio 10-25.5 */
+	gint table_num;			/*!< Which table this refers to */
+	gboolean visible;		/*!< Is it visible? */
 };
 
 /* Prototypes */

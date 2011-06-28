@@ -19,7 +19,8 @@
 
 
 typedef struct _Rtv_Map Rtv_Map;
-/*! 
+
+/*!
  \brief _RtvMap is the RealTime Variables Map structure, containing fields to
  access the realtime derived data via a hashtable, and via raw index. Stores
  timestamps of each incoming data byte for advanced future use.
@@ -28,15 +29,15 @@ typedef struct _Rtv_Map Rtv_Map;
 
 struct _Rtv_Map
 {
-	guint derived_total;	/*! Number of derived variables */
-	guint rtvars_size;	/*! total size of rtvars block */
-	gchar **raw_list;	/*! Char List of raw variables by name */
-	gchar *applicable_revisions;/*! Firmware revisions that use this map*/
-	GHashTable *offset_hash;/*! Hashtable of rtv dervied values indexed by
+	guint derived_total;	/*!< Number of derived variables */
+	guint rtvars_size;	/*!< total size of rtvars block */
+	gchar **raw_list;	/*!< Char List of raw variables by name */
+	gchar *applicable_revisions;/*!< Firmware revisions that use this map*/
+	GHashTable *offset_hash;/*!< Hashtable of rtv dervied values indexed by
 				  it's raw offset in the RTV block */
-	GArray *ts_array;	/*! Timestamp array */
-	GPtrArray *rtv_list;	/*! List of derived vars IN ORDER */
-	GHashTable *rtv_hash;	/*! Hashtable of rtv derived values indexed by
+	GArray *ts_array;	/*!< Timestamp array */
+	GPtrArray *rtv_list;	/*!< List of derived vars IN ORDER */
+	GHashTable *rtv_hash;	/*!< Hashtable of rtv derived values indexed by
 				 * it's internal name */
 };
 

@@ -32,31 +32,31 @@ typedef struct _Logview_Data Logview_Data;
  */
 struct _Logview_Data
 {
-	GdkGC *highlight_gc;	/*! GC used for the highlight */
-	GtkWidget *darea;	/*! Trace drawing area... */
-	GdkPixmap *pixmap;	/*! pointer to backing pixmap... */
-	GdkPixmap *pmap;	/*! pointer to Win32 pixmap hack!!! */
-	GHashTable *traces;	/*! Hash table of v_values key'd by name */
-	GList *tlist;		/*! Doubly linked lists of v_Values*/
-	GList *used_colors;	/*! List of colors in use.... */
-	gint active_traces;	/*! how many are active */
-	gint spread;		/*! Pixel spread between trace info blocks */
-	guint tselect;		/*! Trace that is currently selected */
-	PangoFontDescription *font_desc; /*! Font used for text... */
-	gint info_width;	/*! Width of left info area */
+	GdkGC *highlight_gc;	/*!< GC used for the highlight */
+	GtkWidget *darea;	/*!< Trace drawing area... */
+	GdkPixmap *pixmap;	/*!< pointer to backing pixmap... */
+	GdkPixmap *pmap;	/*!< pointer to Win32 pixmap hack!!! */
+	GHashTable *traces;	/*!< Hash table of v_values key'd by name */
+	GList *tlist;		/*!< Doubly linked lists of v_Values*/
+	GList *used_colors;	/*!< List of colors in use.... */
+	gint active_traces;	/*!< how many are active */
+	gint spread;		/*!< Pixel spread between trace info blocks */
+	guint tselect;		/*!< Trace that is currently selected */
+	PangoFontDescription *font_desc; /*!< Font used for text... */
+	gint info_width;	/*!< Width of left info area */
 };
 
 
-/*! 
+/*!
  \brief The _Log_Info datastructure is populated when a datalog file is opened
  for viewing in the Datalog viewer.
  */
 struct _Log_Info
 {
-	guint field_count;	/*! How many fields in the logfile */
-	gchar *delimiter;	/*! delimiter between fields for this logfile */
-	gchar *signature;	/*! ECU signature of log */
-	GPtrArray *log_list;	/*! List of objects */
+	guint field_count;	/*!< How many fields in the logfile */
+	gchar *delimiter;	/*!< delimiter between fields for this logfile */
+	gchar *signature;	/*!< ECU signature of log */
+	GPtrArray *log_list;	/*!< List of objects */
 };
 
 

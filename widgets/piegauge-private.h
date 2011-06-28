@@ -31,26 +31,26 @@ typedef struct _MtxPieGaugePrivate      MtxPieGaugePrivate;
   */
 struct _MtxPieGaugePrivate
 {
-        GdkPixmap *pixmap;      /*! Update/backing pixmap */
-        GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
-        gfloat min;             /*! Minimum Value */
-        gfloat max;             /* MAximum Value */
-        gfloat value;           /* Current value */
-        gint w;                 /* Width of full widget */
-        gint h;                 /* Height of full widget */
-        gint pie_xc;            /* Pie arc x center */
-        gint pie_yc;            /* Pie arc y center */
-        gint pie_radius;        /*! Pie Radius */
-        gint precision;         /* Text precision */
-        gint start_angle;       /* Start angle */
-        gint sweep_angle;       /* Sweep angle */
-        gchar *value_font;      /* Font string for value */
-        gfloat value_font_scale;/* Font scale */
-        gchar *valname;         /* Value text to the let of the number */
-        cairo_t *cr;            /*! Cairo context,  not sure if this is good
+        GdkPixmap *pixmap;      /*!< Update/backing pixmap */
+        GdkPixmap *bg_pixmap;   /*!< Static rarely changing pixmap */
+        gfloat min;             /*!< Minimum Value */
+        gfloat max;             /*!< Maximum Value */
+        gfloat value;           /*!< Current value */
+        gint w;                 /*!< Width of full widget */
+        gint h;                 /*!< Height of full widget */
+        gint pie_xc;            /*!< Pie arc x center */
+        gint pie_yc;            /*!< Pie arc y center */
+        gint pie_radius;        /*!< Pie Radius */
+        gint precision;         /*!< Text precision */
+        gint start_angle;       /*!< Start angle */
+        gint sweep_angle;       /*!< Sweep angle */
+        gchar *value_font;      /*!< Font string for value */
+        gfloat value_font_scale;/*!< Font scale */
+        gchar *valname;         /*!< Value text to the let of the number */
+        cairo_t *cr;            /*!< Cairo context,  not sure if this is good
                                    too hold onto or not */
-        cairo_font_options_t * font_options;
-        GdkColor colors[NUM_COLORS];
+        cairo_font_options_t * font_options;/*!< Font Options */
+        GdkColor colors[NUM_COLORS];	/*!< Colors for this gauge */
 };
 
 

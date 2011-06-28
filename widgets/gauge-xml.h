@@ -26,7 +26,7 @@
 
 typedef struct _MtxXMLFuncs             MtxXMLFuncs;
 
-/*! \struct _MtxXMLFuncs
+/*! 
  * \brief This small container struct is used to store a set of import and
  * export functions use by the XML code to export or import gauge settings
  * The import function takes two args,  one is the text string from the XML
@@ -37,11 +37,11 @@ typedef struct _MtxXMLFuncs             MtxXMLFuncs;
  */
 struct _MtxXMLFuncs
 {
-        void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer, gboolean);
-        void (*export_func) (MtxDispatchHelper *);
-        gchar * varname;
-        gpointer dest_var;
-	gboolean api_compat;
+        void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer, gboolean);/*!< import function pointer */	
+        void (*export_func) (MtxDispatchHelper *);	/*!< export function pointer */
+        gchar * varname;	/*!< Variable name */
+        gpointer dest_var;	/*!< Pointer to destination */
+	gboolean api_compat;	/*!< api_compat flag */
 };
 
 
@@ -78,7 +78,9 @@ void mtx_gauge_poly_arc_import(MtxGaugeFace *, xmlNode *, gpointer, gboolean );
 void mtx_gauge_poly_circle_export(xmlNodePtr , MtxPolygon * );
 void mtx_gauge_poly_circle_import(MtxGaugeFace *, xmlNode *, gpointer, gboolean );
 
-/** Structure used to streamline the xml import/export */
+/*!
+ \brief Structure used to streamline the xml import/export 
+ */
 static const struct
 {
 	void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer, gboolean);

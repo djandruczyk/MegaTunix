@@ -28,8 +28,8 @@ typedef struct _LookupTable LookupTable;
  */
 struct _LookupTable
 {
-	gint *array;		/*! the table itself */
-	gchar *filename;	/*! The relative filename where 
+	gint *array;		/*!< the table itself */
+	gchar *filename;	/*!< The relative filename where 
 				    this table came from */
 };
 

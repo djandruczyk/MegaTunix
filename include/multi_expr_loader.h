@@ -28,11 +28,11 @@ typedef struct _MultiSource MultiSource;
  */
 struct _MultiExpr
 {
-	gint lower_limit;	/* Lower limit */	
-	gint upper_limit;	/* Upper limit */
-	gchar *lookuptable;	/* textual lookuptable name */
-	gfloat *fromecu_mult;	/* upload (from ecu) conv multiplier */
-	gfloat *fromecu_add;	/* upload (from ecu) conv adder */
+	gint lower_limit;	/*!< Lower limit */	
+	gint upper_limit;	/*!< Upper limit */
+	gchar *lookuptable;	/*!< textual lookuptable name */
+	gfloat *fromecu_mult;	/*!< upload (from ecu) conv multiplier */
+	gfloat *fromecu_add;	/*!< upload (from ecu) conv adder */
 };
 
 
@@ -44,13 +44,13 @@ struct _MultiExpr
  */
 struct _MultiSource
 {
-	gchar *source;		/* name of rtvars datasource */
-	gfloat *fromecu_mult;	/* conversion multipler ms units to real */
-	gfloat *fromecu_add;	/* conversion adder ms units to real */
-	void * ul_eval;		/* evaluator pointer */
-	void * dl_eval;		/* evaluator pointer */
-	gchar * suffix;		/* textual suffix for this evaluator*/
-	gint precision;		/* Precision for floating point */
+	gchar *source;		/*!< name of rtvars datasource */
+	gfloat *fromecu_mult;	/*!< conversion multipler ms units to real */
+	gfloat *fromecu_add;	/*!< conversion adder ms units to real */
+	void * ul_eval;		/*!< evaluator pointer */
+	void * dl_eval;		/*!< evaluator pointer */
+	gchar * suffix;		/*!< textual suffix for this evaluator*/
+	gint precision;		/*!< Precision for floating point */
 };
 
 

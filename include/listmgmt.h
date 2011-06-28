@@ -18,13 +18,16 @@
 #include <firmware.h>
 
 typedef struct _ListElement ListElement;
+/*!
+  \brief _ListElement holds the infomation specific to each choice
+  */
 struct _ListElement 
 {
-	gchar *filename;	/* Filename */
-	gchar *dirname;		/* Dirname */
-	gchar *name;		/* Shortname in choice box */
-	gint baud;		/* Random data */
-	gboolean def;		/* Default choice */
+	gchar *filename;	/*!< Filename */
+	gchar *dirname;		/*!< Dirname */
+	gchar *name;		/*!< Shortname in choice box */
+	gint baud;		/*!< Random data */
+	gboolean def;		/*!< Default choice */
 };
 
 /* Prototypes */

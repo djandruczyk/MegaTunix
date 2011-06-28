@@ -35,8 +35,8 @@ typedef struct _MaskEntry MaskEntry;
   */
 struct _MaskEntry
 {
-	GtkEntry entry;
-	gchar *mask;
+	GtkEntry entry;			/*!< GtkEntry this mask goes with */
+	gchar *mask;			/*!< The actual mask */
 };
 
 typedef struct _MaskEntryClass MaskEntryClass;
@@ -45,7 +45,7 @@ typedef struct _MaskEntryClass MaskEntryClass;
   */
 struct _MaskEntryClass
 {
-	GtkEntryClass parent_class;
+	GtkEntryClass parent_class;	/*!< Parent Class */
 };
 
 void mask_entry_editable_init (GtkEditableClass *iface);

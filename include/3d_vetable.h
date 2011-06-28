@@ -44,21 +44,21 @@ typedef struct _Ve_View_3D Ve_View_3D;
  */
 struct _RGB3f
 {
-	float red;
-	float green;
-	float blue;
+	float red;		/*!< Red color in 0<-X->1.0 */
+	float green;		/*!< Green color in 0<-X->1.0 */
+	float blue;		/*!< Blue color in 0<-X->1.0 */
 };
 
 
-/*! 
+/*!
  \brief _Quad describes a quad forthe 3D mesh grid
  */
 struct _Quad
 {
-	gfloat x[4];
-	gfloat y[4];
-	gfloat z[4];
-	RGB3f color[4];
+	gfloat x[4];		/*!< X coords array for the quad */
+	gfloat y[4];		/*!< Y coords array for the quad */
+	gfloat z[4];		/*!< Z coords array for the quad */
+	RGB3f color[4];		/*!< Color at each point */
 };
 
 /*!
@@ -68,98 +68,97 @@ struct _Quad
  */
 struct _Ve_View_3D
 {
-	gint beginX;
-	gint beginY;
-	gint active_y;
-	gint active_x;
-	gfloat dt;
-	gfloat sphi;
-	gfloat stheta;
-	gfloat sdepth;
-	gfloat zNear;
-	gfloat zFar;
-	gfloat aspect;
-	gfloat h_strafe;
-	gfloat v_strafe;
-	gfloat z_offset;
-	gfloat x_trans;
-	gfloat y_trans;
-	gfloat z_trans;
-	gfloat x_scale;
-	gfloat y_scale;
-	gfloat z_scale;
-	gfloat x_max;
-	gfloat y_max;
-	gfloat z_max;
-	gint x_precision;
-	gint y_precision;
-	gint z_precision;
-	gint x_mult;
-	gint y_mult;
-	gint z_mult;
-	gint z_minval;
-	gint z_maxval;
-	gint x_smallstep;
-	gint x_bigstep;
-	gint y_smallstep;
-	gint y_bigstep;
-	gint z_smallstep;
-	gint z_bigstep;
+	gint beginX;		/*!< X Click coordinate */
+	gint beginY;		/*!< Y Click coordinate */
+	gint active_x;		/*!< Current active X position */
+	gint active_y;		/*!< Current active X position */
+	gfloat sphi;		/*!< Camera rotation horiz angle */
+	gfloat stheta;		/*!< Camera rotation vertical angle */
+	gfloat sdepth;		/*!< Zoom factor */
+	gfloat zNear;		/*!< Near clip */
+	gfloat zFar;		/*!< Far clip */
+	gfloat aspect;		/*!< Aspect ratio */
+	gfloat h_strafe;	/*!< Amount of horizotal offset */
+	gfloat v_strafe;	/*!< Amount of vertical offset */
+	gfloat z_offset;	/*!< offst from bottom of grid */
+	gfloat x_trans;		/*!< factors to handle axis's */
+	gfloat y_trans;		/*!< factors to handle axis's */
+	gfloat z_trans;		/*!< factors to handle axis's */
+	gfloat x_scale;		/*!< X Scale factor */
+	gfloat y_scale;		/*!< Y Scale factor */
+	gfloat z_scale;		/*!< Z Scale factor */
+	gfloat x_max;		/*!< X Max Value */
+	gfloat y_max;		/*!< Y Max Value */
+	gfloat z_max;		/*!< Z Max Value */
+	gint x_precision;	/*!< X Precision */
+	gint y_precision;	/*!< Y Precision */
+	gint z_precision;	/*!< Z Precision */
+	gint x_mult;		/*!< X Multiplier */
+	gint y_mult;		/*!< Y Multiplier */
+	gint z_mult;		/*!< Z Multiplier */
+	gint z_minval;		/*!< Z Minimum Value */
+	gint z_maxval;		/*!< Z Maximum Value */
+	gint x_smallstep;	/*!< X Smallstep for hotkeys */
+	gint x_bigstep;		/*!< X Bigstep for hotkeys */
+	gint y_smallstep;	/*!< Y smallstep for hotkeys */
+	gint y_bigstep;		/*!< Y bigstep for hotkeys */
+	gint z_smallstep;	/*!< Z smallstep for hotkeys */
+	gint z_bigstep;		/*!< Z bigstep for hotkeys */
 	/* Simple sources*/
-	gchar *x_source;
-	gchar *x_suffix;
-	gchar *x_conv_expr;
-	void *x_eval;
-	gchar *y_source;
-	gchar *y_suffix;
-	gchar *y_conv_expr;
-	void *y_eval;
-	gchar *z_source;
-	gchar *z_suffix;
-	gchar *z_conv_expr;
-	void *z_eval;
-	gchar * z_depend_on;
-	GObject *x_container;
-	GObject *y_container;
-	GObject *z_container;
-	GObject **x_objects;
-	GObject **y_objects;
-	GObject ***z_objects;
+	gchar *x_source;	/*!< X Source name */
+	gchar *x_suffix;	/*!< X Suffix */
+	gchar *x_conv_expr;	/*!< X conversion expression */
+	void *x_eval;		/*!< X Evaluator */
+	gchar *y_source;	/*!< Y source name */
+	gchar *y_suffix;	/*!< Y suffix */
+	gchar *y_conv_expr;	/*!< Y Conversion Expression */
+	void *y_eval;		/*!< Y evaluator */
+	gchar *z_source;	/*!< Z source name */
+	gchar *z_suffix;	/*!< Z Suffix */
+	gchar *z_conv_expr;	/*!< Z Conversion Expression */
+	void *z_eval;		/*!< Z Evaluator */
+	gchar * z_depend_on;	/*!< Z Dependancy */
+	GObject *x_container;	/*!< X Container */
+	GObject *y_container;	/*!< Y Container */
+	GObject *z_container;	/*!< Z Container */
+	GObject **x_objects;	/*!< Array of X Objects */
+	GObject **y_objects;	/*!< Array of Y Objects */
+	GObject ***z_objects;	/*!< Array of Z Objects */
 	/* Multi-sources */
-	gchar * x_source_key;
-	gboolean x_multi_source;
-	GHashTable *x_multi_hash;
-	gchar * y_source_key;
-	gboolean y_multi_source;
-	GHashTable *y_multi_hash;
-	gchar * z_source_key;
-	gboolean z_multi_source;
-	GHashTable *z_multi_hash;
+	gchar * x_source_key;	/*!< X Source key (multi-source only) */
+	gboolean x_multi_source;/*!< X Multi-source or not */
+	GHashTable *x_multi_hash;/*!< X Multi Hash */
+	gchar * y_source_key;	/*!< Y Source key (multi-source only) */
+	gboolean y_multi_source;/*!< Y Multi-source or not */
+	GHashTable *y_multi_hash;/*!< Y Multi Hash */
+	gchar * z_source_key;	/*!< Z Source key (multi-source only) */
+	gboolean z_multi_source;/*!< Z Multi-source or not */
+	GHashTable *z_multi_hash;/*!< Z Multi Hash */
 
-	GtkWidget *drawing_area;
-	GtkWidget *window;
-	GtkWidget *burn_but;
-	GObject *dep_obj;
-	gint x_base;
-	gint x_page;
-	gint x_bincount;
-	DataSize x_size;
-	gint y_base;
-	gint y_page;
-	gint y_bincount;
-	DataSize y_size;
-	gint z_base;
-	gint z_page;
-	DataSize z_size;
-	gchar *table_name;
-	gint table_num;
-	gfloat opacity;
-	gboolean tracking_focus;
-	gboolean fixed_scale;
-	gboolean wireframe;
-	GtkWidget *tracking_button;
-	Quad ***quad_mesh;
-	gboolean mesh_created;
+	GtkWidget *drawing_area;/*!< where the magic happens */
+	GtkWidget *window;	/*!< main window */
+	GtkWidget *burn_but;	/*!< Burn button */
+	GObject *dep_obj;	/*!< Dependant object */
+	gint x_base;		/*!< X base offset */
+	gint x_page;		/*!< X page */
+	gint x_bincount;	/*!< X bincount */
+	DataSize x_size;	/*!< X variable size (8,16,32 signed/unsigned)*/
+	gint y_base;		/*!< Y base offset */
+	gint y_page;		/*!< Y page */
+	gint y_bincount;	/*!< Y bincount */
+	DataSize y_size;	/*!< Y variable size (8,16,32 signed/unsigned)*/
+	gint z_base;		/*!< Z base offset */
+	gint z_page;		/*!< Z page */
+	DataSize z_size;	/*!< Z variable size (8,16,32 signed/unsigned)*/
+	gchar *table_name;	/*!< Table name */
+	gint table_num;		/*!< Table number */
+	gfloat opacity;		/*!< Opacity factor */
+	gboolean tracking_focus;/*!< Is tracking focus turned on? */
+	gboolean fixed_scale;	/*!< IS this using a fixed scale? */
+	gboolean wireframe;	/*!< IS this using wireframe rendering? */
+	GtkWidget *tracking_button;/*!< Tracking button widget */
+	Quad ***quad_mesh;	/*!< Array of Quads for the mesh */
+	gboolean mesh_created;	/*!< Is the mesh calculated yet? */
 };
 
 
@@ -169,24 +168,24 @@ struct _Ve_View_3D
  */
 struct _Cur_Vals
 {
-	gfloat x_val;
-	gfloat p_x_vals[3];
-	gfloat x_edit_value;
-	gchar *x_edit_text;
-	gchar *x_runtime_text;
-	void *x_eval;
-	gfloat y_val;
-	gfloat p_y_vals[3];
-	gfloat y_edit_value;
-	gchar *y_edit_text;
-	gchar *y_runtime_text;
-	void *y_eval;
-	gfloat z_val;
-	gfloat p_z_vals[3];
-	gfloat z_edit_value;
-	gchar *z_edit_text;
-	gchar *z_runtime_text;
-	void *z_eval;
+	gfloat x_val;		/*!< Current X value */
+	gfloat p_x_vals[3];	/*!< Previous 3 X values */
+	gfloat x_edit_value;	/*!< X Edit value */
+	gchar *x_edit_text;	/*!< X Edit Text */
+	gchar *x_runtime_text;	/*!< X Runtime Text */
+	void *x_eval;		/*!< X Evaluator */
+	gfloat y_val;		/*!< Current Y Value */
+	gfloat p_y_vals[3];	/*!< Previous 3 Y values */
+	gfloat y_edit_value;	/*!< Y Edit value */
+	gchar *y_edit_text;	/*!< Y Edit Text */
+	gchar *y_runtime_text;	/*!< Y Runtime Text */
+	void *y_eval;		/*!< Y Evlautator */
+	gfloat z_val;		/*!< Current Z Value */
+	gfloat p_z_vals[3];	/*!< Previous 3 Z values */
+	gfloat z_edit_value;	/*!< Z Edit value */
+	gchar *z_edit_text;	/*!< Z Edit Text */
+	gchar *z_runtime_text;	/*!< Z Runtime Text */
+	void *z_eval;		/*!< Z Evaluator */
 };
 
 /* Prototypes */

@@ -26,29 +26,33 @@
 #include "config.h"
 #endif
 
-/* Data structure representing symbol table record.  */
+/*!
+  \brief Data structure representing symbol table record.  
+ */
 typedef struct _Record {
-	struct _Record *next;	/* Pointer to next record.  */
-	char           *name;	/* Symbol name.  */
-	char            type;	/* Symbol type ('c' for constant, 'v' for
+	struct _Record *next;	/*!< Pointer to next record.  */
+	char           *name;	/*!< Symbol name.  */
+	char            type;	/*!< Symbol type ('c' for constant, 'v' for
 				 * variable, 'f' for function).  */
 	union {
-		double          value;	/* Constant or variable value.  */
-		double          (*function) (double);	/* Pointer to
+		double          value;	/*!< Constant or variable value.  */
+		double          (*function) (double);	/*!< Pointer to
 							 * function to
 							 * calculate its
 							 * value.  */
-	} data;
-	int             flag;	/* Record flag used for symbol table
+	} data;			/*!< data */
+	int             flag;	/*!< Record flag used for symbol table
 				 * selective traversal.  */
 } Record;
 
-/* Data structure representing symbol table (hash table is used for this
- * purpose). */
+/*!
+ \brief Data structure representing symbol table (hash table is used for this
+ purpose). 
+ */
 typedef struct {
-	int             length;	/* Hash table length.  */
-	Record         *records;	/* Hash table buckets.  */
-	int             reference_count;	/* Reference count for
+	int             length;	/*!< Hash table length.  */
+	Record         *records;	/*!< Hash table buckets.  */
+	int             reference_count;	/*!< Reference count for
 						 * symbol table (evaluator 
 						 * for derivative uses
 						 * same symbol table as

@@ -50,14 +50,14 @@ typedef struct _Location_Details Location_Details;
  */
 struct _Detection_Test
 {
-	gchar *test_name;	/* Friendly test name, like "MS-II_RTvars" */
-	gchar *test_desc;	/* Gui displayed test description */
-	gchar *test_func;	/* Function to run */
-	void *(*function)(gint *);/* Function Pointer */
-	guint32 result_type;	/* DATA,TEXT or LIST */
-	void *result;		/* Result of test stored for matching */
-	gchar *result_str;	/* String version of result */
-	gint num_bytes;		/* number of bytes in returned string */
+	gchar *test_name;	/*!< Friendly test name, like "MS-II_RTvars" */
+	gchar *test_desc;	/*!< Gui displayed test description */
+	gchar *test_func;	/*!< Function to run */
+	void *(*function)(gint *);/*!< Function Pointer */
+	guint32 result_type;	/*!< DATA,TEXT or LIST */
+	void *result;		/*!< Result of test stored for matching */
+	gchar *result_str;	/*!< String version of result */
+	gint num_bytes;		/*!< number of bytes in returned string */
 };
 
 /*!
@@ -67,13 +67,13 @@ struct _Detection_Test
  */
 struct _Location_Details
 {
-	guint16 flags;
-	guint16 parent;
-	guint8 ram_page;
-	guint8 flash_page;
-	guint16 ram_address;
-	guint16 flash_address;
-	guint16 length;
+	guint16 flags;		/*!< Flags specific to this location ID */
+	guint16 parent;		/*!< Parent LocID for nested locations */
+	guint8 ram_page;	/*!< Ram Page number */
+	guint8 flash_page;	/*!< Flash Page number */
+	guint16 ram_address;	/*!< Ram address in Hex */
+	guint16 flash_address;	/*!< Flash address in Hex */
+	guint16 length;		/*!< How many bytes in this location ID */
 };
 
 /* Prototypes */

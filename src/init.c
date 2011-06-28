@@ -713,8 +713,8 @@ G_MODULE_EXPORT void mem_dealloc(void)
 {
 	gint i = 0;
 	gint j = 0;
-	gchar *tmpbuf = NULL;
 	gpointer data;
+	gchar * tmpbuf = NULL;
 	GtkListStore *store = NULL;
 	GList *defaults = NULL;
 	Firmware_Details *firmware = NULL;

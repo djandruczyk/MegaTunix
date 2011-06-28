@@ -53,7 +53,7 @@ typedef enum
   */
 struct _MtxPieGauge
 {	/* public data */
-	GtkDrawingArea parent;
+	GtkDrawingArea parent;		/*!< Parent Widget */
 };
 
 /*!
@@ -61,7 +61,7 @@ struct _MtxPieGauge
   */
 struct _MtxPieGaugeClass
 {
-	GtkDrawingAreaClass parent_class;
+	GtkDrawingAreaClass parent_class;	/*!< Parent Class */
 };
 
 GType mtx_pie_gauge_get_type (void) G_GNUC_CONST;

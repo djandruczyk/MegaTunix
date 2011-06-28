@@ -32,15 +32,15 @@ typedef struct _MtxStripChartTrace      MtxStripChartTrace;
   */
 struct _MtxStripChartTrace
 {
-	gfloat min;		/*! minimum clamp valued */
-	gfloat max;		/*! maximum clamped value */
-	gint precision;		/*! numeric precision */
-	gint id;		/*! numeric ID */
-	gfloat lwidth;		/*! linewidth */
-       	gchar * name;		/*! textual name onscreen */
-	GdkColor color;		/*! Trace color */
-	GArray *history;	/*! Previous values */
-	gboolean show_val;	/*! Show the value or not */
+	gfloat min;		/*!< minimum clamp valued */
+	gfloat max;		/*!< maximum clamped value */
+	gint precision;		/*!< numeric precision */
+	gint id;		/*!< numeric ID */
+	gfloat lwidth;		/*!< linewidth */
+       	gchar * name;		/*!< textual name onscreen */
+	GdkColor color;		/*!< Trace color */
+	GArray *history;	/*!< Previous values */
+	gboolean show_val;	/*!< Show the value or not */
 };
 
 /*!
@@ -49,22 +49,22 @@ struct _MtxStripChartTrace
   */
 struct _MtxStripChartPrivate
 {
-        GdkPixmap *bg_pixmap;   /*! Update/backing pixmap */
-        GdkPixmap *trace_pixmap;/*! Static part of traces */
-	GdkPixmap *grat_pixmap;	/*! Graticule pixmap */
-        gint w;                 /*! Width of full widget */
-        gint h;                 /*! Height of full widget */
-	gfloat mouse_x;		/*! motion event X coord */
-	gfloat mouse_y;		/*! motion event X coord */
-	gint num_traces;	/*! Number of active traces */
-	gboolean mouse_tracking;/*! If true, render tracer line at mouse pos */
-	gboolean update_pending;/*! If true, don't schedule another */
-	GArray *traces;		/*! Array of trace specific data */
-        gchar *font;		/*! Font string for value */
-        cairo_font_options_t * font_options;
-        GdkColor colors[NUM_COLORS];
-        GdkColor tcolors[6];	/*! Trace colors */
-	GtkJustification justification;	/*! Where to put the trace names */
+        GdkPixmap *bg_pixmap;   /*!< Update/backing pixmap */
+        GdkPixmap *trace_pixmap;/*!< Static part of traces */
+	GdkPixmap *grat_pixmap;	/*!< Graticule pixmap */
+        gint w;                 /*!< Width of full widget */
+        gint h;                 /*!< Height of full widget */
+	gfloat mouse_x;		/*!< motion event X coord */
+	gfloat mouse_y;		/*!< motion event X coord */
+	gint num_traces;	/*!< Number of active traces */
+	gboolean mouse_tracking;/*!< If true, render tracer line at mouse pos */
+	gboolean update_pending;/*!< If true, don't schedule another */
+	GArray *traces;		/*!< Array of trace specific data */
+        gchar *font;		/*!< Font string for value */
+        cairo_font_options_t * font_options; /*!< Font optione */
+        GdkColor colors[NUM_COLORS]; /*!< Colors for this chart */
+        GdkColor tcolors[6];	/*!< Trace colors */
+	GtkJustification justification;	/*!< Where to put the trace names */
 };
 
 

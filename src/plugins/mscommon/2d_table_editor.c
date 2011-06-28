@@ -26,11 +26,15 @@
 
 extern gconstpointer *global_data;
 
+/*!
+  \brief CurveData holds basic info on each curve including the widget itself
+  its axis and its source
+  */
 typedef struct
 {
-	GtkWidget *curve;
-	Axis axis;
-	gchar * source;
+	GtkWidget *curve;		/*!< Widget Pointer */
+	Axis axis;			/*!< Axis */
+	gchar * source;			/*!< data source */
 }CurveData;
 
 G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)

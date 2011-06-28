@@ -44,15 +44,15 @@ typedef struct _Detection_Test Detection_Test;
  */
 struct _Detection_Test
 {
-	gchar *test_name;	/* Friendly test name, like "MS-II_RTvars" */
-	gchar *test_desc;	/* Gui displayed test description */
-	gchar *actual_test;	/* machine parsable test string */
-	gchar **test_vector;	/* Vector split of test (csv split) */
-	GArray *test_arg_types;	/* Array of enums describing test arguments */
-	gint test_arg_count;	/* number of args in the test */
-	guint32 result_type;	/* DATA or TEXT */
-	gchar *result_str;	/* Result of test stored for matching */
-	gint num_bytes;		/* Number of bytes returned for this test */
+	gchar *test_name;	/*!< Friendly test name, like "MS-II_RTvars" */
+	gchar *test_desc;	/*!< Gui displayed test description */
+	gchar *actual_test;	/*!< machine parsable test string */
+	gchar **test_vector;	/*!< Vector split of test (csv split) */
+	GArray *test_arg_types;	/*!< Array of enums describing test arguments */
+	gint test_arg_count;	/*!< number of args in the test */
+	guint32 result_type;	/*!< DATA or TEXT */
+	gchar *result_str;	/*!< Result of test stored for matching */
+	gint num_bytes;		/*!< Number of bytes returned for this test */
 
 };
 /* Prototypes */

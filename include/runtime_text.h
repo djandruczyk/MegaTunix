@@ -31,25 +31,26 @@ typedef enum
 }RttTVCols;
 
 typedef struct _Rt_Text Rt_Text;
-/*! 
+
+/*!
  \brief The _Rt_Text struct contains info on the floating runtime var text 
  display
  */
 struct _Rt_Text
 {
-	gchar *ctrl_name;	/*! Ctrl name in config file (key in hash) */
-	GtkWidget *parent;	/*! Parent of the table below  */
-	GtkWidget *name_label;	/*! Label in runtime display */
-	GtkWidget *textval;	/*! Label in runtime display */
-	gchar *friendly_name;	/*! text for Label above */
-	gchar *label_prefix;	/*! markup strings */
-	gchar *label_suffix;	/*! markup strings */
-	gconstpointer *object;  	/*! object of obsession.... */
-	gint count;		/*! used to making sure things update */
-	gint rate;		/*! used to making sure things update */
-	gint last_upd;		/*! used to making sure things update */
-	gboolean show_prefix;	/*! show prefix (friendly name) or not */
-	gboolean markup;	/*! Uses markup or not? */
+	gchar *ctrl_name;	/*!< Ctrl name in config file (key in hash) */
+	GtkWidget *parent;	/*!< Parent of the table below  */
+	GtkWidget *name_label;	/*!< Label in runtime display */
+	GtkWidget *textval;	/*!< Label in runtime display */
+	gchar *friendly_name;	/*!< text for Label above */
+	gchar *label_prefix;	/*!< markup strings */
+	gchar *label_suffix;	/*!< markup strings */
+	gconstpointer *object;  	/*!< object of obsession.... */
+	gint count;		/*!< used to making sure things update */
+	gint rate;		/*!< used to making sure things update */
+	gint last_upd;		/*!< used to making sure things update */
+	gboolean show_prefix;	/*!< show prefix (friendly name) or not */
+	gboolean markup;	/*!< Uses markup or not? */
 };
 
 /* Prototypes */

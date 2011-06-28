@@ -165,18 +165,21 @@ struct
 
 typedef struct _FreeEMS_Packet FreeEMS_Packet;
 
+/*!
+  \brief _FreeEMS_Packet packet detailed container
+  */
 struct _FreeEMS_Packet
 {
-	guchar *data;		/* Raw packet data */
-	guint16 raw_length;	/* Raw packet length */
-	guint8 header_bits;
-	gboolean has_sequence;
-	gboolean has_length;
-	gboolean is_nack;
-	guint8 seq_num;
-	guint16 payload_id;
-	guint16 payload_base_offset;
-	guint16 payload_length;
+	guchar *data;		/*!< Raw packet data */
+	guint16 raw_length;	/*!< Raw packet length */
+	guint8 header_bits;	/*!< Header Bits */
+	gboolean has_sequence;	/*!< Does this packet have a sequence */
+	gboolean has_length;	/*!< Does this packet have a length */
+	gboolean is_nack;	/*!< Is this a negative ack? */
+	guint8 seq_num;		/*!< Sequence Number */
+	guint16 payload_id;	/*!< Payload ID */
+	guint16 payload_base_offset;	/*!< PAylaod base offset within pkt */
+	guint16 payload_length;	/*!< Payload length in bytes */
 };
 
 #define	ESCAPE_BYTE			0xBB

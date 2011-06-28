@@ -32,9 +32,9 @@ typedef struct _MtxColor      MtxColor;
  */
 struct _MtxColor
 {
-	gfloat red;
-	gfloat green;
-	gfloat blue;
+	gfloat red;		/*!< Red value 0-1.0 */
+	gfloat green;		/*!< Green value 0-1.0 */
+	gfloat blue;		/*!< Blue value 0-1.0 */
 };
 
 /*!
@@ -43,10 +43,10 @@ struct _MtxColor
  */
 struct _MtxProgressBarPrivate
 {
-	gfloat peak;
-	gint hold_id;
-	gint hold_time;
-        MtxColor colors[PROGRESS_NUM_COLORS];
+	gfloat peak;		/*!< Peak value */
+	gint hold_id;		/*!< ID for hold timeout func */
+	gint hold_time;		/*!< Hold time in ms */
+        MtxColor colors[PROGRESS_NUM_COLORS];	/*!< Colors for the widget */
 };
 
 void mtx_progress_bar_init_colors(MtxProgressBar *);

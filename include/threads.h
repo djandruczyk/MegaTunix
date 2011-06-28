@@ -33,8 +33,8 @@ typedef struct _OutputData OutputData;
  */
 struct _QFunction
 {
-	const gchar *func_name;	/*! Function Name */
-	gint  dummy;		/*! filler for more shit later.. */
+	const gchar *func_name;	/*!< Function Name */
+	gint  dummy;		/*!< filler for more shit later.. */
 };
 
 
@@ -46,10 +46,10 @@ struct _QFunction
  */
 struct _Widget_Update
 {
-	const gchar *widget_name;	/*! Widget name */
-	WidgetType type;	/*! what type of widget are we updating */
-	gchar *msg;		/*! message to display */
-	gboolean state;		/*! state to set widget (MTX_SENSITIVE) */
+	const gchar *widget_name;	/*!< Widget name */
+	WidgetType type;	/*!< what type of widget are we updating */
+	gchar *msg;		/*!< message to display */
+	gboolean state;		/*!< state to set widget (MTX_SENSITIVE) */
 };
 
 
@@ -58,21 +58,21 @@ struct _Widget_Update
  */
 struct _Widget_Range
 {
-	gint page;
-	gint offset;
-	gint len;
+	gint page;		/*!< Page */
+	gint offset;		/*!< Offset */
+	gint len;		/*!< Length */
 };
 
 
-/*! 
+/*!
  \brief _OutputData A simple wrapper struct to pass data to the output 
  function which makes the function a lot simpler.
  */
 struct _OutputData
 {
-	gconstpointer *data;	/*! Opaque object for data storage */
-	gboolean need_page_change;	/*! Set to true to force page change */
-	gboolean queue_update;	/*! If true queues a member widget update */
+	gconstpointer *data;	/*!< Opaque object for data storage */
+	gboolean need_page_change;	/*!< Set to true to force page change */
+	gboolean queue_update;	/*!< If true queues a member widget update */
 };
 
 
@@ -85,12 +85,12 @@ struct _OutputData
  */
 struct _Io_Message
 {
-	GArray *functions;	/*! for gui_dispatch_queue */
-	GArray *sequence;	/*! for sending data to ECU */
-	void *payload;		/*! data passed along, arbritrary size.. */
-	void *recv_buf;		/* data that comes from ECU */
-	Command *command;	/* Command struct */
-	gboolean status;	/* True == success, false == failure */
+	GArray *functions;	/*!< for gui_dispatch_queue */
+	GArray *sequence;	/*!< for sending data to ECU */
+	void *payload;		/*!< data passed along, arbritrary size.. */
+	void *recv_buf;		/*!< data that comes from ECU */
+	Command *command;	/*!< Command struct */
+	gboolean status;	/*!< True == success, false == failure */
 };
 
 
@@ -102,11 +102,11 @@ struct _Io_Message
  */
 struct _Text_Message
 {
-	const gchar *view_name;	/*! Textview name */
-	const gchar *tagname;	/*! Texttag to use */
-	gchar *msg;		/*! message to display */
-	gboolean count;		/*! display a counter */
-	gboolean clear;		/*! Clear the window? */
+	const gchar *view_name;	/*!< Textview name */
+	const gchar *tagname;	/*!< Texttag to use */
+	gchar *msg;		/*!< message to display */
+	gboolean count;		/*!< display a counter */
+	gboolean clear;		/*!< Clear the window? */
 };
 
 

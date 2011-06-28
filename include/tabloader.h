@@ -30,13 +30,13 @@ typedef struct _TabInfo TabInfo;
  */
 struct _Group
 {
-	gchar **keys;		/*! String array for key names */
-	gint *keytypes;		/*! Int array of key types... */
-	GObject *object;		/*! To hold the data cleanly */
-	gint num_keys;		/* How many keys we hold */
-	gint num_keytypes;	/* How many keytypes we hold */
-	gint page;		/* page of this group of data */
-	gint canID;		/* can_id of this group of data */
+	gchar **keys;		/*!< String array for key names */
+	gint *keytypes;		/*!< Int array of key types... */
+	GObject *object;	/*!< To hold the data cleanly */
+	gint num_keys;		/*!< How many keys we hold */
+	gint num_keytypes;	/*!< How many keytypes we hold */
+	gint page;		/*!< page of this group of data */
+	gint canID;		/*!< can_id of this group of data */
 };
 
 
@@ -46,10 +46,10 @@ struct _Group
  */
 struct _BindGroup
 {
-	ConfigFile *cfgfile;	/*! where the configfile ptr goes... */
-	GHashTable *groups;	/*! where the groups table goes */
-	gchar * map_file;	/*! Tab datamap file */
-	GList *widget_list;	/*! List of widgets in this tab */
+	ConfigFile *cfgfile;	/*!< where the configfile ptr goes... */
+	GHashTable *groups;	/*!< where the groups table goes */
+	gchar * map_file;	/*!< Tab datamap file */
+	GList *widget_list;	/*!< List of widgets in this tab */
 };
 
 
@@ -59,11 +59,11 @@ struct _BindGroup
  */
 struct _TabInfo
 {
-	gchar *glade_file;	/*! Glade file */
-	gchar *datamap_file;	/*! Datamap file that goes with it */
-	GtkNotebook *notebook;	/*! Ptr to notebook */
-	GtkWidget *tab_label;	/*! Tab Label widget */
-	gint page_num;		/*! The number of this tab */
+	gchar *glade_file;	/*!< Glade file */
+	gchar *datamap_file;	/*!< Datamap file that goes with it */
+	GtkNotebook *notebook;	/*!< Ptr to notebook */
+	GtkWidget *tab_label;	/*!< Tab Label widget */
+	gint page_num;		/*!< The number of this tab */
 };
 
 

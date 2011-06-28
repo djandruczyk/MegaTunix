@@ -81,10 +81,6 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 		h=widget->allocation.height;
 		if (ttm_data->layout)
 			g_object_unref(ttm_data->layout);
-		if (ttm_data->axis_gc)
-			g_object_unref(ttm_data->axis_gc);
-		if (ttm_data->trace_gc)
-			g_object_unref(ttm_data->trace_gc);
 
 		if (ttm_data->pixmap)
 			g_object_unref(ttm_data->pixmap);

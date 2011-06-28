@@ -50,23 +50,23 @@ typedef struct _Vex_Import Vex_Import;
  */
 struct _Vex_Import
 {	
-	gchar *version;		/* String */
-	gchar *revision;	/* String */
-	gchar *comment;		/* String */
-	gchar *date;		/* String */
-	gchar *time;		/* String */
-	gint page;		/* Int */
-	gint table;		/* Int */
-	gint total_x_bins;	/* Int */
-	gint *x_bins;		/* Int Array, dynamic */
-	gint total_y_bins;	/* Int */
-	gint *y_bins;		/* Int Array, dynamic */
-	gint total_tbl_bins;	/* Int */
-	gint *tbl_bins;		/* Int Array, dynamic */
-	gboolean got_page;	/* Flag */
-	gboolean got_rpm;	/* Flag */
-	gboolean got_load;	/* Flag */
-	gboolean got_ve;	/* Flag */
+	gchar *version;		/*!< Version String */
+	gchar *revision;	/*!< Revision String */
+	gchar *comment;		/*!< Comment String */
+	gchar *date;		/*!< Date String */
+	gchar *time;		/*!< Time String */
+	gint page;		/*!< ecu page */
+	gint table;		/*!< ecu table */
+	gint total_x_bins;	/*!< total X bins */
+	gint *x_bins;		/*!< x bins Array, dynamic */
+	gint total_y_bins;	/*!< total y bins */
+	gint *y_bins;		/*!< y bins  Array, dynamic */
+	gint total_tbl_bins;	/*!< total table bins */
+	gint *tbl_bins;		/*!< table bings Array, dynamic */
+	gboolean got_page;	/*!< got_page state Flag */
+	gboolean got_rpm;	/*!< got_rpm state Flag */
+	gboolean got_load;	/*!< got load state Flag */
+	gboolean got_ve;	/*!< got ve state Flag */
 
 };
 

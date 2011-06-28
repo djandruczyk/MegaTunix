@@ -115,15 +115,15 @@ typedef enum
   */
 struct _MtxSocketClient 
 {
-	gchar *ip;
-	guint16 port;
-	guint8 ** ecu_data;
-	GSocket *socket;
-	GSocket *control_socket;
-	gint fd;
-	gint control_fd;
-	SocketType type;
-	gpointer container;
+	gchar *ip;		/*!< IP of client */
+	guint16 port;		/*!< Port on client */
+	guint8 ** ecu_data;	/*!< Copy of ecu_data */
+	GSocket *socket;	/*!< Socket structure */
+	GSocket *control_socket;/*!< Control Socket structure */
+	gint fd;		/*!< Filedescriptor related to socket */
+	gint control_fd;	/*!< Filedescriptor related to ctrl socket */
+	SocketType type;	/*!< Sock type (ascii, binary, etc) */
+	gpointer container;	/*!< container ? */
 };
 
 /*!
@@ -131,11 +131,11 @@ struct _MtxSocketClient
   */
 struct _MtxSocketData
 {
-	guchar cmd;
-	guint8 canID;
-	guint8 tableID;
-	guint16 offset;
-	guint16 count;
+	guchar cmd;		/*!< Command to execute */
+	guint8 canID;		/*!< can ID */
+	guint8 tableID;		/*!< Table ID (page?) */
+	guint16 offset;		/*!< offset */
+	guint16 count;		/*!< Count (how many bytes */
 };
 
 /*!
@@ -143,9 +143,9 @@ struct _MtxSocketData
   */
 struct _MtxSocket
 {
-	GSocket *socket;
-	gint fd;
-	SocketType type;
+	GSocket *socket;	/*!< Socket structure */
+	gint fd;		/*!< fd this socket is linked to */
+	SocketType type;	/*!< Ascii/Binary/ETC */
 };
 
 /*!
@@ -153,16 +153,16 @@ struct _MtxSocket
   */
 struct _SlaveMessage
 {
-	guint8 canID;
-	guint8 page;
-	guint16 offset;
-	guint16 length;
-	DataSize size;
-	gint value;
-	void * data;
-	WriteMode mode;
-	SlaveMsgType type;
-	RemoteAction action;
+	guint8 canID;		/*!< can ID */
+	guint8 page;		/*!< Page */
+	guint16 offset;		/*!< Offset */
+	guint16 length;		/*!< Length */
+	DataSize size;		/*!< Size */
+	gint value;		/*!< Value */
+	void * data;		/*!< Data Block */
+	WriteMode mode;		/*!< Write mode, simple or complex */
+	SlaveMsgType type;	/*!< Slave message type */
+	RemoteAction action;	/*!< Action slave should perform */
 };
 
 /* Prototypes */
@@ -292,13 +292,13 @@ typedef enum
   */
 struct _MtxSocketClient 
 {
-	gchar *ip;
-	guint16 port;
-	guint8 ** ecu_data;
-	gint fd;
-	gint control_fd;
-	SocketType type;
-	gpointer container;
+	gchar *ip;		/*!< Client IP */
+	guint16 port;		/*!< Client Port */
+	guint8 ** ecu_data;	/*!< Copy of ECU data */
+	gint fd;		/*!< filedescriptor for this socket */
+	gint control_fd;	/*!< Control filedescriptor for this socket */
+	SocketType type;	/*!< Ascii, binary, other? */
+	gpointer container;	/*!< Container pointer */
 };
 
 /*!
@@ -306,11 +306,11 @@ struct _MtxSocketClient
   */
 struct _MtxSocketData
 {
-	guchar cmd;
-	guint8 canID;
-	guint8 tableID;
-	guint16 offset;
-	guint16 count;
+	guchar cmd;		/*!< Command to execute */
+	guint8 canID;		/*!< Can ID */
+	guint8 tableID;		/*!< Table ID (Page?) */
+	guint16 offset;		/*!< offset */
+	guint16 count;		/*!< how many bytes */
 };
 
 /*!
@@ -318,8 +318,8 @@ struct _MtxSocketData
   */
 struct _MtxSocket
 {
-	gint fd;
-	SocketType type;
+	gint fd;		/*!< Filedescriptor */
+	SocketType type;	/*!< Type of socket client */
 };
 
 /*!
@@ -327,16 +327,16 @@ struct _MtxSocket
   */
 struct _SlaveMessage
 {
-	guint8 canID;
-	guint8 page;
-	guint16 offset;
-	guint16 length;
-	DataSize size;
-	gint value;
-	void * data;
-	WriteMode mode;
-	SlaveMsgType type;
-	RemoteAction action;
+	guint8 canID;		/*!< can ID */
+	guint8 page;		/*!< Page */
+	guint16 offset;		/*!< Offset */
+	guint16 length;		/*!< Length */
+	DataSize size;		/*!< Size */
+	gint value;		/*!< Value */
+	void * data;		/*!< Vata block */
+	WriteMode mode;		/*!< Type of write */
+	SlaveMsgType type;	/*!< Slave message type */
+	RemoteAction action;	/*!< Remote Action Message */
 };
 
 /* Prototypes */

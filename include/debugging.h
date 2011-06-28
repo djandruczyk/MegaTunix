@@ -62,20 +62,19 @@ typedef enum guint
 }Dbg_Shift;
 
 typedef struct _DebugLevel DebugLevel;
-/*! 
+
+/*!
  \brief _DebugLevel stores the debugging name, handler, class (bitmask) and 
  shift (forgot why this is here) and a enable/disable flag. Used to make the
  debugging core a little more configurable
  */
-
-
 struct _DebugLevel
 {
-	gchar * name;		/*! Debugging name */
-	gint	handler;	/*! Signal handler name */
-	Dbg_Class dclass;	/*! Bit mask for this level (0-31) */
-	Dbg_Shift dshift;	/*! Bit shift amount */
-	gboolean enabled;	/*! Enabled or not? */
+	gchar * name;		/*!< Debugging name */
+	gint	handler;	/*!< Signal handler name */
+	Dbg_Class dclass;	/*!< Bit mask for this level (0-31) */
+	Dbg_Shift dshift;	/*!< Bit shift amount */
+	gboolean enabled;	/*!< Enabled or not? */
 };
 
 

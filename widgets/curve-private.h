@@ -29,73 +29,77 @@ typedef enum
 	NONE
 }MarkerClamp;
 
+/*! 
+  \brief _MtxCurvePrivate structure holding all the private data for the
+  MtxCurve Widget.
+ */
 struct _MtxCurvePrivate
 {
-	MtxCurve *self;		/* Pointer to public opbject */
-	GdkColor colors[CURVE_NUM_COLORS];    /* Colors Array */
-	GdkPixmap *pixmap;      /*! Update/backing pixmap */
-	GdkPixmap *bg_pixmap;   /*! Static rarely changing pixmap */
-	MtxCurveCoord *coords;       /* Points array */
-	GdkPoint *points;       /*! Onscreen coords array (for mouse) */
-	gint auto_rescale_id;	/*! Auto rescale */
-	gint proximity_threshold;	/*! Proximity threshold */
-	gint proximity_vertex;	/*! Closest one to mouse.. */
-	gint marker_proximity_vertex;	/*! Closest one to marker.. */
-	gint num_points;        /*! Total Points*/
-	gint w;                 /*! Width of full widget */
-	gint h;                 /*! Height of full widget */
-	gfloat x_lower_limit;	/*! hard limit to gauge */
-	gfloat y_lower_limit;	/*! hard limit to gauge */
-	gfloat x_upper_limit;	/*! hard limit to gauge */
-	gfloat y_upper_limit;	/*! hard limit to gauge */
-	gfloat lowest_x;	/*! Lowest X value in points[] */
-	gfloat highest_x;	/*! Highest X value in points[] */
-	gfloat lowest_y;	/*! Lowest Y value in points[] */
-	gfloat highest_y;	/*! Highest Y value in points[] */
-	gint x_peak_timeout;	/*! X Peak/Hold timeout */
-	gint y_peak_timeout;	/*! Y Peak/Hold timeout */
-	gint x_border;          /*! X Border in pixels */
-	gint y_border;          /*! Y Border in pixels */
-	gint active_coord;      /*! Active Coordinate */
-	gint x_precision;	/*! Precision for X axis */
-	gint y_precision;	/*! Precision for X axis */
-	gint vertex_id;		/*! timeout ID */
-	gfloat locked_scale;    /*! minimum fixed scale for both axis' */
-	gfloat x_scale;         /*! X coord points->coords scaler */
-	gfloat y_scale;         /*! Y coord points->coords scaler */
-	gfloat x_marker;	/*! X marker (vertical line) */
-	gfloat peak_x_marker;	/*! X marker (vertical line) */
-	gfloat peak_y_at_x_marker;	/*! X marker (vertical line) */
-	gfloat y_at_x_marker;	/*! X marker (vertical line) */
-	gfloat y_marker;	/*! Y marker (horizontal line) */
-	gfloat peak_y_marker;	/*! Y marker (horizontal line) */
-	gfloat peak_x_at_y_marker;	/*! Y marker (horizontal line) */
-	gfloat x_at_y_marker;	/*! Y marker (horizontal line) */
-	gboolean x_draw_peak;	/*! X draw peak */
-	gboolean y_draw_peak;	/*! Y draw peak */
-	gboolean vertex_selected;/*! Do we have one selected? */
-	gboolean auto_hide;	/*! Auto hide vertex on focus out */
-	gboolean show_x_marker; /*! Show x_marker rectangles */
-	gboolean show_y_marker; /*! Show y_marker rectangles */
-	gboolean show_edit_marker;	/*! Show edit marker */
-	gboolean show_vertexes; /*! Show vertex rectangles */
-	gboolean show_grat;	/*! Draw graticule? */
-	gboolean coord_changed;	/*! Flag */
-	gboolean x_blocked_from_edit;	/* Prevent mouse edit of an axis */
-	gboolean y_blocked_from_edit;	/* Prevent mouse edit of an axis */
-	MarkerClamp x_marker_clamp;
-	MarkerClamp y_marker_clamp;
-	cairo_t *cr;            /*! Cairo context,  not sure if this is good
+	MtxCurve *self;		/*!< Pointer to public opbject */
+	GdkColor colors[CURVE_NUM_COLORS];    /*!< Colors Array */
+	GdkPixmap *pixmap;      /*!< Update/backing pixmap */
+	GdkPixmap *bg_pixmap;   /*!< Static rarely changing pixmap */
+	MtxCurveCoord *coords;       /*!< Points array */
+	GdkPoint *points;       /*!< Onscreen coords array (for mouse) */
+	gint auto_rescale_id;	/*!< Auto rescale */
+	gint proximity_threshold;	/*!< Proximity threshold */
+	gint proximity_vertex;	/*!< Closest one to mouse.. */
+	gint marker_proximity_vertex;	/*!< Closest one to marker.. */
+	gint num_points;        /*!< Total Points*/
+	gint w;                 /*!< Width of full widget */
+	gint h;                 /*!< Height of full widget */
+	gfloat x_lower_limit;	/*!< hard limit to gauge */
+	gfloat y_lower_limit;	/*!< hard limit to gauge */
+	gfloat x_upper_limit;	/*!< hard limit to gauge */
+	gfloat y_upper_limit;	/*!< hard limit to gauge */
+	gfloat lowest_x;	/*!< Lowest X value in points[] */
+	gfloat highest_x;	/*!< Highest X value in points[] */
+	gfloat lowest_y;	/*!< Lowest Y value in points[] */
+	gfloat highest_y;	/*!< Highest Y value in points[] */
+	gint x_peak_timeout;	/*!< X Peak/Hold timeout */
+	gint y_peak_timeout;	/*!< Y Peak/Hold timeout */
+	gint x_border;          /*!< X Border in pixels */
+	gint y_border;          /*!< Y Border in pixels */
+	gint active_coord;      /*!< Active Coordinate */
+	gint x_precision;	/*!< Precision for X axis */
+	gint y_precision;	/*!< Precision for X axis */
+	gint vertex_id;		/*!< timeout ID */
+	gfloat locked_scale;    /*!< minimum fixed scale for both axis' */
+	gfloat x_scale;         /*!< X coord points->coords scaler */
+	gfloat y_scale;         /*!< Y coord points->coords scaler */
+	gfloat x_marker;	/*!< X marker (vertical line) */
+	gfloat peak_x_marker;	/*!< X marker (vertical line) */
+	gfloat peak_y_at_x_marker;	/*!< X marker (vertical line) */
+	gfloat y_at_x_marker;	/*!< X marker (vertical line) */
+	gfloat y_marker;	/*!< Y marker (horizontal line) */
+	gfloat peak_y_marker;	/*!< Y marker (horizontal line) */
+	gfloat peak_x_at_y_marker;	/*!< Y marker (horizontal line) */
+	gfloat x_at_y_marker;	/*!< Y marker (horizontal line) */
+	gboolean x_draw_peak;	/*!< X draw peak */
+	gboolean y_draw_peak;	/*!< Y draw peak */
+	gboolean vertex_selected;/*!< Do we have one selected? */
+	gboolean auto_hide;	/*!< Auto hide vertex on focus out */
+	gboolean show_x_marker; /*!< Show x_marker rectangles */
+	gboolean show_y_marker; /*!< Show y_marker rectangles */
+	gboolean show_edit_marker;	/*!< Show edit marker */
+	gboolean show_vertexes; /*!< Show vertex rectangles */
+	gboolean show_grat;	/*!< Draw graticule? */
+	gboolean coord_changed;	/*!< Flag */
+	gboolean x_blocked_from_edit;	/*!< Prevent mouse edit of an axis */
+	gboolean y_blocked_from_edit;	/*!< Prevent mouse edit of an axis */
+	MarkerClamp x_marker_clamp;	/*!< Clamp behavior */
+	MarkerClamp y_marker_clamp;	/*!< Clamp behavior */
+	cairo_t *cr;            /*!< Cairo context,  not sure if this is good
 				  too hold onto or not */
-	cairo_font_options_t * font_options;
-	gfloat x_label_border;	/*! Space taken by x axis marker */
-	gfloat y_label_border;	/*! Space taken by x axis marker */
-	gchar * pos_str;	/*! Position String */
-	gchar * font;           /*! Font to use */
-	gchar * axis_font;	/*! Axis Font to use */
-	gchar * title;          /*! Title to use */
-	gchar * x_axis_label;	/*! X Axis Label */
-	gchar * y_axis_label;	/*! X Axis Label */
+	cairo_font_options_t * font_options;	/*!< Font options */
+	gfloat x_label_border;	/*!< Space taken by x axis marker */
+	gfloat y_label_border;	/*!< Space taken by x axis marker */
+	gchar * pos_str;	/*!< Position String */
+	gchar * font;           /*!< Font to use */
+	gchar * axis_font;	/*!< Axis Font to use */
+	gchar * title;          /*!< Title to use */
+	gchar * x_axis_label;	/*!< X Axis Label */
+	gchar * y_axis_label;	/*!< X Axis Label */
 };
 
 enum
@@ -128,13 +132,5 @@ gboolean delay_turnoff_vertexes(gpointer);
 gboolean proximity_test (GtkWidget *, GdkEventMotion *);
 gboolean get_intersection(gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat *, gfloat *);
 void mtx_curve_finalize(GObject *);
-
-
-
-
-
-
-
-
 
 #endif

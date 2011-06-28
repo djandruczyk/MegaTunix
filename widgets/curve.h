@@ -63,7 +63,7 @@ enum
  */
 struct _MtxCurve
 {	/* public data */
-	GtkDrawingArea parent;
+	GtkDrawingArea parent;		/*!< Parent Widget */
 };
 
 /*! 
@@ -71,13 +71,13 @@ struct _MtxCurve
  */
 struct _MtxCurveClass
 {
-	GtkDrawingAreaClass parent_class;
+	GtkDrawingAreaClass parent_class;	/*!< Parent Class */
 	/* Signal for coordinate change via drag/drop edit */
-	void (*coords_changed) (MtxCurve *);
+	void (*coords_changed) (MtxCurve *);	/*!< Coords changed signal */
 	/* Signal for vertex proximity notify */
-	void (*vertex_proximity) (MtxCurve *);
+	void (*vertex_proximity) (MtxCurve *);	/*!< Vertex Proximity signal */
 	/* Signal for marker proximity notify */
-	void (*marker_proximity) (MtxCurve *);
+	void (*marker_proximity) (MtxCurve *);	/*!< Marker Proximity signal */
 };
 
 /*! 
@@ -85,8 +85,8 @@ struct _MtxCurveClass
  */
 struct _MtxCurveCoord
 {
-	gfloat x;
-	gfloat y;
+	gfloat x;		/*!< X value */
+	gfloat y;		/*!< Y value */
 };
 
 GType mtx_curve_get_type (void) G_GNUC_CONST;
