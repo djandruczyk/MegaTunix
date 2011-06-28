@@ -23,6 +23,10 @@
 typedef struct _Rtv_Data Rtv_Data;
 typedef struct _Persona_Info Persona_Info;
 
+/*!
+  \brief _Rtv_Data holds an array of all RTV vlaues and a hash to mape them to
+  specific ECU personalities
+  */
 struct _Rtv_Data
 {
 	GHashTable *persona_hash;
@@ -30,6 +34,11 @@ struct _Rtv_Data
 	gint total_files;
 };
 
+/*!
+  \brief _Persona_Info holds information about the persona and its associated
+  internal and external name references
+  specific ECU personalities
+  */
 struct _Persona_Info
 {
 	GHashTable *hash;
@@ -38,6 +47,9 @@ struct _Persona_Info
 	gchar *persona;
 };
 
+/*!
+  \brief Columns in the datasource listing
+  */
 enum
 {
 	VARNAME_COL,

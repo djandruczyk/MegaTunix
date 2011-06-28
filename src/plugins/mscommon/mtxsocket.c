@@ -259,11 +259,11 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 			cli_data->type = mtxsock->type;
 			cli_data->ecu_data = g_new0(guint8 *, firmware->total_pages);
 			g_object_unref(sockaddr);
-			/*			printf ("created slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);*/
+			/*printf ("created slave %p, ecu_data %p\n",cli_data,cli_data->ecu_data);*/
 			for (i=0;i<firmware->total_pages;i++)
 			{
 				cli_data->ecu_data[i] = g_new0(guint8, firmware->page_params[i]->length);
-				/*				printf ("created slave %p, ecu_data[%i] %p\n",cli_data,i,cli_data->ecu_data[i]);*/
+				/*printf ("created slave %p, ecu_data[%i] %p\n",cli_data,i,cli_data->ecu_data[i]);*/
 				if (firmware->ecu_data[i])
 					memcpy (cli_data->ecu_data[i],firmware->ecu_data[i],firmware->page_params[i]->length);
 

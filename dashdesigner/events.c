@@ -34,7 +34,7 @@ static GtkBuilder *properties = NULL;
 static GtkBuilder *previews = NULL;
 static GtkWidget *grabbed_widget = NULL;
 extern GtkBuilder *toplevel;
-static struct T
+static struct 
 {
 	gint child_x_origin;
 	gint child_y_origin;

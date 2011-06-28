@@ -44,7 +44,9 @@ Node           *root;		/* Root of tree representation of
 SymbolTable    *symbol_table;	/* Evaluator symbol table.  */
 int             ok;		/* Flag determining if parsing went OK.  */
 
-/* Data structure representing evaluator.  */
+/*!
+ \brief Data structure representing evaluator.  
+ */
 typedef struct {
 	Node           *root;	/* Root of tree representation of
 				 * function.  */

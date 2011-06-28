@@ -68,6 +68,10 @@ struct _Command
 };
 
 
+/*!
+ * \brief _PostFunction struct holds information regard post functions to be
+ * fired.
+ */
 struct _PostFunction
 {
 	gchar *name;		/* Function name */
@@ -76,6 +80,9 @@ struct _PostFunction
 	gboolean w_arg;		/* Does it take an arg (void *) */
 };
 
+/*!
+ * \brief _DBlock is a container for a data block
+ */
 struct _DBlock
 {
 	guint8 *data;		/* String of data */

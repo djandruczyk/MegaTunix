@@ -43,11 +43,17 @@ typedef enum
 }ProgressColorIndex;
 
 
+/*!
+  \brief MtxProgressBar structure
+  */
 struct _MtxProgressBar
 {	/* public data */
 	GtkProgressBar parent;
 };
 
+/*!
+  \brief MtxProgressBarClass structure
+  */
 struct _MtxProgressBarClass
 {
 	GtkProgressBarClass parent_class;

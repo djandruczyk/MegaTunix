@@ -38,6 +38,9 @@ typedef enum
 	REGEX
 }MatchClass;
 
+typedef struct _Detection_Test Detection_Test;
+typedef struct _Location_Details Location_Details;
+
 /*!
  \brief The _Detection_Test struct holds the basics for each ECU test.
  a friendly human readable test name (this matches up eith test names in the 
@@ -45,7 +48,6 @@ typedef enum
  test_vector,  which is the result of splitting up the actual_test string into
  it's component parts. 
  */
-typedef struct _Detection_Test Detection_Test;
 struct _Detection_Test
 {
 	gchar *test_name;	/* Friendly test name, like "MS-II_RTvars" */
@@ -58,7 +60,11 @@ struct _Detection_Test
 	gint num_bytes;		/* number of bytes in returned string */
 };
 
-typedef struct _Location_Details Location_Details;
+/*!
+ \brief The _Location_Details struct holds the information specific about each
+ ECU location ID, including applicable flags, its parent, its ram/flash pages
+ and their addresses, and length.
+ */
 struct _Location_Details
 {
 	guint16 flags;

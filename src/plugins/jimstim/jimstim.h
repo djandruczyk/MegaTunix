@@ -32,6 +32,10 @@ extern void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, 
 
 typedef struct _JimStim_Data JimStim_Data;
 
+/*!
+  \brief _JimStim_Data is a container of all widgets specific to the jimstim
+  gui for automated control of the jimstim
+  */
 struct _JimStim_Data
 {
 	GtkWidget *start_e;	/* start entry */

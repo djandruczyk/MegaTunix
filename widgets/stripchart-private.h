@@ -26,6 +26,10 @@
 typedef struct _MtxStripChartPrivate      MtxStripChartPrivate;
 typedef struct _MtxStripChartTrace      MtxStripChartTrace;
 
+/*!
+  \brief _MtxStripChartTrace holds detailed information about each trace in
+  the stripchart widget
+  */
 struct _MtxStripChartTrace
 {
 	gfloat min;		/*! minimum clamp valued */
@@ -39,6 +43,10 @@ struct _MtxStripChartTrace
 	gboolean show_val;	/*! Show the value or not */
 };
 
+/*!
+  \brief _MtxStripChartPrivate holds the private information for the 
+  MtxStripChart widget
+  */
 struct _MtxStripChartPrivate
 {
         GdkPixmap *bg_pixmap;   /*! Update/backing pixmap */

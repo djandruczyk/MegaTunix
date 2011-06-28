@@ -18,6 +18,11 @@
 #include <gtk/gtk.h>
 
 typedef struct _PersonaElement PersonaElement;
+/*!
+  \struct _PersonaElement
+  \brief Datastructure to hold details of the currently loaded ECU Personality 
+  plugin
+  */
 struct _PersonaElement 
 {
 	gchar *filename;	/* Filename */

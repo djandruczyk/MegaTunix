@@ -25,6 +25,10 @@
 
 typedef struct _MtxPieGaugePrivate      MtxPieGaugePrivate;
 
+/*!
+  \struct _MtxPieGaugePrivate
+  \brief Private variables for the PieGauge Widget
+  */
 struct _MtxPieGaugePrivate
 {
         GdkPixmap *pixmap;      /*! Update/backing pixmap */

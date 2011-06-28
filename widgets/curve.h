@@ -31,7 +31,9 @@ typedef struct _MtxCurve		MtxCurve;
 typedef struct _MtxCurveClass	MtxCurveClass;
 typedef struct _MtxCurveCoord	MtxCurveCoord;
 
-/*! CurveColorIndex enum,  for indexing into the color arrays */
+/*! 
+  \brief CurveColorIndex enum,  for indexing into the color arrays
+ */
 typedef enum  
 {
 	CURVE_COL_BG = 0,
@@ -45,6 +47,9 @@ typedef enum
 	CURVE_NUM_COLORS
 }CurveColorIndex;
 
+/*! 
+  \brief CurveSignals enum
+ */
 enum
 {	
 	CHANGED_SIGNAL,
@@ -53,11 +58,17 @@ enum
 	LAST_SIGNAL
 };
 
+/*! 
+  \brief _MtxCurve structure
+ */
 struct _MtxCurve
 {	/* public data */
 	GtkDrawingArea parent;
 };
 
+/*! 
+  \brief _MtxCurveClass structure
+ */
 struct _MtxCurveClass
 {
 	GtkDrawingAreaClass parent_class;
@@ -69,6 +80,9 @@ struct _MtxCurveClass
 	void (*marker_proximity) (MtxCurve *);
 };
 
+/*! 
+  \brief _MtxCurveCoord structure containing the coordinates
+ */
 struct _MtxCurveCoord
 {
 	gfloat x;

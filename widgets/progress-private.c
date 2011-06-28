@@ -22,31 +22,6 @@
 
 G_DEFINE_TYPE (MtxProgressBar, mtx_progress_bar, GTK_TYPE_PROGRESS_BAR)
 
-/*
-GType mtx_progress_bar_get_type(void)
-{
-	static GType mtx_progress_bar_type = 0;
-
-	if (!mtx_progress_bar_type)
-	{
-		static const GTypeInfo mtx_progress_bar_info =
-		{
-			sizeof(MtxProgressBarClass),
-			NULL,
-			NULL,
-			(GClassInitFunc) mtx_progress_bar_class_init,
-			NULL,
-			NULL,
-			sizeof(MtxProgressBar),
-			0,
-			(GInstanceInitFunc) mtx_progress_bar_init,
-		};
-		mtx_progress_bar_type = g_type_register_static(GTK_TYPE_PROGRESS_BAR, "MtxProgressBar", &mtx_progress_bar_info, 0);
-	}
-	return mtx_progress_bar_type;
-}
-*/
-
 /*!
  \brief Initializes the mtx pie pbar class and links in the primary
  signal handlers for config event, expose event, and button press/release

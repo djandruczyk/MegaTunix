@@ -30,6 +30,9 @@ G_BEGIN_DECLS
 
 
 typedef struct _MaskEntry MaskEntry;
+/*!
+  \brief MaskEntry structure
+  */
 struct _MaskEntry
 {
 	GtkEntry entry;
@@ -37,6 +40,9 @@ struct _MaskEntry
 };
 
 typedef struct _MaskEntryClass MaskEntryClass;
+/*!
+  \brief MaskEntryClass structure
+  */
 struct _MaskEntryClass
 {
 	GtkEntryClass parent_class;

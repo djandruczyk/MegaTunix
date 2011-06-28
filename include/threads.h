@@ -26,7 +26,7 @@ typedef struct _Widget_Update Widget_Update;
 typedef struct _OutputData OutputData;
 
 
-/*
+/*!
  \brief _QFunction strcture is used for a thread to pass messages up
  a GAsyncQueue to the main gui thread for running any arbritrary function
  by name.
@@ -38,7 +38,7 @@ struct _QFunction
 };
 
 
-/*
+/*!
  \brief _Widget_Update strcture is used for a thread to pass a widget update
  call up a GAsyncQueue to the main gui thread for updating a widget in 
  a thread safe manner. A dispatch queue runs periodically checking 
@@ -53,8 +53,9 @@ struct _Widget_Update
 };
 
 
-/* Used to update a bunch of widgets in ecu_widgets from a thread context
-   */
+/*!
+ \brief Used to update a bunch of widgets in ecu_widgets from a thread context
+ */
 struct _Widget_Range
 {
 	gint page;
@@ -93,7 +94,7 @@ struct _Io_Message
 };
 
 
-/*
+/*!
  \brief _Text_Message strcture is used for a thread to pass messages up
  a GAsyncQueue to the main gui thread for updating a textview in a thread
  safe manner. A dispatch queue runs 5 times per second checking for messages

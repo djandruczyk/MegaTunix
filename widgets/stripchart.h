@@ -41,11 +41,17 @@ typedef enum
 }ColorIndex;
 
 
+/*!
+  \brief MtxStripChart structure
+  */
 struct _MtxStripChart
 {	/* public data */
 	GtkDrawingArea parent;
 };
 
+/*!
+  \brief MtxStripChartClass structure
+  */
 struct _MtxStripChartClass
 {
 	GtkDrawingAreaClass parent_class;

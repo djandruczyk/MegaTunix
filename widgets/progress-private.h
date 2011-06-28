@@ -27,6 +27,9 @@ typedef struct _MtxProgressBarPrivate      MtxProgressBarPrivate;
 typedef struct _MtxColor      MtxColor;
 
 
+/*!
+  \brief _MtxColor holds float representation of a RGB color
+ */
 struct _MtxColor
 {
 	gfloat red;
@@ -34,6 +37,10 @@ struct _MtxColor
 	gfloat blue;
 };
 
+/*!
+  \brief _MtxProgressBarPrivate holds all the private variables for 
+  MtxProgressBar
+ */
 struct _MtxProgressBarPrivate
 {
 	gfloat peak;

@@ -28,6 +28,9 @@ typedef struct _MtxSocketData MtxSocketData;
 typedef struct _MtxSocket MtxSocket;
 typedef struct _SlaveMessage SlaveMessage;
 
+/*!
+  \brief Different types of socket connections
+  */
 typedef enum
 {
 	MTX_SOCKET_ASCII = 0x410,
@@ -35,6 +38,9 @@ typedef enum
 	MTX_SOCKET_CONTROL
 }SocketType;
 
+/*!
+  \brief Socket States used in the socket state machine
+  */
 typedef enum
 {
 	WAITING_FOR_CMD = 0x420,
@@ -62,6 +68,9 @@ typedef enum
 	SET_COLOR
 }State;
 
+/*!
+  \brief Socket SubStates used in the socket state machine
+  */
 typedef enum
 {
 	UNDEFINED_SUBSTATE = 0x430,
@@ -72,6 +81,9 @@ typedef enum
 	RECV_LOOKUPTABLE
 }SubState;
 
+/*!
+  \brief Allowed Commands used in the socket state machine
+  */
 typedef enum
 {
 	HELP = 0x3F0,
@@ -98,6 +110,9 @@ typedef enum
 	SET_RAW_ECU
 }TcpCommand;
 
+/*!
+  \brief Structure to keep all client data together
+  */
 struct _MtxSocketClient 
 {
 	gchar *ip;
@@ -111,6 +126,9 @@ struct _MtxSocketClient
 	gpointer container;
 };
 
+/*!
+  \brief Structure to for passing data around to socket sub functions
+  */
 struct _MtxSocketData
 {
 	guchar cmd;
@@ -120,6 +138,9 @@ struct _MtxSocketData
 	guint16 count;
 };
 
+/*!
+  \brief MtxSocket wrapper
+  */
 struct _MtxSocket
 {
 	GSocket *socket;
@@ -127,6 +148,9 @@ struct _MtxSocket
 	SocketType type;
 };
 
+/*!
+  \brief Notification message to slaves 
+  */
 struct _SlaveMessage
 {
 	guint8 canID;
@@ -183,6 +207,9 @@ typedef struct _MtxSocketData MtxSocketData;
 typedef struct _MtxSocket MtxSocket;
 typedef struct _SlaveMessage SlaveMessage;
 
+/*!
+  \brief Different types of socket connections
+  */
 typedef enum
 {
 	MTX_SOCKET_ASCII = 0x410,
@@ -190,6 +217,9 @@ typedef enum
 	MTX_SOCKET_CONTROL
 }SocketType;
 
+/*!
+  \brief Socket States used in the socket state machine
+  */
 typedef enum
 {
 	WAITING_FOR_CMD = 0x420,
@@ -215,6 +245,9 @@ typedef enum
 	SET_COLOR
 }State;
 
+/*!
+  \brief Socket SubStates used in the socket state machine
+  */
 typedef enum
 {
 	UNDEFINED_SUBSTATE = 0x430,
@@ -225,6 +258,9 @@ typedef enum
 	RECV_LOOKUPTABLE
 }SubState;
 
+/*!
+  \brief Allowed Commands used in the socket state machine
+  */
 typedef enum
 {
 	HELP = 0x3F0,
@@ -251,6 +287,9 @@ typedef enum
 	SET_RAW_ECU
 }TcpCommand;
 
+/*!
+  \brief Structure to keep all client data together
+  */
 struct _MtxSocketClient 
 {
 	gchar *ip;
@@ -262,6 +301,9 @@ struct _MtxSocketClient
 	gpointer container;
 };
 
+/*!
+  \brief Structure to for passing data around to socket sub functions
+  */
 struct _MtxSocketData
 {
 	guchar cmd;
@@ -271,12 +313,18 @@ struct _MtxSocketData
 	guint16 count;
 };
 
+/*!
+  \brief MtxSocket wrapper
+  */
 struct _MtxSocket
 {
 	gint fd;
 	SocketType type;
 };
 
+/*!
+  \brief Notification message to slaves 
+  */
 struct _SlaveMessage
 {
 	guint8 canID;

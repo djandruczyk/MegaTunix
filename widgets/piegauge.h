@@ -33,7 +33,9 @@ G_BEGIN_DECLS
 typedef struct _MtxPieGauge		MtxPieGauge;
 typedef struct _MtxPieGaugeClass	MtxPieGaugeClass;
 
-/*! ColorIndex enum,  for indexing into the color arrays */
+/*! 
+  \brief ColorIndex enum, for indexing into the color arrays 
+ */
 typedef enum  
 {
 	COL_BG = 0,
@@ -46,11 +48,17 @@ typedef enum
 }ColorIndex;
 
 
+/*!
+  \brief _MtxPieGauge structure
+  */
 struct _MtxPieGauge
 {	/* public data */
 	GtkDrawingArea parent;
 };
 
+/*!
+  \brief _MtxPieGaugeClass structure
+  */
 struct _MtxPieGaugeClass
 {
 	GtkDrawingAreaClass parent_class;

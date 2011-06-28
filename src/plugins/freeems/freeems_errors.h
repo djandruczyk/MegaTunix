@@ -22,6 +22,9 @@
 #include <threads.h>
 
 typedef struct _FreeEMS_Errors FreeEMS_Errors;
+/*!
+  \brief FreeEMS Error codes
+  */
 static struct _FreeEMS_Errors
 {
 	guint code;

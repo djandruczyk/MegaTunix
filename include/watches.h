@@ -19,6 +19,9 @@
 #include <defines.h>
 #include <gtk/gtk.h>
 
+/*!
+  \brief Enumerations for types of watches 
+  */
 typedef enum
 {
 	SINGLE_BIT_STATE,	/*! Single bit state (level) watch */
@@ -36,6 +39,9 @@ typedef enum
 typedef struct _DataWatch DataWatch;
 
 
+/*!
+  \brief DataWatch structure contains the fields common to all watches
+  */
 struct _DataWatch
 {
 	guint32 id;		/*! Watch ID */

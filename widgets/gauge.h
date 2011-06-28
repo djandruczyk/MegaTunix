@@ -231,6 +231,11 @@ typedef struct _MtxRectangle		MtxRectangle;
 typedef struct _MtxGenPoly		MtxGenPoly;
 
 
+/*!
+  \struct _MtxDispatchHelper
+  \brief MtxDispatchHelper struct contains the information needed to call the 
+  appropriate function  based on the elements name
+  */
 struct _MtxDispatchHelper
 {
 	gchar * element_name;
@@ -240,7 +245,8 @@ struct _MtxDispatchHelper
 };
 
 
-/*! \struct _MtxWarningRange
+/*! 
+ * \struct _MtxWarningRange
  * \brief
  * _MtxWarningRange is a container struct that holds all the information needed
  * for a color range span on a gauge. Any gauge can have an arbritrary number
@@ -258,7 +264,8 @@ struct _MtxWarningRange
 };
 
 
-/*! \struct _MtxAlertRange
+/*!
+ * \struct _MtxAlertRange
  * \brief
  * _MtxAlertRange is a container struct that holds all the information needed
  * for an alert range span on a gauge. Any gauge can have an arbritrary number
@@ -278,7 +285,8 @@ struct _MtxAlertRange
 };
 
 
-/*! \struct _MtxTextBlock
+/*! 
+ * \struct _MtxTextBlock
  * \brief
  * _MtxTextBlock is a container struct that holds information for a text
  * block to be placed somplace on a gauge.  A dynamic array holds the pointers
@@ -295,7 +303,8 @@ struct _MtxTextBlock
 	gint layer;		/* Layer number */
 };
 
-/*! \struct _MtxTickGroup
+/*! 
+ * \struct _MtxTickGroup
  * \brief
  * _MtxTickGroup is a container structure that holds all the info needed for
  * a group of tickmarks.  This is added to allow multiple groups of tickmarks
@@ -326,7 +335,8 @@ struct _MtxTickGroup
 };
 
 
-/*! \struct _MtxPoint
+/*! 
+ * \struct _MtxPoint
  * \brief
  * _MtxPoint houses a coordinate in gauge space in floating point coords which
  * are percentages of radius to keep everything scalable
@@ -337,7 +347,8 @@ struct _MtxPoint
 	gfloat y;		/* Y val as % of gauge radius */
 };
 
-/*! \struct _MtxPolygon
+/*! 
+ * \struct _MtxPolygon
  * \brief
  * _MtxPolygon is a container struct that holds an identifier (enum) and a 
  * void * for the the actual polygon data (the struct will be casted in the
@@ -356,7 +367,8 @@ struct _MtxPolygon
 };
 
 
-/*! \struct _MtxCircle 
+/*! 
+ * \struct _MtxCircle 
  * \brief
  * _MtxCircle contains the info needed to create a circle on the gauge.
  * Values are in floating point as they are percentages of gauge radius so
@@ -375,7 +387,8 @@ struct _MtxCircle
 };
 
 
-/*! \struct _MtxArc
+/*! 
+ * \struct _MtxArc
  * \brief
  * _MtxArc contains the info needed to create an arc on the gauge.
  * Values are in floating point as they are percentages of gauge radius so
@@ -397,7 +410,8 @@ struct _MtxArc
 };
 
 
-/*! \struct _MtxRectangle _MtxSquare
+/*! 
+ * \struct _MtxRectangle
  * \brief
  * _MtxRectangle contains the info needed to create a rect on the gauge.
  * Values are in floating point as they are percentages of gauge radius so
@@ -416,7 +430,8 @@ struct _MtxRectangle
 	gfloat height;		/* Height */
 };
 
-/*! \struct _MtxGenPoly
+/*! 
+ * \struct _MtxGenPoly
  * \brief
  * _MtxGenPoly is a container structure for generic polygons that can't be
  * described by the generic choices above. It allows for any number of points
@@ -429,11 +444,17 @@ struct _MtxGenPoly
 	MtxPoint *points;	/* Dynamic array of points */
 };
 
+/*!
+  \brief MtxGaugeFace structure
+  */
 struct _MtxGaugeFace
 {	/* public data */
 	GtkDrawingArea parent;
 };
 
+/*!
+  \brief MtxGaugeFaceClass structure
+  */
 struct _MtxGaugeFaceClass
 {
 	GtkDrawingAreaClass parent_class;

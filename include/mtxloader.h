@@ -17,34 +17,10 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-/**********************************************************************
- * samples holds the three temperatures and corresponding three
- * resistances for the user's input. temps are lowest to highest
- * resistances are corresponding values and will be highest to
- * lowest due to the nature of thermistors.					
- **********************************************************************/
-typedef struct _samples samples;
-typedef struct _inc_entry inc_entry;
-
-struct _samples {
-  double t1, t2, t3, r1, r2, r3;
-};
-
- struct _inc_entry {
-  int ms_val;
-  int adc;
-  int temp_f;
-  int temp_c;
-  int ohms;
-};
-
-/* Prototypes */
 gboolean load_firmware (GtkButton*);
 gboolean get_signature (GtkButton*);
 gboolean leave (GtkWidget *, gpointer);
 gboolean about_popup (GtkWidget *, gpointer);
-gboolean use_sensor (GtkWidget *, gpointer);
-gboolean get_sensor_info (GtkWidget *, gpointer);
 gboolean persona_choice (GtkWidget *, gpointer);
 void load_defaults(void);
 void save_defaults(void);
