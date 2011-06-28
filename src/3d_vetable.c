@@ -2917,9 +2917,11 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	/* If OpenGL window is open, redraw it... */
 	for (i=0;i<firmware->total_tables;i++)
 	{
+		printf("Checking if table %i is open\n",i);
 		ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
 		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 		{
+			printf("Table %i is visible, checking sources\n",i);
 			/* Get X values */
 			if (ve_view->x_multi_source)
 			{
@@ -2954,7 +2956,10 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 
 			/* Test X values, redraw if needed */
 			if (((fabs(x[0]-x[1])/x[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				printf("X value has changed\n");
 				goto redraw;
+			}
 
 			/* Get Y values */
 			if (ve_view->y_multi_source)
@@ -2990,7 +2995,10 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 
 			/* Test Y values, redraw if needed */
 			if (((fabs(y[0]-y[1])/y[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				printf("Y value has changed\n");
 				goto redraw;
+			}
 
 			/* Get Z values */
 			if (ve_view->z_multi_source)
@@ -3026,10 +3034,14 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 
 			/* Test Z values, redraw if needed */
 			if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
+			{
+				printf("Z value has changed\n");
 				goto redraw;
+			}
 			continue;
 
 redraw:
+			printf("Redrawing 3d display for table %i\n",i);
 			gdk_threads_enter();
 			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
 			gdk_threads_leave();
@@ -3038,6 +3050,7 @@ redraw:
 
 	gdk_threads_enter();
 	{
+		printf("Drawing 2d VE markers and tab gauges\n");
 		draw_ve_marker();
 		update_tab_gauges();
 	}
