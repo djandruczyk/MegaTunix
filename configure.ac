@@ -282,6 +282,7 @@ desktop/Makefile
 category/Makefile
 icons/Makefile
 MegaTunix.iss
+Doxyfile
 WIN_NOTES.txt
 ])
 AC_OUTPUT
