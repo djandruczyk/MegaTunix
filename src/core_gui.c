@@ -445,4 +445,60 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 			"dark green", NULL);
 	g_object_ref(tag);
 	DATA_SET_FULL(global_data,"comms_info_tag",tag,g_object_unref);
+
+	widget = glade_xml_get_widget(xml,"main_status_hbox");
+	if (GTK_IS_WIDGET(widget))
+		setup_main_status(widget);
+}
+
+
+void setup_main_status(GtkWidget *parent)
+{
+	GtkWidget * image = NULL;
+
+	gtk_box_set_spacing(GTK_BOX(parent),5);
+	image = gtk_image_new_from_stock("gtk-connect",GTK_ICON_SIZE_MENU);
+	gtk_widget_set_sensitive(image,FALSE);
+	gtk_box_pack_start(GTK_BOX(parent),image,FALSE,FALSE,0);
+	DATA_SET(global_data,"connected_icon", image);
+	image = gtk_image_new_from_stock("gtk-disconnect",GTK_ICON_SIZE_MENU);
+	gtk_widget_set_sensitive(image,TRUE);
+	gtk_box_pack_start(GTK_BOX(parent),image,FALSE,FALSE,0);
+	DATA_SET(global_data,"disconnected_icon", image);
+	image = gtk_image_new_from_stock("gtk-media-record",GTK_ICON_SIZE_MENU);
+	gtk_widget_set_sensitive(image,FALSE);
+	gtk_box_pack_start(GTK_BOX(parent),image,FALSE,FALSE,0);
+	DATA_SET(global_data,"data_xfer_icon", image);
+	image = gtk_image_new_from_stock("gtk-dialog-warning",GTK_ICON_SIZE_MENU);
+	gtk_widget_set_sensitive(image,FALSE);
+	gtk_box_pack_start(GTK_BOX(parent),image,FALSE,FALSE,0);
+	DATA_SET(global_data,"warning_icon", image);
+}
+
+
+void set_connected_icons_state(gboolean state)
+{
+	static GtkWidget * conn = NULL;
+	static GtkWidget * disconn = NULL;
+	
+	if (!conn)
+		conn = DATA_GET(global_data,"connected_icon");
+	if (!disconn)
+		disconn = DATA_GET(global_data,"disconnected_icon");
+
+	g_return_if_fail(conn);
+	g_return_if_fail(disconn);
+
+	if (state)
+	{
+		printf("Connected!!\n");
+		gtk_widget_set_sensitive(conn, TRUE);
+		gtk_widget_set_sensitive(disconn, FALSE);
+	}
+	else
+	{
+		printf("DisConnected!!\n");
+		gtk_widget_set_sensitive(conn, FALSE);
+		gtk_widget_set_sensitive(disconn, TRUE);
+	}
 }

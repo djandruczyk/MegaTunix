@@ -22,6 +22,7 @@
             <child>
               <widget class="GtkHBox" id="main_top_hbox">
                 <property name="visible">True</property>
+                <property name="spacing">3</property>
                 <child>
                   <widget class="GtkMenuBar" id="mtx_top_menubar">
                     <property name="visible">True</property>
@@ -144,7 +145,7 @@
                                         <property name="use_underline">True</property>
                                         <property name="use_stock">False</property>
                                         <property name="always_show_image">True</property>
-                                	<signal name="activate" handler="jump_to_tab"/>
+                                        <signal name="activate" handler="jump_to_tab"/>
                                         <child internal-child="image">
                                           <widget class="GtkImage" id="image6">
                                             <property name="visible">True</property>
@@ -161,7 +162,7 @@
                                         <property name="use_underline">True</property>
                                         <property name="use_stock">False</property>
                                         <property name="always_show_image">True</property>
-                                	<signal name="activate" handler="jump_to_tab"/>
+                                        <signal name="activate" handler="jump_to_tab"/>
                                         <child internal-child="image">
                                           <widget class="GtkImage" id="image9">
                                             <property name="visible">True</property>
@@ -178,7 +179,7 @@
                                         <property name="use_underline">True</property>
                                         <property name="use_stock">False</property>
                                         <property name="always_show_image">True</property>
-                                	<signal name="activate" handler="jump_to_tab"/>
+                                        <signal name="activate" handler="jump_to_tab"/>
                                         <child internal-child="image">
                                           <widget class="GtkImage" id="image7">
                                             <property name="visible">True</property>
@@ -195,7 +196,7 @@
                                         <property name="use_underline">True</property>
                                         <property name="use_stock">False</property>
                                         <property name="always_show_image">True</property>
-                                	<signal name="activate" handler="jump_to_tab"/>
+                                        <signal name="activate" handler="jump_to_tab"/>
                                         <child internal-child="image">
                                           <widget class="GtkImage" id="image8">
                                             <property name="visible">True</property>

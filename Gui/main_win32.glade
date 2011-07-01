@@ -22,6 +22,7 @@
             <child>
               <widget class="GtkHBox" id="main_top_hbox">
                 <property name="visible">True</property>
+                <property name="spacing">3</property>
                 <child>
                   <widget class="GtkMenuBar" id="mtx_top_menubar">
                     <property name="visible">True</property>

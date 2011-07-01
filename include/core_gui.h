@@ -20,6 +20,9 @@
 /* Prototypes */
 gint setup_gui(void);
 void finalize_core_gui(GladeXML *);
+void setup_main_status(GtkWidget *);
+void set_connected_icons_state(gboolean);
+
 /* Prototypes */
 
 #endif

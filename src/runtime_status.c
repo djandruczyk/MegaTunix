@@ -14,6 +14,7 @@
 
 #include <args.h>
 #include <api-versions.h>
+#include <core_gui.h>
 #include <debugging.h>
 #include <glade/glade-xml.h>
 #include <getfiles.h>
@@ -252,6 +253,7 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 	{
 		gdk_threads_enter();
 		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,GINT_TO_POINTER(curr_conn_status));
+		set_connected_icons_state(curr_conn_status);
 		gdk_threads_leave();
 		conn_status = curr_conn_status;
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));

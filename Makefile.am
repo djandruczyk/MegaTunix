@@ -22,6 +22,9 @@ DISTCLEANFILES = intltool-extract intltool-merge intltool-update po/.intltool-me
 EXTRA_DIST = config.rpath m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE ${INTLTOOL_FILES}
 
 
+doc:
+	@doxygen
+
 check-gettext:
 	@if test x$(USE_NLS) != "xyes" ; then echo "Missing gettext. Rerun configure and check for" \
 	"'checking whether to use NLS... yes'!" ; exit 1 ; fi
