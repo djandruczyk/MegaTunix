@@ -288,7 +288,7 @@ gboolean check_status(gint port_fd)
 	guchar errorCode = 0;
 	guchar statusCode = 0;
 	guchar prompt = 0;
-	guchar buf[3];
+	gchar buf[3];
 	gint res = 0;
 	gboolean retval = TRUE;
 
@@ -626,7 +626,7 @@ void ms2_enter_boot_mode(gint port_fd)
 void reset_proc(gint port_fd)
 {
 	gint res = 0;
-	guchar buf[10];
+	gchar buf[10];
 	guchar command = C_RESET;
 
 	res = write_wrapper(port_fd, &command, 1);

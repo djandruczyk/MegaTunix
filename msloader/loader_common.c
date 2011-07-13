@@ -280,13 +280,14 @@ gboolean lock_port(gchar * name)
 }
 
 
-gint read_wrapper(gint fd, guchar *buf, gint requested)
+gint read_wrapper(gint fd, gchar *buf, gint requested)
 {
 #ifdef __WIN32__
 	/* Windows can't do select() on anything but network sockets which
 	   is completely braindead, and thus yoou must do overlapped IO
 	   or uglier busylooped IO.  I'm lazy and hate windows and the 
 	   overlapped IO stuff is ugly as hell, so I used the busylooped method
+	   instead...
 	   */
 	gint received = 0;
         gint read_pos = 0;
@@ -320,7 +321,7 @@ gint read_wrapper(gint fd, guchar *buf, gint requested)
 	printf("timeout, returning only %i of %i bytes\n",total,requested);
 	return total;
 	   
-#else	/* Linux/OS-X where sane IO lives */
+#else	/* Linux/OS-X where sane I/O lives */
 	fd_set readfds;
 	struct timeval t;
 	gint attempts = 0;

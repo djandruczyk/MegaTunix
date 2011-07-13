@@ -35,6 +35,13 @@ struct termios newtio;
 
 void boot_jumper_prompt(void);
 
+/*!
+  \brief Load the firmware to the MS-1 Device. Implementation is a simple
+  state machine.
+  \param port_fd. Filedescriptor to the device (serial port)
+  \param file_fd, Filedescriptor to the .s19 file
+  \returns True on success, False on failure
+  */
 gboolean do_ms1_load(gint port_fd, gint file_fd)
 {
 	gboolean result = FALSE;
@@ -95,15 +102,20 @@ gboolean do_ms1_load(gint port_fd, gint file_fd)
 }
 
 
+/*!
+  \brief detect_ecu probes ecu to try and determine if in bootloader, if so
+  what mode, (i.e. waiting for data, waiting for CMD), or if in normal run mode
+  \param fd, filedescriptor of serial port
+  \returns EcuState, enumeration of ECU state
+  \see EcuState
+  */
 EcuState detect_ecu(gint fd)
 {
 	gint res = 0;
 	gint size = 1024;
-	guchar buf[1024];
-	guchar *ptr = buf;
+	gchar buf[1024];
+	gchar *ptr = buf;
 	gint total_read = 0;
-	gint total_wanted = 0;
-	gint zerocount = 0;
 	gchar  *message = NULL;
 
 	/* Probe for response 
@@ -111,27 +123,13 @@ EcuState detect_ecu(gint fd)
 	 * If that fails, see if we are in bootloader mode already
 	 */
 
-	res = write (fd,"S",1);
 	flush_serial(fd,BOTH);
+	res = write_wrapper (fd,(guchar *)"S",1);
+	flush_serial(fd,OUTBOUND);
 	if (res != 1)
 		output("Failure sending signature request!\n",FALSE);
-	g_usleep(300000); /* 300ms timeout */
-	total_read = 0;
-	total_wanted = size;
-	zerocount = 0;
-	while ((total_read < total_wanted ) && (total_wanted-total_read) > 0 )
-	{
-		total_read += res = read(fd,
-				ptr+total_read,
-				total_wanted-total_read);
-
-		/* If we get nothing back (i.e. timeout, assume done)*/
-		if (res <= 0)
-			zerocount++;
-
-		if (zerocount > 1)
-			break;
-	}
+	total_read = read_wrapper(fd,buf,32);
+	flush_serial(fd,BOTH);
 	if (total_read > 0)
 	{
 		message = g_strndup(((gchar *)buf),total_read);
@@ -159,13 +157,18 @@ EcuState detect_ecu(gint fd)
 
 
 
+/*!
+  \brief jump_to_bootloader sends the magic string to get to the 
+  bootloader from normal run mode
+  \param fd, filedescriptor of serial port
+  \returns  True if we get a Boot prompt, false otherwise
+  */
 gboolean jump_to_bootloader(gint fd)
 {
 	gint res = 0;
 
 	flush_serial(fd,OUTBOUND);
-	res = write (fd,"!!",2);
-	g_usleep(100000); /* 100ms timeout  */
+	res = write_wrapper (fd,(guchar *)"!!",2);
 	if (res != 2)
 	{
 		output("Error trying to get \"Boot>\" Prompt,\n",FALSE);
@@ -176,13 +179,18 @@ gboolean jump_to_bootloader(gint fd)
 }
 
 
+/*!
+  \brief prepare_for_upload Gets the ECU into a state to accept the S19 file
+  \param  fd, filedescriptor of serial port
+  \returns True if we are ready, false otherwise
+  */
 gboolean prepare_for_upload(gint fd)
 {
 	gint res = 0;
-	gchar buf[1024];
+	guchar buf[1024];
 	gchar * message = NULL;
 
-	res = write(fd,"W",1);
+	res = write_wrapper(fd,(guchar *)"W",1);
 	if (res != 1)
 	{
 		output("Error trying to initiate ECU wipe\n",FALSE);
@@ -190,13 +198,13 @@ gboolean prepare_for_upload(gint fd)
 	}
 	flush_serial(fd,OUTBOUND);
 	g_usleep(1000000); /* 1000ms timeout for flash to erase */
-	res = read(fd,&buf,1024);
+	res = read(fd,buf,1024);
 	message = g_strndup(((gchar *)buf),res);
-	if (g_strrstr_len(buf,res,"Complete"))
+	if (g_strrstr_len((gchar *)buf,res,"Complete"))
 	{
 		g_free(message);
 		output("ECU Wipe complete\n",FALSE);
-		res = write(fd,"U",1);
+		res = write_wrapper(fd,(guchar *)"U",1);
 		if (res != 1)
 		{
 			output("Error trying to initiate ECU upgrade\n",FALSE);
@@ -204,15 +212,15 @@ gboolean prepare_for_upload(gint fd)
 		}
 		flush_serial(fd,OUTBOUND);
 		g_usleep(2000000); /* 2000ms timeout for flash to erase */
-		res = read(fd,&buf,1024);
-		if (g_strrstr_len(buf,res,"waiting"))
+		res = read(fd,buf,1024);
+		if (g_strrstr_len((gchar *)buf,res,"waiting"))
 		{
 			output("Ready to update ECU firmware\n",FALSE);
 			return TRUE;
 		}
 		else
 		{
-			message = g_strndup(buf,res);
+			message = g_strndup((gchar *)buf,res);
 			output(g_strdup_printf("ECU returned \"%s\"\n",message),TRUE);	
 			g_free(message);
 			output("Error getting \"ready to update\" message from ECU\n",FALSE);
@@ -228,6 +236,12 @@ gboolean prepare_for_upload(gint fd)
 }
 
 
+/*!
+  \brief
+  upload_firmware handles the actual sending of the .s19 file to the ECU
+  \param fd, serial port filedescriptor
+  \param file_fd, .s19 file filedescriptor
+  */
 void upload_firmware(gint fd, gint file_fd)
 {
 	gint res = 0;
@@ -275,18 +289,20 @@ void upload_firmware(gint fd, gint file_fd)
 }
 
 
+/*!
+  \brief reboot_ecu tells the ECU to reboot
+  \param fd, serial port filedescriptor
+  */
 void reboot_ecu(gint fd)
 {
 	gint res = 0;
 
 	output("Sleeping 3 Seconds\n",FALSE);
 	g_usleep(3000000);
-	res = write (fd,"X",1);
+	res = write_wrapper (fd,(guchar *)"X",1);
 	flush_serial(fd,OUTBOUND);
 	if (res != 1)
 		output("Error trying to Reboot ECU\n",FALSE);
 
-	return ;
+	return;
 }
-
-
