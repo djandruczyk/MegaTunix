@@ -120,7 +120,7 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	free_s19(count);
 	reset_proc(port_fd);
 	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
-	output("ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
+	output("Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
 	return TRUE;
 }
 
@@ -150,10 +150,11 @@ gboolean do_freeems_load(gint port_fd, gint file_fd)
 		return FALSE;
 	}
 	free_s19(count);
-	reset_proc(port_fd);
+	/* Make fred happier
+	   reset_proc(port_fd);
+	   */
 	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
-	output("Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
-	output("All Done!\n",FALSE);
+	output("ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
 	return TRUE;
 }
 
