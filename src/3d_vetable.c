@@ -61,8 +61,9 @@ extern gconstpointer *global_data;
 
 static gboolean delayed_expose(gpointer);
 
-/* let's get what we need and calculate FPS */
-
+/*!
+ \brief Caluclates the frames per second for the 3D display
+ */
 G_MODULE_EXPORT void CalculateFrameRate(void)
 {
 	static float framesPerSecond = 0.0f;	/* This will store our fps*/
@@ -93,8 +94,9 @@ G_MODULE_EXPORT void CalculateFrameRate(void)
 	drawOrthoText(strFrameRate, 1.0f, 1.0f, 1.0f, 0.025, 0.975 );
 }
 
-/* Draws the current frame rate on screen */
-
+/*!
+ \brief Draws simple 2d test on screen in orthographic projection
+ */
 G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
 {
 	GLint matrixMode;
@@ -931,10 +933,8 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 
 /*!
  \brief ve3d_button_press_event is called when the user clicks a mouse 
-button
- The function grabs the location at which the button was clicked in 
-order to
- calculate what to change when rerendering
+ button The function grabs the location at which the button was clicked in 
+ order to calculate what to change when rerendering
  \see ve3d_motion_notify_event
  */
 G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -988,6 +988,9 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief When the display should be insensitive, this greys it out
+  */
 G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 {
 	GdkPixmap *pmap = NULL;
@@ -2093,8 +2096,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 /*!
  \brief initialize_ve3d_view is called from create_ve3d_view to 
-intialize it's
- datastructure for use.  
+ intialize it's datastructure for use.  
  \see Ve_View
  */
 G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
@@ -2250,6 +2252,10 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	}
 }
 
+
+/*!
+  \brief Queues a deferred redraw to the 3D view in 300 ms
+  */
 G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 {
 	if (!DATA_GET(global_data,"ve3d_redraw_queued"))
@@ -2261,6 +2267,10 @@ G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 	return;
 }
 
+
+/*!
+  \brief Invalidates the display which forces a redraw event
+  */
 G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
@@ -2274,6 +2284,10 @@ G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
 
 
 
+/*! 
+  \brief Finds to current nearest vertexes and highlights them to indicate
+  to the user the vertexes of influence.
+  */
 G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 {
 	gfloat tmpf1 = 0.0;
@@ -2637,6 +2651,10 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 }
 
 
+/*!
+  \brief Enables or disables the tracking focus feature, where the active 
+  editable vertex TRACKS the most inflential vertex
+  */
 G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2655,6 +2673,9 @@ G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief Sets the scaling mode to proportional or fixed
+  */
 G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2669,6 +2690,9 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 }
 
 
+/*! 
+  \brief Sets the rendering mode to wireframe or semi-transparent solid
+  */
 G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2683,6 +2707,9 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 }
 
 
+/*! 
+  \brief sets the amount of opacity in the view.
+  */
 G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2696,6 +2723,11 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+  \brief Frees up data in the Cur_Vals structure
+  \param Cur_Vals structure of current values
+  */
 G_MODULE_EXPORT void free_current_values(Cur_Vals *cur_val)
 {
 	if (cur_val->x_edit_text)
@@ -2714,6 +2746,9 @@ G_MODULE_EXPORT void free_current_values(Cur_Vals *cur_val)
 }
 
 
+/*!
+  \brief Gets the  position between vertexes in fixed scale mode
+  */
 G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 {
 	gfloat tmp1 = 0.0;
@@ -2751,6 +2786,11 @@ G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 }
 
 
+/*!
+  \brief  Generates the quad mesh, this only needs to be done when the 
+  underlying ECU data changes, so we do it once, hold onto it nad render it
+  as needed
+  */
 G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	static gint (*get_ecu_data_f)(gpointer) = NULL;

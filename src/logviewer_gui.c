@@ -234,6 +234,9 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 }
 
 
+/*!
+  \brief re-enabled the select params button
+ */
 G_MODULE_EXPORT gboolean reenable_select_params_button(GtkWidget *widget)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_params_button")),TRUE);
@@ -241,6 +244,10 @@ G_MODULE_EXPORT gboolean reenable_select_params_button(GtkWidget *widget)
 
 }
 
+
+/*!
+  \brief Saves the default loggable choices
+ */
 G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 {
 	GtkWidget *tmpwidget = NULL;
@@ -1315,6 +1322,9 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 }
 
 
+/*!
+  \brief Enable log playback controls
+  */
 G_MODULE_EXPORT void enable_playback_controls(gboolean state)
 {	
 	static GtkWidget * playback_controls_window = NULL;
@@ -1463,6 +1473,9 @@ G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *
 
 
 
+/*!
+  \brief write logviewer defaults to file
+  */
 G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 {
 	GList * list = NULL;
@@ -1489,6 +1502,9 @@ G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 }
 
 
+/*!
+  \brief read logviewer defaults from file
+  */
 G_MODULE_EXPORT void read_logviewer_defaults(ConfigFile *cfgfile)
 {
 	gchar *tmpbuf = NULL;

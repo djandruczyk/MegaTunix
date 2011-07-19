@@ -321,6 +321,10 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 }
 
 
+/*!
+  \brief looks up the index of a table based on its value. NOTE: returns the 
+  "midpoint" betwen matching values.
+  */
 G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 {
 	gint i = 0;
@@ -485,6 +489,9 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 
 
 
+/*!
+  \brief looks up the value given the index
+  */
 G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 {
 	LookupTable *lookuptable = NULL;
@@ -510,6 +517,9 @@ G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 }
 
 
+/*!
+  \brief Creates the lookuptables configurator window (MS1 FW's only)
+  */
 G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 {
 	static gboolean ltc_created = FALSE;
@@ -661,6 +671,10 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 
 }
 
+
+/*!
+  \brief hides the lookuptables config window
+  */
 G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_hide(widget);
@@ -669,6 +683,9 @@ G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpoin
 }
 
 
+/*!
+ \brief Loads up the new lokuptable
+  */
 G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
 {
 	GtkListStore *store = NULL;
@@ -757,6 +774,10 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	return TRUE;
 }
 
+
+/*!
+  \brief updates the interrogation profile with the new default lookuptable
+  */
 G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
 	ConfigFile *cfgfile = data;

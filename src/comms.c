@@ -186,6 +186,10 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 }
 
 
+/*!
+  \brief Enumerates the contents of /dev to be used when looking for a 
+  serial port device on Linux or OS-X
+  */
 G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 {
 #ifndef __WIN32__

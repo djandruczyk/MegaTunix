@@ -701,6 +701,11 @@ G_MODULE_EXPORT void reset_temps(gpointer type)
 }
 
 
+/*!
+  \brief temp_to_host Converts and ECU temperature into host units
+  \param in, the input temperature in ECU scale
+  \return temp in host (mtx user) scale
+  */
 G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 {
 	static Firmware_Details *firmware = NULL;
@@ -735,6 +740,12 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 	return res;
 }
 
+
+/*!
+  \brief Converts temps to the scale that the ECU expects
+  \param temp in host (mtx user) scale
+  \returns temp in ECU scale
+  */
 G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 {
 	gdouble res = 0.0;
@@ -769,42 +780,76 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 }
 
 
+/*!
+  \brief Celsius to Fahrenheit conversion
+  \param in, temp in Celsius
+  \returns temp in Fahrenheit
+  */
 G_MODULE_EXPORT gdouble c_to_f(gdouble in)
 {
 	return ((in *(9.0/5.0))+32.0)+0.001;
 }
 
 
+/*!
+  \brief Celsius to Kelvin conversion
+  \param in, temp in Celsius
+  \returns temp in Kelvin
+  */
 G_MODULE_EXPORT gdouble c_to_k(gdouble in)
 {
 	return (in+273.0);
 }
 
 
+/*!
+  \brief Fahrenheit to Celsius conversion
+  \param in, temp in Fahrenheit
+  \returns temp in Celsius
+  */
 G_MODULE_EXPORT gdouble f_to_c(gdouble in)
 {
 	return ((in-32.0)*(5.0/9.0))+0.001;
 }
 
 
+/*!
+  \brief Fahrenheit to Kelvin conversion
+  \param in, temp in Fahrenheit
+  \returns temp in Kelvin
+  */
 G_MODULE_EXPORT gdouble f_to_k(gdouble in)
 {
 	return ((in-32.0)*(5.0/9.0))+273.001;
 }
 
 
+/*!
+  \brief Kelvin to Fahrenheit conversion
+  \param in, temp in Kevin
+  \returns temp in Fahrenheit
+  */
 G_MODULE_EXPORT gdouble k_to_f(gdouble in)
 {
 	return (((in-273) *(9.0/5.0))+32.0)+0.001;
 }
 
 
+/*!
+  \brief Kelvin to Celsius conversion
+  \param in, temp in Kelvin
+  \returns temp in Celsius
+  */
 G_MODULE_EXPORT gdouble k_to_c(gdouble in)
 {
 	return (in-273.0);
 }
 
 
+/*!
+  \brief Calculates the result based on the passed multiplier, adder, conversion cdirection (to/from ecu) and raw input)
+  \returns the calculated result
+  */
 G_MODULE_EXPORT gfloat calc_value(gfloat in, gfloat *mult, gfloat *add, ConvDir dir)
 {
 	gfloat result = 0.0;

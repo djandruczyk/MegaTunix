@@ -36,6 +36,9 @@ extern gconstpointer *global_data;
 #endif
 
 
+/*!
+  \brief removes the mtx lockfile
+  */
 G_MODULE_EXPORT void remove_mtx_lock(void)
 {
 	if (DATA_GET(global_data,"network_mode"))
@@ -48,6 +51,9 @@ G_MODULE_EXPORT void remove_mtx_lock(void)
 }
 
 
+/*!
+  \brief creates the mtx lockfile
+  */
 G_MODULE_EXPORT void create_mtx_lock(void)
 {
 	if (DATA_GET(global_data,"network_mode"))
@@ -59,7 +65,9 @@ G_MODULE_EXPORT void create_mtx_lock(void)
 #endif
 }
 
-
+/*!
+  \brief Unix function that creates the mtx lockfile
+  */
 G_MODULE_EXPORT void unix_create_mtx_lock(void)
 {
 #ifndef __WIN32__
@@ -107,6 +115,9 @@ G_MODULE_EXPORT void unix_create_mtx_lock(void)
 }
 
 
+/*!
+  \brief Unix function that removes the mtx lockfile
+  */
 G_MODULE_EXPORT void unix_remove_mtx_lock(void)
 {
 #ifndef __WIN32__
@@ -130,6 +141,9 @@ G_MODULE_EXPORT void unix_remove_mtx_lock(void)
 }
 
 
+/*!
+  \brief creates the win32 mtx lockfile
+  */
 G_MODULE_EXPORT void win32_create_mtx_lock(void)
 {
 #ifdef __WIN32__
@@ -154,6 +168,9 @@ G_MODULE_EXPORT void win32_create_mtx_lock(void)
 #endif
 }
 
+/*!
+  \brief Removes the win32 mtx lockfile
+  */
 G_MODULE_EXPORT void win32_remove_mtx_lock(void)
 {
 #ifdef __WIN32__
@@ -164,6 +181,9 @@ G_MODULE_EXPORT void win32_remove_mtx_lock(void)
 }
 
 
+/*!
+  \brief Unlock the serial port
+  */
 G_MODULE_EXPORT void unlock_serial(void)
 {
 #ifndef __WIN32__
@@ -182,6 +202,9 @@ G_MODULE_EXPORT void unlock_serial(void)
 }
 
 
+/*!
+  \brief Locks the serial port
+  */
 G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 {
 #ifndef __WIN32__

@@ -27,6 +27,10 @@
 
 extern gconstpointer *global_data;
 
+
+/*!
+  \brief Creates a stripchart widget (i.e. accel wizard)
+  */
 G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 {
 	GtkWidget *chart = NULL;
@@ -79,6 +83,10 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 
 }
 
+
+/*!
+  \brief  updates a stripchart widget with new values
+  */
 G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
 {
 	mtx_stripchart_set_values(MTX_STRIPCHART(watch->user_data),watch->vals);

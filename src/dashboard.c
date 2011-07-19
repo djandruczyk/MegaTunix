@@ -151,13 +151,10 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean ebox_expose(GtkWidget *widget, GdkEventExpose *event, gpointer data)
-{
-	printf("ebox expose!?\n");
-	return FALSE;
-}
-
-
+/*!
+  \brief dashboard configure event.  Handles the dashboard setup and render
+  of the spots for each gauge and initiates the shape combine
+  */
 G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
 {
 	gint orig_width = 0;
@@ -218,6 +215,9 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 }
 
 
+/*!
+  \brief XML processing function to load the elements for each dashboard
+  */
 G_MODULE_EXPORT void load_elements(GtkWidget *dash, xmlNode *a_node)
 {
 	xmlNode *cur_node = NULL;
@@ -236,6 +236,10 @@ G_MODULE_EXPORT void load_elements(GtkWidget *dash, xmlNode *a_node)
 	}
 }
 
+
+/*!
+  \brief XML processing function to load the geometry data for the dashboard
+  */
 G_MODULE_EXPORT void load_geometry(GtkWidget *dash, xmlNode *node)
 {
 	GdkGeometry hints;
@@ -270,6 +274,10 @@ G_MODULE_EXPORT void load_geometry(GtkWidget *dash, xmlNode *node)
 
 }
 
+
+/*!
+  \brief XML processing function to load the gauge data for the dashboard
+  */
 G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
@@ -326,6 +334,10 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 }
 
 
+/*!
+  \brief Links the dashboard datasources defined in hte XML to actual 
+  datasources within megatunix itself (match is via name)
+  */
 G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 {
 	Dash_Gauge *d_gauge = NULL;
@@ -378,6 +390,10 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 	}
 }
 
+
+/*!
+  \brief Updates a dashboard gauge with a new value
+  */
 G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 {
 	Dash_Gauge *d_gauge = (Dash_Gauge *)value;
@@ -413,6 +429,9 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 }
 
 
+/*!
+  \brief gives the dashboard that floating look without a bounding window/box
+  */
 G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 {
 	GtkFixedChild *child = NULL;
@@ -504,11 +523,19 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	return;
 }
 
+
+/*!
+  \brief Dashboard motion event handler (not used yet)
+  */
 G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	return FALSE;
 }
 
+
+/*!
+  \brief Dashboard keyboard event handler that handles dashboard hotkeys
+  */
 G_MODULE_EXPORT gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (event->type == GDK_KEY_RELEASE)
@@ -554,6 +581,9 @@ G_MODULE_EXPORT gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, g
 }
 
 
+/*!
+  \brief Makes the runtime status window appear/disappear
+  */
 G_MODULE_EXPORT void toggle_status_visible(void)
 {
 	gint x = 0;
@@ -577,6 +607,9 @@ G_MODULE_EXPORT void toggle_status_visible(void)
 }
 
 
+/*!
+  \brief Makes the runtime text window appear/disappear
+  */
 G_MODULE_EXPORT void toggle_rtt_visible(void)
 {
 	gint x = 0;
@@ -599,6 +632,10 @@ G_MODULE_EXPORT void toggle_rtt_visible(void)
 	}
 }
 
+
+/*!
+  \brief Makes the main window appear/disappear
+  */
 G_MODULE_EXPORT void toggle_main_visible(void)
 {
 	gint x = 0;
@@ -622,6 +659,10 @@ G_MODULE_EXPORT void toggle_main_visible(void)
 	}
 }
 
+
+/*!
+  \brief Turns on/off gauge attributes of a dash (tattletales, etc )
+  */
 G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 {
 	GList *children = NULL;
@@ -656,6 +697,9 @@ G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 }
 
 
+/*!
+  \brief Queries the status of gauge attirbutes for a dashboard
+  */
 G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr attr)
 {
 	gchar * text_attr = NULL;
@@ -689,6 +733,9 @@ G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr att
 }
 
 
+/*!
+  \brief Pops up the menu for the dashboard when right clicked upon the dash
+  */
 G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget)
 {
 	dash_context_popup(widget, NULL);
@@ -696,6 +743,9 @@ G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget)
 }
 
 
+/*!
+  \brief Pops up the menu for the dashboard when right clicked upon the dash
+  */
 G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 {
 	static GtkWidget *menu = NULL;
@@ -813,6 +863,9 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 }
 
 
+/*!
+  \brief Closes the dashboard
+  */
 G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 {
 	gint index = 0;
@@ -834,6 +887,9 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief Enables or disables the dashboard tattletales...
+  */
 G_MODULE_EXPORT gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer data)
 {
 	GtkWidget *widget = (GtkWidget *)data;
@@ -842,6 +898,9 @@ G_MODULE_EXPORT gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer d
 }
 
 
+/*!
+  \brief Conext menu handler that Sets the dashboard to daytime or nitetime mode
+  */
 G_MODULE_EXPORT gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
 {
 	gboolean value;
@@ -852,6 +911,9 @@ G_MODULE_EXPORT gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
 }
 
 
+/*!
+  \brief Gets the dashboard to daytime or nitetime mode
+  */
 G_MODULE_EXPORT gboolean get_dash_daytime_mode(GtkWidget *widget)
 {
 	GtkWidget * dash  = NULL;
@@ -880,6 +942,9 @@ G_MODULE_EXPORT gboolean get_dash_daytime_mode(GtkWidget *widget)
 }
 
 
+/*!
+  \brief Sets the dashboard to daytime or nitetime mode
+  */
 G_MODULE_EXPORT void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
 {
 	GtkWidget * dash  = NULL;
@@ -899,6 +964,9 @@ G_MODULE_EXPORT void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
 }
 
 
+/*!
+  \brief resets the dashboard tattletales for all gauges 
+  */
 G_MODULE_EXPORT gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer data)
 {
 	GList *children = NULL;
@@ -926,6 +994,9 @@ G_MODULE_EXPORT gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer da
 }
 
 
+/*!
+  \brief Toggles the dashboard antialiasing
+  */
 G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer data)
 {
 	GtkWidget *widget = (GtkWidget *)data;
@@ -935,6 +1006,9 @@ G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer dat
 
 
 
+/*!
+  \brief Dash mouse button event handler to handler move/resize
+  */
 G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gint edge = -1;
@@ -1019,6 +1093,10 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 }
 
 
+/*!
+  \brief Initialize dashboard post function. Loads dashboards as previously set
+  from a previous mtx run
+  */
 G_MODULE_EXPORT void initialize_dashboards_pf(void)
 {
 	GtkWidget *widget = NULL;
@@ -1095,6 +1173,9 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 }
 
 
+/*!
+  \brief Presents a filechooser to pick hte dash you want
+  */
 G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -1145,7 +1226,9 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 }
 
 
-
+/*!
+  \brief Removes a dashboard
+  */
 G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *label = NULL;
@@ -1174,6 +1257,10 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+  \brief Removes a dashboard
+  */
 G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 {
 	gint id = 0;
@@ -1205,12 +1292,18 @@ G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpoint
 	return FALSE;
 }
 
+/*! 
+  \brief dummy function that jsut returns true to block signal...
+  */
 G_MODULE_EXPORT gboolean dummy(GtkWidget *widget,gpointer data)
 {
 	return TRUE;
 }
 
 
+/*!
+  \brief creates a gauge for a tab
+  */
 G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 {
 	GtkWidget * gauge = NULL;
@@ -1237,6 +1330,10 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *widget)
 	tab_gauges[table_num] = g_list_prepend(tab_gauges[table_num],gauge);
 }
 
+
+/*!
+  \brief updates tab gauges with new data
+  */
 G_MODULE_EXPORT void update_tab_gauges(void)
 {
 	GtkWidget *gauge = NULL;
@@ -1294,6 +1391,9 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 }
 
 
+/*!
+  \brief Hides dashboard resizers
+  */
 G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 {
 	if (!data)
@@ -1306,6 +1406,10 @@ G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 	return FALSE;
 }
 
+
+/*!
+  \brief Enter/Leave Event handler
+  */
 G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 {
 	GtkWidget *dash = GTK_BIN(widget)->child;
@@ -1326,6 +1430,9 @@ G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *
 }
 
 
+/*!
+  \brief Toggles the dashboard fullscreen status
+  */
 G_MODULE_EXPORT void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dash = OBJ_GET(widget,"dash");
@@ -1348,6 +1455,9 @@ G_MODULE_EXPORT void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief Toggles the dashboard force on top function
+  */
 G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *dash = GTK_BIN(widget)->child;
@@ -1366,6 +1476,9 @@ G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief Toggles the visibility of the remainder of the Gui
+  */
 G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 {
 	/* IF visible, hide them */
@@ -1393,6 +1506,9 @@ G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief updates the values of all gauges on all dashboards in use
+  */
 G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
 {
 	static GMutex *dash_mutex = NULL;
@@ -1409,6 +1525,9 @@ G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
 }
 
 
+/*!
+  \brief Prints the available dashboard choices to std output
+  */
 G_MODULE_EXPORT void print_dash_choices(void)
 {
 	GDir * dir = NULL;
@@ -1456,6 +1575,9 @@ G_MODULE_EXPORT void print_dash_choices(void)
 }
 
 
+/*!
+  \brief Validates the user supplied dashboard choice via the -D option
+  */
 G_MODULE_EXPORT gchar * validate_dash_choice(gchar * choice, gboolean *result)
 {
 	gchar *path = NULL;

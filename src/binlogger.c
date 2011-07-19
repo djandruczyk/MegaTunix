@@ -19,6 +19,10 @@ extern gconstpointer *global_data;
 static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
 
+/*!
+  \brief Opens the binary logs that record the raw serial IO activity for
+  debugging purposes
+  */
 G_MODULE_EXPORT void open_binary_logs(void)
 {
 	GIOChannel *ichan = NULL;
@@ -70,6 +74,9 @@ G_MODULE_EXPORT void open_binary_logs(void)
 }
 
 
+/*!
+  \brief closes the binary logfiles
+  */
 G_MODULE_EXPORT void close_binary_logs(void)
 {
 	GIOChannel *ichan = NULL;
@@ -94,6 +101,9 @@ G_MODULE_EXPORT void close_binary_logs(void)
 }
 
 
+/*!
+  \brief flushes the binary log contents to disk
+  */
 G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 {
 	GIOChannel *ichan = NULL;
@@ -112,6 +122,9 @@ G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 }
 
 
+/*!
+  \brief logs outbound (to ECU) data to the logfile
+  */
 G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
 {
 	GIOChannel *ochan = NULL;
@@ -124,6 +137,9 @@ G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
 }
 
 
+/*!
+  \brief logs inbound (to ECU) data to the logfile
+  */
 G_MODULE_EXPORT void log_inbound_data(const void * buf, size_t count)
 {
 	GIOChannel *ichan = NULL;

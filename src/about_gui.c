@@ -33,6 +33,9 @@ G_MODULE_EXPORT void install_logo(GtkWidget *alignment)
 }
 
 
+/*!
+  \brief Builds the about MegaTunix Tab and loads the main Logo
+  */
 G_MODULE_EXPORT void build_about(GtkWidget *frame)
 {
 	gchar *tmpbuf = NULL;

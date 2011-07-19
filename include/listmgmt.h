@@ -37,7 +37,6 @@ void remove_list(const gchar *);
 gint list_sort(gconstpointer, gconstpointer);
 gint list_object_sort(gconstpointer, gconstpointer, gpointer);
 void free_element(gpointer, gpointer);
-void simple_free_element(gpointer, gpointer);
 /* Prototypes */
 
 #endif

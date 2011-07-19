@@ -23,6 +23,11 @@
 
 
 
+/*!
+  \brief Sets up a megatunix comboboxentry widget. Reads teh data from the 
+  passed ConfigFile *, and sets up the choices as well as the combo model
+  and an entry completion/regex alloing textual based entry.
+  */
 G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;

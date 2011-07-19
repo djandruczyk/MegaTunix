@@ -196,6 +196,9 @@ G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 }
 
 
+/*!
+  \brief logviewer generic button event handler
+  */
 G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
 {
 	Lv_Handler handler;
@@ -232,6 +235,10 @@ G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data
 	return TRUE;
 }
 
+
+/*!
+  \brief logview mouse button event handler
+  */
 G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gint x = 0;

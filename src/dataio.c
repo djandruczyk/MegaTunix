@@ -185,6 +185,9 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 }
 
 
+/*!
+  \brief Wrapper function that does a nonblocking select()/read loop .
+  */
 G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 {
 	gint res = 0;
@@ -226,6 +229,9 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 }
 
 
+/*!
+  \brief wrapper for writing data that handles serial and network modes
+  */
 G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 {
 	gint res = 0;

@@ -917,6 +917,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	}
 
 
+/*!
+  \brief deallocs a dataset
+  */
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 	/*printf("removing data for %s\n",g_quark_to_string(key_id));*/
@@ -947,6 +950,9 @@ G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 }
 
 
+/*!
+  \brief initializes an OutputData structure and returns a pointer to it
+  */
 G_MODULE_EXPORT OutputData * initialize_outputdata(void)
 {
 	OutputData *output = NULL;
@@ -1002,6 +1008,9 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 }
 
 
+/*!
+  \brief deallocs an array
+  */
 G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 {
 	DBlock *db = NULL;
@@ -1243,6 +1252,9 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 }
 
 
+/*!
+  \brief deallocs a lookuptable object
+  */
 G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 {
 	LookupTable * table = (LookupTable *)data;
@@ -1254,6 +1266,9 @@ G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 }
 
 
+/*!
+  \brief Deallocates a gauge (dash)
+  */
 G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 {
 	GtkWidget * widget = (GtkWidget *) data;
@@ -1262,6 +1277,9 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 }
 
 
+/*!
+  \brief Deallocates a widget
+  */
 G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
 	static CmdLineArgs *args = NULL;
@@ -1286,6 +1304,9 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 }
 
 
+/*!
+  \brief deallocates the runtiem text tree model 
+ */
 G_MODULE_EXPORT gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
 {
 	Rt_Text *rtt = NULL;
@@ -1296,6 +1317,9 @@ G_MODULE_EXPORT gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *pat
 	return FALSE;
 }
 
+/*!
+  \brief deallocates an RTT object
+  */
 G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 {
 	Rt_Text *rtt = (Rt_Text *)data;
@@ -1307,6 +1331,9 @@ G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 }
 
 
+/*!
+  \brief deallocates a slider object
+  */
 G_MODULE_EXPORT void dealloc_slider(gpointer data)
 {
 	Rt_Slider *slider = (Rt_Slider *)data;
@@ -1327,6 +1354,9 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 }
 
 
+/*!
+  \brief frees and XML Cmd object
+  */
 G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 {
 	Command *cmd = NULL;
@@ -1341,6 +1371,10 @@ G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 	cleanup(cmd);
 }
 
+
+/*!
+  \brief frees and xml arg object
+  */
 G_MODULE_EXPORT void xml_arg_free(gpointer data)
 {
 	PotentialArg *arg = NULL;
@@ -1353,6 +1387,9 @@ G_MODULE_EXPORT void xml_arg_free(gpointer data)
 }
 
 
+/*!
+  \brief deallocates the hashtable of lists
+  */
 G_MODULE_EXPORT void dealloc_lists_hash(gpointer data)
 {
 	g_hash_table_foreach((GHashTable *)data,(GHFunc)dealloc_list,NULL);
@@ -1360,12 +1397,18 @@ G_MODULE_EXPORT void dealloc_lists_hash(gpointer data)
 }
 
 
+/*! 
+  \brief Deallocates a linked list
+  */
 G_MODULE_EXPORT void dealloc_list(gpointer key, gpointer value, gpointer user_data)
 {
 	g_list_free((GList *)value);
 }
 
 
+/*!
+  \brief generic cleanup function
+  */
 G_MODULE_EXPORT void cleanup(void *data)
 {
 	if (data)

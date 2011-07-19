@@ -99,6 +99,16 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 }
 
 
+
+/*!
+ \brief _set_sized_data() is a func to set the data requested.
+ The data is casted to the passed type.
+ \param data array of data to store
+ \param offset (RAW BYTE offset)
+ \param size (size to be stored)
+ \param new (data to be stored)
+ \param bigendian (Flag to flip bytes or not)
+ */
 G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new, gboolean bigendian)
 {
 	guint16 u16 = 0;

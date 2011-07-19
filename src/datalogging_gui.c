@@ -514,6 +514,9 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 }
 
 
+/*!
+  \brief dumps the automatic datalog blob to disk on its periodic basis
+  */
 G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
 {
 	CmdLineArgs *args = NULL;
@@ -538,6 +541,9 @@ G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
 }
 
 
+/*!
+  \brief dumps the internally running datalog to disk
+  */
 G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;

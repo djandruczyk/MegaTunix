@@ -1206,6 +1206,10 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 }
 
 
+/*!
+  \brief Validates the input is numeric/puntuation (numbers) and filters
+  as necessary
+  */
 G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos, gpointer data)
 {
 	gint count = 0;
@@ -1591,6 +1595,9 @@ G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 }
 
 
+/*!
+  \brief gets the bitshift from the provided mask 
+  */
 G_MODULE_EXPORT guint get_bitshift(guint mask)
 {
 	gint i = 0;
@@ -1600,6 +1607,10 @@ G_MODULE_EXPORT guint get_bitshift(guint mask)
 	return 0;
 }
 
+
+/*
+ \brief sets the value of a miscelaneous gauge
+ */
 G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 {
 	if (GTK_IS_WIDGET(watch->user_data))
@@ -1609,6 +1620,9 @@ G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 }
 
 
+/*!
+  \brief Gets the min/max based on the size enumeration passed 
+  */
 G_MODULE_EXPORT glong get_extreme_from_size(DataSize size,Extreme limit)
 {
 	glong lower_limit = 0;
@@ -1657,7 +1671,9 @@ G_MODULE_EXPORT glong get_extreme_from_size(DataSize size,Extreme limit)
 }
 
 
-/* Clamps a value to it's limits and updates if needed */
+/*!
+  \brief Clamps a value to it's limits and updates if needed 
+ */
 G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 {
 	gint lower = 0;
@@ -1694,6 +1710,10 @@ G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief refocuses a cell based on a direction to go within a table. 
+  This is hacky and I don't like it at all
+  */
 G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 {
 	gchar *widget_name = NULL;
@@ -1966,6 +1986,9 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 }
 
 
+/*!
+  \brief If a comboboxentry has a "set_labels" attribute handle it
+  */
 void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
 {
 	gint total = 0;
@@ -1995,6 +2018,9 @@ void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
 }
 
 
+/*!
+  \brief Get the total number of choices for a treemodel
+  */
 G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
 {
 	gboolean valid = TRUE;
@@ -2046,6 +2072,9 @@ G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
 
 
 
+/*!
+  \brief Sets the text in a widget based on the passed index (data)
+  */
 G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
 {
 	gchar *labels = NULL;
@@ -2136,6 +2165,10 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 }
 
 
+/*!
+  \brief Calls the process_interdependancy function for each item in the 
+  global dep_list List
+  */
 G_MODULE_EXPORT void update_interdependancies_pf()
 {
 	GList *list = NULL;
@@ -2146,6 +2179,10 @@ G_MODULE_EXPORT void update_interdependancies_pf()
 }
 
 
+/*!
+  \brief Calls the process_source function for each item in the 
+  global souce_list List
+  */
 G_MODULE_EXPORT void update_sources_pf()
 {
 	GList *list = NULL;
@@ -2156,6 +2193,10 @@ G_MODULE_EXPORT void update_sources_pf()
 }
 
 
+/*!
+  \brief deals with interdepenant controls loaded after ECU state is loaded
+  i.e. deferred tabs
+  */
 void process_interdependancy(gpointer data, gpointer nothing)
 {
 	GObject *object = (GObject *)data;
@@ -2199,6 +2240,10 @@ void process_interdependancy(gpointer data, gpointer nothing)
 }
 
 
+/*!
+  \brief deals with mult_source controls loaded after ECU state is loaded
+  i.e. deferred tabs
+  */
 void process_source(gpointer data, gpointer nothing)
 {
 	static GHashTable *sources_hash = NULL;

@@ -153,6 +153,10 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 }
 
 
+/*!
+  \brief Finialized the core base Gui, and initializes thins that can't be
+  done in glade.
+  */
 G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 {
 	/* Initializes base gui and installs things like the logo and
@@ -452,6 +456,10 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 }
 
 
+/*!
+  \brief Initializes the status icons at the top of the bar to indicate things
+  like connected/disconnected, errors, etc
+  */
 void setup_main_status(GtkWidget *parent)
 {
 	GtkWidget * image = NULL;
@@ -476,6 +484,9 @@ void setup_main_status(GtkWidget *parent)
 }
 
 
+/*!
+  \brief Sets the connected/disconnected icons as appropriate
+  */
 void set_connected_icons_state(gboolean state)
 {
 	static GtkWidget * conn = NULL;
@@ -491,13 +502,11 @@ void set_connected_icons_state(gboolean state)
 
 	if (state)
 	{
-		printf("Connected!!\n");
 		gtk_widget_set_sensitive(conn, TRUE);
 		gtk_widget_set_sensitive(disconn, FALSE);
 	}
 	else
 	{
-		printf("DisConnected!!\n");
 		gtk_widget_set_sensitive(conn, FALSE);
 		gtk_widget_set_sensitive(disconn, TRUE);
 	}

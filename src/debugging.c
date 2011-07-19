@@ -85,6 +85,9 @@ G_MODULE_EXPORT void open_debug(void)
 }
 
 
+/*!
+  \brief Closes the debug log iochannel
+  */
 G_MODULE_EXPORT void close_debug(void)
 {
 	g_static_mutex_lock(&dbg_mutex);
@@ -142,6 +145,9 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 	g_static_mutex_unlock(&dbg_mutex);
 }
 
+/*!
+  \brief Populates the debugging tab with the choices
+  */
 G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 {
 	GtkWidget *vbox2 = NULL;

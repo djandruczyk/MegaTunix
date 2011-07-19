@@ -65,6 +65,9 @@ G_MODULE_EXPORT void remove_list(const gchar *key)
 }
 
 
+/*!
+  \brief Does a string comparison on two list elements
+  */
 G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
 {
 	ListElement *a1 = (ListElement *)a;
@@ -73,6 +76,9 @@ G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
 }
 
 
+/*!
+  \brief does a list object string comparison
+  */
 G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
 {
 	const gchar *key = (const gchar *)data;
@@ -80,15 +86,13 @@ G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer
 }
 
 
+/*!
+  \brief free's a ListElement Structure
+  */
 G_MODULE_EXPORT void free_element(gpointer data, gpointer user_data)
 {
 	ListElement *a = (ListElement *)data;
 	g_free(a->filename);
 	g_free(a->name);
 	g_free(a);
-}
-
-G_MODULE_EXPORT void simple_free_element(gpointer data, gpointer user_data)
-{
-	g_free((gchar *)data);
 }
