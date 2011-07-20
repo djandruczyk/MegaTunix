@@ -326,6 +326,12 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
 }
 
 
+/*!
+  \brief Retrieves the response from the offline mode dialog box choice
+  \param widget
+  \param data, the response as a integer
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 {
 	gint response = (GINT)data;
@@ -396,6 +402,10 @@ G_MODULE_EXPORT void set_title(gchar * text)
 	g_free(text);
 }
 
+
+/*!
+  \brief enables the static warning present flag
+  */
 G_MODULE_EXPORT gboolean set_warning_flag(gpointer user_data)
 {
 	warning_present = FALSE;

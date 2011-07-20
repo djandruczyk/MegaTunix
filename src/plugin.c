@@ -21,6 +21,16 @@
 
 extern gconstpointer *global_data;
 
+
+/*!
+  \brief Attempts the resolve the function named within the widget. If 
+  function_name is defined and the func ptr is null, we try and find it, if
+  so store a ptr to it, else log the error. IF func found, run it and return
+  the result of it.
+  \param widget, widget containing the function name/ptr
+  \param data, second arg to function that we call (if found )
+  \returns result of function call or FALSE if func not found;
+  */
 G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 {
 	gchar * func_name = NULL;
@@ -44,6 +54,12 @@ G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief initializes pointers to megatunix itself the core family plugin and
+  the ECU specific plugin, then searches for and attempts to call the 
+  "plugin_init()" function within each to initialize any datastructures, 
+  handlers, threads within each plugin
+  */
 G_MODULE_EXPORT void plugins_init()
 {
 	GModule *module[3] = {NULL,NULL,NULL};
@@ -124,6 +140,11 @@ G_MODULE_EXPORT void plugins_init()
 }
 
 
+/*!
+  \brief Stops the thread_dispatcher thread, and lookups up "plugin_shutdown"
+  within each plugin and calls them in turn to have them shutdown any resources
+  or threads, in preparation for plugin unloading.
+  */
 G_MODULE_EXPORT void plugins_shutdown()
 {
 	GModule *module = NULL;
@@ -156,6 +177,14 @@ G_MODULE_EXPORT void plugins_shutdown()
 }
 
 
+/*!
+  \brief searches for a function name within megatunix, the core plugin and 
+  the ecu specific plugin, if found, it sets the passed pointer to the 
+  found function pointer as well as return TRUE
+  \param name, the name of the function to find
+  \param function_p, pointer to be filled with the address of the function
+  \returns TRUE on success, false on failure
+  */
 G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 {
 	GModule *module[3] = {NULL,NULL,NULL};

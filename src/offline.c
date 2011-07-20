@@ -393,12 +393,11 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	return NULL;
 }
 
-G_MODULE_EXPORT gint ptr_sort(gconstpointer a, gconstpointer b)
-{
-	return strcmp((gchar *)a, (gchar *) b);
-}
 
-
+/*!
+  \brief initiates an offline ECU restore from file. Prompts for file, if
+  valid, it calles the restore_all function from the ECU plugin
+  */
 G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 {
 	MtxFileIO *fileio = NULL;

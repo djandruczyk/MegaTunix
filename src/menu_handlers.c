@@ -38,6 +38,12 @@ static struct
 	{"backup_ecu_menuitem",ECU_BACKUP},
 };
 
+
+/*!
+  \brief Sets up the menu handlers and additional menu options as well as 
+  calling the common plugin's menu setup handler. (which in turn calls the
+  ecu specific plugin handler)
+  */
 G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 {
 	void (*common_plugin_menu_setup)(GladeXML *);

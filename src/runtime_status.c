@@ -132,6 +132,13 @@ G_MODULE_EXPORT void load_status_pf(void)
 }
 
 
+/*!
+  \brief Traverses the runtime status XML config file and creates the RTS 
+  structures and adds them to the parent
+  \param a_node, XML node
+  \param parent, parent widget thisrts entity shouldbe placed in
+  \returns FALSE at EOF, TRUE otherwise
+  */
 G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
@@ -157,6 +164,11 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
 }
 
 
+/*!
+  \brief loads the runtime status XML
+  \param node XML node the start from
+  \param parent parent widget
+  */
 G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 {
 	gchar *txt = NULL;

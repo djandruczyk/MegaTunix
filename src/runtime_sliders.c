@@ -158,6 +158,16 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 }
 
 
+/*!
+  \brief loads runtime status XML elements by iterating down recursively 
+  through the passed XML node
+  \param a_node, current XML node we are traversing
+  \param prefix the prefix we are searching for in the XML (section)
+  \param hash, pointer to hashtable to store the created RTS structure
+  \param table_num, table number within this tab
+  \param tab_id, Tab identifier enumeration
+  \returns FALSE when at end of file, TRUE otherwise
+  */
 G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash, gint table_num, TabIdent tab_id)
 {
 	xmlNode *cur_node = NULL;
@@ -182,6 +192,15 @@ G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *pre
 	return TRUE;
 }
 
+
+/*!
+  \brief loads runtime status details from XML, creates the slider and inserts
+  it into the hash table
+  \param node, current XML node
+  \param hash, hashtable to stic kthe resulting RTS structure into
+  \param table_num, table number on this tab
+  \param tab_id, Tab identification enumeration
+  */
 G_MODULE_EXPORT void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
 {
 	gchar *slider_name = NULL;
@@ -548,18 +567,31 @@ G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 }
 
 
+/*!
+  \brief Runtime slider button handler, not used yet.
+  */
 G_MODULE_EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	return TRUE;
 }
 
 
+/*!
+  \brief Runtime slider motion handler, not used yet.
+  */
 G_MODULE_EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	return TRUE;
 }
 
 
+/*!
+  \brief Accel enrichment slider limit checker, This takes care fo the special 
+  0/100 cases where controls should be enabled/disabled as appropriate
+  \param widget, the slider/range
+  \param data, unused
+  \returns FALSE to let other signals run
+  */
 G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data)
 {
 	gboolean mapae_ctrl_state = FALSE;
@@ -587,6 +619,11 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
 }
 
 
+/*!
+  \brief Updates the runtime sliders on whichever tab is active, by calling
+  rt_update_values for each element of the hashtable
+  \param data, unused
+  */
 G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 {
 	gfloat coolant = 0.0;

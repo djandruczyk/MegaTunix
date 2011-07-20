@@ -145,6 +145,10 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	DATA_SET_FULL(object,"multi_expr_hash",hash,g_hash_table_destroy);
 }
 
+
+/*!
+  \brief frees up the resources for a MultiExpr structure
+  */
 G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
 	MultiExpr *multi = (MultiExpr *)data;
@@ -155,6 +159,9 @@ G_MODULE_EXPORT void free_multi_expr(gpointer data)
 }
 
 
+/*!
+  \brief frees up the resource for a MultiSource structure
+  */
 G_MODULE_EXPORT void free_multi_source(gpointer data)
 {
 	MultiSource *multi = (MultiSource *)data;
