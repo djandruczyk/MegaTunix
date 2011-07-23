@@ -19,15 +19,16 @@
 
 /*!
  \brief build_about makes the about tab and presents the MegaTunix logo
+ \param parent, container to place the logo in
  */
-G_MODULE_EXPORT void install_logo(GtkWidget *alignment)
+G_MODULE_EXPORT void install_logo(GtkWidget *parent)
 {
 	GdkPixbuf *pixbuf;
 	GtkWidget *image;
 
 	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
-	gtk_container_add (GTK_CONTAINER (alignment), image);
+	gtk_container_add (GTK_CONTAINER (parent), image);
 	return;
 
 }
@@ -35,6 +36,7 @@ G_MODULE_EXPORT void install_logo(GtkWidget *alignment)
 
 /*!
   \brief Builds the about MegaTunix Tab and loads the main Logo
+  \param frame, parent frame for about window
   */
 G_MODULE_EXPORT void build_about(GtkWidget *frame)
 {
