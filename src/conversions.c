@@ -30,10 +30,10 @@ extern gconstpointer *global_data;
 /*!
  \brief convert_before_download() converts the value passed using the
  conversions bound to the widget
- \param widget (GtkWidget *) widget to extract the conversion info from
- \param value (gfloat *) the "real world" value from the tuning gui before
- translation to MS-units
- \returns the integere ms-units form after conversion
+ \param widget, widget to extract the conversion info from
+ \param value, the "real world" value from the tuning gui before
+ translation to ECU-units
+ \returns the integer ECU-units form after conversion
  */
 G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 {
@@ -220,9 +220,9 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 
 /*!
- \brief convert_after_upload() converts the ms-units data to the real world
+ \brief convert_after_upload() converts the ECU-units data to the real world
  units for display on the GUI
- \param widget (GtkWidget *) to extract the conversion info from to perform
+ \param widget, to extract the conversion info from to perform
  the necessary math
  \returns the real world value for the GUI
  */
@@ -437,10 +437,10 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 /*!
  \brief convert_temps() changes the values of controls based on the currently
- selected temperature scale.  IT works for labels, spinbuttons, etc...
- \param widget (gpointer) pointer to the widget that contains the necessary
+ selected temperature scale.  It works for labels, spinbuttons, etc...
+ \param widget, pointer to the widget that contains the necessary
  paramaters re temp (Alt label, etc)
- \param units (gpointer) the temp scale selected
+ \param units, the temp scale selected
  */
 G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 {
@@ -691,13 +691,11 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 /*!
  \brief reset_temps() calls the convert_temps function for each widget in
  the "temperature" list
- \param type (gpointer) the temp scale now selected
+ \param type, the temp scale now selected
  */
 G_MODULE_EXPORT void reset_temps(gpointer type)
 {
-	/* Better way.. :) */
 	g_list_foreach(get_list("temperature"),convert_temps,type);
-
 }
 
 
@@ -743,7 +741,7 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 
 /*!
   \brief Converts temps to the scale that the ECU expects
-  \param temp in host (mtx user) scale
+  \param temp, in host (mtx user) scale
   \returns temp in ECU scale
   */
 G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
@@ -848,6 +846,10 @@ G_MODULE_EXPORT gdouble k_to_c(gdouble in)
 
 /*!
   \brief Calculates the result based on the passed multiplier, adder, conversion cdirection (to/from ecu) and raw input)
+  \param in, input value
+  \param mult, pointer to multiplier
+  \param add, pointer to adder
+  \param dir, enumeration defining theconversion direction, i.e. TO/FROM Ecu
   \returns the calculated result
   */
 G_MODULE_EXPORT gfloat calc_value(gfloat in, gfloat *mult, gfloat *add, ConvDir dir)

@@ -32,7 +32,7 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief update_comms_status updates the Gui with the results of the comms
+ \brief Updates the Gui with the results of the comms
  test.  This is decoupled from the comms_test due to threading constraints.
  \see comms_test
  */
@@ -50,7 +50,7 @@ G_MODULE_EXPORT void update_comms_status(void)
 
 /*!
  \brief write_data() physically sends the data to the ECU.
- \param message (Io_Message *) a pointer to a Io_Message
+ \param message (Io_Message *) a pointer to an Io_Message structure
  */
 G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
@@ -189,6 +189,9 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 /*!
   \brief Enumerates the contents of /dev to be used when looking for a 
   serial port device on Linux or OS-X
+  \param widget, unused
+  \param data, unused
+  \returns TRUE
   */
 G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 {
@@ -296,7 +299,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	for (i=0;i<g_list_length(found);i++)
 		g_free(g_list_nth_data(found,i));
 	g_list_free(found);
-	
+
 	return TRUE;
 #else
 	return TRUE;
@@ -307,12 +310,17 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 /*!
   \brief Checks the potential ports config var for the existance of this
   port, if so, return TRUE else return FALSE
+  \param name,  port name to search for...
   */
 gboolean check_potential_ports(const gchar *name)
 {
 	gchar * ports = NULL;
 	gboolean retval = FALSE;
+#ifdef __WIN32__
+	gchar *searchstr = g_strdup_printf("%s",name);
+#else
 	gchar *searchstr = g_strdup_printf("/dev/%s",name);
+#endif
 	ports = (gchar *)DATA_GET(global_data,"potential_ports");
 	if (g_strrstr(ports,searchstr))
 		retval = TRUE;

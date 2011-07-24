@@ -60,9 +60,9 @@ extern GdkColor white;
 /*!
  \brief leave() is the main shutdown function for MegaTunix. It shuts down
  whatever runnign handlers are still going, deallocates memory and quits
- \param widget (GtkWidget *) unused
- \param data (gpointer) quiet or not quiet, leave mode .quiet doesn't prompt 
- to save anything
+ \param widget, unused
+ \param data, unused
+ \returns TRUE
  */
 G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
@@ -254,7 +254,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
  \brief comm_port_override() is called every time the comm port text entry
  changes. it'll try to open the port and if it does it'll setup the serial 
  parameters
- \param editable (GtkEditable *) pointer to editable widget to extract text from
+ \param editable, pointer to editable widget to extract text from
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
@@ -277,8 +277,8 @@ G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 
 /*!
  \brief toggle_button_handler() handles all toggle buttons in MegaTunix
- \param widget (GtkWidget *) the toggle button that changes
- \param data (gpointer) unused in most cases
+ \param widget, the toggle button that changes
+ \param data, unused in most cases
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
@@ -441,8 +441,8 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
  of bits in a variable (i.e. a var shared by multiple controls),  most commonly
  used for check/radio buttons referring to features that control single
  bits in the firmware
- \param widget (Gtkwidget *) widget being changed
- \param data (gpointer) not really used 
+ \param widget, widget being changed
+ \param data, unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
@@ -503,8 +503,8 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
  \brief entry_changed_handler() gets called anytime a text entries is changed
  (i.e. during edit) it's main purpose is to turn the entry red to signify
  to the user it's being modified but not yet SENT to the ecu
- \param widget (GtkWidget *) the widget being modified
- \param data (gpointer) not used
+ \param widget, the widget being modified
+ \param data, unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
@@ -523,9 +523,9 @@ G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 /*!
  \brief focus_out_handler() auto-sends data IF IT IS CHANGED to the ecu thus
  hopefully ending the user confusion about why data isn't sent.
- \param widget (GtkWidget *) the widget being modified
- \param event (GdkEvent *) not used
- \param data (gpointer) not used
+ \param widget, the widget being modified
+ \param event, unused
+ \param data, unused
  \returns FALSE
  */
 G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *event, gpointer data)
@@ -545,8 +545,12 @@ G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *eve
 
 
 /*!
- * \brief slider_value_changed() handles controls based upon a slider
- * sort of like spinbutton controls
+ \brief slider_value_changed() handles controls based upon a slider
+ sort of like spinbutton controls
+ \param widget, pointer to slider widget
+ \param data, unused
+ \returns, if paused/not ready, return TRUE, otherwise call plugin handler
+ and returm whatever it returns
  */
 G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 {

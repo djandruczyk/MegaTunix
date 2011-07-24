@@ -24,9 +24,12 @@
 
 
 /*!
-  \brief Sets up a megatunix comboboxentry widget. Reads teh data from the 
+  \brief Sets up a megatunix comboboxentry widget. Reads the data from the 
   passed ConfigFile *, and sets up the choices as well as the combo model
   and an entry completion/regex alloing textual based entry.
+  \param object, pointer to combo widget object
+  \param cfgfile, pointer to datamap file assocated with this widget
+  \param section, section within the cfgfile
   */
 G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 {

@@ -24,7 +24,7 @@
  for message on the dispatch queue which handles gui operations after a thread
  function runs, This will attempt to handle multiple messages at a time if the
  queue has multiple message queued up.
- \param data (gpointer) unused
+ \param data, unused
  \returns TRUE 
  */
 G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
@@ -141,7 +141,7 @@ fast_exit:
  for message on the dispatch queue which handles gui operations after a thread
  function runs, This will attempt to handle multiple messages at a time if the
  queue has multiple message queued up.
- \param data (gpointer) unused
+ \param data, unused
  \returns TRUE 
  */
 G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)

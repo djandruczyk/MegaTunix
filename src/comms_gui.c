@@ -40,7 +40,7 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 
 /*!
  \brief update_errcounts() updates the text entries on the gui with the 
- current statistical error and i/O counters
+ current status, error and I/O counters
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean update_errcounts(void)

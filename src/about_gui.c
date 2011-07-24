@@ -71,6 +71,9 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
 
 /*!
  \brief about_popup makes the about tab and presents the MegaTunix logo
+ \param widget, unused
+ \param data, unused
+ \returns TRUE
  */
 G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 {
