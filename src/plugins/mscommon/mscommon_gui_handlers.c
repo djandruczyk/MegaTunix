@@ -160,7 +160,6 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		if (OBJ_GET(widget,"table_num"))
 		{
 			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-			//if (firmware->table_params[table_num]->color_update == FALSE)
 			if (firmware->table_params[table_num]->color_update)
 			{
 				recalc_table_limits_f(canID,table_num);
