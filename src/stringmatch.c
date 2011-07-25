@@ -147,6 +147,12 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(TRACKING_FOCUS));
 	g_hash_table_insert(str_2_enum,"_MS2_USER_OUTPUTS_",
 			GINT_TO_POINTER(MS2_USER_OUTPUTS));
+	g_hash_table_insert(str_2_enum,"_TOGGLE_KELVIN_",
+			GINT_TO_POINTER(TOGGLE_KELVIN));
+	g_hash_table_insert(str_2_enum,"_TOGGLE_CELSIUS_",
+			GINT_TO_POINTER(TOGGLE_CELSIUS));
+	g_hash_table_insert(str_2_enum,"_TOGGLE_FAHRENHEIT_",
+			GINT_TO_POINTER(TOGGLE_FAHRENHEIT));
 
 	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",

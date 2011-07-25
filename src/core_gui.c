@@ -219,17 +219,17 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Temp Scales */
 	button = glade_xml_get_widget(xml,"fahrenheit_rbutton");
-	OBJ_SET(button,"handler",GINT_TO_POINTER(FAHRENHEIT));
+	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_FAHRENHEIT));
 	if (mtx_temp_units == FAHRENHEIT)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	button = glade_xml_get_widget(xml,"celsius_rbutton");
-	OBJ_SET(button,"handler",GINT_TO_POINTER(CELSIUS));
+	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_CELSIUS));
 	if (mtx_temp_units == CELSIUS)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	button = glade_xml_get_widget(xml,"kelvin_rbutton");
-	OBJ_SET(button,"handler",GINT_TO_POINTER(KELVIN));
+	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_KELVIN));
 	if (mtx_temp_units == KELVIN)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 

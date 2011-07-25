@@ -508,7 +508,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	for (i=0;i<command->args->len;i++)
 	{
 		arg = g_array_index(command->args,PotentialArg *, i);
-		switch (arg->type)
+		switch ((GINT)arg->type)
 		{
 			case ACTION:
 				/*printf("build_output_message(): ACTION being created!\n");*/
@@ -704,9 +704,9 @@ G_MODULE_EXPORT void mtxlog_packet(const void *buf, size_t len, gboolean toecu)
 	guint8 *ptr = (guint8 *)buf;
 
 	if (toecu)
-		dbg_func_f(PACKETS,g_strdup_printf(__FILE__": mtxlog_packet\n\tPacket TO ECU %i bytes \n\t",len));
+		dbg_func_f(PACKETS,g_strdup_printf(__FILE__": mtxlog_packet\n\tPacket TO ECU %i bytes \n\t",(gint)len));
 	else
-		dbg_func_f(PACKETS,g_strdup_printf(__FILE__": mtxlog_packet\n\tPacket FROM ECU %i bytes \n\t",len));
+		dbg_func_f(PACKETS,g_strdup_printf(__FILE__": mtxlog_packet\n\tPacket FROM ECU %i bytes \n\t",(gint)len));
 	for (i=0;i<len;i++)
 	{
 		dbg_func_f(PACKETS,g_strdup_printf("%.2X ",ptr[i]));
