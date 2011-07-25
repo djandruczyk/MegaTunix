@@ -73,7 +73,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 		g_signal_handlers_unblock_by_func (widget,(gpointer)entry_changed_handler_f, data);
 		g_signal_handlers_unblock_by_func (widget,(gpointer)std_entry_handler_f, data);
 	}
-	switch ((MtxButton)handler)
+	switch ((MS1MtxButton)handler)
 	{ 
 		case TRIGGER_ANGLE:
 			offset = (GINT)OBJ_GET(widget,"spconfig_offset");
@@ -246,7 +246,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 
 	tmpi = (int)(value+.001);
 
-	switch ((MtxButton)handler)
+	switch ((MS1MtxButton)handler)
 	{
 		case TRIGGER_ANGLE:
 			offset = (GINT)OBJ_GET(widget,"spconfig_offset");
@@ -346,7 +346,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 
 	handler = (GINT)OBJ_GET(widget,"handler");
 
-	switch ((MS1MtxButton)handler)
+	switch ((MS1MtxStdButton)handler)
 	{
 		case REBOOT_GETERR:
 			if (DATA_GET(global_data,"offline"))
@@ -376,7 +376,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{       /* It's pressed (or checked) */
-		switch ((MS1ToggleButton)handler)
+		switch ((MS1MtxToggleButton)handler)
 		{
 
 			case START_TOOTHMON_LOGGER:

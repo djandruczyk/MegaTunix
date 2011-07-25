@@ -89,6 +89,9 @@ void register_ecu_enums(void)
 				GINT_TO_POINTER(TRIGGER_ANGLE));
 		g_hash_table_insert(str_2_enum,"_ODDFIRE_ANGLE_",
 				GINT_TO_POINTER(ODDFIRE_ANGLE));
+		/* Std button handlers */
+		g_hash_table_insert(str_2_enum,"_REBOOT_GETERR_",
+	                        GINT_TO_POINTER(REBOOT_GETERR));		
 	}
 }
 
@@ -107,5 +110,7 @@ void deregister_ecu_enums(void)
 		/* Oddball Trigger angle/oddfire angle special handlers */
 		g_hash_table_remove(str_2_enum,"_TRIGGER_ANGLE_");
 		g_hash_table_remove(str_2_enum,"_ODDFIRE_ANGLE_");
+		/* Std button handlers */
+		g_hash_table_remove(str_2_enum,"_REBOOT_GETERR_");
 	}
 }

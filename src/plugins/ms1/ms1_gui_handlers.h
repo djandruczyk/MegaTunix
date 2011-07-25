@@ -23,7 +23,7 @@ typedef enum
         STOP_TOOTHMON_LOGGER,
         START_TRIGMON_LOGGER,
         STOP_TRIGMON_LOGGER
-}MS1ToggleButton;
+}MS1MtxToggleButton;
 
 typedef enum
 {
@@ -31,6 +31,10 @@ typedef enum
         ODDFIRE_ANGLE
 }MS1MtxButton;
 
+typedef enum
+{
+	REBOOT_GETERR = LAST_COMMON_STD_BUTTON_ENUM + 1
+}MS1MtxStdButton;
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
