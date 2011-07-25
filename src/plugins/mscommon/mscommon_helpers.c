@@ -50,7 +50,7 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 }
 
 
-G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall type)
+G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 {
 	OutputData *output = NULL;
 	Command *command = NULL;
@@ -60,7 +60,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall type)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	last_page = (gint)DATA_GET(global_data,"last_page");
+	last_page = (GINT)DATA_GET(global_data,"last_page");
 
 	if (last_page == -1)
 	{
@@ -69,7 +69,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall type)
 		return TRUE;
 	}
 	/*printf("burn all helper\n");*/
-	if ((type != MS2) && (type != MS1))
+	if ((firmware->capabilities & MS2) && (firmware->capabilities & MS1))
 		return FALSE;
 	if (!DATA_GET(global_data,"offline"))
 	{
@@ -105,7 +105,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall type)
 	return TRUE;
 }
 
-G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
+G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall func)
 {
 	gint last_page;
 	OutputData *output = NULL;
@@ -115,8 +115,8 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall type)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	last_page = (gint)DATA_GET(global_data,"last_page");
-	switch (type)
+	last_page = (GINT)DATA_GET(global_data,"last_page");
+	switch (func)
 	{
 		case MS1_VECONST:
 
@@ -274,7 +274,7 @@ G_MODULE_EXPORT void enable_ttm_buttons_pf(void)
 }
 
 
-G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
+G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall func)
 {
 	static guint16 lastcount = 0;
 	static gboolean just_starting = TRUE;
@@ -295,7 +295,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall type)
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
 
-	switch (type)
+	switch (func)
 	{
 		case WRITE_VERIFY:
 			printf(_("MS2_WRITE_VERIFY not written yet\n"));

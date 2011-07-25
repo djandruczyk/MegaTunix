@@ -43,9 +43,9 @@ G_MODULE_EXPORT void common_gui_init(void)
 G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
-	FreeEMSToggleButton handler;
+	FreeEMSCommonMtxToggleButton handler;
 
-	handler = (FreeEMSToggleButton)OBJ_GET(widget,"handler");
+	handler = (FreeEMSCommonMtxToggleButton)OBJ_GET(widget,"handler");
 
 	switch (handler)
 	{
@@ -69,9 +69,9 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
-	FreeEMSStdButton handler;
+	FreeEMSCommonMtxStdButton handler;
 
-	handler = (FreeEMSStdButton)OBJ_GET(widget,"handler");
+	handler = (FreeEMSCommonMtxStdButton)OBJ_GET(widget,"handler");
 
 	switch (handler)
 	{
@@ -132,7 +132,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	static Firmware_Details *firmware = NULL;
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	GdkColor black = {0,0,0,0};
-	gint handler = -1;
+	FreeEMSCommonMtxButton handler;
 	gchar *text = NULL;
 	gchar *tmpbuf = NULL;
 	gfloat tmpf = -1;
@@ -163,7 +163,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
-	handler = (MtxButton)OBJ_GET(widget,"handler");
+	handler = (FreeEMSCommonMtxButton)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	precision = (GINT) OBJ_GET(widget,"precision");
 	get_essentials(widget,&locID,&offset,&size,&precision);

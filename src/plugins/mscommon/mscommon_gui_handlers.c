@@ -1019,7 +1019,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 
 	tmpi = (int)(value+.001);
 
-	switch ((MtxButton)handler)
+	switch ((MSCommonMtxButton)handler)
 	{
 		case REQ_FUEL_1:
 		case REQ_FUEL_2:

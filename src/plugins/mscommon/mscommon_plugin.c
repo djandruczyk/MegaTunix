@@ -212,6 +212,8 @@ void register_common_enums(void)
 		g_hash_table_insert (str_2_enum, "_RESULT_TEXT_",
 				GINT_TO_POINTER (RESULT_TEXT));
 		/* Common Handlers */
+		g_hash_table_insert(str_2_enum,"_GENERIC_",
+	                        GINT_TO_POINTER(GENERIC));
 		g_hash_table_insert (str_2_enum, "_NUM_SQUIRTS_1_",
 				GINT_TO_POINTER (NUM_SQUIRTS_1));
 		g_hash_table_insert (str_2_enum, "_NUM_SQUIRTS_2_",
@@ -335,6 +337,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_RESULT_DATA_");
 		g_hash_table_remove (str_2_enum, "_RESULT_TEXT_");
 		/* Common Handlers */
+		g_hash_table_remove (str_2_enum, "_GENERIC_");
 		g_hash_table_remove (str_2_enum, "_NUM_SQUIRTS_1_");
 		g_hash_table_remove (str_2_enum, "_NUM_SQUIRTS_2_");
 		g_hash_table_remove (str_2_enum, "_NUM_CYLINDERS_1_");

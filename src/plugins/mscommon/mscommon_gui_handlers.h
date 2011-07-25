@@ -34,7 +34,8 @@ typedef enum
 
 typedef enum
 {
-	NUM_SQUIRTS_1 = LAST_BUTTON_ENUM + 3,
+	GENERIC = LAST_BUTTON_ENUM + 3,
+	NUM_SQUIRTS_1,
 	NUM_SQUIRTS_2,
 	NUM_CYLINDERS_1,
 	NUM_CYLINDERS_2,
@@ -47,6 +48,7 @@ typedef enum
 	ALT_SIMUL,
 	LAST_COMMON_BUTTON_ENUM
 }MSCommonMtxButton;
+
 /* Prototypes */
 gboolean common_std_button_handler(GtkWidget *, gpointer);
 gboolean common_toggle_button_handler(GtkWidget *, gpointer);
