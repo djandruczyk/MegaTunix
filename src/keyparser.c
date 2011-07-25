@@ -19,9 +19,9 @@
 /*!
  \brief parse_keys() splits up a string list into a vector and returns it
  and the number of keys
- \param string (gchar *) input string
- \param count (gint *) reference to dest to place number of keys
- \param delimiter (gchar *) char to split the string with
+ \param string, input string
+ \param count, reference to dest to place number of keys
+ \param delimiter, char to split the string with
  \returns a string vector of the original string split up with the delimiter
  */
 G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gchar *delimiter)
@@ -42,9 +42,9 @@ G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gc
 /*!
  \brief parse_keytypes() splits up a string list and converts the individual 
  values into enumerations
- \param string (gchar *) input string
- \param count (gint *) reference to dest to place number of keys
- \param delimiter (gchar *) char to split the string with
+ \param string, input string
+ \param count, reference to dest to place number of keys
+ \param delimiter, char to split the string with
  \returns a dynamic integer array of the keystypes (enums)
  */
 G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const gchar *delimiter)

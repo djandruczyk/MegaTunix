@@ -25,9 +25,9 @@ extern Logview_Data *lv_data;
 /*! 
  \brief lv_configure_event() is the logviewer configure event that gets called
  whenever the display is resized or created
- \param widget (GtkWidget *) pointer to widget receiving event
- \param event (GdkEventConfigure *) pointerto event structure
- \param data (gpointer) unused)
+ \param widget, pointer to widget receiving event
+ \param event, pointer to Config event structure
+ \param data, unused)
  \returns FALSE
  */
 G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
@@ -89,9 +89,9 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 /*!
  \brief lv_expose_event() is called whenever part of the display is uncovered
  so that the screen can be redraw from the backing pixmap
- \param widget (GtkWidget *) widget receiving the event
- \param event (GdkEventExpose *) event structure
- \param data (gpointer) unused
+ \param widget, pointer to widget receiving the event
+ \param event, pointer to Expose event structure
+ \param data, unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -115,9 +115,9 @@ G_MODULE_EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *even
  \brief lv_mouse_motion_event() is called whenever there is pointer motion on the
  logviewer.  We use this to context highlight things and provide for popup
  menus...
- \param widget (GtkWidget *) widget receiving the event
- \param event (GdkEventMotion *) motion event structure
- \param data (gpointer) unused
+ \param widget, widget receiving the event
+ \param event, pointer to motion event structure
+ \param data, unused
  \returns TRUE on handled, FALSE otherwise
  */
 G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
@@ -161,9 +161,8 @@ G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion
 /*!
  \brief highlight_tinfo() highlights the trace info box on the left side 
  of the logviewer when the mouse goes in there..
- \param tnum (GINT) trace number starting from 0
- \param state (gboolean) if set we highlight the target trace info box
- \returns void 
+ \param tnum, trace number starting from 0
+ \param state, if set we highlight the target trace info box
  */
 G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 {
@@ -198,6 +197,9 @@ G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 
 /*!
   \brief logviewer generic button event handler
+  \param widget, pointer to button
+  \param data, unused
+  \returns TRUE
   */
 G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
 {
@@ -238,6 +240,10 @@ G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data
 
 /*!
   \brief logview mouse button event handler
+  \param widget, pointer to logviewer drawingarea
+  \param event, pointer to EventButton structure
+  \param data, unused
+  \returns TRUE if handled, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {

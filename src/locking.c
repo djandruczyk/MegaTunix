@@ -204,6 +204,8 @@ G_MODULE_EXPORT void unlock_serial(void)
 
 /*!
   \brief Locks the serial port
+  \param name, name of the serial port device to lock
+  \returns TRUE on lock success, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 {

@@ -33,8 +33,8 @@ gconstpointer *global_data = NULL;
  \brief main() is the typical main function in a C program, it performs
  all core initialization, loading of all main parameters, initializing handlers
  and entering gtk_main to process events until program close
- \param argc (gint) count of command line arguments
- \param argv (char **) array of command line args
+ \param argc, count of command line arguments
+ \param argv, array of command line args
  \returns TRUE
  */
 gint main(gint argc, gchar ** argv)

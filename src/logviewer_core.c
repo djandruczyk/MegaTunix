@@ -30,6 +30,7 @@ extern gconstpointer *global_data;
 
 /*!
   \brief Creates a stripchart widget (i.e. accel wizard)
+  \param parent, container for stripchart widget
   */
 G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 {
@@ -85,7 +86,8 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 
 
 /*!
-  \brief  updates a stripchart widget with new values
+  \brief updates a stripchart widget with new values
+  \param watch, pointer to the watch containing the new data
   */
 G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
 {
@@ -94,8 +96,8 @@ G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
 
 /*! 
  \brief select_datalog_for_import() loads a datalog file for playback
- \param widget Calling widget
- \param data  unused
+ \param widget, Calling widget
+ \param data, unused
  */
 
 G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
@@ -144,7 +146,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 
 /*! 
  \brief load_logviewer_file() loads a datalog file for playback
- \param iochannel The IO channel representing the source file
+ \param iochannel, The IO channel representing the source file
  */
 G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 {
@@ -182,8 +184,8 @@ G_MODULE_EXPORT Log_Info * initialize_log_info(void)
 /*!
  \brief read_log_header() First we read the first line,  try to determine 
  if the delimiter is a COMMA, or a TAB. 
- \param iochannel (GIOChannel *) iochannel that represents the input file
- \param log_info (Log_Info *)the Log_Info structure
+ \param iochannel,iochannel that represents the input file
+ \param log_info, the Log_Info structure
  */
 G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 {
@@ -268,7 +270,7 @@ read_again:
 /*!
  \brief populate_limits() scans the datalog data and sets the minimum and 
  maximum values based on the span of the data in the file
- \param log_info (Log_Info *) pointer to log info structure
+ \param log_info, pointer to log info structure
  */
 G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 {
@@ -314,8 +316,8 @@ G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 /*! 
  \brief read_log_data() reads the log data and sticks it into the arrays in
  the log_info structure
- \param iochannel (GIOChannel *) data source 
- \param log_info (Log_Info *) pointer to log information struct
+ \param iochannel, data source 
+ \param log_info, pointer to log information struct
  */
 G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 {
@@ -382,6 +384,7 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 /*!
  \brief free_log_info frees the data allocated by a datalog import, 
  should be done when switching logfiles
+ \param log_info, pointer to log information structure
  */
 G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 {
@@ -414,7 +417,10 @@ G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 
 
 /*!
- *\brief changes scroll speed for logviewer playback
+ \brief changes scroll speed for logviewer playback
+ \param widget, pointer to the range widget representing the scroll speed
+ \param data, unused
+ \returns TRUE, to indicate the event is handled
  */
 G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
 {

@@ -41,10 +41,10 @@ enum
  get_file and passes it to load_table(void)
  \see load_table
  \see get_File
- \param table_name (gpointer) textual name of the table to use as the key
+ \param table_name, textual name of the table to use as the key
  to the lookuptables hashtable
- \param fname (gpointer) textual name of the filename to load
- \param user_data (gpointer) unused
+ \param fname, textual name of the filename to load
+ \param user_data, unused
  */
 G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
@@ -75,8 +75,8 @@ G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer use
  \brief load_table() physically handles loading the table datafrom disk, 
  populating and array and sotring a pointer to that array in the lookuptables
  hashtable referenced by the table_name passed
- \param table_name (gchar *) key to lookuptables hashtable
- \param filename (gchar *) filename to load table data from
+ \param table_name, key to lookuptables hashtable
+ \param filename, filename to load table data from
  \returns TRUE on success, FALSE on failure
  */
 G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
@@ -153,8 +153,8 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
  choose the midpoint of that span. (i.e. if there are 11 sequential target
  values, we choose the middle one (6th).  This algorithm can STILL however
  be tricked by multiple SINGLE values. in that case it'll take the last one.
- \param object (gconstpointer *) pointer to object.
- \param value (gint ) value to be reverse looked up
+ \param object, pointer to object.
+ \param value, value to be reverse looked up
  \returns the index closest to that data
  */
 G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
@@ -242,8 +242,8 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
  choose the midpoint of that span. (i.e. if there are 11 sequential target
  values, we choose the middle one (6th).  This algorithm can STILL however
  be tricked by multiple SINGLE values. in that case it'll take the last one.
- \param object (GObject *) pointer to object.
- \param value (gint ) value to be reverse looked up
+ \param object, pointer to object.
+ \param value, value to be reverse looked up
  \returns the index closest to that data
  */
 G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
@@ -324,6 +324,10 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 /*!
   \brief looks up the index of a table based on its value. NOTE: returns the 
   "midpoint" betwen matching values.
+  \param table, name of table to lookup the index given the value
+  \param value, value to lookup the index for
+  \returns the index, or midpoint index if multiple values in sequence equal 
+  the passed value.
   */
 G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 {
@@ -384,8 +388,8 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 /*!
  \brief lookup_data() returns the value represented by the lookuptable 
  associated with the passed object and offset
- \param object (gconstpointer *) container of parameters we need to do the lookup
- \param offset (gint) offset into lookuptable
+ \param object, container of parameters we need to do the lookup
+ \param offset, offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
 G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
@@ -441,8 +445,8 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 /*!
  \brief lookup_data_obj() returns the value represented by the lookuptable 
  associated with the passed object and offset
- \param object (GObject *) container of parameters we need to do the lookup
- \param offset (gint) offset into lookuptable
+ \param object, container of parameters we need to do the lookup
+ \param offset, offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
 G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
@@ -491,6 +495,9 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 
 /*!
   \brief looks up the value given the index
+  \param table, name of table to look in
+  \param offset, index into this table..
+  \returns, the value at the index
   */
 G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 {
@@ -519,6 +526,9 @@ G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 
 /*!
   \brief Creates the lookuptables configurator window (MS1 FW's only)
+  \param widget, unused
+  \param data, unused
+  \returns TRUE on success
   */
 G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 {
@@ -578,7 +588,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 				G_TYPE_BOOLEAN); /* change */
 
 		combostore = gtk_tree_store_new(1,G_TYPE_STRING);/* lookuptable filename */
-				
+
 		gtk_tree_store_append(combostore,&per_iter,NULL);
 		gtk_tree_store_append(combostore,&sys_iter,NULL);
 		gtk_tree_store_set(combostore,&per_iter,
@@ -659,21 +669,23 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		column = gtk_tree_view_column_new_with_attributes("Table Filename",renderer,"text",FILENAME_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
 
-/*		renderer = gtk_cell_renderer_toggle_new();
-		column = gtk_tree_view_column_new_with_attributes("View/Edit",renderer,"active",VIEW_EDIT_COL,NULL);
-		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
-		*/
+		/*		renderer = gtk_cell_renderer_toggle_new();
+				column = gtk_tree_view_column_new_with_attributes("View/Edit",renderer,"active",VIEW_EDIT_COL,NULL);
+				gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
+		 */
 		gtk_window_set_transient_for(GTK_WINDOW(lookuptables_config_window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all (lookuptables_config_window);
 		gtk_tree_view_columns_autosize( GTK_TREE_VIEW(tree));
-		return TRUE;
 	}
-
+	return TRUE;
 }
 
 
 /*!
   \brief hides the lookuptables config window
+  \param widget, pointer to the lookuptables config window
+  \[aram data, unused
+  \returns TRUE
   */
 G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
 {
@@ -684,7 +696,12 @@ G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpoin
 
 
 /*!
- \brief Loads up the new lokuptable
+ \brief Loads up the new lookuptable
+ \param renderer, the cell renderer of the cell selected
+ \param path, the treepath in text
+ \param new_text, the personal/system column name
+ \param data, unused
+ \returns TRUE on success, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
 {
@@ -714,7 +731,7 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 		g_free(old);
 		return TRUE;
 	}
-	
+
 	if (g_strcasecmp(new_text,"Personal") == 0)
 	{
 		g_free(int_name);
@@ -746,14 +763,14 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	if (restart_tickler)
 		start_tickler(RTV_TICKLER);
 
-		cfgfile = cfg_open_file(firmware->profile_filename);
-		if (!cfgfile)
-		{
-			g_free(int_name);
-			g_free(old);
-			return FALSE;
-		}
-		g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),update_lt_config,cfgfile);
+	cfgfile = cfg_open_file(firmware->profile_filename);
+	if (!cfgfile)
+	{
+		g_free(int_name);
+		g_free(old);
+		return FALSE;
+	}
+	g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),update_lt_config,cfgfile);
 	if (g_strrstr(firmware->profile_filename,".MegaTunix"))
 		cfg_write_file(cfgfile, firmware->profile_filename);
 	else
@@ -767,7 +784,7 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 		g_free(new_name);
 	}
 	cfg_free(cfgfile);
-		
+
 	/*printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);*/
 	g_free(int_name);
 	g_free(old);
@@ -777,6 +794,9 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 
 /*!
   \brief updates the interrogation profile with the new default lookuptable
+  \param key, lookuptable name
+  \param value, pointer to LookupTable object
+  \param data, pointer to ConfigFile structure
   */
 G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
@@ -791,9 +811,9 @@ G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer dat
 /*!
  \brief dump_hash() is a debug function to dump the contents of the str_2_enum
  hashtable to check for errors or problems
- \param key (gpointer) key name in the hashtable
- \param value (gpointer) value (enumeration value) in the hashtable
- \param user_data (gpointer) unused...
+ \param key, key name in the hashtable
+ \param value, value (enumeration value) in the hashtable
+ \param user_data, unused...
  */
 G_MODULE_EXPORT void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
 {

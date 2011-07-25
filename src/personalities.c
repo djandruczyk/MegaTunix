@@ -106,8 +106,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		i++;
 		cfg_free(cfgfile);	
 	}
-	p_list = g_list_sort(p_list,persona_list_sort);
-	s_list = g_list_sort(s_list,persona_list_sort);
+	p_list = g_list_sort(p_list,persona_seq_sort);
+	s_list = g_list_sort(s_list,persona_seq_sort);
 	g_strfreev(dirs);
 	g_array_free(classes,TRUE);
 	if (shouldjump)
@@ -252,9 +252,9 @@ jumpahead_offline:
   data from the data object and sets the necessary bits in the global data
   object container.
   \param widget, the toggle button clicked
-  \param data, point to the PersonaElement structure
+  \param data, pointer to the PersonaElement structure
   \see PersonaElement
-  \returns TRUE
+  \returns TRUE unused element is NULL
   */
 G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 {
@@ -291,6 +291,8 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 
 /*!
   \brief frees the resources for a PersonaElement structure
+  \param data, pointer to PersonaElement
+  \param user_data, unused
   */
 G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
 {
@@ -314,7 +316,7 @@ G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
   \param b, Element 2
   \returns the results of g_ascii_strcasecmp of a->sequence,b->sequence
   */
-G_MODULE_EXPORT gint persona_list_sort(gconstpointer a, gconstpointer b)
+G_MODULE_EXPORT gint persona_seq_sort(gconstpointer a, gconstpointer b)
 {
 	PersonaElement *a1 = (PersonaElement *)a;
 	PersonaElement *b1 = (PersonaElement *)b;
