@@ -729,6 +729,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GMutex *rtt_mutex = NULL;
 	GMutex *dash_mutex = NULL;
 	CmdLineArgs *args = NULL;
+#ifdef DEBUG
+	gchar *tmpbuf = NULL;
+#endif
 
 	args = DATA_GET(global_data,"args");
 	serial_params = DATA_GET(global_data,"serial_params");
