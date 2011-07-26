@@ -50,4 +50,4 @@ does not have it)
 
 As of 4/26/2010 MegaTunix has moved version control into Git.
 To work with git run:
-cd ; mkdir git ; git clone http://github.com/djandruczyk/MegaTunix.git
+cd ; mkdir git ; cd git ;  git clone http://github.com/djandruczyk/MegaTunix.git
