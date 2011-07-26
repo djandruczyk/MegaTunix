@@ -22,7 +22,11 @@
 
 /*!
  \brief win32_setup_serial_params() sets up the serial port attributes for win32
- by setting things basically for 8N1, no flow, no escapes, etc....
+ \param fd, filedescriptor representing the serial port
+ \param baud, baud rate
+ \param bits, number of data bits
+ \param parity, enumeration describign odd, even or no parity
+ \param stop, number of stop bits
  */
 G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gint stop)
 {
@@ -130,9 +134,8 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  \brief win32_flush_serial() is used to flush the serial port.  It effectively
  does the same thing as "tcflush()". and a wrapper function is used to call
  this or tcflush depending what OS we are compiled for.
- \param fd (integer) filedescriptor to flush
- \param mode (integer enum) either TCIFLUSH (input flush), TCOFLUSH (output flush), 
- or TCIOFLUSH (both input and output flush).
+ \param fd, filedescriptor to flush
+ \param mode, enum represnting the direction to flush...
  */
 G_MODULE_EXPORT void win32_flush_serial(int fd, FlushDirection mode)
 {

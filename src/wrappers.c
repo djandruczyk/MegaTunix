@@ -16,21 +16,44 @@
 #include <mtxmatheval.h>
 
 
+/*!
+  \brief wrapper for evaluator_create()
+  \param expr, math expression to create an evaluator for
+  \returns pointer to opaque pointer representing the evaluator
+  */
 G_MODULE_EXPORT void * evaluator_create_w(char *expr)
 {
 	return evaluator_create(expr);
 }
 
+
+/*!
+  \brief wrapper for evaluator_destroy()
+  \param eval, evaluator to destroy....
+  */
 G_MODULE_EXPORT void evaluator_destroy_w( void *eval)
 {
 	evaluator_destroy(eval);
 }
 
+
+/*!
+  \brief wrapper for evaluator_evaluator_x()
+  \param eval, evaluator to evaluate
+  \param x, input to the math
+  \returns result of the math
+  */
 G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
 {
 	return evaluator_evaluate_x(eval,x);
 }
 
+
+/*!
+  \brief wrapper for mask_entry_new_with_mask()
+  \param mask, regex mask for this new entry
+  \returns pointer to the new widget
+  */
 G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_w(gchar *mask)
 {
 	return mask_entry_new_with_mask(mask);
