@@ -27,9 +27,9 @@
  a realtimemap, and triggers the loading of al lthe keys/values that
  will allow megatunix to process a special variable that requires handling of
  multiple circumstances
- \param object (gconstpointer *) place to store the retrieved data
- \param cfgfile (ConfigFile *) pointer to cfgfile that contains the data
- \param section (gchar *) sectio nto read the data from
+ \param object, place to store the retrieved data
+ \param cfgfile, pointer to cfgfile that contains the data
+ \param section, section to read the data from
  \see check_dependancies
  */
 G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *cfgfile,gchar * section)
@@ -148,6 +148,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 
 /*!
   \brief frees up the resources for a MultiExpr structure
+  \param data, pointer to MultiExpr structure to deallocate
   */
 G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
@@ -161,6 +162,7 @@ G_MODULE_EXPORT void free_multi_expr(gpointer data)
 
 /*!
   \brief frees up the resource for a MultiSource structure
+  \param data, pointer to MultiSource structure to deallocate
   */
 G_MODULE_EXPORT void free_multi_source(gpointer data)
 {

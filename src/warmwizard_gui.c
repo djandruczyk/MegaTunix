@@ -20,8 +20,8 @@ extern GdkColor red;
 /*!
  \brief warmwizard_update_status(temp) will update the warmup wizard scale and 
  highlight the appropriate values on screen when the temperature changes. This
- is done ot aid the user for tuning warmup enrichments for their ECU.
- \param temp (float) the temp of the engine's coolant in deg Fahrenheit.
+ is done to aid the user for tuning warmup enrichments for their ECU.
+ \param temp, the temp of the engine's coolant in deg Fahrenheit.
  */
 G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 {

@@ -333,9 +333,9 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 /*!
  \brief load_complex_params() loads the necessary parameters from the config
  file for a complex conversion
- \param object (GData *) the place where the data loaded is bound to
- \param cfgfile (ConfigFile *) configfile pointer to read from
- \param section (gchar *) section to read from in the config file
+ \param object, the place where the data loaded is bound to
+ \param cfgfile, configfile pointer to read from
+ \param section, section to read from in the config file
  */
 G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
 {
@@ -453,9 +453,9 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 /*!
  \brief load_complex_params_obj() loads the necessary parameters from the config
  file for a complex conversion
- \param object (GData *) the place where the data loaded is bound to
- \param cfgfile (ConfigFile *) configfile pointer to read from
- \param section (gchar *) section to read from in the config file
+ \param object, the place where the data loaded is bound to
+ \param cfgfile, configfile pointer to read from
+ \param section, section to read from in the config file
  */
 G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * section)
 {

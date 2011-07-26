@@ -23,6 +23,13 @@
 static GtkWidget *vis_window = NULL;
 extern gconstpointer *global_data;
 
+
+/*!
+  \brief shows the tabe visibility chooser window
+  \param widget, widget clicked to get this to come up
+  \param data, unused
+  \return TRUE on success
+  */
 G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer data)
 {
 	GladeXML *main_xml = NULL;
@@ -79,7 +86,7 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 			label = gtk_label_new(gtk_notebook_get_tab_label_text(GTK_NOTEBOOK(notebook),child));
 			gtk_table_attach_defaults(GTK_TABLE(table),label,
 					1,2,i+1,i+2);
-			
+
 		}
 	}
 
@@ -88,6 +95,12 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 }
 
 
+/*!
+  \brief hides a tab
+  \param widget, widget clicked to get this to come up
+  \param data, index to the tab to hide
+  \return TRUE on success
+  */
 G_MODULE_EXPORT gboolean hide_tab(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *child;

@@ -28,7 +28,7 @@ extern gconstpointer *global_data;
 /*!
  \brief start_tickler() starts up a GTK+ timeout function based on the
  enum passed to it.
- \param type (TicklerType enum) is an enum passed which is used to know 
+ \param type, is an enum passed which is used to know 
  which timeout to fire up.
  \see signal_read_rtvars_thread signal_read_rtvars
  */
@@ -96,7 +96,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 /*!
  \brief stop_tickler() kills off the GTK+ timeout for the specified handler 
  passed across in the ENUM
- /param TicklerType an enumeration used to determine which handler to stop.
+ /param type, an enumeration used to determine which handler to stop.
  \see start_tickler
  */
 G_MODULE_EXPORT void stop_tickler(TicklerType type)
@@ -152,6 +152,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
  a thread which handles I/O.  This function will check the queue depth and 
  if the queue is backed up it will skip sending a request for data, as that 
  will only aggravate the queue roadblock.
+ \param data, unused
  \returns 0 on signal to exit
  */
 G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
@@ -241,6 +242,10 @@ G_MODULE_EXPORT gboolean early_interrogation(void)
 }
 
 
+/*!
+  \brief Handler to fire off if this is the first time MtX has run
+  \returns FALSE
+  */
 G_MODULE_EXPORT gboolean check_for_first_time(void)
 {
 	if (DATA_GET(global_data,"first_time"))

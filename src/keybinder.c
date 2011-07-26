@@ -22,6 +22,11 @@
 
 /*!
   \brief Binds remaing keys in cfgfile to the object
+  \param object, pointer to object where we bind the data to
+  \param cfgfile, pointer to configfile  where we pull the data from
+  \param section, section name within cfgfile to gt the data from
+  \param keys, array of char *'s, list of keys to read and store
+  \param num_keys, number of elements in the keys array
   */
 G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
 {

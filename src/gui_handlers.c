@@ -332,17 +332,17 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				DATA_SET(global_data,"log_raw_datastream",GINT_TO_POINTER(TRUE));
 				open_binary_logs();
 				break;
-			case FAHRENHEIT:
+			case TOGGLE_FAHRENHEIT:
 				DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(FAHRENHEIT));
 				reset_temps(GINT_TO_POINTER(FAHRENHEIT));
 				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 				break;
-			case CELSIUS:
+			case TOGGLE_CELSIUS:
 				DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(CELSIUS));
 				reset_temps(GINT_TO_POINTER(CELSIUS));
 				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 				break;
-			case KELVIN:
+			case TOGGLE_KELVIN:
 				DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(KELVIN));
 				reset_temps(GINT_TO_POINTER(KELVIN));
 				DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
@@ -406,9 +406,9 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				DATA_SET(global_data,"log_raw_datastream",GINT_TO_POINTER(FALSE));
 				close_binary_logs();
 				break;
-			case FAHRENHEIT:
-			case CELSIUS:
-			case KELVIN:
+			case TOGGLE_FAHRENHEIT:
+			case TOGGLE_CELSIUS:
+			case TOGGLE_KELVIN:
 			case COMMA:
 			case TAB:
 			case OFFLINE_FIRMWARE_CHOICE:

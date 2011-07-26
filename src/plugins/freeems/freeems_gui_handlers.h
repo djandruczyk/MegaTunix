@@ -23,14 +23,20 @@ typedef enum
 {
 	SOFT_BOOT_ECU = LAST_STD_BUTTON_ENUM + 1,
 	HARD_BOOT_ECU
-}FreeEMSStdButton;
+}FreeEMSCommonMtxStdButton;
 
 
 typedef enum
 {
 	FREEEMS_TOGGLE = LAST_TOGGLE_BUTTON_ENUM + 1
-}FreeEMSToggleButton;
+}FreeEMSCommonMtxToggleButton;
 /* Enumerations */
+
+
+typedef enum
+{
+        GENERIC = LAST_BUTTON_ENUM + 1
+}FreeEMSCommonMtxButton;
 
 /* Prototypes */
 gboolean common_std_button_handler(GtkWidget *, gpointer);

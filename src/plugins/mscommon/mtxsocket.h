@@ -65,21 +65,15 @@ typedef enum
 	GET_COLOR,
 	GET_ACTION,
 	GET_STRING,
-	SET_COLOR
-}State;
-
-/*!
-  \brief Socket SubStates used in the socket state machine
-  */
-typedef enum
-{
-	UNDEFINED_SUBSTATE = 0x430,
+	SET_COLOR,
+	UNDEFINED_SUBSTATE, /* Beginning of Sub-States */
 	SEND_FULL_TABLE,
 	SEND_PARTIAL_TABLE,
 	BURN_MS2_FLASH,
 	GET_VAR_DATA,
 	RECV_LOOKUPTABLE
-}SubState;
+}State;
+
 
 /*!
   \brief Allowed Commands used in the socket state machine

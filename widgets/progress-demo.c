@@ -82,7 +82,7 @@ gboolean update_pbar(gpointer data)
 
 gboolean close_demo(GtkWidget * widget, gpointer data)
 {
-	g_source_remove((gint)data);
+	g_source_remove((guint)data);
 	gtk_widget_destroy(widget);
 	gtk_main_quit();
 	return TRUE;

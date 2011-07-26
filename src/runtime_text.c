@@ -132,6 +132,13 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 }
 
 
+/*!
+  \brief loads the runtime text XML elements
+  \param a_node, XML node
+  \param store, Liststoreto stick the built RTT object into
+  \param parent, container for the RTT display
+  \returns FALSE when at EOF, otherwise TRUE
+  */
 G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
@@ -157,6 +164,13 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 }
 
 
+/*
+ \brief loda the RTT specifics at this XML node, creates the RTT object and 
+ stores it in the ListStore
+ \param node, pointer to XML node
+ \param store, pointer to ListStore where we save it
+ \param parent, Parent widget
+ */
 G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 {
 	gchar *int_name = NULL;
@@ -203,9 +217,9 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 /*!
  \brief create_rtt() creates the rt_text from the passed data, and attaches
  it the the gui.
- \param parent (GtkWidget *) parent widget
- \param ctrl_name (gchar *) name of the rt_text as defined in the config file
- \param source (gchar *) data source for this rt_text 
+ \param parent, parent widget
+ \param ctrl_name, name of the rt_text as defined in the config file
+ \param source, data source for this rt_text 
  \returns a Struct Rt_Text *
  */
 G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
@@ -242,9 +256,9 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 /*!
  \brief add_rtt() creates the rt_text from the passed data, and attaches
  it the the gui.
- \param parent (GtkWidget *) parent widget
- \param ctrl_name (gchar *) name of the rt_text as defined in the config file
- \returns a Struct Rt_Text *
+ \param parent, parent widget
+ \param ctrl_name, name of the rt_text as defined in the config file
+ \returns a populated pointer to a Rt_Text structure
  */
 G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 {
@@ -284,8 +298,8 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
 	rtt->markup = (GBOOLEAN)OBJ_GET(parent,"markup");
-	rtt->label_prefix = OBJ_GET(parent,"label_prefix");
-	rtt->label_suffix = OBJ_GET(parent,"label_suffix");
+	rtt->label_prefix = g_strdup(OBJ_GET(parent,"label_prefix"));
+	rtt->label_suffix = g_strdup(OBJ_GET(parent,"label_suffix"));
 	rtt->object = object;
 	
 	hbox = gtk_hbox_new(FALSE,2);
@@ -360,9 +374,9 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
  \brief rtt_update_values() is called for each runtime text to update
  it's label (label is periodic and not every time due to pango
  speed problems)
- \param key (gpointer) unused
- \param value (gpointer) pointer to Rt_Slider
- \param data (gpointer) unused
+ \param key, unused
+ \param value, pointer to Rt_Slider
+ \param data, unused
  */
 G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
@@ -434,6 +448,10 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 }
 
 
+/*!
+  \brief Sets up the runtime text treeview
+  \param treeview, pointer to the treeviedw to setup
+  */
 G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 {
 	GtkCellRenderer *renderer;
@@ -461,6 +479,14 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 }
 
 
+/*!
+  \brief updates each RTT with new data as appropriate
+  \param model, pointer to TreeModel
+  \param path, pointer to item in the model
+  \param iter, iterator
+  \param user_data, unused
+  \returns FALSE
+  */
 G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -509,7 +535,11 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 }
 
 
-                
+/*!
+  \brief  calls the rtt_foreach handler to update each runtime text entry
+  \param data, unused
+  \returns TRUE on success, FALSE if Mtx is shutting down
+  */
 G_MODULE_EXPORT gboolean update_rttext(gpointer data)
 {       
         static GMutex *rtt_mutex = NULL;

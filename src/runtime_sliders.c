@@ -201,7 +201,7 @@ G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *pre
   \param table_num, table number on this tab
   \param tab_id, Tab identification enumeration
   */
-G_MODULE_EXPORT void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabIdent tab_id)
+G_MODULE_EXPORT void load_rts(xmlNode *node, GHashTable *hash, gint table_num, TabIdent tab_id)
 {
 	gchar *slider_name = NULL;
 	gchar *source = NULL;
@@ -246,7 +246,7 @@ G_MODULE_EXPORT void load_rts(xmlNode *node,GHashTable *hash,gint table_num,TabI
 /*!
  \brief load_ve3d_sliders() is called from 3d_vetable.c to load up the sliders
  specific to the 3D Table views. 
- \param table_num (gint) the table number passed to load sliders for
+ \param table_num, the table number passed to load sliders for
  */
 G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 {
@@ -299,16 +299,16 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 /*!
  \brief add_slider() creates the slider from the passed data, and attaches
  it the the gui.
- \param ctrl_name (gchar *) name of the slider as defined in the config file
- \param tbl (gint) table number to bind this slider to
- \param table_num (gint) the table_num from the firmware that this slider is
+ \param ctrl_name, name of the slider as defined in the config file
+ \param tbl, table number to bind this slider to
+ \param table_num, the table_num from the firmware that this slider is
  bound to. (used for the sliders on the 3D view)
- \param row (gint) row of the table (tbl) that this slider goes on
- \param source (gchar *) data source for this slider 
- \param ident (TabIdent) enumeration of the page this slider goes on
+ \param row, row of the table (tbl) that this slider goes on
+ \param source, data source for this slider 
+ \param ident, enumeration of the page this slider goes on
  \returns a Struct Rt_Slider *
  */
-G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
+G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
 {
 	Rt_Slider *slider = NULL;
 	GtkWidget *label = NULL;
@@ -426,7 +426,7 @@ G_MODULE_EXPORT Rt_Slider *  add_slider(gchar *ctrl_name, gint tbl, gint table_n
  \brief register_rt_range() creates the slider from the passed data, 
  and attaches it the the gui. This is called during gui tab loading to embed
  sliders into regular tabs.
- \param widget (GtkWidget *) name of widget defined in Gui datamap file. Used
+ \param widget, of widget defined in Gui datamap file. Used
  to load al lthe necessary attributes to stick the control in the right place.
  */
 G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
@@ -544,7 +544,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 /*!
  \brief free_ve3d_sliders() frees the sliders associated with the table_num
  passed to it.
- \param table_num (gint) the table_number to free the sliders for
+ \param table_num, table_number to free the sliders for
  \returns FALSE
  */
 G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
@@ -569,6 +569,10 @@ G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 
 /*!
   \brief Runtime slider button handler, not used yet.
+  \param widget, unused
+  \param event, unused
+  \param data, unused
+  \returns TRUE
   */
 G_MODULE_EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
@@ -578,6 +582,10 @@ G_MODULE_EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButt
 
 /*!
   \brief Runtime slider motion handler, not used yet.
+  \param widget, unused
+  \param event, unused
+  \param data, unused
+  \returns TRUE
   */
 G_MODULE_EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
@@ -679,9 +687,9 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
  \brief rt_update_values() is called for each runtime slider to update
  it's position and label (label is periodic and not every time due to pango
  speed problems)
- \param key (gpointer) unused
- \param value (gpointer) pointer to Rt_Slider
- \param data (gpointer) unused
+ \param key, unused
+ \param value, pointer to Rt_Slider
+ \param data, unused
  */
 G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer data)
 {

@@ -97,8 +97,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(TE_TABLE));
 	g_hash_table_insert(str_2_enum,"_TE_TABLE_GROUP_",
 			GINT_TO_POINTER(TE_TABLE_GROUP));
-	g_hash_table_insert(str_2_enum,"_GENERIC_",
-			GINT_TO_POINTER(GENERIC));
 	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",
 			GINT_TO_POINTER(READ_VE_CONST));
 	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",
@@ -133,8 +131,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(CLOSE_LOGFILE));
 	g_hash_table_insert(str_2_enum,"_LOGVIEW_ZOOM_",
 			GINT_TO_POINTER(LOGVIEW_ZOOM));
-	g_hash_table_insert(str_2_enum,"_REBOOT_GETERR_",
-			GINT_TO_POINTER(REBOOT_GETERR));
 	g_hash_table_insert(str_2_enum,"_IMPORT_VETABLE_",
 			GINT_TO_POINTER(IMPORT_VETABLE));
 	g_hash_table_insert(str_2_enum,"_EXPORT_VETABLE_",
@@ -151,6 +147,12 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(TRACKING_FOCUS));
 	g_hash_table_insert(str_2_enum,"_MS2_USER_OUTPUTS_",
 			GINT_TO_POINTER(MS2_USER_OUTPUTS));
+	g_hash_table_insert(str_2_enum,"_TOGGLE_KELVIN_",
+			GINT_TO_POINTER(TOGGLE_KELVIN));
+	g_hash_table_insert(str_2_enum,"_TOGGLE_CELSIUS_",
+			GINT_TO_POINTER(TOGGLE_CELSIUS));
+	g_hash_table_insert(str_2_enum,"_TOGGLE_FAHRENHEIT_",
+			GINT_TO_POINTER(TOGGLE_FAHRENHEIT));
 
 	/* Datalogger/logviewer */
 	g_hash_table_insert(str_2_enum,"_COMMA_",
@@ -462,9 +464,9 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 /*!
  \brief dump_hash() is a debug function to dump the contents of the str_2_enum
  hashtable to check for errors or problems
- \param key (gpointer) key name in the hashtable
- \param value (gpointer) value (enumeration value) in the hashtable
- \param user_data (gpointer) unused...
+ \param key, key name in the hashtable
+ \param value, value (enumeration value) in the hashtable
+ \param user_data, unused...
  */
 G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
 {
@@ -475,7 +477,7 @@ G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
 /*!
  \brief translate_string() is called passing in a string name to be translated
  into an enumeration
- \param string (gchar *) string to be translated
+ \param string, string to be translated
  \returns enumeration equivalent
  */
 G_MODULE_EXPORT gint translate_string(const gchar *string)

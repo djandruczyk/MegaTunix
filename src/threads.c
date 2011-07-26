@@ -32,8 +32,8 @@ gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test
  needed information back to the gui via another GAsyncQueue which takes care
  of any post thread GUI updates. (which can NOT be done in a thread context
  due to reentrancy and deadlock conditions)
- \param cmd (gchar *) and enumerated representation of a command to execute
- \param data (void *) additional data for fringe cases..
+ \param cmd, and enumerated representation of a command to execute
+ \param data, additional data for fringe cases..
  */
 G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 {
@@ -97,7 +97,7 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
  io_data_queue and running handlers as messages come in. After they are done it
  passes the message back to the gui via the dispatch_queue for further
  gui handling (for things that can't run in a thread context)
- \param data (gpointer) unused
+ \param data, unused
  */
 G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 {
@@ -254,12 +254,12 @@ fast_exit:
  information to the main thread via an GAsyncQueue to a dispatcher that will
  take care of the message. Since the functions that call this ALWAYS send
  dynamically allocated test in the msg field we DEALLOCATE it HERE...
- \param view_name (gchar *) textual name fothe textview to update (required)
- \param tagname (gchar *) textual name ofthe tag to be applied to the text 
+ \param view_name, textual name fothe textview to update (required)
+ \param tagname, textual name ofthe tag to be applied to the text 
  sent.  This can be NULL is no tag is desired
- \param msg (gchar *) the message to be sent (required)
- \param count (gboolean) Flag to display a counter
- \param clear (gboolean) Flag to clear the display before writing the text
+ \param msg, the message to be sent (required)
+ \param count, Flag to display a counter
+ \param clear, Flag to clear the display before writing the text
  */
 G_MODULE_EXPORT void  thread_update_logbar(
 		const gchar * view_name, 
@@ -305,7 +305,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
  up an AsyncQueue to the gui process which will lookup the function name
  and run it with no arguments (currently inflexible and can only run "void"
  functions (ones that take no params)
- \param name name of function to lookup and run in the main gui context..
+ \param name, name of function to lookup and run in the main gui context..
  */
 G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 {
@@ -339,9 +339,9 @@ G_MODULE_EXPORT gboolean queue_function(const gchar * name)
  widget from a threaded context in win32, hence this fucntion is created 
  to pass the information to the main thread via an GAsyncQueue to a 
  dispatcher that will take care of the message. 
- \param widget_name (gchar *) textual name of the widget to update
- \param type (WidgetType enumeration) type of widget to update
- \param msg (gchar *) the message to be sent (required)
+ \param widget_name, textual name of the widget to update
+ \param type, type of widget to update
+ \param msg, the message to be sent (required)
  */
 G_MODULE_EXPORT void  thread_update_widget(
 		const gchar * widget_name,
@@ -380,8 +380,8 @@ G_MODULE_EXPORT void  thread_update_widget(
 /*!
  \brief thread_set_sensitive() is a function to be called from within threads
  to update a widgets sensitivity state.
- \param widget_name (gchar *) textual name of the widget to update
- \param stats (gboolean) the state to set
+ \param widget_name, textual name of the widget to update
+ \param stats, the state to set
  */
 G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
@@ -415,7 +415,7 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 /*!
  \brief thread_refresh_widget() is a function to be called from within threads
  to force a widget rerender
- \param widget_name (GtkWidget *) widget pointer
+ \param widget_name, widget pointer
  */
 G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {
@@ -439,6 +439,11 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 }
 
 
+/*!
+  \brief refreshs all widgets as a particular page/offset
+  \param page, mtx-ecu page number
+  \param offset, offset from that page's origin
+  */
 G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
@@ -456,9 +461,10 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 
 
 /*!
- \brief thread_refresh_widget() is a function to be called from within threads
- to force a widget rerender
- \param widget_name (GtkWidget *) widget pointer
+ \brief To be called from within threads to force a widget rerender
+ \param page, MTX-ecu page
+ \param offset, offset from beginnig of page
+ \param len, now many bytes worth of widgets to search for an update
  */
 G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint len)
 {

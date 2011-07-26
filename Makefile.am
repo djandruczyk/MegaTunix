@@ -53,4 +53,4 @@ update-po: check-gettext
 	fi \
 	&& cd po && $(MAKE) $(AM_MAKEFLAGS) update-po)
 
-.PHONY: check-gettext update-po
+.PHONY: check-gettext update-po doc

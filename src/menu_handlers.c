@@ -93,6 +93,9 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 
 /*!
  \brief switches to tab encoded into the widget
+ \param widget, the menuitem the user clicked upon
+ \param data, unused
+ \returns TRUE if handled, FALSE otherwise
  */
 G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 {
@@ -129,6 +132,9 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 /*!
  \brief General purpose handler to take care of menu initiated settings 
  transfers like VEX import/export and ECU backup/restore
+ \param widget,  pointer to widget the user clicket on
+ \param data, unused
+ \returns TRUE
  */
 G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
@@ -164,6 +170,8 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 /*!
  \brief General purpose handler to take care of menu initiated settings 
  transfers like VEX import/export and ECU backup/restore
+ \param target, enumeration for a TAB to be checked if it exists
+ \returns TRUE if tab found, FALSE if not
  */
 G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 {

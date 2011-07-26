@@ -18,16 +18,13 @@
 #include <vetable_gui.h>
 #include <widgetmgmt.h>
 
+extern gconstpointer *global_data;
 
 /*!
  \brief rescale_table() is called to rescale a subset of a Table (doesn't
  matter what kind of table). 
- \param widget_name (gchar *) is the widget name of the scaler widget 
- that was used. From this widget we extract the table number and other 
- needed data to properly do the rescaling.
+ \param widget, pointer to widget containing the table number we care about
  */
-extern gconstpointer *global_data;
-
 G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 {
 	gint table_num = -1;
@@ -109,6 +106,13 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 }
 
 
+/*!
+  \brief rescales the input based onthe factor and scale operation
+  \param input, input value
+  \param scaleop, enumeration of what we are doing math wise.
+  \param factor, the other side of our math equation
+  \returns the result of the math
+  */
 G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 {
 	switch (scaleop)
@@ -136,7 +140,9 @@ G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 }
 
 
-
+/*!
+  \brief Draws the VE marker on the table via calling the appropriate plugin
+  */
 G_MODULE_EXPORT void draw_ve_marker(void)
 {
 	static void (*common_draw_ve_marker)(void) = NULL;
