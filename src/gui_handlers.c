@@ -584,8 +584,8 @@ G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
  to a number (checking for base10 or base16) performs the proper conversion
  and send it to the ECU and updates the gui to the closest value if the user
  didn't enter in an exact value.
- \param widget (GtkWidget *) the widget being modified
- \param data (gpointer) not used
+ \param widget, the widget being modified
+ \param data, not used
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
@@ -623,8 +623,8 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 /*!
  \brief std_button_handler() handles all standard non toggle/check/radio
  buttons. 
- \param widget (GtkWidget *) the widget being modified
- \param data (gpointer) not used
+ \param widget, the widget being modified
+ \param data, not used
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
@@ -766,9 +766,9 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief std_combo_handler() handles all combo boxes
- \param widget (GtkWidget *) the widget being modified
- \param data (gpointer) not used
+ \brief Generic handler for all combo boxes
+ \param widget, the widget being modified
+ \param data, not used
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
@@ -801,10 +801,10 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief spin_button_handler() handles ALL spinbuttons in MegaTunix and does
+ \brief Generic handler for ALL spinbuttons in MegaTunix and does
  whatever is needed for the data before sending it to the ECU
- \param widget (GtkWidget *) the widget being modified
- \param data (gpointer) not used
+ \param widget, the widget being modified
+ \param data, not used
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
@@ -910,11 +910,13 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief key_event() is triggered when a key is pressed on a widget that
- has a key_press/release_event handler registered.
- \param widget (GtkWidget *) widget where the event occurred
- \param event (GdkEventKey) event struct, (contains key that was pressed)
- \param data (gpointer) unused
+ \brief Handler for key button presses is triggered when a key is pressed 
+ on a widget that has a key_press/release_event handler registered.
+ \param widget, widget where the event occurred
+ \param event, pointer to GdkEventKey event struct,  which contains the key 
+ that was pressed
+ \param data, unused
+ \returns FALSE if not handled, TRUE otherwise
  */
 G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
@@ -1001,7 +1003,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	lower = lower < hardlower ? hardlower:lower;
 	/* In the rare case where bigstep exceeds the limit, reset to more
 	   sane values.  Only should happen on extreme conversions
-	   */
+	 */
 	if (bigstep > upper)
 	{
 		bigstep = upper/10;
@@ -1213,6 +1215,11 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 /*!
   \brief Validates the input is numeric/puntuation (numbers) and filters
   as necessary
+  \param entry, pointer to GtkEntry
+  \param text, new text typed into the entry
+  \param len, length of new text entered
+  \param pos, pointer to the  position of the cursor within the entry
+  \param data, unused
   */
 G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos, gpointer data)
 {
@@ -1248,33 +1255,22 @@ G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gin
 
 
 /*!
- \brief widget_grab() used on Tables only to "select" the widget or 
+ \brief used on Tables only to "select" the widget or 
  group of widgets for rescaling . Requires shift key to be held down and click
  on each spinner/entry that you want to select for rescaling
- \param widget (GtkWidget *) widget being selected
- \param event (GdkEventButton *) struct containing details on the event
- \param data (gpointer) unused
+ \param widget, widget being selected
+ \param event, struct containing details on the event
+ \param data, unused
  \returns FALSE to allow other handlers to run
  */
 G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gboolean marked = FALSE;
-	/*
-	gint table_num = -1;
-	const gchar * widget_name = NULL;
-	gchar **vector = NULL;
-	*/
 	extern GdkColor red;
 	static gint total_marked = 0;
 	GtkWidget *frame = NULL;
 	GtkWidget *parent = NULL;
 	gchar * frame_name = NULL;
-
-	/* Select all chars on click */
-	/*
-	 * printf("selecting all chars, or so I thought....\n");
-	 * gtk_editable_select_region(GTK_EDITABLE(widget),0,-1);
-	 */
 
 	if ((GBOOLEAN)data == TRUE)
 		goto testit;
@@ -1321,14 +1317,13 @@ testit:
 
 
 /*
- \brief notebook_page_changed() is fired off whenever a new notebook page 
- is chosen.
+ \brief Handler that is fired off whenever a new notebook page is chosen.
  This function just sets a variable marking the current page.  this is to
  prevent the runtime sliders from being updated if they aren't visible
- \param notebook (GtkNotebook *) nbotebook that emitted the event
- \param page (GtkNotebookPage *) page
- \param page_no (guint) page number that's now active
- \param data (gpointer) unused
+ \param notebook, nbotebook that emitted the event
+ \param page, page
+ \param page_no, page number that's now active
+ \param data, unused
  */
 G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
@@ -1402,14 +1397,13 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 
 
 /*
- \brief subtab_changed() is fired off whenever a new sub-notebook page is 
- chosen.
- This fucntion just sets a variable marking the current page.  this is to
+ \brief Handler that is fired off whenever a new sub-notebook page is chosen.
+ This function just sets a variable marking the current page.  this is to
  prevent the runtime sliders from being updated if they aren't visible
- \param notebook (GtkNotebook *) nbotebook that emitted the event
- \param page (GtkNotebookPage *) page
- \param page_no (guint) page number that's now active
- \param data (gpointer) unused
+ \param notebook, nbotebook that emitted the event
+ \param page, page
+ \param page_no, page number that's now active
+ \param data, unused
  */
 G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
@@ -1432,12 +1426,12 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page
 
 
 /*!
- \brief set_algorithm() handles the buttons that deal with the Fueling
+ \brief Handles the buttons that deal with the Fueling
  algorithm, as special things need to be taken care of to enable proper
  display of data.
- \param widget (GtkWidget *) the toggle button that changes
- \param data (gpointer) unused in most cases
- \returns TRUE if handles
+ \param widget, the toggle button that changes
+ \param data, unused in most cases
+ \returns TRUE if it handles
  */
 G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 {
