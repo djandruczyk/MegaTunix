@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file combo_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <assert.h>
 #include <combo_loader.h>
 #include <combo_mask.h>
@@ -31,6 +38,13 @@
   \param cfgfile, pointer to datamap file assocated with this widget
   \param section, section within the cfgfile
   */
+
+/*! @file combo_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	gchar *tmpbuf = NULL;
@@ -100,6 +114,13 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
 		entry = mask_entry_new_with_mask(regex);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
+
+/*! @file combo_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if ((width = (GINT)OBJ_GET((GtkWidget *)object,"max_chars")) > 0)
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);
 		else

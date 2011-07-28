@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file about_gui.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <about_gui.h>
 #include <logo.h>
 #include <widgetmgmt.h>
@@ -20,6 +27,13 @@
 /*!
  \brief build_about makes the about tab and presents the MegaTunix logo
  \param parent, container to place the logo in
+ */
+
+/*! @file about_gui.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void install_logo(GtkWidget *parent)
 {
@@ -38,6 +52,13 @@ G_MODULE_EXPORT void install_logo(GtkWidget *parent)
   \brief Builds the about MegaTunix Tab and loads the main Logo
   \param frame, parent frame for about window
   */
+
+/*! @file about_gui.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void build_about(GtkWidget *frame)
 {
 	gchar *tmpbuf = NULL;
@@ -74,6 +95,13 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
  \param widget, unused
  \param data, unused
  \returns TRUE
+ */
+
+/*! @file about_gui.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 {

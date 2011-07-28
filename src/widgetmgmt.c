@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <configfile.h>
 #include <defines.h>
 #include <widgetmgmt.h>
@@ -29,6 +36,13 @@ extern gconstpointer *global_data;
  \param widget, pointer to Widget
  \param user_data, pointer to ConfigFile structure
  */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 {
 	gchar *name = NULL;
@@ -44,6 +58,13 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 	 be a clash, and there's no need to store the top frame widget 
 	 anyways...
 	 */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (GTK_IS_CONTAINER(widget))
 		gtk_container_foreach(GTK_CONTAINER(widget),populate_master,user_data);
 	if (!cfg_read_string(cfg,"global","id_prefix",&prefix))
@@ -51,6 +72,13 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 
 	name = (char *)glade_get_widget_name(widget);
 	/*printf("name of widget stored is %s\n",name);*/
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	if (name == NULL)
 	{
@@ -87,6 +115,13 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
  \param widget, Pointer to the widget to be stored by name.
  \see deregister_widget
  */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
 {
 	GHashTable *dynamic_widgets = NULL;
@@ -115,6 +150,13 @@ G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
  \returns TRUE on success removing, FALSE on failure removing 
  \see register_widget
  */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean deregister_widget(gchar *name)
 {
 	GHashTable *dynamic_widgets = NULL;
@@ -128,6 +170,13 @@ G_MODULE_EXPORT gboolean deregister_widget(gchar *name)
   \param name,  name of widget to find
   \returns pointer to the GtkWidget if found, or NULL
   */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
 {
 	GHashTable *dynamic_widgets = NULL;
@@ -146,6 +195,13 @@ G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
 	else if (g_hash_table_lookup_extended(widget_2_tab_hash,name,NULL,(gpointer *)&datamap))
 	{
 		/* Load the tab this depends on and then search again! */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if (handle_dependant_tab_load(datamap))
 		{
 			if (g_hash_table_lookup_extended(dynamic_widgets,name,NULL,(gpointer *)&widget))
@@ -167,6 +223,13 @@ G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
  \param string, string to parse and dissect
  \param index, which one we want to check
  \returns the decoded state from the string
+ */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean get_state(gchar *string, gint index)
 {
@@ -192,6 +255,13 @@ G_MODULE_EXPORT gboolean get_state(gchar *string, gint index)
   \param key, pointer to Widget
   \param data, unused
   */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 {
 	GtkWidget * widget = key;
@@ -223,6 +293,13 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	groups = parse_keys(tmpbuf,&num_groups,",");
 	state = TRUE;
 	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<num_groups;i++)
 	{
 		value = (GBOOLEAN)g_hash_table_lookup(widget_group_states,groups[i]);
@@ -247,6 +324,13 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	}
 	g_strfreev(groups);
 	/*printf("%i\n",state);*/
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	gtk_widget_set_sensitive(GTK_WIDGET(widget),state);
 }
 
@@ -260,6 +344,13 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
  \param text, the text we want to get the dimensions of
  \param geo, pointer to PangoRectangle representation of the text dimensions
  */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void get_geo( GtkWidget *widget, const char *text, PangoRectangle *geo )
 {
 	PangoLayout *layout;
@@ -271,6 +362,13 @@ G_MODULE_EXPORT void get_geo( GtkWidget *widget, const char *text, PangoRectangl
 
 	/* FIXME ... we left/top to 0 for now.
 	 *          */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	geo->width = width;
 	geo->height = height;
 }
@@ -280,12 +378,26 @@ G_MODULE_EXPORT void get_geo( GtkWidget *widget, const char *text, PangoRectangl
  \param widget, pointer to the widget
  \param nchars,  number of charactors this widget should size itself for
  */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void set_fixed_size( GtkWidget *widget, int nchars )
 {
 	PangoRectangle geo;
 
 	/*! Statically using the font size is BAD PRACTICE and should use
 	  the current theme settings,  but that has its own issues! */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	get_geo( widget, "8", &geo );
 	gtk_widget_set_size_request( widget, geo.width * nchars, 
 			geo.height );
@@ -296,6 +408,13 @@ G_MODULE_EXPORT void set_fixed_size( GtkWidget *widget, int nchars )
   \brief, prevents a entry from being editable
   \param widget, pointer to Comboboxentry where we want to lock the entry
   */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 {
 	GtkComboBox *box = GTK_COMBO_BOX(widget);
@@ -312,6 +431,13 @@ G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
  \param size, the enumeration of the size we want to get number of bytes this
  variable would take up in memory
  \returns the size in bytes that this would take up
+ */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gint get_multiplier(DataSize size)
 {
@@ -346,6 +472,13 @@ G_MODULE_EXPORT gint get_multiplier(DataSize size)
   \param data, the data associated with this quark
   \param user_data, unused
   */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
 {
 	const gchar * key = NULL;
@@ -378,6 +511,13 @@ G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_d
  \param widget, pointer to widget to change sensitivity
  \param state, the state to set it to
  */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void set_widget_sensitive(gpointer widget, gpointer state)
 {
         gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)state);
@@ -390,6 +530,13 @@ G_MODULE_EXPORT void set_widget_sensitive(gpointer widget, gpointer state)
  gtk_toggle_button_set_active from there would result in typecheck warnings
  \param widget, pointer to widget to change sensitivity
  \param state, the state to set it to.
+ */
+
+/*! @file widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void set_widget_active(gpointer widget, gpointer state)
 {

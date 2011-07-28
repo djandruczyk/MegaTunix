@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file tag_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <config.h>
 #include <configfile.h>
 #include <debugging.h>
@@ -37,6 +44,13 @@
  necessary data from.
  \param section, section name in the config file to search for the
  tags
+ */
+
+/*! @file tag_loader.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
@@ -77,14 +91,35 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 			{
 				case 2:
 					/*gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],NULL);*/
+
+/*! @file tag_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 					tag = gtk_text_buffer_create_tag(textbuffer,key,attrs[0],attrs[1],NULL);
 					break;
 				case 4:
 					/*gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],NULL);*/
+
+/*! @file tag_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 					tag = gtk_text_buffer_create_tag(textbuffer,key,attrs[0],attrs[1],attrs[2],attrs[3],NULL);
 					break;
 				case 6:
 					/*gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],attrs[4],attrs[5],NULL);*/
+
+/*! @file tag_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 					tag = gtk_text_buffer_create_tag(textbuffer,key,attrs[0],attrs[1],attrs[2],attrs[3],attrs[4],attrs[5],NULL);
 					break;
 				default:

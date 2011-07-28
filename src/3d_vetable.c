@@ -30,6 +30,13 @@
  *  - drawFrameRate change to drawOrthoText
  */
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <3d_vetable.h>
 #include <conversions.h>
 #include <dashboard.h>
@@ -52,6 +59,13 @@
 
 #define ONE_SECOND 	 1	/* one second */
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 static GLuint font_list_base;
 
 #define DEFAULT_WIDTH  640
@@ -64,33 +78,103 @@ static gboolean delayed_expose(gpointer);
 /*!
  \brief Caluclates the frames per second for the 3D display
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void CalculateFrameRate(void)
 {
 	static float framesPerSecond = 0.0f;	/* This will store our fps*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	static long lastTime = 0;		/* This will hold the time from the last frame*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	static char strFrameRate[50] = {0};	/* We will store the string here for the window title*/
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	/* struct for the time value*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	GTimeVal  currentTime;
 	currentTime.tv_sec  = 0;
 	currentTime.tv_usec = 0;
 
 	/* gets the microseconds passed since app started*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_get_current_time(&currentTime);
 
 	/* Increase the frame counter*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	++framesPerSecond;
 
 	if( currentTime.tv_sec - lastTime >= ONE_SECOND )
 	{
 		lastTime = currentTime.tv_sec;
 		/* Copy the frames per second into a string to display in the window*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		sprintf(strFrameRate, _("Current Frames Per Second: %i"), (int)framesPerSecond);
 		/* Reset the frames per second*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		framesPerSecond = 0;
 	}
 
 	/* draw frame rate on screen */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	drawOrthoText(strFrameRate, 1.0f, 1.0f, 1.0f, 0.025, 0.975 );
 }
 
@@ -103,6 +187,13 @@ G_MODULE_EXPORT void CalculateFrameRate(void)
  \param x, x coordinate
  \param y, y coordinate
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
 {
 	GLint matrixMode;
@@ -110,6 +201,13 @@ G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b
 		return;
 
 	glGetIntegerv(GL_MATRIX_MODE, &matrixMode);  /* matrix mode? */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -119,6 +217,13 @@ G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b
 	glPushMatrix();
 	glLoadIdentity();
 	glPushAttrib(GL_COLOR_BUFFER_BIT);       /* save current colour */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glColor3f(r, g, b);
 	glRasterPos3f(x, y, 0.0);
 	while(*str)
@@ -142,6 +247,13 @@ G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b
  \param val (gfloat) col_val from 0-1.0
  \returns a RGB3f variable at the hue angle requested
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
 	RGB3f color;
@@ -149,7 +261,21 @@ G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 	gfloat tmp = 0.0;
 	gfloat fract = 0.0;
 	gfloat S = sat;	/* using col_sat of 1.0*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	gfloat V = val;	/* using Value of 1.0*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	gfloat p = 0.0;
 	gfloat q = 0.0;
 	gfloat t = 0.0;
@@ -221,6 +347,13 @@ G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
  \param widget, parent widget
  \param data, unused
  \return TRUE on success
+ */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 {
@@ -312,6 +445,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		ve_view->z_precision =
 			firmware->table_params[table_num]->z_precision;
 		/* Z axis lookuptable dependancies */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if (firmware->table_params[table_num]->z_depend_on)
 			ve_view->z_depend_on = firmware->table_params[table_num]->z_depend_on;
 	}
@@ -479,6 +619,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	}
 
 	/* Store it in ve_view_hash by table_num */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_hash_table_insert(ve_view_hash,GINT_TO_POINTER(table_num), ve_view);
 
 	g_signal_connect(G_OBJECT(window), "delete_event",
@@ -516,6 +663,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 
 	/* Connect signal handlers to the drawing area */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
 			G_CALLBACK (ve3d_realize), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
@@ -530,6 +684,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK (ve3d_key_press_event), NULL);
 
 	/* End of GL window, Now controls for it.... */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	frame = gtk_frame_new("3D Display Controls");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,FALSE,FALSE,0);
 
@@ -595,6 +756,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			NULL);
 
 	/* Focus follows vertex toggle */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	button = gtk_check_button_new_with_label("Focus Follows Vertex\n with most Weight");
 	ve_view->tracking_button = button;
 	OBJ_SET(button,"ve_view",ve_view);
@@ -604,11 +772,25 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			NULL);
 
 	/* Table for rendering mode */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	table = gtk_table_new(2,2,TRUE);
 	gtk_box_pack_end(GTK_BOX(vbox2),table,FALSE,FALSE,0);
 	label = gtk_label_new("Rendering Mode");
 	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,0,0,0,0);
 	/* Wireframe toggle */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	button = gtk_radio_button_new_with_label(NULL,"Wireframe");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),ve_view->wireframe);
 	OBJ_SET(button,"ve_view",ve_view);
@@ -618,18 +800,39 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			NULL);
 
 	/* Solid toggle */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(button),"Solid");
 	OBJ_SET(button,"ve_view",ve_view);
 	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 
 
 	/* Table for Scaling mode */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	table = gtk_table_new(2,2,TRUE);
 	gtk_box_pack_end(GTK_BOX(vbox2),table,FALSE,FALSE,0);
 	label = gtk_label_new("Axis Scale");
 	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,0,0,0,0);
 
 	/* Fixed Scale toggle */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	button = gtk_radio_button_new_with_label(NULL,"Fixed");
 	OBJ_SET(button,"ve_view",ve_view);
 	gtk_table_attach(GTK_TABLE(table),button,0,1,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
@@ -638,6 +841,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			NULL);
 
 	/* Prop Scale toggle */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(button),"Proportional");
 
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),!ve_view->fixed_scale);
@@ -645,6 +855,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
 
 	/* Opacity Slider */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	scale = gtk_hscale_new_with_range(0.1,1.0,0.001);
 	OBJ_SET(scale,"ve_view",ve_view);
 	g_signal_connect(G_OBJECT(scale), "value_changed",
@@ -658,6 +875,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_box_pack_end(GTK_BOX(vbox2),label,FALSE,TRUE,0);
 
 	/* Realtime var slider gauges */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	frame = gtk_frame_new("Real-Time Variables");
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(frame),0);
@@ -699,6 +923,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
  \param data, unused
  \returns FALSE so other handlers run
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
 	GHashTable *ve_view_hash = NULL;
@@ -722,10 +953,24 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	g_object_unref(ve_view->y_container);
 	g_object_unref(ve_view->z_container);
 	free(ve_view);/* free up the memory */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	ve_view = NULL;
 	
 	//printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
 	/* MUST return false otherwise other handlers won't run*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	return FALSE;  
 }
@@ -737,6 +982,13 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
  case the user moves it or places it off the edge of the window and 
  can't find it...
  \param widget, the container of the view
+ */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 {
@@ -762,10 +1014,24 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
  \brief get_gl_config gets the OpenGL mode creates a GL config and returns it
  \returns pointer to a GdkGLConfig structure
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
 	/* Try double-buffered visual */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 			GDK_GL_MODE_DEPTH |
 			GDK_GL_MODE_DOUBLE);
@@ -774,6 +1040,13 @@ GdkGLConfig* get_gl_config(void)
 		dbg_func(CRITICAL,g_strdup(__FILE__": get_gl_config()\n\t*** Cannot find the double-buffered visual.\n\t*** Trying single-buffered visual.\n"));
 
 		/* Try single-buffered visual */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
 				GDK_GL_MODE_DEPTH);
 		if (gl_config == NULL)
@@ -781,6 +1054,13 @@ GdkGLConfig* get_gl_config(void)
 			/* Should make a non-GL basic drawing area version
 			   instead of dumping the user out of here, or at least 
 			   render a non-GL found text on the drawing area */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			dbg_func(CRITICAL,g_strdup(__FILE__": get_gl_config()\n\t*** No appropriate OpenGL-capable visual found. EXITING!!\n"));
 			exit (-1);
 		}
@@ -795,6 +1075,13 @@ GdkGLConfig* get_gl_config(void)
  \param event, the Configure Event Structure
  \param data, unused
  \returns TRUE on completion, false if we couldn't get a GL drawable
+ */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
@@ -813,6 +1100,13 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"));
 
 	/*** OpenGL BEGIN ***/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return FALSE;
 
@@ -822,6 +1116,13 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	ve3d_load_font_metrics(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	return TRUE;
 }
 
@@ -833,6 +1134,13 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
  \param event, Expose Event structure
  \param data, unused
  \returns TRUE on success, FALSE if not realized or no GLdrawable
+ */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
@@ -856,6 +1164,13 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	//printf("expose event ve_view %p gldrawable %p\n",ve_view,gldrawable);
 
 	/*** OpenGL BEGIN ***/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return FALSE;
 
@@ -866,16 +1181,44 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glLoadIdentity();
 
 	/* move model away from camera */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glTranslatef(0,0.1875,ve_view->sdepth);
 
 	/* Rotate around x/Y axis by sphi/stheta */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glRotatef(ve_view->stheta, 1.0, 0.0, 0.0);
 	glRotatef(ve_view->sphi, 0.0, 0.0, 1.0);
 
 	/* Shift to middle of the screen or something like that */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glTranslatef (-0.5, -0.5, -0.5);
 
 	/* Draw everything */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (GTK_WIDGET_IS_SENSITIVE(widget))
 	{
 		cur_vals = get_current_values(ve_view);
@@ -891,6 +1234,13 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 		free_current_values(cur_vals);
 		CalculateFrameRate();
 		/* Grey things out if we're supposed to be insensitive */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	}
 	else
 		ve3d_grey_window(ve_view);
@@ -903,6 +1253,13 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	return TRUE;
 }
 
@@ -917,6 +1274,13 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
  \returns TRUE
  \see ve3d_button_press_event
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
@@ -925,19 +1289,47 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"));
 	/*printf("motion notify event\n");*/
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	/* Left Button */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (event->state & GDK_BUTTON1_MASK)
 	{
 		ve_view->sphi += (gfloat)(event->x - ve_view->beginX) / 4.0;
 		ve_view->stheta += (gfloat)(event->y - ve_view->beginY) / 4.0;
 	}
 	/* Middle button (or both buttons for two button mice) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (event->state & GDK_BUTTON2_MASK)
 	{
 		ve_view->h_strafe -= (gfloat)(event->x - ve_view->beginX)/300.0;
 		ve_view->v_strafe += (gfloat)(event->y - ve_view->beginY)/300.0;
 	}
 	/* Right Button */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (event->state & GDK_BUTTON3_MASK)
 	{
 		ve_view->sdepth -= (event->y - ve_view->beginY)/(widget->allocation.height);
@@ -962,12 +1354,26 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
  \return TRUE if a button is clicked, FALSE otherwise
  \see ve3d_motion_notify_event
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_button_press_event()\n"));
 	/*printf("button press event\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	gtk_widget_grab_focus (widget);
 
@@ -988,6 +1394,13 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
  \param widget, the drawingarea
  \param data, unused
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
@@ -997,6 +1410,13 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	g_return_if_fail(glcontext);
 	g_return_if_fail(gldrawable);
 	/*** OpenGL BEGIN ***/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
 		return;
 
@@ -1004,6 +1424,13 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	glShadeModel(GL_SMOOTH);
 	glEnable (GL_LINE_SMOOTH);
 	/*glEnable (GL_POLYGON_SMOOTH);*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glEnable (GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -1011,6 +1438,13 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
 	glMatrixMode(GL_MODELVIEW);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 }
 
 
@@ -1018,6 +1452,13 @@ G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
   \brief When the display should be insensitive, this greys it out
   \param ve_view, pointer to the current view
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 {
 	GdkPixmap *pmap = NULL;
@@ -1025,6 +1466,13 @@ G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 	GtkWidget * widget = ve_view->drawing_area;
 
 	/* Not sure how to "grey" the window to make it appear insensitve */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	pmap=gdk_pixmap_new(widget->window,
 			widget->allocation.width,
 			widget->allocation.height,
@@ -1047,6 +1495,13 @@ G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
  \param ve_view, pointer to the view
  \param cur_val, pointer to structure of current values for this iteration
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gint i=0;
@@ -1059,6 +1514,13 @@ G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_v
 	firmware = DATA_GET(global_data,"firmware");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_calculate_scaling()\n"));
 	/*printf("CALC Scaling\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	min = 65535;
 	max = 0;
@@ -1118,6 +1580,13 @@ G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_v
  \param ve_view, pointer to the view
  \param cur_val, pointer to structure of current values for this iteration
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gint x = 0;
@@ -1131,7 +1600,21 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 	/*printf("draw grid\n");*/
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	/* Switch between solid and wireframe */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (ve_view->wireframe)
 	{
 		glLineWidth(1.75);
@@ -1144,6 +1627,13 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	}
 
 	/* Draw QUAD MESH */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	//for(y=0;y<ve_view->y_bincount-1;++y)
 	for(y=ve_view->y_bincount-1;y >= 0;y--)
 	{
@@ -1152,21 +1642,56 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		{
 			quad = ve_view->quad_mesh[x][y];
 			/* (0x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			glColor4f(quad->color[0].red, quad->color[0].green, quad->color[0].blue, ve_view->opacity);
 			glVertex3f(quad->x[0],quad->y[0],quad->z[0]);
 			/* (1x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			glColor4f(quad->color[1].red, quad->color[1].green, quad->color[1].blue, ve_view->opacity);
 			glVertex3f(quad->x[1],quad->y[1],quad->z[1]);
 			/* (1x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			glColor4f(quad->color[2].red, quad->color[2].green, quad->color[2].blue, ve_view->opacity);
 			glVertex3f(quad->x[2],quad->y[2],quad->z[2]);
 			/* (0x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			glColor4f(quad->color[3].red, quad->color[3].green, quad->color[3].blue, ve_view->opacity);
 			glVertex3f(quad->x[3],quad->y[3],quad->z[3]);
 		}
 		glEnd();
 	}
 	if (!ve_view->wireframe)  /* render black grid on main grid */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		for(y=ve_view->y_bincount-1;y>=0;y--)
@@ -1177,12 +1702,40 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				glColor4f(0,0,0, 1);
 				quad = ve_view->quad_mesh[x][y];
 				/* (0x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				glVertex3f(quad->x[0],quad->y[0],quad->z[0]+0.001);
 				/* (1x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				glVertex3f(quad->x[1],quad->y[1],quad->z[1]+0.001);
 				/* (1x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				glVertex3f(quad->x[2],quad->y[2],quad->z[2]+0.001);
 				/* (0x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				glVertex3f(quad->x[3],quad->y[3],quad->z[3]+0.001);
 			}
 			glEnd();
@@ -1192,12 +1745,40 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				glColor4f(0,0,0, 1);
 				quad = ve_view->quad_mesh[x][y];
 				/* (0x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				glVertex3f(quad->x[0],quad->y[0],quad->z[0]-0.001);
 				/* (1x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				glVertex3f(quad->x[1],quad->y[1],quad->z[1]-0.001);
 				/* (1x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				glVertex3f(quad->x[2],quad->y[2],quad->z[2]-0.001);
 				/* (0x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				glVertex3f(quad->x[3],quad->y[3],quad->z[3]-0.001);
 			}
 			glEnd();
@@ -1214,6 +1795,13 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
  \param ve_view, pointer to the view
  \param cur_val, pointer to structure of current values for this iteration
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gfloat bottom = 0.0;
@@ -1224,6 +1812,13 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
 	firmware = DATA_GET(global_data,"firmware");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
 	/*printf("draw edit indicator\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	
 	drawOrthoText(cur_val->x_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.2 );
 	drawOrthoText(cur_val->y_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.233 );
@@ -1231,6 +1826,13 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
 	drawOrthoText("Edit Position", 1.0f, 0.2f, 0.2f, 0.025, 0.300 );
 
 	/* Render a red dot at the active VE map position */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glPointSize(MIN(w,h)/55.0);
 	glLineWidth(MIN(w,h)/300.0);
 	glColor3f(1.0,0.0,0.0);
@@ -1320,6 +1922,13 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
  \param ve_view, pointer to the view
  \param cur_val, pointer to structure of current values for this iteration
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gchar * label = NULL;
@@ -1340,6 +1949,13 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
 	/*printf("draw runtime indicator\n");*/
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	if ((!ve_view->z_source) && (!ve_view->z_multi_source))
 	{
 		dbg_func(OPENGL|CRITICAL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n\t\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"));
@@ -1354,6 +1970,13 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	bottom = 0.0;
 
 	/* Tail, last val. */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glLineWidth(MIN(w,h)/90.0);
 	glColor3f(0.0,0.0,0.25);
 	if (ve_view->fixed_scale)
@@ -1386,7 +2009,21 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	glEnd();
 	*/
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	/* Tail, second last val. */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glColor3f(0.0,0.0,0.50);
 	if (ve_view->fixed_scale)
 	{
@@ -1418,8 +2055,22 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	glEnd();
 	*/
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	glBegin(GL_LINE_STRIP);
 	/* If anything out of bounds change color and clamp! */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (out_of_bounds)
 		glColor3f(0.65,0.0,0.0);
 	else
@@ -1430,6 +2081,13 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	glEnd();
 
 	/* Tail, last val. */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glColor3f(0.0,0.0,0.80);
 	if (ve_view->fixed_scale)
 	{
@@ -1461,8 +2119,22 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	glEnd();
 	*/
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	glBegin(GL_LINE_STRIP);
 	/* If anything out of bounds change color and clamp! */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (out_of_bounds)
 		glColor3f(0.80,0.0,0.0);
 	else
@@ -1474,6 +2146,13 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	glEnd();
 
 	/* Render a Blue dot at the active VE map position */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glPointSize(MIN(w,h)/50.0);
 
 	glColor3f(0.0,0.0,1.0);
@@ -1517,6 +2196,13 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	glLineWidth(MIN(w,h)/300.0);
 	glBegin(GL_LINE_STRIP);
 	/* If anything out of bounds change color and clamp! */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (out_of_bounds)
 		glColor3f(1.0,0.0,0.0);
 	else
@@ -1537,6 +2223,13 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 
 
 	/* Live X axis marker */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	label = g_strdup_printf("%i",(GINT)cur_val->x_val);
 
 	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
@@ -1544,6 +2237,13 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 
 
 	/* Live Y axis marker */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	label = g_strdup_printf("%i",(GINT)cur_val->y_val);
 
 	ve3d_draw_text(label,-0.05,tmpf2,-0.05);
@@ -1558,9 +2258,23 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
  \param ve_view, pointer to the view
  \param cur_val, pointer to structure of current values for this iteration
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	/* Set vars and an asthetically pleasing maximum value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	gint i=0;
 	gfloat tmpf = 0.0;
 	gfloat tmpf1 = 0.0;
@@ -1570,12 +2284,33 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_axis()\n"));
 	/*printf("draw axis \n");*/
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	/* Set line thickness and color */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glLineWidth(1.0);
 	glColor3f(0.3,0.3,0.3);
 
 	/* Draw horizontal background grid lines
 	   starting at 0 VE and working up to VE+10% */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<=100;i+=10)
 	{
 		glBegin(GL_LINE_STRIP);
@@ -1587,6 +2322,13 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	}
 
 	/* Draw vertical background grid lines along KPA axis */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<ve_view->y_bincount;i++)
 	{
 		glBegin(GL_LINES);
@@ -1601,6 +2343,13 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	}
 
 	/* Draw vertical background lines along RPM axis */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<ve_view->x_bincount;i++)
 	{
 		glBegin(GL_LINES);
@@ -1616,6 +2365,13 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	}
 
 	/* Add the back corner top lines */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glBegin(GL_LINE_STRIP);
 	glVertex3f(0,1,1);
 	glVertex3f(1,1,1);
@@ -1623,6 +2379,13 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glEnd();
 
 	/* Add front corner base lines */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glBegin(GL_LINE_STRIP);
 	glVertex3f(0,1,0);
 	glVertex3f(0,0,0);
@@ -1632,6 +2395,13 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	glEnd();
 
 	/* Draw Z labels */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<=100;i+=10)
 	{
 		tmpf = (((float)i/100.0)/ve_view->z_scale)+ve_view->z_trans;
@@ -1652,13 +2422,41 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
  \param y, y coord
  \param z, z coord
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 {
 	/* Experiment*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glColor3f(0.2,0.8,0.8);
 	/* Set rendering postition */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glRasterPos3f (x, y, z);
 	/* Render each letter of text as stored in the display list */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	while(*text)
 	{
@@ -1672,6 +2470,13 @@ G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
  \brief ve3d_load_font_metrics is called during ve3d_realize and loads 
  the fonts needed by OpenGL for rendering the text
  \param widget, parent widget of the view
+ */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
 {
@@ -1711,6 +2516,13 @@ G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
  \param event, Eventkey structure
  \param data, unused
  \returns TRUE
+ */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
                                       *event, gpointer data)
@@ -1805,6 +2617,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_Up:
 			dbg_func(OPENGL,g_strdup("\t\"UP\"\n"));
 			/* Ctrl+Up moves the Load axis up */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
@@ -1831,6 +2650,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_Down:
 			dbg_func(OPENGL,g_strdup("\t\"DOWN\"\n"));
 			/* Ctrl+Down moves the Load axis down */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = y_base + (ve_view->active_y*y_mult);
@@ -1857,6 +2683,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			dbg_func(OPENGL,g_strdup("\t\"LEFT\"\n"));
 
 			/* Ctrl+Down moves the RPM axis left (down) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
@@ -1881,6 +2714,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		case GDK_Right:
 			dbg_func(OPENGL,g_strdup("\t\"RIGHT\"\n"));
 			/* Ctrl+Down moves the RPM axis right (up) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				offset = x_base + (ve_view->active_x*x_mult);
@@ -1907,6 +2747,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				/*printf("Ctrl-PgUp, big increase ROW!\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1924,6 +2771,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else if (event->state & GDK_MOD1_MASK)
 			{
 				/*printf("Alt-PgUp, big increase COL!\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -1963,6 +2817,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				/*printf("Ctrl-q/+/=, increase ROW!\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -1980,6 +2841,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else if (event->state & GDK_MOD1_MASK)
 			{
 				/*printf("Alt-q/+/=, increase COL!\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -2013,6 +2881,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				/*printf("Ctrl-PgDn, big decrease ROW!\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -2030,6 +2905,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_MOD1_MASK)
 			{
 				/*printf("Alt-PgDn, big decrease COL!\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -2066,6 +2948,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			if (event->state & GDK_CONTROL_MASK)
 			{
 				/*printf("Ctrl-w/-, decrease ROW!\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				for (i=0;i<x_bincount;i++)
 				{
 					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
@@ -2083,6 +2972,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			else if (event->state & GDK_MOD1_MASK)
 			{
 				/*printf("ALT-w/-, decrease COL!\n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				for (i=0;i<y_bincount;i++)
 				{
 					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
@@ -2144,6 +3040,13 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
  intialize it's datastructure for use.  
  \returns pointer to an initialized Ve_View_3D structure
  \see Ve_View_3D
+ */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 {
@@ -2217,6 +3120,13 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
  but it works)
  \param page, ECU page 
  \param offset, ECU offset withing the above page
+ */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 {
@@ -2305,6 +3215,13 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
   \brief Queues a deferred redraw to the 3D view in 300 ms
   \param ve_view, pointer to view
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 {
 	if (!DATA_GET(global_data,"ve3d_redraw_queued"))
@@ -2322,6 +3239,13 @@ G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
   \param data, pointer to view
   \returns FALSE to cause timeout to expire
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
@@ -2341,6 +3265,13 @@ G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
   \param ve_view, pointer to view
   \param cur_val, pointer to structure of current values for this iteration
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Vals *cur_val)
 {
 	gfloat tmpf1 = 0.0;
@@ -2366,6 +3297,13 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
 	firmware = DATA_GET(global_data,"firmware");
 
 	/*printf("draw active vertexes marker \n");*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	glPointSize(MIN(w,h)/100.0);
 
 	for (i=0;i<ve_view->x_bincount-1;i++)
@@ -2533,6 +3471,13 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
  MUST be freed when done.
   \see Cur_Vals
  */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 {
 	gfloat x_val = 0.0;
@@ -2554,11 +3499,32 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
 	/* X */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	/* Edit value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	cur_val->x_edit_value = ((convert_after_upload((GtkWidget *)ve_view->x_objects[ve_view->active_x]))-ve_view->x_trans)*ve_view->x_scale;
 	tmp = (cur_val->x_edit_value/ve_view->x_scale)+ve_view->x_trans;
 
 	/* Runtime value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (ve_view->x_multi_source)
 	{
 		hash = ve_view->x_multi_hash;
@@ -2594,6 +3560,13 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	else
 	{
 		/* Runtime value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		lookup_current_value(ve_view->x_source,&x_val);
 		cur_val->x_val = x_val;
 		lookup_previous_n_skip_x_values(ve_view->x_source,3,2,cur_val->p_x_vals);
@@ -2601,6 +3574,13 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,ve_view->x_precision,ve_view->x_suffix);
 	}
 	/* Y */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	cur_val->y_edit_value = ((convert_after_upload((GtkWidget *)ve_view->y_objects[ve_view->active_y]))-ve_view->y_trans)*ve_view->y_scale;
 	tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
 	if (ve_view->y_multi_source)
@@ -2634,9 +3614,23 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 			printf("BUG! multi is null!!\n");
 
 		/* Edit value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
 		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
 		/* runtime value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		lookup_current_value(multi->source,&y_val);
 		cur_val->y_val = y_val;
 		lookup_previous_n_skip_x_values(multi->source,3,2,cur_val->p_y_vals);
@@ -2645,6 +3639,13 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	else
 	{
 		/* Runtime value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		lookup_current_value(ve_view->y_source,&y_val);
 		cur_val->y_val = y_val;
 		lookup_previous_n_skip_x_values(ve_view->y_source,3,2,cur_val->p_y_vals);
@@ -2653,6 +3654,13 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	}
 
 	/* Z */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	cur_val->z_edit_value = ((convert_after_upload((GtkWidget *)ve_view->z_objects[ve_view->active_x][ve_view->active_y]))-ve_view->z_trans)*ve_view->z_scale;
 	tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
 	if (ve_view->z_multi_source)
@@ -2682,10 +3690,24 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 			printf("BUG! multi is null!!\n");
 
 		/* Edit value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
 		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
 		printf("z_edit_val (multi) is %f\n",cur_val->z_edit_value);
 		/* runtime value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		lookup_current_value(multi->source,&z_val);
 		cur_val->z_val = z_val;
 		lookup_previous_n_skip_x_values(multi->source,3,2,cur_val->p_z_vals);
@@ -2694,6 +3716,13 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	else
 	{
 		/* runtime value */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		lookup_current_value(ve_view->z_source,&z_val);
 		cur_val->z_val = z_val;
 		lookup_previous_n_skip_x_values(ve_view->z_source,3,2,cur_val->p_z_vals);
@@ -2712,6 +3741,13 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
   \param data, unused
   \return FALSE if no view, TRUE otherwise
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2736,6 +3772,13 @@ G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
   \param data, unused
   \return FALSE if no view, TRUE otherwise
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2756,6 +3799,13 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
   \param data, unused
   \return FALSE if no view, TRUE otherwise
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2776,6 +3826,13 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
   \param data, unused
   \return FALSE if no view, TRUE otherwise
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2794,6 +3851,13 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
   \brief Frees up data in the Cur_Vals structure
   \param Cur_Vals structure of current values
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void free_current_values(Cur_Vals *cur_val)
 {
 	if (cur_val->x_edit_text)
@@ -2819,6 +3883,13 @@ G_MODULE_EXPORT void free_current_values(Cur_Vals *cur_val)
   \param axis,  enumeration for X or Y axis
   \returns position across the axis as a fraction of 0<->1.0
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 {
 	gfloat tmp1 = 0.0;
@@ -2863,6 +3934,13 @@ G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
   \param ve_View, pointer to the view
   \param cur_val, pointer to the structure ofcurrent values for this iteration
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	static gint (*get_ecu_data_f)(gpointer) = NULL;
@@ -2901,6 +3979,13 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	ve_view->z_minval=1000;
 	ve_view->z_maxval=0;
 	/* Draw QUAD MESH into stored grid (Calc'd once*/
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for(y=0;y<ve_view->x_bincount*ve_view->y_bincount;++y)
 	{
 		OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(y*z_mult)));
@@ -2924,24 +4009,52 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			if (ve_view->fixed_scale)
 			{
 				/* (0x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				quad->x[0] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[0] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x)*z_mult)));
 				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				quad->x[1] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[1] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x+1)*z_mult)));
 				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				quad->x[2] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[2] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult)));
 				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				quad->x[3] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[3] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
@@ -2951,24 +4064,52 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			else
 			{
 				/* (0x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				quad->x[0] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[0] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x)*z_mult)));
 				quad->color[0] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,0y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				quad->x[1] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[1] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x+1)*z_mult)));
 				quad->color[1] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (1x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				quad->x[2] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[2] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult)));
 				quad->color[2] = rgb_from_hue(256.0-((gfloat)get_ecu_data_f(z_container)-ve_view->z_minval)*scaler,0.75, 1.0);
 				/* (0x,1y) */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				quad->x[3] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[3] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
@@ -2986,6 +4127,13 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
   \param data, pointer to ve_view
   \returns FALSE to disable timeout
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 gboolean delayed_expose(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
@@ -3002,6 +4150,13 @@ gboolean delayed_expose(gpointer data)
   \param data, unused
   \returns TRUE
   */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 {
 	gfloat x[2] = {0.0,0.0};
@@ -3031,16 +4186,37 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	g_return_val_if_fail(algorithm,TRUE);
 	/* Update all the dynamic RT Sliders */
 
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
 	/* If OpenGL window is open, redraw it... */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<firmware->total_tables;i++)
 	{
 		ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
 		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
 		{
 			/* Get X values */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (ve_view->x_multi_source)
 			{
 				hash = ve_view->x_multi_hash;
@@ -3073,10 +4249,24 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 				lookup_previous_n_values(ve_view->x_source,2,x);
 
 			/* Test X values, redraw if needed */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (((fabs(x[0]-x[1])/x[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 				goto redraw;
 
 			/* Get Y values */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (ve_view->y_multi_source)
 			{
 				hash = ve_view->y_multi_hash;
@@ -3109,10 +4299,24 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 				lookup_previous_n_values(ve_view->y_source,2,y);
 
 			/* Test Y values, redraw if needed */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (((fabs(y[0]-y[1])/y[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 				goto redraw;
 
 			/* Get Z values */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (ve_view->z_multi_source)
 			{
 				hash = ve_view->z_multi_hash;
@@ -3145,6 +4349,13 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 				lookup_previous_n_values(ve_view->z_source,2,z);
 
 			/* Test Z values, redraw if needed */
+
+/*! @file 3d_vetable.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 				goto redraw;
 			continue;

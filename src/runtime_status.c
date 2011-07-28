@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <args.h>
 #include <api-versions.h>
@@ -38,6 +45,13 @@ extern gconstpointer *global_data;
 /*!
  \brief load_status_pf() is called to create the ECU status window, load the 
  settings from the StatusMapFile.
+ */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_status_pf(void)
 {
@@ -98,6 +112,13 @@ G_MODULE_EXPORT void load_status_pf(void)
 	else
 		gtk_window_set_default_size(GTK_WINDOW(window),-1,-1);
 		*/
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 //	gtk_window_resize(GTK_WINDOW(window),w,h);
 //	g_object_set(window, "resizable", FALSE, NULL);
 	parent = glade_xml_get_widget(xml,"status_vbox");
@@ -139,11 +160,25 @@ G_MODULE_EXPORT void load_status_pf(void)
   \param parent, parent widget thisrts entity shouldbe placed in
   \returns FALSE at EOF, TRUE otherwise
   */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
 
 	/* Iterate though all nodes... */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
@@ -169,6 +204,13 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
   \param node, XML node the start from
   \param parent, parent container widget
   */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 {
 	gchar *txt = NULL;
@@ -211,6 +253,13 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 		cur_node = cur_node->next;
 	}
 	/* Minimum requirements */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if ((txt) && (active_fg) && (inactive_fg) && (bind_to_list))
 	{
 		frame = gtk_frame_new(NULL);
@@ -227,6 +276,13 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 		g_free(active_fg);
 		g_free(inactive_fg);
 		/* For controls based on ECU data */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if ((bitval >= 0) && (bitmask >= 0) && (source))
 		{
 			OBJ_SET(label,"bitval",GINT_TO_POINTER(bitval));
@@ -247,6 +303,13 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 /*!
  \brief update_runtime_vars_pf() updates all of the runtime sliders on all
  visible portions of the gui
+ */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 {
@@ -288,11 +351,32 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
  \brief reset_runtime_statue() sets all of the status indicators to OFF
  to reset the display
  */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void reset_runtime_status(void)
 {
 	/* Runtime screen */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 	/* Warmup Wizard screen */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_list_foreach(get_list("ww_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 }
 
@@ -302,6 +386,13 @@ G_MODULE_EXPORT void reset_runtime_status(void)
  runtime/warmupwizard displays
  \param key, pointer to a widget
  \param data, unused
+ */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 {
@@ -358,13 +449,34 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 
 
 	/* if the value hasn't changed, don't bother continuing */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (((value & bitmask) == (previous_value & bitmask)) && 
 			(!DATA_GET(global_data,"forced_update")))
 		return;	
 
 	if (((value & bitmask) >> bitshift) == bitval) /* enable it */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 	else	/* disable it.. */
+
+/*! @file runtime_status.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 
 	last_source = source;

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <configfile.h>
 #include <debugging.h>
 #include <getfiles.h>
@@ -30,6 +37,13 @@ extern gconstpointer *global_data;
  \brief personality_choice() is called from a one shot timeout from main
  in order to open the window to ask the user what ECU family to deal with
  running.
+ */
+
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean personality_choice(void)
 {
@@ -144,6 +158,13 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 
 		group = NULL;
 		/* Cycle list for PERSONAL profile files */
+
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		for (i=0;i<g_list_length(p_list);i++)
 		{
 			element = g_list_nth_data(p_list,i);
@@ -182,6 +203,13 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	label = gtk_label_new("System Wide ECU Profiles");
 	gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
 	/* Cycle list for System interogation files */
+
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<g_list_length(s_list);i++)
 	{
 		element = g_list_nth_data(s_list,i);
@@ -227,6 +255,13 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			break;
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK: /* Normal mode */
+
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
 jumpahead:
 			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
@@ -235,6 +270,13 @@ jumpahead:
 			io_cmd("interrogation",NULL);
 			break;
 		default: /* Offline */
+
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
 jumpahead_offline:
 			plugins_init();
 			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
@@ -256,6 +298,13 @@ jumpahead_offline:
   \see PersonaElement
   \returns TRUE unused element is NULL
   */
+
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 {
 	PersonaElement *element = (PersonaElement *)data;
@@ -294,6 +343,13 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
   \param data, pointer to PersonaElement
   \param user_data, unused
   */
+
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
 {
 	PersonaElement *e = (PersonaElement *)data;
@@ -316,6 +372,13 @@ G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
   \param b, Element 2
   \returns the results of g_ascii_strcasecmp of a->sequence,b->sequence
   */
+
+/*! @file personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gint persona_seq_sort(gconstpointer a, gconstpointer b)
 {
 	PersonaElement *a1 = (PersonaElement *)a;

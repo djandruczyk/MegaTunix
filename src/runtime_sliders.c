@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <api-versions.h>
 #include <debugging.h>
@@ -40,6 +47,13 @@ extern gconstpointer *global_data;
  \brief load_rt_sliders() is called to load up the runtime slider configurations
  from the file specified in the firmware's interrogation profile, and populate
  the gui with the newly created sliders.
+ */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_rt_sliders(void)
 {
@@ -101,6 +115,13 @@ G_MODULE_EXPORT void load_rt_sliders(void)
  \brief load_ww_sliders() is called to load up the runtime slider configurations
  from the file specified in the firmware's interrogation profile, and populate
  the gui with the newly created sliders.
+ */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_ww_sliders(void)
 {
@@ -168,11 +189,25 @@ G_MODULE_EXPORT void load_ww_sliders(void)
   \param tab_id, Tab identifier enumeration
   \returns FALSE when at end of file, TRUE otherwise
   */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *prefix, GHashTable *hash, gint table_num, TabIdent tab_id)
 {
 	xmlNode *cur_node = NULL;
 
 	/* Iterate though all nodes... */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
@@ -201,6 +236,13 @@ G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *pre
   \param table_num, table number on this tab
   \param tab_id, Tab identification enumeration
   */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_rts(xmlNode *node, GHashTable *hash, gint table_num, TabIdent tab_id)
 {
 	gchar *slider_name = NULL;
@@ -247,6 +289,13 @@ G_MODULE_EXPORT void load_rts(xmlNode *node, GHashTable *hash, gint table_num, T
  \brief load_ve3d_sliders() is called from 3d_vetable.c to load up the sliders
  specific to the 3D Table views. 
  \param table_num, the table number passed to load sliders for
+ */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 {
@@ -307,6 +356,13 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
  \param source, data source for this slider 
  \param ident, enumeration of the page this slider goes on
  \returns a Struct Rt_Slider *
+ */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
 {
@@ -379,6 +435,13 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	gtk_entry_set_alignment(GTK_ENTRY(label),1);
 	gtk_entry_set_editable(GTK_ENTRY(label),FALSE);
 	/* PRELIGHT seems to not givehte box as NORMAL does, not sure why */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	gtk_widget_modify_base(GTK_WIDGET(label),GTK_STATE_NORMAL,&slider->label->style->bg[GTK_STATE_PRELIGHT]);
 	/* For some reason GtkLabel consumes 3x the CPU to update vs an entry 
 	label = gtk_label_new(NULL);
@@ -386,6 +449,13 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	gtk_label_set_max_width_chars(GTK_LABEL(label),6);
 	gtk_misc_set_alignment(GTK_MISC(label),1.0,0.5);
 	*/
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	slider->textval = label;
 	gtk_box_pack_start(GTK_BOX(hbox),label,FALSE,FALSE,0);
@@ -405,6 +475,13 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 
 	pbar = mtx_progress_bar_new();
 	/* 1.1 Seconds peak hold time */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(pbar),1100);
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(pbar),
 			GTK_PROGRESS_LEFT_TO_RIGHT);
@@ -428,6 +505,13 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
  sliders into regular tabs.
  \param widget, of widget defined in Gui datamap file. Used
  to load al lthe necessary attributes to stick the control in the right place.
+ */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 {
@@ -504,12 +588,26 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 		slider->pbar = widget;
 	}
 	/* generic container (Table/box HOLDING a mtx pbar */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	else if (GTK_IS_CONTAINER(widget))
 	{
 		/* We don't like GTK+'s progress bar, so rip it out and 
 		 * stick in my custom version instead.  Get the orientation
 		 * first...
 		 */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		orient = (GtkProgressBarOrientation)OBJ_GET(widget,"orientation");
 		slider->pbar = mtx_progress_bar_new();
 		mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(slider->pbar),(GINT)DATA_GET(global_data,"pbar_hold_time"));
@@ -547,6 +645,13 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
  \param table_num, table_number to free the sliders for
  \returns FALSE
  */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 {
 	gchar * widget = NULL;
@@ -574,6 +679,13 @@ G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
   \param data, unused
   \returns TRUE
   */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	return TRUE;
@@ -587,6 +699,13 @@ G_MODULE_EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButt
   \param data, unused
   \returns TRUE
   */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	return TRUE;
@@ -600,6 +719,13 @@ G_MODULE_EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMoti
   \param data, unused
   \returns FALSE to let other signals run
   */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data)
 {
 	gboolean mapae_ctrl_state = FALSE;
@@ -632,6 +758,13 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
   rt_update_values for each element of the hashtable
   \param data, unused
   */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 {
 	gfloat coolant = 0.0;
@@ -650,16 +783,51 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 
 	active_page = (TabIdent)DATA_GET(global_data,"active_page");
 	/* Update all the dynamic RT Sliders */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (active_page == RUNTIME_TAB) /* Runtime display is visible */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if ((hash = DATA_GET(global_data,"rt_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == ENRICHMENTS_TAB)     /* Enrichments display is up */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if ((hash = DATA_GET(global_data,"enr_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == ACCEL_WIZ_TAB)       /* Enrichments display is up */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if ((hash = DATA_GET(global_data,"aw_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == WARMUP_WIZ_TAB)      /* Warmup wizard is visible */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	{
 		if ((hash = DATA_GET(global_data,"ww_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
@@ -690,6 +858,13 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
  \param key, unused
  \param value, pointer to Rt_Slider
  \param data, unused
+ */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
@@ -723,6 +898,13 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	precision = (GINT)DATA_GET(slider->object,"precision");
 	g_mutex_lock(rtv_mutex);
 	/*printf("runtime_gui history length is %i, current index %i\n",history->len,history->len-1);*/
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	current = g_array_index(history, gfloat, history->len-1);
 	previous = slider->last;
 	slider->last = current;
@@ -756,6 +938,13 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 		/* If changed by more than 5% or has been at least 5 
 		 * times withot an update or rt_forced_update is set
 		 * */
+
+/*! @file runtime_sliders.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if ((slider->textval) && ((abs(count-last_upd) > 2) || 
 					(DATA_GET(global_data,"rt_forced_update"))))
 		{

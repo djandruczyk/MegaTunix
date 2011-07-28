@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file listmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <init.h>
 #include <listmgmt.h>
 
@@ -22,6 +29,13 @@ extern gconstpointer *global_data;
  \param key, Text name of list to return a pointer to
  \returns pointer to GList
  \see store_list
+ */
+
+/*! @file listmgmt.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT GList * get_list(const gchar * key)
 {
@@ -40,6 +54,13 @@ G_MODULE_EXPORT GList * get_list(const gchar * key)
  \param list pointer to list to store
  \see get_list
  */
+
+/*! @file listmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
 {
 	if (!lists_hash)
@@ -57,6 +78,13 @@ G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
  \param key, Text name of list to remove
  \see get_list
  */
+
+/*! @file listmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void remove_list(const gchar *key)
 {
 	if (!lists_hash)
@@ -70,6 +98,13 @@ G_MODULE_EXPORT void remove_list(const gchar *key)
   \param a, pointer to ListElement structure
   \param b, pointer to ListElement structure
   */
+
+/*! @file listmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
 {
 	ListElement *a1 = (ListElement *)a;
@@ -84,6 +119,13 @@ G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
   \param b, pointer to gconstpointer object
   \param data, pointer to char string of the key name to each object passed
   */
+
+/*! @file listmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
 {
 	const gchar *key = (const gchar *)data;
@@ -96,6 +138,13 @@ G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer
   \param data, pointer to ListElement structure to be freed
   \param user_data, unused
   */
+
+/*! @file listmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void free_element(gpointer data, gpointer user_data)
 {
 	ListElement *a = (ListElement *)data;

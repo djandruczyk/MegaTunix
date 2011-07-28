@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <apicheck.h>
 #include <api-versions.h>
 #include <debugging.h>
@@ -33,6 +40,13 @@
  \brief load_realtime_map_pf() loads the realtime map specified in the detected
  firmware's interrogation profile, and sets up the necessary arrays for storage
  of data coming from the ECU (temporary arrays for the last 50 or so entries)
+ */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 {
@@ -113,6 +127,13 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	g_free(filename);
 
 	/* If file found we continue... */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if(!cfg_read_string(cfgfile,"realtime_map","applicable_firmwares",&tmpbuf))
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup(__FILE__": load_realtime_map_pf()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n"));
@@ -135,6 +156,13 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	/* OK, basic checks passed,  start loading data into
 	 * the main mapping structures...
 	 */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
 	{
 		dbg_func(RTMLOADER|CRITICAL,g_strdup(__FILE__": load_realtime_map_pf()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n"));
@@ -151,6 +179,13 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		g_free(tmpbuf);
 	}
 	/* This should free to values with g_list_free, but it causes a fault*/
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	rtv_map->offset_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,NULL);
 	rtv_map->rtv_list = g_ptr_array_new();
 	rtv_map->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -159,10 +194,24 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE, sizeof(GTimeVal),4096);
 
 	/* Load em up.. */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<derived_total;i++)
 	{
 		section = g_strdup_printf("derived_%i",i);
 		/* Get key list and parse */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
 			dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find \"keys\" in the \"[%s]\" section, ABORTING!!!\n\n ",section));
@@ -188,15 +237,57 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		object = g_new0(gconstpointer, 1);
 		history = NULL;
 		/* Create object to hold all the data. (dynamically)*/
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		/* Assume default size of 8 bit unsigned */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		DATA_SET(object,"size",GINT_TO_POINTER(MTX_U08));
 		/* Index */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		DATA_SET(object,"index",GINT_TO_POINTER(i));
 		/* Object name */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		DATA_SET_FULL(object,"name",g_strdup(section),g_free);
 		/* History Array */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		/* bind history array to object for future retrieval */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		DATA_SET(object,"history",(gpointer)history);
 
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
@@ -313,6 +404,13 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			g_free(tmpbuf);
 		}
 		/*DATA_SET_FULL(object,"keys",g_strdupv(keys),g_strfreev);*/
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
 		list = g_list_prepend(list,(gpointer)object);
 		g_hash_table_replace(rtv_map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
@@ -320,6 +418,13 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		g_free(section);
 		g_strfreev(keys);
 		/*g_datalist_foreach(object,dump_datalist,NULL);*/
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	}
 	cfg_free(cfgfile);
 	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
@@ -336,6 +441,13 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
  \param object, the place where the data loaded is bound to
  \param cfgfile, configfile pointer to read from
  \param section, section to read from in the config file
+ */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
 {
@@ -389,6 +501,13 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 		return;
 	}
 	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	DATA_SET_FULL(object,"expr_types",(gpointer)expr_types,g_free);
 	DATA_SET_FULL(object,"expr_symbols",(gpointer)expr_symbols,g_strfreev);
 	DATA_SET(object,"total_symbols",GINT_TO_POINTER(total_symbols));
@@ -404,6 +523,13 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 				break;
 			case RAW_VAR:
 				/* RAW variable */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
@@ -428,6 +554,13 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 				break;
 			case RAW_EMB_BIT:
 				/* RAW data embedded bitfield 2 params */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
@@ -456,6 +589,13 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
  \param object, the place where the data loaded is bound to
  \param cfgfile, configfile pointer to read from
  \param section, section to read from in the config file
+ */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
@@ -508,6 +648,13 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 		return;
 	}
 	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	OBJ_SET_FULL(object,"expr_types",(gpointer)expr_types,g_free);
 	OBJ_SET_FULL(object,"expr_symbols",(gpointer)expr_symbols,g_strfreev);
 	OBJ_SET(object,"total_symbols",GINT_TO_POINTER(total_symbols));
@@ -523,6 +670,13 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 				break;
 			case RAW_VAR:
 				/* RAW variable */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
@@ -547,6 +701,13 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 				break;
 			case RAW_EMB_BIT:
 				/* RAW data embedded bitfield 2 params */
+
+/*! @file rtv_map_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))

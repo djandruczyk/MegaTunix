@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <args.h>
 #include <config.h>
 #include <configfile.h>
@@ -45,6 +52,13 @@ gboolean descend_tree(GladeWidgetInfo *info, ConfigFile *);
  \brief load_gui_tabs_pf() is called after interrogation completes successfully.
  It's purpose is to load all the glade files and datamaps as specified in the
  interrogation profile of the detected firmware. 
+ */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 {
@@ -178,6 +192,13 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			break;
 
 		/* Allow gui to update as it should.... */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		while (gtk_events_pending())
 		{
 			if (DATA_GET(global_data,"leaving"))
@@ -205,6 +226,13 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
  \param notebook, pointer to the notebook the new tab should be placed
  \param page, page number to load
  \returns TRUE on success, FALSE on failure
+ */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 {
@@ -260,6 +288,13 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 			g_hash_table_destroy(groups);
 		groups = NULL;
 		/* Clear not_rendered flag */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		OBJ_SET(label,"not_rendered",NULL);
 
 		populate_master(topframe,(gpointer)cfgfile);
@@ -274,6 +309,13 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		   dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
 		   g_free(tab_name);
 		 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 		gtk_box_pack_start(GTK_BOX(placeholder),topframe,TRUE,TRUE,0);
 		OBJ_SET(placeholder,"topframe",topframe);
@@ -292,6 +334,13 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	}
 	update_interdependancies_pf();
 	/* Allow gui to update as it should.... */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	while (gtk_events_pending())
 	{
 		if (DATA_GET(global_data,"leaving"))
@@ -307,6 +356,13 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
  \brief free's the data from the struct Group structure
  \param value, pointer to the struct Group to be deallocated
  \see load_groups
+ */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void group_free(gpointer value)
 {
@@ -335,6 +391,13 @@ G_MODULE_EXPORT void group_free(gpointer value)
  \returns a GHashTable * to a newly created hashtable of the groups that were
  loaded. The groups are indexed in the hashtable by group name.
  */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 {
 	gint x = 0;
@@ -362,6 +425,13 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 	for (x=0;x<num_groups;x++)
 	{
 		/* Create structure and allocate ram for it */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		group = g_new0(Group, 1);
 		section = g_strdup(groupnames[x]);
 		if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
@@ -385,6 +455,13 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		 * load the dependency information and store it for 
 		 * use when needed...
 		 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
 			if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
@@ -393,6 +470,13 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		}
 
 		/* Adds on "default" options to any other groups */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if (g_strcasecmp(section,"defaults") != 0)
 			group->page = bind_group_data(cfgfile, group->object, groups, "defaults");
 
@@ -400,8 +484,22 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 			group->page = tmpi;
 
 		/* Binds the rest of the settings, overriding any defaults */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		bind_keys(group->object,cfgfile,section,group->keys,group->num_keys);
 		/* Store it in the hashtable... */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		g_hash_table_insert(groups,g_strdup(section),(gpointer)group);
 		g_free(section);
 	}
@@ -425,6 +523,13 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
  be bound to the widget
  \returns the page of the group
  */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar *groupname)
 {
 	gint i = 0;
@@ -439,7 +544,21 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 		return -1;
 	}
 	/* Copy data from the group object to the */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	/* Grab hidden data if it exists */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (OBJ_GET(group->object, "dep_object"))
 		OBJ_SET(object,"dep_object",OBJ_GET(group->object, "dep_object"));
 
@@ -482,6 +601,13 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
  \param lists, command seperated string list of lists to bind this
  widget into.
  */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
 {
 	gint bind_num_keys = 0;
@@ -504,6 +630,13 @@ G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
 	 * returned list is used to store back into the hashtable so
 	 * that the list is always stored and up to date...
 	 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<bind_num_keys;i++)
 	{
 		dest_list = get_list(tmpvector[i]);
@@ -520,6 +653,13 @@ G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
   \param lists, comma separated list of list names
   \param data, pointer to the item to remove from each list
   */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
 {
 	gint i = 0;
@@ -550,6 +690,13 @@ G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
  object model.
  \param widget, widget passed to load attributes on
  \param user_data, pointer to a BingGroup structure.
+ */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 {
@@ -599,9 +746,23 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		tmpbuf = g_strdelimit(g_strdup(ptr),"_",' ');
 		section = g_strndup(widget->name,ptr-widget->name);
 		/*printf("(indexed) section is %s\n",section);*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		result = sscanf(tmpbuf,"%d of %d",&index,&count);
 		/*printf("sscanf result %i\n",result);
 		  printf("Found indexed value for \"%s\", index %i, count %i\n",tmpbuf,index,count); */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		g_free(tmpbuf);
 	}
 	else
@@ -621,10 +782,24 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 	page = -1;
 	/* Store ptr to self in qdata, needed for bind_to_lists from groups*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	OBJ_SET(widget,"self",widget);
 	/* Bind the data in the "defaults" group per tab to EVERY var in that
 	 * tab
 	 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	page = bind_group_data(cfgfile, G_OBJECT(widget), groups, "defaults");
 
 	if(cfg_read_string(cfgfile, section, "group", &tmpbuf))
@@ -640,6 +815,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	/* Bind widgets to lists if they have the bind_to_list flag set...
 	*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	tmpbuf = NULL;
 	if (cfg_read_string(cfgfile, section, "bind_to_list", &tmpbuf))
 	{
@@ -653,6 +835,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 
 	/* Color selections */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile, section, "active_fg", &tmpbuf))
 	{
 		gdk_color_parse(tmpbuf, &color);
@@ -669,6 +858,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget has a "depend_on" tag we need to load the dependancy
 	 * information  and store it for use when needed...
 	 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
 		if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
@@ -679,6 +875,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget (a textview) has "create_tags" we call a special
 	 * handler just for that..
 	 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile,section,"create_tags",&tmpbuf))
 	{
 		load_tags(G_OBJECT(widget),cfgfile,section);
@@ -686,6 +889,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 
 	/* If this widget has "tooltip" set the tip on the widget */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile,section,"tooltip",&tmpbuf))
 	{
 		gtk_widget_set_tooltip_text(widget,tmpbuf);
@@ -694,6 +904,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 	/* If this widget (a label) has "set_label" we set the label on it
 	*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile,section,"set_label",&tmpbuf))
 	{
 		gtk_label_set_text(GTK_LABEL(widget),tmpbuf);
@@ -702,6 +919,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 	/* If this widget is temp dependant, set the current units on it 
 	*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile,section,"temp_dep",&tmpbuf))
 	{
 		OBJ_SET(widget,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
@@ -710,6 +934,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 	/* If this widget has "register_as", register it with the supplied name
 	*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile,section,"register_as",&tmpbuf))
 	{
 		register_widget(tmpbuf,widget);
@@ -719,6 +950,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget has "initializer" there's a global variable 
 	 * with it's name on it 
 	 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile,section,"initializer",&initializer))
 	{
 		if (!cfg_read_string(cfgfile,section,"widget_type",&tmpbuf))
@@ -749,6 +987,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	if (offset >= 0 && indexed)
 	{
 		/*printf("indexed widget %s\n",widget->name); */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if (cfg_read_string(cfgfile, section, "size", &size))
 		{
 			offset += index * get_multiplier (translate_string (size));
@@ -768,6 +1013,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 			}
 		}
 		/*printf("widget %s, offset %i\n",widget->name,offset);*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		OBJ_SET(widget,"offset",GINT_TO_POINTER(offset));
 	}
 	if (offset >= 0)
@@ -776,6 +1028,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		 * offset, thus we can have multiple on screen controls bound
 		 * to single data offset in the ECU
 		 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if (page < 0)
 		{
 			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, page %i, at offset %i...\n\n",section,page,offset));
@@ -803,11 +1062,25 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 * rest of it's setting from the groupname listed.  This reduces
 	 * redundant keys all throughout the file...
 	 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	bind_keys(G_OBJECT(widget), cfgfile, section, keys, num_keys);
 	g_strfreev(keys);
 
 	/* If this widget has the "choices" key (combobox)
 	*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (cfg_read_string(cfgfile,section,"choices",&tmpbuf))
 	{
 		combo_setup(G_OBJECT(widget),cfgfile,section);
@@ -846,6 +1119,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
  found execute it
  \param functions, CSV list of functions to run
  */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void run_post_functions(const gchar * functions)
 {
 	run_post_functions_with_arg(functions,NULL);
@@ -861,6 +1141,13 @@ G_MODULE_EXPORT void run_post_functions(const gchar * functions)
  \param functions, CSV list of functions to run
  \param widget, pointer to widget to be passed to the function
  */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
 	void (*post_func_w_arg)(GtkWidget *) = NULL;
@@ -871,6 +1158,13 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 	for (i=0;i<g_strv_length(vector);i++)
 	{
 		/* If widget defined, pass to post function */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if (widget)
 		{
 			if (get_symbol(vector[i],(void *)&post_func_w_arg))
@@ -879,6 +1173,13 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
 		}
 		else /* If no widget find funct with no args.. */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		{
 			if (get_symbol(vector[i],(void *)&post_func))
 				post_func();
@@ -895,6 +1196,13 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
   \param data, pointer to a GPtrArray list of tab infos, used to traverse 
   each tab config file to preload the needed interdependancy structures
   */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 gboolean preload_deps(gpointer data)
 {
 	Firmware_Details *firmware = NULL;
@@ -926,6 +1234,13 @@ gboolean preload_deps(gpointer data)
 	}
 	io_cmd(firmware->get_all_command,NULL);
 	return FALSE; /* Make it not run again... */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 }
 
 
@@ -936,6 +1251,13 @@ gboolean preload_deps(gpointer data)
   \param cfgfilem, pointer to the corresponding datamap file
   \returns TRUE, unless eat end of the tree
   */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 {
 	static GHashTable *widget_2_tab_hash = NULL;
@@ -951,6 +1273,13 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	gint offset = 0;
 	gint page = 0;
 	/*gint canID = 0;*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	DataSize size = MTX_U08;
 	GObject *object = NULL;
 	GList *list = NULL;
@@ -974,6 +1303,13 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 
 	   printf("widget %s has %i children\n",info->name,info->n_children);
 	 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<info->n_children;i++)
 	{
 		descend_tree(info->children[i].child,cfgfile);
@@ -1037,6 +1373,13 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		g_object_ref_sink(object);
 		gdk_threads_leave();
 		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		OBJ_SET(object,"page",GINT_TO_POINTER(page));
 		OBJ_SET(object,"offset",GINT_TO_POINTER(offset));
 		OBJ_SET(object,"size",GINT_TO_POINTER(size));
@@ -1094,11 +1437,25 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		   }
 		   }
 		 */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		gdk_threads_enter();
 		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(object);
 		gdk_threads_leave();
 		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		OBJ_SET(object,"page",GINT_TO_POINTER(page));
 		OBJ_SET(object,"offset",GINT_TO_POINTER(offset));
 		OBJ_SET(object,"size",GINT_TO_POINTER(size));
@@ -1125,6 +1482,13 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
   \param datamap, the datamap that goes with this tab
   \returns TRUE on success, FALSE otherwise
   */
+
+/*! @file tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean handle_dependant_tab_load(gchar * datamap)
 {
 	GPtrArray *tabinfos = NULL;

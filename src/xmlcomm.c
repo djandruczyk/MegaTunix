@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <debugging.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -29,6 +36,13 @@ extern gconstpointer *global_data;
   \brief Loads the comm_xml specific to this firmware persona
   \param filename, name of the file to open/parse
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 {
 	xmlDoc *doc = NULL;
@@ -43,6 +57,13 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 	LIBXML_TEST_VERSION
 
 	/*parse the file and get the DOM */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	doc = xmlReadFile(filename, NULL, 0);
 
 	if (doc == NULL)
@@ -52,11 +73,25 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 	}
 
 	/*Get the root element node */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	root_element = xmlDocGetRootElement(doc);
 	load_xmlcomm_elements(root_element);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 	/*g_hash_table_foreach((GHashTable *)DATA_GET(global_data,"commands_hash"),xmlcomm_dump_commands,NULL);*/
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 }
 
@@ -65,6 +100,13 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
   \brief recursive function to iterate over the XML nodes
   \param a_name, current XML node
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 {
 	static GHashTable *arguments = NULL;
@@ -77,6 +119,13 @@ G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 		commands = (GHashTable *)DATA_GET(global_data,"commands_hash");
 
 	/* Iterate though all nodes... */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
@@ -97,6 +146,13 @@ G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
   \param arguments, pointer to hashtable to store the arg structures within
   \param node, XML node
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
@@ -131,6 +187,13 @@ G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
   \param commands_hash, pointer to hashtable to store the Cmd structures within
   \param node, XML node
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
@@ -167,6 +230,13 @@ G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
   \param arg, pointer to the PotentialArg structure
   \param node, XML node
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
@@ -234,6 +304,13 @@ G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
   \param cmd, pointer to the Command structure
   \param node, XML node
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
@@ -309,6 +386,13 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
   \param cmd, pointer to the Command structure
   \param node, XML node
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
@@ -344,6 +428,13 @@ G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
   \param cmd, pointer to the Command structure
   \param node, XML node
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
@@ -396,6 +487,13 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
   \param value, pointer to the Command structure
   \param data, unused
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 {
 	Command *cmd = NULL;
@@ -449,6 +547,13 @@ G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointe
   \param str_len,  pointer to place the destination string length into after 
   parsing
   */
+
+/*! @file xmlcomm.c
+ *
+ * @brief ...
+ *
+ *
+ */
 void parse_hex_string(gchar *str, gchar *dest, gint *str_len)
 {
 	gchar **vector = NULL;

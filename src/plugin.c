@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <debugging.h>
 #include <defines.h>
 #include <notifications.h>
@@ -31,6 +38,13 @@ extern gconstpointer *global_data;
   \param data, second arg to function that we call (if found )
   \returns result of function call or FALSE if func not found;
   */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
 {
 	gchar * func_name = NULL;
@@ -60,6 +74,13 @@ G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
   "plugin_init()" function within each to initialize any datastructures, 
   handlers, threads within each plugin
   */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void plugins_init()
 {
 	GModule *module[3] = {NULL,NULL,NULL};
@@ -72,12 +93,26 @@ G_MODULE_EXPORT void plugins_init()
 	void (*common_gui_init)(void) = NULL;
 
 	/* MegaTunix itself */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	module[MAIN] = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module[MAIN])
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": plugin_init()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
 	DATA_SET_FULL(global_data,"megatunix_module",(gpointer)module[0],g_module_close);
 
 	/* Common Library */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (DATA_GET(global_data,"common_lib"))
 	{
 #ifdef __WIN32__
@@ -94,6 +129,13 @@ G_MODULE_EXPORT void plugins_init()
 		DATA_SET_FULL(global_data,"common_module",(gpointer)module[COMMON],g_module_close);
 	}
 	/* ECU library */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (DATA_GET(global_data,"ecu_lib"))
 	{
 #ifdef __WIN32__
@@ -114,14 +156,35 @@ G_MODULE_EXPORT void plugins_init()
 	   passed to plugin(s) so they have access to get to global functions
 	   by looking up the symbols
 	 */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	DATA_SET(global_data,"error_msg_f",(gpointer)&error_msg);
 	DATA_SET(global_data,"get_symbol_f",(gpointer)&get_symbol);
 
 	/* Common module init */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (module[COMMON])
 		if (g_module_symbol(module[COMMON],"plugin_init",(void *)&plugin_init))
 			plugin_init(global_data);
 	/* ECU Specific module init */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (module[ECU])
 
 		if (g_module_symbol(module[ECU],"plugin_init",(void *)&plugin_init))
@@ -131,10 +194,38 @@ G_MODULE_EXPORT void plugins_init()
 		common_gui_init();
 
 	/* Startup dispatcher thread */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	id =  g_thread_create(thread_dispatcher,
 			NULL, /* Thread args */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			TRUE, /* Joinable */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			NULL); /*GError Pointer */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (id)
 		DATA_SET(global_data,"thread_dispatcher_id",id);
 }
@@ -145,6 +236,13 @@ G_MODULE_EXPORT void plugins_init()
   within each plugin and calls them in turn to have them shutdown any resources
   or threads, in preparation for plugin unloading.
   */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void plugins_shutdown()
 {
 	GModule *module = NULL;
@@ -159,6 +257,13 @@ G_MODULE_EXPORT void plugins_shutdown()
 		DATA_SET(global_data,"thread_dispatcher_id",NULL);
 	}
 	/* Shutdown ECU module */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	module = DATA_GET(global_data,"ecu_module");
 	if (module)
 	{
@@ -167,6 +272,13 @@ G_MODULE_EXPORT void plugins_shutdown()
 		DATA_SET(global_data,"ecu_module",NULL);
 	}
 	/* Shutdown Common module */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	module = DATA_GET(global_data,"common_module");
 	if (module)
 	{
@@ -185,6 +297,13 @@ G_MODULE_EXPORT void plugins_shutdown()
   \param function_p, pointer to be filled with the address of the function
   \returns TRUE on success, false on failure
   */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 {
 	GModule *module[3] = {NULL,NULL,NULL};
@@ -193,10 +312,31 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 	extern gconstpointer *global_data;
 
 	/* Megatunix itself */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	module[MAIN] = DATA_GET(global_data,"megatunix_module");
 	/* Common library */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	module[COMMON] = DATA_GET(global_data,"common_module");
 	/* ECU Specific library */
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	module[ECU] = DATA_GET(global_data,"ecu_module");
 
 	for (i=MAIN;i<NUM_MODULES;i++)
@@ -208,6 +348,13 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 			{
 				found = TRUE;
 				/*printf("FOUND symbol %s (%p) in module %i\n",name,function_p,i);*/
+
+/*! @file plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			}
 	}
 	if (!found)

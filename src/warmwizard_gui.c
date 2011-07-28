@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file warmwizard_gui.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <defines.h>
 #include <widgetmgmt.h>
 
@@ -22,6 +29,13 @@ extern GdkColor red;
  highlight the appropriate values on screen when the temperature changes. This
  is done to aid the user for tuning warmup enrichments for their ECU.
  \param temp, the temp of the engine's coolant in deg Fahrenheit.
+ */
+
+/*! @file warmwizard_gui.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 {

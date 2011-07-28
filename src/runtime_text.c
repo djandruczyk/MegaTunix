@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <args.h>
 #include <api-versions.h>
@@ -35,6 +42,13 @@ extern gconstpointer *global_data;
  \brief load_rt_text_pf() is called to load up the runtime text configurations
  from the file specified in the firmware's interrogation profile, and populate
  a new window with the runtiem vars text value box.
+ */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_rt_text_pf(void)
 {
@@ -85,6 +99,13 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	}
 
 	/* Create window */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	xml = glade_xml_new(main_xml->filename,"rtt_window",NULL);
 	window = glade_xml_get_widget(xml,"rtt_window");
 	register_widget("rtt_window",window);
@@ -108,6 +129,13 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	}
 
 	/*Get the root element node */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT);
 	DATA_SET(global_data,"rtt_model",store);
 	treeview = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
@@ -139,11 +167,25 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
   \param parent, container for the RTT display
   \returns FALSE when at EOF, otherwise TRUE
   */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
 
 	/* Iterate though all nodes... */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
@@ -170,6 +212,13 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
  \param node, pointer to XML node
  \param store, pointer to ListStore where we save it
  \param parent, Parent widget
+ */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 {
@@ -222,6 +271,13 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
  \param source, data source for this rt_text 
  \returns a Struct Rt_Text *
  */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
@@ -259,6 +315,13 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
  \param parent, parent widget
  \param ctrl_name, name of the rt_text as defined in the config file
  \returns a populated pointer to a Rt_Text structure
+ */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 {
@@ -305,6 +368,13 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	hbox = gtk_hbox_new(FALSE,2);
 
 	/* Static prefix label.... */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (show_prefix)
 	{
 		label = gtk_label_new(NULL);
@@ -315,6 +385,13 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	}
 
 	/* Value label */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	label = gtk_label_new(NULL);
 	gtk_label_set_width_chars(GTK_LABEL(label),5);
 
@@ -339,6 +416,13 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
  \brief add_additional_rtt() is called as a post function for Tab loading
  to add an RTT on a normal widget tab. (AE wizard currently)
  \param widget, pointer to widget containing the data needed
+ */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 {
@@ -377,6 +461,13 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
  \param key, unused
  \param value, pointer to Rt_Slider
  \param data, unused
+ */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
@@ -452,6 +543,13 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
   \brief Sets up the runtime text treeview
   \param treeview, pointer to the treeviedw to setup
   */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 {
 	GtkCellRenderer *renderer;
@@ -463,12 +561,26 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 
 	renderer = gtk_cell_renderer_text_new();
 	/*gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);*/
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "text", COL_RTT_INT_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
 	renderer = gtk_cell_renderer_text_new();
 	/*gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),65, 1);*/
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
 	column = gtk_tree_view_column_new_with_attributes("",renderer, "markup", COL_RTT_DATA,  NULL);
 	g_object_set(column, "alignment", 1.0, NULL);
@@ -487,6 +599,13 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
   \param user_data, unused
   \returns FALSE
   */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -540,6 +659,13 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
   \param data, unused
   \returns TRUE on success, FALSE if Mtx is shutting down
   */
+
+/*! @file runtime_text.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean update_rttext(gpointer data)
 {       
         static GMutex *rtt_mutex = NULL;

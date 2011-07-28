@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file keybinder.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <defines.h>
 #include <debugging.h>
 #include <rtv_map_loader.h>
@@ -28,6 +35,13 @@
   \param keys, array of char *'s, list of keys to read and store
   \param num_keys, number of elements in the keys array
   */
+
+/*! @file keybinder.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *section, gchar ** keys, gint num_keys)
 {
 	gint i = 0;
@@ -104,6 +118,13 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 					tmpstr = DATA_GET(object,keys[i]);
 					/* If data already on widget, append
 					 * new data and store */
+
+/*! @file keybinder.c
+ *
+ * @brief ...
+ *
+ *
+ */
 					if ((tmpstr) && (g_strrstr(keys[i],"bind_to_list")!= NULL))
 					{
 						tmpstr = g_strconcat(tmpstr,",",tmpbuf,NULL);

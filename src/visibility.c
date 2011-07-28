@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file visibility.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <config.h>
 #include <defines.h>
 #include <enums.h>
@@ -30,6 +37,13 @@ extern gconstpointer *global_data;
   \param data, unused
   \return TRUE on success
   */
+
+/*! @file visibility.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer data)
 {
 	GladeXML *main_xml = NULL;
@@ -101,6 +115,13 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
   \param data, index to the tab to hide
   \return TRUE on success
   */
+
+/*! @file visibility.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean hide_tab(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *child;

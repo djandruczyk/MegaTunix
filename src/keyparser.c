@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file keyparser.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <assert.h>
 #include <debugging.h>
 #include <stringmatch.h>
@@ -23,6 +30,13 @@
  \param count, reference to dest to place number of keys
  \param delimiter, char to split the string with
  \returns a string vector of the original string split up with the delimiter
+ */
+
+/*! @file keyparser.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gchar *delimiter)
 {
@@ -46,6 +60,13 @@ G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gc
  \param count, reference to dest to place number of keys
  \param delimiter, char to split the string with
  \returns a dynamic integer array of the keystypes (enums)
+ */
+
+/*! @file keyparser.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const gchar *delimiter)
 {

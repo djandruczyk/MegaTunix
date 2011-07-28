@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #define _ISOC99_SOURCE
 #include <3d_vetable.h>
 #include <args.h>
@@ -64,6 +71,13 @@ extern GdkColor white;
  \param data, unused
  \returns TRUE
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
 	gint id;
@@ -72,6 +86,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	   extern GThread * binary_socket_id;
 	   extern GThread * control_socket_id;
 	 */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	GMutex *serio_mutex = NULL;
 	GMutex *rtv_mutex = NULL;
 	GAsyncQueue *io_repair_queue = NULL;
@@ -109,6 +130,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	main_window = lookup_widget("main_window");
 
 	/* Stop timeout functions */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	stop_tickler(RTV_TICKLER);
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"));
 	stop_tickler(LV_PLAYBACK_TICKLER);
@@ -118,15 +146,36 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
 
 	/* Set global flag */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	DATA_SET(global_data,"leaving",GINT_TO_POINTER(TRUE));
 
 
 	/* Message to trigger serial repair queue to exit immediately */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 	if (io_repair_queue)
 		g_async_queue_push(io_repair_queue,&tmp);
 
 	/* Commits any pending data to ECU flash */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
 	if ((DATA_GET(global_data,"connected")) && 
 			(DATA_GET(global_data,"interrogated")) && 
@@ -139,6 +188,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 
 	/* IO dispatch queue */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
@@ -148,12 +204,26 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_mutex_unlock(io_dispatch_mutex);
 
 	/* Binary Log flusher */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	id = (GINT)DATA_GET(global_data,"binlog_flush_id");
 	if (id)
 		g_source_remove(id);
 	DATA_SET(global_data,"binlog_flush_id",NULL);
 
 	/* PF dispatch queue */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
 	if (id)
 		g_source_remove(id);
@@ -167,6 +237,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_mutex_unlock(pf_dispatch_mutex);
 
 	/* Statuscounts timeout */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	id = (GINT)DATA_GET(global_data,"statuscounts_id");
 	if (id)
 		g_source_remove(id);
@@ -180,6 +257,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_mutex_unlock(statuscounts_mutex);
 
 	/* GUI Dispatch timeout */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");
 	if (id)
 		g_source_remove(id);
@@ -212,6 +296,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	 dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after control socket thread shutdown\n"));
 	 */
 
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	if (lookup_widget("dlog_select_log_button"))
 		iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
 
@@ -224,7 +315,21 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	g_mutex_trylock(rtv_mutex);  /* <-- this makes us wait */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_mutex_unlock(rtv_mutex); /* now unlock */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	close_serial();
 	unlock_serial();
@@ -233,14 +338,35 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	/* Grab and release all mutexes to get them to relinquish
 	 */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	g_mutex_lock(serio_mutex);
 	g_mutex_unlock(serio_mutex);
 
 	/* Tell plugins to shutdown */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	plugins_shutdown();
 
 	/* Free all buffers */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	mem_dealloc();
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
@@ -257,6 +383,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
  \param editable, pointer to editable widget to extract text from
  \returns TRUE
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 {
 	gchar *port;
@@ -271,6 +404,13 @@ G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 	 * repair thread which should take care of flipping to the 
 	 * overridden port
 	 */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	return TRUE;
 }
 
@@ -280,6 +420,13 @@ G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
  \param widget, the toggle button that changes
  \param data, unused in most cases
  \returns TRUE
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
@@ -303,6 +450,13 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		switch ((ToggleButton)handler)
 		{
 			case TOGGLE_NETMODE:
@@ -381,6 +535,13 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	}
 	else
 	{	/* not pressed */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		switch ((ToggleButton)handler)
 		{
 			case TOGGLE_NETMODE:
@@ -415,6 +576,13 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 			case REALTIME_VIEW:
 			case PLAYBACK_VIEW:
 				/* Not pressed, just break */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				break;
 			default:
 				if (!common_handler)
@@ -445,6 +613,13 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
  \param data, unused
  \returns TRUE
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
@@ -473,6 +648,13 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	{
 		case DEBUG_LEVEL:
 			/* Debugging selection buttons */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			tmp32 = (GINT)DATA_GET(global_data,"dbg_lvl");
 			tmp32 = tmp32 & ~bitmask;
 			tmp32 = tmp32 | (bitval << bitshift);
@@ -507,6 +689,13 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
  \param data, unused
  \returns TRUE
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
 	if ((DATA_GET(global_data,"paused_handlers")) || 
@@ -527,6 +716,13 @@ G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
  \param event, unused
  \param data, unused
  \returns FALSE
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 {
@@ -551,6 +747,13 @@ G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *eve
  \param data, unused
  \returns, if paused/not ready, return TRUE, otherwise call plugin handler
  and returm whatever it returns
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 {
@@ -587,6 +790,13 @@ G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
  \param widget, the widget being modified
  \param data, not used
  \returns TRUE
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
@@ -627,9 +837,23 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
  \param data, not used
  \returns TRUE
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 	void *obj_data = NULL;
@@ -771,6 +995,13 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
  \param data, not used
  \returns TRUE
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
@@ -807,6 +1038,13 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
  \param data, not used
  \returns TRUE
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
@@ -814,6 +1052,13 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	 * if necessary.  works well,  one generic function with a 
 	 * select/case branch to handle the choices..
 	 */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 	gint tmpi = 0;
 	gint handler = -1;
@@ -888,6 +1133,13 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (tmpwidget)
 				lv_configure_event(lookup_widget("logviewer_trace_darea"),NULL,NULL);
 			/*	g_signal_emit_by_name(tmpwidget,"configure_event",NULL);*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			break;
 		default:
 			if (!common_handler)
@@ -917,6 +1169,13 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
  that was pressed
  \param data, unused
  \returns FALSE if not handled, TRUE otherwise
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
@@ -976,6 +1235,13 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	smallstep = (GINT)OBJ_GET(widget,"smallstep");
 	bigstep = (GINT)OBJ_GET(widget,"bigstep");
 	/* Get factor to give sane small/bigstep no matter what */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (smallstep == 0)
 	{
 		tmpf = pow(10.0,(double)-precision);
@@ -1004,6 +1270,13 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	/* In the rare case where bigstep exceeds the limit, reset to more
 	   sane values.  Only should happen on extreme conversions
 	 */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if (bigstep > upper)
 	{
 		bigstep = upper/10;
@@ -1034,6 +1307,13 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		/*		grab_single_cell = FALSE;
 				grab_multi_cell = FALSE;
 		 */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		return FALSE;
 	}
 	switch (event->keyval)
@@ -1221,6 +1501,13 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
   \param pos, pointer to the  position of the cursor within the entry
   \param data, unused
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gint len, gint *pos, gpointer data)
 {
 	gint count = 0;
@@ -1263,6 +1550,13 @@ G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gin
  \param data, unused
  \returns FALSE to allow other handlers to run
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gboolean marked = FALSE;
@@ -1276,6 +1570,13 @@ G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, g
 		goto testit;
 
 	if (event->button != 1) /* Left button click  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		return FALSE;
 
 	if (!grab_single_cell)
@@ -1313,6 +1614,13 @@ testit:
 
 	return FALSE;	/* Allow other handles to run...  */
 
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 }
 
 
@@ -1324,6 +1632,13 @@ testit:
  \param page, page
  \param page_no, page number that's now active
  \param data, unused
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
@@ -1367,12 +1682,26 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 	if (OBJ_GET(topframe,"sub-notebook"))
 	{
 /*		printf(" This tab has a sub-notebook\n"); */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		sub = lookup_widget( (OBJ_GET(topframe,"sub-notebook")));
 		if (GTK_IS_WIDGET(sub))
 		{
 			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
 			widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(sub),sub_page);
 /*			printf("subtable found, searching for active page\n"); */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 #if GTK_MINOR_VERSION >= 18
 			if ((OBJ_GET(widget,"table_num")) && (gtk_widget_get_state(widget) != GTK_STATE_INSENSITIVE))
 #else
@@ -1381,11 +1710,25 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 			{
 				active_table = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 				/*printf("found it,  active table %i\n",active_table);*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			}
 			else
 			{
 				active_table = -1;
 /*			 	printf("didn't find table_num key on subtable\n"); */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			}
 			 
 		}
@@ -1405,6 +1748,13 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
  \param page_no, page number that's now active
  \param data, unused
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint active_table = -1;
@@ -1418,6 +1768,13 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page
 	else
 		return;
 	/*printf("active table changed to %i\n",active_table); */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 
 	return;
@@ -1432,6 +1789,13 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page
  \param widget, the toggle button that changes
  \param data, unused in most cases
  \returns TRUE if it handles
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 {
@@ -1455,12 +1819,26 @@ G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 	/* Split string to pieces to grab the list of tables this algorithm
 	 * applies to
 	 */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	vector = g_strsplit(tmpbuf,",",-1);
 	if (!vector)
 		return FALSE;
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		i = 0;
 		while (vector[i])
 		{
@@ -1479,6 +1857,13 @@ G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 /*!
  * \brief dummy handler to prevent window closing
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
 {
 	return TRUE;
@@ -1487,6 +1872,13 @@ G_MODULE_EXPORT gboolean prevent_close(GtkWidget *widget, gpointer data)
 
 /*!
  * \brief prompts user to save internal datalog and ecu backup
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void prompt_to_save(void)
 {
@@ -1555,6 +1947,13 @@ G_MODULE_EXPORT void prompt_to_save(void)
 /*!
  * \brief prompts user for yes/no to quit
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 {
 	gint result = 0;
@@ -1596,6 +1995,13 @@ G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 /*!
   \brief gets the bitshift from the provided mask 
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT guint get_bitshift(guint mask)
 {
 	gint i = 0;
@@ -1609,6 +2015,13 @@ G_MODULE_EXPORT guint get_bitshift(guint mask)
 /*
  \brief sets the value of a miscelaneous gauge
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 {
 	if (GTK_IS_WIDGET(watch->user_data))
@@ -1621,6 +2034,13 @@ G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 /*!
   \brief Gets the min/max based on the size enumeration passed 
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT glong get_extreme_from_size(DataSize size,Extreme limit)
 {
 	glong lower_limit = 0;
@@ -1672,6 +2092,13 @@ G_MODULE_EXPORT glong get_extreme_from_size(DataSize size,Extreme limit)
 /*!
   \brief Clamps a value to it's limits and updates if needed 
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
 {
 	gint lower = 0;
@@ -1712,6 +2139,13 @@ G_MODULE_EXPORT gboolean clamp_value(GtkWidget *widget, gpointer data)
   \brief refocuses a cell based on a direction to go within a table. 
   This is hacky and I don't like it at all
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 {
 	gchar *widget_name = NULL;
@@ -1790,6 +2224,13 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
  separated string of name/value pairs, first being the widget name 
  (global name) and the second being the string to set on this widget
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void set_widget_labels(const gchar *input)
 {
 	gchar ** vector = NULL;
@@ -1828,6 +2269,13 @@ G_MODULE_EXPORT void set_widget_labels(const gchar *input)
  \param state (gboolean) passed on to subfunction
  the default label
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void swap_labels(GtkWidget *widget, gboolean state)
 {
 	GList *list = NULL;
@@ -1858,6 +2306,13 @@ G_MODULE_EXPORT void swap_labels(GtkWidget *widget, gboolean state)
  \param data (gpointer)  gpointer encapsulation of the target state if TRUE 
  we use the alternate label, if FALSE we use
  the default label
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void switch_labels(gpointer key, gpointer data)
 {
@@ -1910,6 +2365,13 @@ G_MODULE_EXPORT void switch_labels(gpointer key, gpointer data)
  * \param widget, combo button
  * \param active, which entry in list was selected
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 {
 	gint num_groups = 0;
@@ -1935,6 +2397,13 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	offset = (GINT)OBJ_GET(widget,"offset");
 
 	/*printf("toggling combobox groups\n");*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	choices = parse_keys(toggle_groups,&num_choices,",");
 	if (active >= num_choices)
 	{
@@ -1944,17 +2413,45 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	}
 	/*printf("toggle groups defined for combo box %p at page %i, offset %i\n",widget,page,offset);*/
 
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 	/* First TURN OFF all non active groups */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<num_choices;i++)
 	{
 		if (i == active)
 			continue;
 		groups = parse_keys(choices[i],&num_groups,":");
 		/*printf("Choice %i, has %i groups\n",i,num_groups);*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		state = FALSE;
 		for (j=0;j<num_groups;j++)
 		{
 			/*printf("setting all widgets in group %s to state %i\n\n",groups[j],state);*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			tmpbuf = g_strdup_printf("!%s",groups[j]);
 			g_hash_table_replace(widget_group_states,g_strdup(tmpbuf),GINT_TO_POINTER(!state));
 			g_list_foreach(get_list(tmpbuf),alter_widget_state,NULL);
@@ -1966,6 +2463,13 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	}
 
 	/* Then TURN ON all active groups */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	groups = parse_keys(choices[active],&num_groups,":");
 	state = TRUE;
 	for (j=0;j<num_groups;j++)
@@ -1980,6 +2484,13 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 	g_strfreev(groups);
 
 	/*printf ("DONE!\n\n\n");*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	g_strfreev(choices);
 }
 
@@ -1987,6 +2498,13 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 /*!
   \brief If a comboboxentry has a "set_labels" attribute handle it
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
 {
 	gint total = 0;
@@ -2019,6 +2537,13 @@ void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
 /*!
   \brief Get the total number of choices for a treemodel
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
 {
 	gboolean valid = TRUE;
@@ -2045,6 +2570,13 @@ G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
  * \param widget, combo button
  * \param active, which entry in list was selected
  */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
        G_MODULE_EXPORT void combo_toggle_labels_linked(GtkWidget *widget,gint active)
 {
 	gint num_groups = 0;
@@ -2062,6 +2594,13 @@ G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
 	 * So we get the names of those groups, and call "set_widget_label_from_array"
 	 * passing in the index of the one in the array we want
 	 */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	for (i=0;i<num_groups;i++)
 		g_list_foreach(get_list(groups[i]),set_widget_label_from_array,GINT_TO_POINTER(active));
 
@@ -2073,6 +2612,13 @@ G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
 /*!
   \brief Sets the text in a widget based on the passed index (data)
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
 {
 	gchar *labels = NULL;
@@ -2097,6 +2643,13 @@ G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
 /*!
  \brief recalc_table_limits() Finds the minimum and maximum values for a 
  2D table (this will be deprecated when thevetables are a custom widget)
+ */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 {
@@ -2126,6 +2679,13 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
         g_object_ref_sink(container);
 
 	/* Limit check */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
 		return;
 	firmware->table_params[table_num]->last_z_maxval = firmware->table_params[table_num]->z_maxval;
@@ -2152,6 +2712,13 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 			min = tmpi;
 	}
 	if (min == max) /* FLAT table, causes black screen */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	{
 		min -= 10;
 		max += 10;
@@ -2167,6 +2734,13 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
   \brief Calls the process_interdependancy function for each item in the 
   global dep_list List
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void update_interdependancies_pf()
 {
 	GList *list = NULL;
@@ -2181,6 +2755,13 @@ G_MODULE_EXPORT void update_interdependancies_pf()
   \brief Calls the process_source function for each item in the 
   global souce_list List
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void update_sources_pf()
 {
 	GList *list = NULL;
@@ -2195,6 +2776,13 @@ G_MODULE_EXPORT void update_sources_pf()
   \brief deals with interdepenant controls loaded after ECU state is loaded
   i.e. deferred tabs
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 void process_interdependancy(gpointer data, gpointer nothing)
 {
 	GObject *object = (GObject *)data;
@@ -2219,6 +2807,13 @@ void process_interdependancy(gpointer data, gpointer nothing)
 			combo_toggle_groups_linked((GtkWidget *)object,0);
 	}
 	else /* Combo button, multiple choices */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	{
 		bitvals = OBJ_GET(object,"bitvals");
 		vector = g_strsplit(bitvals,",",-1);
@@ -2226,9 +2821,23 @@ void process_interdependancy(gpointer data, gpointer nothing)
 		{
 			bitval = strtol(vector[i],NULL,10);
 			/*printf("bitval str %s, bitval %i, rawvalue %i, bitmask %i, bitshift %i\n",vector[i],bitval,value,bitmask,bitshift);*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			if (((value & bitmask) >> bitshift) == bitval)
 			{
 				/*printf("It was choice %i\n",i);*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 				combo_toggle_groups_linked((GtkWidget *)object,i);
 				break;
 			}
@@ -2242,6 +2851,13 @@ void process_interdependancy(gpointer data, gpointer nothing)
   \brief deals with mult_source controls loaded after ECU state is loaded
   i.e. deferred tabs
   */
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 void process_source(gpointer data, gpointer nothing)
 {
 	static GHashTable *sources_hash = NULL;
@@ -2272,6 +2888,13 @@ void process_source(gpointer data, gpointer nothing)
 	{
 		bitval = strtol(vector[i],NULL,10);
 		/*printf("bitval str %s, bitval %i, rawvalue %i, bitmask %i, bitshift %i\n",vector[i],bitval,value,bitmask,bitshift);*/
+
+/*! @file gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		if (((value & bitmask) >> bitshift) == bitval)
 		{
 			g_hash_table_replace(sources_hash,g_strdup(OBJ_GET(object,"source_key")),g_strdup(vector2[i]));

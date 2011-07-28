@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file apicheck.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <apicheck.h>
 
 
@@ -21,6 +28,13 @@
  \param major  major api version number
  \param minor  minor api version number
  \returns TRUE on api version setting, FALSE on api version set failure
+ */
+
+/*! @file apicheck.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
 {
@@ -37,6 +51,13 @@ G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
  \param major  major api version number
  \param minor  minor api version number
  \returns TRUE on api version reading, FALSE on api version not readable
+ */
+
+/*! @file apicheck.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT gboolean get_file_api(ConfigFile *cfg, gint *major, gint *minor)
 {

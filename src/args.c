@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file args.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <args.h>
 #include <dashboard.h>
@@ -27,6 +34,13 @@ extern gconstpointer *global_data;
  \brief handle_args() handles parsing of cmd line arguments to megatunix
  \param argc, count of command line arguments
  \param argv, array of command line args
+ */
+
+/*! @file args.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 {
@@ -52,6 +66,13 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
 		{"Port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use this serial port ONLY",NULL},
 		/*{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},*/
+
+/*! @file args.c
+ *
+ * @brief ...
+ *
+ *
+ */
 		{"inhibit-tabs",'i',0,G_OPTION_ARG_NONE,&args->inhibit_tabs,"Prevent loading of tabs (debug option)",NULL},
 		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Network connect instead of serial","host[:port]"},
 		{"no-rttext",'r',0,G_OPTION_ARG_NONE,&args->hide_rttext,"Hide RealTime Vars Text window",NULL},
@@ -229,6 +250,13 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
   \brief Initializes and returns a pointer to a CmdLineArgs structure.
   \returns pointer to CmdLineArgs structure
   */
+
+/*! @file args.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT CmdLineArgs * init_args(void)
 {
 	CmdLineArgs *args;
@@ -257,6 +285,13 @@ G_MODULE_EXPORT CmdLineArgs * init_args(void)
   \brief frees a CmdLineArgs structure
   \param data, pointer to CmdLineArgs structure to be freed
   */
+
+/*! @file args.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void args_free(gpointer data)
 {
 	CmdLineArgs *args = (CmdLineArgs *)data;

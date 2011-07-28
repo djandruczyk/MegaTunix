@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <args.h>
 #include <debugging.h>
 #include <gui_handlers.h>
@@ -35,6 +42,13 @@ extern gconstpointer *global_data;
  \param group, textual name of the group of controls to alter color
  \see set_widget_color
  */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 {
 	g_list_foreach(get_list(group), set_widget_color,(gpointer)color);
@@ -48,6 +62,13 @@ G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
  \param table_num, the table number to determine the right group of 
  controls to change the color on
  \see set_widget_color
+ */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
 {
@@ -63,6 +84,13 @@ G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
  the color passed.
  \param widget, the widget to  change color
  \param color, enumeration of the color to switch to..
+ */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 {
@@ -153,6 +181,13 @@ G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
  \param count, flag to show a running count or not
  \param clear, if set, clear display before displaying text
  */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void  update_logbar(
 		const gchar * view_name, 
 		const gchar * tagname, 
@@ -182,6 +217,13 @@ G_MODULE_EXPORT void  update_logbar(
 	}
 
 	/* Add the message to the end of the textview */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
 	if (!textbuffer)
 		return;
@@ -203,12 +245,26 @@ G_MODULE_EXPORT void  update_logbar(
 	if (tagname == NULL)
 	{
 		if (count) /* if TRUE, display counter, else don't */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
 		gtk_text_buffer_insert(textbuffer,&iter,(const gchar *)message,-1);
 	}
 	else
 	{
 		if (count) /* if TRUE, display counter, else don't */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 			gtk_text_buffer_insert_with_tags_by_name(textbuffer,
 					&iter,tmpbuf,-1,tagname,NULL);
 
@@ -219,6 +275,13 @@ G_MODULE_EXPORT void  update_logbar(
 	/* Get it's parent (the scrolled window) and slide it to the
 	 * bottom so the new message is visible... 
 	 */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 	parent = gtk_widget_get_parent(widget);
 	if (parent != NULL)
 	{
@@ -238,6 +301,13 @@ G_MODULE_EXPORT void  update_logbar(
  \brief conn_warning() displays a warning message when connection is 
  either lost or not detected with the ECU
  */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void conn_warning(void)
 {
 	CmdLineArgs *args = DATA_GET(global_data,"args");
@@ -251,6 +321,13 @@ G_MODULE_EXPORT void conn_warning(void)
 /*!
  \brief kill_conn_warning() removes the no connection warning message.
   Takes no parameters.
+ */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void kill_conn_warning(void)
 {
@@ -268,6 +345,13 @@ G_MODULE_EXPORT void kill_conn_warning(void)
 /*!
  \brief warn_user() displays a warning message on the screen as a error dialog
  \param message, the text to display
+ */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void warn_user(const gchar *message)
 {
@@ -303,6 +387,13 @@ G_MODULE_EXPORT void warn_user(const gchar *message)
  \brief error_msg() displays a warning message on the screen as a error dialog
  \param message, the text to display
  */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT void error_msg(const gchar *message)
 {
 	GtkWidget *dialog = NULL;
@@ -332,6 +423,13 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
   \param data, the response as an integer
   \returns TRUE
   */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 {
 	gint response = (GINT)data;
@@ -352,6 +450,13 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
  \param data, unused
  \returns FALSE
  */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 {
 	static GtkWidget *info_label = NULL;
@@ -366,6 +471,13 @@ G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
  \brief set_title() appends text to the titlebar of the application to
  give user notifications...
  \param text, text to append, dynamic strings only
+ */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
  */
 G_MODULE_EXPORT void set_title(gchar * text)
 {
@@ -410,6 +522,13 @@ G_MODULE_EXPORT void set_title(gchar * text)
   \param user_Data, unused
   \returns FALSE
   */
+
+/*! @file notifications.c
+ *
+ * @brief ...
+ *
+ *
+ */
 G_MODULE_EXPORT gboolean set_warning_flag(gpointer user_data)
 {
 	warning_present = FALSE;
