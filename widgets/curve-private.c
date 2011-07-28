@@ -28,6 +28,14 @@
 
 static guint mtx_curve_signals[LAST_SIGNAL] = { 0 };
 
+
+/*!
+ *\brief MtxCurve get_type function that returns the proper GType
+ * 
+ * If the GType isn't yet defined for MtxCurve,  register it and return it
+ * to the caller
+ *\returns the GType associated with the MtxCurve custom widget
+ */
 GType mtx_curve_get_type(void)
 {
 	static GType mtx_curve_type = 0;
@@ -54,7 +62,8 @@ GType mtx_curve_get_type(void)
 /*!
  \brief Initializes the mtx pie curve class and links in the primary
  signal handlers for config event, expose event, and button press/release
- \param klass (MtxCurveClass *) pointer to the class
+ \param klass is the pointer to the MtxCurveClass structure
+ \see MtxCurveClass
  */
 void mtx_curve_class_init (MtxCurveClass *klass)
 {
@@ -96,7 +105,7 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 
 /*!
  \brief Finalizes the curve object on destruction
- \param curve (GObject *) pointer to the curve object
+ \param curve is the pointer to the curve object to be finalized
  */
 void mtx_curve_finalize (GObject *curve)
 {
@@ -128,7 +137,7 @@ void mtx_curve_finalize (GObject *curve)
 
 /*!
  \brief Initializes the curve attributes to sane defaults
- \param curve (MtxCurve *) pointer to the curve object
+ \param curve is the pointer to the curve object
  */
 void mtx_curve_init (MtxCurve *curve)
 {
@@ -184,10 +193,9 @@ void mtx_curve_init (MtxCurve *curve)
 }
 
 
-
 /*!
  \brief Allocates the default colors for a curve with no options 
- \param widget (MegaCurve *) pointer to the curve object
+ \param curve is the pointer to the curve object
  */
 void mtx_curve_init_colors(MtxCurve *curve)
 {
@@ -230,7 +238,7 @@ void mtx_curve_init_colors(MtxCurve *curve)
 /*!
  \brief updates the curve position,  This is the CAIRO implementation that
  looks a bit nicer, though is a little bit slower than a raw GDK version
- \param widget (MtxCurve *) pointer to the curve object
+ \param curve is the pointer to the curve object
  */
 void update_curve (MtxCurve *curve)
 {
@@ -372,6 +380,12 @@ void update_curve (MtxCurve *curve)
 }
 
 
+/*!
+  \brief draws the box with the selected coordinates information near the
+  mouse pointer
+  \param cr is the pointer to a cairo_t context
+  \param priv is the pointer to the Curve private data structure
+  */
 void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 {
 	gchar * x_msg = NULL;
@@ -501,9 +515,10 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
  Takes care of creating/destroying graphics contexts, backing pixmaps (two 
  levels are used to split the rendering for speed reasons) colormaps are 
  also created here as well
- \param widget (GtkWidget *) pointer to the curve object
- \param event (GdkEventConfigure *) pointer to GDK event datastructure that
+ \param widget is the pointer to the curve object
+ \param event is the pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
+ \returns TRUE
  */
 gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
@@ -554,9 +569,10 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 /*!
  \brief handles exposure events when the screen is covered and then 
  exposed. Works by copying from a backing pixmap to screen,
- \param widget (GtkWidget *) pointer to the curve object
- \param event (GdkEventExpose *) pointer to GDK event datastructure that
+ \param widget is the pointer to the curve object
+ \param event is the pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
+ \returns FALSE so other handlers run
  */
 gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 {
@@ -602,7 +618,7 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
  \brief draws the static elements of the curve (only on resize), This includes
  the border, units and name strings,  tick marks and warning regions
  This is the cairo version.
- \param widget (MtxCurve *) pointer to the curve object
+ \param curve is the pointer to the curve object
  */
 void generate_static_curve(MtxCurve *curve)
 {
@@ -797,6 +813,12 @@ void generate_static_curve(MtxCurve *curve)
 }
 
 
+/*!
+  \brief The motion event handler fires anytime the mouse moves on the widget
+  \param curve is the pointer to the curve widget
+  \param event is the pointer to a GdkEventMotion structure
+  \returns TRUE
+  */
 gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -878,7 +900,7 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 	if ((gfloat)(-((tmp_y - priv->h + priv->y_border)/priv->y_scale) + priv ->lowest_y) > priv->y_upper_limit)
 		priv->coords[i].y = priv->y_upper_limit;
 
-	
+
 	if (( (gint)priv->coords[i].x > priv->highest_x) ||
 			( (gint) priv->coords[i].y > priv->highest_y) ||
 			( (gint) priv->coords[i].x < priv->lowest_x) ||
@@ -891,6 +913,11 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 }
 					       
 
+/*!
+  \brief timeout function which auto-rescales and redraws the screen
+  \param data is a pointer to the MtxCurvePrivate datastructure
+  \returns FALSE to cancel the timeout
+  */
 gboolean auto_rescale(gpointer data)
 {
 	MtxCurvePrivate *priv = (MtxCurvePrivate *)data;
@@ -899,6 +926,7 @@ gboolean auto_rescale(gpointer data)
 	priv->auto_rescale_id = 0;
 	return FALSE;
 }
+
 
 gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 {
@@ -941,9 +969,8 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 
 /*!
  \brief sets the INITIAL sizeof the widget
- \param curve (GtkWidget *) pointer to the curve widget
- \param requisition (GdkRequisition *) struct to set the vars within
- \returns void
+ \param widget pointer to the curve widget
+ \param requisition pointer to the Requisition structure 2 set the vars within
  */
 void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
@@ -954,7 +981,8 @@ void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
 
 /*!
  \brief gets called to redraw the entire display manually
- \param curve (MtxCurve *) pointer to the curve object
+ \param curve pointer to the curve object
+ \param full force a full redraw if TRUE
  */
 void mtx_curve_redraw (MtxCurve *curve, gboolean full)
 {

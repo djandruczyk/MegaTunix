@@ -29,7 +29,10 @@ GtkWidget *mtx_curve_new ()
 
 /*!
  \brief gets the current value 
- \param curve (MtxCurve *) pointer to curve
+ \param curve pointer to curve object
+ \param num_points pointer to integer object of the number of points
+ \param array pointer to array of MtxCurveCoord structures
+ \returns TRUE if curve exists, FALSE otherwise
  */
 gboolean mtx_curve_get_coords (MtxCurve *curve, gint *num_points, MtxCurveCoord *array)
 {
@@ -43,9 +46,11 @@ gboolean mtx_curve_get_coords (MtxCurve *curve, gint *num_points, MtxCurveCoord 
 
 /*!
  \brief sets the current points 
- \param curve (MtxCurve *) pointer to curve
- \param num_points (gint) new value
- \param array (MtxCurveCoord*) Array of points
+ \param curve pointer to curve
+ \param num_points total number of new points
+ \param array pointer to Array of MtxCurveCoord structures holding the point 
+ information
+ \returns TRUE on success, FALSE otherwise
  */
 gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *array)
 {
@@ -77,9 +82,10 @@ gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *
 
 
 /*!
- \brief sets the current points to empty array
- \param curve (MtxCurve *) pointer to curve
- \param num_points (gint) size of array to create
+ \brief sets the current points to an array of 0,0 values
+ \param curve pointer to curve
+ \param num_points size of array to create
+ \returns TRUE on success, FALSE otherwise
  */
 gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 {
@@ -115,10 +121,11 @@ gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 
 
 /*!
- \brief sets the value of one point
- \param curve (MtxCurve *) pointer to curve
- \param index (gfloat) index of point
- \param point (gfloat) new point coords
+ \brief sets the value of one point at a specific index
+ \param curve pointer to curve
+ \param index index of point
+ \param point new point coordinates in MtxCurveCoord container
+ \returns TRUE on success, FALSE otherwise
  */
 gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoord point)
 {
@@ -146,15 +153,17 @@ gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 
 /*!
  \brief gets the value of one point
- \param curve (MtxCurve *) pointer to curve
- \param index (gfloat) index of point
- \param point (gfloat) new point coords
+ \param curve pointer to curve
+ \param index index of point
+ \param point pointer to MtCurveCoord to store the coordinates into
+ \returns TRUE on success, FALSE otherwise
  */
 gboolean mtx_curve_get_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoord *point)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
 	g_return_val_if_fail (priv->num_points > index,FALSE);
+	g_return_val_if_fail (point,FALSE);
 	g_return_val_if_fail (index >= 0,FALSE);
 	point->x = priv->coords[index].x;
 	point->y = priv->coords[index].y;
