@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -40,7 +40,7 @@ extern gconstpointer *global_data;
  \see signal_read_rtvars_thread signal_read_rtvars
  */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -69,7 +69,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 				realtime_id = g_thread_create(signal_read_rtvars_thread,
 						NULL, /* Thread args */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -77,7 +77,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
  */
 						TRUE, /* Joinable */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -85,7 +85,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
  */
 						NULL); /*GError Pointer */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -123,7 +123,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 		default:
 			/* Search for registered handlers from plugins */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -142,7 +142,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
  \see start_tickler
  */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -205,7 +205,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
  \returns 0 on signal to exit
  */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -260,7 +260,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 
 		/* Auto-throttling if gui gets sluggish */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -297,7 +297,7 @@ breakout:
  running.
  */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *
@@ -317,7 +317,7 @@ G_MODULE_EXPORT gboolean early_interrogation(void)
   \returns FALSE
   */
 
-/*! @file timeout_handlers.c
+/*! @file src/timeout_handlers.c
  *
  * @brief ...
  *

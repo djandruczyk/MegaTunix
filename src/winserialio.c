@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -36,7 +36,7 @@
  \param stop, number of stop bits
  */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -59,7 +59,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 
 	/* Populate struct with defaults from windows */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -74,7 +74,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 		dcb.BaudRate = CBR_115200;
 		*/
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -88,7 +88,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 			dcb.Parity   = NOPARITY;        
 			dcb.fParity = FALSE;		/* Disabled */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -99,7 +99,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 			dcb.Parity   = ODDPARITY;        
 			dcb.fParity = TRUE;		/* Enabled */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -110,7 +110,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 			dcb.Parity   = EVENPARITY;     
 			dcb.fParity = TRUE;		/* Enabled */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -121,7 +121,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 	if (stop == 2)
 		dcb.StopBits = TWOSTOPBITS;      /* #defined in windows.h */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -130,7 +130,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 	else
 		dcb.StopBits = ONESTOPBIT;      /* #defined in windows.h */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -139,7 +139,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 
 	dcb.fBinary = TRUE;		/* Enable binary mode */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -147,7 +147,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fOutxCtsFlow = FALSE;	/* don't monitor CTS line */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -155,7 +155,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fOutxDsrFlow = FALSE;	/* don't monitor DSR line */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -163,7 +163,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fDsrSensitivity = FALSE;	/* ignore Dsr line */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -171,7 +171,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fDtrControl = DTR_CONTROL_DISABLE;  /* Disable DTR line */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -179,7 +179,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fRtsControl = RTS_CONTROL_DISABLE;  /* Disable RTS line */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -187,7 +187,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fOutX = FALSE;		/* Disable Xoff */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -195,7 +195,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fInX  = FALSE;		/* Disable Xin */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -203,7 +203,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fErrorChar = FALSE;		/* Don't replace bad chars */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -211,7 +211,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fNull = FALSE;		/* don't drop NULL bytes */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -219,7 +219,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.fAbortOnError = FALSE;	/* Don't abort */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -227,7 +227,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  */
 	dcb.wReserved = 0;		/* as per msdn */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -236,7 +236,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 
 	/* Set the port properties and write the string out the port. */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -247,7 +247,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 
 	/* Set timeout params in a fashion that mimics linux behavior */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -260,7 +260,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 		printf("nonblock\n");
 		/* Buffer? */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -275,7 +275,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 		timeouts.ReadTotalTimeoutConstant    = 0;
 		*/
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -288,7 +288,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 		timeouts.WriteTotalTimeoutMultiplier = 20000L/baud;
 		timeouts.ReadTotalTimeoutConstant    = 100; /* 100ms timeout*/
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *
@@ -320,7 +320,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  \param mode, enum represnting the direction to flush...
  */
 
-/*! @file winserialio.c
+/*! @file src/winserialio.c
  *
  * @brief ...
  *

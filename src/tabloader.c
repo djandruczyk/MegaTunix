@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -54,7 +54,7 @@ gboolean descend_tree(GladeWidgetInfo *info, ConfigFile *);
  interrogation profile of the detected firmware. 
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -193,7 +193,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 		/* Allow gui to update as it should.... */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -228,7 +228,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
  \returns TRUE on success, FALSE on failure
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -289,7 +289,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		groups = NULL;
 		/* Clear not_rendered flag */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -310,7 +310,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		   g_free(tab_name);
 		 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -335,7 +335,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	update_interdependancies_pf();
 	/* Allow gui to update as it should.... */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -358,7 +358,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
  \see load_groups
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -392,7 +392,7 @@ G_MODULE_EXPORT void group_free(gpointer value)
  loaded. The groups are indexed in the hashtable by group name.
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -426,7 +426,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 	{
 		/* Create structure and allocate ram for it */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -456,7 +456,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		 * use when needed...
 		 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -471,7 +471,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 
 		/* Adds on "default" options to any other groups */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -485,7 +485,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 
 		/* Binds the rest of the settings, overriding any defaults */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -494,7 +494,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		bind_keys(group->object,cfgfile,section,group->keys,group->num_keys);
 		/* Store it in the hashtable... */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -524,7 +524,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
  \returns the page of the group
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -545,7 +545,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 	}
 	/* Copy data from the group object to the */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -553,7 +553,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
  */
 	/* Grab hidden data if it exists */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -602,7 +602,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
  widget into.
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -631,7 +631,7 @@ G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
 	 * that the list is always stored and up to date...
 	 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -654,7 +654,7 @@ G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
   \param data, pointer to the item to remove from each list
   */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -692,7 +692,7 @@ G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
  \param user_data, pointer to a BingGroup structure.
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -747,7 +747,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		section = g_strndup(widget->name,ptr-widget->name);
 		/*printf("(indexed) section is %s\n",section);*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -757,7 +757,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		/*printf("sscanf result %i\n",result);
 		  printf("Found indexed value for \"%s\", index %i, count %i\n",tmpbuf,index,count); */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -783,7 +783,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	page = -1;
 	/* Store ptr to self in qdata, needed for bind_to_lists from groups*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -794,7 +794,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 * tab
 	 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -816,7 +816,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	/* Bind widgets to lists if they have the bind_to_list flag set...
 	*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -836,7 +836,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 	/* Color selections */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -859,7 +859,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 * information  and store it for use when needed...
 	 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -876,7 +876,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 * handler just for that..
 	 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -890,7 +890,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 	/* If this widget has "tooltip" set the tip on the widget */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -905,7 +905,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget (a label) has "set_label" we set the label on it
 	*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -920,7 +920,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget is temp dependant, set the current units on it 
 	*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -935,7 +935,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget has "register_as", register it with the supplied name
 	*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -951,7 +951,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 * with it's name on it 
 	 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -988,7 +988,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	{
 		/*printf("indexed widget %s\n",widget->name); */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1014,7 +1014,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		}
 		/*printf("widget %s, offset %i\n",widget->name,offset);*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1029,7 +1029,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		 * to single data offset in the ECU
 		 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1063,7 +1063,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 * redundant keys all throughout the file...
 	 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1075,7 +1075,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	/* If this widget has the "choices" key (combobox)
 	*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1120,7 +1120,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
  \param functions, CSV list of functions to run
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1142,7 +1142,7 @@ G_MODULE_EXPORT void run_post_functions(const gchar * functions)
  \param widget, pointer to widget to be passed to the function
  */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1159,7 +1159,7 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 	{
 		/* If widget defined, pass to post function */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1174,7 +1174,7 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 		}
 		else /* If no widget find funct with no args.. */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1197,7 +1197,7 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
   each tab config file to preload the needed interdependancy structures
   */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1235,7 +1235,7 @@ gboolean preload_deps(gpointer data)
 	io_cmd(firmware->get_all_command,NULL);
 	return FALSE; /* Make it not run again... */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1252,7 +1252,7 @@ gboolean preload_deps(gpointer data)
   \returns TRUE, unless eat end of the tree
   */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1274,7 +1274,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	gint page = 0;
 	/*gint canID = 0;*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1304,7 +1304,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	   printf("widget %s has %i children\n",info->name,info->n_children);
 	 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1374,7 +1374,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		gdk_threads_leave();
 		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1438,7 +1438,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		   }
 		 */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1450,7 +1450,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		gdk_threads_leave();
 		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *
@@ -1483,7 +1483,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
   \returns TRUE on success, FALSE otherwise
   */
 
-/*! @file tabloader.c
+/*! @file src/tabloader.c
  *
  * @brief ...
  *

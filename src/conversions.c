@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -43,7 +43,7 @@ extern gconstpointer *global_data;
  \returns the integer ECU-units form after conversion
  */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -99,7 +99,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	/* MULTI EXPRESSION ONLY! */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -144,7 +144,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			table_num = (GINT)strtol(tmpbuf,NULL,10);
 		if (table_num == -1) /* Not a table */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -164,7 +164,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		}
 		else /* This is a 3d table */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -197,7 +197,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		}
 		/* Reverse calc due to this being TO the ecu */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -212,7 +212,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	else /* NON Multi Expression */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -223,7 +223,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 		/* Expression is NOT multi expression but has more complex math*/
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -246,7 +246,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			adder = (gfloat *)OBJ_GET(widget,"fromecu_add");
 			/* Handle all cases of with or without multiplier/adder*/
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -290,7 +290,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
  \returns the real world value for the GUI
  */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -363,7 +363,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		/*printf("Complex upload conversion for widget at page %i, offset %i, name %s\n",(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset"),(name == NULL ? "undefined" : name));
 		  */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -390,7 +390,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	}
 	/* MULTI EXPRESSION ONLY! */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -511,7 +511,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 				return_value = (gfloat)tmpi;
 			/*dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNo/Fast CONVERSION defined for  widget %s, value %f\n",(name == NULL ? "undefined" : name), return_value));*/
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -534,7 +534,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
  \param units, the temp scale selected
  */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -555,7 +555,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	gint widget_temp = -1;
 	/*extern GdkColor black;*/
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -568,7 +568,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	 * state, FALSE otherwise...
 	 */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -598,7 +598,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 		case FAHRENHEIT:
 			/*printf("fahr %s\n",(name == NULL ? "undefined" : name));*/
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -631,7 +631,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 				else /* Previous is kelvin */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -667,7 +667,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 				else /* Previous is kelvin */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -686,7 +686,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 		case CELSIUS:
 			/*printf("fahr %s\n",(name == NULL ? "undefined" : name));*/
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -719,7 +719,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 				else /* Previous is kelvin */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -755,7 +755,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 				else /* Previous is kelvin */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -774,7 +774,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 		case KELVIN:
 			/*printf("fahr %s\n",(name == NULL ? "undefined" : name));*/
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -807,7 +807,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 				else /* Previous is celsius */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -843,7 +843,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 				}
 				else /* Previous is celsius */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -869,7 +869,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
  \param type, the temp scale now selected
  */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -887,7 +887,7 @@ G_MODULE_EXPORT void reset_temps(gpointer type)
   \return temp in host (mtx user) scale
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -934,7 +934,7 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
   \returns temp in ECU scale
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -980,7 +980,7 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
   \returns temp in Fahrenheit
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -998,7 +998,7 @@ G_MODULE_EXPORT gdouble c_to_f(gdouble in)
   \returns temp in Kelvin
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -1016,7 +1016,7 @@ G_MODULE_EXPORT gdouble c_to_k(gdouble in)
   \returns temp in Celsius
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -1034,7 +1034,7 @@ G_MODULE_EXPORT gdouble f_to_c(gdouble in)
   \returns temp in Kelvin
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -1052,7 +1052,7 @@ G_MODULE_EXPORT gdouble f_to_k(gdouble in)
   \returns temp in Fahrenheit
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -1070,7 +1070,7 @@ G_MODULE_EXPORT gdouble k_to_f(gdouble in)
   \returns temp in Celsius
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *
@@ -1091,7 +1091,7 @@ G_MODULE_EXPORT gdouble k_to_c(gdouble in)
   \returns the calculated result
   */
 
-/*! @file conversions.c
+/*! @file src/conversions.c
  *
  * @brief ...
  *

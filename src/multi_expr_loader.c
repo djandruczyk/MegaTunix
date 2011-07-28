@@ -13,7 +13,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file multi_expr_loader.c
+/*! @file src/multi_expr_loader.c
  *
  * @brief ...
  *
@@ -40,7 +40,7 @@
  \see check_dependancies
  */
 
-/*! @file multi_expr_loader.c
+/*! @file src/multi_expr_loader.c
  *
  * @brief ...
  *
@@ -125,7 +125,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	}
 	/* Create hash table to store structures for each one */
 
-/*! @file multi_expr_loader.c
+/*! @file src/multi_expr_loader.c
  *
  * @brief ...
  *
@@ -172,7 +172,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
   \param data, pointer to MultiExpr structure to deallocate
   */
 
-/*! @file multi_expr_loader.c
+/*! @file src/multi_expr_loader.c
  *
  * @brief ...
  *
@@ -193,7 +193,7 @@ G_MODULE_EXPORT void free_multi_expr(gpointer data)
   \param data, pointer to MultiSource structure to deallocate
   */
 
-/*! @file multi_expr_loader.c
+/*! @file src/multi_expr_loader.c
  *
  * @brief ...
  *

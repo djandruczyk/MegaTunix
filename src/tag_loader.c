@@ -13,7 +13,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file tag_loader.c
+/*! @file src/tag_loader.c
  *
  * @brief ...
  *
@@ -46,7 +46,7 @@
  tags
  */
 
-/*! @file tag_loader.c
+/*! @file src/tag_loader.c
  *
  * @brief ...
  *
@@ -92,7 +92,7 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 				case 2:
 					/*gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],NULL);*/
 
-/*! @file tag_loader.c
+/*! @file src/tag_loader.c
  *
  * @brief ...
  *
@@ -103,7 +103,7 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 				case 4:
 					/*gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],NULL);*/
 
-/*! @file tag_loader.c
+/*! @file src/tag_loader.c
  *
  * @brief ...
  *
@@ -114,7 +114,7 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 				case 6:
 					/*gtk_text_buffer_create_tag(textbuffer,g_strdup(key),attrs[0],attrs[1],attrs[2],attrs[3],attrs[4],attrs[5],NULL);*/
 
-/*! @file tag_loader.c
+/*! @file src/tag_loader.c
  *
  * @brief ...
  *

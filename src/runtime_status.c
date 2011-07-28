@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -47,7 +47,7 @@ extern gconstpointer *global_data;
  settings from the StatusMapFile.
  */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -113,7 +113,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 		gtk_window_set_default_size(GTK_WINDOW(window),-1,-1);
 		*/
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -161,7 +161,7 @@ G_MODULE_EXPORT void load_status_pf(void)
   \returns FALSE at EOF, TRUE otherwise
   */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -173,7 +173,7 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
 
 	/* Iterate though all nodes... */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -205,7 +205,7 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
   \param parent, parent container widget
   */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -254,7 +254,7 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 	}
 	/* Minimum requirements */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -277,7 +277,7 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 		g_free(inactive_fg);
 		/* For controls based on ECU data */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -305,7 +305,7 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
  visible portions of the gui
  */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -352,7 +352,7 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
  to reset the display
  */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -362,7 +362,7 @@ G_MODULE_EXPORT void reset_runtime_status(void)
 {
 	/* Runtime screen */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -371,7 +371,7 @@ G_MODULE_EXPORT void reset_runtime_status(void)
 	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 	/* Warmup Wizard screen */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -388,7 +388,7 @@ G_MODULE_EXPORT void reset_runtime_status(void)
  \param data, unused
  */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -450,7 +450,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 
 	/* if the value hasn't changed, don't bother continuing */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -462,7 +462,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 
 	if (((value & bitmask) >> bitshift) == bitval) /* enable it */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *
@@ -471,7 +471,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 	else	/* disable it.. */
 
-/*! @file runtime_status.c
+/*! @file src/runtime_status.c
  *
  * @brief ...
  *

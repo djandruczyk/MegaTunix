@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *
@@ -55,7 +55,7 @@ static DebugLevel dbglevels[] =
  The path defaults to the current working directory.
  */
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *
@@ -103,7 +103,7 @@ G_MODULE_EXPORT void open_debug(void)
   \brief Closes the debug log iochannel
   */
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *
@@ -127,7 +127,7 @@ G_MODULE_EXPORT void close_debug(void)
  \param str, message to print out
  */
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *
@@ -145,7 +145,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 	static time_t *t = NULL;
 	*/
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *
@@ -154,7 +154,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 
 	/* IF we don't debug this level, free message and exit */
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *
@@ -192,7 +192,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
   \param parent, pointer to parent container widget
   */
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *
@@ -239,7 +239,7 @@ G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 				(GtkAttachOptions) (0), 0, 0);
 		/* If user set on turn on as well */
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *
@@ -249,7 +249,7 @@ G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		/* if hardcoded on, turn on.. */
 
-/*! @file debugging.c
+/*! @file src/debugging.c
  *
  * @brief ...
  *

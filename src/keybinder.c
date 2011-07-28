@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file keybinder.c
+/*! @file src/keybinder.c
  *
  * @brief ...
  *
@@ -36,7 +36,7 @@
   \param num_keys, number of elements in the keys array
   */
 
-/*! @file keybinder.c
+/*! @file src/keybinder.c
  *
  * @brief ...
  *
@@ -119,7 +119,7 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 					/* If data already on widget, append
 					 * new data and store */
 
-/*! @file keybinder.c
+/*! @file src/keybinder.c
  *
  * @brief ...
  *

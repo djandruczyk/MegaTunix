@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -44,7 +44,7 @@ extern gconstpointer *global_data;
  \see comms_test
  */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -67,7 +67,7 @@ G_MODULE_EXPORT void update_comms_status(void)
  \param message (Io_Message *) a pointer to an Io_Message structure
  */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -137,7 +137,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		g_static_mutex_unlock(&mutex);
 		return TRUE;		/* can't write anything if offline */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -150,7 +150,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		g_static_mutex_unlock(&mutex);
 		return FALSE;		/* can't write anything if disconnected */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -163,7 +163,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		block = g_array_index(message->sequence,DBlock *,i);
 		/*	printf("Block pulled\n");*/
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -173,7 +173,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		{
 			/*		printf("Block type of ACTION!\n");*/
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -183,7 +183,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			{
 				/*			printf("Sleeping for %i usec\n", block->arg);*/
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -197,7 +197,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		{
 			/*		printf("Block type of DATA!\n");*/
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -209,7 +209,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			{
 				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -223,7 +223,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%.2X\"\n",i,j+1,block->len,block->data[j]));
 				/*printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);*/
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -231,7 +231,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
  */
 				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);	/* Send write command */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -257,7 +257,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	 * update_write_status() function will catch it and rollback as needed
 	 */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -285,7 +285,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
   \returns TRUE
   */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -321,7 +321,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 
 	/* Read list of dev before device plugin */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -344,7 +344,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	gtk_widget_destroy (dialog);
 	g_usleep(1000000);	/* 1 Sec */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -353,7 +353,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 
 	/* Read list of dev AFTER device plugin */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *
@@ -432,7 +432,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
   \param name,  port name to search for...
   */
 
-/*! @file comms.c
+/*! @file src/comms.c
  *
  * @brief ...
  *

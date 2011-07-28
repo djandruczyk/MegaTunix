@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -30,7 +30,7 @@ extern gconstpointer *global_data;
  configuration files so that things just plain look better
  */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -43,7 +43,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Interrogation field types */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -68,7 +68,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Data Types for glade data binder.... */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -87,7 +87,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Widget Types */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -104,7 +104,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Variable handling */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -119,7 +119,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Complex Expressions (RT Vars)*/
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -137,7 +137,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Signal handler mapping */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -212,7 +212,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Datalogger/logviewer */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -229,7 +229,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Page Identifiers */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -268,7 +268,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Algorithm */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -289,7 +289,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Function Call */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -304,7 +304,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Action's */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -314,7 +314,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(SLEEP));
 	/* XMLcomm processing */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -330,7 +330,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(SLEEP));
 	/* Tab datamap processing */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -539,7 +539,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Match conditions */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -552,7 +552,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/* Temp Scales */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -566,7 +566,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(FAHRENHEIT));
 	/* MtxPbar orientations */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -583,7 +583,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -602,7 +602,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
  \param user_data, unused...
  */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -621,7 +621,7 @@ G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
  \returns enumeration equivalent
  */
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *
@@ -640,7 +640,7 @@ G_MODULE_EXPORT gint translate_string(const gchar *string)
 	{
 		/*dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
 
-/*! @file stringmatch.c
+/*! @file src/stringmatch.c
  *
  * @brief ...
  *

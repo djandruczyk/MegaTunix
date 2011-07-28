@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file listmgmt.c
+/*! @file src/listmgmt.c
  *
  * @brief ...
  *
@@ -31,7 +31,7 @@ extern gconstpointer *global_data;
  \see store_list
  */
 
-/*! @file listmgmt.c
+/*! @file src/listmgmt.c
  *
  * @brief ...
  *
@@ -55,7 +55,7 @@ G_MODULE_EXPORT GList * get_list(const gchar * key)
  \see get_list
  */
 
-/*! @file listmgmt.c
+/*! @file src/listmgmt.c
  *
  * @brief ...
  *
@@ -79,7 +79,7 @@ G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
  \see get_list
  */
 
-/*! @file listmgmt.c
+/*! @file src/listmgmt.c
  *
  * @brief ...
  *
@@ -99,7 +99,7 @@ G_MODULE_EXPORT void remove_list(const gchar *key)
   \param b, pointer to ListElement structure
   */
 
-/*! @file listmgmt.c
+/*! @file src/listmgmt.c
  *
  * @brief ...
  *
@@ -120,7 +120,7 @@ G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
   \param data, pointer to char string of the key name to each object passed
   */
 
-/*! @file listmgmt.c
+/*! @file src/listmgmt.c
  *
  * @brief ...
  *
@@ -139,7 +139,7 @@ G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer
   \param user_data, unused
   */
 
-/*! @file listmgmt.c
+/*! @file src/listmgmt.c
  *
  * @brief ...
  *

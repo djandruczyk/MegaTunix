@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -40,7 +40,7 @@ extern gconstpointer *global_data;
   \param parent, container for stripchart widget
   */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -104,7 +104,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
   \param watch, pointer to the watch containing the new data
   */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -121,7 +121,7 @@ G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
  \param data, unused
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -177,7 +177,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
  \param iochannel, The IO channel representing the source file
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -206,7 +206,7 @@ G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
  \returns a pointer to an allocated Log_Info structure
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -230,7 +230,7 @@ G_MODULE_EXPORT Log_Info * initialize_log_info(void)
  \param log_info, the Log_Info structure
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -256,7 +256,7 @@ read_again:
 
 	if (status == G_IO_STATUS_NORMAL) /* good read */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -271,7 +271,7 @@ read_again:
 		 * the REAL signature returned by the firmware. 
 		 */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -282,7 +282,7 @@ read_again:
 			log_info->signature = g_strdup(g_strstrip(g_strdelimit(a_line->str,"\"\n\r",' ')));
 			/*printf(_("LOG signature is \"%s\"\n"),log_info->signature);*/
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -309,7 +309,7 @@ read_again:
 
 		/* Store delimiter in structure */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -321,7 +321,7 @@ read_again:
 		 * that is NULL terminated thanks to g_strsplit(void)
 		 */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -332,7 +332,7 @@ read_again:
 		log_info->field_count = num_fields;
 		/* Create objects, arrays and storage points... */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -350,7 +350,7 @@ read_again:
 		}
 		/* Enable parameter selection button */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -371,7 +371,7 @@ read_again:
  \param log_info, pointer to log info structure
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -425,7 +425,7 @@ G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
  \param log_info, pointer to log information struct
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -451,7 +451,7 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 			 * in the data arrays... 
 			 */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -484,7 +484,7 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 
 			/*printf("data[%i]=%s\n",i,data[i]);*/
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -492,7 +492,7 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
  */
 			if (x == 0) /* only check first line */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -520,7 +520,7 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
  \param log_info, pointer to log information structure
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *
@@ -563,7 +563,7 @@ G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
  \returns TRUE, to indicate the event is handled
  */
 
-/*! @file logviewer_core.c
+/*! @file src/logviewer_core.c
  *
  * @brief ...
  *

@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file wrappers.c
+/*! @file src/wrappers.c
  *
  * @brief ...
  *
@@ -29,7 +29,7 @@
   \returns pointer to opaque pointer representing the evaluator
   */
 
-/*! @file wrappers.c
+/*! @file src/wrappers.c
  *
  * @brief ...
  *
@@ -46,7 +46,7 @@ G_MODULE_EXPORT void * evaluator_create_w(char *expr)
   \param eval, evaluator to destroy....
   */
 
-/*! @file wrappers.c
+/*! @file src/wrappers.c
  *
  * @brief ...
  *
@@ -65,7 +65,7 @@ G_MODULE_EXPORT void evaluator_destroy_w( void *eval)
   \returns result of the math
   */
 
-/*! @file wrappers.c
+/*! @file src/wrappers.c
  *
  * @brief ...
  *
@@ -83,7 +83,7 @@ G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
   \returns pointer to the new widget
   */
 
-/*! @file wrappers.c
+/*! @file src/wrappers.c
  *
  * @brief ...
  *

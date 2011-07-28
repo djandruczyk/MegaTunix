@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -44,7 +44,7 @@ extern gconstpointer *global_data;
  a new window with the runtiem vars text value box.
  */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -100,7 +100,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 
 	/* Create window */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -130,7 +130,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 
 	/*Get the root element node */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -168,7 +168,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
   \returns FALSE when at EOF, otherwise TRUE
   */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -180,7 +180,7 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 
 	/* Iterate though all nodes... */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -214,7 +214,7 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
  \param parent, Parent widget
  */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -272,7 +272,7 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
  \returns a Struct Rt_Text *
  */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -317,7 +317,7 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
  \returns a populated pointer to a Rt_Text structure
  */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -369,7 +369,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 
 	/* Static prefix label.... */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -386,7 +386,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 
 	/* Value label */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -418,7 +418,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
  \param widget, pointer to widget containing the data needed
  */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -463,7 +463,7 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
  \param data, unused
  */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -544,7 +544,7 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
   \param treeview, pointer to the treeviedw to setup
   */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -562,7 +562,7 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 	renderer = gtk_cell_renderer_text_new();
 	/*gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),-1, 1);*/
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -575,7 +575,7 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 	renderer = gtk_cell_renderer_text_new();
 	/*gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),65, 1);*/
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -600,7 +600,7 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
   \returns FALSE
   */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *
@@ -660,7 +660,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
   \returns TRUE on success, FALSE if Mtx is shutting down
   */
 
-/*! @file runtime_text.c
+/*! @file src/runtime_text.c
  *
  * @brief ...
  *

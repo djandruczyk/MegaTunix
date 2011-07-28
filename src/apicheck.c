@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file apicheck.c
+/*! @file src/apicheck.c
  *
  * @brief ...
  *
@@ -30,7 +30,7 @@
  \returns TRUE on api version setting, FALSE on api version set failure
  */
 
-/*! @file apicheck.c
+/*! @file src/apicheck.c
  *
  * @brief ...
  *
@@ -53,7 +53,7 @@ G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
  \returns TRUE on api version reading, FALSE on api version not readable
  */
 
-/*! @file apicheck.c
+/*! @file src/apicheck.c
  *
  * @brief ...
  *

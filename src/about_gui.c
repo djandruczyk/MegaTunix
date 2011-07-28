@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file about_gui.c
+/*! @file src/about_gui.c
  *
  * @brief ...
  *
@@ -29,7 +29,7 @@
  \param parent, container to place the logo in
  */
 
-/*! @file about_gui.c
+/*! @file src/about_gui.c
  *
  * @brief ...
  *
@@ -53,7 +53,7 @@ G_MODULE_EXPORT void install_logo(GtkWidget *parent)
   \param frame, parent frame for about window
   */
 
-/*! @file about_gui.c
+/*! @file src/about_gui.c
  *
  * @brief ...
  *
@@ -97,7 +97,7 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
  \returns TRUE
  */
 
-/*! @file about_gui.c
+/*! @file src/about_gui.c
  *
  * @brief ...
  *

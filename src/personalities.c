@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *
@@ -39,7 +39,7 @@ extern gconstpointer *global_data;
  running.
  */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *
@@ -159,7 +159,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		group = NULL;
 		/* Cycle list for PERSONAL profile files */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *
@@ -204,7 +204,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
 	/* Cycle list for System interogation files */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *
@@ -256,7 +256,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK: /* Normal mode */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *
@@ -271,7 +271,7 @@ jumpahead:
 			break;
 		default: /* Offline */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *
@@ -299,7 +299,7 @@ jumpahead_offline:
   \returns TRUE unused element is NULL
   */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *
@@ -344,7 +344,7 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
   \param user_data, unused
   */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *
@@ -373,7 +373,7 @@ G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
   \returns the results of g_ascii_strcasecmp of a->sequence,b->sequence
   */
 
-/*! @file personalities.c
+/*! @file src/personalities.c
  *
  * @brief ...
  *

@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -34,7 +34,7 @@
 
 /* External global vars */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -44,7 +44,7 @@ extern gconstpointer *global_data;
 
 /* Static vars to all functions in this file... */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -61,7 +61,7 @@ static gboolean header_needed = FALSE;
  selecting during datalogging.
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -110,7 +110,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 
 	/* Update status of the delimiter buttons... */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -137,7 +137,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 	k = 0;
 	/* Put into GList and sort it */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -165,7 +165,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 		 * of the buttons from elsewhere... 
 		 */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -175,7 +175,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 
 		/* Bind object to the button */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -212,7 +212,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
  starts them.
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -223,7 +223,7 @@ G_MODULE_EXPORT void start_datalogging(void)
 	if (logging_active)
 		return;   /* Logging already running ... */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -254,7 +254,7 @@ G_MODULE_EXPORT void start_datalogging(void)
  variable readback though
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -306,7 +306,7 @@ G_MODULE_EXPORT void stop_datalogging(void)
  \returns TRUE
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -321,7 +321,7 @@ G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
                 
 	/* get object from widget */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -341,7 +341,7 @@ G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
  only selected variabels are logged
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -368,7 +368,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	}
 	/* Count total logable variables */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -382,7 +382,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	}
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -399,7 +399,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 		{
 			/* If space delimited, QUOTE the header names */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -425,7 +425,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
  processing and logs the selected values to the file
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -453,7 +453,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 
 	if (!logging_active) /* Logging isn't enabled.... */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -477,7 +477,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 
 	output = g_string_sized_new(64); /*64 char initial size */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -513,7 +513,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 		 * char at the end fo the line 
 		 */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -533,7 +533,7 @@ G_MODULE_EXPORT void run_datalog_pf(void)
  \brief dlog_select_all() selects all variables for logging
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -550,7 +550,7 @@ G_MODULE_EXPORT void dlog_select_all(void)
 
 	/* Check all logable choices */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -571,7 +571,7 @@ G_MODULE_EXPORT void dlog_select_all(void)
  \brief dlog_deselect_all() resets the logged choices to having NONE selected
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -588,7 +588,7 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 
 	/* Uncheck all logable choices */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -610,7 +610,7 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 		}
 		*/
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -624,7 +624,7 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
  in the RealtimeMap file
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -642,7 +642,7 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
 
 	/* Uncheck all logable choices */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -670,7 +670,7 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
   \returns FALSE on problem, TRUE otherwise
   */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -732,7 +732,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
   \returns TRUE
   */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -769,7 +769,7 @@ G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
   \returns TRUE
   */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -826,7 +826,7 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
  \param iochannel, pointer to io channel for the log stream
  */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -884,7 +884,7 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 			value = g_array_index(histories[i], gfloat, x);
 			/*tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%1$.*2$f",value,precisions[i]);*/
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *
@@ -899,7 +899,7 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 			 * char at the end fo the line 
 			 */
 
-/*! @file datalogging_gui.c
+/*! @file src/datalogging_gui.c
  *
  * @brief ...
  *

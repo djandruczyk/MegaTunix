@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file comms_gui.c
+/*! @file src/comms_gui.c
  *
  * @brief ...
  *
@@ -33,7 +33,7 @@ extern GdkColor black;
  \returns TRUE
  */
 
-/*! @file comms_gui.c
+/*! @file src/comms_gui.c
  *
  * @brief ...
  *
@@ -58,7 +58,7 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
  \returns TRUE
  */
 
-/*! @file comms_gui.c
+/*! @file src/comms_gui.c
  *
  * @brief ...
  *

@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -51,7 +51,7 @@ static void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
  * MegaTunix
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -61,7 +61,7 @@ G_MODULE_EXPORT void init(void)
 {
 	/* defaults */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -88,7 +88,7 @@ G_MODULE_EXPORT void init(void)
 	gdk_colormap_alloc_color(colormap,&white,FALSE,TRUE);
 	hidden_list = g_new0(gboolean, 100); /*static, 100 max tabs... */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -99,7 +99,7 @@ G_MODULE_EXPORT void init(void)
 
 	DATA_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));	/* Disallow network connections by default */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -107,7 +107,7 @@ G_MODULE_EXPORT void init(void)
  */
 	DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -115,7 +115,7 @@ G_MODULE_EXPORT void init(void)
  */
 	DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -123,7 +123,7 @@ G_MODULE_EXPORT void init(void)
  */
 	DATA_SET(global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -158,7 +158,7 @@ G_MODULE_EXPORT void init(void)
 
 	/* initialize all global variables to known states */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -182,7 +182,7 @@ G_MODULE_EXPORT void init(void)
 #endif
 	serial_params->fd = 0; /* serial port file-descriptor */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -191,7 +191,7 @@ G_MODULE_EXPORT void init(void)
 
 	serial_params->errcount = 0; /* I/O error count */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -199,7 +199,7 @@ G_MODULE_EXPORT void init(void)
  */
 	/* default for MS v1.x and 2.x */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -207,7 +207,7 @@ G_MODULE_EXPORT void init(void)
  */
 	serial_params->read_wait = 50;	/* delay between reads in ms */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -216,7 +216,7 @@ G_MODULE_EXPORT void init(void)
 
 	/* Set flags to clean state */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -247,7 +247,7 @@ G_MODULE_EXPORT void init(void)
  * \see save_config(void)
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -417,7 +417,7 @@ G_MODULE_EXPORT gboolean read_config(void)
 		save_config();
 		return FALSE;	/* No file found */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -435,7 +435,7 @@ G_MODULE_EXPORT gboolean read_config(void)
  * \see read_config(void)
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -654,7 +654,7 @@ G_MODULE_EXPORT void save_config(void)
  * users home directory under ~/.MegaTunix
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -729,7 +729,7 @@ G_MODULE_EXPORT void make_megasquirt_dirs(void)
  * \see mem_dealloc
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -785,7 +785,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	 * download...
 	 */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -850,7 +850,7 @@ G_MODULE_EXPORT void mem_alloc(void)
  * \see mem_alloc
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -899,7 +899,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 	/* Firmware datastructure.... */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1043,7 +1043,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		}
 		/* Runtime Text*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1063,7 +1063,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 		/* Logviewer settings */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1077,7 +1077,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		DATA_SET(global_data,"interrogated",NULL);
 		/* Free all global data and structures */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1088,7 +1088,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup(global_data);
 		/* Dynamic widgets master hash  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1108,7 +1108,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
   \param user_data, unused
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1118,7 +1118,7 @@ void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 	/*printf("removing data for %s\n",g_quark_to_string(key_id));*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1136,7 +1136,7 @@ void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
  \returns a allocated and initialized pointer to a single structure
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1162,7 +1162,7 @@ G_MODULE_EXPORT Io_Message * initialize_io_message(void)
   \brief initializes an OutputData structure and returns a pointer to it
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1186,7 +1186,7 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
  \param message (Io_Message *) pointer to message data to be deallocated
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1197,7 +1197,7 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 	OutputData *payload;
 	/*printf("dealloc_message\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1217,7 +1217,7 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 			if (message->command->post_functions)
 				/*dealloc_array(message->command->post_functions,POST_FUNCTIONS);*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1251,7 +1251,7 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
   elements of the array
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1266,7 +1266,7 @@ G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 
 	/*printf("dealloc_array\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1329,7 +1329,7 @@ G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
  \param w_update, pointer to widget update data to be freed
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1339,7 +1339,7 @@ G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 {
 	/*printf("dealloc_w_update\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1356,7 +1356,7 @@ G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
  \param message, pointer to message data to be freed
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1366,7 +1366,7 @@ G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
 {
 	/*printf("dealloc_textmessage\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1388,7 +1388,7 @@ G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
  \param qfunc, Queued Function structure to deallocate
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1398,7 +1398,7 @@ G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
 {
 	/*printf("dealloc_qfunction\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1414,7 +1414,7 @@ G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
  \param table_params, pointer to table parameters structure to deallocate
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1502,7 +1502,7 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
  \param object, pointer to RTV object to deallocate
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1515,7 +1515,7 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 		return;
 	 /* For debugging: g_dataset_foreach(object,dump_dataset,NULL);*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1526,7 +1526,7 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 		g_array_free(DATA_GET(object,"history"),TRUE);
 	/* This should release everything else bound via a DATA_SET_FULL */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1544,7 +1544,7 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
  \param te_params, pointer to TE_Params struct to deallocate
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1554,7 +1554,7 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 {
 	/*printf("dealloc_te_params\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1594,7 +1594,7 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
   \param data, pointer to LookupTable structure to deallocate
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1605,7 +1605,7 @@ G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 	LookupTable * table = (LookupTable *)data;
 	/*printf("dealloc_lookuptable\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1624,7 +1624,7 @@ G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
   \param user_data, unused
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1644,7 +1644,7 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
   \param user_data, unused
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1682,7 +1682,7 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
   \returns FALSE so other handlers run
  */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1703,7 +1703,7 @@ G_MODULE_EXPORT gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *pat
   \param data, pointer to Rt_Text object to be deallocated..
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1714,7 +1714,7 @@ G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 	Rt_Text *rtt = (Rt_Text *)data;
 	/*printf("dealloc_rtt\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1732,7 +1732,7 @@ G_MODULE_EXPORT void dealloc_rtt(gpointer data)
   \param data, pointer to Rt_Slider object to be deallocated
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1743,7 +1743,7 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 	Rt_Slider *slider = (Rt_Slider *)data;
 	/*printf("dealloc_slider\n");*/
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1755,7 +1755,7 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 	 * data in the rtv object and that gets freed elsewhere
 	 */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1777,7 +1777,7 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
   \param data, pointer to Command structure to be freed
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1803,7 +1803,7 @@ G_MODULE_EXPORT void xml_cmd_free(gpointer data)
   \param data, pointer to PotentialArg structure to be freed
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1826,7 +1826,7 @@ G_MODULE_EXPORT void xml_arg_free(gpointer data)
   \param data, pointer to hashtable to be cleaned up
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1846,7 +1846,7 @@ G_MODULE_EXPORT void dealloc_lists_hash(gpointer data)
   \param user_data, unused
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *
@@ -1863,7 +1863,7 @@ G_MODULE_EXPORT void dealloc_list(gpointer key, gpointer value, gpointer user_da
   \param data, pointer to arbritrary data to be freed
   */
 
-/*! @file init.c
+/*! @file src/init.c
  *
  * @brief ...
  *

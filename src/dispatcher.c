@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -35,7 +35,7 @@
  \returns TRUE 
  */
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -70,7 +70,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	{
 		/* Flush the queue */
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -92,7 +92,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	{
 		/*	printf("no messages waiting, returning\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -109,7 +109,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		 * in this case.
 		 */
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -130,7 +130,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
 			/*printf("dispatching post function %s\n",pf->name);*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -161,7 +161,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	dealloc_message(message);
 	/*printf ("deallocation of dispatch message complete\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -194,7 +194,7 @@ fast_exit:
  \returns TRUE 
  */
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -237,7 +237,7 @@ trypop:
 	{
 		/* Flush the queue */
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -255,7 +255,7 @@ trypop:
 	{
 		/*	printf("no messages waiting, returning\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -275,7 +275,7 @@ trypop:
 			val = g_array_index(message->functions,UpdateFunction, i);
 			/*printf("gui_dispatcher\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -320,7 +320,7 @@ trypop:
 				case UPD_LOGBAR:
 					/*printf("logbar update\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -336,7 +336,7 @@ trypop:
 				case UPD_RUN_FUNCTION:
 					/*printf("run function\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -353,7 +353,7 @@ trypop:
 				case UPD_WIDGET:
 					/*printf("widget update\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -366,7 +366,7 @@ trypop:
 						case MTX_ENTRY:
 							/*printf("entry\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -381,7 +381,7 @@ trypop:
 						case MTX_LABEL:
 							/*printf("label\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -396,7 +396,7 @@ trypop:
 						case MTX_TITLE:
 							/*printf("title\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -409,7 +409,7 @@ trypop:
 						case MTX_SENSITIVE:
 							/*printf("sensitivity change\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -447,7 +447,7 @@ dealloc:
 	dealloc_message(message);
 	/*printf ("deallocation of dispatch message complete\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -459,7 +459,7 @@ dealloc:
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -469,7 +469,7 @@ dealloc:
 	{
 		/*printf("trying to handle another message\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *
@@ -479,7 +479,7 @@ dealloc:
 	}
 	/*printf("returning\n");*/
 
-/*! @file dispatcher.c
+/*! @file src/dispatcher.c
  *
  * @brief ...
  *

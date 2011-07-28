@@ -13,7 +13,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file combo_loader.c
+/*! @file src/combo_loader.c
  *
  * @brief ...
  *
@@ -39,7 +39,7 @@
   \param section, section within the cfgfile
   */
 
-/*! @file combo_loader.c
+/*! @file src/combo_loader.c
  *
  * @brief ...
  *
@@ -115,7 +115,7 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 		entry = mask_entry_new_with_mask(regex);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
 
-/*! @file combo_loader.c
+/*! @file src/combo_loader.c
  *
  * @brief ...
  *

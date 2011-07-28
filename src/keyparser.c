@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file keyparser.c
+/*! @file src/keyparser.c
  *
  * @brief ...
  *
@@ -32,7 +32,7 @@
  \returns a string vector of the original string split up with the delimiter
  */
 
-/*! @file keyparser.c
+/*! @file src/keyparser.c
  *
  * @brief ...
  *
@@ -62,7 +62,7 @@ G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gc
  \returns a dynamic integer array of the keystypes (enums)
  */
 
-/*! @file keyparser.c
+/*! @file src/keyparser.c
  *
  * @brief ...
  *

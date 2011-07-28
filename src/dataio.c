@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -41,7 +41,7 @@
 
 /* Externs */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -51,7 +51,7 @@ extern gconstpointer *global_data;
 
 /* Cause OS-X sucks.... */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -70,7 +70,7 @@ extern gconstpointer *global_data;
  \returns TRUE on success, FALSE on failure 
  */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -114,7 +114,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	 * excess latency in my test VM
 	 */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -137,7 +137,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 
 		/* Increment bad read counter.... */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -145,7 +145,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
  */
 		if (!res) /* I/O Error Device disappearance or other */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -159,7 +159,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		}
 		if (len == 0) /* Short read!*/
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -168,7 +168,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 			zerocount++;
 		if ((len == 0) && (zerocount > 3))  /* Too many Short reads! */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -194,7 +194,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		failcount++;
 		/* Excessive failures triggers port recheck */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -225,7 +225,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
  \param buf, pointer to data to write to console
  */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -271,7 +271,7 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
   \returns TRUE on success, FALSE otherwise
   */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -298,7 +298,7 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 	 * but may require tweaking for slow wireless links.
 	 */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -309,7 +309,7 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 		res = select(fd+1,&rd,NULL,NULL,&timeout);
 		if (res < 0) /* Error, socket close, abort */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -318,7 +318,7 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 			return FALSE;
 		if (res > 0) /* Data Arrived! */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -348,7 +348,7 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
   \returns TRUE on success, FALSE otherwise
   */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -365,7 +365,7 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 
 	/*      printf("write_wrapper\n"); */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -375,7 +375,7 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 	{
 		/*              printf("net mode write\n"); */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -396,7 +396,7 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 	{
 		/*              printf("normal write %i bytes\n",count); */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *
@@ -405,7 +405,7 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 		res = write(fd,buf,count);
 		/*              printf("result of write is %i\n",res); */
 
-/*! @file dataio.c
+/*! @file src/dataio.c
  *
  * @brief ...
  *

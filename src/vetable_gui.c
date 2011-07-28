@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file vetable_gui.c
+/*! @file src/vetable_gui.c
  *
  * @brief ...
  *
@@ -33,7 +33,7 @@ extern gconstpointer *global_data;
  \param widget, pointer to widget containing the table number we care about
  */
 
-/*! @file vetable_gui.c
+/*! @file src/vetable_gui.c
  *
  * @brief ...
  *
@@ -128,7 +128,7 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
   \returns the result of the math
   */
 
-/*! @file vetable_gui.c
+/*! @file src/vetable_gui.c
  *
  * @brief ...
  *
@@ -165,7 +165,7 @@ G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
   \brief Draws the VE marker on the table via calling the appropriate plugin
   */
 
-/*! @file vetable_gui.c
+/*! @file src/vetable_gui.c
  *
  * @brief ...
  *

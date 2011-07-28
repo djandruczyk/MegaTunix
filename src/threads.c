@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -43,7 +43,7 @@ gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test
  \param data, additional data for fringe cases..
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -73,7 +73,7 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 	 * the void pointer part.
 	 */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -90,7 +90,7 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 	}
 	/* Std io_message passed by string name */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -128,7 +128,7 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
  \param data, unused
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -149,7 +149,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	void *(*serial_repair_thread)(gpointer data) = NULL;
 	/*	GTimer *clock;*/
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -176,7 +176,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	g_return_val_if_fail(serial_repair_thread,NULL);
 	/*	clock = g_timer_new();*/
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -184,7 +184,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
  */
 	/* Endless Loop, wait for message, processs and repeat... */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -195,7 +195,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,10000); /* 10 ms timeout */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -209,7 +209,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 fast_exit:
 			/* drain queue and exit thread */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -227,7 +227,7 @@ fast_exit:
 		}
 		if (!message) /* NULL message */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -242,7 +242,7 @@ fast_exit:
 		{
 			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",DATA_GET(global_data,"connected"),DATA_GET(global_data,"offline"),serial_params->open);*/
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -277,7 +277,7 @@ fast_exit:
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -294,7 +294,7 @@ fast_exit:
 					   message->command->defer_post_functions=TRUE;
 					 */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -305,7 +305,7 @@ fast_exit:
 			case WRITE_CMD:
 				/*				g_timer_start(clock);*/
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -314,7 +314,7 @@ fast_exit:
 				message->status = write_data(message);
 				/*				printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -333,7 +333,7 @@ fast_exit:
 			case NULL_CMD:
 				/*printf("null_cmd, just passing thru\n");*/
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -352,7 +352,7 @@ fast_exit:
 		   push up the queue to the postfunction dispatcher
 		 */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -388,7 +388,7 @@ fast_exit:
  \param clear, Flag to clear the display before writing the text
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -441,7 +441,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
  \param name, name of function to lookup and run in the main gui context..
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -484,7 +484,7 @@ G_MODULE_EXPORT gboolean queue_function(const gchar * name)
  \param msg, the message to be sent (required)
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -531,7 +531,7 @@ G_MODULE_EXPORT void  thread_update_widget(
  \param stats, the state to set
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -572,7 +572,7 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
  \param widget_name, widget pointer
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -606,7 +606,7 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
   \param offset, offset from that page's origin
   */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *
@@ -635,7 +635,7 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
  \param len, now many bytes worth of widgets to search for an update
  */
 
-/*! @file threads.c
+/*! @file src/threads.c
  *
  * @brief ...
  *

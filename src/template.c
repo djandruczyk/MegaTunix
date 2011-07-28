@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file template.c
+/*! @file src/template.c
  *
  * @brief ...
  *

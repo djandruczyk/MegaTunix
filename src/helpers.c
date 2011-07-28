@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -37,7 +37,7 @@ extern gconstpointer *global_data;
   \brief status the statuscounts timeout function
   */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -53,7 +53,7 @@ G_MODULE_EXPORT void start_statuscounts_pf(void)
   \brief Enables the "get data" buttons on all tabs
   */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -71,7 +71,7 @@ G_MODULE_EXPORT void enable_get_data_buttons_pf(void)
   \brief Starts the runtime var timeout if this is the first run of mtx
   */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -93,7 +93,7 @@ G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
   \brief sets all burn buttons back to black 
  */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -108,7 +108,7 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 	firmware = DATA_GET(global_data,"firmware");
 	/* Only MS firmwares have TCP socket mode for now */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -135,7 +135,7 @@ G_MODULE_EXPORT void set_store_black_pf(void)
   \brief Enables all applicable 3D display buttons
  */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -151,7 +151,7 @@ G_MODULE_EXPORT void enable_3d_buttons_pf(void)
   \brief Disables all burn to ecu buttons
  */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -170,7 +170,7 @@ G_MODULE_EXPORT void disable_burner_buttons_pf(void)
   changes
  */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -189,7 +189,7 @@ G_MODULE_EXPORT void reset_temps_pf(void)
   \brief sets hte time to be ready
   */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *
@@ -208,7 +208,7 @@ G_MODULE_EXPORT void ready_msg_pf(void)
   i.e. rtsliders, rttext, dashboards and so on.
   */
 
-/*! @file helpers.c
+/*! @file src/helpers.c
  *
  * @brief ...
  *

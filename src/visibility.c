@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file visibility.c
+/*! @file src/visibility.c
  *
  * @brief ...
  *
@@ -38,7 +38,7 @@ extern gconstpointer *global_data;
   \return TRUE on success
   */
 
-/*! @file visibility.c
+/*! @file src/visibility.c
  *
  * @brief ...
  *
@@ -116,7 +116,7 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
   \return TRUE on success
   */
 
-/*! @file visibility.c
+/*! @file src/visibility.c
  *
  * @brief ...
  *

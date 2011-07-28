@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -37,7 +37,7 @@
 
 /* Default window size and MINIMUM size as well... */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -55,7 +55,7 @@ extern gconstpointer *global_data;
  tabs and populates them with data
  */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -152,7 +152,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 
 	/* Tabs that should be hidden.... */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -172,7 +172,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 		{
 			/* Get tab and child label and hide it.. */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -194,7 +194,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
   \param xml, pointer to XML for the core Gui
   */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -206,7 +206,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	 * other dynamic bits that can't be set via glade statically 
 	 */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -233,7 +233,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("toplevel_notebook",widget);
 	/* Set about tab title */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -246,7 +246,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Info status label at base of UI */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -257,7 +257,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Load Main MegaTunix logo */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -272,7 +272,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Set about tab identifier */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -282,7 +282,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Tab visibility menuitem */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -293,7 +293,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Tooltips */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -305,7 +305,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Log Datastreams */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -317,7 +317,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Temp Scales */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -340,7 +340,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Dashboard Ebox */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -351,7 +351,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Dashboard 1 */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -380,7 +380,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("dash_1_label",label);
 	/* Bind signal to the button to choose a new dash */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -392,7 +392,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Dashboard 2 */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -420,7 +420,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("dash_2_label",label);
 	/* Bind signal to the button to choose a new dash */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -432,7 +432,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Debugging frame */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -445,7 +445,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab Interrogation frame */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -456,7 +456,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab Interrogation button */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -470,7 +470,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab OFfline mode button */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -484,7 +484,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Interrogation results entries */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -499,7 +499,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab Textview */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -526,7 +526,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Commport frame */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -537,7 +537,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Locate Port button */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -550,7 +550,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Read Timeout threshold spinner */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -563,7 +563,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Active COMM Port entry */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -574,7 +574,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Autodetect Checkbutton */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -587,7 +587,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Fill in comm port entry if in manual mode */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -598,7 +598,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Read delay subtable */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -630,7 +630,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Network ctrls */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -657,7 +657,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Stats Frame */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -668,7 +668,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Stats Entries */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -715,7 +715,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
   \param parent, Container for the status Icons
   */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *
@@ -750,7 +750,7 @@ void setup_main_status(GtkWidget *parent)
   \param state, state of the ECU connection
   */
 
-/*! @file core_gui.c
+/*! @file src/core_gui.c
  *
  * @brief ...
  *

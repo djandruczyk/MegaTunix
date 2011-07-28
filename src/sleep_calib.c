@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file sleep_calib.c
+/*! @file src/sleep_calib.c
  *
  * @brief ...
  *
@@ -31,7 +31,7 @@ extern gconstpointer *global_data;
  to account for OS/platform differences in precision of the call
  */
 
-/*! @file sleep_calib.c
+/*! @file src/sleep_calib.c
  *
  * @brief ...
  *
@@ -58,7 +58,7 @@ void sleep_calib(void)
 		factors[i] = test/(time*1000000);
 		/*printf("Sleep Correction Factor test %i is %f, %f/%f\n",i,factors[i],test,time*1000000);*/
 
-/*! @file sleep_calib.c
+/*! @file src/sleep_calib.c
  *
  * @brief ...
  *
@@ -70,7 +70,7 @@ void sleep_calib(void)
 	*factor = tmpf/(gfloat)i;
 	/*printf("Sleep Correction Factor is %f\n",*factor);*/
 
-/*! @file sleep_calib.c
+/*! @file src/sleep_calib.c
  *
  * @brief ...
  *

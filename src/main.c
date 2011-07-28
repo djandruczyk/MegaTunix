@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -45,7 +45,7 @@ gconstpointer *global_data = NULL;
  \returns TRUE
  */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -80,7 +80,7 @@ gint main(gint argc, gchar ** argv)
 
 	/* Condition variables */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -99,7 +99,7 @@ gint main(gint argc, gchar ** argv)
 
 	/* Mutexes */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -128,7 +128,7 @@ gint main(gint argc, gchar ** argv)
 	   printf(_("Hello World!\n"));
 	 */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -137,7 +137,7 @@ gint main(gint argc, gchar ** argv)
 
 	/* This will exit mtx if the locking fails! */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -147,7 +147,7 @@ gint main(gint argc, gchar ** argv)
 
 	/* Allocate memory  */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -159,7 +159,7 @@ gint main(gint argc, gchar ** argv)
 
 	handle_args(argc,argv);	/* handle CLI arguments */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -167,7 +167,7 @@ gint main(gint argc, gchar ** argv)
  */
 	open_debug();		/* Open debug log */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -175,7 +175,7 @@ gint main(gint argc, gchar ** argv)
  */
 	init();			/* Initialize global vars */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -183,7 +183,7 @@ gint main(gint argc, gchar ** argv)
  */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -191,7 +191,7 @@ gint main(gint argc, gchar ** argv)
  */
 	/* Build table of strings to enum values */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -200,7 +200,7 @@ gint main(gint argc, gchar ** argv)
 
 	/* Create Message passing queues */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *
@@ -234,7 +234,7 @@ gint main(gint argc, gchar ** argv)
 	   load personality choice
 	   */
 
-/*! @file main.c
+/*! @file src/main.c
  *
  * @brief ...
  *

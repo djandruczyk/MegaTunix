@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file mem_mgmt.c
+/*! @file src/mem_mgmt.c
  *
  * @brief ...
  *
@@ -34,7 +34,7 @@ extern gconstpointer *global_data;
  \param bigendian, Flag to flip bytes or not
  */
 
-/*! @file mem_mgmt.c
+/*! @file src/mem_mgmt.c
  *
  * @brief ...
  *
@@ -57,7 +57,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			printf("8 bit, returning %i\n",(guint8)data[offset]);
 			*/
 
-/*! @file mem_mgmt.c
+/*! @file src/mem_mgmt.c
  *
  * @brief ...
  *
@@ -78,7 +78,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			printf("U16 bit, returning %i\n",result);
 			*/
 
-/*! @file mem_mgmt.c
+/*! @file src/mem_mgmt.c
  *
  * @brief ...
  *
@@ -97,7 +97,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			printf("S16 bit, returning %i\n",result);
 			*/
 
-/*! @file mem_mgmt.c
+/*! @file src/mem_mgmt.c
  *
  * @brief ...
  *
@@ -114,7 +114,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			printf("U32 bit, returning %i\n",result);
 			*/
 
-/*! @file mem_mgmt.c
+/*! @file src/mem_mgmt.c
  *
  * @brief ...
  *
@@ -132,7 +132,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			printf("S32 bit, returning %i\n",result);
 			*/
 
-/*! @file mem_mgmt.c
+/*! @file src/mem_mgmt.c
  *
  * @brief ...
  *
@@ -159,7 +159,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
  \param bigendian, Flag to flip bytes or not
  */
 
-/*! @file mem_mgmt.c
+/*! @file src/mem_mgmt.c
  *
  * @brief ...
  *

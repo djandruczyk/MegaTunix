@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -47,7 +47,7 @@ extern gconstpointer *global_data;
   \brief removes the mtx lockfile
   */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -69,7 +69,7 @@ G_MODULE_EXPORT void remove_mtx_lock(void)
   \brief creates the mtx lockfile
   */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -90,7 +90,7 @@ G_MODULE_EXPORT void create_mtx_lock(void)
   \brief Unix function that creates the mtx lockfile
   */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -124,7 +124,7 @@ G_MODULE_EXPORT void unix_create_mtx_lock(void)
 		else
 		*/
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -154,7 +154,7 @@ G_MODULE_EXPORT void unix_create_mtx_lock(void)
   \brief Unix function that removes the mtx lockfile
   */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -187,7 +187,7 @@ G_MODULE_EXPORT void unix_remove_mtx_lock(void)
   \brief creates the win32 mtx lockfile
   */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -221,7 +221,7 @@ G_MODULE_EXPORT void win32_create_mtx_lock(void)
   \brief Removes the win32 mtx lockfile
   */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -241,7 +241,7 @@ G_MODULE_EXPORT void win32_remove_mtx_lock(void)
   \brief Unlock the serial port
   */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -254,7 +254,7 @@ G_MODULE_EXPORT void unlock_serial(void)
 
 	/*printf("told to unlock serial,  path \"%s\"\n",fname); */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -278,7 +278,7 @@ G_MODULE_EXPORT void unlock_serial(void)
   \returns TRUE on lock success, FALSE otherwise
   */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -298,7 +298,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 
 	/*printf("told to lock serial port %s\n",name); */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *
@@ -306,7 +306,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
  */
 	/* If no /proc (i.e. os-X), just fake it and return */
 
-/*! @file locking.c
+/*! @file src/locking.c
  *
  * @brief ...
  *

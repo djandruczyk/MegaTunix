@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -46,7 +46,7 @@ extern gconstpointer *global_data;
  \returns pointer to a new dashboard container widget
  */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -77,7 +77,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 
 		/*parse the file and get the DOM */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -108,7 +108,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 						GDK_POINTER_MOTION_HINT_MASK|
 			 */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -140,7 +140,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 
 	/*Get the root element node */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -156,7 +156,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 
 	/* Store global info about this dash */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -168,7 +168,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 	g_free(key);
 	/* retrieve coord info from global store */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -191,7 +191,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 	height = (GINT)OBJ_GET(dash,"orig_height");
 	/*printf("move/resize to %i,%i, %ix%i\n",x,y,width,height); */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -216,7 +216,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
   \returns FALSE so other signals run
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -288,7 +288,7 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
   \param a_node, pointer to XML node
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -300,7 +300,7 @@ G_MODULE_EXPORT void load_elements(GtkWidget *dash, xmlNode *a_node)
 
 	/* Iterate though all nodes... */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -326,7 +326,7 @@ G_MODULE_EXPORT void load_elements(GtkWidget *dash, xmlNode *a_node)
   \param node, pointer to XML node
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -373,7 +373,7 @@ G_MODULE_EXPORT void load_geometry(GtkWidget *dash, xmlNode *node)
   \param node, pointer to XML node
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -442,7 +442,7 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
   \param data, unused
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -508,7 +508,7 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
   \param data, unused
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -542,7 +542,7 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 	{
 		/*printf("updating gauge %s\n",(gchar *)key);*/
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -550,7 +550,7 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
  */
 		/*printf("updating gauge %s\n",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge)));*/
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -569,7 +569,7 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
   \param hide_resizers, flag to display or hide the  dashboard resizers
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -674,7 +674,7 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
   \return FALSE so other handlers run
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -694,7 +694,7 @@ G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *ev
   \return FALSE so other handlers run
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -749,7 +749,7 @@ G_MODULE_EXPORT gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, g
   \brief Makes the runtime status window appear/disappear
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -782,7 +782,7 @@ G_MODULE_EXPORT void toggle_status_visible(void)
   \brief Makes the runtime text window appear/disappear
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -815,7 +815,7 @@ G_MODULE_EXPORT void toggle_rtt_visible(void)
   \brief Makes the main window appear/disappear
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -851,7 +851,7 @@ G_MODULE_EXPORT void toggle_main_visible(void)
   \param attr, Enumeration for type of attribute
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -897,7 +897,7 @@ G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
   \param attr, Enumeration for type of attribute
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -942,7 +942,7 @@ G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr att
   \returns TRUE to block any other handlers from running
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -961,7 +961,7 @@ G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget)
   \param event, pointer to EventButton structure
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -981,7 +981,7 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 
 	/* Create Menu here */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1098,7 +1098,7 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
   \returns TRUE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1112,7 +1112,7 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 
 	/* IF gui isn't visible, make it visible */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1139,7 +1139,7 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
   \returns TRUE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1160,7 +1160,7 @@ G_MODULE_EXPORT gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer d
   \returns TRUE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1182,7 +1182,7 @@ G_MODULE_EXPORT gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
   \returns TRUE if daytime, otherwise FALSE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1222,7 +1222,7 @@ G_MODULE_EXPORT gboolean get_dash_daytime_mode(GtkWidget *widget)
   \param state, Whether  we are daytime or nitetime
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1254,7 +1254,7 @@ G_MODULE_EXPORT void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
   \returns TRUE if successfull, FALSE otherwise
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1294,7 +1294,7 @@ G_MODULE_EXPORT gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer da
   \returns TRUE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1317,7 +1317,7 @@ G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer dat
   \returns TRUE, if it handles something, otherwise FALSE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1349,7 +1349,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 	{
 		/*printf("dash button event\n"); */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1359,7 +1359,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		{
 			/* Upper portion */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1369,7 +1369,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 				edge = GDK_WINDOW_EDGE_NORTH_EAST;
 			/* Lower portion */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1382,7 +1382,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		}
 		/* Left Side of window */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1392,7 +1392,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		{
 			/* If it's in the middle portion */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1400,7 +1400,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
  */
 			/* Upper portion */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1410,7 +1410,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 				edge = GDK_WINDOW_EDGE_NORTH_WEST;
 			/* Lower portion */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1428,7 +1428,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		{
 			/*printf("MOVE drag\n"); */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1446,7 +1446,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		{
 			/*printf("RESIZE drag\n"); */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1475,7 +1475,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
   from a previous mtx run
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1543,7 +1543,7 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 	 * So we force the dash chooser
 	 */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1571,7 +1571,7 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
   \returns, TRUE if it handles something, or FALSE otherwise
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1634,7 +1634,7 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
   \returns TRUE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1677,7 +1677,7 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
   \returns TRUE if it handles someting, FALSE otherwise
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1695,7 +1695,7 @@ G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpoint
 		g_free(tmpbuf);
 		/* Found gauge in soon to be destroyed dash */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1728,7 +1728,7 @@ G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpoint
   \returns TRUE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1745,7 +1745,7 @@ G_MODULE_EXPORT gboolean dummy(GtkWidget *widget,gpointer data)
   \param parent, container for the gauge to be created
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1782,7 +1782,7 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *parent)
   \brief updates tab gauges with new data
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1821,7 +1821,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 				source = OBJ_GET(gauge,"datasource");
 				/*printf("gauge is visible/sensitive, source %s\n",source);*/
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1841,7 +1841,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 				printf("insensitive\n");
 				*/
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1853,7 +1853,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 			printf("not visible\n");
 			*/
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1864,7 +1864,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 	printf("done updating gauges\n");
 	*/
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1879,7 +1879,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
   \returns FALSE
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1906,7 +1906,7 @@ G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
   \returns FALSE normally
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1923,7 +1923,7 @@ G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *
 	OBJ_SET(dash,"resizing",GINT_TO_POINTER(FALSE));
 	/* If "leaving" the window, set timeout to hide the resizers */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1945,7 +1945,7 @@ G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *
   \param data, unused
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -1979,7 +1979,7 @@ G_MODULE_EXPORT void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
   \param data, unused
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -2009,7 +2009,7 @@ G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
   \param data, unused
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -2019,7 +2019,7 @@ G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 {
 	/* IF visible, hide them */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -2055,7 +2055,7 @@ G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
   \returns TRUE unless app is closing down
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -2081,7 +2081,7 @@ G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
   \brief Prints the available dashboard choices to std output
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -2097,7 +2097,7 @@ G_MODULE_EXPORT void print_dash_choices(void)
 
 	/* Personal Path */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -2121,7 +2121,7 @@ G_MODULE_EXPORT void print_dash_choices(void)
 
 	/* System Path */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -2155,7 +2155,7 @@ G_MODULE_EXPORT void print_dash_choices(void)
   \returns pointer to dashboard config file found
   */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *
@@ -2171,7 +2171,7 @@ G_MODULE_EXPORT gchar * validate_dash_choice(gchar * choice, gboolean *result)
 
 	/* Check personal path first */
 
-/*! @file dashboard.c
+/*! @file src/dashboard.c
  *
  * @brief ...
  *

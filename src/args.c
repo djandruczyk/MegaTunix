@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file args.c
+/*! @file src/args.c
  *
  * @brief ...
  *
@@ -36,7 +36,7 @@ extern gconstpointer *global_data;
  \param argv, array of command line args
  */
 
-/*! @file args.c
+/*! @file src/args.c
  *
  * @brief ...
  *
@@ -67,7 +67,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		{"Port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use this serial port ONLY",NULL},
 		/*{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},*/
 
-/*! @file args.c
+/*! @file src/args.c
  *
  * @brief ...
  *
@@ -251,7 +251,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
   \returns pointer to CmdLineArgs structure
   */
 
-/*! @file args.c
+/*! @file src/args.c
  *
  * @brief ...
  *
@@ -286,7 +286,7 @@ G_MODULE_EXPORT CmdLineArgs * init_args(void)
   \param data, pointer to CmdLineArgs structure to be freed
   */
 
-/*! @file args.c
+/*! @file src/args.c
  *
  * @brief ...
  *

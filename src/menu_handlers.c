@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file menu_handlers.c
+/*! @file src/menu_handlers.c
  *
  * @brief ...
  *
@@ -52,7 +52,7 @@ static struct
   ecu specific plugin handler)
   */
 
-/*! @file menu_handlers.c
+/*! @file src/menu_handlers.c
  *
  * @brief ...
  *
@@ -112,7 +112,7 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
  \returns TRUE if handled, FALSE otherwise
  */
 
-/*! @file menu_handlers.c
+/*! @file src/menu_handlers.c
  *
  * @brief ...
  *
@@ -158,7 +158,7 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
  \returns TRUE
  */
 
-/*! @file menu_handlers.c
+/*! @file src/menu_handlers.c
  *
  * @brief ...
  *
@@ -202,7 +202,7 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
  \returns TRUE if tab found, FALSE if not
  */
 
-/*! @file menu_handlers.c
+/*! @file src/menu_handlers.c
  *
  * @brief ...
  *

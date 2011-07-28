@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -43,7 +43,7 @@ extern gconstpointer *global_data;
  \see set_widget_color
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -64,7 +64,7 @@ G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
  \see set_widget_color
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -86,7 +86,7 @@ G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
  \param color, enumeration of the color to switch to..
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -182,7 +182,7 @@ G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
  \param clear, if set, clear display before displaying text
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -218,7 +218,7 @@ G_MODULE_EXPORT void  update_logbar(
 
 	/* Add the message to the end of the textview */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -246,7 +246,7 @@ G_MODULE_EXPORT void  update_logbar(
 	{
 		if (count) /* if TRUE, display counter, else don't */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -259,7 +259,7 @@ G_MODULE_EXPORT void  update_logbar(
 	{
 		if (count) /* if TRUE, display counter, else don't */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -276,7 +276,7 @@ G_MODULE_EXPORT void  update_logbar(
 	 * bottom so the new message is visible... 
 	 */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -302,7 +302,7 @@ G_MODULE_EXPORT void  update_logbar(
  either lost or not detected with the ECU
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -323,7 +323,7 @@ G_MODULE_EXPORT void conn_warning(void)
   Takes no parameters.
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -347,7 +347,7 @@ G_MODULE_EXPORT void kill_conn_warning(void)
  \param message, the text to display
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -388,7 +388,7 @@ G_MODULE_EXPORT void warn_user(const gchar *message)
  \param message, the text to display
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -424,7 +424,7 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
   \returns TRUE
   */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -451,7 +451,7 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
  \returns FALSE
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -473,7 +473,7 @@ G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
  \param text, text to append, dynamic strings only
  */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *
@@ -523,7 +523,7 @@ G_MODULE_EXPORT void set_title(gchar * text)
   \returns FALSE
   */
 
-/*! @file notifications.c
+/*! @file src/notifications.c
  *
  * @brief ...
  *

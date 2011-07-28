@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file warmwizard_gui.c
+/*! @file src/warmwizard_gui.c
  *
  * @brief ...
  *
@@ -31,7 +31,7 @@ extern GdkColor red;
  \param temp, the temp of the engine's coolant in deg Fahrenheit.
  */
 
-/*! @file warmwizard_gui.c
+/*! @file src/warmwizard_gui.c
  *
  * @brief ...
  *
