@@ -7,6 +7,13 @@
  *
  * version: 0.13.13
  */
+
+/*! @file widgets/crx.c
+ *
+ * @brief ...
+ *
+ *
+ */
 #include "crx.h"
 #include <gtk/gtk.h>
 #include <stdlib.h>

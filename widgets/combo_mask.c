@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file widgets/combo_mask.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <combo_mask.h>
 #include <crx.h>
 #include <libgen.h>

@@ -13,6 +13,13 @@
  *  
  */
 
+/*! @file widgets/progress-private.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #undef GTK_DISABLE_DEPRECATED
 #undef GDK_DISABLE_DEPRECATED

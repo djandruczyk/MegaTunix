@@ -25,6 +25,13 @@
  *  have come up with!
  */
 
+/*! @file widgets/gauge.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <gauge-private.h>
 #include <string.h>

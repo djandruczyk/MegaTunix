@@ -11,6 +11,13 @@
  *  
  */
 
+/*! @file widgets/curve-private.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <config.h>
 #include <defines.h>

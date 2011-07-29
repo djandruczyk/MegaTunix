@@ -13,6 +13,13 @@
  *  
  */
 
+/*! @file widgets/piegauge-private.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <piegauge-private.h>
 #include <math.h>

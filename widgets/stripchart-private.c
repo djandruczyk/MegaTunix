@@ -13,6 +13,13 @@
  *  
  */
 
+/*! @file widgets/stripchart-private.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <config.h>
 #include <cairo/cairo.h>

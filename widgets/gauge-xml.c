@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file widgets/gauge-xml.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <gauge-xml.h>
 #include <gauge-private.h>

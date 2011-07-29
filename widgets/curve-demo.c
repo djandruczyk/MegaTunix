@@ -12,6 +12,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file widgets/curve-demo.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <curve.h>
 #include <math.h>

@@ -10,6 +10,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file widgets/curve.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <curve-private.h>
 #include <math.h>

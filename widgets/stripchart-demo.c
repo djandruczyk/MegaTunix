@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file widgets/stripchart-demo.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 
 #include <defines.h>
 #include <stripchart.h>
