@@ -24,7 +24,7 @@
 
 /*!
  \brief build_about makes the about tab and presents the MegaTunix logo
- \param parent, container to place the logo in
+ \param parent is the container to place the logo in
  */
 G_MODULE_EXPORT void install_logo(GtkWidget *parent)
 {
@@ -41,7 +41,7 @@ G_MODULE_EXPORT void install_logo(GtkWidget *parent)
 
 /*!
   \brief Builds the about MegaTunix Tab and loads the main Logo
-  \param frame, parent frame for about window
+  \param frame is the parent frame for about window
   */
 G_MODULE_EXPORT void build_about(GtkWidget *frame)
 {
@@ -76,8 +76,8 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
 
 /*!
  \brief about_popup makes the about tab and presents the MegaTunix logo
- \param widget, unused
- \param data, unused
+ \param widget is unused
+ \param data is unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)

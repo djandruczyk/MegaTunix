@@ -34,7 +34,7 @@ extern gconstpointer *global_data;
 /*!
  \brief start_tickler() starts up a GTK+ timeout function based on the
  enum passed to it.
- \param type, is an enum passed which is used to know 
+ \param type is an enum passed which is used to know 
  which timeout to fire up.
  \see signal_read_rtvars_thread signal_read_rtvars
  */
@@ -158,7 +158,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
  a thread which handles I/O.  This function will check the queue depth and 
  if the queue is backed up it will skip sending a request for data, as that 
  will only aggravate the queue roadblock.
- \param data, unused
+ \param data is unused
  \returns 0 on signal to exit
  */
 G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)

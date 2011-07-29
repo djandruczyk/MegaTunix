@@ -139,9 +139,9 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 
 /*!
   \brief loads the runtime text XML elements
-  \param a_node, XML node
-  \param store, Liststoreto stick the built RTT object into
-  \param parent, container for the RTT display
+  \param a_node is the XML node
+  \param store is the Liststoreto stick the built RTT object into
+  \param parent is the container for the RTT display
   \returns FALSE when at EOF, otherwise TRUE
   */
 G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
@@ -172,9 +172,9 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 /*
  \brief loda the RTT specifics at this XML node, creates the RTT object and 
  stores it in the ListStore
- \param node, pointer to XML node
- \param store, pointer to ListStore where we save it
- \param parent, Parent widget
+ \param node is the pointer to XML node
+ \param store is the pointer to ListStore where we save it
+ \param parent is the Parent widget
  */
 G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 {
@@ -222,9 +222,9 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 /*!
  \brief create_rtt() creates the rt_text from the passed data, and attaches
  it the the gui.
- \param parent, parent widget
- \param ctrl_name, name of the rt_text as defined in the config file
- \param source, data source for this rt_text 
+ \param parent is the parent widget
+ \param ctrl_name is the name of the rt_text as defined in the config file
+ \param source is the data source for this rt_text 
  \returns a Struct Rt_Text *
  */
 G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
@@ -261,8 +261,8 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 /*!
  \brief add_rtt() creates the rt_text from the passed data, and attaches
  it the the gui.
- \param parent, parent widget
- \param ctrl_name, name of the rt_text as defined in the config file
+ \param parent is the parent widget
+ \param ctrl_name is the name of the rt_text as defined in the config file
  \returns a populated pointer to a Rt_Text structure
  */
 G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
@@ -343,7 +343,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 /*!
  \brief add_additional_rtt() is called as a post function for Tab loading
  to add an RTT on a normal widget tab. (AE wizard currently)
- \param widget, pointer to widget containing the data needed
+ \param widget is the pointer to widget containing the data needed
  */
 G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 {
@@ -379,9 +379,9 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
  \brief rtt_update_values() is called for each runtime text to update
  it's label (label is periodic and not every time due to pango
  speed problems)
- \param key, unused
- \param value, pointer to Rt_Slider
- \param data, unused
+ \param key is the unused
+ \param value is the pointer to Rt_Slider
+ \param data is unused
  */
 G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
@@ -455,7 +455,7 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 
 /*!
   \brief Sets up the runtime text treeview
-  \param treeview, pointer to the treeviedw to setup
+  \param treeview is the pointer to the treeviedw to setup
   */
 G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 {
@@ -486,10 +486,10 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 
 /*!
   \brief updates each RTT with new data as appropriate
-  \param model, pointer to TreeModel
-  \param path, pointer to item in the model
-  \param iter, iterator
-  \param user_data, unused
+  \param model is the pointer to TreeModel
+  \param path is the pointer to item in the model
+  \param iter is the iterator
+  \param user_data is unused
   \returns FALSE
   */
 G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
@@ -542,7 +542,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 
 /*!
   \brief  calls the rtt_foreach handler to update each runtime text entry
-  \param data, unused
+  \param data is unused
   \returns TRUE on success, FALSE if Mtx is shutting down
   */
 G_MODULE_EXPORT gboolean update_rttext(gpointer data)

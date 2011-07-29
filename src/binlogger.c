@@ -108,7 +108,7 @@ G_MODULE_EXPORT void close_binary_logs(void)
 
 /*!
   \brief flushes the binary log contents to disk
-  \param data, unused
+  \param data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
@@ -131,8 +131,8 @@ G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 
 /*!
   \brief logs outbound (to ECU) data to the logfile
-  \param buf, buffer to write
-  \param count, how many bytes to write
+  \param buf is the pointer to the buffer to write
+  \param count is how many bytes to write
   */
 G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
 {
@@ -148,8 +148,8 @@ G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
 
 /*!
   \brief logs inbound (to ECU) data to the logfile
-  \param buf, buffer to write
-  \param count, how many bytes to write
+  \param buf is the pointer to the buffer to write
+  \param count is how many bytes to write
   */
 G_MODULE_EXPORT void log_inbound_data(const void * buf, size_t count)
 {

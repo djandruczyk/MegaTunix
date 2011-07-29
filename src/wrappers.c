@@ -24,7 +24,7 @@
 
 /*!
   \brief wrapper for evaluator_create()
-  \param expr, math expression to create an evaluator for
+  \param expr is the math expression to create an evaluator for
   \returns pointer to opaque pointer representing the evaluator
   */
 G_MODULE_EXPORT void * evaluator_create_w(char *expr)
@@ -35,7 +35,7 @@ G_MODULE_EXPORT void * evaluator_create_w(char *expr)
 
 /*!
   \brief wrapper for evaluator_destroy()
-  \param eval, evaluator to destroy....
+  \param eval is the evaluator to destroy....
   */
 G_MODULE_EXPORT void evaluator_destroy_w( void *eval)
 {
@@ -45,8 +45,8 @@ G_MODULE_EXPORT void evaluator_destroy_w( void *eval)
 
 /*!
   \brief wrapper for evaluator_evaluator_x()
-  \param eval, evaluator to evaluate
-  \param x, input to the math
+  \param eval is the evaluator to evaluate
+  \param x is the input to the math
   \returns result of the math
   */
 G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
@@ -57,7 +57,7 @@ G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
 
 /*!
   \brief wrapper for mask_entry_new_with_mask()
-  \param mask, regex mask for this new entry
+  \param mask is the regex mask for this new entry
   \returns pointer to the new widget
   */
 G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_w(gchar *mask)

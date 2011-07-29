@@ -108,8 +108,8 @@ G_MODULE_EXPORT void close_debug(void)
 /*!
  \brief dbg_func() writes debugggin output to the console based on if the
  passed debug level is marked in the current debugging mask.
- \param level,Dbg_Class enumeration defining the debug level
- \param str, message to print out
+ \param level iss theDbg_Class enumeration defining the debug level
+ \param str is the message to print out
  */
 G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 {
@@ -153,7 +153,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 
 /*!
   \brief Populates the debugging tab with the choices
-  \param parent, pointer to parent container widget
+  \param parent is the pointer to parent container widget
   */
 G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 {

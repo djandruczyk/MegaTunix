@@ -52,7 +52,7 @@ extern gconstpointer *global_data;
 /*!
  \brief open_serial() called to open the serial port, updates textviews on the
  comms page on success/failure
- \param port_name, name of the port to open
+ \param port_name is the name of the port to open
  */
 G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 {
@@ -130,8 +130,8 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
  pending data. It's a wrapper to the tcflush command on unix and the 
  win32_serial_flush command in winserialio.c that does the equivalent 
  operation on windows.
- \param fd, filedescriptor to flush
- \param type, how to flush it (enumeration)
+ \param fd is the filedescriptor to flush
+ \param type is how to flush it (enumeration)
  */
 G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 {
@@ -428,11 +428,11 @@ G_MODULE_EXPORT void close_serial(void)
 
 /*!
   \brief Parses the baud string to extract out the baud, bits, parity and stop
-  \param baud_str, the input string to parse
-  \param baud, pointer to the baud rate value
-  \param bits, pointer to the bits value
-  \param parity, pointer to the Parity enumeration value
-  \param stop, pointer to the stop bits value
+  \param baud_str is the input string to parse
+  \param baud is the pointer to the baud rate value
+  \param bits is the pointer to the bits value
+  \param parity is the pointer to the Parity enumeration value
+  \param stop is the pointer to the stop bits value
   \returns TRUE if parsable, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits, Parity *parity, gint *stop)

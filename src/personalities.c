@@ -256,8 +256,8 @@ jumpahead_offline:
   \brief signal handler when the user selects an ECU personality. Extracts the
   data from the data object and sets the necessary bits in the global data
   object container.
-  \param widget, the toggle button clicked
-  \param data, pointer to the PersonaElement structure
+  \param widget is the toggle button clicked
+  \param data is the pointer to the PersonaElement structure
   \see PersonaElement
   \returns TRUE unused element is NULL
   */
@@ -296,8 +296,8 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 
 /*!
   \brief frees the resources for a PersonaElement structure
-  \param data, pointer to PersonaElement
-  \param user_data, unused
+  \param data is the pointer to PersonaElement
+  \param user_data is unused
   */
 G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
 {
@@ -317,8 +317,8 @@ G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
 /*!
   \brief sorting function specific to a PersonaElement that compares on the 
   sequence member of the structure
-  \param a, Element 1
-  \param b, Element 2
+  \param a is Element 1
+  \param b is Element 2
   \returns the results of g_ascii_strcasecmp of a->sequence,b->sequence
   */
 G_MODULE_EXPORT gint persona_seq_sort(gconstpointer a, gconstpointer b)

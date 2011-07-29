@@ -208,8 +208,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
  \brief load_gui_tabs_pf() is called after interrogation completes successfully.
  It's purpose is to load all the glade files and datamaps as specified in the
  interrogation profile of the detected firmware. 
- \param notebook, pointer to the notebook the new tab should be placed
- \param page, page number to load
+ \param notebook is the pointer to the notebook the new tab should be placed
+ \param page is the page number to load
  \returns TRUE on success, FALSE on failure
  */
 G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
@@ -311,7 +311,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 
 /*!
  \brief free's the data from the struct Group structure
- \param value, pointer to the struct Group to be deallocated
+ \param value is the pointer to the struct Group to be deallocated
  \see load_groups
  */
 G_MODULE_EXPORT void group_free(gpointer value)
@@ -334,7 +334,7 @@ G_MODULE_EXPORT void group_free(gpointer value)
 /*!
  \brief Called from the load_gui_tabs_pf function in order to
  load common settings for a group of controls.
- \param cfgfile, the pointer to the configuration file to read
+ \param cfgfile is the pointer to the configuration file to read
  the group information from.
  \see group_free
  \see load_gui_tabs_pf
@@ -424,10 +424,10 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
  a group. (saves from having to duplicate a large number of keys/values for 
  a big group of widgets) This function will set the necessary data on the 
  Gui object.
- \param cfgfile, pointer to the config file to read data from
- \param object, the widget to bind the data to
- \param groups, the hashtable that holds the  group common data
- \param groupname, textual name of the group to get the data for to
+ \param cfgfile is the pointer to the config file to read data from
+ \param object is the widget to bind the data to
+ \param groups is the hashtable that holds the  group common data
+ \param groupname is the textual name of the group to get the data for to
  be bound to the widget
  \returns the page of the group
  */
@@ -484,8 +484,8 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 
 /*!
  \brief bind_to_lists() binds a widget to any number of string named lists.
- \param widget, widget to bind to lists
- \param lists, command seperated string list of lists to bind this
+ \param widget is the widget to bind to lists
+ \param lists is the command seperated string list of lists to bind this
  widget into.
  */
 G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
@@ -523,8 +523,8 @@ G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
 
 /*!
   \brief  Removed a pointer/widget from a list of lists
-  \param lists, comma separated list of list names
-  \param data, pointer to the item to remove from each list
+  \param lists is the comma separated list of list names
+  \param data is the pointer to the item to remove from each list
   */
 G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
 {
@@ -554,8 +554,8 @@ G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
  for the widget names in the glade file and if it's fond in the datamap to
  load all the attribues listed and bind them to the object using GTK+'s
  object model.
- \param widget, widget passed to load attributes on
- \param user_data, pointer to a BingGroup structure.
+ \param widget is the widget passed to load attributes on
+ \param user_data is the pointer to a BingGroup structure.
  */
 G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 {
@@ -850,7 +850,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
  \brief run_post_functions() is called to run a function AFTER tab loading.
  It'll search the exported symbols of MegaTunix for the function and if
  found execute it
- \param functions, CSV list of functions to run
+ \param functions is the CSV list of functions to run
  */
 G_MODULE_EXPORT void run_post_functions(const gchar * functions)
 {
@@ -864,8 +864,8 @@ G_MODULE_EXPORT void run_post_functions(const gchar * functions)
  tab loading is complete. It'll search the exported symbols of MegaTunix 
  for the function and if found execute it with the passed widget as an
  argument.
- \param functions, CSV list of functions to run
- \param widget, pointer to widget to be passed to the function
+ \param functions is the CSV list of functions to run
+ \param widget is the pointer to widget to be passed to the function
  */
 G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
@@ -898,7 +898,7 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 
 /*!
   \brief Pre-loads the dependancies related to a tab/group of tabs
-  \param data, pointer to a GPtrArray list of tab infos, used to traverse 
+  \param data is the pointer to a GPtrArray list of tab infos, used to traverse 
   each tab config file to preload the needed interdependancy structures
   */
 gboolean preload_deps(gpointer data)
@@ -938,8 +938,8 @@ gboolean preload_deps(gpointer data)
 /*!
   \brief descends into a GladeWidgetInfo tree looking for special case 
   widgets to handle
-  \param info, pointer to a GladeWidgetInfo structure
-  \param cfgfilem, pointer to the corresponding datamap file
+  \param info is the pointer to a GladeWidgetInfo structure
+  \param cfgfile is the pointer to the corresponding datamap file
   \returns TRUE, unless eat end of the tree
   */
 gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
@@ -1128,7 +1128,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 
 /*!
   \brief loads a tab when its clicked upon
-  \param datamap, the datamap that goes with this tab
+  \param datamap is the datamap that goes with this tab
   \returns TRUE on success, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean handle_dependant_tab_load(gchar * datamap)

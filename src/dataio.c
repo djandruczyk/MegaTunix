@@ -49,9 +49,10 @@ extern gconstpointer *global_data;
 /*!
  \brief read_data() reads in the data from the ECU, checks to make sure
  enough arrived, copies it to thedestination buffer and returns;
- \param total_wanted, if set to -1, input is variable and we don't error out.
+ \param total_wanted if set to -1, input is variable and we don't error out.
  otherwise error out if count doesn't match what is asked for
- \param buffer, pointer to buffer to stick the data.
+ \param buffer is the pointer to buffer to stick the data.
+ \param reset_on_fail is a hacky flag that should be removed, (win32ism)
  \returns TRUE on success, FALSE on failure 
  */
 G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
@@ -157,8 +158,8 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 /*!
  \brief dump_output() dumps the newly read data to the console in HEX for
  debugging purposes
- \param total_read, total bytesto printout
- \param buf, pointer to data to write to console
+ \param total_read is the total bytes to print out
+ \param buf is the pointer to data to write to console
  */
 G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 {
@@ -193,10 +194,10 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 
 /*!
   \brief Wrapper function that does a nonblocking select()/read loop .
-  \param fd, serial port filedescriptor
-  \param buf, pointer to where to stick the data
-  \param count, how many bytes to read
-  \param len. pointer to length read
+  \param fd is the serial port filedescriptor
+  \param buf is the pointer to where to stick the data
+  \param count is how many bytes to read
+  \param len is the pointer to length read
   \returns TRUE on success, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
@@ -242,10 +243,10 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 
 /*!
   \brief wrapper for writing data that handles serial and network modes
-  \param fd, serial port filedescriptor
-  \param buf, pointer to where to pull the data from
-  \param count, how many bytes to write
-  \param len. pointer to length to write
+  \param fd is the serial port filedescriptor
+  \param buf is the pointer to where to pull the data from
+  \param count is how many bytes to write
+  \param len is the pointer to length to write
   \returns TRUE on success, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)

@@ -28,7 +28,7 @@ extern GdkColor black;
 
 /*!
  \brief reset_errcounts() resets the error counters
- \param widget (GtkWidget *) unused
+ \param widget is unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)

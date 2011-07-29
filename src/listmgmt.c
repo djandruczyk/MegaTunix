@@ -26,7 +26,7 @@ extern gconstpointer *global_data;
 
 /*!
  \brief get_list returns the list referenced by name
- \param key, Text name of list to return a pointer to
+ \param key is the Text name of list to return a pointer to
  \returns pointer to GList
  \see store_list
  */
@@ -43,7 +43,7 @@ G_MODULE_EXPORT GList * get_list(const gchar * key)
 
 /*!
  \brief store_list stores a list by a textual name
- \param key, Text name of list to store
+ \param key is the Text name of list to store
  \param list pointer to list to store
  \see get_list
  */
@@ -61,7 +61,7 @@ G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
 
 /*!
  \brief remove_list removes a list from the hashtable
- \param key, Text name of list to remove
+ \param key is the Text name of list to remove
  \see get_list
  */
 G_MODULE_EXPORT void remove_list(const gchar *key)
@@ -74,8 +74,8 @@ G_MODULE_EXPORT void remove_list(const gchar *key)
 
 /*!
   \brief Does a string comparison on two list elements 'name' members
-  \param a, pointer to ListElement structure
-  \param b, pointer to ListElement structure
+  \param a is the pointer to ListElement structure
+  \param b is the pointer to ListElement structure
   */
 G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
 {
@@ -87,9 +87,9 @@ G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
 
 /*!
   \brief does a object string comparison on the key passed
-  \param a, pointer to gconstpointer object
-  \param b, pointer to gconstpointer object
-  \param data, pointer to char string of the key name to each object passed
+  \param a is the pointer to gconstpointer object
+  \param b is the pointer to gconstpointer object
+  \param data is the pointer to char string of the key name to each object passed
   */
 G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
 {
@@ -100,8 +100,8 @@ G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer
 
 /*!
   \brief free's a ListElement Structure
-  \param data, pointer to ListElement structure to be freed
-  \param user_data, unused
+  \param data is the pointer to ListElement structure to be freed
+  \param user_data is unused
   */
 G_MODULE_EXPORT void free_element(gpointer data, gpointer user_data)
 {

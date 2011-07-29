@@ -31,8 +31,8 @@ extern gconstpointer *global_data;
 
 /*!
   \brief shows the tabe visibility chooser window
-  \param widget, widget clicked to get this to come up
-  \param data, unused
+  \param widget is the widget clicked to get this to come up
+  \param data is unused
   \return TRUE on success
   */
 G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer data)
@@ -102,8 +102,8 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 
 /*!
   \brief hides a tab
-  \param widget, widget clicked to get this to come up
-  \param data, index to the tab to hide
+  \param widget is the widget clicked to get this to come up
+  \param data is the index to the tab to hide
   \return TRUE on success
   */
 G_MODULE_EXPORT gboolean hide_tab(GtkWidget *widget, gpointer data)

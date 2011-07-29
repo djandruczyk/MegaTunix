@@ -39,8 +39,8 @@ extern gconstpointer *global_data;
 /*!
  \brief load_dashboard() loads the specified dashboard configuration file
  and initializes the dash.
- \param chooser, the fileshooser that triggered the signal
- \param data, user date
+ \param filename is the pointer to the file we should load
+ \param data is the dash ID (1 or 2)
  \returns pointer to a new dashboard container widget
  */
 G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
@@ -123,7 +123,6 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 
 	link_dash_datasources(dash,data);
 
-
 	/* Store global info about this dash */
 	prefix = g_strdup_printf("dash_%i",(GINT)data);
 	key = g_strdup_printf("%s_name",prefix);
@@ -160,8 +159,8 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 /*!
   \brief dashboard configure event.  Handles the dashboard setup and render
   of the spots for each gauge and initiates the shape combine
-  \param widget, pointer to the dash drawing area
-  \param event, EventConfigure event pointer
+  \param widget is the pointer to the dash drawing area
+  \param event is the pointer to the GdkEventConfigure event structure
   \returns FALSE so other signals run
   */
 G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigure *event)
@@ -226,8 +225,8 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 
 /*!
   \brief XML processing function to load the elements for each dashboard
-  \param dash, pointer to dashboard window
-  \param a_node, pointer to XML node
+  \param dash is the pointer to dashboard window
+  \param a_node is the pointer to XML node
   */
 G_MODULE_EXPORT void load_elements(GtkWidget *dash, xmlNode *a_node)
 {
@@ -250,8 +249,8 @@ G_MODULE_EXPORT void load_elements(GtkWidget *dash, xmlNode *a_node)
 
 /*!
   \brief XML processing function to load the geometry data for the dashboard
-  \param dash, pointer to dashboard widget
-  \param node, pointer to XML node
+  \param dash is the pointer to dashboard widget
+  \param node is the pointer to XML node
   */
 G_MODULE_EXPORT void load_geometry(GtkWidget *dash, xmlNode *node)
 {
@@ -290,8 +289,8 @@ G_MODULE_EXPORT void load_geometry(GtkWidget *dash, xmlNode *node)
 
 /*!
   \brief XML processing function to load the gauge data for the dashboard
-  \param dash, pointer to dashboard widget
-  \param node, pointer to XML node
+  \param dash is the pointer to dashboard widget
+  \param node is the pointer to XML node
   */
 G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 {
@@ -352,8 +351,8 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 /*!
   \brief Links the dashboard datasources defined in the XML to actual 
   datasources within megatunix itself (match is via name)
-  \param dash, pointer to dashboard widget
-  \param data, unused
+  \param dash is the pointer to dashboard widget
+  \param data is unused
   */
 G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 {
@@ -410,9 +409,9 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 
 /*!
   \brief Updates a dashboard gauge with a new value
-  \param key, gauge name
-  \param value,  pointer to Dash_Gauge structure
-  \param data, unused
+  \param key is the gauge name
+  \param value is the pointer to Dash_Gauge structure
+  \param user_data is unused
   */
 G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer user_data)
 {
@@ -451,8 +450,8 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 
 /*!
   \brief gives the dashboard that floating look without a bounding window/box
-  \param dash, pointer to dashboard widget
-  \param hide_resizers, flag to display or hide the  dashboard resizers
+  \param dash is the pointer to dashboard widget
+  \param hide_resizers is the flag to display or hide the dashboard resizers
   */
 G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 {
@@ -548,8 +547,9 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 
 /*!
   \brief Dashboard motion event handler (not used yet)
-  \param widget, unused
-  \param event, pointer to EventMotion structure
+  \param widget is unused
+  \param event is a pointer to GdkEventMotion structure
+  \param data is unused
   \return FALSE so other handlers run
   */
 G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
@@ -560,9 +560,9 @@ G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *ev
 
 /*!
   \brief Dashboard keyboard event handler that handles dashboard hotkeys
-  \param widget, pointer to dashboard widget
-  \param event, pointer to EventKey structure
-  \param data, unused
+  \param widget is th pointer to dashboard widget
+  \param event is th pointer to a GdkEventKey structure
+  \param data is unused
   \return FALSE so other handlers run
   */
 G_MODULE_EXPORT gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -691,8 +691,8 @@ G_MODULE_EXPORT void toggle_main_visible(void)
 
 /*!
   \brief Turns on/off gauge attributes of a dash (tattletales, etc )
-  \param widget, pointer to dashboard widget 
-  \param attr, Enumeration for type of attribute
+  \param widget is the pointer to dashboard widget 
+  \param attr is the Enumeration for type of attribute
   */
 G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 {
@@ -730,8 +730,8 @@ G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 
 /*!
   \brief Queries the status of gauge attirbutes for a dashboard
-  \param widget, pointer to dashboard widget 
-  \param attr, Enumeration for type of attribute
+  \param widget is the pointer to dashboard widget 
+  \param attr is the Enumeration for type of attribute
   */
 G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr attr)
 {
@@ -768,7 +768,7 @@ G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr att
 
 /*!
   \brief Pops up the menu for the dashboard when right clicked upon the dash
-  \param widget, pointer to dashboard window
+  \param widget is the pointer to dashboard window
   \returns TRUE to block any other handlers from running
   */
 G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget)
@@ -780,8 +780,8 @@ G_MODULE_EXPORT gboolean dash_popup_menu_handler(GtkWidget *widget)
 
 /*!
   \brief Pops up the menu for the dashboard when right clicked upon the dash
-  \param widget, pointer to dashboard window
-  \param event, pointer to EventButton structure
+  \param widget is the pointer to dashboard window
+  \param event is the pointer to a GdkEventButton structure
   */
 G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event)
 {
@@ -902,8 +902,8 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 
 /*!
   \brief Closes the dashboard
-  \param widget, pointer to dashboard  window
-  \param data, pointer to dashboard index
+  \param widget is the pointer to dashboard  window
+  \param data is the pointer to dashboard index
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
@@ -929,8 +929,8 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 
 /*!
   \brief Enables or disables the dashboard tattletales...
-  \param menuitem, pointer to context menuitem
-  \param data, pointer to dashboard widget
+  \param menuitem is the pointer to context menuitem
+  \param data is the pointer to dashboard widget
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer data)
@@ -943,8 +943,8 @@ G_MODULE_EXPORT gboolean toggle_dash_tattletales(GtkWidget *menuitem, gpointer d
 
 /*!
   \brief Conext menu handler that Sets the dashboard to daytime or nitetime mode
-  \param menuitem, pointer to context menuitem
-  \param data, pointer to dashboard widget
+  \param menuitem is the pointer to context menuitem
+  \param data is the pointer to dashboard widget
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
@@ -959,7 +959,7 @@ G_MODULE_EXPORT gboolean set_dash_time_mode(GtkWidget *menuitem, gpointer data)
 
 /*!
   \brief Gets the dashboard to daytime or nitetime mode
-  \param widet, pointer to dashboard widget
+  \param widget is the pointer to dashboard widget
   \returns TRUE if daytime, otherwise FALSE
   */
 G_MODULE_EXPORT gboolean get_dash_daytime_mode(GtkWidget *widget)
@@ -992,8 +992,8 @@ G_MODULE_EXPORT gboolean get_dash_daytime_mode(GtkWidget *widget)
 
 /*!
   \brief Sets the dashboard to daytime or nitetime mode
-  \param widet, pointer to dashboard widget
-  \param state, Whether  we are daytime or nitetime
+  \param widget is the pointer to dashboard widget
+  \param state is the flag whether we are daytime or nitetime
   */
 G_MODULE_EXPORT void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
 {
@@ -1016,8 +1016,8 @@ G_MODULE_EXPORT void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
 
 /*!
   \brief resets the dashboard tattletales for all gauges 
-  \param menuitem, pointer to dash context menuitem
-  \param data, unused
+  \param menuitem is the pointer to the dash context menuitem
+  \param data is unused
   \returns TRUE if successfull, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer data)
@@ -1049,8 +1049,8 @@ G_MODULE_EXPORT gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer da
 
 /*!
   \brief Toggles the dashboard antialiasing
-  \param menuitem, dash context menu item
-  \param data, pointer to dashboard widget
+  \param menuitem is the dash context menu item
+  \param data is the pointer to dashboard widget
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer data)
@@ -1064,9 +1064,9 @@ G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer dat
 
 /*!
   \brief Dash mouse button event handler to handler move/resize
-  \param widget, pointer to dashboard widget
-  \param event, pointer to EventButton structure.
-  \param data, unused
+  \param widget is the pointer to dashboard widget
+  \param event is the pointer to EventButton structure.
+  \param data is unused
   \returns TRUE, if it handles something, otherwise FALSE
   */
 G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -1235,8 +1235,8 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 
 /*!
   \brief Presents a filechooser to pick hte dash you want
-  \param widget, pointer to dash choice button
-  \param data, unused
+  \param widget is the pointer to dash choice button
+  \param data is unused
   \returns, TRUE if it handles something, or FALSE otherwise
   */
 G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
@@ -1291,8 +1291,8 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 
 /*!
   \brief Removes a dashboard
-  \param widget, pointer to dash close button
-  \param data, unused
+  \param widget is the pointer to dash close button
+  \param data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
@@ -1326,9 +1326,9 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 
 /*!
   \brief Removes a dashboard
-  \param key, dash gauge name pointer
-  \param value, dash gauge pointer
-  \param user_data,  pointer to dash number
+  \param key is the dash gauge name pointer
+  \param value is the dash gauge pointer
+  \param user_data is the pointer to dash number
   \returns TRUE if it handles someting, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
@@ -1364,8 +1364,8 @@ G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpoint
 
 /*! 
   \brief dummy function that jsut returns true to block signal...
-  \param widget, unused
-  \param data, unused
+  \param widget is unused
+  \param data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean dummy(GtkWidget *widget,gpointer data)
@@ -1376,7 +1376,7 @@ G_MODULE_EXPORT gboolean dummy(GtkWidget *widget,gpointer data)
 
 /*!
   \brief creates a gauge for a tab
-  \param parent, container for the gauge to be created
+  \param parent is the container for the gauge to be created
   */
 G_MODULE_EXPORT void create_gauge(GtkWidget *parent)
 {
@@ -1467,7 +1467,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 
 /*!
   \brief Hides dashboard resizers
-  \param data, pointer to dashboard widget
+  \param data is the pointer to dashboard widget
   \returns FALSE
   */
 G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
@@ -1485,9 +1485,9 @@ G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 
 /*!
   \brief Enter/Leave Event handler
-  \param widget, pointer to dash window/eventbox
-  \param event, pointer to EventCrossing structure
-  \param data, unused
+  \param widget is the pointer to dash window/eventbox
+  \param event is the pointer to a GdkEventCrossing structure
+  \param data is unused
   \returns FALSE normally
   */
 G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *event, gpointer data)
@@ -1512,8 +1512,8 @@ G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *
 
 /*!
   \brief Toggles the dashboard fullscreen status
-  \param widget, pointer to dashboard widget
-  \param data, unused
+  \param widget is the pointer to dashboard widget
+  \param data is unused
   */
 G_MODULE_EXPORT void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 {
@@ -1539,8 +1539,8 @@ G_MODULE_EXPORT void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
 
 /*!
   \brief Toggles the dashboard force on top function
-  \param widget, pointer to dashboard widget
-  \param data, unused
+  \param widget is the pointer to dashboard widget
+  \param data is unused
   */
 G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 {
@@ -1562,8 +1562,8 @@ G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 
 /*!
   \brief Toggles the visibility of the remainder of the Gui
-  \param widget, pointer to dash context menu item
-  \param data, unused
+  \param widget is the pointer to dash context menu item
+  \param data is unused
   */
 G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 {
@@ -1594,7 +1594,7 @@ G_MODULE_EXPORT void toggle_gui_visible(GtkWidget *widget, gpointer data)
 
 /*!
   \brief updates the values of all gauges on all dashboards in use
-  \param data, unused
+  \param data is unused
   \returns TRUE unless app is closing down
   */
 G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
@@ -1665,9 +1665,10 @@ G_MODULE_EXPORT void print_dash_choices(void)
 
 /*!
   \brief Validates the user supplied dashboard choice via the -D option
-  \param choice, user supplied dashboard choice
-  \param result, pointer to result variable, set to TRUE if choice is valid
-  \returns pointer to dashboard config file found
+  \param choice is the user supplied dashboard choice
+  \param result is the pointer to result variable, set to TRUE if 
+  choice is valid, FALSE otherwise
+  \returns pointer to dashboard config file found or NULL
   */
 G_MODULE_EXPORT gchar * validate_dash_choice(gchar * choice, gboolean *result)
 {

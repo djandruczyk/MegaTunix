@@ -57,7 +57,7 @@ G_MODULE_EXPORT void update_comms_status(void)
 
 /*!
  \brief write_data() physically sends the data to the ECU.
- \param message (Io_Message *) a pointer to an Io_Message structure
+ \param message is the pointer to an Io_Message structure
  */
 G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
@@ -196,8 +196,8 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 /*!
   \brief Enumerates the contents of /dev to be used when looking for a 
   serial port device on Linux or OS-X
-  \param widget, unused
-  \param data, unused
+  \param widget is unused
+  \param data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
@@ -317,7 +317,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 /*!
   \brief Checks the potential ports config var for the existance of this
   port, if so, return TRUE else return FALSE
-  \param name,  port name to search for...
+  \param name is the port name to search for...
   */
 gboolean check_potential_ports(const gchar *name)
 {

@@ -47,10 +47,10 @@ enum
  get_file and passes it to load_table(void)
  \see load_table
  \see get_File
- \param table_name, textual name of the table to use as the key
+ \param table_name is the textual name of the table to use as the key
  to the lookuptables hashtable
- \param fname, textual name of the filename to load
- \param user_data, unused
+ \param fname is the textual name of the filename to load
+ \param user_data is unused
  */
 G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
@@ -81,8 +81,8 @@ G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer use
  \brief load_table() physically handles loading the table datafrom disk, 
  populating and array and sotring a pointer to that array in the lookuptables
  hashtable referenced by the table_name passed
- \param table_name, key to lookuptables hashtable
- \param filename, filename to load table data from
+ \param table_name is the key to lookuptables hashtable
+ \param filename is the filename to load table data from
  \returns TRUE on success, FALSE on failure
  */
 G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
@@ -159,8 +159,8 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
  choose the midpoint of that span. (i.e. if there are 11 sequential target
  values, we choose the middle one (6th).  This algorithm can STILL however
  be tricked by multiple SINGLE values. in that case it'll take the last one.
- \param object, pointer to object.
- \param value, value to be reverse looked up
+ \param object is the pointer to object.
+ \param value is the value to be reverse looked up
  \returns the index closest to that data
  */
 G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
@@ -248,8 +248,8 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
  choose the midpoint of that span. (i.e. if there are 11 sequential target
  values, we choose the middle one (6th).  This algorithm can STILL however
  be tricked by multiple SINGLE values. in that case it'll take the last one.
- \param object, pointer to object.
- \param value, value to be reverse looked up
+ \param object is the pointer to object.
+ \param value is the value to be reverse looked up
  \returns the index closest to that data
  */
 G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
@@ -330,8 +330,8 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 /*!
   \brief looks up the index of a table based on its value. NOTE: returns the 
   "midpoint" betwen matching values.
-  \param table, name of table to lookup the index given the value
-  \param value, value to lookup the index for
+  \param table is the name of table to lookup the index given the value
+  \param value is the value to lookup the index for
   \returns the index, or midpoint index if multiple values in sequence equal 
   the passed value.
   */
@@ -394,8 +394,8 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 /*!
  \brief lookup_data() returns the value represented by the lookuptable 
  associated with the passed object and offset
- \param object, container of parameters we need to do the lookup
- \param offset, offset into lookuptable
+ \param object is the container of parameters we need to do the lookup
+ \param offset is the offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
 G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
@@ -451,8 +451,8 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 /*!
  \brief lookup_data_obj() returns the value represented by the lookuptable 
  associated with the passed object and offset
- \param object, container of parameters we need to do the lookup
- \param offset, offset into lookuptable
+ \param object is the container of parameters we need to do the lookup
+ \param offset is the offset into lookuptable
  \returns the value at that offset of the lookuptable
  */
 G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
@@ -501,8 +501,8 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 
 /*!
   \brief looks up the value given the index
-  \param table, name of table to look in
-  \param offset, index into this table..
+  \param table is the name of table to look in
+  \param offset is the index into this table..
   \returns, the value at the index
   */
 G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
@@ -532,8 +532,8 @@ G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 
 /*!
   \brief Creates the lookuptables configurator window (MS1 FW's only)
-  \param widget, unused
-  \param data, unused
+  \param widget is unused
+  \param data is unused
   \returns TRUE on success
   */
 G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
@@ -689,8 +689,8 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 
 /*!
   \brief hides the lookuptables config window
-  \param widget, pointer to the lookuptables config window
-  \[aram data, unused
+  \param widget is the pointer to the lookuptables config window
+  \[aram data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
@@ -703,10 +703,10 @@ G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpoin
 
 /*!
  \brief Loads up the new lookuptable
- \param renderer, the cell renderer of the cell selected
- \param path, the treepath in text
- \param new_text, the personal/system column name
- \param data, unused
+ \param renderer is  the cell renderer of the cell selected
+ \param path is  the treepath in text
+ \param new_text is  the personal/system column name
+ \param data is unused
  \returns TRUE on success, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
@@ -800,9 +800,9 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 
 /*!
   \brief updates the interrogation profile with the new default lookuptable
-  \param key, lookuptable name
-  \param value, pointer to LookupTable object
-  \param data, pointer to ConfigFile structure
+  \param key is the lookuptable name
+  \param value is the pointer to LookupTable object
+  \param data is the pointer to ConfigFile structure
   */
 G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
@@ -817,9 +817,9 @@ G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer dat
 /*!
  \brief dump_hash() is a debug function to dump the contents of the str_2_enum
  hashtable to check for errors or problems
- \param key, key name in the hashtable
- \param value, value (enumeration value) in the hashtable
- \param user_data, unused...
+ \param key is the key name in the hashtable
+ \param value is the value (enumeration value) in the hashtable
+ \param user_data is unused...
  */
 G_MODULE_EXPORT void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
 {

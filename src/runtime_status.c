@@ -139,8 +139,8 @@ G_MODULE_EXPORT void load_status_pf(void)
 /*!
   \brief Traverses the runtime status XML config file and creates the RTS 
   structures and adds them to the parent
-  \param a_node, XML node
-  \param parent, parent widget thisrts entity shouldbe placed in
+  \param a_node is the XML node
+  \param parent is the parent widget thisrts entity shouldbe placed in
   \returns FALSE at EOF, TRUE otherwise
   */
 G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *parent)
@@ -170,8 +170,8 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
 
 /*!
   \brief loads the runtime status XML
-  \param node, XML node the start from
-  \param parent, parent container widget
+  \param node is the XML node the start from
+  \param parent is the parent container widget
   */
 G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 {
@@ -304,8 +304,8 @@ G_MODULE_EXPORT void reset_runtime_status(void)
 /*!
  \brief rt_update_status() updates the bitfield based status lights on the 
  runtime/warmupwizard displays
- \param key, pointer to a widget
- \param data, unused
+ \param key is the pointer to a widget
+ \param data is unused
  */
 G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 {

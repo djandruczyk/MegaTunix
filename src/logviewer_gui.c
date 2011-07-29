@@ -241,7 +241,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 
 /*!
   \brief re-enabled the select params button
-  \param widget, unused
+  \param widget is unused
   \returns FALSE
  */
 G_MODULE_EXPORT gboolean reenable_select_params_button(GtkWidget *widget)
@@ -254,7 +254,7 @@ G_MODULE_EXPORT gboolean reenable_select_params_button(GtkWidget *widget)
 
 /*!
   \brief Saves the default loggable choices
-  \param widget, unused
+  \param widget is unused
   \returns FALSE
  */
 G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
@@ -296,9 +296,9 @@ G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 /*!
  \brief view_value_set() is called when a value to be viewed is selected
  or not. We tag the widget with a marker if it is to be displayed
- \param widget, button clicked, we extract the object this
+ \param widget is the button clicked, we extract the object this
  represents and mark it
- \param data, unused
+ \param data is unused
  \returns FALSE
  */
 G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
@@ -501,7 +501,7 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 /*!
  \brief build_v_value() allocates a viewable_value structure and populates
  it with sane defaults and returns it to the caller
- \param object, objet to get soem of the data from
+ \param object is the object to get soem of the data from
  \returns a pointer to a newly allocated and populated Viewable_Value structure
  */
 G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
@@ -569,8 +569,8 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 /*!
  \brief initialize_gc() allocates and initializes the graphics contexts for
  the logviewer trace window.
- \param drawable, pointer to the drawable surface
- \param type, Graphics Context type? (I donno for sure)
+ \param drawable is the pointer to the drawable surface
+ \param type is the Graphics Context type? (I donno for sure)
  \returns Pointer to a GdkGC *
  */
 G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
@@ -669,9 +669,9 @@ G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 /*!
  \brief get_colors_from_hue(gets a color back from an angle passed in degrees.
  The degrees represent the arc aroudn a color circle.
- \param hue, degrees around the color circle
- \param sat, col_sat from 0-1.0
- \param val, col_val from 0-1.0
+ \param hue is the degrees around the color circle
+ \param sat is the col_sat from 0-1.0
+ \param val is the col_val from 0-1.0
  \returns a GdkColor at the hue angle requested
  */
 G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
@@ -824,7 +824,7 @@ G_MODULE_EXPORT void draw_infotext(void)
  the left hand side of the logviewer. This is optimized so that if the value
  becomes temporarily static, it won't keep blindly updating the screen and
  wasting CPU time.
- \param force_draw, when true to write the values to screen for
+ \param force_draw when true to write the values to screen for
  all controls no matter if hte previous value is the same or not.
  */
 G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
@@ -889,7 +889,7 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 /*!
  \brief update_logview_traces_pf() updates each trace in turn and then scrolls 
  the display
- \param force_redraw, flag to force all data to be redrawn not 
+ \param force_redraw flag to force all data to be redrawn not 
  just the new data...
  \returns TRUE
  */
@@ -921,7 +921,7 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 /*!
  \brief pb_update_logview_traces() updates each trace in turn and then scrolls 
  the display
- \param force_redraw, flag to force all data to be redrawn not 
+ \param force_redraw flag to force all data to be redrawn not 
  just the new data...
  \returns TRUE
  */
@@ -945,7 +945,7 @@ G_MODULE_EXPORT gboolean pb_update_logview_traces(gboolean force_redraw)
 /*!
  \brief trace_update() updates a trace onscreen,  this is run for EACH 
  individual trace (yeah, not very optimized)
- \param redraw_all, flag to redraw all or just recent data
+ \param redraw_all flag to redraw all or just recent data
  */
 G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 {
@@ -1248,8 +1248,8 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 /*!
  \brief set_all_lview_choices_state() sets all the logables to either be 
  selected or deselected (select all fucntionality)
- \param widget, unused
- \param data, state to set the widgets to
+ \param widget is  unused
+ \param data The state to set the widgets to
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean set_all_lview_choices_state(GtkWidget *widget, gpointer data)
@@ -1301,8 +1301,8 @@ G_MODULE_EXPORT void set_default_lview_choices_state(void)
 /*!
  \brief logviewer_log_position_change() gets called when the log position 
  slider is moved by the user to fast forware/rewind through a datalog
- \param widget, widget that received the event
- \param data, unused
+ \param widget is the widget that received the event
+ \param data is unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
@@ -1333,7 +1333,7 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 
 /*!
   \brief Enable log playback controls
-  \param state, whether to enable or disable the playback controls
+  \param state whether to enable or disable the playback controls
   */
 G_MODULE_EXPORT void enable_playback_controls(gboolean state)
 {	
@@ -1392,7 +1392,7 @@ G_MODULE_EXPORT void enable_playback_controls(gboolean state)
 
 /*!
  \brief set_logviewer_mode() sets things up for playback mode
- \param mode, Enumeration defining the logviewr mode (live or playback)
+ \param mode Enumeration defining the logviewr mode (live or playback)
  */
 G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 {
@@ -1476,9 +1476,9 @@ G_MODULE_EXPORT void finish_logviewer(void)
 
 /*!
  \brief slider_ket_press_event() doesn't do anything yet (stub)
- \param widget, unused
- \param event, unused
- \param data, unused
+ \param widget is unused
+ \param event is unused
+ \param data is unused
  \returns FALSE
  */
 G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -1490,7 +1490,7 @@ G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *
 
 /*!
   \brief write logviewer defaults to file
-  \param cfgfile, pointer to ConfigFile structure to save the settings to
+  \param cfgfile is the pointer to ConfigFile structure to save the settings to
   */
 G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 {
@@ -1520,7 +1520,7 @@ G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 
 /*!
   \brief read logviewer defaults from file
-  \param cfgfile, pointer to ConfigFile structure to read the settings from
+  \param cfgfile is the pointer to ConfigFile structure to read the settings from
   */
 G_MODULE_EXPORT void read_logviewer_defaults(ConfigFile *cfgfile)
 {

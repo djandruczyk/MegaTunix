@@ -30,7 +30,7 @@ extern gconstpointer *global_data;
 /*!
  \brief rescale_table() is called to rescale a subset of a Table (doesn't
  matter what kind of table). 
- \param widget, pointer to widget containing the table number we care about
+ \param widget is the pointer to widget containing the table number we care about
  */
 G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 {
@@ -115,9 +115,9 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 
 /*!
   \brief rescales the input based onthe factor and scale operation
-  \param input, input value
-  \param scaleop, enumeration of what we are doing math wise.
-  \param factor, the other side of our math equation
+  \param input is the input value
+  \param scaleop is the enumeration of what we are doing math wise.
+  \param factor is the other side of our math equation
   \returns the result of the math
   */
 G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)

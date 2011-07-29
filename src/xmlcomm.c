@@ -32,7 +32,7 @@ extern gconstpointer *global_data;
 
 /*!
   \brief Loads the comm_xml specific to this firmware persona
-  \param filename, name of the file to open/parse
+  \param filename is the name of the file to open/parse
   */
 G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 {
@@ -68,7 +68,7 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 
 /*!
   \brief recursive function to iterate over the XML nodes
-  \param a_name, current XML node
+  \param a_name is the current XML node
   */
 G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 {
@@ -99,8 +99,9 @@ G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 /*!
   \brief loads the details of a potential argument from the XML, creates the
   PotentialArg structure and stores it
-  \param arguments, pointer to hashtable to store the arg structures within
-  \param node, XML node
+  \param arguments is the pointer to hashtable to store the arg 
+  structures within
+  \param node is the XML node
   */
 G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 {
@@ -133,8 +134,9 @@ G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 /*!
   \brief loads the details of an XML command argument from the XML, creates the
   Command structure and stores it
-  \param commands_hash, pointer to hashtable to store the Cmd structures within
-  \param node, XML node
+  \param commands_hash is the pointer to hashtable to store the Cmd 
+  structures within
+  \param node is the XML node
   */
 G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 {
@@ -169,8 +171,8 @@ G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 
 /*!
   \brief loads the details of an XML PotentialArg from the XML.
-  \param arg, pointer to the PotentialArg structure
-  \param node, XML node
+  \param arg is the pointer to the PotentialArg structure
+  \param node is the XML node
   */
 G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 {
@@ -236,8 +238,8 @@ G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 
 /*!
   \brief loads the details of an XML Command from the XML.
-  \param cmd, pointer to the Command structure
-  \param node, XML node
+  \param cmd is the pointer to the Command structure
+  \param node is the XML node
   */
 G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 {
@@ -311,8 +313,8 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 
 /*!
   \brief loads the command args of an XML Command from the XML.
-  \param cmd, pointer to the Command structure
-  \param node, XML node
+  \param cmd is the pointer to the Command structure
+  \param node is the XML node
   */
 G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 {
@@ -346,8 +348,8 @@ G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 
 /*!
   \brief loads the command post functions of an XML Command from the XML.
-  \param cmd, pointer to the Command structure
-  \param node, XML node
+  \param cmd is the pointer to the Command structure
+  \param node is the XML node
   */
 G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 {
@@ -397,9 +399,9 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 
 /*!
   \brief dumps the Commands from the Commands hashtable for debugging purposes
-  \param key, Commands hashtable key
-  \param value, pointer to the Command structure
-  \param data, unused
+  \param key is the Commands hashtable key
+  \param value is the pointer to the Command structure
+  \param data is unused
   */
 G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointer data)
 {
@@ -449,10 +451,10 @@ G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointe
 
 /*!
   \brief parses a comma separated hex string 
-  \param str, input string
-  \param dest,  place to put the parsed string
-  \param str_len,  pointer to place the destination string length into after 
-  parsing
+  \param str is the input string
+  \param dest is the place to put the parsed string
+  \param str_len is the pointer to place the destination string length 
+  into after parsing
   */
 void parse_hex_string(gchar *str, gchar *dest, gint *str_len)
 {

@@ -31,8 +31,8 @@ extern gconstpointer *global_data;
 
 /*!
  \brief handle_args() handles parsing of cmd line arguments to megatunix
- \param argc, count of command line arguments
- \param argv, array of command line args
+ \param argc is the count of command line arguments
+ \param argv is the array of command line args
  */
 G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 {
@@ -261,7 +261,7 @@ G_MODULE_EXPORT CmdLineArgs * init_args(void)
 
 /*!
   \brief frees a CmdLineArgs structure
-  \param data, pointer to CmdLineArgs structure to be freed
+  \param data is the pointer to CmdLineArgs structure to be freed
   */
 G_MODULE_EXPORT void args_free(gpointer data)
 {

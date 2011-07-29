@@ -36,8 +36,8 @@ extern gconstpointer *global_data;
 /*!
  \brief set_group_color() sets all the widgets in the passed group to 
  the color passed.
- \param color, the color to set the widgets to.
- \param group, textual name of the group of controls to alter color
+ \param color is the the color to set the widgets to.
+ \param group is the textual name of the group of controls to alter color
  \see set_widget_color
  */
 G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
@@ -49,8 +49,8 @@ G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 /*!
  \brief set_reqfuel_color() sets all the widgets in the reqfuel group as 
  defined by the page number passed to the color passed.
- \param color, the color to set the widgets to
- \param table_num, the table number to determine the right group of 
+ \param color is the the color to set the widgets to
+ \param table_num is the the table number to determine the right group of 
  controls to change the color on
  \see set_widget_color
  */
@@ -66,8 +66,8 @@ G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
 /*!
  \brief set_widget_color() sets all the widgets in the passed group to 
  the color passed.
- \param widget, the widget to  change color
- \param color, enumeration of the color to switch to..
+ \param widget is the the widget to  change color
+ \param color is the enumeration of the color to switch to..
  */
 G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 {
@@ -152,11 +152,11 @@ G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
  \brief update_logbar() updates the logbar passed with the text passed to it
  \param view_name, textual name of the textview the text is supposed 
  to go to. (required)
- \param tagname, textual tagname to be used to set attributes on the
+ \param tagname is the textual tagname to be used to set attributes on the
  text (optional, can be NULL)
- \param message, message to display (required)
- \param count, flag to show a running count or not
- \param clear, if set, clear display before displaying text
+ \param message is the message to display (required)
+ \param count is the flag to show a running count or not
+ \param clear if set, clear display before displaying text
  */
 G_MODULE_EXPORT void  update_logbar(
 		const gchar * view_name, 
@@ -272,7 +272,7 @@ G_MODULE_EXPORT void kill_conn_warning(void)
 
 /*!
  \brief warn_user() displays a warning message on the screen as a error dialog
- \param message, the text to display
+ \param message is the text to display
  */
 G_MODULE_EXPORT void warn_user(const gchar *message)
 {
@@ -306,7 +306,7 @@ G_MODULE_EXPORT void warn_user(const gchar *message)
 
 /*!
  \brief error_msg() displays a warning message on the screen as a error dialog
- \param message, the text to display
+ \param message is the text to display
  */
 G_MODULE_EXPORT void error_msg(const gchar *message)
 {
@@ -333,8 +333,8 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
 
 /*!
   \brief Retrieves the response from the offline mode dialog box choice
-  \param widget, widget the user clicked on
-  \param data, the response as an integer
+  \param widget is the widget the user clicked on
+  \param data is the response as an integer
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
@@ -354,7 +354,7 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 
 /*!
  \brief reset_infolabel() resets infolabel text to "Ready"
- \param data, unused
+ \param data is unused
  \returns FALSE
  */
 G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
@@ -370,7 +370,7 @@ G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 /*!
  \brief set_title() appends text to the titlebar of the application to
  give user notifications...
- \param text, text to append, dynamic strings only
+ \param text is the text to append, dynamic strings only
  */
 G_MODULE_EXPORT void set_title(gchar * text)
 {
@@ -412,7 +412,7 @@ G_MODULE_EXPORT void set_title(gchar * text)
 
 /*!
   \brief enables the static warning present flag
-  \param user_Data, unused
+  \param user_data is unused
   \returns FALSE
   */
 G_MODULE_EXPORT gboolean set_warning_flag(gpointer user_data)

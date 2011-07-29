@@ -229,8 +229,8 @@ G_MODULE_EXPORT void stop_datalogging(void)
 /*! 
  \brief log_value_set() gets called when a variable is selected for 
  logging so that it can be marked as being logged
- \param widget, pointer to toggle button widget
- \param data, unused
+ \param widget is the pointer to toggle button widget
+ \param data is unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
@@ -250,8 +250,8 @@ G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
 
 /*!
  \brief write_log_header() writes the top line of the datalog with field names
- \param iochannel, pointer to the datalog output channel 
- \param override,  if true ALL variables are logged, if FALSE
+ \param iochannel is the pointer to the datalog output channel 
+ \param override if true ALL variables are logged, if FALSE
  only selected variabels are logged
  */
 G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
@@ -474,8 +474,8 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
 
 /*!
   \brief Selects a datalog to export
-  \param widget, unused
-  \param data, unused
+  \param widget is unused
+  \param data is unused
   \returns FALSE on problem, TRUE otherwise
   */
 G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
@@ -530,7 +530,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 
 /*!
   \brief dumps the automatic datalog blob to disk on its periodic basis
-  \param data, unused
+  \param data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
@@ -559,8 +559,8 @@ G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
 
 /*!
   \brief dumps the internally running datalog to disk
-  \param widget, unused
-  \param data, unused
+  \param widget is unused
+  \param data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
@@ -611,7 +611,7 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 /*!
  \brief dump_log_to_disk() dumps the contents of the RTV arrays to disk as a
  datalog file
- \param iochannel, pointer to io channel for the log stream
+ \param iochannel is the pointer to io channel for the log stream
  */
 G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 {

@@ -22,9 +22,9 @@
 
 /*!
  \brief Sets the file API to version passed by major/minor
- \param cfg, file to check the API of
- \param major  major api version number
- \param minor  minor api version number
+ \param cfg is the pointer to the ConfigFile structure
+ \param major is the major api version number
+ \param minor is the minor api version number
  \returns TRUE on api version setting, FALSE on api version set failure
  */
 G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
@@ -38,9 +38,9 @@ G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
 
 /*!
  \brief gets the file API and returns it thru the passed pointers
- \param cfg, configfile to get the API of
- \param major  major api version number
- \param minor  minor api version number
+ \param cfg is the poitner to the ConfigFile structure
+ \param major is the major api version number
+ \param minor is the minor api version number
  \returns TRUE on api version reading, FALSE on api version not readable
  */
 G_MODULE_EXPORT gboolean get_file_api(ConfigFile *cfg, gint *major, gint *minor)

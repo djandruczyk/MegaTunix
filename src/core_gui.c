@@ -161,7 +161,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 /*!
   \brief Finialized the core base Gui, and initializes thins that can't be
   done in glade.
-  \param xml, pointer to XML for the core Gui
+  \param xml is the pointer to XML for the core Gui
   */
 G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 {
@@ -465,7 +465,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 /*!
   \brief Initializes the status icons at the top of the bar to indicate things
   like connected/disconnected, errors, etc
-  \param parent, Container for the status Icons
+  \param parent is the Container for the status Icons
   */
 void setup_main_status(GtkWidget *parent)
 {
@@ -493,7 +493,7 @@ void setup_main_status(GtkWidget *parent)
 
 /*!
   \brief Sets the connected/disconnected icons as appropriate
-  \param state, state of the ECU connection
+  \param state is the state of the ECU connection
   */
 void set_connected_icons_state(gboolean state)
 {

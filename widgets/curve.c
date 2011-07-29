@@ -189,10 +189,10 @@ gboolean mtx_curve_get_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 
 /*!
  \brief sets the color for the passed index
- \param curve (MtxCurve *) pointer to curve
- \param value (gfloat) new value
+ \param curve is the pointer to the curve
+ \param index is the enumeration fo the CurveColorIndex
+ \param color is the new color
  */
-
 gboolean mtx_curve_set_color (MtxCurve *curve, CurveColorIndex index, GdkColor color)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -243,7 +243,6 @@ gboolean mtx_curve_get_color (MtxCurve *curve, CurveColorIndex index, GdkColor *
  \param curve (MtxCurve *) pointer to curve
  \returns title text(DO NOT FREE this)
  */
-
 const gchar * mtx_curve_get_title (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -254,10 +253,10 @@ const gchar * mtx_curve_get_title (MtxCurve *curve)
 
 /*!
  \brief sets the curve title
- \param curve (MtxCurve *) pointer to curve
- \returns title text(DO NOT FREE this)
+ \param curve is the pointer to curve
+ \param new_title is the new title to display
+ \returns TRUE on success, false otherwise
  */
-
 gboolean mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -279,9 +278,10 @@ gboolean mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
 
 /*!
  \brief sets the show_vertex param
- \param curve (MtxCurve *) pointer to curve
+ \param curve is the pointer to the curve
+ \param value is TRUE to show vertexes, FALSE otherwise
+ \returns TRUE on success, FALSE on failure
  */
-
 gboolean mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -303,10 +303,9 @@ gboolean mtx_curve_set_show_vertexes (MtxCurve *curve, gboolean value)
 
 /*!
  \brief gets the show_vertexes param
- \param curve (MtxCurve *) pointer to curve
- \returns true or false
+ \param curve is the pointer to the curve
+ \returns TRUE if vertexes are shown, FALSE otherwise
  */
-
 gboolean mtx_curve_get_show_vertexes (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -318,8 +317,9 @@ gboolean mtx_curve_get_show_vertexes (MtxCurve *curve)
 /*!
  \brief sets the auto_hide vertexes param
  \param curve (MtxCurve *) pointer to curve
+ \param value should be TRUE to set auto-hide, FALSE otherwise
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_curve_set_auto_hide_vertexes (MtxCurve *curve, gboolean value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -342,9 +342,8 @@ gboolean mtx_curve_set_auto_hide_vertexes (MtxCurve *curve, gboolean value)
 /*!
  \brief gets the auto_hide param
  \param curve (MtxCurve *) pointer to curve
- \returns true or false
+ \returns TRUE if auto-hide is enabled, FALSE otherwise
  */
-
 gboolean mtx_curve_get_auto_hide_vertexes (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -355,9 +354,10 @@ gboolean mtx_curve_get_auto_hide_vertexes (MtxCurve *curve)
 
 /*!
  \brief sets the show_grat param
- \param curve (MtxCurve *) pointer to curve
+ \param curve is the pointer to the curve
+ \param value is a flag to show or hide the graticule
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -379,9 +379,10 @@ gboolean mtx_curve_set_show_graticule (MtxCurve *curve, gboolean value)
 
 /*!
  \brief sets the show_x_marker param
- \param curve (MtxCurve *) pointer to curve
+ \param curve is the pointer to the curve
+ \param value is a flag to hide/show the X marker
+ \returns TRUE on succes, FALSE otherwise
  */
-
 gboolean mtx_curve_set_show_x_marker (MtxCurve *curve, gboolean value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -403,9 +404,10 @@ gboolean mtx_curve_set_show_x_marker (MtxCurve *curve, gboolean value)
 
 /*!
  \brief sets the show_y_marker param
- \param curve (MtxCurve *) pointer to curve
+ \param curve is the pointer to the curve
+ \param value is a flag to hide/show the Y marker
+ \returns TRUE on succes, FALSE otherwise
  */
-
 gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -427,9 +429,10 @@ gboolean mtx_curve_set_show_y_marker (MtxCurve *curve, gboolean value)
 
 /*!
  \brief displays a live marker for the X axis (vertical Line)
- \param curve (MtxCurve *) pointer to curve
+ \param curve is the pointer to the curve
+ \param value is a pointer to a location to place the current x_marker value
+ \returns TRUE on success, FALSE if widget is invalid
  */
-
 gboolean mtx_curve_get_x_marker_value (MtxCurve *curve, gfloat *value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -442,9 +445,10 @@ gboolean mtx_curve_get_x_marker_value (MtxCurve *curve, gfloat *value)
 
 /*!
  \brief displays a live marker for the Y axis (horizontal Line)
- \param curve (MtxCurve *) pointer to curve
+ \param curve is the pointer to the curve
+ \param value is a pointer to a location to place the current x_marker value
+ \returns TRUE on success, FALSE if widget is invalid
  */
-
 gboolean mtx_curve_get_y_marker_value (MtxCurve *curve, gfloat *value)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -457,9 +461,9 @@ gboolean mtx_curve_get_y_marker_value (MtxCurve *curve, gfloat *value)
 
 /*!
  \brief displays a live marker for the X axis (vertical Line)
- \param curve (MtxCurve *) pointer to curve
+ \param curve is the pointer to the curve
+ \param value the value to set the X marker to
  */
-
 void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 {
 	MtxCurvePrivate *priv = NULL;
@@ -584,9 +588,9 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 
 /*!
  \brief displays a live marker for the Y axis (horizontal Line)
- \param curve (MtxCurve *) pointer to curve
+ \param curve is the pointer to the curve
+ \param value is the value to set the Y marker to
  */
-
 void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 {
 	MtxCurvePrivate *priv = NULL;
@@ -713,10 +717,9 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 
 /*!
  \brief gets the show_graticule param
- \param curve (MtxCurve *) pointer to curve
- \returns true or false
+ \param curve is the pointer to the curve
+ \returns TRUE if graticule is shown, FALSE otherwise
  */
-
 gboolean mtx_curve_get_show_graticule (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -727,10 +730,9 @@ gboolean mtx_curve_get_show_graticule (MtxCurve *curve)
 
 /*!
  \brief gets the show_x_marker param
- \param curve (MtxCurve *) pointer to curve
- \returns true or false
+ \param curve is the pointer to the curve
+ \returns TRUE if X marker is shown, FALSE otherwise
  */
-
 gboolean mtx_curve_get_show_x_marker (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -741,10 +743,9 @@ gboolean mtx_curve_get_show_x_marker (MtxCurve *curve)
 
 /*!
  \brief gets the show_y_marker param
- \param curve (MtxCurve *) pointer to curve
- \returns true or false
+ \param curve is the pointer to the curve
+ \returns TRUE if Y marker is shown, FALSE otherwise
  */
-
 gboolean mtx_curve_get_show_y_marker (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -755,10 +756,9 @@ gboolean mtx_curve_get_show_y_marker (MtxCurve *curve)
 
 /*!
  \brief gets the x_precision param
- \param curve (MtxCurve *) pointer to curve
- \returns true or false
+ \param curve is the pointer to the curve
+ \returns the x precision
  */
-
 gint mtx_curve_get_x_precision (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -769,10 +769,9 @@ gint mtx_curve_get_x_precision (MtxCurve *curve)
 
 /*!
  \brief gets the y_precision param
- \param curve (MtxCurve *) pointer to curve
- \returns true or false
+ \param curve is the pointer to the curve
+ \returns the y precision
  */
-
 gint mtx_curve_get_y_precision (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -783,11 +782,10 @@ gint mtx_curve_get_y_precision (MtxCurve *curve)
 
 /*!
  \brief sets the x_precision param
- \param curve (MtxCurve *) pointer to curve
- \param precision (gint) precision in significant digits
+ \param curve is the pointer to the curve
+ \param precision is the precision in significant digits
  \returns true or false on success/failure
  */
-
 gboolean mtx_curve_set_x_precision (MtxCurve *curve, gint precision)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -799,11 +797,10 @@ gboolean mtx_curve_set_x_precision (MtxCurve *curve, gint precision)
 
 /*!
  \brief sets the y_precision param
- \param curve (MtxCurve *) pointer to curve
- \param precision (gint) precision in significant digits
+ \param curve is the pointer to the curve
+ \param precision is the precision in significant digits
  \returns true or false on success/failure
  */
-
 gboolean mtx_curve_set_y_precision (MtxCurve *curve, gint precision)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -815,10 +812,9 @@ gboolean mtx_curve_set_y_precision (MtxCurve *curve, gint precision)
 
 /*!
  \brief gets the active_vertex index
- \param curve (MtxCurve *) pointer to curve
- \returns active vertex
+ \param curve is the pointer to the curve
+ \returns the active vertex
  */
-
 gint mtx_curve_get_active_coord_index (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -831,10 +827,13 @@ gint mtx_curve_get_active_coord_index (MtxCurve *curve)
 
 /*!
  \brief sets the hard limits for autoscroll
- \param curve (MtxCurve *) pointer to curve
- \returns active vertex
+ \param curve is the pointer to the curve
+ \param x_lower is the hard X lower limit
+ \param x_upper is the hard X upper limit
+ \param y_lower is the hard Y lower limit
+ \param y_upper is the hard Y upper limit
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gfloat x_lower, gfloat x_upper, gfloat y_lower, gfloat y_upper)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -849,14 +848,13 @@ gboolean mtx_curve_set_hard_limits (MtxCurve *curve, gfloat x_lower, gfloat x_up
 
 /*!
  \brief gets the hard limits for autoscroll
- \param curve (MtxCurve *) pointer to curve
- \param x_lower (gint *) pointer to be filled in with value
- \param x_upper (gint *) pointer to be filled in with value
- \param y_lower (gint *) pointer to be filled in with value
- \param x_upper (gint *) pointer to be filled in with value
- \returns TRUE
+ \param curve is the pointer to the curve
+ \param x_lower is the pointer to be filled in with value
+ \param x_upper is the pointer to be filled in with value
+ \param y_lower is the pointer to be filled in with value
+ \param y_upper is the pointer to be filled in with value
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gfloat *x_lower, gfloat *x_upper, gfloat *y_lower, gfloat *y_upper)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -875,10 +873,9 @@ gboolean mtx_curve_get_hard_limits (MtxCurve *curve, gfloat *x_lower, gfloat *x_
 
 /*!
  \brief gets the current mouse proximity vertex
- \param curve (MtxCurve *) pointer to curve
- \returns active vertex
+ \param curve is the pointer to the curve
+ \returns the vertex closest to the mouse pointer 
  */
-
 gint mtx_curve_get_vertex_proximity_index (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -889,10 +886,9 @@ gint mtx_curve_get_vertex_proximity_index (MtxCurve *curve)
 
 /*!
  \brief gets the current marker proximity vertex
- \param curve (MtxCurve *) pointer to curve
- \returns active vertex
+ \param curve is the pointer to the curve
+ \returns the vertex closest to a marker
  */
-
 gint mtx_curve_get_marker_proximity_index (MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -903,11 +899,10 @@ gint mtx_curve_get_marker_proximity_index (MtxCurve *curve)
 
 /*!
  \brief sets the axis lock state for the X axis
- \param curve (MtxCurve *) pointer to curve
- \param state (gboolean) state of axis lock
- \returns TRUE on succes
+ \param curve is the pointer to the curve
+ \param state is the state of axis lock
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_curve_set_x_axis_lock_state(MtxCurve *curve, gboolean state)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -919,11 +914,10 @@ gboolean mtx_curve_set_x_axis_lock_state(MtxCurve *curve, gboolean state)
 
 /*!
  \brief sets the axis lock state for the Y axis
- \param curve (MtxCurve *) pointer to curve
- \param state (gboolean) state of axis lock
- \returns TRUE on succes
+ \param curve is the pointer to the curve
+ \param state is the state of axis lock
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_curve_set_y_axis_lock_state(MtxCurve *curve, gboolean state)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -935,10 +929,9 @@ gboolean mtx_curve_set_y_axis_lock_state(MtxCurve *curve, gboolean state)
 
 /*!
  \brief gets the axis lock state for the X axis
- \param curve (MtxCurve *) pointer to curve
- \returns TRUE on succes
+ \param curve is the pointer to the curve
+ \returns the X axis lock state or FALSE if widget is invalid
  */
-
 gboolean mtx_curve_get_x_axis_lock_state(MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -950,10 +943,9 @@ gboolean mtx_curve_get_x_axis_lock_state(MtxCurve *curve)
 
 /*!
  \brief gets the axis lock state for the Y axis
- \param curve (MtxCurve *) pointer to curve
- \returns TRUE on succes
+ \param curve is the pointer to the curve
+ \returns the X axis lock state or FALSE if widget is invalid
  */
-
 gboolean mtx_curve_get_y_axis_lock_state(MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -964,11 +956,10 @@ gboolean mtx_curve_get_y_axis_lock_state(MtxCurve *curve)
 
 /*!
  \brief sets the X axis label
- \param curve (MtxCurve *) pointer to curve
- \param text (gchar *) label string
- \returns TRUE on succes
+ \param curve is the pointer to the curve
+ \param text is the new X axis label string
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_curve_set_x_axis_label(MtxCurve *curve, const gchar *text)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -992,11 +983,10 @@ gboolean mtx_curve_set_x_axis_label(MtxCurve *curve, const gchar *text)
 
 /*!
  \brief sets the Y axis label
- \param curve (MtxCurve *) pointer to curve
- \param text (gchar *) label string
- \returns TRUE on succes
+ \param curve is the pointer to the curve
+ \param text is the new Y axis label string
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_curve_set_y_axis_label(MtxCurve *curve, const gchar *text)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);

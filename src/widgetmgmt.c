@@ -33,8 +33,8 @@ extern gconstpointer *global_data;
  \brief populate_master() stores a pointer to all of the glade loaded 
  widgets into a master hashtable so that it can be recalled by name 
  anywhere in the program.
- \param widget, pointer to Widget
- \param user_data, pointer to ConfigFile structure
+ \param widget is the pointer to Widget
+ \param user_data is the pointer to ConfigFile structure
  */
 G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 {
@@ -90,8 +90,8 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 /*!
  \brief register_widget() adds a widget to the master hashtable (dynamic_widgets)
  \see dynamic_widgets
- \param name, Name of widget to store (any strings are allowed)
- \param widget, Pointer to the widget to be stored by name.
+ \param name is the Name of widget to store (any strings are allowed)
+ \param widget is the Pointer to the widget to be stored by name.
  \see deregister_widget
  */
 G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
@@ -118,7 +118,7 @@ G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
 /*!
  \brief deregister_widget() removes a widget from the master hashtable (dynamic_widgets)
  \see dynamic_widgets
- \param name, Name of widget to remove (any strings are allowed)
+ \param name is the Name of widget to remove (any strings are allowed)
  \returns TRUE on success removing, FALSE on failure removing 
  \see register_widget
  */
@@ -132,7 +132,7 @@ G_MODULE_EXPORT gboolean deregister_widget(gchar *name)
 
 /*!
   \brief looks up the widget pointer given it's name
-  \param name,  name of widget to find
+  \param name is the name of widget to find
   \returns pointer to the GtkWidget if found, or NULL
   */
 G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
@@ -171,8 +171,8 @@ G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
  \brief get_State() returns either TRUE or false based on the encoded value 
  passed across as a string.  The string is split up using g_strsplit, the 
  values are check for true/false and hte appropriate value is returned
- \param string, string to parse and dissect
- \param index, which one we want to check
+ \param string is the string to parse and dissect
+ \param index which one we want to check
  \returns the decoded state from the string
  */
 G_MODULE_EXPORT gboolean get_state(gchar *string, gint index)
@@ -196,8 +196,8 @@ G_MODULE_EXPORT gboolean get_state(gchar *string, gint index)
 /*!
   \brief  sets a widget sensitive or insensitive based on the status of
   dependant groups
-  \param key, pointer to Widget
-  \param data, unused
+  \param key is the pointer to Widget
+  \param data is unused
   */
 G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 {
@@ -263,9 +263,10 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
  \brief Calculate the bounding box for a string rendered with a widget's 
  default font. Set geo to a rect with 0,0 positioned on the left-hand 
  baseline.
- \param widget, pointer to the Widget in question
- \param text, the text we want to get the dimensions of
- \param geo, pointer to PangoRectangle representation of the text dimensions
+ \param widget is the pointer to the Widget in question
+ \param text is the text we want to get the dimensions of
+ \param geo is the pointer to PangoRectangle representation of the 
+ text dimensions
  */
 G_MODULE_EXPORT void get_geo( GtkWidget *widget, const char *text, PangoRectangle *geo )
 {
@@ -284,8 +285,8 @@ G_MODULE_EXPORT void get_geo( GtkWidget *widget, const char *text, PangoRectangl
 
 /*!
  \brief Set a widget to a fixed size ... width in characters.
- \param widget, pointer to the widget
- \param nchars,  number of charactors this widget should size itself for
+ \param widget is the pointer to the widget
+ \param nchars is the number of charactors this widget should size itself for
  */
 G_MODULE_EXPORT void set_fixed_size( GtkWidget *widget, int nchars )
 {
@@ -301,7 +302,7 @@ G_MODULE_EXPORT void set_fixed_size( GtkWidget *widget, int nchars )
 
 /*!
   \brief, prevents a entry from being editable
-  \param widget, pointer to Comboboxentry where we want to lock the entry
+  \param widget is the pointer to Comboboxentry where we want to lock the entry
   */
 G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 {
@@ -316,7 +317,7 @@ G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 
 /*
  \brief,  returns number of bytes for passed DataSize enumeration
- \param size, the enumeration of the size we want to get number of bytes this
+ \param size is the enumeration of the size we want to get number of bytes this
  variable would take up in memory
  \returns the size in bytes that this would take up
  */
@@ -349,9 +350,9 @@ G_MODULE_EXPORT gint get_multiplier(DataSize size)
 /*!
   \brief debugging function to spit out the contents of a datalist attached to
   a widget pointer
-  \param key_id, quark representation of a string
-  \param data, the data associated with this quark
-  \param user_data, unused
+  \param key_id is the quark representation of a string
+  \param data is the data associated with this quark
+  \param user_data is unused
   */
 G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_data)
 {
@@ -382,8 +383,8 @@ G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_d
  \brief set_widget_sensitive() is used to set a widgets state.  This function
  exists because we call it from a g_list_foreach() whereas a straight call to
  gtk_widget_set_sensitive from there would result in typecheck warnings
- \param widget, pointer to widget to change sensitivity
- \param state, the state to set it to
+ \param widget is the pointer to widget to change sensitivity
+ \param state is the state to set it to
  */
 G_MODULE_EXPORT void set_widget_sensitive(gpointer widget, gpointer state)
 {
@@ -395,8 +396,8 @@ G_MODULE_EXPORT void set_widget_sensitive(gpointer widget, gpointer state)
  \brief set_widget_active() is used to set a toggle buttonstate.  This function
  exists because we call it from a g_list_foreach() whereas a straight call to
  gtk_toggle_button_set_active from there would result in typecheck warnings
- \param widget, pointer to widget to change sensitivity
- \param state, the state to set it to.
+ \param widget is the pointer to widget to change sensitivity
+ \param state is  the state to set it to.
  */
 G_MODULE_EXPORT void set_widget_active(gpointer widget, gpointer state)
 {

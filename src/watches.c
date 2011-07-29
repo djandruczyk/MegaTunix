@@ -43,14 +43,14 @@ G_MODULE_EXPORT void fire_off_rtv_watches_pf(void)
 /*!
   \brief Creates a watch that monitors for a single bit to be a specific state,
   when it is this watch fires.
-  \param varname, an internal name ofthe variable we want to watch for a bit
+  \param varname is an internal name ofthe variable we want to watch for a bit
   change
-  \param bit, bit to watch from 0-7
-  \param state, the state you want the bit to be, i.e. TRUE or FALSE
-  \param one_shot, If true, this watch is called only once then expires
-  \param fname, function name to call when this watch fires
-  \param user_data, pointer to data to pass to the function when this watch
-  fires
+  \param bit is a bit to watch from 0-7
+  \param state is the state you want the bit to be, i.e. TRUE or FALSE
+  \param one_shot If true, this watch is called only once then expires
+  \param fname is the function name to call when this watch fires
+  \param user_data is the pointer to data to pass to the function when 
+  this watch fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
 G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
@@ -77,13 +77,13 @@ G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gin
 /*!
   \brief Creates a watch that monitors for a single bit to change within a
   variable.
-  \param varname, an internal name ofthe variable we want to watch for a bit
+  \param varname is an internal name ofthe variable we want to watch for a bit
   change
-  \param bit, bit to watch from 0-7
-  \param state, the state you want the bit to be, i.e. TRUE or FALSE
-  \param one_shot, If true, this watch is called only once then expires
-  \param fname, function name to call when this watch fires
-  \param user_data, pointer to data to pass to the function when this watch
+  \param bit is the bit to watch from 0-7
+  \param state is the state you want the bit to be, i.e. TRUE or FALSE
+  \param one_shot If true, this watch is called only once then expires
+  \param fname is the function name to call when this watch fires
+  \param user_data the pointer to data to pass to the function when this watch
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
@@ -109,10 +109,10 @@ G_MODULE_EXPORT guint32 create_single_bit_change_watch(const gchar * varname, gi
 
 /*!
   \brief Creates a watch that monitors for a variable's value to change.
-  \param varname, an internal name ofthe variable we want to watch for changes
-  \param one_shot, if TRUE, this watch is called only once then expires
-  \param fname, function name to call when this watch fires
-  \param user_data, pointer to data to pass to the function when this watch
+  \param varname is an internal name ofthe variable we want to watch for changes
+  \param one_shot if TRUE, this watch is called only once then expires
+  \param fname is the function name to call when this watch fires
+  \param user_data the pointer to data to pass to the function when this watch
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
@@ -137,11 +137,11 @@ G_MODULE_EXPORT guint32 create_value_change_watch(const gchar * varname, gboolea
 
 /*!
   \brief Creates a watch that monitors for multiple variable's values to change.
-  \param varnames, A CSV list of internal names of the variables we want 
+  \param varnames A CSV list of internal names of the variables we want 
   to watch for changes in value
-  \param one_shot, if TRUE, this watch is called only once then expires
-  \param fname, function name to call when this watch fires
-  \param user_data, pointer to data to pass to the function when this watch
+  \param one_shot if TRUE, this watch is called only once then expires
+  \param fname is the function name to call when this watch fires
+  \param user_data the pointer to data to pass to the function when this watch
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
@@ -168,7 +168,7 @@ G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one
 
 /*!
   \brief destroys a watch given the pointer passed
-  \param data, pointer to the DataWatch structure we need to destroy
+  \param data is the pointer to the DataWatch structure we need to destroy
   */
 G_MODULE_EXPORT void watch_destroy(gpointer data)
 {
@@ -188,7 +188,7 @@ G_MODULE_EXPORT void watch_destroy(gpointer data)
 
 /*!
   \brief Removes a watch for the list of active watches
-  \param watch_id, the watch identifier as returned by any of the 
+  \param watch_id is the watch identifier as returned by any of the 
   create_*_watch functions
   */
 G_MODULE_EXPORT void remove_watch(guint32 watch_id)
@@ -201,9 +201,9 @@ G_MODULE_EXPORT void remove_watch(guint32 watch_id)
   \brief iterates over the has hof active watches and if they have fired
   call the corresponding watch function passing in the pointer to the 
   DataWatch structure as the argument
-  \param key, unused
-  \param value, pointer to DataWatch structure
-  \param data, unused
+  \param key is unused
+  \param value is the pointer to DataWatch structure
+  \param data is unused
   */
 G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data)
 {
@@ -301,7 +301,7 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 
 /*!
   \brief checks if a watch ID is in the active list of watches
-  \param id, WatchID as returned by any of the create_*_watch functions
+  \param id is the WatchID as returned by any of the create_*_watch functions
   \returns TRUE if the ID is valid, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean watch_active(guint32 id)

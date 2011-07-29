@@ -36,8 +36,8 @@ extern gconstpointer *global_data;
 /*!
  \brief convert_before_download() converts the value passed using the
  conversions bound to the widget
- \param widget, widget to extract the conversion info from
- \param value, the "real world" value from the tuning gui before
+ \param widget is the pointer to the widget to extract the conversion info from
+ \param value is the "real world" value from the tuning gui before
  translation to ECU-units
  \returns the integer ECU-units form after conversion
  */
@@ -228,8 +228,8 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 /*!
  \brief convert_after_upload() converts the ECU-units data to the real world
  units for display on the GUI
- \param widget, to extract the conversion info from to perform
- the necessary math
+ \param widget is the pointer to the widget to extract the conversion 
+ info from to perform the necessary math
  \returns the real world value for the GUI
  */
 G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
@@ -444,9 +444,10 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 /*!
  \brief convert_temps() changes the values of controls based on the currently
  selected temperature scale.  It works for labels, spinbuttons, etc...
- \param widget, pointer to the widget that contains the necessary
- paramaters re temp (Alt label, etc)
- \param units, the temp scale selected
+ \param widget is the pointer to the widget that contains the necessary
+ paramaters regarding temperature (Alt label, etc)
+ \param units is the temp scale selected 
+ \see TempUnits
  */
 G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 {
@@ -697,7 +698,8 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 /*!
  \brief reset_temps() calls the convert_temps function for each widget in
  the "temperature" list
- \param type, the temp scale now selected
+ \param type is the temp scale now selected
+ \see TempUnits
  */
 G_MODULE_EXPORT void reset_temps(gpointer type)
 {
@@ -707,7 +709,7 @@ G_MODULE_EXPORT void reset_temps(gpointer type)
 
 /*!
   \brief temp_to_host Converts and ECU temperature into host units
-  \param in, the input temperature in ECU scale
+  \param in is the input temperature in ECU scale
   \return temp in host (mtx user) scale
   */
 G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
@@ -747,7 +749,7 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 
 /*!
   \brief Converts temps to the scale that the ECU expects
-  \param temp, in host (mtx user) scale
+  \param in is the input temp in host (mtx user) scale
   \returns temp in ECU scale
   */
 G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
@@ -786,7 +788,7 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 
 /*!
   \brief Celsius to Fahrenheit conversion
-  \param in, temp in Celsius
+  \param in is the input temp in Celsius
   \returns temp in Fahrenheit
   */
 G_MODULE_EXPORT gdouble c_to_f(gdouble in)
@@ -797,7 +799,7 @@ G_MODULE_EXPORT gdouble c_to_f(gdouble in)
 
 /*!
   \brief Celsius to Kelvin conversion
-  \param in, temp in Celsius
+  \param in is the input temp in Celsius
   \returns temp in Kelvin
   */
 G_MODULE_EXPORT gdouble c_to_k(gdouble in)
@@ -808,7 +810,7 @@ G_MODULE_EXPORT gdouble c_to_k(gdouble in)
 
 /*!
   \brief Fahrenheit to Celsius conversion
-  \param in, temp in Fahrenheit
+  \param in is the input temp in Fahrenheit
   \returns temp in Celsius
   */
 G_MODULE_EXPORT gdouble f_to_c(gdouble in)
@@ -819,7 +821,7 @@ G_MODULE_EXPORT gdouble f_to_c(gdouble in)
 
 /*!
   \brief Fahrenheit to Kelvin conversion
-  \param in, temp in Fahrenheit
+  \param in is the input temp in Fahrenheit
   \returns temp in Kelvin
   */
 G_MODULE_EXPORT gdouble f_to_k(gdouble in)
@@ -830,7 +832,7 @@ G_MODULE_EXPORT gdouble f_to_k(gdouble in)
 
 /*!
   \brief Kelvin to Fahrenheit conversion
-  \param in, temp in Kevin
+  \param in is the input temp in Kevin
   \returns temp in Fahrenheit
   */
 G_MODULE_EXPORT gdouble k_to_f(gdouble in)
@@ -841,7 +843,7 @@ G_MODULE_EXPORT gdouble k_to_f(gdouble in)
 
 /*!
   \brief Kelvin to Celsius conversion
-  \param in, temp in Kelvin
+  \param in is the input temp in Kelvin
   \returns temp in Celsius
   */
 G_MODULE_EXPORT gdouble k_to_c(gdouble in)
@@ -852,10 +854,11 @@ G_MODULE_EXPORT gdouble k_to_c(gdouble in)
 
 /*!
   \brief Calculates the result based on the passed multiplier, adder, conversion cdirection (to/from ecu) and raw input)
-  \param in, input value
-  \param mult, pointer to multiplier
-  \param add, pointer to adder
-  \param dir, enumeration defining theconversion direction, i.e. TO/FROM Ecu
+  \param in is the input value
+  \param mult is the pointer to multiplier
+  \param add is the pointer to adder
+  \param dir is the enumeration defining the conversion direction, i.e. TO/FROM Ecu
+  \see ConvDir
   \returns the calculated result
   */
 G_MODULE_EXPORT gfloat calc_value(gfloat in, gfloat *mult, gfloat *add, ConvDir dir)

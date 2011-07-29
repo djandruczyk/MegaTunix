@@ -928,9 +928,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 /*!
   \brief deallocs a dataset
-  \param key_id, keyID to be deallocated
-  \param data, unused
-  \param user_data, unused
+  \param key_id is the keyID to be deallocated
+  \param data is unused
+  \param user_data is unused
   */
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
@@ -1022,9 +1022,10 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 
 /*!
   \brief deallocs an array
-  \param array, pointer to the array to be dealloced
-  \param type, enumeration to determine the logic needed to deallocate the 
-  elements of the array
+  \param array is the pointer to the array to be dealloced
+  \param type is the enumeration to determine the logic needed to 
+  deallocate the elements of the array
+  \see ArrayType
   */
 G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 {
@@ -1088,7 +1089,7 @@ G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 /*!
  \brief dealloc_w_update() deallocates the structure used to pass an I/O
  widget update message from a thread to here..
- \param w_update, pointer to widget update data to be freed
+ \param w_update is the pointer to widget update data to be freed
  */
 G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 {
@@ -1101,7 +1102,7 @@ G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 /*!
  \brief dealloc_textmessage() deallocates the structure used to pass a text
  message from the thread to here..
- \param message, pointer to message data to be freed
+ \param message is the pointer to message data to be freed
  */
 G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
 {
@@ -1119,7 +1120,7 @@ G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
 /*!
  \brief dealloc_qfunction() deallocates the structure used to pass a function
  message from the thread to here..
- \param qfunc, Queued Function structure to deallocate
+ \param qfunc is the Queued Function structure to deallocate
  */
 G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
 {
@@ -1131,7 +1132,7 @@ G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
 /*!
  \brief dealloc_table_params() deallocates the structure used for firmware
  table parameters
- \param table_params, pointer to table parameters structure to deallocate
+ \param table_params is the pointer to table parameters structure to deallocate
  */
 G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 {
@@ -1212,7 +1213,7 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 /*!
  \brief dealloc_rtv_object() deallocates the rtv object used 
  for runtime vars data
- \param object, pointer to RTV object to deallocate
+ \param object is the pointer to RTV object to deallocate
  */
 G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 {
@@ -1233,7 +1234,7 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 /*!
  \brief dealloc_te_params() deallocates the structure used for firmware
  te parameters
- \param te_params, pointer to TE_Params struct to deallocate
+ \param te_params is the pointer to TE_Params struct to deallocate
  */
 G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 {
@@ -1269,7 +1270,7 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 
 /*!
   \brief deallocs a lookuptable object
-  \param data, pointer to LookupTable structure to deallocate
+  \param data is the pointer to LookupTable structure to deallocate
   */
 G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 {
@@ -1284,8 +1285,8 @@ G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 
 /*!
   \brief Deallocates a gauge (dash)
-  \param data, pointer to gauge widget
-  \param user_data, unused
+  \param data is the pointer to gauge widget
+  \param user_data is unused
   */
 G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 {
@@ -1297,8 +1298,8 @@ G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 
 /*!
   \brief Deallocates a widget
-  \param data, pointer to GTK+ widget
-  \param user_data, unused
+  \param data is the pointer to GTK+ widget
+  \param user_data is unused
   */
 G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 {
@@ -1325,10 +1326,10 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 
 /*!
   \brief deallocates the runtime text tree model elements
-  \param model, pointer to Gtk Tree Model
-  \param path, pointer to Gtk Tree Path within the model
-  \param iter, pointer to Tree Iterator
-  \param user_data, unused
+  \param model is the pointer to Gtk Tree Model
+  \param path is the pointer to Gtk Tree Path within the model
+  \param iter is the pointer to Tree Iterator
+  \param user_data is unused
   \returns FALSE so other handlers run
  */
 G_MODULE_EXPORT gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
@@ -1343,7 +1344,7 @@ G_MODULE_EXPORT gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *pat
 
 /*!
   \brief deallocates an RTT object
-  \param data, pointer to Rt_Text object to be deallocated..
+  \param data is the pointer to Rt_Text object to be deallocated..
   */
 G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 {
@@ -1358,7 +1359,7 @@ G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 
 /*!
   \brief deallocates a slider object
-  \param data, pointer to Rt_Slider object to be deallocated
+  \param data is the pointer to Rt_Slider object to be deallocated
   */
 G_MODULE_EXPORT void dealloc_slider(gpointer data)
 {
@@ -1382,7 +1383,7 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 
 /*!
   \brief frees and XML Cmd object
-  \param data, pointer to Command structure to be freed
+  \param data is the pointer to Command structure to be freed
   */
 G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 {
@@ -1401,7 +1402,7 @@ G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 
 /*!
   \brief frees and xml arg object
-  \param data, pointer to PotentialArg structure to be freed
+  \param data is the pointer to PotentialArg structure to be freed
   */
 G_MODULE_EXPORT void xml_arg_free(gpointer data)
 {
@@ -1417,7 +1418,7 @@ G_MODULE_EXPORT void xml_arg_free(gpointer data)
 
 /*!
   \brief deallocates the hashtable of lists
-  \param data, pointer to hashtable to be cleaned up
+  \param data is the pointer to hashtable to be cleaned up
   */
 G_MODULE_EXPORT void dealloc_lists_hash(gpointer data)
 {
@@ -1428,9 +1429,9 @@ G_MODULE_EXPORT void dealloc_lists_hash(gpointer data)
 
 /*! 
   \brief Deallocates a linked list
-  \param key, unused
-  \param value, pointer to list to be freed
-  \param user_data, unused
+  \param key is unused
+  \param value is the pointer to list to be freed
+  \param user_data is unused
   */
 G_MODULE_EXPORT void dealloc_list(gpointer key, gpointer value, gpointer user_data)
 {
@@ -1440,7 +1441,7 @@ G_MODULE_EXPORT void dealloc_list(gpointer key, gpointer value, gpointer user_da
 
 /*!
   \brief generic cleanup function
-  \param data, pointer to arbritrary data to be freed
+  \param data is the pointer to arbritrary data to be freed
   */
 G_MODULE_EXPORT void cleanup(void *data)
 {
