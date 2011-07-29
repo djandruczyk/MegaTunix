@@ -63,6 +63,7 @@ GType mtx_gauge_face_get_type(void)
  signal handlers for config event, expose event, and button press/release
  \param class_name (MtxGaugeFaceClass *) pointer to the class
  */
+
 void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 {
 	GObjectClass *obj_class;
@@ -72,15 +73,19 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 	widget_class = GTK_WIDGET_CLASS (class_name);
 
 	/* GtkWidget signals */
+
 	widget_class->configure_event = mtx_gauge_face_configure;
 	widget_class->expose_event = mtx_gauge_face_expose;
 	widget_class->button_press_event = mtx_gauge_face_button_press;
 	widget_class->button_release_event = mtx_gauge_face_button_release;
 	widget_class->key_press_event = mtx_gauge_face_key_event;
 	/* Motion event not needed, as unused currently */
+
 	/*widget_class->motion_notify_event = mtx_gauge_face_motion_event;*/
+
 	/* Realize and size_allocate are NOT NEEDED casue GtkDrawingArea
 	   does it for us */
+
 	widget_class->size_request = mtx_gauge_face_size_request;
 	obj_class->finalize = mtx_gauge_face_finalize;
 
@@ -93,6 +98,7 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
  \brief Free's data
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
+
 void mtx_gauge_face_finalize (GObject *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -179,6 +185,7 @@ void mtx_gauge_face_finalize (GObject *gauge)
  \brief Frees up memory for tblocks array of structures
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
+
 void mtx_gauge_face_cleanup_text_blocks(GArray *array)
 {
 	gint i = 0;
@@ -201,6 +208,7 @@ void mtx_gauge_face_cleanup_text_blocks(GArray *array)
  \brief Frees up memory for tgroups array of structures
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
+
 void mtx_gauge_face_cleanup_tick_groups(GArray *array)
 {
 	gint i = 0;
@@ -223,6 +231,7 @@ void mtx_gauge_face_cleanup_tick_groups(GArray *array)
  \brief Frees up memory for w_ranges array of structures
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
+
 void mtx_gauge_face_cleanup_warning_ranges(GArray *array)
 {
 	gint i = 0;
@@ -241,6 +250,7 @@ void mtx_gauge_face_cleanup_warning_ranges(GArray *array)
  \brief Frees up memory for a_ranges array of structures
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
+
 void mtx_gauge_face_cleanup_alert_ranges(GArray *array)
 {
 	gint i = 0;
@@ -259,6 +269,7 @@ void mtx_gauge_face_cleanup_alert_ranges(GArray *array)
  \brief Frees up memory for polygons array of structures
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
+
 void mtx_gauge_face_cleanup_polygons(GArray *array)
 {
 	gint i = 0;
@@ -314,13 +325,15 @@ void mtx_gauge_face_cleanup_polygons(GArray *array)
  \brief Initializes the gauge attributes to sane defaults
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
+
 void mtx_gauge_face_init (MtxGaugeFace *gauge)
 {
 	/* The events the gauge receives
 	* Need events for button press/release AND motion EVEN THOUGH
 	* we don't have a motion handler defined.  It's required for the 
 	* dash designer to do drag and move placement 
-	*/ 
+	*/
+
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	gtk_widget_set_events (GTK_WIDGET (gauge),
 			GDK_KEY_PRESS_MASK |
@@ -338,18 +351,24 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->yc = 0.0;
 	priv->radius = 0.0;
 	priv->value = 0.0;		/* default values */
+
 	priv->lbound = 0.0;
 	priv->ubound = 100.0;
 	priv->rotation = MTX_ROT_CW;
 	priv->precision = 2;
 	priv->clamped = CLAMP_NONE;
 	priv->start_angle = 135; 	/* lower left quadrant */
+
 	priv->sweep_angle = 270; 	/* CW sweep */
+
 	priv->needle_width = 0.05;  	/* % of radius */
+
 	priv->needle_tip_width = 0.0;
 	priv->needle_tail_width = 0.0;
 	priv->needle_tail = 0.083;  	/* % of radius */
+
 	priv->needle_length = 0.850; 	/* % of radius */
+
 	priv->value_font = g_strdup("Bitstream Vera Sans");
 	priv->value_xpos = 0.0;
 	priv->value_ypos = 0.40;
@@ -378,6 +397,7 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
 	/* Compat with older gauges */
+
 	g_object_set_data(G_OBJECT(gauge),"bg_color", &priv->colors[GAUGE_COL_BG_DAY]);
 	g_object_set_data(G_OBJECT(gauge),"bg_color_alt", &priv->colors[GAUGE_COL_BG_NITE]);
 	g_object_set_data(G_OBJECT(gauge),"needle_color", &priv->colors[GAUGE_COL_NEEDLE_DAY]);
@@ -425,6 +445,7 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 /*!
  * \brief  initializes and populates the xml_functions hashtable 
  */
+
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
 {
 	gint i = 0;
@@ -453,12 +474,15 @@ void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
  \brief Allocates the default colors for a gauge with no options 
  \param widget (GtkWidget *) pointer to the gauge object
  */
+
 void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	/* Defaults for the gauges,  user over-ridable */
 
+
 	/*! Background */
+
 	priv->colors[GAUGE_COL_BG_DAY].red=0*65535;
 	priv->colors[GAUGE_COL_BG_DAY].green=0*65535;
 	priv->colors[GAUGE_COL_BG_DAY].blue=0*65535;
@@ -466,6 +490,7 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	priv->colors[GAUGE_COL_BG_NITE].green=1*65535;
 	priv->colors[GAUGE_COL_BG_NITE].blue=1*65535;
 	/*! Needle */
+
 	priv->colors[GAUGE_COL_NEEDLE_DAY].red=1.0*65535;
 	priv->colors[GAUGE_COL_NEEDLE_DAY].green=1.0*65535;
 	priv->colors[GAUGE_COL_NEEDLE_DAY].blue=1.0*65535;
@@ -473,6 +498,7 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	priv->colors[GAUGE_COL_NEEDLE_NITE].green=0.0*65535;
 	priv->colors[GAUGE_COL_NEEDLE_NITE].blue=0.0*65535;
 	/*! Units Font*/
+
 	priv->colors[GAUGE_COL_VALUE_FONT_DAY].red=0.8*65535;
 	priv->colors[GAUGE_COL_VALUE_FONT_DAY].green=0.8*65535;
 	priv->colors[GAUGE_COL_VALUE_FONT_DAY].blue=0.8*65535;
@@ -480,6 +506,7 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	priv->colors[GAUGE_COL_VALUE_FONT_NITE].green=0.2*65535;
 	priv->colors[GAUGE_COL_VALUE_FONT_NITE].blue=0.2*65535;
 	/*! Gradient Color Begin */
+
 	priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].red=0.85*65535;
 	priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].green=0.85*65535;
 	priv->colors[GAUGE_COL_GRADIENT_BEGIN_DAY].blue=0.85*65535;
@@ -487,6 +514,7 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 	priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].green=0.15*65535;
 	priv->colors[GAUGE_COL_GRADIENT_BEGIN_NITE].blue=0.15*65535;
 	/*! Gradient Color End */
+
 	priv->colors[GAUGE_COL_GRADIENT_END_DAY].red=0.15*65535;
 	priv->colors[GAUGE_COL_GRADIENT_END_DAY].green=0.15*65535;
 	priv->colors[GAUGE_COL_GRADIENT_END_DAY].blue=0.15*65535;
@@ -500,6 +528,7 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
  \brief creates a default tick group (replacing old tick system)
  \param widget (GtkWidget *) pointer to the gauge object
  */
+
 void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -536,6 +565,7 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
  looks a bit nicer, though is a little bit slower
  \param widget (MtxGaugeFace *) pointer to the gauge object
  */
+
 void update_gauge_position (MtxGaugeFace *gauge)
 {
 	GtkWidget *widget = NULL;
@@ -564,6 +594,7 @@ void update_gauge_position (MtxGaugeFace *gauge)
 	widget = GTK_WIDGET(gauge);
 
 	/* Check if in alert bounds and alert as necessary */
+
 	alert = FALSE;
 	for (i=0;i<priv->a_ranges->len;i++)
 	{
@@ -582,6 +613,7 @@ void update_gauge_position (MtxGaugeFace *gauge)
 			 * just copy the pixmap (saving all the render time)
 			 * as pixmap copies are reasonably fast.
 			 */
+
 			priv->last_alert_index = i;
 			widget = GTK_WIDGET(gauge);
 			cr = gdk_cairo_create(priv->tmp_pixmap);
@@ -604,9 +636,11 @@ void update_gauge_position (MtxGaugeFace *gauge)
 	}
 cairo_jump_out_of_alerts:
 	/* Copy background pixmap to intermediary for final rendering */
+
 	if (!alert)
 	{
 		/* Not in alert status,  copy from bg_pixmap to current pixmap */
+
 		cr = gdk_cairo_create(priv->pixmap);
 		gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
 		cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
@@ -616,6 +650,7 @@ cairo_jump_out_of_alerts:
 	else
 	{
 		/* In ALERT status, copy from tmp_pixmap to current pixmap instead */
+
 		cr = gdk_cairo_create(priv->pixmap);
 		gdk_cairo_set_source_pixmap(cr,priv->tmp_pixmap,0,0);
 		cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
@@ -631,6 +666,7 @@ cairo_jump_out_of_alerts:
 	else
 		cairo_set_antialias(cr,CAIRO_ANTIALIAS_NONE);
 	/* Update the VALUE text */
+
 	if (priv->show_value)
 	{
 		if (priv->daytime_mode == MTX_DAY)
@@ -670,12 +706,14 @@ cairo_jump_out_of_alerts:
 		priv->value_bounding_box.width = extents.width + extents.x_advance + 2; 
 		priv->value_bounding_box.height = extents.height + extents.y_advance + 2;
 		/*printf("Value bounding box is at %i,%i, width/height %i,%i\n",priv->value_bounding_box.x,priv->value_bounding_box.y,priv->value_bounding_box.width,priv->value_bounding_box.height); */
+
 		g_free(message);
 
 		cairo_stroke (cr);
 	}
 
 	/* gauge needle */
+
 	if (priv->clamped == CLAMP_UPPER)
 		val = priv->ubound;
 	else if (priv->clamped == CLAMP_LOWER)
@@ -714,6 +752,7 @@ cairo_jump_out_of_alerts:
 	 * Points 2 and 5 are the points on either side of the pivot and
 	 * points 3 and 4 are the points on either side of the needle's tail
 	 */
+
 	priv->needle_coords[0].x = xc + (((n_tip) * cos (needle_pos)) + ((tip_width) * -sin(needle_pos)));
 	priv->needle_coords[0].y = yc + (((n_tip) * sin (needle_pos)) + ((tip_width) * cos(needle_pos)));
 	priv->needle_coords[1].x = xc + (((n_tip) * cos (needle_pos)) + ((tip_width) * sin(needle_pos)));
@@ -722,6 +761,7 @@ cairo_jump_out_of_alerts:
 	if (n_tail < 0)
 	{
 		/* "Hidden Pivot" needle, where pivot point is invisible */
+
 		priv->needle_coords[2].x = xc + (((n_tail) * -cos (needle_pos)) + ((n_width) * sin(needle_pos)));
 		priv->needle_coords[2].y = yc + (((n_tail) * -sin (needle_pos)) + ((n_width) * -cos(needle_pos)));
 		priv->needle_coords[3].x = priv->needle_coords[2].x;
@@ -734,6 +774,7 @@ cairo_jump_out_of_alerts:
 	else
 	{
 		/* Normal Needle */
+
 		priv->needle_coords[2].x = xc + ((n_width) * sin(needle_pos));
 		priv->needle_coords[2].y = yc + ((n_width) * -cos(needle_pos));
 
@@ -770,6 +811,7 @@ cairo_jump_out_of_alerts:
  \param event (GdkEventConfigure *) pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
  */
+
 gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	cairo_t *cr = NULL;
@@ -785,6 +827,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		if (priv->layout)
 			g_object_unref(priv->layout);
 		/* Backing pixmap (copy of window) */
+
 		if (priv->pixmap)
 			g_object_unref(priv->pixmap);
 		priv->pixmap=gdk_pixmap_new(widget->window,
@@ -795,6 +838,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		cairo_paint(cr);
 		cairo_destroy(cr);
 		/* Static Background pixmap */
+
 		if (priv->bg_pixmap)
 			g_object_unref(priv->bg_pixmap);
 		priv->bg_pixmap=gdk_pixmap_new(widget->window,
@@ -805,6 +849,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		cairo_paint(cr);
 		cairo_destroy(cr);
 		/* Tmp Background pixmap */
+
 		if (priv->tmp_pixmap)
 			g_object_unref(priv->tmp_pixmap);
 		priv->tmp_pixmap=gdk_pixmap_new(widget->window,
@@ -833,16 +878,19 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 				CAIRO_ANTIALIAS_GRAY);
 
 		/* Shape combine bitmap */
+
 		if (priv->bitmap)
 			g_object_unref(priv->bitmap);
 		priv->bitmap = gdk_pixmap_new(NULL,priv->w,priv->h,1);
 		/* Shape combine mask bitmap */
+
 		cr = gdk_cairo_create(priv->bitmap);
 		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(cr);
 		cairo_set_operator(cr,CAIRO_OPERATOR_SOURCE);
 		cairo_set_source_rgb (cr, 1.0,1.0,1.0);
 		/* Drag border boxes... */
+
 		if (priv->show_drag_border)
 		{
 			cairo_rectangle(cr,0,0,DRAG_BORDER,DRAG_BORDER);
@@ -872,6 +920,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
  \param event (GdkEventExpose *) pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
  */
+
 gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFacePrivate * priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
@@ -931,6 +980,7 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
  This is the cairo version.
  \param widget (GtkWidget *) pointer to the gauge object
  */
+
 void generate_gauge_background(MtxGaugeFace *gauge)
 {
 	GtkWidget * widget = NULL;
@@ -982,14 +1032,18 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	if (!priv->bg_pixmap)
 		return;
 	/* get a cairo_t */
+
 	cr = gdk_cairo_create (priv->bg_pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 	/* Background set to black */
+
 	cairo_set_source_rgb (cr, 0,0,0);
 	/* The little corner resizer boxes... */
+
 	if (priv->show_drag_border)
 	{
 		/* Fill 4 rectangles with black */
+
 		cairo_rectangle (cr,
 				0,0,
 				DRAG_BORDER, DRAG_BORDER);
@@ -1005,6 +1059,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		cairo_fill(cr);
 		cairo_set_source_rgb (cr, 0.9,0.9,0.9);
 		/* draw light grey border around 4 rectangles */
+
 		cairo_rectangle (cr,
 				0,0,
 				DRAG_BORDER, DRAG_BORDER);
@@ -1020,6 +1075,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		cairo_stroke(cr);
 	}
 	/* Black out the rest of the gauge */
+
 	cairo_set_source_rgb (cr, 0,0,0);
 	cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
 
@@ -1031,7 +1087,9 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 
 
 	/* Filled Arcs */
+
 	/* Outside gradient ring */
+
 	gradient = cairo_pattern_create_linear(priv->xc+(0.707*priv->xc),
 			priv->yc-(0.707*priv->yc),
 			priv->xc-(0.707*priv->xc),
@@ -1066,6 +1124,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	cairo_pattern_destroy(gradient);
 
 	/* Inside gradient ring */
+
 	gradient = cairo_pattern_create_linear(priv->xc-(0.707*priv->xc),
 			priv->yc+(0.707*priv->yc),
 			priv->xc+(0.707*priv->xc),
@@ -1099,6 +1158,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	cairo_pattern_destroy(gradient);
 
 	/* Gauge background inside the bezel */
+
 	if (priv->daytime_mode == MTX_DAY)
 	{
 		cairo_set_source_rgb (cr, priv->colors[GAUGE_COL_BG_DAY].red/65535.0,
@@ -1117,18 +1177,22 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	for (layer=0;layer<priv->max_layers;layer++)
 	{
 		/* The warning color ranges */
+
 		for (i=0;i<priv->w_ranges->len;i++)
 		{
 			range = g_array_index(priv->w_ranges,MtxWarningRange *, i);
 			if (range->layer != layer) /* Draw layers in order, 0 being "lowest" */
+
 				continue;
 			cairo_set_source_rgb(cr,range->color[priv->daytime_mode].red/65535.0,
 					range->color[priv->daytime_mode].green/65535.0,
 					range->color[priv->daytime_mode].blue/65535.0);
 			/* percent of full scale is (lbound-range_lbound)/(fullspan)*/
+
 			angle1 = (range->lowpoint-priv->lbound)/(priv->ubound-priv->lbound);
 			angle2 = (range->highpoint-priv->lbound)/(priv->ubound-priv->lbound);
 			/*printf("gauge warning range should be from %f, to %f of full scale\n",angle1, angle2);*/
+
 			lwidth = priv->radius*range->lwidth < 1 ? 1: priv->radius*range->lwidth;
 			cairo_set_line_width (cr, lwidth);
 			if (priv->rotation == MTX_ROT_CW)
@@ -1139,10 +1203,12 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		}
 
 		/* NEW STYLE Gauge tick groups */
+
 		for (i=0;i<priv->tick_groups->len;i++)
 		{
 			tgroup = g_array_index(priv->tick_groups,MtxTickGroup *, i);
 			if (tgroup->layer != layer) /* Draw layers in order, 0 being "lowest" */
+
 				continue;
 			cairo_set_source_rgb (cr, 
 					tgroup->maj_tick_color[priv->daytime_mode].red/65535.0,
@@ -1190,6 +1256,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 						priv->yc + (priv->radius - insetfrom - inset) * sin (counter));
 				cairo_stroke (cr);
 				if ((vector) && (j < count)) /* If not null */
+
 				{
 					cairo_save(cr);
 					cairo_set_source_rgb (cr, 
@@ -1199,6 +1266,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 					cairo_text_extents (cr, vector[j], &extents);
 					/* Gets the radius of a circle that encompasses the 
 					 * rectangle of text on screen */
+
 					rad = sqrt(pow(extents.width,2)+pow(extents.height,2))/2.0;
 					cairo_move_to (cr,
 							priv->xc + (priv->radius - tgroup->text_inset*priv->radius - rad) * cos (counter) - extents.width/2.0-extents.x_bearing,
@@ -1207,9 +1275,11 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 					cairo_restore(cr);
 				}
 				/* minor ticks */
+
 				if ((tgroup->num_min_ticks > 0) && (j < (tgroup->num_maj_ticks-1)))
 				{
 					cairo_save (cr); /* stack-pen-size */
+
 					cairo_set_source_rgb (cr,
 							tgroup->min_tick_color[priv->daytime_mode].red/65535.0,
 							tgroup->min_tick_color[priv->daytime_mode].green/65535.0,
@@ -1233,6 +1303,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 						cairo_stroke (cr);
 					}
 					cairo_restore (cr); /* stack-pen-size */
+
 				}
 				if (priv->rotation == MTX_ROT_CW)
 					counter += (deg_per_major_tick)*(M_PI/180);
@@ -1244,6 +1315,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 		cairo_stroke (cr);
 
 		/* Polygons */
+
 		for (i=0;i<priv->polygons->len;i++)
 		{
 			poly = g_array_index(priv->polygons,MtxPolygon *, i);
@@ -1327,6 +1399,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 				cairo_stroke(cr);
 		}
 		/* Render all the text blocks */
+
 		for (i=0;i<priv->t_blocks->len;i++)
 		{
 			tblock = g_array_index(priv->t_blocks,MtxTextBlock *, i);
@@ -1362,6 +1435,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	}
 
 	/* Tattletale (ghost needle showing peak value) */
+
 	if (priv->show_tattletale)
 	{
 		if (priv->clamped == CLAMP_UPPER)
@@ -1443,6 +1517,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	}
 	cairo_destroy (cr);
 	/* SAVE copy of this on tmp pixmap */
+
 	widget = GTK_WIDGET(gauge);
 
 	cr = gdk_cairo_create(priv->tmp_pixmap);
@@ -1461,32 +1536,41 @@ void generate_gauge_background(MtxGaugeFace *gauge)
  pressed
  \returns FALSE
  */
+
 gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 					     
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
 	GdkWindowEdge edge = -1;
 	/*printf("gauge button event\n");*/
+
 	/* Right side of window */
+
 	if (event->x > (priv->w-10))
 	{
 		/* Upper portion */
+
 		if (event->y < 10)
 			edge = GDK_WINDOW_EDGE_NORTH_EAST;
 		/* Lower portion */
+
 		else if (event->y > (priv->h-10))
 			edge = GDK_WINDOW_EDGE_SOUTH_EAST;
 		else 
 			edge = -1;
 	}
 	/* Left Side of window */
+
 	else if (event->x < 10)
 	{
 		/* If it's in the middle portion */
+
 		/* Upper portion */
+
 		if (event->y < 10) 
 			edge = GDK_WINDOW_EDGE_NORTH_WEST;
 		/* Lower portion */
+
 		else if (event->y > (priv->h-10))
 			edge = GDK_WINDOW_EDGE_SOUTH_WEST;
 		else 
@@ -1501,6 +1585,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 		switch (event->button)
 		{
 			case 1: /* left button */
+
 				if ((edge != GDK_WINDOW_EDGE_NORTH_WEST) && 
 						(edge != GDK_WINDOW_EDGE_NORTH_EAST) && 
 						(edge != GDK_WINDOW_EDGE_SOUTH_WEST) && 
@@ -1527,18 +1612,21 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 					/* Grab click coords, used by 
 					 * gaugedesigner to ease development
 					 */
+
 					priv->last_click_x = (event->x-priv->xc)/priv->xc;
 					priv->last_click_y = (event->y-priv->yc)/priv->yc;
 				}
 					
 				break;
 			case 3: /* right button */
+
 				if (GTK_IS_WINDOW(widget->parent))
 				{
 					gtk_widget_destroy(widget);
 					gtk_main_quit();
 				}
 				/* Added api call to do this*/
+
 				else if (priv->show_tattletale)
 				{
 					priv->peak = priv->lbound;
@@ -1548,6 +1636,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 		}
 	}
 	/*printf("gauge button event ENDING\n");*/
+
 	return FALSE;
 }
 
@@ -1559,10 +1648,12 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
  released
  \returns FALSE
  */
+
 gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 					       
 {
 	/*printf("button release\n");*/
+
 	return FALSE;
 }
 
@@ -1570,7 +1661,9 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
+
 	/*printf("motion in gauge, returning false\n");*/
+
 	return FALSE;
 }
 					       
@@ -1580,6 +1673,7 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	/* We don't care, but return FALSE to propogate properly */
+
 	switch (event->keyval)
 	{
 		case GDK_T:
@@ -1622,6 +1716,7 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
  \param requisition (GdkRequisition *) struct to set the vars within
  \returns void
  */
+
 void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	g_return_if_fail(widget != NULL);

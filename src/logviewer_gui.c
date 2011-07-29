@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
-
 #include <debugging.h>
 #include <getfiles.h>
 #include <glade/glade.h>
@@ -46,13 +39,6 @@ extern gconstpointer *global_data;
  \brief present_viewer_choices() presents the user with the a list of 
  variables from EITHER the realtime vars (if in realtime mode) or from a 
  datalog (playback mode)
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void present_viewer_choices(void)
 {
@@ -93,13 +79,6 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
 	/* Playback mode..... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	if (playback)
 	{
 		gtk_window_set_title(GTK_WINDOW(window),
@@ -110,13 +89,6 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	else
 	{
 		/* Realtime Viewing mode... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		gtk_window_set_title(GTK_WINDOW(window),
 				_("Realtime Mode: Logviewer Choices"));
 		frame = gtk_frame_new(_("Select Realtime Variables to view from the list below..."));
@@ -205,13 +177,6 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 		{
 			OBJ_SET(button,"object",(gpointer)object);
 			/* so we can set the state from elsewhere...*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			DATA_SET(object,"lview_button",(gpointer)button);
 			if ((GBOOLEAN)DATA_GET(object,"being_viewed"))
 				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
@@ -274,13 +239,6 @@ G_MODULE_EXPORT void present_viewer_choices(void)
   \param widget, unused
   \returns FALSE
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean reenable_select_params_button(GtkWidget *widget)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_params_button")),TRUE);
@@ -293,13 +251,6 @@ G_MODULE_EXPORT gboolean reenable_select_params_button(GtkWidget *widget)
   \brief Saves the default loggable choices
   \param widget, unused
   \returns FALSE
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 {
@@ -345,13 +296,6 @@ G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
  \param data, unused
  \returns FALSE
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
 {
 	gconstpointer *object = NULL;
@@ -360,13 +304,6 @@ G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
 
 	/* get object from widget */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	object = (gconstpointer *)OBJ_GET(widget,"object");
 	if (!object)
 	{
@@ -381,13 +318,6 @@ G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
 /*!
  \brief populate_viewer() creates/removes the list of viewable values from
  the objects in use (playback list or realtime vars list)
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void populate_viewer(void)
 {
@@ -410,13 +340,6 @@ G_MODULE_EXPORT void populate_viewer(void)
 	 * and adds them to the list, also checks if entires are removed and
 	 * pulls them from the hashtable and de-allocates them...
 	 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	if (lv_data == NULL)
 	{
 		lv_data = g_new0(Logview_Data,1);
@@ -428,13 +351,6 @@ G_MODULE_EXPORT void populate_viewer(void)
 	 * malloc datastructure, populate it's values and insert a pointer
 	 * into the table for it..
 	 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	if (DATA_GET(global_data,"playback_mode"))
 		total = log_info->field_count;
 	else
@@ -461,41 +377,13 @@ G_MODULE_EXPORT void populate_viewer(void)
 
 		being_viewed = (GBOOLEAN)DATA_GET(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		if (!(g_hash_table_lookup(lv_data->traces,name)))
 		{
 			if (being_viewed)	/* Marked viewable widget */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			{
 				/* Call the build routine, feed it the drawing_area*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 				v_value = build_v_value(object);
 				/* store location of master*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 				g_hash_table_insert(lv_data->traces,
 						g_strdup(name),
 						(gpointer)v_value);
@@ -504,13 +392,6 @@ G_MODULE_EXPORT void populate_viewer(void)
 		}
 		else
 		{	/* If in table but now de-selected, remove it */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			if (!being_viewed)
 			{
 				v_value = (Viewable_Value *)g_hash_table_lookup(lv_data->traces,name);
@@ -521,13 +402,6 @@ G_MODULE_EXPORT void populate_viewer(void)
 					col_sat = 1.0;
 					col_val = 0.75;
 					/*printf("hue at 1110 deg, reducing to 1080, sat at 1.0, val at 0.75\n");*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 				}
 				if ((hue > 0) && ((GINT)hue%780 == 0))
 				{
@@ -535,65 +409,23 @@ G_MODULE_EXPORT void populate_viewer(void)
 					col_sat = 0.5;
 					col_val = 1.0;
 					/*printf("hue at 780 deg, reducing to 750, sat at 0.5, val at 1.0\n");*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 				}
 				if ((hue > 0) && ((GINT)hue%390 == 0)) /* phase shift */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 				{
 					hue-=30.0;
 					col_sat=1.0;
 					col_val = 1.0;
 					/*printf("hue at 390 deg, reducing to 360, sat at 0.5, val at 1.0\n");*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 				}
 				hue -=60;
 				/*printf("angle at %f, sat %f, val %f\n",hue,col_sat,col_val);*/
 
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
-
 				/* Remove entry in from hash table */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 				g_hash_table_remove(lv_data->traces,name);
 
 				/* Free all resources of the datastructure 
 				 * before de-allocating it... 
 				 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 
 				g_object_unref(v_value->trace_gc);
 				g_object_unref(v_value->font_gc);
@@ -609,13 +441,6 @@ G_MODULE_EXPORT void populate_viewer(void)
 	/* If traces selected, emit a configure_Event to clear the window
 	 * and draw the traces (IF ONLY reading a log for playback)
 	 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	g_static_mutex_unlock(&update_mutex);
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 		lv_configure_event(lookup_widget("logviewer_trace_darea"),NULL,NULL);
@@ -628,13 +453,6 @@ G_MODULE_EXPORT void populate_viewer(void)
  \brief reset_logviewer_state() deselects any traces, resets the position 
  slider.  This function is called when switching from playback to rt mode
  and back
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void reset_logviewer_state(void)
 {
@@ -681,13 +499,6 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
  \param object, objet to get soem of the data from
  \returns a pointer to a newly allocated and populated Viewable_Value structure
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 {
 	Viewable_Value *v_value = NULL;
@@ -699,124 +510,47 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 
 	/* Set limits of this variable. (it's ranges, used for scaling */
 
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
-
 	if (DATA_GET(global_data,"playback_mode"))
 	{
 		/* textual name of the variable we're viewing.. */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		v_value->vname = g_strdup(DATA_GET(object,"lview_name"));
 		/* data was already read from file and stored, copy pointer
 		 * over to v_value so it can be drawn...
 		 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		v_value->data_source = g_strdup("data_array");
 	}
 	else
 	{
 		/* textual name of the variable we're viewing.. */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		v_value->vname = g_strdup(DATA_GET(object,"dlog_gui_name"));
 		/* Array to keep history for resize/redraw and export 
 		 * to datalog we use the _sized_ version to give a big 
 		 * enough size to prevent reallocating memory too often. 
 		 * (more initial mem usage,  but less calls to malloc...
 		 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		v_value->data_source = g_strdup("history");
 	}
 	/* Store pointer to object, but DO NOT FREE THIS on v_value destruction
 	 * as its the SAME one used for all Viewable_Values */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	v_value->object = object;
 	/* IS it a floating point value? */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	v_value->precision = (GINT)DATA_GET(object,"precision");
 	v_value->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
 	v_value->upper = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	v_value->last_y = -1;
 
 	/* User adjustable scales... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	v_value->cur_low = v_value->lower;
 	v_value->cur_high = v_value->upper;
 	v_value->min = 0;
 	v_value->max = 0;
 
 	/* Allocate the colors (GC's) for the font and trace */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	v_value->font_gc = initialize_gc(pixmap, FONT);
 	v_value->trace_gc = initialize_gc(pixmap, TRACE);
 
 	/* Allocate the structs to hold the text screen dimensions */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	v_value->ink_rect = g_new0(PangoRectangle, 1);
 	v_value->log_rect = g_new0(PangoRectangle, 1);
 
@@ -833,13 +567,6 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
  \param drawable, pointer to the drawable surface
  \param type, Graphics Context type? (I donno for sure)
  \returns Pointer to a GdkGC *
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 {
@@ -877,13 +604,6 @@ G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 			hue += 60;
 			/*printf("angle at %f, sat %f, val %f\n",hue,col_sat,col_val);*/
 
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
-
 			if ((hue > 0) && ((GINT)hue%360 == 0))
 			{
 				hue+=30.0;
@@ -897,13 +617,6 @@ G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 				col_val = 0.75;
 			}
 			/*printf("JBA angle at %f, sat %f, val %f\n",hue,col_sat,col_val);*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			color = get_colors_from_hue(hue,col_sat,col_val);
 			gdk_colormap_alloc_color(cmap,&color,TRUE,TRUE);
 			values.foreground = color;
@@ -956,13 +669,6 @@ G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
  \param val, col_val from 0-1.0
  \returns a GdkColor at the hue angle requested
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
 	static gint count = 0;
@@ -971,21 +677,7 @@ G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 	gfloat tmp = 0.0;	
 	gfloat fract = 0.0;
 	gfloat S = sat;	/* using col_sat of 1.0*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	gfloat V = val;	/* using Value of 1.0*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	gfloat p = 0.0;
 	gfloat q = 0.0;
 	gfloat t = 0.0;
@@ -999,13 +691,6 @@ G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 		colormap = gdk_colormap_get_system();
 
 	/*printf("get_color_from_hue count %i\n",count); */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 
 	while (hue >= 360.0)
 		hue -= 360.0;
@@ -1065,23 +750,9 @@ G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
  \brief draw_infotext() draws the static textual data for the trace on 
  the left hand side of the logviewer
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void draw_infotext(void)
 {
 	/* Draws the textual (static) info on the left side of the window..*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 
 	gint name_x = 0;
 	gint name_y = 0;
@@ -1151,13 +822,6 @@ G_MODULE_EXPORT void draw_infotext(void)
  \param force_draw, when true to write the values to screen for
  all controls no matter if hte previous value is the same or not.
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 {
 	gint last_index = 0;
@@ -1195,13 +859,6 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 			last_val = g_array_index(array,gfloat,last_index-1);
 		/* IF this value matches the last one,  don't bother
 		 * updating the text as there's no point... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		if ((val == last_val) && (!force_draw) && (!v_value->force_update))
 			continue;
 		
@@ -1230,13 +887,6 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
  \param force_redraw, flag to force all data to be redrawn not 
  just the new data...
  \returns TRUE
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 {
@@ -1270,13 +920,6 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
  just the new data...
  \returns TRUE
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean pb_update_logview_traces(gboolean force_redraw)
 {
 
@@ -1299,13 +942,6 @@ G_MODULE_EXPORT gboolean pb_update_logview_traces(gboolean force_redraw)
  individual trace (yeah, not very optimized)
  \param redraw_all, flag to redraw all or just recent data
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 {
 	GdkPixmap * pixmap = NULL;
@@ -1326,23 +962,9 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	gfloat newpos = 0.0;
 	GArray *array = NULL;
 	GdkPoint pts[2048]; /* Bad idea as static...*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	Viewable_Value *v_value = NULL;
 	gint lv_zoom;
 	/*static gulong sig_id = 0;*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	static GtkWidget *scale = NULL;
 
 	pixmap = lv_data->pixmap;
@@ -1353,13 +975,6 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 		sig_id = g_signal_handler_find(lookup_widget("logviewer_log_position_hscale"),G_SIGNAL_MATCH_FUNC,0,0,NULL,(gpointer)logviewer_log_position_change,NULL);
 		*/
 
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
-
 	if (!scale)
 		scale = lookup_widget("logviewer_log_position_hscale");
 	w = lv_data->darea->allocation.width;
@@ -1367,21 +982,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 
 	log_pos = (gfloat)((GINT)OBJ_GET(lv_data->darea,"log_pos_x100"))/100.0;
 	/*printf("log_pos is %f\n",log_pos);*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	/* Full screen redraw, only with configure events (usually) */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	if ((GBOOLEAN)redraw_all)
 	{
 		lo_width = lv_data->darea->allocation.width-lv_data->info_width;
@@ -1391,57 +992,22 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			array = DATA_GET(v_value->object,v_value->data_source);
 			len = array->len;
 			if (len == 0)	/* If empty */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			{
 				return;
 			}
 			/*printf("length is %i\n", len);*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			len *= (log_pos/100.0);
 			/*printf("length after is  %i\n", len);*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			/* Determine total number of points 
 			 * that'll fit on the window
 			 * taking into account the scroll amount
 			 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			total = len < lo_width/lv_zoom ? len : lo_width/lv_zoom;
 
 
 			/* Draw is reverse order, from right to left, 
 			 * easier to think out in my head... :) 
 			 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */	
 			for (x=0;x<total;x++)
 			{
 				val = g_array_index(array,gfloat,len-1-x);
@@ -1473,33 +1039,12 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			v_value->last_index = len-1;
 
 			/*printf ("last index displayed was %i from %i,%i to %i,%i\n",v_value->last_index,pts[1].x,pts[1].y, pts[0].x,pts[0].y );*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		}
 		draw_valtext(TRUE);
 		/*printf("redraw complete\n");*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		return;
 	}
 	/* Playback mode, playing from logfile.... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	if (DATA_GET(global_data,"playback_mode"))
 	{
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
@@ -1511,13 +1056,6 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 				return;
 
 			/*printf("got data from array at index %i\n",last_index+1);*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			val = g_array_index(array,gfloat,last_index+1);
 			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
 			if (val > (v_value->max))
@@ -1530,13 +1068,6 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 					w-lv_zoom-1,v_value->last_y,
 					w-1,(GINT)(percent*(h-2))+1);
 			/*printf("drawing from %i,%i to %i,%i\n",w-lv_zoom-1,v_value->last_y,w-1,(GINT)(percent*(h-2))+1);*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 
 			v_value->last_y = (GINT)((percent*(h-2))+1);
 
@@ -1552,13 +1083,6 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 				if (newpos >= 100)
 					stop_tickler(LV_PLAYBACK_TICKLER);
 				/*	printf("playback reset slider to position %i\n",(GINT)(newpos*100.0));*/
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			}
 			if (v_value->highlight)
 			{
@@ -1577,13 +1101,6 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	}
 
 	/* REALTIME mode... all traces updated at once.. */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	for (i=0;i<g_list_length(lv_data->tlist);i++)
 	{
 		v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
@@ -1599,13 +1116,6 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			v_value->last_y = (GINT)((percent*(h-2))+1);
 
 		/* If watching at the edge (full realtime) */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		if (log_pos == 100)
 		{
 			v_value->last_index = array->len-1;
@@ -1617,13 +1127,6 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 		}
 		else
 		{	/* Watching somewhat behind realtime... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 			last_index = v_value->last_index;
 
 			last_val = g_array_index(array,gfloat,last_index);
@@ -1647,13 +1150,6 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			}
 		}
 		/* Draw the data.... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		v_value->last_y = (GINT)((percent*(h-2))+1);
 		if (v_value->highlight)
 		{
@@ -1668,26 +1164,12 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 		}
 	}
 	/* Update textual data */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	draw_valtext(FALSE);
 }
 
 
 /*!
  \brief scroll_logviewer_traces() scrolls the traces to the left
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void scroll_logviewer_traces(void)
 {
@@ -1719,22 +1201,8 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 	 * in the same widget...  This works however on EVERY OTHER
 	 * OS where GTK+ runs.  grr.....
 	 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 #ifdef __WIN32__
 	/* Scroll the screen to the left... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	gdk_threads_enter();
 	gdk_draw_drawable(pmap,
 			widget->style->black_gc,
@@ -1752,13 +1220,6 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 #else
 
 	/* Scroll the screen to the left... */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	gdk_draw_drawable(pixmap,
 			widget->style->black_gc,
 			pixmap,
@@ -1768,13 +1229,6 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 #endif
 
 	/* Init new "blank space" as black */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	gdk_draw_rectangle(pixmap,
 			widget->style->black_gc,
 			TRUE,
@@ -1793,13 +1247,6 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
  \param data, state to set the widgets to
  \returns TRUE
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean set_all_lview_choices_state(GtkWidget *widget, gpointer data)
 {
 	gboolean state = (GBOOLEAN)data;
@@ -1812,13 +1259,6 @@ G_MODULE_EXPORT gboolean set_all_lview_choices_state(GtkWidget *widget, gpointer
 
 /*!
  \brief set_default_lview_choices_state() sets the default logviewer values
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void set_default_lview_choices_state(void)
 {
@@ -1860,13 +1300,6 @@ G_MODULE_EXPORT void set_default_lview_choices_state(void)
  \param data, unused
  \returns TRUE
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpointer data)
 {
 	gfloat val = 0.0;
@@ -1876,13 +1309,6 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 	 * the redraw routine wil have to adjsut the slider as it scrolls 
 	 * through the data...
 	 */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	if ((GBOOLEAN)data)
 		return TRUE;
 	if (blocked)
@@ -1904,13 +1330,6 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
   \brief Enable log playback controls
   \param state, whether to enable or disable the playback controls
   */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void enable_playback_controls(gboolean state)
 {	
 	static GtkWidget * playback_controls_window = NULL;
@@ -1920,13 +1339,6 @@ G_MODULE_EXPORT void enable_playback_controls(gboolean state)
 	GtkWidget *widget = NULL;
 	GtkAdjustment *adj = NULL;
 	if (state) /* show the controls */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 	{
 		if (!GTK_IS_WIDGET(playback_controls_window))
 		{
@@ -1977,13 +1389,6 @@ G_MODULE_EXPORT void enable_playback_controls(gboolean state)
  \brief set_logviewer_mode() sets things up for playback mode
  \param mode, Enumeration defining the logviewr mode (live or playback)
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 {
 	GtkWidget *widget = NULL;
@@ -1997,13 +1402,6 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), FALSE);
 		gtk_widget_hide(lookup_widget("logviewer_rt_control_vbox1"));
 		/* This one should NOT be enabled until at least 1 var is selected */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 		gtk_widget_show(lookup_widget("logviewer_playback_control_vbox1"));
 		gtk_widget_show(lookup_widget("scroll_speed_vbox"));
 
@@ -2038,13 +1436,6 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 /*!
  \brief finish_logviewer() sets button default states for the logviewer after
  it is created from it's glade config file
- */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void finish_logviewer(void)
 {
@@ -2085,13 +1476,6 @@ G_MODULE_EXPORT void finish_logviewer(void)
  \param data, unused
  \returns FALSE
  */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	return FALSE;
@@ -2103,13 +1487,6 @@ G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *
   \brief write logviewer defaults to file
   \param cfgfile, pointer to ConfigFile structure to save the settings to
   */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 {
 	GList * list = NULL;
@@ -2140,13 +1517,6 @@ G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
   \brief read logviewer defaults from file
   \param cfgfile, pointer to ConfigFile structure to read the settings from
   */
-
-/*! @file src/logviewer_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void read_logviewer_defaults(ConfigFile *cfgfile)
 {
 	gchar *tmpbuf = NULL;

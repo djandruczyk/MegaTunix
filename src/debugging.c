@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
-
 #include <args.h>
 #include <debugging.h>
 #include <gui_handlers.h>
@@ -53,13 +46,6 @@ static DebugLevel dbglevels[] =
 /*!
  \brief open_debug() opens the channel to the debugging information log.
  The path defaults to the current working directory.
- */
-
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void open_debug(void)
 {
@@ -102,13 +88,6 @@ G_MODULE_EXPORT void open_debug(void)
 /*!
   \brief Closes the debug log iochannel
   */
-
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void close_debug(void)
 {
 	g_static_mutex_lock(&dbg_mutex);
@@ -126,13 +105,6 @@ G_MODULE_EXPORT void close_debug(void)
  \param level,Dbg_Class enumeration defining the debug level
  \param str, message to print out
  */
-
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 {
 	gsize count = 0;
@@ -145,21 +117,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 	static time_t *t = NULL;
 	*/
 
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
-
 	/* IF we don't debug this level, free message and exit */
-
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
 	if (!(dbg_lvl & level))
 	{
 		g_free(str);
@@ -191,13 +149,6 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
   \brief Populates the debugging tab with the choices
   \param parent, pointer to parent container widget
   */
-
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 {
 	GtkWidget *vbox2 = NULL;
@@ -238,23 +189,9 @@ G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 				(GtkAttachOptions) (GTK_FILL),
 				(GtkAttachOptions) (0), 0, 0);
 		/* If user set on turn on as well */
-
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
 		if ((dbg_lvl & mask) == mask)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		/* if hardcoded on, turn on.. */
-
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
 		if (dbglevels[i].enabled)
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 		j++;

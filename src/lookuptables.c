@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
-
 #include <assert.h>
 #include <configfile.h>
 #include <debugging.h>
@@ -53,13 +46,6 @@ enum
  \param fname, textual name of the filename to load
  \param user_data, unused
  */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer user_data)
 {
 	gboolean status = FALSE;
@@ -93,13 +79,6 @@ G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer use
  \param filename, filename to load table data from
  \returns TRUE on success, FALSE on failure
  */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 {
 	GIOStatus status;
@@ -112,13 +91,6 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 	GString *a_line; 
 	LookupTable *lookuptable = NULL;
 	gint tmparray[2048]; /* bad idea being static!!*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 	gchar ** vector = NULL;
 	gint i = 0;
 
@@ -137,24 +109,10 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 		else
 		{
 			/*	str = g_strchug(g_strdup(a_line->str));*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 			str = g_strchug(a_line->str);
 			if (g_str_has_prefix(str,"DB"))
 			{
 				str+=2; /* move 2 places in	*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 				end = g_strrstr(str,"T");
 				tmp = g_strndup(str,end-str);
 				tmparray[i]=atoi(tmp);
@@ -181,13 +139,6 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 	g_hash_table_replace(DATA_GET(global_data,"lookuptables"),g_strdup(table_name),lookuptable);
 	/*g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),dump_lookuptables,NULL);*/
 
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
-
 	return TRUE;
 }
 
@@ -205,13 +156,6 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
  \param object, pointer to object.
  \param value, value to be reverse looked up
  \returns the index closest to that data
- */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 {
@@ -255,34 +199,13 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 	for (i=0;i<len;i++)
 	{
 		/*printf("counter is %i\n",i);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 		if (array[i] == value)
 		{
 			/*printf("match at %i\n",i);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 			j = i;
 			while (array[j] == value)
 			{
 				/*printf("searching for dups to upp the weight\n");*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 				weight[i]++;
 				if (j+1 == len)
 					break;
@@ -297,26 +220,12 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 		if (weight[i] > min)
 		{
 			/*printf("weight[%i]= %i greater than %i\n",i,weight[i],min);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 			min = weight[i];
 			closest_index=i+(min/2);
 		}
 	}
 
 	/*printf("closest index is %i\n",closest_index);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 
 	return closest_index;
 }
@@ -336,13 +245,6 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
  \param object, pointer to object.
  \param value, value to be reverse looked up
  \returns the index closest to that data
- */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 {
@@ -387,34 +289,13 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 	for (i=0;i<len;i++)
 	{
 		/*printf("counter is %i\n",i);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 		if (array[i] == value)
 		{
 			/*printf("match at %i\n",i);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 			j = i;
 			while (array[j] == value)
 			{
 				/*printf("searching for dups to upp the weight\n");*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 				weight[i]++;
 				if (j+1 == len)
 					break;
@@ -429,26 +310,12 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 		if (weight[i] > min)
 		{
 			/*printf("weight[%i]= %i greater than %i\n",i,weight[i],min);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 			min = weight[i];
 			closest_index=i+(min/2);
 		}
 	}
 
 	/*printf("closest index is %i\n",closest_index);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 
 	return closest_index;
 }
@@ -462,13 +329,6 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
   \returns the index, or midpoint index if multiple values in sequence equal 
   the passed value.
   */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 {
 	gint i = 0;
@@ -493,34 +353,13 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 	for (i=0;i<len;i++)
 	{
 		/*printf("counter is %i\n",i);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 		if (array[i] == value)
 		{
 			/*printf("match at %i\n",i);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 			j = i;
 			while (array[j] == value)
 			{
 				/*printf("searching for dups to upp the weight\n");*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 				weight[i]++;
 				if (j+1 == len)
 					break;
@@ -535,26 +374,12 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 		if (weight[i] > min)
 		{
 			/*printf("weight[%i]= %i greater than %i\n",i,weight[i],min);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 			min = weight[i];
 			closest_index=i+(min/2);
 		}
 	}
 
 	/*printf("closest index is %i\n",closest_index);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 
 	return closest_index;
 }
@@ -566,13 +391,6 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
  \param object, container of parameters we need to do the lookup
  \param offset, offset into lookuptable
  \returns the value at that offset of the lookuptable
- */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 {
@@ -597,13 +415,6 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 	   printf("no dependancy\n");
 	 */
 
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
-
 	if (dep_obj) 
 	{
 		if (check_deps)
@@ -614,25 +425,11 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 	if (state)
 	{
 		/*printf("ALTERNATE\n");*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
 	}
 	else
 	{
 		/*printf("NORMAL\n");*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
 	}
 
@@ -651,13 +448,6 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
  \param object, container of parameters we need to do the lookup
  \param offset, offset into lookuptable
  \returns the value at that offset of the lookuptable
- */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 {
@@ -685,25 +475,11 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 	if (state)
 	{
 		/*printf("ALTERNATE\n");*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
 	}
 	else
 	{
 		/*printf("NORMAL\n");*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
 	}
 
@@ -723,13 +499,6 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
   \param offset, index into this table..
   \returns, the value at the index
   */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 {
 	LookupTable *lookuptable = NULL;
@@ -761,13 +530,6 @@ G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
   \param data, unused
   \returns TRUE on success
   */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer data)
 {
 	static gboolean ltc_created = FALSE;
@@ -803,13 +565,6 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		return TRUE;
 	}
 	else	/* i.e.  NOT created,  build it */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 	{
 		lookuptables_config_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 		gtk_window_set_title(GTK_WINDOW(lookuptables_config_window),_("MegaTunix LookupTables"));
@@ -827,54 +582,12 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		gtk_container_add(GTK_CONTAINER(frame),vbox);
 
 		store = gtk_list_store_new(N_COLS,	/* total cols */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 				G_TYPE_STRING, /* int name */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 				G_TYPE_STRING, /* filename  combo*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 				G_TYPE_BOOLEAN,/* View/Edit */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 				G_TYPE_BOOLEAN); /* change */
 
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
-
 		combostore = gtk_tree_store_new(1,G_TYPE_STRING);/* lookuptable filename */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 
 		gtk_tree_store_append(combostore,&per_iter,NULL);
 		gtk_tree_store_append(combostore,&sys_iter,NULL);
@@ -960,13 +673,6 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 				column = gtk_tree_view_column_new_with_attributes("View/Edit",renderer,"active",VIEW_EDIT_COL,NULL);
 				gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
 		 */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 		gtk_window_set_transient_for(GTK_WINDOW(lookuptables_config_window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all (lookuptables_config_window);
 		gtk_tree_view_columns_autosize( GTK_TREE_VIEW(tree));
@@ -981,13 +687,6 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
   \[aram data, unused
   \returns TRUE
   */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
 {
 	gtk_widget_hide(widget);
@@ -1004,13 +703,6 @@ G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpoin
  \param data, unused
  \returns TRUE on success, FALSE otherwise
   */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
 {
 	GtkListStore *store = NULL;
@@ -1030,24 +722,10 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
 
 	/* Get combo box model so we can set the combo to this new value */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 	g_object_get(G_OBJECT(renderer),"model",&store,NULL);
 	gtk_tree_model_get_iter_from_string(model,&iter,path);
 	gtk_tree_model_get(model,&iter,INTERNAL_NAME_COL,&int_name,FILENAME_COL,&old,-1);
 	if (g_strcasecmp(old,new_text) == 0) /* If no change, return */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 	{
 		g_free(int_name);
 		g_free(old);
@@ -1081,13 +759,6 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 
 	}
 	get_table(int_name,new_text,NULL); /* Load the new one in it's place */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 	gtk_list_store_set(GTK_LIST_STORE(model),&iter, FILENAME_COL, new_text,-1);
 	if (restart_tickler)
 		start_tickler(RTV_TICKLER);
@@ -1115,13 +786,6 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	cfg_free(cfgfile);
 
 	/*printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 	g_free(int_name);
 	g_free(old);
 	return TRUE;
@@ -1134,25 +798,11 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
   \param value, pointer to LookupTable object
   \param data, pointer to ConfigFile structure
   */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
 	ConfigFile *cfgfile = data;
 	LookupTable *lookuptable = value;
 	/*printf("updating %s, %s, %s\n",cfgfile->filename,(gchar *)key, lookuptable->filename);*/
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
- */
 	cfg_write_string(cfgfile,"lookuptables",(gchar *)key,lookuptable->filename);
 
 }
@@ -1164,13 +814,6 @@ G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer dat
  \param key, key name in the hashtable
  \param value, value (enumeration value) in the hashtable
  \param user_data, unused...
- */
-
-/*! @file src/lookuptables.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
 {

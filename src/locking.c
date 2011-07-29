@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
-
 #include <errno.h>
 #include <init.h>
 #include <locking.h>
@@ -46,13 +39,6 @@ extern gconstpointer *global_data;
 /*!
   \brief removes the mtx lockfile
   */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void remove_mtx_lock(void)
 {
 	if (DATA_GET(global_data,"network_mode"))
@@ -68,13 +54,6 @@ G_MODULE_EXPORT void remove_mtx_lock(void)
 /*!
   \brief creates the mtx lockfile
   */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void create_mtx_lock(void)
 {
 	if (DATA_GET(global_data,"network_mode"))
@@ -89,13 +68,6 @@ G_MODULE_EXPORT void create_mtx_lock(void)
 /*!
   \brief Unix function that creates the mtx lockfile
   */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void unix_create_mtx_lock(void)
 {
 #ifndef __WIN32__
@@ -123,13 +95,6 @@ G_MODULE_EXPORT void unix_create_mtx_lock(void)
 		}
 		else
 		*/
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 		{
 			printf (_("ERROR!! Multiple MegaTunix instances are not allowed UNLESS in network socket mode (see -n option)!\n"));
 			dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_("<b>MegaTunix</b> is already Running!\nMultiple instances are <b><u>NOT</u></b> allowed unless running\nin network socket mode, see the -n option!\n"));
@@ -153,13 +118,6 @@ G_MODULE_EXPORT void unix_create_mtx_lock(void)
 /*!
   \brief Unix function that removes the mtx lockfile
   */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void unix_remove_mtx_lock(void)
 {
 #ifndef __WIN32__
@@ -186,13 +144,6 @@ G_MODULE_EXPORT void unix_remove_mtx_lock(void)
 /*!
   \brief creates the win32 mtx lockfile
   */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void win32_create_mtx_lock(void)
 {
 #ifdef __WIN32__
@@ -220,13 +171,6 @@ G_MODULE_EXPORT void win32_create_mtx_lock(void)
 /*!
   \brief Removes the win32 mtx lockfile
   */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void win32_remove_mtx_lock(void)
 {
 #ifdef __WIN32__
@@ -240,26 +184,12 @@ G_MODULE_EXPORT void win32_remove_mtx_lock(void)
 /*!
   \brief Unlock the serial port
   */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void unlock_serial(void)
 {
 #ifndef __WIN32__
 	gchar *fname = DATA_GET(global_data,"serial_lockfile");
 
 	/*printf("told to unlock serial,  path \"%s\"\n",fname); */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 	if (fname)
 	{
 		if (g_file_test(fname,G_FILE_TEST_IS_REGULAR))
@@ -277,13 +207,6 @@ G_MODULE_EXPORT void unlock_serial(void)
   \param name, name of the serial port device to lock
   \returns TRUE on lock success, FALSE otherwise
   */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 {
 #ifndef __WIN32__
@@ -297,21 +220,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 	gint pid = 0;
 
 	/*printf("told to lock serial port %s\n",name); */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 	/* If no /proc (i.e. os-X), just fake it and return */
-
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
 	if (!g_file_test("/var/lock",G_FILE_TEST_IS_DIR))
 		return TRUE;
 

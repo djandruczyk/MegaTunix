@@ -43,6 +43,8 @@ void import_dash_xml(gchar * filename)
 	LIBXML_TEST_VERSION
 
 		/*parse the file and get the DOM */
+
+
 		doc = xmlReadFile(filename, NULL, 0);
 
 	if (doc == NULL) 
@@ -51,17 +53,23 @@ void import_dash_xml(gchar * filename)
 		return;
 	}
 	/*Get the root element node */
+
+
 	root_element = xmlDocGetRootElement(doc);
 	load_elements(dash,root_element);
 
 	OBJ_SET((dash),"dash_xml_filename",g_strdup(filename));
 	/*free the document */
+
+
 	xmlFreeDoc(doc);
 
 	/*
 	 *Free the global variables that may
 	 *have been allocated by the parser.
 	 */
+
+
 	xmlCleanupParser();
 
 	return ;
@@ -73,6 +81,8 @@ void load_elements(GtkWidget *dash, xmlNode *a_node)
 	xmlNode *cur_node = NULL;
 
 	/* Iterate though all nodes... */
+
+
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
@@ -161,6 +171,8 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 		g_free(filename);
 		OBJ_SET_FULL((gauge),"datasource",g_strdup(datasource),g_free);
 		/* Cheat to get property window created... */
+
+
 		create_preview_list(NULL,NULL);
 		update_properties(gauge,GAUGE_ADD);
 		g_free(xml_name);
@@ -199,9 +211,17 @@ void export_dash_xml(gchar * filename)
 	gchar * tmpbuf = NULL;
 	guint i = 0;
 	xmlDocPtr doc = NULL;       /* document pointer */
+
+
 	xmlNodePtr root_node = NULL;/* node pointers */
+
+
 	xmlNodePtr node = NULL;/* node pointers */
+
+
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
+
+
 	GtkTreeIter parent;
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
@@ -217,6 +237,8 @@ void export_dash_xml(gchar * filename)
 	/*
 	 * Creates a DTD declaration. Isn't mandatory. 
 	 */
+
+
 	dtd = xmlCreateIntSubset(doc, BAD_CAST "dashboard", NULL, BAD_CAST "mtxdashboard.dtd");
 
 	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
@@ -248,17 +270,23 @@ void export_dash_xml(gchar * filename)
 	xmlSaveFormatFileEnc(filename, doc, "utf-8", 1);
 
 	/*free the document */
+
+
 	xmlFreeDoc(doc);
 
 	/*
 	 *Free the global variables that may
 	 *have been allocated by the parser.
 	 */
+
+
 	xmlCleanupParser();
 
 	/*
 	 * this is to debug memory for regression tests
 	 */
+
+
 	xmlMemoryDump();
 
 	return ;

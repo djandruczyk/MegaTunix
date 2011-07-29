@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/wrappers.c
- *
- * @brief ...
- *
- *
- */
-
 #include <combo_mask.h>
 #include <gauge.h>
 #include <mtxmatheval.h>
@@ -28,13 +21,6 @@
   \param expr, math expression to create an evaluator for
   \returns pointer to opaque pointer representing the evaluator
   */
-
-/*! @file src/wrappers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void * evaluator_create_w(char *expr)
 {
 	return evaluator_create(expr);
@@ -45,13 +31,6 @@ G_MODULE_EXPORT void * evaluator_create_w(char *expr)
   \brief wrapper for evaluator_destroy()
   \param eval, evaluator to destroy....
   */
-
-/*! @file src/wrappers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void evaluator_destroy_w( void *eval)
 {
 	evaluator_destroy(eval);
@@ -64,13 +43,6 @@ G_MODULE_EXPORT void evaluator_destroy_w( void *eval)
   \param x, input to the math
   \returns result of the math
   */
-
-/*! @file src/wrappers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
 {
 	return evaluator_evaluate_x(eval,x);
@@ -82,13 +54,6 @@ G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
   \param mask, regex mask for this new entry
   \returns pointer to the new widget
   */
-
-/*! @file src/wrappers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_w(gchar *mask)
 {
 	return mask_entry_new_with_mask(mask);

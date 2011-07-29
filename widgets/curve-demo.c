@@ -44,9 +44,11 @@ int main (int argc, char **argv)
 	{
 		/*points[i].x=i*1000;
 		points[i].y=(i*1000)-5000;*/
+
 		points[i].x=i-6;
 		points[i].y=powf(2.0,(gfloat)i);
 		/*points[i].y=exp(i/2.0);*/
+
 	}
 	gtk_widget_show(curve);
 	mtx_curve_set_coords(MTX_CURVE(curve),11,points);
@@ -54,11 +56,13 @@ int main (int argc, char **argv)
 	mtx_curve_set_auto_hide_vertexes(MTX_CURVE(curve),FALSE);
 	mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
 /*	mtx_curve_set_show_y_marker(MTX_CURVE(curve),TRUE);*/
+
 	mtx_curve_set_show_vertexes(MTX_CURVE(curve),TRUE);
 	mtx_curve_set_x_axis_label(MTX_CURVE(curve),"X Axis");
 	mtx_curve_set_y_axis_label(MTX_CURVE(curve),"This is the Y Axis");
 	mtx_curve_set_hard_limits(MTX_CURVE(curve),-7.0,7.0,0.0,1200.0);
 	/*mtx_curve_set_hard_limits(MTX_CURVE(curve),-2000.0,12000.0,-6000.0,7000.0);*/
+
 	mtx_curve_set_x_precision(MTX_CURVE(curve),2);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),2);
 	g_signal_connect(G_OBJECT(curve), "coords-changed",
@@ -88,6 +92,7 @@ void coords_changed(MtxCurve *curve, gpointer data)
 	MtxCurveCoord point;
 	mtx_curve_get_coords_at_index(curve,index,&point);
 	/*printf("changed coord %i, to %.1f,%.1f\n",index,point.x,point.y);*/
+
 	
 }
 
@@ -102,6 +107,7 @@ void marker_proximity(MtxCurve *curve, gpointer data)
 {
 	gint index = mtx_curve_get_marker_proximity_index(curve);
 /*	printf("marker proximity to coordinate %i,\n",index);*/
+
 }
 
 gboolean update_curve_marker(gpointer data)
@@ -111,8 +117,10 @@ gboolean update_curve_marker(gpointer data)
 	gfloat max = 8.0;
 	/*gfloat min = -5000.0;
 	gfloat max = 8000.0;*/
+
 	static gfloat step = 0.125;
 	/*static gfloat step = 125;*/
+
 	static gboolean rising = TRUE;
 	static gfloat value = 0;
 
@@ -126,7 +134,9 @@ gboolean update_curve_marker(gpointer data)
 	else
 		value-=step;
 /*	printf("Setting x marker to %f\n",value); */
+
 /*	mtx_curve_set_y_marker_value(MTX_CURVE(curve),(gfloat)value); */
+
 	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
 	return TRUE;
 }

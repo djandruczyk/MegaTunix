@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
-
 #include <stdio.h>
 #include <winserialio.h>
 #ifdef __WIN32__
@@ -35,13 +28,6 @@
  \param parity, enumeration describign odd, even or no parity
  \param stop, number of stop bits
  */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gint stop)
 {
 #ifdef __WIN32__
@@ -58,13 +44,6 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 	dcb.DCBlength = sizeof(dcb);
 
 	/* Populate struct with defaults from windows */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	GetCommState((HANDLE) _get_osfhandle(fd), &dcb);
 
 	/*
@@ -73,13 +52,6 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 	else if (baud == 115200)
 		dcb.BaudRate = CBR_115200;
 		*/
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.BaudRate = baud;
 	dcb.ByteSize = bits;
 	switch (parity)
@@ -87,185 +59,45 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 		case NONE:
 			dcb.Parity   = NOPARITY;        
 			dcb.fParity = FALSE;		/* Disabled */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 			break;
 		case ODD:
 			dcb.Parity   = ODDPARITY;        
 			dcb.fParity = TRUE;		/* Enabled */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 			break;
 		case EVEN:
 			dcb.Parity   = EVENPARITY;     
 			dcb.fParity = TRUE;		/* Enabled */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 			break;
 	}
 	if (stop == 2)
 		dcb.StopBits = TWOSTOPBITS;      /* #defined in windows.h */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	else
 		dcb.StopBits = ONESTOPBIT;      /* #defined in windows.h */
 
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
-
 	dcb.fBinary = TRUE;		/* Enable binary mode */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fOutxCtsFlow = FALSE;	/* don't monitor CTS line */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fOutxDsrFlow = FALSE;	/* don't monitor DSR line */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fDsrSensitivity = FALSE;	/* ignore Dsr line */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fDtrControl = DTR_CONTROL_DISABLE;  /* Disable DTR line */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fRtsControl = RTS_CONTROL_DISABLE;  /* Disable RTS line */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fOutX = FALSE;		/* Disable Xoff */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fInX  = FALSE;		/* Disable Xin */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fErrorChar = FALSE;		/* Don't replace bad chars */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fNull = FALSE;		/* don't drop NULL bytes */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.fAbortOnError = FALSE;	/* Don't abort */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	dcb.wReserved = 0;		/* as per msdn */
 
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
-
 	/* Set the port properties and write the string out the port. */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	if(SetCommState((HANDLE) _get_osfhandle (fd) ,&dcb) == 0)
 		dbg_func(CRITICAL,g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
 
 	/* Set timeout params in a fashion that mimics linux behavior */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	GetCommTimeouts((HANDLE) _get_osfhandle (fd), &timeouts);
 
 	if (DATA_GET(global_data,"serial_nonblock"))
 	{
 		printf("nonblock\n");
 		/* Buffer? */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 //		SetupComm((HANDLE) _get_osfhandle (fd),128,128);
 		/*
 		timeouts.ReadIntervalTimeout         = MAXDWORD;
@@ -274,26 +106,12 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 		timeouts.WriteTotalTimeoutMultiplier = 20000L/baud;
 		timeouts.ReadTotalTimeoutConstant    = 0;
 		*/
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 		// Works, but causes deadlock in reader blocking UI 
 		timeouts.ReadIntervalTimeout         = MAXDWORD;
 		timeouts.ReadTotalTimeoutMultiplier  = MAXDWORD;
 		timeouts.WriteTotalTimeoutConstant   = 0;
 		timeouts.WriteTotalTimeoutMultiplier = 20000L/baud;
 		timeouts.ReadTotalTimeoutConstant    = 100; /* 100ms timeout*/
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
 	}
 	else
 	{
@@ -318,13 +136,6 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
  this or tcflush depending what OS we are compiled for.
  \param fd, filedescriptor to flush
  \param mode, enum represnting the direction to flush...
- */
-
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void win32_flush_serial(int fd, FlushDirection mode)
 {

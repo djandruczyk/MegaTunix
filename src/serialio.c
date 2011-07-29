@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
-
 #ifndef CRTSCTS
 #define CRTSCTS 0
 #endif
@@ -56,26 +49,12 @@ extern gconstpointer *global_data;
  comms page on success/failure
  \param port_name, name of the port to open
  */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 {
 	/* We are using DOS/Win32 style com port numbers instead of unix
 	 * style as its easier to think of COM1 instead of /dev/ttyS0
 	 * thus com1=/dev/ttyS0, com2=/dev/ttyS1 and so on 
 	 */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	static GMutex *serio_mutex = NULL;
 	gboolean port_open = FALSE;
 	Serial_Params *serial_params = NULL;
@@ -86,29 +65,8 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 
 	g_mutex_lock(serio_mutex);
 	/*printf("Opening serial port %s\n",port_name);*/
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	/* Open Read/Write and NOT as the controlling TTY */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	/* Blocking mode... */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	if (nonblock)
 	{
 #ifdef __WIN32__
@@ -129,21 +87,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	if (fd > 0)
 	{
 		/* SUCCESS */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 		/* NO Errors occurred opening the port */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 		serial_params->port_name = g_strdup(port_name); 
 		serial_params->open = TRUE;
 		port_open = TRUE;
@@ -155,21 +99,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	else
 	{
 		/* FAILURE */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 		/* An Error occurred opening the port */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 		port_open = FALSE;
 		if (serial_params->port_name)
 			g_free(serial_params->port_name);
@@ -178,13 +108,6 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 		serial_params->fd = -1;
 		err_text = (gchar *)g_strerror(errno);
 		/*printf("Error Opening \"%s\", Error Code: \"%s\"\n",port_name,g_strdup(err_text));*/
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
 		thread_update_widget("titlebar",MTX_TITLE,g_strdup_printf(_("Error Opening \"%s\", Error Code: \"%s\""),port_name,err_text));
 
@@ -192,13 +115,6 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	}
 
 	/*printf("open_serial returning\n");*/
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	g_mutex_unlock(serio_mutex);
 	return port_open;
 }
@@ -211,13 +127,6 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
  operation on windows.
  \param fd, filedescriptor to flush
  \param type, how to flush it (enumeration)
- */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 {
@@ -258,13 +167,6 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
  calls to initialize the serial port to the proper speed, bits, flow, parity
  etc..
  */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void setup_serial_params(void)
 {
 	GMutex *serio_mutex = NULL;
@@ -293,26 +195,12 @@ G_MODULE_EXPORT void setup_serial_params(void)
 		return;
 	}
 	/*printf("setup_serial_params entered\n");*/
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	g_mutex_lock(serio_mutex);
 
 #ifdef __WIN32__
 	win32_setup_serial_params(serial_params->fd,baudrate,bits,parity,stop);
 #else
 	/* Save serial port status */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	tcgetattr(serial_params->fd,&serial_params->oldtio);
 
 	g_mutex_unlock(serio_mutex);
@@ -325,21 +213,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	 * in the open_serial() and close_serial() functions.
 	 */
 
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */ 
-
 	/*clear struct for new settings*/
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	memset(&serial_params->newtio, 0, sizeof(serial_params->newtio)); 
 	/* 
 	 * BAUDRATE: Set bps rate. You could also use cfsetispeed and 
@@ -351,21 +225,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	 * CREAD   : enable receiving characters
 	 */
 
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
-
 	/* Set baud (posix way) */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 
 	switch (baudrate)
 	{
@@ -389,13 +249,6 @@ G_MODULE_EXPORT void setup_serial_params(void)
 			break;
 		default:
 			/* Assume 9600 */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 			baud = B9600;
 	}
 
@@ -403,50 +256,15 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	cfsetospeed(&serial_params->newtio, baud);
 
 	/* Mask and set to 8N1 mode... */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	/* Mask out HW flow control */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cflag &= ~(CRTSCTS);
 
 	/* Set additional flags, note |= syntax.. */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	/* CLOCAL == Ignore modem control lines
 	   CREAD == Enable receiver
 	   */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cflag |= CLOCAL | CREAD;
 	/* Mask out Bit size */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cflag &= ~(CSIZE);
 	switch (bits)
 	{
@@ -464,13 +282,6 @@ G_MODULE_EXPORT void setup_serial_params(void)
 			break;
 	}
 	/* Mask out Parity Flags */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cflag &= ~(PARENB | PARODD);
 	switch (parity)
 	{
@@ -484,95 +295,32 @@ G_MODULE_EXPORT void setup_serial_params(void)
 			break;
 	}
 	/* Mask out Stip bit flags */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cflag &= ~(CSTOPB);
 	if (stop == 2)
 		serial_params->newtio.c_cflag |= CSTOPB;
 	/* 1 stop bit is default */
 
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
-
 
 	/* RAW Input */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	/* Ignore signals, disable canonical, echo, etc */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	/*
 	serial_params->newtio.c_lflag &= ~(ICANON | ECHO | ECHOE | ECHONL | IEXTEN | ISIG);
 	*/
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_lflag = 0;
 
 	/* Disable software flow control */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_iflag &= ~(IXON | IXOFF | IXANY );
 	/*
 	serial_params->newtio.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP
 			                           | INLCR | IGNCR | ICRNL );
 						   */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_iflag = IGNBRK;
 
 
 	/* Set raw output */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	/*
 	serial_params->newtio.c_oflag &= ~OPOST;
 	*/
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_oflag = 0;
 
 	/* 
@@ -580,80 +328,17 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	   default values can be found in /usr/include/termios.h, and are given
 	   in the comments, but we don't need them here
 	 */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cc[VINTR]    = 0;     /* Ctrl-c */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cc[VQUIT]    = 0;     /* Ctrl-\ */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cc[VERASE]   = 0;     /* del */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cc[VKILL]    = 0;     /* @ */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cc[VEOL]     = 0;     /* '\0' */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	/* Fredcooke say vmin = 1 solves his hang on close issue with
 	   his broken FTDI driver,  but that will break interrogation unles I
 	   completely transition to nonblocking IO */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	serial_params->newtio.c_cc[VMIN]     = 0;     
 	serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 
 #ifdef __PIS_SUPPORT__
 	if (ioctl(serial_params->fd, TIOCGSERIAL, &serial_params->oldctl) != 0)
@@ -693,13 +378,6 @@ G_MODULE_EXPORT void setup_serial_params(void)
  \brief close_serial() closes the serial port, and sets several gui widgets
  to reflect the port closing (textview/connected indicator)
  */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void close_serial(void)
 {
 	GMutex *serio_mutex = NULL;
@@ -714,13 +392,6 @@ G_MODULE_EXPORT void close_serial(void)
 	g_mutex_lock(serio_mutex);
 
 	/*printf("Closing serial port\n");*/
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 #ifndef __WIN32__
 #ifdef __PIS_SUPPORT__
 	if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->oldctl) != 0)
@@ -731,21 +402,7 @@ G_MODULE_EXPORT void close_serial(void)
 #else
 	tcsetattr(serial_params->fd,TCSANOW,&serial_params->oldtio);
 #endif /* PIS_SUPPORT */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 #endif /* __WIN32___ */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 
 	close(serial_params->fd);
 	serial_params->fd = -1;
@@ -756,13 +413,6 @@ G_MODULE_EXPORT void close_serial(void)
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 
 	/* An Closing the comm port */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
 	if (!DATA_GET(global_data,"leaving"))
 		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
@@ -780,13 +430,6 @@ G_MODULE_EXPORT void close_serial(void)
   \param stop, pointer to the stop bits value
   \returns TRUE if parsable, FALSE otherwise
   */
-
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits, Parity *parity, gint *stop)
 {
 	gchar **vector = NULL;

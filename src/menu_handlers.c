@@ -10,13 +10,6 @@
  * 
  * No warranty is made or implied. You use this program at your own risk.
  */
-
-/*! @file src/menu_handlers.c
- *
- * @brief ...
- *
- *
- */
 #include <firmware.h>
 #include <menu_handlers.h>
 #include <plugin.h>
@@ -51,13 +44,6 @@ static struct
   calling the common plugin's menu setup handler. (which in turn calls the
   ecu specific plugin handler)
   */
-
-/*! @file src/menu_handlers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 {
 	void (*common_plugin_menu_setup)(GladeXML *);
@@ -111,13 +97,6 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
  \param data, unused
  \returns TRUE if handled, FALSE otherwise
  */
-
-/*! @file src/menu_handlers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *notebook = NULL;
@@ -157,13 +136,6 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
  \param data, unused
  \returns TRUE
  */
-
-/*! @file src/menu_handlers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
 	FioAction action = -1;
@@ -200,13 +172,6 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
  transfers like VEX import/export and ECU backup/restore
  \param target, enumeration for a TAB to be checked if it exists
  \returns TRUE if tab found, FALSE if not
- */
-
-/*! @file src/menu_handlers.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 {

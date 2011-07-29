@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
-
 #include <3d_vetable.h>
 #include <conversions.h>
 #include <dashboard.h>
@@ -36,13 +29,6 @@ extern gconstpointer *global_data;
 /*!
   \brief status the statuscounts timeout function
   */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void start_statuscounts_pf(void)
 {
 	start_tickler(SCOUNTS_TICKLER);
@@ -52,13 +38,6 @@ G_MODULE_EXPORT void start_statuscounts_pf(void)
 /*!
   \brief Enables the "get data" buttons on all tabs
   */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void enable_get_data_buttons_pf(void)
 {
 	gdk_threads_enter();
@@ -70,13 +49,6 @@ G_MODULE_EXPORT void enable_get_data_buttons_pf(void)
 /*!
   \brief Starts the runtime var timeout if this is the first run of mtx
   */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
 {
 	static gboolean just_starting = TRUE;
@@ -92,13 +64,6 @@ G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
 /*!
   \brief sets all burn buttons back to black 
  */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void set_store_black_pf(void)
 {
 	gint j = 0;
@@ -107,13 +72,6 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 
 	firmware = DATA_GET(global_data,"firmware");
 	/* Only MS firmwares have TCP socket mode for now */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 	if ((firmware->capabilities & MS1 ) ||
 		(firmware->capabilities & MS2))
 	{
@@ -134,13 +92,6 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 /*!
   \brief Enables all applicable 3D display buttons
  */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void enable_3d_buttons_pf(void)
 {
 	g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
@@ -149,13 +100,6 @@ G_MODULE_EXPORT void enable_3d_buttons_pf(void)
 
 /*!
   \brief Disables all burn to ecu buttons
- */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void disable_burner_buttons_pf(void)
 {
@@ -169,13 +113,6 @@ G_MODULE_EXPORT void disable_burner_buttons_pf(void)
   \brief Resets and temperature dependant controls to rerender on temp scale
   changes
  */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void reset_temps_pf(void)
 {
 	gdk_threads_enter();
@@ -188,13 +125,6 @@ G_MODULE_EXPORT void reset_temps_pf(void)
 /*!
   \brief sets hte time to be ready
   */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void ready_msg_pf(void)
 {
 	gdk_threads_enter();
@@ -207,13 +137,6 @@ G_MODULE_EXPORT void ready_msg_pf(void)
   \brief Starts up all the default timeout handlers for doing Gui updates,
   i.e. rtsliders, rttext, dashboards and so on.
   */
-
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 {
 	gint source = 0;

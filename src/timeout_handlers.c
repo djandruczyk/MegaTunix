@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
-
 #include <comms_gui.h>
 #include <debugging.h>
 #include <logviewer_gui.h>
@@ -38,13 +31,6 @@ extern gconstpointer *global_data;
  \param type, is an enum passed which is used to know 
  which timeout to fire up.
  \see signal_read_rtvars_thread signal_read_rtvars
- */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
@@ -68,29 +54,8 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 
 				realtime_id = g_thread_create(signal_read_rtvars_thread,
 						NULL, /* Thread args */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
 						TRUE, /* Joinable */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
 						NULL); /*GError Pointer */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
 				DATA_SET(global_data,"realtime_id",realtime_id);
 				update_logbar("comms_view",NULL,_("Realtime Reader started\n"),FALSE,FALSE,FALSE);
 			}
@@ -122,13 +87,6 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 			break;
 		default:
 			/* Search for registered handlers from plugins */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
 			break;
 
 	}
@@ -140,13 +98,6 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
  passed across in the ENUM
  /param type, an enumeration used to determine which handler to stop.
  \see start_tickler
- */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
@@ -204,13 +155,6 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
  \param data, unused
  \returns 0 on signal to exit
  */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 {
 	static void (*signal_read_rtvars)(void);
@@ -259,13 +203,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		signal_read_rtvars();
 
 		/* Auto-throttling if gui gets sluggish */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
 		while (( g_async_queue_length(io_data_queue) > 2) || 
 				(g_async_queue_length(pf_dispatch_queue) > 3))
 		{
@@ -296,13 +233,6 @@ breakout:
  in order to start the interrogation process as soon as the gui is up and 
  running.
  */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean early_interrogation(void)
 {
 	set_title(g_strdup(_("Initiating background ECU interrogation...")));
@@ -316,13 +246,6 @@ G_MODULE_EXPORT gboolean early_interrogation(void)
   \brief Handler to fire off if this is the first time MtX has run
   \returns FALSE
   */
-
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean check_for_first_time(void)
 {
 	if (DATA_GET(global_data,"first_time"))

@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/comms_gui.c
- *
- * @brief ...
- *
- *
- */
-
 #include <serialio.h>
 #include <widgetmgmt.h>
 
@@ -31,13 +24,6 @@ extern GdkColor black;
  \brief reset_errcounts() resets the error counters
  \param widget (GtkWidget *) unused
  \returns TRUE
- */
-
-/*! @file src/comms_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
@@ -56,13 +42,6 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
  \brief update_errcounts() updates the text entries on the gui with the 
  current status, error and I/O counters
  \returns TRUE
- */
-
-/*! @file src/comms_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean update_errcounts(void)
 {

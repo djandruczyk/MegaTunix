@@ -20,6 +20,7 @@
  \brief gets called when  a user wants a new gauge
  \returns a pointer to a newly created gauge widget
  */
+
 GtkWidget *mtx_pie_gauge_new ()
 {
 	return GTK_WIDGET (g_object_new (MTX_TYPE_PIE_GAUGE, NULL));
@@ -30,6 +31,7 @@ GtkWidget *mtx_pie_gauge_new ()
  \brief gets the current value 
  \param gauge (MtxPieGauge *) pointer to gauge
  */
+
 gfloat mtx_pie_gauge_get_value (MtxPieGauge *gauge)
 {
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
@@ -43,6 +45,7 @@ gfloat mtx_pie_gauge_get_value (MtxPieGauge *gauge)
  \param gauge (MtxPieGauge *) pointer to gauge
  \param value (gfloat) new value
  */
+
 void mtx_pie_gauge_set_value (MtxPieGauge *gauge, gfloat value)
 {
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);

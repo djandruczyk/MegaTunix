@@ -34,6 +34,7 @@ int main (int argc, char **argv)
 
 	gtk_container_add (GTK_CONTAINER (window), pbar);
 	/*gtk_widget_realize(pbar);*/
+
 	gtk_widget_show_all (window);
 
 	timeout = g_timeout_add(30,(GSourceFunc)update_pbar,(gpointer)pbar);

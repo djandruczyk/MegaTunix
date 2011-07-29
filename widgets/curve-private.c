@@ -36,6 +36,7 @@ static guint mtx_curve_signals[LAST_SIGNAL] = { 0 };
  * to the caller
  *\returns the GType associated with the MtxCurve custom widget
  */
+
 GType mtx_curve_get_type(void)
 {
 	static GType mtx_curve_type = 0;
@@ -65,6 +66,7 @@ GType mtx_curve_get_type(void)
  \param klass is the pointer to the MtxCurveClass structure
  \see MtxCurveClass
  */
+
 void mtx_curve_class_init (MtxCurveClass *klass)
 {
 	GObjectClass *obj_class;
@@ -74,6 +76,7 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 	widget_class = GTK_WIDGET_CLASS (klass);
 
 	/* GtkWidget signals */
+
 	widget_class->configure_event = mtx_curve_configure;
 	widget_class->expose_event = mtx_curve_expose;
 	widget_class->button_press_event = mtx_curve_button_event;
@@ -107,6 +110,7 @@ void mtx_curve_class_init (MtxCurveClass *klass)
  \brief Finalizes the curve object on destruction
  \param curve is the pointer to the curve object to be finalized
  */
+
 void mtx_curve_finalize (GObject *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -139,11 +143,13 @@ void mtx_curve_finalize (GObject *curve)
  \brief Initializes the curve attributes to sane defaults
  \param curve is the pointer to the curve object
  */
+
 void mtx_curve_init (MtxCurve *curve)
 {
 	/* The events the curve receives
 	* Need events for button press/release AND motion AND enter/leave
-	*/ 
+	*/
+
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	gtk_widget_add_events (GTK_WIDGET (curve),GDK_BUTTON_PRESS_MASK
 			        |GDK_BUTTON_RELEASE_MASK
@@ -197,38 +203,47 @@ void mtx_curve_init (MtxCurve *curve)
  \brief Allocates the default colors for a curve with no options 
  \param curve is the pointer to the curve object
  */
+
 void mtx_curve_init_colors(MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	/*! Main Background */
+
 	priv->colors[CURVE_COL_BG].red=0.0*65535;
 	priv->colors[CURVE_COL_BG].green=0.0*65535;
 	priv->colors[CURVE_COL_BG].blue=0.0*65535;
 	/*! Trace */
+
 	priv->colors[CURVE_COL_FG].red=0.8*65535;
 	priv->colors[CURVE_COL_FG].green=0.8*65535;
 	priv->colors[CURVE_COL_FG].blue=0.8*65535;
 	/*! Selected Trace */
+
 	priv->colors[CURVE_COL_SEL].red=0.9*65535;
 	priv->colors[CURVE_COL_SEL].green=0.0*65535;
 	priv->colors[CURVE_COL_SEL].blue=0.0*65535;
 	/*! Proximity */
+
 	priv->colors[CURVE_COL_PROX].red=0.9*65535;
 	priv->colors[CURVE_COL_PROX].green=0.0*65535;
 	priv->colors[CURVE_COL_PROX].blue=0.9*65535;
 	/*! Graticule Color*/
+
 	priv->colors[CURVE_COL_GRAT].red=0.50*65535;
 	priv->colors[CURVE_COL_GRAT].green=0.50*65535;
 	priv->colors[CURVE_COL_GRAT].blue=0.50*65535;
 	/*! Text/Title Color */
+
 	priv->colors[CURVE_COL_TEXT].red=1.0*65535;
 	priv->colors[CURVE_COL_TEXT].green=1.0*65535;
 	priv->colors[CURVE_COL_TEXT].blue=1.0*65535;
 	/*! Marker Lines Color */
+
 	priv->colors[CURVE_COL_MARKER].red=0.2*65535;
 	priv->colors[CURVE_COL_MARKER].green=1.0*65535;
 	priv->colors[CURVE_COL_MARKER].blue=0.2*65535;
 	/*! Marker Lines Color */
+
 	priv->colors[CURVE_COL_EDIT].red=1.0*65535;
 	priv->colors[CURVE_COL_EDIT].green=0.2*65535;
 	priv->colors[CURVE_COL_EDIT].blue=0.2*65535;
@@ -240,6 +255,7 @@ void mtx_curve_init_colors(MtxCurve *curve)
  looks a bit nicer, though is a little bit slower than a raw GDK version
  \param curve is the pointer to the curve object
  */
+
 void update_curve (MtxCurve *curve)
 {
 	GtkWidget * widget = NULL;
@@ -262,6 +278,7 @@ void update_curve (MtxCurve *curve)
 	state = GTK_WIDGET_STATE (widget);
 #endif
 	/* Copy background pixmap to intermediary for final rendering */
+
 	cr = gdk_cairo_create(priv->pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
 	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
@@ -270,6 +287,7 @@ void update_curve (MtxCurve *curve)
 	cairo_set_font_options(cr,priv->font_options);
 
 	/* The circles for each vertex itself */
+
 	if (priv->show_vertexes)
 	{
 		cairo_set_source_rgb (cr, 0.0,0.7,1.0);
@@ -281,6 +299,7 @@ void update_curve (MtxCurve *curve)
 		cairo_fill(cr);
 	}
 	/* Selected vertex drawn in alt color... */
+
 	if (priv->vertex_selected)
 	{
 		cairo_set_source_rgb (cr, 
@@ -306,6 +325,7 @@ void update_curve (MtxCurve *curve)
 	cairo_stroke(cr);
 
 	/* Edit Markers */
+
 	/*
 	   if (priv->show_edit_marker)
 	   {
@@ -319,7 +339,9 @@ void update_curve (MtxCurve *curve)
 	   cairo_stroke(cr);
 	   }
 	 */
+
 	/* Vertical and Horizontal Markers */
+
 	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_MARKER].red/65535.0,
 			priv->colors[CURVE_COL_MARKER].green/65535.0,
 			priv->colors[CURVE_COL_MARKER].blue/65535.0);
@@ -360,6 +382,7 @@ void update_curve (MtxCurve *curve)
 	}
 
 	/* Update the Title text */
+
 	tmpbuf = g_utf8_strup(priv->font,-1);
 	if (g_strrstr(tmpbuf,"BOLD"))
 		weight = CAIRO_FONT_WEIGHT_BOLD;
@@ -386,6 +409,7 @@ void update_curve (MtxCurve *curve)
   \param cr is the pointer to a cairo_t context
   \param priv is the pointer to the Curve private data structure
   */
+
 void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 {
 	gchar * x_msg = NULL;
@@ -413,6 +437,7 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 	 * popup. If too close to right side, put it to left of
 	 * pointer, otherwise prefer upper right side
 	 */
+
 	w = MAX(x_extents.width,y_extents.width);
 	h = x_extents.height+y_extents.height;
 	cairo_set_source_rgb (cr, 
@@ -424,6 +449,7 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 		if ((priv->points[priv->active_coord].y - h - y_pad - priv->y_border) < 0)
 		{
 			/*printf("lower left?\n"); */
+
 			cairo_set_source_rgba (cr,0.13,0.13,0.13,0.75);
 			cairo_rectangle(cr,priv->points[priv->active_coord].x - x_pad/2,
 					priv->points[priv->active_coord].y + y_pad/2,
@@ -443,6 +469,7 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 		else
 		{
 		/*	printf("upper left?\n"); */
+
 			cairo_set_source_rgba (cr,0.13,0.13,0.13,0.75);
 			cairo_rectangle(cr,priv->points[priv->active_coord].x - x_pad/2,
 					priv->points[priv->active_coord].y - y_pad/2,
@@ -464,6 +491,7 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 		if ((priv->points[priv->active_coord].y - h - y_pad - priv->y_border) < 0)
 		{
 			/* printf("lower right?\n"); */
+
 			cairo_set_source_rgba (cr,0.13,0.13,0.13,0.75);
 			cairo_rectangle(cr,priv->points[priv->active_coord].x + x_pad/2,
 					priv->points[priv->active_coord].y + y_pad/2,
@@ -482,6 +510,7 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 		else
 		{
 			/*printf("upper right?\n"); */
+
 			cairo_set_source_rgba (cr,0.13,0.13,0.13,0.75);
 			cairo_rectangle(cr,priv->points[priv->active_coord].x + x_pad/2,
 					priv->points[priv->active_coord].y - y_pad/2,
@@ -505,6 +534,7 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
 			-extents.height);
 	cairo_fill (cr);
 	*/
+
 	g_free(x_msg);
 	g_free(y_msg);
 
@@ -520,6 +550,7 @@ void draw_selected_msg(cairo_t *cr, MtxCurvePrivate *priv)
  encodes important info like window dimensions and depth.
  \returns TRUE
  */
+
 gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	MtxCurve * curve = MTX_CURVE(widget);
@@ -530,6 +561,7 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 	priv->h = widget->allocation.height;
 
 	/* Backing pixmap (copy of window) */
+
 	if (priv->pixmap)
 		g_object_unref(priv->pixmap);
 	priv->pixmap=gdk_pixmap_new(widget->window,
@@ -540,6 +572,7 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_paint(cr);
 	cairo_destroy(cr);
 	/* Static Background pixmap */
+
 	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
 	priv->bg_pixmap=gdk_pixmap_new(widget->window,
@@ -574,6 +607,7 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
  encodes important info like window dimensions and depth.
  \returns FALSE so other handlers run
  */
+
 gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxCurve * curve = MTX_CURVE(widget);
@@ -620,6 +654,7 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
  This is the cairo version.
  \param curve is the pointer to the curve object
  */
+
 void generate_static_curve(MtxCurve *curve)
 {
 	cairo_t *cr = NULL;
@@ -641,6 +676,7 @@ void generate_static_curve(MtxCurve *curve)
 		return;
 
 	/* get a cairo_t */
+
 	cr = gdk_cairo_create (priv->bg_pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 	cairo_set_source_rgb (cr, 
@@ -648,10 +684,12 @@ void generate_static_curve(MtxCurve *curve)
 			priv->colors[CURVE_COL_BG].green/65535.0,
 			priv->colors[CURVE_COL_BG].blue/65535.0);
 	/* Background Rectangle */
+
 	cairo_rectangle (cr,
 			0,0,w,h);
 	cairo_fill(cr);
 	/* X Axis Label */
+
 	cairo_set_source_rgb (cr, 
 			priv->colors[CURVE_COL_TEXT].red/65535.0,
 			priv->colors[CURVE_COL_TEXT].green/65535.0,
@@ -662,6 +700,7 @@ void generate_static_curve(MtxCurve *curve)
 		message = g_strdup_printf("%s",priv->x_axis_label);
 		cairo_text_extents (cr, message, &extents);
 		/*cairo_move_to(cr,(priv->w/2) + priv->x_border - (extents.width/2.0),priv->h - (extents.height/2));*/
+
 		cairo_move_to(cr,(priv->w/2) - (extents.width/2.0),priv->h - (extents.height/2));
 		cairo_show_text (cr, message);
 		g_free(message);
@@ -673,6 +712,7 @@ void generate_static_curve(MtxCurve *curve)
 		message = g_strdup_printf("%s",priv->y_axis_label);
 		cairo_text_extents (cr, message, &extents);
 		/*cairo_move_to(cr,1.5*extents.height,(priv->h/2) - priv->y_border + (extents.width/2.0));*/
+
 		cairo_move_to(cr,1.5*extents.height,(priv->h/2) + (extents.width/2.0));
 		cairo_save(cr);
 		cairo_rotate(cr,-G_PI/2.0);
@@ -687,7 +727,9 @@ void generate_static_curve(MtxCurve *curve)
 	if (priv->show_grat)
 	{
 		/* Need to draw text markers FIRST... */
+
 		/* Y axis text markers */
+
 		max_lines = (priv->h - 2*priv->y_border)/50;
 		tmpf = ((priv->h - 2*priv->y_border)%50)/50.0;
 		if (tmpf > 0.5)
@@ -697,6 +739,7 @@ void generate_static_curve(MtxCurve *curve)
 		spread = (priv->h - 2*priv->y_border)/(gfloat)max_lines;
 		longest = 0.0;
 		/* Find longest one */
+
 		for (i = 0;i <= max_lines;i++)
 		{
 			message = g_strdup_printf("%1$.*2$f",((i*spread)/priv->y_scale)+priv->lowest_y,priv->y_precision==0?1:priv->y_precision);
@@ -706,6 +749,7 @@ void generate_static_curve(MtxCurve *curve)
 				longest = extents.width;
 		}
 		/* Render text labels, right justified */
+
 		cairo_set_source_rgb (cr, 
 				priv->colors[CURVE_COL_TEXT].red/65535.0,
 				priv->colors[CURVE_COL_TEXT].green/65535.0,
@@ -719,14 +763,17 @@ void generate_static_curve(MtxCurve *curve)
 			g_free(message);
 		}
 		/* Calc out X border */
+
 		priv->x_border = priv->y_label_border + longest + extents.height;
 		/* Render Left to Right Lines for Y axis */
+
 		cairo_set_source_rgba (cr, 
 				priv->colors[CURVE_COL_GRAT].red/65535.0,
 				priv->colors[CURVE_COL_GRAT].green/65535.0,
 				priv->colors[CURVE_COL_GRAT].blue/65535.0,
 				0.5);
 		/* Render Horizontal Lines */
+
 		for(i = 0;i <= max_lines;i++)
 		{
 			cairo_move_to (cr,priv->x_border-extents.height/2.0,priv->y_border+i*spread);
@@ -734,6 +781,7 @@ void generate_static_curve(MtxCurve *curve)
 		}
 		cairo_stroke(cr);
 		/* top to Bottom (X axis) graticule lines */
+
 		max_lines = (priv->w - priv->x_border - 25)/50;
 		tmpf = ((priv->w - priv->x_border - 25)%50)/50.0;
 		if (tmpf > 0.5)
@@ -762,6 +810,7 @@ void generate_static_curve(MtxCurve *curve)
 				priv->colors[CURVE_COL_GRAT].blue/65535.0,
 				0.5);
 		/* Render Vertical Lines */
+
 		for(i = 0;i <= max_lines;i++)
 		{
 			cairo_move_to (cr,priv->x_border+i*spread,0);
@@ -772,12 +821,14 @@ void generate_static_curve(MtxCurve *curve)
 	}
 	recalc_points(priv);
 	/* THE curve */
+
 	cairo_set_source_rgb (cr, priv->colors[CURVE_COL_FG].red/65535.0,
 			priv->colors[CURVE_COL_FG].green/65535.0,
 			priv->colors[CURVE_COL_FG].blue/65535.0);
 	cairo_set_line_width (cr, 1.5);
 
 	/* The "curve" itself */
+
 	for (i=0;i<priv->num_points-1;i++)
 	{
 		cairo_move_to (cr, priv->points[i].x,priv->points[i].y);
@@ -819,6 +870,7 @@ void generate_static_curve(MtxCurve *curve)
   \param event is the pointer to a GdkEventMotion structure
   \returns TRUE
   */
+
 gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
@@ -852,14 +904,18 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 
 	/*printf("motion, active vertex is %i, coords %f,%f\n",i,priv->coords[i].x,priv->coords[i].y);*/
 
+
 	/* Honor Axis locks */
+
 	if (priv->x_blocked_from_edit)
 		tmp_x = priv->points[i].x;
 	else
 	{
 		tmp_x = event->x;
 		/* Clamp X movement within adjoining points */
+
 		if (i == 0) /* lower left */
+
 			if (event->x > priv->points[i+1].x)
 				tmp_x = priv->points[i+1].x;
 		if ((i > 0) && (i < (priv->num_points-1)))
@@ -881,7 +937,9 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 
 	/* Limit clamps */
 
+
 	/* IF not highest or lowest point, clamp within X bounds */
+
 	tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)((tmp_x - priv->x_border)/priv->x_scale) + priv ->lowest_x, priv->x_precision);
 	priv->coords[i].x = (gfloat)g_strtod(tmpbuf,NULL);
 	g_free(tmpbuf);
@@ -918,6 +976,7 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
   \param data is a pointer to the MtxCurvePrivate datastructure
   \returns FALSE to cancel the timeout
   */
+
 gboolean auto_rescale(gpointer data)
 {
 	MtxCurvePrivate *priv = (MtxCurvePrivate *)data;
@@ -972,6 +1031,7 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
  \param widget pointer to the curve widget
  \param requisition pointer to the Requisition structure 2 set the vars within
  */
+
 void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	requisition->width = 100;
@@ -984,6 +1044,7 @@ void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
  \param curve pointer to the curve object
  \param full force a full redraw if TRUE
  */
+
 void mtx_curve_redraw (MtxCurve *curve, gboolean full)
 {
 	if (!GTK_WIDGET(curve)->window) return;
@@ -999,6 +1060,7 @@ void mtx_curve_redraw (MtxCurve *curve, gboolean full)
  \brief Recalculates the extremes of all coords in the graph
  \param priv (MtxCurvePrivate *) pointer to private data
  */
+
 void recalc_extremes(MtxCurvePrivate *priv)
 {
         gint i = 0;
@@ -1019,9 +1081,12 @@ void recalc_extremes(MtxCurvePrivate *priv)
                         priv->highest_y = priv->coords[i].y;
         }
 	/*printf("X range (%f<->%f), Y range (%f<->%f)\n",priv->lowest_x, priv->highest_x, priv->lowest_y, priv->highest_y);*/
+
 	if  (fabs(priv->lowest_x-priv->highest_x) < 2) /* Vertical Line */
+
 	{
 		if ( priv->lowest_x == 0.0)	/* Special case */
+
 		{
 			priv->lowest_x -= 5;
 			priv->highest_x += 5;
@@ -1039,9 +1104,12 @@ void recalc_extremes(MtxCurvePrivate *priv)
 		priv->highest_x *= 1.05;
 	}
 	*/
+
 	if  (fabs(priv->lowest_y-priv->highest_y) < 2) /* Horizontal Line */
+
 	{
 		if ( priv->lowest_y == 0.0)	/* Special case */
+
 		{
 			priv->lowest_y -= 5;
 			priv->highest_y += 5;
@@ -1059,6 +1127,7 @@ void recalc_extremes(MtxCurvePrivate *priv)
 		priv->highest_y *= 1.05;
 	}
 	*/
+
 	priv->x_scale = (gfloat)(priv->w-(1.25*priv->x_border))/((priv->highest_x - (priv->lowest_x + 0.000001)));
 	priv->y_scale = (gfloat)(priv->h-(2*priv->y_border))/((priv->highest_y - (priv->lowest_y + 0.000001)));
 	priv->locked_scale = (priv->x_scale < priv->y_scale) ? priv->x_scale:priv->y_scale;
@@ -1070,6 +1139,7 @@ void recalc_extremes(MtxCurvePrivate *priv)
  \brief Recalculates the points of all coords in the graph
  \param priv (MtxCurvePrivate *) pointer to private data
  */
+
 void recalc_points(MtxCurvePrivate *priv)
 {
 	gint i = 0;
@@ -1084,6 +1154,7 @@ void recalc_points(MtxCurvePrivate *priv)
  	 * take into account specified precision so that signals feed useful
  	 * data back to connected handlers
  	 */
+
 	for (i=0;i<priv->num_points;i++)
 	{
 		priv->points[i].x = (gint)(((priv->coords[i].x - priv->lowest_x)*priv->x_scale) + priv->x_border);
@@ -1092,6 +1163,7 @@ void recalc_points(MtxCurvePrivate *priv)
 
         /*printf("Extremes, X %i,%i, Y %i,%i\n",priv->lowest_x,priv->highest_x, priv->lowest_y, priv->highest_y);
  	*/
+
 }
 
 
@@ -1161,18 +1233,22 @@ gboolean get_intersection(
 	gdouble  distAB, theCos, theSin, newX, ABpos ;
 
 	/*  Fail if either line segment is zero-length. */
+
 	if (((Ax==Bx) && (Ay==By)) || ((Cx==Dx) && (Cy==Dy)))
 		return FALSE;
 
 	/*  (1) Translate the system so that point A is on the origin. */
+
 	Bx-=Ax; By-=Ay;
 	Cx-=Ax; Cy-=Ay;
 	Dx-=Ax; Dy-=Ay;
 
 	/*  Discover the length of segment A-B.*/
+
 	distAB=sqrt(Bx*Bx+By*By);
 
 	/*  (2) Rotate the system so that point B is on the positive X axis.*/
+
 	theCos=Bx/distAB;
 	theSin=By/distAB;
 	newX=Cx*theCos+Cy*theSin;
@@ -1181,17 +1257,21 @@ gboolean get_intersection(
 	Dy  =Dy*theCos-Dx*theSin; Dx=newX;
 
 	/*  Fail if lines are parallel */
+
 	if (Cy == Dy) 
 		return FALSE;
 
 	/*  (3) Discover the position of the intersection point along line A-B.*/
+
 	ABpos=Dx+(Cx-Dx)*Dy/(Dy-Cy);
 
 	/*  (4) Apply the discovered position to line A-B in the original coordinate system. */
+
 	*X=Ax+ABpos*theCos;
 	*Y=Ay+ABpos*theSin;
 
 	/*  Success. */
+
 	return TRUE; 
 } 
 

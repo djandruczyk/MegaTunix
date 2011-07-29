@@ -31,11 +31,15 @@ int main (int argc, char **argv)
 	gauge = mtx_pie_gauge_new ();
 	gtk_container_add (GTK_CONTAINER (window), gauge);
 	/*gtk_widget_realize(gauge);*/
+
 	gtk_widget_show_all (window);
 
 	/*mtx_pie_gauge_set_value(MTX_PIE_GAUGE(gauge), 0.0);*/
+
 	/*mtx_gauge_face_set_attribute(MTX_PIE_GAUGE(gauge),LBOUND, 0.0);*/
+
 	/*mtx_gauge_face_set_attribute(MTX_PIE_GAUGE(gauge),UBOUND, 8000.0);*/
+
 	timeout = g_timeout_add(20,(GSourceFunc)update_gauge,(gpointer)gauge);
 
 	g_signal_connect (window, "delete_event",
@@ -58,7 +62,9 @@ gboolean update_gauge(gpointer data)
 	GtkWidget * gauge = data;
 	interval = (upper-lower)/100.0;
 	/*mtx_gauge_face_get_attribute(MTX_PIE_GAUGE(gauge), LBOUND, &lower);*/
+
 	/*mtx_gauge_face_get_attribute(MTX_PIE_GAUGE(gauge), UBOUND, &upper);*/
+
 	cur_val = mtx_pie_gauge_get_value(MTX_PIE_GAUGE (gauge));
 	if (cur_val >= upper)
 		rising = FALSE;

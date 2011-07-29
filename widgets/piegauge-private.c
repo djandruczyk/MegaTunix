@@ -46,6 +46,7 @@ GType mtx_pie_gauge_get_type(void)
  signal handlers for config event, expose event, and button press/release
  \param class_name (MtxPieGaugeClass *) pointer to the class
  */
+
 void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
 {
 	GObjectClass *obj_class;
@@ -55,12 +56,17 @@ void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
 	widget_class = GTK_WIDGET_CLASS (class_name);
 
 	/* GtkWidget signals */
+
 	widget_class->configure_event = mtx_pie_gauge_configure;
 	widget_class->expose_event = mtx_pie_gauge_expose;
 	/*widget_class->button_press_event = mtx_pie_gauge_button_press; */
+
 	/*widget_class->button_release_event = mtx_pie_gauge_button_release; */
+
 	/* Motion event not needed, as unused currently */
+
 	/*widget_class->motion_notify_event = mtx_pie_gauge_motion_event; */
+
 	widget_class->size_request = mtx_pie_gauge_size_request;
 	obj_class->finalize = mtx_pie_gauge_finalize;
 
@@ -72,6 +78,7 @@ void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
  \brief Frees up private data
  \param gauge (MtxPieGauge *) pointer to the gauge object
  */
+
 void mtx_pie_gauge_finalize (GObject *gauge)
 {
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
@@ -89,13 +96,15 @@ void mtx_pie_gauge_finalize (GObject *gauge)
  \brief Initializes the gauge attributes to sane defaults
  \param gauge (MtxPieGauge *) pointer to the gauge object
  */
+
 void mtx_pie_gauge_init (MtxPieGauge *gauge)
 {
 	/* The events the gauge receives
 	* Need events for button press/release AND motion EVEN THOUGH
 	* we don't have a motion handler defined.  It's required for the 
 	* dash designer to do drag and move placement 
-	*/ 
+	*/
+
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
 	gtk_widget_add_events (GTK_WIDGET (gauge),GDK_BUTTON_PRESS_MASK
 			       | GDK_BUTTON_RELEASE_MASK |GDK_POINTER_MOTION_MASK);
@@ -103,18 +112,25 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
 	priv->w = 130;		
 	priv->h = 20;
 	priv->pie_xc = 17;		/* pie x center coord from LL corner */
+
 	priv->pie_yc = priv->h-3;	/* pie y center coord from LL corner */
+
 	priv->pie_radius = 14;		/* pie is 180deg swep so 14x28 pixels */
+
 	priv->value = 0.0;		/* default values */
+
 	priv->min = 0.0;
 	priv->max = 100.0;
 	priv->precision = 2;
 	priv->start_angle = 180;	/* lower left quadrant */
+
 	priv->sweep_angle = 180;	/* CW sweep */
+
 	priv->value_font = g_strdup("Bitstream Vera Sans");
 	priv->value_font_scale = 0.2;
 	mtx_pie_gauge_init_colors(gauge);
 	/*mtx_pie_gauge_redraw (gauge);*/
+
 }
 
 
@@ -123,30 +139,37 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
  \brief Allocates the default colors for a gauge with no options 
  \param widget (MegaPieGauge *) pointer to the gauge object
  */
+
 void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
 {
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
 	/*! Main Background */
+
 	priv->colors[COL_BG].red=0.914*65535;
 	priv->colors[COL_BG].green=0.914*65535;
 	priv->colors[COL_BG].blue=0.859*65535;
 	/*! Needle */
+
 	priv->colors[COL_NEEDLE].red=0.0*65535;
 	priv->colors[COL_NEEDLE].green=0.0*65535;
 	priv->colors[COL_NEEDLE].blue=0.0*65535;
 	/*! Text Color*/
+
 	priv->colors[COL_VALUE_FONT].red=0.1*65535;
 	priv->colors[COL_VALUE_FONT].green=0.1*65535;
 	priv->colors[COL_VALUE_FONT].blue=0.1*65535;
 	/*! Gauge BG Color Begin */
+
 	priv->colors[COL_LOW].red=0.0*65535;
 	priv->colors[COL_LOW].green=1.0*65535;
 	priv->colors[COL_LOW].blue=0.0*65535;
 	/*! Gauge BG Color Middle */
+
 	priv->colors[COL_MID].red=1.0*65535;
 	priv->colors[COL_MID].green=1.0*65535;
 	priv->colors[COL_MID].blue=0.0*65535;
 	/*! Gauge BG Color End */
+
 	priv->colors[COL_HIGH].red=1.0*65535;
 	priv->colors[COL_HIGH].green=0.0*65535;
 	priv->colors[COL_HIGH].blue=0.0*65535;
@@ -159,6 +182,7 @@ void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
  looks a bit nicer, though is a little bit slower
  \param widget (MtxPieGauge *) pointer to the gauge object
  */
+
 void update_pie_gauge_position (MtxPieGauge *gauge)
 {
 	GtkWidget * widget = NULL;
@@ -176,6 +200,7 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 	widget = GTK_WIDGET(gauge);
 
 	/* Copy background pixmap to intermediary for final rendering */
+
 	cr = gdk_cairo_create(priv->pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
 	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
@@ -185,6 +210,7 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);
 	/* Update the VALUE text */
+
 	cairo_set_source_rgb (cr, 
 			priv->colors[COL_VALUE_FONT].red/65535.0,
 			priv->colors[COL_VALUE_FONT].green/65535.0,
@@ -221,6 +247,7 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 	cairo_stroke (cr);
 
 	/* gauge hands */
+
 	tmpf = (priv->value-priv->min)/(priv->max-priv->min);
 	needle_pos = (priv->start_angle+(tmpf*priv->sweep_angle))*(M_PI/180);
 
@@ -250,6 +277,7 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
  \param event (GdkEventConfigure *) pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
  */
+
 gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
@@ -260,6 +288,7 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	priv->h = widget->allocation.height;
 
 	/* Backing pixmap (copy of window) */
+
 	if (priv->pixmap)
 		g_object_unref(priv->pixmap);
 	priv->pixmap=gdk_pixmap_new(widget->window,
@@ -271,6 +300,7 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_paint(cr);
 	cairo_destroy(cr);
 	/* Static Background pixmap */
+
 	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
 	priv->bg_pixmap=gdk_pixmap_new(widget->window,
@@ -302,6 +332,7 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
  \param event (GdkEventExpose *) pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
  */
+
 gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
@@ -341,6 +372,7 @@ gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
  This is the cairo version.
  \param widget (MtxPieGauge *) pointer to the gauge object
  */
+
 void generate_pie_gauge_background(MtxPieGauge *gauge)
 {
 	cairo_t *cr = NULL;
@@ -354,6 +386,7 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 	if (!priv->bg_pixmap)
 		return;
 	/* get a cairo_t */
+
 	cr = gdk_cairo_create (priv->bg_pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 	cairo_set_source_rgb (cr, 
@@ -361,11 +394,13 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 			priv->colors[COL_BG].green/65535.0,
 			priv->colors[COL_BG].blue/65535.0);
 	/* Background Rectangle */
+
 	cairo_rectangle (cr,
 			0,0,w,h);
 	cairo_fill(cr);
 	/* first one big yellow, with the green and red on top
 	 * This prevents seeing BG pixels due to antialiasing errors */
+
 	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
 	cairo_set_source_rgb (cr, 
 			priv->colors[COL_MID].red/65535.0,
@@ -376,6 +411,7 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 			(priv->start_angle+priv->sweep_angle)*(M_PI/180.0));
 	cairo_fill(cr);
 	/* Low green Arc (*/
+
 	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
 	cairo_set_source_rgb (cr, 
 			priv->colors[COL_LOW].red/65535.0,
@@ -386,6 +422,7 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 			(priv->start_angle+45)*(M_PI/180.0));
 	cairo_fill(cr);
 	/* High red Arc */
+
 	cairo_move_to(cr,priv->pie_xc,priv->pie_yc);
 	cairo_set_source_rgb (cr, 
 			priv->colors[COL_HIGH].red/65535.0,
@@ -396,6 +433,7 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 			(priv->start_angle+180)*(M_PI/180.0));
 	cairo_fill(cr);
 	/* Pie Gauge Arcs */
+
 	cairo_set_line_width (cr, 1.0);
 	cairo_set_source_rgb (cr, 
 			priv->colors[COL_NEEDLE].red/65535.0,
@@ -412,7 +450,9 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 gboolean mtx_pie_gauge_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
+
 	/*	printf("motion in gauge, returning false\n");*/
+
 	return FALSE;
 }
 					       
@@ -424,6 +464,7 @@ gboolean mtx_pie_gauge_motion_event (GtkWidget *gauge,GdkEventMotion *event)
  \param requisition (GdkRequisition *) struct to set the vars within
  \returns void
  */
+
 void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	requisition->width = 80;

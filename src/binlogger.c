@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/binlogger.c
- *
- * @brief ...
- *
- *
- */
-
 #include <binlogger.h>
 #include <defines.h>
 
@@ -30,13 +23,6 @@ static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
   \brief Opens the binary logs that record the raw serial IO activity for
   debugging purposes
   */
-
-/*! @file src/binlogger.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void open_binary_logs(void)
 {
 	GIOChannel *ichan = NULL;
@@ -91,13 +77,6 @@ G_MODULE_EXPORT void open_binary_logs(void)
 /*!
   \brief closes the binary logfiles
   */
-
-/*! @file src/binlogger.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void close_binary_logs(void)
 {
 	GIOChannel *ichan = NULL;
@@ -127,13 +106,6 @@ G_MODULE_EXPORT void close_binary_logs(void)
   \param data, unused
   \returns TRUE
   */
-
-/*! @file src/binlogger.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 {
 	GIOChannel *ichan = NULL;
@@ -157,13 +129,6 @@ G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
   \param buf, buffer to write
   \param count, how many bytes to write
   */
-
-/*! @file src/binlogger.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
 {
 	GIOChannel *ochan = NULL;
@@ -181,13 +146,6 @@ G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
   \param buf, buffer to write
   \param count, how many bytes to write
   */
-
-/*! @file src/binlogger.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void log_inbound_data(const void * buf, size_t count)
 {
 	GIOChannel *ichan = NULL;

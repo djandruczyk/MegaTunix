@@ -24,20 +24,28 @@ typedef enum {
 /*!
   \brief Regex CMD structure
   */
+
 typedef struct {
     char id;		/*!< ID */
+
     int span;		/*!< Span */
+
     void* fcn;		/*!< function pointer */
+
     CMD_TYPE type;	/*!< Command type enum */
+
 } Cmd;
 
 /* Prototypes */
+
 int match(char*, char*, char* );
 /* function pointers */
+
 #define CMD2    (int(*)(char*,char*))
 #define CMD3    (int(*)(char*,char*,char*))
 
 /* function shortcuts */
+
 #define _CMD2(str)  int c_##str(char* pat, char* sam)
 #define _CMD3(str)  int c_##str(char* pat, char* sam, char* endp)
 
@@ -46,6 +54,7 @@ int match(char*, char*, char* );
  * 1. return number of consumed characters in sample string
  * 2. TYPE_CLOSE follows TYPE_OPEN immediately in command table
  */
+
 inline _CMD2(achar);
 inline _CMD2(any);
 inline _CMD2(escape);
@@ -63,6 +72,7 @@ Cmd cmd_tbl[] = {
 	{ '*',    1,    c_multi,    TYPE_SUFFIX,		},
 	{ '+',    1,    c_multi,    TYPE_SUFFIX,		},
 /*	{ '?',    1,    c_multi,    TYPE_SUFFIX,		},*/
+
 	{ '.',    1,    c_any,      TYPE_CMD,			},
 	{ '\\',    2,    c_escape,   TYPE_PREFIX,		},
 	{ 0,    1,    c_achar,    TYPE_CHAR,			}
@@ -107,6 +117,7 @@ char* find_close(char* init, char stop)
 }
 
 char* get_next_pat(char* cur)   /* find next unit of pattern */
+
 {
     Cmd* cmd = get_cmd(*cur);
 
@@ -121,11 +132,13 @@ char* get_next_pat(char* cur)   /* find next unit of pattern */
 
 /* -------------- command handlers ---------------- */
 
+
 inline _CMD2(any) {return 1;}
 inline _CMD2(achar) {return (*pat == *sam);}
 
 
 _CMD2(group)    /* sub pattern */
+
 {
     char *close = find_close(pat, ')');
     if (!close) return false;
@@ -140,48 +153,57 @@ _CMD2(escape)
     switch (*++pat)
     {
         case 'd':   /* digit */
+
             strcpy(magic, "[0-9]");
             break;
         case 'D':   /* non-digit */
+
             strcpy(magic, "[^0-9]");
             break;
         case 'x':   /* hex digit */
+
             strcpy(magic, "[0-9A-Fa-f]");
             break;
         case 'X':
             strcpy(magic, "[^0-9A-Fa-f]");
             break;
         case 'o':   /* octal digit */
+
             strcpy(magic, "[0-7]");
             break;
         case 'O':
             strcpy(magic, "[^0-7]");
             break;
         case 'w':   /* word character */
+
             strcpy(magic, "[0-9A-Za-z_]");
             break;
         case 'W':
             strcpy(magic, "[^0-9A-Za-z_]");
             break;
         case 'h':   /* head of word character */
+
             strcpy(magic, "[0-9A-Za-z]");
             break;
         case 'H':
             strcpy(magic, "[^0-9A-Za-z]");
             break;
         case 'a':   /* alphabetic character */
+
             strcpy(magic, "[A-Za-z]");
             break;
         case 'A':
             strcpy(magic, "[^A-Za-z]");
             break;
         case 'l':   /* lowercase character */
+
             strcpy(magic, "[a-z]");
             break;
         case 'L':
             strcpy(magic, "[^a-z]");
             break;
         case 'u':   /* uppercase character */
+
             strcpy(magic, "[A-Z]");
             break;
         case 'U':
@@ -240,11 +262,13 @@ _CMD2(option)
 _CMD3(multi)
 {
     /* repeated variables */
+
     Cmd* cmd = get_cmd(*pat);
     int  found;
     char* start_sam = sam;
 
     /* new local variables */
+
     int repeat = 0;
     int good_follows = 0;
 
@@ -259,6 +283,7 @@ _CMD3(multi)
     switch (*multi)
     {
         case '{':  /* for range of repetition */
+
             {
                 char* comma = strchr(multi, ',');
                 char* close = strchr(multi, '}');
@@ -283,9 +308,12 @@ _CMD3(multi)
 
         if (!found) break;  /* can be less than min */
 
+
         /* condition 1 */
+
         repeat ++;
         sam += found;   /* advance ptr */
+
 
         if (min && repeat < min)
             continue;
@@ -297,6 +325,7 @@ _CMD3(multi)
 
             found = match(next_pat, sam, endp);
             if (found)    /* condition 2 */
+
             {
                 good_follows = found;
                 good_sam = sam;
@@ -308,6 +337,7 @@ _CMD3(multi)
     }
 
     /* return here */
+
     if (repeat < min)
         found = 0;
 
@@ -315,14 +345,17 @@ _CMD3(multi)
         found = sam - start_sam;
 
     else if (good_sam)  /* *next_pat > 0 */
+
         found = good_sam + good_follows - start_sam;
 
     else if (!min)
     {
         if (repeat == 0)    /* no match before *multi */
+
             found = match(next_pat, sam, endp);
 
         else if (!good_sam) /* repeat > 0 is wrongly match before *multi */
+
             found = match(next_pat, start_sam, endp);
     }
 
@@ -333,6 +366,7 @@ _CMD3(multi)
 
 
 /* -------------- core functions ---------------- */
+
 
 G_MODULE_EXPORT char* regex(char* pat, char* sam, int* len)
 {
@@ -354,6 +388,7 @@ G_MODULE_EXPORT char* regex(char* pat, char* sam, int* len)
 /*
  * return: # found in sam
  */
+
 int match(char* pat, char* sam, char* endp)
 {
     Cmd* cmd;

@@ -52,16 +52,20 @@ int main (int argc, char **argv)
 		for (i=0;i<3;i++)
 			data[i] = j;
 		/*printf("setting values to %f, %f, %f\n",data[0],data[1],data[2]); */
+
 		mtx_stripchart_set_values(MTX_STRIPCHART(chart),data);
 	}
 	mtx_stripchart_get_latest_values(MTX_STRIPCHART(chart),data);
 /*	printf("latest values are %f, %f, %f\n",data[0],data[1],data[2]);*/
 
+
 	/*mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);*/
+
 	
 
 	timeout = g_timeout_add(40,(GSourceFunc)update_stripchart,(gpointer)chart);
 /*	g_timeout_add(4000,(GSourceFunc)remove_trace,GINT_TO_POINTER(trace2));*/
+
 
 	gtk_widget_show_all (window);
 
@@ -86,6 +90,7 @@ gboolean update_stripchart(gpointer data)
 	vals[2]+=2.125;
 	mtx_stripchart_set_values(MTX_STRIPCHART(chart),vals);
 /*	printf("This should scroll stripchart \n"); */
+
 	return TRUE;
 }
 

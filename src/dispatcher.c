@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
-
 #include <conversions.h>
 #include <init.h>
 #include <notifications.h>
@@ -33,13 +26,6 @@
  queue has multiple message queued up.
  \param data, unused
  \returns TRUE 
- */
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 {
@@ -69,13 +55,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 			(DATA_GET(global_data,"might_be_leaving")))
 	{
 		/* Flush the queue */
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 		while (NULL != (message = g_async_queue_try_pop(pf_dispatch_queue)))
 			dealloc_message(message);
 		g_mutex_lock(pf_dispatch_mutex);
@@ -91,13 +70,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
 		g_mutex_unlock(pf_dispatch_mutex);
@@ -108,13 +80,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		/* Message failed at some point, do NOT run post functions
 		 * in this case.
 		 */
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 		dealloc_message(message);
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
@@ -129,13 +94,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		{
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
 			/*printf("dispatching post function %s\n",pf->name);*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -161,13 +119,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	dealloc_message(message);
 	/*printf ("deallocation of dispatch message complete\n");*/
 
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
-
 	gdk_threads_enter();
 	while (gtk_events_pending())
 	{
@@ -192,13 +143,6 @@ fast_exit:
  queue has multiple message queued up.
  \param data, unused
  \returns TRUE 
- */
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
@@ -236,13 +180,6 @@ trypop:
 			(DATA_GET(global_data,"might_be_leaving")))
 	{
 		/* Flush the queue */
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 		while (NULL != (message = g_async_queue_try_pop(gui_dispatch_queue)))
 			dealloc_message(message);
 		g_mutex_lock(gui_dispatch_mutex);
@@ -254,13 +191,6 @@ trypop:
 	if (!message)
 	{
 		/*	printf("no messages waiting, returning\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 		g_mutex_lock(gui_dispatch_mutex);
 		g_cond_signal(gui_dispatch_cond);
 		g_mutex_unlock(gui_dispatch_mutex);
@@ -274,13 +204,6 @@ trypop:
 		{
 			val = g_array_index(message->functions,UpdateFunction, i);
 			/*printf("gui_dispatcher\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 			switch ((UpdateFunction)val)
 			{
 				case UPD_REFRESH:
@@ -319,13 +242,6 @@ trypop:
 					break;
 				case UPD_LOGBAR:
 					/*printf("logbar update\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 					t_message = (Text_Message *)message->payload;
 					gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear,FALSE);
@@ -335,13 +251,6 @@ trypop:
 					break;
 				case UPD_RUN_FUNCTION:
 					/*printf("run function\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 					qfunc = (QFunction *)message->payload;
 					gdk_threads_enter();
 					run_post_functions(qfunc->func_name);
@@ -352,26 +261,12 @@ trypop:
 
 				case UPD_WIDGET:
 					/*printf("widget update\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 					widget = NULL;
 					w_update = (Widget_Update *)message->payload;
 					switch (w_update->type)
 					{
 						case MTX_ENTRY:
 							/*printf("entry\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gdk_threads_enter();
@@ -380,13 +275,6 @@ trypop:
 							break;
 						case MTX_LABEL:
 							/*printf("label\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gdk_threads_enter();
@@ -395,26 +283,12 @@ trypop:
 							break;
 						case MTX_TITLE:
 							/*printf("title\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 							gdk_threads_enter();
 							set_title(g_strdup(w_update->msg));
 							gdk_threads_leave();
 							break;
 						case MTX_SENSITIVE:
 							/*printf("sensitivity change\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gdk_threads_enter();
@@ -446,45 +320,17 @@ trypop:
 dealloc:
 	dealloc_message(message);
 	/*printf ("deallocation of dispatch message complete\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 	count++;
 	/* try to handle up to 4 messages at a time.  If this is 
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 	if ((count < 3) && (!DATA_GET(global_data,"leaving")))
 	{
 		/*printf("trying to handle another message\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 		goto trypop;
 	}
 	/*printf("returning\n");*/
-
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
 	g_mutex_lock(gui_dispatch_mutex);
 	g_cond_signal(gui_dispatch_cond);
 	g_mutex_unlock(gui_dispatch_mutex);

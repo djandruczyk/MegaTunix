@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
-
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
@@ -29,26 +22,12 @@ extern gconstpointer *global_data;
  name to it's matching enumeration.  It's used for mapping things from all the 
  configuration files so that things just plain look better
  */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void build_string_2_enum_table(void)
 {
 	GHashTable *str_2_enum = NULL;
 	str_2_enum = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,NULL);
 
 	/* Interrogation field types */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_CHAR_",
 			GINT_TO_POINTER(MTX_CHAR));
 	g_hash_table_insert(str_2_enum,"_U08_",
@@ -67,13 +46,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_UNDEF));
 
 	/* Data Types for glade data binder.... */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_INT_",
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"_ENUM_",
@@ -86,13 +58,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_FLOAT));
 
 	/* Widget Types */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_MTX_ENTRY_",
 			GINT_TO_POINTER(MTX_ENTRY));
 	g_hash_table_insert(str_2_enum,"_MTX_LABEL_",
@@ -103,13 +68,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_SPINBUTTON));
 
 	/* Variable handling */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_IMMEDIATE_",
 			GINT_TO_POINTER(IMMEDIATE));
 	g_hash_table_insert(str_2_enum,"_DEFERRED_",
@@ -118,13 +76,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(IGNORED));
 
 	/* Complex Expressions (RT Vars)*/
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_ECU_EMB_BIT_",
 			GINT_TO_POINTER(ECU_EMB_BIT));
 	g_hash_table_insert(str_2_enum,"_ECU_VAR_",
@@ -136,13 +87,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 
 	/* Signal handler mapping */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_RESCALE_TABLE_",
 			GINT_TO_POINTER(RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,"_EXPORT_SINGLE_TABLE_",
@@ -211,13 +155,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(TOGGLE_FAHRENHEIT));
 
 	/* Datalogger/logviewer */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_COMMA_",
 			GINT_TO_POINTER(COMMA));
 	g_hash_table_insert(str_2_enum,"_TAB_",
@@ -228,13 +165,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(PLAYBACK_VIEW));
 
 	/* Page Identifiers */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_SETTINGS_TAB_",
 			GINT_TO_POINTER(SETTINGS_TAB));
 	g_hash_table_insert(str_2_enum,"_CORRECTIONS_TAB_",
@@ -267,13 +197,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(ERROR_STATUS_TAB));
 
 	/* Algorithm */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_SPEED_DENSITY_",
 			GINT_TO_POINTER(SPEED_DENSITY));
 	g_hash_table_insert(str_2_enum,"_ALPHA_N_",
@@ -288,13 +211,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(SD_MAF_HYBRID));
 
 	/* Function Call */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_FUNC_CALL_",
 			GINT_TO_POINTER(FUNC_CALL));
 	g_hash_table_insert(str_2_enum,"_WRITE_CMD_",
@@ -303,23 +219,9 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(NULL_CMD));
 
 	/* Action's */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
 	/* XMLcomm processing */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_DATA_",
 			GINT_TO_POINTER(DATA));
 	g_hash_table_insert(str_2_enum,"_ACTION_",
@@ -329,13 +231,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
 	/* Tab datamap processing */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"active_fg",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"algorithms",
@@ -538,26 +433,12 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_INT));
 
 	/* Match conditions */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_OR_",
 			GINT_TO_POINTER(OR));
 	g_hash_table_insert(str_2_enum,"_AND_",
 			GINT_TO_POINTER(AND));
 
 	/* Temp Scales */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_KELVIN_",
 			GINT_TO_POINTER(KELVIN));
 	g_hash_table_insert(str_2_enum,"_CELSIUS_",
@@ -565,13 +446,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"_FAHRENHEIT_",
 			GINT_TO_POINTER(FAHRENHEIT));
 	/* MtxPbar orientations */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 	g_hash_table_insert(str_2_enum,"_L_TO_R_",
 			GINT_TO_POINTER(GTK_PROGRESS_LEFT_TO_RIGHT));
 	g_hash_table_insert(str_2_enum,"_R_TO_L_",
@@ -583,13 +457,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
-
 	DATA_SET_FULL(global_data,"str_2_enum",str_2_enum,g_hash_table_destroy);
 }
 
@@ -600,13 +467,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
  \param key, key name in the hashtable
  \param value, value (enumeration value) in the hashtable
  \param user_data, unused...
- */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
 {
@@ -620,13 +480,6 @@ G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
  \param string, string to be translated
  \returns enumeration equivalent
  */
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gint translate_string(const gchar *string)
 {
 	static GHashTable *str_2_enum = NULL;
@@ -639,13 +492,6 @@ G_MODULE_EXPORT gint translate_string(const gchar *string)
 	if (value == 0)
 	{
 		/*dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
-
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
 		return (MTX_UNKNOWN);
 	}
 	else

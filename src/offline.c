@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
-
 #include <apicheck.h>
 #include <api-versions.h>
 #include <debugging.h>
@@ -43,13 +36,6 @@ extern gconstpointer *global_data;
  choices to select one for loading to work in offline mode (no connection to
  an ECU)
  */
-
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean set_offline_mode(void)
 {
 	GtkWidget * widget = NULL;
@@ -65,13 +51,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 
 	/* Cause Serial Searcher thread to abort.... */
-
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
 	if (io_repair_queue)
 		g_async_queue_push(io_repair_queue,&tmp);
 
@@ -99,13 +78,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	DATA_SET(global_data,"interrogated",GINT_TO_POINTER(TRUE));
 
 	/* Disable interrogation button */
-
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
 	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
@@ -201,13 +173,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	   io_cmd(firmware->get_all_command,NULL);
 	 */
 
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
-
 	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
@@ -234,13 +199,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
  \brief present_firmware_choices() presents a dialog box with the firmware
  choices.
  \returns the name of the chosen firmware
- */
-
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gchar * present_firmware_choices(void)
 {
@@ -336,13 +294,6 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),vbox,TRUE,TRUE,0);
 	/* Dummies */
-
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
 	dummybutton = gtk_radio_button_new(NULL);
 	g_object_ref_sink(dummybutton);
 	group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(dummybutton));
@@ -352,13 +303,6 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
 
 		/* Cycle list for PERSONAL interogation files */
-
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
 		for (i=0;i<g_list_length(p_list);i++)
 		{
 			element = g_list_nth_data(p_list,i);
@@ -392,13 +336,6 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	label = gtk_label_new("System Wide ECU Profiles");
 	gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,0);
 	/* Cycle list for System interogation files */
-
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
 	for (i=0;i<g_list_length(s_list);i++)
 	{
 		element = g_list_nth_data(s_list,i);
@@ -431,13 +368,6 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	   gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 	 */
 
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
-
 	g_strfreev(filenames);
 	g_array_free(classes,TRUE);
 
@@ -468,13 +398,6 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
   \brief initiates an offline ECU restore from file. Prompts for file, if
   valid, it calles the restore_all function from the ECU plugin
   */
-
-/*! @file src/offline.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 {
 	MtxFileIO *fileio = NULL;

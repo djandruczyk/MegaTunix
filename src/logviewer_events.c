@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
-
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>
@@ -37,13 +30,6 @@ extern Logview_Data *lv_data;
  \param data, unused)
  \returns FALSE
  */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
@@ -52,13 +38,6 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 	gint h = 0;
 
 	/* Get pointer to backing pixmap ... */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 	if (!lv_data)
 	{
 		lv_data = g_new0(Logview_Data,1);
@@ -115,26 +94,12 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
  \param data, unused
  \returns TRUE
  */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkPixmap *pixmap = NULL;
 	pixmap = lv_data->pixmap;
 
 	/* Expose event handler... */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 	gdk_draw_drawable(widget->window,
                         widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
                         pixmap,
@@ -155,13 +120,6 @@ G_MODULE_EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *even
  \param data, unused
  \returns TRUE on handled, FALSE otherwise
  */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	gint x = 0;
@@ -178,13 +136,6 @@ G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion
 	if (lv_data->active_traces == 0)
 		return FALSE;
 	if (x > lv_data->info_width) /* If out of bounds just return... */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 	{
 		highlight_tinfo(lv_data->tselect,FALSE);
 		lv_data->tselect = -1;
@@ -212,13 +163,6 @@ G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion
  of the logviewer when the mouse goes in there..
  \param tnum, trace number starting from 0
  \param state, if set we highlight the target trace info box
- */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 {
@@ -257,13 +201,6 @@ G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
   \param data, unused
   \returns TRUE
   */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data)
 {
 	Lv_Handler handler;
@@ -308,13 +245,6 @@ G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data
   \param data, unused
   \returns TRUE if handled, FALSE otherwise
   */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gint x = 0;
@@ -337,21 +267,7 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	/*printf("button with event is %i\n",event->button);
 	 *printf("state of event is %i\n",state);
 	 */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 	if (x > lv_data->info_width) /* If out of bounds just return... */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 		return TRUE;
 
 	if (lv_data->active_traces == 0)
@@ -363,13 +279,6 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	if (event->state & (GDK_BUTTON3_MASK))
 	{
 		/*printf("right button released... \n");*/
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 		v_value->highlight = FALSE;
 		gdk_draw_rectangle(lv_data->pixmap,
 				widget->style->black_gc,
@@ -381,22 +290,8 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 
 	}
 	else if (event->button == 3) /* right mouse button */
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 	{
 		/*printf("right button pushed... \n");*/
-
-/*! @file src/logviewer_events.c
- *
- * @brief ...
- *
- *
- */
 		v_value->highlight = TRUE;
 		gdk_draw_rectangle(lv_data->pixmap,
 				widget->style->black_gc,

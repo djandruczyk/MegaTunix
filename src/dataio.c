@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
-
 #include <binlogger.h>
 #include <dataio.h>
 #include <debugging.h>
@@ -40,23 +33,9 @@
 
 
 /* Externs */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 extern gconstpointer *global_data;
 
 /* Cause OS-X sucks.... */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 #ifndef MSG_NOSIGNAL
 #define MSG_NOSIGNAL 0
 #endif
@@ -68,13 +47,6 @@ extern gconstpointer *global_data;
  otherwise error out if count doesn't match what is asked for
  \param buffer, pointer to buffer to stick the data.
  \returns TRUE on success, FALSE on failure 
- */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 {
@@ -113,13 +85,6 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	 * Ugly hack,  but couldn't find out why it did it.  might be due to
 	 * excess latency in my test VM
 	 */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 #ifdef __WIN32__
 	if (reset)
 		total_wanted *= 2;
@@ -136,21 +101,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		total_read += len;
 
 		/* Increment bad read counter.... */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 		if (!res) /* I/O Error Device disappearance or other */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 		{
 			dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
 			bad_read = TRUE;
@@ -158,22 +109,8 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 			break;
 		}
 		if (len == 0) /* Short read!*/
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 			zerocount++;
 		if ((len == 0) && (zerocount > 3))  /* Too many Short reads! */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 		{
 			bad_read = TRUE;
 			break;
@@ -193,13 +130,6 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 			reset = FALSE;
 		failcount++;
 		/* Excessive failures triggers port recheck */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 		if (failcount > 10)
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 	}
@@ -223,13 +153,6 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
  debugging purposes
  \param total_read, total bytesto printout
  \param buf, pointer to data to write to console
- */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 {
@@ -270,13 +193,6 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
   \param len. pointer to length read
   \returns TRUE on success, FALSE otherwise
   */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
 {
 	gint res = 0;
@@ -297,33 +213,12 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 	 * timeout around 500ms seems to give us ok function to new zealand,
 	 * but may require tweaking for slow wireless links.
 	 */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 	if (serial_params->net_mode)
 	{
 		res = select(fd+1,&rd,NULL,NULL,&timeout);
 		if (res < 0) /* Error, socket close, abort */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 			return FALSE;
 		if (res > 0) /* Data Arrived! */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 			*len = recv(fd,buf,count,0);
 		return TRUE;
 	}
@@ -347,13 +242,6 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
   \param len. pointer to length to write
   \returns TRUE on success, FALSE otherwise
   */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
 {
 	gint res = 0;
@@ -364,23 +252,9 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 	log_outbound_data(buf,count);
 
 	/*      printf("write_wrapper\n"); */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 	if (serial_params->net_mode)
 	{
 		/*              printf("net mode write\n"); */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 #if GTK_MINOR_VERSION >= 18
 		res = g_socket_send(serial_params->socket,buf,(gsize)count,NULL,&error);
 #else
@@ -395,22 +269,8 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 	else
 	{
 		/*              printf("normal write %i bytes\n",count); */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 		res = write(fd,buf,count);
 		/*              printf("result of write is %i\n",res); */
-
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
 	}
 	if (len)
 		*len = res;

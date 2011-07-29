@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
-
 #include <dataio.h>
 #include <comms.h>
 #include <debugging.h>
@@ -43,13 +36,6 @@ extern gconstpointer *global_data;
  test.  This is decoupled from the comms_test due to threading constraints.
  \see comms_test
  */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void update_comms_status(void)
 {
 	GtkWidget *widget = NULL;
@@ -65,13 +51,6 @@ G_MODULE_EXPORT void update_comms_status(void)
 /*!
  \brief write_data() physically sends the data to the ECU.
  \param message (Io_Message *) a pointer to an Io_Message structure
- */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
@@ -136,59 +115,24 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		g_mutex_unlock(serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return TRUE;		/* can't write anything if offline */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 	}
 	if (!DATA_GET(global_data,"connected"))
 	{
 		g_mutex_unlock(serio_mutex);
 		g_static_mutex_unlock(&mutex);
 		return FALSE;		/* can't write anything if disconnected */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 	}
 
 	for (i=0;i<message->sequence->len;i++)
 	{
 		block = g_array_index(message->sequence,DBlock *,i);
 		/*	printf("Block pulled\n");*/
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 		if (block->type == ACTION)
 		{
 			/*		printf("Block type of ACTION!\n");*/
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 			if (block->action == SLEEP)
 			{
 				/*			printf("Sleeping for %i usec\n", block->arg);*/
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 				dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tSleeping for %i microseconds \n",block->arg));
 				g_usleep((*factor)*block->arg);
 			}
@@ -196,25 +140,11 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		else if (block->type == DATA)
 		{
 			/*		printf("Block type of DATA!\n");*/
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 			if (block->len > 100)
 				notifies = TRUE;
 			for (j=0;j<block->len;j++)
 			{
 				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 				if ((notifies) && ((j % notif_divisor) == 0))
 					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<b>Sending %i of %i bytes</b>"),j,block->len));
 				if (i == 0)
@@ -222,21 +152,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 				else
 					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%.2X\"\n",i,j+1,block->len,block->data[j]));
 				/*printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);*/
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);	/* Send write command */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 				if (!res)
 				{
 					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
@@ -256,13 +172,6 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	 * and pending match, in the case of a failed write, the 
 	 * update_write_status() function will catch it and rollback as needed
 	 */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 	if ((output) && (retval))
 	{
 		if (mode == MTX_SIMPLE_WRITE)
@@ -284,13 +193,6 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
   \param data, unused
   \returns TRUE
   */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 {
 #ifndef __WIN32__
@@ -320,13 +222,6 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	gtk_widget_destroy (dialog);
 
 	/* Read list of dev before device plugin */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 	b_dir = g_dir_open("/dev",0,&err);
 	if (b_dir)
 	{
@@ -344,21 +239,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	gtk_widget_destroy (dialog);
 	g_usleep(1000000);	/* 1 Sec */
 
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
-
 	/* Read list of dev AFTER device plugin */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 	a_dir = g_dir_open("/dev",0,&err);
 	if (a_dir)
 	{
@@ -431,13 +312,6 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
   port, if so, return TRUE else return FALSE
   \param name,  port name to search for...
   */
-
-/*! @file src/comms.c
- *
- * @brief ...
- *
- *
- */
 gboolean check_potential_ports(const gchar *name)
 {
 	gchar * ports = NULL;

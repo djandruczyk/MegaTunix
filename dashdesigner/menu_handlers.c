@@ -11,6 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+
 #include <events.h>
 #include <loadsave.h>
 
@@ -33,6 +34,8 @@ void menu_setup(GtkBuilder *toplevel)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menubar),item);
 
 	/* Dashboard Menu */
+
+
 	item = gtk_image_menu_item_new_with_mnemonic("_Add Gauge");
 	OBJ_SET(toplevel,"new_dash_menuitem",item);
 	image = gtk_image_new_from_stock("gtk-add",GTK_ICON_SIZE_MENU);
@@ -88,6 +91,8 @@ void menu_setup(GtkBuilder *toplevel)
 	gtk_widget_show_all(menu);
 
 	/* Edit Menu */
+
+
 	item = gtk_menu_item_new_with_mnemonic("_Edit");
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),menu);
@@ -102,6 +107,8 @@ void menu_setup(GtkBuilder *toplevel)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
 	/* Help Menu */
+
+
 	item = gtk_menu_item_new_with_mnemonic("_Help");
 	menu = gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),menu);

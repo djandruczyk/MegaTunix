@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/sleep_calib.c
- *
- * @brief ...
- *
- *
- */
-
 #include <defines.h>
 #include <sleep_calib.h>
 #include <stdio.h>
@@ -29,13 +22,6 @@ extern gconstpointer *global_data;
 /*
  \brief calculates the accuracy of g_usleep and sets up a fudge factor
  to account for OS/platform differences in precision of the call
- */
-
-/*! @file src/sleep_calib.c
- *
- * @brief ...
- *
- *
  */
 void sleep_calib(void)
 {
@@ -57,25 +43,11 @@ void sleep_calib(void)
 		time = g_timer_elapsed(timer,NULL);
 		factors[i] = test/(time*1000000);
 		/*printf("Sleep Correction Factor test %i is %f, %f/%f\n",i,factors[i],test,time*1000000);*/
-
-/*! @file src/sleep_calib.c
- *
- * @brief ...
- *
- *
- */
 		tmpf += factors[i];
 		g_timer_reset(timer);
 	}
 	*factor = tmpf/(gfloat)i;
 	/*printf("Sleep Correction Factor is %f\n",*factor);*/
-
-/*! @file src/sleep_calib.c
- *
- * @brief ...
- *
- *
- */
 	DATA_SET_FULL(global_data,"sleep_correction",(gpointer)factor,g_free);
 	g_timer_destroy(timer);
 }

@@ -13,13 +13,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
-
 #include <assert.h>
 #include <conversions.h>
 #include <debugging.h>
@@ -48,13 +41,6 @@ extern gconstpointer *global_data;
  complex function so read the sourcecode.. ;)
  \param incoming, pointer to the raw incoming data
  \param len, how many bytes in the raw incoming block
- */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 {
@@ -98,30 +84,9 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 	g_return_if_fail(incoming);
 	/* Store timestamps in ringbuffer */
 
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
-
 	/* Backup current rtv copy */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 	memcpy(firmware->rt_data_last,firmware->rt_data,len);
 	/* Needed for Socket Mode */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 	memcpy(firmware->rt_data,incoming,len);
 	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 	g_get_current_time(&timeval);
@@ -143,22 +108,8 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 	for (i=0;i<rtv_map->rtvars_size;i++)
 	{
 		/* Get list of derived vars for raw offset "i" */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(i));
 		if (list == NULL) /* no derived vars for this variable */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 		{
 			continue;
 		}
@@ -174,13 +125,6 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 			printf("Dumping datalist for objects\n");
 			g_dataset_foreach(object,dump_datalist,NULL);
 			*/
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			 
 			if (!object)
 			{
@@ -211,36 +155,15 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 			if (DATA_GET(object,"lookuptable"))
 			{
 				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tgetting Lookuptable for var using offset %i\n",offset));*/
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 				x = lookup_data(object,raw_realtime[offset]);
 			}
 			else
 			{
 				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tNo Lookuptable needed for var using offset %i\n",offset));*/
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 				x = _get_sized_data((guint8 *)incoming,offset,size,firmware->bigendian);
 			}
 
 			/* MS Simple math without the complex math... */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			multiplier = NULL;
 			adder = NULL;
 			multiplier = DATA_GET(object,"fromecu_mult");
@@ -256,54 +179,19 @@ store_it:
 			if (temp_dep)
 			{
 				/*dbg_func(COMPLEX_EXPR,g_strdup_printf(__FILE__": process_rt_vars()\n\tvar at offset %i is temp dependant.\n",offset));*/
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 				result = temp_to_host(tmpf);
 			}
 			else
 				result = tmpf;
 			/* Get history array and current index point */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			history = (GArray *)DATA_GET(object,"history");
 			/* Store data in history buffer */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			g_mutex_lock(rtv_mutex);
 			g_array_append_val(history,result);
 			/*printf("array size %i, current index %i, appended %f, readback %f previous %f\n",history->len,history->len-1,result,g_array_index(history, gfloat, history->len-1),g_array_index(history, gfloat, history->len-2));*/
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			g_mutex_unlock(rtv_mutex);
 
 			/*printf("Result of %s is %f\n",(gchar *)DATA_GET(object,"internal_names"),result);*/
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 
 		}
 	}
@@ -320,13 +208,6 @@ store_it:
  \param type, enumeration stating if this is an upload or
  download conversion
  \returns a float of the result of the mathematical expression
- */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 {
@@ -482,13 +363,6 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
  download conversion
  \returns a float of the result of the mathematical expression
  */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
 {
 	static gdouble (*common_rtv_processor_obj)(GObject *, gchar *, ComplexExprType);
@@ -635,13 +509,6 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
  \param hash, pointer to hashtable of MultiExpression structures
  \returns the result of the multi_expression calc
  */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw_realtime,GHashTable *hash)
 {
 	MultiExpr *multi = NULL;
@@ -708,13 +575,6 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
  \param handler_name, string name of special handler case to be done
  \returns the result of the special calc
  */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 {
 	static GTimeVal now;
@@ -757,13 +617,6 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
  \param value, where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat *value)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -802,13 +655,6 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
  \param internal_name, name of the variable to get the data for.
  \param value, where to put the value
  \returns TRUE on successful lookup, FALSE on failure
- */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloat *value)
 {
@@ -851,13 +697,6 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
  \param value, where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, gint n, gfloat *value)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -887,13 +726,6 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
 	g_mutex_lock(rtv_mutex);
 	if (index > n)
 		index -= n;  /* get PREVIOUS nth one */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 	*value = g_array_index(history,gfloat,index);
 	g_mutex_unlock(rtv_mutex);
 	history = (GArray *)DATA_GET(object,"history");
@@ -910,13 +742,6 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
  \param value, where to put the value
  \returns TRUE on successful lookup, FALSE on failure
  */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *values)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -930,13 +755,6 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 	if (!rtv_mutex)
 		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	/* Set default in case of failure */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 	for (i=0;i<n;i++)
 		values[i] = 0.0;
 	if (!internal_name)
@@ -960,13 +778,6 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 		for (i=0;i<n;i++)
 		{
 			index--;  /* get PREVIOUS nth one */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			values[i] = g_array_index(history,gfloat,index);
 		}
 	}
@@ -982,13 +793,6 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
  \param skip, number to SKIP between samples
  \param values, where to put the value
  \returns TRUE on successful lookup, FALSE on failure
- */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_name, gint n, gint skip, gfloat *values)
 {
@@ -1025,13 +829,6 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 		for (i=0;i<n;i++)
 		{
 			index-=skip;  /* get PREVIOUS nth one */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			values[i] = g_array_index(history,gfloat,index);
 		}
 	}
@@ -1046,13 +843,6 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
  \param internal_name, name of the variable to get the data for.
  \param precision, where to put the precision
  \returns TRUE on successful lookup, FALSE on failure
- */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *precision)
 {
@@ -1080,13 +870,6 @@ G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *prec
  \brief flush_rt_arrays() flushed the history buffers for all the realtime
  variables
  */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void flush_rt_arrays(void)
 {
 	GMutex *rtv_mutex = NULL;
@@ -1100,35 +883,14 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 	rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 
 	/* Flush and recreate the timestamp array */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 	g_array_free(rtv_map->ts_array,TRUE);
 	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE,sizeof(GTimeVal),4096);
 
 	for (i=0;i<rtv_map->rtvars_size;i++)
 	{
 		/* Get list of derived vars for raw offset "i" */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(i));
 		if (list == NULL) /* no derived vars for this variable */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			continue;
 		list = g_list_first(list);
 		for (j=0;j<g_list_length(list);j++)
@@ -1141,25 +903,11 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 			/* TRuncate array,  but don't free/recreate as it
 			 * makes the logviewer explode!
 			 */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 			g_array_free(history,TRUE);
 			history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 			DATA_SET(object,"history",(gpointer)history);
 			g_mutex_unlock(rtv_mutex);
 	                /* bind history array to object for future retrieval */
-
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
 		}
 
 	}

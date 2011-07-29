@@ -66,6 +66,7 @@ GType mtx_stripchart_get_type(void)
  signal handlers for config event, expose event, and button press/release
  \param class_name (MtxStripChartClass *) pointer to the class
  */
+
 void mtx_stripchart_class_init (MtxStripChartClass *class_name)
 {
 	GObjectClass *obj_class;
@@ -75,11 +76,15 @@ void mtx_stripchart_class_init (MtxStripChartClass *class_name)
 	widget_class = GTK_WIDGET_CLASS (class_name);
 
 	/* GtkWidget signals */
+
 	widget_class->configure_event = mtx_stripchart_configure;
 	widget_class->expose_event = mtx_stripchart_expose;
 	/*widget_class->button_press_event = mtx_stripchart_button_press; */
+
 	/*widget_class->button_release_event = mtx_stripchart_button_release; */
+
 	/* Motion event not needed, as unused currently */
+
 	widget_class->enter_notify_event = mtx_stripchart_enter_leave_event; 
 	widget_class->leave_notify_event = mtx_stripchart_enter_leave_event; 
 	widget_class->motion_notify_event = mtx_stripchart_motion_event; 
@@ -94,6 +99,7 @@ void mtx_stripchart_class_init (MtxStripChartClass *class_name)
  \brief Finalizes the chart object
  \param chart (MtxStripChart *) pointer to the chart object
  */
+
 void mtx_stripchart_finalize (GObject *chart)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
@@ -114,6 +120,7 @@ void mtx_stripchart_finalize (GObject *chart)
  \brief cleans up each trace object
  \param chart (MtxStripChart *) pointer to the chart object
  */
+
 void mtx_stripchart_cleanup_traces (GArray *traces)
 {
 	gint i=0;
@@ -135,13 +142,15 @@ void mtx_stripchart_cleanup_traces (GArray *traces)
  \brief Initializes the chart attributes to sane defaults
  \param chart (MtxStripChart *) pointer to the chart object
  */
+
 void mtx_stripchart_init (MtxStripChart *chart)
 {
 	/* The events the chart receives
 	* Need events for button press/release AND motion EVEN THOUGH
 	* we don't have a motion handler defined.  It's required for the 
 	* dash designer to do drag and move placement 
-	*/ 
+	*/
+
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	gtk_widget_add_events (GTK_WIDGET (chart),GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
@@ -160,6 +169,7 @@ void mtx_stripchart_init (MtxStripChart *chart)
 /*	if (GTK_WIDGET_REALIZED(chart))
 		mtx_stripchart_redraw (chart);
 */
+
 }
 
 
@@ -168,38 +178,47 @@ void mtx_stripchart_init (MtxStripChart *chart)
  \brief Allocates the default colors for a chart with no options 
  \param widget (MegaStripChart *) pointer to the chart object
  */
+
 void mtx_stripchart_init_colors(MtxStripChart *chart)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 	/*! Main Background */
+
 	priv->colors[COL_BG].red=0.*65535;
 	priv->colors[COL_BG].green=0.*65535;
 	priv->colors[COL_BG].blue=0.*65535;
 	/*! Needle */
+
 	priv->colors[COL_GRAT].red=0.8*65535;
 	priv->colors[COL_GRAT].green=0.8*65535;
 	priv->colors[COL_GRAT].blue=0.8*65535;
 	/*! Trace 1 */
+
 	priv->tcolors[0].red=0.0*65535;
 	priv->tcolors[0].green=1.0*65535;
 	priv->tcolors[0].blue=1.0*65535;
 	/*! Trace 2 */
+
 	priv->tcolors[1].red=1.0*65535;
 	priv->tcolors[1].green=0.0*65535;
 	priv->tcolors[1].blue=0.0*65535;
 	/*! Trace 3 */
+
 	priv->tcolors[2].red=1.0*65535;
 	priv->tcolors[2].green=1.0*65535;
 	priv->tcolors[2].blue=0.0*65535;
 	/*! Trace 4 */
+
 	priv->tcolors[3].red=0.0*65535;
 	priv->tcolors[3].green=1.0*65535;
 	priv->tcolors[3].blue=0.0*65535;
 	/*! Trace 5 */
+
 	priv->tcolors[4].red=1.0*65535;
 	priv->tcolors[4].green=0.0*65535;
 	priv->tcolors[4].blue=1.0*65535;
 	/*! Trace 6 */
+
 	priv->tcolors[5].red=0.0*65535;
 	priv->tcolors[5].green=0.0*65535;
 	priv->tcolors[5].blue=1.0*65535;
@@ -211,6 +230,7 @@ void mtx_stripchart_init_colors(MtxStripChart *chart)
  \brief updates the chart position,  This is the CAIRO implementation
  \param widget (MtxStripChart *) pointer to the chart object
  */
+
 void update_stripchart_position (MtxStripChart *chart)
 {
 	GtkWidget * widget = NULL;
@@ -238,7 +258,9 @@ void update_stripchart_position (MtxStripChart *chart)
 	widget = GTK_WIDGET(chart);
 
 	/* Draw new data to trace pixmap */
+
 	/* Scroll trace pixmap */
+
 	cr = gdk_cairo_create(priv->trace_pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->trace_pixmap,-1,0);
 	cairo_rectangle(cr,0,0,priv->w,priv->h);
@@ -247,6 +269,7 @@ void update_stripchart_position (MtxStripChart *chart)
 	cairo_rectangle(cr,priv->w-1,0,1,priv->h);
 	cairo_fill(cr);
 	/* Render new data */
+
 	for (i=0;i<priv->num_traces;i++)
 	{
 		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
@@ -270,12 +293,14 @@ void update_stripchart_position (MtxStripChart *chart)
 	cairo_destroy(cr);
 
 	/* Copy background trace pixmap to grat for grat rendering */
+
 	cr = gdk_cairo_create(priv->grat_pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->trace_pixmap,0,0);
 	cairo_rectangle(cr,0,0,priv->w,priv->h);
 	cairo_fill(cr);
 
 	/* Render the graticule lines */
+
 	cairo_set_source_rgba (cr, 
 			priv->colors[COL_GRAT].red/65535.0,
 			priv->colors[COL_GRAT].green/65535.0,
@@ -319,6 +344,7 @@ void update_stripchart_position (MtxStripChart *chart)
 		draw_quarters = TRUE;
 	g_free(message);
 	/* render the new data */
+
 	cr2 = gdk_cairo_create(priv->grat_pixmap);
 	cairo_set_source_rgba(cr2,0.13,0.13,0.13,0.75);
 
@@ -383,6 +409,7 @@ void update_stripchart_position (MtxStripChart *chart)
 		text_offset[TOP] += extents.width + 7;
 
 		/* Trace names */
+
 		message = g_strdup_printf("%s", trace->name);
 		cairo_text_extents (cr, message, &extents);
 		cairo_rectangle(cr2,priv->w-extents.width - 20, 2.0+buffer +extents.height,extents.width,-extents.height);
@@ -407,6 +434,7 @@ void update_stripchart_position (MtxStripChart *chart)
  \param event (GdkEventConfigure *) pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
  */
+
 gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
@@ -417,6 +445,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 	priv->h = widget->allocation.height;
 
 	/* Backing pixmap (copy of window) */
+
 	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
 	priv->bg_pixmap=gdk_pixmap_new(widget->window,
@@ -427,6 +456,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_paint(cr);
 	cairo_destroy(cr);
 	/* Trace pixmap */
+
 	if (priv->trace_pixmap)
 		g_object_unref(priv->trace_pixmap);
 	priv->trace_pixmap=gdk_pixmap_new(widget->window,
@@ -437,6 +467,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_paint(cr);
 	cairo_destroy(cr);
 	/* Grat pixmap */
+
 	if (priv->grat_pixmap)
 		g_object_unref(priv->grat_pixmap);
 	priv->grat_pixmap=gdk_pixmap_new(widget->window,
@@ -469,6 +500,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
  \param event (GdkEventExpose *) pointer to GDK event datastructure that
  encodes important info like window dimensions and depth.
  */
+
 gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
@@ -500,6 +532,7 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 			   0,0,priv->w,priv->h);
 			   cairo_fill(cr);
 			 */
+
 			cairo_destroy(cr);
 		}
 	return FALSE;
@@ -514,6 +547,7 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
  overlay is added on.
  \param widget (MtxStripChart *) pointer to the chart object
  */
+
 void generate_stripchart_static_traces(MtxStripChart *chart)
 {
 	cairo_t *cr = NULL;
@@ -535,6 +569,7 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 	if (!priv->trace_pixmap)
 		return;
 	/* get a cairo_t */
+
 	cr = gdk_cairo_create (priv->trace_pixmap);
 	cairo_set_font_options(cr,priv->font_options);
 	cairo_set_source_rgb (cr, 
@@ -542,6 +577,7 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 			priv->colors[COL_BG].green/65535.0,
 			priv->colors[COL_BG].blue/65535.0);
 	/* Background Rectangle */
+
 	cairo_rectangle (cr,
 			0,0,w,h);
 	cairo_fill(cr);
@@ -579,6 +615,7 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
+
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(MTX_STRIPCHART(chart));
 	priv->mouse_x = event->x;
 	priv->mouse_y = event->y;
@@ -593,6 +630,7 @@ gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
  \param requisition (GdkRequisition *) struct to set the vars within
  \returns void
  */
+
 void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	requisition->width = 140;
@@ -604,6 +642,7 @@ void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
  \brief gets called to redraw the entire display manually
  \param chart (MtxStripChart *) pointer to the chart object
  */
+
 void mtx_stripchart_redraw (MtxStripChart *chart)
 {
 	if (!GTK_WIDGET(chart)->window) return;
@@ -639,6 +678,7 @@ void render_marker(MtxStripChart *chart)
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
 	/* Copy trace+graticule to backing pixmap */
+
 	cr = gdk_cairo_create(priv->bg_pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->grat_pixmap,0,0);
 	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);

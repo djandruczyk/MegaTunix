@@ -12,6 +12,8 @@ void retrieve_rt_vars(void)
 	Rtv_Data *rtv_data = NULL;
 	gint i = 0;
 	/*printf("retrieve rt_vars from mtx realtime maps\n");*/
+
+
 	files = get_files(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,NULL),g_strdup("rtv_map"),&classes);
 	if (!files)
 		return;
@@ -60,9 +62,13 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 			value = NULL;
 			info = NULL;
 			/* Check if we already know about it */
+
+
 			if (g_hash_table_lookup_extended(rtv_data->persona_hash,persona,&orig,&value))
 				info = (Persona_Info *)value;
 			else /* We just disovered this persona,  CREATE the hashtable for it and store */
+
+
 			{
 				info = g_new0(Persona_Info, 1);
 				info->hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -85,6 +91,8 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 					for (k=0;k<g_strv_length(vector);k++)
 					{
 						/* If we know about it, increase it's ref count */
+
+
 						if (g_hash_table_lookup_extended(info->hash,vector[k],&orig,&value))
 						{
 							tmpi = (GINT)value + 1;
@@ -93,6 +101,8 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 						else
 						{
 							/*printf("inserting var %s with value %i\n",vector[k],1);*/
+
+
 							g_hash_table_insert(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
 							g_hash_table_insert(info->int_ext_hash,g_strdup(dlog_name),g_strdup(vector[k]));
 							info->rtv_list = g_list_prepend(info->rtv_list,g_strdup(dlog_name));
@@ -112,6 +122,8 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 
 	store = gtk_tree_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_STRING);
 	/*printf("Total number of uniq vars is %i\n",len);*/
+
+
 
 	for (i=0;i<(gint)rtv_data->persona_array->len;i++)
 	{

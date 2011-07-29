@@ -12,6 +12,7 @@
  */
 
 
+
 #include <getfiles.h>
 #include <events.h>
 #include <gauge.h>
@@ -157,6 +158,8 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		exit (-1);
 	}
 	/* get rid of default empty page from ui... */
+
+
 	gtk_notebook_remove_page(GTK_NOTEBOOK(notebook),0);
 #ifdef __WIN32__
 	path = g_build_path(PSEP,HOME(),"dist",GAUGES_DATA_DIR,NULL);
@@ -238,7 +241,11 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		while (d_name != NULL)
 		{
 			g_hash_table_insert(list,g_strdup(d_name),GINT_TO_POINTER(1)); /* Store this dirname for next run thru */
+
+
 			/* check for files in */
+
+
 			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"),&classes);
 			if (files)
 			{
@@ -316,6 +323,8 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_show_all(table);
 			/* Get next dir... */
+
+
 			d_name = (gchar *)g_dir_read_name(dir);
 		}
 		gtk_widget_show_all(notebook);
@@ -325,12 +334,16 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		   gtk_main_iteration();
 		   }
 		   */
+
+
 		g_dir_close(dir);
 	}
 	g_free(path);
 	/* NOW for user private dirs,  check to make sure we didn't already get overrides and
 	 * create sections for entirely user private ones.
 	 * */
+
+
 	path = g_build_path(PSEP,HOME(),".MegaTunix",GAUGES_DATA_DIR,NULL);
 	dir = g_dir_open(path,0,NULL);
 	if (dir)
@@ -339,11 +352,15 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		while ((d_name != NULL))
 		{
 			if (g_hash_table_lookup(list,d_name) != NULL)	/* we already got this dir*/
+
+
 			{
 				d_name = (gchar *)g_dir_read_name(dir);
 				continue;
 			}
 			/* check for files in */
+
+
 			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"),&classes);
 			if (files)
 			{
@@ -422,6 +439,8 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 			}
 			gtk_widget_show_all(table);
 			/* Get next dir... */
+
+
 			d_name = (gchar *)g_dir_read_name(dir);
 		}
 		gtk_widget_show_all(notebook);
@@ -457,6 +476,8 @@ G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventBu
 	gdk_drawable_get_size(widget->window,&width,&height);
 	
 	/* Current cursor location relative to upper left corner */
+
+
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
@@ -496,6 +517,8 @@ G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventBu
 	}
 
 	/*printf("button event in gauge choice window at %i,%i\n",x_cur,y_cur);*/
+
+
 	return TRUE;
 
 }
@@ -520,12 +543,18 @@ G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, 
 
 	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
 	/* Current cursor locatio nrelatuive to upper left corner */
+
+
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
 
 	/*printf("motion event\n");*/
+
+
 	/*printf("rel movement point %i,%i\n",x_cur,y_cur);*/
+
+
 	if (grabbed)
 	{
 		if (moving)
@@ -606,11 +635,15 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 		resizing = FALSE;
 		corner = -1;
 		/*printf("button1 released, unlocking\n");*/
+
+
 		return TRUE;
 	}
 
 	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
 	/* Current cursor locatio nrelatuive to upper left corner */
+
+
 	x_cur = (gint)event->x_root-origin_x;
 	y_cur = (gint)event->y_root-origin_y;
 
@@ -655,6 +688,8 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 			if (event->button == 1)
 			{
 				/*printf("grabbed it \n");*/
+
+
 				grabbed = TRUE;
 				tt.rel_grab_x=x_cur;
 				tt.rel_grab_y=y_cur;
@@ -663,6 +698,8 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 				{
 					resizing = TRUE;
 					/* Left border */
+
+
 					if (x_cur < (tt.child_x_origin+7))
 					{
 						if (y_cur < (tt.child_y_origin+(0.33*tt.child_height)))
@@ -673,6 +710,8 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 						
 					}
 					/* Right border */
+
+
 					else if (x_cur > (tt.child_x_origin+tt.child_width-7))
 					{
 						if (y_cur < (tt.child_y_origin+(0.33*tt.child_height)))
@@ -683,6 +722,8 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 							corner = -1;
 					}
 					/* Top border */
+
+
 					if (y_cur < (tt.child_y_origin+7))
 					{
 						if (x_cur < (tt.child_x_origin+(0.33*tt.child_width)))
@@ -693,6 +734,8 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 							corner = -1;
 					}
 					/* Bottom border */
+
+
 					else if (y_cur > (tt.child_y_origin+tt.child_height-7))
 					{
 						if (x_cur < (tt.child_x_origin+(0.33*tt.child_width)))
@@ -711,6 +754,8 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 			else
 			{
 				/*printf("didn't grab squat\n");*/
+
+
 				grabbed = FALSE;
 				moving = FALSE;
 				resizing = FALSE;
@@ -731,6 +776,8 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 		printf("child base %i,%i, rel click point %i,%i\n",tt.child_x_origin,tt.child_y_origin,tt.rel_grab_x,tt.rel_grab_y);
 	}
 	*/
+
+
 	
 	return TRUE;
 
@@ -744,8 +791,12 @@ void raise_fixed_child (GtkWidget * widget)
 	fixed = GTK_FIXED (widget->parent);
 	/* If widget hasn't got a window, move it to the back of the parent fixed's
 	 *      children. If it has got a window, raise it. */
+
+
 	/* Note: this is slightly naughty as it changes the GtkFixed's GList of
 	 *      children, but it's better than removing the widget and adding it again. */
+
+
 	if (GTK_WIDGET_NO_WINDOW (widget))
 	{
 		GList *child;
@@ -837,6 +888,8 @@ void update_properties(GtkWidget * widget, Choice choice)
 	else if (choice == GAUGE_REMOVE)
 	{
 		/*printf ("gauge removal\n");*/
+
+
 		changed =  TRUE;
 		table = OBJ_GET((widget),"prop_table");
 		gtk_widget_destroy(table);
@@ -846,6 +899,8 @@ void update_properties(GtkWidget * widget, Choice choice)
 	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
 
 	/*printf("update_properties\n");*/
+
+
 }
 
 

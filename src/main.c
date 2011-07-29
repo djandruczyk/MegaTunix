@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
-
 
 #include <args.h>
 #include <binlogger.h>
@@ -43,13 +36,6 @@ gconstpointer *global_data = NULL;
  \param argc, count of command line arguments
  \param argv, array of command line args
  \returns TRUE
- */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
  */
 gint main(gint argc, gchar ** argv)
 {
@@ -79,13 +65,6 @@ gint main(gint argc, gchar ** argv)
 	global_data = g_new0(gconstpointer, 1);
 
 	/* Condition variables */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	cond = g_cond_new();
 	DATA_SET(global_data,"statuscounts_cond",cond);
 	cond = g_cond_new();
@@ -98,13 +77,6 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"rtv_thread_cond",cond);
 
 	/* Mutexes */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"serio_mutex",mutex);
 	mutex = g_mutex_new();
@@ -128,84 +100,21 @@ gint main(gint argc, gchar ** argv)
 	   printf(_("Hello World!\n"));
 	 */
 
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
-
 	/* This will exit mtx if the locking fails! */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	//create_mtx_lock();
 
 	/* Allocate memory  */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	build_string_2_enum_table();
 	serial_params = g_malloc0(sizeof(Serial_Params));
 	DATA_SET(global_data,"serial_params",serial_params);
 
 	handle_args(argc,argv);	/* handle CLI arguments */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	open_debug();		/* Open debug log */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	init();			/* Initialize global vars */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	make_megasquirt_dirs();	/* Create config file dirs if missing */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	/* Build table of strings to enum values */
 
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
-
 	/* Create Message passing queues */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	queue = g_async_queue_new();
 	DATA_SET_FULL(global_data,"io_data_queue",queue,g_async_queue_unref);
 	queue = g_async_queue_new();
@@ -233,13 +142,6 @@ gint main(gint argc, gchar ** argv)
 	/* Check for first_time flag, if so, run first tiem wizard, otherwise
 	   load personality choice
 	   */
-
-/*! @file src/main.c
- *
- * @brief ...
- *
- *
- */
 	gdk_threads_add_timeout(500,(GSourceFunc)check_for_first_time,NULL);
 	
 

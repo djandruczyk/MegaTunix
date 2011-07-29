@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
-
 #include <args.h>
 #include <datalogging_gui.h>
 #include <debugging.h>
@@ -33,23 +26,9 @@
 
 
 /* External global vars */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 extern gconstpointer *global_data;
 
 /* Static vars to all functions in this file... */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 static gboolean logging_active = FALSE;
 static gboolean header_needed = FALSE;
 
@@ -59,13 +38,6 @@ static gboolean header_needed = FALSE;
  by glade AFTER the realtime variable definitions have been loaded and 
  processed.  All of the logable variables are then placed here for user 
  selecting during datalogging.
- */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void populate_dlog_choices(void)
 {
@@ -110,13 +82,6 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 
 	/* Update status of the delimiter buttons... */
 
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
-
 	switch ((GINT)DATA_GET(global_data,"preferred_delimiter"))
 	{
 		case COMMA:
@@ -136,13 +101,6 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 	j = 0;	
 	k = 0;
 	/* Put into GList and sort it */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 	for (i=0;i<rtv_map->derived_total;i++)
 		list = g_list_prepend(list,(gpointer)g_ptr_array_index(rtv_map->rtv_list,i));
 	list = g_list_sort_with_data(list,list_object_sort,(gpointer)"dlog_gui_name");
@@ -164,23 +122,9 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 		/* Bind button to the object, Done so that we can set the state
 		 * of the buttons from elsewhere... 
 		 */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 		DATA_SET(object,"dlog_button",(gpointer)button);
 
 		/* Bind object to the button */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 		OBJ_SET(button,"object",(gpointer)object);
 
 		g_signal_connect(G_OBJECT(button),"toggled",
@@ -211,24 +155,10 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
  \brief start_datalogging() enables logging and if RT vars aren't running it
  starts them.
  */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void start_datalogging(void)
 {
 	if (logging_active)
 		return;   /* Logging already running ... */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 	if (DATA_GET(global_data,"offline"))
 		return;
 	if (lookup_widget("dlog_logable_vars_vbox1"))
@@ -252,13 +182,6 @@ G_MODULE_EXPORT void start_datalogging(void)
 /*!
  \brief stop_datalogging() stops the datalog process. It DOES not stop realtime
  variable readback though
- */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void stop_datalogging(void)
 {
@@ -305,13 +228,6 @@ G_MODULE_EXPORT void stop_datalogging(void)
  \param data, unused
  \returns TRUE
  */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
 {
 	gconstpointer *object = NULL;
@@ -320,13 +236,6 @@ G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
                 
 	/* get object from widget */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 	object = (gconstpointer *)OBJ_GET(widget,"object");
 	DATA_SET(object,"being_logged",GINT_TO_POINTER(state));
 
@@ -339,13 +248,6 @@ G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
  \param iochannel, pointer to the datalog output channel 
  \param override,  if true ALL variables are logged, if FALSE
  only selected variabels are logged
- */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 {
@@ -367,13 +269,6 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 		return;
 	}
 	/* Count total logable variables */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = g_ptr_array_index(rtv_map->rtv_list,i);
@@ -381,13 +276,6 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 			total_logables++;
 	}
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 
 	string = g_strdup_printf("\"%s\"\r\n",firmware->actual_signature);
 	output = g_string_append(output,string); 
@@ -398,13 +286,6 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 		if((override) || ((GBOOLEAN)DATA_GET(object,"being_logged")))
 		{
 			/* If space delimited, QUOTE the header names */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 			string = (gchar *)DATA_GET(object,"dlog_field_name");
 			output = g_string_append(output,string); 
 
@@ -423,13 +304,6 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 /*!
  \brief run_datalog_pf() gets called each time data arrives after rtvar 
  processing and logs the selected values to the file
- */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void run_datalog_pf(void)
 {
@@ -452,13 +326,6 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 		return;
 
 	if (!logging_active) /* Logging isn't enabled.... */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 		return;
 
 	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
@@ -476,13 +343,6 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 	}
 
 	output = g_string_sized_new(64); /*64 char initial size */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 
 	if (header_needed)
 	{
@@ -512,13 +372,6 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 		/* Print delimiter to log here so there isnt an extra
 		 * char at the end fo the line 
 		 */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 		if (j < total_logables)
 			output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 	}
@@ -532,13 +385,6 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 /*!
  \brief dlog_select_all() selects all variables for logging
  */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void dlog_select_all(void)
 {
 	guint i = 0;
@@ -549,13 +395,6 @@ G_MODULE_EXPORT void dlog_select_all(void)
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Check all logable choices */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = NULL;
@@ -570,13 +409,6 @@ G_MODULE_EXPORT void dlog_select_all(void)
 /*!
  \brief dlog_deselect_all() resets the logged choices to having NONE selected
  */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void dlog_deselect_all(void)
 {
 	guint i = 0;
@@ -587,13 +419,6 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = NULL;
@@ -609,26 +434,12 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 			g_dataset_foreach(&object,dump_datalist,NULL);
 		}
 		*/
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 	}
 }
 
 /*!
  \brief dlog_select_defaults() resets the logged choices to the ones defined 
  in the RealtimeMap file
- */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void dlog_select_defaults(void)
 {
@@ -641,13 +452,6 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = NULL;
@@ -669,13 +473,6 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
   \param data, unused
   \returns FALSE on problem, TRUE otherwise
   */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -731,13 +528,6 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
   \param data, unused
   \returns TRUE
   */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
 {
 	CmdLineArgs *args = NULL;
@@ -768,13 +558,6 @@ G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
   \param data, unused
   \returns TRUE
   */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -824,13 +607,6 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
  \brief dump_log_to_disk() dumps the contents of the RTV arrays to disk as a
  datalog file
  \param iochannel, pointer to io channel for the log stream
- */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 {
@@ -883,13 +659,6 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 		{
 			value = g_array_index(histories[i], gfloat, x);
 			/*tmpbuf = g_ascii_formatd(buf,G_ASCII_DTOSTR_BUF_SIZE,"%1$.*2$f",value,precisions[i]);*/
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 			tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precisions[i]),",",'.');
 			g_string_append(output,tmpbuf);
 			g_free(tmpbuf);
@@ -898,13 +667,6 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 			/* Print delimiter to log here so there isnt an extra
 			 * char at the end fo the line 
 			 */
-
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
 			if (j < rtv_map->derived_total)
 				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 		}

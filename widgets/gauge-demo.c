@@ -34,6 +34,7 @@ int main (int argc, char **argv)
 	gauge = mtx_gauge_face_new ();
 	gtk_container_add (GTK_CONTAINER (window), gauge);
 	/*gtk_widget_realize(gauge);*/
+
 	gtk_widget_show_all (window);
 
 	if (argc < 2)

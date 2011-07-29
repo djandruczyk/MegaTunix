@@ -28,6 +28,7 @@
  * Prints the names of the all the xml elements
  * that are siblings or children of a given xml node.
  */
+
 static void
 load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 {
@@ -45,6 +46,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 		if (cur_node->type == XML_ELEMENT_NODE) 
 		{
 			/*printf("node type: Element, name: \"%s\"\n", cur_node->name);*/
+
 			xml_funcs = NULL;
 			xml_funcs = g_hash_table_lookup(priv->xmlfunc_hash,cur_node->name);
 			/* If current element name has a set of function 
@@ -55,7 +57,8 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 			 * (applies to text vals like "units_str"). We do
 			 * this in the handler by detecting that the node 
 			 * passed is null and handle it appropriately
-			 */ 
+			 */
+
 			if (xml_funcs)
 			{
 				xml_funcs->import_func(gauge,cur_node,xml_funcs->dest_var,xml_funcs->api_compat);
@@ -75,6 +78,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
  * FILENAME passed is a SHORTname,  this function will use get_file to
  * get a full path on the system.
  */
+
 void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 {
 	xmlDoc *doc = NULL;
@@ -92,9 +96,11 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	 * between the version it was compiled for and the actual shared
 	 * library used.
 	 */
+
 	LIBXML_TEST_VERSION
 
 	/*parse the file and get the DOM */
+
 	doc = xmlReadFile(filename, NULL, 0);
 
 	if (doc == NULL) {
@@ -104,6 +110,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	{
 
 		/*Get the root element node */
+
 		root_element = xmlDocGetRootElement(doc);
 
 		g_object_freeze_notify(G_OBJECT(gauge));
@@ -114,6 +121,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		mtx_gauge_face_remove_all_polygons(gauge);
 		load_elements(gauge, root_element);
 		/* Fix for api break, default to CW gauges */
+
 		if (priv->rotation == 187) 
 			priv->rotation = MTX_ROT_CCW;
 		if (priv->rotation == 188) 
@@ -133,11 +141,13 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	g_free(tmpbuf);
 
 	/*free the document */
+
 	xmlFreeDoc(doc);
 	/*
 	 *Free the global variables that may
 	 *have been allocated by the parser.
 	 */
+
 	xmlCleanupParser();
 }
 
@@ -145,8 +155,11 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 {
 	guint i = 0;
 	xmlDocPtr doc = NULL;       /* document pointer */
+
 	xmlNodePtr root_node = NULL;/* node pointers */
+
 	xmlDtdPtr dtd = NULL;       /* DTD pointer */
+
 	MtxDispatchHelper *helper = NULL;
 	MtxXMLFuncs * xml_funcs = NULL;
 	MtxGaugeFacePrivate *priv = NULL;
@@ -161,6 +174,7 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	/* 
 	 * Creates a new document, a node and set it as a root node
 	 */
+
 	doc = xmlNewDoc(BAD_CAST "1.0");
 	root_node = xmlNewNode(NULL, BAD_CAST "gauge");
 	xmlDocSetRootElement(doc, root_node);
@@ -168,11 +182,13 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	/*
 	 * Creates a DTD declaration. Isn't mandatory. 
 	 */
+
 	dtd = xmlCreateIntSubset(doc, BAD_CAST "gauge", NULL, BAD_CAST "mtxgauge.dtd");
 
 	/* Create a helper struct o bind data to for to 
 	 * trim up the XML export functions.
 	 */
+
 	helper = g_new0(MtxDispatchHelper, 1);
 	helper->gauge = gauge;
 	helper->root_node = root_node;
@@ -183,6 +199,7 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	 * key names right and the memory addresses right.  It looks confusing
 	 * but it works great.  See gauge-xml.h for the static struct binding
 	 * keynames to import/export generic handler functions */
+
 	for (i=0;i<priv->xmlfunc_array->len;i++)
 	{
 		xml_funcs = g_array_index(priv->xmlfunc_array,MtxXMLFuncs *, i);
@@ -199,20 +216,24 @@ void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
 	*/
 
 
+
 	xmlSaveFormatFileEnc(filename, doc, "utf-8", 1);
 
 	/*free the document */
+
 	xmlFreeDoc(doc);
 
 	/*
 	 *Free the global variables that may
 	 *have been allocated by the parser.
 	 */
+
 	xmlCleanupParser();
 
 	/*
 	 * this is to debug memory for regression tests
 	 */
+
 	xmlMemoryDump();
 	if (priv->xml_filename)
 		g_free(priv->xml_filename);
@@ -289,6 +310,7 @@ void mtx_gauge_warning_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
 				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_NITE],api_compat);
 			/* API compat */
+
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"color") == 0)
 			{
 				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_DAY],api_compat);
@@ -342,6 +364,7 @@ void mtx_gauge_alert_range_import(MtxGaugeFace *gauge, xmlNode *node, gpointer d
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
 				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_NITE],api_compat);
 			/* API compat */
+
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"color") == 0)
 			{
 				mtx_gauge_color_import(gauge, cur_node,&range->color[MTX_DAY],api_compat);
@@ -392,6 +415,7 @@ void mtx_gauge_text_block_import(MtxGaugeFace *gauge, xmlNode *node, gpointer de
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
 				mtx_gauge_color_import(gauge, cur_node,&tblock->color[MTX_NITE],api_compat);
 			/* API compat */
+
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"color") == 0)
 			{
 				mtx_gauge_color_import(gauge, cur_node,&tblock->color[MTX_DAY],api_compat);
@@ -525,6 +549,7 @@ void mtx_gauge_polygon_import(MtxGaugeFace *gauge, xmlNode *node, gpointer dest,
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"color_nite") == 0)
 				mtx_gauge_color_import(gauge, cur_node,&poly->color[MTX_NITE],api_compat);
 			/* API compat */
+
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"color") == 0)
 			{
 				mtx_gauge_color_import(gauge, cur_node,&poly->color[MTX_DAY],api_compat);

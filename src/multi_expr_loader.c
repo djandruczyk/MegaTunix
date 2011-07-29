@@ -13,13 +13,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/multi_expr_loader.c
- *
- * @brief ...
- *
- *
- */
-
 #include <debugging.h>
 #include <init.h>
 #include <multi_expr_loader.h>
@@ -38,13 +31,6 @@
  \param cfgfile, pointer to cfgfile that contains the data
  \param section, section to read the data from
  \see check_dependancies
- */
-
-/*! @file src/multi_expr_loader.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *cfgfile,gchar * section)
 {
@@ -124,13 +110,6 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		g_free(tmpbuf);
 	}
 	/* Create hash table to store structures for each one */
-
-/*! @file src/multi_expr_loader.c
- *
- * @brief ...
- *
- *
- */
 	hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_expr);
 	lowest = G_MAXINT32;
 	highest = G_MININT32;
@@ -171,13 +150,6 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
   \brief frees up the resources for a MultiExpr structure
   \param data, pointer to MultiExpr structure to deallocate
   */
-
-/*! @file src/multi_expr_loader.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
 	MultiExpr *multi = (MultiExpr *)data;
@@ -192,13 +164,6 @@ G_MODULE_EXPORT void free_multi_expr(gpointer data)
   \brief frees up the resource for a MultiSource structure
   \param data, pointer to MultiSource structure to deallocate
   */
-
-/*! @file src/multi_expr_loader.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void free_multi_source(gpointer data)
 {
 	MultiSource *multi = (MultiSource *)data;

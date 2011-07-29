@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
- */
-
 #include <defines.h>
 #include <mem_mgmt.h>
 
@@ -32,13 +25,6 @@ extern gconstpointer *global_data;
  \param offset, RAW BYTE offset
  \param size, size enumeration to be returned.
  \param bigendian, Flag to flip bytes or not
- */
-
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, gboolean bigendian)
 {
@@ -56,13 +42,6 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("8 bit, returning %i\n",(guint8)data[offset]);
 			*/
-
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
- */
 			return (guint8)data[offset];
 			break;
 		case MTX_S08:
@@ -77,13 +56,6 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("U16 bit, returning %i\n",result);
 			*/
-
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
- */
 			return (guint16)result;
 			break;
 		case MTX_S16:
@@ -96,13 +68,6 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("S16 bit, returning %i\n",result);
 			*/
-
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
- */
 			break;
 		case MTX_U32:
 			u32 = ((guint8)data[offset] +((guint8)data[offset+1] << 8)+((guint8)data[offset+2] << 16)+((guint8)data[offset+3] << 24));
@@ -113,13 +78,6 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("U32 bit, returning %i\n",result);
 			*/
-
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
- */
 			return (guint32)result;
 			break;
 		case MTX_S32:
@@ -131,13 +89,6 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("S32 bit, returning %i\n",result);
 			*/
-
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
- */
 			return (gint32)result;
 			break;
 		default:
@@ -157,13 +108,6 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
  \param size, size to be stored
  \param new, data to be stored
  \param bigendian, Flag to flip bytes or not
- */
-
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new, gboolean bigendian)
 {

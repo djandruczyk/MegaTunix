@@ -38,6 +38,7 @@
  \param index (gint) index of color to set.
  \param color (GdkColor) new color to use for the specified index
  */
+
 void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -69,6 +70,7 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkCo
  \param[in,out] color_ref reference to a user allocated GdkColor
  \returns GdkColor* color_ref on success, null otherwise
  */
+
 GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor *color_ref)
 {
 	MtxGaugeFacePrivate *const priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -87,6 +89,7 @@ GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index, 
  \brief gets the current value 
  \param gauge (MtxGaugeFace *) pointer to gauge
  */
+
 gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -101,12 +104,14 @@ gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value)
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param value (gfloat) new value
  */
+
 gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
 {
 	gboolean new_bg = FALSE;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	/* If no change,  no point updating */
+
 	if (value == priv->value)
 		return TRUE;
 	g_object_freeze_notify (G_OBJECT (gauge));
@@ -154,6 +159,7 @@ gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value)
  \brief gets a newly allocated copy of the value font.  Free when done.
  \param gauge (MtxGaugeFace *) pointer to gauge
  */
+
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -167,6 +173,7 @@ gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *) pointer to gauge
  \param value (gfloat) new value
  */
+
 void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -193,6 +200,7 @@ void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
  \param range (MtxWarningRange*) pointer to color range struct to copy
  \returns index of where this range is stored...
  */
+
 gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRange *range)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -223,6 +231,7 @@ gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRang
  \param range (MtxAlertRange*) pointer to alert range struct to copy
  \returns index of where this range is stored...
  */
+
 gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *range)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -253,6 +262,7 @@ gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *r
  \param tblock, MtxTextBlock * pointer to text block struct to copy
  \returns index of where this text block is stored...
  */
+
 gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tblock)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -290,6 +300,7 @@ gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tbl
  \param tblock, MtxTickGroup * pointer to tick group struct to copy
  \returns index of where this text block is stored...
  */
+
 gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgroup)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -340,6 +351,7 @@ gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgr
  \param tblock, MtxPolygon * pointer to polygon struct to copy
  \returns index of where this text block is stored...
  */
+
 gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -356,6 +368,7 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 	new_poly->color[MTX_NITE] = poly->color[MTX_NITE];
 	new_poly->filled = poly->filled;
 	/* Get size of struct to copy */
+
 	switch(poly->type)
 	{
 		case MTX_CIRCLE:
@@ -375,12 +388,14 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 	}
 	new_poly->data = g_memdup(poly->data,size);
 	/* Generic polygons have a dynmically allocated part, copy it */
+
 	if (poly->type == MTX_GENPOLY)
 	{
 		new = (MtxGenPoly *)new_poly->data;
 		temp = (MtxGenPoly *)poly->data;
 		new->points = g_memdup(temp->points,sizeof(MtxPoint)*temp->num_points);
 		/*printf("copied over %i MTxPoints (%i bytes) \n",temp->num_points,sizeof(MtxPoint)*temp->num_points);*/
+
 	}
 	g_array_append_val(priv->polygons,new_poly);
 	g_object_thaw_notify (G_OBJECT (gauge));
@@ -402,6 +417,7 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the ranges,  DO NOT FREE THIS.
  */
+
 GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -415,6 +431,7 @@ GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the ranges,  DO NOT FREE THIS.
  */
+
 GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -428,6 +445,7 @@ GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the textblocks,  DO NOT FREE THIS.
  */
+
 GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -441,6 +459,7 @@ GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the tickgroups,  DO NOT FREE THIS.
  */
+
 GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -454,6 +473,7 @@ GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \returns GArray * of the polygons,  DO NOT FREE THIS.
  */
+
 GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -468,6 +488,7 @@ GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge)
  \param field,  enumeration of the field to change
  \param value, new value
  */
+
 void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -556,6 +577,7 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
  \param field,  enumeration of the field to change
  \param value, new value
  */
+
 gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -634,6 +656,7 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
  \param field,  enumeration of the field to change
  \param value, new value
  */
+
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -697,6 +720,7 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
  \param field,  enumeration of the field to change
  \param value, new value
  */
+
 void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -800,6 +824,7 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
  \param field,  enumeration of the field to change
  \param value, new value
  */
+
 void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -925,6 +950,7 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
  \param field,  enumeration of the field to change
  \param value, new value
  */
+
 void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -983,6 +1009,7 @@ void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField 
  \param field,  enumeration of the field to change
  \param value, new value
  */
+
 void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1043,6 +1070,7 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
  \brief clears all color ranges from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
+
 void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge)
 {
 	gint i = 0;
@@ -1074,6 +1102,7 @@ void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge)
  \brief clears all alert ranges from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
+
 void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge)
 {
 	gint i = 0;
@@ -1105,6 +1134,7 @@ void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge)
  \brief clears all text blocks from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
+
 void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge)
 {
 	gint i = 0;
@@ -1139,6 +1169,7 @@ void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge)
  \brief clears all tick groups from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
+
 void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge)
 {
 	gint i = 0;
@@ -1172,6 +1203,7 @@ void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge)
  \brief clears all polygons from the gauge
  \param gauge (MtxGaugeFace *), pointer to gauge object
  */
+
 void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
 {
 	gint i = 0;
@@ -1209,6 +1241,7 @@ void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
+
 void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index)
 {
 	MtxWarningRange *w_range = NULL;
@@ -1242,6 +1275,7 @@ void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
+
 void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index)
 {
 	MtxAlertRange *a_range = NULL;
@@ -1275,6 +1309,7 @@ void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
+
 void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index)
 {
 	MtxTextBlock *tblock = NULL;
@@ -1312,6 +1347,7 @@ void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
+
 void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index)
 {
 	MtxTextBlock *tgroup = NULL;
@@ -1349,6 +1385,7 @@ void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index)
  \param gauge (MtxGaugeFace *), pointer to gauge object
  \param index gint index of the one we want to remove.
  */
+
 void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index)
 {
 	MtxPolygon *poly = NULL;
@@ -1388,6 +1425,7 @@ void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index)
  \brief gets called when  a user wants a new gauge
  \returns a pointer to a newly created gauge widget
  */
+
 GtkWidget *mtx_gauge_face_new ()
 {
 	return GTK_WIDGET (g_object_new (MTX_TYPE_GAUGE_FACE, NULL));
@@ -1399,6 +1437,7 @@ GtkWidget *mtx_gauge_face_new ()
  \param gauge, pointer to gauge
  \param state, state to set it to
  */
+
 void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1425,6 +1464,7 @@ void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
  \param gauge, pointer to gauge
  \param state, state to set it to
  */
+
 void mtx_gauge_face_set_show_tattletale(MtxGaugeFace *gauge, gboolean state)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1449,6 +1489,7 @@ void mtx_gauge_face_set_show_tattletale(MtxGaugeFace *gauge, gboolean state)
  \param gauge, pointer to gauge
  \param state, state to set it to
  */
+
 gboolean mtx_gauge_face_get_show_tattletale(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1462,6 +1503,7 @@ gboolean mtx_gauge_face_get_show_tattletale(MtxGaugeFace *gauge)
  \param gauge, pointer to gauge
  \param state, state to set it to
  */
+
 void mtx_gauge_face_set_tattletale_alpha(MtxGaugeFace *gauge, gfloat alpha)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1486,6 +1528,7 @@ void mtx_gauge_face_set_tattletale_alpha(MtxGaugeFace *gauge, gfloat alpha)
  \param gauge, pointer to gauge
  \param state, state to set it to
  */
+
 gfloat mtx_gauge_face_get_tattletale_alpha(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1498,6 +1541,7 @@ gfloat mtx_gauge_face_get_tattletale_alpha(MtxGaugeFace *gauge)
  \brief gets the peak value 
  \param gauge (MtxGaugeFace *) pointer to gauge
  */
+
 gfloat mtx_gauge_face_get_peak (MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1510,6 +1554,7 @@ gfloat mtx_gauge_face_get_peak (MtxGaugeFace *gauge)
  \brief clears the peak value 
  \param gauge (MtxGaugeFace *) pointer to gauge
  */
+
 gboolean mtx_gauge_face_clear_peak (MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1535,6 +1580,7 @@ gboolean mtx_gauge_face_clear_peak (MtxGaugeFace *gauge)
  \param gauge, pointer to gauge
  \returns the state of whether the gauge shows the drag border
  */
+
 gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1547,6 +1593,7 @@ gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *gauge)
  \brief gets called to redraw the entire display manually
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
+
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 {
 	if (!GTK_WIDGET(gauge)->window) return;
@@ -1561,6 +1608,7 @@ void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
  \param gauge, pointer to gauge
  \returns the state of whether the gauge is in daytime or nitetime mode
  */
+
 gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1574,6 +1622,7 @@ gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
  \param gauge, pointer to gauge
  \returns true on sucess
  */
+
 void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1604,6 +1653,7 @@ void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
  \param y, gdouble pointer 
  \returns nothing, all resutls passed via pointer dereference
  */
+
 void mtx_gauge_face_get_last_click_coords(MtxGaugeFace *gauge, gdouble *x, gdouble *y)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);

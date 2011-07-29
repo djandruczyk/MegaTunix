@@ -27,6 +27,7 @@ G_DEFINE_TYPE (MtxProgressBar, mtx_progress_bar, GTK_TYPE_PROGRESS_BAR)
  signal handlers for config event, expose event, and button press/release
  \param class_name (MtxProgressBarClass *) pointer to the class
  */
+
 void mtx_progress_bar_class_init (MtxProgressBarClass *class)
 {
 	GObjectClass *gobject_class;
@@ -38,7 +39,9 @@ void mtx_progress_bar_class_init (MtxProgressBarClass *class)
 	progress_class = (GtkProgressClass *) class;
 
 	/* GtkWidget signals */
+
 	/*widget_class->button_press_event = mtx_progress_bar_button_press; */
+
 
 	widget_class->expose_event = mtx_progress_bar_expose;
 
@@ -53,13 +56,15 @@ void mtx_progress_bar_class_init (MtxProgressBarClass *class)
  \brief Initializes the pbar attributes to sane defaults
  \param pbar (MtxProgressBar *) pointer to the pbar object
  */
+
 void mtx_progress_bar_init (MtxProgressBar *pbar)
 {
 	/* The events the pbar receives
 	* Need events for button press/release AND motion EVEN THOUGH
 	* we don't have a motion handler defined.  It's required for the 
 	* dash designer to do drag and move placement 
-	*/ 
+	*/
+
 	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	priv->peak = 0.0;
 	priv->hold_id = 0;
@@ -72,18 +77,22 @@ void mtx_progress_bar_init (MtxProgressBar *pbar)
  \brief Allocates the default colors for a pbar with no options 
  \param widget (MegaProgressBar *) pointer to the pbar object
  */
+
 void mtx_progress_bar_init_colors(MtxProgressBar *pbar)
 {
 	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	/*! Main Background */
+
 	priv->colors[PROGRESS_COL_BG].red=0.95;
 	priv->colors[PROGRESS_COL_BG].green=0.95;
 	priv->colors[PROGRESS_COL_BG].blue=0.95;
 	/*! Bar */
+
 	priv->colors[PROGRESS_COL_BAR].red=0.2;
 	priv->colors[PROGRESS_COL_BAR].green=0.2;
 	priv->colors[PROGRESS_COL_BAR].blue=1.0;
 	/*! Peak */
+
 	priv->colors[PROGRESS_COL_PEAK].red=1.0;
 	priv->colors[PROGRESS_COL_PEAK].green=0.0;
 	priv->colors[PROGRESS_COL_PEAK].blue=0.0;
@@ -94,6 +103,7 @@ void mtx_progress_bar_init_colors(MtxProgressBar *pbar)
  \brief gets called to redraw the entire display manually
  \param pbar (MtxProgressBar *) pointer to the pbar object
  */
+
 void mtx_progress_bar_real_update (GtkProgress *progress)
 {
 	GtkProgressBar *pbar;
@@ -170,6 +180,7 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 			   if (GTK_PROGRESS (pbar)->show_text)
 			   mtx_progress_bar_paint_text (pbar, -1, current, orientation);
 			   */
+
 		}
 		pbar->dirty = FALSE;
 
@@ -243,6 +254,7 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 	}
 
 	/* Show the immediate value */
+
 	cairo_set_source_rgb(cr,priv->colors[PROGRESS_COL_BAR].red,
 			priv->colors[PROGRESS_COL_BAR].green,
 			priv->colors[PROGRESS_COL_BAR].blue);

@@ -20,12 +20,14 @@
 
 
 /* Prototypes */
+
 gboolean mtx_progress_bar_peak_reset(gpointer data);
 
 /*!
  \brief gets called when  a user wants a new pbar
  \returns a pointer to a newly created pbar widget
  */
+
 GtkWidget *mtx_progress_bar_new ()
 {
 	return GTK_WIDGET (g_object_new (MTX_TYPE_PROGRESS_BAR, NULL));
@@ -39,6 +41,7 @@ GtkWidget *mtx_progress_bar_new ()
  * running,  cancel it.
  * If fraction is LESS than peak, check for hold function, if none, start one.
  */
+
 void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 {
 	MtxProgressBarPrivate *priv = NULL; 
@@ -84,6 +87,7 @@ gboolean mtx_progress_bar_peak_reset(gpointer data)
  \brief gets current fraction
  \returns current fraction (0-1.0)
  */
+
 gfloat mtx_progress_bar_get_fraction (MtxProgressBar *pbar)
 {
 	g_return_val_if_fail ((MTX_IS_PROGRESS_BAR (pbar)),0.0);
@@ -95,6 +99,7 @@ gfloat mtx_progress_bar_get_fraction (MtxProgressBar *pbar)
  \brief gets hold time
  \returns hold time in ms
  */
+
 gint mtx_progress_bar_get_hold_time (MtxProgressBar *pbar)
 {
 	MtxProgressBarPrivate *priv = NULL; 
@@ -109,6 +114,7 @@ gint mtx_progress_bar_get_hold_time (MtxProgressBar *pbar)
  \brief sets hold time
  \returns nothing
  */
+
 void mtx_progress_bar_set_hold_time (MtxProgressBar *pbar, gint hold_time)
 {
 	MtxProgressBarPrivate *priv = NULL; 

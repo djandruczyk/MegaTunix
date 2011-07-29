@@ -20,6 +20,7 @@
  \brief gets called when  a user wants a new stripchart
  \returns a pointer to a newly created stripchart widget
  */
+
 GtkWidget *mtx_stripchart_new ()
 {
 	return GTK_WIDGET (g_object_new (MTX_TYPE_STRIPCHART, NULL));
@@ -30,6 +31,7 @@ GtkWidget *mtx_stripchart_new ()
  \brief gets the current value 
  \param stripchart (MtxStripChart *) pointer to stripchart
  */
+
 gboolean mtx_stripchart_get_latest_values (MtxStripChart *stripchart, gfloat *values)
 {
 	gint i = 0;
@@ -51,6 +53,7 @@ gboolean mtx_stripchart_get_latest_values (MtxStripChart *stripchart, gfloat *va
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param value (gfloat *) new value. This code makes some bad assumptions
  */
+
 void mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 {
 	gint i = 0;
@@ -88,6 +91,7 @@ void mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param value (gfloat) new value
  */
+
 gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint precision, const gchar *name, GdkColor *color)
 {
 	gint i = 0;
@@ -99,6 +103,7 @@ gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint
 	g_object_freeze_notify (G_OBJECT (chart));
 	
 	/* add a trace.. */
+
 	trace = g_new0(MtxStripChartTrace, 1);
 	trace->min = min;
 	trace->max = max;
@@ -135,6 +140,7 @@ gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param value (gfloat) new value
  */
+
 gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
 {
 	gint i = 0;
@@ -150,6 +156,7 @@ gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
 		if (!trace)
 			continue;
 		if (trace->id == index) /* Found it! */
+
 		{
 			priv->traces = g_array_remove_index(priv->traces,i);
 			if (trace->name)
@@ -181,6 +188,7 @@ gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
  \param stripchart (MtxStripChart *) pointer to stripchart
  \param justification 
  */
+
 gboolean mtx_stripchart_set_name_justification(MtxStripChart *chart, GtkJustification justification)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
@@ -208,6 +216,7 @@ gboolean mtx_stripchart_set_name_justification(MtxStripChart *chart, GtkJustific
  \brief Gets trace name justification
  \param stripchart (MtxStripChart *) pointer to stripchart
  */
+
 GtkJustification mtx_stripchar_get_name_justification(MtxStripChart *chart)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);

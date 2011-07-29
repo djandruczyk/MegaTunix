@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
-
 #include <debugging.h>
 #include <getfiles.h>
 #include <gui_handlers.h>
@@ -39,13 +32,6 @@ extern gconstpointer *global_data;
   \brief Creates a stripchart widget (i.e. accel wizard)
   \param parent, container for stripchart widget
   */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 {
 	GtkWidget *chart = NULL;
@@ -103,13 +89,6 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
   \brief updates a stripchart widget with new values
   \param watch, pointer to the watch containing the new data
   */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
 {
 	mtx_stripchart_set_values(MTX_STRIPCHART(watch->user_data),watch->vals);
@@ -119,13 +98,6 @@ G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
  \brief select_datalog_for_import() loads a datalog file for playback
  \param widget, Calling widget
  \param data, unused
- */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
  */
 
 G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
@@ -176,13 +148,6 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
  \brief load_logviewer_file() loads a datalog file for playback
  \param iochannel, The IO channel representing the source file
  */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 {
 	Log_Info *log_info = NULL;
@@ -205,13 +170,6 @@ G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
  of the log_info struture
  \returns a pointer to an allocated Log_Info structure
  */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT Log_Info * initialize_log_info(void)
 {
 	Log_Info *log_info = NULL;
@@ -228,13 +186,6 @@ G_MODULE_EXPORT Log_Info * initialize_log_info(void)
  if the delimiter is a COMMA, or a TAB. 
  \param iochannel,iochannel that represents the input file
  \param log_info, the Log_Info structure
- */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 {
@@ -255,13 +206,6 @@ read_again:
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
 
 	if (status == G_IO_STATUS_NORMAL) /* good read */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 	{
 		/* This searched for a quoted string which should be the 
 		 * ecu signature.  pre 0.9.15 versions of megatunix shoved the
@@ -270,24 +214,10 @@ read_again:
 		 * as it hurts interoperability.  0.9.16+ changes this to use 
 		 * the REAL signature returned by the firmware. 
 		 */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 		if (g_strrstr(a_line->str,"\"") != NULL)
 		{
 			log_info->signature = g_strdup(g_strstrip(g_strdelimit(a_line->str,"\"\n\r",' ')));
 			/*printf(_("LOG signature is \"%s\"\n"),log_info->signature);*/
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 			if (DATA_GET(global_data,"offline"))
 			{
 				printf("rtv_map->applicable_revisions is \"%s\"\n",rtv_map->applicable_revisions);
@@ -308,36 +238,15 @@ read_again:
 			delimiter = g_strdup("\t");
 
 		/* Store delimiter in structure */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 		log_info->delimiter = g_strdup(delimiter);
 		/* Store field names as well... 
 		 * log_info->fields is a string vector (char **)
 		 * that is NULL terminated thanks to g_strsplit(void)
 		 */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 		fields = parse_keys(a_line->str,&num_fields,delimiter);
 
 		log_info->field_count = num_fields;
 		/* Create objects, arrays and storage points... */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 		for (i=0;i<num_fields;i++)
 		{
 			array = NULL;
@@ -349,13 +258,6 @@ read_again:
 			g_ptr_array_add(log_info->log_list,object);
 		}
 		/* Enable parameter selection button */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 		gtk_widget_set_sensitive(lookup_widget("logviewer_select_params_button"), TRUE);
 		OBJ_SET(lookup_widget("logviewer_trace_darea"),"log_info",(gpointer)log_info);
 
@@ -369,13 +271,6 @@ read_again:
  \brief populate_limits() scans the datalog data and sets the minimum and 
  maximum values based on the span of the data in the file
  \param log_info, pointer to log info structure
- */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 {
@@ -424,13 +319,6 @@ G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
  \param iochannel, data source 
  \param log_info, pointer to log information struct
  */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 {
 	GString *a_line = g_string_new("\0");
@@ -450,13 +338,6 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 			/* Should insert some sort of marker at this index
 			 * in the data arrays... 
 			 */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 			printf(_("MARK found in logfile. MTX doesn't do anything with these yet...!\n"));
 			continue;
 		}
@@ -483,21 +364,7 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 			g_array_append_val(tmp_array,val);
 
 			/*printf("data[%i]=%s\n",i,data[i]);*/
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 			if (x == 0) /* only check first line */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
 			{
 				if (g_strrstr(data[i], ".") != NULL)
 				{
@@ -518,13 +385,6 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
  \brief free_log_info frees the data allocated by a datalog import, 
  should be done when switching logfiles
  \param log_info, pointer to log information structure
- */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 {
@@ -561,13 +421,6 @@ G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
  \param widget, pointer to the range widget representing the scroll speed
  \param data, unused
  \returns TRUE, to indicate the event is handled
- */
-
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
 {

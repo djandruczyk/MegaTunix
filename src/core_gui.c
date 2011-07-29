@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
-
 #include <args.h>
 #include <core_gui.h>
 #include <dashboard.h>
@@ -36,13 +29,6 @@
 
 
 /* Default window size and MINIMUM size as well... */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 static gint def_width=640;
 static gint def_height=400;
 gint width = 0;
@@ -53,13 +39,6 @@ extern gconstpointer *global_data;
 /*!
  \brief setup_gui() creates the main window, main notebook, and the static
  tabs and populates them with data
- */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT gboolean setup_gui(void)
 {
@@ -151,13 +130,6 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 		gtk_widget_show_all(window);
 
 	/* Tabs that should be hidden.... */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	notebook = glade_xml_get_widget(xml,"toplevel_notebook");
 	g_object_set(G_OBJECT(notebook),"tab-border",0,NULL);
 	tabcount = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
@@ -171,13 +143,6 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 		if(hidden_list[i] == TRUE)
 		{
 			/* Get tab and child label and hide it.. */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 			child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
 			label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
 			gtk_widget_hide(child);
@@ -193,25 +158,11 @@ G_MODULE_EXPORT gboolean setup_gui(void)
   done in glade.
   \param xml, pointer to XML for the core Gui
   */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 {
 	/* Initializes base gui and installs things like the logo and
 	 * other dynamic bits that can't be set via glade statically 
 	 */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	GtkTextBuffer * textbuffer = NULL;
 	GtkTextTag *tag = NULL;
 	GtkWidget *alignment = NULL;
@@ -232,37 +183,16 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
 	register_widget("toplevel_notebook",widget);
 	/* Set about tab title */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	label = glade_xml_get_widget(xml,"about_title_label");
 	tmpbuf = g_strdup_printf(_("MegaTunix %s Tuning Software for Unix-class OS's"),VERSION);
 	gtk_label_set_text(GTK_LABEL(label),tmpbuf);
 	g_free(tmpbuf);
 
 	/* Info status label at base of UI */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	widget = glade_xml_get_widget(xml,"info_label");
 	register_widget("info_label",widget);
 
 	/* Load Main MegaTunix logo */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	alignment = glade_xml_get_widget(xml,"logo_alignment");
 	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
@@ -271,58 +201,23 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	gtk_container_add (GTK_CONTAINER (alignment), image);
 
 	/* Set about tab identifier */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	OBJ_SET(glade_xml_get_widget(xml,"about_frame"),"tab_ident",GINT_TO_POINTER(ABOUT_TAB));
 
 	/* Tab visibility menuitem */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	widget = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
 	register_widget("show_tab_visibility_menuitem",widget);
 
 	/* General Tab, Tooltips */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	button = glade_xml_get_widget(xml,"tooltips_cbutton");
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOOLTIPS_STATE));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(global_data,"tips_in_use"));
 
 	/* General Tab, Log Datastreams */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	button = glade_xml_get_widget(xml,"log_raw_cbutton");
 	OBJ_SET(button,"handler",GINT_TO_POINTER(LOG_RAW_DATASTREAM));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(global_data,"log_raw_datastream"));
 
 	/* General Tab, Temp Scales */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	button = glade_xml_get_widget(xml,"fahrenheit_rbutton");
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_FAHRENHEIT));
 	if (mtx_temp_units == FAHRENHEIT)
@@ -339,24 +234,10 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	/* General Tab, Dashboard Ebox */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"dash_ebox");
 	gtk_widget_set_tooltip_text(ebox,"This box provides your choice for the active dashboard to be used");
 
 	/* General Tab, Dashboard 1 */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	button = glade_xml_get_widget(xml,"dash1_choice_button");
 	cbutton = glade_xml_get_widget(xml,"dash1_cbutton");
 	register_widget("dash1_cbutton",cbutton);
@@ -379,25 +260,11 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 #endif
 	register_widget("dash_1_label",label);
 	/* Bind signal to the button to choose a new dash */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(present_dash_filechooser),
 			GINT_TO_POINTER(1));
 
 	/* General Tab, Dashboard 2 */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	button = glade_xml_get_widget(xml,"dash2_choice_button");
 	cbutton = glade_xml_get_widget(xml,"dash2_cbutton");
 	register_widget("dash2_cbutton",cbutton);
@@ -419,49 +286,21 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 #endif
 	register_widget("dash_2_label",label);
 	/* Bind signal to the button to choose a new dash */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	g_signal_connect(G_OBJECT(button),"clicked",
 			G_CALLBACK(present_dash_filechooser),
 			GINT_TO_POINTER(2));
 
 	/* General Tab, Debugging frame */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"debugging_ebox");
 	gtk_widget_set_tooltip_text(ebox,"This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will be written to MTXlog.txt file in your homedir, or in C:\\program files\\megatunix on Win32 platforms...");
 	widget = glade_xml_get_widget(xml,"debugging_frame");
 	populate_debugging(widget);
 
 	/* General Tab Interrogation frame */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"ecu_info_ebox");
 	gtk_widget_set_tooltip_text(ebox,"This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you some feedback about how the MS responds to various commands and suggests what it thinks is the closest match.");
 
 	/* General Tab Interrogation button */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"interrogate_button_ebox");
 	gtk_widget_set_tooltip_text(ebox,"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100% foolproof, but it works about 99.5% of the time.  If it MIS-detects your ECU contact the developer with your firmware details.");
 	button = glade_xml_get_widget(xml,"interrogate_button");
@@ -469,13 +308,6 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	OBJ_SET(button,"handler",GINT_TO_POINTER(INTERROGATE_ECU));
 
 	/* General Tab OFfline mode button */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"offline_mode_ebox");
 	gtk_widget_set_tooltip_text(ebox,"This button Enables \"Offline Mode\" so that you can load tabs specific to an ECU and set settings, modify maps without doing any Serial I/O. This will allow you to modify maps offline when not connected to the vehicle/ECU.");
 	button = glade_xml_get_widget(xml,"offline_button");
@@ -483,13 +315,6 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	OBJ_SET(button,"handler",GINT_TO_POINTER(OFFLINE_MODE));
 
 	/* Interrogation results entries */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	widget = glade_xml_get_widget(xml,"ecu_revision_entry");
 	register_widget("ecu_revision_entry",widget);
 	widget = glade_xml_get_widget(xml,"text_version_entry");
@@ -498,13 +323,6 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("ecu_signature_entry",widget);
 
 	/* General Tab Textview */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"interrogation_status_ebox");
 	gtk_widget_set_tooltip_text(ebox,"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"R\", which returns the extended runtime variables (only supported by a subset of firmwares, like MSnS-Extra \n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"T\" command (Text version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU (DT Firmwares only).");
 
@@ -525,85 +343,36 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	DATA_SET_FULL(global_data,"inter_info_tag",tag,g_object_unref);
 
 	/* COMMS Tab Commport frame */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"commport_ebox");
 	gtk_widget_set_tooltip_text(ebox,"These controls set parameters specific to Serial/Network communication.  The read timeout should be set to 100 ms for serial and low latency network links. Increase this to 300-500 for slower links over long distances.  Since megatunix 0.9.18 serial port setup is dynamic for Linux and Windows,  OS-X users may need to disable auto-scanning and manually type in the device name (/dev/cu...) Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)");
 
 	/* Locate Port button */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 #ifdef __WIN32__
 	widget = glade_xml_get_widget(xml,"locate_port_button");
 	gtk_widget_set_sensitive (widget,FALSE);
 #endif
 
 	/* Read Timeout threshold spinner */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	widget = glade_xml_get_widget(xml,"read_timeout_spin");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(GINT)DATA_GET(global_data,"read_timeout"));
 
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(SER_READ_TIMEOUT));
 
 	/* Active COMM Port entry */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	widget = glade_xml_get_widget(xml,"active_port_entry");
 	register_widget("active_port_entry",widget);
 
 	/* Autodetect Checkbutton */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	widget = glade_xml_get_widget(xml,"serial_autodetect_cbutton");
 	register_widget("serial_autodetect_cbutton",widget);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(COMM_AUTODETECT));
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)DATA_GET(global_data,"autodetect_port"));
 
 	/* Fill in comm port entry if in manual mode */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	if (!(GBOOLEAN)DATA_GET(global_data,"autodetect_port"))
 		gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget(xml,"active_port_entry")),DATA_GET(global_data,"override_port"));
 
 	/* COMMS Tab Read delay subtable */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"rates_ebox");
 	gtk_widget_set_tooltip_text(ebox,"These controls set the polling rate of the serial port (i.e. every 30 ms), as well as the update rates for the runtime text, runtime sliders, and dashboards.  The Datalogging always happens at the raw serial polling rate.  This allows you to reduce the update rate of other things that are less relevant and conserver CPU resources for slower systems.");
 
@@ -629,13 +398,6 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(VE3D_FPS));
 
 	/* COMMS Tab Network ctrls */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	button = glade_xml_get_widget(xml,"reverse_connect_button");
 	register_widget("reverse_connect_button",button);
 	OBJ_SET(button,"handler",GINT_TO_POINTER(PHONE_HOME));
@@ -656,24 +418,10 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("connected_clients_entry",widget);
 
 	/* COMMS Tab Stats Frame */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	ebox = glade_xml_get_widget(xml,"ms_stats_ebox");
 	gtk_widget_set_tooltip_text(ebox,"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable or wireless connection between this host computer and the MS.");
 
 	/* COMMS Tab Stats Entries */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 	widget = glade_xml_get_widget(xml,"comms_vecount_entry");
 	register_widget("comms_vecount_entry",widget);
 	widget = glade_xml_get_widget(xml,"comms_rtcount_entry");
@@ -714,13 +462,6 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
   like connected/disconnected, errors, etc
   \param parent, Container for the status Icons
   */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 void setup_main_status(GtkWidget *parent)
 {
 	GtkWidget * image = NULL;
@@ -749,13 +490,6 @@ void setup_main_status(GtkWidget *parent)
   \brief Sets the connected/disconnected icons as appropriate
   \param state, state of the ECU connection
   */
-
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
 void set_connected_icons_state(gboolean state)
 {
 	static GtkWidget * conn = NULL;

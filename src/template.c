@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/template.c
- *
- * @brief ...
- *
- *
- */
-
 #include <template.h>
 
 extern gconstpointer *global_data;

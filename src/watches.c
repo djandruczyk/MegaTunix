@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
-
 #include <plugin.h>
 #include <rtv_processor.h>
 #include <stdio.h>
@@ -28,13 +21,6 @@ static GHashTable *watch_hash;
 /*!
  \brief fire_off_rtv_watches_pf() Trolls through the watch list and if
  conditions are met, calls the corresponding fucntion(s)
- */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void fire_off_rtv_watches_pf(void)
 {
@@ -60,13 +46,6 @@ G_MODULE_EXPORT void fire_off_rtv_watches_pf(void)
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
@@ -101,13 +80,6 @@ G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gin
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT guint32 create_single_bit_change_watch(const gchar * varname, gint bit,gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
@@ -137,13 +109,6 @@ G_MODULE_EXPORT guint32 create_single_bit_change_watch(const gchar * varname, gi
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT guint32 create_value_change_watch(const gchar * varname, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
@@ -173,13 +138,6 @@ G_MODULE_EXPORT guint32 create_value_change_watch(const gchar * varname, gboolea
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
@@ -205,24 +163,10 @@ G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one
   \brief destroys a watch given the pointer passed
   \param data, pointer to the DataWatch structure we need to destroy
   */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void watch_destroy(gpointer data)
 {
 	DataWatch *watch = (DataWatch *)data;
 	/*printf("destroying watch %ui\n",watch->id);*/
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 	if (watch->varname)
 		g_free(watch->varname);
 	if (watch->vals)
@@ -240,13 +184,6 @@ G_MODULE_EXPORT void watch_destroy(gpointer data)
   \param watch_id, the watch identifier as returned by any of the 
   create_*_watch functions
   */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void remove_watch(guint32 watch_id)
 {
 	g_hash_table_remove(watch_hash,GINT_TO_POINTER(watch_id));
@@ -261,13 +198,6 @@ G_MODULE_EXPORT void remove_watch(guint32 watch_id)
   \param value, pointer to DataWatch structure
   \param data, unused
   */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data)
 {
 	DataWatch * watch = (DataWatch *)value;
@@ -276,13 +206,6 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 	guint8 tmpi2 = 0;
 	gint i = 0;
 	/*printf("process watches running\n");*/
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 	switch (watch->style)
 	{
 		case SINGLE_BIT_STATE:
@@ -292,21 +215,7 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 			   watch is set to run only once, thus it will 
 			   evaporate after 1 run 
 			 */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 			/*printf("single bit state\n");*/
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
 			if (((tmpi & (1 << watch->bit)) >> watch->bit) == watch->state)
@@ -324,21 +233,7 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 			  fire when it changes, but if it's stable, 
 			  don't fire repeatedly 
 			 */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 			/*printf("single bit change\n");*/
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
 			lookup_previous_value(watch->varname, &tmpf);
@@ -357,30 +252,9 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 			  If value changes at ALL from previous value, then
 			  fire watch. (useful for gauges/dash/warmup 2d stuff)
 			 */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 			/*printf("value change\n");*/
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 			lookup_current_value(watch->varname, &(watch->val));
 			/* If it's a one-shot, fire it no matter what... */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 			if (watch->one_shot)
 			{
 				watch->func(watch);
@@ -398,13 +272,6 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 			break;
 		case MULTI_VALUE:
 			/*printf("multi value change\n");*/
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 			for (i=0;i<watch->num_vars;i++)
 			{
 				if (watch->varnames[i])
@@ -430,23 +297,9 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
   \param id, WatchID as returned by any of the create_*_watch functions
   \returns TRUE if the ID is valid, FALSE otherwise
   */
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean watch_active(guint32 id)
 {
 	/*printf("watch_active call for watch %ui\n",id);*/
-
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
 	if (g_hash_table_lookup(watch_hash,GINT_TO_POINTER(id)))
 		return TRUE;
 	else

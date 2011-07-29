@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
-
 #include <args.h>
 #include <3d_vetable.h>
 #include <comms.h>
@@ -42,13 +35,6 @@ gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test
  \param cmd, and enumerated representation of a command to execute
  \param data, additional data for fringe cases..
  */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 {
 	static GAsyncQueue *io_data_queue = NULL;
@@ -72,13 +58,6 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 	 * call io_cmd with no cmd name and pack in the post functions into
 	 * the void pointer part.
 	 */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 	if (!cmd_name)
 	{
 		message = initialize_io_message();
@@ -89,13 +68,6 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 		message->command->dynamic = TRUE;
 	}
 	/* Std io_message passed by string name */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 	else
 	{
 		command = g_hash_table_lookup(commands_hash,cmd_name);
@@ -127,13 +99,6 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
  gui handling (for things that can't run in a thread context)
  \param data, unused
  */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
@@ -148,13 +113,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
 	/*	GTimer *clock;*/
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 
 	dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
 
@@ -175,32 +133,11 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	g_return_val_if_fail(serial_params,NULL);
 	g_return_val_if_fail(serial_repair_thread,NULL);
 	/*	clock = g_timer_new();*/
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 	/* Endless Loop, wait for message, processs and repeat... */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 	while (TRUE)
 	{
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,10000); /* 10 ms timeout */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
 		if (DATA_GET(global_data,"leaving") || 
@@ -208,13 +145,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		{
 fast_exit:
 			/* drain queue and exit thread */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
 				dealloc_message(message);
 
@@ -226,13 +156,6 @@ fast_exit:
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 			continue;
 
 		if ((!DATA_GET(global_data,"offline")) && 
@@ -241,13 +164,6 @@ fast_exit:
 				 (!(serial_params->open))))
 		{
 			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",DATA_GET(global_data,"connected"),DATA_GET(global_data,"offline"),serial_params->open);*/
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 			if (args->network_mode)
 			{
 				dbg_func(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));
@@ -276,13 +192,6 @@ fast_exit:
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 					if (DATA_GET(global_data,"leaving"))
 						goto fast_exit;
 					gdk_threads_enter();
@@ -293,33 +202,12 @@ fast_exit:
 					   if (!result)
 					   message->command->defer_post_functions=TRUE;
 					 */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 				}
 				break;
 			case WRITE_CMD:
 				/*				g_timer_start(clock);*/
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 				message->status = write_data(message);
 				/*				printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 				if (message->command->helper_function)
 				{
 					if (DATA_GET(global_data,"leaving"))
@@ -332,13 +220,6 @@ fast_exit:
 				break;
 			case NULL_CMD:
 				/*printf("null_cmd, just passing thru\n");*/
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 				break;
 
 			default:
@@ -351,13 +232,6 @@ fast_exit:
 		   via a function fall, thus dealloc it here., Otherwise
 		   push up the queue to the postfunction dispatcher
 		 */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 		if (message->command->defer_post_functions)
 			dealloc_message(message);
 		else
@@ -386,13 +260,6 @@ fast_exit:
  \param msg, the message to be sent (required)
  \param count, Flag to display a counter
  \param clear, Flag to clear the display before writing the text
- */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void  thread_update_logbar(
 		const gchar * view_name, 
@@ -440,13 +307,6 @@ G_MODULE_EXPORT void  thread_update_logbar(
  functions (ones that take no params)
  \param name, name of function to lookup and run in the main gui context..
  */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
@@ -482,13 +342,6 @@ G_MODULE_EXPORT gboolean queue_function(const gchar * name)
  \param widget_name, textual name of the widget to update
  \param type, type of widget to update
  \param msg, the message to be sent (required)
- */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void  thread_update_widget(
 		const gchar * widget_name,
@@ -530,13 +383,6 @@ G_MODULE_EXPORT void  thread_update_widget(
  \param widget_name, textual name of the widget to update
  \param stats, the state to set
  */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
@@ -571,13 +417,6 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
  to force a widget rerender
  \param widget_name, widget pointer
  */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
@@ -605,13 +444,6 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
   \param page, mtx-ecu page number
   \param offset, offset from that page's origin
   */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
 G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 {
 	guint i = 0;
@@ -633,13 +465,6 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
  \param page, MTX-ecu page
  \param offset, offset from beginnig of page
  \param len, now many bytes worth of widgets to search for an update
- */
-
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
  */
 G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint len)
 {
