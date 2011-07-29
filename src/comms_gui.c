@@ -19,7 +19,6 @@ extern GdkColor white;
 extern GdkColor red;
 extern GdkColor black;
 
-
 /*!
  \brief reset_errcounts() resets the error counters
  \param widget (GtkWidget *) unused

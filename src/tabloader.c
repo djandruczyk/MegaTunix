@@ -38,7 +38,6 @@
 #include <widgetmgmt.h>
 
 extern gconstpointer *global_data;
-
 gboolean descend_tree(GladeWidgetInfo *info, ConfigFile *);
 
 /*!

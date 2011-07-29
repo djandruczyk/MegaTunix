@@ -21,8 +21,6 @@
 #include <glade/glade.h>
 #include <keyparser.h>
 
-
-
 /*!
   \brief Sets up a megatunix comboboxentry widget. Reads the data from the 
   passed ConfigFile *, and sets up the choices as well as the combo model

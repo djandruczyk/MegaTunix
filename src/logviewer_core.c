@@ -27,7 +27,6 @@
 
 extern gconstpointer *global_data;
 
-
 /*!
   \brief Creates a stripchart widget (i.e. accel wizard)
   \param parent, container for stripchart widget

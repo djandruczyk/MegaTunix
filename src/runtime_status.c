@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-
 #include <args.h>
 #include <api-versions.h>
 #include <core_gui.h>
@@ -30,8 +29,6 @@
 #include <tabloader.h>
 #include <widgetmgmt.h>
 #include <xmlbase.h>
-
-
 
 extern gconstpointer *global_data;
 

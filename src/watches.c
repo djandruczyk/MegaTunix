@@ -16,8 +16,8 @@
 #include <stdio.h>
 #include <watches.h>
 
-
 static GHashTable *watch_hash;
+
 /*!
  \brief fire_off_rtv_watches_pf() Trolls through the watch list and if
  conditions are met, calls the corresponding fucntion(s)

@@ -36,8 +36,8 @@ GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
 extern gconstpointer *global_data;
 
-
 static void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
+
 /*!
  * init(void)
  * \brief Sets sane values to global variables for a clean startup of 

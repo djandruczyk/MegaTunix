@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-
 #include <args.h>
 #include <binlogger.h>
 #include <core_gui.h>

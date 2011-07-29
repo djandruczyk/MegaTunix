@@ -51,11 +51,9 @@
 #include <widgetmgmt.h>
 
 #define ONE_SECOND 	 1	/* one second */
-
-static GLuint font_list_base;
-
 #define DEFAULT_WIDTH  640
 #define DEFAULT_HEIGHT 480                                                                                  
+static GLuint font_list_base;
 static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 

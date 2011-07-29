@@ -15,7 +15,6 @@
 #include <debugging.h>
 #include <stringmatch.h>
 
-
 /*!
  \brief parse_keys() splits up a string list into a vector and returns it
  and the number of keys

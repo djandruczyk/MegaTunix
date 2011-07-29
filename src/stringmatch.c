@@ -15,8 +15,8 @@
 #include <defines.h>
 #include <enums.h>
 
-
 extern gconstpointer *global_data;
+
 /*!
  \brief build_string_2_enum_table() constructs a hashtable that maps a textual
  name to it's matching enumeration.  It's used for mapping things from all the 

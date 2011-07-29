@@ -29,12 +29,10 @@
  #include <fcntl.h>
 #endif
 
-
 extern gconstpointer *global_data;
 #ifdef __WIN32__
 	static HANDLE win32_global_lock;
 #endif
-
 
 /*!
   \brief removes the mtx lockfile

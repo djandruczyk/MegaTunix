@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-
 #include <api-versions.h>
 #include <debugging.h>
 #include <getfiles.h>
@@ -34,7 +33,6 @@
 static GtkSizeGroup *size_group_left = NULL;
 static GtkSizeGroup *size_group_right = NULL;
 extern gconstpointer *global_data;
-
 
 /*!
  \brief load_rt_sliders() is called to load up the runtime slider configurations

@@ -18,9 +18,7 @@
 #include <stdio.h>
 #include <threads.h>
 
-
 extern gconstpointer *global_data;
-
 
 /*!
   \brief Attempts the resolve the function named within the widget. If 

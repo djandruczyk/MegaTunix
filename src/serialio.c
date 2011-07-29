@@ -11,13 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef CRTSCTS
-#define CRTSCTS 0
-#endif
-#ifndef B115200
-#define B115200 115200
-#endif
-
 #include <debugging.h>
 #include <enums.h>
 #include <errno.h>
@@ -40,7 +33,12 @@
 #ifdef __WIN32__
  #include <winserialio.h>
 #endif
-
+#ifndef CRTSCTS
+#define CRTSCTS 0
+#endif
+#ifndef B115200
+#define B115200 115200
+#endif
 
 extern gconstpointer *global_data;
 

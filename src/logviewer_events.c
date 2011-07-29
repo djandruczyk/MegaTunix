@@ -18,9 +18,7 @@
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
 
-
 extern Logview_Data *lv_data;
-
 
 /*! 
  \brief lv_configure_event() is the logviewer configure event that gets called

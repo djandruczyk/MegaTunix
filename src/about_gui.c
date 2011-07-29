@@ -15,8 +15,6 @@
 #include <logo.h>
 #include <widgetmgmt.h>
 
-
-
 /*!
  \brief build_about makes the about tab and presents the MegaTunix logo
  \param parent, container to place the logo in

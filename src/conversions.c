@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 extern gconstpointer *global_data;
 
 /*!

@@ -13,8 +13,6 @@
 
 #include <apicheck.h>
 
-
-
 /*!
  \brief Sets the file API to version passed by major/minor
  \param cfg, file to check the API of

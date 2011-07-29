@@ -19,10 +19,8 @@
 #include <plugin.h>
 #include <serialio.h>
 
-
 extern gconstpointer *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
-
 
 /*!
  \brief io_cmd() is called from all over the gui to kick off a threaded I/O

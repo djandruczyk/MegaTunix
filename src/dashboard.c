@@ -27,8 +27,6 @@
 #include <string.h>
 #include <widgetmgmt.h>
 
-
-
 extern gconstpointer *global_data;
 
 /*!

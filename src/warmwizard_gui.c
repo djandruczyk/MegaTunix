@@ -16,7 +16,6 @@
 
 extern GdkColor red;
 
-
 /*!
  \brief warmwizard_update_status(temp) will update the warmup wizard scale and 
  highlight the appropriate values on screen when the temperature changes. This

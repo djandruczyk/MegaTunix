@@ -27,7 +27,6 @@
 static gboolean ltc_visible = FALSE;
 extern gconstpointer *global_data;
 
-
 enum
 {
 	INTERNAL_NAME_COL,

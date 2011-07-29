@@ -20,8 +20,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-
 /*!
  \brief multi_expr_loader() is called when a "multi_expr_keys" key is found in
  a realtimemap, and triggers the loading of al lthe keys/values that

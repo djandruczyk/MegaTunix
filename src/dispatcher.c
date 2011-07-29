@@ -18,7 +18,6 @@
 #include <tabloader.h>
 #include <widgetmgmt.h>
 
-
 /*!
  \brief pf_dispatcher() is a GTK+ timeout that runs 10 times per second checking
  for message on the dispatch queue which handles gui operations after a thread

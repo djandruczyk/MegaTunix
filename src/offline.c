@@ -26,9 +26,7 @@
 #include <widgetmgmt.h>
 #include <xmlcomm.h>
 
-
 extern gconstpointer *global_data;
-
 
 /*!
  \brief set_offline_mode() is called when the "Offline Mode" button is clicked

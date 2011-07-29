@@ -29,11 +29,9 @@ static gboolean blocked = FALSE;
 static gfloat hue = -60.0;
 static gfloat col_sat = 1.0;
 static gfloat col_val = 1.0;
-
 Logview_Data *lv_data = NULL;
 static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
-
 
 /*!
  \brief present_viewer_choices() presents the user with the a list of 

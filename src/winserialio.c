@@ -19,7 +19,6 @@
  #include <windows.h>
 #endif
 
-
 /*!
  \brief win32_setup_serial_params() sets up the serial port attributes for win32
  \param fd, filedescriptor representing the serial port

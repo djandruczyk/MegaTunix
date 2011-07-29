@@ -14,9 +14,7 @@
 #include <defines.h>
 #include <mem_mgmt.h>
 
-
 extern gconstpointer *global_data;
-
 
 /*!
  \brief _get_sized_data() is a func to return the data requested.

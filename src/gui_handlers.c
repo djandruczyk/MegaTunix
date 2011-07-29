@@ -44,18 +44,14 @@
 #include <vetable_gui.h>
 #include <widgetmgmt.h>
 
-
-
 static gboolean grab_single_cell = FALSE;
 static gboolean grab_multi_cell = FALSE;
 extern gconstpointer *global_data;
-
 extern GdkColor red;
 extern GdkColor green;
 extern GdkColor blue;
 extern GdkColor black;
 extern GdkColor white;
-
 
 /*!
  \brief leave() is the main shutdown function for MegaTunix. It shuts down

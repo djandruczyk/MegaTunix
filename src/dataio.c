@@ -31,7 +31,6 @@
 #include <sys/socket.h>
 #endif
 
-
 /* Externs */
 extern gconstpointer *global_data;
 

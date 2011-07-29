@@ -24,9 +24,6 @@
 #include <stringmatch.h>
 #include <tag_loader.h>
 
-
-
-
 /*!
  \brief Loads tags from the datamap file in reference to a 
  textview.  A tag defines a set of attributes that can be applied to

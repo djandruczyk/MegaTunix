@@ -28,7 +28,6 @@
 #include <string.h>
 #include <stringmatch.h>
 
-
 /*!
  \brief load_realtime_map_pf() loads the realtime map specified in the detected
  firmware's interrogation profile, and sets up the necessary arrays for storage

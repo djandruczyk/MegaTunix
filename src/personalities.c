@@ -22,9 +22,7 @@
 #include <plugin.h>
 #include <widgetmgmt.h>
 
-
 extern gconstpointer *global_data;
-
 
 /*!
  \brief personality_choice() is called from a one shot timeout from main

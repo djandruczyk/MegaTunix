@@ -14,10 +14,8 @@
 #include <binlogger.h>
 #include <defines.h>
 
-
 extern gconstpointer *global_data;
 static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
-
 
 /*!
   \brief Opens the binary logs that record the raw serial IO activity for

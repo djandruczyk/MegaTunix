@@ -17,9 +17,6 @@
 #include <string.h>
 #include <stringmatch.h>
 
-
-
-
 /*!
   \brief Binds remaing keys in cfgfile to the object
   \param object, pointer to object where we bind the data to

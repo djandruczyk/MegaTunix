@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-
 #include <args.h>
 #include <api-versions.h>
 #include <debugging.h>
@@ -29,7 +28,6 @@
 #include <xmlbase.h>
 
 extern gconstpointer *global_data;
-
 
 /*!
  \brief load_rt_text_pf() is called to load up the runtime text configurations

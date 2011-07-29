@@ -10,6 +10,7 @@
  * 
  * No warranty is made or implied. You use this program at your own risk.
  */
+
 #include <firmware.h>
 #include <menu_handlers.h>
 #include <plugin.h>
@@ -37,7 +38,6 @@ static struct
 	{"restore_ecu_menuitem",ECU_RESTORE},
 	{"backup_ecu_menuitem",ECU_BACKUP},
 };
-
 
 /*!
   \brief Sets up the menu handlers and additional menu options as well as 

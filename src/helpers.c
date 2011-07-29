@@ -22,9 +22,7 @@
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
 
-
 extern gconstpointer *global_data;
-
 
 /*!
   \brief status the statuscounts timeout function

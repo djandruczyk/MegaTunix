@@ -15,7 +15,6 @@
 #include <gauge.h>
 #include <mtxmatheval.h>
 
-
 /*!
   \brief wrapper for evaluator_create()
   \param expr, math expression to create an evaluator for

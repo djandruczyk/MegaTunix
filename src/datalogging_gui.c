@@ -23,8 +23,6 @@
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
 
-
-
 /* External global vars */
 extern gconstpointer *global_data;
 

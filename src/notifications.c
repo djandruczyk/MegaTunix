@@ -26,8 +26,6 @@ static volatile gboolean warning_present = FALSE;
 static GtkWidget *warning_dialog;
 extern gconstpointer *global_data;
 
-
-
 /*!
  \brief set_group_color() sets all the widgets in the passed group to 
  the color passed.

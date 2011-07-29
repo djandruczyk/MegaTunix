@@ -15,9 +15,7 @@
 #include <sleep_calib.h>
 #include <stdio.h>
 
-
 extern gconstpointer *global_data;
-
 
 /*
  \brief calculates the accuracy of g_usleep and sets up a fudge factor

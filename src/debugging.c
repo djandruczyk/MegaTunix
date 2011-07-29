@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include <time.h>
 
-
 extern gconstpointer *global_data;
 static GIOChannel * dbg_channel = NULL;
 static GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;

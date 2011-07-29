@@ -21,9 +21,7 @@
 #include <xmlcomm.h>
 #include <xmlbase.h>
 
-
 extern gconstpointer *global_data;
-
 
 /*!
   \brief Loads the comm_xml specific to this firmware persona

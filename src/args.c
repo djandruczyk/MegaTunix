@@ -11,7 +11,6 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-
 #include <args.h>
 #include <dashboard.h>
 #include <datalogging_gui.h>
@@ -21,8 +20,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-
 extern gconstpointer *global_data;
+
 /*!
  \brief handle_args() handles parsing of cmd line arguments to megatunix
  \param argc, count of command line arguments

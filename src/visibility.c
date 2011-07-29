@@ -19,10 +19,8 @@
 #include <visibility.h>
 #include <widgetmgmt.h>
 
-
 static GtkWidget *vis_window = NULL;
 extern gconstpointer *global_data;
-
 
 /*!
   \brief shows the tabe visibility chooser window

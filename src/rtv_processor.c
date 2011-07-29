@@ -33,7 +33,6 @@
 #include <string.h>
 #include <threads.h>
 
-
 extern gconstpointer *global_data;
 
 /*!

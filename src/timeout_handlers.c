@@ -22,7 +22,6 @@
 #include <threads.h>
 #include <timeout_handlers.h>
 
-
 extern gconstpointer *global_data;
 
 /*!
