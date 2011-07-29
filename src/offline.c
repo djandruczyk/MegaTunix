@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/offline.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <apicheck.h>
 #include <api-versions.h>
 #include <debugging.h>

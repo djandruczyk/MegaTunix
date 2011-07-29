@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/conversions.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <assert.h>
 #include <conversions.h>
 #include <debugging.h>

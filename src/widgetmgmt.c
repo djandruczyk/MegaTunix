@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/widgetmgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <configfile.h>
 #include <defines.h>
 #include <widgetmgmt.h>

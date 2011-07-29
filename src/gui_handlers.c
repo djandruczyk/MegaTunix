@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/gui_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #define _ISOC99_SOURCE
 #include <3d_vetable.h>
 #include <args.h>

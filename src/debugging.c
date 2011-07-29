@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/debugging.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <args.h>
 #include <debugging.h>
 #include <gui_handlers.h>

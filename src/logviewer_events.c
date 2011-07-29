@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/logviewer_events.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>

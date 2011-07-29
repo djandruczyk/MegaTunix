@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/wrappers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <combo_mask.h>
 #include <gauge.h>
 #include <mtxmatheval.h>

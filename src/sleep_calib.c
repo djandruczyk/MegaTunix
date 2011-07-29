@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/sleep_calib.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <defines.h>
 #include <sleep_calib.h>
 #include <stdio.h>

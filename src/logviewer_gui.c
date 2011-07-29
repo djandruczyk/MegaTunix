@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/logviewer_gui.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <debugging.h>
 #include <getfiles.h>
 #include <glade/glade.h>

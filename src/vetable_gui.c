@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/vetable_gui.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <firmware.h>
 #include <gui_handlers.h>
 #include <plugin.h>

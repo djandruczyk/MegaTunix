@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/mem_mgmt.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <defines.h>
 #include <mem_mgmt.h>
 

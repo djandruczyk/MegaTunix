@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/helpers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <3d_vetable.h>
 #include <conversions.h>
 #include <dashboard.h>

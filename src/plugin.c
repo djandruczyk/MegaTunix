@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/plugin.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <debugging.h>
 #include <defines.h>
 #include <notifications.h>

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/keybinder.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <defines.h>
 #include <debugging.h>
 #include <rtv_map_loader.h>

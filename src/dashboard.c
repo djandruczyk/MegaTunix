@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/dashboard.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <args.h>
 #include <xmlbase.h>
 #include <dashboard.h>

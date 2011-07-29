@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/logviewer_core.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <debugging.h>
 #include <getfiles.h>
 #include <gui_handlers.h>

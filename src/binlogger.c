@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/binlogger.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <binlogger.h>
 #include <defines.h>
 

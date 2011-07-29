@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/timeout_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <comms_gui.h>
 #include <debugging.h>
 #include <logviewer_gui.h>

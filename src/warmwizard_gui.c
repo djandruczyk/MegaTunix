@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/warmwizard_gui.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <defines.h>
 #include <widgetmgmt.h>
 

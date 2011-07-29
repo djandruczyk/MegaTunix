@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/args.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <args.h>
 #include <dashboard.h>
 #include <datalogging_gui.h>

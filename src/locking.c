@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/locking.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <errno.h>
 #include <init.h>
 #include <locking.h>

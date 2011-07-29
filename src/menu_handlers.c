@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/menu_handlers.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <firmware.h>
 #include <menu_handlers.h>
 #include <plugin.h>

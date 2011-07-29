@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/comms.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <dataio.h>
 #include <comms.h>
 #include <debugging.h>

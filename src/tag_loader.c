@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/tag_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <config.h>
 #include <configfile.h>
 #include <debugging.h>

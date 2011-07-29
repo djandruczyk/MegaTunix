@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/keyparser.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <assert.h>
 #include <debugging.h>
 #include <stringmatch.h>

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/tabloader.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <args.h>
 #include <config.h>
 #include <configfile.h>

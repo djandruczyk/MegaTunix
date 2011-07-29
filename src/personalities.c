@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/personalities.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <configfile.h>
 #include <debugging.h>
 #include <getfiles.h>

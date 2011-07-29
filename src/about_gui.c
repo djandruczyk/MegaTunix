@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/about_gui.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <about_gui.h>
 #include <logo.h>
 #include <widgetmgmt.h>

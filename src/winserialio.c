@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/winserialio.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <stdio.h>
 #include <winserialio.h>
 #ifdef __WIN32__

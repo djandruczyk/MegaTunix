@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*! @file src/combo_loader.c
+ *
+ * @brief ...
+ *
+ *
+ */
+
 #include <assert.h>
 #include <combo_loader.h>
 #include <combo_mask.h>
