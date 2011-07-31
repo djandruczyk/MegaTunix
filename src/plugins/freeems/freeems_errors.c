@@ -14,6 +14,12 @@
 #include <freeems_errors.h>
 
 
+/*!
+  \brief looks up the error code and returns thestring equivalent (similar in
+  spirit to strerror()
+  \param code is the error code integer
+  \returns the Textual representation of the error code
+  */
 G_MODULE_EXPORT const gchar * lookup_error(gint code)
 {
 	gint i = 0;

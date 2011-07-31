@@ -27,7 +27,13 @@
  #include <sys/stat.h>
 #endif
 
-
+/*!
+  \brief Pops up a filechooser so the User can select a file to save the 
+  current ECU state to.
+  \param widget is unused
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -72,7 +78,13 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 }
 
 
-
+/*!
+  \brief Pops up a filechooser so the User can select a file to restore the 
+  current ECU state to.
+  \param widget is unused
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -106,8 +118,8 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer
 }
 
 /*!
- \brief backup_all_ecu_settings() backs up the ECU to a filename passed
- \param filename (gchar *) filename to backup the ECU to
+ \brief Firmware specific function that backs up the ECU to a filename passed
+ \param filename is the filename to backup the ECU to
  */
 G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 {
@@ -160,9 +172,9 @@ G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 
 
 /*!
- \brief restore_all_ecu_settings() reads the filename passed and if all checks
- pass the file will be loaded and any values that differ from the values
- currently in the ECU will be replaced.
+ \brief Firmware/ECU specific function that reads the filename passed and 
+ if all checks pass the file will be loaded and any values that differ 
+ from the values currently in the ECU will be replaced.
  \param filename (filename to read for ecu restoration
 WARNING:  This function is not yet capable of handling CAN devices, and will
 always restore to can ID ZERO (which can be BAD!!), backup/restore needs to
@@ -171,10 +183,6 @@ be rewritten..
 G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 {
 	ConfigFile *cfgfile;
-	/*
-	GArray *pfuncs = NULL;
-	PostFunction *pf = NULL;
-	*/
 	gchar * section = NULL;
 	gchar * msgbuf = NULL;
 	gint canID = 0;

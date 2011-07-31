@@ -27,6 +27,7 @@
 
 extern gconstpointer *global_data;
 
+
 G_MODULE_EXPORT void common_gui_init(void)
 {
 	void (*ecu_gui_init_f)(void) = NULL;

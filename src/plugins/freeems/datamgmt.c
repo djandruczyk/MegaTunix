@@ -19,6 +19,13 @@
 
 extern gconstpointer *global_data;
 
+/*!
+  \brief returns the ECU data corresponding to the fields attached to the 
+  data object, data can be either a GtkWidget pointer or a gconstpointer
+  \param data pointer to container, should contain the following fields
+  offset, size, and location_id or page
+  \returns the value at that ECU memory location
+  */
 G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 {
 	gint locID = 0;
@@ -72,11 +79,12 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 
 
 /*!
- \brief freeems_get_ecu_data() is a func to return the data requested.
- \param canID, CANbus ID (unused currently)
- \param locID, Location ID (internal to ECU)
- \param offset, (RAW BYTE offset)
- \param size, (size to be returned)
+ \brief returns the ECU data at the location coordinates provided
+ \param canID is the CANbus ID (unused currently)
+ \param locID is the Location ID (internal to ECU)
+ \param offset is the (RAW BYTE offset)
+ \param size is the (size to be returned)
+ \returns the value at those specific memory coordinates
  */
 G_MODULE_EXPORT gint freeems_get_ecu_data(gint canID, gint locID, gint offset, DataSize size) 
 {
@@ -100,11 +108,13 @@ G_MODULE_EXPORT gint freeems_get_ecu_data(gint canID, gint locID, gint offset, D
 
 
 /*!
- \brief freeems_get_ecu_data_last() is a func to return the data requested.
- \param canID, CANbus ID (unused currently)
- \param locID, Location ID (internal to ECU)
- \param offset, (RAW BYTE offset)
- \param size, (size to be returned)
+ \brief returns the ECU data from the previous buffer (last) at the 
+ location coordinates provided
+ \param canID is the CANbus ID (unused currently)
+ \param locID is the Location ID (internal to ECU)
+ \param offset is the (RAW BYTE offset)
+ \param size is the (size to be returned)
+ \returns the value from ECU memory at the specified coordinates
  */
 G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint canID, gint locID, gint offset, DataSize size) 
 {
@@ -126,11 +136,13 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint canID, gint locID, gint offs
 
 
 /*!
- \brief freeems_get_ecu_data_backup() is a func to return the data requested.
- \param canID, CANbus ID (unused currently)
- \param locID, Location ID (internal to ECU)
- \param offset (RAW BYTE offset)
- \param size (size to be returned...
+ \brief returns the ECU data from the backup buffer at the coordinates 
+ requested
+ \param canID is the CANbus ID (unused currently)
+ \param locID is the Location ID (internal to ECU)
+ \param offset is the(RAW BYTE offset)
+ \param size is the size to be returned...
+ \returns the value from ECU memory at the specified coordinates
  */
 G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint canID, gint locID, gint offset, DataSize size) 
 {
@@ -151,6 +163,12 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint canID, gint locID, gint of
 }
 
 
+/*!
+  \brief Sets the ECU data at the coordinates specified in the data pointer
+  \param data, pointer to either a GtkWidget pointer or a gconstpointer object
+  container the coordinate information as to where to store the new data.
+  \param new, pointer to the new data to be stored
+  */
 G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 {
 	gint canID = 0;
@@ -212,6 +230,15 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 }
 
 
+/*!
+  \brief ECU specific function to set a value in the representation of ECU 
+  memory
+  \param canID is the CAN Identifier
+  \param locID is the Location ID
+  \param offset is the offset in bytes from thebeginning on this location ID
+  \param size, is the  size representation enumeration
+  \param new, is the new value to store
+  */
 G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint locID, gint offset, DataSize size, gint new) 
 {
 	gint page = 0;
@@ -232,6 +259,13 @@ G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint locID, gint offset, D
 }
 
 
+/*!
+  \brief Generic function to store a blob of data to a specific location in
+  ECU representative memory. The block variable must contain the necessary
+  fields in order to store properly
+  \param block, pointer to a gconstpointer containing the location ID, offset
+  and data to store
+  */
 G_MODULE_EXPORT void store_new_block(gpointer block)
 {
 	gint locID = 0;
@@ -261,6 +295,15 @@ G_MODULE_EXPORT void store_new_block(gpointer block)
 }
 
 
+/*!
+  \brief ECU specific function to store a new blob of data at a specific 
+  location in ECU representative memory
+  \param canID is the CAN identifier
+  \param locID is the Location ID
+  \param offset is the byte offset from the beginning of the Location ID
+  \param buf is the pointer to the buffer to copy from
+  \param count is the number of bytes to copy to the destination
+  */
 G_MODULE_EXPORT void freeems_store_new_block(gint canID, gint locID, gint offset, void * buf, gint count)
 {
 	gint page = 0;
@@ -275,10 +318,19 @@ G_MODULE_EXPORT void freeems_store_new_block(gint canID, gint locID, gint offset
 	g_return_if_fail(ecu_data);
 	g_return_if_fail(ecu_data[page]);
 
-	memcpy (ecu_data[page]+offset,buf,count);
+	if((offset + count ) < (firmware->page_params[page]->length -1))
+		memcpy (ecu_data[page]+offset,buf,count);
+	else
+		dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": Attempted to write beyond endof Location ID (%i), page (%i)\n Loc ID size %i, write offset %i, length %i\n",locID,page,firmware->page_params[page]->length,offset,count));
+		
 }
 
 
+/*!
+  \brief copies current ECU memory representation to backup buffer
+  \param canID is unused
+  \param locID is the location ID (page representation) to backup
+  */
 G_MODULE_EXPORT void freeems_backup_current_data(gint canID,gint locID)
 {
 	gint page = 0;
@@ -302,8 +354,8 @@ G_MODULE_EXPORT void freeems_backup_current_data(gint canID,gint locID)
 
 
 /*!
- \brief freeems_find_mtx_page() is a func to return the data requested.
- \param tableID, Table Identified (physical ecu page)
+ \brief Finds the MTX page associated with this Location ID
+ \param locID is the ecu firmware location Identifier
  \param mtx_page, The symbolic page mtx uses to get around the nonlinear
  nature of the page layout in certain firmwares
  \returns true on success, false on failure

@@ -29,8 +29,16 @@
 #include <sys/time.h>
 #include <unistd.h>
 
-
 extern gconstpointer *global_data;
+
+/*!
+  \brief This thread attempts to reconnect to a device that has vanished
+  either due to Serial IO errors, or a loss of the physical device (USB unplug)
+  This is a thread and will exit if specific flags are set or when it manages
+  to re-connect to the device
+  \param data is unused
+  \returns NULL
+  */
 
 G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 {
@@ -183,6 +191,9 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 }
 		
 
+/*!
+ \brief Disables the serial connection and shuts down the reader thread
+  */
 G_MODULE_EXPORT void freeems_serial_disable(void)
 {
 	GIOChannel *channel = NULL;
@@ -200,8 +211,8 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	g_mutex_lock(mutex);
 	g_get_current_time(&now);
 	/* Wait up to 0.25 seconds for thread to exit */
-        g_time_val_add(&now,250000);
-        cond = DATA_GET(global_data,"serial_reader_cond");
+	g_time_val_add(&now,250000);
+	cond = DATA_GET(global_data,"serial_reader_cond");
 	if ((cond) && (thread))
 	{
 		res = g_cond_timed_wait(cond,mutex,&now);
@@ -209,16 +220,19 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	}
 	DATA_SET(global_data,"serial_thread_id",NULL);
 	/*
-	if (res)
-		printf("condition signaled\n");
-	else
-		printf("cond timeout\n");
-	*/
+	   if (res)
+	   printf("condition signaled\n");
+	   else
+	   printf("cond timeout\n");
+	 */
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
 }
 
 
+/*!
+ \brief Enables the serial connection and starts up  the reader thread
+  */
 G_MODULE_EXPORT void freeems_serial_enable(void)
 {
 	GIOChannel *channel = NULL;
@@ -245,6 +259,11 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 }
 
 
+/*!
+  \brief Simple communication test, Assembles a packet, sends it, 
+  subscribes to the response and waits for it, or a timeout.
+  \returns TRUE on success, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean comms_test(void)
 {
 	GAsyncQueue *queue = NULL;
@@ -323,6 +342,14 @@ G_MODULE_EXPORT gboolean comms_test(void)
 }
 
 
+/*!
+  \brief Windows reader thread.  Runs continuously once port is open to a 
+  working device. This is a strict timeout blocking read due to windows's
+  absolutelybraindead I/O model where select/poll isn't allowed on anything
+  but network sockets. Overallpaed I/O is just too ugly...
+  \param data is the encapsulation of the port filedescriptor
+  \returns NULL on termination
+  */
 void *win32_reader(gpointer data)
 {
 	gint fd = (GINT)data;
@@ -367,9 +394,16 @@ void *win32_reader(gpointer data)
 			handle_data((guchar *)buf+read_pos,received);
 		g_cond_signal(cond);
 	}
+	return NULL;
 }
 
 
+/*!
+  \brief Unix serial read thread, initiated as soon as a connection is made.
+  Uses select() and nonblocking I/O in order to be nice with the port
+  \param data, encapsulation of the filedescriptor
+  \returns NULL/0
+  */
 void *unix_reader(gpointer data)
 {
 	gint fd = (GINT)data;
@@ -386,7 +420,6 @@ void *unix_reader(gpointer data)
 	GCond *cond = NULL;
 	fd_set readfds;
 	struct timeval t;
-
 
 	cond = DATA_GET(global_data,"serial_reader_cond");
 	FD_ZERO(&readfds);
@@ -435,9 +468,16 @@ void *unix_reader(gpointer data)
 			g_cond_signal(cond);
 		}
 	}
+	return NULL;
 }
 
 
+/*!
+  \brief Generic per-firmware function to setup the Runtime Vars Handling.
+  This initiates a subscriber queue, anda thread to handle requests coming in
+  the queue
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean setup_rtv(void)
 {
 	GAsyncQueue *queue = NULL;
@@ -453,6 +493,11 @@ G_MODULE_EXPORT gboolean setup_rtv(void)
 }
 
 
+/*
+ \brief Per plugin handler which shuts down the RTV stuff. Kills off the 
+ rtv_subscriber thread, dismantles the queue in preparation for plugin shutdown
+ \returns TRUE
+ */
 G_MODULE_EXPORT gboolean teardown_rtv(void)
 {
 	GAsyncQueue *queue = NULL;
@@ -474,6 +519,11 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 }
 
 
+/*! 
+  \brief The thread which pops stuff off the RTV queue and processes them
+  \param data, pointer to the queue to pop entries off of
+  \returns NULL
+  */
 G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 {
 	GAsyncQueue *queue = (GAsyncQueue *)data;
@@ -499,6 +549,9 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 }
 
 
+/*! 
+  \breif Per firmware plugin function to signal a request for ECU Runtime vars
+  */
 G_MODULE_EXPORT void signal_read_rtvars(void)
 {
 	OutputData *output = NULL;	
@@ -517,10 +570,14 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 
 
 /*!
- \brief send_to_ecu() gets called to send a value to the ECU.  This function
+ \brief Generic that gets called to send a value to the ECU.  This function
  is has an ECU agnostic interface and is for sending single 8-32 bit bits of 
  data to the ECU. This one extracts the important things from the passed ptr
  and sends to the real function which is ecu specific
+ \param data is the pointer to the container of the important bits like
+ LocationID or Page, canID, offset and size
+ \param value is the new value to send to the ECU
+ \param queue_update is a flag that triggers the ECU to update
  */
 G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_update)
 {
@@ -569,17 +626,14 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 
 
 /*!
- \brief ms_send_to_ecu() gets called to send a value to the ECU.  This function
- will check if the value sent is NOT the reqfuel_offset (that has special
- interdependancy issues) and then will check if there are more than 1 widgets
- that are associated with this page/offset and update those widgets before
- sending the value to the ECU.
- \param widget (GtkWidget *) pointer to the widget that was modified or NULL
- \param locID (gint) Location ID to where this value belongs
- \param offset (gint) offset from the beginning of the page that this data
+ \brief ECU specifc that gets called to send a value to the ECU. 
+ \param canID is the can Identifier
+ \param locID is the Location ID to where this value belongs
+ \param offset is the offset from the beginning of the page that this data
  refers to.
- \param value (gint) the value that should be sent to the ECU At page.offset
- \param queue_update (gboolean), if true queues a gui update, used to prevent
+ \param size is an enumeration corresponding to how big this variable is
+ \param value is the value that should be sent to the ECU At page/offset
+ \param queue_update if true queues a gui update, used to prevent
  a horrible stall when doing an ECU restore or batch load...
  */
 G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, DataSize size, gint value, gboolean queue_update)
@@ -689,15 +743,14 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 
 
 /*!
- \brief freeems_chunk_write() gets called to send a block of values to the ECU.
- \param canID (gint) can identifier (0-14)
- \param locID (gint) locationID in which the value refers to.
- \param offset (gint) offset from the beginning of the page that this data
+ \brief ECU Specif gets called to send a block of values to the ECU.
+ \param canID is the can identifier (0-14)
+ \param locID is the locationID in which the value refers to.
+ \param offset is the offset from the beginning of the page that this data
  refers to.
- \param len (gint) length of block to sent
- \param data (guint8) the block of data to be sent which better damn well be
+ \param num_byts is the length of block to sent
+ \param block is the block of data to be sent which better damn well be
  int ECU byte order if there is an endianness thing..
- a horrible stall when doing an ECU restore or batch load...
  */
 G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gint num_bytes, guint8 * block)
 {
@@ -739,7 +792,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
  \brief update_write_status() checks the differences between the current ECU
  data snapshot and the last one, if there are any differences (things need to
  be burnt) then it turns all the widgets in the "burners" group to RED
- \param data (OutputData *) pointer to data sent to ECU used to
+ \param data is a pointer to message sent to ECU used to
  update other widgets that refer to that Page/Offset
  */
 G_MODULE_EXPORT void update_write_status(void *data)
@@ -835,6 +888,11 @@ red_or_black:
 }
 
 
+/*!
+  \brief A pere ECU family function to be run after a single page burn.  It's
+  purpose being to backup the in memory representation of the ECU
+  \param data, pointer to the Io_Message structure used for the burn request
+  */
 G_MODULE_EXPORT void post_single_burn_pf(void *data)
 {
 	Io_Message *message = (Io_Message *)data;
@@ -856,4 +914,3 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 
 	return;
 }
-
