@@ -28,6 +28,10 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief ECU family plugin to do common (core) gui initialization, this will
+  check and call the ecu specific gui init function if preset
+  */
 G_MODULE_EXPORT void common_gui_init(void)
 {
 	void (*ecu_gui_init_f)(void) = NULL;
@@ -40,7 +44,14 @@ G_MODULE_EXPORT void common_gui_init(void)
 }
 
 
-
+/*!
+  \brief ECU family plugin to handle toggle button handling.  If the handler
+  assigned to the widget isn't found, call the ecu specific handler if it 
+  exists and return it's result
+  \param widget is the toggle button the user manipulated
+  \param data is the data pointer attached to the widget
+  \returns the result of the ECU handler or TRUE
+  */
 G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
@@ -67,6 +78,14 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
  }
 
 
+/*!
+  \brief ECU family plugin to handle standard button handling.  If the handler
+  assigned to the widget isn't found, call the ecu specific handler if it 
+  exists and return it's result
+  \param widget is the standard button the user manipulated
+  \param data is the data pointer attached to the widget
+  \returns the result of the ECU handler or TRUE
+  */
 G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
@@ -99,7 +118,14 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 }
 
 
-
+/*!
+  \brief ECU family plugin to handle radio button handling.  If the handler
+  assigned to the widget isn't found, call the ecu specific handler if it 
+  exists and return it's result
+  \param widget is the radio button the user manipulated
+  \param data is the data pointer attached to the widget
+  \returns the result of the ECU handler or TRUE
+  */
 G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
@@ -128,6 +154,14 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 }
 
 
+/*!
+  \brief ECU family plugin to handle text entry handling.  If the handler
+  assigned to the widget isn't found, call the ecu specific handler if it 
+  exists and return it's result
+  \param widget is the text entry the user manipulated
+  \param data is the data pointer attached to the widget
+  \returns the result of the ECU handler or TRUE
+  */
 G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
@@ -282,9 +316,9 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief update_ecu_controls_pf() is called after a read of the block of 
- data from the ECU.  It takes care of updating evey control that relates to
- an ECU variable on screen
+ \brief This ECU family specific function is called after a read of 
+ the block of data from the ECU.  It takes care of updating evey 
+ control that relates to an ECU variable on screen
  */
 G_MODULE_EXPORT void update_ecu_controls_pf(void)
 {
@@ -348,6 +382,12 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 }
 
 
+/*!
+  \brief This function handles caling the appropriate update function
+  based on the widget type.
+  \param object is the pointer to the widget in question
+  \param user_data is a pointer  to verify we don't do duplicate updates
+  */
 G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 {
 	static gint upd_count = 0;
@@ -375,9 +415,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 		while (gtk_events_pending())
 		{
 			if (DATA_GET(global_data,"leaving"))
-			{
 				return;
-			}
 			gtk_main_iteration();
 		}
 	}
@@ -415,6 +453,10 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 }
 
 
+/*!
+  \brief updates a check/radio button
+  \param widget is the pointer to the widget to update
+  */
 void update_checkbutton(GtkWidget *widget)
 {
 	gboolean cur_state = FALSE;
@@ -464,6 +506,10 @@ void update_checkbutton(GtkWidget *widget)
 }
 
 
+/*!
+  \brief updates a text entry
+  \param widget is the pointer to the widget to update
+  */
 void update_entry(GtkWidget *widget)
 {
 	static void (*update_handler)(GtkWidget *) = NULL;
@@ -563,6 +609,10 @@ void update_entry(GtkWidget *widget)
 }
 
 
+/*!
+  \brief updates a combo box/combo box entry
+  \param widget is the pointer to the widget to update
+  */
 void update_combo(GtkWidget *widget)
 {
 	static void (*update_ms2_user_outputs)(GtkWidget *) = NULL;
@@ -627,6 +677,17 @@ combo_toggle:
 }
 
 
+/*!
+  \brief extracts theessential bits from a a widget pointer, This function 
+  verifies the passed pointers are valid, so only specific values can be 
+  requested if wanted
+  \param widget is the pointer to the widget to get the essentions from
+  \param locID is a pointer to where to store the Location ID or NULL
+  \param offset is a pointer to where to store the Offset or NULL
+  \param bitval is a pointer to where to store the bitval or NULL
+  \param bitmask is a pointer to where to store the bitmask or NULL
+  \param bitshift is a pointer to where to store the bitshift or NULL
+  */
 G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *locID, gint *offset, gint *bitval, gint *bitmask, gint *bitshift)
 {
 	if (!GTK_IS_WIDGET(widget))
@@ -644,6 +705,16 @@ G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *locID, gint *of
 }
 
 
+/*!
+  \brief extracts the essential bits from a a widget pointer, This function 
+  verifies the passed pointers are valid, so only specific values can be 
+  requested if wanted
+  \param widget is the pointer to the widget to get the essentions from
+  \param locID is a pointer to where to store the Location ID or NULL
+  \param offset is a pointer to where to store the Offset or NULL
+  \param size is a pointer to where to store the size or NULL
+  \param precision is a pointer to where to store the precision or NULL
+  */
 G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *locID, gint *offset, DataSize *size, gint *precision)
 {
 	if (!GTK_IS_WIDGET(widget))

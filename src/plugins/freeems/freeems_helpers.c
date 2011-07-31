@@ -24,6 +24,9 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief Sends a packet to stop the datalog streaming from the ECU
+  */
 G_MODULE_EXPORT void stop_streaming(void)
 {
 	GAsyncQueue *queue = NULL;
@@ -72,6 +75,9 @@ G_MODULE_EXPORT void stop_streaming(void)
 }
 
 
+/*!
+  \brief Sends a packet to start the datalog streaming from the ECU
+  */
 G_MODULE_EXPORT void start_streaming(void)
 {
 	GAsyncQueue *queue = NULL;
@@ -121,6 +127,9 @@ G_MODULE_EXPORT void start_streaming(void)
 }
 
 
+/*!
+  \brief Sends a packet to soft-boot the ECU
+  */
 void soft_boot_ecu(void)
 {
 	GTimeVal tval;
@@ -155,6 +164,9 @@ void soft_boot_ecu(void)
 }
 
 
+/*!
+  \brief Sends a packet to hard-boot the ECU
+  */
 void hard_boot_ecu(void)
 {
 	GTimeVal tval;
@@ -189,6 +201,9 @@ void hard_boot_ecu(void)
 }
 
 
+/*!
+  \brief Initiates a call to read all ECU data
+  */
 G_MODULE_EXPORT void spawn_read_all_pf(void)
 {
 	Firmware_Details *firmware = NULL;
@@ -204,6 +219,10 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 }
 
 
+/*!
+  \brief This handler is called to issue packets to read each ECU page in turn
+  then pass the original post functions to run.
+  */
 G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 {
 	static Firmware_Details *firmware = NULL;
@@ -260,8 +279,10 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 /*
  *\brief handle_transaction is defined in comm.xml to handle the results
  of certain IO operations
- \param data Io_Message structure
- \param type FuncCall enumeration
+ \param data is a pointer to an Io_Message structure
+ \param type is the FuncCall enumeration
+ \see Io_Message
+ \see FuncCall
  */
 G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 {
@@ -399,6 +420,14 @@ handle_write:
 }
 
 
+/*!
+  \brief handler to issue the needed calls to burn every outstanding page
+  to ECU flash
+  \param data is a pointer to an Io_Message structure
+  \param type is theFuncCall enumeration
+  \see Io_Message
+  \see FuncCall
+  */
 G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 {
 	OutputData *output = NULL;
@@ -436,6 +465,13 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 }
 
 
+/*!
+  \brief attemps to retrieve a packet from the named queue if provided or the
+  "queue" variable within the object
+  \param object is a gconstpointer to an object
+  \param queue_name is the name of the queue to pull the packet from
+  \returns a pointer to a FreeEMS_Packet structure or NULL of no packet is found
+  */
 G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gchar * queue_name)
 {
 	GTimeVal tval;
