@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <config.h>
 #include <cairo/cairo.h>
 #include <stripchart.h>
@@ -32,8 +31,9 @@
 #include <string.h>
 #include <time.h>
 
-
-
+/*!
+  \brief The Enumeration for the Text Placement within the chart
+  */
 static enum
 {
 	BOTTOM,
@@ -45,6 +45,10 @@ static enum
 }TxtPlacement;
 
 
+/*!
+  \brief Returns the Gtype for a MtxStripChart object, or cretes one and 
+  registers it if it hasn't already been
+  */
 GType mtx_stripchart_get_type(void)
 {
 	static GType mtx_stripchart_type = 0;
@@ -68,12 +72,12 @@ GType mtx_stripchart_get_type(void)
 	return mtx_stripchart_type;
 }
 
-/*!
- \brief Initializes the mtx pie chart class and links in the primary
- signal handlers for config event, expose event, and button press/release
- \param class_name (MtxStripChartClass *) pointer to the class
- */
 
+/*!
+ \brief Initializes the mtx strip chart class and links in the primary
+ signal handlers for config event, expose event, and button press/release
+ \param class_name is a pointer to the MtxStripChartClass structure
+ */
 void mtx_stripchart_class_init (MtxStripChartClass *class_name)
 {
 	GObjectClass *obj_class;
@@ -104,9 +108,8 @@ void mtx_stripchart_class_init (MtxStripChartClass *class_name)
 
 /*!
  \brief Finalizes the chart object
- \param chart (MtxStripChart *) pointer to the chart object
+ \param chart is the pointer to the chart object
  */
-
 void mtx_stripchart_finalize (GObject *chart)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
@@ -125,9 +128,8 @@ void mtx_stripchart_finalize (GObject *chart)
 
 /*!
  \brief cleans up each trace object
- \param chart (MtxStripChart *) pointer to the chart object
+ \param traces is the pointer to the array of trace structures
  */
-
 void mtx_stripchart_cleanup_traces (GArray *traces)
 {
 	gint i=0;
@@ -147,9 +149,8 @@ void mtx_stripchart_cleanup_traces (GArray *traces)
 
 /*!
  \brief Initializes the chart attributes to sane defaults
- \param chart (MtxStripChart *) pointer to the chart object
+ \param chart is the pointer to the chart object
  */
-
 void mtx_stripchart_init (MtxStripChart *chart)
 {
 	/* The events the chart receives
@@ -176,16 +177,13 @@ void mtx_stripchart_init (MtxStripChart *chart)
 /*	if (GTK_WIDGET_REALIZED(chart))
 		mtx_stripchart_redraw (chart);
 */
-
 }
-
 
 
 /*!
  \brief Allocates the default colors for a chart with no options 
- \param widget (MegaStripChart *) pointer to the chart object
+ \param chart is the pointer to the chart object
  */
-
 void mtx_stripchart_init_colors(MtxStripChart *chart)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
@@ -229,15 +227,13 @@ void mtx_stripchart_init_colors(MtxStripChart *chart)
 	priv->tcolors[5].red=0.0*65535;
 	priv->tcolors[5].green=0.0*65535;
 	priv->tcolors[5].blue=1.0*65535;
-
 }
 
 
 /*!
  \brief updates the chart position,  This is the CAIRO implementation
- \param widget (MtxStripChart *) pointer to the chart object
+ \param chart is the pointer to the chart object
  */
-
 void update_stripchart_position (MtxStripChart *chart)
 {
 	GtkWidget * widget = NULL;
@@ -437,16 +433,19 @@ void update_stripchart_position (MtxStripChart *chart)
  Takes care of creating/destroying graphics contexts, backing pixmaps (two 
  levels are used to split the rendering for speed reasons) colormaps are 
  also created here as well
- \param widget (GtkWidget *) pointer to the chart object
- \param event (GdkEventConfigure *) pointer to GDK event datastructure that
+ \param widget is the pointer to the chart object
+ \param event is the pointer to the GdkEventConfigure structure that
  encodes important info like window dimensions and depth.
+ \returns TRUE on success, FALSE otherwise
  */
-
 gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
-	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	MtxStripChartPrivate *priv = NULL;
 	cairo_t *cr = NULL;
+
+	g_return_val_if_fail(MTX_IS_STRIPCHART(widget),FALSE);
+	priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
 	priv->w = widget->allocation.width;
 	priv->h = widget->allocation.height;
@@ -503,16 +502,19 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 /*!
  \brief handles exposure events when the screen is covered and then 
  exposed. Works by copying from a backing pixmap to screen,
- \param widget (GtkWidget *) pointer to the chart object
- \param event (GdkEventExpose *) pointer to GDK event datastructure that
+ \param widget is the pointer to the chart object
+ \param event is the pointer to the GdkEventExpose structure that
  encodes important info like window dimensions and depth.
+ \returns FALSE
  */
-
 gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
-	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	MtxStripChartPrivate *priv = NULL;
 	cairo_t *cr = NULL;
+
+	g_return_val_if_fail(MTX_IS_STRIPCHART(widget),FALSE);
+	priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
@@ -548,13 +550,12 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 
 /*!
  \brief draws the static part of the stripchart,  i.e. this is only the 
- history of the trace, as there's no point to re-renderthe whole fucking thing
+ history of the trace, as there's no point to re-render the whole fucking thing
  every damn time when only 1 datapoint is being appended,  This writes to a
  pixmap, which is shifted and new trace data rendered, before graticaule/text
  overlay is added on.
- \param widget (MtxStripChart *) pointer to the chart object
+ \param chart is the pointer to the chart object
  */
-
 void generate_stripchart_static_traces(MtxStripChart *chart)
 {
 	cairo_t *cr = NULL;
@@ -619,6 +620,14 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 }
 
 
+/*!
+  \brief handler for mouse motion on the stripchart, stores the current mouse
+  coords
+  \param chart is the pointer to the chart object
+  \param event is the pointer to the GdkEventMotion structure containing
+  details about the motion event
+  \returns FALSE so other handlers run
+  */
 gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
@@ -633,11 +642,9 @@ gboolean mtx_stripchart_motion_event (GtkWidget *chart,GdkEventMotion *event)
 
 /*!
  \brief sets the INITIAL sizeof the widget
- \param chart (GtkWidget *) pointer to the chart widget
- \param requisition (GdkRequisition *) struct to set the vars within
- \returns void
+ \param widget is the pointer to the chart widget
+ \param requisition is the pointer to the GdkRequisition structure
  */
-
 void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	requisition->width = 140;
@@ -647,9 +654,8 @@ void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
 
 /*!
  \brief gets called to redraw the entire display manually
- \param chart (MtxStripChart *) pointer to the chart object
+ \param chart is the pointer to the chart object
  */
-
 void mtx_stripchart_redraw (MtxStripChart *chart)
 {
 	if (!GTK_WIDGET(chart)->window) return;
@@ -660,9 +666,18 @@ void mtx_stripchart_redraw (MtxStripChart *chart)
 }
 
 
+/*!
+  \brief Event handler for when the mouse enters/leaves the window
+  \param widget is the pointer to the chart object
+  \param event is the pointer to the GdkEventCrossing structure
+  \returns TRUE on success FALSE otherwise
+  */
 gboolean mtx_stripchart_enter_leave_event(GtkWidget *widget, GdkEventCrossing *event)
 {
-	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(MTX_STRIPCHART(widget));
+	MtxStripChartPrivate *priv = NULL;
+	g_return_val_if_fail(MTX_IS_STRIPCHART(widget),FALSE);
+	priv = MTX_STRIPCHART_GET_PRIVATE(MTX_STRIPCHART(widget));
+
 	if (event->type == GDK_ENTER_NOTIFY)
 		priv->mouse_tracking = TRUE;
 	else
@@ -672,6 +687,10 @@ gboolean mtx_stripchart_enter_leave_event(GtkWidget *widget, GdkEventCrossing *e
 }
 
 
+/*!
+  \brief  renders a marker at the current mouse position
+  \param chart is the pointer to the chart object
+  */
 void render_marker(MtxStripChart *chart)
 {
 	cairo_t *cr = NULL;

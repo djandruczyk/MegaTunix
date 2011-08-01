@@ -32,9 +32,8 @@ G_DEFINE_TYPE (MtxProgressBar, mtx_progress_bar, GTK_TYPE_PROGRESS_BAR)
 /*!
  \brief Initializes the mtx pie pbar class and links in the primary
  signal handlers for config event, expose event, and button press/release
- \param class_name (MtxProgressBarClass *) pointer to the class
+ \param class is a pointer to a MtxProgressBarClass structure
  */
-
 void mtx_progress_bar_class_init (MtxProgressBarClass *class)
 {
 	GObjectClass *gobject_class;
@@ -61,9 +60,8 @@ void mtx_progress_bar_class_init (MtxProgressBarClass *class)
 
 /*!
  \brief Initializes the pbar attributes to sane defaults
- \param pbar (MtxProgressBar *) pointer to the pbar object
+ \param pbar is the pointer to the pbar object
  */
-
 void mtx_progress_bar_init (MtxProgressBar *pbar)
 {
 	/* The events the pbar receives
@@ -71,8 +69,10 @@ void mtx_progress_bar_init (MtxProgressBar *pbar)
 	* we don't have a motion handler defined.  It's required for the 
 	* dash designer to do drag and move placement 
 	*/
+	MtxProgressBarPrivate *priv = NULL;
+	g_return_if_fail(GTK_IS_WIDGET(pbar));
 
-	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
+	priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	priv->peak = 0.0;
 	priv->hold_id = 0;
 	priv->hold_time = 750;
@@ -82,9 +82,8 @@ void mtx_progress_bar_init (MtxProgressBar *pbar)
 
 /*!
  \brief Allocates the default colors for a pbar with no options 
- \param widget (MegaProgressBar *) pointer to the pbar object
+ \param pbar is the pointer to the pbar object
  */
-
 void mtx_progress_bar_init_colors(MtxProgressBar *pbar)
 {
 	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
@@ -108,9 +107,8 @@ void mtx_progress_bar_init_colors(MtxProgressBar *pbar)
 
 /*!
  \brief gets called to redraw the entire display manually
- \param pbar (MtxProgressBar *) pointer to the pbar object
+ \param progress is the pointer to the Real progressbar object
  */
-
 void mtx_progress_bar_real_update (GtkProgress *progress)
 {
 	GtkProgressBar *pbar;
@@ -123,6 +121,11 @@ void mtx_progress_bar_real_update (GtkProgress *progress)
 	gtk_widget_queue_draw (GTK_WIDGET (progress));
 }
 
+
+/*!
+  \brief This does the actual drawing of our custom progressbar
+  \param progress isa pointer to the progressbar object to render
+  */
 void mtx_progress_bar_paint (GtkProgress *progress)
 {
 	GtkProgressBar *pbar;
@@ -182,19 +185,23 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 		if (pbar->bar_style == GTK_PROGRESS_CONTINUOUS)
 		{
 			mtx_progress_bar_paint_continuous (pbar, current, peak, orientation);
-
 			/*
 			   if (GTK_PROGRESS (pbar)->show_text)
 			   mtx_progress_bar_paint_text (pbar, -1, current, orientation);
 			   */
-
 		}
 		pbar->dirty = FALSE;
-
 	}
 }
 
 
+/*!
+  \brief Paints the pbar when its style is set to GTK_PROGRESS_CONTINUOUS
+  \param pbar is the pointer to the progressbar object
+  \param current is the current value 
+  \param peak is the peak value
+  \param orientation is an enum identifying the orientation of the pbar
+  */
 void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint peak, GtkProgressBarOrientation orientation)
 {
 	GdkRectangle b_area;
@@ -272,6 +279,13 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 }
 
 
+/*!
+  \brief The progressbar expose event handler to handle redraws when un-
+  convered
+  \param widget is the pointer to the progressbar
+  \param event is a pointer to a GdkEventExpose structure
+  \returns TRUE
+  */
 gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	GtkProgressBar *pbar;
@@ -326,10 +340,15 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 	return TRUE;
 }
 
+
+/*!
+  \brief returns the peak value as a percentage (0<->1.0)
+  \param progress is a pointer to the progressbar widget
+  \returns the peak value 
+  */
 gfloat mtx_progress_get_peak_percentage (GtkProgress *progress)
 {
 	MtxProgressBar *pbar = MTX_PROGRESS_BAR (progress);
 	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	return priv->peak;
-
 }
