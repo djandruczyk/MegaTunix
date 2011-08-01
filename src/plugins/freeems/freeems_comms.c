@@ -401,7 +401,7 @@ void *win32_reader(gpointer data)
 /*!
   \brief Unix serial read thread, initiated as soon as a connection is made.
   Uses select() and nonblocking I/O in order to be nice with the port
-  \param data, encapsulation of the filedescriptor
+  \param data is the encapsulation of the serial/network port filedescriptor
   \returns NULL/0
   */
 void *unix_reader(gpointer data)
@@ -521,7 +521,7 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 
 /*! 
   \brief The thread which pops stuff off the RTV queue and processes them
-  \param data, pointer to the queue to pop entries off of
+  \param data is the pointer to the queue to pop entries off of
   \returns NULL
   */
 G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
@@ -550,7 +550,7 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 
 
 /*! 
-  \breif Per firmware plugin function to signal a request for ECU Runtime vars
+  \brief Per firmware plugin function to signal a request for ECU Runtime vars
   */
 G_MODULE_EXPORT void signal_read_rtvars(void)
 {
@@ -748,7 +748,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
  \param locID is the locationID in which the value refers to.
  \param offset is the offset from the beginning of the page that this data
  refers to.
- \param num_byts is the length of block to sent
+ \param num_bytes is the length of block to sent
  \param block is the block of data to be sent which better damn well be
  int ECU byte order if there is an endianness thing..
  */
@@ -889,9 +889,10 @@ red_or_black:
 
 
 /*!
-  \brief A pere ECU family function to be run after a single page burn.  It's
+  \brief A per ECU family function to be run after a single page burn.  It's
   purpose being to backup the in memory representation of the ECU
-  \param data, pointer to the Io_Message structure used for the burn request
+  \param data is the pointer to the Io_Message structure used for the 
+  burn request
   */
 G_MODULE_EXPORT void post_single_burn_pf(void *data)
 {

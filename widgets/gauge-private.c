@@ -32,15 +32,16 @@
  *
  */
 
-
 #include <gauge-private.h>
 #include <gauge-xml.h>
 #include <gdk/gdkkeysyms.h>
 #include <math.h>
 #include <stdio.h>
 
-
-
+/*!
+  \brief if a MtxGaugeFace isn't registered with GTK+ register the Type and 
+  return a Gtype object for it
+  */
 GType mtx_gauge_face_get_type(void)
 {
 	static GType mtx_gauge_face_type = 0;
@@ -68,9 +69,8 @@ GType mtx_gauge_face_get_type(void)
 /*!
  \brief Initializes the mtx gauge face class and links in the primary
  signal handlers for config event, expose event, and button press/release
- \param class_name (MtxGaugeFaceClass *) pointer to the class
+ \param class_name is the pointer to the class
  */
-
 void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
 {
 	GObjectClass *obj_class;
@@ -105,7 +105,6 @@ void mtx_gauge_face_class_init (MtxGaugeFaceClass *class_name)
  \brief Free's data
  \param gauge (MtxGaugeFace *) pointer to the gauge object
  */
-
 void mtx_gauge_face_finalize (GObject *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -190,9 +189,8 @@ void mtx_gauge_face_finalize (GObject *gauge)
 
 /*!
  \brief Frees up memory for tblocks array of structures
- \param gauge (MtxGaugeFace *) pointer to the gauge object
+ \param array is the pointer to the gauge text blocks array
  */
-
 void mtx_gauge_face_cleanup_text_blocks(GArray *array)
 {
 	gint i = 0;
@@ -213,9 +211,8 @@ void mtx_gauge_face_cleanup_text_blocks(GArray *array)
 
 /*!
  \brief Frees up memory for tgroups array of structures
- \param gauge (MtxGaugeFace *) pointer to the gauge object
+ \param array is the pointer to the gauge tick groups array
  */
-
 void mtx_gauge_face_cleanup_tick_groups(GArray *array)
 {
 	gint i = 0;
@@ -236,9 +233,8 @@ void mtx_gauge_face_cleanup_tick_groups(GArray *array)
 
 /*!
  \brief Frees up memory for w_ranges array of structures
- \param gauge (MtxGaugeFace *) pointer to the gauge object
+ \param array is the pointer to the gauge warning ranges array
  */
-
 void mtx_gauge_face_cleanup_warning_ranges(GArray *array)
 {
 	gint i = 0;
@@ -255,9 +251,8 @@ void mtx_gauge_face_cleanup_warning_ranges(GArray *array)
 
 /*!
  \brief Frees up memory for a_ranges array of structures
- \param gauge (MtxGaugeFace *) pointer to the gauge object
+ \param array is the pointer to the gauge alert ranges array
  */
-
 void mtx_gauge_face_cleanup_alert_ranges(GArray *array)
 {
 	gint i = 0;
@@ -274,9 +269,8 @@ void mtx_gauge_face_cleanup_alert_ranges(GArray *array)
 
 /*!
  \brief Frees up memory for polygons array of structures
- \param gauge (MtxGaugeFace *) pointer to the gauge object
+ \param array is the pointer to the gauge polygons array
  */
-
 void mtx_gauge_face_cleanup_polygons(GArray *array)
 {
 	gint i = 0;
@@ -330,16 +324,15 @@ void mtx_gauge_face_cleanup_polygons(GArray *array)
 
 /*!
  \brief Initializes the gauge attributes to sane defaults
- \param gauge (MtxGaugeFace *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
-
 void mtx_gauge_face_init (MtxGaugeFace *gauge)
 {
 	/* The events the gauge receives
-	* Need events for button press/release AND motion EVEN THOUGH
-	* we don't have a motion handler defined.  It's required for the 
-	* dash designer to do drag and move placement 
-	*/
+	 * Need events for button press/release AND motion EVEN THOUGH
+	 * we don't have a motion handler defined.  It's required for the 
+	 * dash designer to do drag and move placement 
+	 */
 
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	gtk_widget_set_events (GTK_WIDGET (gauge),
@@ -399,6 +392,11 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 }
 
 
+/*!
+ \brief Initializes the gauge XML name bindings which basically sets the 
+ memory location of things by name which is super convenient
+ \param gauge is the pointer to the gauge object
+ */
 void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -450,9 +448,9 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 }
 
 /*!
- * \brief  initializes and populates the xml_functions hashtable 
+  \brief initializes and populates the xml_functions hashtable 
+  \param gauge is a pointer to the gauge object
  */
-
 void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
 {
 	gint i = 0;
@@ -479,9 +477,8 @@ void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
 
 /*!
  \brief Allocates the default colors for a gauge with no options 
- \param widget (GtkWidget *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
-
 void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -533,9 +530,8 @@ void mtx_gauge_face_init_colors(MtxGaugeFace *gauge)
 
 /*!
  \brief creates a default tick group (replacing old tick system)
- \param widget (GtkWidget *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
-
 void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -570,9 +566,8 @@ void mtx_gauge_face_init_default_tick_group(MtxGaugeFace *gauge)
 /*!
  \brief updates the gauge position,  This is the CAIRO implementation that
  looks a bit nicer, though is a little bit slower
- \param widget (MtxGaugeFace *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
-
 void update_gauge_position (MtxGaugeFace *gauge)
 {
 	GtkWidget *widget = NULL;
@@ -814,11 +809,11 @@ cairo_jump_out_of_alerts:
  Takes care of creating/destroying graphics contexts, backing pixmaps (two 
  levels are used to split the rendering for speed reasons) colormaps are 
  also created here as well
- \param widget (GtkWidget *) pointer to the gauge object
- \param event (GdkEventConfigure *) pointer to GDK event datastructure that
+ \param widget is the pointer to the gauge object
+ \param event is the pointer to a GdkEventConfigure structure that 
  encodes important info like window dimensions and depth.
+ \returns TRUE
  */
-
 gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	cairo_t *cr = NULL;
@@ -923,11 +918,11 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 /*!
  \brief handles exposure events when the screen is covered and then 
  exposed. Works by copying from a backing pixmap to screen,
- \param widget (GtkWidget *) pointer to the gauge object
- \param event (GdkEventExpose *) pointer to GDK event datastructure that
+ \param widget is the pointer to the gauge object
+ \param event is the pointer to a GdkEventExpose structure that
  encodes important info like window dimensions and depth.
+ \returns FALSE
  */
-
 gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFacePrivate * priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
@@ -985,9 +980,8 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
  \brief draws the static elements of the gauge (only on resize), This includes
  the border, units and name strings,  tick marks and warning regions
  This is the cairo version.
- \param widget (GtkWidget *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
-
 void generate_gauge_background(MtxGaugeFace *gauge)
 {
 	GtkWidget * widget = NULL;
@@ -1538,12 +1532,11 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 
 /*!
  \brief handler called when a button is pressed,  currently unused 
- \param gauge (GtkWidget *) pointer to the gauge widget
- \param event (GdkEventButton *) struct containing details on the button(s) 
- pressed
- \returns FALSE
+ \param widget is the pointer to the gauge widget
+ \param event is the pointer to the GdkEventButton struct containing 
+ details on the button(s) pressed
+ \returns FALSE so other handlers run
  */
-
 gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 					     
 {
@@ -1650,12 +1643,11 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 
 /*!
  \brief handler called when a button is released,  currently unused 
- \param gauge (GtkWidget *) pointer to the gauge widget
- \param event (GdkEventButton *) struct containing details on the button(s) 
- released
+ \param gauge is the pointer to the gauge widget
+ \param event is the pointer to a GdkEventButton structure containing 
+ details on the button(s) released
  \returns FALSE
  */
-
 gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 					       
 {
@@ -1665,6 +1657,13 @@ gboolean mtx_gauge_face_button_release (GtkWidget *gauge,GdkEventButton *event)
 }
 
 
+/*!
+ \brief handler called when there is motion of the gauge
+ \param gauge is the pointer to the gauge widget
+ \param event is the pointer to a GdkEventMotion structure containing 
+ details on the motion event
+ \returns FALSE
+ */
 gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
@@ -1673,9 +1672,15 @@ gboolean mtx_gauge_face_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 
 	return FALSE;
 }
-					       
 
 
+/*!
+ \brief handler called when there is keyboard events on the gauge
+ \param gauge is the pointer to the gauge widget
+ \param event is the pointer to a GdkEventKey structure containing 
+ details on the keyboard event
+ \returns FALSE
+ */
 gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
@@ -1719,11 +1724,11 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
 					       
 /*!
  \brief sets the INITIAL sizeof the widget
- \param gauge (GtkWidget *) pointer to the gauge widget
- \param requisition (GdkRequisition *) struct to set the vars within
+ \param widget is the pointer to the gauge widget
+ \param requisition is the pointer to the GdkRequisition structure to set 
+ the vars within
  \returns void
  */
-
 void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	g_return_if_fail(widget != NULL);
@@ -1735,7 +1740,12 @@ void mtx_gauge_face_size_request(GtkWidget *widget, GtkRequisition *requisition)
 }
 
 
-
+/*!
+  \brief Calculates a box that contains all the passed points
+  \param coords is a pointer to a list of MtxPoint structures
+  \param count is the number of MtxPoint structures
+  \param box is a pointer to be filled with the bounding box coordinates
+  */
 void calc_bounding_box(MtxPoint *coords, gint count, GdkRectangle *box)
 {
 	gint x_min = G_MAXINT;

@@ -37,6 +37,14 @@ typedef struct
 	gchar * source;			/*!< data source */
 }CurveData;
 
+
+/*!
+  \brief Creates a group of 2D Table Editors packed into a GtkNotebook
+  \param button is a pointer to the widget the user click on, which has bound
+  to is a list of the TE Table ID's which we need to create on-screen 
+  representations for
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 {
 	GladeXML *main_xml = NULL;
@@ -379,7 +387,6 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	OBJ_SET(window,"gauge_list",gauge_list);
 	gtk_widget_show_all(window);
 	return TRUE;
-
 }
 
 

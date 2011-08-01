@@ -577,6 +577,8 @@ G_MODULE_EXPORT void test_cleanup(gpointer data)
   interrogation profiles, favoring USER profiles over system ones.
   If we have a match, allocated resources for a Firmware structure, and load
   the firmware details.
+  \param tests is a pointer to a GArray of tests
+  \param tests_hash is a pointer to the hashtable of tests
   \returns TRUE on if we hit a match, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)

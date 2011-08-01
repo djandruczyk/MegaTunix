@@ -90,10 +90,10 @@ G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSiz
 
 /*!
  \brief ms_get_ecu_data_last() is a func to return the data requested.
- \param canID, CAN Identifier (currently unused)
- \param page, (ecu firmware page)
- \param offset, (RAW BYTE offset)
- \param size, (size to be returned)
+ \param canID is the CAN Identifier (currently unused)
+ \param page is the (ecu firmware page)
+ \param offset is the (RAW BYTE offset)
+ \param size is the (size to be returned)
  */
 G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, DataSize size) 
 {

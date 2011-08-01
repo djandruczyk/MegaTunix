@@ -25,6 +25,11 @@
 #include <math.h>
 #include <stdio.h>
 
+/*!
+  \brief returns the GType associated with a MtxPieGauge, registering it if 
+  needed
+  \returns the GType for a MtxPieGauge
+  */
 GType mtx_pie_gauge_get_type(void)
 {
 	static GType mtx_pie_gauge_type = 0;
@@ -51,9 +56,8 @@ GType mtx_pie_gauge_get_type(void)
 /*!
  \brief Initializes the mtx pie gauge class and links in the primary
  signal handlers for config event, expose event, and button press/release
- \param class_name (MtxPieGaugeClass *) pointer to the class
+ \param class_name is a pointer to the MtxPieGaugeClass structure
  */
-
 void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
 {
 	GObjectClass *obj_class;
@@ -83,9 +87,8 @@ void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
 
 /*!
  \brief Frees up private data
- \param gauge (MtxPieGauge *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
-
 void mtx_pie_gauge_finalize (GObject *gauge)
 {
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
@@ -101,9 +104,8 @@ void mtx_pie_gauge_finalize (GObject *gauge)
 
 /*!
  \brief Initializes the gauge attributes to sane defaults
- \param gauge (MtxPieGauge *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
-
 void mtx_pie_gauge_init (MtxPieGauge *gauge)
 {
 	/* The events the gauge receives
@@ -141,12 +143,10 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
 }
 
 
-
 /*!
  \brief Allocates the default colors for a gauge with no options 
- \param widget (MegaPieGauge *) pointer to the gauge object
+ \param widget is the pointer to the gauge object
  */
-
 void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
 {
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
@@ -187,9 +187,8 @@ void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
 /*!
  \brief updates the gauge position,  This is the CAIRO implementation that
  looks a bit nicer, though is a little bit slower
- \param widget (MtxPieGauge *) pointer to the gauge object
+ \param widget is the pointer to the gauge object
  */
-
 void update_pie_gauge_position (MtxPieGauge *gauge)
 {
 	GtkWidget * widget = NULL;
@@ -280,11 +279,11 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
  Takes care of creating/destroying graphics contexts, backing pixmaps (two 
  levels are used to split the rendering for speed reasons) colormaps are 
  also created here as well
- \param widget (GtkWidget *) pointer to the gauge object
- \param event (GdkEventConfigure *) pointer to GDK event datastructure that
+ \param widget is the pointer to the gauge object
+ \param event is a pointer to the GdkEventConfigure structure that 
  encodes important info like window dimensions and depth.
+ \returns TRUE
  */
-
 gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
@@ -335,11 +334,11 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 /*!
  \brief handles exposure events when the screen is covered and then 
  exposed. Works by copying from a backing pixmap to screen,
- \param widget (GtkWidget *) pointer to the gauge object
- \param event (GdkEventExpose *) pointer to GDK event datastructure that
+ \param widget is the pointer to the gauge object
+ \param event is the pointer to the GdkEventExpose structure that 
  encodes important info like window dimensions and depth.
+ \returns FALSE
  */
-
 gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
@@ -377,9 +376,8 @@ gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
  \brief draws the static elements of the gauge (only on resize), This includes
  the border, units and name strings,  tick marks and warning regions
  This is the cairo version.
- \param widget (MtxPieGauge *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
-
 void generate_pie_gauge_background(MtxPieGauge *gauge)
 {
 	cairo_t *cr = NULL;
@@ -454,6 +452,12 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 }
 
 
+/*!
+  \brief Unused handler for motion events
+  \param gauge is the pointer to the gauge widget
+  \param event is a pointe to a GdkEventMotion structure
+  \returns FALSE so other handlers run
+  */
 gboolean mtx_pie_gauge_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 {
 	/* We don't care, but return FALSE to propogate properly */
@@ -466,14 +470,14 @@ gboolean mtx_pie_gauge_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 
 
 /*!
- \brief sets the INITIAL sizeof the widget
- \param gauge (GtkWidget *) pointer to the gauge widget
- \param requisition (GdkRequisition *) struct to set the vars within
- \returns void
+ \brief sets the INITIAL size of the widget
+ \param gauge is the pointer to the gauge widget
+ \param requisition is a pointer to the GdkRequisition struct to set the 
+ vars within
  */
-
 void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
+	g_return_if_fail(requisition);
 	requisition->width = 80;
 	requisition->height = 20;
 }
@@ -481,7 +485,7 @@ void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
 
 /*!
  \brief gets called to redraw the entire display manually
- \param gauge (MtxPieGauge *) pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
 void mtx_pie_gauge_redraw (MtxPieGauge *gauge)
 {

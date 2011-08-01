@@ -166,9 +166,10 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint canID, gint locID, gint of
 
 /*!
   \brief Sets the ECU data at the coordinates specified in the data pointer
-  \param data, pointer to either a GtkWidget pointer or a gconstpointer object
-  container the coordinate information as to where to store the new data.
-  \param new, pointer to the new data to be stored
+  \param data is the pointer to either a GtkWidget pointer or a 
+  gconstpointer object container the coordinate information as to where 
+  to store the new data.
+  \param new is the pointer to the new data to be stored
   */
 G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 {
@@ -237,8 +238,8 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
   \param canID is the CAN Identifier
   \param locID is the Location ID
   \param offset is the offset in bytes from thebeginning on this location ID
-  \param size, is the  size representation enumeration
-  \param new, is the new value to store
+  \param size is the  size representation enumeration
+  \param new is the new value to store
   */
 G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint locID, gint offset, DataSize size, gint new) 
 {
@@ -264,8 +265,8 @@ G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint locID, gint offset, D
   \brief Generic function to store a blob of data to a specific location in
   ECU representative memory. The block variable must contain the necessary
   fields in order to store properly
-  \param block, pointer to a gconstpointer containing the location ID, offset
-  and data to store
+  \param block is a pointer to a gconstpointer containing the location ID, 
+  offset and data to store
   */
 G_MODULE_EXPORT void store_new_block(gpointer block)
 {
@@ -357,7 +358,7 @@ G_MODULE_EXPORT void freeems_backup_current_data(gint canID,gint locID)
 /*!
  \brief Finds the MTX page associated with this Location ID
  \param locID is the ecu firmware location Identifier
- \param mtx_page, The symbolic page mtx uses to get around the nonlinear
+ \param mtx_page is the symbolic page mtx uses to get around the nonlinear
  nature of the page layout in certain firmwares
  \returns true on success, false on failure
  */

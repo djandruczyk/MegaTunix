@@ -467,35 +467,35 @@ void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
 
 /* Warning Ranges */
-GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge);
+const GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index, WrField field, void * value);
 gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRange *);
 void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge);
 
 /* Alert Ranges */
-GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge);
+const GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index, AlertField field, void * value);
 gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *);
 void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge);
 
 /* Text Blocks */
-GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
+const GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
 gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *);
 void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge);
 
 /* Tick Groups */
-GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge);
+const GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value);
 gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *);
 void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge);
 
 /* Polygons */
-GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge);
+const GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge);
 void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index, PolyField field, void * value);
 gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *);
 void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index);
