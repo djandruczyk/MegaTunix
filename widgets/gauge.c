@@ -1610,6 +1610,7 @@ gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
 /*!
  \brief sets the state of the daytime_mode flag
  \param gauge is the pointer to the gauge object
+ \param mode is the mode to set,  daytime or nitetime
  \returns TRUE on sucess, FALSE otherwise
  */
 gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)

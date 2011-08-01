@@ -145,7 +145,7 @@ void mtx_pie_gauge_init (MtxPieGauge *gauge)
 
 /*!
  \brief Allocates the default colors for a gauge with no options 
- \param widget is the pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
 void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
 {
@@ -187,7 +187,7 @@ void mtx_pie_gauge_init_colors(MtxPieGauge *gauge)
 /*!
  \brief updates the gauge position,  This is the CAIRO implementation that
  looks a bit nicer, though is a little bit slower
- \param widget is the pointer to the gauge object
+ \param gauge is the pointer to the gauge object
  */
 void update_pie_gauge_position (MtxPieGauge *gauge)
 {
@@ -471,9 +471,9 @@ gboolean mtx_pie_gauge_motion_event (GtkWidget *gauge,GdkEventMotion *event)
 
 /*!
  \brief sets the INITIAL size of the widget
- \param gauge is the pointer to the gauge widget
+ \param widget is the pointer to the gauge widget
  \param requisition is a pointer to the GdkRequisition struct to set the 
- vars within
+ vars within forthe size requisition
  */
 void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
