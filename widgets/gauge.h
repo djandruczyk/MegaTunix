@@ -455,7 +455,7 @@ void update_gauge_position (MtxGaugeFace *);
 GtkWidget* mtx_gauge_face_new ();
 
 /* Gauge General Attributes */
-void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat value);
+gboolean mtx_gauge_face_set_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat value);
 gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge, MtxGenAttr field, gfloat * value);
 
 /* Get/Set value */
@@ -463,46 +463,46 @@ gboolean mtx_gauge_face_set_value (MtxGaugeFace *gauge, gfloat value);
 gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value);
 
 /* Value Font */
-void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
+gboolean mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
 
 /* Warning Ranges */
 const GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge);
-void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index, WrField field, void * value);
+gboolean mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index, WrField field, void * value);
 gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRange *);
 void mtx_gauge_face_remove_warning_range(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_warning_ranges(MtxGaugeFace *gauge);
 
 /* Alert Ranges */
 const GArray * mtx_gauge_face_get_alert_ranges(MtxGaugeFace *gauge);
-void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index, AlertField field, void * value);
+gboolean mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index, AlertField field, void * value);
 gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *);
 void mtx_gauge_face_remove_alert_range(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_alert_ranges(MtxGaugeFace *gauge);
 
 /* Text Blocks */
 const GArray * mtx_gauge_face_get_text_blocks(MtxGaugeFace *gauge);
-void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
+gboolean mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value);
 gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *);
 void mtx_gauge_face_remove_text_block(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_text_blocks(MtxGaugeFace *gauge);
 
 /* Tick Groups */
 const GArray * mtx_gauge_face_get_tick_groups(MtxGaugeFace *gauge);
-void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value);
+gboolean mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value);
 gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *);
 void mtx_gauge_face_remove_tick_group(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_tick_groups(MtxGaugeFace *gauge);
 
 /* Polygons */
 const GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge);
-void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index, PolyField field, void * value);
+gboolean mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index, PolyField field, void * value);
 gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *);
 void mtx_gauge_face_remove_polygon(MtxGaugeFace *gauge, guint index);
 void mtx_gauge_face_remove_all_polygons(MtxGaugeFace *gauge);
 
 /* Colors */
-void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color);
+gboolean mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color);
 GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor *color_ref);
 
 /* XML */
@@ -511,7 +511,7 @@ void mtx_gauge_face_export_xml(MtxGaugeFace *, gchar *);
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge);
 
 /* Misc */
-void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *, gboolean);
+gboolean mtx_gauge_face_set_show_drag_border(MtxGaugeFace *, gboolean);
 gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *);
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *);
 void mtx_gauge_face_get_last_click_coords(MtxGaugeFace *, gdouble *, gdouble *);
@@ -521,7 +521,7 @@ float mtx_gauge_face_get_peak (MtxGaugeFace *);
 gboolean mtx_gauge_face_clear_peak(MtxGaugeFace *);
 
 /* Daytime or nitetime (flips colors) */
-void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *, gboolean);
+gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *, gboolean);
 gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *);
 
 G_END_DECLS

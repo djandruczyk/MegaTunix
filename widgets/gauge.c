@@ -44,11 +44,12 @@
  \param gauge is the pointer to the gauge object
  \param index is the index of color to set.
  \param color is the new color to use for the specified index
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color)
+gboolean mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor color)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->colors[index].red = color.red;
 	priv->colors[index].green = color.green;
@@ -58,13 +59,14 @@ void mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkCo
 
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
+	return TRUE;
 }
 
 
@@ -180,11 +182,13 @@ gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
  \brief sets the current value_font 
  \param gauge is the pointer to the gauge object
  \param new is the new value
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
+gboolean mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	g_return_val_if_fail (new,FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 	if (priv->value_font)
 		g_free(priv->value_font);
@@ -192,12 +196,13 @@ void mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	mtx_gauge_face_redraw_canvas (gauge);
+	return TRUE;
 }
 
 
@@ -301,7 +306,7 @@ gint mtx_gauge_face_set_text_block_struct(MtxGaugeFace *gauge, MtxTextBlock *tbl
 /*!
  \brief adds a new tick group from the struct passed
  \param gauge is the pointer to the gauge object
- \param group is the pointer to a MtxTickGroup struct to copy
+ \param tgroup is the pointer to a MtxTickGroup struct to copy
  \returns index of where this tick group is stored...
  */
 gint mtx_gauge_face_set_tick_group_struct(MtxGaugeFace *gauge, MtxTickGroup *tgroup)
@@ -484,12 +489,13 @@ const GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge)
  \param gauge is the pointer to the gauge object
  \param field is the enumeration of the field to change
  \param value is the new value
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat value)
+gboolean mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (field < NUM_ATTRIBUTES);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	g_return_val_if_fail (field < NUM_ATTRIBUTES,FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	switch (field)
@@ -556,14 +562,14 @@ void mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat v
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
-	return;
+	return TRUE;
 }
 
 
@@ -652,17 +658,19 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
  \param index is the index of the textblock
  \param field is the enumeration of the field to change
  \param value is a pointer to the new value
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value)
+gboolean mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	MtxTextBlock *tblock = NULL;
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (field < TB_NUM_FIELDS);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	g_return_val_if_fail (value,FALSE);
+	g_return_val_if_fail (field < TB_NUM_FIELDS,FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	tblock = g_array_index(priv->t_blocks,MtxTextBlock *,index);
-	g_return_if_fail (tblock != NULL);
+	g_return_val_if_fail (tblock != NULL,FALSE);
 	switch (field)
 	{
 		case TB_FONT_SCALE:
@@ -697,14 +705,14 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
-	return;
+	return TRUE;
 }
 
 
@@ -715,17 +723,19 @@ void mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField fie
  \param index is the index of the tickgroup
  \param field is the enumeration of the field to change
  \param value is the pointer to the new value
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value)
+gboolean mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	MtxTickGroup *tgroup = NULL;
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (field < TG_NUM_FIELDS);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	g_return_val_if_fail (field < TG_NUM_FIELDS,FALSE);
+	g_return_val_if_fail (value,FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	tgroup = g_array_index(priv->tick_groups,MtxTickGroup *,index);
-	g_return_if_fail (tgroup != NULL);
+	g_return_val_if_fail (tgroup != NULL,FALSE);
 	switch (field)
 	{
 		case TG_FONT:
@@ -799,14 +809,14 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
-	return;
+	return TRUE;
 }
 
 
@@ -818,8 +828,9 @@ void mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField fie
  \param index is the index of the tickgroup
  \param field is the enumeration of the field to change
  \param value is the pointer to the new value
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField field, void * value)
+gboolean mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	MtxPolygon *poly = NULL;
@@ -827,13 +838,14 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 	gint i = 0;
 	gint num_points = 0;
 
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (field < POLY_NUM_FIELDS);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	g_return_val_if_fail (field < POLY_NUM_FIELDS,FALSE);
+	g_return_val_if_fail (value, FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 
 	poly = g_array_index(priv->polygons,MtxPolygon *,index);
-	g_return_if_fail (poly != NULL);
+	g_return_val_if_fail (poly != NULL,FALSE);
 	data = poly->data;
 	switch (field)
 	{
@@ -925,14 +937,14 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
-	return;
+	return TRUE;
 }
 
 
@@ -943,17 +955,19 @@ void mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField fiel
  \param index is the index of the WarningRange
  \param field is the enumeration of the field to change
  \param value is the pointer to the new value
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField field, void * value)
+gboolean mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	MtxWarningRange *w_range = NULL;
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (field < WR_NUM_FIELDS);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	g_return_val_if_fail (value,FALSE);
+	g_return_val_if_fail (field < WR_NUM_FIELDS,FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	w_range = g_array_index(priv->w_ranges,MtxWarningRange *,index);
-	g_return_if_fail (w_range != NULL);
+	g_return_val_if_fail (w_range != NULL,FALSE);
 	switch (field)
 	{
 		case WR_LOWPOINT:
@@ -983,14 +997,14 @@ void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField 
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
-	return;
+	return TRUE;
 }
 
 
@@ -1001,17 +1015,19 @@ void mtx_gauge_face_alter_warning_range(MtxGaugeFace *gauge, gint index,WrField 
  \param index is the index of the AlertRange
  \param field is the enumeration of the field to change
  \param value is the pointe to the new value
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField field, void * value)
+gboolean mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField field, void * value)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	MtxAlertRange *a_range = NULL;
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
-	g_return_if_fail (field < ALRT_NUM_FIELDS);
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
+	g_return_val_if_fail (value,FALSE);
+	g_return_val_if_fail (field < ALRT_NUM_FIELDS,FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 
 	a_range = g_array_index(priv->a_ranges,MtxAlertRange *,index);
-	g_return_if_fail (a_range != NULL);
+	g_return_val_if_fail (a_range != NULL,FALSE);
 	switch (field)
 	{
 		case ALRT_LOWPOINT:
@@ -1047,14 +1063,14 @@ void mtx_gauge_face_alter_alert_range(MtxGaugeFace *gauge, gint index,AlertField
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
-	return;
+	return TRUE;
 }
 
 
@@ -1417,25 +1433,27 @@ GtkWidget *mtx_gauge_face_new ()
  \brief enables showing the drag border boxes 
  \param gauge is the pointer to the gauge object
  \param state is the state to set the drag border to
+ \returns TRUE on success, FALSE otherwise
  */
-void mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
+gboolean mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 	priv->show_drag_border = state;
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #else
 	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-		return;
+		return TRUE;
 #endif
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	mtx_gauge_face_configure(GTK_WIDGET(gauge),NULL);
 	gdk_window_clear_area_e(GTK_WIDGET(gauge)->window,0,0,priv->w, priv->h);
+	return TRUE;
 }
 
 
@@ -1466,7 +1484,7 @@ void mtx_gauge_face_set_show_tattletale(MtxGaugeFace *gauge, gboolean state)
 /*!
  \brief gets whether tattletale is enabled or not
  \param gauge is the pointer to the gauge object
- \param state is the state to set it to
+ \returns TRUE if tattle tale is set to be shown, or FALSE otherwise
  */
 gboolean mtx_gauge_face_get_show_tattletale(MtxGaugeFace *gauge)
 {
@@ -1479,7 +1497,7 @@ gboolean mtx_gauge_face_get_show_tattletale(MtxGaugeFace *gauge)
 /*!
  \brief sets alpha for tattletale
  \param gauge is the pointer to the gauge object
- \param state is the state to set it to
+ \param alpha is the alpha value from 0-1 to set for the tattletale
  */
 void mtx_gauge_face_set_tattletale_alpha(MtxGaugeFace *gauge, gfloat alpha)
 {
@@ -1503,7 +1521,7 @@ void mtx_gauge_face_set_tattletale_alpha(MtxGaugeFace *gauge, gfloat alpha)
 /*!
  \brief gets tattletale alpha value
  \param gauge is the pointer to the gauge object
- \param state is the state to set it to
+ \returns the Tattletale alpha value
  */
 gfloat mtx_gauge_face_get_tattletale_alpha(MtxGaugeFace *gauge)
 {
@@ -1528,6 +1546,7 @@ gfloat mtx_gauge_face_get_peak (MtxGaugeFace *gauge)
 /*!
  \brief clears the peak value 
  \param gauge is the pointer to the gauge object
+ \returns TRUE on success, FALSE otherwise
  */
 gboolean mtx_gauge_face_clear_peak (MtxGaugeFace *gauge)
 {
@@ -1593,26 +1612,26 @@ gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *gauge)
  \param gauge is the pointer to the gauge object
  \returns TRUE on sucess, FALSE otherwise
  */
-void mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
+gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE (gauge));
+	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	if (priv->daytime_mode == mode)
-		return;
+		return TRUE;
 	else
 	{
 		priv->daytime_mode = mode;
 #if GTK_MINOR_VERSION >= 18
 		if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
-			return;
+			return TRUE;
 #else
 		if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(gauge)))
-			return;
+			return TRUE;
 #endif
 		generate_gauge_background(gauge);
 		mtx_gauge_face_redraw_canvas (gauge);
 	}
-	return;
+	return TRUE;
 }
 
 
