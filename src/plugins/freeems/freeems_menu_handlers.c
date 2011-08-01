@@ -18,6 +18,12 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief Sets up the main gui menu with stuff common to this ECU persona.
+  It checks for the presence of an ecu/firmware specific handler and runs that
+  as well
+  \param xml is a pointer to the GladeXML structure for the core Gui
+  */
 G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 {
 	void (*ecu_plugin_menu_setup)(GladeXML *) = NULL;

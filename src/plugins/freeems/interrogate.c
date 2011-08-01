@@ -33,6 +33,7 @@ extern gconstpointer *global_data;
  firmware it is running.  It does this by reading a list of tests, sending
  those tests in turn, reading the responses and them comparing the group of
  responses against a list of interrogation profiles until it finds a match.
+ NOTE: This function is NOT yet complete for FreeEMS
  */
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
@@ -97,6 +98,12 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 }
 
 
+/*!
+  \brief Issues a packet to the ECU to get its revision information. 
+  \param len is a pointer to a location to store the length of the data
+  received, or NULL
+  \returns the Firmware version as a text string
+  */
 G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 {
 	OutputData *output = NULL;
@@ -141,13 +148,6 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 	packet = g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
 	g_async_queue_unref(queue);
-	/*
-	if (packet)
-		printf("Firmware version PACKET ARRIVED!\n");
-	else
-		printf("TIMEOUT\n");
-	*/
-
 	if (packet)
 	{
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
@@ -159,6 +159,12 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 }
 
 
+/*!
+  \brief Issues a packet to the ECU to get its interface version. 
+  \param len is a pointer to a location to store the length of the data
+  received, or NULL
+  \returns the Firmware interface version as a text string
+  */
 G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 {
 	OutputData *output = NULL;
@@ -221,6 +227,13 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 }
 
 
+/*!
+  \brief Issues a packet to the ECU to get its detailed interface version. 
+  \param major is a pointer to where to store the major version or NULL
+  \param minor is a pointer to where to store the minor version or NULL
+  \param micro is a pointer to where to store the micro version or NULL
+  \returns the Firmware detailed interface version as a text string
+  */
 G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8 *minor, guint8 *micro)
 {
 	OutputData *output = NULL;
@@ -273,12 +286,6 @@ G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8
 	packet = g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 	g_async_queue_unref(queue);
-	/*
-	   if (packet)
-	   printf("Firmware version PACKET ARRIVED!\n");
-	   else
-	   printf("TIMEOUT\n");
-	 */
 
 	if (packet)
 	{
@@ -294,6 +301,9 @@ G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8
 
 /*
  \brief Queries the ECU for a location ID list
+ \paranm len is a pointer to a location where this function can store the
+ length of data received, or NULL
+ \returns a pointer to a Link list (GList) of location ID's
  */
 G_MODULE_EXPORT GList *request_location_ids(gint * len)
 {
@@ -366,7 +376,10 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 
 
 /*
- \brief Queries the ECU for a location ID list
+ \brief Queries the ECU for the details of a specific location ID
+ \param loc_id, the location ID to get more information about
+ \returns a pointer to a Location_Details structure
+ \see Location_Details
  */
 G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 {
@@ -454,9 +467,11 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 
 /*!
  \brief validate_and_load_tests() loads the list of tests from the system
- checks them for validity, populates and array and returns it
- command tested against the ECU arestored
- \returns a dynamic GArray for commands
+ checks them for validity, and populates the passed array and hashtables
+ with them
+ \param tests is a pointer to a pointer of a GArray structure of the tests
+ \param tests_hash is a pointer to a pointer of a hashtable of the Tests
+ \returns TRUE on success, FALSE otherwise
  */
 G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **tests_hash)
 {
@@ -487,6 +502,8 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
+		g_free(filename);
+		cfg_free(cfgfile);
 		return FALSE;
 	}
 
@@ -535,6 +552,11 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 }
 
 
+/*!
+  \brief Frees all the resources of a Detection_Test structure
+  \param data is a pointer to a Detection_Test structure
+  \see Detection_Test
+  */
 G_MODULE_EXPORT void test_cleanup(gpointer data)
 {
 	Detection_Test *test = (Detection_Test *)data;
@@ -550,6 +572,13 @@ G_MODULE_EXPORT void test_cleanup(gpointer data)
 }
 
 
+/*!
+  \brief Compares the results of the test runs with the available 
+  interrogation profiles, favoring USER profiles over system ones.
+  If we have a match, allocated resources for a Firmware structure, and load
+  the firmware details.
+  \returns TRUE on if we hit a match, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 {
 	gboolean retval = TRUE;
@@ -569,7 +598,6 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": determine_ecu()\n\t NO Interrogation profiles found,  was MegaTunix installed properly?\n\n"));
 		return FALSE;
 	}
-
 	i = 0;
 	while (filenames[i])
 	{
@@ -626,12 +654,11 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 
 
 /*!
- \brief check_for_match() compares the resutls of the interrogation with the
+ \brief check_for_match() compares the results of the interrogation with the
  ECU to the canidates in turn. When a match occurs TRUE is returned
  otherwise it returns FALSE
- \param cmd_array (GArray *) array of commands
- \param potential (Canidate *) potential 
- \param canidate (Canidate *) Canidate
+ \param tests_hash is a pointer to an hashtable of tests
+ \param filename is a pointer to an interrogation profile file to check against
  \returns TRUE on match, FALSE on failure
  */
 G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
@@ -739,7 +766,10 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 }
 
 
-
+/*!
+  \brief updates the interrogation Gui (General Tab) with the Firmware and 
+  Interface Versions
+  */
 G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 {
 	gchar *version = NULL;
@@ -764,6 +794,14 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 }
 
 
+/*!
+  \brief Loads the remaining parts of the Interrogation profile and populates
+  the firmware structure allocation resources as needed based on the contents
+  of the profile
+  \param firmware is a pointer to an allocated Firmware_Details structure
+  \param filename is a pointer to the matched interrogation profile
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar * filename)
 {
 	ConfigFile *cfgfile;
@@ -1011,7 +1049,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 /*!
  \brief translate_capabilities() converts a stringlist into a mask of 
  enumerations and returns it
- \param string (gchar *) listing of capabilities in textual format
+ \param string is a listing of capabilities in textual format
  \returns an integer mask of the capabilites
  */
 G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
@@ -1020,7 +1058,6 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 	gint i = 0;
 	gint value = 0;
 	gint tmpi = 0;
-
 
 	if (!string)
 	{
@@ -1044,8 +1081,7 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 }
 
 /*!
- \brief initialize_page_params() creates and initializes the page_params
- datastructure to sane defaults and returns it
+ \brief Initializes a Page_Params datastructure and returns a pointer to it
  */
 G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 {
@@ -1059,8 +1095,7 @@ G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 
 
 /*!
- \brief initialize_table_params() creates and initializes the Table_Params
- datastructure to sane defaults and returns it
+ \brief Initializes a Table_Params datastructure and returns a pointer to it
  */
 G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 {

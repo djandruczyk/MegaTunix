@@ -24,6 +24,13 @@ extern gconstpointer *global_data;
 
 #define PKT_DEBUG 0
 
+/*!
+  \brief This functions handles all incoing data from the ECU and validates
+  its content for proper START/STOP/ESCAPING and allocates a FreeEMS_Packet
+  structure for VALID packets and populates the required fields as needed
+  \param buf is a pointer to the incoming data buffer
+  \param len is the numbe of bytes to pull from the incoming buffer
+  */
 G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 {
 	static GAsyncQueue *queue = NULL;
@@ -182,6 +189,14 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 }
 
 
+/*!
+  \brief This function is a thread that sits and listens on the packet_queue
+  for incoming data that has come from handle_data() after passing basic
+  validation.  This thread will call the dispatcher with the packet, which
+  will fire off all appropriate subscribers to this packet
+  \param data is unused
+  \returns NULL
+  */
 void *packet_handler(gpointer data)
 {
 	GTimeVal tval;
@@ -209,6 +224,14 @@ void *packet_handler(gpointer data)
 }
 
 
+/*!
+  \brief packet decoder and verifier of packet syntax.  This function takes
+  in a FreeEMS_Packet pointer and validates that the fields within it make
+  sense,  i.e. lengths add up, fields are sane (where applicable), if all is
+  well it returns TRUE, otherwise FALSE
+  \param packet is a pointer to a populated FreeEMS_Packet structure
+  \returns TRUE on good packet, FALSE otherwise
+  */
 gboolean packet_decode(FreeEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
@@ -244,7 +267,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	/*if ((PKT_DEBUG) || (packet->is_nack))*/
 	if (PKT_DEBUG)
 	{
-			printf("Full packet received, %i bytes!\n",packet->raw_length);
+		printf("Full packet received, %i bytes!\n",packet->raw_length);
 		if (packet->is_nack)
 			printf("WARNING packet NACK received for payload ID %i\n",packet->payload_id);
 		printf("Ack/Nack Flag: %i\n",packet->is_nack);
@@ -270,7 +293,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	{
 		if ((packet->payload_length - 3) > packet->raw_length)
 		{
-			printf("BAD PACKET!\n");
+			printf("BAD PACKET, PAYLOAD LENGTH issue!\n");
 			printf("payload length + header/payload EXCEEDS packet length, BUGGY PACKET!!\n");
 			printf("Payload ID: %i, Payload Length %i, raw pkt len %i\n",packet->payload_id,packet->payload_length,packet->raw_length);
 			return FALSE;
@@ -283,8 +306,14 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 
 
 /*!
- *\brief registers a queue for a subscriber to gets the packets it wants
- based on provider criteria
+ *\brief Registers a queue for a subscriber such that whe na packet comes in 
+ matching the criteria a copy of the packet is pushed down that queue to the
+ waiting subscriber
+ \param type is an enumeration statign whether we are matching on payload ID
+ OR sequence number (can't match on a combination of both yet)
+ \param queue is a pointer to the queue where this packet should be sent on a 
+ match
+ \param data is the payloadID or sequence number to match on
  */
 G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint data)
 {
@@ -327,7 +356,10 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 
 
 /*!
- *\brief de-registers a queue for a subscriber
+ \brief de-registers a queue for a subscriber based on the passed criteria
+ \param type is an enum representing payload ID or Sequence
+ \param queue is a pointer to the queue used during registration
+ \param data is the payloadID or Sequence Number
  */
 G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint data)
 {
@@ -386,9 +418,13 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 
 
 /*
- *\brief Purpose is to dispatch the conditions waiting on a specific packet 
- * criteria.  Uses g_signal_broadcast to wakeup all threads that went to 
- * sleep on a specific condition
+ \brief This dispatches out packets to awaiting subscribers (if any)
+ If the payload or sequnce number matches what's in the packet, this packet
+ is copied and pushed down the supplied queue to the lucky winner. This allows
+ multiple subscribers per payloadID or sequence number, which offers some
+ interesting flexibility
+ \param packet is a pointer to the new packet
+ \see FreeEMS_Packet
  */
 G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 {
@@ -451,6 +487,11 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 
 
 
+/*!
+  \brief copies ALL fields of a packet and returns the deep copy
+  \param packet is the packet to copy
+  \returns a pointer to a full (deep) copy
+  */
 FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
 {
 	FreeEMS_Packet *new = NULL;
@@ -462,6 +503,10 @@ FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
 }
 
 
+/*!
+  \brief Deallocates a FreeEMS_Packet structure
+  \param packet is a pointer to the packet being deallocated
+  */
 void freeems_packet_cleanup(FreeEMS_Packet *packet)
 {
 	if (!packet)
@@ -474,7 +519,12 @@ void freeems_packet_cleanup(FreeEMS_Packet *packet)
 
 /*! 
  \brief build_output_message() is called when doing output to the ECU, to 
- append the needed data together into one nice blob for sending
+ append the needed data together into one nice structured piece for 
+ sending to the ECU
+ \param message is a pointer to a Io_Message structure
+ \param command is a pointer to a Command structure which contains information
+ about what fields are needed to be sent to the ecu. This is used to create the  message->sequence correctly
+ \param data is an pointer to an OutputData structure that contains the source data to build the message successfully
  */
 G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command, gpointer data)
 {
@@ -643,6 +693,14 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 }
 
 
+/*!
+  \brief This handles escaping and wrapping the packet with the START/STOP
+  markers. 
+  \param raw is the raw unescape unmarker'd packet (checksummed already)
+  \param raw_length is the length of the raw packet in bytes
+  \param final_length is a pointer to where to store the packets final length
+  \returns a pointer to the finalized packet
+  */
 guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
 {
 	gint i = 0;
@@ -698,6 +756,14 @@ guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
 }
 
 
+/*!
+  \brief logs a raw incoming or outgoing packet as HEX to the PACKETS dbg
+  channel
+  \param buf is a pointer to the raw packet
+  \param len is the packets length in bytes
+  \param toecu is a flag, TRUE means the packets is GOING from MtX to the ECU
+  FALSE means the packet is coming FROM the ECU to MtX
+  */
 G_MODULE_EXPORT void mtxlog_packet(const void *buf, size_t len, gboolean toecu)
 {
 	gint i = 0;

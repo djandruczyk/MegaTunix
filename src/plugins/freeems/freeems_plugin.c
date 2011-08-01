@@ -27,6 +27,13 @@
 gconstpointer *global_data = NULL;
 
 
+/*!
+  \brief initializes the FreeEMS plugin via locating and attaching to all
+  needed functions within the core MegaTunix. It also registers any 
+  plugin specific enumerations, and registers/sets up any additional resources
+  needed like threads, Queues, memory, etc
+  \param data is a pointer to the global data container.
+ */ 
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	GAsyncQueue *queue = NULL;
@@ -36,7 +43,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	GHashTable *hash = NULL;
 
 	global_data = data;
-	/* Initializes function pointers since on Winblows was can NOT
+	/* Initializes function pointers since on Winblows you can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
 	 */
@@ -128,6 +135,12 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 }
 
 
+/*!
+  \brief Shuts down any plugin allocated resources (Serial IO/threads/queues,
+  etc) and deallocates anything that was allocated with plugin_init(), as well
+  as de-registering any enums specific to this plugin. This allows the plugin
+  to be safely uninstalled
+  */
 G_MODULE_EXPORT void plugin_shutdown()
 {
 	GThread *thread = NULL;
@@ -210,6 +223,9 @@ G_MODULE_EXPORT void plugin_shutdown()
 }
 
 
+/*!
+  \brief registers enumerations specific to the FreeEMS plugin
+  */
 void register_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
@@ -273,6 +289,9 @@ void register_common_enums(void)
 }
 
 
+/*!
+  \brief De-registers enumerations specific to the FreeEMS plugin
+  */
 void deregister_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;

@@ -22,6 +22,9 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief Draws the VE-Table markers
+  */
 G_MODULE_EXPORT void common_draw_ve_marker(void)
 {
 	static Firmware_Details *firmware = NULL;
