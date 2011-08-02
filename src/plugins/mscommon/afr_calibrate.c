@@ -31,6 +31,9 @@ typedef enum
 	NUM_COLS
 }columns;
 
+/*!
+  \brief Enumerations for thetypes of Pre-canned AFR tables
+  */
 typedef enum
 {
 	narrowBand,
@@ -51,6 +54,9 @@ typedef enum
 	num_symbols
 }afr_table_enums;
 
+/*!
+  \brief Pre-cannel array of structures matching the  name to the enumeration for the Gui
+  */
 static struct 
 {
 	const gchar *name;
@@ -74,51 +80,73 @@ static struct
 };
 
 #define nADC 1024
+/*!
+  \brief converts an ADC value to a narrowband AFR value
+  */
 G_MODULE_EXPORT gdouble NBFv (gint adc) 
 { 
 	return 100.0 * (1.0 - adc * 5.0/nADC); 
 }
 
 
+/*!
+  \brief converts an ADC value to a Innovate motorsports 1-2V value
+  */
 G_MODULE_EXPORT gdouble inno12Fv (gint adc) 
 { 
 	return  adc * 50.0 / (nADC-1.0); 
 }
 
 
+/*!
+  \brief converts an ADC value to a Innovate motorsports 0-5V value
+  */
 G_MODULE_EXPORT gdouble inno05Fv (gint adc) 
 {
 	return  10.0 + adc * 10.0 / (nADC-1.0); 
 }
 
 
+/*!
+  \brief converts an ADC value to a Innovate motorsports LC-1 value
+  */
 G_MODULE_EXPORT gdouble innoLC1Fv (gint adc)
 {
 	return  7.35 + adc * 14.7 / (nADC-1.0);
 }
 
 
+/*!
+  \brief converts an ADC value to a TechEdge Linear wideband value
+  */
 G_MODULE_EXPORT gdouble teWBlinFv (gint adc) 
 {
 	return   9.0 + adc * 10.0 / (nADC-1.0);
 }
 
 
+/*!
+  \brief converts an ADC value to a Dynojet Linear wideband value
+  */
 G_MODULE_EXPORT gdouble djWBlinFv (gint adc) 
 {
 	return  10.0 + adc *  8.0 / (nADC-1.0);
 }
 
 
+/*!
+  \brief fills in the AFR calibrator combobutton with the appropriate
+  choices. The model stores the corresponding enum for later
+  \param combo is a pointer to the combobutton to initialize
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
 {
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
 	gint i = 0;
 
-
-	if (!GTK_IS_COMBO_BOX(combo))
-		return FALSE;
+	g_return_val_if_fail(GTK_IS_COMBO_BOX(combo),FALSE);
 
 	store = gtk_list_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_INT);
 	for (i=0;i<num_symbols;i++)
@@ -133,14 +161,19 @@ G_MODULE_EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
 }
 
 
+/*!
+  \brief Called when the user selects an AFR conversion combobox entry
+  \param widget is the combobox the user touched
+  \param data is unused
+  */
 G_MODULE_EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 {
 	gboolean state = FALSE;
 	GtkTreeModel *model = NULL;
 	GtkTreeIter iter;
 
-	if (!GTK_IS_COMBO_BOX(widget))
-		return;
+	g_return_if_fail(GTK_IS_COMBO_BOX(widget));
+
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
 	gtk_tree_model_get(model,&iter,0,&afr_name,1,&afr_enum,-1);
@@ -154,7 +187,14 @@ G_MODULE_EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 }
 
 
-
+/*!
+  \brief When the user selects the OK button the new table is calculated
+  packaged up, dumped to a file as well as being sent to the ECU to live 
+  a long and happy life
+  \param widget, the OK button the user clicked
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer data)
 {
 	static gdouble diywbBv[] = { 0.00, 1.40, 1.45, 1.50, 1.55, 1.60, 

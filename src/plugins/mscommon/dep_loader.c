@@ -23,13 +23,13 @@ extern gconstpointer *global_data;
 
 /*!
  \brief load_dependancies() is called when a "depend_on" key is found in
- a datamap or realtimemap, and triggers the loading of al lthe keys/values that
- will allow megatunix to process a dependancy (or multiple deps) on other
- variables
- \param object (gconstpointer *) place to store the retrieved data
- \param cfgfile (ConfigFile *) pointer to cfgfile that contains the data
- \param section (gchar *) section to read the data from
- \param source_key (gchar *) source key in section to read the data from
+ a datamap or realtime map, and triggers the loading of all the 
+ keys/values that will allow megatunix to process a dependancy 
+ (or multiple deps) on other variables
+ \param object is a pointer to a place to store the retrieved data
+ \param cfgfile is the pointer to cfgfile object that contains the data
+ \param section is the section to read the data from
+ \param source_key is the source key in the above section to read the data from
  \see check_dependancies
  */
 G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfile, gchar * section, gchar * source_key)
@@ -207,10 +207,10 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
  a datamap or realtimemap, and triggers the loading of al lthe keys/values that
  will allow megatunix to process a dependancy (or multiple deps) on other
  variables
- \param object (gconstpointer *) place to store the retrieved data
- \param cfgfile (ConfigFile *) pointer to cfgfile that contains the data
- \param section (gchar *) section to read the data from
- \param source_key (gchar *) source key in section to read the data from
+ \param object is a pointer to a place to store the retrieved data
+ \param cfgfile is the pointer to cfgfile that contains the data
+ \param section is the section to read the data from
+ \param source_key is the source key in section to read the data from
  \see check_dependancies
  */
 G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)

@@ -18,6 +18,15 @@
 
 extern gconstpointer *global_data;
 
+
+/*!
+  \brief processes commen runtime variables
+  \param object is the pointer to the object containing the info abot the 
+  complex expression
+  \param symbol is the name of the symbol
+  \param type is the type of rtv expression
+  \returns the result
+  */
 G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;
@@ -77,6 +86,14 @@ G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbo
 }
 
 
+/*!
+  \brief processes commen runtime variables
+  \param object is the pointer to the GObject containing the info abot the 
+  complex expression
+  \param symbol is the name of the symbol
+  \param type is the type of rtv expression
+  \returns the result
+  */
 G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;

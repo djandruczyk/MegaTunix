@@ -32,10 +32,11 @@ extern GtkWidget *interr_view;
 #define BUFSIZE 4096
 
 /*!
- \brief interrogate_ecu() interrogates the target ECU to determine what
+ \brief Iinterrogates the target ECU to determine what
  firmware it is running.  It does this by reading a list of tests, sending
  those tests in turn, reading the responses and them comparing the group of
  responses against a list of interrogation profiles until it finds a match.
+ \returns TRUE on a success, FALSE otherwise
  */
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
@@ -227,16 +228,13 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 
 /*!
- \brief determine_ecu() trys to match determine the target firmware by 
+ \brief Tries to match to determine the target firmware by 
  loading the interrogation profiles in turn and comparing the data from our
- test ECU adn a profile until a match is found, 
- \param canidate (Canidate *) pointer to the Canidate structure
- \param cmd_array (GArray *) pointer to the array of commands sent
- \param cmd_details (GHashTable) details on the interrogation process with
- the target ECU
- \returns TRUE on successfull interrogation, FALSE on no match
+ test ECU and a profile until a match is found, 
+ \param tests is a pointer to the Array of tests
+ \param tests_hash is a pointer to the hashtable of tests
+ \returns TRUE on successfull match, FALSE on no match
  */
-
 G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 {
 	gboolean retval = TRUE;
@@ -308,8 +306,11 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 }
 
 
-/* !brief loads up all firmware details from the passed filename (interrogation
- * profile), and configures megatunix for use.
+/*! 
+ \brief loads up all firmware details allocating the required resrouces
+ \param firmware is the pointer to the firmware datastructure
+ \param filename is the pointer to the filename to parse
+ \returns TRUE on success, FALSE otherwise
  */
 G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const gchar * filename)
 {
@@ -1126,9 +1127,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 
 /*!
  \brief validate_and_load_tests() loads the list of tests from the system
- checks them for validity, populates and array and returns it
- command tested against the ECU arestored
- \returns a dynamic GArray for commands
+ checks them for validity, populates an array and returns it
+ \param tests_hash is a double pointer to a hashtable to also populate
+ \returns a pointer to a GArray of tests
  */
 G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 {
@@ -1234,7 +1235,7 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 /*!
  \brief translate_capabilities() converts a stringlist into a mask of 
  enumerations and returns it
- \param string (gchar *) listing of capabilities in textual format
+ \param string is the listing of capabilities in textual format
  \returns an integer mask of the capabilites
  */
 G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
@@ -1268,12 +1269,11 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 
 
 /*!
- \brief check_for_match() compares the resutls of the interrogation with the
+ \brief check_for_match() compares the results of the interrogation with the
  ECU to the canidates in turn. When a match occurs TRUE is returned
  otherwise it returns FALSE
- \param cmd_array (GArray *) array of commands
- \param potential (Canidate *) potential 
- \param canidate (Canidate *) Canidate
+ \param tests_hash is a pointer to the hashtable of tests
+ \param filename isa pointer to the  file to compare against
  \returns TRUE on match, FALSE on failure
  */
 G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename)
@@ -1382,7 +1382,9 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 }
 
 
-/*! brief destroys Array holding Detection_Test structures
+/*! 
+  \brief destroys Array holding Detection_Test structures
+  \param tests is the pointer to the array to destroy
  */
 G_MODULE_EXPORT void free_tests_array(GArray *tests)
 {
@@ -1412,8 +1414,11 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
 }
 
 
-/*! brief interrogate_error,  dumps an error out to the error handling
- * based on passed string and numeric pararms
+/*! 
+  \brief interrogate_error, dumps an error out to the error handling
+  based on passed string and numeric pararms
+  \param text is the text to display
+  \param num is the number to display
  */
 G_MODULE_EXPORT void interrogate_error(gchar *text, gint num)
 {
@@ -1421,8 +1426,9 @@ G_MODULE_EXPORT void interrogate_error(gchar *text, gint num)
 }
 
 
-/* !brief updates the interrogation gui with the text revision, signature
- * and ecu numerical revision
+/*!
+  \brief updates the interrogation gui with the text revision, signature
+  and ecu numerical revision
  */
 G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 {
@@ -1484,6 +1490,8 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 /*!
  \brief initialize_page_params() creates and initializes the page_params
  datastructure to sane defaults and returns it
+ \return a pointer to an initialized Page_Params structure
+ \see Page_Params
  */
 G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 {
@@ -1498,6 +1506,8 @@ G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 /*!
  \brief initialize_table_params() creates and initializes the Table_Params
  datastructure to sane defaults and returns it
+ \return a pointer to an initialized Table_Params structure
+ \see Table_Params
  */
 G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 {
@@ -1554,6 +1564,8 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 /*!
  \brief initialize_te_params() creates and initializes the TE_Params
  datastructure to sane defaults and returns it
+ \return a pointer to an initialized TE_Params structure
+ \see TE_Params
  */
 G_MODULE_EXPORT TE_Params * initialize_te_params(void)
 {

@@ -17,6 +17,14 @@
 
 extern gconstpointer *global_data;
 
+/*! 
+  \brief handles runtime variables with complex ECU/Family specific handlers
+  \param object is a pointer to the object to store the data within
+  \param cfgfile is a pointer to the ConfigFile structure
+  \param section is the section within the file
+  \param symbol is the symbol name within the section
+  \param type is an enumeration representing the type of RT var
+  */
 G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfile, gchar * section, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;
@@ -98,6 +106,15 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfil
 	return;
 }
 
+
+/*! 
+  \brief handles runtime variables with complex ECU/Family specific handlers
+  \param object is a pointer to the object to store the data within
+  \param cfgfile is a pointer to the ConfigFile structure
+  \param section is the section within the file
+  \param symbol is the symbol name within the section
+  \param type is an enumeration representing the type of RT var
+  */
 G_MODULE_EXPORT void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile, gchar * section, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;

@@ -21,10 +21,15 @@
 #include <mtxsocket.h>
 #include <gtk/gtk.h>
 
-
 gconstpointer *global_data = NULL;
 
-
+/*!
+  \brief initializes the MegaSquirt plugin via locating and attaching to all
+  needed functions within the core MegaTunix. It also registers any 
+  plugin specific enumerations, and registers/sets up any additional resources
+  needed like threads, Queues, memory, etc
+  \param data is a pointer to the global data container.
+  */
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	global_data = data;
@@ -118,6 +123,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 }
 
 
+/*!
+  \brief Frees up any resources of the plugin
+  */
 G_MODULE_EXPORT void plugin_shutdown()
 {
 	deregister_common_enums();
@@ -125,6 +133,9 @@ G_MODULE_EXPORT void plugin_shutdown()
 }
 
 
+/*!
+  \brief Registers enumerations common to this plugin
+  */
 void register_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
@@ -213,7 +224,7 @@ void register_common_enums(void)
 				GINT_TO_POINTER (RESULT_TEXT));
 		/* Common Handlers */
 		g_hash_table_insert(str_2_enum,"_GENERIC_",
-	                        GINT_TO_POINTER(GENERIC));
+				GINT_TO_POINTER(GENERIC));
 		g_hash_table_insert (str_2_enum, "_NUM_SQUIRTS_1_",
 				GINT_TO_POINTER (NUM_SQUIRTS_1));
 		g_hash_table_insert (str_2_enum, "_NUM_SQUIRTS_2_",
@@ -287,6 +298,9 @@ void register_common_enums(void)
 }
 
 
+/*!
+  \brief De-registers enumerations common to this plugin
+  */
 void deregister_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;

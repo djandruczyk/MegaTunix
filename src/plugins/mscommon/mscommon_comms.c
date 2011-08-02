@@ -28,7 +28,8 @@ extern gconstpointer *global_data;
 /*!
  \brief queue_burn_ecu_flash() issues the commands to the ECU to 
  burn the contents of RAM to flash.
- \param page  page to be burnt
+ \param page is the MTX page (not  to be confused with the ECU physical page)
+ to be burnt
  */
 G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 {
@@ -53,7 +54,7 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 /*!
  \brief queue_ms1_page_change() issues the commands to the ECU to 
  change the ECU page
- \param page page to be loaded into ECU RAM from flash
+ \param page is the page to be read into ECU RAM from flash by the ECU
  */
 G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 {
@@ -77,14 +78,13 @@ G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 
 
 /*! 
- \brief comms_test sends the clock_request command ("C") to the ECU and
+ \brief comms_test sends the clock_request command to the ECU and
  checks the response.  if nothing comes back, MegaTunix assumes the ecu isn't
  connected or powered down. NO Gui updates are done from this function as it
  gets called from a thread. update_comms_status is dispatched after this
  function ends from the main context to update the GUI.
  \see update_comms_status
  */
-
 G_MODULE_EXPORT gint comms_test(void)
 {
 	static gint errcount = 0;
@@ -94,15 +94,12 @@ G_MODULE_EXPORT gint comms_test(void)
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
-/*	if (DATA_GET(global_data,"leaving"))
+	if (DATA_GET(global_data,"leaving"))
 		return TRUE;
-		*/
 	serial_params = DATA_GET(global_data,"serial_params");
 
 	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
-	if (!serial_params)
-		return FALSE;
-
+	g_return_val_if_fail(serial_params, FALSE);
 
 	if ((GINT)DATA_GET(global_data,"ecu_baud") < 115200)
 	{
@@ -161,11 +158,10 @@ G_MODULE_EXPORT gint comms_test(void)
 
 /*!
  \brief ms_table_write() gets called to send a block of lookuptable values to the ECU
- \param page (tableID) (gint) page in which the value refers to.
- \param len (gint) length of block to sent
- \param data (guint8) the block of data to be sent which better damn well be
- int ECU byte order if there is an endianness thing..
- a horrible stall when doing an ECU restore or batch load...
+ \param page is the MTX page in which the value refers to.
+ \param len is the length of block to sent
+ \param data is the block of data to be sent which better damn well be
+ in ECU byte order if there is an endianness thing..
  */
 G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 {
@@ -200,6 +196,12 @@ G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 }
 
 
+/*!
+  \brief cis passed the current/last pages and  determines if the ECU
+  requires a  burn to flash or not, if so, it injects the command to do so
+  \param page is the current page
+  \param last is the page  used  for the last command
+  */
 G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 {
 	guint8 **ecu_data = NULL;
@@ -279,6 +281,10 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
  arbritrary blocks of data to the ECU. This function extracts the 
  important things from the passed ptr and sends to the real function 
  which is ecu specific.
+ \param data is the pointer to the object containing the really important 
+ things like thecanID, page  and offset
+ \param num_bytes is how many bytes in the next var to send
+ \param block is a pointer to the buffer to write
  */
 G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
 {
@@ -306,14 +312,13 @@ G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
 
 /*!
  \brief ms_chunk_write() gets called to send a block of values to the ECU.
- \param canID (gint) can identifier (0-14)
- \param page (gint) page in which the value refers to.
- \param offset (gint) offset from the beginning of the page that this data
+ \param canID is the CAN identifier (0-14)
+ \param page is the MTX page in which the value refers to.
+ \param offset is the offset from the beginning of the page that this data
  refers to.
- \param len (gint) length of block to sent
- \param data (guint8) the block of data to be sent which better damn well be
+ \param len is the length of block to sent
+ \param data is the the block of data to be sent which better damn well be
  int ECU byte order if there is an endianness thing..
- a horrible stall when doing an ECU restore or batch load...
  */
 G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * block)
 {
@@ -351,6 +356,10 @@ G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num
  is has an ECU agnostic interface and is for sending single 8-32 bit bits of 
  data to the ECU. This one extracts the important things from the passed ptr
  and sends to the real function which is ecu specific
+ \param data is a pointer to the  object holding the important bits
+ \param value is the new value to send
+ \param queue_update is a flag to trigger other wisgets on this address to
+ update
  */
 G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_update)
 {
@@ -377,18 +386,21 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 	}
 	ms_send_to_ecu(canID,page,offset,size,value,queue_update);
 }
+
+
 /*!
  \brief ms_send_to_ecu() gets called to send a value to the ECU.  This function
  will check if the value sent is NOT the reqfuel_offset (that has special
  interdependancy issues) and then will check if there are more than 1 widgets
  that are associated with this page/offset and update those widgets before
  sending the value to the ECU.
- \param widget (GtkWidget *) pointer to the widget that was modified or NULL
- \param page (gint) page in which the value refers to.
- \param offset (gint) offset from the beginning of the page that this data
+ \param canID is the CAN identifier
+ \param page is the page in which the value refers to.
+ \param offset is the offset from the beginning of the page that this data
  refers to.
- \param value (gint) the value that should be sent to the ECU At page.offset
- \param queue_update (gboolean), if true queues a gui update, used to prevent
+ \para size is the size enumeration for this value
+ \param value is the the value that should be sent to the ECU At page.offset
+ \param queue_update if true queues a gui update, used to prevent
  a horrible stall when doing an ECU restore or batch load...
  */
 G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize size, gint value, gboolean queue_update)
@@ -511,10 +523,9 @@ G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize
 /*!
  \brief send_to_slaves() sends messages to a thread talking to the slave
  clients to trigger them to update their GUI with appropriate changes
- \param data (OutputData *) pointer to data sent to ECU used to
- update other widgets that refer to that Page/Offset
+ \param data is a pointer to an OutputData structure which contains the
+ necessary info to pass to the slave 
  */
-
 G_MODULE_EXPORT void send_to_slaves(void *data)
 {
 	static GAsyncQueue *slave_msg_queue = NULL;
@@ -556,6 +567,13 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 }
 
 
+/*!
+  \brief sends a message to connected slaves to change the color of the
+  widgets in the passed group name
+  \param clr is an enumeration representing the color
+  \param groupname is the group to manipulate
+  \see GuiColor
+  */
 G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
 {
 	static GAsyncQueue *slave_msg_queue = NULL;
@@ -585,7 +603,7 @@ G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
  \brief update_write_status() checks the differences between the current ECU
  data snapshot and the last one, if there are any differences (things need to
  be burnt) then it turns all the widgets in the "burners" group to RED
- \param data (OutputData *) pointer to data sent to ECU used to
+ \param data is a pointer to data sent to ECU used to
  update other widgets that refer to that Page/Offset
  */
 G_MODULE_EXPORT void update_write_status(void *data)
@@ -704,6 +722,12 @@ G_MODULE_EXPORT void start_restore_monitor(void)
 
 }
 
+
+/*!
+  \brief the thread which monitorsthe io_data_queue and updates the GUI with
+  feedback, for very long running operrations (restores)
+  \param data is unused
+  */
 G_MODULE_EXPORT void *restore_update(gpointer data)
 {
 	static GAsyncQueue *io_data_queue = NULL;
@@ -738,6 +762,12 @@ G_MODULE_EXPORT void *restore_update(gpointer data)
 }
 
 
+/*!
+  \brief kludgy ugly monster that gets enabled whene hte serial I/O error
+  crosses sa magic threshold, This basically closes the port and begins a 
+  search for a valid device, and will exit when it does, or is cancelled
+  \param data is unused
+  */
 G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 {
 	/* We got sent here because of one of the following occurred:
@@ -941,6 +971,11 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 /*! 
  \brief build_output_message() is called when doing output to the ECU, to 
  append the needed data together into one nice blob for sending
+ \param message is apointer to the Io_Message structure to finish up
+ \param command is a pointer to the Command strucutre which hasthe info on how
+ to assemble the message properly
+ \param data is a poiinter to the  OutputData structure which contains the 
+ source info needed by this function to make the proper output stream
  */
 G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command, gpointer data)
 {
@@ -1049,12 +1084,18 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	}
 }
 
+/*! 
+  \brief stub function for the plugin
+  */
 G_MODULE_EXPORT gboolean setup_rtv(void)
 {
 	return TRUE;
 }
 
 
+/*! 
+  \brief stub function for the plugin
+  */
 G_MODULE_EXPORT gboolean teardown_rtv(void)
 {
 	return TRUE;

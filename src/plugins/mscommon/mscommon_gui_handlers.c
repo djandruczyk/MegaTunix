@@ -31,6 +31,13 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief handles text entries common to the megasquirt family, and if the 
+  hander isn't found it calls per ecu handlers to deal with those specifics
+  \param widget is the entry the user interacted with
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
@@ -191,6 +198,12 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief handles common radio/check buttons, if the handler isn't found it 
+  calls the ECU firmware specific handler to deal with it
+  \param widget is the button the user interacted with
+  \param data is unused
+  */
 G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
@@ -350,6 +363,13 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 }
 
 
+/*!
+  \brief handles common toggle buttons and calls an ECU specific handler if the
+  case statemnt here doesn't catch it
+  \param widget is the toggle button the user flipped
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
         static gboolean (*ecu_handler)(GtkWidget *widget, gpointer) = NULL;
@@ -378,9 +398,12 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 
 
 /*!
- * \brief slider_value_changed() handles controls based upon a slider
- * sort of like spinbutton controls
- */
+  \brief handles common sliders/ranges and calls an ECU specific handler if the
+  case statemnt here doesn't catch it
+  \param widget is the toggle button the user flipped
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean common_slider_handler(GtkWidget *widget, gpointer data)
 {
 	gint page = 0;
@@ -409,6 +432,13 @@ G_MODULE_EXPORT gboolean common_slider_handler(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief handles common buttons and calls an ECU specific handler if the
+  case statemnt here doesn't catch it
+  \param widget is the toggle button the user flipped
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*ecu_handler)(GtkWidget *widget, gpointer) = NULL;
@@ -479,11 +509,12 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 
 
 /*!
- \brief common_combo_handler() handles all combo boxes
- \param widget (GtkWidget *) the widget being modified
- \param data (gpointer) not used
- \returns TRUE
- */
+  \brief handles common combo buttons and calls an ECU specific handler if the
+  case statemnt here doesn't catch it
+  \param widget is the toggle button the user flipped
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
@@ -684,7 +715,7 @@ combo_download:
 /*!
  \brief force_update_table() updates a subset of widgets (specifically ONLY
  the Z axis widgets) of a table on screen.
- \param table_num, integer number of the table in question
+ \param data is the string representation of the table number
  */
 G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 {
@@ -727,7 +758,8 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
  \brief trigger_group_update() updates a subset of widgets (any widgets in
  the group name passed. This runs as a timeout delayed asynchronously from
  when the ctrl is modified, to prevent a deadlock.
- \param data, string name of list of controls
+ \param data is the string name of list of controls
+  \returns FALSE to cancel the timeout
  */
 G_MODULE_EXPORT gboolean trigger_group_update(gpointer data)
 {
@@ -739,12 +771,15 @@ G_MODULE_EXPORT gboolean trigger_group_update(gpointer data)
 }
 
 
+/*!
+  \brief updates  anywidgets in the "multi_expression" group
+  \returns FALSE to cancel the timeout
+  */
 G_MODULE_EXPORT gboolean update_multi_expression(gpointer data)
 {
 	g_list_foreach(get_list_f("multi_expression"),update_widget,NULL);
 	return FALSE;
 }
-
 
 
 /*!
@@ -969,6 +1004,13 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 }
 
 
+/*!
+  \brief handles spinbuttons common to the megasquirt family, and if the 
+  hander isn't found it calls per ecu handlers to deal with those specifics
+  \param widget is the entry the user interacted with
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
@@ -1169,7 +1211,12 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 }
 
 
-
+/*! 
+  \brief Checks the widget's type and updates it or callsthe appropriate 
+  update function forit
+  \param objct is a pointer to the object to update
+  \param user_data is used to detect a recursive loop and break out
+  */
 G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 {
 	static gint upd_count = 0;
@@ -1237,6 +1284,10 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 }
 
 
+/*!
+  \brief updates a checkbutton 
+  \param widget is the pointer to the button
+  */
 void update_checkbutton(GtkWidget *widget)
 {
 	gboolean cur_state = FALSE;
@@ -1284,6 +1335,10 @@ void update_checkbutton(GtkWidget *widget)
 }
 
 
+/*!
+  \brief updates a text entry 
+  \param widget is the pointer to the button
+  */
 void update_entry(GtkWidget *widget)
 {
 	static void (*update_handler)(GtkWidget *) = NULL;
@@ -1382,6 +1437,10 @@ void update_entry(GtkWidget *widget)
 }
 
 
+/*!
+  \brief updates a combo box
+  \param widget is the pointer to the button
+  */
 void update_combo(GtkWidget *widget)
 {
 	static Firmware_Details *firmware = NULL;
@@ -1463,6 +1522,11 @@ combo_toggle:
 }
 
 
+/*!
+  \brief handles the case where a combobox enables or disables multiple 
+  groups of controls based on which value is chosen
+  \param widget is the pointer to the button
+  */
 void combo_handle_group_2_update(GtkWidget *widget)
 {
 	static GHashTable *sources_hash = NULL;
@@ -1495,6 +1559,11 @@ void combo_handle_group_2_update(GtkWidget *widget)
 }
 
 
+/*!
+  \brief handles the case where a combobox changes the algorithm that
+  applies to a set of tables
+  \param widget is the pointer to the button
+  */
 void combo_handle_algorithms(GtkWidget *widget)
 {
 	gchar *tmpbuf = NULL;
@@ -1537,6 +1606,12 @@ void combo_handle_algorithms(GtkWidget *widget)
 	}
 }
 
+
+/*!
+  \brief handles the case where a togglebutton changes the algorithm that
+  applies to a set of tables
+  \param widget is the pointer to the button
+  */
 void handle_algorithm(GtkWidget *widget)
 {
 	static gint * algorithm = NULL;
@@ -1569,6 +1644,12 @@ void handle_algorithm(GtkWidget *widget)
 	}
 }
 
+
+/*!
+  \brief handles the case where a togglebutton changes the state of one or 
+  more group of controls
+  \param widget is the pointer to the button
+  */
 void handle_group_2_update(GtkWidget *widget)
 {
 	static GHashTable *sources_hash = NULL;
@@ -1593,7 +1674,14 @@ void handle_group_2_update(GtkWidget *widget)
 }
 
 
-
+/*!
+  \brief searchs through the choices in a comboboxmodel looking for match with
+  what the  user typed in, if we get a match we set te combobox to that iter
+  \param model is a pointer to the  modelthat backs the  combobox
+  \param box is the combo box in question
+  \param iter is a pointter to a model iterator
+  \returns TRUE if found, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTreeIter *iter)
 {
 	gchar *choice = NULL;
@@ -1615,6 +1703,17 @@ G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTr
 	return FALSE;
 }
 
+
+/*!
+  \brief Extracts the essential bits fro m a widget and fills in the passed
+  pointers if present
+  \param widget is hte pointer to the  widget to extract the goodies from
+  \param page is a pointer to the location to save the MTX page to or NULL
+  \param offset is a pointer to the location to save the offset to or NULL
+  \param bitval is a pointer to the location to save the bitval to or NULL
+  \param bitmask is a pointer to the location to save the bitmask to or NULL
+  \param bitshift is a pointer to the location to save the bitshift to or NULL
+  */
 G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *canID, gint *page, gint *offset, gint *bitval, gint *bitmask, gint *bitshift)
 {
 	if (!GTK_IS_WIDGET(widget))
@@ -1634,6 +1733,16 @@ G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *canID, gint *pa
 }
 
 
+/*!
+  \brief Extracts the essential values from a widget and fills in the passed
+  pointers if present
+  \param widget is hte pointer to the  widget to extract the goodies from
+  \param canID is a pointer to the location to save the CAN id to or NULL
+  \param page is a pointer to the location to save the MTX page to or NULL
+  \param offset is a pointer to the location to save the offset to or NULL
+  \param size is a pointer to the location to save the sise to or NULL
+  \param precision is a pointer to the location to save the precision to or NULL
+  */
 G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *canID, gint *page, gint *offset, DataSize *size, gint *precision)
 {
 	if (!GTK_IS_WIDGET(widget))
@@ -1656,7 +1765,10 @@ G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *canID, gint *page, 
 }
 
 
-
+/*!
+  \brief handler to initialize the common portions of the maingui, and then to
+  call the ecu/firmware specific handler to do tis part
+  */
 G_MODULE_EXPORT void common_gui_init(void)
 {
 	void (*ecu_gui_init)(void) = NULL;

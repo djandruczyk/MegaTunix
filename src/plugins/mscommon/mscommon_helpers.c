@@ -23,7 +23,9 @@
 
 extern gconstpointer *global_data;
 
-
+/*!
+  \brief post function to fire up the TCP/IP sockets
+  */
 G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 {
 	CmdLineArgs *args = NULL;
@@ -35,6 +37,10 @@ G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 		open_tcpip_sockets();
 }
 
+
+/*!
+  \brief post function to issue a read of all ECU data
+  */
 G_MODULE_EXPORT void spawn_read_all_pf(void)
 {
 	Firmware_Details *firmware = NULL;
@@ -50,6 +56,13 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 }
 
 
+/*!
+  \brief  Burns all outstanding ECU pages to flash
+  \param data is a pointer to a Command structure to be passed on the last
+  call out
+  \param func
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 {
 	OutputData *output = NULL;
@@ -76,7 +89,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 		/* MS2 extra is slightly different as it's paged like MS1 */
 		if (((firmware->capabilities & MS2_E) || (firmware->capabilities & MS1) || (firmware->capabilities & MS1_E)))
 		{
-	/*		printf("paged burn\n");*/
+			/*		printf("paged burn\n");*/
 			output = initialize_outputdata_f();
 			DATA_SET(output->data,"page",GINT_TO_POINTER(last_page));
 			DATA_SET(output->data,"phys_ecu_page",GINT_TO_POINTER(firmware->page_params[last_page]->phys_ecu_page));
@@ -105,6 +118,13 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 	return TRUE;
 }
 
+
+/*!
+  \brief function to do the actual read calls from the ECU
+  \param data is a pointer to the Command structure
+  \param func is an enumeration for the type of function
+  \returns TRUE on success, FASE otherwise
+  */
 G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall func)
 {
 	gint last_page;
@@ -268,12 +288,20 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall func)
 }
 
 
+/*!
+  \brief post functions to enable the TTM buttons
+  */
 G_MODULE_EXPORT void enable_ttm_buttons_pf(void)
 {
 	g_list_foreach(get_list_f("ttm_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
 }
 
 
+/*!
+  \brief handles a simple read result
+  \param data is a pointer to a Io_Message structure
+  \param func is an enum representing the action we need to handle
+  */
 G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall func)
 {
 	static guint16 lastcount = 0;
@@ -327,20 +355,20 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall func)
 			if (count > 0)
 			{
 				thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
-				 firmware->txt_rev_len = count;
+				firmware->txt_rev_len = count;
 				firmware->text_revision = g_strndup(message->recv_buf,count);
 			}
 			break;
 		case SIGNATURE:
 			if (DATA_GET(global_data,"offline"))
 				break;
-			 count = read_data_f(-1,&message->recv_buf,FALSE);
-                         if (count > 0)
-			 {
-				 thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
-				 firmware->signature_len = count;
-				 firmware->actual_signature = g_strndup(message->recv_buf,count);
-			 }
+			count = read_data_f(-1,&message->recv_buf,FALSE);
+			if (count > 0)
+			{
+				thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
+				firmware->signature_len = count;
+				firmware->actual_signature = g_strndup(message->recv_buf,count);
+			}
 			break;
 		case MS1_VECONST:
 		case MS2_VECONST:
@@ -476,7 +504,7 @@ G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall func)
 }
 
 /*!
- \brief post_burn_pf() handles post burn ecu data mgmt
+ \brief Copies current state to backup state
  */
 G_MODULE_EXPORT void post_burn_pf(void)
 {
@@ -499,6 +527,9 @@ G_MODULE_EXPORT void post_burn_pf(void)
 }
 
 
+/*!
+ \brief Copies current state to backup state
+ */
 G_MODULE_EXPORT void post_single_burn_pf(void *data)
 {
 	Io_Message *message = (Io_Message *)data;

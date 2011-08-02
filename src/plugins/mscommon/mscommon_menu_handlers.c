@@ -23,6 +23,10 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief Sets up the Gui menu and calls the ECU specific menu init function
+  \param xml is the core gui XML
+  */
 G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 {
 	void (*ecu_plugin_menu_setup)(GladeXML *) = NULL;
@@ -100,6 +104,12 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 }
 
 
+/*!
+  \brief Creates an ignition map
+  \param widget is the buttonthe user clicked on to create the map
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 {
 	GladeXML* xml = NULL;
@@ -287,8 +297,11 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 
 
 /*!
-  \ show / hide window
-  \ populates the combo box with available spark maps that could be filled out by the generator
+  \brief shows/hides  the ignition map window populates the combo box with 
+  available spark maps that could be filled out by the generator
+  \param widget is unused
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
   */
 G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpointer data)
 {
@@ -342,7 +355,16 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 }
 
 
-/* non extrapolating linear dual line interpolation (3 times fast after 6 beers :-) */
+/*
+  \brief non extrapolating linear dual line interpolation (3 times fast 
+  after 6 beers :-) 
+  \param offset is used to prevent extrapolation
+  \param slope1_a
+  \param slope1_b
+  \param slope2_a
+  \param slope2_b
+  \returns the linear interpolation between the points
+  */
 G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdouble slope1_b, gdouble slope2_a, gdouble slope2_b)
 {
 	gdouble slope1, slope2, result;
@@ -372,6 +394,9 @@ G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdo
 
 /*!
  \brief General purpose handler to hide/show trigger offset window
+ \param widget is the button
+ \param data is unused
+ \returns TRUE on success, FALSE otherwise
  */
 G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer data)
 {

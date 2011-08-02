@@ -266,14 +266,14 @@ G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint locID, gint offset, D
   ECU representative memory. The block variable must contain the necessary
   fields in order to store properly
   \param block is a pointer to a gconstpointer containing the location ID, 
-  offset and data to store
+  offset, length and data to store
   */
 G_MODULE_EXPORT void store_new_block(gpointer block)
 {
 	gint locID = 0;
 	gint page = 0;
 	gint offset = 0;
-	gint count = 0;
+	gint num_bytes = 0;
 	GtkWidget *widget = NULL;
 	gconstpointer *container = NULL;
 	guint8 *data = NULL;
@@ -288,12 +288,13 @@ G_MODULE_EXPORT void store_new_block(gpointer block)
 
 	locID = (GINT)DATA_GET(block,"location_id");
 	offset = (GINT)DATA_GET(block,"offset");
+	num_bytes = (GINT)DATA_GET(block,"num_bytes");
 	data = (guint8 *)DATA_GET(block,"data");
 
 	g_return_if_fail(freeems_find_mtx_page(locID, &page));
 	g_return_if_fail(ecu_data[page]);
 
-	memcpy (ecu_data[page]+offset,data,count);
+	memcpy (ecu_data[page]+offset,data,num_bytes);
 }
 
 
@@ -369,10 +370,8 @@ G_MODULE_EXPORT gboolean freeems_find_mtx_page(gint locID, gint *mtx_page)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (!firmware)
-		return FALSE;
-	if (!firmware->page_params)
-		return FALSE;
+	g_return_if_fail(firmware);
+	g_return_if_fail(firmware->page_params);
 
 	for (i=0;i<firmware->total_pages;i++)
 	{

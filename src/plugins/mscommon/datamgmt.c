@@ -18,6 +18,14 @@
 
 extern gconstpointer *global_data;
 
+
+/*!
+  \brief A generic function to returns the data from the representation of
+  ECU memory. This will call an ECU specific function to do the heavy lifting
+  \param data is either a GtkWidget pointer or a gconstpointer which contains
+  name:value associations describng the location to return
+  \returns the value requested or 0 if error
+*/
 G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 {
 	gint canID = 0;
@@ -35,6 +43,7 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 
 	firmware = DATA_GET(global_data,"firmware");
 	/* Sanity checking */
+	g_return_val_if_fail(data,0);
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
@@ -62,11 +71,13 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 
 
 /*!
- \brief ms_get_ecu_data() is a func to return the data requested.
- \param canID, CAN Identifier (currently unused)
- \param page, (ecu firmware page)
- \param offset, (RAW BYTE offset)
- \param size, (size to be returned)
+ \brief MegaSquirt specific wrapper function to call the firmwre/ECU specific
+ handler to return the requested data
+ \param canID is the CAN Identifier (currently unused)
+ \param page is the ecu firmware page
+ \param offset is the RAW BYTE offset
+ \param size is the size to be returned
+ \returns thedata requested or 0 if error
  */
 G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSize size) 
 {
@@ -81,6 +92,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSiz
 	/* Sanity checking */
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(page >= firmware->total_pages,0)
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 
@@ -89,11 +101,12 @@ G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSiz
 
 
 /*!
- \brief ms_get_ecu_data_last() is a func to return the data requested.
+ \brief Megasquirrt specific function to return the data from the "last" buffer
  \param canID is the CAN Identifier (currently unused)
- \param page is the (ecu firmware page)
- \param offset is the (RAW BYTE offset)
- \param size is the (size to be returned)
+ \param page is the ecu firmware page
+ \param offset is the RAW BYTE offset
+ \param size is the size to be returned
+ \returnsthe value requested or 0 on error
  */
 G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, DataSize size) 
 {
@@ -107,6 +120,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, Da
 	firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(page >= firmware->total_pages,0)
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 	return _get_sized_data(firmware->ecu_data_last[page],offset,size,firmware->bigendian);
@@ -114,11 +128,13 @@ G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, Da
 
 
 /*!
- \brief ms_get_ecu_data_backup() is a func to return the data requested.
- \param canID, canIdentifier (currently unused)
- \param page ( ecu firmware page)
- \param offset (RAW BYTE offset)
- \param size (size to be returned...
+ \brief Megasquirrt specific function to return the data from the "backup" 
+ buffer
+ \param canID is the can Identifier (currently unused)
+ \param page is the ecu firmware page
+ \param offset is the RAW BYTE offset
+ \param size is the size to be returned...
+ \returns the data requested or 0 on error
  */
 G_MODULE_EXPORT gint ms_get_ecu_data_backup(gint canID, gint page, gint offset, DataSize size) 
 {
@@ -132,12 +148,20 @@ G_MODULE_EXPORT gint ms_get_ecu_data_backup(gint canID, gint page, gint offset, 
 	firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
+	g_return_val_if_fail(page >= firmware->total_pages,0)
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 	return _get_sized_data(firmware->ecu_data_backup[page],offset,size,firmware->bigendian);
 }
 
 
+/*!
+  \brief Sets the ECU data at the coordinates specified in the data pointer
+  \param data is the pointer to either a GtkWidget pointer or a 
+  gconstpointer object container the coordinate information as to where 
+  to store the new data.
+  \param new is the pointer to the new data to be stored
+  */
 G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 {
 	gint canID = 0;
@@ -185,6 +209,15 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 }
 
 
+/*!
+  \brief ECU specific function to set a value in the representation of ECU 
+  memory
+  \param canID is the CAN Identifier
+  \param page is the MTX page(may not be the same as the ECU page)
+  \param offset is the offset in bytes from the beginning of this page
+  \param size is the size representation enumeration
+  \param new is the new value to store
+  */
 G_MODULE_EXPORT void ms_set_ecu_data(gint canID, gint page, gint offset, DataSize size, gint new) 
 {
 	Firmware_Details *firmware = NULL;
@@ -199,36 +232,50 @@ G_MODULE_EXPORT void ms_set_ecu_data(gint canID, gint page, gint offset, DataSiz
 }
 
 
+/*!
+  \brief Generic function to store a blob of data to a specific location in
+  ECU representative memory. The block variable must contain the necessary
+  fields in order to store properly
+  \param block is a pointer to a gconstpointer containing the page, 
+  offset, length and data to store
+  */
 G_MODULE_EXPORT void store_new_block(gconstpointer *block)
 {
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
-	gint count = 0;
+	gint num_bytes = 0;
 	guint8 *data = NULL;
 	Firmware_Details *firmware = NULL;
 	guint8 ** ecu_data = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (!firmware)
-		return;
-	if (!firmware->ecu_data)
-		return;
-	if (!firmware->ecu_data[page])
-		return;
+	g_return_if_fail(firmware);
+	g_return_if_fail(firmware->ecu_data);
+	g_return_if_fail(page <= firmware->total_pages);
+	g_return_if_fail(firmware->ecu_data[page]);
 
 	ecu_data = firmware->ecu_data;
 
 	canID = (GINT)DATA_GET(block,"canID");
 	page = (GINT)DATA_GET(block,"page");
 	offset = (GINT)DATA_GET(block,"offset");
+	num_bytes = (GINT)DATA_GET(block,"num_bytes");
 	data = (guint8 *)DATA_GET(block,"data");
 
-	memcpy (ecu_data[page]+offset,data,count);
+	memcpy (ecu_data[page]+offset,data,num_bytes);
 }
 
-
+/*!
+  \brief ECU specific function to store a new blob of data at a specific 
+  location in ECU representative memory
+  \param canID is the CAN identifier
+  \param page is the MTX ecu page (may not necessarily match the phys ECU page)
+  \param offset is the byte offset from the beginning of the Location ID
+  \param buf is the pointer to the buffer to copy from
+  \param count is the number of bytes to copy to the destination
+  */
 G_MODULE_EXPORT void ms_store_new_block(gint canID, gint page, gint offset, void * buf, gint count)
 {
 	Firmware_Details *firmware = NULL;
@@ -236,18 +283,21 @@ G_MODULE_EXPORT void ms_store_new_block(gint canID, gint page, gint offset, void
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (!firmware)
-		return;
-	if (!firmware->ecu_data)
-		return;
-	if (!firmware->ecu_data[page])
-		return;
+	g_return_if_fail(firmware);
+	g_return_if_fail(firmware->ecu_data);
+	g_return_if_fail(page <= firmware->total_pages);
+	g_return_if_fail(firmware->ecu_data[page]);
 
 	ecu_data = firmware->ecu_data;
 	memcpy (ecu_data[page]+offset,buf,count);
 }
 
 
+/*!
+  \brief copies current ECU memory representation to backup buffer
+  \param canID is unused
+  \param page is the Mtx page (may not necessarily match the phys ECU page)
+  */
 G_MODULE_EXPORT void ms_backup_current_data(gint canID, gint page)
 {
 	guint8 ** ecu_data = NULL;
@@ -256,16 +306,12 @@ G_MODULE_EXPORT void ms_backup_current_data(gint canID, gint page)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (!firmware)
-		return;
-	if (!firmware->ecu_data)
-		return;
-	if (!firmware->ecu_data_last)
-		return;
-	if (!firmware->ecu_data[page])
-		return;
-	if (!firmware->ecu_data_last[page])
-		return;
+	g_return_if_fail(firmware);
+	g_return_if_fail(firmware->ecu_data);
+	g_return_if_fail(firmware->ecu_data_last);
+	g_return_if_fail(page <= firmware->total_pages);
+	g_return_if_fail(firmware->ecu_data[page]);
+	g_return_if_fail(firmware->ecu_data_last[page]);
 
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
@@ -274,11 +320,12 @@ G_MODULE_EXPORT void ms_backup_current_data(gint canID, gint page)
 
 
 /*!
- \brief find_mtx_page() is a func to return the data requested.
- \param tableID, Table Identified (physical ecu page)
- \param mtx_page, The symbolic page mtx uses to get around the nonlinear
- nature of the page layout in certain MS firmwares
- \returns true on success, false on failure
+ \brief Returns the MTX physical page given the Mtx page number
+ \param tableID is the Table Identified (physical ecu page)
+ \param mtx_page is the pointer to a place to store the symbolic page mtx 
+ uses to get around the nonlinear nature of the page layout in certain 
+ MS firmwares
+ \returns TRUE on success, FALSE on failure
  */
 G_MODULE_EXPORT gboolean ms_find_mtx_page(gint tableID,gint *mtx_page)
 {
@@ -287,10 +334,8 @@ G_MODULE_EXPORT gboolean ms_find_mtx_page(gint tableID,gint *mtx_page)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (!firmware)
-		return FALSE;
-	if (!firmware->page_params)
-		return FALSE;
+	g_return_if_fail(firmware);
+	g_return_if_fail(firmware->page_params);
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
