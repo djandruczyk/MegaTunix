@@ -34,7 +34,7 @@ typedef struct
 {
 	GtkWidget *curve;		/*!< Widget Pointer */
 	Axis axis;			/*!< Axis */
-	gchar * source;			/*!< data source */
+	gchar *source;			/*!< data source */
 }CurveData;
 
 
@@ -390,6 +390,12 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 }
 
 
+/*!
+  \brief Creates a 2D Table Editors for visualizing a simpel 2D table
+  \param table_num is the TE table ID we need to create the display for.
+  \param parent if set it's the parent widget to embed this editor into
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *parent)
 {
 	GladeXML *main_xml = NULL;
@@ -808,6 +814,13 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 }
 
 
+/*!
+  \brief Closes a 2-D table editor and deallocates any required resources
+  \param widget is the 2D table editor window containing the widget list to
+  be deallocated
+  \param data is unused
+  \returns FALSE
+  */
 G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 {
 	GList *list = NULL;
@@ -838,6 +851,11 @@ G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 }
 
 
+/*!
+  \brief removes a widget pointer from the ecu_widgets list
+  \param widget_ptr is the pointer to the widget to remove
+  \param data is unused
+  */
 G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 {
 	GList ***ecu_widgets = NULL;
@@ -860,6 +878,11 @@ G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 }
 
 
+/*!
+  \brief  removes the watch that drives the gauge on the 2D editor winddow
+  \param gauge_ptr is the pointer to the Gauge object
+  \param data is unused
+  */
 G_MODULE_EXPORT void gauge_cleanup(gpointer gauge_ptr, gpointer data)
 {
 	gint id = 0;
@@ -872,6 +895,12 @@ G_MODULE_EXPORT void gauge_cleanup(gpointer gauge_ptr, gpointer data)
 }
 
 
+/*!
+  \brief deallocates the data that was stored within the curve object including
+  the X and Y entries, the cdata and gets rid of the marker_id watch
+  \param curve_ptr is the pointer to the 2D curve widget
+  \param data is unused
+  */
 G_MODULE_EXPORT void clean_curve(gpointer curve_ptr, gpointer data)
 {
 	GArray *array = NULL;
@@ -893,6 +922,15 @@ G_MODULE_EXPORT void clean_curve(gpointer curve_ptr, gpointer data)
 		remove_watch_f(id);
 }
 
+
+/*!
+  \brief updates the curve with new data from the corresponding text entry
+  This extracts the curve axis and index from the widget in order to know 
+  which vertex of the curve to change
+  \param widget is hte entry that was changed via the user
+  \param data is a pointer to the curve to update
+  \returns FALSE
+  */
 G_MODULE_EXPORT gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *curve = (GtkWidget *)data;
@@ -915,10 +953,15 @@ G_MODULE_EXPORT gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 		printf(_("ERROR in update_2d_curve()!!!\n"));
 	mtx_curve_set_coords_at_index(MTX_CURVE(curve),index,point);
 	return FALSE;
-
 }
 
 
+/*! 
+  \brief signal handler to deal with the user clicking on the curve and moving
+  the vertex, which thus updates the corresponding entry
+  \param curve is the pointer to the curve object
+  \param data is unused
+  */
 G_MODULE_EXPORT void coords_changed(GtkWidget *curve, gpointer data)
 {
 	MtxCurveCoord point;
@@ -956,7 +999,13 @@ G_MODULE_EXPORT void coords_changed(GtkWidget *curve, gpointer data)
 	}
 }
 
-
+ 
+/*!
+  \brief  This handler fires when the mouse gets close to a vertex. This
+  will make the point change color 
+  \param curve is a pointer the the curve  object
+  \param data is unused
+  */
 G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 {
 	gint index = 0;
@@ -1057,6 +1106,12 @@ G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 }
 
 
+/*!
+  \brief  This handler fires when the marker gets close to a vertex. This
+  will make the point change color 
+  \param curve is a pointer the the curve object
+  \param data is unused
+  */
 G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 {
 	gint index = 0;
@@ -1159,6 +1214,12 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 }
 
 
+/*!
+  \brief handler attached te the 2d table editor window to close the window
+  \param widget is the menu handler item
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 {
 	close_2d_editor(OBJ_GET(widget,"window"),NULL);
@@ -1166,6 +1227,12 @@ G_MODULE_EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 }
 
 
+/*!
+  \brief This is hte watch triggered function to update the curve markers
+  when their source value changes
+  \param watch is a pointer to the DateWatch structure
+  \see DataWatch
+  */
 G_MODULE_EXPORT void update_curve_marker(DataWatch *watch)
 {
 	CurveData *cdata = (CurveData *)watch->user_data;
@@ -1181,6 +1248,12 @@ G_MODULE_EXPORT void update_curve_marker(DataWatch *watch)
 }
 
 
+/*!
+  \brief Handler to lock/unlock the X or Y axis of the curve from being edited
+  \param widget is the pointer to the togglebutton the user flipped
+  \param datais unused
+  \retuns TRUE
+  */
 G_MODULE_EXPORT gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 {
 	Axis axis = (Axis)OBJ_GET(widget,"axis");
@@ -1197,12 +1270,16 @@ G_MODULE_EXPORT gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief handler to create a 2D table, extracts the table_number from the  
+  widget and calls the function to create the 2d table  editor
+  \param widget is the pointer to the button the user clicked on
+  \returns TRUE on success, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 {
 	gint table_num = 0;
-
-	if (!GTK_IS_WIDGET(widget))
-		return FALSE;
+	g_return_val_if_fail(GTK_IS_WIDGET(widget),FALSE);
 
 	table_num = (gint)g_ascii_strtod(OBJ_GET(widget,"te_table_num"),NULL);
 	create_2d_table_editor(table_num,widget);
@@ -1210,6 +1287,12 @@ G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 }
 
 
+/*!
+  \brief Highlights the corresponding text entry related to the curve
+  vertex
+  \param widget is the pointer to the text entry in question
+  \param color is the pointer to the color to set the entry to
+  */
 G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 {
 	cairo_t *cr = NULL;
@@ -1253,4 +1336,3 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 	}
 #endif
 }
-
