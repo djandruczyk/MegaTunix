@@ -570,7 +570,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
   \param data is unused
   \returns TRUE
   */
-G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointer data)
+G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *window;
 	GtkWidget *view;

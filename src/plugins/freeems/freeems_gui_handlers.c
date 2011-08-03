@@ -386,7 +386,8 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
   \brief This function handles caling the appropriate update function
   based on the widget type.
   \param object is the pointer to the widget in question
-  \param user_data is a pointer  to verify we don't do duplicate updates
+  \param user_data is a pointer to verify we don't do duplicate updates and
+  allows us to break out of a recursive loop
   */
 G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 {

@@ -78,7 +78,7 @@ G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
   \brief the TM drawingarea configure event
   \param widget is the pointer to the drawingarea for the TTM
   \param event is the pointer to the GdkEventConfigure structure
-  \param datat is unused
+  \param data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
