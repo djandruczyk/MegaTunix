@@ -1827,9 +1827,8 @@ G_MODULE_EXPORT void set_widget_labels(const gchar *input)
 /*!
  \brief swap_labels() is a utility function that extracts the list passed to 
  it, and kicks off a subfunction to do the swapping on each widget in the list
- \param input (gchar *) name of list to enumeration and run the subfunction on
- \param state (gboolean) passed on to subfunction
- the default label
+ \param widget is the name of list to enumeration and run the subfunction on
+ \param state is the state passed on to the subfunction
  */
 G_MODULE_EXPORT void swap_labels(GtkWidget *widget, gboolean state)
 {

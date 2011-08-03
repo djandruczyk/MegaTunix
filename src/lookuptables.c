@@ -690,7 +690,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 /*!
   \brief hides the lookuptables config window
   \param widget is the pointer to the lookuptables config window
-  \[aram data is unused
+  \param data is unused
   \returns TRUE
   */
 G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)

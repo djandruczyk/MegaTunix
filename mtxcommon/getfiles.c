@@ -25,7 +25,7 @@
  the list as a vector char array. (free with g_strfreev)
  \param input is the partial path to search for files
  \param extension is the extension to search for 
- \param class is a pointer to an Array of classes to be filled based on the
+ \param classes is a pointer to an Array of classes to be filled based on the
  search so we know which paths are system wide and which are personal
  \returns vector char array of filenames or NULL if none found
  */
@@ -157,7 +157,7 @@ finish:
  then in the system path of $PREFIX/share/MegaTunix/+pathstub, it'll return
  the list as a vector char array. (free with g_strfreev)
  \param input is the partial path to search for files
- \param class is a pointer to an Array of classes to be filled based on the
+ \param classes is a pointer to an Array of classes to be filled based on the
  search so we know which paths are system wide and which are personal
  \returns vector char array of dir names or NULL if none found
  */

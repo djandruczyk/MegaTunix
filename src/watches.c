@@ -80,7 +80,6 @@ G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gin
   \param varname is an internal name ofthe variable we want to watch for a bit
   change
   \param bit is the bit to watch from 0-7
-  \param state is the state you want the bit to be, i.e. TRUE or FALSE
   \param one_shot If true, this watch is called only once then expires
   \param fname is the function name to call when this watch fires
   \param user_data the pointer to data to pass to the function when this watch

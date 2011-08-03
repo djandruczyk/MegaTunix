@@ -150,13 +150,14 @@ G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 
 /*!
  \brief update_logbar() updates the logbar passed with the text passed to it
- \param view_name, textual name of the textview the text is supposed 
+ \param view_name is the textual name of the textview the text is supposed 
  to go to. (required)
  \param tagname is the textual tagname to be used to set attributes on the
  text (optional, can be NULL)
  \param message is the message to display (required)
  \param count is the flag to show a running count or not
  \param clear if set, clear display before displaying text
+ \param free if set, free the message passed to it
  */
 G_MODULE_EXPORT void  update_logbar(
 		const gchar * view_name, 

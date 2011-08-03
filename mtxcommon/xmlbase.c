@@ -271,7 +271,7 @@ void generic_xml_color_import(xmlNode *node, gpointer dest)
   \brief Writes a GdkColor to an XML node
   \param parent is the pointer to the parent XML node
   \param element_name is the name of the new XML node
-  \param val is the value to store at that node
+  \param color is the value to store at that node
   */
 void generic_xml_color_export(xmlNode *parent,gchar * element_name, GdkColor *color)
 {

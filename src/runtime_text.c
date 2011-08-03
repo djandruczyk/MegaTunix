@@ -222,10 +222,11 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 /*!
  \brief create_rtt() creates the rt_text from the passed data, and attaches
  it the the gui.
- \param parent is the parent widget
  \param ctrl_name is the name of the rt_text as defined in the config file
  \param source is the data source for this rt_text 
- \returns a Struct Rt_Text *
+ \param show_prefix is a flag to hide or show the prefix
+ \returns a pointer to a Rt_Text structure
+ \see Rt_Text
  */
 G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {

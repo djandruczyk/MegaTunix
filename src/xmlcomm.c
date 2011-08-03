@@ -68,7 +68,7 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 
 /*!
   \brief recursive function to iterate over the XML nodes
-  \param a_name is the current XML node
+  \param a_node is the current XML node
   */
 G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 {

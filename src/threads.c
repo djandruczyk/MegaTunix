@@ -37,7 +37,7 @@ gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test
  needed information back to the gui via another GAsyncQueue which takes care
  of any post thread GUI updates. (which can NOT be done in a thread context
  due to reentrancy and deadlock conditions)
- \param cmd is the enumerated representation of a command to execute
+ \param cmd_name is the name of the command to look for in the commands_hash
  \param data is the additional data for fringe cases..
  */
 G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
@@ -386,7 +386,7 @@ G_MODULE_EXPORT void  thread_update_widget(
  \brief thread_set_sensitive() is a function to be called from within threads
  to update a widgets sensitivity state.
  \param widget_name is the textual name of the widget to update
- \param stats is the state to set
+ \param state is the state to set
  */
 G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
@@ -420,7 +420,7 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 /*!
  \brief thread_refresh_widget() is a function to be called from within threads
  to force a widget rerender
- \param widget_name is the widget pointer
+ \param widget is the widget pointer to be updated
  */
 G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {

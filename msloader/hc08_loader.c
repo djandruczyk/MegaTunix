@@ -38,8 +38,8 @@ void boot_jumper_prompt(void);
 /*!
   \brief Load the firmware to the MS-1 Device. Implementation is a simple
   state machine.
-  \param port_fd. Filedescriptor to the device (serial port)
-  \param file_fd, Filedescriptor to the .s19 file
+  \param port_fd is the filedescriptor to the device (serial port)
+  \param file_fd is the filedescriptor to the .s19 file
   \returns True on success, False on failure
   */
 gboolean do_ms1_load(gint port_fd, gint file_fd)
@@ -105,8 +105,8 @@ gboolean do_ms1_load(gint port_fd, gint file_fd)
 /*!
   \brief detect_ecu probes ecu to try and determine if in bootloader, if so
   what mode, (i.e. waiting for data, waiting for CMD), or if in normal run mode
-  \param fd, filedescriptor of serial port
-  \returns EcuState, enumeration of ECU state
+  \param fd is the filedescriptor of serial port
+  \returns the enumeration of ECU state
   \see EcuState
   */
 EcuState detect_ecu(gint fd)
@@ -160,8 +160,8 @@ EcuState detect_ecu(gint fd)
 /*!
   \brief jump_to_bootloader sends the magic string to get to the 
   bootloader from normal run mode
-  \param fd, filedescriptor of serial port
-  \returns  True if we get a Boot prompt, false otherwise
+  \param fd is the filedescriptor of serial port
+  \returns True if we get a Boot prompt, false otherwise
   */
 gboolean jump_to_bootloader(gint fd)
 {
@@ -181,7 +181,7 @@ gboolean jump_to_bootloader(gint fd)
 
 /*!
   \brief prepare_for_upload Gets the ECU into a state to accept the S19 file
-  \param  fd, filedescriptor of serial port
+  \param fd is the filedescriptor of serial port
   \returns True if we are ready, false otherwise
   */
 gboolean prepare_for_upload(gint fd)
@@ -239,8 +239,8 @@ gboolean prepare_for_upload(gint fd)
 /*!
   \brief
   upload_firmware handles the actual sending of the .s19 file to the ECU
-  \param fd, serial port filedescriptor
-  \param file_fd, .s19 file filedescriptor
+  \param fd is the serial port filedescriptor
+  \param file_fd is the .s19 file filedescriptor
   */
 void upload_firmware(gint fd, gint file_fd)
 {
@@ -291,7 +291,7 @@ void upload_firmware(gint fd, gint file_fd)
 
 /*!
   \brief reboot_ecu tells the ECU to reboot
-  \param fd, serial port filedescriptor
+  \param fd is the serial port filedescriptor
   */
 void reboot_ecu(gint fd)
 {

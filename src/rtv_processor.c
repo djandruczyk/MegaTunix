@@ -745,7 +745,7 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
  5 samples "back in time"
  \param internal_name is name of the variable to get the data for.
  \param n how many samples from now to get
- \param value is where to put the value
+ \param values is where to put the values
  \returns TRUE on successful lookup, FALSE on failure
  */
 G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *values)

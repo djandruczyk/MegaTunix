@@ -53,6 +53,7 @@ extern gconstpointer *global_data;
  \brief open_serial() called to open the serial port, updates textviews on the
  comms page on success/failure
  \param port_name is the name of the port to open
+ \param nonblock is a flag if we should open hte port in nonblocking mode
  */
 G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 {

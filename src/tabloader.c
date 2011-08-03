@@ -424,9 +424,9 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
  a group. (saves from having to duplicate a large number of keys/values for 
  a big group of widgets) This function will set the necessary data on the 
  Gui object.
- \param cfgfile is the pointer to the config file to read data from
+ \param cfg is the pointer to the config file object to read data from
  \param object is the widget to bind the data to
- \param groups is the hashtable that holds the  group common data
+ \param groups is the hashtable that holds the group common data
  \param groupname is the textual name of the group to get the data for to
  be bound to the widget
  \returns the page of the group

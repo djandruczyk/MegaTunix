@@ -107,8 +107,8 @@ ConfigFile *cfg_open_file(gchar * filename)
 
 /*!
  \brief writes the configfile to disk from the internal structure
- \param cfg is hte pointer to the ConfigFile structure
- \param filenameis the name of filename to save the data to
+ \param cfg is the pointer to the ConfigFile structure
+ \param filename is the name of filename to save the data to
  \returns TRUE on success, FALSE on failure
  */
 gboolean cfg_write_file(ConfigFile * cfg, gchar * filename)
