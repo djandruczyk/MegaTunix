@@ -113,15 +113,15 @@ void mtx_stripchart_class_init (MtxStripChartClass *class_name)
 void mtx_stripchart_finalize (GObject *chart)
 {
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
-	if (priv->bg_pixmap);
+	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
-	if (priv->trace_pixmap);
+	if (priv->trace_pixmap)
 		g_object_unref(priv->trace_pixmap);
-	if (priv->grat_pixmap);
+	if (priv->grat_pixmap)
 		g_object_unref(priv->grat_pixmap);
-	if (priv->font);
+	if (priv->font)
 		g_free(priv->font);
-	if (priv->traces);
+	if (priv->traces)
 		mtx_stripchart_cleanup_traces(priv->traces);
 }
 

@@ -118,9 +118,9 @@ void mtx_curve_class_init (MtxCurveClass *klass)
  \param curve is the pointer to the curve object to be finalized
  */
 
-void mtx_curve_finalize (GObject *curve)
+void mtx_curve_finalize (GObject *object)
 {
-	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(object);
 	if (priv->pixmap)
 		g_object_unref(priv->pixmap);
 	if (priv->bg_pixmap)

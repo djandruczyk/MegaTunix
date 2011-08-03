@@ -55,5 +55,7 @@ void mtx_progress_bar_real_update(GtkProgress *);
 void mtx_progress_bar_paint (GtkProgress *);
 void mtx_progress_bar_paint_continuous (GtkProgressBar *, gint, gint, GtkProgressBarOrientation);
 gfloat mtx_progress_get_peak_percentage (GtkProgress *progress);
+void mtx_progress_bar_finalize (GObject *);
+
 
 #endif

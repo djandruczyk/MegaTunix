@@ -356,14 +356,23 @@ void ms2_update_trigtooth_display()
  */
 G_MODULE_EXPORT void ms2_ttm_update(DataWatch *watch)
 {
-	gint page = 0;
-
-	page = (GINT)OBJ_GET(ttm_data->darea,"page");
 	ms2_crunch_trigtooth_data();
 	ms2_update_trigtooth_display();
 	if (ttm_data->stop)
 		return;
 	io_cmd_f((gchar *)OBJ_GET(ttm_data->darea,"io_cmd_function"),NULL);
+}
+
+
+
+/*!
+  \brief Postfunction wrapper for crunch trigtooth data
+  */
+G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
+{
+	gdk_threads_enter();
+	ms2_crunch_trigtooth_data();
+	gdk_threads_leave();
 }
 
 

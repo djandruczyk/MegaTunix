@@ -161,6 +161,18 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
 }
 
 
+
+/*!
+  \brief Postfunction wrapper for crunch trigtooth data
+  */
+G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
+{
+	gdk_threads_enter();
+	crunch_trigtooth_data();
+	gdk_threads_leave();
+}
+
+
 /*!
   \brief Crunches the trigtooth data into something usable for display
   */

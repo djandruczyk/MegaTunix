@@ -36,11 +36,11 @@ G_DEFINE_TYPE (MtxProgressBar, mtx_progress_bar, GTK_TYPE_PROGRESS_BAR)
  */
 void mtx_progress_bar_class_init (MtxProgressBarClass *class)
 {
-	GObjectClass *gobject_class;
+	GObjectClass *obj_class;
 	GtkWidgetClass *widget_class;
 	GtkProgressClass *progress_class;
 
-	gobject_class = G_OBJECT_CLASS (class);
+	obj_class = G_OBJECT_CLASS (class);
 	widget_class = GTK_WIDGET_CLASS (class);
 	progress_class = (GtkProgressClass *) class;
 
@@ -50,9 +50,9 @@ void mtx_progress_bar_class_init (MtxProgressBarClass *class)
 
 
 	widget_class->expose_event = mtx_progress_bar_expose;
-
 	progress_class->update = mtx_progress_bar_real_update;
 	progress_class->paint = mtx_progress_bar_paint;
+	obj_class->finalize = mtx_progress_bar_finalize;
 
 	g_type_class_add_private (class, sizeof (MtxProgressBarPrivate)); 
 }
@@ -352,3 +352,20 @@ gfloat mtx_progress_get_peak_percentage (GtkProgress *progress)
 	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(pbar);
 	return priv->peak;
 }
+
+
+/*!
+  \brief Finalizes the progressbar object
+  \param chart is the pointer to the chart object
+  */
+void mtx_progress_bar_finalize (GObject *object)
+{
+	MtxProgressBarPrivate *priv = MTX_PROGRESS_BAR_GET_PRIVATE(object);
+	if (priv->hold_id != 0)
+	{
+		g_source_remove(priv->hold_id);
+		priv->hold_id = 0;
+	}
+	G_OBJECT_CLASS(mtx_progress_bar_parent_class)->finalize(object);
+}
+

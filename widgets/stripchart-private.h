@@ -87,7 +87,4 @@ void mtx_stripchart_redraw (MtxStripChart *gauge);
 void mtx_stripchart_finalize (GObject *);
 void mtx_stripchart_cleanup_traces (GArray *);
 
-
-
-
 #endif

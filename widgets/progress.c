@@ -65,8 +65,11 @@ void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 		}
 	}
 	else
+	{
 		if (priv->hold_id == 0)
 			priv->hold_id = g_timeout_add(priv->hold_time,mtx_progress_bar_peak_reset,pbar);
+	}
+
 
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(pbar),fraction);
 	return;
