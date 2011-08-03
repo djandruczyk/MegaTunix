@@ -53,6 +53,7 @@ headers = \
 	runtime_text.h \
 	s12x_loader.h \
 	serialio.h \
+	sleep_calib.h \
 	stringmatch.h \
 	tabloader.h \
 	tag_loader.h \
