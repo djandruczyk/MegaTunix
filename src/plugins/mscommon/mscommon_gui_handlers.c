@@ -1214,7 +1214,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 /*! 
   \brief Checks the widget's type and updates it or callsthe appropriate 
   update function forit
-  \param objct is a pointer to the object to update
+  \param object is a pointer to the object to update
   \param user_data is used to detect a recursive loop and break out
   */
 G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
