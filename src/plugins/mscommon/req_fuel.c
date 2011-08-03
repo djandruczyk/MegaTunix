@@ -766,7 +766,7 @@ G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
  the ECU
  \param offset is the offset in ecu_data this value goes to
  \param value is the pointer to OutputData Struct
- \param page is unused.
+ \param user_data is unused.
  */
 G_MODULE_EXPORT gboolean drain_hashtable(gpointer offset, gpointer value, gpointer user_data)
 {

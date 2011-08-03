@@ -1882,6 +1882,8 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	GSocketAddress *sockaddr = NULL;
 	MtxSocketClient * cli_data = NULL;
 	GError *error = NULL;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 
 	/*	printf ("Trying to open network port!\n");*/
 	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
@@ -2894,9 +2896,9 @@ close_binary:
   \brief This function validates incoming commands from the TCP socket 
   thread(s).  Commands need to be comma separated, ASCII text, minimum of two
   arguments (more are allowed)
-  \param client, MtxSocketClient structure
-  \param buf, input buffer
-  \param len, length of input buffer
+  \param client is the MtxSocketClient structure
+  \param buf is the input buffer
+  \param len is the length of input buffer
   */
 G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
@@ -3157,7 +3159,7 @@ G_MODULE_EXPORT void socket_get_rt_vars(gint fd, gchar *arg2)
 
 /*!
   \brief Echos back to the client a list of all avaialble runtime variables
-  \param socket is a pointer to the active GSocket structure
+  \param fd is the network socket filedescriptor
   */
 G_MODULE_EXPORT void socket_get_rtv_list(gint fd)
 {
@@ -3303,7 +3305,7 @@ G_MODULE_EXPORT void socket_get_ecu_page(MtxSocketClient *client, gchar *arg2)
   \brief The slave is updating an ECU location in memory, validate it, update
   which will trigger the master Gui and all slave gui's to update accordingly
   \param client is a pointer to the MtxSocketClient structure
-  \param args is the coordinates (4 values required), canID, page, offset,
+  \param arg2 is the coordinates (4 values required), canID, page, offset,
   and the new data
   \param size is hte size to store. 
   \bug this function works properly only for 8 bit values....
@@ -4024,6 +4026,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
   \param fd is the filedescriptor for the network socket
   \param buf is a pointer to the buffer to read from when sending
   \param len is the amount of data to send in bytes
+  \param flags is the network flags to use if in windows
   \returns the numbe of bytes sent
   */
 G_MODULE_EXPORT gint net_send(gint fd, guint8 *buf, gint len, gint flags)

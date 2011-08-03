@@ -159,7 +159,7 @@ G_MODULE_EXPORT gint comms_test(void)
 /*!
  \brief ms_table_write() gets called to send a block of lookuptable values to the ECU
  \param page is the MTX page in which the value refers to.
- \param len is the length of block to sent
+ \param num_bytes is the length of block to sent
  \param data is the block of data to be sent which better damn well be
  in ECU byte order if there is an endianness thing..
  */
@@ -316,9 +316,9 @@ G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
  \param page is the MTX page in which the value refers to.
  \param offset is the offset from the beginning of the page that this data
  refers to.
- \param len is the length of block to sent
- \param data is the the block of data to be sent which better damn well be
- int ECU byte order if there is an endianness thing..
+ \param num_bytes is the length of block to sent
+ \param block is the the block of data to be sent which better damn well be
+ in ECU byte order if there is an endianness thing..
  */
 G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * block)
 {
@@ -398,7 +398,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
  \param page is the page in which the value refers to.
  \param offset is the offset from the beginning of the page that this data
  refers to.
- \para size is the size enumeration for this value
+ \param size is the size enumeration for this value
  \param value is the the value that should be sent to the ECU At page.offset
  \param queue_update if true queues a gui update, used to prevent
  a horrible stall when doing an ECU restore or batch load...

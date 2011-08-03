@@ -191,7 +191,7 @@ G_MODULE_EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
   \brief When the user selects the OK button the new table is calculated
   packaged up, dumped to a file as well as being sent to the ECU to live 
   a long and happy life
-  \param widget, the OK button the user clicked
+  \param widget is the OK button the user clicked
   \param data is unused
   \returns TRUE on success, FALSE otherwise
   */

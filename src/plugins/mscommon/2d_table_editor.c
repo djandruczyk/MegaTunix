@@ -1251,8 +1251,8 @@ G_MODULE_EXPORT void update_curve_marker(DataWatch *watch)
 /*!
   \brief Handler to lock/unlock the X or Y axis of the curve from being edited
   \param widget is the pointer to the togglebutton the user flipped
-  \param datais unused
-  \retuns TRUE
+  \param data is unused
+  \returns TRUE
   */
 G_MODULE_EXPORT gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 {

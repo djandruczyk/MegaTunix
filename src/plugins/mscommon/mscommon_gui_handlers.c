@@ -1708,6 +1708,7 @@ G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTr
   \brief Extracts the essential bits fro m a widget and fills in the passed
   pointers if present
   \param widget is hte pointer to the  widget to extract the goodies from
+  \param canID is a pointer to the location to save the canID to or NULL
   \param page is a pointer to the location to save the MTX page to or NULL
   \param offset is a pointer to the location to save the offset to or NULL
   \param bitval is a pointer to the location to save the bitval to or NULL

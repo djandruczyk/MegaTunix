@@ -106,7 +106,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSiz
  \param page is the ecu firmware page
  \param offset is the RAW BYTE offset
  \param size is the size to be returned
- \returnsthe value requested or 0 on error
+ \returns the value requested or 0 on error
  */
 G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, DataSize size) 
 {
