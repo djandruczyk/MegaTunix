@@ -30,7 +30,7 @@ libmtxpie_la_SOURCES = piegauge.c piegauge.h piegauge-private.c piegauge-private
 libmtxprogress_la_SOURCES = progress.c progress.h progress-private.c progress-private.h
 
 libmtxstripchart_la_SOURCES = stripchart.c stripchart.h stripchart-private.c stripchart-private.h
-libmtxcombo_mask_la_SOURCES = combo_mask.c crx.c ../include/crx.h ../include/combo_mask.h
+libmtxcombo_mask_la_SOURCES = combo_mask.c ../include/combo_mask.h
 
 libmtxgauge_la_LDFLAGS = -shared $(no_undefined)
 libmtxcurve_la_LDFLAGS = -shared $(no_undefined) 

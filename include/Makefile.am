@@ -13,7 +13,6 @@ headers = \
 	configfile.h \
 	conversions.h \
 	core_gui.h \
-	crx.h \
 	dashboard.h \
 	dataio.h \
 	datalogging_gui.h \

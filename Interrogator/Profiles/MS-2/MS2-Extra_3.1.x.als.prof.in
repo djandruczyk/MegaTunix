@@ -1784,7 +1784,7 @@ length=1024
 
 [interrogation]
 match_on=MS_VerNum
-MS_VerNum=_REGEX_,MS2Extra Serial310A
+MS_VerNum=_FULLMATCH_,MS2Extra Serial310A
 
 [gui]
 RealtimeMapFile=MS2-Extra-3.0.3y

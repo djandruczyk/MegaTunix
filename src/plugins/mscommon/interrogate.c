@@ -14,7 +14,6 @@
  */
 
 #include <api-versions.h>
-#include <crx.h>
 #include <debugging.h>
 #include <dep_loader.h>
 #include <getfiles.h>
@@ -1357,8 +1356,9 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 					pass=TRUE;
 				break;
 			case REGEX:
-				if (regex(vector[1],test->result_str,&len))
-					pass=TRUE;
+				printf("Regex compare, string 1 \"%s\" string 2 \"%s\"\n",vector[1],test->result_str);
+				if (g_regex_match_simple(vector[1],test->result_str,0,0))
+					pass = TRUE;
 				break;
 			default:
 				pass=FALSE;

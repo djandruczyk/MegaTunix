@@ -15,7 +15,6 @@
 
 #include <api-versions.h>
 #include <debugging.h>
-#include <crx.h>
 #include <getfiles.h>
 #include <interrogate.h>
 #include <freeems_plugin.h>
@@ -743,7 +742,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 					pass=TRUE;
 				break;
 			case REGEX:
-				if (regex(vector[1],test->result_str,&len))
+				if (g_regex_match_simple(vector[1],test->result_str,0,0))
 					pass=TRUE;
 				break;
 			default:

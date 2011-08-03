@@ -21,8 +21,6 @@
  */
 
 #include <combo_mask.h>
-#include <crx.h>
-#include <libgen.h>
 
 
 /* Macro that creates a lot of boilerplate for us */
@@ -65,7 +63,7 @@ G_MODULE_EXPORT void mask_entry_set_background (MaskEntry *entry)
 		tmpstr = g_utf8_normalize(gtk_entry_get_text (GTK_ENTRY (entry)),-1,G_NORMALIZE_DEFAULT);
 		tmpbuf = g_utf8_casefold(tmpstr,-1);
 		g_free(tmpstr);
-		if (regex(tmpbuf,entry->mask,&len))
+		if (g_regex_match_simple(tmpbuf,entry->mask,0,0))
 		{
 			gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
 			g_free(tmpbuf);
