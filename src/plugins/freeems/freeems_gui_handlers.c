@@ -385,15 +385,15 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 /*!
   \brief This function handles caling the appropriate update function
   based on the widget type.
-  \param object is the pointer to the widget in question
+  \param u_object is the pointer to the widget in question
   \param user_data is a pointer to verify we don't do duplicate updates and
   allows us to break out of a recursive loop
   */
-G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
+G_MODULE_EXPORT void update_widget(gpointer u_object, gpointer user_data)
 {
 	static gint upd_count = 0;
 	static void (*insert_text_handler)(GtkEntry *, const gchar *, gint, gint *, gpointer);
-	GtkWidget * widget = object;
+	GtkWidget *widget = u_object;
 	gdouble value = 0.0;
 
 	if (DATA_GET(global_data,"leaving"))
