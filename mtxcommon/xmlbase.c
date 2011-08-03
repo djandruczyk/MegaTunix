@@ -15,6 +15,12 @@
 #include <libxml/tree.h>
 #include <xmlbase.h>
 
+
+/*!
+  \brief Reads an Integer from an XML node and stores in the dest var
+  \param node is the pointer to the XML node
+  \param dest is the pointer to the place to store the read value
+  */
 void generic_xml_gint_import(xmlNode *node, gpointer dest)
 {
 	gint *val = NULL;
@@ -37,6 +43,11 @@ void generic_xml_gint_import(xmlNode *node, gpointer dest)
 }
 
 
+/*!
+  \brief Reads an boolean from an XML node and stores in the dest var
+  \param node is the pointer to the XML node
+  \param dest is the pointer to the place to store the read value
+  */
 void generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 {
 	gboolean *val = NULL;
@@ -59,6 +70,12 @@ void generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 }
 
 
+/*!
+  \brief Writes an integer to an XML node
+  \param parent is the pointer to the parent XML node
+  \param element_name is the name of the new XML node
+  \param val is the value to store at that node
+  */
 void generic_xml_gint_export(xmlNode *parent, gchar *element_name, gint *val)
 {
 	gchar * tmpbuf = NULL;
@@ -74,6 +91,12 @@ void generic_xml_gint_export(xmlNode *parent, gchar *element_name, gint *val)
 }
 
 
+/*!
+  \brief Writes an boolean to an XML node
+  \param parent is the pointer to the parent XML node
+  \param element_name is the name of the new XML node
+  \param val is the value to store at that node
+  */
 void generic_xml_gboolean_export(xmlNode *parent, gchar *element_name, gboolean *val)
 {
 	g_return_if_fail(parent);
@@ -89,6 +112,11 @@ void generic_xml_gboolean_export(xmlNode *parent, gchar *element_name, gboolean 
 }
 
 
+/*!
+  \brief Reads a Float from an XML node and stores in the dest var
+  \param node is the pointer to the XML node
+  \param dest is the pointer to the place to store the read value
+  */
 void generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 {
 	gfloat *val = NULL;
@@ -108,6 +136,12 @@ void generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 }
 
 
+/*!
+  \brief Writes a gfloat to an XML node
+  \param parent is the pointer to the parent XML node
+  \param element_name is the name of the new XML node
+  \param val is the value to store at that node
+  */
 void generic_xml_gfloat_export(xmlNode *parent, gchar *element_name, gfloat *val)
 {
 	gchar tmpbuf[10];
@@ -124,6 +158,11 @@ void generic_xml_gfloat_export(xmlNode *parent, gchar *element_name, gfloat *val
 }
 
 
+/*!
+  \brief Reads a string from an XML node and stores in the dest var
+  \param node is the pointer to the XML node
+  \param dest is the pointer to the place to store the read value
+  */
 void generic_xml_gchar_import(xmlNode *node, gpointer dest)
 {
 	gchar **val = NULL;
@@ -152,6 +191,12 @@ void generic_xml_gchar_import(xmlNode *node, gpointer dest)
 }
 
 
+/*!
+  \brief Writes a gchar string to an XML node
+  \param parent is the pointer to the parent XML node
+  \param element_name is the name of the new XML node
+  \param val is the value to store at that node
+  */
 void generic_xml_gchar_export(xmlNode *parent, gchar *element_name, gchar **val)
 {
 	g_return_if_fail(parent);
@@ -166,6 +211,11 @@ void generic_xml_gchar_export(xmlNode *parent, gchar *element_name, gchar **val)
 }
 
 
+/*!
+  \brief Reads a GdkColor from an XML node and stores in the dest var
+  \param node is the pointer to the XML node
+  \param dest is the pointer to the place to store the read value
+  */
 void generic_xml_color_import(xmlNode *node, gpointer dest)
 {
 	xmlNode *cur_node = NULL;
@@ -217,6 +267,12 @@ void generic_xml_color_import(xmlNode *node, gpointer dest)
 }
 
 
+/*!
+  \brief Writes a GdkColor to an XML node
+  \param parent is the pointer to the parent XML node
+  \param element_name is the name of the new XML node
+  \param val is the value to store at that node
+  */
 void generic_xml_color_export(xmlNode *parent,gchar * element_name, GdkColor *color)
 {
 	gchar * tmpbuf =  NULL;
@@ -240,6 +296,13 @@ void generic_xml_color_export(xmlNode *parent,gchar * element_name, GdkColor *co
 }
 
 
+/*!
+  \brief checks the API tags of an XML file for compliance
+  \param node is the XML node to start from
+  \param major is the major API to match on
+  \param minor is the minor API to match on
+  \returns TRUE on success, FALSE otherwise
+  */
 gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 {
 	gint maj = -1;
@@ -272,4 +335,3 @@ gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 	else
 		return TRUE;
 }
-

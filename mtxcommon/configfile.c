@@ -31,9 +31,9 @@ static ConfigLine *cfg_find_string(ConfigSection * section, gchar * key);
 
 
 /*!
- \brief Creates a new ConfigFile * and returns it
+ \brief Creates a new ConfigFile structure and returns it
  \see ConfigFile
- \returns a ConfigFile *
+ \returns a pointer to a ConfigFile structure
  */
 ConfigFile *cfg_new(void)
 {
@@ -47,9 +47,9 @@ ConfigFile *cfg_new(void)
 
 /*!
  \brief Opens a file, reads it's entire contents and populates
- to cfg internal structures.
+ the cfg internal structures.
  \param filename: name of file to open and load
- \returns the populated ConfigFile * 
+ \returns the pointer to a poulated ConfigFile structure
  */
 ConfigFile *cfg_open_file(gchar * filename)
 {
@@ -107,8 +107,8 @@ ConfigFile *cfg_open_file(gchar * filename)
 
 /*!
  \brief writes the configfile to disk from the internal structure
- \param cfg: source of data to export to disk
- \param filename: name of filename to dave the data to
+ \param cfg is hte pointer to the ConfigFile structure
+ \param filenameis the name of filename to save the data to
  \returns TRUE on success, FALSE on failure
  */
 gboolean cfg_write_file(ConfigFile * cfg, gchar * filename)
@@ -146,10 +146,10 @@ gboolean cfg_write_file(ConfigFile * cfg, gchar * filename)
 
 /*!
  \brief Reads a string value from the cfg 
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want the value for
- \param value: where to store the value
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want the value for
+ \param value is the pointer to where to store the value
  \returns TRUE on success, FALSE on no key found
  */
 gboolean cfg_read_string(ConfigFile * cfg, gchar * section, gchar * key, gchar ** value)
@@ -168,10 +168,10 @@ gboolean cfg_read_string(ConfigFile * cfg, gchar * section, gchar * key, gchar *
 
 /*!
  \brief reads an int value from the cfg 
- \param cfg: source of the data
- \param section:  section in the file
- \param key: key we want the value for
- \param value: Where to store that value
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want the value for
+ \param value is the pointer to where to store that value
  \returns TRUE on success, FALSE on no key found
  */
 gboolean cfg_read_int(ConfigFile * cfg, gchar * section, gchar * key, gint * value)
@@ -189,10 +189,10 @@ gboolean cfg_read_int(ConfigFile * cfg, gchar * section, gchar * key, gint * val
 
 /*!
  \brief Reads an boolean value from the cfg 
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want the value for
- \param value: Where to store that value
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want the value for
+ \param value is the pointer to where to store that value
  \returns TRUE on success, FALSE on no key found
  */
 gboolean cfg_read_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboolean * value)
@@ -212,10 +212,10 @@ gboolean cfg_read_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboole
 
 /*!
  \brief Reads a float value from the cfg 
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want the value for
- \param value: Where to store that value
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want the value for
+ \param value is the pointer to where to store that value
  \returns TRUE on success, FALSE on no key found
  */
 gboolean cfg_read_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat * value)
@@ -234,10 +234,10 @@ gboolean cfg_read_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat *
 
 /*!
  \brief Reads a double value from the cfg 
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want the value for
- \param value: Where to store that value
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want the value for
+ \param value is the pointer to where to store that value
  \returns TRUE on success, FALSE on no key found
  */
 gboolean cfg_read_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble * value)
@@ -256,10 +256,10 @@ gboolean cfg_read_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble
 
 /*!
  \brief Writes a string value to the cfg 
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want to write the value for
- \param value: value to write
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want to write the value for
+ \param value is the value we want to store
  */
 void cfg_write_string(ConfigFile * cfg, gchar * section, gchar * key, gchar * value)
 {
@@ -301,10 +301,10 @@ void cfg_write_int(ConfigFile * cfg, gchar * section, gchar * key, gint value)
 
 /*!
  \brief Writes a boolean value to the cfg 
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want to write the value for
- \param value: value to write
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want to write the value for
+ \param value is the value we want to store
  */
 void cfg_write_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboolean value)
 {
@@ -317,10 +317,10 @@ void cfg_write_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboolean 
 
 /*!
  \brief Writes a float value to the cfg 
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want to write the value for
- \param value: value to write
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want to write the value for
+ \param value is the value we want to store
  */
 void cfg_write_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat value)
 {
@@ -334,10 +334,10 @@ void cfg_write_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat valu
 
 /*!
  \brief Writes a double value to the cfg 
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want to write the value for
- \param value: value to write
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want to write the value for
+ \param value is the value we want to store
  */
 void cfg_write_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble value)
 {
@@ -351,9 +351,9 @@ void cfg_write_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble va
 
 /*!
  \brief Removes a key from the cfgfile
- \param cfg: source of the data
- \param section: section in the file
- \param key: key we want to remove
+ \param cfg is the pointer to the ConfigFile structure
+ \param section is the section in the file
+ \param key is the key we want to remove
  */
 void cfg_remove_key(ConfigFile * cfg, gchar * section, gchar * key)
 {
@@ -375,7 +375,7 @@ void cfg_remove_key(ConfigFile * cfg, gchar * section, gchar * key)
 
 /*!
  \brief frees the memory/resources for a cfg
- \param cfg: source of the data
+ \param cfg is the pointer to the ConfigFile structure
  */
 void cfg_free(ConfigFile * cfg)
 {
@@ -411,9 +411,9 @@ void cfg_free(ConfigFile * cfg)
 
 /*!
  \brief Creates a section in the cfgfile
- \param cfg: cfg to create the section in
- \param name: name of section to create
- \returns the ConfigSection pointer
+ \param cfg is the pointer to the ConfigFile structure
+ \param name is the name of section to create
+ \returns a pointer to the ConfigSection structure
  */
 static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)
 {
@@ -429,10 +429,10 @@ static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)
 
 /*!
  \brief Creates a string in a section
- \param section:  section pointer
- \param key: key to create
- \param value: value to set the key to
- \returns a ConfigLine pointer
+ \param section is the pointer to the ConfigSection structure
+ \param key is the key to create
+ \param value is the value to set the key to
+ \returns a pointer to the ConfigLine structure
  */
 static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value)
 {
@@ -454,9 +454,9 @@ static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar
 
 /*!
  \brief Locates the section requested
- \param cfg: cfg to search in
- \param name: section naem to search for
- \returns the ConfigSection * searched for
+ \param cfg is the pointer to the ConfigFile structure
+ \param name is the section naem to search for
+ \returns a pointer to the  ConfigSection structure searched for
  */
 ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name)
 {
@@ -477,9 +477,9 @@ ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name)
 
 /*!
  \brief Returns the ConfigLine *
- \param section: section to search in
- \param key: key to search for
- \returns ConfigLine * to the line requested
+ \param section is the section to search in
+ \param key is the key to search for
+ \returns the pointer to the ConfigLine structure of the line requested
  */
 static ConfigLine *cfg_find_string(ConfigSection * section, gchar * key)
 {

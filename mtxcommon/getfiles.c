@@ -23,10 +23,10 @@
  this function will first search starting from ~/.MegaTunix+pathstub and
  then in the system path of $PREFIX/share/MegaTunix/+pathstub, it'll return
  the list as a vector char array. (free with g_strfreev)
- \param pathstub (gchar *) partial path to search for files
- \param extension (gchar *) extension to search for 
- \param class (FileClass) enumeration pointer to array of classes for each
- file found
+ \param input is the partial path to search for files
+ \param extension is the extension to search for 
+ \param class is a pointer to an Array of classes to be filled based on the
+ search so we know which paths are system wide and which are personal
  \returns vector char array of filenames or NULL if none found
  */
 gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
@@ -156,11 +156,10 @@ finish:
  this function will first search starting from ~/.MegaTunix+pathstub and
  then in the system path of $PREFIX/share/MegaTunix/+pathstub, it'll return
  the list as a vector char array. (free with g_strfreev)
- \param pathstub (gchar *) partial path to search for files
- \param extension (gchar *) extension to search for 
- \param class (FileClass) enumeration pointer to array of classes for each
- file found
- \returns vector char array of filenames or NULL if none found
+ \param input is the partial path to search for files
+ \param class is a pointer to an Array of classes to be filled based on the
+ search so we know which paths are system wide and which are personal
+ \returns vector char array of dir names or NULL if none found
  */
 gchar ** get_dirs(gchar *input, GArray **classes)
 {
@@ -293,8 +292,8 @@ finish:
 /*!
  \brief get_file() gets a single file defnied by pathstub, first searching in
  ~/.MegaTunix+pathstub, and then in $PREFIX/share/MegaTunix/+pathstub,
- \param pathstub (gchar *) partial path to filename
- \param extension (gchar *) extension wanted..
+ \param pathstub is the partial path to filename
+ \param extension is the extension wanted..
  \returns filename if found or NULL if not found
  */
 gchar * get_file(gchar *pathstub,gchar *extension)
@@ -348,6 +347,13 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 }
 
 
+/*!
+  \brief pops up a Filechooser dialog to select a file
+  \param data is a pointer to a MtxFileIO structure which contains important
+  bits like the path to start, the filter, default filename and so on
+  \see MtxFileIO
+  \returns the path to the file or NULL if cancelled
+  */
 gchar * choose_file(MtxFileIO *data)
 {
 	GtkWidget *dialog = NULL;
@@ -518,6 +524,12 @@ afterfilter:
 }
 
 #if GTK_MINOR_VERSION >= 8
+/*!
+  \brief The pops up the overwrite confirmation dialog
+  \param chooser is a pointer to the active filechooser dialog
+  \param data is unused
+  \returns a GtkFileChooserConfirmation enumeration
+  */
 GtkFileChooserConfirmation
 confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 {
@@ -573,6 +585,11 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 #endif
 
 
+/*!
+  \brief frees the resources of a MtxFileIO structure
+  \param data is a pointer to a MtxFileIO structure to be deallocated
+  \see MtxFileIO
+  */
 void free_mtxfileio(MtxFileIO *data)
 {
 	if (!data)
@@ -600,6 +617,10 @@ void free_mtxfileio(MtxFileIO *data)
 }
 
 
+/*!
+  \brief pops up an error dialog with the passed text
+  \param text is the text to display to the user
+  */
 void getfiles_errmsg(const gchar * text)
 {
 	GtkWidget *dialog = NULL;
@@ -614,6 +635,11 @@ void getfiles_errmsg(const gchar * text)
 	gtk_widget_destroy (dialog);
 }
 
+
+/*!
+  \brief gets the path of the home directory
+  \returns the path to the home directory
+  */
 gchar * get_home()
 {
 #ifdef __WIN32__
@@ -633,6 +659,13 @@ gchar * get_home()
 #endif
 }
 
+
+/*!
+  \brief checks for the presence of files in a specific path
+  \param path is the path to look for files
+  \param ext is the extentions of the files to look for
+  \returns TRUE if files found, FALSE otherwise
+  */
 gboolean check_for_files(const gchar * path, const gchar *ext)
 {
 	GDir * dir = NULL;
