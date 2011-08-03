@@ -63,8 +63,8 @@ gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpoin
 gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
 void ms2_ttm_update(DataWatch *);
-void _ms2_crunch_trigtooth_data(gint);
-void ms2_update_trigtooth_display(gint);
+void ms2_crunch_trigtooth_data(void);
+void ms2_update_trigtooth_display(void);
 void reset_ttm_buttons(void);
 
 /* Prototypes */

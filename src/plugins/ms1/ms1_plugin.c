@@ -23,6 +23,13 @@
 gconstpointer *global_data;
 
 
+/*!
+  \brief Initializes the MS1 ecu firmware plugin. This links up to all the 
+  needed functions within core MtX, and registers any ecu specific ENUMS
+  or other datastructures
+  \param data is a pointer to the global_data container
+  \see plugin_shutdown
+  */
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	global_data = data;
@@ -61,6 +68,10 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 }
 
 
+/*!
+  \brief stops any resources assocated with the MS1 plugin and de-registers
+  the enums/resource in prep for plugin unload
+  */
 G_MODULE_EXPORT void plugin_shutdown()
 {
 	stop(TOOTHMON_TICKLER);
@@ -69,6 +80,9 @@ G_MODULE_EXPORT void plugin_shutdown()
 }
 
 
+/*!
+  \brief registers firmware specific enumerations so this plugin can work
+  */
 void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
@@ -96,6 +110,10 @@ void register_ecu_enums(void)
 }
 
 
+/*!
+  \brief deregisters firmware specific enumerations so this plugin can 
+  be unloaded without leaking excessive amounts of memory
+  */
 void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;

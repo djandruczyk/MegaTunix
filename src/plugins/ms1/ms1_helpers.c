@@ -14,6 +14,9 @@
 #include <ms1_plugin.h>
 
 
+/*!
+  \brief Handler to re-enable the reboot button on the error status tab
+  */
 G_MODULE_EXPORT void enable_reboot_button_pf(void)
 {
 	gdk_threads_enter();

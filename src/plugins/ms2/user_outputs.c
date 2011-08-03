@@ -20,8 +20,10 @@
 extern gconstpointer *global_data;
 
 
-/*! \brief sets up and populates the MS2-Extra combo for output choice
- */
+/*!
+  \brief sets up and populates the MS2-Extra combo for output choice
+  \param widget is the pointer to the combo to initialize
+  */
 G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 {
 	gint i = 0;
@@ -176,6 +178,10 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 }
 
 
+/*!
+  \brief updates the ms2 user_outputs controls which are a bit special purpose
+  \param widget is the pointer to the widget to update
+  */
 G_MODULE_EXPORT void update_ms2_user_outputs(GtkWidget *widget)
 {
 	GtkTreeModel *model = NULL;

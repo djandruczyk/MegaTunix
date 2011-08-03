@@ -49,3 +49,6 @@ tags
 gmon.out
 docs
 Doxyfile
+doxygen.errors
+*.swp
+megatunix-*

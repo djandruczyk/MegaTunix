@@ -11,7 +11,7 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#include <null_menu_handlers.h>
+#include <pis_menu_handlers.h>
 
 extern gconstpointer *global_data;
 

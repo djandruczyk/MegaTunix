@@ -15,37 +15,83 @@
 
 extern gconstpointer *global_data;
 
+/*!
+  \brief This is used for this plugin to initialize stuff on the main Gui
+  */
 G_MODULE_EXPORT void ecu_gui_init(void)
 {
 	/* We don't need anything specific to this ecu initialized */
 }
 
 
+/*!
+  \brief ECU specific plugin handler for toggle buttons
+  \param widget is the pointer to the toggle button
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	        return TRUE;
 }
 
 
-G_MODULE_EXPORT gboolean ecu_button_handler(GtkWidget *widget, gpointer data)
+/*!
+  \brief ECU specific plugin handler for standard buttons
+  \param widget is the pointer to the standard button
+  \param data is unused
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	        return TRUE;
 }
 
 
+/*!
+  \brief ECU specific plugin handler for radio/check buttons
+  \param widget is the pointer to the radio/check button
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ecu_bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	        return TRUE;
 }
 
 
+/*!
+  \brief ECU specific plugin handler for spin buttons
+  \param widget is the pointer to the spin button
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	        return TRUE;
 }
 
 
-G_MODULE_EXPORT gboolean ecu_sntry_handler(GtkWidget *widget, gpointer data)
+/*!
+  \brief ECU specific plugin handler for text entries
+  \param widget is the pointer to the text entry
+  \param data is unused
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
+{
+	        return TRUE;
+}
+
+
+
+/*!
+  \brief ECU specific plugin handler for combo boxes
+  \param widget is the pointer to the combo box 
+  \param data is unused
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 {
 	        return TRUE;
 }

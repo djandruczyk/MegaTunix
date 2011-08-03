@@ -17,13 +17,21 @@
 #include <defines.h>
 #include <init.h>
 #include <math.h>
-#include <jimstim.h>
+#include <jimstim_sweeper.h>
 #include <stdlib.h>
 #include <string.h>
 #include <threads.h>
 
 
 
+/*!
+  \brief initiates sending a continual update to the jimstim in order to make
+  it output a moving RPM signal.  This is limited to the serial IO rate
+  and the amountof data needed to be sent
+  \param widget is the pointer to the start button
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 {
 	static JimStim_Data jsdata;
@@ -138,6 +146,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	if (fault)
 	{
 		dbg_func_f(PLUGINS,g_strdup(_("Jimstim parameter issue, please check!\n")));
+		/*warn_user_f(_("Jimstim parameter issue, please check!\n"));*/
 		return TRUE;
 	}
 	stop_tickler_f(RTV_TICKLER);
@@ -183,6 +192,13 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief stops the feed to the jimstim and returns controls to their
+  normal state
+  \param widget is a pointer to the stop button
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 {
 	OutputData *output = NULL;
@@ -220,11 +236,19 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+  \brief This is the timeout function that sends the updates to the jimstim
+  \param jsdata is a pointer to the JimStim_Data structure
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 {
 	OutputData *output = NULL;
 	gchar *tmpbuf = NULL;
 	static gboolean rising = TRUE;
+
+	g_return_val_if_fail(jsdata,FALSE);
 
 	if (jsdata->reset)
 	{
@@ -279,6 +303,11 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 }
 
 
+/*!
+  \brief init function for the jimstim tab, if we are in network mode this
+  plugin doesn't work as it isn't supported in the MTXSocket implementation
+  \param widget is the pointer to the jimstim sweeper tab
+  */
 G_MODULE_EXPORT void jimstim_sweeper_init(GtkWidget *widget)
 {
 	CmdLineArgs *args = NULL;

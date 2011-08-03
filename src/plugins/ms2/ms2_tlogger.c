@@ -17,12 +17,22 @@
 
 MS2_TTMon_Data *ttm_data;
 
+
+/*!
+  \brief trivial function to set the page variable of the ttm_data structure
+  \see MS2_TTM_Data
+  \param page is the page to store in the datastructure
+  */
 G_MODULE_EXPORT void bind_ttm_to_page(gint page)
 {
 	ttm_data->page = page;
 	OBJ_SET(ttm_data->darea,"page",GINT_TO_POINTER(page));
 }
 
+
+/*!
+  \brief resets the ms2 ttm's zoom value
+  */
 G_MODULE_EXPORT void ms2_ttm_reset_zoom(void)
 {
 	GtkWidget *widget = NULL;
@@ -32,6 +42,12 @@ G_MODULE_EXPORT void ms2_ttm_reset_zoom(void)
 }
 
 
+/*!
+  \brief Initializes the MS2_TTMon_Data structure and stores a pointer to 
+  it in the passed src_widget
+  \param src_widget is where the pointer to the TM datastructure is stored
+  \see MS2_TTMon_Data
+  */
 G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 {
 	ttm_data = g_new0(MS2_TTMon_Data,1);
@@ -57,6 +73,14 @@ G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 	return;
 }
 
+
+/*!
+  \brief the TM drawingarea configure event
+  \param widget is the pointer to the drawingarea for the TTM
+  \param event is the pointer to the GdkEventConfigure structure
+  \param datat is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
 	cairo_t *cr = NULL;
@@ -78,8 +102,8 @@ G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, Gdk
 				gtk_widget_get_visual(widget)->depth);
 		cr = gdk_cairo_create(ttm_data->pixmap);
 		cairo_set_source_rgb(cr,1.0,1.0,1.0);
-                cairo_paint(cr);
-                cairo_destroy(cr);
+		cairo_paint(cr);
+		cairo_destroy(cr);
 		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
 		ttm_data->layout = gtk_widget_create_pango_layout(ttm_data->darea,NULL);
 
@@ -88,14 +112,17 @@ G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, Gdk
 	if (ttm_data->page < 0)
 		return TRUE;
 
-	_ms2_crunch_trigtooth_data(ttm_data->page);
+	ms2_crunch_trigtooth_data();
 	if (ttm_data->peak > 0)
-		ms2_update_trigtooth_display(ttm_data->page);
+		ms2_update_trigtooth_display();
 	return TRUE;
 }
 
 
-void _ms2_crunch_trigtooth_data(gint page)
+/*!
+  \brief crunches the TTM data in prep for display
+  */
+void ms2_crunch_trigtooth_data()
 {
 	static GTimeVal last;
 	GTimeVal current;
@@ -111,7 +138,7 @@ void _ms2_crunch_trigtooth_data(gint page)
 	gfloat ratio = 0.0;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware;
- 
+
 	min = 1048576;
 	max = 1;
 	g_get_current_time(&current);
@@ -124,9 +151,9 @@ void _ms2_crunch_trigtooth_data(gint page)
 	for (i=0;i<341;i++)
 	{
 		ttm_data->last[i] = ttm_data->current[i];
-		high = ms_get_ecu_data_f(canID,page,(i*3),MTX_U08);
-		mid = ms_get_ecu_data_f(canID,page,(i*3)+1,MTX_U08);
-		low = ms_get_ecu_data_f(canID,page,(i*3)+2,MTX_U08);
+		high = ms_get_ecu_data_f(canID,ttm_data->page,(i*3),MTX_U08);
+		mid = ms_get_ecu_data_f(canID,ttm_data->page,(i*3)+1,MTX_U08);
+		low = ms_get_ecu_data_f(canID,ttm_data->page,(i*3)+2,MTX_U08);
 		ttm_data->current[i] = (((high & 0x0f) << 16) + (mid << 8) +low)*0.66;
 		ttm_data->flags[i] = (high & 0xf0) >> 4;
 		if ((ttm_data->current[i] < min) && (ttm_data->current[i] != 0))
@@ -142,8 +169,8 @@ void _ms2_crunch_trigtooth_data(gint page)
 	 */
 	ratio = (float)max/(float)min;
 	lookup_current_value_f("rpm",&ttm_data->rpm);
-/*printf("Current RPM %f\n",ttm_data->rpm);*/
-	if (page == firmware->toothmon_page) /* TOOTH logger, we should search for min/max's */
+	/*printf("Current RPM %f\n",ttm_data->rpm);*/
+	if (ttm_data->page == firmware->toothmon_page) /* TOOTH logger, we should search for min/max's */
 	{
 		for (i=0;i<341;i++)
 		{
@@ -152,9 +179,9 @@ void _ms2_crunch_trigtooth_data(gint page)
 			else
 				ttm_data->sync_loss[i] = FALSE;
 			/*
-			if (!(ttm_data->flags[i] & 0x02))
-				printf("Cam event happened at sample %i\n",i);
-				*/
+			   if (!(ttm_data->flags[i] & 0x02))
+			   printf("Cam event happened at sample %i\n",i);
+			 */
 		}
 	}
 	/* vertical scale calcs:
@@ -194,7 +221,10 @@ void _ms2_crunch_trigtooth_data(gint page)
 }
 
 
-void ms2_update_trigtooth_display(gint page)
+/*!
+  \brief renders the new TTM data to the screen
+  */
+void ms2_update_trigtooth_display()
 {
 	gint w = 0;
 	gint h = 0;
@@ -320,29 +350,37 @@ void ms2_update_trigtooth_display(gint page)
 
 /*!
  \brief ms2_ttm_update is a function called by a watch that was set looking
- for the state of a particular variable. When that var is set  this function
+ for the state of a particular variable. When that var is set this function
  is fired off to take care of updating the MS2 TTM display
- \param data (gpointer) arbritary data passed.
+ \param watch is the pointer to the watch structure
  */
 G_MODULE_EXPORT void ms2_ttm_update(DataWatch *watch)
 {
 	gint page = 0;
 
 	page = (GINT)OBJ_GET(ttm_data->darea,"page");
-	_ms2_crunch_trigtooth_data(page);
-	ms2_update_trigtooth_display(page);
+	ms2_crunch_trigtooth_data();
+	ms2_update_trigtooth_display();
 	if (ttm_data->stop)
 		return;
 	io_cmd_f((gchar *)OBJ_GET(ttm_data->darea,"io_cmd_function"),NULL);
 }
 
 
+/*!
+  \brief creates the watch that triggers the TTM update
+  */
 G_MODULE_EXPORT void ms2_ttm_watch(void)
 {
 	create_single_bit_state_watch_f("status3",1,TRUE,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
 }
 
 
+/*!
+  \brief handler to deal with the zoom control which triggers a display update
+  \param widget is the pointer to the slider the user moved
+  \param data is unused
+  */
 G_MODULE_EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 {
 	gint page = 0;
@@ -350,14 +388,19 @@ G_MODULE_EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 	{
 		ttm_data->zoom = (gfloat)gtk_range_get_value(GTK_RANGE(widget));
 		if (ttm_data->pixmap)
-		{
-			page = (GINT)OBJ_GET(ttm_data->darea,"page");
-			ms2_update_trigtooth_display(page);
-		}
+			ms2_update_trigtooth_display();
 	}
 	return TRUE;
 }
 
+
+/*!
+  \brief hte TTM expose event which handles redraw after being unobscured
+  \param widget is hte pointer to the TTM drawingarea
+  \param event is the pointers to the GdkEventExpose structure
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
 	cairo_t *cr = NULL;
@@ -388,7 +431,9 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
 }
 
 
-
+/*!
+  \brief Resets the TTM buttons to defaults
+  */
 G_MODULE_EXPORT void reset_ttm_buttons(void)
 {
 	GtkWidget *widget = NULL;
@@ -402,4 +447,3 @@ G_MODULE_EXPORT void reset_ttm_buttons(void)
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 }
-

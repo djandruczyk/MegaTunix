@@ -25,7 +25,9 @@ static TTMon_Data *ttm_data;
 
 
 /*!
- \brief 
+ \brief Hacky little function to set the global ttm_data->page variable
+ \param page is the page to set on ttm_data
+ \see TTMon_Data
  */
 void bind_ttm_to_page(gint page)
 {
@@ -34,6 +36,9 @@ void bind_ttm_to_page(gint page)
 }
 
 
+/*!
+  \brief resets the TTM to be disabled
+  */
 G_MODULE_EXPORT void reset_ttm_buttons(void)
 {
 	GtkWidget *widget = NULL;
@@ -46,6 +51,11 @@ G_MODULE_EXPORT void reset_ttm_buttons(void)
 }
 
 
+/*!
+  \brief Initializes the static ttm_data structure and stores a pointer to it
+  on src_widget
+  \param src_widget is where the ttm_data pointer is stored
+  */
 G_MODULE_EXPORT void setup_logger_display(GtkWidget * src_widget)
 {
 	ttm_data = g_new0(TTMon_Data,1);
@@ -69,6 +79,14 @@ G_MODULE_EXPORT void setup_logger_display(GtkWidget * src_widget)
 	return;
 }
 
+
+/*!
+  \brief configure event handler for the TTM drawingarea
+  \param widget is the pointer to the TTM drawingarea
+  \param event is the pointer to the GdkEventConfigure structure
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
 	cairo_t *cr = NULL;
@@ -99,12 +117,20 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 	if (ttm_data->page < 0)
 		return TRUE;
 
-	_crunch_trigtooth_data(ttm_data->page);
+	crunch_trigtooth_data();
 	if (ttm_data->peak > 0)
-		update_trigtooth_display(ttm_data->page);
+		update_trigtooth_display();
 	return TRUE;
 }
 
+
+/*!
+  \brief Expose event handler for the TTM drawingarea
+  \param widget is the pointer to the TTM drawingarea
+  \param event is the pointer to the GdkEventExpose structure
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
         cairo_t *cr = NULL;
@@ -135,12 +161,10 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
 }
 
 
-G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
-{
-	_crunch_trigtooth_data(ttm_data->page);
-}
-
-void _crunch_trigtooth_data(gint page)
+/*!
+  \brief Crunches the trigtooth data into something usable for display
+  */
+void crunch_trigtooth_data(void)
 {
 	gint canID = 0;
 	DataSize size = MTX_U08;
@@ -163,15 +187,15 @@ void _crunch_trigtooth_data(gint page)
 	firmware = DATA_GET(global_data,"firmware");
 
 	canID = firmware->canID;
-	position = ms_get_ecu_data_f(canID,page,CTR,size);
+	position = ms_get_ecu_data_f(canID,ttm_data->page,CTR,size);
 
-/*
-	g_printf("Counter position on page %i is %i\n",page,position);
-	if (position > 0)
-		g_printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
-	else
-		g_printf("data block from position 0 to 185 (93 words)\n");
-*/
+	/*
+	   g_printf("Counter position on page %i is %i\n",ttm_data->page,position);
+	   if (position > 0)
+	   g_printf("data block from position %i to 185, then wrapping to 0 to %i\n",position,position-1);
+	   else
+	   g_printf("data block from position 0 to 185 (93 words)\n");
+	 */
 
 	/*printf("position is %i\n",position);*/
 	index=0;
@@ -181,8 +205,8 @@ void _crunch_trigtooth_data(gint page)
 
 	for (i=position;i<185;i+=2)
 	{
-		/*total = (ms_get_ecu_data_f(canID,page,i,size)*256)+ms_get_ecu_data_f(canID,page,i+1,size);*/
-		total = ms_get_ecu_data_f(canID,page,i,MTX_U16);
+		/*total = (ms_get_ecu_data_f(canID,ttm_data->page,i,size)*256)+ms_get_ecu_data_f(canID,ttm_data->page,i+1,size);*/
+		total = ms_get_ecu_data_f(canID,ttm_data->page,i,MTX_U16);
 		ttm_data->current[index] = total;
 		index++;
 	}
@@ -190,15 +214,15 @@ void _crunch_trigtooth_data(gint page)
 	{
 		for (i=0;i<position;i+=2)
 		{
-			/*total = (ms_get_ecu_data_f(canID,page,i,size)*256)+ms_get_ecu_data_f(canID,page,i+1,size);*/
-			total = ms_get_ecu_data_f(canID,page,i,MTX_U16);
+			/*total = (ms_get_ecu_data_f(canID,ttm_data->page,i,size)*256)+ms_get_ecu_data_f(canID,ttm_data->page,i+1,size);*/
+			total = ms_get_ecu_data_f(canID,ttm_data->page,i,MTX_U16);
 			ttm_data->current[index] = total;
 			index++;
 		}
 	}
 	/*g_printf("\n");*/
 
-	if (ms_get_ecu_data_f(canID,page,UNITS,size) == 1)
+	if (ms_get_ecu_data_f(canID,ttm_data->page,UNITS,size) == 1)
 	{
 		/*g_printf("0.1 ms units\n");*/
 		ttm_data->units=100;
@@ -221,15 +245,15 @@ void _crunch_trigtooth_data(gint page)
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
 	/*
-	printf("min %i, max %i\n",min,max);
-	*/
+	   printf("min %i, max %i\n",min,max);
+	 */
 	/* Ratio of min to max,  may not work for complex wheel
 	 * patterns
 	 */
 	ratio = (float)max/(float)min;
 	lookup_current_value_f("rpm",&ttm_data->rpm);
-/*printf("Current RPM %f\n",ttm_data->rpm);*/
-	if (page == 9) /* TOOTH logger, we should search for min/max's */
+	/*printf("Current RPM %f\n",ttm_data->rpm);*/
+	if (ttm_data->page == 9) /* TOOTH logger, we should search for min/max's */
 	{
 		/* ttm_data->current is the array containing the entire
 		 * sample of data organized so the beginning of the array
@@ -293,15 +317,15 @@ void _crunch_trigtooth_data(gint page)
 
 	}
 	/*
-	printf("Data for this block\n");
-	for (i=0;i<93;i++)
-	{
-		printf("%.4x ", ttm_data->current[i]);
-		if (!((i+1)%16))
-			printf("\n");
-	}
-	printf("\n");
-	*/
+	   printf("Data for this block\n");
+	   for (i=0;i<93;i++)
+	   {
+	   printf("%.4x ", ttm_data->current[i]);
+	   if (!((i+1)%16))
+	   printf("\n");
+	   }
+	   printf("\n");
+	 */
 	/* vertical scale calcs:
 	 * PROBLEM:  max_time can be anywhere from 0-65535, need to 
 	 * develop a way to have nice even scale along the Y axis so you
@@ -330,14 +354,22 @@ void _crunch_trigtooth_data(gint page)
 }
 
 
+/*!
+  \brief wrapper function to update the display from a post function 
+  thread context, hence hte gdk_threads* wrappers
+  */
 G_MODULE_EXPORT void update_trigtooth_display_pf(void)
 {
 	gdk_threads_enter();
-	update_trigtooth_display(ttm_data->page);
+	update_trigtooth_display();
 	gdk_threads_leave();
 }
 
-G_MODULE_EXPORT void update_trigtooth_display(gint page)
+
+/*!
+  \brief Redraws the new trigtooth display based on the data in ttm_data
+  */
+G_MODULE_EXPORT void update_trigtooth_display()
 {
 	gint w = 0;
 	gint h = 0;
@@ -468,6 +500,11 @@ G_MODULE_EXPORT void update_trigtooth_display(gint page)
 }
 
 
+/*!
+  \brief handler to start the ttm display.  Since this competes for IO with
+  the RTV_TICKLER we stop it to run this then set a flag to re-enable it later
+  \param type is an enumeration representing which TTM display we want to start
+  */
 void start(EcuPluginTickler type)
 {
 	gint tmpi = 0;
@@ -512,6 +549,11 @@ void start(EcuPluginTickler type)
 }
 
 
+/*!
+  \brief stops the TTM tickler (data reader) and returns the RTV reader to its
+  former state
+  \param type is an enumeration representing which TTM display we want to stop
+  */
 void stop(EcuPluginTickler type)
 {
 	gint tmpi = 0;
@@ -550,6 +592,7 @@ void stop(EcuPluginTickler type)
    \brief signal_toothtrig_read() is called by a GTK+ timeout on a 
    periodic basis to get a new set of teeth or ignition trigger data.  
    It does so by queing messages to a thread which handles I/O.
+  \param type is an enumeration representing which TTM display we want to stop
    \returns TRUE
    */
 gboolean signal_toothtrig_read(EcuPluginTickler type)

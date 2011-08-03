@@ -20,6 +20,10 @@
 gconstpointer *global_data = NULL;
 
 
+/*!
+  \brief initializes the plugin, referencing all needed functions
+  \param data is the pointer to the global data container
+  */
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	global_data = data;
@@ -31,6 +35,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 }
 
 
+/*!
+  \brief prepares the plugin to be unloaded
+  */
 G_MODULE_EXPORT void plugin_shutdown()
 {
 	deregister_ecu_enums();
@@ -38,6 +45,9 @@ G_MODULE_EXPORT void plugin_shutdown()
 }
 
 
+/*!
+  \brief registers common enumerations in the global table for this plugin
+  */
 void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
@@ -51,6 +61,9 @@ void register_ecu_enums(void)
 }
 
 
+/*!
+  \brief deregisters common enumerations from the global table for this plugin
+  */
 void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;

@@ -17,6 +17,10 @@
 
 extern gconstpointer *global_data;
 
+/*!
+  \brief Handler to setup any ecu specific menu objects on the core Gui
+  \param xml is a pointer to the core Gui xml
+  */
 G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 {
 	Firmware_Details *firmware = NULL;

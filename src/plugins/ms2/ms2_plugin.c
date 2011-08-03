@@ -23,6 +23,11 @@
 gconstpointer *global_data;
 
 
+/*!
+  \brief initializes the MS2 plugin, connects to all functions needed in
+  core megatunix and registers any needed enumerations
+  \param data is the pointer to the global data container
+  */
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	global_data = data;
@@ -65,6 +70,10 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 }
 
 
+/*!
+  \brief Shuts down the MS2 plugin and deregisters the enums in prep for 
+  plugin unload
+  */
 G_MODULE_EXPORT void plugin_shutdown(void)
 {
 	extern MS2_TTMon_Data *ttm_data;
@@ -73,6 +82,11 @@ G_MODULE_EXPORT void plugin_shutdown(void)
 	deregister_ecu_enums();
 }
 
+
+/*!
+  \brief Registers the MS2 specific enumerations in the global table
+  \see deregister_ecu_enums
+  */
 void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
@@ -97,6 +111,11 @@ void register_ecu_enums(void)
 	}
 }
 
+
+/*!
+  \brief Deregister the MS2 specific enumerations in the global table
+  \see register_ecu_enums
+  */
 void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
@@ -113,4 +132,3 @@ void deregister_ecu_enums(void)
 		g_hash_table_remove(str_2_enum,"_GET_CURR_TPS_");
 	}
 }
-

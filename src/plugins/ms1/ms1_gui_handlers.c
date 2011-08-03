@@ -26,6 +26,12 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief ECU specific handler for text entries
+  \param widget is the widget the user interacted with
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
@@ -210,6 +216,12 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief ECU specific handler for spin buttons
+  \param widget is the widget the user interacted with
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
@@ -339,6 +351,12 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 
 
 
+/*!
+  \brief ECU specific handler for std buttons
+  \param widget is the widget the user interacted with
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = -1;
@@ -369,6 +387,12 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 }
 
 
+/*!
+  \brief ECU specific handler for toggle buttons
+  \param widget is the widget the user interacted with
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *tmpwidget = NULL;
@@ -414,6 +438,12 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 }
 
 
+/*!
+  \brief ECU specific handler for combo boxes
+  \param widget is the widget the user interacted with
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = -1;
@@ -459,6 +489,10 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief ECU specific handler to update a text entry
+  \param widget is the widget the user interacted with
+  */
 G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 {
 	gint canID = 0;
@@ -539,6 +573,10 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 }
 
 
+/*!
+  \brief ECU specific handler to initialize any part of the core gui
+  that is specific to this ECU firmware
+  */
 G_MODULE_EXPORT void ecu_gui_init(void)
 {
 	/* We don't need anything specific to this ecu initialized */

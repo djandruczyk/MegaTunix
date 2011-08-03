@@ -11,8 +11,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __JIMSTIM_H__
-#define __JIMSTIM_H__
+#ifndef __JIMSTIM_SWEEPER_H__
+#define __JIMSTIM_SWEEPER_H__
 
 #include <gtk/gtk.h>
 #include <threads.h>

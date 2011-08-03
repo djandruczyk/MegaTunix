@@ -23,6 +23,10 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief Setups up MS2 specific menu entries on the main gui 
+  \param xml is the pointer to the core gui XML
+  */
 G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 {
 	Firmware_Details *firmware = NULL;
@@ -110,6 +114,9 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 
 /*!
    \brief General purpose handler to hide/show Sensor calibrate window
+   \param widget is a pointer to the widget clicked
+   \param data is unused
+   \returns TRUE
     */
 G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget, gpointer data)
 {
@@ -226,6 +233,9 @@ G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget
 
 /*!
  \brief General purpose handler to hide/show Sensor calibrate window
+ \param widget is a pointer to the widget clicked
+ \param data is unused
+ \returns TRUE
  */
 G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpointer data)
 {
@@ -298,6 +308,9 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 
 /*!
  \brief General purpose handler to hide/show Sensor calibrate window
+ \param widget is a pointer to the widget clicked
+ \param data is unused
+ \returns TRUE
  */
 G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpointer data)
 {
@@ -464,6 +477,9 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 
 /*!
  \brief General purpose handler to hide/show Battery calibrate window
+ \param widget is a pointer to the widget clicked
+ \param data is unused
+ \returns TRUE
  */
 G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpointer data)
 {
@@ -548,6 +564,12 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 }
 
 
+/*!
+  \brief shows the sensor calibration help text
+  \param widget is the button the user clicked on
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointer data)
 {
 	GtkWidget *window;
@@ -578,7 +600,11 @@ G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widhet, gpointe
 
 
 
-/*! \brief tell ms2 to reinitialize */
+/*! 
+  \brief tells ms2 to reinitialize 
+  \param widget is unused
+  \param data is unused
+ */
 G_MODULE_EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
 {
 	io_cmd_f("ms2_reinit",NULL);
@@ -586,7 +612,11 @@ G_MODULE_EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
 }
 
 
-/*! \brief tell ms2 to fully reboot */
+/*! 
+  \brief tells ms2 to fully reboot 
+  \param widget is unused
+  \param data is unused
+ */
 G_MODULE_EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
 {
 	io_cmd_f("ms2_reboot",NULL);
@@ -595,7 +625,9 @@ G_MODULE_EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief General purpose handler to hide/show tps calibrate window
+  \brief General purpose handler to hide/show tps calibrate window
+  \param widget is the pointer to the TPS caliobration window
+  \param data is unused
  */
 G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer data)
 {
@@ -721,6 +753,12 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 }
 
 
+/*!
+  \brief toggle button handler for the therm calibrator
+  \param widget is the pointer to the togglebutton flipped
+  \param data is the pointer to the destination widget we want to enable or
+  disable its sensitivity
+  */
 G_MODULE_EXPORT gboolean therm_set_state(gpointer data, GtkWidget *widget)
 {
 	GtkWidget *dest = (GtkWidget *)data;

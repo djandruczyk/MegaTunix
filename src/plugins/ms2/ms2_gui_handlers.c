@@ -26,6 +26,12 @@
 extern gconstpointer *global_data;
 
 
+/*!
+  \brief ECU specific text entry handler
+  \param widget is a pointer to the widget the user modified
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 {
 	dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_entry_handler()\n\tERROR handler NOT found for widget %s, command aborted! BUG!!!\n",glade_get_widget_name(widget)));
@@ -34,6 +40,12 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief ECU specific std button handler
+  \param widget is a pointer to the widget the user modified
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	gint handler = 0;
@@ -62,6 +74,12 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 }
 
 
+/*!
+  \brief ECU specific toggle button handler
+  \param widget is a pointer to the widget the user modified
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	extern MS2_TTMon_Data *ttm_data;
@@ -122,6 +140,12 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 }
 
 
+/*!
+  \brief ECU specific combo box handler
+  \param widget is a pointer to the widget the user modified
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 {
 	GtkTreeIter iter;
@@ -270,8 +294,11 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief ECU specific gui init function to setup anything in the core gui for 
+  this ECU family
+  */
 G_MODULE_EXPORT void ecu_gui_init(void)
 {
 	/* We don't need anything specific to this ecu initialized */
 }
-

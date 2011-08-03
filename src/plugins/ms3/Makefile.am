@@ -13,10 +13,12 @@ plugin_LTLIBRARIES = libnull.la
 
 libnull_la_SOURCES = \
 	Makefile \
+	ms3_plugin.c \
+	ms3_plugin.h \
 	ms3_gui_handlers.c \
 	ms3_gui_handlers.h \
-	ms3_plugin.c \
-	ms3_plugin.h
+	ms3_menu_handlers.c \
+	ms3_menu_handlers.h 
 
 libnull_la_LDFLAGS = -shared $(no_undefined) -module
 libnull_la_LIBADD = @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@

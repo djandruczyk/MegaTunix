@@ -18,6 +18,11 @@
 
 gconstpointer *global_data;
 
+/*!
+  \brief initializes the jimstim plugin, sets up all function references
+  and enumerations
+  \param data is the pointer to the global data structure
+  */
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	global_data = data;
@@ -54,12 +59,20 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	register_ecu_enums();
 }
 
+
+/*!
+  \brief deregisters plugin resources in prep for plugin shutdown
+  */
 G_MODULE_EXPORT void plugin_shutdown(void)
 {
 	deregister_ecu_enums();
 	return;
 }
 
+
+/*!
+  \brief registers enumeration into the global table for this plugin
+  */
 void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
@@ -73,6 +86,9 @@ void register_ecu_enums(void)
 }
 
 
+/*!
+  \brief deregisters enumeration from the global table for this plugin
+  */
 void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
