@@ -36,6 +36,9 @@ struct _Serial_Params
 {
 #if GTK_MINOR_VERSION >= 18
 	GSocket *socket;	/*!< Network mode socket */
+	GSocket *ctrl_socket;	/*!< Network mode socket */
+#else
+	gint ctrl_fd;		/*!< Network mode ctrl socket fd */
 #endif
 	gint fd;		/*!< File descriptor */
 	gchar *port_name;	/*!< textual name of comm port */
@@ -49,6 +52,9 @@ struct _Serial_Params
 {
 #if GTK_MINOR_VERSION >= 18
 	GSocket *socket;	/*!< Network mode socket */
+	GSocket *ctrl_socket;	/*!< Network mode socket */
+#else
+	gint ctrl_fd;		/*!< Network mode control socket */
 #endif
 	gint fd;		/*!< File descriptor */
 	gchar *port_name;	/*!< textual name of comm port */

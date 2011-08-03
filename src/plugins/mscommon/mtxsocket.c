@@ -50,7 +50,6 @@
 #define ERR_MSG "Bad Request: "
 
 static GPtrArray *slave_list = NULL;
-static GSocket * controlsocket = NULL;
 static const guint8 SLAVE_MEMORY_UPDATE=0xBE;
 static const guint8 SLAVE_STATUS_UPDATE=0xBF;
 GThread *ascii_socket_id = NULL;
@@ -141,7 +140,9 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 
 
 /*!
- * \brief Sets up incoming sockets (master mode only)
+ \brief Sets up incoming sockets (master mode only)
+ \param port if the port number to setup
+ \returns a pointer to a GSocket structure
  */
 G_MODULE_EXPORT GSocket *setup_socket(gint port)
 {
@@ -193,7 +194,9 @@ G_MODULE_EXPORT GSocket *setup_socket(gint port)
  \brief socket_thread_manager()'s sole purpose in life is to wait for socket
  connections and spawn threads to handle their I/O.  These sockets are for
  remote megatunix management (logging, dashboards, and other cool things)
- \param data (gpointer) socket descriptor for the open TCP socket.
+ \param data is a pointer to the socket descriptor for the open TCP socket.
+ \see MtxSocket
+ \see MtxSocketClient
  **/
 G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 {
@@ -305,8 +308,8 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 
 
 /*!
- \brief ascii_socket_server, answers simple requests for data on port
- 12764
+ \brief ascii_socket_server, answers simple requests for data on the
+ ASCII communications port 12764 (for telnet/other simple low speed apps)
  \param data gpointer representation of the socket filedescriptor
  */
 G_MODULE_EXPORT void *ascii_socket_server(gpointer data)
@@ -381,6 +384,17 @@ close_ascii:
 }
 
 
+/*!
+  \brief This thread handles the binary socket port (port 12765), and 
+  acts as a MegaSquirt state machine, thus a remote client uses the same
+  API as if it was talking to a MS on a serial port.  It emulates most of the
+  MS features, thus allowing non-megatunix clients, however MS doesn't have any
+  sort of notification of changes, which is why another port (12766) is used
+  to pass messages from the MASTER (the one connected directly to the MS via
+  serial) to all connected slaves to keep them in sync.
+  \param data is a pointer to the MtxSocketClient structure
+  \see MtxSocketClient
+  */
 G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 {
 	GtkWidget *widget = NULL;
@@ -838,9 +852,10 @@ close_binary2:
  \brief This function validates incoming commands from the TCP socket 
  thread(s).  Commands need to be comma separated, ASCII text, minimum of two
  arguments (more are allowed)
- \param client, MtxSocketClient structure
- \param buf, input buffer
- \param len, length of input buffer
+ \param client is a pointer to an active MtxSocketClient structure
+ \param buf is the pointer to the input buffer
+ \param len is the length of input buffer
+ \returns TRUE on valid command, FALSE otherwise
  */
 G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
@@ -884,11 +899,11 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 		case GET_RTV_LIST:
 			socket_get_rtv_list(client->socket);
 			break;
-		case GET_ECU_VARS:
+		case GET_ECU_PAGE:
 			if  (args != 2) 
 				return_socket_error(client->socket);
 			else
-				socket_get_ecu_vars(client,arg2);
+				socket_get_ecu_page(client,arg2);
 			break;
 		case GET_ECU_VAR_U08:
 			if  (args != 2) 
@@ -1001,6 +1016,7 @@ Supported Calls:\n\r\
  get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
  get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
  set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+get_ecu_page,<canID>,<page> <-- returns the whole ECU page at canID,page\n\r\
  burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 			net_send(client->socket,(guint8 *)tmpbuf,strlen(tmpbuf));
 			g_free(tmpbuf);
@@ -1033,6 +1049,10 @@ Supported Calls:\n\r\
 }
 
 
+/*!
+  \brief simple wrapper function to spit back a generic error to a client
+  \param socket is a pointer to the network socket
+  */
 G_MODULE_EXPORT void return_socket_error(GSocket *socket)
 {
 	net_send(socket,(guint8 *)ERR_MSG,strlen(ERR_MSG));
@@ -1040,6 +1060,13 @@ G_MODULE_EXPORT void return_socket_error(GSocket *socket)
 }
 
 
+/*!
+  \brief This returns the RTV vars requested by the comma separated string,
+  arg2
+  \param socket is the pointer to the open GSocket structure
+  \param arg2 is a command separated list of internal names of runtime 
+  variables the remote end is interested in.
+  */
 G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 {
 	gint res = 0;
@@ -1088,6 +1115,10 @@ G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 }
 
 
+/*!
+  \brief Echos back to the client a list of all avaialble runtime variables
+  \param socket is a pointer to the active GSocket structure
+  */
 G_MODULE_EXPORT void socket_get_rtv_list(GSocket *socket)
 {
 	guint i = 0;
@@ -1123,6 +1154,14 @@ G_MODULE_EXPORT void socket_get_rtv_list(GSocket *socket)
 }
 
 
+/*!
+  \brief The client requested an ECU variable, validate its request and return
+  the value back to the client
+  \param client is a pointer to the active MtxSocketclient structure
+  \param arg2 is a comma separated list of coordinates, i.e. canID,page, 
+  and offset. All three are required, 
+  \param size is the size enumeration of the data to retrieve
+  */
 G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
 	gint canID = 0;
@@ -1165,7 +1204,14 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 }
 
 
-G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
+/*!
+  \brief The client requested multiple ECU variables, validate its request 
+  and return the values back to the client
+  \param client is a pointer to the active MtxSocketclient structure
+  \param arg2 is a 2 value comma separated list of coordinates, 
+  i.e. canID and page, This fucntion returns the WHOLE PAGE
+  */
+G_MODULE_EXPORT void socket_get_ecu_page(MtxSocketClient *client, gchar *arg2)
 {
 	gint canID = 0;
 	gint page = 0;
@@ -1210,6 +1256,15 @@ G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 }
 
 
+/*!
+  \brief The slave is updating an ECU location in memory, validate it, update
+  which will trigger the master Gui and all slave gui's to update accordingly
+  \param client is a pointer to the MtxSocketClient structure
+  \param args is the coordinates (4 values required), canID, page, offset,
+  and the new data
+  \param size is hte size to store. 
+  \bug this function works properly only for 8 bit values....
+  */
 G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
 	gint canID = 0;
@@ -1244,6 +1299,11 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 }
 
 
+/*!
+  \brief compares the content of the master's representation of ECU memory with
+  the slave's,  if they match return FALSE, if not, return TRUE
+  \param client is a pointer to the active socket client
+  */
 G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 {
 	gint i = 0;
@@ -1268,20 +1328,12 @@ G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 }
 
 
-G_MODULE_EXPORT gint * convert_socket_data(gchar *buf, gint len)
-{
-	gint i = 0;
-	gint *res = g_new0(gint,len);
-
-	for (i=0;i<len;i++)
-	{
-		memcpy (&res[i],&buf[i],1);
-		/*		printf("data[%i] is %i\n",i,res[i]);*/
-	}
-	return res;
-}
-
-
+/*!
+  \brief this is analagous to the serial_repair_thread and goes through the
+  motions of trying to reconnect to the target if the connection is lost
+  \param data is unused
+  \see serial_repair_thread
+  */
 G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 {
 	/* - DEV code for setting up connection to a network socket
@@ -1403,6 +1455,13 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 }
 
 
+/*! 
+  \brief Opens a network connection to a remote machine, sets up the global
+  Serial_Params structure on success
+  \param host is the name of the remote host
+  \param port is the port on the target to attempt to open
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 {
 	GSocket *clientsocket = NULL;
@@ -1449,52 +1508,9 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 }
 
 
-G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
-{
-	GSocket *clientsocket = NULL;
-	gint status = 0;
-	GResolver *resolver = NULL;
-	GSocketAddress *sockaddr = NULL;
-	GError *error = NULL;
-	GList *list = NULL;
-	Serial_Params *serial_params;
-	serial_params = DATA_GET(global_data,"serial_params");
-
-
-	/*	printf ("Trying to open network port!\n");*/
-	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
-	if (!clientsocket)
-	{
-		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_notification_link()\n\tSocket open error: %s\n",error->message));
-		g_error_free(error);
-		error = NULL;
-		return FALSE;
-	}
-
-	resolver = g_resolver_get_default();
-	list = g_resolver_lookup_by_name(resolver,host,NULL,NULL);
-	sockaddr = g_inet_socket_address_new(g_list_nth_data(list,0),port);
-	status = g_socket_connect(clientsocket,sockaddr,NULL,&error);
-	if (status == -1)
-	{
-		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_notification_link()\n\tSocket connect error: %s\n",error->message));
-		g_error_free(error);
-		error = NULL;
-		return FALSE;
-	}
-
-	g_resolver_free_addresses(list);
-	g_object_unref(resolver);
-	g_object_unref(sockaddr);
-
-	/*	printf("connected!!\n");*/
-	/* Should startup thread now to listen for notification messages
-	 */
-
-	return TRUE;
-}
-		
-
+/*!
+  \brief closes the binary socket
+  */
 G_MODULE_EXPORT gboolean close_network(void)
 {
 	Serial_Params *serial_params;
@@ -1505,33 +1521,36 @@ G_MODULE_EXPORT gboolean close_network(void)
 	serial_params->open = FALSE;
 	serial_params->fd = -1;
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
-
-	return TRUE;
-}
-
-
-G_MODULE_EXPORT gboolean close_control_socket(void)
-{
-	Serial_Params *serial_params;
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_socket_close(serial_params->socket,NULL);
-
 	return TRUE;
 }
 
 
 /*!
- \brief notify_slaves_thread()'s sole purpose in life is to listen for 
- messages on the async queue from the IO core for messages to send to slaves
- and dispatch them out.  It should check if a slave disconected and in that 
- case delete their entry from the slave list.
- \param data (gpointer) unused.
- **/
+  \brief closes the control socket
+  */
+G_MODULE_EXPORT gboolean close_control_socket(void)
+{
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_socket_shutdown(serial_params->ctrl_socket,TRUE,TRUE,NULL);
+	g_socket_close(serial_params->ctrl_socket,NULL);
+	serial_params->ctrl_socket = NULL;
+	return TRUE;
+}
+
+
+/*!
+  \brief notify_slaves_thread()'s sole purpose in life is to listen for 
+  messages on the async queue from the IO core for messages to send to slaves
+  and dispatch them out.  It should check if a slave disconected and in that 
+  case delete their entry from the slave list.
+  \param data (gpointer) unused.
+  */
 G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 {
 	static GAsyncQueue *slave_msg_queue = NULL;
 	static Firmware_Details *firmware = NULL;
- 	GtkWidget *widget = NULL;
+	GtkWidget *widget = NULL;
 	gchar * tmpbuf = NULL;
 	GTimeVal cur;
 	SlaveMessage *msg = NULL;
@@ -1668,6 +1687,13 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 }
 
 
+/*!
+  \brief handles notofications from the master to the slaves.  The slave
+  will connect and basically sit and wait for data to arrive. when changes
+  are made on the master or another slave, the master will send out messages
+  to the connected slaves letting them know about the change
+  \param data is a pointer to the MtxSocketClient structure
+  */
 G_MODULE_EXPORT void *control_socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
@@ -1706,7 +1732,7 @@ close_control:
 			g_error_free(error);
 			error = NULL;
 
-			g_socket_close(controlsocket,NULL);
+			close_control_socket();
 			dealloc_client_data(client);
 			g_thread_exit(0);
 		}
@@ -1842,6 +1868,11 @@ close_control:
 }
 
 
+/*!
+  \brief Opens the control socket connection to the master instance
+  \param host is the hostname to connect to
+  \param port is the port number to connect to
+  */
 G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 {
 	GSocket *clientsocket = NULL;
@@ -1877,7 +1908,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	/* Should startup thread now to listen for notification messages
 	 */
 
-	controlsocket = clientsocket;
+	serial_params->ctrl_socket = clientsocket;
 	cli_data = g_new0(MtxSocketClient, 1);
 	cli_data->ip = g_inet_address_to_string(g_inet_socket_address_get_address((GInetSocketAddress *)sockaddr));
 	cli_data->socket = clientsocket;
@@ -1896,6 +1927,13 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 }
 
 
+/*!
+  \brief Wrapper function to deal with sending data to a remote connection
+  \param socket is the pointer to the active GSocket
+  \param buf is a pointer to the buffer to read from when sending
+  \param len is the amount of data to send in bytes
+  \returns the numbe of bytes sent
+  */
 G_MODULE_EXPORT gint net_send(GSocket *socket, guint8 *buf, gint len)
 {
 	gint total = 0;        /* how many bytes we've sent*/
@@ -1924,6 +1962,14 @@ G_MODULE_EXPORT gint net_send(GSocket *socket, guint8 *buf, gint len)
 }
 
 
+/*!
+  \brief Assembles a packet destined to the slaves for data changes
+  \param update_type is the type of update to the slave
+  \param msg is a pointer to a SlaveMessage structure
+  \param msg_len is the pointer to a place to store the packet length when
+  its done being assembled
+  \returns a pointer to the buffer containing this packet
+  */
 G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 {
 	guint8 *buffer = NULL;
@@ -1950,6 +1996,14 @@ G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint 
 }
 
 
+/*!
+  \brief Assembles a packet destined to the slaves for status updates
+  \param update_type is the type of update to the slave
+  \param msg is a pointer to a SlaveMessage structure
+  \param msg_len is the pointer to a place to store the packet length when
+  its done being assembled
+  \returns a pointer to the buffer containing this packet
+  */
 G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 {
 	guint8 *buffer = NULL;
@@ -1966,7 +2020,6 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 	buffer[4] = msg->length & 0xff; /* Highbyte of length */
 	g_memmove(buffer+headerlen, msg->data,msg->length);
 
-
 	*msg_len = buflen;
 	return buffer;
 }
@@ -1975,6 +2028,7 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 /*!
    \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
    sockets
+   \param client is a pointer to the MtxSocketClient structure to deallocate
    */
 G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 {
@@ -2038,7 +2092,6 @@ G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 #define ERR_MSG "Bad Request: "
 
 static GPtrArray *slave_list = NULL;
-static gint controlsocket = 0;
 static const guint8 SLAVE_MEMORY_UPDATE=0xBE;
 static const guint8 SLAVE_STATUS_UPDATE=0xBF;
 GThread *ascii_socket_id = NULL;
@@ -2838,13 +2891,13 @@ close_binary:
 
 
 /*!
-   \brief This function validates incoming commands from the TCP socket 
-    thread(s).  Commands need to be comma separated, ASCII text, minimum of two
-     arguments (more are allowed)
-      \param client, MtxSocketClient structure
-       \param buf, input buffer
-        \param len, length of input buffer
-	 */
+  \brief This function validates incoming commands from the TCP socket 
+  thread(s).  Commands need to be comma separated, ASCII text, minimum of two
+  arguments (more are allowed)
+  \param client, MtxSocketClient structure
+  \param buf, input buffer
+  \param len, length of input buffer
+  */
 G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gchar * buf, gint len)
 {
 	gint fd = client->fd;
@@ -2887,11 +2940,11 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 		case GET_RTV_LIST:
 			socket_get_rtv_list(fd);
 			break;
-		case GET_ECU_VARS:
+		case GET_ECU_PAGE:
 			if  (args != 2) 
 				return_socket_error(fd);
 			else
-				socket_get_ecu_vars(client,arg2);
+				socket_get_ecu_page(client,arg2);
 			break;
 		case GET_ECU_VAR_U08:
 			if  (args != 2) 
@@ -2996,15 +3049,16 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 		case HELP:
 			tmpbuf = g_strdup("\n\
 Supported Calls:\n\r\
- help\n\r\
- quit\n\r\
- get_signature <-- Returns ECU Signature\n\r\
- get_revision <-- Returns ECU Textual Revision\n\r\
- get_rtv_list <-- returns runtime variable listing\n\r\
- get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
- get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
- set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
- burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
+help\n\r\
+quit\n\r\
+get_signature <-- Returns ECU Signature\n\r\
+get_revision <-- Returns ECU Textual Revision\n\r\
+get_rtv_list <-- returns runtime variable listing\n\r\
+get_rt_vars,[*|<var1>,<var2>,...] <-- returns values of specified variables\n\r\tor all variables if '*' is specified\n\r\
+get_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset> <-- returns the\n\r\tecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+set_ecu_var_[u08|s08|u16|s16|u32|s32],<canID>,<page>,<offset>,<data> <-- Sets\n\r\tthe ecu variable at the spcified location, if firmware\n\r\tis not CAN capable, use 0 for canID, likewise for non-paged\n\r\tfirmwares use 0 for page...\n\r\
+get_ecu_page,<canID>,<page> <-- returns the whole ECU page at canID,page\n\r\
+burn_flash <-- Burns contents of ecu ram for current page to flash\n\r\n\r");
 			net_send(fd,(guint8 *)tmpbuf,strlen(tmpbuf),0);
 			g_free(tmpbuf);
 			send_rescode = TRUE;
@@ -3036,6 +3090,10 @@ Supported Calls:\n\r\
 }
 
 
+/*!
+  \brief simple wrapper function to spit back a generic error to a client
+  \param fd is the network socket filedescriptor
+  */
 G_MODULE_EXPORT void return_socket_error(gint fd)
 {
 	net_send(fd,(guint8 *)ERR_MSG,strlen(ERR_MSG),0);
@@ -3043,6 +3101,13 @@ G_MODULE_EXPORT void return_socket_error(gint fd)
 }
 
 
+/*!
+  \brief This returns the RTV vars requested by the comma separated string,
+  arg2
+  \param fd is the network socket filedescriptor
+  \param arg2 is a command separated list of internal names of runtime 
+  variables the remote end is interested in.
+  */
 G_MODULE_EXPORT void socket_get_rt_vars(gint fd, gchar *arg2)
 {
 	gint res = 0;
@@ -3090,6 +3155,10 @@ G_MODULE_EXPORT void socket_get_rt_vars(gint fd, gchar *arg2)
 }
 
 
+/*!
+  \brief Echos back to the client a list of all avaialble runtime variables
+  \param socket is a pointer to the active GSocket structure
+  */
 G_MODULE_EXPORT void socket_get_rtv_list(gint fd)
 {
 	guint i = 0;
@@ -3126,6 +3195,14 @@ G_MODULE_EXPORT void socket_get_rtv_list(gint fd)
 }
 
 
+/*!
+  \brief The client requested an ECU variable, validate its request and return
+  the value back to the client
+  \param client is a pointer to the active MtxSocketclient structure
+  \param arg2 is a comma separated list of coordinates, i.e. canID,page, 
+  and offset. All three are required, 
+  \param size is the size enumeration of the data to retrieve
+  */
 G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
 	gint fd = client->fd;
@@ -3169,7 +3246,14 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 }
 
 
-G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
+/*!
+  \brief The client requested multiple ECU variables, validate its request 
+  and return the values back to the client
+  \param client is a pointer to the active MtxSocketclient structure
+  \param arg2 is a 2 value comma separated list of coordinates, 
+  i.e. canID and page, This fucntion returns the WHOLE PAGE
+  */
+G_MODULE_EXPORT void socket_get_ecu_page(MtxSocketClient *client, gchar *arg2)
 {
 	gint fd = client->fd;
 	gint canID = 0;
@@ -3215,6 +3299,15 @@ G_MODULE_EXPORT void socket_get_ecu_vars(MtxSocketClient *client, gchar *arg2)
 }
 
 
+/*!
+  \brief The slave is updating an ECU location in memory, validate it, update
+  which will trigger the master Gui and all slave gui's to update accordingly
+  \param client is a pointer to the MtxSocketClient structure
+  \param args is the coordinates (4 values required), canID, page, offset,
+  and the new data
+  \param size is hte size to store. 
+  \bug this function works properly only for 8 bit values....
+  */
 G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
 	int fd = client->fd;
@@ -3250,6 +3343,11 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 }
 
 
+/*!
+  \brief compares the content of the master's representation of ECU memory with
+  the slave's,  if they match return FALSE, if not, return TRUE
+  \param client is a pointer to the active socket client
+  */
 G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 {
 	gint i = 0;
@@ -3274,20 +3372,13 @@ G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 }
 
 
-G_MODULE_EXPORT gint * convert_socket_data(gchar *buf, gint len)
-{
-	gint i = 0;
-	gint *res = g_new0(gint,len);
 
-	for (i=0;i<len;i++)
-	{
-		memcpy (&res[i],&buf[i],1);
-		/*		printf("data[%i] is %i\n",i,res[i]);*/
-	}
-	return res;
-}
-
-
+/*!
+  \brief this is analagous to the serial_repair_thread and goes through the
+  motions of trying to reconnect to the target if the connection is lost
+  \param data is unused
+  \see serial_repair_thread
+  */
 G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 {
 	/* - DEV code for setting up connection to a network socket
@@ -3403,6 +3494,13 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 }
 
 
+/*! 
+  \brief Opens a network connection to a remote machine, sets up the global
+  Serial_Params structure on success
+  \param host is the name of the remote host
+  \param port is the port on the target to attempt to open
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 {
 	int clientsocket = 0;
@@ -3469,69 +3567,10 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 }
 
 
-G_MODULE_EXPORT gboolean open_notification_link(gchar * host, gint port)
-{
-	int clientsocket = 0;
-	gint status = 0;
-	struct hostent *hostptr = NULL;
-	struct sockaddr_in servername;
-#ifdef __WIN32__
-	struct WSAData wsadata;
-	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
-	if (status != 0)
-	{
-		/* Tell the user that we could not find a usable */
-		/* Winsock DLL.                                  */
-		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf("WSAStartup failed with error: %d\n", status));
-		return FALSE;
-	}
-#endif
 
-	/*	printf ("Trying to open network port!\n");*/
-	clientsocket = socket(PF_INET,SOCK_STREAM,IPPROTO_TCP);
-	if (!clientsocket)
-	{
-		dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket open error: %s\n",strerror(errno)));
-#ifdef __WIN32__
-		WSACleanup();
-#endif
-		return FALSE;
-	}
-	/*	printf("Socket created!\n");*/
-	hostptr = gethostbyname(host);
-	if (hostptr == NULL)
-	{
-		hostptr = gethostbyaddr(host,strlen(host), AF_INET);
-		if (hostptr == NULL)
-		{
-			dbg_func_f(CRITICAL|SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tError resolving server address: \"%s\"\n",host));
-#ifdef __WIN32__
-			WSACleanup();
-#endif
-			return FALSE;
-		}
-	}
-	/*	printf("host resolved!\n");*/
-	servername.sin_family = AF_INET;
-	servername.sin_port = htons(port);
-	memcpy(&servername.sin_addr,hostptr->h_addr,hostptr->h_length);
-	status = connect(clientsocket,(struct sockaddr *) &servername, sizeof(servername));
-	if (status == -1)
-	{
-		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__"open_network()\n\tSocket connect error: %s\n",strerror(errno)));
-#ifdef __WIN32__
-		WSACleanup();
-#endif
-		return FALSE;
-	}
-	/*	printf("connected!!\n");*/
-	/* Should startup thread now to listen for notification messages
-	 */
-
-	return TRUE;
-}
-
-
+/*!
+  \brief closes the network socket
+  */
 G_MODULE_EXPORT gboolean close_network(void)
 {
 	Serial_Params *serial_params;
@@ -3549,9 +3588,15 @@ G_MODULE_EXPORT gboolean close_network(void)
 }
 
 
+/*!
+  \brief closes the control socket
+  */
 G_MODULE_EXPORT gboolean close_control_socket(void)
 {
-	close(controlsocket);
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
+	close(serial_params->ctrl_fd);
+	serial_params->ctrl_fd = -1;
 
 #ifdef __WIN32__
 	WSACleanup();
@@ -3561,12 +3606,12 @@ G_MODULE_EXPORT gboolean close_control_socket(void)
 
 
 /*!
-   \brief notify_slaves_thread()'s sole purpose in life is to listen for 
-    messages on the async queue from the IO core for messages to send to slaves
-     and dispatch them out.  It should check if a slave disconected and in that 
-      case delete their entry from the slave list.
-       \param data (gpointer) unused.
-        **/
+  \brief notify_slaves_thread()'s sole purpose in life is to listen for 
+  messages on the async queue from the IO core for messages to send to slaves
+  and dispatch them out.  It should check if a slave disconected and in that 
+  case delete their entry from the slave list.
+  \param data (gpointer) unused.
+  */
 G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 {
 	static GAsyncQueue *slave_msg_queue = NULL;
@@ -3713,8 +3758,13 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 }
 
 
-
-
+/*!
+  \brief handles notofications from the master to the slaves.  The slave
+  will connect and basically sit and wait for data to arrive. when changes
+  are made on the master or another slave, the master will send out messages
+  to the connected slaves letting them know about the change
+  \param data is a pointer to the MtxSocketClient structure
+  */
 G_MODULE_EXPORT void *control_socket_client(gpointer data)
 {
 	MtxSocketClient *client = (MtxSocketClient *) data;
@@ -3891,6 +3941,11 @@ close_control:
 }
 
 
+/*!
+  \brief Opens the control socket connection to the master instance
+  \param host is the hostname to connect to
+  \param port is the port number to connect to
+  */
 G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 {
 	int clientsocket = 0;
@@ -3900,6 +3955,8 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	MtxSocketClient * cli_data = NULL;
 #ifdef __WIN32__
 	struct WSAData wsadata;
+	Serial_Params *serial_params;
+	serial_params = DATA_GET(global_data,"serial_params");
 	status = WSAStartup(MAKEWORD(2, 2),&wsadata);
 	if (status != 0)
 	{
@@ -3947,7 +4004,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 #endif
 		return FALSE;
 	}
-	controlsocket = clientsocket;
+	serial_params->ctrl_fd = clientsocket;
 	cli_data = g_new0(MtxSocketClient, 1);
 	cli_data->ip = g_strdup(inet_ntoa(servername.sin_addr));
 	cli_data->port = ntohs(servername.sin_port);
@@ -3962,6 +4019,13 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 }
 
 
+/*!
+  \brief Wrapper function to deal with sending data to a remote connection
+  \param fd is the filedescriptor for the network socket
+  \param buf is a pointer to the buffer to read from when sending
+  \param len is the amount of data to send in bytes
+  \returns the numbe of bytes sent
+  */
 G_MODULE_EXPORT gint net_send(gint fd, guint8 *buf, gint len, gint flags)
 {
 	int total = 0;        /* how many bytes we've sent*/
@@ -3987,6 +4051,14 @@ G_MODULE_EXPORT gint net_send(gint fd, guint8 *buf, gint len, gint flags)
 }
 
 
+/*!
+  \brief Assembles a packet destined to the slaves for data changes
+  \param update_type is the type of update to the slave
+  \param msg is a pointer to a SlaveMessage structure
+  \param msg_len is the pointer to a place to store the packet length when
+  its done being assembled
+  \returns a pointer to the buffer containing this packet
+  */
 G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 {
 	guint8 *buffer = NULL;
@@ -4013,6 +4085,14 @@ G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint 
 }
 
 
+/*!
+  \brief Assembles a packet destined to the slaves for status updates
+  \param update_type is the type of update to the slave
+  \param msg is a pointer to a SlaveMessage structure
+  \param msg_len is the pointer to a place to store the packet length when
+  its done being assembled
+  \returns a pointer to the buffer containing this packet
+  */
 G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *msg,gint *msg_len)
 {
 	guint8 *buffer = NULL;
@@ -4038,6 +4118,7 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 /*!
    \brief dealloc_client_data() deallocates the structure used for MTX TCP/IP
    sockets
+   \param client is a pointer to the MtxSocketClient structure to deallocate
    */
 G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 {

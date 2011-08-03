@@ -86,7 +86,7 @@ typedef enum
 	GET_REVISION,
 	GET_RT_VARS,
 	GET_RTV_LIST,
-	GET_ECU_VARS,
+	GET_ECU_PAGE,
 	GET_ECU_VAR_U08,
 	GET_ECU_VAR_S08,
 	GET_ECU_VAR_U16,
@@ -173,7 +173,7 @@ void return_socket_error(GSocket *);
 void socket_get_rt_vars(GSocket *, gchar *);
 void socket_get_rtv_list(GSocket *);
 void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
-void socket_get_ecu_vars(MtxSocketClient *, gchar *);
+void socket_get_ecu_page(MtxSocketClient *, gchar *);
 void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
 void dealloc_client_data(MtxSocketClient *);
 gboolean check_for_changes(MtxSocketClient *);
@@ -263,7 +263,7 @@ typedef enum
 	GET_REVISION,
 	GET_RT_VARS,
 	GET_RTV_LIST,
-	GET_ECU_VARS,
+	GET_ECU_PAGE,
 	GET_ECU_VAR_U08,
 	GET_ECU_VAR_S08,
 	GET_ECU_VAR_U16,
@@ -347,7 +347,7 @@ void return_socket_error(gint);
 void socket_get_rt_vars(gint, gchar *);
 void socket_get_rtv_list(gint);
 void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
-void socket_get_ecu_vars(MtxSocketClient *, gchar *);
+void socket_get_ecu_page(MtxSocketClient *, gchar *);
 void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
 void dealloc_client_data(MtxSocketClient *);
 gboolean check_for_changes(MtxSocketClient *);

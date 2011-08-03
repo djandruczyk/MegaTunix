@@ -27,6 +27,9 @@
 #include <stdlib.h>
 #include <user_outputs.h>
 
+/*!
+  \brief enumerations for the user outputs for MS-1 firmwares
+  */
 enum
 {
 	COL_OBJECT = 0,
@@ -43,6 +46,12 @@ enum
 static GList *views = NULL;
 extern gconstpointer *global_data;
 
+
+/*!
+  \brief Forces the model based on the view
+  \param data is unused
+  \returns FALSE
+  */
 G_MODULE_EXPORT gboolean force_view_recompute(gpointer data)
 {
 	guint i = 0;
@@ -50,11 +59,13 @@ G_MODULE_EXPORT gboolean force_view_recompute(gpointer data)
 		update_model_from_view(g_list_nth_data(views,i));
 	return FALSE;
 }
+
+
 /*!
  \brief build_model_and_view() is called to create the model and view for
  a preexisting textview. Currently used to generate the User controlled outputs
  lists for MSnS and MSnEDIS firmwares
- \param widget (GtkWidget *) The textview that this model and view is to be
+ \param widget is the pointer to The textview that this model and view is to be
  created for.
  */
 G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
@@ -92,7 +103,7 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 
 /*!
  \brief create_model() Creates a TreeModel used by the user outputs treeviews
- \returns a pointer to a newly created GtkTreeModel.
+ \returns a pointer to a newly created GtkTreeModel structure.
  */
 G_MODULE_EXPORT GtkTreeModel * create_model(void)
 {
@@ -151,8 +162,8 @@ G_MODULE_EXPORT GtkTreeModel * create_model(void)
 
 /*!
  \brief add_columns() creates the column fields for a treeview.
- \param view (GtkTreeView *) pointer to the Treeview
- \param widget (Gtkwidget) Widget passed to extract the needed info from
+ \param view is the pointer to the Treeview object
+ \param widget is the Widget passed to extract the needed info from
  */
 G_MODULE_EXPORT void add_columns(GtkTreeView *view, GtkWidget *widget)
 {
@@ -245,10 +256,10 @@ G_MODULE_EXPORT void add_columns(GtkTreeView *view, GtkWidget *widget)
  \brief cell_edited() is called whenever an editable cell on the user outputs
  treeviews are modified. This function will check and verify the user input
  is valid, and process it and send it to the ECU
- \param cell (GtkCellRendererText *)  pointer to the cell that was edited
- \param path_string (const gchar *) tree_path for the treeview (see GTK+ docs)
- \param new_text (const gchar *) new text thatwas entered into the cell
- \param data (gpointer) pointer to the GtkTreeModel
+ \param cell is the pointer to the cell that was edited
+ \param path_string is the tree_path for the treeview (see GTK+ docs)
+ \param new_text is the new text that was entered into the cell
+ \param data is the pointer to the GtkTreeModel
  */
 G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell, 
 		const gchar * path_string,
@@ -408,7 +419,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
  \brief update_model_from_view() is called after a cell is cuccessfully edited
  and updates the treemodel associated with the view.
  \see cell_edited
- \param widget (GtkWidget *) pointer to the TreeView widget.
+ \param widget is the pointer to the TreeView widget.
  */
 G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 {
@@ -650,10 +661,14 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 	}
 }
 
+
+/*!
+  \brief This is called from a timeout in order to trigger a model/view refresh
+  \param widget is the pointer to the view
+  \returns FALSE to cancel the timeout
+  */
 G_MODULE_EXPORT gboolean deferred_model_update(GtkWidget * widget)
 {
 	update_model_from_view(widget);
 	return FALSE;
 }
-
-

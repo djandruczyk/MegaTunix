@@ -92,7 +92,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSiz
 	/* Sanity checking */
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
-	g_return_val_if_fail(page >= firmware->total_pages,0)
+	g_return_val_if_fail(page >= firmware->total_pages,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 
@@ -120,7 +120,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, Da
 	firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
-	g_return_val_if_fail(page >= firmware->total_pages,0)
+	g_return_val_if_fail(page >= firmware->total_pages,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 	return _get_sized_data(firmware->ecu_data_last[page],offset,size,firmware->bigendian);
@@ -148,7 +148,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data_backup(gint canID, gint page, gint offset, 
 	firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
-	g_return_val_if_fail(page >= firmware->total_pages,0)
+	g_return_val_if_fail(page >= firmware->total_pages,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 	return _get_sized_data(firmware->ecu_data_backup[page],offset,size,firmware->bigendian);
@@ -334,8 +334,8 @@ G_MODULE_EXPORT gboolean ms_find_mtx_page(gint tableID,gint *mtx_page)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	g_return_if_fail(firmware);
-	g_return_if_fail(firmware->page_params);
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(firmware->page_params,FALSE);
 
 	for (i=0;i<firmware->total_pages;i++)
 	{

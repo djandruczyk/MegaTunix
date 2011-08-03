@@ -154,8 +154,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER (GET_RT_VARS));
 		g_hash_table_insert (str_2_enum, "GET_RTV_LIST",
 				GINT_TO_POINTER (GET_RTV_LIST));
-		g_hash_table_insert (str_2_enum, "GET_ECU_VARS",
-				GINT_TO_POINTER (GET_ECU_VARS));
+		g_hash_table_insert (str_2_enum, "GET_ECU_PAGE",
+				GINT_TO_POINTER (GET_ECU_PAGE));
 		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_U08",
 				GINT_TO_POINTER (GET_ECU_VAR_U08));
 		g_hash_table_insert (str_2_enum, "GET_ECU_VAR_S08",
@@ -315,7 +315,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "GET_SIGNATURE");
 		g_hash_table_remove (str_2_enum, "GET_RT_VARS");
 		g_hash_table_remove (str_2_enum, "GET_RTV_LIST");
-		g_hash_table_remove (str_2_enum, "GET_ECU_VARS");
+		g_hash_table_remove (str_2_enum, "GET_ECU_PAGE");
 		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_U08");
 		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_S08");
 		g_hash_table_remove (str_2_enum, "GET_ECU_VAR_U16");

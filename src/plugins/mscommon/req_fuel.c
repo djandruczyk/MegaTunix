@@ -29,7 +29,7 @@ extern gconstpointer *global_data;
 
 /*!
  \brief reqd_fuel_change() is called whenever the req_fuel variable from 
- the reqfuel_popup is changed and this recalcualtes things and updated 
+ the reqfuel_popup is changed and this recalcualtes things and updates 
  the necesary spinbuttons
  \param widget (GtkWidget *) the spinbutton that changed
  */
@@ -367,9 +367,9 @@ G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 /*!
  \brief save_reqd_fuel() called when the reqfuel popup closes, to save the
  values to a config file
- \param widget (GtkWidget *) widget that contains a pointer to the Reqd_Fuel 
- datastructure to save
- \param data (gpointer) unused
+ \param widget is the pointer to the widget that contains a mapping to 
+ the Reqd_Fuel datastructure to save
+ \param data is unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
@@ -440,7 +440,7 @@ G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 
 /*!
  \brief close_popup() does exactly that.
- \param widget (GtkWidget *) is the widget that contains the pointer to the 
+ \param widget is the widget that contains the pointer to the 
  Reqd_Fuel struct.
  \returns TRUE
  */
@@ -460,6 +460,7 @@ G_MODULE_EXPORT gboolean close_popup(GtkWidget * widget)
  interdependant variable changes.  This function recalculates values and shows
  error status on the gui if needed and send the new values to the ECU when 
  appropropriate
+ \param table_num is the table number to do the calculation for
  */
 G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 {
@@ -710,8 +711,8 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 /*!
  \brief initialize_reqd_fuel() initializes the reqd_fuel datastructure for 
  use This will load any previously saved defaults from the global config file.
- \param page (gint) page to create this structure for.
- \returns a pointer to a Reqd_Fuel
+ \param table_num is the table number to create this structure for.
+ \returns a pointer to an initialized Reqd_Fuel structure
  */
 G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
 {
@@ -763,9 +764,9 @@ G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
 /*!
  \brief drain_hashtable() is called to send all the data from a hashtable to
  the ECU
- \param offset (gpointer) offset in ecu_data this value goes to
- \param value (gpointer) pointer to OutputData Struct
- \param page (gpointer) unused.
+ \param offset is the offset in ecu_data this value goes to
+ \param value is the pointer to OutputData Struct
+ \param page is unused.
  */
 G_MODULE_EXPORT gboolean drain_hashtable(gpointer offset, gpointer value, gpointer user_data)
 {
@@ -778,6 +779,12 @@ G_MODULE_EXPORT gboolean drain_hashtable(gpointer offset, gpointer value, gpoint
 }
 
 
+/*!
+  \brief Handles Required Fuel spinbuton changes and updated the Reqd_Fuel 
+  structure as appropriate
+  \param widget is a pointer to the widget the user changes
+  \param data is unused
+  */
 G_MODULE_EXPORT gboolean rf_spin_button_handler(GtkWidget *widget, gpointer data)
 {
         Reqd_Fuel *reqd_fuel = NULL;
@@ -822,10 +829,10 @@ G_MODULE_EXPORT gboolean rf_spin_button_handler(GtkWidget *widget, gpointer data
 
 /*!
  \brief reqfuel_rescale_table() is called to rescale a VEtable based on a
- newly sent reqfuel variable.
- \param widget_name is the widget of the scaler widget 
- that was used. From this widget we extract the table number and other 
- needed data to properly do the rescaling.
+ newly chosen reqfuel variable.
+ \param widget is the pointer to the scaler widget that was used. From 
+ this widget we extract the table number and other needed data to 
+ properly do the rescaling.
  */
 G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 {

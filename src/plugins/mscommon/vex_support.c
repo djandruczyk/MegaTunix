@@ -51,6 +51,12 @@ static struct
 };
 
 
+/*!
+  \brief prompts the user for a filename to export all tables to in VEX format
+  \param widget is the export button the user clicked on
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -105,13 +111,19 @@ G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
+
+/*!
+  \brief prompts the user for a filename to export a single table to in 
+  VEX format
+  \param table_num is the table number to export
+  */
 G_MODULE_EXPORT void select_table_for_export(gint table_num)
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 	struct tm *tm = NULL;
-        time_t *t = NULL;
+	time_t *t = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -160,6 +172,13 @@ G_MODULE_EXPORT void select_table_for_export(gint table_num)
 }
 
 
+/*!
+  \brief Prompts the user with a filechooser so he/she an select a VEX file
+  for import, This is for a VEX file containing MULTIPLE tables..
+  \param widget is hte pointer to the import button the user clicked
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -200,6 +219,11 @@ G_MODULE_EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 }
 
 
+/*!
+  \brief prompts the user for a filename to import a single table to in 
+  VEX format
+  \param table_num is the table number to export
+  */
 G_MODULE_EXPORT void select_table_for_import(gint table_num)
 {
 	MtxFileIO *fileio = NULL;
@@ -248,11 +272,11 @@ G_MODULE_EXPORT void select_table_for_import(gint table_num)
 
 /*!
  \brief all_table_export() is the export function to dump all Tables to a "vex"
- file.  It has been modified to handler multiple tables per page.  
+ file.  It has been modified to handle multiple tables per page.  
  There is a major problem with this in that the currect VEX 1.0 spec 
  doesn't allow for multiple tables per page, so import is likely to be 
- a problem.
- \param iochannel a pointer to the output channel 
+ a problem on other tuning softwares.
+ \param iochannel is the pointer to the output channel 
  to write the data to.
  \see all_table_import
  \returns TRUE on success, FALSE on failure
@@ -376,10 +400,9 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 /*!
  \brief single_table_export() is the export function to dump one Tables
  to a "vex" file.  
- \param iochannel a pointer to the output channel 
- \param table_num, integer number of table to export
+ \param iochannel is the pointer to the output channel 
+ \param table_num is the integer number of table to export
  \see single_table_import
- \returns TRUE on success, FALSE on failure
  */
 G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 {
@@ -499,9 +522,10 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
  \brief all_table_import() is called to import Tables from a file.  
  There currently exists a big problem in that newer firmwares (msns-extra 
  and MS-II) have multiple tables per page and the VEX 1.0 spec does NOT 
- account for that. 
- \param iochannel pointer to the output channel to read 
- the data from.
+ account for that, mtx can handle its own exported files but may have issues
+ with file from other softwares. the best method is one table per file. 
+ \param iochannel is the pointer to the output channel to read 
+ \returns TRUE on success, FALSE otherwise
  */
 G_MODULE_EXPORT gboolean all_table_import(GIOChannel *iochannel)
 {
@@ -559,12 +583,12 @@ G_MODULE_EXPORT gboolean all_table_import(GIOChannel *iochannel)
 
 
 /*!
- \brief single_table_import() is called to import a single from a file.  
+ \brief single_table_import() is called to import a single table  from a file.  
  There currently exists a big problem in that newer firmwares (msns-extra 
  and MS-II) have multiple tables per page and the VEX 1.0 spec does NOT 
  account for that. 
- \param iochannel pointer to the output channel to read 
- \param table_num,  table number to import
+ \param iochannel is the pointer to the output channel to read 
+ \param table_num is the table number to import
  the data from.
  */
 G_MODULE_EXPORT void single_table_import(GIOChannel *iochannel, gint table_num)
@@ -623,8 +647,8 @@ G_MODULE_EXPORT void single_table_import(GIOChannel *iochannel, gint table_num)
 /*!
  \brief process_vex_line() is called for to read the VEX file and
  dispatch handlers to process sections of the file.
- \param vex (Vex_Import *) pointer to Vex_Import structure.
- \param iochannel (GIOChannel *) the bytestream represented by the VEXfile
+ \param vex is the pointer to Vex_Import structure.
+ \param iochannel is the iopchannel bytestream represented by the VEXfile
  \returns The status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL
  usually
  */
@@ -662,14 +686,13 @@ breakout:
  It passes off the pointer to the Vex_Import struct, the function arg, 
  the string read, and the pointer to the IOchannel representing the 
  input bytestream.
- \param vex (Vex_Import *) The pointer to the Vex_Import datastructure.
- \param function (ImportParserFunc) an enumeration used to determine 
- which handler to call.
- \param arg (ImportParserArg) another enumeration passed to the functiosn 
+ \param vex is the pointer to the Vex_Import datastructure.
+ \param function is an enumeration used to determine which handler to call.
+ \param arg is another enumeration passed to the functions 
  being dispatched from here
- \param string (gchar *) The current line of the VEXfile just read.  Used for
+ \param string is The current line of the VEXfile just read.  Used for
  handlers than only need 1 lines's worth of data
- \param iochannel (GIOChannel *) the pointer to the input stream of the 
+ \param iochannel is the pointer to the input stream of the 
  vexfile for reading additional data (used by some dispatched functions)
  \see ImportParserFunc
  \see ImportParserArg
@@ -700,9 +723,9 @@ G_MODULE_EXPORT GIOStatus handler_dispatch(Vex_Import *vex, ImportParserFunc fun
 /*!
  \brief process_header() processes portions of the header of the VEX file 
  and populates the Vex_Import datastructure for this Table
- \param vex (Vex_Import *) pointer to the Vex_Import structure
- \param arg (ImportPArserArg) enumeration of header portion to process
- \param string (gchar *) text of the header line to process
+ \param vex is the pointer to the Vex_Import structure
+ \param arg is the enumeration of header portion to process
+ \param string is the text of the header line to process
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
 G_MODULE_EXPORT GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, gchar * string)
@@ -763,8 +786,8 @@ G_MODULE_EXPORT GIOStatus process_header(Vex_Import *vex, ImportParserArg arg, g
 /*!
  \brief process_page() extracts the page variable from the VEX file and 
  stores it in the Vex_Import Structure for this table.
- \param vex (Vex_Import *) Pointer to the Vex_Import structure
- \param string (gchar *) line of VEX file in which to extract the page out of
+ \param vex is the Pointer to the Vex_Import structure
+ \param string is the line of VEX file in which to extract the page out of
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
 G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
@@ -812,7 +835,7 @@ G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 /*!
  \brief process_table() extracts the table_number out of the comment field
  stores it in the Vex_Import Structure for this table.
- \param vex (Vex_Import *) Pointer to the Vex_Import structure
+ \param vex is the Pointer to the Vex_Import structure
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
 G_MODULE_EXPORT GIOStatus process_table(Vex_Import *vex)
@@ -859,8 +882,8 @@ G_MODULE_EXPORT GIOStatus process_table(Vex_Import *vex)
 /*!
  \brief read_number_from_line() is used to read the RPM/LOAD values from the
  VEX file and store them in the Vex_Import structure
- \param dest (gint *) pointer to array within the Vex_Import struct
- \param iochannel (GIOChannel *) pointer to the iochannel representing the
+ \param dest is the pointer to array within the Vex_Import struct
+ \param iochannel is the pointer to the iochannel representing the
  VEX file
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
@@ -894,11 +917,11 @@ G_MODULE_EXPORT GIOStatus read_number_from_line(gint *dest, GIOChannel *iochanne
  allocate the memory for storing the data and call the needed functions to
  read the values into the arrays.
  \see read_number_from_line
- \param vex (Vex_Import *) pointer to the Vex_Import structure
- \param arg (ImportParserArg) enumeration to decide which range we are going to
+ \param vex is the pointer to the Vex_Import structure
+ \param arg is the enumeration to decide which range we are going to
  read
- \param string (gchar *) Line of text passed to parse.
- \param iochannel (GIOChannel *) Pointer to iochannel representing VEXfile for
+ \param string is the Line of text passed to parse.
+ \param iochannel is the Pointer to iochannel representing VEXfile for
  retrieving additional data.
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
@@ -974,9 +997,9 @@ G_MODULE_EXPORT GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg
 /*!
  \brief process_vex_table() reads, processes and stores the Table data into
  the Vex_Import structure in preparation for import to the ECU.
- \param vex (stuct Vex_Import *) pointer to the Vex_Import structure
- \param string (gchar *) pointer to the current line of the VEXfile
- \param iochannel (GIOChannel *), Pointer to the iochannel representing the
+ \param vex is the *) pointer to the Vex_Import structure
+ \param string is the pointer to the current line of the VEXfile
+ \param iochannel is the Pointer to the iochannel representing the
  VEX file for reading more data
  \returns status of the operation (G_IO_STATUS_ERROR/G_IO_STATUS_NORMAL)
  */
@@ -1062,9 +1085,9 @@ G_MODULE_EXPORT GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIO
 /*!
  \brief vex_comment_parse() stores the comment field  as entered by the
  user on the Megatunix GUI for VEX export.
- \param widget (GtkWidget *) pointer to textentry widget where user enters
+ \param widget is the pointer to textentry widget where user enters
  the comment
- \param data (gpointer) unused
+ \param data is unused
  \returns TRUE
  */
 G_MODULE_EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
@@ -1081,7 +1104,7 @@ G_MODULE_EXPORT gboolean vex_comment_parse(GtkWidget *widget, gpointer data)
 /*!
  \brief dealloc_vex_struct() deallocates the memory used by the Vex_Import
  datastructure
- \param vex (Vex_Import *) Pointer to the Vex_Import structure 
+ \param vex is the Pointer to the Vex_Import structure 
  to deallocate.
  */
 G_MODULE_EXPORT void dealloc_vex_struct(Vex_Import *vex)
@@ -1111,7 +1134,7 @@ G_MODULE_EXPORT void dealloc_vex_struct(Vex_Import *vex)
  \brief feed_import_data_to_ecu() Forwards the data in the VEX file to the
  ECU.  NOTE this may have problems with firmware using multiple tables in
  a page, as the VEX format 1.0 does NOT handle that condition.
- \param vex (Vex_Import *) pointer to the Vex_Impot datastructure.
+ \param vex is the pointer to the Vex_Impot datastructure.
  */
 G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 {

@@ -26,23 +26,33 @@
 extern gconstpointer *global_data;
 static gboolean read_import_file(GIOChannel *);
 
+/*!
+  \brief flips the temperature label on the table generator tab
+  \param widget is the pointer to the widget the user clicked on
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *temp_label = lookup_widget_f("temp_label");
 
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) /* Deg C */
 		gtk_label_set_text(GTK_LABEL(temp_label),OBJ_GET(widget,"temp_label"));
-
 	return TRUE;
 }
 
 
+/*!
+  \brief imports a temp table from a file
+  \param widget is a pointer to the widget
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean import_table_from_file(GtkWidget *widget, gpointer data)
 {
 	gchar * filename = NULL;
 	GIOChannel *chan = NULL;
 	gboolean res = FALSE;
-	printf("import table from file\n");
 	/* This should load and sanity check the file, if good, store it
 	   so that the send to ecu button can deliver it.
 	   */
@@ -63,9 +73,11 @@ G_MODULE_EXPORT gboolean import_table_from_file(GtkWidget *widget, gpointer data
 }
 
 
-/* This is hacky and should be redone to be much better than its ugly hacky 
-   state
-   */
+/*!
+  \brief This is hacky and should be redone to do much better sanity checking
+  \param chan is a pointer to the IOchannel for the file to read
+  \returns TRUE on success, FALSE otherwise
+  */
 gboolean read_import_file(GIOChannel *chan)
 {
 	Firmware_Details *firmware = NULL;
@@ -128,6 +140,12 @@ gboolean read_import_file(GIOChannel *chan)
 }
 
 
+/*!
+  \brief Calculates the values for the new table and downloads to the ECU
+  \param widget is a pointer to the widget the user clicked
+  \param data is unused
+  \returns TRUE on success, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer data)
 {
 #define CTS 0
