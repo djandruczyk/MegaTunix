@@ -159,6 +159,7 @@ struct _Ve_View_3D
 	GtkWidget *tracking_button;/*!< Tracking button widget */
 	Quad ***quad_mesh;	/*!< Array of Quads for the mesh */
 	gboolean mesh_created;	/*!< Is the mesh calculated yet? */
+	gboolean gl_initialized;/*!< Flag for init of the window */
 };
 
 
@@ -193,7 +194,7 @@ RGB3f rgb_from_hue(gfloat, gfloat, gfloat);
 gboolean create_ve3d_view(GtkWidget *, gpointer );
 gboolean ve3d_shutdown(GtkWidget *, gpointer);
 GdkGLConfig* get_gl_config(void);
-void ve3d_realize (GtkWidget *, gpointer );
+gint ve3d_realize (GtkWidget *, gpointer );
 gboolean ve3d_configure_event(GtkWidget *, GdkEventConfigure *,gpointer);
 gboolean ve3d_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean ve3d_motion_notify_event(GtkWidget *, GdkEventMotion *,gpointer);

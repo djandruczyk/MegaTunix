@@ -1356,7 +1356,6 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 					pass=TRUE;
 				break;
 			case REGEX:
-				printf("Regex compare, string 1 \"%s\" string 2 \"%s\"\n",vector[1],test->result_str);
 				if (g_regex_match_simple(vector[1],test->result_str,0,0))
 					pass = TRUE;
 				break;

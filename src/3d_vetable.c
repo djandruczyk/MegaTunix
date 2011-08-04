@@ -65,6 +65,7 @@ static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 
 static gboolean delayed_expose(gpointer);
+static gboolean delayed_reconfigure(gpointer);
 
 /*!
  \brief Calculates the frames per second for the 3D display
@@ -490,6 +491,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK(ve3d_shutdown),
 			NULL);
 
+	gl_config = get_gl_config();
+
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
 	gtk_container_add(GTK_CONTAINER(window),vbox);
@@ -505,9 +508,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
 	gtk_widget_show(drawing_area);
 
-	gl_config = get_gl_config();
-	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
-			TRUE, GDK_GL_RGBA_TYPE);
 	OBJ_SET(drawing_area,"ve_view",(gpointer)ve_view);
 	ve_view->drawing_area = drawing_area;
 
@@ -519,20 +519,23 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			GDK_VISIBILITY_NOTIFY_MASK);
 
 
-
 	/* Connect signal handlers to the drawing area */
-	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
+	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
+			G_CALLBACK (ve3d_expose_event), NULL);
+	g_signal_connect(G_OBJECT (drawing_area), "realize",
 			G_CALLBACK (ve3d_realize), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
 			G_CALLBACK (ve3d_configure_event), NULL);
-	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
-			G_CALLBACK (ve3d_expose_event), NULL);
+
 	g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
 			G_CALLBACK (ve3d_motion_notify_event), NULL);
 	g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
 			G_CALLBACK (ve3d_button_press_event), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
 			G_CALLBACK (ve3d_key_press_event), NULL);
+
+	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
+			TRUE, GDK_GL_RGBA_TYPE);
 
 	/* End of GL window, Now controls for it.... */
 	frame = gtk_frame_new("3D Display Controls");
@@ -691,7 +694,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_widget_show_all(window);
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	gdk_threads_add_timeout(500,delayed_expose,ve_view);
+	gdk_threads_add_timeout(500,delayed_reconfigure,ve_view);
 	return TRUE;
 }
 
@@ -803,32 +806,36 @@ GdkGLConfig* get_gl_config(void)
  */
 G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
-	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
-	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 	Ve_View_3D *ve_view = NULL;
+	GdkGLContext *glcontext = NULL;
+	GdkGLDrawable *gldrawable = NULL;
 	GLfloat w = widget->allocation.width;
 	GLfloat h = widget->allocation.height;
 
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() Entered\n"));
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
-	g_return_val_if_fail(glcontext,FALSE);
-	g_return_val_if_fail(gldrawable,FALSE);
+	glcontext = gtk_widget_get_gl_context(widget);
+	gldrawable = gtk_widget_get_gl_drawable(widget);
+	if (!glcontext)
+		return TRUE;
+	if (!gldrawable)
+		return TRUE;
 
-	//printf("ve3d config event, ve_view %p gldrawable %p\n",ve_view,gldrawable);
 
-	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() 3D View Configure Event\n"));
+	dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_configure_event() W %f, H %f\n",w,h));
 
 	/*** OpenGL BEGIN ***/
-	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
-		return FALSE;
-
+	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
 	ve_view->aspect = 1.0;
 	glViewport (0, 0, w, h);
 	glMatrixMode(GL_MODELVIEW);
 	ve3d_load_font_metrics(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() Complete!\n"));
 	return TRUE;
 }
+
 
 /*!
  \brief ve3d_expose_event is called when the part or all of the GL area
@@ -847,22 +854,36 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	Cur_Vals *cur_vals = NULL;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
-	if (!GTK_WIDGET_REALIZED(widget))
-		return FALSE;
-
 	glcontext = gtk_widget_get_gl_context(widget);
 	gldrawable = gtk_widget_get_gl_drawable(widget);
 
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
-	
-	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() 3D View Expose Event\n"));
-	//printf("expose event ve_view %p gldrawable %p\n",ve_view,gldrawable);
+
+	/* GL initialize to hopefully solve the native window issue for GTK+
+	   newer that 2.18.x
+	   */
+	if (!ve_view->gl_initialized)
+	{
+		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() GL Initialize!\n"));
+		ve_view->gl_initialized = TRUE;
+		gdk_gl_drawable_gl_begin(gldrawable, glcontext);
+		glClearColor (0.0, 0.0, 0.0, 0.0);
+		glShadeModel(GL_SMOOTH);
+		glEnable (GL_LINE_SMOOTH);
+		/*glEnable (GL_POLYGON_SMOOTH);*/
+		glEnable (GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
+		glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glMatrixMode(GL_MODELVIEW);
+		gdk_gl_drawable_gl_end (gldrawable);
+	}
 
 	/*** OpenGL BEGIN ***/
-	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
-		return FALSE;
+	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -908,6 +929,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
+	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() Completed!\n"));
 	return TRUE;
 }
 
@@ -993,29 +1015,33 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
  \param widget is the drawingarea
  \param data is unused
  */
-G_MODULE_EXPORT void ve3d_realize (GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 {
-	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
-	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
-
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
-	g_return_if_fail(glcontext);
-	g_return_if_fail(gldrawable);
-	/*** OpenGL BEGIN ***/
-	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
-		return;
+	gdk_window_ensure_native(widget->window);
+	return TRUE;
 
-	glClearColor (0.0, 0.0, 0.0, 0.0);
-	glShadeModel(GL_SMOOTH);
-	glEnable (GL_LINE_SMOOTH);
-	/*glEnable (GL_POLYGON_SMOOTH);*/
-	glEnable (GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glMatrixMode(GL_MODELVIEW);
-	gdk_gl_drawable_gl_end (gldrawable);
-	/*** OpenGL END ***/
+//	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
+//	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
+//
+//	g_return_val_if_fail(glcontext,TRUE);
+//	g_return_val_if_fail(gldrawable,TRUE);
+//	/*** OpenGL BEGIN ***/
+//	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
+//		return TRUE;
+//
+//	glClearColor (0.0, 0.0, 0.0, 0.0);
+//	glShadeModel(GL_SMOOTH);
+//	glEnable (GL_LINE_SMOOTH);
+//	/*glEnable (GL_POLYGON_SMOOTH);*/
+//	glEnable (GL_BLEND);
+//	glEnable(GL_DEPTH_TEST);
+//	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//	glMatrixMode(GL_MODELVIEW);
+//	gdk_gl_drawable_gl_end (gldrawable);
+//	/*** OpenGL END ***/
+//	return TRUE;
 }
 
 
@@ -2209,6 +2235,8 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 	ve_view->z_container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref_sink(ve_view->z_container);
 	ve_view->mesh_created = FALSE;
+	ve_view->gl_initialized = FALSE;
+
 	return ve_view;
 }
 
@@ -2989,7 +3017,7 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 /*!
   \brief triggers an expose event
-  \param data the pointer to the ve_view
+  \param data is the pointer to the ve_view structure
   \returns FALSE to disable timeout
   */
 gboolean delayed_expose(gpointer data)
@@ -2998,9 +3026,24 @@ gboolean delayed_expose(gpointer data)
 
 	g_return_val_if_fail(ve_view,FALSE);
 	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
 	return FALSE;
 }
 
+
+/*!
+  \brief hack to get around a weird GL init sequencing issue
+  \param data is the pointer to the ve_view structure
+  \returns FALSE to disable timeout
+  */
+gboolean delayed_reconfigure(gpointer data)
+{
+	Ve_View_3D *ve_view = (Ve_View_3D *)data;
+	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
+	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
+	return FALSE;
+}
 
 
 /*!
