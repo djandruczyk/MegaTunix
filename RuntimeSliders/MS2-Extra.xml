@@ -155,9 +155,9 @@
 		<source>mapkpa</source>
 	</ve3d_rts>
 	<ve3d_rts>
-		<slider_name>ve3d_clt</slider_name>
+		<slider_name>ve3d_tpspercent</slider_name>
 		<table>1</table>
 		<row>1</row>
-		<source>cltdeg</source>
+		<source>tpspercent</source>
 	</ve3d_rts>
 </runtimestatus>

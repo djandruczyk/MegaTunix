@@ -252,7 +252,7 @@ _tooltip=See MS2-Extra Manuals
 
 [afr_load_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-choices=Use primary load,MAP,%Baro,TPS,MAFMAP,ITB
+choices=Use primary load,Speed Density,Percent Baro,Alpha-N,MAFMAP,ITB
 bitvals=0,1,2,3,4,6
 offset=985
 bitmask=7
@@ -261,7 +261,7 @@ _tooltip=See MS2-Extra Manuals
 
 [eae_load_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-choices=Use primary load,MAP,%Baro,TPS,MAFMAP,ITB
+choices=Use primary load,Speed Density,Percent Baro,Alpha-N,MAFMAP,ITB
 bitvals=0,1,2,3,4,6
 offset=985
 bitmask=112

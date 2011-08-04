@@ -101,7 +101,8 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 				g_free(tmpbuf);
 				break;
 			default:
-				printf(_("CASE NOT HANDLED, dep_processor BUG!\n"));
+				printf(_("dep_processor() ERROR, CASE NOT HANDLED, type passed was %i, dep name was \"%s\"\n"),type,deps[i]);
+				break;
 
 		}
 	}

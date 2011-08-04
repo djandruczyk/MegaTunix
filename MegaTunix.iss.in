@@ -43,8 +43,11 @@ Source: "z:\target\dest\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: rec
 
 [Icons]
 Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
-Name: "{group}\MegaTunix MS1 Dash Only"; Filename: "{app}\MegaTunix.exe -p ms1 -D Default_Dash -F -rsmq"; WorkingDir: "{app}"
-Name: "{group}\MegaTunix MS2 Dash Only"; Filename: "{app}\MegaTunix.exe -p ms2 -D Default_Dash -F -rsmq"; WorkingDir: "{app}"
+Name: "{group}\MegaTunix MS1 Fullscreen Dash"; Filename: "{app}\MegaTunix.exe";Parameters:" -p ms1 -D Default_Dash -F -rsmq"; WorkingDir: "{app}"
+Name: "{group}\MegaTunix for MS1 Autodetect"; Filename: "{app}\MegaTunix.exe";Parameters:" -p ms1"; WorkingDir: "{app}"
+Name: "{group}\MegaTunix MS2 Fullscreen Dash"; Filename: "{app}\MegaTunix.exe";Parameters:" -p ms2 -D Default_Dash -F -rsmq"; WorkingDir: "{app}"
+Name: "{group}\MegaTunix for MS2 Autodetect"; Filename: "{app}\MegaTunix.exe";Parameters:" -p ms2 "; WorkingDir: "{app}"
+Name: "{group}\MegaTunix for FreeEMS Autodetect"; Filename: "{app}\MegaTunix.exe";Parameters:" -p freeems -q "; WorkingDir: "{app}"
 Name: "{group}\MtxGaugeDesigner"; Filename: "{app}\gaugedesigner.exe"; WorkingDir: "{app}"
 Name: "{group}\MtxDashDesigner"; Filename: "{app}\dashdesigner.exe"; WorkingDir: "{app}"
 Name: "{group}\MtxLoader"; Filename: "{app}\mtxloader.exe"; WorkingDir: "{app}"

@@ -75,15 +75,15 @@ you want, just make sure you have all the necessary keys in there.
 The number of keys per variable varies based on the variable type 
 which is what it's marked as in expr_types. 
 expr_types an contain one of three choices. 
- 1. _VE_VAR_, meaning VE variable, which requires a page/offset 
+ 1. _ECU_VAR_, meaning ECU variable, which requires a page/offset 
  to resolve it. 
- 2. _VE_EMB_BIT_, meaning VE_embedded bit, which requires page,offset,
+ 2. _ECU_EMB_BIT_, meaning ECU_embedded bit, which requires page,offset,
   and bitmask to resolve completely
  3. _RAW_VAR_ meaning a raw variable, which only requires an offset to
  resolve.
 The expr_types in combination of expr_symbols determine what following
 keys will be present in the section.  If expr_symbols contains "cyls,reqfuel"
-and expr_types contains "_VE_EMB_BIT_,_VE_VAR_" then the following fields will
+and expr_types contains "_ECU_EMB_BIT_,_ECU_VAR_" then the following fields will
 be searched for. "cyls_page","cyls_offset","cyls_bitmask",
 "reqfuel_page" and "reqfuel_offset". 
 	
@@ -103,11 +103,11 @@ be searched for. "cyls_page","cyls_offset","cyls_bitmask",
 			to gather the required info about each dependancy.
 			i.e. depend_on=o2_sensor.  The MUST be a key called
 			o2_sensor=  with either 7 or 4 parameters depending if
-			its a VE_EMB_BIT or VE_VAR respectively. 
+			its a ECU_EMB_BIT or ECU_VAR respectively. 
 			for example:
 		depend_on=some_value
-		some_value=_VE_EMB_BIT_,_U08_,0,100,8,3,1
-		Field 1 is the type (_VE_EMB_BIT_, or _VE_VAR_)
+		some_value=_ECU_EMB_BIT_,_U08_,0,100,8,3,1
+		Field 1 is the type (_ECU_EMB_BIT_, or _ECU_VAR_)
 		Field 2 is the size (_U08_ _U16_, _U32_, Use _U08_ if unsure)
 		Field 3 is the page of this dependancy
 		Field 4 is the offset of this dependancy
@@ -115,7 +115,7 @@ be searched for. "cyls_page","cyls_offset","cyls_bitmask",
 		Field 6 (EMB_BIT) is the bitSHIFT
 		Field 7 (EMB_BIT) is the bitVALUE that we are looking for.
 		
-	*_type		(enum) Type of variable (VE_VAR or VE_EMB_BIT)
+	*_type		(enum) Type of variable (ECU_VAR or ECU_EMB_BIT)
 	*_page		(integer) Page in ve_vars
 	*_offset	(integer) Offset in ve_vars
 	*_bitmask	(integer) bitmask to mask value at page,offset

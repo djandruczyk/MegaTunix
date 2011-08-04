@@ -261,7 +261,7 @@ z_fromecu_mult=10
 z_lookuptable=nbo2_table
 z_alt_lookuptable=wbo2_table
 z_depend_on=z_o2_sensor
-z_o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+z_o2_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,1
 z_precision=1
 
 [table_6]
@@ -296,7 +296,7 @@ z_fromecu_mult=0.1
 z_lookuptable=nbo2_table
 z_alt_lookuptable=wbo2_table
 z_depend_on=z_o2_sensor
-z_o2_sensor=_VE_EMB_BIT_,_U08_,1,184,2,1,1
+z_o2_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,1
 z_precision=1
 
 [table_7]

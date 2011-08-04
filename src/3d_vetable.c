@@ -523,12 +523,12 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 
 	/* Connect signal handlers to the drawing area */
-	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
-			G_CALLBACK (ve3d_expose_event), NULL);
-	g_signal_connect(G_OBJECT (drawing_area), "realize",
+	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
 			G_CALLBACK (ve3d_realize), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
 			G_CALLBACK (ve3d_configure_event), NULL);
+	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
+			G_CALLBACK (ve3d_expose_event), NULL);
 
 	g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
 			G_CALLBACK (ve3d_motion_notify_event), NULL);
