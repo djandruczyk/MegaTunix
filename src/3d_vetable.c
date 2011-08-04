@@ -519,7 +519,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			GDK_VISIBILITY_NOTIFY_MASK);
 
 
-
 	/* Connect signal handlers to the drawing area */
 	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
 			G_CALLBACK (ve3d_realize), NULL);
