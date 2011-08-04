@@ -504,9 +504,12 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	drawing_area = gtk_drawing_area_new();
+	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
+			TRUE, GDK_GL_RGBA_TYPE);
+
 	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
 	GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
-	gtk_widget_show(drawing_area);
+//	gtk_widget_show(drawing_area);
 
 	OBJ_SET(drawing_area,"ve_view",(gpointer)ve_view);
 	ve_view->drawing_area = drawing_area;
@@ -533,9 +536,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK (ve3d_button_press_event), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
 			G_CALLBACK (ve3d_key_press_event), NULL);
-
-	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
-			TRUE, GDK_GL_RGBA_TYPE);
 
 	/* End of GL window, Now controls for it.... */
 	frame = gtk_frame_new("3D Display Controls");
@@ -862,26 +862,6 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
 
-	/* GL initialize to hopefully solve the native window issue for GTK+
-	   newer that 2.18.x
-	   */
-	if (!ve_view->gl_initialized)
-	{
-		dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() GL Initialize!\n"));
-		ve_view->gl_initialized = TRUE;
-		gdk_gl_drawable_gl_begin(gldrawable, glcontext);
-		glClearColor (0.0, 0.0, 0.0, 0.0);
-		glShadeModel(GL_SMOOTH);
-		glEnable (GL_LINE_SMOOTH);
-		/*glEnable (GL_POLYGON_SMOOTH);*/
-		glEnable (GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
-		glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glMatrixMode(GL_MODELVIEW);
-		gdk_gl_drawable_gl_end (gldrawable);
-	}
-
 	/*** OpenGL BEGIN ***/
 	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
 
@@ -1018,30 +998,28 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
 G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
-	gdk_window_ensure_native(widget->window);
-	return TRUE;
 
-//	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
-//	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
-//
-//	g_return_val_if_fail(glcontext,TRUE);
-//	g_return_val_if_fail(gldrawable,TRUE);
-//	/*** OpenGL BEGIN ***/
-//	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
-//		return TRUE;
-//
-//	glClearColor (0.0, 0.0, 0.0, 0.0);
-//	glShadeModel(GL_SMOOTH);
-//	glEnable (GL_LINE_SMOOTH);
-//	/*glEnable (GL_POLYGON_SMOOTH);*/
-//	glEnable (GL_BLEND);
-//	glEnable(GL_DEPTH_TEST);
-//	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//	glMatrixMode(GL_MODELVIEW);
-//	gdk_gl_drawable_gl_end (gldrawable);
-//	/*** OpenGL END ***/
-//	return TRUE;
+	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
+	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
+
+	g_return_val_if_fail(glcontext,TRUE);
+	g_return_val_if_fail(gldrawable,TRUE);
+	/*** OpenGL BEGIN ***/
+	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
+		return TRUE;
+
+	glClearColor (0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH);
+	glEnable (GL_LINE_SMOOTH);
+	/*glEnable (GL_POLYGON_SMOOTH);*/
+	glEnable (GL_BLEND);
+	glEnable(GL_DEPTH_TEST);
+	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glMatrixMode(GL_MODELVIEW);
+	gdk_gl_drawable_gl_end (gldrawable);
+	/*** OpenGL END ***/
+	return TRUE;
 }
 
 
