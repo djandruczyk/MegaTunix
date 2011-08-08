@@ -18,7 +18,10 @@
 
 /* Prototypes */
 gboolean update_errcounts(void);
+void update_comms_status(void);
 gboolean reset_errcounts(GtkWidget *);
+gboolean check_potential_ports(const gchar *);
+gboolean enumerate_dev(GtkWidget *, gpointer);	/* Help find usb/serial adapter */
 /* Prototypes */
 
 #endif

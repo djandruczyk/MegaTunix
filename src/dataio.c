@@ -21,7 +21,11 @@
 #include <binlogger.h>
 #include <dataio.h>
 #include <debugging.h>
+#include <enums.h>
 #include <errno.h>
+#include <firmware.h>
+#include <notifications.h>
+#include <plugin.h>
 #include <serialio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -154,6 +158,143 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	return total_read;
 }
 
+
+/*!
+ \brief write_data() physically sends the data to the ECU.
+ \param message is the pointer to an Io_Message structure
+ */
+G_MODULE_EXPORT gboolean write_data(Io_Message *message)
+{
+	static GMutex *serio_mutex = NULL;
+	static Serial_Params *serial_params = NULL;
+	static Firmware_Details *firmware = NULL;
+	static gfloat *factor = NULL;
+	OutputData *output = message->payload;
+	gint res = 0;
+	gchar * err_text = NULL;
+	guint i = 0;
+	gint j = 0;
+	gint len = 0;
+	gboolean notifies = FALSE;
+	gint notif_divisor = 32;
+	WriteMode mode = MTX_CMD_WRITE;
+	gboolean retval = TRUE;
+	DBlock *block = NULL;
+	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static void (*store_new_block)(gpointer) = NULL;
+	static void (*set_ecu_data)(gpointer,gint *) = NULL;
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!serial_params)
+		serial_params = DATA_GET(global_data,"serial_params");
+	if (!serio_mutex)
+		serio_mutex = DATA_GET(global_data,"serio_mutex");
+	if (!factor)
+		factor = DATA_GET(global_data,"sleep_correction");
+	if (!set_ecu_data)
+		get_symbol("set_ecu_data",(void*)&set_ecu_data);
+	if (!store_new_block)
+		get_symbol("store_new_block",(void*)&store_new_block);
+
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(serial_params,FALSE);
+	g_return_val_if_fail(serio_mutex,FALSE);
+	g_return_val_if_fail(factor,FALSE);
+	g_return_val_if_fail(set_ecu_data,FALSE);
+	g_return_val_if_fail(store_new_block,FALSE);
+
+	g_static_mutex_lock(&mutex);
+	g_mutex_lock(serio_mutex);
+
+	if (output)
+		mode = (WriteMode)DATA_GET(output->data,"mode");
+
+	if (DATA_GET(global_data,"offline"))
+	{
+		switch (mode)
+		{
+			case MTX_SIMPLE_WRITE:
+				set_ecu_data(output->data,NULL);
+				break;
+			case MTX_CHUNK_WRITE:
+				store_new_block(output->data);
+				break;
+			case MTX_CMD_WRITE:
+				break;
+		}
+		g_mutex_unlock(serio_mutex);
+		g_static_mutex_unlock(&mutex);
+		return TRUE;		/* can't write anything if offline */
+	}
+	if (!DATA_GET(global_data,"connected"))
+	{
+		g_mutex_unlock(serio_mutex);
+		g_static_mutex_unlock(&mutex);
+		return FALSE;		/* can't write anything if disconnected */
+	}
+
+	for (i=0;i<message->sequence->len;i++)
+	{
+		block = g_array_index(message->sequence,DBlock *,i);
+		/*	printf("Block pulled\n");*/
+		if (block->type == ACTION)
+		{
+			/*		printf("Block type of ACTION!\n");*/
+			if (block->action == SLEEP)
+			{
+				/*			printf("Sleeping for %i usec\n", block->arg);*/
+				dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tSleeping for %i microseconds \n",block->arg));
+				g_usleep((*factor)*block->arg);
+			}
+		}
+		else if (block->type == DATA)
+		{
+			/*		printf("Block type of DATA!\n");*/
+			if (block->len > 100)
+				notifies = TRUE;
+			for (j=0;j<block->len;j++)
+			{
+				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
+				if ((notifies) && ((j % notif_divisor) == 0))
+					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<b>Sending %i of %i bytes</b>"),j,block->len));
+				if (i == 0)
+					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%.2X\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
+				else
+					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%.2X\"\n",i,j+1,block->len,block->data[j]));
+				/*printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);*/
+				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);	/* Send write command */
+				if (!res)
+				{
+					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
+					retval = FALSE;
+				}
+				if (firmware->capabilities & MS2)
+					g_usleep((*factor)*firmware->interchardelay*1000);
+			}
+		}
+	}
+	if (notifies)
+	{
+		thread_update_widget("info_label",MTX_LABEL,g_strdup("<b>Transfer Completed</b>"));
+		gdk_threads_add_timeout(2000,(GSourceFunc)reset_infolabel,NULL);
+	}
+	/* If sucessfull update ecu_data as well, this way, current 
+	 * and pending match, in the case of a failed write, the 
+	 * update_write_status() function will catch it and rollback as needed
+	 */
+	if ((output) && (retval))
+	{
+		if (mode == MTX_SIMPLE_WRITE)
+			set_ecu_data(output->data,NULL);
+		else if (mode == MTX_CHUNK_WRITE)
+			store_new_block(output->data);
+	}
+
+	g_mutex_unlock(serio_mutex);
+	g_static_mutex_unlock(&mutex);
+	return retval;
+}
 
 /*!
  \brief dump_output() dumps the newly read data to the console in HEX for

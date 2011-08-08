@@ -11,11 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/args.c
- *
- * @brief ...
- *
- *
+/*! 
+ \file src/args.c
+ \ingroup CoreMtx 
+ \brief Processes Command Line arguments for things like personality
+ selection, Dashboard,  online/offline mode, background logging, etc
+ \author David Andruczyk
  */
 
 #include <args.h>

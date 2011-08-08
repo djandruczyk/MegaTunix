@@ -6,7 +6,6 @@ headers = \
 	apicheck.h \
 	args.h \
 	binlogger.h \
-	comms.h \
 	comms_gui.h \
 	combo_loader.h \
 	combo_mask.h \

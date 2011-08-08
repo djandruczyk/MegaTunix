@@ -20,7 +20,7 @@
 
 #include <args.h>
 #include <3d_vetable.h>
-#include <comms.h>
+#include <dataio.h>
 #include <debugging.h>
 #include <init.h>
 #include <plugin.h>

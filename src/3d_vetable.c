@@ -30,11 +30,12 @@
  *  - drawFrameRate change to drawOrthoText
  */
 
-/*! @file src/3d_vetable.c
- *
- * @brief ...
- *
- *
+/*!
+ \file src/3d_vetable.c
+ \ingroup SpecialStuff
+ \brief Contains all the functions specific to the 3D table viewer/editor
+ \author David Andruczyk
+ \author Ben Pierre
  */
 
 #include <3d_vetable.h>

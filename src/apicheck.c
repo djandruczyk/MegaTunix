@@ -11,11 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/apicheck.c
- *
- * @brief ...
- *
- *
+/*! 
+ \file src/apicheck.c
+ \ingroup CoreMtx
+ \brief Functions to get/set the API major/minor versions within .ini 
+ styles files
+   
+ Gets or sets the API major/minor versions in an [API] section
+ with the following keys "major" and "minor".
+ \author David Andruczyk 
  */
 
 #include <apicheck.h>
@@ -39,16 +43,20 @@ G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
 /*!
  \brief gets the file API and returns it thru the passed pointers
  \param cfg is the poitner to the ConfigFile structure
- \param major is the major api version number
- \param minor is the minor api version number
+ \param major is the pointer to where the major api version number should be 
+ stored or NULL
+ \param minor is the pointer to where the minor api version number should be 
+ stored or NULL
  \returns TRUE on api version reading, FALSE on api version not readable
  */
 G_MODULE_EXPORT gboolean get_file_api(ConfigFile *cfg, gint *major, gint *minor)
 {
-	gboolean result = FALSE;
-	gboolean result2 = FALSE;
-	result = cfg_read_int(cfg,"API","major",&*major);
-	result2 = cfg_read_int(cfg,"API","minor",&*minor);
+	gboolean result = TRUE;
+	gboolean result2 = TRUE;
+	if (major)
+		result = cfg_read_int(cfg,"API","major",&*major);
+	if (minor)
+		result2 = cfg_read_int(cfg,"API","minor",&*minor);
 	if ((result) && (result2))
 		return TRUE;
 	else

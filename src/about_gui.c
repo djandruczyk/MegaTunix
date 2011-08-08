@@ -11,11 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/about_gui.c
- *
- * @brief ...
- *
- *
+/*! 
+ \file src/about_gui.c
+ \ingroup CoreMtx
+ \brief Creates the about MegaTunix tab with the Logo
+ \authors David Andryczk
+ \authors Dale Anderson (logo)
  */
 
 #include <about_gui.h>

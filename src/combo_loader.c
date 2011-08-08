@@ -13,11 +13,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/combo_loader.c
- *
- * @brief ...
- *
- *
+/*!
+ \file src/combo_loader.c
+ \ingroup CoreMtx
+ \brief Handles the special case ComboBoxEntry widgets
+ This takes care of setting up the underlying TreeModel used for the combo
+ box and sets up the regex parser so users can type in subtrings and on
+ a match the selection is made.  The model has additional fields on it for
+ the ECU specific bit value associated with the varius choices. The remaining
+ ecu specific data (location information) is loaded via the tabloader
+ \author David Andruczyk
  */
 
 #include <assert.h>
@@ -44,7 +49,6 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 	gint num_choices = 0;
 	gint num_bitvals = 0;
 	gint i = 0;
-	gint bitmask = 0;
 	gint width = 0;
 	gchar *tmpstr = NULL;
 	gchar *regex = NULL;
@@ -71,12 +75,6 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 	}
 	vector = parse_keys(tmpbuf,&num_bitvals,",");
 	g_free(tmpbuf);
-	if (!cfg_read_int(cfgfile,section,"bitmask",&bitmask))
-	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": combo_loader()\n\t\"bitvals\" key is MISSING, critical fault, not setting up control \n"));
-		return;
-	}
-
 	if (num_bitvals != num_choices)
 	{
 		name = glade_get_widget_name(GTK_WIDGET(object));

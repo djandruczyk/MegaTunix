@@ -11,11 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/binlogger.c
- *
- * @brief ...
- *
- *
+/*!
+ \file src/binlogger.c
+ \ingroup CoreMtx
+ \brief Handles all aspects of binary logging of the serial I/O used for
+ debugging purposes.
+ \author David Andruczyk
  */
 
 #include <binlogger.h>
