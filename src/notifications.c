@@ -11,11 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/notifications.c
- *
- * @brief ...
- *
- *
+/*!
+  \file src/notifications.c
+  \ingroup CoreMtx
+  \brief Where all the notification messages come from...
+  \author David Andruczyk
  */
 
 #include <args.h>

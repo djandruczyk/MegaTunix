@@ -13,12 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/multi_expr_loader.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/multi_expr_loader.c
+  \ingroup CoreMtx 
+  \brief Deals with RT map vars that are rare special cases that have 
+  different math functions based on other variables' state
+  \author David Andruczyk
+  */
 
 #include <debugging.h>
 #include <init.h>
