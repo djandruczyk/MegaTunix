@@ -32,10 +32,10 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief personality_choice() is called from a one shot timeout from main
- in order to open the window to ask the user what ECU family to deal with
- running.
- */
+  \brief personality_choice() is called from a one shot timeout from main
+  in order to open the window to ask the user what ECU family to deal with
+  running.
+  */
 G_MODULE_EXPORT gboolean personality_choice(void)
 {
 	GtkWidget *dialog = NULL;

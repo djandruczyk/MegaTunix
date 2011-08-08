@@ -11,12 +11,21 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/dispatcher.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/dispatcher.c
+  \ingroup CoreMtx
+  \brief Handles calling gui functions from thread contexts via msg passing
+  
+  There are two dispatcher functions, one for "Post Functions". These are 
+  special operations that need to take place after some form of I/O with an
+  ECU has happened,  In most cases this may do additional I/O and or gui
+  operations that can't be done in a threaded context as only the main
+  thread context can do Gui operations safely
+  The second dispatcher is the gui_dispatcher and handles things that need to
+  be isolated and/or delayed from a thread context, and this is more for things
+  like queued widget update/redraws, label changers and so on.
+  \author David Andruczyk
+  */
 
 #include <conversions.h>
 #include <init.h>
@@ -26,13 +35,13 @@
 #include <widgetmgmt.h>
 
 /*!
- \brief pf_dispatcher() is a GTK+ timeout that runs 10 times per second checking
- for message on the dispatch queue which handles gui operations after a thread
- function runs, This will attempt to handle multiple messages at a time if the
- queue has multiple message queued up.
- \param data is unused
- \returns TRUE 
- */
+  \brief pf_dispatcher() is a GTK+ timeout that runs 10 times per second 
+  checking for message on the dispatch queue which handles gui operations
+  after a thread function runs, This will attempt to handle multiple 
+  messages at a time if the queue has multiple message queued up.
+  \param data is unused
+  \returns TRUE 
+  */
 G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 {
 	static GAsyncQueue *pf_dispatch_queue = NULL;
@@ -143,13 +152,13 @@ fast_exit:
 
 
 /*!
- \brief gui_dispatcher() is a GTK+ timeout that runs 30 tiems per second checking
- for message on the dispatch queue which handles gui operations after a thread
- function runs, This will attempt to handle multiple messages at a time if the
- queue has multiple message queued up.
- \param data is unused
- \returns TRUE 
- */
+  \brief gui_dispatcher() is a GTK+ timeout that runs 30 tiems per second 
+  checking for message on the dispatch queue which handles gui operations 
+  after a thread function runs, This will attempt to handle multiple 
+  messages at a time if the queue has multiple message queued up.
+  \param data is unused
+  \returns TRUE 
+  */
 G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;

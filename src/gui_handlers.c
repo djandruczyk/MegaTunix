@@ -11,12 +11,21 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/gui_handlers.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/gui_handlers.c
+  \ingroup CoreMtx
+  \brief Handles all interations with Gui widgets
+ 
+  This file contains nearly all the functions that will handle gui operations
+  like updating text entries, clicking buttons, moving ranges/scales and so 
+  on. Since most controls will be ecu persona/firmware specific these functions
+  will check for and call the persona specific handlers which will then call
+  firmware specific handlers if required from the persona/firmware plugins.
+  Basically for any control that could exist in potentially more than one
+  ECU persona, there should be a wrapper here that calls the apprpriate function
+  out of the plugin to be reasonably extensible
+  \author David Andruczyk
+  */
 
 #define _ISOC99_SOURCE
 #include <3d_vetable.h>
@@ -61,12 +70,12 @@ extern GdkColor black;
 extern GdkColor white;
 
 /*!
- \brief leave() is the main shutdown function for MegaTunix. It shuts down
- whatever runnign handlers are still going, deallocates memory and quits
- \param widget is  unused
- \param data is unused
- \returns TRUE
- */
+  \brief leave() is the main shutdown function for MegaTunix. It shuts down
+  whatever runnign handlers are still going, deallocates memory and quits
+  \param widget is  unused
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
 	gint id;
@@ -254,12 +263,12 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief comm_port_override() is called every time the comm port text entry
- changes. it'll try to open the port and if it does it'll setup the serial 
- parameters
- \param editable is the pointer to editable widget to extract text from
- \returns TRUE
- */
+  \brief comm_port_override() is called every time the comm port text entry
+  changes. it'll try to open the port and if it does it'll setup the serial 
+  parameters
+  \param editable is the pointer to editable widget to extract text from
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 {
 	gchar *port;
@@ -279,11 +288,11 @@ G_MODULE_EXPORT gboolean comm_port_override(GtkEditable *editable)
 
 
 /*!
- \brief toggle_button_handler() handles all toggle buttons in MegaTunix
- \param widget is the the toggle button that changes
- \param data is unused in most cases
- \returns TRUE
- */
+  \brief toggle_button_handler() handles all toggle buttons in MegaTunix
+  \param widget is the the toggle button that changes
+  \param data is unused in most cases
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	static GtkSettings *settings = NULL;
@@ -440,14 +449,14 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief bitmask_button_handler() handles all controls that refer to a group
- of bits in a variable (i.e. a var shared by multiple controls),  most commonly
- used for check/radio buttons referring to features that control single
- bits in the firmware
- \param widget is the widget being changed
- \param data is unused
- \returns TRUE
- */
+  \brief bitmask_button_handler() handles all controls that refer to a group
+  of bits in a variable (i.e. a var shared by multiple controls),  most commonly
+  used for check/radio buttons referring to features that control single
+  bits in the firmware
+  \param widget is the widget being changed
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
@@ -503,13 +512,13 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 
 
 /*!
- \brief entry_changed_handler() gets called anytime a text entries is changed
- (i.e. during edit) it's main purpose is to turn the entry red to signify
- to the user it's being modified but not yet SENT to the ecu
- \param widget is the the widget being modified
- \param data is unused
- \returns TRUE
- */
+  \brief entry_changed_handler() gets called anytime a text entries is changed
+  (i.e. during edit) it's main purpose is to turn the entry red to signify
+  to the user it's being modified but not yet SENT to the ecu
+  \param widget is the the widget being modified
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 {
 	if ((DATA_GET(global_data,"paused_handlers")) || 
@@ -524,13 +533,13 @@ G_MODULE_EXPORT gboolean entry_changed_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief focus_out_handler() auto-sends data IF IT IS CHANGED to the ecu thus
- hopefully ending the user confusion about why data isn't sent.
- \param widget is the the widget being modified
- \param event is unused
- \param data is unused
- \returns FALSE
- */
+  \brief focus_out_handler() auto-sends data IF IT IS CHANGED to the ecu thus
+  hopefully ending the user confusion about why data isn't sent.
+  \param widget is the the widget being modified
+  \param event is unused
+  \param data is unused
+  \returns FALSE
+  */
 G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *event, gpointer data)
 {
 	if (OBJ_GET(widget,"not_sent"))
@@ -548,13 +557,13 @@ G_MODULE_EXPORT gboolean focus_out_handler(GtkWidget *widget, GdkEventFocus *eve
 
 
 /*!
- \brief slider_value_changed() handles controls based upon a slider
- sort of like spinbutton controls
- \param widget is the pointer to slider widget
- \param data is unused
- \returns if paused/not ready, return TRUE, otherwise call plugin handler
- and returm whatever it returns
- */
+  \brief slider_value_changed() handles controls based upon a slider
+  sort of like spinbutton controls
+  \param widget is the pointer to slider widget
+  \param data is unused
+  \returns if paused/not ready, return TRUE, otherwise call plugin handler
+  and returm whatever it returns
+  */
 G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
@@ -582,15 +591,15 @@ G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief std_entry_handler() gets called when a text entries is "activated"
- i.e. when the user hits enter. This function extracts the data, converts it
- to a number (checking for base10 or base16) performs the proper conversion
- and send it to the ECU and updates the gui to the closest value if the user
- didn't enter in an exact value.
- \param widget is the widget being modified
- \param data is not used
- \returns TRUE
- */
+  \brief std_entry_handler() gets called when a text entries is "activated"
+  i.e. when the user hits enter. This function extracts the data, converts it
+  to a number (checking for base10 or base16) performs the proper conversion
+  and send it to the ECU and updates the gui to the closest value if the user
+  didn't enter in an exact value.
+  \param widget is the widget being modified
+  \param data is not used
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
@@ -624,12 +633,12 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief std_button_handler() handles all standard non toggle/check/radio
- buttons. 
- \param widget is the widget being modified
- \param data is not used
- \returns TRUE
- */
+  \brief std_button_handler() handles all standard non toggle/check/radio
+  buttons. 
+  \param widget is the widget being modified
+  \param data is not used
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* get any datastructures attached to the widget */
@@ -769,11 +778,11 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief Generic handler for all combo boxes
- \param widget is the widget being modified
- \param data is not used
- \returns TRUE
- */
+  \brief Generic handler for all combo boxes
+  \param widget is the widget being modified
+  \param data is not used
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
@@ -804,12 +813,12 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief Generic handler for ALL spinbuttons in MegaTunix and does
- whatever is needed for the data before sending it to the ECU
- \param widget is the widget being modified
- \param data is not used
- \returns TRUE
- */
+  \brief Generic handler for ALL spinbuttons in MegaTunix and does
+  whatever is needed for the data before sending it to the ECU
+  \param widget is the widget being modified
+  \param data is not used
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 {
 	/* Gets the value from the spinbutton then modifues the 
@@ -913,14 +922,14 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief Handler for key button presses is triggered when a key is pressed 
- on a widget that has a key_press/release_event handler registered.
- \param widget is the widget where the event occurred
- \param event is the pointer to GdkEventKey event struct, which 
- contains the key that was pressed
- \param data is unused
- \returns FALSE if not handled, TRUE otherwise
- */
+  \brief Handler for key button presses is triggered when a key is pressed 
+  on a widget that has a key_press/release_event handler registered.
+  \param widget is the widget where the event occurred
+  \param event is the pointer to GdkEventKey event struct, which 
+  contains the key that was pressed
+  \param data is unused
+  \returns FALSE if not handled, TRUE otherwise
+  */
 G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	static gint (*get_ecu_data_f)(gpointer) = NULL;
@@ -1258,14 +1267,14 @@ G_MODULE_EXPORT void insert_text_handler(GtkEntry *entry, const gchar *text, gin
 
 
 /*!
- \brief used on Tables only to "select" the widget or 
- group of widgets for rescaling . Requires shift key to be held down and click
- on each spinner/entry that you want to select for rescaling
- \param widget is the widget being selected
- \param event is the struct containing details on the event
- \param data is unused
- \returns FALSE to allow other handlers to run
- */
+  \brief used on Tables only to "select" the widget or 
+  group of widgets for rescaling . Requires shift key to be held down and click
+  on each spinner/entry that you want to select for rescaling
+  \param widget is the widget being selected
+  \param event is the struct containing details on the event
+  \param data is unused
+  \returns FALSE to allow other handlers to run
+  */
 G_MODULE_EXPORT gboolean widget_grab(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gboolean marked = FALSE;
@@ -1320,14 +1329,14 @@ testit:
 
 
 /*
- \brief Handler that is fired off whenever a new notebook page is chosen.
- This function just sets a variable marking the current page.  this is to
- prevent the runtime sliders from being updated if they aren't visible
- \param notebook is the notebook that emitted the event
- \param page is the page
- \param page_no is the page number that's now active
- \param data is unused
- */
+  \brief Handler that is fired off whenever a new notebook page is chosen.
+  This function just sets a variable marking the current page.  this is to
+  prevent the runtime sliders from being updated if they aren't visible
+  \param notebook is the notebook that emitted the event
+  \param page is the page
+  \param page_no is the page number that's now active
+  \param data is unused
+  */
 G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint tab_ident = 0;
@@ -1400,14 +1409,14 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
 
 
 /*
- \brief Handler that is fired off whenever a new sub-notebook page is chosen.
- This function just sets a variable marking the current page.  this is to
- prevent the runtime sliders from being updated if they aren't visible
- \param notebook is the nbotebook that emitted the event
- \param page is the page
- \param page_no is the page number that's now active
- \param data is unused
- */
+  \brief Handler that is fired off whenever a new sub-notebook page is chosen.
+  This function just sets a variable marking the current page.  this is to
+  prevent the runtime sliders from being updated if they aren't visible
+  \param notebook is the nbotebook that emitted the event
+  \param page is the page
+  \param page_no is the page number that's now active
+  \param data is unused
+  */
 G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
 {
 	gint active_table = -1;
@@ -1429,13 +1438,13 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page
 
 
 /*!
- \brief Handles the buttons that deal with the Fueling
- algorithm, as special things need to be taken care of to enable proper
- display of data.
- \param widget is the the toggle button that changes
- \param data is unused in most cases
- \returns TRUE if it handles
- */
+  \brief Handles the buttons that deal with the Fueling
+  algorithm, as special things need to be taken care of to enable proper
+  display of data.
+  \param widget is the the toggle button that changes
+  \param data is unused in most cases
+  \returns TRUE if it handles
+  */
 G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 {
 	gint algo = 0; 
@@ -1610,8 +1619,8 @@ G_MODULE_EXPORT guint get_bitshift(guint mask)
 
 
 /*
- \brief sets the value of a miscelaneous gauge
- */
+  \brief sets the value of a miscelaneous gauge
+  */
 G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 {
 	if (GTK_IS_WIDGET(watch->user_data))
@@ -1789,10 +1798,10 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 
 
 /*!
- \brief set_widget_labels takes a passed string which is a comma 
- separated string of name/value pairs, first being the widget name 
- (global name) and the second being the string to set on this widget
- */
+  \brief set_widget_labels takes a passed string which is a comma 
+  separated string of name/value pairs, first being the widget name 
+  (global name) and the second being the string to set on this widget
+  */
 G_MODULE_EXPORT void set_widget_labels(const gchar *input)
 {
 	gchar ** vector = NULL;
@@ -1825,11 +1834,11 @@ G_MODULE_EXPORT void set_widget_labels(const gchar *input)
 
 
 /*!
- \brief swap_labels() is a utility function that extracts the list passed to 
- it, and kicks off a subfunction to do the swapping on each widget in the list
- \param widget is the name of list to enumeration and run the subfunction on
- \param state is the state passed on to the subfunction
- */
+  \brief swap_labels() is a utility function that extracts the list passed to 
+  it, and kicks off a subfunction to do the swapping on each widget in the list
+  \param widget is the name of list to enumeration and run the subfunction on
+  \param state is the state passed on to the subfunction
+  */
 G_MODULE_EXPORT void swap_labels(GtkWidget *widget, gboolean state)
 {
 	GList *list = NULL;
@@ -1854,13 +1863,13 @@ G_MODULE_EXPORT void swap_labels(GtkWidget *widget, gboolean state)
 
 
 /*!
- \brief switch_labels() swaps labels that depend on the state of another 
- control. Handles temp dependant labels as well..
- \param key (gpointer) gpointer encapsulation of the widget
- \param data (gpointer)  gpointer encapsulation of the target state if TRUE 
- we use the alternate label, if FALSE we use
- the default label
- */
+  \brief switch_labels() swaps labels that depend on the state of another 
+  control. Handles temp dependant labels as well..
+  \param key (gpointer) gpointer encapsulation of the widget
+  \param data (gpointer)  gpointer encapsulation of the target state if TRUE 
+  we use the alternate label, if FALSE we use
+  the default label
+  */
 G_MODULE_EXPORT void switch_labels(gpointer key, gpointer data)
 {
 	GtkWidget * widget = (GtkWidget *) key;
@@ -2097,9 +2106,9 @@ G_MODULE_EXPORT void set_widget_label_from_array(gpointer key, gpointer data)
 
 
 /*!
- \brief recalc_table_limits() Finds the minimum and maximum values for a 
- 2D table (this will be deprecated when thevetables are a custom widget)
- */
+  \brief recalc_table_limits() Finds the minimum and maximum values for a 
+  2D table (this will be deprecated when thevetables are a custom widget)
+  */
 G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 {
 	static Firmware_Details *firmware = NULL;

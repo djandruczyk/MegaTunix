@@ -42,10 +42,10 @@ static GtkSizeGroup *size_group_right = NULL;
 extern gconstpointer *global_data;
 
 /*!
- \brief load_rt_sliders() is called to load up the runtime slider configurations
- from the file specified in the firmware's interrogation profile, and populate
- the gui with the newly created sliders.
- */
+  \brief load_rt_sliders() is called to load up the runtime slider 
+  configuration from the file specified in the firmware's interrogation 
+  profile, and populate the gui with the newly created sliders.
+  */
 G_MODULE_EXPORT void load_rt_sliders(void)
 {
 	GHashTable *rt_sliders = NULL;
@@ -103,10 +103,10 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 
 
 /*!
- \brief load_ww_sliders() is called to load up the runtime slider configurations
- from the file specified in the firmware's interrogation profile, and populate
- the gui with the newly created sliders.
- */
+  \brief load_ww_sliders() is called to load up the runtime slider 
+  configurations from the file specified in the firmware's interrogation 
+  profile, and populate the gui with the newly created sliders.
+  */
 G_MODULE_EXPORT void load_ww_sliders(void)
 {
 	GHashTable *ww_sliders = NULL;
@@ -249,10 +249,10 @@ G_MODULE_EXPORT void load_rts(xmlNode *node, GHashTable *hash, gint table_num, T
 
 
 /*!
- \brief load_ve3d_sliders() is called from 3d_vetable.c to load up the sliders
- specific to the 3D Table views. 
- \param table_num is the table number passed to load sliders for
- */
+  \brief load_ve3d_sliders() is called from 3d_vetable.c to load up the sliders
+  specific to the 3D Table views. 
+  \param table_num is the table number passed to load sliders for
+  */
 G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 {
 	gchar *filename = NULL;
@@ -302,17 +302,17 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 
 
 /*!
- \brief add_slider() creates the slider from the passed data, and attaches
- it the the gui.
- \param ctrl_name is the name of the slider as defined in the config file
- \param tbl is the table number to bind this slider to
- \param table_num is  the table_num from the firmware that this slider is
- bound to. (used for the sliders on the 3D view)
- \param row is the row of the table (tbl) that this slider goes on
- \param source is the data source for this slider 
- \param ident is the enumeration of the page this slider goes on
- \returns a Struct Rt_Slider *
- */
+  \brief add_slider() creates the slider from the passed data, and attaches
+  it the the gui.
+  \param ctrl_name is the name of the slider as defined in the config file
+  \param tbl is the table number to bind this slider to
+  \param table_num is  the table_num from the firmware that this slider is
+  bound to. (used for the sliders on the 3D view)
+  \param row is the row of the table (tbl) that this slider goes on
+  \param source is the data source for this slider 
+  \param ident is the enumeration of the page this slider goes on
+  \returns a Struct Rt_Slider *
+  */
 G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
 {
 	Rt_Slider *slider = NULL;
@@ -428,12 +428,12 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 
 
 /*!
- \brief register_rt_range() creates the slider from the passed data, 
- and attaches it the the gui. This is called during gui tab loading to embed
- sliders into regular tabs.
- \param widget is the widget defined in Gui datamap file. Used
- to load all the necessary attributes to stick the control in the right place.
- */
+  \brief register_rt_range() creates the slider from the passed data, 
+  and attaches it the the gui. This is called during gui tab loading to embed
+  sliders into regular tabs.
+  \param widget is the widget defined in Gui datamap file. Used
+  to load all the necessary attributes to stick the control in the right place.
+  */
 G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 {
 	gconstpointer *object = NULL;
@@ -547,11 +547,11 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 
 
 /*!
- \brief free_ve3d_sliders() frees the sliders associated with the table_num
- passed to it.
- \param table_num is the table_number to free the sliders for
- \returns FALSE
- */
+  \brief free_ve3d_sliders() frees the sliders associated with the table_num
+  passed to it.
+  \param table_num is the table_number to free the sliders for
+  \returns FALSE
+  */
 G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 {
 	gchar * widget = NULL;
@@ -689,13 +689,13 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 
 
 /*!
- \brief rt_update_values() is called for each runtime slider to update
- it's position and label (label is periodic and not every time due to pango
- speed problems)
- \param key is unused
- \param value is the pointer to Rt_Slider
- \param data is unused
- */
+  \brief rt_update_values() is called for each runtime slider to update
+  it's position and label (label is periodic and not every time due to pango
+  speed problems)
+  \param key is unused
+  \param value is the pointer to Rt_Slider
+  \param data is unused
+  */
 G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer data)
 {
 	static GRand *rand = NULL;

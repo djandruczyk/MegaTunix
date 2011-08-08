@@ -15,15 +15,15 @@
 
 /*!
  \file src/combo_loader.c
- \ingroup CoreMtx
- \brief Handles the special case ComboBoxEntry widgets
- This takes care of setting up the underlying TreeModel used for the combo
- box and sets up the regex parser so users can type in subtrings and on
- a match the selection is made.  The model has additional fields on it for
- the ECU specific bit value associated with the varius choices. The remaining
- ecu specific data (location information) is loaded via the tabloader
- \author David Andruczyk
- */
+  \ingroup CoreMtx
+  \brief Handles the special case ComboBoxEntry widgets
+  This takes care of setting up the underlying TreeModel used for the combo
+  box and sets up the regex parser so users can type in subtrings and on
+  a match the selection is made.  The model has additional fields on it for
+  the ECU specific bit value associated with the varius choices. The remaining
+  ecu specific data (location information) is loaded via the tabloader
+  \author David Andruczyk
+  */
 
 #include <assert.h>
 #include <combo_loader.h>

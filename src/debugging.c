@@ -11,12 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/debugging.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/debugging.c
+  \ingroup CoreMtx
+  \brief Handles al ldebugging within MTX
+  
+  Note: This isn't ideal in design and should be redesigned at some point to
+  be less ugly using some macro magic
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <debugging.h>
@@ -50,9 +53,9 @@ static DebugLevel dbglevels[] =
 };
 
 /*!
- \brief open_debug() opens the channel to the debugging information log.
- The path defaults to the current working directory.
- */
+  \brief open_debug() opens the channel to the debugging information log.
+  The path defaults to the current working directory.
+  */
 G_MODULE_EXPORT void open_debug(void)
 {
 	extern gconstpointer *global_data;
@@ -106,11 +109,11 @@ G_MODULE_EXPORT void close_debug(void)
 }
 
 /*!
- \brief dbg_func() writes debugggin output to the console based on if the
- passed debug level is marked in the current debugging mask.
- \param level iss theDbg_Class enumeration defining the debug level
- \param str is the message to print out
- */
+  \brief dbg_func() writes debugggin output to the console based on if the
+  passed debug level is marked in the current debugging mask.
+  \param level iss theDbg_Class enumeration defining the debug level
+  \param str is the message to print out
+  */
 G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 {
 	gsize count = 0;

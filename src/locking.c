@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/locking.c
- *
- * @brief ...
- *
- *
- */
+/*! 
+  \file src/locking.c
+  \ingroup CoreMtx
+  \brief Locking functions to prevent multiple instances
+  NOTE, this implementation is NOT complete for all platforms
+  \author David Andruczyk
+  */
 
 #include <errno.h>
 #include <init.h>

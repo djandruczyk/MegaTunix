@@ -28,15 +28,15 @@
 #include <string.h>
 
 /*!
- \brief multi_expr_loader() is called when a "multi_expr_keys" key is found in
- a realtimemap, and triggers the loading of al lthe keys/values that
- will allow megatunix to process a special variable that requires handling of
- multiple circumstances
- \param object is the place to store the retrieved data
- \param cfgfile is the pointer to cfgfile that contains the data
- \param section is the section to read the data from
- \see check_dependancies
- */
+  \brief multi_expr_loader() is called when a "multi_expr_keys" key is found in
+  a realtimemap, and triggers the loading of al lthe keys/values that
+  will allow megatunix to process a special variable that requires handling of
+  multiple circumstances
+  \param object is the place to store the retrieved data
+  \param cfgfile is the pointer to cfgfile that contains the data
+  \param section is the section to read the data from
+  \see check_dependancies
+  */
 G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *cfgfile,gchar * section)
 {
 	gchar *tmpbuf = NULL;

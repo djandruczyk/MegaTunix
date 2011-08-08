@@ -48,10 +48,10 @@ extern gconstpointer *global_data;
 gboolean descend_tree(GladeWidgetInfo *info, ConfigFile *);
 
 /*!
- \brief load_gui_tabs_pf() is called after interrogation completes successfully.
- It's purpose is to load all the glade files and datamaps as specified in the
- interrogation profile of the detected firmware. 
- */
+  \brief load_gui_tabs_pf() is called after interrogation completes 
+  successfully. It's purpose is to load all the glade files and 
+  datamaps as specified in the interrogation profile of the detected firmware. 
+  */
 G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 {
 	gint i = 0;
@@ -205,13 +205,13 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 
 /*!
- \brief load_gui_tabs_pf() is called after interrogation completes successfully.
- It's purpose is to load all the glade files and datamaps as specified in the
- interrogation profile of the detected firmware. 
- \param notebook is the pointer to the notebook the new tab should be placed
- \param page is the page number to load
- \returns TRUE on success, FALSE on failure
- */
+  \brief load_gui_tabs_pf() is called after interrogation completes 
+  successfully. It's purpose is to load all the glade files and datamaps 
+  as specified in the interrogation profile of the detected firmware. 
+  \param notebook is the pointer to the notebook the new tab should be placed
+  \param page is the page number to load
+  \returns TRUE on success, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 {
 	static void (*update_widget_f)(gpointer, gpointer) = NULL;
@@ -310,10 +310,10 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 
 
 /*!
- \brief free's the data from the struct Group structure
- \param value is the pointer to the struct Group to be deallocated
- \see load_groups
- */
+  \brief free's the data from the struct Group structure
+  \param value is the pointer to the struct Group to be deallocated
+  \see load_groups
+  */
 G_MODULE_EXPORT void group_free(gpointer value)
 {
 	Group *group = value;
@@ -332,15 +332,15 @@ G_MODULE_EXPORT void group_free(gpointer value)
 }
 
 /*!
- \brief Called from the load_gui_tabs_pf function in order to
- load common settings for a group of controls.
- \param cfgfile is the pointer to the configuration file to read
- the group information from.
- \see group_free
- \see load_gui_tabs_pf
- \returns a GHashTable * to a newly created hashtable of the groups that were
- loaded. The groups are indexed in the hashtable by group name.
- */
+  \brief Called from the load_gui_tabs_pf function in order to
+  load common settings for a group of controls.
+  \param cfgfile is the pointer to the configuration file to read
+  the group information from.
+  \see group_free
+  \see load_gui_tabs_pf
+  \returns a GHashTable * to a newly created hashtable of the groups that were
+  loaded. The groups are indexed in the hashtable by group name.
+  */
 G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 {
 	gint x = 0;
@@ -420,17 +420,17 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 
 
 /*!
- \brief bind_group_data() is called to bind data widget that is defined in
- a group. (saves from having to duplicate a large number of keys/values for 
- a big group of widgets) This function will set the necessary data on the 
- Gui object.
- \param cfg is the pointer to the config file object to read data from
- \param object is the widget to bind the data to
- \param groups is the hashtable that holds the group common data
- \param groupname is the textual name of the group to get the data for to
- be bound to the widget
- \returns the page of the group
- */
+  \brief bind_group_data() is called to bind data widget that is defined in
+  a group. (saves from having to duplicate a large number of keys/values for 
+  a big group of widgets) This function will set the necessary data on the 
+  Gui object.
+  \param cfg is the pointer to the config file object to read data from
+  \param object is the widget to bind the data to
+  \param groups is the hashtable that holds the group common data
+  \param groupname is the textual name of the group to get the data for to
+  be bound to the widget
+  \returns the page of the group
+  */
 G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar *groupname)
 {
 	gint i = 0;
@@ -483,11 +483,11 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 
 
 /*!
- \brief bind_to_lists() binds a widget to any number of string named lists.
- \param widget is the widget to bind to lists
- \param lists is the command seperated string list of lists to bind this
- widget into.
- */
+  \brief bind_to_lists() binds a widget to any number of string named lists.
+  \param widget is the widget to bind to lists
+  \param lists is the command seperated string list of lists to bind this
+  widget into.
+  */
 G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
 {
 	gint bind_num_keys = 0;
@@ -549,14 +549,14 @@ G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
 }
 
 /*!
- \brief bind_data() is a recursive function that is called for every container
- widget in a glade frame and it's purpose is to search the datamap file passed
- for the widget names in the glade file and if it's fond in the datamap to
- load all the attribues listed and bind them to the object using GTK+'s
- object model.
- \param widget is the widget passed to load attributes on
- \param user_data is the pointer to a BingGroup structure.
- */
+  \brief bind_data() is a recursive function that is called for every container
+  widget in a glade frame and it's purpose is to search the datamap file passed
+  for the widget names in the glade file and if it's fond in the datamap to
+  load all the attribues listed and bind them to the object using GTK+'s
+  object model.
+  \param widget is the widget passed to load attributes on
+  \param user_data is the pointer to a BingGroup structure.
+  */
 G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 {
 	BindGroup *bindgroup = user_data;
@@ -847,11 +847,11 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 
 /*!
- \brief run_post_functions() is called to run a function AFTER tab loading.
- It'll search the exported symbols of MegaTunix for the function and if
- found execute it
- \param functions is the CSV list of functions to run
- */
+  \brief run_post_functions() is called to run a function AFTER tab loading.
+  It'll search the exported symbols of MegaTunix for the function and if
+  found execute it
+  \param functions is the CSV list of functions to run
+  */
 G_MODULE_EXPORT void run_post_functions(const gchar * functions)
 {
 	run_post_functions_with_arg(functions,NULL);
@@ -860,13 +860,13 @@ G_MODULE_EXPORT void run_post_functions(const gchar * functions)
 
 
 /*!
- \brief run_post_functions_with_arg() is called to run a function AFTER 
- tab loading is complete. It'll search the exported symbols of MegaTunix 
- for the function and if found execute it with the passed widget as an
- argument.
- \param functions is the CSV list of functions to run
- \param widget is the pointer to widget to be passed to the function
- */
+  \brief run_post_functions_with_arg() is called to run a function AFTER 
+  tab loading is complete. It'll search the exported symbols of MegaTunix 
+  for the function and if found execute it with the passed widget as an
+  argument.
+  \param functions is the CSV list of functions to run
+  \param widget is the pointer to widget to be passed to the function
+  */
 G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWidget *widget)
 {
 	void (*post_func_w_arg)(GtkWidget *) = NULL;

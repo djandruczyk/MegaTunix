@@ -11,12 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/init.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/init.c
+  \ingroup CoreMtx
+  \brief Handles all init/shutdown tasks, mem mgmt and file save/restore
+  
+  Most of the stuff dealt with here includes memory allocation/deallocation
+  for various structures, as well as default global variable initialization
+  and file save/restore functionality.
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <debugging.h>
@@ -941,11 +945,11 @@ void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 
 
 /*!
- \brief initialize_io_message() allocates and initializes a pointer
- to a Io_Message datastructure,  used for passing messages 
- across the GAsyncQueue's between the threads and the main context
- \returns a allocated and initialized pointer to a single structure
- */
+  \brief initialize_io_message() allocates and initializes a pointer
+  to a Io_Message datastructure,  used for passing messages 
+  across the GAsyncQueue's between the threads and the main context
+  \returns a allocated and initialized pointer to a single structure
+  */
 G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 {
 	Io_Message *message = NULL;
@@ -978,10 +982,10 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
 
 
 /*!
- \brief dealloc_message() deallocates the structure used to pass an I/O
- message from a thread to here..
- \param message (Io_Message *) pointer to message data to be deallocated
- */
+  \brief dealloc_message() deallocates the structure used to pass an I/O
+  message from a thread to here..
+  \param message (Io_Message *) pointer to message data to be deallocated
+  */
 G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 {
 	OutputData *payload;
@@ -1087,10 +1091,10 @@ G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 
 
 /*!
- \brief dealloc_w_update() deallocates the structure used to pass an I/O
- widget update message from a thread to here..
- \param w_update is the pointer to widget update data to be freed
- */
+  \brief dealloc_w_update() deallocates the structure used to pass an I/O
+  widget update message from a thread to here..
+  \param w_update is the pointer to widget update data to be freed
+  */
 G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 {
 	/*printf("dealloc_w_update\n");*/
@@ -1100,10 +1104,10 @@ G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 
 
 /*!
- \brief dealloc_textmessage() deallocates the structure used to pass a text
- message from the thread to here..
- \param message is the pointer to message data to be freed
- */
+  \brief dealloc_textmessage() deallocates the structure used to pass a text
+  message from the thread to here..
+  \param message is the pointer to message data to be freed
+  */
 G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
 {
 	/*printf("dealloc_textmessage\n");*/
@@ -1118,10 +1122,10 @@ G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
 
 
 /*!
- \brief dealloc_qfunction() deallocates the structure used to pass a function
- message from the thread to here..
- \param qfunc is the Queued Function structure to deallocate
- */
+  \brief dealloc_qfunction() deallocates the structure used to pass a function
+  message from the thread to here..
+  \param qfunc is the Queued Function structure to deallocate
+  */
 G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
 {
 	/*printf("dealloc_qfunction\n");*/
@@ -1130,10 +1134,10 @@ G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
 
 
 /*!
- \brief dealloc_table_params() deallocates the structure used for firmware
- table parameters
- \param table_params is the pointer to table parameters structure to deallocate
- */
+  \brief dealloc_table_params() deallocates the structure used for firmware
+  table parameters
+  \param table_params is the pointer to table parameters structure to deallocate
+  */
 G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 {
 	cleanup(table_params->table_name);
@@ -1211,10 +1215,10 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 
 
 /*!
- \brief dealloc_rtv_object() deallocates the rtv object used 
- for runtime vars data
- \param object is the pointer to RTV object to deallocate
- */
+  \brief dealloc_rtv_object() deallocates the rtv object used 
+  for runtime vars data
+  \param object is the pointer to RTV object to deallocate
+  */
 G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 {
 	GArray * array = NULL;
@@ -1232,10 +1236,10 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 
 
 /*!
- \brief dealloc_te_params() deallocates the structure used for firmware
- te parameters
- \param te_params is the pointer to TE_Params struct to deallocate
- */
+  \brief dealloc_te_params() deallocates the structure used for firmware
+  te parameters
+  \param te_params is the pointer to TE_Params struct to deallocate
+  */
 G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 {
 	/*printf("dealloc_te_params\n");*/

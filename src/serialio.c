@@ -50,11 +50,11 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief open_serial() called to open the serial port, updates textviews on the
- comms page on success/failure
- \param port_name is the name of the port to open
- \param nonblock is a flag if we should open hte port in nonblocking mode
- */
+  \brief open_serial() called to open the serial port, updates textviews on the
+  comms page on success/failure
+  \param port_name is the name of the port to open
+  \param nonblock is a flag if we should open hte port in nonblocking mode
+  */
 G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 {
 	/* We are using DOS/Win32 style com port numbers instead of unix
@@ -127,13 +127,13 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	
 
 /*!
- \brief flush_serial() is called whenever we want to flush the I/O port of any
- pending data. It's a wrapper to the tcflush command on unix and the 
- win32_serial_flush command in winserialio.c that does the equivalent 
- operation on windows.
- \param fd is the filedescriptor to flush
- \param type is how to flush it (enumeration)
- */
+  \brief flush_serial() is called whenever we want to flush the I/O port of any
+  pending data. It's a wrapper to the tcflush command on unix and the 
+  win32_serial_flush command in winserialio.c that does the equivalent 
+  operation on windows.
+  \param fd is the filedescriptor to flush
+  \param type is how to flush it (enumeration)
+  */
 G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 {
 	GMutex *serio_mutex = NULL;
@@ -169,10 +169,10 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 
 
 /*!
- \brief setup_serial_params() is another wrapper that calls the appropriate
- calls to initialize the serial port to the proper speed, bits, flow, parity
- etc..
- */
+  \brief setup_serial_params() is another wrapper that calls the appropriate
+  calls to initialize the serial port to the proper speed, bits, flow, parity
+  etc..
+  */
 G_MODULE_EXPORT void setup_serial_params(void)
 {
 	GMutex *serio_mutex = NULL;
@@ -381,9 +381,9 @@ G_MODULE_EXPORT void setup_serial_params(void)
 
 
 /*!
- \brief close_serial() closes the serial port, and sets several gui widgets
- to reflect the port closing (textview/connected indicator)
- */
+  \brief close_serial() closes the serial port, and sets several gui widgets
+  to reflect the port closing (textview/connected indicator)
+  */
 G_MODULE_EXPORT void close_serial(void)
 {
 	GMutex *serio_mutex = NULL;

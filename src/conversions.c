@@ -11,12 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/conversions.c
- *
- * @brief ...
- *
- *
- */
+/*! 
+  \file src/conversions.c
+  \ingroup CoreMtx
+  \brief Handlers for value conversion to/From ECU units
+  
+  These take care of all the fancy matho converting between ECU units and 
+  Real world units, taking into account things like the local Temperature scale
+  in use, and other factors like interdependant variables.
+  \author David Andruczyk
+  */
 
 #include <assert.h>
 #include <conversions.h>
@@ -34,13 +38,13 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief convert_before_download() converts the value passed using the
- conversions bound to the widget
- \param widget is the pointer to the widget to extract the conversion info from
- \param value is the "real world" value from the tuning gui before
- translation to ECU-units
- \returns the integer ECU-units form after conversion
- */
+  \brief convert_before_download() converts the value passed using the
+  conversions bound to the widget
+  \param widget is the pointer to the widget to extract the conversion info from
+  \param value is the "real world" value from the tuning gui before
+  translation to ECU-units
+  \returns the integer ECU-units form after conversion
+  */
 G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 {
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -226,12 +230,12 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 
 /*!
- \brief convert_after_upload() converts the ECU-units data to the real world
- units for display on the GUI
- \param widget is the pointer to the widget to extract the conversion 
- info from to perform the necessary math
- \returns the real world value for the GUI
- */
+  \brief convert_after_upload() converts the ECU-units data to the real world
+  units for display on the GUI
+  \param widget is the pointer to the widget to extract the conversion 
+  info from to perform the necessary math
+  \returns the real world value for the GUI
+  */
 G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 {
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -442,13 +446,13 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 
 /*!
- \brief convert_temps() changes the values of controls based on the currently
- selected temperature scale.  It works for labels, spinbuttons, etc...
- \param widget is the pointer to the widget that contains the necessary
- paramaters regarding temperature (Alt label, etc)
- \param units is the temp scale selected 
- \see TempUnits
- */
+  \brief convert_temps() changes the values of controls based on the currently
+  selected temperature scale.  It works for labels, spinbuttons, etc...
+  \param widget is the pointer to the widget that contains the necessary
+  paramaters regarding temperature (Alt label, etc)
+  \param units is the temp scale selected 
+  \see TempUnits
+  */
 G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 {
 	static void (*update_widget_f)(gpointer, gpointer);
@@ -696,11 +700,11 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 
 
 /*!
- \brief reset_temps() calls the convert_temps function for each widget in
- the "temperature" list
- \param type is the temp scale now selected
- \see TempUnits
- */
+  \brief reset_temps() calls the convert_temps function for each widget in
+  the "temperature" list
+  \param type is the temp scale now selected
+  \see TempUnits
+  */
 G_MODULE_EXPORT void reset_temps(gpointer type)
 {
 	g_list_foreach(get_list("temperature"),convert_temps,type);

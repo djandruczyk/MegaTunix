@@ -25,9 +25,9 @@
 extern gconstpointer *global_data;
 
 /*
- \brief calculates the accuracy of g_usleep and sets up a fudge factor
- to account for OS/platform differences in precision of the call
- */
+  \brief calculates the accuracy of g_usleep and sets up a fudge factor
+  to account for OS/platform differences in precision of the call
+  */
 void sleep_calib(void)
 {
 	GTimer *timer = NULL;

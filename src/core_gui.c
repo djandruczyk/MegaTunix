@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/core_gui.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/core_gui.c
+  \ingroup CoreMtx
+  \brief Handles initialization of the Core MegaTunix GUI before interrogation
+  takes place
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <core_gui.h>
@@ -42,9 +43,9 @@ extern gconstpointer *global_data;
 
 
 /*!
- \brief setup_gui() creates the main window, main notebook, and the static
- tabs and populates them with data
- */
+  \brief setup_gui() creates the main window, main notebook, and the static
+  tabs and populates them with data
+  */
 G_MODULE_EXPORT gboolean setup_gui(void)
 {
 	gchar *fname = NULL;

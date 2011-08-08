@@ -11,12 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/menu_handlers.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/menu_handlers.c
+  \ingroup CoreMtx
+  \brief Sets up the global Mtx menu's applicable to all firmware variants
+
+  This checks for and calls the ECU plugin function that enables the ECU
+  specific menu handlers as appropriate
+  \author David Andruczyk
+  */
 
 #include <firmware.h>
 #include <menu_handlers.h>
@@ -99,11 +102,11 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 }
 
 /*!
- \brief switches to tab encoded into the widget
- \param widget is the the menuitem the user clicked upon
- \param data is unused
- \returns TRUE if handled, FALSE otherwise
- */
+  \brief switches to tab encoded into the widget
+  \param widget is the the menuitem the user clicked upon
+  \param data is unused
+  \returns TRUE if handled, FALSE otherwise
+  */
 G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *notebook = NULL;
@@ -137,12 +140,12 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 }
 
 /*!
- \brief General purpose handler to take care of menu initiated settings 
- transfers like VEX import/export and ECU backup/restore
- \param widget is the pointer to widget the user clicket on
- \param data is unused
- \returns TRUE
- */
+  \brief General purpose handler to take care of menu initiated settings 
+  transfers like VEX import/export and ECU backup/restore
+  \param widget is the pointer to widget the user clicket on
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
 	FioAction action = -1;
@@ -175,11 +178,11 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 }
 
 /*!
- \brief General purpose handler to take care of menu initiated settings 
- transfers like VEX import/export and ECU backup/restore
- \param target is the enumeration for a TAB to be checked if it exists
- \returns TRUE if tab found, FALSE if not
- */
+  \brief General purpose handler to take care of menu initiated settings 
+  transfers like VEX import/export and ECU backup/restore
+  \param target is the enumeration for a TAB to be checked if it exists
+  \returns TRUE if tab found, FALSE if not
+  */
 G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 {
 	GtkWidget *notebook = NULL;

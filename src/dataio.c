@@ -11,12 +11,14 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/dataio.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/dataio.c
+  \ingroup CoreMtx
+  \brief Does the actual reading and writing to the ECU
+  Provides wrappers that do the actual reading/writing to allow the 
+  implementations to be changed with minimal disruption
+  \author David Andruczyk
+  */
 
 #include <binlogger.h>
 #include <dataio.h>
@@ -51,14 +53,14 @@ extern gconstpointer *global_data;
 #endif
 
 /*!
- \brief read_data() reads in the data from the ECU, checks to make sure
- enough arrived, copies it to thedestination buffer and returns;
- \param total_wanted if set to -1, input is variable and we don't error out.
- otherwise error out if count doesn't match what is asked for
- \param buffer is the pointer to buffer to stick the data.
- \param reset_on_fail is a hacky flag that should be removed, (win32ism)
- \returns TRUE on success, FALSE on failure 
- */
+  \brief read_data() reads in the data from the ECU, checks to make sure
+  enough arrived, copies it to thedestination buffer and returns;
+  \param total_wanted if set to -1, input is variable and we don't error out.
+  otherwise error out if count doesn't match what is asked for
+  \param buffer is the pointer to buffer to stick the data.
+  \param reset_on_fail is a hacky flag that should be removed, (win32ism)
+  \returns TRUE on success, FALSE on failure 
+  */
 G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
 {
 	static GMutex *serio_mutex = NULL;
@@ -160,9 +162,9 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 
 
 /*!
- \brief write_data() physically sends the data to the ECU.
- \param message is the pointer to an Io_Message structure
- */
+  \brief write_data() physically sends the data to the ECU.
+  \param message is the pointer to an Io_Message structure
+  */
 G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 {
 	static GMutex *serio_mutex = NULL;
@@ -297,11 +299,11 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 }
 
 /*!
- \brief dump_output() dumps the newly read data to the console in HEX for
- debugging purposes
- \param total_read is the total bytes to print out
- \param buf is the pointer to data to write to console
- */
+  \brief dump_output() dumps the newly read data to the console in HEX for
+  debugging purposes
+  \param total_read is the total bytes to print out
+  \param buf is the pointer to data to write to console
+  */
 G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 {
 	guchar *p = NULL;

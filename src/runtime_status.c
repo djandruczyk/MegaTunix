@@ -40,9 +40,9 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief load_status_pf() is called to create the ECU status window, load the 
- settings from the StatusMapFile.
- */
+  \brief load_status_pf() is called to create the ECU status window, load the 
+  settings from the StatusMapFile.
+  */
 G_MODULE_EXPORT void load_status_pf(void)
 {
 	gchar *filename = NULL;
@@ -249,9 +249,9 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 
 
 /*!
- \brief update_runtime_vars_pf() updates all of the runtime sliders on all
- visible portions of the gui
- */
+  \brief update_runtime_vars_pf() updates all of the runtime sliders on all
+  visible portions of the gui
+  */
 G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 {
 	static gint count = 0;
@@ -289,9 +289,9 @@ G_MODULE_EXPORT gboolean update_runtime_vars_pf(void)
 
 
 /*!
- \brief reset_runtime_statue() sets all of the status indicators to OFF
- to reset the display
- */
+  \brief reset_runtime_statue() sets all of the status indicators to OFF
+  to reset the display
+  */
 G_MODULE_EXPORT void reset_runtime_status(void)
 {
 	/* Runtime screen */
@@ -302,11 +302,11 @@ G_MODULE_EXPORT void reset_runtime_status(void)
 
 
 /*!
- \brief rt_update_status() updates the bitfield based status lights on the 
- runtime/warmupwizard displays
- \param key is the pointer to a widget
- \param data is unused
- */
+  \brief rt_update_status() updates the bitfield based status lights on the 
+  runtime/warmupwizard displays
+  \param key is the pointer to a widget
+  \param data is unused
+  */
 G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 {
 	static gconstpointer *object = NULL;

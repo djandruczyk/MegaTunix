@@ -31,12 +31,12 @@
  */
 
 /*!
- \file src/3d_vetable.c
- \ingroup SpecialStuff
- \brief Contains all the functions specific to the 3D table viewer/editor
- \author David Andruczyk
- \author Ben Pierre
- */
+  \file src/3d_vetable.c
+  \ingroup SpecialStuff
+  \brief Contains all the functions specific to the 3D table viewer/editor
+  \author David Andruczyk
+  \author Ben Pierre
+  */
 
 #include <3d_vetable.h>
 #include <conversions.h>
@@ -69,8 +69,8 @@ static gboolean delayed_expose(gpointer);
 static gboolean delayed_reconfigure(gpointer);
 
 /*!
- \brief Calculates the frames per second for the 3D display
- */
+  \brief Calculates the frames per second for the 3D display
+  */
 G_MODULE_EXPORT void CalculateFrameRate(void)
 {
 	static float framesPerSecond = 0.0f;	/* This will store our fps*/
@@ -102,14 +102,14 @@ G_MODULE_EXPORT void CalculateFrameRate(void)
 }
 
 /*!
- \brief Draws simple 2d test on screen in orthographic projection
- \param str s the string to display
- \param r is the red value
- \param g is the green value
- \param b is the blue value
- \param x is the x coordinate
- \param y is the y coordinate
- */
+  \brief Draws simple 2d test on screen in orthographic projection
+  \param str s the string to display
+  \param r is the red value
+  \param g is the green value
+  \param b is the blue value
+  \param x is the x coordinate
+  \param y is the y coordinate
+  */
 G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
 {
 	GLint matrixMode;
@@ -142,13 +142,13 @@ G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b
 
 
 /*!
- \brief gets a color back from an angle passed in degrees.
- The degrees represent the arc around a color circle.
- \param hue (gfloat) degrees around the color circle
- \param sat (gfloat) col_sat from 0-1.0
- \param val (gfloat) col_val from 0-1.0
- \returns a RGB3f variable at the hue angle requested
- */
+  \brief gets a color back from an angle passed in degrees.
+  The degrees represent the arc around a color circle.
+  \param hue (gfloat) degrees around the color circle
+  \param sat (gfloat) col_sat from 0-1.0
+  \param val (gfloat) col_val from 0-1.0
+  \returns a RGB3f variable at the hue angle requested
+  */
 G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 {
 	RGB3f color;
@@ -222,13 +222,13 @@ G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 
 
 /*!
- \brief create_ve3d_view does the initial work of creating the 3D vetable
- widget, it creates the datastructures, creates the window, initializes 
- OpenGL and binds all the handlers to the window that are needed.
- \param widget is the parent widget
- \param data is the unused
- \return TRUE on success
- */
+  \brief create_ve3d_view does the initial work of creating the 3D vetable
+  widget, it creates the datastructures, creates the window, initializes 
+  OpenGL and binds all the handlers to the window that are needed.
+  \param widget is the parent widget
+  \param data is the unused
+  \return TRUE on success
+  */
 G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *window;
@@ -701,13 +701,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief ve3d_shutdown is called on close of the 3D vetable viewer/editor, it
- deallocates memory, disconencts handlers and then the widget is deleted 
- with gtk_widget_destroy
- \param widget is the widget to be destroyed
- \param data is the unused
- \returns FALSE so other handlers run
- */
+  \brief ve3d_shutdown is called on close of the 3D vetable viewer/editor, it
+  deallocates memory, disconencts handlers and then the widget is deleted 
+  with gtk_widget_destroy
+  \param widget is the widget to be destroyed
+  \param data is the unused
+  \returns FALSE so other handlers run
+  */
 G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
 	GHashTable *ve_view_hash = NULL;
@@ -742,11 +742,11 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief reset_3d_view resets the OpenGL widget to default position in
- case the user moves it or places it off the edge of the window and 
- can't find it...
- \param widget is the the container of the view
- */
+  \brief reset_3d_view resets the OpenGL widget to default position in
+  case the user moves it or places it off the edge of the window and 
+  can't find it...
+  \param widget is the the container of the view
+  */
 G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 {
 	Ve_View_3D *ve_view;
@@ -768,9 +768,9 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 }
 
 /*!
- \brief get_gl_config gets the OpenGL mode creates a GL config and returns it
- \returns pointer to a GdkGLConfig structure
- */
+  \brief get_gl_config gets the OpenGL mode creates a GL config and returns it
+  \returns pointer to a GdkGLConfig structure
+  */
 GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
@@ -798,13 +798,13 @@ GdkGLConfig* get_gl_config(void)
 }
 
 /*!
- \brief ve3d_configure_event is called when the window needs to be drawn or redrawn
- after a resize. 
- \param widget is the pointer to the drawingarea
- \param event is the the Configure Event Structure
- \param data is unused
- \returns TRUE on completion, false if we couldn't get a GL drawable
- */
+  \brief ve3d_configure_event is called when the window needs to be 
+  drawn or redrawn after a resize. 
+  \param widget is the pointer to the drawingarea
+  \param event is the the Configure Event Structure
+  \param data is unused
+  \returns TRUE on completion, false if we couldn't get a GL drawable
+  */
 G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -839,14 +839,14 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 
 
 /*!
- \brief ve3d_expose_event is called when the part or all of the GL area
- needs to be redrawn due to being "exposed" (uncovered), this kicks off 
- all the other renderers for updating the axis and status indicators. 
- \param widget is a pointer to the drawingarea for the view
- \param event is a pointer to the Expose Event structure
- \param data is unused
- \returns TRUE on success, FALSE if not realized or no GLdrawable
- */
+  \brief ve3d_expose_event is called when the part or all of the GL area
+  needs to be redrawn due to being "exposed" (uncovered), this kicks off 
+  all the other renderers for updating the axis and status indicators. 
+  \param widget is a pointer to the drawingarea for the view
+  \param event is a pointer to the Expose Event structure
+  \param data is unused
+  \returns TRUE on success, FALSE if not realized or no GLdrawable
+  */
 G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GdkGLContext *glcontext = NULL;
@@ -916,15 +916,15 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 
 
 /*!
- \brief ve3d_motion_notify_event is called when the user moves
- the mouse inside the GL window, it causes the display to be 
- rotated/scaled/strafed depending on which button the user had held down.
- \param widget is the container of the view
- \param event is a pointer to the GdkEventMotion Structure
- \param data is unused
- \returns TRUE
- \see ve3d_button_press_event
- */
+  \brief ve3d_motion_notify_event is called when the user moves
+  the mouse inside the GL window, it causes the display to be 
+  rotated/scaled/strafed depending on which button the user had held down.
+  \param widget is the container of the view
+  \param event is a pointer to the GdkEventMotion Structure
+  \param data is unused
+  \returns TRUE
+  \see ve3d_button_press_event
+  */
 G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
@@ -961,15 +961,15 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 
 
 /*!
- \brief ve3d_button_press_event is called when the user clicks a mouse 
- button The function grabs the location at which the button was clicked in 
- order to calculate what to change when rerendering
- \param widget is a pointer to the container of the view
- \param event is a pointer to the GdkEventButton Structure
- \param data is unused
- \return TRUE if a button is clicked, FALSE otherwise
- \see ve3d_motion_notify_event
- */
+  \brief ve3d_button_press_event is called when the user clicks a mouse 
+  button The function grabs the location at which the button was clicked in 
+  order to calculate what to change when rerendering
+  \param widget is a pointer to the container of the view
+  \param event is a pointer to the GdkEventButton Structure
+  \param data is unused
+  \return TRUE if a button is clicked, FALSE otherwise
+  \see ve3d_motion_notify_event
+  */
 G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
@@ -991,11 +991,11 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
 
 
 /*!
- \brief ve3d_realize is called when the window is created and sets the 
- main OpenGL parameters of the window (this only needs to be done once)
- \param widget is the drawingarea
- \param data is unused
- */
+  \brief ve3d_realize is called when the window is created and sets the 
+  main OpenGL parameters of the window (this only needs to be done once)
+  \param widget is the drawingarea
+  \param data is unused
+  */
 G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
@@ -1052,11 +1052,11 @@ G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 
 
 /*!
- \brief ve3d_calculate_scaling is called during a redraw to recalculate 
- the dimensions for the scales to make thing look pretty
- \param ve_view is a pointer to the view
- \param cur_val is a pointer to structure of current values for this iteration
- */
+  \brief ve3d_calculate_scaling is called during a redraw to recalculate 
+  the dimensions for the scales to make thing look pretty
+  \param ve_view is a pointer to the view
+  \param cur_val is a pointer to structure of current values for this iteration
+  */
 G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gint i=0;
@@ -1123,11 +1123,11 @@ G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_v
 }
 
 /*!
- \brief ve3d_draw_ve_grid is called during rerender and draws the 
- VEtable grid in 3D space
- \param ve_view is a pointer to the view
- \param cur_val is a pointer to structure of current values for this iteration
- */
+  \brief ve3d_draw_ve_grid is called during rerender and draws the 
+  VEtable grid in 3D space
+  \param ve_view is a pointer to the view
+  \param cur_val is a pointer to structure of current values for this iteration
+  */
 G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gint x = 0;
@@ -1218,12 +1218,12 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 
 /*!
- \brief ve3d_draw_edit_indicator is called during rerender and draws 
- the red dot which tells where changes will be made to the table by the 
- user.  The user moves this with the arrow keys..
- \param ve_view is a pointer to the view
- \param cur_val is a pointer to structure of current values for this iteration
- */
+  \brief ve3d_draw_edit_indicator is called during rerender and draws 
+  the red dot which tells where changes will be made to the table by the 
+  user.  The user moves this with the arrow keys..
+  \param ve_view is a pointer to the view
+  \param cur_val is a pointer to structure of current values for this iteration
+  */
 G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gfloat bottom = 0.0;
@@ -1325,11 +1325,11 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
 
 
 /*!
- \brief ve3d_draw_runtime_indicator is called during rerender and draws the
- green dot which tells where the engine is running at this instant.
- \param ve_view is a pointer to the view
- \param cur_val is a pointer to structure of current values for this iteration
- */
+  \brief ve3d_draw_runtime_indicator is called during rerender and draws the
+  green dot which tells where the engine is running at this instant.
+  \param ve_view is a pointer to the view
+  \param cur_val is a pointer to structure of current values for this iteration
+  */
 G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gchar * label = NULL;
@@ -1563,11 +1563,11 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 
 
 /*!
- \brief ve3d_draw_axis is called during rerender and draws the
- border axis scales around the VEgrid.
- \param ve_view is a pointer to the view
- \param cur_val is a pointer to structure of current values for this iteration
- */
+  \brief ve3d_draw_axis is called during rerender and draws the
+  border axis scales around the VEgrid.
+  \param ve_view is a pointer to the view
+  \param cur_val is a pointer to structure of current values for this iteration
+  */
 G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	/* Set vars and an asthetically pleasing maximum value */
@@ -1655,13 +1655,13 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 
 /*!
- \brief ve3d_draw_text is called during rerender and draws the
- axis marker text
- \param text is the text to draw in 3d space
- \param x is the x coord
- \param y is the y coord
- \param z is the z coord
- */
+  \brief ve3d_draw_text is called during rerender and draws the
+  axis marker text
+  \param text is the text to draw in 3d space
+  \param x is the x coord
+  \param y is the y coord
+  \param z is the z coord
+  */
 G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 {
 	/* Experiment*/
@@ -1679,10 +1679,10 @@ G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 
 
 /*!
- \brief ve3d_load_font_metrics is called during ve3d_realize and loads 
- the fonts needed by OpenGL for rendering the text
- \param widget is a pointer to the parent widget of the view
- */
+  \brief ve3d_load_font_metrics is called during ve3d_realize and loads 
+  the fonts needed by OpenGL for rendering the text
+  \param widget is a pointer to the parent widget of the view
+  */
 G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc;
@@ -1713,15 +1713,15 @@ G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
 
 
 /*!
- \brief ve3d_key_press_event is called whenever the user hits a key on the 3D
- view. It looks for arrow keys, Plus/Minus and Pgup/PgDown.  Arrows  move the
- red marker, +/- shift the value by 1 unit, Pgup/Pgdn shift the value by 10
- units
- \param widget is the pointer to the  parent widget of the view
- \param event is the pointer to the GdkEventkey structure
- \param data is unused
- \returns TRUE
- */
+  \brief ve3d_key_press_event is called whenever the user hits a key on the 3D
+  view. It looks for arrow keys, Plus/Minus and Pgup/PgDown.  Arrows  move the
+  red marker, +/- shift the value by 1 unit, Pgup/Pgdn shift the value by 10
+  units
+  \param widget is the pointer to the  parent widget of the view
+  \param event is the pointer to the GdkEventkey structure
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
                                       *event, gpointer data)
 {
@@ -2150,11 +2150,11 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 
 /*!
- \brief initialize_ve3d_view is called from create_ve3d_view to 
- intialize it's datastructure for use.  
- \returns pointer to an initialized Ve_View_3D structure
- \see Ve_View_3D
- */
+  \brief initialize_ve3d_view is called from create_ve3d_view to 
+  intialize it's datastructure for use.  
+  \returns pointer to an initialized Ve_View_3D structure
+  \see Ve_View_3D
+  */
 G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 {
 	Ve_View_3D *ve_view = NULL;
@@ -2221,15 +2221,15 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 
 
 /*!
- \brief update_ve3d_if_necessary is called from update_write_status to 
- redraw the 3D view if a variable is changed that is represented in the 
- 3D view.  This function scans through the table params to see if the passed 
- page/offset is part of a table and then checks if the table is visible 
- if so it forces a redraw of that table. (convoluted and butt ugly, 
- but it works)
- \param page is the ECU page 
- \param offset is the ECU offset withing the above page
- */
+  \brief update_ve3d_if_necessary is called from update_write_status to 
+  redraw the 3D view if a variable is changed that is represented in the 
+  3D view.  This function scans through the table params to see if the passed 
+  page/offset is part of a table and then checks if the table is visible 
+  if so it forces a redraw of that table. (convoluted and butt ugly, 
+  but it works)
+  \param page is the ECU page 
+  \param offset is the ECU offset withing the above page
+  */
 G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 {
 	gint total_tables = 0;
@@ -2537,14 +2537,14 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
 
 
 /*!
- \brief get_current_values is a helper function that populates a structure
- of data comon to all the redraw subhandlers to avoid duplication of
- effort
- \param ve_view is the base structure
- \returns a Cur_Vals structure populted with appropriate fields some of which
- MUST be freed when done.
+  \brief get_current_values is a helper function that populates a structure
+  of data comon to all the redraw subhandlers to avoid duplication of
+  effort
+  \param ve_view is the base structure
+  \returns a Cur_Vals structure populted with appropriate fields some of which
+  MUST be freed when done.
   \see Cur_Vals
- */
+  */
 G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 {
 	gfloat x_val = 0.0;

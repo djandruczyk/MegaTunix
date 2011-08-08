@@ -30,16 +30,16 @@ extern gconstpointer *global_data;
 gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 
 /*!
- \brief io_cmd() is called from all over the gui to kick off a threaded I/O
- command.  A command enumeration and an option block of data is passed and
- this function allocates an Io_Message and shoves it down an GAsyncQueue
- to the main thread dispatcher which runs things and then passes any 
- needed information back to the gui via another GAsyncQueue which takes care
- of any post thread GUI updates. (which can NOT be done in a thread context
- due to reentrancy and deadlock conditions)
- \param cmd_name is the name of the command to look for in the commands_hash
- \param data is the additional data for fringe cases..
- */
+  \brief io_cmd() is called from all over the gui to kick off a threaded I/O
+  command.  A command enumeration and an option block of data is passed and
+  this function allocates an Io_Message and shoves it down an GAsyncQueue
+  to the main thread dispatcher which runs things and then passes any 
+  needed information back to the gui via another GAsyncQueue which takes care
+  of any post thread GUI updates. (which can NOT be done in a thread context
+  due to reentrancy and deadlock conditions)
+  \param cmd_name is the name of the command to look for in the commands_hash
+  \param data is the additional data for fringe cases..
+  */
 G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 {
 	static GAsyncQueue *io_data_queue = NULL;
@@ -98,12 +98,12 @@ G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
 
 
 /*!
- \brief thread_dispatcher() runs continuously as a thread listening to the 
- io_data_queue and running handlers as messages come in. After they are done it
- passes the message back to the gui via the dispatch_queue for further
- gui handling (for things that can't run in a thread context)
- \param data is unused
- */
+  \brief thread_dispatcher() runs continuously as a thread listening to the 
+  io_data_queue and running handlers as messages come in. After they are done it
+  passes the message back to the gui via the dispatch_queue for further
+  gui handling (for things that can't run in a thread context)
+  \param data is unused
+  */
 G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
@@ -253,19 +253,19 @@ fast_exit:
 
 
 /*!
- \brief thread_update_logbar() is a function to be called from within threads
- to update a logbar (textview). It's not safe to update a widget from a 
- threaded context in win32, hence this fucntion is created to pass the 
- information to the main thread via an GAsyncQueue to a dispatcher that will
- take care of the message. Since the functions that call this ALWAYS send
- dynamically allocated test in the msg field we DEALLOCATE it HERE...
- \param view_name is the textual name fothe textview to update (required)
- \param tagname is the textual name ofthe tag to be applied to the text 
- sent.  This can be NULL is no tag is desired
- \param msg is the message to be sent (required)
- \param count is the Flag to display a counter
- \param clear is the Flag to clear the display before writing the text
- */
+  \brief thread_update_logbar() is a function to be called from within threads
+  to update a logbar (textview). It's not safe to update a widget from a 
+  threaded context in win32, hence this fucntion is created to pass the 
+  information to the main thread via an GAsyncQueue to a dispatcher that will
+  take care of the message. Since the functions that call this ALWAYS send
+  dynamically allocated test in the msg field we DEALLOCATE it HERE...
+  \param view_name is the textual name fothe textview to update (required)
+  \param tagname is the textual name ofthe tag to be applied to the text 
+  sent.  This can be NULL is no tag is desired
+  \param msg is the message to be sent (required)
+  \param count is the Flag to display a counter
+  \param clear is the Flag to clear the display before writing the text
+  */
 G_MODULE_EXPORT void  thread_update_logbar(
 		const gchar * view_name, 
 		const gchar * tagname, 
@@ -305,13 +305,14 @@ G_MODULE_EXPORT void  thread_update_logbar(
 
 
 /*!
- \brief queue_function() is used to run ANY global function in the context
- of the main GUI from within any thread.  It does it by passing a message 
- up an AsyncQueue to the gui process which will lookup the function name
- and run it with no arguments (currently inflexible and can only run "void"
- functions (ones that take no params)
- \param name is the name of function to lookup and run in the main gui context..
- */
+  \brief queue_function() is used to run ANY global function in the context
+  of the main GUI from within any thread.  It does it by passing a message 
+  up an AsyncQueue to the gui process which will lookup the function name
+  and run it with no arguments (currently inflexible and can only run "void"
+  functions (ones that take no params)
+  \param name is the name of function to lookup and run in the main 
+  gui context vis the gui dispatcher.
+  */
 G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
@@ -339,15 +340,15 @@ G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 
 
 /*!
- \brief thread_update_widget() is a function to be called from within threads
- to update a widget (spinner/entry/label). It's not safe to update a 
- widget from a threaded context in win32, hence this fucntion is created 
- to pass the information to the main thread via an GAsyncQueue to a 
- dispatcher that will take care of the message. 
- \param widget_name is the textual name of the widget to update
- \param type is the type of widget to update
- \param msg is the message to be sent (required)
- */
+  \brief thread_update_widget() is a function to be called from within threads
+  to update a widget (spinner/entry/label). It's not safe to update a 
+  widget from a threaded context in win32, hence this fucntion is created 
+  to pass the information to the main thread via an GAsyncQueue to a 
+  dispatcher that will take care of the message. 
+  \param widget_name is the textual name of the widget to update
+  \param type is the type of widget to update
+  \param msg is the message to be sent (required)
+  */
 G_MODULE_EXPORT void  thread_update_widget(
 		const gchar * widget_name,
 		WidgetType type,
@@ -383,11 +384,11 @@ G_MODULE_EXPORT void  thread_update_widget(
 
 
 /*!
- \brief thread_set_sensitive() is a function to be called from within threads
- to update a widgets sensitivity state.
- \param widget_name is the textual name of the widget to update
- \param state is the state to set
- */
+  \brief thread_set_sensitive() is a function to be called from within threads
+  to update a widgets sensitivity state.
+  \param widget_name is the textual name of the widget to update
+  \param state is the state to set
+  */
 G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
@@ -418,10 +419,10 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 
 
 /*!
- \brief thread_refresh_widget() is a function to be called from within threads
- to force a widget rerender
- \param widget is the widget pointer to be updated
- */
+  \brief thread_refresh_widget() is a function to be called from within threads
+  to force a widget rerender
+  \param widget is the widget pointer to be updated
+  */
 G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
@@ -466,11 +467,11 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 
 
 /*!
- \brief To be called from within threads to force a widget rerender
- \param page is the MTX-ecu page
- \param offset is the offset from beginnig of page
- \param len How many bytes worth of widgets to search for an update
- */
+  \brief To be called from within threads to force a widget rerender
+  \param page is the MTX-ecu page
+  \param offset is the offset from beginnig of page
+  \param len How many bytes worth of widgets to search for an update
+  */
 G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint len)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;

@@ -11,11 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/mem_mgmt.c
- *
- * @brief ...
- *
- *
+/*!
+  \file src/mem_mgmt.c
+  \ingroup CoreMtx
+  \brief Utility functions for getting/setting data within a block of memory
+  \author David Andruczyk
  */
 
 #include <defines.h>
@@ -24,13 +24,13 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief _get_sized_data() is a func to return the data requested.
- The data is casted to the passed type.
- \param data is the array of data to pull from.
- \param offset is the RAW BYTE offset
- \param size is the size enumeration to be returned.
- \param bigendian is the Flag to flip bytes or not
- */
+  \brief _get_sized_data() is a func to return the data requested.
+  The data is casted to the passed type.
+  \param data is the array of data to pull from.
+  \param offset is the RAW BYTE offset
+  \param size is the size enumeration to be returned.
+  \param bigendian is the Flag to flip bytes or not
+  */
 G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, gboolean bigendian)
 {
 	gint result = 0;
@@ -106,14 +106,14 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 
 
 /*!
- \brief _set_sized_data() is a func to set the data requested.
- The data is casted to the passed type.
- \param data is the array of data to store
- \param offset is the RAW BYTE offset
- \param size is the size to be stored
- \param new is the data to be stored
- \param bigendian is the Flag to flip bytes or not
- */
+  \brief _set_sized_data() is a func to set the data requested.
+  The data is casted to the passed type.
+  \param data is the array of data to store
+  \param offset is the RAW BYTE offset
+  \param size is the size to be stored
+  \param new is the data to be stored
+  \param bigendian is the Flag to flip bytes or not
+  */
 G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new, gboolean bigendian)
 {
 	guint16 u16 = 0;

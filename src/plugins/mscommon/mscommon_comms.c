@@ -81,9 +81,7 @@ G_MODULE_EXPORT void queue_ms1_page_change(gint page)
  \brief comms_test sends the clock_request command to the ECU and
  checks the response.  if nothing comes back, MegaTunix assumes the ecu isn't
  connected or powered down. NO Gui updates are done from this function as it
- gets called from a thread. update_comms_status is dispatched after this
- function ends from the main context to update the GUI.
- \see update_comms_status
+ gets called from a thread. 
  */
 G_MODULE_EXPORT gint comms_test(void)
 {

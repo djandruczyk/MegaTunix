@@ -11,12 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/helpers.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/helpers.c
+  \ingroup CoreMtx
+  \brief These are a bunch fo helper functions that are called from comm.xml
+  
+  These functions are referenced by the per ECU comm.xml which defines the
+  I/O command structure and API for the device.  Most of these functions are
+  helpers that do something important after some I/O operation has completed
+  \author David Andruczyk 
+  */
 
 #include <3d_vetable.h>
 #include <conversions.h>

@@ -12,12 +12,12 @@
  */
 
 /*!
- \file src/binlogger.c
- \ingroup CoreMtx
- \brief Handles all aspects of binary logging of the serial I/O used for
- debugging purposes.
- \author David Andruczyk
- */
+  \file src/binlogger.c
+  \ingroup CoreMtx
+  \brief Handles all aspects of binary logging of the serial I/O used for
+  debugging purposes.
+  \author David Andruczyk
+  */
 
 #include <binlogger.h>
 #include <defines.h>

@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/listmgmt.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/listmgmt.c
+  \ingroup CoreMtx
+  \brief Convenience functions for dealing with Linked Lists
+  \author David Andruczyk
+  */
 
 #include <init.h>
 #include <listmgmt.h>
@@ -25,11 +25,11 @@ static GHashTable *lists_hash = NULL;
 extern gconstpointer *global_data;
 
 /*!
- \brief get_list returns the list referenced by name
- \param key is the Text name of list to return a pointer to
- \returns pointer to GList
- \see store_list
- */
+  \brief get_list returns the list referenced by name
+  \param key is the Text name of list to return a pointer to
+  \returns pointer to GList
+  \see store_list
+  */
 G_MODULE_EXPORT GList * get_list(const gchar * key)
 {
 	if (!lists_hash)
@@ -42,11 +42,11 @@ G_MODULE_EXPORT GList * get_list(const gchar * key)
 
 
 /*!
- \brief store_list stores a list by a textual name
- \param key is the Text name of list to store
- \param list pointer to list to store
- \see get_list
- */
+  \brief store_list stores a list by a textual name
+  \param key is the Text name of list to store
+  \param list pointer to list to store
+  \see get_list
+  */
 G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
 {
 	if (!lists_hash)
@@ -60,10 +60,10 @@ G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
 
 
 /*!
- \brief remove_list removes a list from the hashtable
- \param key is the Text name of list to remove
- \see get_list
- */
+  \brief remove_list removes a list from the hashtable
+  \param key is the Text name of list to remove
+  \see get_list
+  */
 G_MODULE_EXPORT void remove_list(const gchar *key)
 {
 	if (!lists_hash)

@@ -12,12 +12,12 @@
  */
 
 /*! 
- \file src/args.c
- \ingroup CoreMtx 
- \brief Processes Command Line arguments for things like personality
- selection, Dashboard,  online/offline mode, background logging, etc
- \author David Andruczyk
- */
+  \file src/args.c
+  \ingroup CoreMtx 
+  \brief Processes Command Line arguments for things like personality
+  selection, Dashboard,  online/offline mode, background logging, etc
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <dashboard.h>
@@ -31,10 +31,10 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief handle_args() handles parsing of cmd line arguments to megatunix
- \param argc is the count of command line arguments
- \param argv is the array of command line args
- */
+  \brief handle_args() handles parsing of cmd line arguments to megatunix
+  \param argc is the count of command line arguments
+  \param argv is the array of command line args
+  */
 G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 {
 	GError *error = NULL;

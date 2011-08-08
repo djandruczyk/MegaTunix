@@ -34,12 +34,12 @@ static GtkWidget *warning_dialog;
 extern gconstpointer *global_data;
 
 /*!
- \brief set_group_color() sets all the widgets in the passed group to 
- the color passed.
- \param color is the the color to set the widgets to.
- \param group is the textual name of the group of controls to alter color
- \see set_widget_color
- */
+  \brief set_group_color() sets all the widgets in the passed group to 
+  the color passed.
+  \param color is the the color to set the widgets to.
+  \param group is the textual name of the group of controls to alter color
+  \see set_widget_color
+  */
 G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 {
 	g_list_foreach(get_list(group), set_widget_color,(gpointer)color);
@@ -47,13 +47,13 @@ G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 
 
 /*!
- \brief set_reqfuel_color() sets all the widgets in the reqfuel group as 
- defined by the page number passed to the color passed.
- \param color is the the color to set the widgets to
- \param table_num is the the table number to determine the right group of 
- controls to change the color on
- \see set_widget_color
- */
+  \brief set_reqfuel_color() sets all the widgets in the reqfuel group as 
+  defined by the page number passed to the color passed.
+  \param color is the the color to set the widgets to
+  \param table_num is the the table number to determine the right group of 
+  controls to change the color on
+  \see set_widget_color
+  */
 G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
 {
 	gchar *name = NULL;
@@ -64,11 +64,11 @@ G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
 
 
 /*!
- \brief set_widget_color() sets all the widgets in the passed group to 
- the color passed.
- \param widget is the the widget to  change color
- \param color is the enumeration of the color to switch to..
- */
+  \brief set_widget_color() sets all the widgets in the passed group to 
+  the color passed.
+  \param widget is the the widget to  change color
+  \param color is the enumeration of the color to switch to..
+  */
 G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 {
 	switch ((GuiColor)color)
@@ -149,16 +149,16 @@ G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 
 
 /*!
- \brief update_logbar() updates the logbar passed with the text passed to it
- \param view_name is the textual name of the textview the text is supposed 
- to go to. (required)
- \param tagname is the textual tagname to be used to set attributes on the
- text (optional, can be NULL)
- \param message is the message to display (required)
- \param count is the flag to show a running count or not
- \param clear if set, clear display before displaying text
- \param free if set, free the message passed to it
- */
+  \brief update_logbar() updates the logbar passed with the text passed to it
+  \param view_name is the textual name of the textview the text is supposed 
+  to go to. (required)
+  \param tagname is the textual tagname to be used to set attributes on the
+  text (optional, can be NULL)
+  \param message is the message to display (required)
+  \param count is the flag to show a running count or not
+  \param clear if set, clear display before displaying text
+  \param free if set, free the message passed to it
+  */
 G_MODULE_EXPORT void  update_logbar(
 		const gchar * view_name, 
 		const gchar * tagname, 
@@ -241,9 +241,9 @@ G_MODULE_EXPORT void  update_logbar(
 
 
 /*!
- \brief conn_warning() displays a warning message when connection is 
- either lost or not detected with the ECU
- */
+  \brief conn_warning() displays a warning message when connection is 
+  either lost or not detected with the ECU
+  */
 G_MODULE_EXPORT void conn_warning(void)
 {
 	CmdLineArgs *args = DATA_GET(global_data,"args");
@@ -255,9 +255,9 @@ G_MODULE_EXPORT void conn_warning(void)
 
 
 /*!
- \brief kill_conn_warning() removes the no connection warning message.
+  \brief kill_conn_warning() removes the no connection warning message.
   Takes no parameters.
- */
+  */
 G_MODULE_EXPORT void kill_conn_warning(void)
 {
 	if (!warning_present)
@@ -272,9 +272,9 @@ G_MODULE_EXPORT void kill_conn_warning(void)
 
 
 /*!
- \brief warn_user() displays a warning message on the screen as a error dialog
- \param message is the text to display
- */
+  \brief warn_user() displays a warning message on the screen as a error dialog
+  \param message is the text to display
+  */
 G_MODULE_EXPORT void warn_user(const gchar *message)
 {
 	CmdLineArgs *args = DATA_GET(global_data,"args");
@@ -306,9 +306,9 @@ G_MODULE_EXPORT void warn_user(const gchar *message)
 
 
 /*!
- \brief error_msg() displays a warning message on the screen as a error dialog
- \param message is the text to display
- */
+  \brief error_msg() displays a warning message on the screen as a error dialog
+  \param message is the text to display
+  */
 G_MODULE_EXPORT void error_msg(const gchar *message)
 {
 	GtkWidget *dialog = NULL;
@@ -354,10 +354,10 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 
 
 /*!
- \brief reset_infolabel() resets infolabel text to "Ready"
- \param data is unused
- \returns FALSE
- */
+  \brief reset_infolabel() resets infolabel text to "Ready"
+  \param data is unused
+  \returns FALSE
+  */
 G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 {
 	static GtkWidget *info_label = NULL;
@@ -369,10 +369,10 @@ G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 }
 
 /*!
- \brief set_title() appends text to the titlebar of the application to
- give user notifications...
- \param text is the text to append, dynamic strings only
- */
+  \brief set_title() appends text to the titlebar of the application to
+  give user notifications...
+  \param text is the text to append, dynamic strings only
+  */
 G_MODULE_EXPORT void set_title(gchar * text)
 {
 	gchar * tmpbuf = NULL;

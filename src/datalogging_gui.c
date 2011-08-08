@@ -11,12 +11,20 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/datalogging_gui.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/datalogging_gui.c
+  \ingroup CoreMtx
+  \brief All functions specific to the datalogging abilities of Megatunix
+ 
+  Megatunix is ALWAYS recording data once it connects to the ECU, this log
+  can be flushed/written as needed as includes ALL FIELDS, in addition the user
+  can select a custom datalog of the default fields, all fields or his own
+  specific fields and log that.  The third type is CLI specified autolog dump
+  which takes the internal auto-recording log and dumps that to a file 
+  periodically,  the filename and path are specified as CLI options at 
+  megatunix startup
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <datalogging_gui.h>
@@ -39,11 +47,11 @@ static gboolean header_needed = FALSE;
 
 
 /*!
- \brief populate_dlog_choices_pf() is called when the datalogging tab is loaded
- by glade AFTER the realtime variable definitions have been loaded and 
- processed.  All of the logable variables are then placed here for user 
- selecting during datalogging.
- */
+  \brief populate_dlog_choices_pf() is called when the datalogging tab is loaded
+  by glade AFTER the realtime variable definitions have been loaded and 
+  processed.  All of the logable variables are then placed here for user 
+  selecting during datalogging.
+  */
 G_MODULE_EXPORT void populate_dlog_choices(void)
 {
 	guint i,j,k;
@@ -157,9 +165,9 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 
 
 /*!
- \brief start_datalogging() enables logging and if RT vars aren't running it
- starts them.
- */
+  \brief start_datalogging() enables logging and if RT vars aren't running it
+  starts them.
+  */
 G_MODULE_EXPORT void start_datalogging(void)
 {
 	if (logging_active)
@@ -185,9 +193,9 @@ G_MODULE_EXPORT void start_datalogging(void)
 
 
 /*!
- \brief stop_datalogging() stops the datalog process. It DOES not stop realtime
- variable readback though
- */
+  \brief stop_datalogging() stops the datalog process. It DOES not stop realtime
+  variable readback though
+  */
 G_MODULE_EXPORT void stop_datalogging(void)
 {
 	GIOChannel *iochannel = NULL;
@@ -227,12 +235,12 @@ G_MODULE_EXPORT void stop_datalogging(void)
 
 
 /*! 
- \brief log_value_set() gets called when a variable is selected for 
- logging so that it can be marked as being logged
- \param widget is the pointer to toggle button widget
- \param data is unused
- \returns TRUE
- */
+  \brief log_value_set() gets called when a variable is selected for 
+  logging so that it can be marked as being logged
+  \param widget is the pointer to toggle button widget
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
 {
 	gconstpointer *object = NULL;
@@ -249,11 +257,11 @@ G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
 
 
 /*!
- \brief write_log_header() writes the top line of the datalog with field names
- \param iochannel is the pointer to the datalog output channel 
- \param override if true ALL variables are logged, if FALSE
- only selected variabels are logged
- */
+  \brief write_log_header() writes the top line of the datalog with field names
+  \param iochannel is the pointer to the datalog output channel 
+  \param override if true ALL variables are logged, if FALSE
+  only selected variabels are logged
+  */
 G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 {
 	guint i = 0;
@@ -307,9 +315,9 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 
 
 /*!
- \brief run_datalog_pf() gets called each time data arrives after rtvar 
- processing and logs the selected values to the file
- */
+  \brief run_datalog_pf() gets called each time data arrives after rtvar 
+  processing and logs the selected values to the file
+  */
 G_MODULE_EXPORT void run_datalog_pf(void)
 {
 	guint i = 0;
@@ -388,8 +396,8 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 
 
 /*!
- \brief dlog_select_all() selects all variables for logging
- */
+  \brief dlog_select_all() selects all variables for logging
+  */
 G_MODULE_EXPORT void dlog_select_all(void)
 {
 	guint i = 0;
@@ -412,8 +420,8 @@ G_MODULE_EXPORT void dlog_select_all(void)
 
 
 /*!
- \brief dlog_deselect_all() resets the logged choices to having NONE selected
- */
+  \brief dlog_deselect_all() resets the logged choices to having NONE selected
+  */
 G_MODULE_EXPORT void dlog_deselect_all(void)
 {
 	guint i = 0;
@@ -443,9 +451,9 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 }
 
 /*!
- \brief dlog_select_defaults() resets the logged choices to the ones defined 
- in the RealtimeMap file
- */
+  \brief dlog_select_defaults() resets the logged choices to the ones defined 
+  in the RealtimeMap file
+  */
 G_MODULE_EXPORT void dlog_select_defaults(void)
 {
 	guint i = 0;
@@ -609,10 +617,10 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 }
 
 /*!
- \brief dump_log_to_disk() dumps the contents of the RTV arrays to disk as a
- datalog file
- \param iochannel is the pointer to io channel for the log stream
- */
+  \brief dump_log_to_disk() dumps the contents of the RTV arrays to disk as a
+  datalog file
+  \param iochannel is the pointer to io channel for the log stream
+  */
 G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 {
 	guint i = 0;

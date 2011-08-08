@@ -43,11 +43,11 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief process_rt_vars() processes incoming realtime variables. It's a pretty
- complex function so read the sourcecode.. ;)
- \param incoming is the pointer to the raw incoming data
- \param len how many bytes in the raw incoming block
- */
+  \brief process_rt_vars() processes incoming realtime variables. It's a pretty
+  complex function so read the sourcecode.. ;)
+  \param incoming is the pointer to the raw incoming data
+  \param len how many bytes in the raw incoming block
+  */
 G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -206,15 +206,15 @@ store_it:
 
 
 /*!
- \brief handle_complex_expr() handles a complex mathematcial expression for
- an variable represented by a gconstpointer.
- \param object is the pointer to the object containing the conversion 
- expression and other relevant data
- \param incoming is the pointer to the raw data
- \param type is the enumeration stating if this is an upload or
- download conversion
- \returns a float of the result of the mathematical expression
- */
+  \brief handle_complex_expr() handles a complex mathematcial expression for
+  an variable represented by a gconstpointer.
+  \param object is the pointer to the object containing the conversion 
+  expression and other relevant data
+  \param incoming is the pointer to the raw data
+  \param type is the enumeration stating if this is an upload or
+  download conversion
+  \returns a float of the result of the mathematical expression
+  */
 G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incoming,ConvType type)
 {
 	static gdouble (*common_rtv_processor)(gconstpointer *, gchar *, ComplexExprType);
@@ -360,15 +360,15 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 
 
 /*!
- \brief handle_complex_expr_obj() handles a complex mathematcial expression for
- an variable represented by a gconstpointer.
- \param object is the pointer to the object containing the conversion 
- expression and other relevant data
- \param incoming is the pointer to the raw data
- \param type is the enumeration stating if this is an upload or
- download conversion
- \returns a float of the result of the mathematical expression
- */
+  \brief handle_complex_expr_obj() handles a complex mathematcial expression for
+  an variable represented by a gconstpointer.
+  \param object is the pointer to the object containing the conversion 
+  expression and other relevant data
+  \param incoming is the pointer to the raw data
+  \param type is the enumeration stating if this is an upload or
+  download conversion
+  \returns a float of the result of the mathematical expression
+  */
 G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,ConvType type)
 {
 	static gdouble (*common_rtv_processor_obj)(GObject *, gchar *, ComplexExprType);
@@ -508,13 +508,13 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 }
 
 /*!
- \brief handle_multi_expression() is used to handle RT Vars that take
- multiple possible conversions based on ECU state
- \param object is the object representing this derived variable
- \param raw_realtime is the pointer to the the raw realtime vars array
- \param hash is the pointer to hashtable of MultiExpression structures
- \returns the result of the multi_expression calc
- */
+  \brief handle_multi_expression() is used to handle RT Vars that take
+  multiple possible conversions based on ECU state
+  \param object is the object representing this derived variable
+  \param raw_realtime is the pointer to the the raw realtime vars array
+  \param hash is the pointer to hashtable of MultiExpression structures
+  \returns the result of the multi_expression calc
+  */
 G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw_realtime,GHashTable *hash)
 {
 	MultiExpr *multi = NULL;
@@ -574,13 +574,13 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 
 
 /*!
- \brief handle_special() is used to handle special derived variables that
- DO NOT use any data fromthe realtime variables.  In this case it's only to
- create the high resoluation clock variable.
- \param object is the object representing this derived variable
- \param handler_name is the string name of special handler case to be done
- \returns the result of the special calc
- */
+  \brief handle_special() is used to handle special derived variables that
+  DO NOT use any data fromthe realtime variables.  In this case it's only to
+  create the high resoluation clock variable.
+  \param object is the object representing this derived variable
+  \param handler_name is the string name of special handler case to be done
+  \returns the result of the special calc
+  */
 G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 {
 	static GTimeVal now;
@@ -617,12 +617,12 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 
 
 /*!
- \brief lookup_current_value() gets the current value of the derived
- variable requested by name.
- \param internal_name is the name of the variable to get the data for.
- \param value is where to put the value
- \returns TRUE on successful lookup, FALSE on failure
- */
+  \brief lookup_current_value() gets the current value of the derived
+  variable requested by name.
+  \param internal_name is the name of the variable to get the data for.
+  \param value is where to put the value
+  \returns TRUE on successful lookup, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat *value)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -656,12 +656,12 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
 
 
 /*!
- \brief lookup_previous_value() gets the current value of the derived
- variable requested by name.
- \param internal_name is the name of the variable to get the data for.
- \param value is where to put the value
- \returns TRUE on successful lookup, FALSE on failure
- */
+  \brief lookup_previous_value() gets the current value of the derived
+  variable requested by name.
+  \param internal_name is the name of the variable to get the data for.
+  \param value is where to put the value
+  \returns TRUE on successful lookup, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloat *value)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -695,14 +695,14 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
 
 
 /*!
- \brief lookup_previous_nth_value() gets the nth previosu value of the derived
- variable requested by name. i.e. if n = 0 it gets current,  n=4 means
- 5 samples "back in time"
- \param internal_name is the name of the variable to get the data for.
- \param n how far back in time to go in samples from current
- \param value is where to put the value
- \returns TRUE on successful lookup, FALSE on failure
- */
+  \brief lookup_previous_nth_value() gets the nth previosu value of the derived
+  variable requested by name. i.e. if n = 0 it gets current,  n=4 means
+  5 samples "back in time"
+  \param internal_name is the name of the variable to get the data for.
+  \param n how far back in time to go in samples from current
+  \param value is where to put the value
+  \returns TRUE on successful lookup, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, gint n, gfloat *value)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -740,14 +740,14 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
 
 
 /*!
- \brief lookup_previous_n_values() gets the n previous values of the derived
- variable requested by name. i.e. if n = 1 it gets current,  n=5 means
- 5 samples "back in time"
- \param internal_name is name of the variable to get the data for.
- \param n how many samples from now to get
- \param values is where to put the values
- \returns TRUE on successful lookup, FALSE on failure
- */
+  \brief lookup_previous_n_values() gets the n previous values of the derived
+  variable requested by name. i.e. if n = 1 it gets current,  n=5 means
+  5 samples "back in time"
+  \param internal_name is name of the variable to get the data for.
+  \param n how many samples from now to get
+  \param values is where to put the values
+  \returns TRUE on successful lookup, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gint n, gfloat *values)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -793,13 +793,13 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 
 
 /*!
- \brief lookup_previous_n_skip_xvalues() gets previous data
- \param internal_name is the name of the variable to get the data for.
- \param n is the number of samples we want
- \param skip is the number to SKIP between samples
- \param values is where to put the value
- \returns TRUE on successful lookup, FALSE on failure
- */
+  \brief lookup_previous_n_skip_xvalues() gets previous data
+  \param internal_name is the name of the variable to get the data for.
+  \param n is the number of samples we want
+  \param skip is the number to SKIP between samples
+  \param values is where to put the value
+  \returns TRUE on successful lookup, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_name, gint n, gint skip, gfloat *values)
 {
 	static GMutex *rtv_mutex = NULL;
@@ -844,12 +844,12 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 
 
 /*!
- \brief lookup_precision() gets the current precision of the derived
- variable requested by name.
- \param internal_name is the name of the variable to get the data for.
- \param precision is  where to put the precision
- \returns TRUE on successful lookup, FALSE on failure
- */
+  \brief lookup_precision() gets the current precision of the derived
+  variable requested by name.
+  \param internal_name is the name of the variable to get the data for.
+  \param precision is  where to put the precision
+  \returns TRUE on successful lookup, FALSE on failure
+  */
 G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *precision)
 {
 	gconstpointer * object = NULL;
@@ -873,9 +873,9 @@ G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *prec
 
 
 /*!
- \brief flush_rt_arrays() flushed the history buffers for all the realtime
- variables
- */
+  \brief flush_rt_arrays() flushed the history buffers for all the realtime
+  variables
+  */
 G_MODULE_EXPORT void flush_rt_arrays(void)
 {
 	GMutex *rtv_mutex = NULL;

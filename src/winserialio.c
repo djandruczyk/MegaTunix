@@ -27,13 +27,14 @@
 #endif
 
 /*!
- \brief win32_setup_serial_params() sets up the serial port attributes for win32
- \param fd is the filedescriptor representing the serial port
- \param baud is the baud rate
- \param bits is the number of data bits
- \param parity is the enumeration describing odd, even or no parity
- \param stop is the number of stop bits
- */
+  \brief win32_setup_serial_params() sets up the serial port attributes 
+  for windows platforms
+  \param fd is the filedescriptor representing the serial port
+  \param baud is the baud rate
+  \param bits is the number of data bits
+  \param parity is the enumeration describing odd, even or no parity
+  \param stop is the number of stop bits
+  */
 G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Parity parity, gint stop)
 {
 #ifdef __WIN32__
@@ -137,12 +138,12 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 
 
 /*!
- \brief win32_flush_serial() is used to flush the serial port.  It effectively
- does the same thing as "tcflush()". and a wrapper function is used to call
- this or tcflush depending what OS we are compiled for.
- \param fd is the filedescriptor to flush
- \param mode is the enum represnting the direction to flush...
- */
+  \brief win32_flush_serial() is used to flush the serial port.  It effectively
+  does the same thing as "tcflush()". and a wrapper function is used to call
+  this or tcflush depending what OS we are compiled for.
+  \param fd is the filedescriptor to flush
+  \param mode is the enum represnting the direction to flush...
+  */
 G_MODULE_EXPORT void win32_flush_serial(int fd, FlushDirection mode)
 {
 #ifdef __WIN32__

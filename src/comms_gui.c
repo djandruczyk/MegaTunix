@@ -11,12 +11,14 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/comms_gui.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/comms_gui.c
+  \ingroup CoreMtx
+  \brief Holds handlers for updating/resetting error counters related to
+  communications as well as the /dev enumeration functions for Unix class
+  OS's
+  \author David Andruczyk
+  */
 
 #include <comms_gui.h>
 #include <serialio.h>
@@ -30,27 +32,10 @@ extern gconstpointer *global_data;
 
 
 /*!
- \brief Updates the Gui with the results of the comms
- test.  This is decoupled from the comms_test due to threading constraints.
- \see comms_test
- */
-G_MODULE_EXPORT void update_comms_status(void)
-{
-        GtkWidget *widget = NULL;
-
-        if (NULL != (widget = lookup_widget("runtime_connected_label")))
-                gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)DATA_GET(global_data,"connected"));
-        if (NULL != (widget = lookup_widget("ww_connected_label")))
-                gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)DATA_GET(global_data,"connected"));
-        return;
-}
-
-
-/*!
- \brief reset_errcounts() resets the error counters
- \param widget is unused
- \returns TRUE
- */
+  \brief reset_errcounts() resets the error counters
+  \param widget is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
 	Serial_Params *serial_params = NULL;
@@ -64,10 +49,10 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 
 
 /*!
- \brief update_errcounts() updates the text entries on the gui with the 
- current status, error and I/O counters
- \returns TRUE
- */
+  \brief update_errcounts() updates the text entries on the gui with the 
+  current status, error and I/O counters
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean update_errcounts(void)
 {
 	static gboolean pf_red = FALSE;

@@ -36,11 +36,11 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief set_offline_mode() is called when the "Offline Mode" button is clicked
- in the general tab and is used to present the user with list of firmware 
- choices to select one for loading to work in offline mode (no connection to
- an ECU)
- */
+  \brief set_offline_mode() is called when the "Offline Mode" button is clicked
+  in the general tab and is used to present the user with list of firmware 
+  choices to select one for loading to work in offline mode (no connection to
+  an ECU)
+  */
 G_MODULE_EXPORT gboolean set_offline_mode(void)
 {
 	GtkWidget * widget = NULL;
@@ -201,10 +201,10 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 
 
 /*!
- \brief present_firmware_choices() presents a dialog box with the firmware
- choices.
- \returns the name of the chosen firmware
- */
+  \brief present_firmware_choices() presents a dialog box with the firmware
+  choices.
+  \returns the name of the chosen firmware
+  */
 G_MODULE_EXPORT gchar * present_firmware_choices(void)
 {
 	gchar ** filenames = NULL;

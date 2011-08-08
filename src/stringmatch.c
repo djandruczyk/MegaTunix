@@ -25,10 +25,10 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief build_string_2_enum_table() constructs a hashtable that maps a textual
- name to it's matching enumeration.  It's used for mapping things from all the 
- configuration files so that things just plain look better
- */
+  \brief build_string_2_enum_table() constructs a hashtable that maps a textual
+  name to it's matching enumeration.  It's used for mapping things from all the 
+  configuration files so that things just plain look better
+  */
 G_MODULE_EXPORT void build_string_2_enum_table(void)
 {
 	GHashTable *str_2_enum = NULL;
@@ -469,12 +469,12 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 
 /*!
- \brief dump_hash() is a debug function to dump the contents of the str_2_enum
- hashtable to check for errors or problems
- \param key is the key name in the hashtable
- \param value is the value (enumeration value) in the hashtable
- \param user_data is unused...
- */
+  \brief dump_hash() is a debug function to dump the contents of the str_2_enum
+  hashtable to check for errors or problems
+  \param key is the key name in the hashtable
+  \param value is the value (enumeration value) in the hashtable
+  \param user_data is unused...
+  */
 G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
 {
 	dbg_func(CRITICAL,g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %i\n",(gchar *)key, (GINT)value));
@@ -482,11 +482,11 @@ G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
 
 
 /*!
- \brief translate_string() is called passing in a string name to be translated
- into an enumeration
- \param string is the string to be translated
- \returns enumeration equivalent
- */
+  \brief translate_string() is called passing in a string name to be translated
+  into an enumeration
+  \param string is the string to be translated
+  \returns enumeration equivalent
+  */
 G_MODULE_EXPORT gint translate_string(const gchar *string)
 {
 	static GHashTable *str_2_enum = NULL;

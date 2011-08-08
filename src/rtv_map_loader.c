@@ -36,10 +36,10 @@
 #include <stringmatch.h>
 
 /*!
- \brief load_realtime_map_pf() loads the realtime map specified in the detected
- firmware's interrogation profile, and sets up the necessary arrays for storage
- of data coming from the ECU (temporary arrays for the last 50 or so entries)
- */
+  \brief load_realtime_map_pf() loads the realtime map specified in the detected
+  firmware's interrogation profile, and sets up the necessary arrays for storage
+  of data coming from the ECU (temporary arrays for the last 50 or so entries)
+  */
 G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 {
 	GtkWidget *dialog = NULL;
@@ -337,12 +337,12 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 
 /*!
- \brief load_complex_params() loads the necessary parameters from the config
- file for a complex conversion
- \param object is the place where the data loaded is bound to
- \param cfgfile is the configfile pointer to read from
- \param section is the section to read from in the config file
- */
+  \brief load_complex_params() loads the necessary parameters from the config
+  file for a complex conversion
+  \param object is the place where the data loaded is bound to
+  \param cfgfile is the configfile pointer to read from
+  \param section is the section to read from in the config file
+  */
 G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
 {
 	static void (*common_rtv_loader)(gconstpointer *,ConfigFile *,gchar * section, gchar *, ComplexExprType);
@@ -457,12 +457,12 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 
 
 /*!
- \brief load_complex_params_obj() loads the necessary parameters from the config
- file for a complex conversion
- \param object is the place where the data loaded is bound to
- \param cfgfile is the configfile pointer to read from
- \param section is the section to read from in the config file
- */
+  \brief load_complex_params_obj() loads the necessary parameters from 
+  the config file for a complex conversion
+  \param object is the place where the data loaded is bound to
+  \param cfgfile is the configfile pointer to read from
+  \param section is the section to read from in the config file
+  */
 G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfile, gchar * section)
 {
 	static void (*common_rtv_loader_obj)(GObject *,ConfigFile *,gchar * section, gchar *, ComplexExprType);

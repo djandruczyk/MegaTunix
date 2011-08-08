@@ -12,25 +12,25 @@
  */
 
 /*! 
- \file src/apicheck.c
- \ingroup CoreMtx
- \brief Functions to get/set the API major/minor versions within .ini 
- styles files
-   
- Gets or sets the API major/minor versions in an [API] section
- with the following keys "major" and "minor".
- \author David Andruczyk 
- */
+  \file src/apicheck.c
+  \ingroup CoreMtx
+  \brief Functions to get/set the API major/minor versions within .ini 
+  styles files
+    
+  Gets or sets the API major/minor versions in an [API] section
+  with the following keys "major" and "minor".
+  \author David Andruczyk 
+  */
 
 #include <apicheck.h>
 
 /*!
- \brief Sets the file API to version passed by major/minor
- \param cfg is the pointer to the ConfigFile structure
- \param major is the major api version number
- \param minor is the minor api version number
- \returns TRUE on api version setting, FALSE on api version set failure
- */
+  \brief Sets the file API to version passed by major/minor
+  \param cfg is the pointer to the ConfigFile structure
+  \param major is the major api version number
+  \param minor is the minor api version number
+  \returns TRUE on api version setting, FALSE on api version set failure
+  */
 G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
 {
 	cfg_write_int(cfg,"API","major",major);
@@ -41,14 +41,14 @@ G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
 
 
 /*!
- \brief gets the file API and returns it thru the passed pointers
- \param cfg is the poitner to the ConfigFile structure
- \param major is the pointer to where the major api version number should be 
- stored or NULL
- \param minor is the pointer to where the minor api version number should be 
- stored or NULL
- \returns TRUE on api version reading, FALSE on api version not readable
- */
+  \brief gets the file API and returns it thru the passed pointers
+  \param cfg is the poitner to the ConfigFile structure
+  \param major is the pointer to where the major api version number should be 
+  stored or NULL
+  \param minor is the pointer to where the minor api version number should be 
+  stored or NULL
+  \returns TRUE on api version reading, FALSE on api version not readable
+  */
 G_MODULE_EXPORT gboolean get_file_api(ConfigFile *cfg, gint *major, gint *minor)
 {
 	gboolean result = TRUE;

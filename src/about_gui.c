@@ -12,21 +12,21 @@
  */
 
 /*! 
- \file src/about_gui.c
- \ingroup CoreMtx
- \brief Creates the about MegaTunix tab with the Logo
- \authors David Andryczk
- \authors Dale Anderson (logo)
- */
+  \file src/about_gui.c
+  \ingroup CoreMtx
+  \brief Creates the about MegaTunix tab with the Logo
+  \author David Andryczk
+  \author Dale Anderson (logo)
+  */
 
 #include <about_gui.h>
 #include <logo.h>
 #include <widgetmgmt.h>
 
 /*!
- \brief build_about makes the about tab and presents the MegaTunix logo
- \param parent is the container to place the logo in
- */
+  \brief build_about makes the about tab and presents the MegaTunix logo
+  \param parent is the container to place the logo in
+  */
 G_MODULE_EXPORT void install_logo(GtkWidget *parent)
 {
 	GdkPixbuf *pixbuf;
@@ -76,11 +76,11 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
 
 
 /*!
- \brief about_popup makes the about tab and presents the MegaTunix logo
- \param widget is unused
- \param data is unused
- \returns TRUE
- */
+  \brief about_popup makes the about tab and presents the MegaTunix logo
+  \param widget is unused
+  \param data is unused
+  \returns TRUE
+  */
 G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 {
 #if GTK_MINOR_VERSION >= 8

@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/dashboard.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/dashboard.c
+  \ingroup CoreMtx
+  \brief Handles dashboard management.  Currently Mtx only allows two separate
+  dashclusters active at any one time.  This code needs refactoring/improvement
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <xmlbase.h>
@@ -37,12 +38,12 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief load_dashboard() loads the specified dashboard configuration file
- and initializes the dash.
- \param filename is the pointer to the file we should load
- \param data is the dash ID (1 or 2)
- \returns pointer to a new dashboard container widget
- */
+  \brief load_dashboard() loads the specified dashboard configuration file
+  and initializes the dash.
+  \param filename is the pointer to the file we should load
+  \param data is the dash ID (1 or 2)
+  \returns pointer to a new dashboard container widget
+  */
 G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 {
 	GtkWidget *window = NULL;

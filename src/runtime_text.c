@@ -37,10 +37,10 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief load_rt_text_pf() is called to load up the runtime text configurations
- from the file specified in the firmware's interrogation profile, and populate
- a new window with the runtiem vars text value box.
- */
+  \brief load_rt_text_pf() is called to load up the runtime text configurations
+  from the file specified in the firmware's interrogation profile, and populate
+  a new window with the runtiem vars text value box.
+  */
 G_MODULE_EXPORT void load_rt_text_pf(void)
 {
 	GtkWidget *treeview = NULL; 
@@ -170,12 +170,12 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 
 
 /*
- \brief loda the RTT specifics at this XML node, creates the RTT object and 
- stores it in the ListStore
- \param node is the pointer to XML node
- \param store is the pointer to ListStore where we save it
- \param parent is the Parent widget
- */
+  \brief loda the RTT specifics at this XML node, creates the RTT object and 
+  stores it in the ListStore
+  \param node is the pointer to XML node
+  \param store is the pointer to ListStore where we save it
+  \param parent is the Parent widget
+  */
 G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *parent)
 {
 	gchar *int_name = NULL;
@@ -220,14 +220,14 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 
 
 /*!
- \brief create_rtt() creates the rt_text from the passed data, and attaches
- it the the gui.
- \param ctrl_name is the name of the rt_text as defined in the config file
- \param source is the data source for this rt_text 
- \param show_prefix is a flag to hide or show the prefix
- \returns a pointer to a Rt_Text structure
- \see Rt_Text
- */
+  \brief create_rtt() creates the rt_text from the passed data, and attaches
+  it the the gui.
+  \param ctrl_name is the name of the rt_text as defined in the config file
+  \param source is the data source for this rt_text 
+  \param show_prefix is a flag to hide or show the prefix
+  \returns a pointer to a Rt_Text structure
+  \see Rt_Text
+  */
 G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean show_prefix)
 {
 	Rt_Text *rtt = NULL;
@@ -260,12 +260,12 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 
 
 /*!
- \brief add_rtt() creates the rt_text from the passed data, and attaches
- it the the gui.
- \param parent is the parent widget
- \param ctrl_name is the name of the rt_text as defined in the config file
- \returns a populated pointer to a Rt_Text structure
- */
+  \brief add_rtt() creates the rt_text from the passed data, and attaches
+  it the the gui.
+  \param parent is the parent widget
+  \param ctrl_name is the name of the rt_text as defined in the config file
+  \returns a populated pointer to a Rt_Text structure
+  */
 G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 {
 	Rt_Text *rtt = NULL;
@@ -342,10 +342,10 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 
 
 /*!
- \brief add_additional_rtt() is called as a post function for Tab loading
- to add an RTT on a normal widget tab. (AE wizard currently)
- \param widget is the pointer to widget containing the data needed
- */
+  \brief add_additional_rtt() is called as a post function for Tab loading
+  to add an RTT on a normal widget tab. (AE wizard currently)
+  \param widget is the pointer to widget containing the data needed
+  */
 G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 {
 	GHashTable *rtt_hash = NULL;
@@ -377,13 +377,13 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 
 
 /*!
- \brief rtt_update_values() is called for each runtime text to update
- it's label (label is periodic and not every time due to pango
- speed problems)
- \param key is the unused
- \param value is the pointer to Rt_Slider
- \param data is unused
- */
+  \brief rtt_update_values() is called for each runtime text to update
+  it's label (label is periodic and not every time due to pango
+  speed problems)
+  \param key is the unused
+  \param value is the pointer to Rt_Slider
+  \param data is unused
+  */
 G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer data)
 {
 	static GRand *rand = NULL;

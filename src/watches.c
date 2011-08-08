@@ -26,9 +26,9 @@
 static GHashTable *watch_hash;
 
 /*!
- \brief fire_off_rtv_watches_pf() Trolls through the watch list and if
- conditions are met, calls the corresponding fucntion(s)
- */
+  \brief fire_off_rtv_watches_pf() Trolls through the watch list and if
+  conditions are met, calls the corresponding fucntion(s)
+  */
 G_MODULE_EXPORT void fire_off_rtv_watches_pf(void)
 {
 	if (watch_hash)

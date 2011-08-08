@@ -11,12 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/keybinder.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/keybinder.c
+  \ingroup CoreMtx
+  \brief Deals with initializing an object with the info from the config file
+
+  This file deals with extracting out the information needed from a config
+  file and storing it within the object in a way that it's easily accessed
+  \author David Andruczyk
+  */
 
 #include <defines.h>
 #include <debugging.h>

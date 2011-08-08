@@ -28,10 +28,11 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief rescale_table() is called to rescale a subset of a Table (doesn't
- matter what kind of table). 
- \param widget is the pointer to widget containing the table number we care about
- */
+  \brief rescale_table() is called to rescale a subset of a Table (doesn't
+  matter what kind of table). 
+  \param widget is the pointer to widget containing the table number 
+  we care about.
+  */
 G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 {
 	gint table_num = -1;

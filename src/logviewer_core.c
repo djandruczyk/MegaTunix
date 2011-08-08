@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/logviewer_core.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/logviewer_core.c
+  \ingroup CoreMtx
+  \brief The legacy MegaTunix Logviewer core functions
+  This needs to be rewritten to use the new stripchart widgets
+  \author David Andruczyk
+  */
 
 #include <debugging.h>
 #include <getfiles.h>
@@ -100,12 +101,12 @@ G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
 	mtx_stripchart_set_values(MTX_STRIPCHART(watch->user_data),watch->vals);
 }
 
-/*! 
- \brief select_datalog_for_import() loads a datalog file for playback
- \param widget is the Calling widget
- \param data is unused
- */
 
+/*! 
+  \brief select_datalog_for_import() loads a datalog file for playback
+  \param widget is the Calling widget
+  \param data is unused
+  */
 G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer data)
 {
 	MtxFileIO *fileio = NULL;
@@ -151,9 +152,9 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 
 
 /*! 
- \brief load_logviewer_file() loads a datalog file for playback
- \param iochannel is the The IO channel representing the source file
- */
+  \brief load_logviewer_file() loads a datalog file for playback
+  \param iochannel is the The IO channel representing the source file
+  */
 G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 {
 	Log_Info *log_info = NULL;
@@ -172,10 +173,10 @@ G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 
 
 /*!
- \brief initialixe_log_info() alocates, and sets to sane defaults the fields
- of the log_info struture
- \returns a pointer to an allocated Log_Info structure
- */
+  \brief initialixe_log_info() alocates, and sets to sane defaults the fields
+  of the log_info struture
+  \returns a pointer to an allocated Log_Info structure
+  */
 G_MODULE_EXPORT Log_Info * initialize_log_info(void)
 {
 	Log_Info *log_info = NULL;
@@ -188,11 +189,11 @@ G_MODULE_EXPORT Log_Info * initialize_log_info(void)
 }
 
 /*!
- \brief read_log_header() First we read the first line,  try to determine 
- if the delimiter is a COMMA, or a TAB. 
- \param iochannel is the iochannel that represents the input file
- \param log_info is the the Log_Info structure
- */
+  \brief read_log_header() First we read the first line,  try to determine 
+  if the delimiter is a COMMA, or a TAB. 
+  \param iochannel is the iochannel that represents the input file
+  \param log_info is the the Log_Info structure
+  */
 G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 {
 	GString *a_line = g_string_new("\0");
@@ -274,10 +275,10 @@ read_again:
 
 
 /*!
- \brief populate_limits() scans the datalog data and sets the minimum and 
- maximum values based on the span of the data in the file
- \param log_info is the pointer to log info structure
- */
+  \brief populate_limits() scans the datalog data and sets the minimum and 
+  maximum values based on the span of the data in the file
+  \param log_info is the pointer to log info structure
+  */
 G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 {
 	guint i = 0;
@@ -320,11 +321,11 @@ G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 
 
 /*! 
- \brief read_log_data() reads the log data and sticks it into the arrays in
- the log_info structure
- \param iochannel is the data source 
- \param log_info is the pointer to log information struct
- */
+  \brief read_log_data() reads the log data and sticks it into the arrays in
+  the log_info structure
+  \param iochannel is the data source 
+  \param log_info is the pointer to log information struct
+  */
 G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 {
 	GString *a_line = g_string_new("\0");
@@ -388,10 +389,10 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 }
 
 /*!
- \brief free_log_info frees the data allocated by a datalog import, 
- should be done when switching logfiles
- \param log_info is the pointer to log information structure
- */
+  \brief free_log_info frees the data allocated by a datalog import, 
+  should be done when switching logfiles
+  \param log_info is the pointer to log information structure
+  */
 G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 {
 	guint i = 0;
@@ -423,11 +424,11 @@ G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 
 
 /*!
- \brief changes scroll speed for logviewer playback
- \param widget is the pointer to the range widget representing the scroll speed
- \param data is unused
- \returns TRUE to indicate the event is handled
- */
+  \brief changes scroll speed for logviewer playback
+  \param widget is the pointer to the range widget representing the scroll speed
+  \param data is unused
+  \returns TRUE to indicate the event is handled
+  */
 G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpointer data)
 {
 	gfloat tmpf = 0.0;

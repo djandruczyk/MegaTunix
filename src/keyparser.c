@@ -11,11 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/keyparser.c
- *
- * @brief ...
- *
- *
+/*!
+  \file src/keyparser.c
+  \ingroup CoreMtx
+  \brief String parsing functions to make things easier
+  \author David Andruczyk
  */
 
 #include <assert.h>
@@ -23,13 +23,13 @@
 #include <stringmatch.h>
 
 /*!
- \brief parse_keys() splits up a string list into a vector and returns it
- and the number of keys
- \param string is the input string
- \param count is the reference to dest to place number of keys
- \param delimiter is the char to split the string with
- \returns a string vector of the original string split up with the delimiter
- */
+  \brief parse_keys() splits up a string list into a vector and returns it
+  and the number of keys
+  \param string is the input string
+  \param count is the reference to dest to place number of keys
+  \param delimiter is the char to split the string with
+  \returns a string vector of the original string split up with the delimiter
+  */
 G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gchar *delimiter)
 {
 	gchar **result = NULL;	
@@ -46,13 +46,13 @@ G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gc
 }
 
 /*!
- \brief parse_keytypes() splits up a string list and converts the individual 
- values into enumerations
- \param string is the input string
- \param count is the reference to dest to place number of keys
- \param delimiter is the char to split the string with
- \returns a dynamic integer array of the keystypes (enums)
- */
+  \brief parse_keytypes() splits up a string list and converts the individual 
+  values into enumerations
+  \param string is the input string
+  \param count is the reference to dest to place number of keys
+  \param delimiter is the char to split the string with
+  \returns a dynamic integer array of the keystypes (enums)
+  */
 G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const gchar *delimiter)
 {
 	gchar **vector = NULL;	
