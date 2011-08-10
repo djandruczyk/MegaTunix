@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/warmwizard_gui.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/warmwizard_gui.c
+  \ingroup CoreMtx
+  \brief A to be deprecated warmupwizard interface used by very few firmwares
+  \author David Andruczyk
+  */
 
 #include <defines.h>
 #include <widgetmgmt.h>
@@ -56,7 +56,7 @@ G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 			name = g_strdup_printf("ww_warmup_label_%i",i+1);
 			gtk_widget_modify_fg(lookup_widget(name),GTK_STATE_NORMAL,&black);
 			g_free(name);
-					
+
 		}
 		else
 			skipnext = FALSE;
@@ -69,7 +69,7 @@ G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 			g_free(name);
 			name = g_strdup_printf("ww_warmup_label_%i",i+2);
 			gtk_widget_modify_fg(lookup_widget(name),GTK_STATE_NORMAL,&red);
-					
+
 			g_free(name);
 		}
 	}

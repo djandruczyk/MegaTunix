@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/stringmatch.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/stringmatch.c
+  \ingroup CoreMtx
+  \brief Manages string to ENUM matching/relationships
+  \author David Andruczyk
+  */
 
 #include <debugging.h>
 #include <defines.h>

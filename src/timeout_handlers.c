@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/timeout_handlers.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/timeout_handlers.c
+  \ingroup CoreMtx
+  \brief Handlers for the various Global periodic functions in Mtx
+  \author David Andruczyk
+  */
 
 #include <comms_gui.h>
 #include <debugging.h>

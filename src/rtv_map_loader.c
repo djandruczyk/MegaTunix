@@ -13,12 +13,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/rtv_map_loader.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/rtv_map_loader.c
+  \ingroup CoreMtx
+  \brief Handles loading ECU runtime map files
+
+  Right now this currrently fits all ECU types however there it may make sense
+  to generalize this more aside from just dependancy handling so plugins can 
+  be leveraged more for ECU specific goodness
+  \author David Andruczyk
+  */
 
 #include <apicheck.h>
 #include <api-versions.h>

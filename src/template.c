@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/template.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/template.c
+  \ingroup CoreMtx
+  \brief Template
+  \author David Andruczyk
+  */
 
 #include <template.h>
 

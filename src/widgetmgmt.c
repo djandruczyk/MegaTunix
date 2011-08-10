@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/widgetmgmt.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/widgetmgmt.c
+  \ingroup CoreMtx
+  \brief widget management utility functions
+  \author David Andruczyk
+  */
 
 #include <configfile.h>
 #include <defines.h>

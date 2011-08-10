@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/visibility.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/visibility.c
+  \ingroup CoreMtx
+  \brief Handles hiding of tabs the user deems are not applicable to their
+  needs
+  \author David Andruczyk
+  */
 
 #include <config.h>
 #include <defines.h>

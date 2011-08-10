@@ -11,12 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/tabloader.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/tabloader.c
+  \ingroup CoreMtx
+  \brief The  Tab loading/pre-rendering functions
+
+  NOTE: This should be broken up into the plugins at some point to allow more
+  flexibility in the gui layout of tabs and  not restrict things to 
+  Glade+MTx Datamap .ini files
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <config.h>

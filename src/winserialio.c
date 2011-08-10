@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/winserialio.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/winserialio.c
+  \ingroup CoreMtx
+  \brief Windows specific serial I/O functions
+  \author David Andruczyk
+  */
 
 #include <stdio.h>
 #include <winserialio.h>

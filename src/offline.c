@@ -14,10 +14,9 @@
 /*!
   \file src/offline.c
   \ingroup CoreMtx
- * @brief ...
- *
- *
- */
+  \brief The functions for initiating Offline Mode, and offline ECU restore
+  \author David Andruczyk
+  */
 
 #include <apicheck.h>
 #include <api-versions.h>

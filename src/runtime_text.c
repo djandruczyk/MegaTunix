@@ -12,11 +12,10 @@
  */
 
 /*! @file src/runtime_text.c
- *
- * @brief ...
- *
- *
- */
+  \ingroup CoreMtx
+  \brief Handles the Runtime Text floating window
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <api-versions.h>

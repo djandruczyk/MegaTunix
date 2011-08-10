@@ -13,12 +13,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/tag_loader.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/tag_loader.c
+  \ingroup CoreMtx
+  \brief Handles loading/parsing of TextTagsfrom Datamap files
+  \author David Andruczyk
+  */
 
 #include <config.h>
 #include <configfile.h>

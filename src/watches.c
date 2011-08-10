@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/watches.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/watches.c
+  \inroup CoreMtx
+  \brief Handles the management of Watches for firing events based on a 
+  condition changing to meet the watche's criteria.
+  \author David Andruczyk
+  */
 
 #include <plugin.h>
 #include <rtv_processor.h>

@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/wrappers.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/wrappers.c
+  \ingroup CoreMtx
+  \brief wrapper functions to fix lib/symbol issues on Windows OS's
+  \author David Andruczyk
+  */
 
 #include <combo_mask.h>
 #include <gauge.h>

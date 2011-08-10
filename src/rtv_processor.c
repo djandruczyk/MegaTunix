@@ -13,12 +13,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/rtv_processor.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/rtv_processor.c
+  \ingroup CoreMtx
+  \brief The routines for processing Runtime/Realtime variables from the ECU
+  \author David Andruczyk
+  */
 
 #include <assert.h>
 #include <conversions.h>

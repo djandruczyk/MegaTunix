@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/runtime_status.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/runtime_status.c
+  \ingroup CoreMtx
+  \brief Handles the Runtime status present on the runtime tab as well as the
+  floating window
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <api-versions.h>

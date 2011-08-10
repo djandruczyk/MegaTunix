@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/vetable_gui.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/vetable_gui.c
+  \ingroup CoreMtx
+  \brief VEtable scaler routine, which is semi-ECU specific and suited to be
+  migrated to a plugin at some future point
+  \author David Andruczyk
+  */
 
 #include <firmware.h>
 #include <gui_handlers.h>

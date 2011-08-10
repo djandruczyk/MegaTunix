@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/xmlcomm.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/xmlcomm.c
+  \ingroup CoreMtx
+  \brief XML code for dealing with COMM.XML I/O dedfinitions for all firmware
+  \author David Andruczyk
+  */
 
 #include <debugging.h>
 #include <libxml/parser.h>

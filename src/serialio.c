@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/serialio.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/serialio.c
+  \ingroup CoreMtx
+  \brief Deals with the lower level Serial functions 
+  Things like open/close setting port parameters, baudrate and so on
+  \author David Andruczyk
+  */
 
 #include <debugging.h>
 #include <enums.h>

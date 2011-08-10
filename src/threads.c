@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/threads.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/threads.c
+  \ingroup CoreMtx
+  \brief Thread functions mainly revolving around I/O or message passing
+  \author David Andruczyk
+  */
 
 #include <args.h>
 #include <3d_vetable.h>

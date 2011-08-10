@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/runtime_sliders.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/runtime_sliders.c
+  \ingroup CoreMtx
+  \brief Handles the Runtime sliders present on the runtime tab as well as the
+  VE/Spark/Afr/Boost 3D displays
+  \author David Andruczyk
+  */
 
 #include <api-versions.h>
 #include <debugging.h>

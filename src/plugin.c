@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/plugin.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/plugin.c
+  \ingroup CoreMtx
+  \brief Functions specific to  plugin init/shutdown as well as symbol lookup
+  within plugins for dereferencing addresses of functions
+  \authors David Andruczyk
+  */
 
 #include <debugging.h>
 #include <defines.h>

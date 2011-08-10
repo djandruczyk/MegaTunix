@@ -11,12 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/personalities.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/personalities.c
+  \ingroup CoreMtx
+  \brief Handles the selection of ECU personality by the End User
+  \author David Andruczyk
+  */
 
 #include <configfile.h>
 #include <debugging.h>

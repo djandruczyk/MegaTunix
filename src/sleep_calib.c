@@ -11,12 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file src/sleep_calib.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file src/sleep_calib.c
+  \ingroup CoreMtx
+  \brief Calibrates the system overhead to adjust the timouts to suite 
+  the users machine speed
+  \author David Andruczyk
+  */
 
 #include <defines.h>
 #include <sleep_calib.h>
