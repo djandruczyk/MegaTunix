@@ -14,7 +14,7 @@
 /*!
   \file src/warmwizard_gui.c
   \ingroup CoreMtx
-  \brief A to be deprecated warmupwizard interface used by very few firmwares
+  \brief A to-be-deprecated warmupwizard interface used by very few firmwares
   \author David Andruczyk
   */
 
