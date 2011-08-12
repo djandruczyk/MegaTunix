@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/secu3/secu3_gui_handlers.c
+  \ingroup Secu3Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <secu3_gui_handlers.h>
 
 

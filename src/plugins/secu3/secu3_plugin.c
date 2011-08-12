@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/secu3/secu3_plugin.c
+  \ingroup Secu3Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #define __SECU3_PLUGIN_C__
 #include <secu3_plugin.h>
 #include <gtk/gtk.h>
