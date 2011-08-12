@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/freeems/freeems_comms.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS Specific comms routines
   \author David Andruczyk
   */
 

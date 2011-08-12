@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/freeems/freeems_errors.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS specific error reporting function(s)
   \author David Andruczyk
   */
 

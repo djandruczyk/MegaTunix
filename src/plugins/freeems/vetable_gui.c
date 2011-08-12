@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/freeems/vetable_gui.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS specific VEtable active vertex highlighter
   \author David Andruczyk
   */
 

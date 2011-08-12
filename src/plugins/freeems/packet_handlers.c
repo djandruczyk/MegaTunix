@@ -16,7 +16,8 @@
 /*!
   \file src/plugins/freeems/packet_handlers.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS packet handling code for parsing, generating and verifying
+  ECU packets of data
   \author David Andruczyk
   */
 

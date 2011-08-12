@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/freeems/freeems_menu_handlers.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS Menu handlers for ECU specific menu hooks
   \author David Andruczyk
   */
 

@@ -16,7 +16,8 @@
 /*!
   \file src/plugins/freeems/freeems_helpers.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS utility functions, mostly referenced from comm.xml as post
+  functions
   \author David Andruczyk
   */
 

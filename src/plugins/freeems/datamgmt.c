@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/freeems/datamgmt.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief All of the FreeEMS specific Data Management functions
   \author David Andruczyk
   */
 

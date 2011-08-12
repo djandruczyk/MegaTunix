@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/freeems/freeems_plugin.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS Plugin init/shutdown functionality
   \author David Andruczyk
   */
 

@@ -16,7 +16,7 @@
 /*!
   \file src/plugins/freeems/interrogate.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS specific interrogation routine (INCOMPLETE/IN FLUX)
   \author David Andruczyk
   */
 

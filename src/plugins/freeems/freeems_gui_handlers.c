@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/freeems/freeems_gui_handlers.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief FreeEMS specific Gui handlers
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/freeems/fileio.c
   \ingroup FreeEMSPlugin,Plugins
-  \brief
+  \brief ECU Specific file save/restore functions
   \author David Andruczyk
   */
 
