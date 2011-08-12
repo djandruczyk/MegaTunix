@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms3/ms3_plugin.c
+  \ingroup MS3Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #define __MS3_PLUGIN_C__
 #include <ms3_plugin.h>
 #include <gtk/gtk.h>

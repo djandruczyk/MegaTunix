@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms3/ms3_gui_handlers.c
+  \ingroup MS3Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <ms3_gui_handlers.h>
 
 
