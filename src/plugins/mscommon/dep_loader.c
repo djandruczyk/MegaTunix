@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/dep_loader.c
+  \ingroup MSCommonPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <debugging.h>
 #include <dep_loader.h>
 #include <firmware.h>

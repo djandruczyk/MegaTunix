@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/vetable_gui.c
+  \ingroup MSCommonPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <datamgmt.h>
 #include <firmware.h>
 #include <mscommon_plugin.h>

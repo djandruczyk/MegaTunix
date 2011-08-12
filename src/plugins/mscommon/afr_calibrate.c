@@ -14,6 +14,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/afr_calibrate.c
+  \ingroup MSCommonPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <firmware.h>
 #include <math.h>
 #include <mscommon_comms.h>

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/datamgmt.c
+  \ingroup MSCommonPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <firmware.h>
 #include <mscommon_plugin.h>
 #include <string.h>

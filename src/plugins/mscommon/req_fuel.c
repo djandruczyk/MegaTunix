@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/req_fuel.c
+  \ingroup MSCommonPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <config.h>
 #include <configfile.h>
 #include <datamgmt.h>
