@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/jimstim/jimstim_plugin.c
+  \ingroup JimStimPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #define __JIMSTIM_PLUGIN_C__
 #include <config.h>
 #include <defines.h>

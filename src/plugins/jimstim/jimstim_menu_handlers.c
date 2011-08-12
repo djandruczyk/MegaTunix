@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/jimstim/jimstim_menu_handlers.c
+  \ingroup JimStimPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <jimstim_menu_handlers.h>
 
 extern gconstpointer *global_data;

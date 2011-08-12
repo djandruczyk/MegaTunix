@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/jimstim/jimstim_sweeper.c
+  \ingroup JimStimPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <args.h>
 #include <config.h>
 #include <debugging.h>
