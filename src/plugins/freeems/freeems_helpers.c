@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/freeems_helpers.c
+  \ingroup FreeEMSPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <datamgmt.h>
 #include <firmware.h>
 #include <freeems_comms.h>

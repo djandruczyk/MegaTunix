@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/datamgmt.c
+  \ingroup FreeEMSPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <datamgmt.h>
 #include <debugging.h>
 #include <firmware.h>

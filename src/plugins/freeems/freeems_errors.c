@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/freeems_errors.c
+  \ingroup FreeEMSPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <freeems_errors.h>
 
 
