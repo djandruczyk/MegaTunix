@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/pis/pis_plugin.c
+  \ingroup PisPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #define __PIS_PLUGIN_C__
 #include <pis_plugin.h>
 #include <gtk/gtk.h>

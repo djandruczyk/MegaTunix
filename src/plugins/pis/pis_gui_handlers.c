@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/pis/pis_gui_handlers.c
+  \ingroup PisPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <pis_gui_handlers.h>
 
 

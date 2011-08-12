@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/pis/pis_menu_handlers.c
+  \ingroup PisPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <pis_menu_handlers.h>
 
 extern gconstpointer *global_data;
