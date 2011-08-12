@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/null/null_plugin.c
+  \ingroup NullPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #define __NULL_PLUGIN_C__
 #include <null_plugin.h>
 #include <gtk/gtk.h>

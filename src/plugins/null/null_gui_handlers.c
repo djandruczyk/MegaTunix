@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/null/null_gui_handlers.c
+  \ingroup NullPlugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <null_gui_handlers.h>
 
 
