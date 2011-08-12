@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms2/ms2_plugin.c
+  \ingroup MS2Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #define __MS2_PLUGIN_C__
 #include <config.h>
 #include <defines.h>

@@ -13,6 +13,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms2/user_outputs.c
+  \ingroup MS2Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <ms2_plugin.h>
 #include <rtv_map_loader.h>
 #include <user_outputs.h>

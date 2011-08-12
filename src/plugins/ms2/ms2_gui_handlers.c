@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms2/ms2_gui_handlers.c
+  \ingroup MS2Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <combo_loader.h>
 #include <debugging.h>
 #include <firmware.h>

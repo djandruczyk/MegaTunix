@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms2/ms2_tlogger.c
+  \ingroup MS2Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <firmware.h>
 #include <ms2_plugin.h>
 #include <ms2_tlogger.h>
