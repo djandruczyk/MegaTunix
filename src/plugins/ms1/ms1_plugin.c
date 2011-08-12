@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms1/ms1_plugin.c
+  \ingroup MS1Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #define __MS1_PLUGIN_C__
 #include <config.h>
 #include <defines.h>

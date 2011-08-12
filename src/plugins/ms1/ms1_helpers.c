@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms1/ms1_helpers.c
+  \ingroup MS1Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <ms1_plugin.h>
 
 

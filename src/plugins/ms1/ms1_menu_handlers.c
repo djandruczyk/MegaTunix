@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms1/ms1_menu_handlers.c
+  \ingroup MS1Plugin,Plugins
+  \brief
+  \author David Andruczyk
+  */
+
 #include <firmware.h>
 #include <ms1_plugin.h>
 #include <ms1_menu_handlers.h>
