@@ -16,7 +16,7 @@
 /*!
   \file src/plugins/mscommon/user_outputs.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS personality common functions for User outputs
   \author David Andruczyk
   */
 

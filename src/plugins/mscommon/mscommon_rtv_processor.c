@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/mscommon_rtv_processor.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS Personality specific RTV processor functions
   \author David Andruczyk
   */
 

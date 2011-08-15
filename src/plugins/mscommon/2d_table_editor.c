@@ -14,7 +14,8 @@
 /*!
   \file src/plugins/mscommon/2d_table_editor.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MSCommon 2d table editor, NOTE this should move to global with MS
+  specific stubs here
   \author David Andruczyk
   */
 

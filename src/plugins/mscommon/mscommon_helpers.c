@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/mscommon_helpers.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS common helper functions referred to via comm.xml
   \author David Andruczyk
   */
 

@@ -16,7 +16,7 @@
 /*!
   \file src/plugins/mscommon/interrogate.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS Specific device interrogation/detection routines
   \author David Andruczyk
   */
 

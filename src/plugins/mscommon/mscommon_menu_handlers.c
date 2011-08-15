@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/mscommon_menu_handlers.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS Common menu init/handler functions
   \author David Andruczyk
   */
 

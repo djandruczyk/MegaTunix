@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/mscommon_comms.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS specific communication functions
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/vetable_gui.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS personality functions for VEtable cell highlighting
   \author David Andruczyk
   */
 

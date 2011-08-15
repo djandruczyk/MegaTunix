@@ -17,7 +17,7 @@
 /*!
   \file src/plugins/mscommon/afr_calibrate.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS Specific afr_calibration functionality
   \author David Andruczyk
   */
 

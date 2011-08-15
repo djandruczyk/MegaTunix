@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/mtxsocket.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS personality specific remote network mode functionality
   \author David Andruczyk
   */
 

@@ -16,7 +16,7 @@
 /*!
   \file src/plugins/mscommon/dep_loader.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS Specific dependancy management functions (common to all MS's)
   \author David Andruczyk
   */
 

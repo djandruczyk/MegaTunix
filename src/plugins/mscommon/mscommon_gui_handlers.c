@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/mscommon_gui_handlers.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS Common Gui handling functions
   \author David Andruczyk
   */
 

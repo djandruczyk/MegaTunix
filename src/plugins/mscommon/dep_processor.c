@@ -16,7 +16,7 @@
 /*!
   \file src/plugins/mscommon/dep_processor.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS Specific dependancy processor (common to all MS's)
   \author David Andruczyk
   */
 

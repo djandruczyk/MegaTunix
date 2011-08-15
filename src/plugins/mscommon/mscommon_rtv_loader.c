@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/mscommon_rtv_loader.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief  MS Personality specific runtime var loader handlers
   \author David Andruczyk
   */
 

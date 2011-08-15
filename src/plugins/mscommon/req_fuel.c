@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/req_fuel.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS personality specific Require Fuel handling stuff..
   \author David Andruczyk
   */
 

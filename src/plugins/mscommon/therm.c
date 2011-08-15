@@ -17,7 +17,7 @@
 /*!
   \file src/plugins/mscommon/therm.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS personality specific handling of temp tables
   \author David Andruczyk
   */
 

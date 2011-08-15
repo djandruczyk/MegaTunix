@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/mscommon_plugin.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS common plugin init/shutdown functions
   \author David Andruczyk
   */
 

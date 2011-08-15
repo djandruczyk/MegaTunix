@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/fileio.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS specific backup/restore handling
   \author David Andruczyk
   */
 

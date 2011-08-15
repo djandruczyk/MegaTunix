@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/datamgmt.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS Specific data management functions (common to all MS's)
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/mscommon/vex_support.c
   \ingroup MSCommonPlugin,Plugins
-  \brief
+  \brief MS personality VE import/export functionality
   \author David Andruczyk
   */
 
