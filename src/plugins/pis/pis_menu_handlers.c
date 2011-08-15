@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/pis/pis_menu_handlers.c
   \ingroup PisPlugin,Plugins
-  \brief
+  \brief PIS menu handler stubs
   \author David Andruczyk
   */
 

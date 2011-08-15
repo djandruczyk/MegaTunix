@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/pis/pis_gui_handlers.c
   \ingroup PisPlugin,Plugins
-  \brief
+  \brief PIS gui handler stubs
   \author David Andruczyk
   */
 

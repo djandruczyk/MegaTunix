@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/pis/pis_plugin.c
   \ingroup PisPlugin,Plugins
-  \brief
+  \brief PIS Plugin stubs
   \author David Andruczyk
   */
 
