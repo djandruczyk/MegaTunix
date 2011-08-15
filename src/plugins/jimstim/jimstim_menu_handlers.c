@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/jimstim/jimstim_menu_handlers.c
   \ingroup JimStimPlugin,Plugins
-  \brief
+  \brief JimStim plugin Menu handler stubs
   \author David Andruczyk
   */
 

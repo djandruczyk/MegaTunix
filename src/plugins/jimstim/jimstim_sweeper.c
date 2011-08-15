@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/jimstim/jimstim_sweeper.c
   \ingroup JimStimPlugin,Plugins
-  \brief
+  \brief  JimStim Plugin speicific code for it's sweeper function
   \author David Andruczyk
   */
 

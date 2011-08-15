@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/jimstim/jimstim_plugin.c
   \ingroup JimStimPlugin,Plugins
-  \brief
+  \brief JimStim Plugin init/shutdown functions
   \author David Andruczyk
   */
 

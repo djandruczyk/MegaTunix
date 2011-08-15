@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/jimstim/jimstim_gui_handlers.c
   \ingroup JimStimPlugin,Plugins
-  \brief
+  \brief JimStim plugin GUI handlers
   \author David Andruczyk
   */
 
