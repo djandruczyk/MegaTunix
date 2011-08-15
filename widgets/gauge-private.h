@@ -16,6 +16,13 @@
  *
  */
 
+/*!
+  \file
+  \ingroup WidgetHeaders,Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __GAUGE_PRIVATE_H__
 #define  __GAUGE_PRIVATE_H__
 

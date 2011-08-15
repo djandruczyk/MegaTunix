@@ -15,6 +15,13 @@
  *
  */
 
+/*!
+  \file
+  \ingroup WidgetHeaders,Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __GAUGE_XML_H__
 #define  __GAUGE_XML_H__
 

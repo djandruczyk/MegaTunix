@@ -12,6 +12,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup WidgetHeaders,Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef MTX_STRIPCHART_H
 #define MTX_STRIPCHART_H
 

@@ -15,6 +15,13 @@
  *
  */
 
+/*!
+  \file
+  \ingroup WidgetHeaders,Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __STRIPCHART_PRIVATE_H__
 #define __STRIPCHART_PRIVATE_H__
 

@@ -14,6 +14,13 @@
  *
  */
 
+/*!
+  \file
+  \ingroup WidgetHeaders,Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __CURVE_PRIVATE_H__
 #define __CURVE_PRIVATE_H__
 
