@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/null/null_gui_handlers.c
   \ingroup NullPlugin,Plugins
-  \brief
+  \brief Null plugin gui handler stubs
   \author David Andruczyk
   */
 

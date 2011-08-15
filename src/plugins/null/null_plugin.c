@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/null/null_plugin.c
   \ingroup NullPlugin,Plugins
-  \brief
+  \brief Null plugin init/shutdown stubs
   \author David Andruczyk
   */
 

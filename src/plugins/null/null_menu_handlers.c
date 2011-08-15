@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/null/null_menu_handlers.c
   \ingroup NullPlugin,Plugins
-  \brief
+  \brief Null plugin menu handler stubs
   \author David Andruczyk
   */
 
