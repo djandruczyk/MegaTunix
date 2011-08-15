@@ -87,7 +87,7 @@ void mtx_pie_gauge_class_init (MtxPieGaugeClass *class_name)
 
 /*!
  \brief Frees up private data
- \param gauge is the pointer to the gauge object
+ \param object is the pointer to the gauge object
  */
 void mtx_pie_gauge_finalize (GObject *object)
 {

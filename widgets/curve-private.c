@@ -115,9 +115,8 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 
 /*!
  \brief Finalizes the curve object on destruction
- \param curve is the pointer to the curve object to be finalized
+ \param object is the pointer to the curve object to be finalized
  */
-
 void mtx_curve_finalize (GObject *object)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(object);
@@ -150,7 +149,6 @@ void mtx_curve_finalize (GObject *object)
  \brief Initializes the curve attributes to sane defaults
  \param curve is the pointer to the curve object
  */
-
 void mtx_curve_init (MtxCurve *curve)
 {
 	/* The events the curve receives
@@ -210,7 +208,6 @@ void mtx_curve_init (MtxCurve *curve)
  \brief Allocates the default colors for a curve with no options 
  \param curve is the pointer to the curve object
  */
-
 void mtx_curve_init_colors(MtxCurve *curve)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);

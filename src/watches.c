@@ -13,7 +13,7 @@
 
 /*!
   \file src/watches.c
-  \inroup CoreMtx
+  \ingroup CoreMtx
   \brief Handles the management of Watches for firing events based on a 
   condition changing to meet the watche's criteria.
   \author David Andruczyk

@@ -356,7 +356,7 @@ gfloat mtx_progress_get_peak_percentage (GtkProgress *progress)
 
 /*!
   \brief Finalizes the progressbar object
-  \param chart is the pointer to the chart object
+  \param object is the pointer to the chart object
   */
 void mtx_progress_bar_finalize (GObject *object)
 {
