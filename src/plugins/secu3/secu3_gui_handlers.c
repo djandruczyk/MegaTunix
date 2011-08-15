@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/secu3/secu3_gui_handlers.c
   \ingroup Secu3Plugin,Plugins
-  \brief
+  \brief Secu3 gui handler stubs
   \author David Andruczyk
   */
 

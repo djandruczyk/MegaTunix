@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/secu3/secu3_plugin.c
   \ingroup Secu3Plugin,Plugins
-  \brief
+  \brief Secu3 plugin init/shutdown stubs
   \author David Andruczyk
   */
 
