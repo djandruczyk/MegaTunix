@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Loader
+  \brief
+  \author David Andruczyk
+  */
+
 #include <winserialio.h>
 #include <stdio.h>
 #ifdef __WIN32__

@@ -11,6 +11,12 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Loader
+  \brief
+  \author David Andruczyk
+  */
 
 #include <hc08_loader.h>
 #include <loader_common.h>
@@ -24,7 +30,6 @@
 #ifndef CRTSCTS
 #define CRTSCTS 0
 #endif
-
 
 /* Globals */
 #ifndef __WIN32__

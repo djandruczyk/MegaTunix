@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Loader
+  \brief
+  \author David Andruczyk
+  */
+
 #include <fcntl.h>
 #include <glib/gstdio.h>
 #include <loader_common.h>
@@ -28,7 +35,6 @@ gint main(gint , gchar **);
 gboolean message_handler(gpointer);
 FirmwareType type = MS1;
 /* Prototypes */
-
 
 /*!
  \brief main() is the typical main function in a C program, it performs

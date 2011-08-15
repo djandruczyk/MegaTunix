@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Loader
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef B115200
 #define B115200 115200
 #endif
@@ -40,7 +47,6 @@
 #define CRTSCTS 0
 #endif
 #define POLL_ATTEMPTS 15
-
 
 /* Globals */
 #ifndef __WIN32__

@@ -1,12 +1,22 @@
-/* This program is a VERY quick and dirty hack which will be cleaned up later
- * I wrote it very quickly in order to be able to reflash the MS2 from linux, so
- * things like comport speed, etc... are hardcoded
- * and I'm using blocking I/O when non-blocking would be better, and
- * I can get into situations that require the boot jumper on occasion
- * This program is based on efahl's ms2dl C++ program, but ported to Linux.
+/*
+ * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
- * $Id: ms2_loader.c,v 1.3 2010/03/09 00:47:10 extace Exp $
+ * Linux Megasquirt tuning software
+ * 
+ * 
+ * This software comes under the GPL (GNU Public License)
+ * You may freely copy,distribute etc. this as long as the source code
+ * is made available for FREE.
+ * 
+ * No warranty is made or implied. You use this program at your own risk.
  */
+
+/*!
+  \file
+  \ingroup Loader
+  \brief
+  \author David Andruczyk
+  */
 
 #ifndef _POSIX_VDISABLE
 #define _POSIX_VDISABLE 0
