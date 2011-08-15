@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms3/ms3_plugin.c
   \ingroup MS3Plugin,Plugins
-  \brief
+  \brief MS3 plugin init/shutdown stubs
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms3/ms3_menu_handlers.c
   \ingroup MS3Plugin,Plugins
-  \brief
+  \brief MS3 menu handler stubs
   \author David Andruczyk
   */
 

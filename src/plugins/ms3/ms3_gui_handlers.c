@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms3/ms3_gui_handlers.c
   \ingroup MS3Plugin,Plugins
-  \brief
+  \brief MS3 gui handler stubs
   \author David Andruczyk
   */
 
