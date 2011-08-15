@@ -377,8 +377,8 @@ G_MODULE_EXPORT gboolean freeems_find_mtx_page(gint locID, gint *mtx_page)
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	g_return_if_fail(firmware);
-	g_return_if_fail(firmware->page_params);
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(firmware->page_params,FALSE);
 
 	for (i=0;i<firmware->total_pages;i++)
 	{
