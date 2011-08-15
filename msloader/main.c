@@ -14,7 +14,7 @@
 /*!
   \file msloader/main.c
   \ingroup Loader
-  \brief
+  \brief main code for the CLI loader tool: msloader
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file msloader/winserialio.c
   \ingroup Loader
-  \brief
+  \brief Windows specific serial init routines
   \author David Andruczyk
   */
 

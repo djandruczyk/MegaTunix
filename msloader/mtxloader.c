@@ -14,7 +14,7 @@
 /*!
   \file msloader/mtxloader.c
   \ingroup Loader
-  \brief
+  \brief main code for the GUI loader tool: mtxloader
   \author David Andruczyk
   */
 

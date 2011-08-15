@@ -14,7 +14,8 @@
 /*!
   \file msloader/hc08_loader.c
   \ingroup Loader
-  \brief
+  \brief Load code specific to Motorole HC08 processor variants with the 
+  embedded .s19 iterpretor/processor bootloader/serial monitor
   \author David Andruczyk
   */
 

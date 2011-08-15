@@ -14,7 +14,7 @@
 /*!
   \file msloader/loader_common.c
   \ingroup Loader
-  \brief
+  \brief Common loader code among all supported ECU's
   \author David Andruczyk
   */
 

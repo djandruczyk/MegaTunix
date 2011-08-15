@@ -14,7 +14,7 @@
 /*!
   \file msloader/s12x_loader.c
   \ingroup Loader
-  \brief
+  \brief Motorola S12x based loader code. 
   \author David Andruczyk
   */
 
