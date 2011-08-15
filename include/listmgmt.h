@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __LISTMGMT_H__
 #define __LISTMGMT_H__
 

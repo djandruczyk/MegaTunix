@@ -19,6 +19,13 @@
  * - drawFrameRate(void)
  */
 
+/*!
+  \file
+  \ingroup Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __3D_VETABLE_H__
 #define __3D_VETABLE_H__
 

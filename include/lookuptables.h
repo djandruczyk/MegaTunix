@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Headers
+  \brief
+  \author David Andruczyk
+  */
+
 /* MegaSquirt Linux tuning lookup tables for converting incoming values
  * to real world numbers. From Bruce Bowlings PCC tuning wsoftware.
  */

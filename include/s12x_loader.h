@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __S12X_LOADER_H__
 #define __S12X_LOADER_H__
 

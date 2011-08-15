@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __RUNTIME_SLIDERS_H__
 #define __RUNTIME_SLIDERS_H__
 

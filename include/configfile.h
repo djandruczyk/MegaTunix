@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Headers
+  \brief
+  \author David Andruczyk
+  */
+
 /* Configfile structs. (derived from an older version of XMMS) */
 
 #ifndef __CONFIGFILE_H__

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup Headers
+  \brief
+  \author David Andruczyk
+  */
+
 #ifndef __TIMEOUT_HANDLERS_H__
 #define __TIMEOUT_HANDLERS_H__
 

@@ -1,5 +1,12 @@
 /* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
 
+/*!
+  \file
+  \ingroup Headers
+  \brief
+  \author David Andruczyk
+  */
+
 static const guint8 Logo[] = 
 { ""
   /* Pixbuf magic (0x47646b50) */
