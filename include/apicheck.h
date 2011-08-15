@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/apicheck.h
   \ingroup Headers
   \brief
   \author David Andruczyk

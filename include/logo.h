@@ -1,7 +1,7 @@
 /* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
 
 /*!
-  \file
+  \file include/logo.h
   \ingroup Headers
   \brief
   \author David Andruczyk

@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/watches.h
   \ingroup Headers
   \brief
   \author David Andruczyk

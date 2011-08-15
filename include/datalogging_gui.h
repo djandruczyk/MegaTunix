@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/datalogging_gui.h
   \ingroup Headers
   \brief
   \author David Andruczyk

@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/wrappers.h
   \ingroup Headers
   \brief
   \author David Andruczyk

@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/unions.h
   \ingroup Headers
   \brief
   \author David Andruczyk

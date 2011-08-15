@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file msloader/hc08_loader.c
   \ingroup Loader
   \brief
   \author David Andruczyk

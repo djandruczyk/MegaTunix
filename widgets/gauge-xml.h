@@ -16,7 +16,7 @@
  */
 
 /*!
-  \file
+  \file widgets/gauge-xml.h
   \ingroup WidgetHeaders,Headers
   \brief
   \author David Andruczyk

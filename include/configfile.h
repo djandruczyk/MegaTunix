@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/configfile.h
   \ingroup Headers
   \brief
   \author David Andruczyk

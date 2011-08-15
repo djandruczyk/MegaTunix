@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/template.h
   \ingroup Headers
   \brief
   \author David Andruczyk

@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file msloader/winserialio.c
   \ingroup Loader
   \brief
   \author David Andruczyk

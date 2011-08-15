@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/listmgmt.h
   \ingroup Headers
   \brief
   \author David Andruczyk

@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/s12x_loader.h
   \ingroup Headers
   \brief
   \author David Andruczyk

@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/menu_handlers.h
   \ingroup Headers
   \brief
   \author David Andruczyk

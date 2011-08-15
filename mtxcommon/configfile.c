@@ -20,7 +20,7 @@
  */
 
 /*!
-  \file
+  \file mtxcommon/configfile.c
   \ingroup MtxCommon
   \brief
   \author David Andruczyk, XMMS

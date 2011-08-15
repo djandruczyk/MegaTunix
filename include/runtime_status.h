@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/runtime_status.h
   \ingroup Headers
   \brief
   \author David Andruczyk

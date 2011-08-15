@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/comms_gui.h
   \ingroup Headers
   \brief
   \author David Andruczyk

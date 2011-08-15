@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/binlogger.h
   \ingroup Headers
   \brief
   \author David Andruczyk

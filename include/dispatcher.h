@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/dispatcher.h
   \ingroup Headers
   \brief
   \author David Andruczyk

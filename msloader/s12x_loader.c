@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file msloader/s12x_loader.c
   \ingroup Loader
   \brief
   \author David Andruczyk

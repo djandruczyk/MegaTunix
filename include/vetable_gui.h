@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/vetable_gui.h
   \ingroup Headers
   \brief
   \author David Andruczyk

@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/plugin.h
   \ingroup Headers
   \brief
   \author David Andruczyk

@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/threads.h
   \ingroup Headers
   \brief
   \author David Andruczyk

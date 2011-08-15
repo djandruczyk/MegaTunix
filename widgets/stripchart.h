@@ -13,7 +13,7 @@
  */
 
 /*!
-  \file
+  \file widgets/stripchart.h
   \ingroup WidgetHeaders,Headers
   \brief
   \author David Andruczyk

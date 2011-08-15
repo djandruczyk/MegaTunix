@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/hc08_loader.h
   \ingroup Headers
   \brief
   \author David Andruczyk

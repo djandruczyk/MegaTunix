@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/serialio.h
   \ingroup Headers
   \brief
   \author David Andruczyk

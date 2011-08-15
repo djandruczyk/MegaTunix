@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/sleep_calib.h
   \ingroup Headers
   \brief
   \author David Andruczyk

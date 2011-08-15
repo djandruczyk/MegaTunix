@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/tag_loader.h
   \ingroup Headers
   \brief
   \author David Andruczyk

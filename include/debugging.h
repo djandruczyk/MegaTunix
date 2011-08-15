@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/debugging.h
   \ingroup Headers
   \brief
   \author David Andruczyk

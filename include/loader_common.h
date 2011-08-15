@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/loader_common.h
   \ingroup Headers
   \brief
   \author David Andruczyk

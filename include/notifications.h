@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/notifications.h
   \ingroup Headers
   \brief
   \author David Andruczyk

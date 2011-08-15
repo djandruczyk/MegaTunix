@@ -14,7 +14,7 @@
  */
 
 /*!
-  \file
+  \file widgets/piegauge.h
   \ingroup WidgetHeaders,Headers
   \brief
   \author David Andruczyk

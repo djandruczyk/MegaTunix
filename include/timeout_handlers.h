@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/timeout_handlers.h
   \ingroup Headers
   \brief
   \author David Andruczyk

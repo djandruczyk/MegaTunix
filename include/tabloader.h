@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/tabloader.h
   \ingroup Headers
   \brief
   \author David Andruczyk

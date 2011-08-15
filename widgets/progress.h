@@ -14,7 +14,7 @@
  */
 
 /*!
-  \file
+  \file widgets/progress.h
   \ingroup WidgetHeaders,Headers
   \brief
   \author David Andruczyk

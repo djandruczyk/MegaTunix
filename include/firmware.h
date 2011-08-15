@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/firmware.h
   \ingroup Headers
   \brief
   \author David Andruczyk

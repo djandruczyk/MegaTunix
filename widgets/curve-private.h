@@ -15,7 +15,7 @@
  */
 
 /*!
-  \file
+  \file widgets/curve-private.h
   \ingroup WidgetHeaders,Headers
   \brief
   \author David Andruczyk

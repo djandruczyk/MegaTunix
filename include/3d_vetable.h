@@ -20,7 +20,7 @@
  */
 
 /*!
-  \file
+  \file include/3d_vetable.h
   \ingroup Headers
   \brief
   \author David Andruczyk

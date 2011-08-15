@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/personalities.h
   \ingroup Headers
   \brief
   \author David Andruczyk

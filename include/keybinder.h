@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/keybinder.h
   \ingroup Headers
   \brief
   \author David Andruczyk

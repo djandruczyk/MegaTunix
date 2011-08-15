@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/core_gui.h
   \ingroup Headers
   \brief
   \author David Andruczyk

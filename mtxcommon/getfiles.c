@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file mtxcommon/getfiles.c
   \ingroup MtxCommon
   \brief
   \author David Andruczyk

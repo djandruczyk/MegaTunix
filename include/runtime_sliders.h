@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/runtime_sliders.h
   \ingroup Headers
   \brief
   \author David Andruczyk

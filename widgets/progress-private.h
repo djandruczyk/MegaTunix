@@ -16,7 +16,7 @@
  */
 
 /*!
-  \file
+  \file widgets/progress-private.h
   \ingroup WidgetHeaders,Headers
   \brief
   \author David Andruczyk

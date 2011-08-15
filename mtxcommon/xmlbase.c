@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file mtxcommon/xmlbase.c
   \ingroup MtxCommon
   \brief
   \author David Andruczyk

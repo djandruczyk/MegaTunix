@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/winserialio.h
   \ingroup Headers
   \brief
   \author David Andruczyk

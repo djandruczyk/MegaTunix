@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/locking.h
   \ingroup Headers
   \brief
   \author David Andruczyk

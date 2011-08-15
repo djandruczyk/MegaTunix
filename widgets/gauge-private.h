@@ -17,7 +17,7 @@
  */
 
 /*!
-  \file
+  \file widgets/gauge-private.h
   \ingroup WidgetHeaders,Headers
   \brief
   \author David Andruczyk

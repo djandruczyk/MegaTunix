@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/xmlbase.h
   \ingroup Headers
   \brief
   \author David Andruczyk

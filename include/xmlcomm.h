@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/xmlcomm.h
   \ingroup Headers
   \brief
   \author David Andruczyk

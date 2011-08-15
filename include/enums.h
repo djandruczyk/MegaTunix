@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/enums.h
   \ingroup Headers
   \brief
   \author David Andruczyk

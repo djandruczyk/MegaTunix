@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/mtxloader.h
   \ingroup Headers
   \brief
   \author David Andruczyk

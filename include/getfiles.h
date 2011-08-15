@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/getfiles.h
   \ingroup Headers
   \brief
   \author David Andruczyk

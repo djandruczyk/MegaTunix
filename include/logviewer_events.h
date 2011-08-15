@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/logviewer_events.h
   \ingroup Headers
   \brief
   \author David Andruczyk

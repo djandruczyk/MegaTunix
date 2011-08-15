@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/dashboard.h
   \ingroup Headers
   \brief
   \author David Andruczyk

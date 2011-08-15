@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file msloader/mtxloader.c
   \ingroup Loader
   \brief
   \author David Andruczyk

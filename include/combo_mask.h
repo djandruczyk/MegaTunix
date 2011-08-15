@@ -12,7 +12,7 @@
  */
 
 /*!
-  \file
+  \file include/combo_mask.h
   \ingroup Headers
   \brief
   \author David Andruczyk
