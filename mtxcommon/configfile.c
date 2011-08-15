@@ -22,7 +22,7 @@
 /*!
   \file mtxcommon/configfile.c
   \ingroup MtxCommon
-  \brief
+  \brief .ini handling functions ported from the XMMS project
   \author David Andruczyk, XMMS
   */
 

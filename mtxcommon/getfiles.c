@@ -14,7 +14,8 @@
 /*!
   \file mtxcommon/getfiles.c
   \ingroup MtxCommon
-  \brief
+  \brief Helper routines for getting files/lists of files in personal/system
+  wide directories
   \author David Andruczyk
   */
 

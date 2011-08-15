@@ -14,7 +14,8 @@
 /*!
   \file mtxcommon/xmlbase.c
   \ingroup MtxCommon
-  \brief
+  \brief  Generic XML processing routines that are common to various Mtx 
+  codebases
   \author David Andruczyk
   */
 
