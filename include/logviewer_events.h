@@ -14,7 +14,7 @@
 /*!
   \file include/logviewer_events.h
   \ingroup Headers
-  \brief
+  \brief Header for logviewer gui event handling
   \author David Andruczyk
   */
 

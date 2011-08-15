@@ -14,7 +14,7 @@
 /*!
   \file include/dashboard.h
   \ingroup Headers
-  \brief
+  \brief Hander for dashboard management
   \author David Andruczyk
   */
 

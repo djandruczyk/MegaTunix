@@ -14,7 +14,7 @@
 /*!
   \file include/helpers.h
   \ingroup Headers
-  \brief
+  \brief Headers for the global postfunctions common to all firmwares
   \author David Andruczyk
   */
 

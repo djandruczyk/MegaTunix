@@ -14,7 +14,7 @@
 /*!
   \file include/core_gui.h
   \ingroup Headers
-  \brief
+  \brief Header for Core gui initialization handlers
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/gui_handlers.h
   \ingroup Headers
-  \brief
+  \brief Header for the global gui handlers
   \author David Andruczyk
   */
 

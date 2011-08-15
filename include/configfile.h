@@ -14,7 +14,7 @@
 /*!
   \file include/configfile.h
   \ingroup Headers
-  \brief
+  \brief Headers for the .ini processing code
   \author David Andruczyk
   */
 

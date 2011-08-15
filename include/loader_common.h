@@ -14,7 +14,7 @@
 /*!
   \file include/loader_common.h
   \ingroup Headers
-  \brief
+  \brief Header for the common routines of the firmware loader tool(s)
   \author David Andruczyk
   */
 

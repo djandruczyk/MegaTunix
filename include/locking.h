@@ -14,7 +14,7 @@
 /*!
   \file include/locking.h
   \ingroup Headers
-  \brief
+  \brief Header for locking/preventing multiple instances
   \author David Andruczyk
   */
 

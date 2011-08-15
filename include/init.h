@@ -14,7 +14,7 @@
 /*!
   \file include/init.h
   \ingroup Headers
-  \brief
+  \brief Header for thememory init/dealloc and config load/save routines
   \author David Andruczyk
   */
 

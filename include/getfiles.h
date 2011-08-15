@@ -14,7 +14,7 @@
 /*!
   \file include/getfiles.h
   \ingroup Headers
-  \brief
+  \brief Handlers for the file/file list get routines
   \author David Andruczyk
   */
 

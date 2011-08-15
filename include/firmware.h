@@ -14,7 +14,8 @@
 /*!
   \file include/firmware.h
   \ingroup Headers
-  \brief
+  \brief Global firmware structure. This should be refactored to be fully
+  ECU agnostic
   \author David Andruczyk
   */
 

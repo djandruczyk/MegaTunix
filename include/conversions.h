@@ -14,7 +14,7 @@
 /*!
   \file include/conversions.h
   \ingroup Headers
-  \brief
+  \brief Header for the ecu<->world and temp scale conversions
   \author David Andruczyk
   */
 

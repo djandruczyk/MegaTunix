@@ -14,7 +14,7 @@
 /*!
   \file include/debugging.h
   \ingroup Headers
-  \brief
+  \brief Handler for debug management. This SHOULD BE REFACTORED to use macros
   \author David Andruczyk
   */
 

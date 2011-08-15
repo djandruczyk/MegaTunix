@@ -14,7 +14,7 @@
 /*!
   \file include/enums.h
   \ingroup Headers
-  \brief
+  \brief Global enumerations
   \author David Andruczyk
   */
 

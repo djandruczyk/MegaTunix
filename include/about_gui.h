@@ -14,7 +14,7 @@
 /*!
   \file include/about_gui.h
   \ingroup Headers
-  \brief
+  \brief Header for the about_gui tab
   \author David Andruczyk
   */
 

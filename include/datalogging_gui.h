@@ -14,7 +14,7 @@
 /*!
   \file include/datalogging_gui.h
   \ingroup Headers
-  \brief
+  \brief Handler for datalogging core management
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/lookuptables.h
   \ingroup Headers
-  \brief
+  \brief Header for lookuptable related functions
   \author David Andruczyk
   */
 

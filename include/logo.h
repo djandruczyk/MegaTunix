@@ -3,7 +3,7 @@
 /*!
   \file include/logo.h
   \ingroup Headers
-  \brief
+  \brief The MegaTunix Logo
   \author David Andruczyk
   */
 

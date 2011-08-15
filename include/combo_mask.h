@@ -14,7 +14,7 @@
 /*!
   \file include/combo_mask.h
   \ingroup Headers
-  \brief
+  \brief Header for the Mtx Specific combobox regex mask loader/initializer
   \author David Andruczyk
   */
 

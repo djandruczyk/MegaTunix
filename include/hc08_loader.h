@@ -14,7 +14,7 @@
 /*!
   \file include/hc08_loader.h
   \ingroup Headers
-  \brief
+  \brief Header for the Motorola HC08 series firmware loader
   \author David Andruczyk
   */
 

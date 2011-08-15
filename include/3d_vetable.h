@@ -22,7 +22,7 @@
 /*!
   \file include/3d_vetable.h
   \ingroup Headers
-  \brief
+  \brief Header for the 3D VE|Spark|Afr|Boost|Any Tables
   \author David Andruczyk
   */
 

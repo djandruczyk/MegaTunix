@@ -14,7 +14,7 @@
 /*!
   \file include/api-versions.h
   \ingroup Headers
-  \brief
+  \brief API Versions for the various config files used in Mtx
   \author David Andruczyk
   */
 

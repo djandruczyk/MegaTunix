@@ -14,7 +14,7 @@
 /*!
   \file include/listmgmt.h
   \ingroup Headers
-  \brief
+  \brief Header for list management convenience functions
   \author David Andruczyk
   */
 

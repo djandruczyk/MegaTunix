@@ -14,7 +14,7 @@
 /*!
   \file include/combo_loader.h
   \ingroup Headers
-  \brief
+  \brief Header for the Mtx Specific combobox loader/initializer
   \author David Andruczyk
   */
 

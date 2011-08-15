@@ -14,7 +14,7 @@
 /*!
   \file include/args.h
   \ingroup Headers
-  \brief
+  \brief Header for CLI argument processing
   \author David Andruczyk
   */
 

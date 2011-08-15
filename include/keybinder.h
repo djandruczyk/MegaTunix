@@ -14,7 +14,7 @@
 /*!
   \file include/keybinder.h
   \ingroup Headers
-  \brief
+  \brief Header for the object config file key binding routines
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/comms_gui.h
   \ingroup Headers
-  \brief
+  \brief Header for the Communications tab specific routines
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/defines.h
   \ingroup Headers
-  \brief
+  \brief Special definitions, macros and platform magic
   \author David Andruczyk
   */
 
@@ -68,7 +68,6 @@
 #define IMMEDIATE		0x10
 #define DEFERRED		0x11
 #define IGNORED			0x12
-
 
 /* TCP socket goodness */
 #define MTX_SOCKET_ASCII_PORT 12764 /* (ascii math) (m*t)+x */

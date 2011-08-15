@@ -14,7 +14,7 @@
 /*!
   \file include/dataio.h
   \ingroup Headers
-  \brief
+  \brief Handler for dealing with data input/output to the ECU
   \author David Andruczyk
   */
 

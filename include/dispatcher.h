@@ -14,7 +14,7 @@
 /*!
   \file include/dispatcher.h
   \ingroup Headers
-  \brief
+  \brief Headers for Gui/postfunction dispatchers
   \author David Andruczyk
   */
 

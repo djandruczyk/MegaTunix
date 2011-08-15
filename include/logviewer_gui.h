@@ -14,7 +14,7 @@
 /*!
   \file include/logviewer_gui.h
   \ingroup Headers
-  \brief
+  \brief Header for logviewer gui creation/management
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/binlogger.h
   \ingroup Headers
-  \brief
+  \brief Header for binary Logging debug functionality
   \author David Andruczyk
   */
 

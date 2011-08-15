@@ -14,7 +14,7 @@
 /*!
   \file include/keyparser.h
   \ingroup Headers
-  \brief
+  \brief Header for the config key parsing functions
   \author David Andruczyk
   */
 

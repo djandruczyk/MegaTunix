@@ -14,7 +14,7 @@
 /*!
   \file include/apicheck.h
   \ingroup Headers
-  \brief
+  \brief API checker headers
   \author David Andruczyk
   */
 
