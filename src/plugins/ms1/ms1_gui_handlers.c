@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms1/ms1_gui_handlers.c
   \ingroup MS1Plugin,Plugins
-  \brief
+  \brief MS1 specific Gui handler functions
   \author David Andruczyk
   */
 

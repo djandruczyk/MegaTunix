@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms1/ms1_menu_handlers.c
   \ingroup MS1Plugin,Plugins
-  \brief
+  \brief MS1 Plugin menu init handlers
   \author David Andruczyk
   */
 

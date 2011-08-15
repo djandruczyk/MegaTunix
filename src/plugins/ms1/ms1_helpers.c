@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms1/ms1_helpers.c
   \ingroup MS1Plugin,Plugins
-  \brief
+  \brief MS1 comm.xml related post function helpers
   \author David Andruczyk
   */
 

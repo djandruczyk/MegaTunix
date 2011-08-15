@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms1/ms1_tlogger.c
   \ingroup MS1Plugin,Plugins
-  \brief
+  \brief MS1 Tooth/Trigger Logger functionality
   \author David Andruczyk
   */
 

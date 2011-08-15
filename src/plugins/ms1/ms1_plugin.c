@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms1/ms1_plugin.c
   \ingroup MS1Plugin,Plugins
-  \brief
+  \brief MS1 Plugin init/shutdown functions
   \author David Andruczyk
   */
 
