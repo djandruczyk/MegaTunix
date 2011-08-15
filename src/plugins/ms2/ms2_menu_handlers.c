@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms2/ms2_menu_handlers.c
   \ingroup MS2Plugin,Plugins
-  \brief
+  \brief MS2 Plugin specific menu handlers
   \author David Andruczyk
   */
 

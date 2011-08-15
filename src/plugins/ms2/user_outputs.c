@@ -16,7 +16,7 @@
 /*!
   \file src/plugins/ms2/user_outputs.c
   \ingroup MS2Plugin,Plugins
-  \brief
+  \brief MS2 Specific user outputs functionality
   \author David Andruczyk
   */
 

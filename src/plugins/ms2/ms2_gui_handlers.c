@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms2/ms2_gui_handlers.c
   \ingroup MS2Plugin,Plugins
-  \brief
+  \brief MS2 Plugin Gui handler functions
   \author David Andruczyk
   */
 

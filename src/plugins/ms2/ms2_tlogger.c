@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms2/ms2_tlogger.c
   \ingroup MS2Plugin,Plugins
-  \brief
+  \brief MS2 Plugin Tooth Trigger Logger functionality
   \author David Andruczyk
   */
 
