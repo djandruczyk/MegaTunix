@@ -11,10 +11,16 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup MtxCommon
+  \brief
+  \author David Andruczyk
+  */
+
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <xmlbase.h>
-
 
 /*!
   \brief Reads an Integer from an XML node and stores in the dest var

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file
+  \ingroup MtxCommon
+  \brief
+  \author David Andruczyk
+  */
+
 #include <defines.h>
 #include <fcntl.h>
 #include <getfiles.h>

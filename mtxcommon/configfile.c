@@ -16,8 +16,15 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  *  Hacked slightly by Dave J. Andruczyk <djandruczyk@yahoo.com> to
- *  fit into eXtace a bit better..
+ *  fit into MegaTunix a bit better..
  */
+
+/*!
+  \file
+  \ingroup MtxCommon
+  \brief
+  \author David Andruczyk, XMMS
+  */
 
 #include <configfile.h>
 #include <glib/gprintf.h>
