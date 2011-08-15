@@ -13,7 +13,7 @@
 /*!
   \file widgets/curve.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Public header for the MtxCurve simple 2D plotter Widget
   \author David Andruczyk
   */
 

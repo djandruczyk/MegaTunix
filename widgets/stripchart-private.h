@@ -18,7 +18,7 @@
 /*!
   \file widgets/stripchart-private.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Private header for the MtxStripChart widget
   \author David Andruczyk
   */
 

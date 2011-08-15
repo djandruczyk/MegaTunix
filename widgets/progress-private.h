@@ -18,7 +18,7 @@
 /*!
   \file widgets/progress-private.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Private header for the MtxProgress subclass of GtkProgress widget
   \author David Andruczyk
   */
 

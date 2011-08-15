@@ -17,7 +17,7 @@
 /*!
   \file widgets/curve-private.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Private Header for the MtxCurve 2D plotter widget
   \author David Andruczyk
   */
 

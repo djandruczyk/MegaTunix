@@ -16,7 +16,7 @@
 /*!
   \file widgets/progress.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Public header for the MtxProgress subclass of GtkProgress widget
   \author David Andruczyk
   */
 

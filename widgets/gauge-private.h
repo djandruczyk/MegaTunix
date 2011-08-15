@@ -19,7 +19,7 @@
 /*!
   \file widgets/gauge-private.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Private header for the MtxGaugeFace analog gauge widget
   \author David Andruczyk
   */
 

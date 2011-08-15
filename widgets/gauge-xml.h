@@ -18,7 +18,7 @@
 /*!
   \file widgets/gauge-xml.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Public header for the MtxGaugeFace XML processing functions
   \author David Andruczyk
   */
 

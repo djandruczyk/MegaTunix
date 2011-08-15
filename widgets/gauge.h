@@ -15,7 +15,7 @@
 /*!
   \file widgets/gauge.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Public header for the MtxGaugeFace analog gauge widget
   \author David Andruczyk
   */
 

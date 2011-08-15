@@ -18,7 +18,7 @@
 /*!
   \file widgets/piegauge-private.h
   \ingroup WidgetHeaders,Headers
-  \brief
+  \brief Private header for the MtxPieGauge widget
   \author David Andruczyk
   */
 
