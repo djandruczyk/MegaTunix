@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms2/user_outputs.h
+  \ingroup MS2Plugin,Headers
+  \brief MS2 user outputs code
+  \author David Andruczyk
+  */
+
 #ifndef __USER_OUTPUTS_H__
 #define __USER_OUTPUTS_H__
 

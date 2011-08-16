@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/freeems_globaldefs.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS Global defines
+  \author David Andruczyk
+  */
+
 #ifndef __FREEEMS_GLOBALDEFS_H__
 #define __FREEEMS_GLOBALDEFS_H__
 

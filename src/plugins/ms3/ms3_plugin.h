@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms3/ms3_plugin.h
+  \ingroup MS3Plugin,Headers
+  \brief MS3 Plugin specific plugin init/shutdown code
+  \author David Andruczyk
+  */
+
 #ifndef __MS3_PLUGIN_H__
 #define __MS3_PLUGIN_H__
 

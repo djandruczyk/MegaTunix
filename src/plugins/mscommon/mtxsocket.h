@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/mtxsocket.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon remote network tuning code
+  \author David Andruczyk
+  */
+
 #ifndef __MTXSOCKET_H__
 #define __MTXSOCKET_H__
 

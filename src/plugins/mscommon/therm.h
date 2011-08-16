@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/therm.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon temp scale handling
+  \author David Andruczyk
+  */
+
 #ifndef __THERM_H__
 #define __THERM_H__
 

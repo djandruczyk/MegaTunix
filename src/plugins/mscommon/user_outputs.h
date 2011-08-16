@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/user_outputs.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon user output handling
+  \author David Andruczyk
+  */
+
 #ifndef __USER_OUTPUTS_H__
 #define __USER_OUTPUTS_H__
 

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/mscommon_helpers.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon helpers for comm.xml
+  \author David Andruczyk
+  */
+
 #ifndef __MSCOMMON_HELPERS_H__
 #define __MSCOMMON_HELPERS_H__
 

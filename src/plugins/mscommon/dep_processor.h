@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/dep_processor.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon dependancy processing
+  \author David Andruczyk
+  */
+
 #ifndef __DEP_PROCESSOR_H__
 #define __DEP_PROCESSOR_H__
 

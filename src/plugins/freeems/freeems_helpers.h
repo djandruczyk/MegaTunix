@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/freeems_helpers.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS comm.xml helpers
+  \author David Andruczyk
+  */
+
 #ifndef __FREEEMS_HELPERS_H__
 #define __FREEEMS_HELPERS_H__
 

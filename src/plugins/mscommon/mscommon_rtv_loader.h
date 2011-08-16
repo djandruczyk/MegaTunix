@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/mscommon_rtv_loader.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon rtv map loader 
+  \author David Andruczyk
+  */
+
 #ifndef __MSCOMMON_RTV_LOADER_H__
 #define __MSCOMMON_RTV_LOADER_H__
 

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/jimstim/jimstim_menu_handlers.h
+  \ingroup JimStimPlugin,Headers
+  \brief JimStim menu handlers
+  \author David Andruczyk
+  */
+
 #ifndef __JIMSTIM_MENU_HANDLERS_H__
 #define __JIMSTIM_MENU_HANDLERS_H__
 

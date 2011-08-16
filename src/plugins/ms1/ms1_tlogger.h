@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms1/ms1_tlogger.h
+  \ingroup MS1Plugin,Headers
+  \brief MS1 tooth/trigger logger code
+  \author David Andruczyk
+  */
+
 #ifndef __MS1_T_LOGGER_H__
 #define __MS1_T_LOGGER_H__
 

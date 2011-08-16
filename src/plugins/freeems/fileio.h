@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/fileio.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS File IO functions
+  \author David Andruczyk
+  */
+
 #ifndef __FILEIO_H__
 #define __FILEIO_H__
 

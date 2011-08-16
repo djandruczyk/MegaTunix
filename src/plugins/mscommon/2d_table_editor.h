@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/2d_table_editor.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon 2D table editor
+  \author David Andruczyk
+  */
+
 #ifndef __2D_TABLE_EDITOR_H__
 #define __2D_TABLE_EDITOR_H__
 

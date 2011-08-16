@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/freeems_gui_handlers.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS Gui handlers
+  \author David Andruczyk
+  */
+
 #ifndef __FREEMS_GUI_HANDLERS_H__
 #define __FREEMS_GUI_HANDLERS_H__
 

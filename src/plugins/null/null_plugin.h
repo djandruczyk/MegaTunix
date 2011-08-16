@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/null/null_plugin.h
+  \ingroup NullPlugin,Headers
+  \brief Null Plugin init/shutdown code
+  \author David Andruczyk
+  */
+
 #ifndef __NULL_PLUGIN_H__
 #define __NULL_PLUGIN_H__
 

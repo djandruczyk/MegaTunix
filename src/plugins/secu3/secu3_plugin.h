@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/secu3/secu3_plugin.h
+  \ingroup Secu3Plugin,Headers
+  \brief Secu3 Plugin init/shutdown code
+  \author David Andruczyk
+  */
+
 #ifndef __SECU3_PLUGIN_H__
 #define __SECU3_PLUGIN_H__
 

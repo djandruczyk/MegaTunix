@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms1/ms1_helpers.h
+  \ingroup MS1Plugin,Headers
+  \briefa MS1 comm.xml helpers
+  \author David Andruczyk
+  */
+
 #ifndef __MS1_HELPERS_H__
 #define __MS1_HELPERS_H__
 

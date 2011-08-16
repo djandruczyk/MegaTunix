@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/datamgmt.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon data management functions
+  \author David Andruczyk
+  */
+
 #ifndef __DATAMGMT_H__
 #define __DATAMGMT_H__
 

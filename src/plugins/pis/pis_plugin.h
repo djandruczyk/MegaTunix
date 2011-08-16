@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/pis/pis_plugin.h
+  \ingroup PisPlugin,Headers
+  \brief PIS Plugin specific plugin init/shutdown code
+  \author David Andruczyk
+  */
+
 #ifndef __PIS_PLUGIN_H__
 #define __PIS_PLUGIN_H__
 

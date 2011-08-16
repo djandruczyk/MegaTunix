@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/interrogate.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS Interrogator functions
+  \author David Andruczyk
+  */
+
 #ifndef __INTERROGATE_H__
 #define __INTERROGATE_H__
 

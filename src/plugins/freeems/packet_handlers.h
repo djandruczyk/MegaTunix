@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/packet_handlers.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS Packet handler functions
+  \author David Andruczyk
+  */
+
 #ifndef __PACKET_HANDLERS_H__
 #define __PACKET_HANDLERS_H__
 

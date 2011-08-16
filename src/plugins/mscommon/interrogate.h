@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/interrogate.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon interrogation
+  \author David Andruczyk
+  */
+
 #ifndef __INTERROGATE_H__
 #define __INTERROGATE_H__
 

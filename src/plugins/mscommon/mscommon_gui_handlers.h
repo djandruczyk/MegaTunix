@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/mscommon_gui_handlers.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon Gui handlers
+  \author David Andruczyk
+  */
+
 #ifndef __MSCOMMON_GUI_HANDLERS_H__
 #define __MSCOMMON_GUI_HANDLERS_H__
 

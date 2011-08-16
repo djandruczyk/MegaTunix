@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/fileio.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon File IO
+  \author David Andruczyk
+  */
+
 #ifndef __FILEIO_H__
 #define __FILEIO_H__
 

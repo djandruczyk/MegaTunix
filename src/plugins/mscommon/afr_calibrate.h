@@ -11,8 +11,15 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-#ifndef __THERM_H__
-#define __THERM_H__
+/*!
+  \file src/plugins/mscommon/afr_calibrate.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon Temp table management
+  \author David Andruczyk
+  */
+
+#ifndef __AFR_CALIBRATE_H__
+#define __AFR_CALIBRATE_H__
 
 #include <defines.h>
 #include <gtk/gtk.h>

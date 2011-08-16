@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/null/null_menu_handlers.h
+  \ingroup NullPlugin,Headers
+  \brief Null Plugin specific menu handlers
+  \author David Andruczyk
+  */
+
 #ifndef __NULL_MENU_HANDLERS_H__
 #define __NULL_MENU_HANDLERS_H__
 

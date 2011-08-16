@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/freeems_menu_handlers.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS Menu Handlers
+  \author David Andruczyk
+  */
+
 #ifndef __FREEEMS_MENU_HANDLERS_H__
 #define __FREEEMS_MENU_HANDLERS_H__
 

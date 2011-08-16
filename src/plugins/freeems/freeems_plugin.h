@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/freeems_plugin.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS Plugin init/shutdown functions
+  \author David Andruczyk
+  */
+
 #ifndef __FREEMS_PLUGIN_H__
 #define __FREEMS_PLUGIN_H__
 

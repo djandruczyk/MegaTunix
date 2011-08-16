@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/req_fuel.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon Required Fuel handling
+  \author David Andruczyk
+  */
+
 #ifndef __REQ_FUEL_H__
 #define __REQ_FUEL_H__
 

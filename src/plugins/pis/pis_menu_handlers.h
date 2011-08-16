@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/pis/pis_menu_handlers.h
+  \ingroup PisPlugin,Headers
+  \brief PIS Plugin specific manu handlers
+  \author David Andruczyk
+  */
+
 #ifndef __PIS_MENU_HANDLERS_H__
 #define __PIS_MENU_HANDLERS_H__
 

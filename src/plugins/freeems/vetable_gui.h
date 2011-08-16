@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/freeems/vetable_gui.h
+  \ingroup FreeEMSPlugin,Headers
+  \brief FreeEMS VETable highlighter functions
+  \author David Andruczyk
+  */
+
 #ifndef __VETABLE_GUI_H__
 #define __VETABLE_GUI_H__
 

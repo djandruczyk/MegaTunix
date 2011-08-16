@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/mscommon_comms.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon comms routines
+  \author David Andruczyk
+  */
+
 #ifndef __MSCOMMON_COMMS_H__
 #define __MSCOMMON_COMMS_H__
 

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/dep_loader.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon dependancy loading
+  \author David Andruczyk
+  */
+
 #ifndef __DEP_LOADER_H__
 #define __DEP_LOADER_H__
 

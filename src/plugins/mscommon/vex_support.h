@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/vex_support.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon VEX import/export code
+  \author David Andruczyk
+  */
+
 #ifndef __VEX_SUPPORT_H__
 #define __VEX_SUPPORT_H__
 

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms3/ms3_menu_handlers.h
+  \ingroup MS3Plugin,Headers
+  \brief MS3 Plugin menu handlers
+  \author David Andruczyk
+  */
+
 #ifndef __MS3_MENU_HANDLERS_H__
 #define __MS3_MENU_HANDLERS_H__
 

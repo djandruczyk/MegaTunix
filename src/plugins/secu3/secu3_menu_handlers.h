@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/secu3/secu3_menu_handlers.h
+  \ingroup Secu3Plugin,Headers
+  \brief Secu3 Plugin specific menu handlers
+  \author David Andruczyk
+  */
+
 #ifndef __SECU3_MENU_HANDLERS_H__
 #define __SECU3_MENU_HANDLERS_H__
 

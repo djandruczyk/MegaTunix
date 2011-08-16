@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms1/ms1_plugin.h
+  \ingroup MS1Plugin,Headers
+  \brief MS1 plugin init/shutdown code
+  \author David Andruczyk
+  */
+
 #ifndef __MS1_PLUGIN_H__
 #define __MS1_PLUGIN_H__
 

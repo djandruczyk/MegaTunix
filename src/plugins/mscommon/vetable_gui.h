@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/vetable_gui.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon vetable highlighter code
+  \author David Andruczyk
+  */
+
 #ifndef __VETABLE_GUI_H__
 #define __VETABLE_GUI_H__
 

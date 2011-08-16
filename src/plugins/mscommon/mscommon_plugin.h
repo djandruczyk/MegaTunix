@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/mscommon/mscommon_plugin.h
+  \ingroup MSCommonPlugin,Headers
+  \brief MSCommon plugin init/shutdown functions
+  \author David Andruczyk
+  */
+
 #ifndef __MSCOMMON_PLUGIN_H__
 #define __MSCOMMON_PLUGIN_H__
 

@@ -11,6 +11,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
+/*!
+  \file src/plugins/ms2/ms2_tlogger.h
+  \ingroup MS2Plugin,Headers
+  \brief MS2 tooth/trigger logger code
+  \author David Andruczyk
+  */
+
 #ifndef __MS2_TLOGGER_H__
 #define __MS2_TLOGGER_H__
 
