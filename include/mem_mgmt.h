@@ -14,7 +14,7 @@
 /*!
   \file include/mem_mgmt.h
   \ingroup Headers
-  \brief
+  \brief Header for generic memory management 
   \author David Andruczyk
   */
 

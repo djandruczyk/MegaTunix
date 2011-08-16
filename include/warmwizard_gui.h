@@ -14,7 +14,7 @@
 /*!
   \file include/warmwizard_gui.h
   \ingroup Headers
-  \brief
+  \brief Header for the almost deprecated warmup wizard code
   \author David Andruczyk
   */
 

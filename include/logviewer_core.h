@@ -14,7 +14,7 @@
 /*!
   \file include/logviewer_core.h
   \ingroup Headers
-  \brief Header for core logviewr parsing/loading functions
+  \brief Header for core logviewer parsing/loading functions
   \author David Andruczyk
   */
 

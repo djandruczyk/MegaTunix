@@ -14,7 +14,7 @@
 /*!
   \file include/notifications.h
   \ingroup Headers
-  \brief
+  \brief Header for notification message functions
   \author David Andruczyk
   */
 

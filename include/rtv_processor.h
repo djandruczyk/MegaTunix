@@ -14,7 +14,7 @@
 /*!
   \file include/rtv_processor.h
   \ingroup Headers
-  \brief
+  \brief Header for the runtime var map processor functionality
   \author David Andruczyk
   */
 

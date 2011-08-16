@@ -14,7 +14,7 @@
 /*!
   \file include/runtime_sliders.h
   \ingroup Headers
-  \brief
+  \brief Header for the runtime slider related code
   \author David Andruczyk
   */
 

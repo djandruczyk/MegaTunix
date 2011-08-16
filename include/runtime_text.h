@@ -14,7 +14,7 @@
 /*!
   \file include/runtime_text.h
   \ingroup Headers
-  \brief
+  \brief Header for the runtime text code
   \author David Andruczyk
   */
 

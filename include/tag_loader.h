@@ -14,7 +14,7 @@
 /*!
   \file include/tag_loader.h
   \ingroup Headers
-  \brief
+  \brief Header for the text tag loading functionality
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/xmlbase.h
   \ingroup Headers
-  \brief
+  \brief Header for the XML base core functions
   \author David Andruczyk
   */
 

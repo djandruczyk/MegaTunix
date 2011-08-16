@@ -14,7 +14,7 @@
 /*!
   \file include/watches.h
   \ingroup Headers
-  \brief
+  \brief Header for the datawatch code.
   \author David Andruczyk
   */
 

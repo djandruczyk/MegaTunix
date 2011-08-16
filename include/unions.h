@@ -14,7 +14,7 @@
 /*!
   \file include/unions.h
   \ingroup Headers
-  \brief
+  \brief AFAIK this is unused and can be removed...
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/vetable_gui.h
   \ingroup Headers
-  \brief
+  \brief Header for the VEtable rescaler code
   \author David Andruczyk
   */
 

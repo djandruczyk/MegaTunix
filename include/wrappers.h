@@ -14,7 +14,7 @@
 /*!
   \file include/wrappers.h
   \ingroup Headers
-  \brief
+  \brief Header for the wrapper functions to deal with symbol issues on windows
   \author David Andruczyk
   */
 

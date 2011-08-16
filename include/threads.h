@@ -14,7 +14,7 @@
 /*!
   \file include/threads.h
   \ingroup Headers
-  \brief
+  \brief Header for the core thread and thread message dispatch functions
   \author David Andruczyk
   */
 

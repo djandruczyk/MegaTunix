@@ -14,7 +14,7 @@
 /*!
   \file include/offline.h
   \ingroup Headers
-  \brief
+  \brief Header for offline mode functions
   \author David Andruczyk
   */
 

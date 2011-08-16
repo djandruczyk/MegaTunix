@@ -14,7 +14,7 @@
 /*!
   \file include/plugin.h
   \ingroup Headers
-  \brief
+  \brief Header for plugin load/unload and symbol resolution
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/widgetmgmt.h
   \ingroup Headers
-  \brief
+  \brief Header for the widget management utility functions
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/xmlcomm.h
   \ingroup Headers
-  \brief
+  \brief Header for the load/management of the per personality comm.xml data
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/serialio.h
   \ingroup Headers
-  \brief
+  \brief Header for serial IO handlers
   \author David Andruczyk
   */
 

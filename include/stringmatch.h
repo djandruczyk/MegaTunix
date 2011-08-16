@@ -14,7 +14,7 @@
 /*!
   \file include/stringmatch.h
   \ingroup Headers
-  \brief
+  \brief Header for the string to enum matching code
   \author David Andruczyk
   */
 

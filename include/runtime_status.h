@@ -14,7 +14,7 @@
 /*!
   \file include/runtime_status.h
   \ingroup Headers
-  \brief
+  \brief Header for the runtime status related code
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/template.h
   \ingroup Headers
-  \brief
+  \brief Template header
   \author David Andruczyk
   */
 

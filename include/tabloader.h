@@ -14,7 +14,7 @@
 /*!
   \file include/tabloader.h
   \ingroup Headers
-  \brief
+  \brief Header for the gui/tabloader core functionality
   \author David Andruczyk
   */
 

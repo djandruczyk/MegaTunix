@@ -14,7 +14,7 @@
 /*!
   \file include/s12x_loader.h
   \ingroup Headers
-  \brief
+  \brief Header for the Motorola S12x loader code
   \author David Andruczyk
   */
 

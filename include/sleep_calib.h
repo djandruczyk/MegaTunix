@@ -14,7 +14,7 @@
 /*!
   \file include/sleep_calib.h
   \ingroup Headers
-  \brief
+  \brief Header for the sleep/time deay calibration code
   \author David Andruczyk
   */
 

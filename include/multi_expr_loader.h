@@ -14,7 +14,7 @@
 /*!
   \file include/multi_expr_loader.h
   \ingroup Headers
-  \brief
+  \brief Header for the multi expression/source loader functions
   \author David Andruczyk
   */
 

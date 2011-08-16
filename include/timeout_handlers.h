@@ -14,7 +14,7 @@
 /*!
   \file include/timeout_handlers.h
   \ingroup Headers
-  \brief
+  \brief Header for the global generic timeout handlers
   \author David Andruczyk
   */
 

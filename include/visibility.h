@@ -14,7 +14,7 @@
 /*!
   \file include/visibility.h
   \ingroup Headers
-  \brief
+  \brief Header for the tab visibility management code
   \author David Andruczyk
   */
 

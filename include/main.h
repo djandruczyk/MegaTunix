@@ -14,7 +14,7 @@
 /*!
   \file include/main.h
   \ingroup Headers
-  \brief
+  \brief Header for main.c if it wasn't obvious....
   \author David Andruczyk
   */
 

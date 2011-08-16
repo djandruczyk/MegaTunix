@@ -14,7 +14,7 @@
 /*!
   \file include/mtxloader.h
   \ingroup Headers
-  \brief
+  \brief Header for the graphical firmware loader
   \author David Andruczyk
   */
 

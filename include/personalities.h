@@ -14,7 +14,7 @@
 /*!
   \file include/personalities.h
   \ingroup Headers
-  \brief
+  \brief Header for the personality selection functions
   \author David Andruczyk
   */
 

@@ -14,7 +14,7 @@
 /*!
   \file include/winserialio.h
   \ingroup Headers
-  \brief
+  \brief Header for the windows serial I/O init functions
   \author David Andruczyk
   */
 

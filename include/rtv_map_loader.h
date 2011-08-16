@@ -14,7 +14,7 @@
 /*!
   \file include/rtv_map_loader.h
   \ingroup Headers
-  \brief
+  \brief Header for the runtime var map loader functionality
   \author David Andruczyk
   */
 
