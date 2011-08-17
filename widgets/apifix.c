@@ -12,11 +12,8 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/apifix.c
- *
- * @brief ...
- *
- *
+/*!
+  \file widgets/apifix.c
  */
 
 

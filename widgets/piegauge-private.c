@@ -13,13 +13,11 @@
  *  
  */
 
-/*! @file widgets/piegauge-private.c
- *
- * @brief ...
- *
- *
+/*!
+  \file widgets/piegauge-private.c
+  \brief MtxPieGauge private functions
+  \author David Andruczyk
  */
-
 
 #include <piegauge-private.h>
 #include <math.h>

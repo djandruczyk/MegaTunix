@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/error.h
+  \ingroup MtxMatheval
+  \brief privatized header of GNU libmatheval error handling functions
+  \author David Andruczyk
+  */
+
 #ifndef ERROR_H
 #define ERROR_H 1
 

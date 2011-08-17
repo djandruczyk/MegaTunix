@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/node.h
+  \ingroup MtxMatheval
+  \brief math evaluator core code header
+  \author GNU,David Andruczyk
+  */
+
 #ifndef NODE_H
 #define NODE_H 1
 

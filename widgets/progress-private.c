@@ -13,13 +13,11 @@
  *  
  */
 
-/*! @file widgets/progress-private.c
- *
- * @brief ...
- *
- *
- */
-
+/*!
+  \file widgets/progress-private.c
+  \brief MtxProgress private functions
+  \author David Andruczyk
+  */
 
 #undef GTK_DISABLE_DEPRECATED
 #undef GDK_DISABLE_DEPRECATED

@@ -11,11 +11,10 @@
  *  
  */
 
-/*! @file widgets/curve-private.c
- *
- * @brief ...
- *
- *
+/*! 
+  \file widgets/curve-private.c
+  \brief Curve widget private functions
+  \author David Andruczyk
  */
 
 

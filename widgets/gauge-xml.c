@@ -11,13 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/gauge-xml.c
- *
- * @brief ...
- *
- *
+/*! 
+  \file widgets/gauge-xml.c
+  \brief MtxGaugeFace XML processing functionality
+  \author David Andruczyk
  */
-
 
 #include <gauge-xml.h>
 #include <gauge-private.h>

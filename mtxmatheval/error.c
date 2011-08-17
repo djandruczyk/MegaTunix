@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/error.c
+  \ingroup MtxMatheval
+  \brief privatized version of GNU libmatheval error handling functions
+  \author GNU,David Andruczyk
+  */
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

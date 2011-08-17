@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/xmalloc.h
+  \ingroup MtxMatheval
+  \brief mtxmatheval xmalloc header
+  \author GNU,David Andruczyk
+  */
+
 #ifndef XMALLOC_H
 #define XMALLOC_H 1
 

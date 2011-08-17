@@ -12,11 +12,10 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/curve-demo.c
- *
- * @brief ...
- *
- *
+/*! 
+  \file widgets/curve-demo.c
+  \brief Curve demo application
+  \author David Andruczyk
  */
 
 

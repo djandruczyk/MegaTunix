@@ -11,13 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/stripchart-demo.c
- *
- * @brief ...
- *
- *
- */
-
+/*!
+  \file widgets/stripchart-demo.c
+  \brief MtxStripChart demo application
+  \author David Andruczyk
+  */
 
 #include <defines.h>
 #include <stripchart.h>

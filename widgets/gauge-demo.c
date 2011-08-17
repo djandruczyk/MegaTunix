@@ -12,13 +12,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/gauge-demo.c
- *
- * @brief ...
- *
- *
+/*! 
+  \file widgets/gauge-demo.c
+  \brief MTxGaugeFace demo application code
+  \author David Andruczyk
  */
-
 
 #include <gauge.h>
 #include <stdio.h>

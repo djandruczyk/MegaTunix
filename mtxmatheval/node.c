@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/node.c
+  \ingroup MtxMatheval
+  \brief math evaluator core code
+  \author GNU,David Andruczyk
+  */
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

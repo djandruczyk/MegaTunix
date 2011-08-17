@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/scanner.c
+  \ingroup MtxMatheval
+  \brief The math expression parser code
+  \author David Andruczyk
+  */
+
 %{
 /*
  * Copyright (C) 1999, 2002, 2003, 2004, 2005, 2006, 2007, 2008 Free

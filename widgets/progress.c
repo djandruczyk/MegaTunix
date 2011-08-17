@@ -11,13 +11,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/progress.c
- *
- * @brief ...
- *
- *
- */
-
+/*!
+  \file widgets/progress.c
+  \brief MtxProgress public functions
+  \author David Andruczyk
+  */
 
 #undef GTK_DISABLE_DEPRECATED
 #undef GDK_DISABLE_DEPRECATED

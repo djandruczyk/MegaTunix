@@ -13,12 +13,11 @@
  *  
  */
 
-/*! @file widgets/stripchart-private.c
- *
- * @brief ...
- *
- *
- */
+/*!
+  \file widgets/stripchart-private.c
+  \brief MtxStripChart private functions
+  \author David Andruczyk
+  */
 
 #include <config.h>
 #include <cairo/cairo.h>

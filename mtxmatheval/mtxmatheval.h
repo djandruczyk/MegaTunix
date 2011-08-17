@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/mtxmatheval.h
+  \ingroup MtxMatheval
+  \brief mtxmatheval public header file
+  \author David Andruczyk
+  */
+
 #ifndef MATHEVAL_H
 #define MATHEVAL_H 1
 

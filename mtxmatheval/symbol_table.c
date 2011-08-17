@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/symbol_table.c
+  \ingroup MtxMatheval
+  \brief mtxmatheval symbol table management
+  \author GNU,David Andruczyk
+  */
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

@@ -13,25 +13,21 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/combo_mask.c
- *
- * @brief ...
- *
- *
+/*! 
+  \file widgets/combo_mask.c
+  \brief Comboboxregex mask init code
+  \author David Andruczyk
  */
 
 #include <combo_mask.h>
 
-
 /* Macro that creates a lot of boilerplate for us */
-
 G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,mask_entry_editable_init))
 
 /*!
  \brief gets called when a user wants a new mask entry
  \returns a pointer to a newly created mask entry widget
  */
-
 G_MODULE_EXPORT GtkWidget *mask_entry_new (void)
 {
         return GTK_WIDGET (g_object_new (TYPE_MASK_ENTRY, NULL));
@@ -42,7 +38,6 @@ G_MODULE_EXPORT GtkWidget *mask_entry_new (void)
  \brief gets called when a user wants a new mask entry
  \returns a pointer to a newly created mask entry widget
  */
-
 G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask (gchar *mask)
 {
 	MaskEntry * widget = g_object_new (TYPE_MASK_ENTRY, NULL);
@@ -51,6 +46,10 @@ G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask (gchar *mask)
 }
 
 
+/*!
+ \brief gets called to set the  entry backgroup color based on a match or not
+ \param entry is a pointer to the MaskEntry structure
+ */
 G_MODULE_EXPORT void mask_entry_set_background (MaskEntry *entry)
 {
 	gchar *tmpbuf = NULL;
@@ -77,20 +76,30 @@ G_MODULE_EXPORT void mask_entry_set_background (MaskEntry *entry)
 }
 
 
-
+/*!
+ \brief gets called when the mask entry is changed
+ \param editable is a pointer to the GtkEditable structure
+ */
 G_MODULE_EXPORT void mask_entry_changed (GtkEditable *editable)
 {
 	mask_entry_set_background (MASK_ENTRY (editable));
 }
 
 
-
+/*!
+ \brief gets called when the mask entry is created
+ \param entry is a pointer to the MaskEntry structure
+ */
 void mask_entry_init (MaskEntry *entry)
 {
 	entry->mask = NULL;
 }
 
 
+/*!
+ \brief gets called when the mask entry class is created
+ \param klass is a pointer to the MaskEntryClass structure
+ */
 void mask_entry_class_init (MaskEntryClass *klass)
 { 
         GObjectClass *obj_class = NULL;
@@ -99,12 +108,20 @@ void mask_entry_class_init (MaskEntryClass *klass)
 }
 
 
+/*!
+ \brief gets called when the mask entry editable is created
+ \param iface is a pointer to the GtkEditableClass structure
+ */
 void mask_entry_editable_init (GtkEditableClass *iface)
 {
 	iface->changed = mask_entry_changed;
 }
 
 
+/*!
+ \brief gets called when the mask entry editable is destroyed
+ \param object is a pointer to the GObject structure
+ */
 void mask_entry_finalize(GObject *object)
 {
 	MaskEntry *entry = MASK_ENTRY(object);

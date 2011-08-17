@@ -14,7 +14,7 @@
 /*!
   \file src/main.c
   \ingroup CoreMtx
-  \brief The older of the main() fucntion which gets the ball rolling...
+  \brief The holder of the main() fucntion which gets the ball rolling...
   \author David Andruczyk
   */
 

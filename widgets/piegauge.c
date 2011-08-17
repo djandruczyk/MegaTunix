@@ -12,16 +12,13 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/piegauge.c
- *
- * @brief ...
- *
- *
+/*!
+  \file widgets/piegauge.c
+  \brief Pie gauge public functions
+  \author David Andruczyk
  */
 
-
 #include <piegauge-private.h>
-
 
 /*!
  \brief gets called when  a user wants a new gauge

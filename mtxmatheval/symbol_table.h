@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/symbol_table.h
+  \ingroup MtxMatheval
+  \brief mtxmatheval symbol_table header
+  \author GNU,David Andruczyk
+  */
+
 #ifndef SYMBOL_TABLE_H
 #define SYMBOL_TABLE_H 1
 

@@ -12,13 +12,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/progress-demo.c
- *
- * @brief ...
- *
- *
- */
-
+/*!
+  \file widgets/progress-demo.c
+  \brief MtxProgress demo application
+  \author David Andruczyk
+  */
 
 #include <progress.h>
 

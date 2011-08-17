@@ -25,11 +25,10 @@
  *  have come up with!
  */
 
-/*! @file widgets/gauge-private.c
- *
- * @brief ...
- *
- *
+/*!
+  \file widgets/gauge-private.c
+  \brief MtxGaugeFace private functions
+  \author David Andruczyk
  */
 
 #include <gauge-private.h>

@@ -19,6 +19,13 @@
  * <http://www.gnu.org/licenses/>.
  */
 
+/*!
+  \file mtxmatheval/xmath.h
+  \ingroup MtxMatheval
+  \brief mtxmatheval xmath header
+  \author GNU,David Andruczyk
+  */
+
 #ifndef XMATH_H
 #define XMATH_H 1
 

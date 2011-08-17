@@ -12,13 +12,11 @@
  * No warranty is made or implied. You use this program at your own risk.
  */
 
-/*! @file widgets/pie-demo.c
- *
- * @brief ...
- *
- *
- */
-
+/*! 
+  \file widgets/pie-demo.c
+  \brief MtxPieGauge demo application
+  \author David Andruczyk
+  */
 
 #include <piegauge.h>
 

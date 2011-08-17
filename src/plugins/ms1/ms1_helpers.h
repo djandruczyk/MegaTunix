@@ -14,7 +14,7 @@
 /*!
   \file src/plugins/ms1/ms1_helpers.h
   \ingroup MS1Plugin,Headers
-  \briefa MS1 comm.xml helpers
+  \brief MS1 comm.xml helpers
   \author David Andruczyk
   */
 
