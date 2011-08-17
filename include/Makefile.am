@@ -58,7 +58,6 @@ headers = \
 	template.h \
 	threads.h \
 	timeout_handlers.h \
-	unions.h \
 	vetable_gui.h \
 	visibility.h \
 	warmwizard_gui.h \
