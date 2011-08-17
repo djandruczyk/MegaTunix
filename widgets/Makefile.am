@@ -15,9 +15,7 @@ progressdemo_SOURCES = progress-demo.c progress.h
 
 stripchartdemo_SOURCES = stripchart-demo.c stripchart.h
 
-apifix_SOURCES = apifix.c gauge.h
-
-noinst_PROGRAMS = gaugedemo piedemo apifix curvedemo progressdemo stripchartdemo
+noinst_PROGRAMS = gaugedemo piedemo curvedemo progressdemo stripchartdemo
 
 lib_LTLIBRARIES = libmtxgauge.la libmtxcurve.la libmtxpie.la libmtxprogress.la libmtxstripchart.la libmtxcombo_mask.la
 
@@ -54,8 +52,6 @@ progressdemo_LDADD = @GTK_LIBS@  ./libmtxprogress.la ../mtxcommon/libmtxcommon.l
 curvedemo_LDADD = @GTK_LIBS@  ./libmtxcurve.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
 stripchartdemo_LDADD = @GTK_LIBS@  ./libmtxstripchart.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
-
-apifix_LDADD = @GTK_LIBS@ @LIBXML2_LIBS@  ./libmtxgauge.la ../mtxcommon/libmtxcommon.la @EXTRA_LIBS@
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
