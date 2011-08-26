@@ -8,7 +8,7 @@ a section for that widget, definining the ACTUAL function with this plugin
 to be called,  i.e.
 
 glade file defines control "special_button" to call function "special_handler"
-Within glade, set the funct to be "plugin_function"
+Within glade, set the function_name parameter to be "plugin_function"
 and in the datamap define it as follows:
 
 [special_button]

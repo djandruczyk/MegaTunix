@@ -24,6 +24,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
+#include <freeems_benchtest.h>
 #include <freeems_comms.h>
 #include <freeems_helpers.h>
 #include <freeems_gui_handlers.h>
@@ -107,6 +108,9 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 			break;
 		case HARD_BOOT_ECU:
 			hard_boot_ecu();
+			break;
+		case BENCHTEST_START:
+			benchtest_validate_and_run();
 			break;
 		default:
 			if (!ecu_handler)

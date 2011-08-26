@@ -27,9 +27,7 @@
 #include <gio/gio.h>
 #ifndef __WIN32__
  #include <termios.h>
- #ifdef __PIS_SUPPORT__
-  #include <linux/serial.h>
- #endif
+ #include <linux/serial.h>
 #endif
 
 typedef struct _Serial_Params Serial_Params;
@@ -71,10 +69,10 @@ struct _Serial_Params
 	gboolean net_mode;	/*!< When using TCP/IP socket mode */
 	struct termios oldtio;	/*!< serial port settings before we touch it */
 	struct termios newtio;	/*!< serial port settings we use when running */
-#ifdef __PIS_SUPPORT__
+	/* Old PIS disabled, PIS author non-responsive
 	struct serial_struct oldctl;
 	struct serial_struct newctl;
-#endif
+	*/
 };
 #endif
 

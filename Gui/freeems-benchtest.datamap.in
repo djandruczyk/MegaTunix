@@ -1,0 +1,143 @@
+[global]
+description=Object data map for the FreeEMS BenchTest Tab
+_tab_name=_BenchTest
+id_prefix=BTest_
+groups=defaults
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+
+[start_test_button]
+keys=handler
+handler=_BENCHTEST_START_
+
+[reset_ecu_button]
+keys=handler
+handler=_SOFT_BOOT_ECU_
+
+#----- Widgets ---------------------------------------------------------------
+
+#[sweeper_frame]
+#keys=post_functions_with_arg
+#post_functions_with_arg=jimstim_sweeper_init
+#
+#[jimstim_view]
+#keys=create_tags,register_as
+#register_as=jimstim_view
+#create_tags=warning
+#warning=foreground,red
+
+#----- Labels ----------------------------------------------------------------
+
+#----- Entries ---------------------------------------------------------------
+
+[events_per_cycle_entry]
+keys=,size,raw_lower,tooltip
+size=_U08_
+raw_lower=1
+raw_upper=255
+tooltip=Events per cycle (1-255 range)
+
+[cycles_entry]
+keys=size,raw_lower,raw_upper,tooltip
+size=_U16_
+raw_lower=1
+raw_upper=65535
+tooltip=Number of cycles to run (1-65535 range)
+
+[time_per_event_entry]
+keys=size,raw_lower,raw_upper,tooltip
+size=_U16_
+raw_lower=0
+raw_upper=65535
+tooltip=Time per event in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
+
+[events_to_fire_from_entry1]
+keys=size,tooltip
+size=_U08_
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[events_to_fire_from_entry2]
+keys=size,tooltip
+size=_U08_
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[events_to_fire_from_entry3]
+keys=size,tooltip
+size=_U08_
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[events_to_fire_from_entry4]
+keys=size,tooltip
+size=_U08_
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[events_to_fire_from_entry5]
+keys=size,tooltip
+size=_U08_
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[events_to_fire_from_entry6]
+keys=size,tooltip
+size=_U08_
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[pw_source_entry1]
+keys=size,raw_upper,tooltip
+size=_U16_
+raw_upper=65535
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[pw_source_entry2]
+keys=size,raw_upper,tooltip
+size=_U16_
+raw_upper=65535
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[pw_source_entry3]
+keys=size,raw_upper,tooltip
+size=_U16_
+raw_upper=65535
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[pw_source_entry4]
+keys=size,raw_upper,tooltip
+size=_U16_
+raw_upper=65535
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[pw_source_entry5]
+keys=size,raw_upper,tooltip
+size=_U16_
+raw_upper=65535
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+
+[pw_source_entry6]
+keys=size,raw_upper,tooltip
+size=_U16_
+raw_upper=65535
+tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+

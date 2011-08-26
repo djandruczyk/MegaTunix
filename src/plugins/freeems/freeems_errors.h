@@ -18,8 +18,8 @@
   \author David Andruczyk
   */
 
-#ifndef __FEEEMS_ERRORS_H__
-#define __FEEEMS_ERRORS_H__
+#ifndef __FREEEMS_ERRORS_H__
+#define __FREEEMS_ERRORS_H__
 
 #include <gtk/gtk.h>
 #include <defines.h>

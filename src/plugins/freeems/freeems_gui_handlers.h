@@ -18,8 +18,8 @@
   \author David Andruczyk
   */
 
-#ifndef __FREEMS_GUI_HANDLERS_H__
-#define __FREEMS_GUI_HANDLERS_H__
+#ifndef __FREEEMS_GUI_HANDLERS_H__
+#define __FREEEMS_GUI_HANDLERS_H__
 
 #include <defines.h>
 #include <enums.h>
@@ -29,7 +29,8 @@
 typedef enum
 {
 	SOFT_BOOT_ECU = LAST_STD_BUTTON_ENUM + 1,
-	HARD_BOOT_ECU
+	HARD_BOOT_ECU,
+	BENCHTEST_START
 }FreeEMSCommonMtxStdButton;
 
 

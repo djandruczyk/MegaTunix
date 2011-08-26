@@ -115,12 +115,12 @@ dnl ===============
 dnl Device specific stuff
 dnl ===============
 
-AC_ARG_ENABLE(pis,
-[  --enable-pis         enable pis support [default=no]],, enable_pis=no)
-
-if test "$enable_pis" == yes ; then
-	AC_DEFINE([__PIS_SUPPORT__], [], [User requested PIS firmare support])
-fi
+dnl AC_ARG_ENABLE(pis,
+dnl [  --enable-pis         enable pis support [default=no]],, enable_pis=no)
+dnl 
+dnl if test "$enable_pis" == yes ; then
+dnl 	AC_DEFINE([__PIS_SUPPORT__], [], [User requested PIS firmare support])
+dnl fi
 
 AC_ARG_ENABLE(deprecated,
 [  --enable-deprecated         enable deprecated functions [default=no]],, enable_deprecated=no)
@@ -294,5 +294,5 @@ Configuration:
     General Debugging:                  ${enable_debug}
     Allow Deprecated functions:         ${enable_deprecated}
     Profiling:                          ${enable_profiling}
-    PIS Support:                        ${enable_pis}
 "
+dnl    PIS Support:                        ${enable_pis}

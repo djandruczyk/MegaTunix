@@ -31,10 +31,10 @@
 #include <sys/types.h>
 #ifndef __WIN32__
  #include <termios.h>
- #ifdef __PIS_SUPPORT__
-  #include <linux/serial.h>
-  #include <sys/ioctl.h>
- #endif
+/*
+ #include <linux/serial.h>
+ #include <sys/ioctl.h>
+ */
 #endif
 #include <threads.h>
 #include <unistd.h>
@@ -347,12 +347,13 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	serial_params->newtio.c_cc[VMIN]     = 0;     
 	serial_params->newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
 
-#ifdef __PIS_SUPPORT__
+	/* PIS Specific (odd baud rate) DISABLED */
+	/*
 	if (ioctl(serial_params->fd, TIOCGSERIAL, &serial_params->oldctl) != 0)
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tError getting ioctl\n"));
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tError getting serial line information error %s\n",strerror(errno)));
 	else
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tget ioctl OK\n"));
+		dbg_func(SERIAL_RD|SERIAL_WR, g_strdup_printf(__FILE__": setup_serial_params()\tget serial line info call OK\n"));
 		// copy ioctl structure
 		memcpy(&serial_params->newctl, &serial_params->oldctl, sizeof(serial_params->newctl));
 
@@ -371,8 +372,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 				dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tset ioctl OK\n"));
 		}
 	}
-
-#endif
+	*/
 	tcsetattr(serial_params->fd, TCSANOW, &serial_params->newtio);
 #endif
 	g_mutex_unlock(serio_mutex);
@@ -400,15 +400,14 @@ G_MODULE_EXPORT void close_serial(void)
 
 	/*printf("Closing serial port\n");*/
 #ifndef __WIN32__
-#ifdef __PIS_SUPPORT__
+	/* OLD PIS stuff disabled
 	if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->oldctl) != 0)
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tError restoring ioctl\n"));
+		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tError restoring serial line config\n"));
 	else
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tioctl restored OK\n"));
+		dbg_func(SERIAL_RD|SERIAL_WR, g_strdup_printf(__FILE__": close_serial()\tserial line settings restored OK\n"));
+	*/
 
-#else
 	tcsetattr(serial_params->fd,TCSANOW,&serial_params->oldtio);
-#endif /* PIS_SUPPORT */
 #endif /* __WIN32___ */
 
 	close(serial_params->fd);

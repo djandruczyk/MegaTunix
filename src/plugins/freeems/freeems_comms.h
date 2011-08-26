@@ -18,8 +18,8 @@
   \author David Andruczyk
   */
 
-#ifndef __FREEMS_COMMS_H__
-#define __FEEEMS_COMMS_H__
+#ifndef __FREEEMS_COMMS_H__
+#define __FREEEMS_COMMS_H__
 
 #include <gtk/gtk.h>
 #include <defines.h>

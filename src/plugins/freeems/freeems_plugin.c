@@ -290,6 +290,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(SOFT_BOOT_ECU));
 		g_hash_table_insert (str_2_enum, "_HARD_BOOT_ECU_",
 				GINT_TO_POINTER(HARD_BOOT_ECU));
+		g_hash_table_insert (str_2_enum, "_BENCHTEST_START_",
+				GINT_TO_POINTER(BENCHTEST_START));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");

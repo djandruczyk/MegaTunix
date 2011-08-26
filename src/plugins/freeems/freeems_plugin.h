@@ -18,8 +18,8 @@
   \author David Andruczyk
   */
 
-#ifndef __FREEMS_PLUGIN_H__
-#define __FREEMS_PLUGIN_H__
+#ifndef __FREEEMS_PLUGIN_H__
+#define __FREEEMS_PLUGIN_H__
 
 #include <gtk/gtk.h>
 #include <defines.h>
