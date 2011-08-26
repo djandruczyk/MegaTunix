@@ -21,9 +21,22 @@
 #ifndef __FREEEMS_BENCHTEST_H__
 #define __FREEEMS_BENCHTEST_H__
 
+#include <gtk/gtk.h>
+
+typedef struct _Bt_Data Bt_Data;
+
+struct _Bt_Data
+{
+	guint8 events_per_cycle;
+	guint16 cycles;
+	guint16 ticks_per_event;
+	guint8 events[6];
+	guint16 pw_sources[6];
+};
 
 /* Prototypes */
 void benchtest_validate_and_run(void);
+gboolean pull_data_from_gui(Bt_Data *);
 /* Prototypes */
 
 #endif

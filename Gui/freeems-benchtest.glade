@@ -121,6 +121,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">12</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -194,6 +195,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">10000</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -217,6 +219,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">0</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -240,6 +243,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">50000</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -419,6 +423,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">50</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -442,6 +447,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">2</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -465,6 +471,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">4</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -488,6 +495,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">6</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -511,6 +519,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">8</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -534,6 +543,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">10</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -557,6 +567,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">50000</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -580,6 +591,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">50000</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -603,6 +615,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">50000</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -626,6 +639,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">50000</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>
@@ -649,6 +663,7 @@
                                         <property name="max_length">7</property>
                                         <property name="invisible_char">&#x25CF;</property>
                                         <property name="width_chars">7</property>
+                                        <property name="text" translatable="yes">50000</property>
                                         <signal name="changed" handler="entry_changed_handler"/>
                                         <signal name="key_press_event" handler="key_event"/>
                                         <signal name="insert_text" handler="insert_text_handler"/>

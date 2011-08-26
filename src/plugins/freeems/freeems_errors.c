@@ -27,11 +27,14 @@
   \param code is the error code integer
   \returns the Textual representation of the error code
   */
-G_MODULE_EXPORT const gchar * lookup_error(gint code)
+G_MODULE_EXPORT gchar * lookup_error(gint code)
 {
 	gint i = 0;
+	gchar *msg = NULL;
 	for (i=0;i< sizeof(Errors)/sizeof(Errors[0]);i++)
+	{
 		if (Errors[i].code == code)
-			return Errors[i].message;
-	return "Couldn't find error code";
+			return g_strdup(Errors[i].message);
+	}
+	return g_strdup_printf("Couldn't find error code %i",code);
 }

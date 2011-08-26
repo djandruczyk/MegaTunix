@@ -67,6 +67,19 @@
 	</potential_args>
 	<commands>
 		<cmd>
+			<name>benchtest_pkt</name>
+			<desc>Special Case benchtest packet</desc>
+			<type>_WRITE_CMD_</type>
+			<args>
+				<arg>SEQUENCE_NUM</arg> 
+				<arg>PAYLOAD_ID</arg>
+				<arg>DATACHUNK</arg>
+				<arg>DATA_LENGTH</arg>
+			</args>
+			<helper_func>handle_transaction</helper_func>
+                        <helper_func_arg>_BENCHTEST_RESPONSE_</helper_func_arg>
+		</cmd>
+		<cmd>
 			<name>basic_datalog</name>
 			<desc>Request basic datalog (once)</desc>
 			<type>_WRITE_CMD_</type>

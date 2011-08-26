@@ -77,6 +77,7 @@
 /* For datalogging and Logviewer */
 #define TABLE_COLS 6
 
+/*! Temp Sensor default Bias resistor value */
 #define DEFAULT_BIAS 2490
 
 #define TEMP_C_100_DENSITY 21.1111

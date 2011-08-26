@@ -376,6 +376,19 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 				printf("Re-issued command sent, seq %i!\n",seq);
 			}
 			break;
+		case BENCHTEST_RESPONSE:
+			packet = retrieve_packet(output->data,NULL);
+			queue = DATA_GET(output->data,"queue");
+			deregister_packet_queue(SEQUENCE_NUM,queue,seq);
+			g_async_queue_unref(queue);
+			DATA_SET(output->data,"queue",NULL);
+			if (packet)
+			{
+				if (packet->is_nack)
+					printf("ERROR with Bench test packet!\n");
+					freeems_packet_cleanup(packet);
+			}
+			break;
 		case GENERIC_FLASH_WRITE:
 			packet = retrieve_packet(output->data,"FLASH_write_queue");
 			goto handle_write;

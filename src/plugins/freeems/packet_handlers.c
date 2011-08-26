@@ -245,6 +245,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	guint8 *ptr = packet->data;
 	gint i = 0;
 	gint error = 0;
+	gchar * errmsg = NULL;
 	gint tmpi = 3; /* header and payload Are ALWAYS present */
 
 	packet->header_bits = ptr[0];
@@ -295,7 +296,9 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	if (packet->is_nack)
 	{
 		error = ((guint8)packet->data[tmpi] << 8) + (guint8)packet->data[tmpi+1];
-		printf("Packet ERROR Code 0x%.4X, \"%s\"\n",packet->payload_id,lookup_error(error));
+		errmsg = lookup_error(error);
+		printf("Packet ERROR Code 0x%.4X, \"%s\"\n",packet->payload_id,errmsg);
+		g_free(errmsg);
 	}
 	if (packet->header_bits & HAS_LENGTH_MASK)
 	{
@@ -538,6 +541,8 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 {
 	gboolean have_sequence = FALSE;
 	gboolean have_payload_data = FALSE;
+	gboolean have_locid = FALSE;
+	gboolean have_offset = FALSE;
 	guint8 *payload_data = NULL;
 	gint length = 0;
 	gint payload_data_length = 0;
@@ -569,7 +574,6 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		switch ((GINT)arg->type)
 		{
 			case ACTION:
-				/*printf("build_output_message(): ACTION being created!\n");*/
 				block = g_new0(DBlock, 1);
 				block->type = ACTION;
 				block->action = arg->action;
@@ -581,29 +585,26 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				{
 					seq_num = (GINT)DATA_GET(output->data,arg->internal_name);
 					have_sequence = TRUE;
-					/*printf("Sequence number present %i\n",seq_num);*/
 					packet_length += 1;
 				}
 				break;
 			case PAYLOAD_ID:
 				payload_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Payload ID number present %i\n",payload_id);*/
 				packet_length += 2;
 				break;
 				/* Payload specific stuff */
 			case LOCATION_ID:
 				location_id = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Location ID number present %i\n",location_id);*/
+				have_locid = TRUE;
 				payload_length += 4;
 				break;
 			case OFFSET:
 				offset = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Offset present %i\n",offset);*/
+				have_offset = TRUE;
 				payload_length += 2;
 				break;
 			case DATA_LENGTH:
 				length = (GINT)DATA_GET(output->data,arg->internal_name);
-				/*printf("Payload write DATA length present %i\n",payload_data_length);*/
 				packet_length += 2;
 				break;
 			case DATA:
@@ -616,6 +617,15 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		}
 	}
 
+	if (PKT_DEBUG)
+	{
+		printf("build_output_message(): ACTION being created!\n");
+		printf("Sequence number %i\n",seq_num);
+		printf("Payload ID number 0x%0X\n",payload_id);
+		printf("Location ID number %i\n",location_id);
+		printf("Offset %i\n",offset);
+		printf("Payload write DATA length %i\n",length);
+	}
 	if (have_payload_data)
 	{
 		payload_data_length = length;
@@ -633,7 +643,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	pos += 2; /* 3, header+payload_id*/
 
 	/* Sequence number if present */
-	if (have_sequence > 0)
+	if (have_sequence)
 	{
 		buf[HEADER_IDX] |= HAS_SEQUENCE_MASK;
 		buf[SEQ_IDX] = (guint8)seq_num;
@@ -643,9 +653,8 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	/* Payload Length if present */
 	if (payload_length > 0)
 	{
-		/*printf("payload length is %i\n",payload_length);*/
 		buf[HEADER_IDX] |= HAS_LENGTH_MASK;
-		if (have_sequence > 0)
+		if (have_sequence)
 		{
 			buf[H_LEN_IDX] = (guint8)((payload_length & 0xff00) >> 8); 
 			buf[L_LEN_IDX] = (guint8)(payload_length & 0x00ff); 
@@ -658,14 +667,23 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		pos += 2; /* 5 or 6, header+payload_id+seq+payload_len */
 
 		/* Location ID */
-		buf[pos++] = (guint8)((location_id & 0xff00) >> 8); 
-		buf[pos++] = (guint8)(location_id & 0x00ff); 
+		if (have_locid)
+		{
+			buf[pos++] = (guint8)((location_id & 0xff00) >> 8); 
+			buf[pos++] = (guint8)(location_id & 0x00ff); 
+		}
 		/* Offset */
-		buf[pos++] = (guint8)((offset & 0xff00) >> 8); 
-		buf[pos++] = (guint8)(offset & 0x00ff); 
+		if (have_offset)
+		{
+			buf[pos++] = (guint8)((offset & 0xff00) >> 8); 
+			buf[pos++] = (guint8)(offset & 0x00ff); 
+		}
 		/* Sub Length */
-		buf[pos++] = (guint8)((length & 0xff00) >> 8); 
-		buf[pos++] = (guint8)(length & 0x00ff); 
+		if (have_locid)
+		{
+			buf[pos++] = (guint8)((length & 0xff00) >> 8); 
+			buf[pos++] = (guint8)(length & 0x00ff); 
+		}
 		/* pos = 11 or 12 depending on if seq or not */
 
 		if (payload_data_length > 0)

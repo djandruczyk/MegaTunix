@@ -287,6 +287,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(GENERIC_RAM_WRITE));
 		g_hash_table_insert (str_2_enum, "_GENERIC_BURN_",
 				GINT_TO_POINTER(GENERIC_BURN));
+		g_hash_table_insert (str_2_enum, "_BENCHTEST_RESPONSE_",
+				GINT_TO_POINTER(BENCHTEST_RESPONSE));
 		/* Firmware Specific button handlers*/
 		g_hash_table_insert (str_2_enum, "_SOFT_BOOT_ECU_",
 				GINT_TO_POINTER(SOFT_BOOT_ECU));
@@ -339,6 +341,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_GENERIC_RAM_WRITE_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_FLASH_WRITE_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_BURN_");
+		g_hash_table_remove (str_2_enum, "_BENCHTEST_RESPONSE_");
 		/* Firmware Specific button handlers*/
 		g_hash_table_remove (str_2_enum, "_SOFT_BOOT_ECU_");
 		g_hash_table_remove (str_2_enum, "_HARD_BOOT_ECU_");
