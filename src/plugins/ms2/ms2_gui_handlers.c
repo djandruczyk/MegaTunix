@@ -60,9 +60,9 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 	gfloat tmpf = 0.0;
 	const gchar *dest = NULL;
 
-	handler = (MS2StdButton)OBJ_GET(widget,"handler");
+	handler = (MS2StdHandler)OBJ_GET(widget,"handler");
 
-	switch ((MS2StdButton)handler)
+	switch ((MS2StdHandler)handler)
 	{
 		case GET_CURR_TPS:
 			tmpbuf = OBJ_GET(widget,"source");
@@ -96,7 +96,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{       /* It's pressed (or checked) */
-		switch ((MS2ToggleButton)handler)
+		switch ((MS2ToggleHandler)handler)
 		{
 
 			case START_TOOTHMON_LOGGER:

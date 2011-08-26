@@ -26,22 +26,19 @@
 
 typedef enum
 {
-        START_TOOTHMON_LOGGER = LAST_COMMON_TOGGLE_BUTTON_ENUM + 1,
+        START_TOOTHMON_LOGGER = LAST_COMMON_TOGGLE_HANDLER_ENUM + 1,
         STOP_TOOTHMON_LOGGER,
         START_TRIGMON_LOGGER,
         STOP_TRIGMON_LOGGER
-}MS1MtxToggleButton;
+}MS1ToggleHandler;
 
 typedef enum
 {
-        TRIGGER_ANGLE = LAST_COMMON_BUTTON_ENUM + 1,
-        ODDFIRE_ANGLE
-}MS1MtxButton;
+        TRIGGER_ANGLE = LAST_COMMON_STD_HANDLER_ENUM + 1,
+        ODDFIRE_ANGLE,
+	REBOOT_GETERR
+}MS1StdHandler;
 
-typedef enum
-{
-	REBOOT_GETERR = LAST_COMMON_STD_BUTTON_ENUM + 1
-}MS1MtxStdButton;
 
 /* Prototypes */
 gboolean ecu_entry_handler(GtkWidget *, gpointer);

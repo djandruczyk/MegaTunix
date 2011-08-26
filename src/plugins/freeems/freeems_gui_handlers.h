@@ -22,30 +22,26 @@
 #define __FREEEMS_GUI_HANDLERS_H__
 
 #include <defines.h>
-#include <enums.h>
+#include <gui_handlers.h>
 #include <gtk/gtk.h>
 
 /* Enumerations */
 typedef enum
 {
-	SOFT_BOOT_ECU = LAST_STD_BUTTON_ENUM + 1,
+	SOFT_BOOT_ECU = LAST_GLOBAL_STD_HANDLER_ENUM + 1,
 	HARD_BOOT_ECU,
-	BENCHTEST_START
-}FreeEMSCommonMtxStdButton;
+	BENCHTEST_START,
+        GENERIC,
+	NOOP
+}FreeEMSCommonStdHandler;
 
 
 typedef enum
 {
-	FREEEMS_TOGGLE = LAST_TOGGLE_BUTTON_ENUM + 1
-}FreeEMSCommonMtxToggleButton;
+	FREEEMS_TOGGLE = LAST_GLOBAL_TOGGLE_HANDLER_ENUM + 1
+}FreeEMSCommonToggleHandler;
 /* Enumerations */
 
-
-typedef enum
-{
-        GENERIC = LAST_BUTTON_ENUM + 1,
-	NOOP
-}FreeEMSCommonMtxButton;
 
 /* Prototypes */
 gboolean common_std_button_handler(GtkWidget *, gpointer);

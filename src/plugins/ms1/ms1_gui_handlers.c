@@ -66,7 +66,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
-	handler = (MtxButton)OBJ_GET(widget,"handler");
+	handler = (MS1StdHandler)OBJ_GET(widget,"handler");
 
 	get_essentials_f(widget,&canID,&page,&offset,&size,&precision);
 
@@ -86,7 +86,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 		g_signal_handlers_unblock_by_func (widget,(gpointer)entry_changed_handler_f, data);
 		g_signal_handlers_unblock_by_func (widget,(gpointer)std_entry_handler_f, data);
 	}
-	switch ((MS1MtxButton)handler)
+	switch ((MS1StdHandler)handler)
 	{ 
 		case TRIGGER_ANGLE:
 			offset = (GINT)OBJ_GET(widget,"spconfig_offset");
@@ -256,7 +256,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 
-	handler = (MtxButton)OBJ_GET(widget,"handler");
+	handler = (MS1StdHandler)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 
 	get_essential_bits_f(widget,&canID,&page,&offset,NULL,&bitmask,&bitshift);
@@ -265,7 +265,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 
 	tmpi = (int)(value+.001);
 
-	switch ((MS1MtxButton)handler)
+	switch ((MS1StdHandler)handler)
 	{
 		case TRIGGER_ANGLE:
 			offset = (GINT)OBJ_GET(widget,"spconfig_offset");
@@ -371,7 +371,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 
 	handler = (GINT)OBJ_GET(widget,"handler");
 
-	switch ((MS1MtxStdButton)handler)
+	switch ((MS1StdHandler)handler)
 	{
 		case REBOOT_GETERR:
 			if (DATA_GET(global_data,"offline"))
@@ -407,7 +407,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{       /* It's pressed (or checked) */
-		switch ((MS1MtxToggleButton)handler)
+		switch ((MS1ToggleHandler)handler)
 		{
 
 			case START_TOOTHMON_LOGGER:
@@ -515,7 +515,7 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 	value = convert_after_upload_f(widget);
 	get_essentials_f(widget, &canID, &page, &offset, &size, &precision);
 
-	switch ((MS1MtxButton)handler)
+	switch ((MS1StdHandler)handler)
 	{
 		case TRIGGER_ANGLE:
 			offset = (GINT)OBJ_GET(widget,"spconfig_offset");

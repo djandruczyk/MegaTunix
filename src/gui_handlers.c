@@ -481,7 +481,7 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	if (!GTK_IS_RADIO_BUTTON(widget))
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-	switch ((BitmaskHandler)handler)
+	switch ((StdHandler)handler)
 	{
 		case DEBUG_LEVEL:
 			/* Debugging selection buttons */

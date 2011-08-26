@@ -51,8 +51,8 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
   */
 G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
-	JimStimEcuMtxStdButton handler;
-	handler = (JimStimEcuMtxStdButton)OBJ_GET(widget,"handler");
+	JimStimStdHandler handler;
+	handler = (JimStimStdHandler)OBJ_GET(widget,"handler");
 
 	switch (handler)
 	{
