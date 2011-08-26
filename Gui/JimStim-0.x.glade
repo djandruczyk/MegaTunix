@@ -290,7 +290,7 @@ All you can do is see the ADC values for the coarse/fine RPM pots
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
-                                        <signal name="clicked" handler="jimstim_sweep_start"/>
+                                        <signal name="clicked" handler="std_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="right_attach">2</property>
@@ -305,7 +305,7 @@ All you can do is see the ADC values for the coarse/fine RPM pots
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
-                                        <signal name="clicked" handler="jimstim_sweep_end"/>
+                                        <signal name="clicked" handler="std_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">2</property>

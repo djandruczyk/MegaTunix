@@ -39,7 +39,7 @@ G_MODULE_EXPORT void ecu_gui_init(void)
   */
 G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+        return TRUE;
 }
 
 
@@ -51,7 +51,23 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
   */
 G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	JimStimEcuMtxStdButton handler;
+	handler = (JimStimEcuMtxStdButton)OBJ_GET(widget,"handler");
+
+	switch (handler)
+	{
+		case SWEEP_START:
+			jimstim_sweep_start(widget,data);
+			break;
+		case SWEEP_STOP:
+			jimstim_sweep_end(widget,data);
+			break;
+		default:
+			printf("ERROR, case not handled, jimstim ecu std button handler!\n");
+			break;
+
+	}
+	return TRUE;
 }
 
 

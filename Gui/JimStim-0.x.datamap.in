@@ -17,6 +17,14 @@ handler=_GENERIC_
 
 #----- Buttons ---------------------------------------------------------------
 
+[start_sweep_button]
+keys=handler
+handler=_SWEEP_START_
+
+[stop_sweep_button]
+keys=handler
+handler=_SWEEP_STOP_
+
 [get_data_button]
 keys=handler,bind_to_list,tooltip
 handler=_READ_VE_CONST_

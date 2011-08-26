@@ -237,6 +237,22 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	}
 	switch (handler)
 	{
+		case NOOP: /* Used for special widgets that do NOT refer to
+			      direct ECU locations (FreeEMS BenchTest tool) */
+			if (OBJ_GET(widget,"temp_dep"))
+				value = temp_to_ecu_f(tmpf);
+			else
+				value = tmpf;
+			dload_val = convert_before_download_f(widget,value);
+			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
+			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);
+			tmpbuf = g_strdup_printf("%1$.*2$f",dload_val,precision);
+			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
+			g_free(tmpbuf);
+			g_signal_handlers_unblock_by_func (widget,(gpointer) entry_changed_handler_f, data);
+			g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler_f, data);
+			break;
+
 		case GENERIC:
 			if (OBJ_GET(widget,"temp_dep"))
 				value = temp_to_ecu_f(tmpf);

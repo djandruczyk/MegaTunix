@@ -21,6 +21,7 @@
 #include <debugging.h>
 #include <defines.h>
 #include <enums.h>
+#include <gui_handlers.h>
 
 extern gconstpointer *global_data;
 
@@ -152,8 +153,6 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(READ_RAW_MEMORY));
 	g_hash_table_insert(str_2_enum,"_TRACKING_FOCUS_",
 			GINT_TO_POINTER(TRACKING_FOCUS));
-	g_hash_table_insert(str_2_enum,"_MS2_USER_OUTPUTS_",
-			GINT_TO_POINTER(MS2_USER_OUTPUTS));
 	g_hash_table_insert(str_2_enum,"_TOGGLE_KELVIN_",
 			GINT_TO_POINTER(TOGGLE_KELVIN));
 	g_hash_table_insert(str_2_enum,"_TOGGLE_CELSIUS_",

@@ -50,7 +50,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	static Firmware_Details *firmware = NULL;
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	GdkColor black = {0,0,0,0};
-	gint handler = -1;
+	MSCommonStdHandler handler = -1;
 	gchar *text = NULL;
 	gchar *tmpbuf = NULL;
 	gfloat tmpf = -1;
@@ -81,7 +81,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
-	handler = (MtxButton)OBJ_GET(widget,"handler");
+	handler = (MSCommonStdHandler)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	get_essentials(widget,&canID,&page,&offset,&size,&precision);
 
@@ -252,7 +252,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	/* If it's a check button then it's state is dependant on the button's state*/
 	if (!GTK_IS_RADIO_BUTTON(widget))
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-	switch ((MSCommonMtxButton)handler)
+	switch ((MSCommonStdHandler)handler)
 	{
 		case MULTI_EXPRESSION:
 			/*printf("MULTI_EXPRESSION CHANGE\n");*/
@@ -462,9 +462,9 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 
-	handler = (MSCommonStdButton)OBJ_GET(widget,"handler");
+	handler = (MSCommonStdHandler)OBJ_GET(widget,"handler");
 
-	switch ((MSCommonStdButton)handler)
+	switch ((MSCommonStdHandler)handler)
 	{
 		case INCREMENT_VALUE:
 		case DECREMENT_VALUE:
@@ -531,7 +531,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 	gboolean state = FALSE;
-	gint handler = 0;
+	MSCommonStdHandler handler = 0;
 	gint total = 0;
 	gchar * set_labels = NULL;
 	gchar * tmpbuf = NULL;
@@ -587,7 +587,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	}
 	gtk_tree_model_get(model,&iter,BITVAL_COL,&bitval,-1);
 			
-	switch ((MSCommonMtxButton)handler)
+	switch ((MSCommonStdHandler)handler)
 	{
 		case MULTI_EXPRESSION:
 			if (!sources_hash)
@@ -1059,7 +1059,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 	g_return_val_if_fail(firmware,FALSE);
 	g_return_val_if_fail(interdep_vars,FALSE);
 
-	handler = (MtxButton)OBJ_GET(widget,"handler");
+	handler = (MSCommonStdHandler)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	size = (DataSize) OBJ_GET(widget,"size");
 	get_essential_bits(widget,&canID,&page,&offset,NULL,&bitmask,&bitshift);
@@ -1068,7 +1068,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 
 	tmpi = (int)(value+.001);
 
-	switch ((MSCommonMtxButton)handler)
+	switch ((MSCommonStdHandler)handler)
 	{
 		case REQ_FUEL_1:
 		case REQ_FUEL_2:
@@ -1451,7 +1451,7 @@ void update_entry(GtkWidget *widget)
 void update_combo(GtkWidget *widget)
 {
 	static Firmware_Details *firmware = NULL;
-	static void (*update_ms2_user_outputs)(GtkWidget *) = NULL;
+	static gboolean (*ecu_update_combo)(GtkWidget *) = NULL;
 	gint tmpi = -1;
 	gint canID = 0;
 	gint page = 0;
@@ -1473,21 +1473,14 @@ void update_combo(GtkWidget *widget)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
-	if (firmware->capabilities & MS2)
-	{
-		if (!update_ms2_user_outputs)
-			get_symbol_f("update_ms2_user_outputs",(void *)&update_ms2_user_outputs);
-		g_return_if_fail(update_ms2_user_outputs);
-	}
+	if (!ecu_update_combo)
+		get_symbol_f("ecu_update_combo",(void *)&ecu_update_combo);
+	g_return_if_fail(ecu_update_combo);
+
+	ecu_update_combo(widget);
 
 	get_essential_bits(widget,&canID, &page, &offset, &bitval, &bitmask, &bitshift);
 	/*printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(GINT)value);*/
-
-	if (firmware->capabilities & MS2)
-	{
-		if ((GINT)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
-			update_ms2_user_outputs(widget);
-	}
 
 	value = convert_after_upload_f(widget);
 	tmpi = ((GINT)value & bitmask) >> bitshift;

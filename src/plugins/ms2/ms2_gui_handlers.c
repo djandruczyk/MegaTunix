@@ -302,6 +302,20 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 
 
 /*!
+  \brief ECU specific combo update routine.  This is called from the common
+  routine to handle any firmware specific stuff related to a ComboBoxEntry
+  \param widget is the pointer to the GtkComboBox widget
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget * widget)
+{
+	if ((GINT)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
+		update_ms2_user_outputs(widget);
+	return TRUE;
+}
+
+
+/*!
   \brief ECU specific gui init function to setup anything in the core gui for 
   this ECU family
   */

@@ -34,10 +34,10 @@ typedef enum
 	STOP_COMPOSITEMON_LOGGER
 }MS2ToggleButton;
 
-
 typedef enum
 {
-	GET_CURR_TPS = LAST_COMMON_STD_BUTTON_ENUM + 1
+	GET_CURR_TPS = LAST_COMMON_STD_BUTTON_ENUM + 1,
+	MS2_USER_OUTPUTS
 }MS2StdButton;
 
 /* Prototypes */
@@ -46,6 +46,8 @@ gboolean ecu_std_button_handler(GtkWidget *, gpointer);
 gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_combo_handler(GtkWidget *, gpointer);
 void ecu_gui_init();
+gboolean ecu_update_combo(GtkWidget *);
+
 /* Prototypes */
 
 #endif

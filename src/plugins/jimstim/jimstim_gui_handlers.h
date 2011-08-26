@@ -22,7 +22,15 @@
 #define __JIMSTIM_GUI_HANDLERS_H__
 
 #include <gtk/gtk.h>
+#include <gui_handlers.h>
 #include <glade/glade.h>
+
+/* Enumerations */
+typedef enum
+{
+        SWEEP_START = LAST_STD_BUTTON_ENUM + 1,
+        SWEEP_STOP
+}JimStimEcuMtxStdButton;
 
 /* Prototypes */
 void ecu_gui_init(void);

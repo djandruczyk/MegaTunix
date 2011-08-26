@@ -22,26 +22,16 @@
 #define __MSCOMMON_GUI_HANDLERS_H__
 
 #include <configfile.h>
-#include <enums.h>
+#include <gui_handlers.h>
 #include <gtk/gtk.h>
 
 typedef enum
 {
-	INCREMENT_VALUE = LAST_STD_BUTTON_ENUM + 1,
+	INCREMENT_VALUE = LAST_GLOBAL_STD_HANDLER_ENUM + 1,
 	DECREMENT_VALUE,
 	REQFUEL_RESCALE_TABLE,
 	REQ_FUEL_POPUP,
-	LAST_COMMON_STD_BUTTON_ENUM
-}MSCommonStdButton;
-
-typedef enum
-{
-	LAST_COMMON_TOGGLE_BUTTON_ENUM = LAST_TOGGLE_BUTTON_ENUM + 1
-}MSCommonToggleButton;
-
-typedef enum
-{
-	GENERIC = LAST_BUTTON_ENUM + 3,
+	GENERIC,
 	NUM_SQUIRTS_1,
 	NUM_SQUIRTS_2,
 	NUM_CYLINDERS_1,
@@ -53,8 +43,13 @@ typedef enum
 	REQ_FUEL_2,
 	MULTI_EXPRESSION,
 	ALT_SIMUL,
-	LAST_COMMON_BUTTON_ENUM
-}MSCommonMtxButton;
+	LAST_COMMON_STD_HANDLER_ENUM
+}MSCommonStdHandler;
+
+typedef enum
+{
+	LAST_COMMON_TOGGLE_HANDLER_ENUM = LAST_GLOBAL_TOGGLE_HANDLER_ENUM + 1
+}MSCommonToggleHandler;
 
 /* Prototypes */
 gboolean common_std_button_handler(GtkWidget *, gpointer);

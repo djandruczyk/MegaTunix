@@ -28,37 +28,6 @@
 
 extern gconstpointer *global_data;
 
-/*!
-  \brief Attempts the resolve the function named within the widget. If 
-  function_name is defined and the func ptr is null, we try and find it, if
-  so store a ptr to it, else log the error. IF func found, run it and return
-  the result of it.
-  \param widget is the widget containing the function name/ptr
-  \param data is the second arg to function that we call (if found )
-  \returns result of function call or FALSE if func not found;
-  */
-G_MODULE_EXPORT gboolean plugin_function(GtkWidget *widget, gpointer data)
-{
-	gchar * func_name = NULL;
-	gboolean (*func)(GtkWidget *, gpointer) =  NULL;
-	gboolean res = FALSE;
-
-	func_name = (gchar *)OBJ_GET(widget,"function_name");
-	func = (void *)OBJ_GET(widget,"function");
-
-	if ((func_name) && (func == NULL))
-	{
-		if (get_symbol(func_name,(void *)&func))
-			OBJ_SET(widget,"function",(gpointer)func);
-		else
-			dbg_func(PLUGINS|CRITICAL,g_strdup_printf(_("ERROR, Cannot locate function \"%s\" within plugin %s\n"),func_name,(gchar *)DATA_GET(global_data,"ecu_library")));
-	}
-	if(func)
-		res = func(widget,data);
-
-	return res;
-}
-
 
 /*!
   \brief initializes pointers to megatunix itself the core family plugin and

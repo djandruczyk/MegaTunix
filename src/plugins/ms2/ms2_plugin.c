@@ -115,6 +115,8 @@ void register_ecu_enums(void)
 				GINT_TO_POINTER(STOP_COMPOSITEMON_LOGGER));
 		g_hash_table_insert(str_2_enum,"_GET_CURR_TPS_",
 				GINT_TO_POINTER(GET_CURR_TPS));
+		g_hash_table_insert(str_2_enum,"_MS2_USER_OUTPUTS_",
+				GINT_TO_POINTER(MS2_USER_OUTPUTS));
 	}
 }
 
@@ -137,5 +139,6 @@ void deregister_ecu_enums(void)
 		g_hash_table_remove(str_2_enum,"_START_COMPOSITEMON_LOGGER_");
 		g_hash_table_remove(str_2_enum,"_STOP_COMPOSITEMON_LOGGER_");
 		g_hash_table_remove(str_2_enum,"_GET_CURR_TPS_");
+		g_hash_table_remove(str_2_enum,"_MS2_USER_OUTPUTS_");
 	}
 }

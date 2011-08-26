@@ -371,7 +371,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
-                                        <signal name="clicked" handler="plugin_function"/>
+                                        <signal name="clicked" handler="std_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="right_attach">2</property>
@@ -386,7 +386,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
-                                        <signal name="clicked" handler="plugin_function"/>
+                                        <signal name="clicked" handler="std_button_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">2</property>

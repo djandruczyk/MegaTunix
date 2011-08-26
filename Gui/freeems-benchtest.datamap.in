@@ -55,7 +55,7 @@ handler=_SOFT_BOOT_ECU_
 #----- Entries ---------------------------------------------------------------
 
 [events_per_cycle_entry]
-keys=,size,raw_lower,tooltip
+keys=size,raw_lower,tooltip
 size=_U08_
 raw_lower=1
 raw_upper=255

@@ -21,6 +21,7 @@
 #define __JIMSTIM_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
+#include <jimstim_gui_handlers.h>
 #include <jimstim_plugin.h>
 
 gconstpointer *global_data;
@@ -87,6 +88,11 @@ void register_ecu_enums(void)
 	str_2_enum = DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
+		/* Ecu specific Handler Enumerations */
+		g_hash_table_insert (str_2_enum, "_SWEEP_START_",
+				GINT_TO_POINTER (SWEEP_START));
+		g_hash_table_insert (str_2_enum, "_SWEEP_STOP_",
+				GINT_TO_POINTER (SWEEP_STOP));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
@@ -103,6 +109,9 @@ void deregister_ecu_enums(void)
 	str_2_enum = DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
+		g_hash_table_remove (str_2_enum, "_SWEEP_START_");
+		g_hash_table_remove (str_2_enum, "_SWEEP_STOP_");
+
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");

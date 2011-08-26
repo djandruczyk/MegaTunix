@@ -43,7 +43,8 @@ typedef enum
 
 typedef enum
 {
-        GENERIC = LAST_BUTTON_ENUM + 1
+        GENERIC = LAST_BUTTON_ENUM + 1,
+	NOOP
 }FreeEMSCommonMtxButton;
 
 /* Prototypes */

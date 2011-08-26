@@ -35,6 +35,73 @@ typedef enum
 	GO_DOWN
 }Direction;
 
+/* Toggle/Radio global button handlers */
+typedef enum
+{
+	TOOLTIPS_STATE=0x500,
+	LOG_RAW_DATASTREAM,
+	TRACKING_FOCUS,
+	COMMA,
+	TAB,
+	REALTIME_VIEW,
+	PLAYBACK_VIEW,
+	OFFLINE_FIRMWARE_CHOICE,
+	ECU_PERSONA,
+	COMM_AUTODETECT,
+	TOGGLE_NETMODE,
+	TOGGLE_KELVIN,
+	TOGGLE_CELSIUS,
+	TOGGLE_FAHRENHEIT,
+	LAST_GLOBAL_TOGGLE_HANDLER_ENUM
+}ToggleHandler;
+
+
+/* Standard global button handlers */
+typedef enum
+{
+        START_REALTIME = 0x520,
+        STOP_REALTIME,
+        START_PLAYBACK,
+        STOP_PLAYBACK,
+        READ_VE_CONST,
+        READ_RAW_MEMORY,
+        BURN_MS_FLASH,
+        INTERROGATE_ECU,
+        OFFLINE_MODE,
+        SELECT_DLOG_EXP,
+        SELECT_DLOG_IMP,
+        DLOG_SELECT_DEFAULTS,
+        DLOG_SELECT_ALL,
+        DLOG_DESELECT_ALL,
+        DLOG_DUMP_INTERNAL,
+        CLOSE_LOGFILE,
+        START_DATALOGGING,
+        STOP_DATALOGGING,
+        EXPORT_VETABLE,
+        IMPORT_VETABLE,
+        REVERT_TO_BACKUP,
+        BACKUP_ALL,
+        RESTORE_ALL,
+        SELECT_PARAMS,
+        RESCALE_TABLE,
+        EXPORT_SINGLE_TABLE,
+        IMPORT_SINGLE_TABLE,
+        TE_TABLE,
+        TE_TABLE_GROUP,
+        PHONE_HOME,
+	SER_INTERVAL_DELAY,
+        SER_READ_TIMEOUT,
+        RTSLIDER_FPS,
+        RTTEXT_FPS,
+        DASHBOARD_FPS,
+        VE3D_FPS,
+        SET_SER_PORT,
+        LOGVIEW_ZOOM,
+        BAUD_CHANGE,
+        DEBUG_LEVEL,
+        LAST_GLOBAL_STD_HANDLER_ENUM
+}StdHandler;
+
 
 /* Prototypes */
 gboolean prevent_close(GtkWidget *, gpointer );

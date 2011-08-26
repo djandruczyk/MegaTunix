@@ -27,6 +27,7 @@
 #include <glade/glade.h>
 #include <glib/gstdio.h>
 #include <getfiles.h>
+#include <gui_handlers.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>

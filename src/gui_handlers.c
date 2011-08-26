@@ -308,14 +308,14 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	if (GTK_IS_OBJECT(widget))
 	{
 		obj_data = (void *)OBJ_GET(widget,"data");
-		handler = (ToggleButton)OBJ_GET(widget,"handler");
+		handler = (ToggleHandler)OBJ_GET(widget,"handler");
 	}
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
 		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
-		switch ((ToggleButton)handler)
+		switch ((ToggleHandler)handler)
 		{
 			case TOGGLE_NETMODE:
 				DATA_SET(global_data,"network_access",GINT_TO_POINTER(TRUE));
@@ -393,7 +393,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	}
 	else
 	{	/* not pressed */
-		switch ((ToggleButton)handler)
+		switch ((ToggleHandler)handler)
 		{
 			case TOGGLE_NETMODE:
 				DATA_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));
@@ -481,7 +481,7 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 	if (!GTK_IS_RADIO_BUTTON(widget))
 		bitval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-	switch ((MtxButton)handler)
+	switch ((BitmaskHandler)handler)
 	{
 		case DEBUG_LEVEL:
 			/* Debugging selection buttons */
@@ -658,7 +658,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 	obj_data = (void *)OBJ_GET(widget,"data");
-	handler = (StdButton)OBJ_GET(widget,"handler");
+	handler = (StdHandler)OBJ_GET(widget,"handler");
 
 	if (handler == 0)
 	{
@@ -666,7 +666,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 
-	switch ((StdButton)handler)
+	switch ((StdHandler)handler)
 	{
 		case PHONE_HOME:
 			printf("Phone home (callback TCP) is not yet implemented, ask nicely\n");
@@ -848,13 +848,13 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 		return TRUE;
 	}
 
-	handler = (MtxButton)OBJ_GET(widget,"handler");
+	handler = (StdHandler)OBJ_GET(widget,"handler");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 
 	tmpi = (int)(value+.001);
 
 
-	switch ((MtxButton)handler)
+	switch ((StdHandler)handler)
 	{
 		case SER_INTERVAL_DELAY:
 			serial_params->read_wait = (GINT)value;

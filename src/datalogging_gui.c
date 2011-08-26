@@ -30,6 +30,7 @@
 #include <datalogging_gui.h>
 #include <debugging.h>
 #include <getfiles.h>
+#include <gui_handlers.h>
 #include <listmgmt.h>
 #include <math.h>
 #include <notifications.h>
