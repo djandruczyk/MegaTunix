@@ -69,6 +69,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	get_symbol_f("dump_output",(void *)&dump_output_f);
+	get_symbol_f("entry_changed_handler",(void *)&entry_changed_handler_f);
 	get_symbol_f("evaluator_create",(void *)&evaluator_create_f);
 	get_symbol_f("evaluator_destroy",(void *)&evaluator_destroy_f);
 	get_symbol_f("evaluator_evaluate_x",(void *)&evaluator_evaluate_x_f);
@@ -92,6 +93,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("read_data",(void *)&read_data_f);
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
 	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
+	get_symbol_f("std_entry_handler",(void *)&std_entry_handler_f);
 	get_symbol_f("set_file_api",(void *)&set_file_api_f);
 	get_symbol_f("set_group_color",(void *)&set_group_color_f);
 	get_symbol_f("set_widget_labels",(void *)&set_widget_labels_f);
@@ -292,6 +294,10 @@ void register_common_enums(void)
 				GINT_TO_POINTER(HARD_BOOT_ECU));
 		g_hash_table_insert (str_2_enum, "_BENCHTEST_START_",
 				GINT_TO_POINTER(BENCHTEST_START));
+		g_hash_table_insert (str_2_enum, "_GENERIC_",
+				GINT_TO_POINTER(GENERIC));
+		g_hash_table_insert (str_2_enum, "_NOOP_",
+				GINT_TO_POINTER(NOOP));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
@@ -336,6 +342,9 @@ void deregister_common_enums(void)
 		/* Firmware Specific button handlers*/
 		g_hash_table_remove (str_2_enum, "_SOFT_BOOT_ECU_");
 		g_hash_table_remove (str_2_enum, "_HARD_BOOT_ECU_");
+		g_hash_table_remove (str_2_enum, "_BENCHTEST_START_");
+		g_hash_table_remove (str_2_enum, "_GENERIC_");
+		g_hash_table_remove (str_2_enum, "_NOOP_");
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");

@@ -7,13 +7,13 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,size,raw_lower,raw_upper,dl_type,handler
+keys=page,handler,size,raw_lower,raw_upper,dl_type,handler
 page=0
 size=_U08_
 raw_lower=0
 raw_upper=255
-dl_type=_IMMEDIATE_
-handler=_GENERIC_
+dl_type=_IGNORED_
+handler=_NOOP_
 
 #----- Buttons ---------------------------------------------------------------
 

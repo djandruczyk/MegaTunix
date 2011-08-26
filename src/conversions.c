@@ -50,6 +50,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gint return_value = 0;
 	gint tmpi = 0;
+	gint dl_type = IMMEDIATE;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
 	DataSize size = MTX_U08;
@@ -84,6 +85,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		printf(__FILE__"%s %s\n",_(": convert_before_download, FATAL ERROR, size undefined for widget %s "),(name == NULL ? "undefined" : name));
 
 	size = (DataSize)OBJ_GET(widget,"size");
+	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	if (OBJ_GET(widget,"raw_lower"))
 		lower = (gfloat)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
@@ -209,14 +211,16 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 	name = glade_get_widget_name(widget);
 	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",(name == NULL ? "undefined" : name),value,return_value));
-	if (return_value > upper) 
+	if (return_value > upper)
 	{
-		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",upper,lower,value,upper));
+		if (dl_type != IGNORED)
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",upper,lower,value,upper));
 		return_value = upper;
 	}
 	if (return_value < lower)
 	{
-		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",lower,lower,value,upper));
+		if (dl_type != IGNORED)
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",lower,lower,value,upper));
 		return_value = lower;
 	}
 
@@ -242,6 +246,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	static gint (*get_ecu_data_f)(gpointer);
 	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
 	gfloat return_value = 0.0;
+	gint dl_type = IMMEDIATE;
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
 	gint tmpi = 0;
@@ -281,6 +286,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	g_static_mutex_lock(&mutex);
 
 	size = (DataSize)OBJ_GET(widget,"size");
+	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	if (size == 0)
 	{
 		printf(_("BIG PROBLEM, size undefined! widget %s, default to U08 \n"),(name == NULL ? "undefined" : name));
@@ -311,13 +317,15 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		tmpi = get_ecu_data_f(widget);
 	if (tmpi < lower)
 	{
-		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value  out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
+		if (dl_type != IGNORED)
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value  out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
 		tmpi = lower;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
 	if (tmpi > upper)
 	{
-		dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
+		if (dl_type != IGNORED)
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
 		tmpi = upper;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}

@@ -604,6 +604,11 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 
+	if (!common_handler)
+		get_symbol("common_entry_handler",(void *)&common_handler);
+	g_return_val_if_fail(common_handler,FALSE);
+
+
 	if (!GTK_IS_OBJECT(widget))
 		return FALSE;
 
@@ -612,16 +617,6 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		return TRUE;
-	}
-	if (!common_handler)
-	{
-		if (get_symbol("common_entry_handler",(void *)&common_handler))
-			return common_handler(widget,data);
-		else
-		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": std_entry_handler()\n\tEntry handler in common plugin is MISSING, BUG!\n"));
-			return FALSE;
-		}
 	}
 	else
 	{
@@ -938,6 +933,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 	static GList ***ecu_widgets = NULL;
 	DataSize size = 0;
 	gint value = 0;
+	gint dl_type = 0;
 	gint active_table = -1;
 	gint smallstep = 0;
 	gint bigstep = 0;
@@ -970,6 +966,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 
 	tracking_focus = (gboolean *)DATA_GET(global_data,"tracking_focus");
 
+	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	size = (DataSize) OBJ_GET(widget,"size");
 	reverse_keys = (GBOOLEAN) OBJ_GET(widget,"reverse_keys");
 	if (OBJ_GET(widget,"table_num"))
@@ -1203,7 +1200,8 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			retval = TRUE;
 			break;
 		case GDK_Escape:
-			update_widget_f(widget,NULL);
+			if (dl_type != IGNORED)
+				update_widget_f(widget,NULL);
 			retval = FALSE;
 			break;
 		case GDK_Return:
@@ -1218,7 +1216,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 			retval = FALSE;
 			break;
 	}
-	if (send)
+	if ((send) && (dl_type == IMMEDIATE))
 		send_to_ecu_f(widget,dload_val,TRUE);
 	return retval;
 }
