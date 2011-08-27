@@ -1335,7 +1335,7 @@ testit:
   \param page_no is the page number that's now active
   \param data is unused
   */
-G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
+G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *page, guint page_no, gpointer data)
 {
 	gint tab_ident = 0;
 	gint sub_page = 0;
@@ -1415,7 +1415,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkNotebookPag
   \param page_no is the page number that's now active
   \param data is unused
   */
-G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkNotebookPage *page, guint page_no, gpointer data)
+G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkWidget *page, guint page_no, gpointer data)
 {
 	gint active_table = -1;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
