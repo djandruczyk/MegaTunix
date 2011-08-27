@@ -108,7 +108,7 @@ void output (gchar *line, gboolean free_it)
 	if (parent != NULL)
 	{
 		adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
-		adj->value = adj->upper;
+		gtk_adjustment_set_value(adj,gtk_adjustment_get_upper(adj));
 	}
 	if (free_it)
 		g_free(line);
