@@ -103,7 +103,7 @@ void update_onscreen_a_ranges()
 	GtkAdjustment *adj = NULL;
 	guint i = 0;
 	MtxAlertRange *range = NULL;
-	GArray * array = NULL;
+	const GArray * array = NULL;
 
 	if ((!toplevel) || (!GTK_IS_WIDGET(gauge)))
 		return;
@@ -128,7 +128,7 @@ void update_onscreen_a_ranges()
 	/* Scroll to end */
 	dummy = GTK_WIDGET (gtk_builder_get_object(toplevel,"arange_swin"));
 	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
-	adj->value = adj->upper;
+	gtk_adjustment_set_value(adj,gtk_adjustment_get_upper(adj));
 	gtk_widget_show_all(container);
 }
 

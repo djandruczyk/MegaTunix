@@ -308,7 +308,7 @@ G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 {
 	GtkComboBox *box = GTK_COMBO_BOX(widget);
 	GtkEntry *entry = NULL;
-	entry =  GTK_ENTRY (GTK_BIN (box)->child);
+	entry =  GTK_ENTRY (gtk_bin_get_child(GTK_BIN (box)));
 	if (GTK_IS_ENTRY(entry))
 		gtk_editable_set_editable(GTK_EDITABLE(entry),FALSE);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget),0);

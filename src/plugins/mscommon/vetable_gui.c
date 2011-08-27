@@ -91,6 +91,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	gchar *hash_key = NULL;
 	GHashTable *hash = NULL;
 	MultiSource *multi = NULL;
+	GtkAllocation allocation;
 
 	if (!sources_hash)
 		sources_hash = DATA_GET(global_data,"sources_hash");
@@ -399,6 +400,7 @@ redraw:
 		if (GTK_IS_WIDGET(last_widgets[table][last[table][i]]))
 		{
 			widget = last_widgets[table][last[table][i]];
+			gtk_widget_get_allocation(widget,&allocation);
 #ifdef __WIN32__
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
 #else
@@ -408,7 +410,7 @@ redraw:
 				cr = gdk_cairo_create(window);
 				gdk_cairo_set_source_color(cr,&old_colors[table][last[table][i]]);
 				cairo_set_line_width(cr,2);
-				cairo_rectangle(cr,1,1,widget->allocation.width-2,widget->allocation.height-2);
+				cairo_rectangle(cr,1,1,allocation.width-2,allocation.height-2);
 				cairo_stroke(cr);
 				cairo_destroy(cr);
 			}
@@ -466,6 +468,7 @@ redraw:
 		last[table][i] = z_bin[i];
 
 		style = gtk_widget_get_modifier_style(widget);
+		gtk_widget_get_allocation(widget,&allocation);
 		/* Save color of original widget */
 		old_colors[table][z_bin[i]] = style->base[GTK_STATE_NORMAL];
 		/*printf("table %i, zbin[%i] %i\n",table,i,z_bin[i]);*/
@@ -489,7 +492,7 @@ redraw:
 			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_color(cr,&color);
 			cairo_set_line_width(cr,2);
-			cairo_rectangle(cr,1,1,widget->allocation.width-2,widget->allocation.height-2);
+			cairo_rectangle(cr,1,1,allocation.width-2,allocation.height-2);
 			cairo_stroke(cr);
 			cairo_destroy(cr);
 		}

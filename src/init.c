@@ -405,9 +405,9 @@ G_MODULE_EXPORT void save_config(void)
 				dash = OBJ_GET(widget,"dash");
 				orig_width = (GINT) OBJ_GET(dash,"orig_width");
 				orig_height = (GINT) OBJ_GET(dash,"orig_height");
-				if (GTK_WIDGET_VISIBLE(widget))
+				if (gtk_widget_get_visible(widget))
 				{
-					gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
+					gdk_drawable_get_size(gtk_widget_get_window(gtk_widget_get_toplevel(widget)), &tmp_width,&tmp_height);
 					ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
 					cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
 				}
@@ -437,9 +437,9 @@ G_MODULE_EXPORT void save_config(void)
 				dash = OBJ_GET(widget,"dash");
 				orig_width = (GINT) OBJ_GET(dash,"orig_width");
 				orig_height = (GINT) OBJ_GET(dash,"orig_height");
-				if (GTK_WIDGET_VISIBLE(widget))
+				if (gtk_widget_get_visible(widget))
 				{
-					gdk_drawable_get_size(gtk_widget_get_toplevel(widget)->window, &tmp_width,&tmp_height);
+					gdk_drawable_get_size(gtk_widget_get_window(gtk_widget_get_toplevel(widget)), &tmp_width,&tmp_height);
 					ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
 					cfg_write_float(cfgfile, "Dashboards", "dash_2_size_ratio", ratio);
 				}
@@ -459,9 +459,9 @@ G_MODULE_EXPORT void save_config(void)
 	if (DATA_GET(global_data,"ready"))
 	{
 		main_window = lookup_widget("main_window");
-		if (GTK_WIDGET_VISIBLE(main_window))
+		if (gtk_widget_get_visible(main_window))
 		{
-			gdk_drawable_get_size(main_window->window, &tmp_width,&tmp_height);
+			gdk_drawable_get_size(gtk_widget_get_window(main_window), &tmp_width,&tmp_height);
 			cfg_write_int(cfgfile, "Window", "width", tmp_width);
 			cfg_write_int(cfgfile, "Window", "height", tmp_height);
 			gtk_window_get_position(GTK_WINDOW(main_window),&x,&y);
@@ -473,9 +473,9 @@ G_MODULE_EXPORT void save_config(void)
 		widget = lookup_widget("status_window");
 		if (widget)
 		{
-			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
+			if ((GTK_IS_WIDGET(widget)) && (gtk_widget_get_visible(widget)))
 			{
-				gdk_drawable_get_size(widget->window, &tmp_width,&tmp_height);
+				gdk_drawable_get_size(gtk_widget_get_window(widget), &tmp_width,&tmp_height);
 
 				cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
 				cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
@@ -489,7 +489,7 @@ G_MODULE_EXPORT void save_config(void)
 		widget = lookup_widget("rtt_window");
 		if (widget)
 		{
-			if ((GTK_IS_WIDGET(widget)) && (GTK_WIDGET_VISIBLE(widget)))
+			if ((GTK_IS_WIDGET(widget)) && (gtk_widget_get_visible(widget)))
 			{
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 				if (x > 0)

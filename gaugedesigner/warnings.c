@@ -196,7 +196,7 @@ void update_onscreen_w_ranges()
 	/* Scroll to end */
 	dummy = GTK_WIDGET (gtk_builder_get_object(toplevel,"crange_swin"));
 	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
-	adj->value = adj->upper;
+	gtk_adjustment_set_value(adj,gtk_adjustment_get_upper(adj));
 	gtk_widget_show_all(container);
 }
 

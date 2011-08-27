@@ -175,7 +175,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 				gtk_widget_hide(child);
 				gtk_widget_hide(label);
 				item = lookup_widget("show_tab_visibility_menuitem");
-				gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
+				gtk_widget_modify_text(gtk_bin_get_child(GTK_BIN(item)),GTK_STATE_NORMAL,&red);
 			}
 			g_ptr_array_add(tabinfos,(gpointer)tabinfo);
 		}
@@ -582,6 +582,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gint result = 0;
 	gint tmpi = 0;
 	gchar *ptr = NULL;
+	const gchar *name = NULL;
 	gboolean indexed = FALSE;
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
@@ -599,15 +600,16 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	if (GTK_IS_WIDGET(widget))
 		if (GTK_IS_CONTAINER(widget))
 			gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
-	if (widget->name == NULL)
+	name = gtk_widget_get_name(widget);
+	if (!name)
 		return;
 
-	if (NULL != (ptr = g_strrstr_len(widget->name,strlen(widget->name),"_of_")))
+	if (NULL != (ptr = g_strrstr_len(name,strlen(name),"_of_")))
 	{
 		indexed = TRUE;
-		ptr = g_strrstr_len(widget->name,ptr-widget->name,"_");
+		ptr = g_strrstr_len(name,ptr-name,"_");
 		tmpbuf = g_strdelimit(g_strdup(ptr),"_",' ');
-		section = g_strndup(widget->name,ptr-widget->name);
+		section = g_strndup(name,ptr-name);
 		/*printf("(indexed) section is %s\n",section);*/
 		result = sscanf(tmpbuf,"%d of %d",&index,&count);
 		/*printf("sscanf result %i\n",result);
@@ -615,7 +617,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		g_free(tmpbuf);
 	}
 	else
-		section = g_strdup(widget->name);
+		section = g_strdup(name);
 
 	if(cfg_read_string(cfgfile, section, "keys", &tmpbuf))
 	{
@@ -758,7 +760,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	cfg_read_int(cfgfile,section, "offset", &offset);
 	if (offset >= 0 && indexed)
 	{
-		/*printf("indexed widget %s\n",widget->name); */
+		/*printf("indexed widget %s\n",name); */
 		if (cfg_read_string(cfgfile, section, "size", &size))
 		{
 			offset += index * get_multiplier (translate_string (size));
@@ -777,7 +779,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 				return;
 			}
 		}
-		/*printf("widget %s, offset %i\n",widget->name,offset);*/
+		/*printf("widget %s, offset %i\n",name,offset);*/
 		OBJ_SET(widget,"offset",GINT_TO_POINTER(offset));
 	}
 	if (offset >= 0)

@@ -41,7 +41,10 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 	GdkPixmap *pmap = NULL;
 	gint w = 0;
 	gint h = 0;
+	GtkAllocation allocation;
+	GdkWindow *window = gtk_widget_get_window(widget);
 
+	gtk_widget_get_allocation(widget,&allocation);
 	/* Get pointer to backing pixmap ... */
 	if (!lv_data)
 	{
@@ -51,7 +54,7 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 	pixmap = lv_data->pixmap;
 	pmap = lv_data->pmap;
 			
-	if (widget->window)
+	if (window)
 	{
 		if (pixmap)
 			g_object_unref(pixmap);
@@ -59,23 +62,23 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 		if (pmap)
 			g_object_unref(pmap);
 
-		w=widget->allocation.width;
-		h=widget->allocation.height;
-		pixmap=gdk_pixmap_new(widget->window,
+		w=allocation.width;
+		h=allocation.height;
+		pixmap=gdk_pixmap_new(window,
 				w,h,
 				gtk_widget_get_visual(widget)->depth);
 		gdk_draw_rectangle(pixmap,
-				widget->style->black_gc,
+				gtk_widget_get_style(widget)->black_gc,
 				TRUE, 0,0,
 				w,h);
-		pmap=gdk_pixmap_new(widget->window,
+		pmap=gdk_pixmap_new(window,
 				w,h,
 				gtk_widget_get_visual(widget)->depth);
 		gdk_draw_rectangle(pmap,
-				widget->style->black_gc,
+				gtk_widget_get_style(widget)->black_gc,
 				TRUE, 0,0,
 				w,h);
-		gdk_window_set_back_pixmap(widget->window,pixmap,0);
+		gdk_window_set_back_pixmap(window,pixmap,0);
 		lv_data->pixmap = pixmap;
 		lv_data->pmap = pmap;
 
@@ -84,7 +87,7 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 			draw_infotext();
 			trace_update(TRUE);
 		}
-		gdk_window_clear(widget->window);
+		gdk_window_clear(window);
 	}
 
 	return FALSE;
@@ -105,8 +108,8 @@ G_MODULE_EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *even
 	pixmap = lv_data->pixmap;
 
 	/* Expose event handler... */
-	gdk_draw_drawable(widget->window,
-                        widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+	gdk_draw_drawable(gtk_widget_get_window(widget),
+                        gtk_widget_get_style(widget)->fg_gc[gtk_widget_get_state (widget)],
                         pixmap,
                         event->area.x, event->area.y,
                         event->area.x, event->area.y,
@@ -173,6 +176,7 @@ G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 {
 	GdkRectangle rect;
 	extern Logview_Data *lv_data;
+	GdkWindow *window = gtk_widget_get_window(lv_data->darea);
 
 	rect.x = 0;
 	rect.y = lv_data->spread*tnum;
@@ -186,14 +190,14 @@ G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 				rect.width,rect.height);
 	else
 		gdk_draw_rectangle(lv_data->pixmap,
-				lv_data->darea->style->white_gc,
+				gtk_widget_get_style(lv_data->darea)->white_gc,
 				FALSE, rect.x,rect.y,
 				rect.width,rect.height);
 
 	rect.width+=1;
 	rect.height+=1;
 
-	gdk_window_clear(lv_data->darea->window);
+	gdk_window_clear(window);
 
 	return;
 
@@ -260,11 +264,13 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	GdkModifierType state;
 	extern Logview_Data *lv_data;
 	Viewable_Value *v_value = NULL;
+	GtkAllocation allocation;
 
 	x = event->x;
 	y = event->y;
-	w=widget->allocation.width;
-	h=widget->allocation.height;
+	gtk_widget_get_allocation(widget,&allocation);
+	w=allocation.width;
+	h=allocation.height;
 	state = event->state;
 
 	return FALSE;
@@ -286,7 +292,7 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 		/*printf("right button released... \n");*/
 		v_value->highlight = FALSE;
 		gdk_draw_rectangle(lv_data->pixmap,
-				widget->style->black_gc,
+				gtk_widget_get_style(widget)->black_gc,
 				TRUE, lv_data->info_width,0,
 				w-lv_data->info_width,h);
 		trace_update(TRUE);
@@ -299,7 +305,7 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 		/*printf("right button pushed... \n");*/
 		v_value->highlight = TRUE;
 		gdk_draw_rectangle(lv_data->pixmap,
-				widget->style->black_gc,
+				gtk_widget_get_style(widget)->black_gc,
 				TRUE, lv_data->info_width,0,
 				w-lv_data->info_width,h);
 		trace_update(TRUE);

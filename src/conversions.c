@@ -520,20 +520,20 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 
 				adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
 						GTK_SPIN_BUTTON(widget));
-				upper = adj->upper;
-				value = adj->value;
-				lower = adj->lower;
+				upper = gtk_adjustment_get_upper(adj);
+				value = gtk_adjustment_get_value(adj);
+				lower = gtk_adjustment_get_lower(adj);
 				if (widget_temp == CELSIUS)
 				{
-					adj->value = c_to_f(value);
-					adj->lower = c_to_f(lower);
-					adj->upper = c_to_f(upper);
+					gtk_adjustment_set_value(adj, c_to_f(value));
+					gtk_adjustment_set_lower(adj, c_to_f(lower));
+					gtk_adjustment_set_upper(adj, c_to_f(upper));
 				}
 				else /* Previous is kelvin */
 				{
-					adj->value = k_to_f(value);
-					adj->lower = k_to_f(lower);
-					adj->upper = k_to_f(upper);
+					gtk_adjustment_set_value(adj, k_to_f(value));
+					gtk_adjustment_set_lower(adj, k_to_f(lower));
+					gtk_adjustment_set_upper(adj, k_to_f(upper));
 				}
 
 				gtk_adjustment_changed(adj);
@@ -549,20 +549,20 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			{
 				adj = (GtkAdjustment *) gtk_range_get_adjustment(
 						GTK_RANGE(widget));
-				upper = adj->upper;
-				lower = adj->lower;
-				value = adj->value;
+				upper = gtk_adjustment_get_upper(adj);
+				lower = gtk_adjustment_get_lower(adj);
+				value = gtk_adjustment_get_value(adj);
 				if (widget_temp == CELSIUS)
 				{
-					adj->value = c_to_f(value);
-					adj->lower = c_to_f(lower);
-					adj->upper = c_to_f(upper);
+					gtk_adjustment_set_value(adj, c_to_f(value));
+					gtk_adjustment_set_lower(adj, c_to_f(lower));
+					gtk_adjustment_set_upper(adj, c_to_f(upper));
 				}
 				else /* Previous is kelvin */
 				{
-					adj->value = k_to_f(value);
-					adj->lower = k_to_f(lower);
-					adj->upper = k_to_f(upper);
+					gtk_adjustment_set_value(adj, k_to_f(value));
+					gtk_adjustment_set_lower(adj, k_to_f(lower));
+					gtk_adjustment_set_upper(adj, k_to_f(upper));
 				}
 
 				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
@@ -587,20 +587,20 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 
 				adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
 						GTK_SPIN_BUTTON(widget));
-				upper = adj->upper;
-				value = adj->value;
-				lower = adj->lower;
+				upper = gtk_adjustment_get_upper(adj);
+				value = gtk_adjustment_get_value(adj);
+				lower = gtk_adjustment_get_lower(adj);
 				if (widget_temp == FAHRENHEIT)
 				{
-					adj->value = f_to_c(value);
-					adj->lower = f_to_c(lower);
-					adj->upper = f_to_c(upper);
+					gtk_adjustment_set_value(adj, f_to_c(value));
+					gtk_adjustment_set_lower(adj, f_to_c(lower));
+					gtk_adjustment_set_upper(adj, f_to_c(upper));
 				}
 				else /* Previous is kelvin */
 				{
-					adj->value = k_to_c(value);
-					adj->lower = k_to_c(lower);
-					adj->upper = k_to_c(upper);
+					gtk_adjustment_set_value(adj, k_to_c(value));
+					gtk_adjustment_set_lower(adj, k_to_c(lower));
+					gtk_adjustment_set_upper(adj, k_to_c(upper));
 				}
 
 				gtk_adjustment_changed(adj);
@@ -616,20 +616,20 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			{
 				adj = (GtkAdjustment *) gtk_range_get_adjustment(
 						GTK_RANGE(widget));
-				upper = adj->upper;
-				lower = adj->lower;
-				value = adj->value;
+				upper = gtk_adjustment_get_upper(adj);
+				lower = gtk_adjustment_get_lower(adj);
+				value = gtk_adjustment_get_value(adj);
 				if (widget_temp == FAHRENHEIT)
 				{
-					adj->value = f_to_c(value);
-					adj->lower = f_to_c(lower);
-					adj->upper = f_to_c(upper);
+					gtk_adjustment_set_value(adj, f_to_c(value));
+					gtk_adjustment_set_lower(adj, f_to_c(lower));
+					gtk_adjustment_set_upper(adj, f_to_c(upper));
 				}
 				else /* Previous is kelvin */
 				{
-					adj->value = k_to_c(value);
-					adj->lower = k_to_c(lower);
-					adj->upper = k_to_c(upper);
+					gtk_adjustment_set_value(adj, k_to_c(value));
+					gtk_adjustment_set_lower(adj, k_to_c(lower));
+					gtk_adjustment_set_upper(adj, k_to_c(upper));
 				}
 
 				gtk_range_set_adjustment(GTK_RANGE(widget),adj);
@@ -654,20 +654,20 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 
 				adj = (GtkAdjustment *) gtk_spin_button_get_adjustment(
 						GTK_SPIN_BUTTON(widget));
-				upper = adj->upper;
-				value = adj->value;
-				lower = adj->lower;
+				upper = gtk_adjustment_get_upper(adj);
+				value = gtk_adjustment_get_value(adj);
+				lower = gtk_adjustment_get_lower(adj);
 				if (widget_temp == FAHRENHEIT)
 				{
-					adj->value = f_to_k(value);
-					adj->lower = f_to_k(lower);
-					adj->upper = f_to_k(upper);
+					gtk_adjustment_set_value(adj, f_to_k(value));
+					gtk_adjustment_set_lower(adj, f_to_k(lower));
+					gtk_adjustment_set_upper(adj, f_to_k(upper));
 				}
 				else /* Previous is celsius */
 				{
-					adj->value = c_to_k(value);
-					adj->lower = c_to_k(lower);
-					adj->upper = c_to_k(upper);
+					gtk_adjustment_set_value(adj, c_to_k(value));
+					gtk_adjustment_set_lower(adj, c_to_k(lower));
+					gtk_adjustment_set_upper(adj, c_to_k(upper));
 				}
 
 				gtk_adjustment_changed(adj);
@@ -683,20 +683,20 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			{
 				adj = (GtkAdjustment *) gtk_range_get_adjustment(
 						GTK_RANGE(widget));
-				upper = adj->upper;
-				lower = adj->lower;
-				value = adj->value;
+				upper = gtk_adjustment_get_upper(adj);
+				lower = gtk_adjustment_get_lower(adj);
+				value = gtk_adjustment_get_value(adj);
 				if (widget_temp == FAHRENHEIT)
 				{
-					adj->value = f_to_k(value);
-					adj->lower = f_to_k(lower);
-					adj->upper = f_to_k(upper);
+					gtk_adjustment_set_value(adj, f_to_k(value));
+					gtk_adjustment_set_lower(adj, f_to_k(lower));
+					gtk_adjustment_set_upper(adj, f_to_k(upper));
 				}
 				else /* Previous is celsius */
 				{
-					adj->value = c_to_k(value);
-					adj->lower = c_to_k(lower);
-					adj->upper = c_to_k(upper);
+					gtk_adjustment_set_value(adj, c_to_k(value));
+					gtk_adjustment_set_lower(adj, c_to_k(lower));
+					gtk_adjustment_set_upper(adj, c_to_k(upper));
 				}
 
 				gtk_range_set_adjustment(GTK_RANGE(widget),adj);

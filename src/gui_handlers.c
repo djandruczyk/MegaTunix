@@ -1517,7 +1517,8 @@ G_MODULE_EXPORT void prompt_to_save(void)
 				GTK_STOCK_NO,GTK_RESPONSE_NO,
 				NULL);
 		hbox = gtk_hbox_new(FALSE,0);
-		gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+		//gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+		gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),hbox,TRUE,TRUE,10);
 		pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
 		image = gtk_image_new_from_pixbuf(pixbuf);
 		gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
@@ -1541,7 +1542,8 @@ G_MODULE_EXPORT void prompt_to_save(void)
 			GTK_STOCK_NO,GTK_RESPONSE_NO,
 			NULL);
 	hbox = gtk_hbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+	//gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),hbox,TRUE,TRUE,10);
 	pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
 	gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
@@ -1580,7 +1582,8 @@ G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 			GTK_STOCK_NO,GTK_RESPONSE_NO,
 			NULL);
 	hbox = gtk_hbox_new(FALSE,0);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+	//gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),hbox,TRUE,TRUE,10);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),hbox,TRUE,TRUE,10);
 	pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
 	gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);

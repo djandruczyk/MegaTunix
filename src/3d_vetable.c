@@ -509,8 +509,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			TRUE, GDK_GL_RGBA_TYPE);
 
 	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
-	GTK_WIDGET_SET_FLAGS(drawing_area,GTK_CAN_FOCUS);
-//	gtk_widget_show(drawing_area);
+	gtk_widget_set_can_focus(drawing_area,TRUE);
 
 	OBJ_SET(drawing_area,"ve_view",(gpointer)ve_view);
 	ve_view->drawing_area = drawing_area;
@@ -810,8 +809,13 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	Ve_View_3D *ve_view = NULL;
 	GdkGLContext *glcontext = NULL;
 	GdkGLDrawable *gldrawable = NULL;
-	GLfloat w = widget->allocation.width;
-	GLfloat h = widget->allocation.height;
+	GtkAllocation allocation;
+	GLfloat w;
+	GLfloat h;
+
+	gtk_widget_get_allocation(widget,&allocation);
+	w = allocation.width;
+	h = allocation.height;
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() Entered\n"));
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
@@ -883,7 +887,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glTranslatef (-0.5, -0.5, -0.5);
 
 	/* Draw everything */
-	if (GTK_WIDGET_IS_SENSITIVE(widget))
+	if (gtk_widget_is_sensitive(widget))
 	{
 		cur_vals = get_current_values(ve_view);
 		ve3d_calculate_scaling(ve_view,cur_vals);
@@ -928,7 +932,12 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	Ve_View_3D *ve_view;
+	GtkAllocation allocation;
+	GdkWindow *window = NULL;
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
+	window = gtk_widget_get_window(ve_view->drawing_area);
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_motion_notify() 3D View Motion Notify\n"));
 	/*printf("motion notify event\n");*/
@@ -948,13 +957,13 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 	/* Right Button */
 	if (event->state & GDK_BUTTON3_MASK)
 	{
-		ve_view->sdepth -= (event->y - ve_view->beginY)/(widget->allocation.height);
+		ve_view->sdepth -= (event->y - ve_view->beginY)/(allocation.height);
 	}
 
 	ve_view->beginX = event->x;
 	ve_view->beginY = event->y;
 
-	gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
+	gdk_window_invalidate_rect (window,&allocation, FALSE);
 
 	return TRUE;
 }
@@ -1033,18 +1042,22 @@ G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 	GdkPixmap *pmap = NULL;
 	cairo_t * cr = NULL;
 	GtkWidget * widget = ve_view->drawing_area;
+	GdkWindow *window = gtk_widget_get_window(widget);
+	GtkAllocation allocation;
+
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 
 	/* Not sure how to "grey" the window to make it appear insensitve */
-	pmap=gdk_pixmap_new(widget->window,
-			widget->allocation.width,
-			widget->allocation.height,
+	pmap=gdk_pixmap_new(window,
+			allocation.width,
+			allocation.height,
 			gtk_widget_get_visual(widget)->depth);
 	cr = gdk_cairo_create (pmap);
 	cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
 	cairo_rectangle (cr,
 			0,0, 
-			widget->allocation.width, 
-			widget->allocation.height);
+			allocation.width, 
+			allocation.height);
 	cairo_fill(cr);
 	cairo_destroy(cr);
 	g_object_unref(pmap);
@@ -1227,10 +1240,14 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 {
 	gfloat bottom = 0.0;
-	GLfloat w = ve_view->window->allocation.width;
-	GLfloat h = ve_view->window->allocation.height;
+	GLfloat w = 0.0;
+	GLfloat h = 0.0;
+	GtkAllocation allocation;
 	Firmware_Details *firmware = NULL;
 
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
+	w = allocation.width;
+	h = allocation.height;
 	firmware = DATA_GET(global_data,"firmware");
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
 	/*printf("draw edit indicator\n");*/
@@ -1341,12 +1358,16 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	gfloat tmpf6 = 0.0;
 	gfloat bottom = 0.0;
 	gboolean out_of_bounds = FALSE;
-	GLfloat w = ve_view->window->allocation.width;
-	GLfloat h = ve_view->window->allocation.height;
+	GLfloat w = 0.0;
+	GLfloat h = 0.0;
+	GtkAllocation allocation;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
+	w = allocation.width;
+	h = allocation.height;
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_runtime_indicator()\n"));
 	/*printf("draw runtime indicator\n");*/
 
@@ -1688,12 +1709,15 @@ G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
 	PangoFontDescription *font_desc;
 	PangoFont *font;
 	gint min = 0;
+	GtkAllocation allocation;
 
-	dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_load_font_metrics(), w %i h %i PANGO_SCALE %i\n",widget->allocation.width,widget->allocation.height,PANGO_SCALE));
-	font_desc = pango_font_description_copy_static(widget->style->font_desc);
+	gtk_widget_get_allocation(widget,&allocation);
+
+	dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_load_font_metrics(), w %i h %i PANGO_SCALE %i\n",allocation.width,allocation.height,PANGO_SCALE));
+	font_desc = pango_font_description_copy_static(gtk_widget_get_style(widget)->font_desc);
 	pango_font_description_set_family_static(font_desc,"Sans");
 
-	min = MIN(widget->allocation.width,widget->allocation.height);
+	min = MIN(allocation.width,allocation.height);
 	pango_font_description_set_size(font_desc,((min+300)/80)*PANGO_SCALE);
 
 	if (font_list_base)
@@ -1755,6 +1779,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	gboolean update_widgets = FALSE;
 	Ve_View_3D *ve_view = NULL;
 	Firmware_Details *firmware = NULL;
+	GtkAllocation allocation;
+	GdkWindow *window = gtk_widget_get_window(ve_view->drawing_area);
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 
 	firmware = DATA_GET(global_data,"firmware");
 	if (!get_ecu_data_f)
@@ -1832,7 +1859,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				if (ve_view->active_y < (y_bincount-1))
 					ve_view->active_y += 1;
-				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
+				gdk_window_invalidate_rect (window,&allocation, FALSE);
 			}
 			break;
 
@@ -1857,7 +1884,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				if (ve_view->active_y > 0)
 					ve_view->active_y -= 1;
-				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
+				gdk_window_invalidate_rect (window,&allocation, FALSE);
 			}
 			break;
 
@@ -1883,7 +1910,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				if (ve_view->active_x > 0)
 					ve_view->active_x -= 1;
-				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
+				gdk_window_invalidate_rect (window,&allocation, FALSE);
 			}
 			break;
 		case GDK_L:
@@ -1908,7 +1935,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			{
 				if (ve_view->active_x < (x_bincount-1))
 					ve_view->active_x += 1;
-				gdk_window_invalidate_rect (ve_view->drawing_area->window,&ve_view->drawing_area->allocation, FALSE);
+				gdk_window_invalidate_rect (window,&allocation, FALSE);
 			}
 			break;
 		case GDK_Page_Up:
@@ -2242,6 +2269,7 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	Ve_View_3D *ve_view = NULL;
 	Firmware_Details *firmware = NULL;
 	GHashTable *ve_view_hash = NULL;
+	GdkWindow *window = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
@@ -2305,7 +2333,8 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 			if (table_list[i] == TRUE)
 			{
 				ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
-				if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+				window = gtk_widget_get_window(ve_view->drawing_area);
+				if ((ve_view != NULL) && (window != NULL))
 					queue_ve3d_update(ve_view);
 			}
 		}
@@ -2337,10 +2366,14 @@ G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
+	GtkAllocation allocation;
+	GdkWindow *window = NULL;
 
 	g_return_val_if_fail(ve_view,FALSE);
+	window = gtk_widget_get_window(ve_view->drawing_area);
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	ve_view->mesh_created = FALSE;
-	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	DATA_SET(global_data,"ve3d_redraw_queued",GINT_TO_POINTER(FALSE));
 	return FALSE;
 }
@@ -2371,12 +2404,16 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
 	gfloat right = 0.0;
 	gfloat top = 0.0;
 	gfloat bottom = 0.0;
-	GLfloat w = ve_view->window->allocation.width;
-	GLfloat h = ve_view->window->allocation.height;
+	GtkAllocation allocation;
+	GLfloat w = 0.0;
+	GLfloat h = 0.0;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
+	w = allocation.width;
+	h = allocation.height;
 	/*printf("draw active vertexes marker \n");*/
 	glPointSize(MIN(w,h)/100.0);
 
@@ -3002,9 +3039,14 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 gboolean delayed_expose(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
+	GtkAllocation allocation;
+	GdkWindow *window = NULL;
 
 	g_return_val_if_fail(ve_view,FALSE);
-	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+	window = gtk_widget_get_window(ve_view->drawing_area);
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
+
+	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
 	return FALSE;
 }
@@ -3018,8 +3060,12 @@ gboolean delayed_expose(gpointer data)
 gboolean delayed_reconfigure(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
+	GtkAllocation allocation;
+	GdkWindow *window = gtk_widget_get_window(ve_view->drawing_area);
+
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
-	gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
 	return FALSE;
 }
@@ -3046,6 +3092,8 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	Firmware_Details *firmware = NULL;
 	GHashTable *sources_hash = NULL;
 	GHashTable *ve_view_hash = NULL;
+	GtkAllocation allocation;
+	GdkWindow *window = NULL;
 
 	sources_hash = DATA_GET(global_data,"sources_hash");
 	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
@@ -3066,7 +3114,12 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	for (i=0;i<firmware->total_tables;i++)
 	{
 		ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
-		if ((ve_view != NULL) && (ve_view->drawing_area->window != NULL))
+		if (ve_view)
+		{
+			gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
+			window = gtk_widget_get_window(ve_view->drawing_area);
+		}
+		if ((ve_view != NULL) && (window != NULL))
 		{
 			/* Get X values */
 			if (ve_view->x_multi_source)
@@ -3179,7 +3232,7 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 
 redraw:
 			gdk_threads_enter();
-			gdk_window_invalidate_rect (ve_view->drawing_area->window, &ve_view->drawing_area->allocation, FALSE);
+			gdk_window_invalidate_rect (window, &allocation, FALSE);
 			gdk_threads_leave();
 		}
 	}

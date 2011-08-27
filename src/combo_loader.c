@@ -110,7 +110,7 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 
 		gtk_widget_set_size_request(GTK_WIDGET(object),-1,(3*(GINT)DATA_GET(global_data,"font_size")));
 
-		gtk_container_remove (GTK_CONTAINER (object), GTK_BIN (object)->child);
+		gtk_container_remove (GTK_CONTAINER (object), gtk_bin_get_child(GTK_BIN (object)));
 		gtk_container_add (GTK_CONTAINER (object), entry);
 
 		completion = gtk_entry_completion_new();

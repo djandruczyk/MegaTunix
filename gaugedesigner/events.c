@@ -178,11 +178,11 @@ G_MODULE_EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 		{
 
 		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(upper_spin));
-		adj->lower = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-		if (adj->value < adj->lower)
-			adj->value = adj->lower;
+		gtk_adjustment_set_lower(adj,gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget)));
+		if (gtk_adjustment_get_value(adj) < gtk_adjustment_get_lower(adj))
+			gtk_adjustment_set_value(adj,gtk_adjustment_get_lower(adj));
 		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(upper_spin),adj);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(upper_spin),adj->value);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(upper_spin),gtk_adjustment_get_value(adj));
 		}
 		else
 			printf("upper_spin widget undefined, not found in builder\n");
@@ -285,6 +285,9 @@ gboolean gauge_motion(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 	GtkWidget *y_o_spin = NULL;
 	gfloat x_origin = 0.0;
 	gfloat y_origin = 0.0;
+	GtkAllocation allocation;
+
+	gtk_widget_get_allocation(widget,&allocation);
 	x_spin = (GtkWidget *)OBJ_GET(widget,"x_spin");
 	y_spin = (GtkWidget *)OBJ_GET(widget,"y_spin");
 	if ((!GTK_IS_WIDGET(x_spin)) || (!GTK_IS_WIDGET(y_spin)))
@@ -296,16 +299,16 @@ gboolean gauge_motion(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 		x_origin = gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_o_spin));
 		y_origin = gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_o_spin));
 		if (GTK_IS_WIDGET(x_spin))
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_spin),((event->x-(widget->allocation.width/2.0))/(widget->allocation.width/2.0))-x_origin);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_spin),((event->x-(allocation.width/2.0))/(allocation.width/2.0))-x_origin);
 		if (GTK_IS_WIDGET(y_spin))
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_spin),((event->y-(widget->allocation.height/2.0))/(widget->allocation.height/2.0))-y_origin);
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_spin),((event->y-(allocation.height/2.0))/(allocation.height/2.0))-y_origin);
 	}
 	else
 	{
 		if (GTK_IS_WIDGET(x_spin))
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_spin),(event->x-(widget->allocation.width/2.0))/(widget->allocation.width/2.0));
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_spin),(event->x-(allocation.width/2.0))/(allocation.width/2.0));
 		if (GTK_IS_WIDGET(y_spin))
-			gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_spin),(event->y-(widget->allocation.height/2.0))/(widget->allocation.height/2.0));
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_spin),(event->y-(allocation.height/2.0))/(allocation.height/2.0));
 	}
 	return TRUE;
 }

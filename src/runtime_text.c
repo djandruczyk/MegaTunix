@@ -419,8 +419,8 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 	previous = g_array_index(history, gfloat, history->len-2);
 	g_mutex_unlock(rtv_mutex);
 
-	if (GTK_IS_WIDGET(GTK_WIDGET(rtt->textval)->window))
-		if (!gdk_window_is_viewable(GTK_WIDGET(rtt->textval)->window))
+	if (GTK_IS_WIDGET(gtk_widget_get_window(GTK_WIDGET(rtt->textval))))
+		if (!gdk_window_is_viewable(gtk_widget_get_window(GTK_WIDGET(rtt->textval))))
 			return;
 
 	if ((current != previous) 

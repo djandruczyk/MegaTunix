@@ -76,9 +76,9 @@ G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 		case RED:
 			if (GTK_IS_BUTTON(widget))
 			{
-				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+				gtk_widget_modify_fg(gtk_bin_get_child(GTK_BIN(widget)),
 						GTK_STATE_NORMAL,&red);
-				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+				gtk_widget_modify_fg(gtk_bin_get_child(GTK_BIN(widget)),
 						GTK_STATE_PRELIGHT,&red);
 			}
 			else if (GTK_IS_LABEL(widget))
@@ -99,9 +99,9 @@ G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 		case BLACK:
 			if (GTK_IS_BUTTON(widget))
 			{
-				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+				gtk_widget_modify_fg(gtk_bin_get_child(GTK_BIN(widget)),
 						GTK_STATE_NORMAL,&black);
-				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+				gtk_widget_modify_fg(gtk_bin_get_child(GTK_BIN(widget)),
 						GTK_STATE_PRELIGHT,&black);
 			}
 			else if (GTK_IS_LABEL(widget))
@@ -122,9 +122,9 @@ G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
 		case GREEN:
 			if (GTK_IS_BUTTON(widget))
 			{
-				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+				gtk_widget_modify_fg(gtk_bin_get_child(GTK_BIN(widget)),
 						GTK_STATE_NORMAL,&green);
-				gtk_widget_modify_fg(GTK_BIN(widget)->child,
+				gtk_widget_modify_fg(gtk_bin_get_child(GTK_BIN(widget)),
 						GTK_STATE_PRELIGHT,&green);
 			}
 			else if (GTK_IS_LABEL(widget))
@@ -229,7 +229,7 @@ G_MODULE_EXPORT void  update_logbar(
 	if (parent != NULL)
 	{
 		adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
-		adj->value = adj->upper;
+		gtk_adjustment_set_value(adj,gtk_adjustment_get_upper(adj));
 	}
 
 	if (tmpbuf)

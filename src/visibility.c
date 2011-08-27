@@ -149,9 +149,9 @@ G_MODULE_EXPORT gboolean hide_tab(GtkWidget *widget, gpointer data)
 	}
 	item = lookup_widget("show_tab_visibility_menuitem");
 	if (hidden)
-		 gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&red);
+		 gtk_widget_modify_text(gtk_bin_get_child(GTK_BIN(item)),GTK_STATE_NORMAL,&red);
 	else
-		 gtk_widget_modify_text(GTK_BIN(item)->child,GTK_STATE_NORMAL,&black);
+		 gtk_widget_modify_text(gtk_bin_get_child(GTK_BIN(item)),GTK_STATE_NORMAL,&black);
 	return TRUE;
 }
 

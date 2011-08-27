@@ -236,7 +236,7 @@ void update_onscreen_polygons()
 	guint i = 0;
 	gint j = 0;
 	MtxPolygon *poly = NULL;
-	GArray * array = NULL;
+	const GArray * array = NULL;
 
 	if ((!toplevel) || (!gauge))
 		return;
@@ -271,7 +271,7 @@ void update_onscreen_polygons()
 	/* Scroll to end */
 	dummy = GTK_WIDGET (gtk_builder_get_object(toplevel,"poly_swin"));
 	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
-	adj->value = adj->upper;
+	gtk_adjustment_set_value(adj, gtk_adjustment_get_upper(adj));
 }
 
 
@@ -468,7 +468,8 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 	index = (GINT)OBJ_GET((widget),"index");
 	num_points = (GINT)gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 
-	rows = ((GtkTable *)table)->nrows;
+	g_object_set(table,"n-rows",&rows,NULL);
+	//rows = ((GtkTable *)table)->nrows;
 
 	if (num_points == 0)
 		return TRUE;

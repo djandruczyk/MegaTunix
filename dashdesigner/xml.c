@@ -228,6 +228,7 @@ void export_dash_xml(gchar * filename)
 	gboolean state = FALSE;
 	gchar * iname = NULL;
 	gchar ** vector = NULL;
+	GtkAllocation allocation;
 
 	g_return_if_fail(filename);
 
@@ -243,18 +244,20 @@ void export_dash_xml(gchar * filename)
 
 	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 
+	gtk_widget_get_allocation(dash, &allocation);
 	node = xmlNewChild(root_node,NULL,BAD_CAST "dash_geometry", NULL);
-	generic_xml_gint_export(node,"width",&dash->allocation.width);
-	generic_xml_gint_export(node,"height",&dash->allocation.height);
+	generic_xml_gint_export(node,"width",&allocation.width);
+	generic_xml_gint_export(node,"height",&allocation.height);
 
 	children = GTK_FIXED(dash)->children;
 	for(i=0;i<g_list_length(GTK_FIXED(dash)->children);i++)
 	{
 		child = g_list_nth_data(GTK_FIXED(dash)->children,i);
 		node = xmlNewChild(root_node,NULL,BAD_CAST "gauge", NULL);
+		gtk_widget_get_allocation(child->widget, &allocation);
 
-		generic_xml_gint_export(node,"width",&child->widget->allocation.width);
-		generic_xml_gint_export(node,"height",&child->widget->allocation.height);
+		generic_xml_gint_export(node,"width",&allocation.width);
+		generic_xml_gint_export(node,"height",&allocation.height);
 		generic_xml_gint_export(node,"x_offset",&child->x);
 		generic_xml_gint_export(node,"y_offset",&child->y);
 		tmpbuf = g_strrstr(mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(child->widget)),"Gauges");

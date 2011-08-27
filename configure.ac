@@ -79,7 +79,7 @@ dnl MACRO definition to determine if running GTK>2.12 or not for use of cairo
 AC_DEFUN([PKG_CHECK_GTK], 
 [
 	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.12.0 gthread-2.0 gmodule-2.0],,)
-	GTK_CFLAGS+="-DGSEAL_ENABLE"
+dnl for GTK 3.x   	GTK_CFLAGS+="-DGSEAL_ENABLE"
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
 ])

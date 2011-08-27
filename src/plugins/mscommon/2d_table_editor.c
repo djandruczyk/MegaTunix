@@ -1332,7 +1332,7 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 		else
 		{
 			if (OBJ_GET(widget, "use_color"))
-				gdk_cairo_set_source_color(cr,&widget->style->base[GTK_STATE_NORMAL]);
+				gdk_cairo_set_source_color(cr,&gtk_widget_get_style(widget)->base[GTK_STATE_NORMAL]);
 			else
 				gdk_cairo_set_source_color(cr,&white);
 		}

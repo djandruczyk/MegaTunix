@@ -93,25 +93,28 @@ G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, Gdk
 	cairo_t *cr = NULL;
 	gint w = 0;
 	gint h = 0;
+	GtkAllocation allocation;
+	GdkWindow *window = gtk_widget_get_window(widget);
+	gtk_widget_get_allocation(widget,&allocation);
 
 	if (!ttm_data)
 		return FALSE;
-	if(widget->window)
+	if(window)
 	{
-		w=widget->allocation.width;
-		h=widget->allocation.height;
+		w=allocation.width;
+		h=allocation.height;
 		if (ttm_data->layout)
 			g_object_unref(ttm_data->layout);
 		if (ttm_data->pixmap)
 			g_object_unref(ttm_data->pixmap);
-		ttm_data->pixmap=gdk_pixmap_new(widget->window,
+		ttm_data->pixmap=gdk_pixmap_new(window,
 				w,h,
 				gtk_widget_get_visual(widget)->depth);
 		cr = gdk_cairo_create(ttm_data->pixmap);
 		cairo_set_source_rgb(cr,1.0,1.0,1.0);
 		cairo_paint(cr);
 		cairo_destroy(cr);
-		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
+		gdk_window_set_back_pixmap(window,ttm_data->pixmap,0);
 		ttm_data->layout = gtk_widget_create_pango_layout(ttm_data->darea,NULL);
 
 	}
@@ -248,11 +251,15 @@ void ms2_update_trigtooth_display()
 	cairo_text_extents_t extents;
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware;
+	GtkAllocation allocation;
+	GdkWindow *window = gtk_widget_get_window(ttm_data->darea);
 
+	gtk_widget_get_allocation(ttm_data->darea,&allocation);
+	
 	firmware = DATA_GET(global_data,"firmware");
 
-	w=ttm_data->darea->allocation.width;
-	h=ttm_data->darea->allocation.height;
+	w=allocation.width;
+	h=allocation.height;
 
 	cr = gdk_cairo_create(ttm_data->pixmap);
 	cairo_set_source_rgb(cr,1.0,1.0,1.0);
@@ -300,8 +307,8 @@ void ms2_update_trigtooth_display()
 	cairo_stroke(cr);
 
 	cairo_set_source_rgba (cr, 0, 0, 0, 1.0); /* black */
-	w = ttm_data->darea->allocation.width-ttm_data->usable_begin;
-	h = ttm_data->darea->allocation.height;
+	w = allocation.width-ttm_data->usable_begin;
+	h = allocation.height;
 	y_shift=ttm_data->font_height;
 	tmpf = w/(682.0/ttm_data->zoom) >= 2.0 ? 2.0 : w/(682.0/ttm_data->zoom);
 	cairo_set_line_width(cr,tmpf);
@@ -349,9 +356,9 @@ void ms2_update_trigtooth_display()
 	cairo_destroy(cr);
 
 	/* Trigger redraw to main screen */
-	if (!ttm_data->darea->window) 
+	if (!window) 
 		return;
-	gdk_window_clear(ttm_data->darea->window);
+	gdk_window_clear(window);
 }
 
 
@@ -420,13 +427,17 @@ G_MODULE_EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
 	cairo_t *cr = NULL;
+	GtkAllocation allocation;
+	GdkWindow *window = gtk_widget_get_window(widget);
+	gtk_widget_get_allocation(widget,&allocation);
+
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
 #else
 	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
 	{
-		cr = gdk_cairo_create(widget->window);
+		cr = gdk_cairo_create(window);
 		gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
 		cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 		cairo_fill(cr);
@@ -434,12 +445,12 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
 	}
 	else	/* INSENSITIVE display so grey it */
 	{
-		cr = gdk_cairo_create(widget->window);
+		cr = gdk_cairo_create(window);
 		gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
 		cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 		cairo_fill(cr);
 		cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
-		cairo_rectangle(cr,0,0,widget->allocation.width, widget->allocation.height);
+		cairo_rectangle(cr,0,0,allocation.width, allocation.height);
 		cairo_fill(cr);
 		cairo_destroy(cr);
 	}

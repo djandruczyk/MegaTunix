@@ -472,6 +472,7 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	gint width = 0;
 	gint height = 0;
 	GMutex *dash_mutex = DATA_GET(global_data,"dash_mutex");
+	GdkWindow *window = NULL;
 
 	if(!GTK_IS_WIDGET(dash))
 		return;
@@ -479,6 +480,7 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 		return;
 	g_mutex_lock(dash_mutex);
 
+	window = gtk_widget_get_window(dash);
 	gtk_window_get_size(GTK_WINDOW(gtk_widget_get_toplevel(dash)),&width,&height);
 	bitmap = gdk_pixmap_new(NULL,width,height,1);
 	cr = gdk_cairo_create(bitmap);
@@ -535,10 +537,10 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 #if GTK_MINOR_VERSION >= 10
 		if (gtk_minor_version >= 10)
 		{
-			gdk_window_input_shape_combine_mask(dash->window,bitmap,0,0);
+			gdk_window_input_shape_combine_mask(window,bitmap,0,0);
 		}
 #endif
-		gdk_window_shape_combine_mask(dash->window,bitmap,0,0);
+		gdk_window_shape_combine_mask(window,bitmap,0,0);
 	}
 	g_object_unref(bitmap);
 	g_mutex_unlock(dash_mutex);
@@ -621,7 +623,7 @@ G_MODULE_EXPORT void toggle_status_visible(void)
 	GtkWidget *tmpwidget = lookup_widget("status_window");
 	if (!GTK_IS_WIDGET(tmpwidget))
 		return;
-	if (GTK_WIDGET_VISIBLE(tmpwidget))
+	if (gtk_widget_get_visible(tmpwidget))
 	{
 		gtk_widget_hide_all (tmpwidget);
 		DATA_SET(global_data,"status_visible",GINT_TO_POINTER(FALSE));
@@ -647,7 +649,7 @@ G_MODULE_EXPORT void toggle_rtt_visible(void)
 	GtkWidget *tmpwidget = lookup_widget("rtt_window");
 	if (!GTK_IS_WIDGET(tmpwidget))
 		return;
-	if (GTK_WIDGET_VISIBLE(tmpwidget))
+	if (gtk_widget_get_visible(tmpwidget))
 	{
 		gtk_widget_hide_all (tmpwidget);
 		DATA_SET(global_data,"rtt_visible",GINT_TO_POINTER(FALSE));
@@ -673,7 +675,7 @@ G_MODULE_EXPORT void toggle_main_visible(void)
 	GtkWidget *tmpwidget = lookup_widget("main_window");
 	if (!GTK_IS_WIDGET(tmpwidget))
 		return;
-	if (GTK_WIDGET_VISIBLE(tmpwidget))
+	if (gtk_widget_get_visible(tmpwidget))
 	{
 		gtk_widget_hide (tmpwidget);
 		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(FALSE));
@@ -792,7 +794,7 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 	GtkWidget *n_item = NULL;
 	gint button = 0;
 	gint event_time = 0;
-	GtkWidget *dash = GTK_BIN(widget)->child;
+	GtkWidget *dash = gtk_bin_get_child(GTK_BIN(widget));
 
 	menu = gtk_menu_new();
 
@@ -1073,8 +1075,10 @@ G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer dat
 G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	gint edge = -1;
+	GtkAllocation allocation;
 
-	GtkWidget *dash = GTK_BIN(widget)->child;
+	gtk_widget_get_allocation(widget,&allocation);
+	GtkWidget *dash = gtk_bin_get_child(GTK_BIN(widget));
 	if (!OBJ_GET(dash,"resizers_visible"))
 	{
 		dash_shape_combine(dash,FALSE);
@@ -1095,13 +1099,13 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1))
 	{
 		/*printf("dash button event\n"); */
-		if (event->x > (widget->allocation.width-16))
+		if (event->x > (allocation.width-16))
 		{
 			/* Upper portion */
 			if (event->y < 16)
 				edge = GDK_WINDOW_EDGE_NORTH_EAST;
 			/* Lower portion */
-			else if (event->y > (widget->allocation.height-16))
+			else if (event->y > (allocation.height-16))
 				edge = GDK_WINDOW_EDGE_SOUTH_EAST;
 			else
 				edge = -1;
@@ -1114,7 +1118,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 			if (event->y < 16)
 				edge = GDK_WINDOW_EDGE_NORTH_WEST;
 			/* Lower portion */
-			else if (event->y > (widget->allocation.height-16))
+			else if (event->y > (allocation.height-16))
 				edge = GDK_WINDOW_EDGE_SOUTH_WEST;
 			else
 				edge = -1;
@@ -1122,7 +1126,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 		else
 			edge = -1;
 
-		if ((edge == -1 ) && (GTK_IS_WINDOW(widget->parent)))
+		if ((edge == -1 ) && (GTK_IS_WINDOW(gtk_widget_get_parent(widget))))
 		{
 			/*printf("MOVE drag\n"); */
 			OBJ_SET(dash,"moving",GINT_TO_POINTER(TRUE));
@@ -1133,7 +1137,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 					event->time);
 			return TRUE;
 		}
-		else if (GTK_IS_WINDOW(widget->parent))
+		else if (GTK_IS_WINDOW(gtk_widget_get_parent(widget)))
 		{
 			/*printf("RESIZE drag\n"); */
 			OBJ_SET(dash,"resizing",GINT_TO_POINTER(TRUE));
@@ -1493,7 +1497,7 @@ G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
   */
 G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 {
-	GtkWidget *dash = GTK_BIN(widget)->child;
+	GtkWidget *dash = gtk_bin_get_child(GTK_BIN(widget));
 	guint id = 0;
 
 	if (event->state & GDK_BUTTON1_MASK)
@@ -1545,7 +1549,7 @@ G_MODULE_EXPORT void toggle_dash_fullscreen(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT void toggle_dash_on_top(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *dash = GTK_BIN(widget)->child;
+	GtkWidget *dash = gtk_bin_get_child(GTK_BIN(widget));
 
 	if ((GBOOLEAN)OBJ_GET(dash,"dash_on_top"))
 	{

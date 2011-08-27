@@ -771,11 +771,14 @@ G_MODULE_EXPORT void draw_infotext(void)
 	Viewable_Value *v_value = NULL;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = lv_data->pixmap;
+	GtkAllocation allocation;
 
-	h = lv_data->darea->allocation.height;
+	gtk_widget_get_allocation(lv_data->darea,&allocation);
+
+	h = allocation.height;
 
 	gdk_draw_rectangle(pixmap,
-			lv_data->darea->style->black_gc,
+			gtk_widget_get_style(lv_data->darea)->black_gc,
 			TRUE, 0,0,
 			lv_data->info_width,h);
 
@@ -811,7 +814,7 @@ G_MODULE_EXPORT void draw_infotext(void)
 	for (i=0;i<lv_data->active_traces;i++)
 	{
 		gdk_draw_rectangle(pixmap,
-				lv_data->darea->style->white_gc,
+				gtk_widget_get_style(lv_data->darea)->white_gc,
 				FALSE, 0,i*lv_data->spread,
 				lv_data->info_width-1,lv_data->spread);
 	}
@@ -841,8 +844,11 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 	Viewable_Value *v_value = NULL;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = lv_data->pixmap;
+	GtkAllocation allocation;
 
-	h = lv_data->darea->allocation.height;
+	gtk_widget_get_allocation(lv_data->darea,&allocation);
+
+	h = allocation.height;
 
 	if (!lv_data->font_desc)
 	{
@@ -869,7 +875,7 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 		
 		v_value->force_update = FALSE;
 		gdk_draw_rectangle(pixmap,
-				lv_data->darea->style->black_gc,
+				gtk_widget_get_style(lv_data->darea)->black_gc,
 				TRUE,
 				v_value->ink_rect->x+val_x,
 				v_value->ink_rect->y+val_y,
@@ -971,6 +977,9 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	gint lv_zoom;
 	/*static gulong sig_id = 0;*/
 	static GtkWidget *scale = NULL;
+	GtkAllocation allocation;
+
+	gtk_widget_get_allocation(lv_data->darea,&allocation);
 
 	pixmap = lv_data->pixmap;
 
@@ -982,15 +991,15 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 
 	if (!scale)
 		scale = lookup_widget("logviewer_log_position_hscale");
-	w = lv_data->darea->allocation.width;
-	h = lv_data->darea->allocation.height;
+	w = allocation.width;
+	h = allocation.height;
 
 	log_pos = (gfloat)((GINT)OBJ_GET(lv_data->darea,"log_pos_x100"))/100.0;
 	/*printf("log_pos is %f\n",log_pos);*/
 	/* Full screen redraw, only with configure events (usually) */
 	if ((GBOOLEAN)redraw_all)
 	{
-		lo_width = lv_data->darea->allocation.width-lv_data->info_width;
+		lo_width = allocation.width-lv_data->info_width;
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
 			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
@@ -1029,13 +1038,13 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 				for (j=0;j<total;j++)	
 					pts[j].y -= 1;
 				gdk_draw_lines(pixmap,
-						lv_data->darea->style->white_gc,
+						gtk_widget_get_style(lv_data->darea)->white_gc,
 						pts,
 						total);
 				for (j=0;j<total;j++)	
 					pts[j].y += 2;
 				gdk_draw_lines(pixmap,
-						lv_data->darea->style->white_gc,
+						gtk_widget_get_style(lv_data->darea)->white_gc,
 						pts,
 						total);
 			}
@@ -1092,11 +1101,11 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			if (v_value->highlight)
 			{
 				gdk_draw_line(pixmap,
-						lv_data->darea->style->white_gc,
+						gtk_widget_get_style(lv_data->darea)->white_gc,
 						w-lv_zoom-1,v_value->last_y-1,
 						w-1,(GINT)(percent*(h-2)));
 				gdk_draw_line(pixmap,
-						lv_data->darea->style->white_gc,
+						gtk_widget_get_style(lv_data->darea)->white_gc,
 						w-lv_zoom-1,v_value->last_y+1,
 						w-1,(GINT)(percent*(h-2))+2);
 			}
@@ -1159,11 +1168,11 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 		if (v_value->highlight)
 		{
 			gdk_draw_line(pixmap,
-					lv_data->darea->style->white_gc,
+					gtk_widget_get_style(lv_data->darea)->white_gc,
 					w-lv_zoom-1,v_value->last_y-1,
 					w-1,(GINT)(percent*(h-2)));
 			gdk_draw_line(pixmap,
-					lv_data->darea->style->white_gc,
+					gtk_widget_get_style(lv_data->darea)->white_gc,
 					w-lv_zoom-1,v_value->last_y+1,
 					w-1,(GINT)(percent*(h-2))+2);
 		}
@@ -1186,19 +1195,23 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 	GdkPixmap *pixmap = NULL;
 	GdkPixmap *pmap = NULL;
 	static GtkWidget * widget = NULL;
+	GtkAllocation allocation;
+	GdkWindow *window = NULL;
 
 	if (!widget)
 		widget = lookup_widget("logviewer_trace_darea");
 	if (!widget)
 		return;
+	window = gtk_widget_get_window(widget);
+	gtk_widget_get_allocation(widget,&allocation);
 	pixmap = lv_data->pixmap;
 	pmap = lv_data->pmap;
 	if (!pixmap)
 		return;
 
 	lv_zoom = (GINT)DATA_GET(global_data,"lv_zoom");
-	w = widget->allocation.width;
-	h = widget->allocation.height;
+	w = allocation.width;
+	h = allocation.height;
 	start = end + lv_zoom;
 
 	/* NASTY NASTY NASTY win32 hack to get it to scroll because
@@ -1210,14 +1223,14 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 	/* Scroll the screen to the left... */
 	gdk_threads_enter();
 	gdk_draw_drawable(pmap,
-			widget->style->black_gc,
+			gtk_widget_get_style(widget)->black_gc,
 			pixmap,
 			lv_data->info_width+lv_zoom,0,
 			lv_data->info_width,0,
 			w-lv_data->info_width-lv_zoom,h);
 
 	gdk_draw_drawable(pixmap,
-			widget->style->black_gc,
+			gtk_widget_get_style(widget)->black_gc,
 			pmap,
 			lv_data->info_width,0,
 			lv_data->info_width,0,
@@ -1226,7 +1239,7 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 
 	/* Scroll the screen to the left... */
 	gdk_draw_drawable(pixmap,
-			widget->style->black_gc,
+			gtk_widget_get_style(widget)->black_gc,
 			pixmap,
 			lv_data->info_width+lv_zoom,0,
 			lv_data->info_width,0,
@@ -1235,12 +1248,12 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 
 	/* Init new "blank space" as black */
 	gdk_draw_rectangle(pixmap,
-			widget->style->black_gc,
+			gtk_widget_get_style(widget)->black_gc,
 			TRUE,
 			w-lv_zoom,0,
 			lv_zoom,h);
 
-	gdk_window_clear(widget->window);
+	gdk_window_clear(window);
 	gdk_threads_leave();
 }
 

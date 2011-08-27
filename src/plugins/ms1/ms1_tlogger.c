@@ -99,24 +99,28 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 	cairo_t *cr = NULL;
 	gint w = 0;
 	gint h = 0;
+	GdkWindow *window = gtk_widget_get_window(widget);
+	GtkAllocation allocation;
 
-	if(widget->window)
+	gtk_widget_get_allocation(widget,&allocation);
+
+	if(window)
 	{
-		w=widget->allocation.width;
-		h=widget->allocation.height;
+		w=allocation.width;
+		h=allocation.height;
 		if (ttm_data->layout)
 			g_object_unref(ttm_data->layout);
 
 		if (ttm_data->pixmap)
 			g_object_unref(ttm_data->pixmap);
-		ttm_data->pixmap=gdk_pixmap_new(widget->window,
+		ttm_data->pixmap=gdk_pixmap_new(window,
 				w,h,
 				gtk_widget_get_visual(widget)->depth);
 		cr = gdk_cairo_create(ttm_data->pixmap);
 		cairo_set_source_rgb(cr,1.0,1.0,1.0);
 		cairo_paint(cr);
 		cairo_destroy(cr);
-		gdk_window_set_back_pixmap(widget->window,ttm_data->pixmap,0);
+		gdk_window_set_back_pixmap(window,ttm_data->pixmap,0);
 		ttm_data->layout = gtk_widget_create_pango_layout(ttm_data->darea,NULL);
 
 	}
@@ -141,13 +145,16 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
         cairo_t *cr = NULL;
+	GdkWindow *window = gtk_widget_get_window(widget);
+	GtkAllocation allocation;
+	gtk_widget_get_allocation(widget,&allocation);
 #if GTK_MINOR_VERSION >= 18
         if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
 #else
         if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
         {
-                cr = gdk_cairo_create(widget->window);
+                cr = gdk_cairo_create(window);
                 gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
                 cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
                 cairo_fill(cr);
@@ -155,12 +162,12 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
         }
         else    /* INSENSITIVE display so grey it */
         {
-                cr = gdk_cairo_create(widget->window);
+                cr = gdk_cairo_create(window);
                 gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
                 cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
                 cairo_fill(cr);
                 cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
-                cairo_rectangle(cr,0,0,widget->allocation.width, widget->allocation.height);
+                cairo_rectangle(cr,0,0,allocation.width, allocation.height);
                 cairo_fill(cr);
                 cairo_destroy(cr);
         }
@@ -402,16 +409,20 @@ G_MODULE_EXPORT void update_trigtooth_display()
 	gchar * message = NULL;
 	cairo_t *cr;
 	cairo_text_extents_t extents;
+	GtkAllocation allocation;
+	GdkWindow *window = gtk_widget_get_window(ttm_data->darea);
 
-	w=ttm_data->darea->allocation.width;
-	h=ttm_data->darea->allocation.height;
+	gtk_widget_get_allocation(ttm_data->darea,&allocation);
+
+	w=allocation.width;
+	h=allocation.height;
 
 	cr = gdk_cairo_create(ttm_data->pixmap);
 
 	cairo_set_source_rgb(cr,1.0,1.0,1.0);
-        cairo_paint(cr);
+	cairo_paint(cr);
 
-        cairo_set_source_rgb(cr,0.0,0.0,0.0);
+	cairo_set_source_rgb(cr,0.0,0.0,0.0);
 
 	/* get our font */
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,CAIRO_FONT_WEIGHT_NORMAL);
@@ -461,8 +472,8 @@ G_MODULE_EXPORT void update_trigtooth_display()
 	cairo_stroke(cr);
 
 	cairo_set_source_rgba (cr, 0, 0, 0, 1.0); /* black */
-	w = ttm_data->darea->allocation.width-ttm_data->usable_begin;
-	h = ttm_data->darea->allocation.height;
+	w = allocation.width-ttm_data->usable_begin;
+	h = allocation.height;
 	y_shift=ttm_data->font_height;
 	cairo_set_line_width(cr,w/186.0);
 	/*g_printf("ttm_data->peak is %f line width %f\n",ttm_data->peak,w/186.0);*/
@@ -512,9 +523,9 @@ G_MODULE_EXPORT void update_trigtooth_display()
 	cairo_destroy(cr);
 
 	/* Trigger redraw to main screen */
-	if (!ttm_data->darea->window) 
+	if (!window) 
 		return;
-	gdk_window_clear(ttm_data->darea->window);
+	gdk_window_clear(window);
 
 }
 

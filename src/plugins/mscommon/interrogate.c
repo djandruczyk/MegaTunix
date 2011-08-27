@@ -1454,7 +1454,7 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	if (GTK_IS_SPIN_BUTTON(widget))
 	{
 		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
-		val = adj->value;
+		val = gtk_adjustment_get_value(adj);
 		if (firmware->capabilities & MS1)
 		{
 			min = 1000.0*(1.0/(960.0/(firmware->rtvars_size+2.0)));
@@ -1479,8 +1479,8 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 			val = min + 10;
 			serial_params->read_wait = (gint)val;
 		}
-		adj->lower = min;
-		adj->value = val;
+		gtk_adjustment_set_lower(adj,min);
+		gtk_adjustment_set_value(adj,val);
 		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(widget),adj);
 	}
 	gdk_threads_leave();

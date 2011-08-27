@@ -472,8 +472,8 @@ G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventBu
 	gchar * filename = NULL;
 	gint row = 0;
 
-	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
-	gdk_drawable_get_size(widget->window,&width,&height);
+	gdk_window_get_origin(gtk_widget_get_window(widget),&origin_x,&origin_y);
+	gdk_drawable_get_size(gtk_widget_get_window(widget),&width,&height);
 	
 	/* Current cursor location relative to upper left corner */
 
@@ -541,7 +541,7 @@ G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, 
 	gint origin_x;
 	gint origin_y;
 
-	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
+	gdk_window_get_origin(gtk_widget_get_window(widget),&origin_x,&origin_y);
 	/* Current cursor locatio nrelatuive to upper left corner */
 
 
@@ -559,7 +559,7 @@ G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, 
 	{
 		if (moving)
 		{
-			gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),grabbed_widget,
+			gtk_fixed_move(GTK_FIXED(gtk_widget_get_parent(grabbed_widget)),grabbed_widget,
 					x_cur-tt.rel_grab_x+tt.child_x_origin,
 					y_cur-tt.rel_grab_y+tt.child_y_origin);
 		}
@@ -576,7 +576,7 @@ G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, 
 						MIN(x_cur-tt.child_x_origin,(tt.child_y_origin+tt.child_height)-y_cur));
 						
 
-				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
+				gtk_fixed_move(GTK_FIXED(gtk_widget_get_parent(grabbed_widget)),
 						grabbed_widget,
 						tt.child_x_origin,
 						tt.child_y_origin+tt.child_height-MIN(x_cur-tt.child_x_origin,(tt.child_y_origin+tt.child_height)-y_cur));
@@ -587,7 +587,7 @@ G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, 
 						MIN((tt.child_x_origin+tt.child_width)-x_cur,(tt.child_y_origin+tt.child_height)-y_cur),
 						MIN((tt.child_x_origin+tt.child_width)-x_cur,(tt.child_y_origin+tt.child_height)-y_cur));
 
-				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
+				gtk_fixed_move(GTK_FIXED(gtk_widget_get_parent(grabbed_widget)),
 						grabbed_widget,
 						tt.child_x_origin+tt.child_width-MIN((tt.child_x_origin+tt.child_width)-x_cur,(tt.child_y_origin+tt.child_height)-y_cur),
 						tt.child_y_origin+tt.child_height-MIN((tt.child_x_origin+tt.child_width)-x_cur,(tt.child_y_origin+tt.child_height)-y_cur));
@@ -597,7 +597,7 @@ G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, 
 				gtk_widget_set_usize(grabbed_widget,
 						MIN(abs((tt.child_x_origin+tt.child_width)-x_cur),event->y),MIN(abs((tt.child_x_origin+tt.child_width)-x_cur),event->y));
 
-				gtk_fixed_move(GTK_FIXED(grabbed_widget->parent),
+				gtk_fixed_move(GTK_FIXED(gtk_widget_get_parent(grabbed_widget)),
 						grabbed_widget,
 						tt.child_x_origin+tt.child_width-MIN((tt.child_x_origin+tt.child_width)-x_cur,event->y),
 						tt.child_y_origin);
@@ -627,6 +627,7 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 	GtkFixedChild * fchild = NULL;
 	GdkWindow *win = NULL;
 	gint len = g_list_length(GTK_FIXED(fixed)->children);
+	GtkAllocation allocation;
 
 	if (event->state & GDK_BUTTON1_MASK)
 	{
@@ -640,7 +641,7 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 		return TRUE;
 	}
 
-	gdk_window_get_origin(widget->window,&origin_x,&origin_y);
+	gdk_window_get_origin(gtk_widget_get_window(widget),&origin_x,&origin_y);
 	/* Current cursor locatio nrelatuive to upper left corner */
 
 
@@ -655,13 +656,14 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 		for (i=0;i<len;i++)
 		{
 			fchild = (GtkFixedChild *)  g_list_nth_data(list,i);
+			gtk_widget_get_allocation(fchild->widget,&allocation);
 
-			if (win == fchild->widget->window)
+			if (win == gtk_widget_get_window(fchild->widget))
 			{
-				tt.child_x_origin = fchild->widget->allocation.x;
-				tt.child_y_origin = fchild->widget->allocation.y;
-				tt.child_width = fchild->widget->allocation.width;
-				tt.child_height = fchild->widget->allocation.height;
+				tt.child_x_origin = allocation.x;
+				tt.child_y_origin = allocation.y;
+				tt.child_width = allocation.width;
+				tt.child_height = allocation.height;
 
 				raise_fixed_child(fchild->widget);
 				found_one = TRUE;
@@ -787,8 +789,8 @@ void raise_fixed_child (GtkWidget * widget)
 {
 	GtkFixed *fixed;
 
-	g_return_if_fail (GTK_IS_FIXED (widget->parent));
-	fixed = GTK_FIXED (widget->parent);
+	g_return_if_fail (GTK_IS_FIXED (gtk_widget_get_parent(widget)));
+	fixed = GTK_FIXED (gtk_widget_get_parent(widget));
 	/* If widget hasn't got a window, move it to the back of the parent fixed's
 	 *      children. If it has got a window, raise it. */
 
@@ -797,7 +799,7 @@ void raise_fixed_child (GtkWidget * widget)
 	 *      children, but it's better than removing the widget and adding it again. */
 
 
-	if (GTK_WIDGET_NO_WINDOW (widget))
+	if (gtk_widget_get_has_window (widget))
 	{
 		GList *child;
 		GtkFixedChild *data;
@@ -816,7 +818,7 @@ void raise_fixed_child (GtkWidget * widget)
 	}
 	else
 	{
-		gdk_window_raise (widget->window);
+		gdk_window_raise (gtk_widget_get_window(widget));
 	}
 }
 
@@ -863,7 +865,7 @@ void update_properties(GtkWidget * widget, Choice choice)
 
 		combo_box = gtk_combo_box_entry_new_with_model(GTK_TREE_MODEL(store),VARNAME_COL);
 		completion = gtk_entry_completion_new();
-		gtk_entry_set_completion(GTK_ENTRY(GTK_BIN (combo_box)->child),completion);
+		gtk_entry_set_completion(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box))),completion);
 		gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
 		gtk_entry_completion_set_text_column(completion,VARNAME_COL);
                 gtk_entry_completion_set_popup_single_match(completion,TRUE);
@@ -1004,10 +1006,13 @@ G_MODULE_EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
 	gint x_shrink = 0;
 	gint y_shrink = 0;
 	GtkFixedChild *child = NULL;
+	GtkAllocation allocation;
 	dash = GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 
-	w = dash->allocation.width;
-	h = dash->allocation.height;
+	gtk_widget_get_allocation(dash,&allocation);
+
+	w = allocation.width;
+	h = allocation.height;
 	left = w;
 	right = 0;
 	top = h;
@@ -1017,25 +1022,28 @@ G_MODULE_EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
 	{
 		child = (GtkFixedChild *)g_list_nth_data(children,i);
 		g = child->widget;
-		left = MIN(left,g->allocation.x);
-		right = MAX(right,g->allocation.x+g->allocation.width);
-		top = MIN(top,g->allocation.y);
-		bottom = MAX(bottom,g->allocation.y+g->allocation.height);
+		gtk_widget_get_allocation(g,&allocation);
+		left = MIN(left,allocation.x);
+		right = MAX(right,allocation.x+allocation.width);
+		top = MIN(top,allocation.y);
+		bottom = MAX(bottom,allocation.y+allocation.height);
 	}
 	for (i=0;i<g_list_length(children);i++)
 	{
 		child = (GtkFixedChild *)g_list_nth_data(children,i);
 		g = child->widget;
-		gtk_fixed_move(GTK_FIXED(g->parent),g,
-				g->allocation.x-left,
-				g->allocation.y-top);
+		gtk_widget_get_allocation(g,&allocation);
+		gtk_fixed_move(GTK_FIXED(gtk_widget_get_parent(g)),g,
+				allocation.x-left,
+				allocation.y-top);
 	}
 	x_shrink = w-(right-left);
 	y_shrink = h-(bottom-top);
 	
 	gtk_widget_set_size_request(GTK_WIDGET(dash),right-left,bottom-top);
 	topwidget = gtk_widget_get_toplevel(GTK_WIDGET(dash));
-	gtk_window_resize(GTK_WINDOW(topwidget),topwidget->allocation.width-x_shrink,topwidget->allocation.height-y_shrink);
+	gtk_widget_get_allocation(topwidget,&allocation);
+	gtk_window_resize(GTK_WINDOW(topwidget),allocation.width-x_shrink,allocation.height-y_shrink);
 	changed = TRUE;
 	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
 	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);

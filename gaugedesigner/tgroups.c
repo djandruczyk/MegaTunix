@@ -137,7 +137,7 @@ void update_onscreen_tgroups()
 	GtkWidget *dummy = NULL;
 	guint i = 0;
 	MtxTickGroup *tgroup = NULL;
-	GArray * array = NULL;
+	const GArray * array = NULL;
 	GtkAdjustment *adj = NULL;
 
 	if ((!toplevel) || (!gauge))
@@ -172,7 +172,7 @@ void update_onscreen_tgroups()
 	/* Scroll to end */
 	dummy = GTK_WIDGET(gtk_builder_get_object(toplevel,"tgroup_swin"));
 	adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(dummy));
-	adj->value = adj->upper;
+	gtk_adjustment_set_value(adj, gtk_adjustment_get_upper(adj));
 	gtk_widget_show_all(toptable);
 }
 

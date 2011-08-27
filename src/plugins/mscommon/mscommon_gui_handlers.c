@@ -1495,7 +1495,7 @@ void update_combo(GtkWidget *widget)
 		if (tmpi == t_bitval)
 		{
 			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
-			gtk_widget_modify_base(GTK_BIN (widget)->child,GTK_STATE_NORMAL,&white);
+			gtk_widget_modify_base(gtk_bin_get_child(GTK_BIN(widget)),GTK_STATE_NORMAL,&white);
 			if (OBJ_GET(widget,"algorithms"))
 				combo_handle_algorithms(widget);
 			if (OBJ_GET(widget,"group_2_update"))
@@ -1507,7 +1507,7 @@ void update_combo(GtkWidget *widget)
 
 	}
 	/*printf("COULD NOT FIND MATCH for data for combo %p, data %i!!\n",widget,tmpi);*/
-	gtk_widget_modify_base(GTK_BIN(widget)->child,GTK_STATE_NORMAL,&red);
+	gtk_widget_modify_base(gtk_bin_get_child(GTK_BIN(widget)),GTK_STATE_NORMAL,&red);
 	return;
 
 combo_toggle:
