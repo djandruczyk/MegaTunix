@@ -27,7 +27,6 @@
 #include <gio/gio.h>
 #ifndef __WIN32__
  #include <termios.h>
- #include <linux/serial.h>
 #endif
 
 typedef struct _Serial_Params Serial_Params;
