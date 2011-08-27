@@ -588,11 +588,13 @@ void update_gauge_position (MtxGaugeFace *gauge)
 	gfloat val = 0.0;
 	gboolean alert = FALSE;
 	MtxAlertRange *range = NULL;
+	GtkAllocation allocation;
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
 	widget = GTK_WIDGET(gauge);
+	gtk_widget_get_allocation(widget,&allocation);
 
 	/* Check if in alert bounds and alert as necessary */
 
@@ -616,10 +618,9 @@ void update_gauge_position (MtxGaugeFace *gauge)
 			 */
 
 			priv->last_alert_index = i;
-			widget = GTK_WIDGET(gauge);
 			cr = gdk_cairo_create(priv->tmp_pixmap);
 			gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
-			cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+			cairo_rectangle(cr,0,0,allocation.width,allocation.height);
 			cairo_fill(cr);
 			cairo_destroy(cr);
 			cr = gdk_cairo_create (priv->tmp_pixmap);
@@ -644,7 +645,7 @@ cairo_jump_out_of_alerts:
 
 		cr = gdk_cairo_create(priv->pixmap);
 		gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
-		cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+		cairo_rectangle(cr,0,0,allocation.width,allocation.height);
 		cairo_fill(cr);
 		cairo_destroy(cr);
 	}
@@ -654,7 +655,7 @@ cairo_jump_out_of_alerts:
 
 		cr = gdk_cairo_create(priv->pixmap);
 		gdk_cairo_set_source_pixmap(cr,priv->tmp_pixmap,0,0);
-		cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+		cairo_rectangle(cr,0,0,allocation.width,allocation.height);
 		cairo_fill(cr);
 		cairo_destroy(cr);
 	}
@@ -816,14 +817,18 @@ cairo_jump_out_of_alerts:
 gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	cairo_t *cr = NULL;
+	GtkAllocation allocation;
+	GdkWindow *window = NULL;
 
 	MtxGaugeFace * gauge = MTX_GAUGE_FACE(widget);
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
+	gtk_widget_get_allocation(widget,&allocation);
+	window = (GdkWindow *)gtk_widget_get_window(widget);
 
-	if(widget->window)
+	if(window)
 	{
-		priv->w = widget->allocation.width;
-		priv->h = widget->allocation.height;
+		priv->w = allocation.width;
+		priv->h = allocation.height;
 
 		if (priv->layout)
 			g_object_unref(priv->layout);
@@ -831,7 +836,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		if (priv->pixmap)
 			g_object_unref(priv->pixmap);
-		priv->pixmap=gdk_pixmap_new(widget->window,
+		priv->pixmap=gdk_pixmap_new(window,
 				priv->w,priv->h,
 				gtk_widget_get_visual(widget)->depth);
 		cr = gdk_cairo_create(priv->pixmap);
@@ -842,7 +847,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		if (priv->bg_pixmap)
 			g_object_unref(priv->bg_pixmap);
-		priv->bg_pixmap=gdk_pixmap_new(widget->window,
+		priv->bg_pixmap=gdk_pixmap_new(window,
 				priv->w,priv->h,
 				gtk_widget_get_visual(widget)->depth);
 		cr = gdk_cairo_create(priv->pixmap);
@@ -853,7 +858,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 		if (priv->tmp_pixmap)
 			g_object_unref(priv->tmp_pixmap);
-		priv->tmp_pixmap=gdk_pixmap_new(widget->window,
+		priv->tmp_pixmap=gdk_pixmap_new(window,
 				priv->w,priv->h,
 				gtk_widget_get_visual(widget)->depth);
 		cr = gdk_cairo_create(priv->pixmap);
@@ -866,8 +871,8 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		priv->needle_bounding_box.y = 0;
 		priv->needle_bounding_box.width = priv->w;
 		priv->needle_bounding_box.height = priv->h;
-		gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
-		priv->layout = gtk_widget_create_pango_layout(GTK_WIDGET(&gauge->parent),NULL);	
+		gdk_window_set_back_pixmap(window,priv->pixmap,0);
+		priv->layout = gtk_widget_create_pango_layout(GTK_WIDGET(gtk_widget_get_parent(widget)),NULL);	
 		priv->xc = priv->w / 2;
 		priv->yc = priv->h / 2;
 		priv->radius = MIN (priv->w/2, priv->h/2); 
@@ -926,10 +931,14 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 {
 	MtxGaugeFacePrivate * priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
 	cairo_t *cr = NULL;
+	GdkWindow *window = NULL;
+	GtkWidget *parent = NULL;
 
 	g_return_val_if_fail(widget != NULL, FALSE);
 	g_return_val_if_fail(MTX_IS_GAUGE_FACE(widget), FALSE);
 	g_return_val_if_fail(event != NULL, FALSE);
+	window = (GdkWindow *)gtk_widget_get_window(widget);
+	parent = gtk_widget_get_parent(widget);
 
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
@@ -937,7 +946,7 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
 			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 			cairo_fill(cr);
@@ -945,7 +954,7 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 		}
 		else
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
 			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 			cairo_fill(cr);
@@ -955,21 +964,21 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 			cairo_fill(cr);
 			cairo_destroy(cr);
 		}
-	if (GTK_IS_WINDOW(widget->parent))
+	if (GTK_IS_WINDOW(parent))
 	{
 #if GTK_MINOR_VERSION >= 10
 		if (gtk_minor_version >= 10)
-			gtk_widget_input_shape_combine_mask(widget->parent,priv->bitmap,0,0);
+			gtk_widget_input_shape_combine_mask(parent,priv->bitmap,0,0);
 #endif
-		gtk_widget_shape_combine_mask(widget->parent,priv->bitmap,0,0);
+		gtk_widget_shape_combine_mask(parent,priv->bitmap,0,0);
 	}
 	else
 	{
 #if GTK_MINOR_VERSION >= 10
 		if (gtk_minor_version >= 10)
-			gdk_window_input_shape_combine_mask(widget->window,priv->bitmap,0,0);
+			gdk_window_input_shape_combine_mask(window,priv->bitmap,0,0);
 #endif
-		gdk_window_shape_combine_mask(widget->window,priv->bitmap,0,0);
+		gdk_window_shape_combine_mask(window,priv->bitmap,0,0);
 	}
 	return FALSE;
 }
@@ -1024,10 +1033,13 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 	MtxWarningRange *range = NULL;
 	MtxTextBlock *tblock = NULL;
 	MtxTickGroup *tgroup = NULL;
+	GtkAllocation allocation;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 
-	w = GTK_WIDGET(gauge)->allocation.width;
-	h = GTK_WIDGET(gauge)->allocation.height;
+	gtk_widget_get_allocation(GTK_WIDGET(gauge),&allocation);
+
+	w = allocation.width;
+	h = allocation.height;
 
 	if (!priv->bg_pixmap)
 		return;
@@ -1522,7 +1534,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 
 	cr = gdk_cairo_create(priv->tmp_pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
-	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+	cairo_rectangle(cr,0,0,allocation.width,allocation.height);
 	cairo_fill(cr);
 	cairo_destroy(cr);
 	priv->last_alert_index = -1;
@@ -1539,6 +1551,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 					     
 {
+	GtkWidget *parent = gtk_widget_get_parent(widget);
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
 	GdkWindowEdge edge = -1;
 	/*printf("gauge button event\n");*/
@@ -1588,7 +1601,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 				if ((edge != GDK_WINDOW_EDGE_NORTH_WEST) && 
 						(edge != GDK_WINDOW_EDGE_NORTH_EAST) && 
 						(edge != GDK_WINDOW_EDGE_SOUTH_WEST) && 
-						(edge != GDK_WINDOW_EDGE_SOUTH_EAST) && (GTK_IS_WINDOW(widget->parent)))
+						(edge != GDK_WINDOW_EDGE_SOUTH_EAST) && (GTK_IS_WINDOW(parent)))
 				{
 					gtk_window_begin_move_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
 							event->button,
@@ -1596,7 +1609,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 							event->y_root,
 							event->time);
 				}
-				else if (GTK_IS_WINDOW(widget->parent))
+				else if (GTK_IS_WINDOW(parent))
 				{
 
 					gtk_window_begin_resize_drag (GTK_WINDOW(gtk_widget_get_toplevel(widget)),
@@ -1619,7 +1632,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 				break;
 			case 3: /* right button */
 
-				if (GTK_IS_WINDOW(widget->parent))
+				if (GTK_IS_WINDOW(parent))
 				{
 					gtk_widget_destroy(widget);
 					gtk_main_quit();

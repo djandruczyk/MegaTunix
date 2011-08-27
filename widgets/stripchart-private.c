@@ -442,18 +442,21 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
 	MtxStripChartPrivate *priv = NULL;
 	cairo_t *cr = NULL;
+	GtkAllocation allocation;
+	GdkWindow *window = gtk_widget_get_window(widget);
 
 	g_return_val_if_fail(MTX_IS_STRIPCHART(widget),FALSE);
+	gtk_widget_get_allocation(widget,&allocation);
 	priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
-	priv->w = widget->allocation.width;
-	priv->h = widget->allocation.height;
+	priv->w = allocation.width;
+	priv->h = allocation.height;
 
 	/* Backing pixmap (copy of window) */
 
 	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
-	priv->bg_pixmap=gdk_pixmap_new(widget->window,
+	priv->bg_pixmap=gdk_pixmap_new(window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
 	cr = gdk_cairo_create(priv->bg_pixmap);
@@ -464,7 +467,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 	if (priv->trace_pixmap)
 		g_object_unref(priv->trace_pixmap);
-	priv->trace_pixmap=gdk_pixmap_new(widget->window,
+	priv->trace_pixmap=gdk_pixmap_new(window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
 	cr = gdk_cairo_create(priv->trace_pixmap);
@@ -475,7 +478,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 	if (priv->grat_pixmap)
 		g_object_unref(priv->grat_pixmap);
-	priv->grat_pixmap=gdk_pixmap_new(widget->window,
+	priv->grat_pixmap=gdk_pixmap_new(window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
 	cr = gdk_cairo_create(priv->grat_pixmap);
@@ -483,7 +486,7 @@ gboolean mtx_stripchart_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_paint(cr);
 	cairo_destroy(cr);
 
-	gdk_window_set_back_pixmap(widget->window,priv->bg_pixmap,0);
+	gdk_window_set_back_pixmap(window,priv->bg_pixmap,0);
 
 	if (priv->font_options)
 		cairo_font_options_destroy(priv->font_options);
@@ -511,6 +514,7 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 	MtxStripChart * chart = MTX_STRIPCHART(widget);
 	MtxStripChartPrivate *priv = NULL;
 	cairo_t *cr = NULL;
+	GdkWindow *window = gtk_widget_get_window(widget);
 
 	g_return_val_if_fail(MTX_IS_STRIPCHART(widget),FALSE);
 	priv = MTX_STRIPCHART_GET_PRIVATE(chart);
@@ -521,7 +525,7 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
 			cairo_rectangle(cr,event->area.x, event->area.y,event->area.width, event->area.height);
 			cairo_fill(cr);
@@ -529,7 +533,7 @@ gboolean mtx_stripchart_expose (GtkWidget *widget, GdkEventExpose *event)
 		}
 		else
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
 			cairo_rectangle(cr,event->area.x, event->area.y,event->area.width, event->area.height);
 			cairo_fill(cr);
@@ -569,9 +573,12 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 	gint points = 0;
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	GtkAllocation allocation;
 
-	w = GTK_WIDGET(chart)->allocation.width;
-	h = GTK_WIDGET(chart)->allocation.height;
+	gtk_widget_get_allocation(GTK_WIDGET(chart),&allocation);
+
+	w = allocation.width;
+	h = allocation.height;
 
 	if (!priv->trace_pixmap)
 		return;
@@ -657,11 +664,13 @@ void mtx_stripchart_size_request(GtkWidget *widget, GtkRequisition *requisition)
  */
 void mtx_stripchart_redraw (MtxStripChart *chart)
 {
-	if (!GTK_WIDGET(chart)->window) return;
+	GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(chart));
+	if (!window) 
+		return;
 
 	update_stripchart_position(chart);
 	render_marker(chart);
-	gdk_window_clear(GTK_WIDGET(chart)->window);
+	gdk_window_clear(window);
 }
 
 
@@ -701,12 +710,14 @@ void render_marker(MtxStripChart *chart)
 	GtkWidget *widget = GTK_WIDGET(chart);
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	GtkAllocation allocation;
 
+	gtk_widget_get_allocation(widget,&allocation);
 	/* Copy trace+graticule to backing pixmap */
 
 	cr = gdk_cairo_create(priv->bg_pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->grat_pixmap,0,0);
-	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+	cairo_rectangle(cr,0,0,allocation.width,allocation.height);
 	cairo_fill(cr);
 
 	cairo_set_antialias(cr,CAIRO_ANTIALIAS_DEFAULT);

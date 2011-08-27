@@ -200,14 +200,16 @@ void update_pie_gauge_position (MtxPieGauge *gauge)
 	cairo_t *cr = NULL;
 	cairo_text_extents_t extents;
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
+	GtkAllocation allocation;
 
 	widget = GTK_WIDGET(gauge);
+	gtk_widget_get_allocation(widget,&allocation);
 
 	/* Copy background pixmap to intermediary for final rendering */
 
 	cr = gdk_cairo_create(priv->pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
-	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+	cairo_rectangle(cr,0,0,allocation.width,allocation.height);
 	cairo_fill(cr);
 
 	cairo_set_font_options(cr,priv->font_options);
@@ -287,18 +289,22 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
 	cairo_t *cr = NULL;
+	GtkAllocation allocation;
+	GdkWindow *window = NULL;
 
-	priv->w = widget->allocation.width;
-	priv->h = widget->allocation.height;
+	gtk_widget_get_allocation(widget,&allocation);
+	window = (GdkWindow *)gtk_widget_get_window(widget);
+	priv->w = allocation.width;
+	priv->h = allocation.height;
 
 	/* Backing pixmap (copy of window) */
 
 	if (priv->pixmap)
 		g_object_unref(priv->pixmap);
-	priv->pixmap=gdk_pixmap_new(widget->window,
+	priv->pixmap=gdk_pixmap_new(window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
-	gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
+	gdk_window_set_back_pixmap(window,priv->pixmap,0);
 	cr = gdk_cairo_create(priv->pixmap);
 	cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
 	cairo_paint(cr);
@@ -307,7 +313,7 @@ gboolean mtx_pie_gauge_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
-	priv->bg_pixmap=gdk_pixmap_new(widget->window,
+	priv->bg_pixmap=gdk_pixmap_new(window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
 	cr = gdk_cairo_create(priv->bg_pixmap);
@@ -342,6 +348,7 @@ gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
 	MtxPieGauge * gauge = MTX_PIE_GAUGE(widget);
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
 	cairo_t *cr = NULL;
+	GdkWindow *window = gtk_widget_get_window(widget);
 
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
@@ -349,14 +356,14 @@ gboolean mtx_pie_gauge_expose (GtkWidget *widget, GdkEventExpose *event)
 		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
 			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 			cairo_fill(cr);
 		}
 		else
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
 			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 			cairo_fill(cr);
@@ -382,9 +389,12 @@ void generate_pie_gauge_background(MtxPieGauge *gauge)
 	gint w = 0;
 	gint h = 0;
 	MtxPieGaugePrivate *priv = MTX_PIE_GAUGE_GET_PRIVATE(gauge);
+	GtkAllocation allocation;
 
-	w = GTK_WIDGET(gauge)->allocation.width;
-	h = GTK_WIDGET(gauge)->allocation.height;
+	gtk_widget_get_allocation(GTK_WIDGET(gauge),&allocation);
+
+	w = allocation.width;
+	h = allocation.height;
 
 	if (!priv->bg_pixmap)
 		return;
@@ -487,10 +497,12 @@ void mtx_pie_gauge_size_request(GtkWidget *widget, GtkRequisition *requisition)
  */
 void mtx_pie_gauge_redraw (MtxPieGauge *gauge)
 {
-	if (!GTK_WIDGET(gauge)->window) return;
+	GdkWindow *window = (GdkWindow *)gtk_widget_get_window(GTK_WIDGET(gauge));
+
+	if (!window) return;
 
 	update_pie_gauge_position(gauge);
-	gdk_window_clear(GTK_WIDGET(gauge)->window);
+	gdk_window_clear(window);
 }
 
 

@@ -1450,7 +1450,7 @@ gboolean mtx_gauge_face_set_show_drag_border(MtxGaugeFace *gauge, gboolean state
 	generate_gauge_background(gauge);
 	mtx_gauge_face_redraw_canvas (gauge);
 	mtx_gauge_face_configure(GTK_WIDGET(gauge),NULL);
-	gdk_window_clear_area_e(GTK_WIDGET(gauge)->window,0,0,priv->w, priv->h);
+	gdk_window_clear_area_e(gtk_widget_get_window(GTK_WIDGET(gauge)),0,0,priv->w, priv->h);
 	return TRUE;
 }
 
@@ -1585,10 +1585,11 @@ gboolean mtx_gauge_face_get_show_drag_border(MtxGaugeFace *gauge)
  */
 void mtx_gauge_face_redraw_canvas (MtxGaugeFace *gauge)
 {
-	if (!GTK_WIDGET(gauge)->window) return;
+	if (!gtk_widget_get_window(GTK_WIDGET(gauge))) 
+		return;
 
 	update_gauge_position(gauge);
-	gdk_window_clear(GTK_WIDGET(gauge)->window);
+	gdk_window_clear(gtk_widget_get_window(GTK_WIDGET(gauge)));
 }
 
 

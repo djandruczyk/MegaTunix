@@ -135,8 +135,8 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 		priv->yc = priv->h / 2;
 		priv->radius = MIN (priv->w/2, priv->h/2) - 5;
 		g_object_thaw_notify(G_OBJECT(gauge));
-		if ((GTK_IS_WINDOW(GTK_WIDGET(gauge)->parent)) && (priv->w > 0) && (priv->h > 0))
-			gtk_window_resize((GtkWindow *)(((GtkWidget *)gauge)->parent),priv->w,priv->h);
+		if ((GTK_IS_WINDOW(gtk_widget_get_parent(GTK_WIDGET(gauge)))) && (priv->w > 0) && (priv->h > 0))
+			gtk_window_resize(GTK_WINDOW(gtk_widget_get_parent(GTK_WIDGET(gauge))),priv->w,priv->h);
 		generate_gauge_background(gauge);
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),priv->lbound);
 		mtx_gauge_face_redraw_canvas (gauge);

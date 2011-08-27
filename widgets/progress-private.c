@@ -115,7 +115,7 @@ void mtx_progress_bar_real_update (GtkProgress *progress)
 
 	pbar = GTK_PROGRESS_BAR (progress);
 
-	pbar->dirty = TRUE;
+//	pbar->dirty = TRUE;
 	gtk_widget_queue_draw (GTK_WIDGET (progress));
 }
 
@@ -133,21 +133,22 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 	gint current;
 	gint space;
 	gint peak;
-
+	GtkAllocation allocation;
 	GtkProgressBarOrientation orientation;
 
 	g_return_if_fail (GTK_IS_PROGRESS_BAR (progress));
 
 	pbar = GTK_PROGRESS_BAR (progress);
 	widget = GTK_WIDGET (progress);
+	gtk_widget_get_allocation(widget,&allocation);
+	orientation = gtk_progress_bar_get_orientation(pbar);
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(MTX_PROGRESS_BAR(pbar));
 
-	orientation = pbar->orientation;
 	if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	{
-		if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
+		if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
 			orientation = GTK_PROGRESS_RIGHT_TO_LEFT;
-		else if (pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+		else if (orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
 			orientation = GTK_PROGRESS_LEFT_TO_RIGHT;
 	}
 
@@ -158,21 +159,21 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 				priv->colors[PROGRESS_COL_BG].green,
 				priv->colors[PROGRESS_COL_BG].blue);
 		cairo_rectangle (cr,1,1,
-				widget->allocation.width-2,
-				widget->allocation.height-2);
+				allocation.width-2,
+				allocation.height-2);
 		cairo_fill(cr);
 		cairo_set_source_rgb(cr,0,0,0);
 		cairo_rectangle (cr,0,0,
-				widget->allocation.width,
-				widget->allocation.height);
+				allocation.width,
+				allocation.height);
 		cairo_stroke(cr);
 		cairo_destroy(cr);
 
 		if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
 				orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
-			space = widget->allocation.width - 2;
+			space = allocation.width - 2;
 		else
-			space = widget->allocation.height - 2;
+			space = allocation.height - 2;
 
 		current = space *
 			gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
@@ -180,15 +181,8 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 		peak = space *
 			mtx_progress_get_peak_percentage (GTK_PROGRESS (pbar));
 
-		if (pbar->bar_style == GTK_PROGRESS_CONTINUOUS)
-		{
-			mtx_progress_bar_paint_continuous (pbar, current, peak, orientation);
-			/*
-			   if (GTK_PROGRESS (pbar)->show_text)
-			   mtx_progress_bar_paint_text (pbar, -1, current, orientation);
-			   */
-		}
-		pbar->dirty = FALSE;
+		mtx_progress_bar_paint_continuous (pbar, current, peak, orientation);
+//		pbar->dirty = FALSE;
 	}
 }
 
@@ -207,7 +201,9 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 	GtkWidget *widget = GTK_WIDGET (pbar);
 	MtxProgressBarPrivate *priv = NULL;
 	cairo_t *cr = NULL;
+	GtkAllocation allocation;
 
+	gtk_widget_get_allocation(GTK_WIDGET(pbar),&allocation);
 
 	priv = MTX_PROGRESS_BAR_GET_PRIVATE(MTX_PROGRESS_BAR(pbar));
 	if (current < 0)
@@ -218,36 +214,36 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *pbar, gint current,gint 
 		case GTK_PROGRESS_LEFT_TO_RIGHT:
 		case GTK_PROGRESS_RIGHT_TO_LEFT:
 			b_area.width = current;
-			b_area.height = widget->allocation.height - 2;
+			b_area.height = allocation.height - 2;
 			b_area.y = 1;
 			b_area.x = 1;
 
 			p_area.width = peak;
-			p_area.height = widget->allocation.height - 2;
+			p_area.height = allocation.height - 2;
 			p_area.y = 1;
 			p_area.x = 1;
 			if (orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
 			{
-				b_area.x = widget->allocation.width - current - b_area.x;
-				p_area.x = widget->allocation.width - peak - p_area.x;
+				b_area.x = allocation.width - current - b_area.x;
+				p_area.x = allocation.width - peak - p_area.x;
 			}
 			break;
 
 		case GTK_PROGRESS_TOP_TO_BOTTOM:
 		case GTK_PROGRESS_BOTTOM_TO_TOP:
-			b_area.width = widget->allocation.width - 2;
+			b_area.width = allocation.width - 2;
 			b_area.height = current;
 			b_area.x = 1;
 			b_area.y = 1;
 
-			p_area.width = widget->allocation.width - 2;
+			p_area.width = allocation.width - 2;
 			p_area.height = peak;
 			p_area.x = 1;
 			p_area.y = 1;
 			if (orientation == GTK_PROGRESS_BOTTOM_TO_TOP)
 			{
-				b_area.y = widget->allocation.height - current - b_area.y;
-				p_area.y = widget->allocation.height - peak - p_area.y;
+				b_area.y = allocation.height - current - b_area.y;
+				p_area.y = allocation.height - peak - p_area.y;
 			}
 			break;
 
@@ -289,10 +285,13 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 	GtkProgressBar *pbar;
 	cairo_t *cr = NULL;
 	GdkPixmap *pmap = NULL;
+	GdkWindow *window = gtk_widget_get_window(widget);
+	GtkAllocation allocation;
 
 	g_return_val_if_fail (MTX_IS_PROGRESS_BAR (widget), FALSE);
 
 	pbar = GTK_PROGRESS_BAR (widget);
+	gtk_widget_get_allocation(widget,&allocation);
 
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
@@ -302,9 +301,11 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 		{
 
 #if GTK_MINOR_VERSION >= 18
-			if (gtk_widget_is_drawable (widget) && pbar->dirty)
+//			if (gtk_widget_is_drawable (widget) && pbar->dirty)
+			if (gtk_widget_is_drawable (widget))
 #else
-				if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
+//				if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
+				if (GTK_WIDGET_DRAWABLE (widget))
 #endif
 					mtx_progress_bar_paint (GTK_PROGRESS (pbar));
 
@@ -316,7 +317,7 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 				if (GTK_WIDGET_DRAWABLE (widget))
 #endif
 				{
-					cr = gdk_cairo_create(widget->window);
+					cr = gdk_cairo_create(window);
 					gdk_cairo_set_source_pixmap(cr,GTK_PROGRESS (widget)->offscreen_pixmap,0,0);
 					cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 					cairo_fill(cr);
@@ -325,13 +326,13 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 		}
 		else
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,GTK_PROGRESS (widget)->offscreen_pixmap,0,0);
 			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
 			cairo_fill(cr);
 			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
 			cairo_rectangle (cr,
-					0,0,widget->allocation.width,widget->allocation.height);
+					0,0,allocation.width,allocation.height);
 			cairo_fill(cr);
 			cairo_destroy(cr);
 		}

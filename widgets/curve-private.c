@@ -272,8 +272,10 @@ void update_curve (MtxCurve *curve)
 	cairo_text_extents_t extents;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	GtkStateType state = GTK_STATE_NORMAL;
+	GtkAllocation allocation;
 
 	widget = GTK_WIDGET(curve);
+	gtk_widget_get_allocation(widget,&allocation);
 
 #if GTK_MINOR_VERSION >= 20
 	state = gtk_widget_get_state(GTK_WIDGET(widget));
@@ -284,7 +286,7 @@ void update_curve (MtxCurve *curve)
 
 	cr = gdk_cairo_create(priv->pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->bg_pixmap,0,0);
-	cairo_rectangle(cr,0,0,widget->allocation.width,widget->allocation.height);
+	cairo_rectangle(cr,0,0,allocation.width,allocation.height);
 	cairo_fill(cr);
 
 	cairo_set_font_options(cr,priv->font_options);
@@ -558,16 +560,21 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 {
 	MtxCurve * curve = MTX_CURVE(widget);
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	GtkAllocation allocation;
 	cairo_t *cr = NULL;
+	GdkWindow *window;
 
-	priv->w = widget->allocation.width;
-	priv->h = widget->allocation.height;
+	window = (GdkWindow *)gtk_widget_get_window(widget);
+	gtk_widget_get_allocation(widget,&allocation);
+
+	priv->w = allocation.width;
+	priv->h = allocation.height;
 
 	/* Backing pixmap (copy of window) */
 
 	if (priv->pixmap)
 		g_object_unref(priv->pixmap);
-	priv->pixmap=gdk_pixmap_new(widget->window,
+	priv->pixmap=gdk_pixmap_new(window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
 	cr = gdk_cairo_create(priv->pixmap);
@@ -578,7 +585,7 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 
 	if (priv->bg_pixmap)
 		g_object_unref(priv->bg_pixmap);
-	priv->bg_pixmap=gdk_pixmap_new(widget->window,
+	priv->bg_pixmap=gdk_pixmap_new(window,
 			priv->w,priv->h,
 			gtk_widget_get_visual(widget)->depth);
 	cr = gdk_cairo_create(priv->bg_pixmap);
@@ -586,7 +593,7 @@ gboolean mtx_curve_configure (GtkWidget *widget, GdkEventConfigure *event)
 	cairo_paint(cr);
 	cairo_destroy(cr);
 
-	gdk_window_set_back_pixmap(widget->window,priv->pixmap,0);
+	gdk_window_set_back_pixmap(window,priv->pixmap,0);
 
 
 	if (priv->font_options)
@@ -616,8 +623,11 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 	MtxCurve * curve = MTX_CURVE(widget);
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	GtkStateType state = GTK_STATE_NORMAL;
+	GdkWindow *window = gtk_widget_get_window(widget);
+	GtkAllocation allocation;
 	cairo_t *cr = NULL;
 
+	gtk_widget_get_allocation(widget,&allocation);
 #if GTK_MINOR_VERSION >= 20
 	state = gtk_widget_get_state(GTK_WIDGET(widget));
 #else
@@ -629,17 +639,17 @@ gboolean mtx_curve_expose (GtkWidget *widget, GdkEventExpose *event)
 		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(curve)))
 #endif
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
-			cairo_rectangle(cr,event->area.x, event->area.y,widget->allocation.width,widget->allocation.height);
+			cairo_rectangle(cr,event->area.x, event->area.y,allocation.width,allocation.height);
 			cairo_fill(cr);
 			cairo_destroy(cr);
 		}
 		else
 		{
-			cr = gdk_cairo_create(widget->window);
+			cr = gdk_cairo_create(window);
 			gdk_cairo_set_source_pixmap(cr,priv->pixmap,0,0);
-			cairo_rectangle(cr,event->area.x, event->area.y,widget->allocation.width,widget->allocation.height);
+			cairo_rectangle(cr,event->area.x, event->area.y,allocation.width,allocation.height);
 			cairo_fill(cr);
 			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
 			cairo_rectangle (cr,
@@ -671,9 +681,12 @@ void generate_static_curve(MtxCurve *curve)
 	gchar * message = NULL;
 	cairo_text_extents_t extents;
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
+	GtkAllocation allocation;
 
-	w = GTK_WIDGET(curve)->allocation.width;
-	h = GTK_WIDGET(curve)->allocation.height;
+	gtk_widget_get_allocation(GTK_WIDGET(curve),&allocation);
+
+	w = allocation.width;
+	h = allocation.height;
 
 	if (!priv->bg_pixmap)
 		return;
@@ -1050,12 +1063,17 @@ void mtx_curve_size_request(GtkWidget *widget, GtkRequisition *requisition)
 
 void mtx_curve_redraw (MtxCurve *curve, gboolean full)
 {
-	if (!GTK_WIDGET(curve)->window) return;
+	GdkWindow *window = NULL;
+
+	g_return_if_fail(GTK_IS_WIDGET(curve));
+	window = gtk_widget_get_window(GTK_WIDGET(curve));
+	if (!window)
+		return;
 
 	if (full)
 		generate_static_curve(curve);
 	update_curve (curve);
-	gdk_window_clear(GTK_WIDGET(curve)->window);
+	gdk_window_clear(window);
 }
 
 
