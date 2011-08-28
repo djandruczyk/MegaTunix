@@ -167,6 +167,11 @@ struct _Ve_View_3D
 	Quad ***quad_mesh;	/*!< Array of Quads for the mesh */
 	gboolean mesh_created;	/*!< Is the mesh calculated yet? */
 	gboolean gl_initialized;/*!< Flag for init of the window */
+	gint font_ascent;	/*!< GL Font ascent value */
+	gint font_descent;	/*!< GL Font ascent value */
+	gint y_offset_bitmap_render_pango_units; /*!< GL font y offset */
+	PangoContext *ft2_context; /*!< GL Font pango context */
+	gboolean font_created;	/*!< GL Font created flag */
 };
 
 
@@ -213,8 +218,7 @@ void ve3d_draw_edit_indicator(Ve_View_3D *, Cur_Vals *);
 void ve3d_draw_runtime_indicator(Ve_View_3D *, Cur_Vals *);
 void ve3d_draw_axis(Ve_View_3D *, Cur_Vals *);
 void ve3d_draw_active_vertexes_marker(Ve_View_3D *, Cur_Vals *);
-void ve3d_draw_text(gchar * text, gfloat x, gfloat y, gfloat z);
-void ve3d_load_font_metrics(GtkWidget *);
+void ve3d_draw_text(GtkWidget *, gchar * text, gfloat x, gfloat y, gfloat z);
 void reset_3d_view(GtkWidget *);
 Ve_View_3D * initialize_ve3d_view(void);
 void update_ve3d_if_necessary(int , int );
@@ -226,23 +230,15 @@ gboolean set_scaling_mode(GtkWidget *, gpointer );
 gboolean set_rendering_mode(GtkWidget *, gpointer );
 gboolean set_shading_mode(GtkWidget *, gpointer );
 gfloat get_fixed_pos(Ve_View_3D *, gfloat, Axis);
-void drawOrthoText(char *, GLclampf, GLclampf, GLclampf, GLfloat, GLfloat);
+void drawOrthoText(GtkWidget *, char *, GLclampf, GLclampf, GLclampf, GLfloat, GLfloat);
 void generate_quad_mesh(Ve_View_3D *, Cur_Vals *);
 void queue_ve3d_update(Ve_View_3D *);
 gboolean sleep_and_redraw(gpointer);
 void ve3d_grey_window(Ve_View_3D *);
 gboolean update_ve3ds(gpointer);
-void gl_print_char(gchar);
-void gl_print_string(const gchar *);
-void gl_destroy_font(void);
+void gl_print_string(GtkWidget *, const gchar *);
+void gl_destroy_font(GtkWidget *);
 void gl_create_font(GtkWidget *);
-int get_gl_font_descent(void);
-int get_gl_font_ascent(void);
-
-
-
-
-
 /* Prototypes */
 
 #endif

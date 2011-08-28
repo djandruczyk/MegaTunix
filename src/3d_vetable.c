@@ -84,22 +84,17 @@ static gboolean delayed_reconfigure(gpointer);
 #ifdef _WIN32_
 //static const char font_string[] = "Courier bold";
 static const char font_string[] = "Sans";
-static const int font_height = 12;
 #else
 //static const char font_string[] = "Monospace";
 static const char font_string[] = "Sans";
-static const int font_height = 13;
 #endif
-static int font_ascent = -1;
-static int font_descent = -1;
-static int y_offset_bitmap_render_pango_units = -1;
-static PangoContext *ft2_context = NULL;
-static gboolean _debug_font_created = FALSE;
+
+void gl_init(GtkWidget *);
 
 /*!
   \brief Calculates the frames per second for the 3D display
   */
-G_MODULE_EXPORT void CalculateFrameRate(void)
+G_MODULE_EXPORT void CalculateFrameRate(GtkWidget *widget)
 {
 	static float framesPerSecond = 0.0f;	/* This will store our fps*/
 	static long lastTime = 0;		/* This will hold the time from the last frame*/
@@ -126,7 +121,7 @@ G_MODULE_EXPORT void CalculateFrameRate(void)
 	}
 
 	/* draw frame rate on screen */
-	drawOrthoText(strFrameRate, 1.0f, 1.0f, 1.0f, 0.025, 0.965 );
+	drawOrthoText(widget, strFrameRate, 1.0f, 1.0f, 1.0f, 0.025, 0.965 );
 }
 
 /*!
@@ -138,7 +133,7 @@ G_MODULE_EXPORT void CalculateFrameRate(void)
   \param x is the x coordinate
   \param y is the y coordinate
   */
-G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
+G_MODULE_EXPORT void drawOrthoText(GtkWidget *widget, char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
 {
 	GLint matrixMode;
 	if (!str)
@@ -156,7 +151,7 @@ G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b
 	glPushAttrib(GL_COLOR_BUFFER_BIT);       /* save current colour */
 	glColor3f(r, g, b);
 	glRasterPos3f(x, y, 0.0);
-	gl_print_string(str);
+	gl_print_string(widget,str);
 	glPopAttrib();
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
@@ -515,6 +510,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	g_signal_connect(G_OBJECT(window), "delete_event",
 			G_CALLBACK(ve3d_shutdown),
 			NULL);
+	gtk_widget_show(window);
 
 	gl_config = get_gl_config();
 
@@ -529,15 +525,10 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
 	drawing_area = gtk_drawing_area_new();
-	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
-			TRUE, GDK_GL_RGBA_TYPE);
-
-	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
-	gtk_widget_set_can_focus(drawing_area,TRUE);
-
 	OBJ_SET(drawing_area,"ve_view",(gpointer)ve_view);
 	ve_view->drawing_area = drawing_area;
 
+	gtk_widget_set_can_focus(drawing_area,TRUE);
 	gtk_widget_add_events (drawing_area,
 			GDK_BUTTON_MOTION_MASK	|
 			GDK_BUTTON_PRESS_MASK   |
@@ -545,14 +536,14 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			GDK_KEY_RELEASE_MASK    |
 			GDK_VISIBILITY_NOTIFY_MASK);
 
-
 	/* Connect signal handlers to the drawing area */
-	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
+	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
+			G_CALLBACK (ve3d_expose_event), NULL);
+	//g_signal_connect_after(G_OBJECT (drawing_area), "realize",
+	g_signal_connect(G_OBJECT (drawing_area), "realize",
 			G_CALLBACK (ve3d_realize), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
 			G_CALLBACK (ve3d_configure_event), NULL);
-	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
-			G_CALLBACK (ve3d_expose_event), NULL);
 
 	g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
 			G_CALLBACK (ve3d_motion_notify_event), NULL);
@@ -560,6 +551,11 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			G_CALLBACK (ve3d_button_press_event), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "key_press_event",
 			G_CALLBACK (ve3d_key_press_event), NULL);
+
+	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
+			TRUE, GDK_GL_RGBA_TYPE);
+
+	gtk_container_add(GTK_CONTAINER(frame),drawing_area);
 
 	/* End of GL window, Now controls for it.... */
 	frame = gtk_frame_new("3D Display Controls");
@@ -843,13 +839,14 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() Entered\n"));
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
+	if (ve_view->font_created)
+		gl_destroy_font(widget);
 	glcontext = gtk_widget_get_gl_context(widget);
 	gldrawable = gtk_widget_get_gl_drawable(widget);
 	if (!glcontext)
 		return TRUE;
 	if (!gldrawable)
 		return TRUE;
-
 
 	dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_configure_event() W %f, H %f\n",w,h));
 
@@ -891,6 +888,12 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
 
+	if (!ve_view->gl_initialized)
+	{
+		ve_view->gl_initialized = TRUE;
+		gl_init(widget);
+	}
+
 	/*** OpenGL BEGIN ***/
 	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
 
@@ -924,7 +927,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 		ve3d_draw_ve_grid(ve_view,cur_vals);
 		ve3d_draw_axis(ve_view,cur_vals);
 		free_current_values(cur_vals);
-		CalculateFrameRate();
+		CalculateFrameRate(ve_view->drawing_area);
 		/* Grey things out if we're supposed to be insensitive */
 	}
 	else
@@ -1031,16 +1034,30 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
   */
 G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 {
+	GdkWindow *window = gtk_widget_get_window(widget);
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
+	gdk_window_ensure_native(window);
+	return TRUE;
+}
 
+
+void gl_init(GtkWidget *widget)
+{
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 
-	g_return_val_if_fail(glcontext,TRUE);
-	g_return_val_if_fail(gldrawable,TRUE);
+	g_return_if_fail(glcontext);
+	g_return_if_fail(gldrawable);
+
+	/*! Stuff we used to do in the realize handler... */
 	/*** OpenGL BEGIN ***/
-	if (!gdk_gl_drawable_gl_begin (gldrawable, glcontext))
-		return TRUE;
+	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
+
+//	glMatrixMode(GL_PROJECTION);
+//	glLoadIdentity();
+//	gluPerspective(65.0, 1.0, 0.1, 4);
+//	glMatrixMode(GL_MODELVIEW);
+//	glLoadIdentity();
 
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
@@ -1053,7 +1070,6 @@ G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 	glMatrixMode(GL_MODELVIEW);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
-	return TRUE;
 }
 
 
@@ -1276,10 +1292,10 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_draw_edit_indicator()\n"));
 	/*printf("draw edit indicator\n");*/
 	
-	drawOrthoText(cur_val->x_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.2 );
-	drawOrthoText(cur_val->y_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.233 );
-	drawOrthoText(cur_val->z_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.266 );
-	drawOrthoText("Edit Position", 1.0f, 0.2f, 0.2f, 0.025, 0.300 );
+	drawOrthoText(ve_view->drawing_area,cur_val->x_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.2 );
+	drawOrthoText(ve_view->drawing_area,cur_val->y_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.233 );
+	drawOrthoText(ve_view->drawing_area,cur_val->z_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.266 );
+	drawOrthoText(ve_view->drawing_area,"Edit Position", 1.0f, 0.2f, 0.2f, 0.025, 0.300 );
 
 	/* Render a red dot at the active VE map position */
 	glPointSize(MIN(w,h)/55.0);
@@ -1401,10 +1417,10 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 		return;
 	}
 
-	drawOrthoText(cur_val->x_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.033 );
-	drawOrthoText(cur_val->y_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.066 );
-	drawOrthoText(cur_val->z_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.100 );
-	drawOrthoText("Runtime Position", 0.2f, 1.0f, 0.2f, 0.025, 0.133 );
+	drawOrthoText(ve_view->drawing_area,cur_val->x_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.033 );
+	drawOrthoText(ve_view->drawing_area,cur_val->y_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.066 );
+	drawOrthoText(ve_view->drawing_area,cur_val->z_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.100 );
+	drawOrthoText(ve_view->drawing_area,"Runtime Position", 0.2f, 1.0f, 0.2f, 0.025, 0.133 );
 
 	bottom = 0.0;
 
@@ -1594,14 +1610,14 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	/* Live X axis marker */
 	label = g_strdup_printf("%i",(GINT)cur_val->x_val);
 
-	ve3d_draw_text(label,tmpf1,-0.05,-0.05);
+	ve3d_draw_text(ve_view->drawing_area,label,tmpf1,-0.05,-0.05);
 	g_free(label);
 
 
 	/* Live Y axis marker */
 	label = g_strdup_printf("%i",(GINT)cur_val->y_val);
 
-	ve3d_draw_text(label,-0.05,tmpf2,-0.05);
+	ve3d_draw_text(ve_view->drawing_area,label,-0.05,tmpf2,-0.05);
 	g_free(label);
 
 }
@@ -1691,7 +1707,7 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	{
 		tmpf = (((float)i/100.0)/ve_view->z_scale)+ve_view->z_trans;
 		label = g_strdup_printf("%1$.*2$f",tmpf,ve_view->z_precision);
-		ve3d_draw_text(label,-0.1,1,((float)i/100.0)-0.03);
+		ve3d_draw_text(ve_view->drawing_area,label,-0.1,1,((float)i/100.0)-0.03);
 		g_free(label);
 	}
 	return;
@@ -1707,15 +1723,14 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
   \param y is the y coord
   \param z is the z coord
   */
-G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
+G_MODULE_EXPORT void ve3d_draw_text(GtkWidget * widget, char* text, gfloat x, gfloat y, gfloat z)
 {
 	/* Experiment*/
 	glColor3f(0.2,0.8,0.8);
 	/* Set rendering postition */
 	glRasterPos3f (x, y, z);
 	/* Render each letter of text as stored in the display list */
-
-	gl_print_string(text);
+	gl_print_string(widget, text);
 }
 
 
@@ -2225,6 +2240,11 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 	ve_view->z_container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref_sink(ve_view->z_container);
 	ve_view->mesh_created = FALSE;
+	ve_view->font_created = FALSE;
+	ve_view->font_ascent = -1;
+	ve_view->font_descent = -1;
+	ve_view->y_offset_bitmap_render_pango_units = -1;
+	ve_view->ft2_context = NULL;
 	ve_view->gl_initialized = FALSE;
 
 	return ve_view;
@@ -3231,25 +3251,6 @@ redraw:
 }
 
 
-// Units are pixels.  Returns a positive value [most likely].
-int get_gl_font_ascent()
-{
-	if (!_debug_font_created) {
-		printf("Programming error: get_gl_font_ascent() called but font does not exist; you should have called gl_create_font() first");
-	}
-	return font_ascent;
-}
-
-// Units are pixels.  Returns a positive value [most likely].
-int get_gl_font_descent()
-{
-	if (!_debug_font_created) {
-		printf("Programming error: get_gl_font_descent() called but font does not exist; you should have called gl_create_font() first");
-	}
-	return font_descent;
-}
-
-
 void gl_create_font(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc = NULL;
@@ -3259,24 +3260,27 @@ void gl_create_font(GtkWidget *widget)
 	int font_descent_pango_units = 0;
 	gint min = 0;
 	GtkAllocation allocation;
+	Ve_View_3D *ve_view = NULL;
+	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 
-	if (_debug_font_created) {
-		printf("Programming error: gl_create_font() was already called; you must call gl_destroy_font() before creating font again");
-	}
-	_debug_font_created = TRUE;
+	g_return_if_fail(ve_view);
+	if (ve_view->font_created)
+		printf("Programming error: gl_create_font() was already called; you must call gl_destroy_font() before creating font again\n");
+	else
+		ve_view->font_created = TRUE;
 
 	// This call is deprecated so we'll have to fix it sometime.
-	ft2_context = pango_ft2_get_context(72, 72);
+	ve_view->ft2_context = pango_ft2_get_context(72, 72);
 
 	gtk_widget_get_allocation(widget,&allocation);
 	min = MIN(allocation.width,allocation.height);
 	font_desc = pango_font_description_from_string(font_string);
-	pango_font_description_set_size(font_desc,(min/33)*PANGO_SCALE);
+	pango_font_description_set_size(font_desc,(min/35)*PANGO_SCALE);
 
-	pango_context_set_font_description(ft2_context, font_desc);
+	pango_context_set_font_description(ve_view->ft2_context, font_desc);
 	pango_font_description_free(font_desc);
 
-	layout = pango_layout_new(ft2_context);
+	layout = pango_layout_new(ve_view->ft2_context);
 
 	// I don't believe that's standard preprocessor syntax?
 #if !PANGO_VERSION_CHECK(1,22,0)
@@ -3292,22 +3296,26 @@ void gl_create_font(GtkWidget *widget)
 	g_object_unref(G_OBJECT(layout));
 	font_descent_pango_units = log_rect.height - font_ascent_pango_units;
 
-	font_ascent = PANGO_PIXELS_CEIL(font_ascent_pango_units);
-	font_descent = PANGO_PIXELS_CEIL(font_descent_pango_units);
-	y_offset_bitmap_render_pango_units = (font_ascent * PANGO_SCALE) - font_ascent_pango_units;
+	ve_view->font_ascent = PANGO_PIXELS_CEIL(font_ascent_pango_units);
+	ve_view->font_descent = PANGO_PIXELS_CEIL(font_descent_pango_units);
+	ve_view->y_offset_bitmap_render_pango_units = (ve_view->font_ascent * PANGO_SCALE) - font_ascent_pango_units;
 }
 
 
-void gl_destroy_font()
+void gl_destroy_font(GtkWidget *widget)
 {
-	if (!_debug_font_created) {
-		printf("Programming error: gl_destroy_font() called when font does not exist");
+	Ve_View_3D *ve_view = NULL;
+	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
+	g_return_if_fail(ve_view);
+
+	if (!ve_view->font_created) {
+		printf("Programming error: gl_destroy_font() called when font does not exist\n");
 	}
-	font_ascent = -1;
-	font_descent = -1;
-	y_offset_bitmap_render_pango_units = -1;
-	g_object_unref(G_OBJECT(ft2_context));
-	_debug_font_created = FALSE;
+	ve_view->font_ascent = -1;
+	ve_view->font_descent = -1;
+	ve_view->y_offset_bitmap_render_pango_units = -1;
+	g_object_unref(G_OBJECT(ve_view->ft2_context));
+	ve_view->font_created = FALSE;
 }
 
 
@@ -3325,7 +3333,7 @@ void gl_destroy_font()
  to this is a very hacky one.  You can search Google for "glDrawPixels 
  clipping".
 */
-void gl_print_string(const gchar *s)
+void gl_print_string(GtkWidget *widget, const gchar *s)
 {
 	PangoLayout *layout;
 	PangoRectangle log_rect;
@@ -3340,18 +3348,22 @@ void gl_print_string(const gchar *s)
 	GLfloat previous_green_bias;
 	GLfloat previous_blue_bias;
 	GLfloat previous_alpha_scale;
+	Ve_View_3D *ve_view = NULL;
+	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 
-	if (!_debug_font_created) {
-		printf("Programming error: gl_print_string() called but font does not exist; you should have called glt_create_font() first");
+	g_return_if_fail(ve_view);
+
+	if (!ve_view->font_created) {
+		printf("Programming error: gl_print_string() called but font does not exist; you should have called glt_create_font() first\n");
 	}
 
-	layout = pango_layout_new(ft2_context);
+	layout = pango_layout_new(ve_view->ft2_context);
 	pango_layout_set_width(layout, -1); // -1 no wrapping.  All text on one line.
 	pango_layout_set_text(layout, s, -1); // -1 null-terminated string.
 	pango_layout_get_extents(layout, NULL, &log_rect);
 
 	if (log_rect.width > 0 && log_rect.height > 0) {
-		bitmap.rows = font_ascent + font_descent;
+		bitmap.rows = ve_view->font_ascent + ve_view->font_descent;
 		bitmap.width = PANGO_PIXELS_CEIL(log_rect.width);
 		bitmap.pitch = -bitmap.width; // Rendering it "upside down" for OpenGL.
 		begin_bitmap_buffer = (unsigned char *) g_malloc(bitmap.rows * bitmap.width);
@@ -3360,7 +3372,7 @@ void gl_print_string(const gchar *s)
 		bitmap.num_grays = 0xff;
 		bitmap.pixel_mode = FT_PIXEL_MODE_GRAY;
 		pango_ft2_render_layout_subpixel(&bitmap, layout, -log_rect.x,
-				y_offset_bitmap_render_pango_units);
+				ve_view->y_offset_bitmap_render_pango_units);
 		glGetFloatv(GL_CURRENT_COLOR, color);
 
 		// Save state.  I didn't see any OpenGL push/pop operations for these.
@@ -3395,15 +3407,5 @@ void gl_print_string(const gchar *s)
 		if (!previous_blend_enabled) { glDisable(GL_BLEND); }
 		glPixelStorei(GL_UNPACK_ALIGNMENT, previous_unpack_alignment);
 	}
-
 	g_object_unref(G_OBJECT(layout));
-}
-
-
-void gl_print_char(gchar s)
-{
-	char str[2];
-	str[0] = s;
-	str[1] = '\0';
-	gl_print_string(str);
 }
