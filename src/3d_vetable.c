@@ -74,7 +74,6 @@
 #define ONE_SECOND 	 1	/* one second */
 #define DEFAULT_WIDTH  640
 #define DEFAULT_HEIGHT 480                                                                                  
-static GLuint font_list_base;
 static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 
@@ -158,13 +157,6 @@ G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b
 	glColor3f(r, g, b);
 	glRasterPos3f(x, y, 0.0);
 	gl_print_string(str);
-	/*
-	while(*str)
-	{
-		glCallList(font_list_base+(*str));
-		str++;
-	};
-	*/
 	glPopAttrib();
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
@@ -788,7 +780,7 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 	ve_view->stheta = -63.75;
 	ve_view->sdepth = -1.5;
 	ve_view->zNear = 0;
-	ve_view->zFar = 10.0;
+	ve_view->zFar = 1.0;
 	ve_view->aspect = 1.0;
 	ve_view->h_strafe = -0.5;
 	ve_view->v_strafe = -0.5;
@@ -866,7 +858,6 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	ve_view->aspect = 1.0;
 	glViewport (0, 0, w, h);
 	glMatrixMode(GL_MODELVIEW);
-//	ve3d_load_font_metrics(widget);
 	gl_create_font(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
@@ -1700,7 +1691,7 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	{
 		tmpf = (((float)i/100.0)/ve_view->z_scale)+ve_view->z_trans;
 		label = g_strdup_printf("%1$.*2$f",tmpf,ve_view->z_precision);
-		ve3d_draw_text(label,-0.1,1,(float)i/100.0);
+		ve3d_draw_text(label,-0.1,1,((float)i/100.0)-0.03);
 		g_free(label);
 	}
 	return;
@@ -1724,51 +1715,7 @@ G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 	glRasterPos3f (x, y, z);
 	/* Render each letter of text as stored in the display list */
 
-	/*
-	while(*text)
-	{
-		glCallList(font_list_base+(*text));
-		text++;
-	};
-	*/
 	gl_print_string(text);
-}
-
-
-/*!
-  \brief ve3d_load_font_metrics is called during ve3d_realize and loads 
-  the fonts needed by OpenGL for rendering the text
-  \param widget is a pointer to the parent widget of the view
-  */
-G_MODULE_EXPORT void ve3d_load_font_metrics(GtkWidget *widget)
-{
-	PangoFontDescription *font_desc;
-	PangoFont *font;
-	gint min = 0;
-	GtkAllocation allocation;
-
-	gtk_widget_get_allocation(widget,&allocation);
-
-	dbg_func(OPENGL,g_strdup_printf(__FILE__": ve3d_load_font_metrics(), w %i h %i PANGO_SCALE %i\n",allocation.width,allocation.height,PANGO_SCALE));
-	font_desc = pango_font_description_copy_static(gtk_widget_get_style(widget)->font_desc);
-	pango_font_description_set_family_static(font_desc,"Sans");
-
-	min = MIN(allocation.width,allocation.height);
-	pango_font_description_set_size(font_desc,((min+300)/80)*PANGO_SCALE);
-
-	if (font_list_base)
-		glDeleteLists(font_list_base,128);
-	font_list_base = (GLuint) glGenLists (128);
-
-	font = gdk_gl_font_use_pango_font (font_desc, 0, 128,
-			(int)font_list_base);
-	if (font == NULL)
-	{
-		dbg_func(OPENGL|CRITICAL,g_strdup_printf(__FILE__": ve3d_load_font_metrics()\n\tCan't load font CRITICAL FAILURE\n"));
-
-		exit (-1);
-	}
-	pango_font_description_free (font_desc);
 }
 
 
@@ -3324,7 +3271,7 @@ void gl_create_font(GtkWidget *widget)
 	gtk_widget_get_allocation(widget,&allocation);
 	min = MIN(allocation.width,allocation.height);
 	font_desc = pango_font_description_from_string(font_string);
-	pango_font_description_set_size(font_desc,(min/31)*PANGO_SCALE);
+	pango_font_description_set_size(font_desc,(min/33)*PANGO_SCALE);
 
 	pango_context_set_font_description(ft2_context, font_desc);
 	pango_font_description_free(font_desc);
