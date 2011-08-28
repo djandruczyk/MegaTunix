@@ -172,6 +172,9 @@ struct _Ve_View_3D
 	gint y_offset_bitmap_render_pango_units; /*!< GL font y offset */
 	PangoContext *ft2_context; /*!< GL Font pango context */
 	gboolean font_created;	/*!< GL Font created flag */
+	gfloat fps;		/*!< Frames per second */
+	glong lasttime;		/*!< Time of last render */
+	gchar strfps[50];	/*!< FPS String */
 };
 
 

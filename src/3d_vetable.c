@@ -96,12 +96,13 @@ void gl_init(GtkWidget *);
   */
 G_MODULE_EXPORT void CalculateFrameRate(GtkWidget *widget)
 {
-	static float framesPerSecond = 0.0f;	/* This will store our fps*/
-	static long lastTime = 0;		/* This will hold the time from the last frame*/
-	static char strFrameRate[50] = {0};	/* We will store the string here for the window title*/
+	Ve_View_3D *ve_view = NULL;
+	GTimeVal  currentTime;
+	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
+
+	g_return_if_fail(ve_view);
 
 	/* struct for the time value*/
-	GTimeVal  currentTime;
 	currentTime.tv_sec  = 0;
 	currentTime.tv_usec = 0;
 
@@ -109,19 +110,19 @@ G_MODULE_EXPORT void CalculateFrameRate(GtkWidget *widget)
 	g_get_current_time(&currentTime);
 
 	/* Increase the frame counter*/
-	++framesPerSecond;
+	ve_view->fps++;
 
-	if( currentTime.tv_sec - lastTime >= ONE_SECOND )
+	if (currentTime.tv_sec - ve_view->lasttime >= ONE_SECOND )
 	{
-		lastTime = currentTime.tv_sec;
+		ve_view->lasttime = currentTime.tv_sec;
 		/* Copy the frames per second into a string to display in the window*/
-		sprintf(strFrameRate, _("Current Frames Per Second: %i"), (int)framesPerSecond);
+		sprintf(ve_view->strfps,_("Current Frames Per Second: %i"), (int)ve_view->fps);
 		/* Reset the frames per second*/
-		framesPerSecond = 0;
+		ve_view->fps = 0;
 	}
 
 	/* draw frame rate on screen */
-	drawOrthoText(widget, strFrameRate, 1.0f, 1.0f, 1.0f, 0.025, 0.965 );
+	drawOrthoText(widget, ve_view->strfps, 1.0f, 1.0f, 1.0f, 0.025, 0.965 );
 }
 
 /*!
@@ -730,7 +731,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
 	GHashTable *ve_view_hash = NULL;
-	GdkGLContext *glcontext = NULL;
 	GdkWindow *window = NULL;
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
@@ -746,9 +746,6 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	free_ve3d_sliders(ve_view->table_num);
 	if (ve_view->drawing_area)
 	{
-		//printf("ve_view->drawing area IS valid\n");
-		//glcontext = gtk_widget_get_gl_context(ve_view->drawing_area);
-		//g_object_unref(glcontext);
 		window = gtk_widget_get_window(ve_view->drawing_area);
 		gdk_window_unset_gl_capability(window);
 		gtk_widget_destroy(ve_view->drawing_area);
