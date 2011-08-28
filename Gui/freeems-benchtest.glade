@@ -750,64 +750,6 @@
                 <property name="position">0</property>
               </packing>
             </child>
-            <child>
-              <widget class="GtkFrame" id="commands_frame">
-                <property name="visible">True</property>
-                <property name="label_xalign">0</property>
-                <child>
-                  <widget class="GtkTable" id="commands_table">
-                    <property name="visible">True</property>
-                    <property name="border_width">5</property>
-                    <property name="n_columns">2</property>
-                    <property name="column_spacing">5</property>
-                    <property name="row_spacing">5</property>
-                    <child>
-                      <widget class="GtkButton" id="burn_data_button">
-                        <property name="label" translatable="yes">Permanently Store Data in ECU</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <signal name="clicked" handler="std_button_handler"/>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="x_options">GTK_EXPAND</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="get_data_button">
-                        <property name="label" translatable="yes">Get Data from ECU</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <signal name="clicked" handler="std_button_handler"/>
-                      </widget>
-                      <packing>
-                        <property name="x_options">GTK_EXPAND</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="commands_frame_title">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes">Commands</property>
-                  </widget>
-                  <packing>
-                    <property name="type">label_item</property>
-                  </packing>
-                </child>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
           </widget>
         </child>
         <child>
