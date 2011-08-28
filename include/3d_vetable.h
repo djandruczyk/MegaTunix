@@ -232,6 +232,16 @@ void queue_ve3d_update(Ve_View_3D *);
 gboolean sleep_and_redraw(gpointer);
 void ve3d_grey_window(Ve_View_3D *);
 gboolean update_ve3ds(gpointer);
+void gl_print_char(gchar);
+void gl_print_string(const gchar *);
+void gl_destroy_font(void);
+void gl_create_font(GtkWidget *);
+int get_gl_font_descent(void);
+int get_gl_font_ascent(void);
+
+
+
+
 
 /* Prototypes */
 

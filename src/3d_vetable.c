@@ -10,7 +10,8 @@
  * 
  * No warranty is made or implied. You use this program at your own risk.
  *
- * Just about all of this was written by Richard Barrington....
+ * Just about all of this was written by Richard Barrington, then rewritten
+ * and extended by David Andruczyk
  * 
  * Large portions of this code are based on the examples provided with 
  * the GtkGlExt libraries.
@@ -44,6 +45,9 @@
 #include <debugging.h>
 #include <gdk/gdkglglext.h>
 #include <gdk/gdkkeysyms.h>
+#include <gtk/gtk.h>
+#include <pango/pangoft2.h>
+#include <gtk/gtkgl.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
@@ -57,6 +61,15 @@
 #include <tabloader.h>
 #include <vetable_gui.h>
 #include <widgetmgmt.h>
+#ifdef _WIN32_
+#include <windows.h>
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
 #define ONE_SECOND 	 1	/* one second */
 #define DEFAULT_WIDTH  640
@@ -67,6 +80,22 @@ extern gconstpointer *global_data;
 
 static gboolean delayed_expose(gpointer);
 static gboolean delayed_reconfigure(gpointer);
+
+/* New Font Stuff */
+#ifdef _WIN32_
+//static const char font_string[] = "Courier bold";
+static const char font_string[] = "Sans";
+static const int font_height = 12;
+#else
+//static const char font_string[] = "Monospace";
+static const char font_string[] = "Sans";
+static const int font_height = 13;
+#endif
+static int font_ascent = -1;
+static int font_descent = -1;
+static int y_offset_bitmap_render_pango_units = -1;
+static PangoContext *ft2_context = NULL;
+static gboolean _debug_font_created = FALSE;
 
 /*!
   \brief Calculates the frames per second for the 3D display
@@ -98,7 +127,7 @@ G_MODULE_EXPORT void CalculateFrameRate(void)
 	}
 
 	/* draw frame rate on screen */
-	drawOrthoText(strFrameRate, 1.0f, 1.0f, 1.0f, 0.025, 0.975 );
+	drawOrthoText(strFrameRate, 1.0f, 1.0f, 1.0f, 0.025, 0.965 );
 }
 
 /*!
@@ -128,11 +157,14 @@ G_MODULE_EXPORT void drawOrthoText(char *str, GLclampf r, GLclampf g, GLclampf b
 	glPushAttrib(GL_COLOR_BUFFER_BIT);       /* save current colour */
 	glColor3f(r, g, b);
 	glRasterPos3f(x, y, 0.0);
+	gl_print_string(str);
+	/*
 	while(*str)
 	{
 		glCallList(font_list_base+(*str));
 		str++;
 	};
+	*/
 	glPopAttrib();
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
@@ -834,7 +866,8 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	ve_view->aspect = 1.0;
 	glViewport (0, 0, w, h);
 	glMatrixMode(GL_MODELVIEW);
-	ve3d_load_font_metrics(widget);
+//	ve3d_load_font_metrics(widget);
+	gl_create_font(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() Complete!\n"));
@@ -1691,11 +1724,14 @@ G_MODULE_EXPORT void ve3d_draw_text(char* text, gfloat x, gfloat y, gfloat z)
 	glRasterPos3f (x, y, z);
 	/* Render each letter of text as stored in the display list */
 
+	/*
 	while(*text)
 	{
 		glCallList(font_list_base+(*text));
 		text++;
 	};
+	*/
+	gl_print_string(text);
 }
 
 
@@ -1780,8 +1816,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	Ve_View_3D *ve_view = NULL;
 	Firmware_Details *firmware = NULL;
 	GtkAllocation allocation;
-	GdkWindow *window = gtk_widget_get_window(ve_view->drawing_area);
-	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
+	GdkWindow *window = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
 	if (!get_ecu_data_f)
@@ -1790,14 +1825,16 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	if (!send_to_ecu_f)
 		get_symbol("send_to_ecu",(void*)&send_to_ecu_f);
 
+	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	g_return_val_if_fail(get_ecu_data_f,FALSE);
 	g_return_val_if_fail(send_to_ecu_f,FALSE);
-
-	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
+	g_return_val_if_fail(ve_view,FALSE);
 
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_key_press_event()\n"));
-
 	g_static_mutex_lock(&key_mutex);
+
+	window = gtk_widget_get_window(ve_view->drawing_area);
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 
 	x_bincount = ve_view->x_bincount;
 	y_bincount = ve_view->y_bincount;
@@ -3244,4 +3281,182 @@ redraw:
 	}
 	gdk_threads_leave();
 	return TRUE;
+}
+
+
+// Units are pixels.  Returns a positive value [most likely].
+int get_gl_font_ascent()
+{
+	if (!_debug_font_created) {
+		printf("Programming error: get_gl_font_ascent() called but font does not exist; you should have called gl_create_font() first");
+	}
+	return font_ascent;
+}
+
+// Units are pixels.  Returns a positive value [most likely].
+int get_gl_font_descent()
+{
+	if (!_debug_font_created) {
+		printf("Programming error: get_gl_font_descent() called but font does not exist; you should have called gl_create_font() first");
+	}
+	return font_descent;
+}
+
+
+void gl_create_font(GtkWidget *widget)
+{
+	PangoFontDescription *font_desc = NULL;
+	PangoLayout *layout = NULL;
+	PangoRectangle log_rect;
+	int font_ascent_pango_units = 0;
+	int font_descent_pango_units = 0;
+	gint min = 0;
+	GtkAllocation allocation;
+
+	if (_debug_font_created) {
+		printf("Programming error: gl_create_font() was already called; you must call gl_destroy_font() before creating font again");
+	}
+	_debug_font_created = TRUE;
+
+	// This call is deprecated so we'll have to fix it sometime.
+	ft2_context = pango_ft2_get_context(72, 72);
+
+	gtk_widget_get_allocation(widget,&allocation);
+	min = MIN(allocation.width,allocation.height);
+	font_desc = pango_font_description_from_string(font_string);
+	pango_font_description_set_size(font_desc,(min/31)*PANGO_SCALE);
+
+	pango_context_set_font_description(ft2_context, font_desc);
+	pango_font_description_free(font_desc);
+
+	layout = pango_layout_new(ft2_context);
+
+	// I don't believe that's standard preprocessor syntax?
+#if !PANGO_VERSION_CHECK(1,22,0)
+	PangoLayoutIter *iter;  
+	iter = pango_layout_get_iter(layout);
+	font_ascent_pango_units = pango_layout_iter_get_baseline(iter);
+	pango_layout_iter_free(iter);
+#else
+	font_ascent_pango_units = pango_layout_get_baseline(layout);
+#endif
+
+	pango_layout_get_extents(layout, NULL, &log_rect);
+	g_object_unref(G_OBJECT(layout));
+	font_descent_pango_units = log_rect.height - font_ascent_pango_units;
+
+	font_ascent = PANGO_PIXELS_CEIL(font_ascent_pango_units);
+	font_descent = PANGO_PIXELS_CEIL(font_descent_pango_units);
+	y_offset_bitmap_render_pango_units = (font_ascent * PANGO_SCALE) - font_ascent_pango_units;
+}
+
+
+void gl_destroy_font()
+{
+	if (!_debug_font_created) {
+		printf("Programming error: gl_destroy_font() called when font does not exist");
+	}
+	font_ascent = -1;
+	font_descent = -1;
+	y_offset_bitmap_render_pango_units = -1;
+	g_object_unref(G_OBJECT(ft2_context));
+	_debug_font_created = FALSE;
+}
+
+
+/*!
+ \brief Renders the input text at the current location with the current color.
+ The X position of the current location is used to place the left edge of 
+ the text image, where the text image bounds are defined as the logical 
+ extents of the line of text.  The Y position of the current location is 
+ used to place the bottom of the text image.  You should offset the Y 
+ position by the amount returned by gl_font_descent() if you 
+ want to place the baseline of the text image at the current Y position.
+ Note: A problem with this function is that if the lower left corner of 
+ the text falls just a hair outside of the viewport (meaning the current 
+ raster position is invalid), then no text will be rendered.  The solution 
+ to this is a very hacky one.  You can search Google for "glDrawPixels 
+ clipping".
+*/
+void gl_print_string(const gchar *s)
+{
+	PangoLayout *layout;
+	PangoRectangle log_rect;
+	FT_Bitmap bitmap;
+	unsigned char *begin_bitmap_buffer;
+	GLfloat color[4];
+	GLint previous_unpack_alignment;
+	GLboolean previous_blend_enabled;
+	GLint previous_blend_func_src;
+	GLint previous_blend_func_dst;
+	GLfloat previous_red_bias;
+	GLfloat previous_green_bias;
+	GLfloat previous_blue_bias;
+	GLfloat previous_alpha_scale;
+
+	if (!_debug_font_created) {
+		printf("Programming error: gl_print_string() called but font does not exist; you should have called glt_create_font() first");
+	}
+
+	layout = pango_layout_new(ft2_context);
+	pango_layout_set_width(layout, -1); // -1 no wrapping.  All text on one line.
+	pango_layout_set_text(layout, s, -1); // -1 null-terminated string.
+	pango_layout_get_extents(layout, NULL, &log_rect);
+
+	if (log_rect.width > 0 && log_rect.height > 0) {
+		bitmap.rows = font_ascent + font_descent;
+		bitmap.width = PANGO_PIXELS_CEIL(log_rect.width);
+		bitmap.pitch = -bitmap.width; // Rendering it "upside down" for OpenGL.
+		begin_bitmap_buffer = (unsigned char *) g_malloc(bitmap.rows * bitmap.width);
+		memset(begin_bitmap_buffer, 0, bitmap.rows * bitmap.width);
+		bitmap.buffer = begin_bitmap_buffer + (bitmap.rows - 1) * bitmap.width; // See pitch above.
+		bitmap.num_grays = 0xff;
+		bitmap.pixel_mode = FT_PIXEL_MODE_GRAY;
+		pango_ft2_render_layout_subpixel(&bitmap, layout, -log_rect.x,
+				y_offset_bitmap_render_pango_units);
+		glGetFloatv(GL_CURRENT_COLOR, color);
+
+		// Save state.  I didn't see any OpenGL push/pop operations for these.
+		// Question: Is saving/restoring this state necessary?  Being safe.
+		glGetIntegerv(GL_UNPACK_ALIGNMENT, &previous_unpack_alignment);
+		previous_blend_enabled = glIsEnabled(GL_BLEND);
+		glGetIntegerv(GL_BLEND_SRC, &previous_blend_func_src);
+		glGetIntegerv(GL_BLEND_DST, &previous_blend_func_dst);
+		glGetFloatv(GL_RED_BIAS, &previous_red_bias);
+		glGetFloatv(GL_GREEN_BIAS, &previous_green_bias);
+		glGetFloatv(GL_BLUE_BIAS, &previous_blue_bias);
+		glGetFloatv(GL_ALPHA_SCALE, &previous_alpha_scale);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glPixelTransferf(GL_RED_BIAS, color[0]);
+		glPixelTransferf(GL_GREEN_BIAS, color[1]);
+		glPixelTransferf(GL_BLUE_BIAS, color[2]);
+		glPixelTransferf(GL_ALPHA_SCALE, color[3]);
+
+		glDrawPixels(bitmap.width, bitmap.rows,
+				GL_ALPHA, GL_UNSIGNED_BYTE, begin_bitmap_buffer);
+		g_free(begin_bitmap_buffer);
+
+		// Restore state in reverse order of how we set it.
+		glPixelTransferf(GL_ALPHA_SCALE, previous_alpha_scale);
+		glPixelTransferf(GL_BLUE_BIAS, previous_blue_bias);
+		glPixelTransferf(GL_GREEN_BIAS, previous_green_bias);
+		glPixelTransferf(GL_RED_BIAS, previous_red_bias);
+		glBlendFunc(previous_blend_func_src, previous_blend_func_dst);
+		if (!previous_blend_enabled) { glDisable(GL_BLEND); }
+		glPixelStorei(GL_UNPACK_ALIGNMENT, previous_unpack_alignment);
+	}
+
+	g_object_unref(G_OBJECT(layout));
+}
+
+
+void gl_print_char(gchar s)
+{
+	char str[2];
+	str[0] = s;
+	str[1] = '\0';
+	gl_print_string(str);
 }
