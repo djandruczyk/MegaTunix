@@ -2350,9 +2350,12 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 			if (table_list[i] == TRUE)
 			{
 				ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
-				window = gtk_widget_get_window(ve_view->drawing_area);
-				if ((ve_view != NULL) && (window != NULL))
-					queue_ve3d_update(ve_view);
+				if ((ve_view) && (ve_view->drawing_area))
+				{
+					window = gtk_widget_get_window(ve_view->drawing_area);
+					if (window)
+						queue_ve3d_update(ve_view);
+				}
 			}
 		}
 	}
