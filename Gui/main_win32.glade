@@ -111,11 +111,10 @@
                             </child>
                             <child>
                               <widget class="GtkImageMenuItem" id="quit_menuitem">
-                                <property name="label">gtk-quit</property>
+                                <property name="label">Quit</property>
                                 <property name="visible">True</property>
                                 <property name="use_underline">True</property>
-                                <property name="use_stock">True</property>
-                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                <property name="use_stock">False</property>
                                 <signal name="activate" handler="leave"/>
                               </widget>
                             </child>
