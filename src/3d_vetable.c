@@ -618,9 +618,9 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	button = gtk_button_new_with_label("Close Window");
 	OBJ_SET(button,"ve_view",ve_view);
 	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-	g_signal_connect(G_OBJECT(button), "clicked",
+	g_signal_connect_swapped(G_OBJECT(button), "clicked",
 			G_CALLBACK(ve3d_shutdown),
-			NULL);
+			(gpointer)window);
 
 	/* Focus follows vertex toggle */
 	button = gtk_check_button_new_with_label("Focus Follows Vertex\n with most Weight");
@@ -730,6 +730,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
 	GHashTable *ve_view_hash = NULL;
+	GdkGLContext *glcontext = NULL;
+	GdkWindow *window = NULL;
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
@@ -742,7 +744,16 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 				get_list("burners"),(gpointer)ve_view->burn_but));
 	g_hash_table_remove(ve_view_hash,GINT_TO_POINTER(ve_view->table_num));
 	free_ve3d_sliders(ve_view->table_num);
-	gtk_widget_destroy(ve_view->window);
+	if (ve_view->drawing_area)
+	{
+		//printf("ve_view->drawing area IS valid\n");
+		//glcontext = gtk_widget_get_gl_context(ve_view->drawing_area);
+		//g_object_unref(glcontext);
+		window = gtk_widget_get_window(ve_view->drawing_area);
+		gdk_window_unset_gl_capability(window);
+		gtk_widget_destroy(ve_view->drawing_area);
+	}
+	gtk_widget_destroy(widget);
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
@@ -786,6 +797,7 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 	gdk_threads_add_timeout(500,delayed_expose,ve_view);
 }
 
+
 /*!
   \brief get_gl_config gets the OpenGL mode creates a GL config and returns it
   \returns pointer to a GdkGLConfig structure
@@ -815,6 +827,7 @@ GdkGLConfig* get_gl_config(void)
 	}
 	return gl_config;
 }
+
 
 /*!
   \brief ve3d_configure_event is called when the window needs to be 
