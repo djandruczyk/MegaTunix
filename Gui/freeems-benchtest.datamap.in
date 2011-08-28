@@ -50,6 +50,13 @@ handler=_SOFT_BOOT_ECU_
 #create_tags=warning
 #warning=foreground,red
 
+[freeems_benchtest_view]
+keys=create_tags,register_as
+register_as=freeems_benchtest_view
+create_tags=warning
+warning=foreground,red
+
+
 #----- Labels ----------------------------------------------------------------
 
 #----- Entries ---------------------------------------------------------------

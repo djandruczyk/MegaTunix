@@ -24,6 +24,7 @@
 #include <datamgmt.h>
 #include <firmware.h>
 #include <freeems_comms.h>
+#include <freeems_errors.h>
 #include <freeems_helpers.h>
 #include <freeems_plugin.h>
 #include <serialio.h>
@@ -309,6 +310,8 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 	gint offset = 0;
 	gint size = 0;
 	gint page = 0;
+	gint errorcode = 0;
+	gchar * errmsg = NULL;
 	GTimeVal tval;
 
 	if (!firmware)
@@ -385,8 +388,15 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 			if (packet)
 			{
 				if (packet->is_nack)
-					printf("ERROR with Bench test packet!\n");
-					freeems_packet_cleanup(packet);
+				{
+					errorcode = ((guint8)packet->data[packet->payload_base_offset] << 8) + (guint8)packet->data[packet->payload_base_offset+1];
+					errmsg = lookup_error(errorcode);
+					update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE,FALSE);
+					g_free(errmsg);
+				}
+				else
+					update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Packet accepted...\n")),FALSE,FALSE,FALSE);
+				freeems_packet_cleanup(packet);
 			}
 			break;
 		case GENERIC_FLASH_WRITE:

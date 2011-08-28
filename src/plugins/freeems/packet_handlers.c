@@ -297,7 +297,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	{
 		error = ((guint8)packet->data[tmpi] << 8) + (guint8)packet->data[tmpi+1];
 		errmsg = lookup_error(error);
-		printf("Packet ERROR Code 0x%.4X, \"%s\"\n",packet->payload_id,errmsg);
+		printf("Packet ERROR Code 0x%.4X, \"%s\"\n",error,errmsg);
 		g_free(errmsg);
 	}
 	if (packet->header_bits & HAS_LENGTH_MASK)
