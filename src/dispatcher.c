@@ -54,6 +54,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	GTimeVal time;
 	extern gconstpointer *global_data;
 
+//	printf("pf_dispatcher running!\n");
 	if (!pf_dispatch_cond)
 		pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
 	if (!pf_dispatch_mutex)
@@ -84,10 +85,12 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	message = g_async_queue_try_pop(pf_dispatch_queue);
 	if (!message)
 	{
+//		printf("no messages waiting, signalling\n");
 		/*	printf("no messages waiting, returning\n");*/
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
 		g_mutex_unlock(pf_dispatch_mutex);
+//		printf("returning!\n");
 		return TRUE;
 	}
 	if (!message->status)
