@@ -1,0 +1,382 @@
+[global]
+description=Object data map for the MS2-E EGO/Revlimits
+_tab_name=_EGO/Revlimit
+id_prefix=ms2e_ego_rev_
+groups=defaults
+bind_to_list=valid_ecu_ctrls
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=0
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=bind_to_list
+bind_to_list=valid_ecu_ctrls
+
+[rev_clt_table]
+keys=bind_to_list
+bind_to_list=revlimit
+
+[max_retard_label]
+keys=bind_to_list
+bind_to_list=revlimit,rev_retard
+
+[soft_limit_label]
+keys=bind_to_list
+bind_to_list=revlimit,rev_no_clt
+
+[hard_limit_label]
+keys=bind_to_list
+bind_to_list=revlimit,rev_no_clt
+
+[revlimit_adder_label]
+keys=bind_to_list
+bind_to_list=revlimit,rev_clt
+
+[revlimit_bypass_label]
+keys=bind_to_list
+bind_to_list=revlimit,rev_clt
+
+[rpm_bypass_label]
+keys=bind_to_list
+bind_to_list=revlimit,rev_clt
+
+[cut_x_label]
+keys=bind_to_list
+bind_to_list=revlimit,rev_cut
+
+[from_y_label]
+keys=bind_to_list
+bind_to_list=revlimit,rev_cut
+
+[2nd_ego_sensor_table]
+keys=bind_to_list
+bind_to_list=dual_ego
+
+[1st_ego_sensor_table]
+keys=bind_to_list
+bind_to_list=ego_ctrl
+
+[nbo2_controls_table]
+keys=bind_to_list
+bind_to_list=nb_ego
+
+[common_ego_controls_table]
+keys=bind_to_list
+bind_to_list=ego_ctrl
+
+[wideband_frame]
+keys=bind_to_list
+bind_to_list=wb_ego
+
+[spark_revlimit_controls_table]
+keys=bind_to_list
+bind_to_list=spark_retard
+
+[fuel_revlimit_controls_table]
+keys=bind_to_list
+bind_to_list=revlimit_controls
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[clt_revlimit_button]
+keys=handler,te_table_num,bind_to_list
+handler=_TE_TABLE_
+te_table_num=25
+bind_to_list=rev_clt
+
+#----- Labels ---------------------------------------------------------------
+
+[active_ego_temp_label]
+keys=temp_dep,bind_to_list,c_label,f_label,k_label
+c_label=Active Above CLT (\302\260C.)
+f_label=Active Above CLT (\302\260F.)
+k_label=Active Above CLT (\302\260K.)
+temp_dep=TRUE
+bind_to_list=temperature
+
+[events_per_step_label]
+keys=bind_to_list
+bind_to_list=wb_simple
+
+[prop_gain_label]
+keys=bind_to_list
+bind_to_list=wb_ego,wb_pid
+
+[pid_integral_label]
+keys=bind_to_list
+bind_to_list=wb_ego,wb_pid
+
+[pid_derivative_label]
+keys=bind_to_list
+bind_to_list=wb_ego,wb_pid
+
+#----- Comboboxes -----------------------------------------------------------
+
+[revlimit_algo_combo]
+keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
+page=0
+offset=636
+bitvals=0,1,2,3,5,7
+bitmask=7
+choices=None,Spark Retard,Fuel Cut,Spk Retard/Fuel Cut,Spk Retard/Cut,Fuel and Spark Cut
+toggle_groups=,revlimit:rev_retard,revlimit,revlimit:rev_retard,revlimit:rev_retard:rev_cut,revlimit:rev_cut
+_tooltip=Sets Revlimiter algorithm
+
+[revlimit_clt_based_combo]
+keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
+page=0
+offset=636
+bitvals=0,1
+bitmask=8
+choices=No,Yes (CLT Based)
+toggle_groups=rev_no_clt,rev_clt
+_tooltip=Sets Revlimiter to use coolant based table
+
+[revlimit_algo_combo]
+keys=page,offset,bitvals,bitmask,toggle_groups,tooltip
+page=0
+offset=636
+bitvals=0,1,2,3,5,7
+bitmask=7
+choices=None,Spark Retard,Fuel Cut,Spk Retard/Fuel Cut,Spk Retard/Cut,Fuel and Spark Cut
+toggle_groups=,revlimit:rev_retard,revlimit,revlimit:rev_retard,revlimit:rev_retard:rev_cut,revlimit:rev_cut
+_tooltip=Sets Revlimiter algorithm
+
+[ego_sensor_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Narrow Band,Dual Narrow Band,Wide Band,Dual Wide Band
+bitvals=0,1,2,3,4
+toggle_groups=,ego_ctrl:nb_ego,ego_ctrl:nb_ego:dual_ego,ego_ctrl:wb_ego,ego_ctrl:wb_ego:dual_ego
+offset=594
+bitmask=7
+_tooltip=Sets the EGO Sensor type and configuration
+
+[2nd_ego_sensor_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=MS2 AD6/JS5,MS2 AD7/JS4,Remote ADC0,Remote ADC1,Remote ADC2,Remote ADC3,Remote ADC4,Remote ADC5,Remote ADC6,Remote ADC7
+bitvals=6,7,8,9,10,11,12,13,14,15
+offset=992
+bitmask=15
+_tooltip=Sets the 2nd EGO Sensor input port/pin
+
+[1st_ego_sensor_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Local,Remote ADC0,Remote ADC1,Remote ADC2,Remote ADC3,Remote ADC4,Remote ADC5,Remote ADC6,Remote ADC7
+bitvals=0,1,2,3,4,5,6,7,8
+offset=993
+bitmask=15
+_tooltip=Sets the EGO Sensor input port/pin
+
+[wb_algo_combo]
+keys=offset,choices,bitvals,bitmask,bind_to_list,toggle_groups,tooltip
+choices=Simple,PID
+bitvals=0,2
+bind_to_list=wb_ego,ego_ctrl
+toggle_groups=wb_simple,wb_pid
+offset=900
+bitmask=3
+_tooltip=Sets the EGO Sensor type and configuration
+
+#----- Entries --------------------------------------------------------------
+
+[max_retard_entry]
+keys=offset,size,fromecu_mult,precision,bind_to_list,tooltip
+offset=637
+size=_U08_
+fromecu_mult=0.1
+precision=1
+bind_to_list=revlimit,rev_retard
+_tooltip=This is Maximum amount of retard permitted( 0 - 25.5 deg)
+
+[soft_limit_entry]
+keys=offset,size,raw_lower,raw_upper,bind_to_list,tooltip
+offset=654
+size=_S16_
+raw_lower=0
+raw_upper=16000
+bind_to_list=revlimit,rev_no_clt
+_tooltip=This is the Soft revlimit in RPM
+
+[hard_limit_entry]
+keys=offset,size,raw_lower,raw_upper,bind_to_list,tooltip
+offset=656
+size=_S16_
+raw_lower=0
+raw_upper=16500
+bind_to_list=revlimit,rev_no_clt
+_tooltip=This is the Hard revlimit in RPM
+
+[revlimit_adder_entry]
+keys=offset,size,raw_lower,raw_upper,bind_to_list,tooltip
+offset=46
+size=_S16_
+raw_lower=0
+raw_upper=15000
+bind_to_list=revlimit,rev_clt
+_tooltip=This is not documented yet
+
+[revlimit_bypass_entry]
+keys=offset,size,fromecu_mult,raw_lower,raw_upper,bind_to_list,tooltip
+offset=44
+size=_S16_
+fromecu_mult=0.1
+raw_lower=0
+raw_upper=1000
+precision=1
+bind_to_list=revlimit,rev_clt
+_tooltip=Alternate Revlimit when TPS exceeds this value
+
+[rpm_bypass_entry]
+keys=offset,size,raw_lower,raw_upper,bind_to_list,tooltip
+offset=652
+size=_S16_
+raw_lower=0
+raw_upper=16000
+bind_to_list=revlimit,rev_clt
+_tooltip=Revlimit RPM when TPS exceeds the bypass threshold
+
+[cut_x_entry]
+keys=offset,size,bind_to_list,tooltip
+offset=995
+size=_U08_
+bind_to_list=revlimit,rev_cut
+_tooltip=Number of sparks (X) to cut from (Y) events
+
+[from_y_entry]
+keys=offset,size,bind_to_list,tooltip
+offset=996
+size=_U08_
+bind_to_list=revlimit,rev_cut
+_tooltip=Number of sparks (X) to cut from (Y) events
+
+[nb_switching_afr_entry]
+keys=offset,precision,fromecu_mult,tooltip
+precision=1
+offset=598
+fromecu_mult=0.1
+_tooltip=This is the AFR we want to toggle around in AFR (14.7:1 being stoich)
+
+[nb_switching_lambda_entry]
+keys=offset,precision,fromecu_mult,tooltip
+precision=4
+offset=598
+fromecu_mult=0.006803
+_tooltip=This is the Lambda we want to toggle around in Lambda (1.0 being stoich)
+
+[ign_events_entry]
+keys=offset,tooltip
+offset=595
+_tooltip=This is the number of ignition events that must take place before an EGO correction can occur.  This limits the correction speed, to avoid oscillation.
+
+[ego_step_entry]
+keys=offset,fromecu_mult,precision,bind_to_list,tooltip
+offset=596
+fromecu_mult=0.1
+precision=1
+bind_to_list=wb_simple
+_tooltip=This is the percentage max percentage change in fueling the EGO control algorithm can make per "step".  This controls how fast the algorithm can alter fueling.   beware of setting this too high as it can cause oscillation. Too low and it takes a long time to reach the "goal.
+
+[ego_auth_entry]
+keys=offset,tooltip
+offset=597
+_tooltip=This is the max correction allowed in percentage of change, So even if the target isn't reached, it won't exceed this value.
+
+[ego_clt_entry]
+keys=offset,precision,size,temp_dep,fromecu_mult,raw_lower,raw_upper,bind_to_list,tooltip
+offset=604
+size=_S16_
+fromecu_mult=0.1
+raw_lower=-400
+raw_upper=3000
+temp_dep=TRUE
+precision=1
+bind_to_list=temperature,ego_ctrl
+_tooltip=This is the minimum temp to be reched before closed loop EGO correction will take place. NOTE: other conditions below must ALSO be met.
+
+[ego_rpm_entry]
+keys=offset,size,raw_upper,bind_to_list,tooltip
+offset=606
+size=_S16_
+raw_upper=15000
+bind_to_list=ego_ctrl
+_tooltip=This is the minimum RPM to be reched before closed loop EGO correction will take place. NOTE: other conditions below and above must ALSO be met.
+
+[ego_tps_entry]
+keys=offset,precision,size,raw_upper,fromecu_mult,bind_to_list,tooltip
+offset=590
+size=_S16_
+fromecu_mult=0.1
+raw_upper=1000
+precision=1
+bind_to_list=ego_ctrl
+_tooltip=This is the level which the TPS must be BELOW before closed loop EGO correction will take place. NOTE: other conditions below and above must ALSO be met.
+
+[ego_low_map_entry]
+keys=offset,precision,size,raw_upper,fromecu_mult,bind_to_list,tooltip
+offset=738
+size=_S16_
+fromecu_mult=0.1
+raw_upper=3000
+precision=1
+bind_to_list=ego_ctrl
+_tooltip=This is the level which the Manifold Pressure (MAP) must be BELOW before closed loop EGO correction will take place. NOTE: other conditions above must ALSO be met.
+
+[ego_high_map_entry]
+keys=offset,precision,size,raw_upper,fromecu_mult,bind_to_list,tooltip
+offset=753
+size=_S16_
+fromecu_mult=0.1
+raw_upper=3000
+precision=1
+bind_to_list=ego_ctrl
+_tooltip=This is the level which the Manifold Pressure (MAP) must be ABOVE before closed loop EGO correction will take place. NOTE: other conditions above must ALSO be met.
+
+[wb_prop_entry]
+keys=offset,raw_upper,bind_to_list,tooltip
+offset=901
+raw_upper=200
+bind_to_list=wb_pid
+_tooltip=This is the Proportional gain for the EGO feedback loop. The constant that defines the proportional relationship between the EGO set-point and the range of values seen from the sensor. 100% is a typical value. It defines the response to the immediate difference between the set-point AFR and that measured from the sensor.
+
+[wb_integ_entry]
+keys=offset,raw_upper,bind_to_list,tooltip
+offset=902
+raw_upper=200
+bind_to_list=wb_pid
+_tooltip=This is the Integral gain for the EGO feedback loop. This corrects for a portion of the on-going average correction over time (the integral), allowing the loop to set into a stable value, rather than oscillating. A typical value is 20%.
+
+[wb_deriv_entry]
+keys=offset,raw_upper,bind_to_list,tooltip
+offset=903
+raw_upper=200
+bind_to_list=wb_pid
+_tooltip=This is the Derivative gain for the EGO feedback loop. This predicts the future difference between the AFR target and the set-point, based on the rate of change of the error at present. The larger the derivative term, the more rapidly the controller responds to changes in the process's output. However, for relatively slow processes,lower numbers mean more stable output, and a value of 0 is typical for MegaSquirt® (i.e., don't use the derivative term at all).
+
+[wb_events_entry]
+keys=offset,bind_to_list,tooltip
+offset=595
+bind_to_list=wb_simple,wb_ego
+_tooltip=This is the number of ignition events that must take place before an EGO correction can occur.  This limits the correction speed, to avoid oscillation.
+
