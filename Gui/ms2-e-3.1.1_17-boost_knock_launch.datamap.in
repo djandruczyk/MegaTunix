@@ -444,8 +444,8 @@ keys=page,offset,size,raw_upper,fromecu_mult,precision,tooltip
 page=0
 offset=936
 size=_U16_
-fromecu_mult=0.1
-raw_upper=3000
+fromecu_mult=0.01
+raw_upper=30000
 precision=1
 _tooltip=See MS2-Extra Manuals
 

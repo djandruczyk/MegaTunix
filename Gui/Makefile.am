@@ -37,8 +37,10 @@ gui_glade_files = 	\
 		ms2-e-3.x-corrections_misc.glade \
 		ms2-e-3.x-crank_idle_warmup.glade \
 		ms2-e-3.1.x-crank_idle_warmup.glade \
+		ms2-e-3.1.1_17-crank_idle_warmup.glade \
 		ms2-e-3.x-debugging.glade \
 		ms2-e-3.0.3v-ego_rev.glade \
+		ms2-e-3.1.1_17-ego_rev.glade \
 		ms2-e-3.x-globals.glade \
 		ms2-e-3.x-ignition.glade \
 		ms2-e-3.0.3y-ignition.glade \
@@ -122,6 +124,7 @@ gui_in_files = 	\
 		afrtable_8x8x2-029x.datamap.in \
 		afrtable_12x12x2-MS2.datamap.in \
 		afrtable_12x12x2-MS2-Extra.datamap.in \
+		afrtable_12x12x2-ms2-e-3.1.1_17.datamap.in \
 		boost_6x6x3-029x.datamap.in \
 		datalogging.datamap.in \
 		dt-params.datamap.in \
@@ -135,20 +138,27 @@ gui_in_files = 	\
 		ms2-accel.datamap.in \
 		ms2-alpha-n_6x6x1.datamap.in \
 		ms2-e-3.x-accel.datamap.in \
+		ms2-e-3.1.1_17-accel.datamap.in \
 		ms2-e-3.x-als.datamap.in \
 		ms2-e-3.x-boost_knock_launch.datamap.in \
+		ms2-e-3.1.1_17-boost_knock_launch.datamap.in \
 		ms2-e-3.x-can.datamap.in \
 		ms2-e-3.x-corrections_misc.datamap.in \
+		ms2-e-3.1.1-corrections_misc.datamap.in \
+		ms2-e-3.1.1_17-corrections_misc.datamap.in \
 		ms2-e-3.x-crank_idle_warmup.datamap.in \
 		ms2-e-3.1.x-crank_idle_warmup.datamap.in \
 		ms2-e-3.x-debugging.datamap.in \
 		ms2-e-3.x-ego_rev.datamap.in \
 		ms2-e-3.0.3v-ego_rev.datamap.in \
+		ms2-e-3.1.1_17-ego_rev.datamap.in \
 		ms2-e-3.x-globals.datamap.in \
+		ms2-e-3.1.1_17-globals.datamap.in \
 		ms2-e-3.x-ignition.datamap.in \
 		ms2-e-3.0.3v-ignition.datamap.in \
 		ms2-e-3.x-inj_timing_6x6x3.datamap.in \
 		ms2-e-3.0.3v-inj_timing_6x6x3.datamap.in \
+		ms2-e-3.1.1_17-inj_timing_6x6x3.datamap.in \
 		ms2-e-3.x-local_outputs.datamap.in \
 		ms2-e-3.x.als-local_outputs.datamap.in \
 		ms2-e-3.x-nitrous_staging_orfc.datamap.in \
@@ -161,6 +171,7 @@ gui_in_files = 	\
 		ms2-e-boost_8x8x2.datamap.in \
 		ms2-e-corrections_misc.datamap.in \
 		ms2-e-crank_idle_warmup.datamap.in \
+		ms2-e-3.1.1_17-crank_idle_warmup.datamap.in \
 		ms2-e-debugging.datamap.in \
 		ms2-e-ego_rev.datamap.in \
 		ms2-e-globals.datamap.in \
@@ -168,6 +179,7 @@ gui_in_files = 	\
 		ms2-e-nitrous_staging_orfc.datamap.in \
 		ms2-e-noise_lag.datamap.in \
 		ms2-e-rotary-split.datamap.in \
+		ms2-e-3.1.1_17-rotary-split.datamap.in \
 		ms2-e-runtime.datamap.in \
 		ms2-e-toothtrigger-2.1.x.datamap.in \
 		ms2-e-toothtrigger-3.x.datamap.in \
@@ -176,6 +188,7 @@ gui_in_files = 	\
 		ms2-ignition.datamap.in \
 		ms2-knock_dwell.datamap.in \
 		ms2-misc-fuel.datamap.in \
+		ms2-e-3.1.1_17-misc-fuel.datamap.in \
 		ms2-runtime.datamap.in \
 		ms2-user_outputs.datamap.in \
 		ms2-warmup.datamap.in \
@@ -203,6 +216,7 @@ gui_in_files = 	\
 		sparktable_12x12x1-MS2.datamap.in \
 		sparktable_12x12x2-029x.datamap.in \
 		sparktable_12x12x3-MS2-Extra.datamap.in \
+		sparktable_12x12x3-ms2-e-3.1.1_17.datamap.in \
 		sparktable_8x8e-EDIS.datamap.in \
 		sparktable_8x8e-Std.datamap.in \
 		template.datamap.in \
@@ -212,11 +226,14 @@ gui_in_files = 	\
 		vetable_12x12x2-MS2.datamap.in \
 		vetable_12x12x3-029x.datamap.in \
 		vetable_12x12x3-MS2-Extra.datamap.in \
+		vetable_12x12x3-ms2-e-3.1.1_17.datamap.in \
 		vetable_16x16x3-MS2-Extra.datamap.in \
+		vetable_16x16x3-ms2-e-3.1.1_17.datamap.in \
 		vetable_8x8e-BnG.datamap.in \
 		vetable_8x8e-DT_1.datamap.in \
 		vetable_8x8e-DT_2.datamap.in \
 		vetrim_16x16x4-MS2-Extra-3.x.datamap.in \
+		vetrim_16x16x4-ms2-e-3.1.1_17.datamap.in \
 		warmupwizard.datamap.in 
 
 

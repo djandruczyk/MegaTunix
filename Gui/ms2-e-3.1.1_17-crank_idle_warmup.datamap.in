@@ -292,6 +292,14 @@ bind_to_list=iac_closedloop
 keys=bind_to_list
 bind_to_list=pwm_local
 
+[pwm_pid_duty_tolerance_label]
+keys=bind_to_list
+bind_to_list=pwm_closedloop
+
+[pwm_pid_steps_tolerance_label]
+keys=bind_to_list
+bind_to_list=iac_closedloop
+
 [live_cranking_temp_box]
 keys=ctrl_name,markup,label_prefix,label_suffix,source,show_prefix,post_functions_with_arg
 ctrl_name=live_cranking_temp_label
@@ -861,9 +869,9 @@ keys=page,offset,size,precision,fromecu_mult,raw_upper,tooltip
 page=1
 offset=46
 size=_U16_
-fromecu_mult=0.1
+fromecu_mult=0.01
 precision=1
-raw_upper=1000
+raw_upper=10000
 _tooltip=See MegaManual
 
 [pwmidle_rpmdot_disablepid_entry]
@@ -874,5 +882,35 @@ size=_S16_
 fromecu_mult=0.1
 raw_lower=10
 raw_upper=100
+_tooltip=See MegaManual
+
+[pwmidle_rpm_hyst_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=1
+offset=63
+size=_U16_
+raw_upper=500
+_tooltip=See MegaManual
+
+[pid_tolerance_duty_entry]
+keys=page,offset,fromecu_mult,precision,bind_to_list,tooltip
+page=1
+offset=65
+fromecu_mult=0.39063
+precision=1
+bind_to_list=pwm_closedloop
+_tooltip=See MegaManual
+
+[pid_tolerance_steps_entry]
+keys=page,offset,bind_to_list,tooltip
+page=1
+offset=65
+bind_to_list=iac_closedloop
+_tooltip=See MegaManual
+
+[pid_stall_rpm_entry]
+keys=page,offset,tooltip
+page=1
+offset=66
 _tooltip=See MegaManual
 

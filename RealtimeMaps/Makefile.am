@@ -13,6 +13,7 @@ rtmap_in_files = 	\
 		MS2-Extra-3.0.x.rtv_map.in \
 		MS2-Extra-3.0.3w.rtv_map.in \
 		MS2-Extra-3.0.3y.rtv_map.in \
+		MS2-Extra-3.1.1_17.rtv_map.in \
 		PIS_V1_00-firmware.rtv_map.in 
 
 rtmap_DATA = $(rtmap_in_files:.rtv_map.in=.rtv_map)

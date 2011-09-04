@@ -199,6 +199,15 @@ offset=900
 bitmask=3
 _tooltip=Sets the EGO Sensor type and configuration
 
+[ego_on_ae_combo]
+keys=page,offset,choices,bitvals,bitmask,tooltip
+page=1
+choices=Off,On
+bitvals=0,1
+offset=828
+bitmask=16
+_tooltip=Sets whether to disable EGO control during accel enrich
+
 #----- Entries --------------------------------------------------------------
 
 [max_retard_entry]
@@ -300,7 +309,7 @@ _tooltip=This is the percentage max percentage change in fueling the EGO control
 
 [ego_auth_entry]
 keys=offset,tooltip
-offset=597
+offset=660
 _tooltip=This is the max correction allowed in percentage of change, So even if the target isn't reached, it won't exceed this value.
 
 [ego_clt_entry]
@@ -337,8 +346,8 @@ _tooltip=This is the level which the TPS must be BELOW before closed loop EGO co
 keys=offset,precision,size,raw_upper,fromecu_mult,bind_to_list,tooltip
 offset=738
 size=_S16_
-fromecu_mult=0.1
-raw_upper=3000
+fromecu_mult=0.01
+raw_upper=30000
 precision=1
 bind_to_list=ego_ctrl
 _tooltip=This is the level which the Manifold Pressure (MAP) must be BELOW before closed loop EGO correction will take place. NOTE: other conditions above must ALSO be met.
@@ -347,8 +356,8 @@ _tooltip=This is the level which the Manifold Pressure (MAP) must be BELOW befor
 keys=offset,precision,size,raw_upper,fromecu_mult,bind_to_list,tooltip
 offset=753
 size=_S16_
-fromecu_mult=0.1
-raw_upper=3000
+fromecu_mult=0.01
+raw_upper=30000
 precision=1
 bind_to_list=ego_ctrl
 _tooltip=This is the level which the Manifold Pressure (MAP) must be ABOVE before closed loop EGO correction will take place. NOTE: other conditions above must ALSO be met.
@@ -380,3 +389,8 @@ offset=595
 bind_to_list=wb_simple,wb_ego
 _tooltip=This is the number of ignition events that must take place before an EGO correction can occur.  This limits the correction speed, to avoid oscillation.
 
+[ego_wait_secs_entry]
+keys=page,offset,tooltip
+page=1
+offset=829
+_tooltip=See MegaManual

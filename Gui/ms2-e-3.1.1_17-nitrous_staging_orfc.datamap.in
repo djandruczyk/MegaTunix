@@ -1,0 +1,652 @@
+[global]
+description=Object data map for the Nitrous/Staging/ORFC tab
+_tab_name=_N<sub>2</sub>O/Staging/ORFC
+id_prefix=NSO_
+groups=defaults,load,rpm,staging
+ellipsize=TRUE
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=2
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[load]
+keys=use_color,size,precision,raw_lower,raw_upper,fromecu_mult,tooltip
+use_color=TRUE
+size=_S16_
+precision=1
+raw_lower=0
+raw_upper=2500
+fromecu_mult=0.1
+_tooltip=Load Values for staging percentage table
+
+[rpm]
+keys=use_color,size,raw_upper,tooltip
+use_color=TRUE
+size=_U16_
+raw_upper=16000
+_tooltip=RPM Values for staging percentage table
+
+[staging]
+keys=use_color,size,raw_upper,tooltip
+size=_U08_
+raw_upper=100
+use_color=TRUE
+_tooltip=Staging values in percentage
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[3d_view_button]
+keys=table_num,tooltip,bind_to_list
+table_num=21
+bind_to_list=3d_buttons
+_tooltip=This pops up a 3 dimensional view of the current Boost-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
+
+[tracking_checkbutton]
+keys=handler,table_num
+handler=_TRACKING_FOCUS_
+table_num=21
+
+[export_button]
+keys=handler,table_num
+handler=_EXPORT_SINGLE_TABLE_
+table_num=21
+
+[import_button]
+keys=handler,table_num
+handler=_IMPORT_SINGLE_TABLE_
+table_num=21
+
+[rescale_button]
+keys=handler,data
+handler=_RESCALE_TABLE_
+data=NSO_rescale_entry,NSO_rescale_combo
+
+
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=tab_ident,sub-notebook
+tab_ident=_STAGING_TAB_
+sub-notebook=NSO_notebook1
+
+[gaugeframe1]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+page=1
+table_num=21
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+datasource=rpm
+
+[gaugeframe2]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+page=1
+table_num=21
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
+datasource=fuelload
+
+[gaugeframe3]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+page=1
+table_num=21
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=tpspercent
+
+[gaugeframe4]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+page=1
+table_num=21
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
+datasource=afr1
+
+[rescale_entry]
+keys=table_num
+table_num=21
+
+[rescale_combo]
+keys=table_num,post_functions_with_arg
+table_num=21
+post_functions_with_arg=lock_entry
+
+[main_table]
+keys=rescaler_frame
+rescaler_frame=NSO_rescale_frame
+
+
+[no2_dt_enrich_combo]
+keys=bind_to_list
+bind_to_list=dual_table
+
+[stage2_params_frame]
+keys=bind_to_list
+bind_to_list=n2o_stage2
+
+[nitrous_params_table]
+keys=bind_to_list
+bind_to_list=n2o_controls
+
+[nitrous_stage2_frame]
+keys=bind_to_list
+bind_to_list=n2o_controls
+
+[n2o_local_input_pin_table]
+keys=bind_to_list
+bind_to_list=n2o_in_local
+
+[n2o_remote_input_pin_table]
+keys=bind_to_list
+bind_to_list=n2o_in_remote
+
+[n2o_local_output_pins_table]
+keys=bind_to_list
+bind_to_list=n2o_out_local
+
+[n2o_remote_output_pins_table]
+keys=bind_to_list
+bind_to_list=n2o_out_remote
+
+[staging_params_table]
+keys=bind_to_list
+bind_to_list=inj_staging
+
+[gradual_staging_table]
+keys=bind_to_list
+bind_to_list=gradual_staging
+
+[sec_staging_params_table]
+keys=bind_to_list
+bind_to_list=sec_staging
+
+[orfc_params_table]
+keys=bind_to_list
+bind_to_list=orfc
+
+[staging_table_vbox1]
+keys=bind_to_list,table_num
+table_num=21
+bind_to_list=staging_table
+
+#----- Labels ---------------------------------------------------------------
+
+[orfc_clt_label]
+keys=bind_to_list,k_label,f_label,c_label,temp_dep
+bind_to_list=temperature
+k_label=and CLT greater than: (\302\260K.)
+f_label=and CLT greater than: (\302\260F.)
+c_label=and CLT greater than: (\302\260C.)
+temp_dep=TRUE
+
+[no2_enable_clt_label]
+keys=bind_to_list,k_label,f_label,c_label,temp_dep
+bind_to_list=temperature
+k_label=and CLT temp above: (\302\260K.)
+f_label=and CLT temp above: (\302\260F.)
+c_label=and CLT temp above: (\302\260C.)
+temp_dep=TRUE
+
+[staging_tab_label]
+keys=bind_to_list
+bind_to_list=staging_table
+
+[orfc_ego_label]
+keys=bind_to_list
+bind_to_list=ego_ctrl
+
+[stage2_retard_label]
+keys=bind_to_list
+bind_to_list=ign
+
+[n2o_retard_label]
+keys=bind_to_list
+bind_to_list=ign
+
+[n2o_launch_label]
+keys=bind_to_list
+bind_to_list=launch_control
+
+[n2o_flatshift_label]
+keys=bind_to_list
+bind_to_list=flatshift
+
+[pri_staging_threshold_units_label]
+keys=bind_to_list,labels
+bind_to_list=staged_units
+labels=Primary staging threshold,Primary staging threshold (RPM),Primary staging threshold (kPa),Primary staging threshold (TPS %),Primary staging threshold (Duty %)
+
+[pri_staging_hysteresis_units_label]
+keys=bind_to_list,labels
+bind_to_list=staged_units
+labels=Primary staging hysteresis,Primary staging hysteresis (RPM),Primary staging hysteresis (kPa),Primary staging hysteresis (TPS %),Primary staging hysteresis (Duty %)
+
+[sec_staging_threshold_units_label]
+keys=bind_to_list,labels
+bind_to_list=sec_staged_units
+labels=Secondary staging threshold,Secondary staging threshold (RPM),Secondary staging threshold (kPa),Secondary staging threshold (TPS %),Secondary staging threshold (Duty %)
+
+[sec_staging_hysteresis_units_label]
+keys=bind_to_list,labels
+bind_to_list=sec_staged_units
+labels=Secondary staging hysteresis,Secondary staging hysteresis (RPM),Secondary staging hysteresis (kPa),Secondary staging hysteresis (TPS %),Secondary staging hysteresis (Duty %)
+
+#----- Combos ---------------------------------------------------------------
+
+[staged_inj_combo]
+keys=offset,choices,bitmask,bitvals,toggle_labels,toggle_groups,tooltip
+offset=697
+bitvals=0,1,2,3,4,5
+bitmask=7
+choices=Off,RPM,MAP,TPS,Duty,Table
+toggle_labels=staged_units
+toggle_groups=,inj_staging,inj_staging,inj_staging,inj_staging,inj_staging:staging_table
+_tooltip=See MS2-Extra Manuals
+
+[staging_transition_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=697
+bitvals=0,1
+bitmask=64
+choices=Disabled,Enabled
+toggle_groups=,gradual_staging
+_tooltip=See MS2-Extra Manuals
+
+[sec_staging_parameter_combo]
+keys=offset,choices,bitmask,bitvals,toggle_labels,toggle_groups,tooltip
+offset=697
+bitvals=0,1,2,3,4
+bitmask=56
+choices=Off,RPM,MAP,TPS,Duty
+toggle_labels=sec_staged_units
+toggle_groups=,sec_staging,sec_staging,sec_staging,sec_staging
+_tooltip=See MS2-Extra Manuals
+
+[sec_staging_logic_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=697
+bitvals=0,1
+bitmask=128
+choices=OR,AND
+_tooltip=See MS2-Extra Manuals
+
+[orfc_combo]
+keys=page,offset,choices,bitmask,bitvals,toggle_groups,tooltip
+page=1
+offset=828
+bitvals=0,1
+bitmask=1
+choices=Disabled,Enabled
+toggle_groups=,orfc
+_tooltip=See MS2-Extra Manuals
+
+[n2o_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=707
+bitvals=0,1
+bitmask=4
+choices=Disabled,Enabled
+toggle_groups=,n2o_controls
+_tooltip=See MS2-Extra Manuals
+
+[n2o_input_location_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=803
+choices=Local,Remote
+bitvals=0,1
+bitmask=1
+toggle_groups=n2o_in_local,n2o_in_remote
+_tooltip=See MS2-Extra Manuals
+
+[n2o_local_input_pin_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=707
+choices=PE0/JS7,PE1,JS10,JS11,JS5,JS4
+bitvals=0,1,2,3,4,5
+bitmask=112
+_tooltip=See MS2-Extra Manuals
+
+[n2o_remote_input_pin_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=803
+choices=Remote Port3 Bit 0,Remote Port3 Bit 1,Remote Port3 Bit 2,Remote Port3 Bit 3,Remote Port3 Bit 4,Remote Port3 Bit 5,Remote Port3 Bit 6,Remote Port3 Bit 7
+bitvals=0,1,2,3,4,5,6,7
+bitmask=28
+_tooltip=See MS2-Extra Manuals
+
+[n2o_output_location_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=803
+choices=Local,Remote
+bitvals=0,1
+bitmask=2
+toggle_groups=n2o_out_local,n2o_out_remote
+_tooltip=See MS2-Extra Manuals
+
+[n2o_local_output_pins_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=707
+choices=IAC1+2,FIDLE+D15
+bitvals=0,1
+bitmask=128
+_tooltip=See MS2-Extra Manuals
+
+[n2o_remote_output_pins_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=803
+choices=Remote Port1 Bits 0+1,Remote Port1 Bits 1+2,Remote Port1 Bits 2+3,Remote Port1 Bits 3+4,Remote Port1 Bits 4+5,Remote Port1 Bits 5+6,Remote Port1 Bits 6+7
+bitvals=0,1,2,3,4,5,6
+bitmask=224
+_tooltip=See MS2-Extra Manuals
+
+[which_bank_combo]
+keys=offset,choices,bitmask,bitvals,tooltip
+offset=707
+bitvals=1,2,3
+bitmask=3
+choices=Bank 1,Bank 2,Both Banks
+_tooltip=See MS2-Extra Manuals
+
+[stage2_n2o_combo]
+keys=offset,choices,bitmask,bitvals,toggle_groups,tooltip
+offset=707
+bitvals=0,1
+bitmask=8
+choices=Disabled,Enabled
+toggle_groups=,n2o_stage2
+_tooltip=See MS2-Extra Manuals
+
+#----- Entries ----------------------------------------------------------------
+
+[staging_pri_inj_size_entry]
+keys=offset,size,raw_upper,tooltip
+offset=693
+size=_U16_
+raw_upper=15000
+_tooltip=Size of primary injectors in cc/min
+
+[staging_sec_inj_size_entry]
+keys=offset,size,raw_upper,tooltip
+offset=695
+size=_U16_
+raw_upper=15000
+_tooltip=Size of secondary injectors in cc/min
+
+[staging_transition_events_entry]
+keys=offset,tooltip
+offset=698
+_tooltip=See MS-2 Extra Manuals
+
+[primary_red_delay_entry]
+keys=offset,raw_upper,tooltip
+offset=985
+raw_upper=30
+_tooltip=See MS-2 Extra Manuals
+
+[secondary_enrichment_entry]
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
+offset=741
+size=_U16_
+raw_upper=10000
+fromecu_mult=0.001
+precision=3
+_tooltip=See MS-2 Extra Manuals
+
+[pri_staging_threshold_entry]
+keys=offset,size,raw_upper,tooltip
+offset=699
+size=_U16_
+raw_upper=25500
+_tooltip=See MS-2 Extra Manuals
+
+[pri_staging_hysteresis_entry]
+keys=offset,size,raw_upper,tooltip
+offset=703
+size=_U16_
+raw_upper=25500
+_tooltip=See MS-2 Extra Manuals
+
+[sec_staging_threshold_entry]
+keys=offset,size,raw_upper,tooltip
+offset=701
+size=_U16_
+raw_upper=25500
+_tooltip=See MS-2 Extra Manuals
+
+[sec_staging_hysteresis_entry]
+keys=offset,size,raw_upper,tooltip
+offset=705
+size=_U16_
+raw_upper=25500
+_tooltip=See MS-2 Extra Manuals
+
+[orfc_rpm_entry]
+keys=page,offset,size,raw_upper,tooltip
+page=1
+offset=833
+size=_U16_
+raw_upper=15000
+_tooltip=See MS-2 Extra Manuals
+
+[orfc_map_entry]
+keys=page,offset,fromecu_mult,size,raw_upper,tooltip
+page=1
+offset=835
+size=_U16_
+fromecu_mult=0.01
+raw_upper=40000
+precision=1
+_tooltip=See MS-2 Extra Manuals
+
+[orfc_tps_entry]
+keys=page,offset,fromecu_mult,size,raw_upper,tooltip
+page=1
+offset=837
+size=_S16_
+fromecu_mult=0.1
+raw_upper=1000
+precision=1
+_tooltip=See MS-2 Extra Manuals
+
+[orfc_clt_entry]
+keys=page,temp_dep,offset,fromecu_mult,size,raw_lower,raw_upper,bind_to_list,tooltip
+page=1
+temp_dep=TRUE
+offset=839
+size=_S16_
+fromecu_mult=0.1
+raw_lower=-400
+raw_upper=4500
+precision=1
+bind_to_list=temperature
+_tooltip=See MS-2 Extra Manuals
+
+[orfc_delay_entry]
+keys=page,offset,fromecu_mult,tooltip
+page=1
+offset=841
+fromecu_mult=0.1
+precision=1
+_tooltip=See MS-2 Extra Manuals
+
+[orfc_ego_delay_entry]
+keys=page,offset,raw_upper,bind_to_list,tooltip
+page=1
+offset=848
+raw_upper=10
+bind_to_list=ego_ctrl
+_tooltip=See MS-2 Extra Manuals
+
+[orfc_rpm_lower_entry]
+keys=page,size,offset,raw_upper,tooltip
+page=1
+size=_U16_
+offset=849
+raw_upper=15000
+_tooltip=See MS-2 Extra Manuals
+
+[no2_enable_above_rpm_entry]
+keys=offset,size,raw_lower,raw_upper,tooltip
+size=_U16_
+offset=708
+raw_lower=1000
+raw_upper=25000
+_tooltip=See MS-2 Extra Manuals
+
+[no2_enable_clt_entry]
+keys=offset,size,fromecu_mult,raw_lower,raw_upper,temp_dep,bind_to_list,precision,tooltip
+offset=714
+size=_S16_
+raw_lower=-400
+raw_upper=4000
+fromecu_mult=0.1
+precision=1
+temp_dep=TRUE
+bind_to_list=temperature
+_tooltip=See MS-2 Extra Manuals
+
+[no2_enable_tps_entry]
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
+size=_S16_
+offset=712
+raw_upper=1000
+fromecu_mult=0.1
+precision=1
+_tooltip=See MS-2 Extra Manuals
+
+[no2_max_rpm_entry]
+keys=offset,size,raw_lower,raw_upper,tooltip
+size=_U16_
+offset=710
+raw_lower=1000
+raw_upper=25000
+_tooltip=See MS-2 Extra Manuals
+
+[pw_at_no2_min_rpm_entry]
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
+size=_U16_
+offset=718
+fromecu_mult=0.000666
+raw_upper=25000
+precision=3
+_tooltip=See MS-2 Extra Manuals
+
+[pw_at_no2_max_rpm_entry]
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
+size=_U16_
+offset=720
+fromecu_mult=0.000666
+raw_upper=25000
+precision=3
+_tooltip=See MS-2 Extra Manuals
+
+[n2o_retard_entry]
+keys=offset,size,fromecu_mult,raw_upper,precision,bind_to_list,tooltip
+size=_S16_
+offset=716
+fromecu_mult=0.1
+raw_upper=500
+precision=1
+bind_to_list=ign
+_tooltip=See MS-2 Extra Manuals
+
+[n2o_launch_delay_entry]
+keys=offset,fromecu_mult,precision,bind_to_list,tooltip
+offset=722
+fromecu_mult=0.01
+precision=2
+bind_to_list=launch_control
+_tooltip=See MS-2 Extra Manuals
+
+[n2o_flatshift_delay_entry]
+keys=offset,fromecu_mult,precision,bind_to_list,tooltip
+offset=723
+fromecu_mult=0.01
+precision=2
+bind_to_list=flatshift
+_tooltip=See MS-2 Extra Manuals
+
+[stage2_enable_above_entry]
+keys=offset,size,raw_lower,raw_upper,tooltip
+size=_U16_
+offset=725
+raw_lower=1000
+raw_upper=25000
+_tooltip=See MS-2 Extra Manuals
+
+[stage2_max_rpm_entry]
+keys=offset,size,raw_lower,raw_upper,tooltip
+size=_U16_
+offset=727
+raw_lower=1000
+raw_upper=25000
+_tooltip=See MS-2 Extra Manuals
+
+[stage2_delay_entry]
+keys=offset,fromecu_mult,precision,bind_to_list,tooltip
+offset=729
+fromecu_mult=0.01
+precision=2
+bind_to_list=flatshift
+_tooltip=See MS-2 Extra Manuals
+
+[stage2_retard_entry]
+keys=offset,size,fromecu_mult,raw_upper,precision,bind_to_list,tooltip
+size=_S16_
+offset=730
+fromecu_mult=0.1
+raw_upper=500
+precision=1
+bind_to_list=ign
+_tooltip=See MS-2 Extra Manuals
+
+[stage2_pw_at_no2_min_rpm_entry]
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
+size=_U16_
+offset=732
+fromecu_mult=0.000666
+raw_upper=25000
+precision=3
+_tooltip=See MS-2 Extra Manuals
+
+[stage2_pw_at_no2_max_rpm_entry]
+keys=offset,size,fromecu_mult,raw_upper,precision,tooltip
+size=_U16_
+offset=734
+fromecu_mult=0.000666
+raw_upper=25000
+precision=3
+_tooltip=See MS-2 Extra Manuals
+
+[load_entry]
+keys=group
+group=load
+offset=791
+
+[rpm_entry]
+keys=group
+group=rpm
+offset=779
+
+[staging_entry]
+keys=group
+group=staging
+offset=743

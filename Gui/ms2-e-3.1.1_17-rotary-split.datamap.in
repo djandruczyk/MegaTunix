@@ -1,0 +1,214 @@
+[global]
+description=Object data map for MS2-E Rotary Split Table
+_tab_name=_Rotary
+id_prefix=Rot_
+groups=defaults,load,rpm,table
+bind_to_list=ign
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=2
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+[load]
+keys=size,fromecu_mult,use_color,tooltip
+use_color=TRUE
+size=_U16_
+fromecu_mult=0.01
+_tooltip=The LOAD ("Ignload") bins in combination with the RPM bins on the bottom of the Rotary Trailing Table define the vertexes (points on the map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+[rpm]
+keys=size,use_color,raw_upper,tooltip
+size=_U16_
+raw_upper=12000
+use_color=TRUE
+_tooltip=The RPM bins in combination with the LOAD bins on the left side of the Rotary Trailing-Table define the vertexes (points on the Rotary Trailing map).  The ECU will interpolate between vertexes providing a smooth transition between points on the map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+[table]
+keys=size,table_num,fromecu_mult,raw_lower,raw_upper,precision,use_color,tooltip
+size=_S16_
+table_num=11
+fromecu_mult=0.1
+precision=1
+raw_lower=-200
+raw_upper=200
+use_color=TRUE
+_tooltip=The Rotary Split Entries are the values of Rotary Split in degrees that the ECU should try to maintain.   Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+
+#----- Gauges --------------------------------------------------------------
+
+[gaugeframe1]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+table_num=11
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+datasource=rpm
+
+[gaugeframe2]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+table_num=11
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_IgnLoad_Gauge.xml
+datasource=ignload
+
+[gaugeframe3]
+keys=post_functions_with_arg,gaugexml,datasource,table_num
+table_num=11
+post_functions_with_arg=create_gauge
+gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
+datasource=sparkangle
+
+#----- Widgets ----------------------------------------------------------------
+
+[topframe]
+keys=tab_ident,bind_to_list,table_num
+tab_ident=_ROTARYTABLES_TAB_
+table_num=11
+bind_to_list=ign
+
+[rotary_mode_table]
+keys=bind_to_list
+bind_to_list=rotary,ign
+
+[import_export_frame]
+keys=bind_to_list
+bind_to_list=rotary,ign
+
+[tracking_frame]
+keys=bind_to_list
+bind_to_list=rotary,ign
+
+[gauge_table]
+keys=bind_to_list
+bind_to_list=rotary,ign
+
+[basetable]
+keys=bind_to_list
+bind_to_list=rotary,ign
+
+#----- Labels ----------------------------------------------------------------
+
+[title]
+keys=set_label,bind_to_list
+set_label=Rotary Split Table 
+bind_to_list=rotary
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_MS_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+[tracking_checkbutton]
+keys=handler,table_num
+handler=_TRACKING_FOCUS_
+table_num=11
+
+[export_button]
+keys=handler,table_num
+handler=_EXPORT_SINGLE_TABLE_
+table_num=11
+
+[import_button]
+keys=handler,table_num
+handler=_IMPORT_SINGLE_TABLE_
+table_num=11
+
+[3d_view_button]
+keys=table_num,tooltip,bind_to_list
+table_num=11
+bind_to_list=3d_buttons
+_tooltip=This pops up a 3 dimensional view of the current Rotary Trailing-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
+
+[rescale_button]
+keys=handler,data
+handler=_RESCALE_TABLE_
+data=Rot_rescale_entry,Rot_rescale_combo
+
+#----- Rescale Entries ------------------------------------------------------
+
+[rescale_entry]
+keys=table_num
+table_num=11
+
+#----- Rescale Combos ------------------------------------------------------
+
+[rescale_combo]
+keys=table_num,post_functions_with_arg
+table_num=11
+post_functions_with_arg=lock_entry
+
+#----- MAIN VETable Container ------------------------------------------------
+
+[main_table]
+keys=rescaler_frame
+rescaler_frame=Rot_rescale_frame
+
+#----- Load Entries (MAP/TPS) -----------------------------------------------
+
+[load_entry_0]
+keys=group
+offset=935
+group=load
+
+#----- RPM Entries ---------------------------------------------------------
+
+[rpm_entry_0]
+keys=group
+offset=951
+group=rpm
+
+#----- VE-Table Entries -----------------------------------------------------
+
+[trail_entry]
+keys=group
+offset=807
+group=table
+
+[rotary_mode_combo]
+keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=967
+bitmask=32
+toggle_groups=,rotary
+_tooltip=Turns on/off Trailing Split Support.
+
+[rotary_output_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=FC mode,FD mode
+bitvals=0,1
+offset=967
+bitmask=1
+_tooltip=See MS2-Extra Manuals
+
+[rotary_rx8_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Disabled,Enabled
+bitvals=0,1
+offset=967
+bitmask=4
+_tooltip=See MS2-Extra Manuals
+
+[rotary_negsplit_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Not Allowed,Allowed
+bitvals=0,1
+offset=967
+bitmask=2
+_tooltip=See MS2-Extra Manuals
+
