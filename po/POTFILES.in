@@ -7,6 +7,7 @@ Gui/dt-params.glade
 Gui/Dualtable-constants.glade
 Gui/enrichments.glade
 Gui/error_status.glade
+Gui/freeems-benchtest.glade
 Gui/freeems-debug.glade
 Gui/generictable_XxYxZ.glade
 Gui/inj_timing_6x6x3.glade
@@ -23,6 +24,8 @@ Gui/ms2-e-3.0.3v-ego_rev.glade
 Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade
 Gui/ms2-e-3.0.3y-ignition.glade
 Gui/ms2-e-3.0.3y-noise_lag.glade
+Gui/ms2-e-3.1.1_17-crank_idle_warmup.glade
+Gui/ms2-e-3.1.1_17-ego_rev.glade
 Gui/ms2-e-3.1.x-crank_idle_warmup.glade
 Gui/ms2-e-3.x-als.glade
 Gui/ms2-e-3.x-boost_knock_launch.glade
@@ -107,7 +110,6 @@ src/apicheck.c
 src/args.c
 src/binlogger.c
 src/combo_loader.c
-src/comms.c
 src/comms_gui.c
 src/conversions.c
 src/core_gui.c
@@ -137,6 +139,7 @@ src/personalities.c
 src/plugin.c
 src/plugins/freeems/datamgmt.c
 src/plugins/freeems/fileio.c
+src/plugins/freeems/freeems_benchtest.c
 src/plugins/freeems/freeems_comms.c
 src/plugins/freeems/freeems_errors.c
 src/plugins/freeems/freeems_gui_handlers.c
@@ -230,9 +233,7 @@ gaugedesigner/polygons.c
 gaugedesigner/tblocks.c
 gaugedesigner/tgroups.c
 gaugedesigner/warnings.c
-widgets/apifix.c
 widgets/combo_mask.c
-widgets/crx.c
 widgets/curve.c
 widgets/curve-demo.c
 widgets/curve-private.c
