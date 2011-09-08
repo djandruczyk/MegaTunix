@@ -9,7 +9,6 @@ profiles_in = \
 	MS2-Extra_3.1.0.prof.in \
 	MS2-Extra_3.1.1_17.prof.in \
 	MS2-Extra_3.1.x.als.prof.in \
-	MS3-Extra_1.0.0.prof.in \
 	MS2.prof.in 
 
 

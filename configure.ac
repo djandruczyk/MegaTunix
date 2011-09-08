@@ -273,6 +273,7 @@ Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Interrogator/Profiles/MS-1/Makefile
 Interrogator/Profiles/MS-2/Makefile
+Interrogator/Profiles/MS-3/Makefile
 Interrogator/Profiles/FreeEMS/Makefile
 Interrogator/Profiles/PIS/Makefile
 Interrogator/Profiles/SECU-3/Makefile
