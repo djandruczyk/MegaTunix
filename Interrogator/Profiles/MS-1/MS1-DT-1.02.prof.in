@@ -141,8 +141,8 @@ SliderMapFile=MS1-DT
 RuntimeTextMapFile=MS1-DT
 StatusMapFile=MS1-Std
 
-LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments,vetable_8x8e,vetable_8x8e,tools,warmupwizard
-TabConfs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,vetable_8x8e-DT_1,vetable_8x8e-DT_2,tools,warmupwizard
+LoadTabs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments,generic-vetable_8x8x1,generic-vetable_8x8x1,tools,warmupwizard
+TabConfs=runtime,datalogging,logviewer,Dualtable-constants,dt-params,enrichments_BnG,ms1-dualtable1-vetable_8x8x1,ms1-dualtable2-vetable_8x8x1,tools,warmupwizard
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

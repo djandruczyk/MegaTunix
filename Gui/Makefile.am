@@ -16,7 +16,7 @@ gui_glade_files = 	\
 	       	PIS-settings.glade \
 		generic-afrtable_8x8x2.glade \
 		generic-afrtable_12x12x2.glade \
-		boost_6x6x3.glade \
+		generic-boost_6x6x3.glade \
 		datalogging.glade \
 		dt-params.glade \
 		enrichments.glade \
@@ -81,23 +81,23 @@ gui_glade_files = 	\
 		ms2-runtime.glade \
 		ms2-user_outputs.glade \
 		ms2-warmup.glade \
-		msns-e-accelwizard.glade \
-		msns-e-advanced.glade \
-		msns-e-boost-knock.glade \
-		msns-e-crank-ase.glade \
-		msns-e-ego.glade \
-		msns-e-features.glade \
-		msns-e-fuelconstants.glade \
-		msns-e-idle.glade \
-		msns-e-output-pins.glade \
-		msns-e-output-pins-hr-011x.glade \
-		msns-e-outputs-sel.glade \
-		msns-e-toothtrigger.glade \
-		msns-e-traction.glade \
-		msns-e-water-nos-launch.glade \
-		msns-e-wheeldecode.glade \
-		msns-e-wheeldecode-029yx.glade \
-		msns-e-wheeldecode-hr-11d.glade \
+		ms1-e-029yx-wheeldecode.glade \
+		ms1-e-accelwizard.glade \
+		ms1-e-advanced.glade \
+		ms1-e-boost-knock.glade \
+		ms1-e-crank-ase.glade \
+		ms1-e-ego.glade \
+		ms1-e-features.glade \
+		ms1-e-fuelconstants.glade \
+		ms1-e-hr_011x-output-pins.glade \
+		ms1-e-hr_11d-wheeldecode.glade \
+		ms1-e-idle.glade \
+		ms1-e-output-pins.glade \
+		ms1-e-outputs-sel.glade \
+		ms1-e-toothtrigger.glade \
+		ms1-e-traction.glade \
+		ms1-e-water-nos-launch.glade \
+		ms1-e-wheeldecode.glade \
 		mtxloader.glade \
 		rotary-trail.glade \
 		runtime.glade \
@@ -122,9 +122,9 @@ gui_in_files = 	\
 		PIS-runtime.datamap.in \
 		PIS-settings.datamap.in \
 		ms1-e-029x-afrtable_8x8x2.datamap.in \
+		ms1-e-029x-boost_6x6x3.datamap.in \
 		ms2-generic-afrtable_12x12x2.datamap.in \
 		ms2-e-generic-afrtable_12x12x2.datamap.in \
-		boost_6x6x3-029x.datamap.in \
 		datalogging.datamap.in \
 		dt-params.datamap.in \
 		enrichments_BnG.datamap.in \
@@ -136,7 +136,27 @@ gui_in_files = 	\
 		memviewer.datamap.in \
 		ms1-dualtable1-vetable_8x8x1.datamap.in \
 		ms1-dualtable2-vetable_8x8x1.datamap.in \
+		ms1-e-029x-accelwizard.datamap.in \
+		ms1-e-029x-advanced.datamap.in \
+		ms1-e-029x-boost-knock.datamap.in \
+		ms1-e-029x-crank-ase.datamap.in \
+		ms1-e-029x-ego.datamap.in \
+		ms1-e-029x-features.datamap.in \
+		ms1-e-029x-fuelconstants.datamap.in \
+		ms1-e-029x-idle.datamap.in \
+		ms1-e-029x-outputs-sel.datamap.in \
+		ms1-e-029x-output-pins.datamap.in \
+		ms1-e-029x-rotary-trail.datamap.in \
+		ms1-e-029x-toothtrigger.datamap.in \
+		ms1-e-029x-traction.datamap.in \
 		ms1-e-029x-vetable_12x12x3.datamap.in \
+		ms1-e-029x-water-nos-launch.datamap.in \
+		ms1-e-029x-wheeldecode.datamap.in \
+		ms1-e-hr-fuelconstants.datamap.in \
+		ms1-e-hr-idle.datamap.in \
+		ms1-e-hr_011x-output-pins.datamap.in \
+		ms1-e-hr_10x-wheeldecode.datamap.in \
+		ms1-e-hr_11d-wheeldecode.datamap.in \
 		ms1-generic-vetable_8x8x1.datamap.in \
 		ms2-accel.datamap.in \
 		ms2-alpha-n_6x6x1.datamap.in \
@@ -205,26 +225,6 @@ gui_in_files = 	\
 		ms2-runtime.datamap.in \
 		ms2-user_outputs.datamap.in \
 		ms2-warmup.datamap.in \
-		msns-e-accelwizard-029x.datamap.in \
-		msns-e-advanced-029x.datamap.in \
-		msns-e-boost-knock-029x.datamap.in \
-		msns-e-crank-ase-029x.datamap.in \
-		msns-e-ego-029x.datamap.in \
-		msns-e-features-029x.datamap.in \
-		msns-e-fuelconstants-hr.datamap.in \
-		msns-e-fuelconstants-029x.datamap.in \
-		msns-e-idle-029x.datamap.in \
-		msns-e-idle-hr.datamap.in \
-		msns-e-output-pins-029x.datamap.in \
-		msns-e-output-pins-hr-011x.datamap.in \
-		msns-e-outputs-sel-029x.datamap.in \
-		msns-e-toothtrigger-029x.datamap.in \
-		msns-e-traction-029x.datamap.in \
-		msns-e-water-nos-launch-029x.datamap.in \
-		msns-e-wheeldecode-029x.datamap.in \
-		msns-e-wheeldecode-hr_10x.datamap.in \
-		msns-e-wheeldecode-hr_11d.datamap.in \
-		rotary-trail-029x.datamap.in \
 		runtime.datamap.in \
 		ms2-generic-sparktable_12x12x1.datamap.in \
 		ms1-e-029x-sparktable_12x12x2.datamap.in \
