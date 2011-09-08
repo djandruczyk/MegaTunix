@@ -90,7 +90,7 @@ gui_glade_files = 	\
 		ms1-e-features.glade \
 		ms1-e-fuelconstants.glade \
 		ms1-e-hr_011x-output-pins.glade \
-		ms1-e-hr_11d-wheeldecode.glade \
+		ms1-e-hr_011d-wheeldecode.glade \
 		ms1-e-idle.glade \
 		ms1-e-output-pins.glade \
 		ms1-e-outputs-sel.glade \
@@ -155,8 +155,8 @@ gui_in_files = 	\
 		ms1-e-hr-fuelconstants.datamap.in \
 		ms1-e-hr-idle.datamap.in \
 		ms1-e-hr_011x-output-pins.datamap.in \
-		ms1-e-hr_10x-wheeldecode.datamap.in \
-		ms1-e-hr_11d-wheeldecode.datamap.in \
+		ms1-e-hr_010x-wheeldecode.datamap.in \
+		ms1-e-hr_011d-wheeldecode.datamap.in \
 		ms1-generic-vetable_8x8x1.datamap.in \
 		ms2-accel.datamap.in \
 		ms2-alpha-n_6x6x1.datamap.in \
@@ -178,7 +178,7 @@ gui_in_files = 	\
 		ms2-e-3.1.1_17-sparktable_12x12x3.datamap.in \
 		ms2-e-3.1.1_17-vetable_12x12x3.datamap.in \
 		ms2-e-3.1.1_17-vetable_16x16x3.datamap.in \
-		ms2-e-3.1.1_17-vetrim_16x16x4-ms2.datamap.in \
+		ms2-e-3.1.1_17-vetrim_16x16x4.datamap.in \
 		ms2-e-3.1.x-crank_idle_warmup.datamap.in \
 		ms2-e-3.x-accel.datamap.in \
 		ms2-e-3.x-als.datamap.in \
@@ -205,8 +205,6 @@ gui_in_files = 	\
 		ms2-e-crank_idle_warmup.datamap.in \
 		ms2-e-debugging.datamap.in \
 		ms2-e-ego_rev.datamap.in \
-		ms2-e-generic-vetable_12x12x3.datamap.in \
-		ms2-e-generic-vetable_16x16x3.datamap.in \
 		ms2-e-globals.datamap.in \
 		ms2-e-ignition.datamap.in \
 		ms2-e-nitrous_staging_orfc.datamap.in \
@@ -217,6 +215,8 @@ gui_in_files = 	\
 		ms2-e-toothtrigger-3.x.datamap.in \
 		ms2-e-vetrim_16x16x4.datamap.in \
 		ms2-generic-vetable_12x12x2.datamap.in \
+		ms2-generic-vetable_12x12x3.datamap.in \
+		ms2-generic-vetable_16x16x3.datamap.in \
 		ms2-globals.datamap.in \
 		ms2-idle_ego_rev.datamap.in \
 		ms2-ignition.datamap.in \
