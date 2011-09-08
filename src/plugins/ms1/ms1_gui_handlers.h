@@ -46,6 +46,7 @@ gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
 gboolean ecu_std_button_handler(GtkWidget *, gpointer);
 gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_combo_handler(GtkWidget *, gpointer);
+gboolean ecu_update_combo(GtkWidget *);
 void ecu_update_entry(GtkWidget *);
 void ecu_gui_init(void);
 /* Prototypes */

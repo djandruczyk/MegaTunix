@@ -17,6 +17,7 @@ snapshots_files = 	\
 			MS2-Extra_V2.1.0e-series.ecu \
 			MS2-Extra_V3.0.x-series.ecu \
 			MS2-Extra_V3.0.3w_series.ecu \
+			MS2-Extra_V3.0.3y_series.ecu \
 			MS2-Extra_V3.1.0_series.ecu \
 			MS2-Extra_V3.1.x.ALS.ecu
 

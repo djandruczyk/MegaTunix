@@ -905,9 +905,12 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 		if (firmware->rf_params[i]->divider == 0)
 			firmware->rf_params[i]->divider = 1;
 		firmware->rf_params[i]->last_divider = firmware->rf_params[i]->divider;
-		firmware->rf_params[i]->alternate = ms_get_ecu_data(canID,firmware->table_params[i]->alternate_page,firmware->table_params[i]->alternate_offset,size);
-		firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
-		/*printf("alternate for table %i in the firmware is %i\n",i,firmware->rf_params[i]->alternate);*/
+		if (!(firmware->capabilities & MS1_DT))
+		{
+			firmware->rf_params[i]->alternate = ms_get_ecu_data(canID,firmware->table_params[i]->alternate_page,firmware->table_params[i]->alternate_offset,size);
+			firmware->rf_params[i]->last_alternate = firmware->rf_params[i]->alternate;
+			/*printf("alternate for table %i in the firmware is %i\n",i,firmware->rf_params[i]->alternate);*/
+		}
 		reqfuel = ms_get_ecu_data(canID,firmware->table_params[i]->reqfuel_page,firmware->table_params[i]->reqfuel_offset,firmware->table_params[i]->reqfuel_size);
 		/*
 		printf("reqfuel for table %i in the firmware is %i\n",i,reqfuel);

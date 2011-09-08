@@ -210,9 +210,9 @@ fast_exit:
 				}
 				break;
 			case WRITE_CMD:
-				/*				g_timer_start(clock);*/
+				/*g_timer_start(clock);*/
 				message->status = write_data(message);
-				/*				printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
+				/*printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
 				if (message->command->helper_function)
 				{
 					if (DATA_GET(global_data,"leaving"))
@@ -221,7 +221,7 @@ fast_exit:
 					message->command->helper_function(message, message->command->helper_func_arg);
 					gdk_threads_leave();
 				}
-				//		printf("Write command with post function time %f\n",g_timer_elapsed(clock,NULL));
+				/*printf("Write command with post function time %f\n",g_timer_elapsed(clock,NULL));*/
 				break;
 			case NULL_CMD:
 				/*printf("null_cmd, just passing thru\n");*/

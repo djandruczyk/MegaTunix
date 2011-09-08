@@ -581,6 +581,18 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 
 
 /*!
+  \brief ECU specific combo update routine.  This is called from the common
+  routine to handle any firmware specific stuff related to a ComboBoxEntry
+  \param widget is the pointer to the GtkComboBox widget
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget * widget)
+{
+        return TRUE;
+}
+
+
+/*!
   \brief ECU specific handler to initialize any part of the core gui
   that is specific to this ECU firmware
   */
@@ -588,4 +600,5 @@ G_MODULE_EXPORT void ecu_gui_init(void)
 {
 	/* We don't need anything specific to this ecu initialized */
 }
+
 
