@@ -20,6 +20,7 @@
   */
 
 #include <api-versions.h>
+#include <conversions.h>
 #include <debugging.h>
 #include <getfiles.h>
 #include <glade/glade-xml.h>
@@ -361,6 +362,7 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	slider->last = 0.0;
 	slider->class = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
+	slider->temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
 	if ((gchar *)DATA_GET(object,"real_lower"))
 		slider->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
 	else
@@ -494,6 +496,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	slider->row = -1;
 	slider->history = (GArray *) DATA_GET(object,"history");
 	slider->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
+	slider->temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
 	if ((gchar *)DATA_GET(object,"real_lower"))
 		slider->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
 	else
@@ -734,8 +737,17 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	slider->last = current;
 	g_mutex_unlock(rtv_mutex);
 
-	upper = (gfloat)slider->upper;
-	lower = (gfloat)slider->lower;
+	if (slider->temp_dep)
+	{
+		upper = temp_to_host((gfloat)slider->upper);
+		lower = temp_to_host((gfloat)slider->lower);
+	}
+	else
+	{
+		upper = (gfloat)slider->upper;
+		lower = (gfloat)slider->lower;
+	}
+
 	
 	gdk_threads_enter();
 	if ((current != previous) || 

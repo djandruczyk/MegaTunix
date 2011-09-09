@@ -48,6 +48,7 @@ struct _Rt_Slider
 	gchar *friendly_name;	/*!< text for Label above */
 	gint lower;		/*!< Lower limit */
 	gint upper;		/*!< Upper limit */
+	gboolean temp_dep;	/*!< Temp dependancy flags to adjust upper/lower dynamically */
 	GArray *history;	/*!< where the data is from */
 	gfloat last_percentage;	/*!< last percentage of on screen slider */
 	gconstpointer *object;		/*!< object of obsession.... */
