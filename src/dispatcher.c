@@ -51,10 +51,10 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	gint i=0;
 	PostFunction *pf=NULL;
 	Io_Message *message = NULL;
-	GTimeVal time;
+	/*GTimeVal time;*/
 	extern gconstpointer *global_data;
 
-//	printf("pf_dispatcher running!\n");
+	/*printf("pf_dispatcher running!\n");*/
 	if (!pf_dispatch_cond)
 		pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
 	if (!pf_dispatch_mutex)
@@ -79,18 +79,21 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		return TRUE;
 	}
 
+	/*
 	g_get_current_time(&time);
-	g_time_val_add(&time,5000);
-	//message = g_async_queue_timed_pop(pf_dispatch_queue,&time);
+	g_time_val_add(&time,50000);
+	message = g_async_queue_timed_pop(pf_dispatch_queue,&time);
+	*/
 	message = g_async_queue_try_pop(pf_dispatch_queue);
 	if (!message)
 	{
-//		printf("no messages waiting, signalling\n");
-		/*	printf("no messages waiting, returning\n");*/
+		/*printf("no messages waiting, signalling\n");
+		printf("no messages waiting, returning\n");
+		*/
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
 		g_mutex_unlock(pf_dispatch_mutex);
-//		printf("returning!\n");
+		/*printf("returning!\n");*/
 		return TRUE;
 	}
 	if (!message->status)

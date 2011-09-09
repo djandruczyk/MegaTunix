@@ -1368,8 +1368,11 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 	/* Experimental... */
 	tab_widgets = OBJ_GET(topframe,"tab_widgets");
 	if (tab_widgets)
+	{
+		set_title(g_strdup(_("Updating Tab with current data...")));
 		g_list_foreach(tab_widgets,update_widget_f,NULL);
-
+	}
+	set_title(g_strdup(_("Ready...")));
 	tab_ident = (TabIdent)OBJ_GET(topframe,"tab_ident");
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(tab_ident));
 

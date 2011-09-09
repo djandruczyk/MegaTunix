@@ -1164,7 +1164,7 @@ G_MODULE_EXPORT gboolean handle_dependant_tab_load(gchar * datamap)
 			g_signal_handlers_unblock_by_func (G_OBJECT (tabinfo->notebook),
 					G_CALLBACK (notebook_page_changed),
 					NULL);
-			set_title(g_strdup(_("Ready")));
+			set_title(g_strdup(_("Tab Loaded")));
 			return TRUE;
 		}
 	}

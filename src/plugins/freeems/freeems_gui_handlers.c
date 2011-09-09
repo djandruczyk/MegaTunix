@@ -381,6 +381,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	}
 
 	/* Update all on screen controls (except bitfields (done above)*/
+	/*
 	gdk_threads_enter();
 	for (page=0;page<firmware->total_pages;page++)
 	{
@@ -398,11 +399,13 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 						update_widget,NULL);
 		}
 	}
+*/
 	for (i=0;i<firmware->total_tables;i++)
 		firmware->table_params[i]->color_update = FALSE;
 
 	DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 	thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Ready...</b>")));
+	gdk_threads_enter();
 	set_title_f(g_strdup(_("Ready...")));
 	gdk_threads_leave();
 	return;
@@ -421,6 +424,8 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	static gint upd_count = 0;
 	static void (*insert_text_handler)(GtkEntry *, const gchar *, gint, gint *, gpointer);
 	GtkWidget *widget = object;
+	gint tmpi = 0;
+	gint last = 0;
 	gdouble value = 0.0;
 
 	if (DATA_GET(global_data,"leaving"))
@@ -453,6 +458,19 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	 * (checkbutton encompases radio)
 	 */
 	value = convert_after_upload_f(widget);
+	tmpi = value*1000;
+        last = (GINT)OBJ_GET(widget,"last_value");
+        /*printf("Old %i, new %i\n",last, tmpi);*/
+        if (tmpi == last)
+        {
+                /*printf("new and old match, exiting early....\n");*/
+                return;
+        }
+        else
+        {
+                /*printf("Values changed, updating..\n");*/
+                OBJ_SET(widget,"last_value",GINT_TO_POINTER(tmpi));
+        }
 
 	if (GTK_IS_ENTRY(widget) || GTK_IS_SPIN_BUTTON(widget))
 	{
