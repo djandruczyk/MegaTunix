@@ -629,6 +629,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	GList **tab_gauges = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
+	g_return_if_fail(firmware);
 
 	if (!firmware->rt_data)
 		firmware->rt_data = g_new0(guint8, firmware->rtvars_size);
@@ -643,6 +644,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 
 	if (!ecu_widgets)
 	{
+		printf("Allocating ecu widgets for %i pages!\n",firmware->total_pages);
 		ecu_widgets = g_new0(GList **, firmware->total_pages);
 		DATA_SET(global_data,"ecu_widgets",ecu_widgets);
 	}

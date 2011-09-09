@@ -918,29 +918,41 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 				&firmware->status_map_file))
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));
 
-
-	/* Megatunix Doesn't yet know how to deal with FreeEMS's locationID's
-	   which are semi-analagous to Pages in MS-land
-	 */
+	/* Mtx maps location id's as pseudo "pages" */
 	locations = request_location_ids(NULL);
-	if (locations)
+	if ((locations) || (DATA_GET(global_data,"offline")))
 	{
-		firmware->total_pages = g_list_length(locations);
+		/* NASTY NASTY NASTY HACK!!!! */
+		if (DATA_GET(global_data,"offline"))
+			firmware->total_pages = 31;
+		else
+			firmware->total_pages = g_list_length(locations);
+
 		firmware->page_params = g_new0(Page_Params *, firmware->total_pages);
 		for (i=0;i<firmware->total_pages;i++)
 		{
 			firmware->page_params[i] = initialize_page_params();
-			firmware->page_params[i]->phys_ecu_page = (GINT)g_list_nth_data(locations,i);
-			details = request_location_id_details((GINT)g_list_nth_data(locations,i));
-			if (details)
+			if (!DATA_GET(global_data,"offline"))
 			{
-				firmware->page_params[i]->length = details->length;
-				firmware->page_params[i]->dl_by_default = (details->flags & BLOCK_IS_INDEXABLE);
-
+				firmware->page_params[i]->phys_ecu_page = (GINT)g_list_nth_data(locations,i);
+				details = request_location_id_details((GINT)g_list_nth_data(locations,i));
 			}
-			g_free(details);
+			if ((details) || (DATA_GET(global_data,"offline")))
+			{
+				/* NASTY NASTY NASTY HACK!!!! */
+				if (DATA_GET(global_data,"offline"))
+					firmware->page_params[i]->length = 4096;
+				else
+				{
+					firmware->page_params[i]->length = details->length;
+					firmware->page_params[i]->dl_by_default = (details->flags & BLOCK_IS_INDEXABLE);
+				}
+				if (details)
+					g_free(details);
+			}
 		}
-		g_list_free(locations);
+		if (locations)
+			g_list_free(locations);
 	}
 	/* MAJOR HACK ALERT,  hardcoded for fred! */
 	firmware->total_tables = 3;

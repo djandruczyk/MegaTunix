@@ -83,8 +83,8 @@ SliderMapFile=FreeEMS
 RuntimeTextMapFile=FreeEMS
 StatusMapFile=FreeEMS
 
-LoadTabs=runtime,datalogging,logviewer,freeems-debug,ve_spark_lambda_16x16x3,freeems-benchtest
-TabConfs=runtime,datalogging,logviewer,freeems-debug,ve_spark_lambda_16x16x3-FreeEMS,freeems-benchtest
+LoadTabs=runtime,datalogging,tools,logviewer,freeems-debug,ve_spark_lambda_16x16x3,freeems-benchtest
+TabConfs=runtime,datalogging,tools,logviewer,freeems-debug,ve_spark_lambda_16x16x3-FreeEMS,freeems-benchtest
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map
