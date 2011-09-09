@@ -798,7 +798,6 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
 	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
 	g_free(version);
-
 }
 
 
@@ -1035,7 +1034,6 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[2]->y_precision = 1;
 	firmware->table_params[2]->z_precision = 1;
 	firmware->table_params[2]->table_name = g_strdup("FreeEMS very alpha spark table");;
-
 
 	if (mem_alloc_f)
 		mem_alloc_f();

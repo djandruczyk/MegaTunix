@@ -96,6 +96,8 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	}
 	if (get_symbol("load_firmware_details",(void*)&load_firmware_details))
 		load_firmware_details(firmware,filename);
+	else
+		printf("Unable to load firmware details!\n");
 
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
@@ -171,6 +173,11 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("cleanup_pf");
+	get_symbol(pf->name,(void *)&pf->function_w_arg);
+	pf->w_arg = TRUE;
+	pfuncs = g_array_append_val(pfuncs,pf);
 
 	io_cmd(NULL,pfuncs);
 
@@ -192,6 +199,12 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	pf->name = g_strdup("reset_temps_pf");
 	get_symbol(pf->name,(void *)&pf->function);
 	pf->w_arg = FALSE;
+	pfuncs = g_array_append_val(pfuncs,pf);
+
+	pf = g_new0(PostFunction,1);
+	pf->name = g_strdup("cleanup_pf");
+	get_symbol(pf->name,(void *)&pf->function_w_arg);
+	pf->w_arg = TRUE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	io_cmd(NULL,pfuncs);

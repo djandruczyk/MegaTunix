@@ -98,7 +98,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 				button = gtk_toggle_button_new();
 				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
 				persona_selection(button,(gpointer)element);
-				gtk_widget_destroy(button);
+				g_object_ref_sink(button);
+				g_object_unref(button);
 				shouldjump = TRUE;
 			}
 		}

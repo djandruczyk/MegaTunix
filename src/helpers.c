@@ -25,6 +25,7 @@
 #include <3d_vetable.h>
 #include <conversions.h>
 #include <dashboard.h>
+#include <init.h>
 #include <listmgmt.h>
 #include <notifications.h>
 #include <plugin.h>
@@ -132,13 +133,26 @@ G_MODULE_EXPORT void reset_temps_pf(void)
 
 
 /*!
-  \brief sets hte time to be ready
+  \brief sets the time to be ready
   */
 G_MODULE_EXPORT void ready_msg_pf(void)
 {
 	gdk_threads_enter();
 	set_title(g_strdup(_("Ready...")));
 	gdk_threads_leave();
+	return;
+}
+
+
+/*!
+  \brief Cleans up a postfunction array (special case for offline without
+  chained helper/post functions
+  \param message is the pointer to the Io_Message structure
+  */
+G_MODULE_EXPORT void cleanup_pf(Io_Message *message)
+{
+	dealloc_array(message->command->post_functions,POST_FUNCTIONS);
+	return;
 }
 
 

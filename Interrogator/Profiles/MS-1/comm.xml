@@ -229,7 +229,6 @@
 				<function>start_statuscounts_pf</function>
 				<function>reset_temps_pf</function>
 				<function>startup_default_timeouts_pf</function>
-				<function>ready_msg_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>

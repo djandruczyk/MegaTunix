@@ -22,6 +22,7 @@
 #define __HELPERS_H__
 
 #include <defines.h>
+#include <threads.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
@@ -34,6 +35,7 @@ void disable_burner_buttons_pf(void);
 void reset_temps_pf(void);
 void ready_msg_pf(void);
 void startup_default_timeouts_pf(void);
+void cleanup_pf(Io_Message *);
 /* Prototypes */
 
 #endif

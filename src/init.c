@@ -39,6 +39,7 @@
 #include <serialio.h>
 #include <stdio.h>
 #include <string.h>
+#include <tabloader.h>
 #include <widgetmgmt.h>
 
 GdkColor red = { 0, 65535, 0, 0};
@@ -741,6 +742,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GMutex *rtt_mutex = NULL;
 	GMutex *dash_mutex = NULL;
 	CmdLineArgs *args = NULL;
+	GPtrArray *tabinfos = NULL;
 #ifdef DEBUG
 	gchar *tmpbuf = NULL;
 #endif
@@ -756,13 +758,18 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	dash_mutex = DATA_GET(global_data,"dash_mutex");
 	dep_list = DATA_GET(global_data,"dep_list");
 	source_list = DATA_GET(global_data,"source_list");
+	tabinfos = DATA_GET(global_data,"tabinfos");
 
 	g_mutex_lock(serio_mutex);
 	cleanup(serial_params->port_name);
 	cleanup(serial_params);
 	g_mutex_unlock(serio_mutex);
 
-	/* Firmware datastructure.... */
+	if (tabinfos)
+	{
+		g_ptr_array_foreach(tabinfos,(GFunc)dealloc_tabinfo,NULL);
+		g_ptr_array_free(tabinfos,TRUE);
+	}
 	if (dep_list)
 	{
 		g_list_foreach(dep_list,(GFunc)g_object_unref,NULL);
@@ -774,6 +781,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		g_list_free(source_list);
 	}
 
+	/* Firmware datastructure.... */
 		if (firmware)
 		{
 			if (ecu_widgets)
@@ -1456,3 +1464,16 @@ G_MODULE_EXPORT void cleanup(void *data)
 	return;
 }
 
+
+/*!
+  \brief deallocs a TabInfo structure
+  \param data is the pointer to the data structure to be freed
+  \param user_data is unused
+  */
+G_MODULE_EXPORT void dealloc_tabinfo(gpointer data, gpointer user_data)
+{
+	TabInfo *tabinfo = (TabInfo *)data;
+	cleanup(tabinfo->glade_file);
+	cleanup(tabinfo->datamap_file);
+	cleanup(tabinfo);
+}
