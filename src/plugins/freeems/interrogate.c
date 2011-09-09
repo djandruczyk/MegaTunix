@@ -920,40 +920,26 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 
 	/* Mtx maps location id's as pseudo "pages" */
 	locations = request_location_ids(NULL);
-	if ((locations) || (DATA_GET(global_data,"offline")))
+	if (locations)
 	{
-		/* NASTY NASTY NASTY HACK!!!! */
-		if (DATA_GET(global_data,"offline"))
-			firmware->total_pages = 31;
-		else
-			firmware->total_pages = g_list_length(locations);
+		firmware->total_pages = g_list_length(locations);
 
 		firmware->page_params = g_new0(Page_Params *, firmware->total_pages);
 		for (i=0;i<firmware->total_pages;i++)
 		{
 			firmware->page_params[i] = initialize_page_params();
-			if (!DATA_GET(global_data,"offline"))
+			firmware->page_params[i]->phys_ecu_page = (GINT)g_list_nth_data(locations,i);
+			details = request_location_id_details((GINT)g_list_nth_data(locations,i));
+			if (details)
 			{
-				firmware->page_params[i]->phys_ecu_page = (GINT)g_list_nth_data(locations,i);
-				details = request_location_id_details((GINT)g_list_nth_data(locations,i));
-			}
-			if ((details) || (DATA_GET(global_data,"offline")))
-			{
-				/* NASTY NASTY NASTY HACK!!!! */
-				if (DATA_GET(global_data,"offline"))
-					firmware->page_params[i]->length = 4096;
-				else
-				{
-					firmware->page_params[i]->length = details->length;
-					firmware->page_params[i]->dl_by_default = (details->flags & BLOCK_IS_INDEXABLE);
-				}
-				if (details)
+				firmware->page_params[i]->length = details->length;
+				firmware->page_params[i]->dl_by_default = (details->flags & BLOCK_IS_INDEXABLE);
 					g_free(details);
 			}
 		}
-		if (locations)
-			g_list_free(locations);
+		g_list_free(locations);
 	}
+
 	/* MAJOR HACK ALERT,  hardcoded for fred! */
 	firmware->total_tables = 3;
 	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
