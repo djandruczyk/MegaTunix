@@ -335,7 +335,7 @@ real_lower=100
 real_upper=200
 fromecu_mult=0.00305175781
 precision=2
-_tooltip="ETE" is the percentage correction for ETE (Engine Temp Enrich) applied to the PW, 100 = no correction
+_tooltip="ETE" is the percentage correction for ETE (Engine Temp Enrich) applied to the PW, 100 means no correction
 log_by_default=TRUE
 
 [derived_24]

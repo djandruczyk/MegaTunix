@@ -212,6 +212,9 @@ fast_exit:
 			case WRITE_CMD:
 				/*g_timer_start(clock);*/
 				message->status = write_data(message);
+				if (!message->status)
+					DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+
 				/*printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
 				if (message->command->helper_function)
 				{
