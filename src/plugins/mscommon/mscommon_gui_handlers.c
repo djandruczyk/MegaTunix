@@ -819,10 +819,6 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	canID = firmware->canID;
 	if (DATA_GET(global_data,"leaving"))
 		return;
-	/*	if (!((DATA_GET(global_data,"connected")) ||
-		(DATA_GET(global_data,"offline"))))
-		return;
-	 */
 
 	gdk_threads_enter();
 	set_title_f(g_strdup(_("Updating Controls...")));
@@ -985,6 +981,12 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	}
 
 
+	/* OK this is terribly inefficient,  why update 95% of controls that are 
+	   NOT EVEN VISIBLE to the end user.  This causes ver y very bad performance
+	   with firmwares that are complex (MS2-Extra/MS3) or on slow machines (mine)
+
+	   A Better solution is to update the controls WHEN the tab is made visible...
+	   */
 	/* Update all on screen controls (except bitfields (done above)*/
 	gdk_threads_enter();
 	for (page=0;page<firmware->total_pages;page++)

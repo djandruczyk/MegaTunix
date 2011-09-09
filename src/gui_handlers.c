@@ -1337,12 +1337,18 @@ testit:
   */
 G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *page, guint page_no, gpointer data)
 {
+	static void (*update_widget_f)(gpointer, gpointer);
 	gint tab_ident = 0;
 	gint sub_page = 0;
 	gint active_table = -1;
+	GList *tab_widgets = NULL;
 	GtkWidget *sub = NULL;
 	GtkWidget *topframe = NULL;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
+
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
+	g_return_if_fail(update_widget_f);
 
 	if (OBJ_GET(gtk_notebook_get_tab_label(notebook,widget),"not_rendered"))
 	{
@@ -1359,6 +1365,11 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 	topframe = OBJ_GET(widget,"topframe");
 	if (!topframe)
 		topframe = widget;
+	/* Experimental... */
+	tab_widgets = OBJ_GET(topframe,"tab_widgets");
+	if (tab_widgets)
+		g_list_foreach(tab_widgets,update_widget_f,NULL);
+
 	tab_ident = (TabIdent)OBJ_GET(topframe,"tab_ident");
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(tab_ident));
 

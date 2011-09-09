@@ -228,6 +228,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	GtkWidget *topframe = NULL;
 	GtkWidget *placeholder = NULL;
 	GHashTable *groups = NULL;
+	GList *tab_widgets = NULL;
 	BindGroup *bindgroup = NULL;
 	extern GdkColor red;
 
@@ -273,12 +274,12 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		OBJ_SET(label,"not_rendered",NULL);
 
 		populate_master(topframe,(gpointer)cfgfile);
-	while (gtk_events_pending())
-	{
-		if (DATA_GET(global_data,"leaving"))
-			return FALSE;
-		gtk_main_iteration();
-	}
+		while (gtk_events_pending())
+		{
+			if (DATA_GET(global_data,"leaving"))
+				return FALSE;
+			gtk_main_iteration();
+		}
 
 		/*
 		   dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
@@ -296,6 +297,8 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		cfg_free(cfgfile);
 		gtk_widget_show_all(topframe);
 		g_list_foreach(bindgroup->widget_list,update_widget_f,NULL);
+		tab_widgets = g_list_copy(bindgroup->widget_list);
+		OBJ_SET_FULL(topframe,"tab_widgets",(gpointer)tab_widgets,g_list_free);
 		g_list_free(bindgroup->widget_list);
 		g_free(bindgroup);
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);

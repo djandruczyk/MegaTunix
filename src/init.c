@@ -644,7 +644,6 @@ G_MODULE_EXPORT void mem_alloc(void)
 
 	if (!ecu_widgets)
 	{
-		printf("Allocating ecu widgets for %i pages!\n",firmware->total_pages);
 		ecu_widgets = g_new0(GList **, firmware->total_pages);
 		DATA_SET(global_data,"ecu_widgets",ecu_widgets);
 	}
