@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the Spark Advance tab
-_tab_name=_Spark
+_tab_name=_Spark Table(s)
 id_prefix=SP16_
 size=_U08_
 ellipsize=TRUE
@@ -25,7 +25,7 @@ size=_U16_
 fromecu_mult=0.01
 precision=1
 use_color=TRUE
-_tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+_tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Spark Table define the vertexes (points on the Spark Advance map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
 keys=page,size,precision,fromecu_mult,use_color,tooltip
@@ -34,7 +34,7 @@ size=_U16_
 fromecu_mult=0.5
 precision=0
 use_color=TRUE
-_tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+_tooltip=The RPM bins in combination with the LOAD bins on the left side of the Spark Table define the vertexes (points on the Spark Advance map).  The ECU will interpolate between vertexes providing a smooth transition between points on the Spark Advance map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark]
 keys=page,size,use_color,precision,table_num,fromecu_mult,tooltip
@@ -54,7 +54,7 @@ tab_ident=_SPARKTABLES_TAB_
 
 [topframe_title]
 keys=set_label
-set_label=FreeEMS 0.0.0 Very Very Alpha Spark Advance tables
+set_label=FreeEMS 0.0.0 Very Very Alpha Spark Advance Table(s)
 
 [notebook_tab_label]
 keys=set_label
@@ -97,7 +97,7 @@ table_num=2
 keys=table_num,tooltip,bind_to_list
 table_num=2
 bind_to_list=3d_buttons
-_tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
+_tooltip=This pops up a 3 dimensional view of the current Spark-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
 [rescale_button]
 keys=handler,data

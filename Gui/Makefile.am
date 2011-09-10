@@ -31,6 +31,7 @@ gui_glade_files = 	\
 		generic-sparktable_8x8x1.glade \
 		generic-vetable_12x12x2.glade \
 		generic-vetable_12x12x3.glade \
+		generic-vetable_16x16x1.glade \
 		generic-vetable_16x16x3.glade \
 		generic-vetable_8x8x1.glade \
 		inj_timing_6x6x3.glade \
@@ -106,7 +107,6 @@ gui_glade_files = 	\
 		template.glade \
 		test.glade \
 		tools.glade \
-		ve_spark_lambda_16x16x3.glade \
 		warmupwizard.glade 
 
 gui_in_files = 	\
@@ -135,6 +135,7 @@ gui_in_files = 	\
 		freeems-benchtest.datamap.in \
 		freeems-lambdatable_16x16x1.datamap.in \
 		freeems-sparktable_16x16x1.datamap.in \
+		freeems-vetable_16x16x1.datamap.in \
 		jimstim-runtime.datamap.in \
 		logviewer.datamap.in \
 		memviewer.datamap.in \
@@ -238,7 +239,6 @@ gui_in_files = 	\
 		template.datamap.in \
 		test.datamap.in \
 		tools.datamap.in \
-		ve_spark_lambda_16x16x3-FreeEMS.datamap.in \
 		warmupwizard.datamap.in 
 
 
