@@ -8,119 +8,91 @@
 		<description>Runtime Text definitions for FreeEMS 0.0.0.</description>
 	</info>
 	<rtt>
-		<internal_name>clock</internal_name>
+		<internal_name>Clock</internal_name>
 		<datasource>clock</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>rpm</internal_name>
+		<internal_name>RPM</internal_name>
 		<datasource>RPM</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>iat</internal_name>
-		<datasource>IAT</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>clt</internal_name>
-		<datasource>CLT</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>tps</internal_name>
+		<internal_name>TPS</internal_name>
 		<datasource>TPS</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>ego</internal_name>
-		<datasource>EGO</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>map</internal_name>
+		<internal_name>MAP</internal_name>
 		<datasource>MAP</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>aap</internal_name>
+		<internal_name>AAP</internal_name>
 		<datasource>AAP</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>brv</internal_name>
+		<internal_name>EGO</internal_name>
+		<datasource>EGO</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>IAT</internal_name>
+		<datasource>IAT</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>CHT</internal_name>
+		<datasource>CHT</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>BRV</internal_name>
 		<datasource>BRV</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>mat</internal_name>
-		<datasource>MAT</datasource>
+		<internal_name>Ign. Adv.</internal_name>
+		<datasource>Advance</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>ego2</internal_name>
-		<datasource>EGO2</datasource>
+		<internal_name>Dwell</internal_name>
+		<datasource>Dwell</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>iap</internal_name>
-		<datasource>IAP</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>mafraw</internal_name>
-		<datasource>MAF</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>dmap</internal_name>
-		<datasource>DMAP</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>dtps</internal_name>
-		<datasource>DTPS</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>rpm</internal_name>
-		<datasource>RPM</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>drpm</internal_name>
-		<datasource>DRPM</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>ddrpm</internal_name>
-		<datasource>DDRPM</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>loadmain</internal_name>
+		<internal_name>Load</internal_name>
 		<datasource>LoadMain</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>vemain</internal_name>
+		<internal_name>VE Main</internal_name>
 		<datasource>VEMain</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>lambda</internal_name>
-		<datasource>LAMBDA</datasource>
+		<internal_name>Lambda</internal_name>
+		<datasource>IntegralLambda</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>airflow</internal_name>
-		<datasource>AirFlow</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>densitynfuel</internal_name>
-		<datasource>DensityAndFuel</datasource>
-	</rtt>
-	<rtt>
-		<internal_name>basepw</internal_name>
+		<internal_name>Base PW</internal_name>
 		<datasource>BasePW</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>ete</internal_name>
+		<internal_name>ETE</internal_name>
 		<datasource>ETE</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>tfctotal</internal_name>
+		<internal_name>TFCT</internal_name>
 		<datasource>TFCTotal</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>effectivepw</internal_name>
+		<internal_name>Fuel PW</internal_name>
 		<datasource>EffectivePW</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>idt</internal_name>
+		<internal_name>IDT</internal_name>
 		<datasource>IDT</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>refpw</internal_name>
+		<internal_name>Elec. PW</internal_name>
 		<datasource>RefPW</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Sync Losses</internal_name>
+		<datasource>zsp15</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Sync Fixes</internal_name>
+		<datasource>zsp16</datasource>
 	</rtt>
 </runtimetext>

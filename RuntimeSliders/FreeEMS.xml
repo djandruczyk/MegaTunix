@@ -4,36 +4,45 @@
                 <major>1</major>
                 <minor>0</minor>
         </api>
-	<rt_rts>
-		<slider_name>clock</slider_name>
-		<table>0</table>
-		<row>0</row>
-		<source>clock</source>
-	</rt_rts>
-	<rt_rts>
-		<slider_name>batt_volts</slider_name>
-		<table>0</table>
-		<row>1</row>
-		<source>BRV</source>
-	</rt_rts>
+<!-- Left Top Table Contents -->
 	<rt_rts>
 		<slider_name>rpm</slider_name>
 		<table>0</table>
-		<row>2</row>
+		<row>0</row>
 		<source>RPM</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>ego</slider_name>
+		<table>0</table>
+		<row>1</row>
+		<source>EGO</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>advance</slider_name>
+		<table>0</table>
+		<row>2</row>
+		<source>Advance</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>dwell</slider_name>
+		<table>0</table>
+		<row>3</row>
+		<source>Dwell</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>effectivepw</slider_name>
 		<table>0</table>
-		<row>3</row>
+		<row>4</row>
 		<source>EffectivePW</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>maf</slider_name>
+		<slider_name>refpw</slider_name>
 		<table>0</table>
-		<row>4</row>
-		<source>MAF</source>
+		<row>5</row>
+		<source>RefPW</source>
 	</rt_rts>
+
+<!-- Right Top Table Contents -->
 	<rt_rts>
 		<slider_name>tps</slider_name>
 		<table>1</table>
@@ -41,58 +50,74 @@
 		<source>TPS</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>iat</slider_name>
-		<table>1</table>
-		<row>1</row>
-		<source>IAT</source>
-	</rt_rts>
-	<rt_rts>
-		<slider_name>clt</slider_name>
-		<table>1</table>
-		<row>2</row>
-		<source>CLT</source>
-	</rt_rts>
-	<rt_rts>
 		<slider_name>map</slider_name>
 		<table>1</table>
-		<row>3</row>
+		<row>1</row>
 		<source>MAP</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>iap</slider_name>
-		<table>2</table>
-		<row>0</row>
-		<source>IAP</source>
+		<slider_name>aap</slider_name>
+		<table>1</table>
+		<row>2</row>
+		<source>AAP</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>dmap</slider_name>
+		<slider_name>iat</slider_name>
+		<table>1</table>
+		<row>3</row>
+		<source>IAT</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>cht</slider_name>
+		<table>1</table>
+		<row>4</row>
+		<source>CHT</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>brv</slider_name>
+		<table>1</table>
+		<row>5</row>
+		<source>BRV</source>
+	</rt_rts>
+
+<!-- Left Lower Table Contents -->
+	<rt_rts>
+		<slider_name>idt</slider_name>
+		<table>2</table>
+		<row>0</row>
+		<source>IDT</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>basepw</slider_name>
 		<table>2</table>
 		<row>1</row>
-		<source>DMAP</source>
+		<source>BasePW</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>drpm</slider_name>
+		<slider_name>lambda</slider_name>
 		<table>2</table>
 		<row>2</row>
-		<source>DRPM</source>
+		<source>IntegralLambda</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>ddrpm</slider_name>
+		<slider_name>synclosses</slider_name>
 		<table>2</table>
 		<row>3</row>
-		<source>DDRPM</source>
+		<source>zsp15</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>ete</slider_name>
+		<slider_name>syncfixes</slider_name>
 		<table>2</table>
 		<row>4</row>
-		<source>ETE</source>
+		<source>zsp16</source>
 	</rt_rts>
+
+<!-- Right Lower Table Contents -->
 	<rt_rts>
-		<slider_name>dtps</slider_name>
+		<slider_name>ete</slider_name>
 		<table>3</table>
 		<row>0</row>
-		<source>DTPS</source>
+		<source>ETE</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>loadmain</slider_name>
@@ -107,17 +132,19 @@
 		<source>VEMain</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>lambda</slider_name>
-		<table>3</table>
-		<row>3</row>
-		<source>LAMBDA</source>
-	</rt_rts>
-	<rt_rts>
 		<slider_name>tfctotal</slider_name>
 		<table>3</table>
-		<row>4</row>
+		<row>3</row>
 		<source>TFCTotal</source>
 	</rt_rts>
+	<rt_rts>
+		<slider_name>clock</slider_name>
+		<table>3</table>
+		<row>4</row>
+		<source>clock</source>
+	</rt_rts>
+
+<!--  -->
 	<ve3d_rts>
 		<slider_name>ve3d_rpm</slider_name>
 		<table>0</table>
