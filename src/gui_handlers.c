@@ -1363,9 +1363,10 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 		set_title(g_strdup(_("Ready")));
 	}
 	topframe = OBJ_GET(widget,"topframe");
+	printf("page_change_A notebook ptr %p, topframe %p\n",notebook,topframe);
 	if (!topframe)
 		topframe = widget;
-	/* Experimental... */
+	printf("page_change_B notebook ptr %p, topframe %p\n",notebook,topframe);
 	tab_widgets = OBJ_GET(topframe,"tab_widgets");
 	if (tab_widgets)
 	{
@@ -2305,4 +2306,40 @@ void process_source(gpointer data, gpointer nothing)
 		}
 	}
 	g_strfreev(vector);
+}
+
+
+/*!
+  \brief updates all mtx widgets on the current visible notebook page
+  */
+G_MODULE_EXPORT void update_current_notebook_page()
+{
+	static void (*update_widget_f)(gpointer, gpointer);
+	GtkWidget *notebook = NULL;
+	GtkWidget *topframe = NULL;
+	GtkWidget *widget = NULL;
+	GList *tab_widgets = NULL;
+
+	if (!update_widget_f)
+		get_symbol("update_widget",(void *)&update_widget_f);
+	g_return_if_fail(update_widget_f);
+
+	notebook = lookup_widget("toplevel_notebook");
+	g_return_if_fail(notebook);
+
+	widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook)));
+	topframe = OBJ_GET(widget,"topframe");
+	if (!topframe)
+		topframe = widget;
+	tab_widgets = OBJ_GET(topframe,"tab_widgets");
+	if (tab_widgets)
+	{
+		set_title(g_strdup(_("Updating Tab with current data...")));
+		g_list_foreach(tab_widgets,update_widget_f,NULL);
+	}
+	/*
+	else
+		printf("WARNING: this tab has no tab_widgets list assigned\n");
+	*/
+	set_title(g_strdup(_("Ready...")));
 }
