@@ -1311,7 +1311,7 @@ testit:
 	frame_name = (gchar *)OBJ_GET(parent,"rescaler_frame");
 	if (!frame_name)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": widget_grab()\n\t\"rescale_frame\" key could NOT be found\n"));
+		dbg_func(CRITICAL,g_strdup(__FILE__": widget_grab()\n\t\"rescaler_frame\" key could NOT be found\n"));
 		return FALSE;
 	}
 

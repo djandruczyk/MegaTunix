@@ -17,6 +17,7 @@ gui_glade_files = 	\
 		generic-afrtable_8x8x2.glade \
 		generic-afrtable_12x12x2.glade \
 		generic-boost_6x6x3.glade \
+		generic-lambdatable_16x16x1.glade \
 		datalogging.glade \
 		dt-params.glade \
 		enrichments.glade \
@@ -131,6 +132,7 @@ gui_in_files = 	\
 		error_status.datamap.in \
 		freeems-debug.datamap.in \
 		freeems-benchtest.datamap.in \
+		freeems-lambdatable_16x16x1.datamap.in \
 		jimstim-runtime.datamap.in \
 		logviewer.datamap.in \
 		memviewer.datamap.in \
