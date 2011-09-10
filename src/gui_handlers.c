@@ -1363,10 +1363,8 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 		set_title(g_strdup(_("Ready")));
 	}
 	topframe = OBJ_GET(widget,"topframe");
-	printf("page_change_A notebook ptr %p, topframe %p\n",notebook,topframe);
 	if (!topframe)
 		topframe = widget;
-	printf("page_change_B notebook ptr %p, topframe %p\n",notebook,topframe);
 	tab_widgets = OBJ_GET(topframe,"tab_widgets");
 	if (tab_widgets)
 	{
