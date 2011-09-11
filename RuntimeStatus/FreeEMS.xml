@@ -5,7 +5,7 @@
 		<minor>0</minor>
 	</api>
 	<info>
-		<description>Runtime Text definitions for FreeEMS 0.0.0.</description>
+		<description>Runtime Text definitions for FreeEMS 0.0.0</description>
 	</info>
 	<status>
 		<label>CONNECTED</label>
@@ -50,7 +50,7 @@
 		<bitmask>8</bitmask>
 	</status>
 	<status>
-		<label>LAST_PERIOD_VALID</label>
+		<label>LAST PERIOD VALID</label>
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
