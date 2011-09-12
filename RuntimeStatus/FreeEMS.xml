@@ -41,7 +41,7 @@
 		<bitmask>4</bitmask>
 	</status>
 	<status>
-		<label>LAST TIMESTAMP VALID</label>
+		<label>LAST STAMP VALID</label>
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>

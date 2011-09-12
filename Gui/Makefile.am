@@ -23,6 +23,7 @@ gui_glade_files = 	\
 		enrichments.glade \
 		error_status.glade \
 		freeems-debug.glade \
+		freeems-runtime.glade \
 		freeems-benchtest.glade \
 		generic-sparktable_12x12x1.glade \
 		generic-sparktable_12x12x2.glade \
@@ -132,6 +133,7 @@ gui_in_files = 	\
 		enrichments_BnG.datamap.in \
 		error_status.datamap.in \
 		freeems-debug.datamap.in \
+		freeems-runtime.datamap.in \
 		freeems-benchtest.datamap.in \
 		freeems-lambdatable_16x16x1.datamap.in \
 		freeems-sparktable_16x16x1.datamap.in \
