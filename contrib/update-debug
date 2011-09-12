@@ -6,3 +6,4 @@ sudo make install
 
 echo "To get valid debug info, cd src ;gdb .libs/megatunix"
 echo "Type \"run --g-fatal-warnings\""
+echo "When it craps itself, type \"backtrace\" and send the output to me"
