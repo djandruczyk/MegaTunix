@@ -155,7 +155,7 @@
 		<slider_name>ve3d_lambda</slider_name>
 		<table>0</table>
 		<row>1</row>
-		<source>LAMBDA</source>
+		<source>EGO</source>
 	</ve3d_rts>
 	<ve3d_rts>
 		<slider_name>ve3d_map</slider_name>
