@@ -418,8 +418,29 @@ handle_write:
 			}
 			else
 			{
-				printf("timeout, no packet found in generic RAM write queue, locID %i\n",locID);
-				printf("DATA_SET REISSUE NOT WRITTEN YET");
+				printf("timeout, no packet found in queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
+				printf("Re-issuing command!\n");
+				retry = initialize_outputdata_f();
+				seq = g_rand_int_range(rand,2,255);
+				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
+				DATA_SET(retry->data,"page",DATA_GET(output->data,"page"));
+				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
+				DATA_SET(retry->data,"location_id",DATA_GET(output->data,"location_id"));
+				DATA_SET(retry->data,"payload_id",DATA_GET(output->data,"payload_id"));
+				DATA_SET(retry->data,"offset",DATA_GET(output->data,"offset"));
+				DATA_SET(retry->data,"size",DATA_GET(output->data,"size"));
+				DATA_SET(retry->data,"value",DATA_GET(output->data,"value"));
+				DATA_SET(retry->data,"data_length",DATA_GET(output->data,"data_length"));
+				DATA_SET(retry->data,"data",DATA_GET(output->data,"data"));
+				DATA_SET(retry->data,"mode",DATA_GET(output->data,"mode"));
+				queue = g_async_queue_new();
+				register_packet_queue(SEQUENCE_NUM,queue,seq);
+				DATA_SET(retry->data,"queue",queue);
+				if (type == GENERIC_RAM_WRITE)
+					io_cmd_f(firmware->write_command,retry);
+				if (type == GENERIC_FLASH_WRITE)
+					io_cmd_f("generic_FLASH_write",retry);
+				printf("Re-issued command sent, seq %i!\n",seq);
 			}
 			break;
 		case GENERIC_BURN:
@@ -440,8 +461,22 @@ handle_write:
 			}
 			else
 			{
-				printf("timeout, no packet found in generic BURN to flash queue, locID %i\n",locID);
-				printf("BURN REISSUE NOT WRITTEN YET");
+				printf("timeout, no packet found in queue for generic BURN sequence %i (%.2X), locID %i\n",seq,seq,locID);
+				printf("Re-issuing command!\n");
+				retry = initialize_outputdata_f();
+				seq = g_rand_int_range(rand,2,255);
+				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
+				DATA_SET(retry->data,"page",DATA_GET(output->data,"page"));
+				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
+				DATA_SET(retry->data,"location_id",DATA_GET(output->data,"location_id"));
+				DATA_SET(retry->data,"payload_id",DATA_GET(output->data,"payload_id"));
+				DATA_SET(retry->data,"offset",DATA_GET(output->data,"offset"));
+				DATA_SET(retry->data,"data_length",DATA_GET(output->data,"data_length"));
+				DATA_SET(retry->data,"mode",DATA_GET(output->data,"mode"));
+				queue = g_async_queue_new();
+				register_packet_queue(SEQUENCE_NUM,queue,seq);
+				DATA_SET(retry->data,"queue",queue);
+				io_cmd_f(firmware->burn_command,retry);
 			}
 			break;
 		default:

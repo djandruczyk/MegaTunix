@@ -91,13 +91,13 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 
 	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
-
 	if (slaves_set_color_f)
 		slaves_set_color_f(BLACK,"burners");
 	for (j=0;j<firmware->total_tables;j++)
 		set_reqfuel_color(BLACK,j);
 	gdk_threads_leave();
 }
+
 
 /*!
   \brief Enables all applicable 3D display buttons

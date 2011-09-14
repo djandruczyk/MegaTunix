@@ -244,6 +244,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	thread_update_logbar("interr_view",NULL,g_strdup(_("Load of tab: ")),FALSE,FALSE);
 	thread_update_logbar("interr_view","info", g_strdup_printf("\"%s\"",glade_file),FALSE,FALSE);
 	xml = glade_xml_new(glade_file,"topframe",NULL);
+	g_return_val_if_fail(xml,FALSE);
 	cfgfile = cfg_open_file(map_file);
 	if (cfgfile)
 	{
