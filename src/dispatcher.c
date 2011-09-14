@@ -47,6 +47,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	static GAsyncQueue *pf_dispatch_queue = NULL;
 	static GCond *pf_dispatch_cond = NULL;
 	static GMutex *pf_dispatch_mutex = NULL;
+	gint loops = 0;
  	gint len=0;
 	gint i=0;
 	PostFunction *pf=NULL;
@@ -140,19 +141,29 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	dealloc_message(message);
 	/*printf ("deallocation of dispatch message complete\n");*/
 
+	/*
 	gdk_threads_enter();
 	while (gtk_events_pending())
 	{
+		loops++;
 		if (DATA_GET(global_data,"leaving"))
 			goto fast_exit;
 		gtk_main_iteration();
+		printf("loopcount %i\n",loops);
+		if (loops > 100)
+		{
+			goto fast_exit;
+		}
+		printf("pf_dispatcher, main iteration!\n");
 	}
 	//gdk_flush();
 fast_exit:
 	gdk_threads_leave();
+	*/
 	g_mutex_lock(pf_dispatch_mutex);
 	g_cond_signal(pf_dispatch_cond);
 	g_mutex_unlock(pf_dispatch_mutex);
+	printf("Returning from  pf dispatcher!\n");
 	return TRUE;
 }
 

@@ -716,6 +716,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	gdk_threads_add_timeout(500,delayed_reconfigure,ve_view);
+	ve_view->render_id = g_timeout_add(100,update_ve3d,ve_view);
 	return TRUE;
 }
 
@@ -740,6 +741,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	g_return_val_if_fail(ve_view_hash,FALSE);
 	//printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
+	g_source_remove(ve_view->render_id);
 	store_list("burners",g_list_remove(
 				get_list("burners"),(gpointer)ve_view->burn_but));
 	g_hash_table_remove(ve_view_hash,GINT_TO_POINTER(ve_view->table_num));
@@ -3089,6 +3091,162 @@ gboolean delayed_reconfigure(gpointer data)
 
 
 /*!
+  \brief updates a single VE3D display with new data from the ECU
+  \param data is the pointer to the Ve_View_3D structure
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
+{
+	Ve_View_3D * ve_view = NULL;
+	gfloat x[2] = {0.0,0.0};
+	gfloat y[2] = {0.0,0.0};
+	gfloat z[2] = {0.0,0.0};
+	GHashTable *hash = NULL;
+	gchar *key = NULL;
+	gchar *hash_key = NULL;
+	MultiSource *multi = NULL;
+	gint * algorithm;
+	Firmware_Details *firmware = NULL;
+	GHashTable *sources_hash = NULL;
+	GtkAllocation allocation;
+	GdkWindow *window = NULL;
+
+	ve_view = (Ve_View_3D *)data;
+	sources_hash = DATA_GET(global_data,"sources_hash");
+	firmware = DATA_GET(global_data,"firmware");
+	algorithm = DATA_GET(global_data,"algorithm");
+
+	g_return_val_if_fail(sources_hash,TRUE);
+	g_return_val_if_fail(ve_view,TRUE);
+	g_return_val_if_fail(firmware,TRUE);
+	g_return_val_if_fail(algorithm,TRUE);
+
+	if (DATA_GET(global_data,"leaving"))
+		return FALSE;
+
+	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
+	window = gtk_widget_get_window(ve_view->drawing_area);
+	/* Get X values */
+	if (ve_view->x_multi_source)
+	{
+		hash = ve_view->x_multi_hash;
+		key = ve_view->x_source_key;
+		hash_key = g_hash_table_lookup(sources_hash,key);
+		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+		{
+			if (hash_key)
+				multi = g_hash_table_lookup(hash,hash_key);
+			else
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else if (algorithm[ve_view->table_num] == ALPHA_N)
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+		else if (algorithm[ve_view->table_num] == MAF)
+		{
+			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			if(!multi)
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+
+		if (!multi)
+			printf(_("multi is null!!\n"));
+
+		lookup_previous_n_values(multi->source,2,x);
+	}
+	else
+		lookup_previous_n_values(ve_view->x_source,2,x);
+
+	/* Test X values, redraw if needed */
+	if (((fabs(x[0]-x[1])/x[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
+		goto redraw;
+
+	/* Get Y values */
+	if (ve_view->y_multi_source)
+	{
+		hash = ve_view->y_multi_hash;
+		key = ve_view->y_source_key;
+		hash_key = g_hash_table_lookup(sources_hash,key);
+		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+		{
+			if (hash_key)
+				multi = g_hash_table_lookup(hash,hash_key);
+			else
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else if (algorithm[ve_view->table_num] == ALPHA_N)
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+		else if (algorithm[ve_view->table_num] == MAF)
+		{
+			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			if(!multi)
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+
+		if (!multi)
+			printf(_("multi is null!!\n"));
+
+		lookup_previous_n_values(multi->source,2,y);
+	}
+	else
+		lookup_previous_n_values(ve_view->y_source,2,y);
+
+	/* Test Y values, redraw if needed */
+	if (((fabs(y[0]-y[1])/y[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
+		goto redraw;
+
+	/* Get Z values */
+	if (ve_view->z_multi_source)
+	{
+		hash = ve_view->z_multi_hash;
+		key = ve_view->z_source_key;
+		hash_key = g_hash_table_lookup(sources_hash,key);
+		if (algorithm[ve_view->table_num] == SPEED_DENSITY)
+		{
+			if (hash_key)
+				multi = g_hash_table_lookup(hash,hash_key);
+			else
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else if (algorithm[ve_view->table_num] == ALPHA_N)
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+		else if (algorithm[ve_view->table_num] == MAF)
+		{
+			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			if(!multi)
+				multi = g_hash_table_lookup(hash,"DEFAULT");
+		}
+		else
+			multi = g_hash_table_lookup(hash,"DEFAULT");
+
+		if (!multi)
+			printf(_("multi is null!!\n"));
+
+		lookup_previous_n_values(multi->source,2,z);
+	}
+	else
+		lookup_previous_n_values(ve_view->z_source,2,z);
+
+	/* Test Z values, redraw if needed */
+	if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
+		goto redraw;
+	return TRUE;
+
+redraw:
+	gdk_window_invalidate_rect (window, &allocation, FALSE);
+
+	{
+		//		draw_ve_marker();
+		//		update_tab_gauges();
+	}
+	return TRUE;
+}
+
+
+/*!
   \brief updates the VE3D displays with new data from the ECU
   \param data is unused
   \returns TRUE
@@ -3104,7 +3262,6 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
 	MultiSource *multi = NULL;
-	TabIdent active_page;
 	gint * algorithm;
 	Firmware_Details *firmware = NULL;
 	GHashTable *sources_hash = NULL;
@@ -3112,11 +3269,11 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
+	return FALSE;
 	sources_hash = DATA_GET(global_data,"sources_hash");
 	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
 	firmware = DATA_GET(global_data,"firmware");
 	algorithm = DATA_GET(global_data,"algorithm");
-	active_page = (TabIdent)DATA_GET(global_data,"active_page");
 
 	g_return_val_if_fail(sources_hash,TRUE);
 	g_return_val_if_fail(ve_view_hash,TRUE);
@@ -3248,18 +3405,14 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 			continue;
 
 redraw:
-//			gdk_threads_enter();
 			gdk_window_invalidate_rect (window, &allocation, FALSE);
-//			gdk_threads_leave();
 		}
 	}
 
-//	gdk_threads_enter();
 	{
 		draw_ve_marker();
 		update_tab_gauges();
 	}
-//	gdk_threads_leave();
 	return TRUE;
 }
 

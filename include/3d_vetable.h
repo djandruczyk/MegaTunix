@@ -175,6 +175,8 @@ struct _Ve_View_3D
 	gfloat fps;		/*!< Frames per second */
 	glong lasttime;		/*!< Time of last render */
 	gchar strfps[50];	/*!< FPS String */
+	gint render_id;		/*!< Render thread ID */
+	GMutex *mutex;		/*!< Protection Mutex */
 };
 
 
@@ -225,6 +227,8 @@ void ve3d_draw_text(GtkWidget *, gchar * text, gfloat x, gfloat y, gfloat z);
 void reset_3d_view(GtkWidget *);
 Ve_View_3D * initialize_ve3d_view(void);
 void update_ve3d_if_necessary(int , int );
+gboolean update_ve3d(gpointer);
+gboolean update_ve3ds(gpointer);
 Cur_Vals * get_current_values(Ve_View_3D *);
 void free_current_values(Cur_Vals *);
 gboolean set_opacity(GtkWidget *, gpointer );
@@ -238,7 +242,6 @@ void generate_quad_mesh(Ve_View_3D *, Cur_Vals *);
 void queue_ve3d_update(Ve_View_3D *);
 gboolean sleep_and_redraw(gpointer);
 void ve3d_grey_window(Ve_View_3D *);
-gboolean update_ve3ds(gpointer);
 void gl_print_string(GtkWidget *, const gchar *);
 void gl_destroy_font(GtkWidget *);
 void gl_create_font(GtkWidget *);
