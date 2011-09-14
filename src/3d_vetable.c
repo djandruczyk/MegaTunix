@@ -3248,18 +3248,18 @@ G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
 			continue;
 
 redraw:
-			gdk_threads_enter();
+//			gdk_threads_enter();
 			gdk_window_invalidate_rect (window, &allocation, FALSE);
-			gdk_threads_leave();
+//			gdk_threads_leave();
 		}
 	}
 
-	gdk_threads_enter();
+//	gdk_threads_enter();
 	{
 		draw_ve_marker();
 		update_tab_gauges();
 	}
-	gdk_threads_leave();
+//	gdk_threads_leave();
 	return TRUE;
 }
 

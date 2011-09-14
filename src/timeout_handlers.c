@@ -173,6 +173,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	GAsyncQueue *pf_dispatch_queue = NULL;
 	GCond *rtv_thread_cond = NULL;
 	GMutex *rtv_thread_mutex = NULL;
+	gint count = 0;
 
 	g_mutex_lock(mutex);
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -207,15 +208,17 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
 
 		signal_read_rtvars();
+		count = 0;
 
 		/* Auto-throttling if gui gets sluggish */
 		while (( g_async_queue_length(io_data_queue) > 2) || 
 				(g_async_queue_length(pf_dispatch_queue) > 3))
 		{
-		//	printf("Auto-throttline, io queue length %i, pf queue length %i\n",g_async_queue_length(io_data_queue), g_async_queue_length(pf_dispatch_queue));
-	//		pf_dispatcher(NULL);
+			count++;
+			//printf("Auto-throttling, io queue length %i, pf queue length %i, loop iterations %i\n",g_async_queue_length(io_data_queue), g_async_queue_length(pf_dispatch_queue),count);
+			//pf_dispatcher(NULL);
 			g_get_current_time(&time);
-			g_time_val_add(&time,2000*g_async_queue_length(pf_dispatch_queue));
+			g_time_val_add(&time,10000*g_async_queue_length(pf_dispatch_queue));
 			if (g_cond_timed_wait(rtv_thread_cond,rtv_thread_mutex,&time))
 				goto breakout;
 		}
