@@ -559,8 +559,8 @@ G_MODULE_EXPORT gboolean update_rttext(gpointer data)
                 rtt_mutex = DATA_GET(global_data,"rtt_mutex");
         if (!rtt_model)
                 rtt_model = DATA_GET(global_data,"rtt_model");
-        if (!rtt_mutex)
-                rtt_mutex = DATA_GET(global_data,"rtt_hash");
+        if (!rtt_hash)
+                rtt_hash = DATA_GET(global_data,"rtt_hash");
 	
         g_mutex_lock(rtt_mutex);
 	/* Silently return if not yet ready */

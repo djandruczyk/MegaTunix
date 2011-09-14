@@ -635,7 +635,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	/* Table for rendering mode */
 	table = gtk_table_new(2,2,TRUE);
 	gtk_box_pack_end(GTK_BOX(vbox2),table,FALSE,FALSE,0);
-	label = gtk_label_new("Rendering Mode");
+	label = gtk_label_new(_("Rendering Mode"));
 	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,0,0,0,0);
 	/* Wireframe toggle */
 	button = gtk_radio_button_new_with_label(NULL,"Wireframe");
@@ -672,7 +672,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),!ve_view->fixed_scale);
 	OBJ_SET(button,"ve_view",ve_view);
 	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
-
 	/* Opacity Slider */
 	scale = gtk_hscale_new_with_range(0.1,1.0,0.001);
 	OBJ_SET(scale,"ve_view",ve_view);
@@ -683,11 +682,24 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_scale_set_draw_value(GTK_SCALE(scale),FALSE);
 	gtk_box_pack_end(GTK_BOX(vbox2),scale,FALSE,TRUE,0);
 
-	label = gtk_label_new("Opacity");
+	label = gtk_label_new(_("Opacity"));
+	gtk_box_pack_end(GTK_BOX(vbox2),label,FALSE,TRUE,0);
+
+	/* FPS Slider */
+	scale = gtk_hscale_new_with_range(1.0,35.0,1.0);
+	OBJ_SET(scale,"ve_view",ve_view);
+	g_signal_connect(G_OBJECT(scale), "value_changed",
+			G_CALLBACK(set_fps),
+			NULL);
+	gtk_range_set_value(GTK_RANGE(scale),ve_view->requested_fps);
+	gtk_scale_set_draw_value(GTK_SCALE(scale),TRUE);
+	gtk_box_pack_end(GTK_BOX(vbox2),scale,FALSE,TRUE,0);
+
+	label = gtk_label_new(_("FPS"));
 	gtk_box_pack_end(GTK_BOX(vbox2),label,FALSE,TRUE,0);
 
 	/* Realtime var slider gauges */
-	frame = gtk_frame_new("Real-Time Variables");
+	frame = gtk_frame_new(_("Real-Time Variables"));
 	gtk_box_pack_start(GTK_BOX(vbox),frame,FALSE,TRUE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(frame),0);
 
@@ -716,7 +728,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	gdk_threads_add_timeout(500,delayed_reconfigure,ve_view);
-	ve_view->render_id = g_timeout_add_full(150,100,update_ve3d,ve_view,NULL);
+	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,ve_view,NULL);
 	return TRUE;
 }
 
@@ -739,9 +751,11 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 			
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(ve_view_hash,FALSE);
+	g_mutex_lock(ve_view->mutex);
 	//printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
-	g_source_remove(ve_view->render_id);
+	if (ve_view->render_id > 0);
+		g_source_remove(ve_view->render_id);
 	store_list("burners",g_list_remove(
 				get_list("burners"),(gpointer)ve_view->burn_but));
 	g_hash_table_remove(ve_view_hash,GINT_TO_POINTER(ve_view->table_num));
@@ -759,6 +773,8 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	g_object_unref(ve_view->x_container);
 	g_object_unref(ve_view->y_container);
 	g_object_unref(ve_view->z_container);
+	g_mutex_unlock(ve_view->mutex);
+	g_mutex_free(ve_view->mutex);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 	
@@ -2197,6 +2213,7 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 {
 	Ve_View_3D *ve_view = NULL;
 	ve_view= g_new0(Ve_View_3D,1) ;
+	ve_view->mutex = g_mutex_new();
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
@@ -2258,6 +2275,8 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 	ve_view->y_offset_bitmap_render_pango_units = -1;
 	ve_view->ft2_context = NULL;
 	ve_view->gl_initialized = FALSE;
+	ve_view->requested_fps = (GINT)DATA_GET(global_data,"ve3d_fps");
+	ve_view->render_id = 0;
 
 	return ve_view;
 }
@@ -2858,6 +2877,27 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 }
 
 
+/*! 
+  \brief sets this displays max FPS in the view.
+  \param widget is the range/scale
+  \param data is unused
+  \return FALSE if no view, TRUE otherwise
+  */
+G_MODULE_EXPORT gboolean set_fps(GtkWidget *widget, gpointer data)
+{
+	Ve_View_3D *ve_view = NULL;
+
+	ve_view = OBJ_GET(widget,"ve_view");
+	if (!ve_view)
+		return FALSE;
+	ve_view->requested_fps = (GINT)gtk_range_get_value(GTK_RANGE(widget));
+	if (ve_view->render_id > 0)
+		g_source_remove(ve_view->render_id);
+	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,ve_view,NULL);
+	return TRUE;
+}
+
+
 /*!
   \brief Frees up data in the Cur_Vals structure
   \param cur_val is the pointer to the structure of current values
@@ -3124,6 +3164,7 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
+	g_mutex_lock(ve_view->mutex);
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 	/* Get X values */
@@ -3233,6 +3274,7 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	/* Test Z values, redraw if needed */
 	if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 		goto redraw;
+	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 
 redraw:
@@ -3242,6 +3284,7 @@ redraw:
 		//		draw_ve_marker();
 		//		update_tab_gauges();
 	}
+	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 }
 

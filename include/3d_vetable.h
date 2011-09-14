@@ -176,6 +176,7 @@ struct _Ve_View_3D
 	glong lasttime;		/*!< Time of last render */
 	gchar strfps[50];	/*!< FPS String */
 	gint render_id;		/*!< Render thread ID */
+	gint requested_fps;	/*!< Requested Frames per second */
 	GMutex *mutex;		/*!< Protection Mutex */
 };
 
@@ -231,6 +232,7 @@ gboolean update_ve3d(gpointer);
 gboolean update_ve3ds(gpointer);
 Cur_Vals * get_current_values(Ve_View_3D *);
 void free_current_values(Cur_Vals *);
+gboolean set_fps(GtkWidget *, gpointer );
 gboolean set_opacity(GtkWidget *, gpointer );
 gboolean set_tracking_focus(GtkWidget *, gpointer );
 gboolean set_scaling_mode(GtkWidget *, gpointer );
