@@ -218,7 +218,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
   */
 G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 {
-	static void (*update_widget_f)(gpointer, gpointer) = NULL;
 	ConfigFile *cfgfile = NULL;
 	gchar * map_file = NULL;
 	gchar * glade_file = NULL;
@@ -231,10 +230,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	GList *tab_widgets = NULL;
 	BindGroup *bindgroup = NULL;
 	extern GdkColor red;
-
-	if (!update_widget_f)
-		get_symbol("update_widget",(void *)&update_widget_f);
-	g_return_val_if_fail(update_widget_f,FALSE);
 
 	placeholder =  gtk_notebook_get_nth_page(notebook,page);
 	label = gtk_notebook_get_tab_label(notebook,placeholder);
@@ -297,7 +292,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		}
 		cfg_free(cfgfile);
 		gtk_widget_show_all(topframe);
-		g_list_foreach(bindgroup->widget_list,update_widget_f,NULL);
 		tab_widgets = g_list_copy(bindgroup->widget_list);
 		OBJ_SET_FULL(topframe,"tab_widgets",(gpointer)tab_widgets,g_list_free);
 		g_list_free(bindgroup->widget_list);
