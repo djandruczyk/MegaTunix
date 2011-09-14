@@ -163,7 +163,6 @@ fast_exit:
 	g_mutex_lock(pf_dispatch_mutex);
 	g_cond_signal(pf_dispatch_cond);
 	g_mutex_unlock(pf_dispatch_mutex);
-	printf("Returning from  pf dispatcher!\n");
 	return TRUE;
 }
 

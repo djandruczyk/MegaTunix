@@ -137,9 +137,9 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
 
-	id = g_timeout_add(16,(GSourceFunc)pf_dispatcher,NULL);
+	id = g_timeout_add_full(-50,16,(GSourceFunc)pf_dispatcher,NULL,NULL);
 	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
-	id = g_timeout_add(35,(GSourceFunc)gui_dispatcher,NULL);
+	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,NULL,NULL);
 	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
 	id = g_timeout_add(1000,(GSourceFunc)flush_binary_logs,NULL);
         DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));

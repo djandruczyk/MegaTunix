@@ -716,7 +716,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	gdk_threads_add_timeout(500,delayed_reconfigure,ve_view);
-	ve_view->render_id = g_timeout_add(100,update_ve3d,ve_view);
+	ve_view->render_id = g_timeout_add_full(150,100,update_ve3d,ve_view,NULL);
 	return TRUE;
 }
 
