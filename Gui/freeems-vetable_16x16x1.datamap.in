@@ -49,7 +49,7 @@ _tooltip=VE stands for Volumetric Efficiency and, with IAT, tells FreeEMS how mu
 keys=table_num,tab_ident,visible_functions
 table_num=0
 tab_ident=_VETABLES_TAB_
-visible_functions=draw_ve_marker,update_tab_gauges
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [topframe_title]
 keys=set_label

@@ -1339,8 +1339,10 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 	gint active_table = -1;
 	GList *tab_widgets = NULL;
 	GList *func_list = NULL;
+	GList *func_fps_list = NULL;
 	gint i = 0;
 	gint id = 0;
+	gint fps = 0;
 	GSourceFunc func = NULL;
 	GtkWidget *sub = NULL;
 	GtkWidget *topframe = NULL;
@@ -1372,12 +1374,14 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 		g_list_foreach(tab_widgets,update_widget_f,NULL);
 	}
 	func_list = OBJ_GET(topframe,"func_list");
+	func_fps_list = OBJ_GET(topframe,"func_fps_list");
 	if (func_list)
 	{
 		for (i=0;i<g_list_length(func_list);i++)
 		{
 			func = (GSourceFunc)g_list_nth_data(func_list,i);
-			id = g_timeout_add_full(110,100,func,NULL,NULL);
+			fps = (GINT)g_list_nth_data(func_fps_list,i);
+			id = g_timeout_add_full(110,1000.0/fps,func,NULL,NULL);
 			g_signal_connect(G_OBJECT(notebook), "switch_page",
 					G_CALLBACK(cancel_visible_function),
 					GINT_TO_POINTER(id));

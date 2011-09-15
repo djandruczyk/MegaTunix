@@ -230,9 +230,12 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	GList *tab_widgets = NULL;
 	BindGroup *bindgroup = NULL;
 	gchar **vector = NULL;
+	gchar **vec2 = NULL;
+	gint fps = 0;
 	gint i = 0;
 	void (*func)(void) = NULL;
 	GList *list = NULL;
+	GList *list2 = NULL;
 	extern GdkColor red;
 
 	placeholder =  gtk_notebook_get_nth_page(notebook,page);
@@ -260,12 +263,25 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 			g_free(tmpbuf);
 			for (i=0;i<g_strv_length(vector);i++)
 			{
-				get_symbol(vector[i],(void *)&func);
+				vec2 = g_strsplit(vector[i],":",2);
+				if (g_strv_length(vec2) != 2)
+				{
+					printf("ERROR in %s, visible_functions param is missing the framerate parameter (func:fps)\n",cfgfile->filename);
+					g_strfreev(vec2);
+					continue;
+				}
+				fps = (GINT)g_strtod(vec2[1],NULL);
+				get_symbol(vec2[0],(void *)&func);
 				if (func)
+				{
 					list = g_list_prepend(list,func);
+					list2 = g_list_prepend(list2,GINT_TO_POINTER(fps));
+				}
+				g_strfreev(vec2);
 			}
 			g_strfreev(vector);
 			OBJ_SET_FULL(topframe,"func_list",list,g_list_free);
+			OBJ_SET(topframe,"func_fps_list",list2);
 		}
 		OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
 		// bind_data() is recursive and will take 

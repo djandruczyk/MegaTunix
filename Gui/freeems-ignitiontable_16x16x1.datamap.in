@@ -52,7 +52,7 @@ _tooltip=Degrees of ignition advance BTDC
 keys=table_num,tab_ident,visible_functions
 table_num=2
 tab_ident=_SPARKTABLES_TAB_
-visible_functions=draw_ve_marker,update_tab_gauges
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [topframe_title]
 keys=set_label
