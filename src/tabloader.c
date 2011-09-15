@@ -229,13 +229,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	GHashTable *groups = NULL;
 	GList *tab_widgets = NULL;
 	BindGroup *bindgroup = NULL;
-	gchar **vector = NULL;
-	gchar **vec2 = NULL;
-	gint fps = 0;
-	gint i = 0;
-	void (*func)(void) = NULL;
-	GList *list = NULL;
-	GList *list2 = NULL;
 	extern GdkColor red;
 
 	placeholder =  gtk_notebook_get_nth_page(notebook,page);
@@ -256,32 +249,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 			dbg_func(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
 			set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
 			return FALSE;
-		}
-		if (cfg_read_string(cfgfile,"topframe","visible_functions",&tmpbuf))
-		{
-			vector = g_strsplit(tmpbuf,",",-1);
-			g_free(tmpbuf);
-			for (i=0;i<g_strv_length(vector);i++)
-			{
-				vec2 = g_strsplit(vector[i],":",2);
-				if (g_strv_length(vec2) != 2)
-				{
-					printf("ERROR in %s, visible_functions param is missing the framerate parameter (func:fps)\n",cfgfile->filename);
-					g_strfreev(vec2);
-					continue;
-				}
-				fps = (GINT)g_strtod(vec2[1],NULL);
-				get_symbol(vec2[0],(void *)&func);
-				if (func)
-				{
-					list = g_list_prepend(list,func);
-					list2 = g_list_prepend(list2,GINT_TO_POINTER(fps));
-				}
-				g_strfreev(vec2);
-			}
-			g_strfreev(vector);
-			OBJ_SET_FULL(topframe,"func_list",list,g_list_free);
-			OBJ_SET(topframe,"func_fps_list",list2);
 		}
 		OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
 		// bind_data() is recursive and will take 
@@ -612,6 +579,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gint result = 0;
 	gint tmpi = 0;
 	gchar *ptr = NULL;
+	gchar **vector = NULL;
+	gchar **vec2 = NULL;
+	gint fps = 0;
+	gint i = 0;
+	void (*func)(void) = NULL;
+	GList *list = NULL;
+	GList *list2 = NULL;
 	const gchar *name = NULL;
 	gboolean indexed = FALSE;
 	Firmware_Details *firmware = NULL;
@@ -756,6 +730,33 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	{
 		register_widget(tmpbuf,widget);
 		g_free(tmpbuf);
+	}
+	/* If this widget has visible_functions defined */
+	if (cfg_read_string(cfgfile,section,"visible_functions",&tmpbuf))
+	{
+		vector = g_strsplit(tmpbuf,",",-1);
+		g_free(tmpbuf);
+		for (i=0;i<g_strv_length(vector);i++)
+		{
+			vec2 = g_strsplit(vector[i],":",2);
+			if (g_strv_length(vec2) != 2)
+			{
+				printf("ERROR in %s, visible_functions param is missing the framerate parameter (func:fps)\n",cfgfile->filename);
+				g_strfreev(vec2);
+				continue;
+			}
+			fps = (GINT)g_strtod(vec2[1],NULL);
+			get_symbol(vec2[0],(void *)&func);
+			if (func)
+			{
+				list = g_list_prepend(list,func);
+				list2 = g_list_prepend(list2,GINT_TO_POINTER(fps));
+			}
+			g_strfreev(vec2);
+		}
+		g_strfreev(vector);
+		OBJ_SET_FULL(widget,"func_list",list,g_list_free);
+		OBJ_SET_FULL(widget,"func_fps_list",list2,g_list_free);
 	}
 
 	/* If this widget has "initializer" there's a global variable 

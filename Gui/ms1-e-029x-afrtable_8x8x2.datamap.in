@@ -225,14 +225,16 @@ ego_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,0
 #----- widgets ---------------------------------------------------------------
 
 [AFR1_vbox1]
-keys=bind_to_list,table_num
+keys=bind_to_list,table_num,visible_functions
 bind_to_list=afr1
 table_num=5
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [AFR2_vbox1]
-keys=bind_to_list,table_num
+keys=bind_to_list,table_num,visible_functions
 bind_to_list=afr2,dt_controls
 table_num=6
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 
 #----- Buttons ---------------------------------------------------------------

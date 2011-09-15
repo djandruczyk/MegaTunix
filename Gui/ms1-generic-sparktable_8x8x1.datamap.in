@@ -76,9 +76,10 @@ datasource=afr
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,table_num
+keys=tab_ident,table_num,visible_functions
 tab_ident=_SPARKTABLES_TAB_
 table_num=1
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [topframe_title]
 keys=set_label

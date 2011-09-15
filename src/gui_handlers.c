@@ -1373,21 +1373,6 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 		set_title(g_strdup(_("Updating Tab with current data...")));
 		g_list_foreach(tab_widgets,update_widget_f,NULL);
 	}
-	func_list = OBJ_GET(topframe,"func_list");
-	func_fps_list = OBJ_GET(topframe,"func_fps_list");
-	if (func_list)
-	{
-		for (i=0;i<g_list_length(func_list);i++)
-		{
-			func = (GSourceFunc)g_list_nth_data(func_list,i);
-			fps = (GINT)g_list_nth_data(func_fps_list,i);
-			id = g_timeout_add_full(110,1000.0/fps,func,NULL,NULL);
-			g_signal_connect(G_OBJECT(notebook), "switch_page",
-					G_CALLBACK(cancel_visible_function),
-					GINT_TO_POINTER(id));
-		}
-	}
-	
 	set_title(g_strdup(_("Ready...")));
 	tab_ident = (TabIdent)OBJ_GET(topframe,"tab_ident");
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(tab_ident));
@@ -1400,7 +1385,23 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 #else
 	if ((OBJ_GET(topframe,"table_num")) && (GTK_WIDGET_STATE(topframe) != GTK_STATE_INSENSITIVE))
 #endif
+	{
 		active_table = (GINT)strtol(OBJ_GET(topframe,"table_num"),NULL,10);
+		func_list = OBJ_GET(topframe,"func_list");
+		func_fps_list = OBJ_GET(topframe,"func_fps_list");
+		if (func_list)
+		{
+			for (i=0;i<g_list_length(func_list);i++)
+			{
+				func = (GSourceFunc)g_list_nth_data(func_list,i);
+				fps = (GINT)g_list_nth_data(func_fps_list,i);
+				id = g_timeout_add_full(110,1000.0/fps,func,NULL,NULL);
+				g_signal_connect(G_OBJECT(notebook), "switch_page",
+						G_CALLBACK(cancel_visible_function),
+						GINT_TO_POINTER(id));
+			}
+		}
+	}
 	else
 		active_table = -1;
 
@@ -1419,6 +1420,24 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 			if ((OBJ_GET(widget,"table_num")) && (GTK_WIDGET_SENSITIVE(widget) != GTK_STATE_INSENSITIVE))
 #endif
 			{
+				func_list = OBJ_GET(widget,"func_list");
+				func_fps_list = OBJ_GET(widget,"func_fps_list");
+				if (func_list)
+				{
+					for (i=0;i<g_list_length(func_list);i++)
+					{
+						func = (GSourceFunc)g_list_nth_data(func_list,i);
+						fps = (GINT)g_list_nth_data(func_fps_list,i);
+						id = g_timeout_add_full(110,1000.0/fps,func,NULL,NULL);
+						g_signal_connect(G_OBJECT(notebook), "switch_page",
+								G_CALLBACK(cancel_visible_function),
+								GINT_TO_POINTER(id));
+						g_signal_connect(G_OBJECT(sub), "switch_page",
+								G_CALLBACK(cancel_visible_function),
+								GINT_TO_POINTER(id));
+					}
+				}
+
 				active_table = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 				/*printf("found it,  active table %i\n",active_table);*/
 			}
@@ -1449,17 +1468,47 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkWidget *page, guint page_no, gpointer data)
 {
 	gint active_table = -1;
+	gint id = 0;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
+	GtkWidget *parent = lookup_widget("toplevel_notebook");
+	GList *func_list = NULL;
+	GList *func_fps_list = NULL;
+	gint i = 0;
+	GSourceFunc func = NULL;
+	gint fps = 0;
 
 	if (OBJ_GET(widget,"table_num"))
 	{
 		active_table = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 		DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
+		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	}
-	else
-		return;
+
+#if GTK_MINOR_VERSION >= 18
+	if ((OBJ_GET(widget,"table_num")) && (gtk_widget_get_state(widget) != GTK_STATE_INSENSITIVE))
+#else
+	if ((OBJ_GET(widget,"table_num")) && (GTK_WIDGET_SENSITIVE(widget) != GTK_STATE_INSENSITIVE))
+#endif
+	{
+		func_list = OBJ_GET(widget,"func_list");
+		func_fps_list = OBJ_GET(widget,"func_fps_list");
+		if (func_list)
+		{
+			for (i=0;i<g_list_length(func_list);i++)
+			{
+				func = (GSourceFunc)g_list_nth_data(func_list,i);
+				fps = (GINT)g_list_nth_data(func_fps_list,i);
+				id = g_timeout_add_full(110,1000.0/fps,func,NULL,NULL);
+				g_signal_connect(G_OBJECT(notebook), "switch_page",
+						G_CALLBACK(cancel_visible_function),
+						GINT_TO_POINTER(id));
+				g_signal_connect(G_OBJECT(parent), "switch_page",
+						G_CALLBACK(cancel_visible_function),
+						GINT_TO_POINTER(id));
+			}
+		}
+	}
 	/*printf("active table changed to %i\n",active_table); */
-	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 
 	return;
 }

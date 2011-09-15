@@ -273,24 +273,28 @@ data=VET16_VET4_rescale_entry,VET16_VET4_rescale_combo
 #----- Widgets --------------------------------------------------------------
 
 [VET1_vbox1]
-keys=bind_to_list,table_num
+keys=bind_to_list,table_num,visible_functions
 bind_to_list=seq_inj,ve_trim
 table_num=17
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [VET2_vbox1]
-keys=bind_to_list,table_num
+keys=bind_to_list,table_num,visible_functions
 bind_to_list=seq_inj,ve_trim
 table_num=18
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [VET3_vbox1]
-keys=bind_to_list,table_num
+keys=bind_to_list,table_num,visible_functions
 bind_to_list=seq_inj,extra_inj,bank2,ve_trim
 table_num=19
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [VET4_vbox1]
-keys=bind_to_list,table_num
+keys=bind_to_list,table_num,visible_functions
 bind_to_list=seq_inj,extra_inj,bank2,ve_trim
 table_num=20
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 #----- Gauges --------------------------------------------------------------
 

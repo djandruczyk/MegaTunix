@@ -303,20 +303,23 @@ alternate_bitmask=1
 #----- Widgets --------------------------------------------------------------
 
 [VE1_vbox1]
-keys=table_num
+keys=table_num,visible_functions
 table_num=3
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [VE2_vbox1]
-keys=bind_to_list,table_num,match_type
+keys=bind_to_list,table_num,match_type,visible_functions
 match_type=_OR_
 bind_to_list=dual_table,second_fuel
 table_num=4
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [VE3_vbox1]
-keys=bind_to_list,table_num,match_type
+keys=bind_to_list,table_num,match_type,visible_functions
 bind_to_list=fuel_switching,seq_siamese
 match_type=_OR_
 table_num=5
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 #----- Gauges --------------------------------------------------------------
 

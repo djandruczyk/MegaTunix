@@ -48,10 +48,11 @@ _tooltip=The Spark Advance Entries control the engine igntion timing.  The value
 #----- Widgets ---------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,sub-notebook,bind_to_list
+keys=tab_ident,sub-notebook,bind_to_list,visible_functions
 tab_ident=_SPARKTABLES_TAB_
 sub-notebook=SP_spark_notebook
 bind_to_list=valid_ecu_ctrls
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [spark_notebook]
 keys=bind_to_list

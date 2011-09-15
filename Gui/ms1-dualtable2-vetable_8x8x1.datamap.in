@@ -37,10 +37,11 @@ _tooltip=The VE Entries control how much fuel is injected into the engine. They 
 #----- Widgets ---------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,table_num,bind_to_list
+keys=tab_ident,table_num,bind_to_list,visible_functions
 tab_ident=_VETABLES_TAB_
 table_num=1
 bind_to_list=dt_controls
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [VE1_gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num

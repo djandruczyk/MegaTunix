@@ -219,13 +219,15 @@ sub-notebook=VE_vetable_notebook
 bind_to_list=valid_ecu_ctrls
 
 [VE1_vbox1]
-keys=table_num
+keys=table_num,visible_functions
 table_num=0
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [VE2_vbox1]
-keys=bind_to_list,table_num
+keys=bind_to_list,table_num,visible_functions
 bind_to_list=dt_controls
 table_num=1
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [VE1_rescale_frame]
 keys=register_as

@@ -92,18 +92,21 @@ keys=bind_to_list
 bind_to_list=spark_controls
 
 [SP1_vbox1]
-keys=table_num
+keys=table_num,visible_functions
 table_num=6
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [SP2_vbox1]
-keys=table_num,bind_to_list
+keys=table_num,bind_to_list,visible_functions
 table_num=7
 bind_to_list=secondary_ign
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [SP3_vbox1]
-keys=page,table_num,bind_to_list
+keys=page,table_num,bind_to_list,visible_functions
 page=3
 table_num=8
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 bind_to_list=spark_switching,ign
 
 [SP1_gaugeframe1]

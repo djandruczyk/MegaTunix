@@ -243,13 +243,15 @@ divider_offset=149
 #----- Widgets --------------------------------------------------------------
 
 [AFR1_vbox1]
-keys=table_num
+keys=table_num,visible_functions
 table_num=9
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [AFR2_vbox1]
-keys=bind_to_list,table_num
+keys=bind_to_list,table_num,visible_functions
 bind_to_list=dual_table
 table_num=10
+visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 #----- Gauges --------------------------------------------------------------
 
