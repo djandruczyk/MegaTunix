@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the Spark Advance tab
-_tab_name=_Spark Table(s)
+_tab_name=_Advance Table
 id_prefix=SP16_
 size=_U08_
 ellipsize=TRUE
@@ -56,7 +56,7 @@ visible_functions=draw_ve_marker,update_tab_gauges
 
 [topframe_title]
 keys=set_label
-set_label=FreeEMS 0.0.0 Very Very Alpha Spark Advance Table(s)
+set_label=FreeEMS Ignition Advance Table
 
 [notebook_tab_label]
 keys=set_label
@@ -121,35 +121,35 @@ keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=2
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
-datasource=rpm
+datasource=RPM
 
 [gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=2
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
-datasource=tpspercent
+gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
+datasource=LoadMain
 
 [gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=2
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
-datasource=fuelload
+gaugexml=SportComp/AM_SportComp_Advance_Gauge.xml
+datasource=Advance
 
 [gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=2
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
-datasource=egocorr1
+gaugexml=SportComp/AM_SportComp_O2Lambda_Gauge.xml
+datasource=EGO
 
 [gaugeframe5]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=2
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
-datasource=afr1
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=TPS
 
 #----- Rescale Entries ------------------------------------------------------
 

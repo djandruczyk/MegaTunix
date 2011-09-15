@@ -1,6 +1,6 @@
 [global]
 description=Object data map for the FreeEMS VEtables tab
-_tab_name=_Fuel Table(s)
+_tab_name=_VE Table
 id_prefix=VE16_
 size=_U08_
 ellipsize=TRUE
@@ -53,7 +53,7 @@ visible_functions=draw_ve_marker,update_tab_gauges
 
 [topframe_title]
 keys=set_label
-set_label=FreeEMS 0.0.0 Very Very Alpha Fuel table(s)
+set_label=FreeEMS VE Table
 
 #----- Buttons ---------------------------------------------------------------
 
@@ -110,35 +110,35 @@ keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
-datasource=rpm
+datasource=RPM
 
 [gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
-datasource=tpspercent
+gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
+datasource=LoadMain
 
 [gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
-datasource=fuelload
+gaugexml=SportComp/AM_SportComp_VE_Gauge.xml
+datasource=VEMain
 
 [gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
-datasource=egocorr1
+gaugexml=SportComp/AM_SportComp_O2Lambda_Gauge.xml
+datasource=EGO
 
 [gaugeframe5]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
-datasource=afr1
+gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
+datasource=TPS
 
 #----- Rescale Entries ------------------------------------------------------
 
