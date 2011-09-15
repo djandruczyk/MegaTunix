@@ -322,11 +322,11 @@ GtkWidget * build_a_range(MtxAlertRange *range, gint index)
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 	g_signal_connect(G_OBJECT(widget),"color_set",G_CALLBACK(alter_a_range_data),NULL);
 	gtk_table_attach(GTK_TABLE(minitable),widget,1,2,0,1,GTK_FILL|GTK_EXPAND,GTK_EXPAND,0,0);
-	/* Nitetime Color */
+	/* Nighttime Color */
 	minitable = gtk_table_new(1,2,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(minitable),5);
 	gtk_table_attach(GTK_TABLE(subtable),minitable,1,2,0,1,GTK_EXPAND|GTK_FILL,GTK_EXPAND|GTK_FILL,0,0);
-	widget = gtk_label_new("Nite:");
+	widget = gtk_label_new("Night:");
 	gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,1,GTK_FILL,GTK_EXPAND|GTK_FILL,0,0);
 
 	widget = gtk_color_button_new_with_color(&range->color[MTX_NITE]);

@@ -203,10 +203,10 @@
                     <child>
                       <object class="GtkColorButton" id="tblock_nite_colorbutton">
                         <property name="visible">True</property>
-                        <property name="tooltip-text" translatable="yes">Nite-Time Color</property>
+                        <property name="tooltip-text" translatable="yes">Nighttime Color</property>
                         <property name="can_focus">True</property>
                         <property name="use_alpha">False</property>
-                        <property name="title" translatable="yes">Nitetime Color</property>
+                        <property name="title" translatable="yes">Nighttime Color</property>
                         <property name="focus_on_click">True</property>
                       </object>
                       <packing>

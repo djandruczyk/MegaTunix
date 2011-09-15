@@ -158,7 +158,7 @@
                             </child>
                             <child>
                               <object class="GtkRadioButton" id="nitetime_radiobutton">
-                                <property name="label" translatable="yes">Nitetime</property>
+                                <property name="label" translatable="yes">Nighttime</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -176,7 +176,7 @@
                         <child type="label">
                           <object class="GtkLabel" id="label252">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Daytime or Nitetime mode</property>
+                            <property name="label" translatable="yes">Daytime or Nighttime mode</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
@@ -875,7 +875,7 @@
                                                   <object class="GtkLabel" id="label249">
                                                     <property name="visible">True</property>
                                                     <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">Nitetime</property>
+                                                    <property name="label" translatable="yes">Nighttime</property>
                                                   </object>
                                                   <packing>
                                                     <property name="left_attach">2</property>
@@ -1034,8 +1034,8 @@
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="receives_default">False</property>
-                                                        <property name="tooltip_text" translatable="yes">Nite-Time Color</property>
-                                                        <property name="title" translatable="yes">Nitetime Color</property>
+                                                        <property name="tooltip_text" translatable="yes">Nighttime Color</property>
+                                                        <property name="title" translatable="yes">Nighttime Color</property>
                                                         <signal name="color_set" handler="color_button_color_set"/>
                                                       </object>
                                                       <packing>

@@ -325,7 +325,7 @@ GtkWidget * build_tgroup(MtxTickGroup *tgroup, gint index)
 	g_signal_connect(G_OBJECT(widget),"color_set",G_CALLBACK(alter_tgroup_data),NULL);
 	gtk_table_attach(GTK_TABLE(subtable),widget,2,3,1,2,GTK_FILL,GTK_EXPAND,0,0);
 
-	widget = gtk_label_new("Nite");
+	widget = gtk_label_new("Night");
 	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,0,GTK_FILL,0,0);
 	widget = gtk_color_button_new_with_color(&tgroup->text_color[MTX_NITE]);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TG_TEXT_COLOR_NITE));
@@ -393,7 +393,7 @@ GtkWidget * build_tgroup(MtxTickGroup *tgroup, gint index)
 	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,GTK_EXPAND,GTK_EXPAND,0,0);
 	widget = gtk_label_new("Day");
 	gtk_table_attach(GTK_TABLE(subtable),widget,4,5,0,1,GTK_EXPAND,GTK_EXPAND,0,0);
-	widget = gtk_label_new("Nite");
+	widget = gtk_label_new("Night");
 	gtk_table_attach(GTK_TABLE(subtable),widget,5,6,0,1,GTK_EXPAND,GTK_EXPAND,0,0);
 
 	/* Spinners */
@@ -457,7 +457,7 @@ GtkWidget * build_tgroup(MtxTickGroup *tgroup, gint index)
 	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,GTK_EXPAND,GTK_EXPAND,0,0);
 	widget = gtk_label_new("Day");
 	gtk_table_attach(GTK_TABLE(subtable),widget,4,5,0,1,GTK_EXPAND,GTK_EXPAND,0,0);
-	widget = gtk_label_new("Nite");
+	widget = gtk_label_new("Night");
 	gtk_table_attach(GTK_TABLE(subtable),widget,5,6,0,1,GTK_EXPAND,GTK_EXPAND,0,0);
 
 	/* Spinners */

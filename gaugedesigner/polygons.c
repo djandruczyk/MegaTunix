@@ -770,7 +770,7 @@ GtkWidget *build_polygon(MtxPolygon *poly, gint index)
 	widget = gtk_label_new("Day");
 	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_EXPAND,0,0,0);
 
-	widget = gtk_label_new("Nite");
+	widget = gtk_label_new("Night");
 	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND,0,0,0);
 
 	widget = gtk_color_button_new_with_color(&poly->color[MTX_DAY]);

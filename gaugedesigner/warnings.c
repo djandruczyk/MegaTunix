@@ -141,7 +141,7 @@ void update_onscreen_w_ranges()
 		gtk_table_attach(GTK_TABLE(table),label,4,5,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
 		label = gtk_label_new("Day Color");
 		gtk_table_attach(GTK_TABLE(table),label,5,6,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
-		label = gtk_label_new("Nite Color");
+		label = gtk_label_new("Night Color");
 		gtk_table_attach(GTK_TABLE(table),label,6,7,0,1,GTK_EXPAND,GTK_SHRINK,0,0);
 	}
 	/* Repopulate the table with the current ranges... */
