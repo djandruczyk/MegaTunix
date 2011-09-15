@@ -85,66 +85,66 @@ tooltip=Time per event in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 
 [events_to_fire_from_entry1]
 keys=size,tooltip
 size=_U08_
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry2]
 keys=size,tooltip
 size=_U08_
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry3]
 keys=size,tooltip
 size=_U08_
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry4]
 keys=size,tooltip
 size=_U08_
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry5]
 keys=size,tooltip
 size=_U08_
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry6]
 keys=size,tooltip
 size=_U08_
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [pw_source_entry1]
 keys=size,raw_upper,tooltip
 size=_U16_
 raw_upper=65535
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry2]
 keys=size,raw_upper,tooltip
 size=_U16_
 raw_upper=65535
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry3]
 keys=size,raw_upper,tooltip
 size=_U16_
 raw_upper=65535
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry4]
 keys=size,raw_upper,tooltip
 size=_U16_
 raw_upper=65535
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry5]
 keys=size,raw_upper,tooltip
 size=_U16_
 raw_upper=65535
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry6]
 keys=size,raw_upper,tooltip
 size=_U16_
 raw_upper=65535
-tooltip=Ask fredcooke/FreeAir in channel #freeems-dev on FreeNode IRC
+tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 

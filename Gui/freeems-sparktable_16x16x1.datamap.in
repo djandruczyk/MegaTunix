@@ -44,7 +44,7 @@ table_num=2
 use_color=TRUE
 fromecu_mult=0.000976563
 precision=1
-_tooltip=Ask FredCooke
+_tooltip=Degrees of ignition advance BTDC
 
 #----- Labels ----------------------------------------------------------------
 

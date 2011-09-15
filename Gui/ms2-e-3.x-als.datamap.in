@@ -62,7 +62,7 @@ offset=996
 choices=Disabled,Enabled
 bitvals=0,1
 bitmask=4
-_tooltip=Ask Baldur
+_tooltip=Closes the idle valve when the ALS gets turned off due to the throttle opening
 
 [als_pin_combo]
 keys=offset,choices,bitvals,bitmask,tooltip

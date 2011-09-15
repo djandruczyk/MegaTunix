@@ -41,7 +41,7 @@ table_num=0
 use_color=TRUE
 fromecu_mult=0.001953125
 precision=1
-_tooltip=The VE Entries control how much fuel is injected into the engine. They refer to Volumetric efficiency of the engine.  If the Req_Fuel variable is scaled appropriately the engine should be at 100% VE at max torque.   These entries are all relative and can be scaled upwards for a low Req_Fuel or downwards with a high Req_Fuel.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
+_tooltip=VE stands for Volumetric Efficiency and, with IAT, tells FreeEMS how much air entered the engine. Using that, the integral lambda value and other physical engine constants the base PW is calculated. Corrections and enrichments are applied to that base PW  to produce a final PW. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- Labels ----------------------------------------------------------------
 
