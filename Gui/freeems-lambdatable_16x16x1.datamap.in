@@ -117,35 +117,35 @@ table_num=1
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
+gaugexml=FreeEMS_AM_SportComp/Tacho_8k_RPM.xml
 datasource=RPM
 
 [gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
+gaugexml=FreeEMS_AM_SportComp/Load_Percent_260.xml
 datasource=LoadMain
 
 [gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_O2Lambda_Gauge.xml
+gaugexml=FreeEMS_AM_SportComp/Lambda_Integral.xml
 datasource=IntegralLambda
 
 [gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_O2Lambda_Gauge.xml
+gaugexml=FreeEMS_AM_SportComp/Lambda_Exhaust.xml
 datasource=EGO
 
 [gaugeframe5]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=SportComp/AM_SportComp_VE_Gauge.xml
+gaugexml=FreeEMS_AM_SportComp/Volumetric_Efficiency.xml
 datasource=VEMain
 
 ;#----- Rescale Entries ------------------------------------------------------
