@@ -431,6 +431,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"ulimit_offset",
 			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,"visible_function",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"use_color",
 			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"widget_type",

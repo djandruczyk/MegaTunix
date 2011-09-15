@@ -229,6 +229,10 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	GHashTable *groups = NULL;
 	GList *tab_widgets = NULL;
 	BindGroup *bindgroup = NULL;
+	gchar **vector = NULL;
+	gint i = 0;
+	void (*func)(void) = NULL;
+	GList *list = NULL;
 	extern GdkColor red;
 
 	placeholder =  gtk_notebook_get_nth_page(notebook,page);
@@ -250,7 +254,19 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 			set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
 			return FALSE;
 		}
-
+		if (cfg_read_string(cfgfile,"topframe","visible_functions",&tmpbuf))
+		{
+			vector = g_strsplit(tmpbuf,",",-1);
+			g_free(tmpbuf);
+			for (i=0;i<g_strv_length(vector);i++)
+			{
+				get_symbol(vector[i],(void *)&func);
+				if (func)
+					list = g_list_prepend(list,func);
+			}
+			g_strfreev(vector);
+			OBJ_SET_FULL(topframe,"func_list",list,g_list_free);
+		}
 		OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
 		// bind_data() is recursive and will take 
 		// care of all children

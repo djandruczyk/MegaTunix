@@ -46,8 +46,9 @@ _tooltip=The VE Entries control how much fuel is injected into the engine. They 
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=tab_ident
+keys=tab_ident,visible_functions
 tab_ident=_VETABLES_TAB_
+visible_functions=draw_ve_marker
 
 [topframe_title]
 keys=set_label

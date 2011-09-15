@@ -229,7 +229,6 @@ void reset_3d_view(GtkWidget *);
 Ve_View_3D * initialize_ve3d_view(void);
 void update_ve3d_if_necessary(int , int );
 gboolean update_ve3d(gpointer);
-gboolean update_ve3ds(gpointer);
 Cur_Vals * get_current_values(Ve_View_3D *);
 void free_current_values(Cur_Vals *);
 gboolean set_fps(GtkWidget *, gpointer );

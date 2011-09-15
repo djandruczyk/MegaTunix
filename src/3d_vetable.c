@@ -3290,176 +3290,10 @@ redraw:
 
 
 /*!
-  \brief updates the VE3D displays with new data from the ECU
-  \param data is unused
-  \returns TRUE
+  \brief Creates the OpenGL font (via pango), and gets its dimensions
+  \param widget is hte pointer to the widget containing the ve_view pointer
+  that is used to store all the font parameters
   */
-G_MODULE_EXPORT gboolean update_ve3ds(gpointer data)
-{
-	gfloat x[2] = {0.0,0.0};
-	gfloat y[2] = {0.0,0.0};
-	gfloat z[2] = {0.0,0.0};
-	gint i = 0;
-	Ve_View_3D * ve_view = NULL;
-	GHashTable *hash = NULL;
-	gchar *key = NULL;
-	gchar *hash_key = NULL;
-	MultiSource *multi = NULL;
-	gint * algorithm;
-	Firmware_Details *firmware = NULL;
-	GHashTable *sources_hash = NULL;
-	GHashTable *ve_view_hash = NULL;
-	GtkAllocation allocation;
-	GdkWindow *window = NULL;
-
-	return FALSE;
-	sources_hash = DATA_GET(global_data,"sources_hash");
-	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
-	firmware = DATA_GET(global_data,"firmware");
-	algorithm = DATA_GET(global_data,"algorithm");
-
-	g_return_val_if_fail(sources_hash,TRUE);
-	g_return_val_if_fail(ve_view_hash,TRUE);
-	g_return_val_if_fail(firmware,TRUE);
-	g_return_val_if_fail(algorithm,TRUE);
-	/* Update all the dynamic RT Sliders */
-
-	if (DATA_GET(global_data,"leaving"))
-		return FALSE;
-
-	/* If OpenGL window is open, redraw it... */
-	for (i=0;i<firmware->total_tables;i++)
-	{
-		ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
-		if (ve_view)
-		{
-			gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
-			window = gtk_widget_get_window(ve_view->drawing_area);
-		}
-		if ((ve_view != NULL) && (window != NULL))
-		{
-			/* Get X values */
-			if (ve_view->x_multi_source)
-			{
-				hash = ve_view->x_multi_hash;
-				key = ve_view->x_source_key;
-				hash_key = g_hash_table_lookup(sources_hash,key);
-				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-				{
-					if (hash_key)
-						multi = g_hash_table_lookup(hash,hash_key);
-					else
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-				}
-				else if (algorithm[ve_view->table_num] == ALPHA_N)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
-				else if (algorithm[ve_view->table_num] == MAF)
-				{
-					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-					if(!multi)
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-				}
-				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
-
-				if (!multi)
-					printf(_("multi is null!!\n"));
-
-				lookup_previous_n_values(multi->source,2,x);
-			}
-			else
-				lookup_previous_n_values(ve_view->x_source,2,x);
-
-			/* Test X values, redraw if needed */
-			if (((fabs(x[0]-x[1])/x[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
-				goto redraw;
-
-			/* Get Y values */
-			if (ve_view->y_multi_source)
-			{
-				hash = ve_view->y_multi_hash;
-				key = ve_view->y_source_key;
-				hash_key = g_hash_table_lookup(sources_hash,key);
-				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-				{
-					if (hash_key)
-						multi = g_hash_table_lookup(hash,hash_key);
-					else
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-				}
-				else if (algorithm[ve_view->table_num] == ALPHA_N)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
-				else if (algorithm[ve_view->table_num] == MAF)
-				{
-					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-					if(!multi)
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-				}
-				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
-
-				if (!multi)
-					printf(_("multi is null!!\n"));
-
-				lookup_previous_n_values(multi->source,2,y);
-			}
-			else
-				lookup_previous_n_values(ve_view->y_source,2,y);
-
-			/* Test Y values, redraw if needed */
-			if (((fabs(y[0]-y[1])/y[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
-				goto redraw;
-
-			/* Get Z values */
-			if (ve_view->z_multi_source)
-			{
-				hash = ve_view->z_multi_hash;
-				key = ve_view->z_source_key;
-				hash_key = g_hash_table_lookup(sources_hash,key);
-				if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-				{
-					if (hash_key)
-						multi = g_hash_table_lookup(hash,hash_key);
-					else
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-				}
-				else if (algorithm[ve_view->table_num] == ALPHA_N)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
-				else if (algorithm[ve_view->table_num] == MAF)
-				{
-					multi = g_hash_table_lookup(hash,"AFM_VOLTS");
-					if(!multi)
-						multi = g_hash_table_lookup(hash,"DEFAULT");
-				}
-				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
-
-				if (!multi)
-					printf(_("multi is null!!\n"));
-
-				lookup_previous_n_values(multi->source,2,z);
-			}
-			else
-				lookup_previous_n_values(ve_view->z_source,2,z);
-
-			/* Test Z values, redraw if needed */
-			if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
-				goto redraw;
-			continue;
-
-redraw:
-			gdk_window_invalidate_rect (window, &allocation, FALSE);
-		}
-	}
-
-	{
-		draw_ve_marker();
-		update_tab_gauges();
-	}
-	return TRUE;
-}
-
-
 void gl_create_font(GtkWidget *widget)
 {
 	PangoFontDescription *font_desc = NULL;
@@ -3511,6 +3345,11 @@ void gl_create_font(GtkWidget *widget)
 }
 
 
+/*!
+  \brief Destroys the OpenGL font for this Ve View
+  \param widget is a pointer to the display containing the ve_view pointer
+  of the variables to release
+  */
 void gl_destroy_font(GtkWidget *widget)
 {
 	Ve_View_3D *ve_view = NULL;

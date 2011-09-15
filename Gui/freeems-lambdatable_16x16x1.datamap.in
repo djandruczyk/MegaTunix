@@ -49,8 +49,9 @@ _tooltip=Ask Fredcooke
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=tab_ident
+keys=tab_ident,visible_functions
 tab_ident=_LAMBDATABLES_TAB_
+visible_functions=draw_ve_marker
 
 [topframe_title]
 keys=set_label

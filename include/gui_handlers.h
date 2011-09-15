@@ -118,6 +118,7 @@ gboolean widget_grab(GtkWidget *, GdkEventButton *, gpointer );
 gboolean key_event(GtkWidget *, GdkEventKey *, gpointer );
 gboolean set_algorithm(GtkWidget *, gpointer );
 void notebook_page_changed(GtkNotebook *, GtkWidget *, guint, gpointer);
+void cancel_visible_function(GtkNotebook *, GtkWidget *, guint, gpointer);
 void subtab_changed(GtkNotebook *, GtkWidget *, guint, gpointer);
 gboolean focus_out_handler(GtkWidget *, GdkEventFocus *, gpointer );
 gboolean slider_value_changed(GtkWidget *, gpointer );

@@ -883,11 +883,6 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case VE3D_FPS:
 			DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));
-			source = (GINT)DATA_GET(global_data,"ve3d_id");
-			if (source)
-				g_source_remove(source);
-			tmpi = g_timeout_add((GINT)(1000.0/(float)tmpi),(GSourceFunc)update_ve3ds,NULL);
-			DATA_SET(global_data,"ve3d_id",GINT_TO_POINTER(tmpi));
 			break;
 		case LOGVIEW_ZOOM:
 			DATA_SET(global_data,"lv_zoom",GINT_TO_POINTER(tmpi));
@@ -1338,10 +1333,15 @@ testit:
 G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *page, guint page_no, gpointer data)
 {
 	static void (*update_widget_f)(gpointer, gpointer);
+	static gint last_notebook_page = -1;
 	gint tab_ident = 0;
 	gint sub_page = 0;
 	gint active_table = -1;
 	GList *tab_widgets = NULL;
+	GList *func_list = NULL;
+	gint i = 0;
+	gint id = 0;
+	GSourceFunc func = NULL;
 	GtkWidget *sub = NULL;
 	GtkWidget *topframe = NULL;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
@@ -1371,6 +1371,19 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 		set_title(g_strdup(_("Updating Tab with current data...")));
 		g_list_foreach(tab_widgets,update_widget_f,NULL);
 	}
+	func_list = OBJ_GET(topframe,"func_list");
+	if (func_list)
+	{
+		for (i=0;i<g_list_length(func_list);i++)
+		{
+			func = (GSourceFunc)g_list_nth_data(func_list,i);
+			id = g_timeout_add_full(110,100,func,NULL,NULL);
+			g_signal_connect(G_OBJECT(notebook), "switch_page",
+					G_CALLBACK(cancel_visible_function),
+					GINT_TO_POINTER(id));
+		}
+	}
+	
 	set_title(g_strdup(_("Ready...")));
 	tab_ident = (TabIdent)OBJ_GET(topframe,"tab_ident");
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(tab_ident));
@@ -1415,6 +1428,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 	}
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	last_notebook_page = page_no;
 	return;
 }
 
@@ -2340,4 +2354,11 @@ G_MODULE_EXPORT void update_current_notebook_page()
 		printf("WARNING: this tab has no tab_widgets list assigned\n");
 	*/
 	set_title(g_strdup(_("Ready...")));
+}
+
+
+G_MODULE_EXPORT void cancel_visible_function(GtkNotebook *notebook, GtkWidget *page, guint page_no, gpointer data)
+{
+	g_source_remove((GINT)data);
+	return;
 }
