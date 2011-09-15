@@ -766,7 +766,6 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 		gdk_window_unset_gl_capability(window);
 		gtk_widget_destroy(ve_view->drawing_area);
 	}
-	gtk_widget_destroy(widget);
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
@@ -776,6 +775,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	g_mutex_unlock(ve_view->mutex);
 	g_mutex_free(ve_view->mutex);
 	free(ve_view);/* free up the memory */
+	gtk_widget_destroy(widget);
 	ve_view = NULL;
 	
 	//printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
@@ -916,6 +916,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
 
+	g_mutex_lock(ve_view->mutex);
 	if (!ve_view->gl_initialized)
 	{
 		ve_view->gl_initialized = TRUE;
@@ -970,6 +971,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() Completed!\n"));
+	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 }
 
@@ -3279,11 +3281,6 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 
 redraw:
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
-
-	{
-		//		draw_ve_marker();
-		//		update_tab_gauges();
-	}
 	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 }
