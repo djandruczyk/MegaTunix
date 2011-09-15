@@ -60,11 +60,11 @@ set_label=FreeEMS Ignition Advance Table
 
 [notebook_tab_label]
 keys=set_label
-set_label=Spark Table
+set_label=Advance Table
 
 [advance_label]
 keys=set_label
-set_label=Advance Table (\302\260BTDC)
+set_label=Ignition Advance (\302\260BTDC)
 
 #----- Buttons ---------------------------------------------------------------
 

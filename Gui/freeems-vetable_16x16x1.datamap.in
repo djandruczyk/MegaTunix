@@ -55,6 +55,10 @@ visible_functions=draw_ve_marker,update_tab_gauges
 keys=set_label
 set_label=FreeEMS VE Table
 
+[label]
+keys=set_label
+set_label=Volumetric Efficiency (%)
+
 #----- Buttons ---------------------------------------------------------------
 
 [get_data_button]

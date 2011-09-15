@@ -25,6 +25,9 @@ gui_glade_files = 	\
 		freeems-debug.glade \
 		freeems-runtime.glade \
 		freeems-benchtest.glade \
+		freeems-vetable_16x16x1.glade \
+		freeems-ignitiontable_16x16x1.glade \
+		freeems-lambdatable_16x16x1.glade \
 		generic-sparktable_12x12x1.glade \
 		generic-sparktable_12x12x2.glade \
 		generic-sparktable_12x12x3.glade \
@@ -136,7 +139,7 @@ gui_in_files = 	\
 		freeems-runtime.datamap.in \
 		freeems-benchtest.datamap.in \
 		freeems-lambdatable_16x16x1.datamap.in \
-		freeems-sparktable_16x16x1.datamap.in \
+		freeems-ignitiontable_16x16x1.datamap.in \
 		freeems-vetable_16x16x1.datamap.in \
 		jimstim-runtime.datamap.in \
 		logviewer.datamap.in \

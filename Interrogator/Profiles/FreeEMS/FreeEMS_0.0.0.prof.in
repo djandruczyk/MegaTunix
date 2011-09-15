@@ -83,8 +83,10 @@ SliderMapFile=FreeEMS
 RuntimeTextMapFile=FreeEMS
 StatusMapFile=FreeEMS
 
-LoadTabs=freeems-runtime,datalogging,tools,logviewer,generic-vetable_16x16x1,generic-sparktable_16x16x1,generic-lambdatable_16x16x1,freeems-benchtest
-TabConfs=freeems-runtime,datalogging,tools,logviewer,freeems-vetable_16x16x1,freeems-sparktable_16x16x1,freeems-lambdatable_16x16x1,freeems-benchtest
+# These correspond to Gui/*.glade files
+LoadTabs=freeems-runtime,datalogging,tools,logviewer,freeems-vetable_16x16x1,freeems-ignitiontable_16x16x1,freeems-lambdatable_16x16x1,freeems-benchtest
+# These correspond to Gui/*.datamap.in files
+TabConfs=freeems-runtime,datalogging,tools,logviewer,freeems-vetable_16x16x1,freeems-ignitiontable_16x16x1,freeems-lambdatable_16x16x1,freeems-benchtest
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

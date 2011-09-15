@@ -60,11 +60,11 @@ set_label=FreeEMS Lambda Table
 
 [notebook_tab_label]
 keys=set_label
-set_label=Lambda Table
+set_label=Lambda
 
 [label]
 keys=set_label
-set_label=Lambda Table (%)
+set_label=Lambda
 
 #----- Buttons ---------------------------------------------------------------
 
