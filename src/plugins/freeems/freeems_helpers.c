@@ -483,6 +483,11 @@ handle_write:
 			printf("Don't know how to handle this type..\n");
 			break;
 	}
+	gdk_threads_enter();
+        while (gtk_events_pending())
+                gtk_main_iteration();
+        gdk_flush();
+        gdk_threads_leave();
 }
 
 
