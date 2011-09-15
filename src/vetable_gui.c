@@ -155,7 +155,6 @@ G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 G_MODULE_EXPORT void draw_ve_marker(void)
 {
 	static void (*common_draw_ve_marker)(void) = NULL;
-	printf("draw_ve_marker!!\n");
 
 	if (!common_draw_ve_marker)
 		get_symbol("common_draw_ve_marker",(void *)&common_draw_ve_marker);

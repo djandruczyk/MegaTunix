@@ -115,35 +115,35 @@ table_num=1
 
 [gaugeframe1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-table_num=0
+table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_RPM_Gauge.xml
 datasource=rpm
 
 [gaugeframe2]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-table_num=0
+table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_TPSpercent_Gauge.xml
 datasource=tpspercent
 
 [gaugeframe3]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-table_num=0
+table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_FuelLoad_Gauge.xml
 datasource=fuelload
 
 [gaugeframe4]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-table_num=0
+table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_EGOcorr_Gauge.xml
 datasource=egocorr1
 
 [gaugeframe5]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
-table_num=0
+table_num=1
 post_functions_with_arg=create_gauge
 gaugexml=SportComp/AM_SportComp_AFR_Gauge.xml
 datasource=afr1
