@@ -1430,6 +1430,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 	list = g_list_first(tab_gauges[(GINT)DATA_GET(global_data,"active_table")]);
 	for (i=0;i<g_list_length(list);i++)
 	{
+		printf("updating gauge %i of %i\n",i,g_list_length(list));
 		gauge = g_list_nth_data(list,i);
 #if GTK_MINOR_VERSION >= 18
 		if (gtk_widget_get_visible(gauge))

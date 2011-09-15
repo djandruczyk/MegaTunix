@@ -49,9 +49,10 @@ _tooltip=Ask FredCooke
 #----- Labels ----------------------------------------------------------------
 
 [topframe]
-keys=tab_ident,visible_functions
+keys=table_num,tab_ident,visible_functions
+table_num=2
 tab_ident=_SPARKTABLES_TAB_
-visible_functions=draw_ve_marker
+visible_functions=draw_ve_marker,update_tab_gauges
 
 [topframe_title]
 keys=set_label
