@@ -751,7 +751,6 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 			
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(ve_view_hash,FALSE);
-	g_mutex_lock(ve_view->mutex);
 	//printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
 	if (ve_view->render_id > 0);
@@ -765,17 +764,16 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 		window = gtk_widget_get_window(ve_view->drawing_area);
 		gdk_window_unset_gl_capability(window);
 		gtk_widget_destroy(ve_view->drawing_area);
+		ve_view->drawing_area = NULL;
 	}
+	gtk_widget_destroy(widget);
 	g_free(ve_view->x_source);
 	g_free(ve_view->y_source);
 	g_free(ve_view->z_source);
 	g_object_unref(ve_view->x_container);
 	g_object_unref(ve_view->y_container);
 	g_object_unref(ve_view->z_container);
-	g_mutex_unlock(ve_view->mutex);
-	g_mutex_free(ve_view->mutex);
 	free(ve_view);/* free up the memory */
-	gtk_widget_destroy(widget);
 	ve_view = NULL;
 	
 	//printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
@@ -916,7 +914,6 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
 
-	g_mutex_lock(ve_view->mutex);
 	if (!ve_view->gl_initialized)
 	{
 		ve_view->gl_initialized = TRUE;
@@ -971,7 +968,6 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() Completed!\n"));
-	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 }
 
@@ -2215,7 +2211,6 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 {
 	Ve_View_3D *ve_view = NULL;
 	ve_view= g_new0(Ve_View_3D,1) ;
-	ve_view->mutex = g_mutex_new();
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
@@ -3159,14 +3154,15 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	algorithm = DATA_GET(global_data,"algorithm");
 
 	g_return_val_if_fail(sources_hash,TRUE);
-	g_return_val_if_fail(ve_view,TRUE);
-	g_return_val_if_fail(firmware,TRUE);
 	g_return_val_if_fail(algorithm,TRUE);
+	g_return_val_if_fail(ve_view,FALSE);
+	g_return_val_if_fail(firmware,FALSE);
 
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
-	g_mutex_lock(ve_view->mutex);
+	if (!GTK_IS_WIDGET(ve_view->drawing_area))
+		return FALSE;
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 	/* Get X values */
@@ -3276,12 +3272,10 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	/* Test Z values, redraw if needed */
 	if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 		goto redraw;
-	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 
 redraw:
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
-	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 }
 
