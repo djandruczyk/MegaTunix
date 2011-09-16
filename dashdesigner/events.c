@@ -655,11 +655,12 @@ G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, 
 		found_one = FALSE;
 		for (i=0;i<len;i++)
 		{
-			fchild = (GtkFixedChild *)  g_list_nth_data(list,i);
-			gtk_widget_get_allocation(fchild->widget,&allocation);
-
+			fchild = (GtkFixedChild *)g_list_nth_data(list,i);
+			if (!fchild)
+				continue;
 			if (win == gtk_widget_get_window(fchild->widget))
 			{
+				gtk_widget_get_allocation(fchild->widget,&allocation);
 				tt.child_x_origin = allocation.x;
 				tt.child_y_origin = allocation.y;
 				tt.child_width = allocation.width;
