@@ -58,7 +58,7 @@
   <needle_tail>0.1949999</needle_tail>
   <show_tattletale>0</show_tattletale>
   <tattletale_alpha>0.5</tattletale_alpha>
-  <precision>0</precision>
+  <precision>1</precision>
   <width>222</width>
   <height>222</height>
   <main_start_angle>135</main_start_angle>
@@ -130,7 +130,7 @@
     <layer>0</layer>
     <font>Arial Bold Italic</font>
     <font_scale>0.135000</font_scale>
-    <text>-20, ,-10, ,0, ,10, ,20, ,30, ,40</text>
+    <text>-20,-15,-10,-5,0,5,10,15,20,25,30,35,40</text>
     <text_inset>0.280000</text_inset>
     <text_color_day>
       <red>55769</red>

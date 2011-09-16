@@ -58,7 +58,7 @@
   <needle_tail>0.1949999</needle_tail>
   <show_tattletale>0</show_tattletale>
   <tattletale_alpha>0.5</tattletale_alpha>
-  <precision>0</precision>
+  <precision>1</precision>
   <width>222</width>
   <height>222</height>
   <main_start_angle>135</main_start_angle>

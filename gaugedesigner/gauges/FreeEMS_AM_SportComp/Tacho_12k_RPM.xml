@@ -59,8 +59,8 @@
   <show_tattletale>0</show_tattletale>
   <tattletale_alpha>0.5</tattletale_alpha>
   <precision>0</precision>
-  <width>263</width>
-  <height>263</height>
+  <width>222</width>
+  <height>222</height>
   <main_start_angle>135</main_start_angle>
   <main_sweep_angle>270</main_sweep_angle>
   <rotation>1</rotation>
@@ -164,7 +164,7 @@
     <layer>0</layer>
     <font>Arial Bold Italic</font>
     <font_scale>0.205000</font_scale>
-    <text>0, ,1, ,2, ,3, ,4, ,5, ,6, ,7, ,8, ,9, ,10, ,11, ,12</text>
+    <text>0,1,2,3,4,5,6,7,8,9,10,11,12</text>
     <text_inset>0.280000</text_inset>
     <text_color_day>
       <red>55769</red>
@@ -176,7 +176,7 @@
       <green>8481</green>
       <blue>8481</blue>
     </text_color_nite>
-    <num_maj_ticks>25</num_maj_ticks>
+    <num_maj_ticks>13</num_maj_ticks>
     <maj_tick_color_day>
       <red>52428</red>
       <green>52428</green>

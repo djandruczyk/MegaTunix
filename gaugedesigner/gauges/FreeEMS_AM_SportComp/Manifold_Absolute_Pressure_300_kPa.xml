@@ -156,7 +156,7 @@
     <maj_tick_inset>0.150000</maj_tick_inset>
     <maj_tick_length>0.120000</maj_tick_length>
     <maj_tick_width>0.200000</maj_tick_width>
-    <num_min_ticks>4</num_min_ticks>
+    <num_min_ticks>2</num_min_ticks>
     <min_tick_color_day>
       <red>52428</red>
       <green>52428</green>
