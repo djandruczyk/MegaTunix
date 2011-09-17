@@ -93,38 +93,6 @@ precision=2
 _tooltip="MAP" is the Manifold absolute pressure in kPa
 log_by_default=TRUE
 
-[derived_5_PSI]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,fromecu_add,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=PSI
-_dlog_gui_name=Boost
-dlog_field_name=PSI
-offset=8
-real_lower=0
-real_upper=35
-fromecu_mult=0.0014503773773020923
-fromecu_add=-14.6959488
-# 14.6959488 PSI is standard atmospheric pressure (101.325kPa)
-precision=2
-_tooltip="Boost" is the manifold pressure in PSI above standard atmospheric pressure
-log_by_default=FALSE
-
-[derived_5_inHg]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,fromecu_add,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=inHg
-_dlog_gui_name=Vacuum
-dlog_field_name=inHg
-offset=8
-real_lower=0
-real_upper=35
-fromecu_mult=0.00295300586467
-fromecu_add=-29.92133192
-# 29.92133192 inHg is standard atmospheric pressure (101.325kPa)
-precision=2
-_tooltip="Vacuum" is the manifold pressure in inches of mercury below standard atmospheric pressure
-log_by_default=FALSE
-
 [derived_6]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
@@ -769,3 +737,34 @@ RawRPM_size=_U16_
 _tooltip="Coil Duty" is the duty cycle of the coils for coil on/near/per plug applications. Note if you're wasted spark, this is out by a factor of two, and even worse for dizzy stuff.
 log_by_default=FALSE
 
+[derived_52]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,fromecu_add,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U16_
+internal_names=PSI
+_dlog_gui_name=Boost
+dlog_field_name=PSI
+offset=8
+real_lower=0
+real_upper=35
+fromecu_mult=0.0014503773773020923
+fromecu_add=-14.6959488
+# 14.6959488 PSI is standard atmospheric pressure (101.325kPa)
+precision=2
+_tooltip="Boost" is the manifold pressure in PSI above standard atmospheric pressure
+log_by_default=FALSE
+
+[derived_53]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,fromecu_add,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U16_
+internal_names=inHg
+_dlog_gui_name=Vacuum
+dlog_field_name=inHg
+offset=8
+real_lower=0
+real_upper=35
+fromecu_mult=0.00295300586467
+fromecu_add=-29.92133192
+# 29.92133192 inHg is standard atmospheric pressure (101.325kPa)
+precision=2
+_tooltip="Vacuum" is the manifold pressure in inches of mercury below standard atmospheric pressure
+log_by_default=FALSE
