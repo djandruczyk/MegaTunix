@@ -22,12 +22,13 @@ gui_glade_files = 	\
 		dt-params.glade \
 		enrichments.glade \
 		error_status.glade \
-		freeems-debug.glade \
-		freeems-runtime.glade \
 		freeems-benchtest.glade \
-		freeems-vetable_16x16x1.glade \
+		freeems-debug.glade \
 		freeems-ignitiontable_16x16x1.glade \
 		freeems-lambdatable_16x16x1.glade \
+		freeems-runtime.glade \
+		freeems-tools.glade \
+		freeems-vetable_16x16x1.glade \
 		generic-sparktable_12x12x1.glade \
 		generic-sparktable_12x12x2.glade \
 		generic-sparktable_12x12x3.glade \
@@ -140,6 +141,7 @@ gui_in_files = 	\
 		freeems-benchtest.datamap.in \
 		freeems-lambdatable_16x16x1.datamap.in \
 		freeems-ignitiontable_16x16x1.datamap.in \
+		freeems-tools.datamap.in \
 		freeems-vetable_16x16x1.datamap.in \
 		jimstim-runtime.datamap.in \
 		logviewer.datamap.in \
