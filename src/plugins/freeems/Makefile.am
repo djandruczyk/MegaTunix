@@ -31,6 +31,10 @@ libfreeems_la_SOURCES = \
 	freeems_helpers.h \
 	freeems_plugin.c \
 	freeems_plugin.h \
+	freeems_rtv_loader.c \
+	freeems_rtv_loader.h \
+	freeems_rtv_processor.c \
+	freeems_rtv_processor.h \
 	interrogate.c \
 	interrogate.h \
 	packet_handlers.c \
