@@ -36,6 +36,7 @@ static GtkBuilder *previews = NULL;
 static GtkWidget *grabbed_widget = NULL;
 static GdkColor white = { 0, 65535, 65535, 65535};
 static GdkColor home_color = {0, 62000, 59000, 65535};
+static GdkColor title_color = {0, 58000, 58000, 58000};
 extern GtkBuilder *toplevel;
 static struct 
 {
@@ -93,9 +94,12 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	GtkWidget * swin = NULL;
 	GtkWidget * ebox = NULL;
 	GtkWidget * vbox = NULL;
+	GtkWidget * sep = NULL;
 	GArray *classes = NULL;
+	gchar ** vector = NULL;
 	gchar ** files = NULL;
 	gchar * filename = NULL;
+	gchar * tmpbuf = NULL;
 	gchar * path = NULL;
 	GDir *dir = NULL;
 	gchar *d_name = NULL;
@@ -202,24 +206,54 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		gtk_widget_show_all(notebook);
 		for (i=0;i<g_list_length(p_list);i++)
 		{
+			vbox = gtk_vbox_new(FALSE,1);
+			gtk_table_attach_defaults(GTK_TABLE(table),vbox,0,1,i,i+1);
 			ebox = gtk_event_box_new();
-			gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
+			gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,FALSE,0);
+			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&title_color);
+			vector = g_strsplit((gchar *)g_list_nth_data(p_list,i),PSEP,-1);
+			tmpbuf = g_strdup_printf("%s",vector[g_strv_length(vector)-1]);
+			g_strfreev(vector);
+			label = gtk_label_new(tmpbuf);
+			g_free(tmpbuf);
+			gtk_container_add(GTK_CONTAINER(ebox),label);
+
+			ebox = gtk_event_box_new();
+                        gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
+
 			gauge = mtx_gauge_face_new();
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),(gchar *)g_list_nth_data(p_list,i));
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
+			sep = gtk_hseparator_new();
+			gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,FALSE,0);
 			gtk_widget_show(gauge);
 		}
 		for (i=0;i<g_list_length(s_list);i++)
 		{
+			vbox = gtk_vbox_new(FALSE,1);
+                        gtk_table_attach_defaults(GTK_TABLE(table),vbox,0,1,i,i+1);
 			ebox = gtk_event_box_new();
-			gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
+			gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,FALSE,0);
+                        gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&title_color);
+                        vector = g_strsplit((gchar *)g_list_nth_data(s_list,i),PSEP,-1);
+                        tmpbuf = g_strdup_printf("%s",vector[g_strv_length(vector)-1]);
+                        g_strfreev(vector);
+                        label = gtk_label_new(tmpbuf);
+                        g_free(tmpbuf);
+                        gtk_container_add(GTK_CONTAINER(ebox),label);
+
+                        ebox = gtk_event_box_new();
+                        gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
+
 			gauge = mtx_gauge_face_new();
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),(gchar *)g_list_nth_data(s_list,i));
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
+			sep = gtk_hseparator_new();
+			gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,FALSE,0);
 			gtk_widget_show(gauge);
 		}
 
@@ -293,10 +327,13 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 	GtkWidget * swin = NULL;
 	GtkWidget * ebox = NULL;
 	GtkWidget * vbox = NULL;
+	GtkWidget * sep = NULL;
 	GArray *classes = NULL;
 	gchar * filename = NULL;
 	gchar * path = NULL;
 	gchar ** files = NULL;
+	gchar ** vector = NULL;
+	gchar *tmpbuf = NULL;
 	GList *p_list = NULL;
 	GList *s_list = NULL;
 
@@ -347,26 +384,54 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 		gtk_widget_show_all(ebox);
 		for (i=0;i<g_list_length(p_list);i++)
 		{
+			vbox = gtk_vbox_new(FALSE,1);
+			gtk_table_attach_defaults(GTK_TABLE(table),vbox,0,1,i,i+1);
 			ebox = gtk_event_box_new();
-			gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
+			gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,FALSE,0);
+			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&title_color);
+			vector = g_strsplit((gchar *)g_list_nth_data(s_list,i),PSEP,-1);
+			tmpbuf = g_strdup_printf("%s",vector[g_strv_length(vector)-1]);
+			g_strfreev(vector);
+			label = gtk_label_new(tmpbuf);
+			g_free(tmpbuf);
+			gtk_container_add(GTK_CONTAINER(ebox),label);
+
+			ebox = gtk_event_box_new();
+			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 			gauge = mtx_gauge_face_new();
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(p_list,i));
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
+			sep = gtk_hseparator_new();
+			gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,FALSE,0);
 			gtk_widget_show(gauge);
 			if (gtk_events_pending())
 				gtk_main_iteration();
 		}
 		for (i=0;i<g_list_length(s_list);i++)
 		{
+			vbox = gtk_vbox_new(FALSE,1);
+			gtk_table_attach_defaults(GTK_TABLE(table),vbox,0,1,i,i+1);
 			ebox = gtk_event_box_new();
-			gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
+			gtk_box_pack_start(GTK_BOX(vbox),ebox,FALSE,FALSE,0);
+			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&title_color);
+			vector = g_strsplit((gchar *)g_list_nth_data(s_list,i),PSEP,-1);
+			tmpbuf = g_strdup_printf("%s",vector[g_strv_length(vector)-1]);
+			g_strfreev(vector);
+			label = gtk_label_new(tmpbuf);
+			g_free(tmpbuf);
+			gtk_container_add(GTK_CONTAINER(ebox),label);
+
+			ebox = gtk_event_box_new();
+			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 			gauge = mtx_gauge_face_new();
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(s_list,i));
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
 			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
+			sep = gtk_hseparator_new();
+			gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,FALSE,0);
 			gtk_widget_show(gauge);
 			if (gtk_events_pending())
 				gtk_main_iteration();
