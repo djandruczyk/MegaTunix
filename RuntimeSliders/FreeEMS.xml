@@ -141,7 +141,7 @@
 		<slider_name>clock</slider_name>
 		<table>3</table>
 		<row>4</row>
-		<source>clock</source>
+		<source>tempClock</source>
 	</rt_rts>
 
 <!--  -->

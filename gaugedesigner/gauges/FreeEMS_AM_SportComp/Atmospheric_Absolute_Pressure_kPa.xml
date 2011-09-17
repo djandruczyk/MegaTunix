@@ -68,7 +68,7 @@
   <ubound>110</ubound>
   <value_font>arial Bold</value_font>
   <value_font_scale>0.2000000</value_font_scale>
-  <value_str_xpos>0</value_str_xpos>
+  <value_str_xpos>-0.029999</value_str_xpos>
   <value_str_ypos>0.3499999</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
@@ -128,8 +128,8 @@
   </text_block>
   <tick_group>
     <layer>0</layer>
-    <font>Arial</font>
-    <font_scale>0.110000</font_scale>
+    <font>Arial Bold</font>
+    <font_scale>0.135000</font_scale>
     <text>50,,60,,70,,80,,90,,100,,110</text>
     <text_inset>0.280000</text_inset>
     <text_color_day>

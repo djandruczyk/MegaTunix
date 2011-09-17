@@ -58,7 +58,7 @@
   <needle_tail>0.1949999</needle_tail>
   <show_tattletale>0</show_tattletale>
   <tattletale_alpha>0.5</tattletale_alpha>
-  <precision>0</precision>
+  <precision>1</precision>
   <width>222</width>
   <height>222</height>
   <main_start_angle>135</main_start_angle>
@@ -68,7 +68,7 @@
   <ubound>300</ubound>
   <value_font>arial Bold</value_font>
   <value_font_scale>0.2000000</value_font_scale>
-  <value_str_xpos>0</value_str_xpos>
+  <value_str_xpos>-0.029999</value_str_xpos>
   <value_str_ypos>0.3499999</value_str_ypos>
   <antialias>1</antialias>
   <show_value>1</show_value>
@@ -128,8 +128,8 @@
   </text_block>
   <tick_group>
     <layer>0</layer>
-    <font>Arial</font>
-    <font_scale>0.110000</font_scale>
+    <font>Arial Bold</font>
+    <font_scale>0.130000</font_scale>
     <text>0,30,60,90,120,150,180,210,240,270,300</text>
     <text_inset>0.280000</text_inset>
     <text_color_day>

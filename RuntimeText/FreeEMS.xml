@@ -9,7 +9,7 @@
 	</info>
 	<rtt>
 		<internal_name>Clock</internal_name>
-		<datasource>clock</datasource>
+		<datasource>tempClock</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>RPM</internal_name>

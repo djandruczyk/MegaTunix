@@ -11,6 +11,9 @@ Coolant_Temp_Narrow_C.xml \
 Coolant_Temp_Narrow_F.xml \
 Coolant_Temp_Wide_C.xml \
 Coolant_Temp_Wide_F.xml \
+Duty_Cycle_Coil.xml \
+Duty_Cycle_Electrical.xml \
+Duty_Cycle_Fuel.xml \
 Duty_Cycle.xml \
 Dwell_Time.xml \
 Effective_PW_Narrow.xml \
@@ -35,7 +38,7 @@ Lambda_Exhaust.xml \
 Lambda_Integral.xml \
 Load_Percent_110.xml \
 Load_Percent_260.xml \
-Manifold_Absolute_Pressure_260_kPa.xml \
+Manifold_Absolute_Pressure_250_kPa.xml \
 Manifold_Absolute_Pressure_300_kPa.xml \
 Manifold_Absolute_Pressure_350_kPa.xml \
 Manifold_Absolute_Pressure_400_kPa.xml \
@@ -47,6 +50,7 @@ Manifold_Air_Temp_Wide_F.xml \
 Tacho_12k_RPM.xml \
 Tacho_8k_RPM.xml \
 Throttle_Position_Percent.xml \
+Vacuum_30_inHg.xml \
 Voltage_Narrow_12V.xml \
 Voltage_Wide_12V.xml \
 Volumetric_Efficiency.xml 

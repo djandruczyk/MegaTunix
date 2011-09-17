@@ -5,7 +5,7 @@ minor=7
 [realtime_map]
 persona=FreeEMS
 applicable_firmwares=FreeEMS 0.0.0
-derived_total=49
+derived_total=54
 
 [derived_0]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,real_lower,real_upper,log_by_default
@@ -38,9 +38,9 @@ log_by_default=TRUE
 [derived_2]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,tooltip,real_lower,real_upper,temp_dep,precision,log_by_default
 size=_U16_
-internal_names=CHT,CLT
+internal_names=CHT
 _dlog_gui_name=Coolant/Head Temp.
-dlog_field_name=CHT/CLT
+dlog_field_name=CHT
 offset=2
 real_lower=253.15
 real_upper=393.15
@@ -93,6 +93,38 @@ precision=2
 _tooltip="MAP" is the Manifold absolute pressure in kPa
 log_by_default=TRUE
 
+[derived_5_PSI]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,fromecu_add,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U16_
+internal_names=PSI
+_dlog_gui_name=Boost
+dlog_field_name=PSI
+offset=8
+real_lower=0
+real_upper=35
+fromecu_mult=0.0014503773773020923
+fromecu_add=-14.6959488
+# 14.6959488 PSI is standard atmospheric pressure (101.325kPa)
+precision=2
+_tooltip="Boost" is the manifold pressure in PSI above standard atmospheric pressure
+log_by_default=FALSE
+
+[derived_5_inHg]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,fromecu_add,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U16_
+internal_names=inHg
+_dlog_gui_name=Vacuum
+dlog_field_name=inHg
+offset=8
+real_lower=0
+real_upper=35
+fromecu_mult=0.00295300586467
+fromecu_add=-29.92133192
+# 29.92133192 inHg is standard atmospheric pressure (101.325kPa)
+precision=2
+_tooltip="Vacuum" is the manifold pressure in inches of mercury below standard atmospheric pressure
+log_by_default=FALSE
+
 [derived_6]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
@@ -140,7 +172,7 @@ log_by_default=TRUE
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=EGO2
-_dlog_gui_name=Exhaust Gas O2
+_dlog_gui_name=Exhaust Gas O2 (2)
 dlog_field_name=EGO2
 offset=16
 # These should be 0.5 and 1.5 but the slider scaling appears to be integer, not floating point.
@@ -359,7 +391,7 @@ log_by_default=TRUE
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=EffectivePW
-_dlog_gui_name=Actual PW
+_dlog_gui_name=Effective PW
 dlog_field_name=EffectivePW
 offset=48
 real_lower=0
@@ -428,7 +460,7 @@ log_by_default=TRUE
 [derived_30]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
-internal_names=tempClock,clock
+internal_names=tempClock
 _dlog_gui_name=Clock/Logs Sent
 dlog_field_name=tempClock
 offset=58
@@ -673,4 +705,67 @@ real_upper=65535
 precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
+
+[derived_49]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_conv_expr,fromecu_complex,tooltip,real_lower,real_upper,log_by_default
+internal_names=FuelDuty
+_dlog_gui_name=Fuel Duty
+dlog_field_name=FuelDuty
+# Note, the offset below is fake and just to keep something in Tunix happy, I think.
+offset=0
+real_lower=0
+real_upper=100
+fromecu_complex=TRUE
+fromecu_conv_expr=(RawRPM / (0.0085333333333 * RawEffPW))
+# What happens with divide by zero?
+expr_symbols=RawEffPW,RawRPM
+expr_types=_RAW_VAR_,_RAW_VAR_
+RawEffPW_offset=48
+RawEffPW_size=_U16_
+RawRPM_offset=26
+RawRPM_size=_U16_
+_tooltip="Fuel Duty" is the duty cycle of the flow period of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.
+log_by_default=FALSE
+
+[derived_50]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_conv_expr,fromecu_complex,tooltip,real_lower,real_upper,log_by_default
+internal_names=ElecDuty
+_dlog_gui_name=Elec. Duty
+dlog_field_name=ElecDuty
+# Note, the offset below is fake and just to keep something in Tunix happy, I think.
+offset=0
+real_lower=0
+real_upper=100
+fromecu_complex=TRUE
+fromecu_conv_expr=(RawRPM / (0.0085333333333 * RawRefPW))
+# What happens with divide by zero?
+expr_symbols=RawRefPW,RawRPM
+expr_types=_RAW_VAR_,_RAW_VAR_
+RawRefPW_offset=52
+RawRefPW_size=_U16_
+RawRPM_offset=26
+RawRPM_size=_U16_
+_tooltip="Elec. Duty" is the duty cycle of the electrical pulse width (dead time AND fuel flow) of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.
+log_by_default=FALSE
+
+[derived_51]
+keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_conv_expr,fromecu_complex,tooltip,real_lower,real_upper,log_by_default
+internal_names=CoilDuty
+_dlog_gui_name=Coil Duty
+dlog_field_name=CoilDuty
+# Note, the offset below is fake and just to keep something in Tunix happy, I think.
+offset=0
+real_lower=0
+real_upper=100
+fromecu_complex=TRUE
+fromecu_conv_expr=(RawRPM / (0.0085333333333 * RawDwell))
+# What happens with divide by zero?
+expr_symbols=RawDwell,RawRPM
+expr_types=_RAW_VAR_,_RAW_VAR_
+RawDwell_offset=56
+RawDwell_size=_U16_
+RawRPM_offset=26
+RawRPM_size=_U16_
+_tooltip="Coil Duty" is the duty cycle of the coils for coil on/near/per plug applications. Note if you're wasted spark, this is out by a factor of two, and even worse for dizzy stuff.
+log_by_default=FALSE
 
