@@ -242,9 +242,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		{
 			g_hash_table_insert(list,g_strdup(d_name),GINT_TO_POINTER(1)); /* Store this dirname for next run thru */
 
-
 			/* check for files in */
-
 
 			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"),&classes);
 			if (files)
@@ -339,7 +337,8 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		g_dir_close(dir);
 	}
 	g_free(path);
-	/* NOW for user private dirs,  check to make sure we didn't already get overrides and
+	/* NOW for user private dirs,  
+	 *  check to make sure we didn't already get overrides and
 	 * create sections for entirely user private ones.
 	 * */
 
@@ -352,14 +351,11 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		while ((d_name != NULL))
 		{
 			if (g_hash_table_lookup(list,d_name) != NULL)	/* we already got this dir*/
-
-
 			{
 				d_name = (gchar *)g_dir_read_name(dir);
 				continue;
 			}
 			/* check for files in */
-
 
 			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"),&classes);
 			if (files)
@@ -368,9 +364,15 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 				while (files[i])
 				{
 					if (g_array_index(classes,FileClass,i) == PERSONAL)
+					{
+						printf("homedir check, personal file %s\n",files[i]);
 						p_list = g_list_append(p_list,g_strdup(files[i]));
+					}
 					if (g_array_index(classes,FileClass,i) == SYSTEM)
+					{
+						printf("homedir check, system file %s\n",files[i]);
 						s_list = g_list_append(s_list,g_strdup(files[i]));
+					}
 					i++;
 				}
 				p_list = g_list_sort(p_list,list_sort);
@@ -454,6 +456,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	prop_created = TRUE;
 	return TRUE;
 }
+
 
 G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
@@ -930,7 +933,8 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 			gtk_tree_model_get(model,&iter,DATASOURCE_COL,&potential,-1);
 			if (!potential)
 				goto again;
-			if (g_strcasecmp(potential,source) == 0)
+			//if (g_strcasecmp(potential,source) == 0)
+			if (g_strcmp0(potential,source) == 0)
 			{
 				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo),&iter);
 				found = TRUE;
@@ -980,7 +984,8 @@ gint list_sort(gconstpointer a, gconstpointer b)
 {
 	gchar *a1 = (gchar *)a;
 	gchar *b1 = (gchar *)b;
-	return g_ascii_strcasecmp(a1,b1);
+	//return g_ascii_strcasecmp(a1,b1);
+	return g_strcmp0(a1,b1);
 }
 
 void free_element(gpointer data, gpointer user_data)

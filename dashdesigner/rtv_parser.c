@@ -67,8 +67,6 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 			if (g_hash_table_lookup_extended(rtv_data->persona_hash,persona,&orig,&value))
 				info = (Persona_Info *)value;
 			else /* We just disovered this persona,  CREATE the hashtable for it and store */
-
-
 			{
 				info = g_new0(Persona_Info, 1);
 				info->hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
