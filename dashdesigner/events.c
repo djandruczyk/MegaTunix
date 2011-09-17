@@ -34,6 +34,8 @@ static gint corner = -1;
 static GtkBuilder *properties = NULL;
 static GtkBuilder *previews = NULL;
 static GtkWidget *grabbed_widget = NULL;
+static GdkColor white = { 0, 65535, 65535, 65535};
+static GdkColor home_color = {0, 62000, 59000, 65535};
 extern GtkBuilder *toplevel;
 static struct 
 {
@@ -98,9 +100,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	GDir *dir = NULL;
 	gchar *d_name = NULL;
 	gint t_num = -1;
-	GHashTable *list = NULL;
-	GdkColor white = { 0, 65535, 65535, 65535};
-	GdkColor home_color = {0, 62000, 59000, 65535};
+	GList *dir_list = NULL;
 	GList *p_list = NULL;
 	GList *s_list = NULL;
 	guint i = 0;
@@ -114,7 +114,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-	        filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"preview.ui",NULL),NULL);
+		filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"preview.ui",NULL),NULL);
 		if (filename)
 		{
 			previews = gtk_builder_new();
@@ -135,7 +135,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-	        filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"propeditor.ui",NULL),NULL);
+		filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"propeditor.ui",NULL),NULL);
 		if (filename)
 		{
 			properties = gtk_builder_new();
@@ -233,116 +233,23 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		p_list = NULL;
 		s_list = NULL;
 	}
+#ifdef __WIN32__
+	path = g_build_path(PSEP,HOME(),"dist",GAUGES_DATA_DIR,NULL);
+#else
+	path = g_build_path(PSEP,DATA_DIR,GAUGES_DATA_DIR,NULL);
+#endif
 	dir = g_dir_open(path,0,NULL);
 	if (dir)
 	{
-		list = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		d_name = (gchar *)g_dir_read_name(dir);
 		while (d_name != NULL)
 		{
-			g_hash_table_insert(list,g_strdup(d_name),GINT_TO_POINTER(1)); /* Store this dirname for next run thru */
-
-			/* check for files in */
-
-			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"),&classes);
-			if (files)
-			{
-				i = 0;
-				while (files[i])
-				{
-					if (g_array_index(classes,FileClass,i) == PERSONAL)
-						p_list = g_list_append(p_list,g_strdup(files[i]));
-					if (g_array_index(classes,FileClass,i) == SYSTEM)
-						s_list = g_list_append(s_list,g_strdup(files[i]));
-					i++;
-				}
-				p_list = g_list_sort(p_list,list_sort);
-				s_list = g_list_sort(s_list,list_sort);
-
-				ebox = gtk_event_box_new();
-				g_signal_connect(G_OBJECT(ebox),
-						"button_press_event",
-						G_CALLBACK(gauge_choice_button_event),
-						NULL);
-				swin = gtk_scrolled_window_new(NULL,NULL);
-				gtk_scrolled_window_set_policy(
-						GTK_SCROLLED_WINDOW(swin),
-						GTK_POLICY_AUTOMATIC,
-						GTK_POLICY_AUTOMATIC);
-				gtk_scrolled_window_add_with_viewport(
-						GTK_SCROLLED_WINDOW(swin),
-						ebox);
-				vbox = gtk_vbox_new(FALSE,0);
-				gtk_container_add(GTK_CONTAINER(ebox),vbox);
-				table = gtk_table_new(1,1,FALSE);
-				gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
-				OBJ_SET((ebox),"table",table);
-				label = gtk_label_new(d_name);
-				t_num = gtk_notebook_append_page(
-						GTK_NOTEBOOK(notebook),
-						swin,label);
-				i = 0;
-				gtk_widget_show_all(ebox);
-				for (i=0;i<g_list_length(p_list);i++)
-				{
-					ebox = gtk_event_box_new();
-					gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
-					gauge = mtx_gauge_face_new();
-					gtk_container_add(GTK_CONTAINER(ebox),gauge);
-					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(p_list,i));
-					gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
-					gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
-					gtk_widget_show(gauge);
-					if (gtk_events_pending())
-						gtk_main_iteration();
-				}
-				for (i=0;i<g_list_length(s_list);i++)
-				{
-					ebox = gtk_event_box_new();
-					gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
-					gauge = mtx_gauge_face_new();
-					gtk_container_add(GTK_CONTAINER(ebox),gauge);
-					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(s_list,i));
-					gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
-					gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
-					gtk_widget_show(gauge);
-					if (gtk_events_pending())
-						gtk_main_iteration();
-				}
-				g_array_free(classes,TRUE);
-				classes = NULL;
-				g_strfreev(files);
-				g_list_foreach(p_list,free_element,NULL);
-				g_list_foreach(s_list,free_element,NULL);
-				g_list_free(p_list);
-				g_list_free(s_list);
-				p_list = NULL;
-				s_list = NULL;
-			}
-			gtk_widget_show_all(table);
-			/* Get next dir... */
-
-
+			dir_list = g_list_prepend(dir_list,g_strdup(d_name)); /* Store this dirname for next run thru */
 			d_name = (gchar *)g_dir_read_name(dir);
 		}
-		gtk_widget_show_all(notebook);
-		/*
-		   while (gdk_events_pending())
-		   {
-		   gtk_main_iteration();
-		   }
-		   */
-
-
 		g_dir_close(dir);
 	}
 	g_free(path);
-	/* NOW for user private dirs,  
-	 *  check to make sure we didn't already get overrides and
-	 * create sections for entirely user private ones.
-	 * */
-
-
 	path = g_build_path(PSEP,HOME(),".MegaTunix",GAUGES_DATA_DIR,NULL);
 	dir = g_dir_open(path,0,NULL);
 	if (dir)
@@ -350,111 +257,139 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 		d_name = (gchar *)g_dir_read_name(dir);
 		while ((d_name != NULL))
 		{
-			if (g_hash_table_lookup(list,d_name) != NULL)	/* we already got this dir*/
+			if (g_list_find_custom(dir_list,d_name,(GCompareFunc)g_strcmp0) != NULL)	/* we already got this dir*/
 			{
 				d_name = (gchar *)g_dir_read_name(dir);
 				continue;
 			}
-			/* check for files in */
-
-			files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"),&classes);
-			if (files)
-			{
-				i = 0;
-				while (files[i])
-				{
-					if (g_array_index(classes,FileClass,i) == PERSONAL)
-					{
-						printf("homedir check, personal file %s\n",files[i]);
-						p_list = g_list_append(p_list,g_strdup(files[i]));
-					}
-					if (g_array_index(classes,FileClass,i) == SYSTEM)
-					{
-						printf("homedir check, system file %s\n",files[i]);
-						s_list = g_list_append(s_list,g_strdup(files[i]));
-					}
-					i++;
-				}
-				p_list = g_list_sort(p_list,list_sort);
-				s_list = g_list_sort(s_list,list_sort);
-				ebox = gtk_event_box_new();
-				g_signal_connect(G_OBJECT(ebox),
-						"button_press_event",
-						G_CALLBACK(gauge_choice_button_event),
-						NULL);
-				swin = gtk_scrolled_window_new(NULL,NULL);
-				gtk_scrolled_window_set_policy(
-						GTK_SCROLLED_WINDOW(swin),
-						GTK_POLICY_AUTOMATIC,
-						GTK_POLICY_AUTOMATIC);
-				gtk_scrolled_window_add_with_viewport(
-						GTK_SCROLLED_WINDOW(swin),
-						ebox);
-				vbox = gtk_vbox_new(FALSE,0);
-				gtk_container_add(GTK_CONTAINER(ebox),vbox);
-				table = gtk_table_new(1,1,FALSE);
-				gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
-				OBJ_SET((ebox),"table",table);
-				label = gtk_label_new(d_name);
-				t_num = gtk_notebook_append_page(
-						GTK_NOTEBOOK(notebook),
-						swin,label);
-				i = 0;
-				gtk_widget_show_all(ebox);
-				for (i=0;i<g_list_length(p_list);i++)
-				{
-					ebox = gtk_event_box_new();
-					gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
-					gauge = mtx_gauge_face_new();
-					gtk_container_add(GTK_CONTAINER(ebox),gauge);
-					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(p_list,i));
-					gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
-					gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
-					gtk_widget_show(gauge);
-					if (gtk_events_pending())
-						gtk_main_iteration();
-				}
-				for (i=0;i<g_list_length(s_list);i++)
-				{
-					ebox = gtk_event_box_new();
-					gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
-					gauge = mtx_gauge_face_new();
-					gtk_container_add(GTK_CONTAINER(ebox),gauge);
-					mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(s_list,i));
-					gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
-					gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
-					gtk_widget_show(gauge);
-					if (gtk_events_pending())
-						gtk_main_iteration();
-				}
-
-
-				g_array_free(classes,TRUE);
-				classes = NULL;
-				g_strfreev(files);
-				g_list_foreach(p_list,free_element,NULL);
-				g_list_foreach(s_list,free_element,NULL);
-				g_list_free(p_list);
-				g_list_free(s_list);
-				p_list = NULL;
-				s_list = NULL;
-			}
-			gtk_widget_show_all(table);
-			/* Get next dir... */
-
-
 			d_name = (gchar *)g_dir_read_name(dir);
+
 		}
-		gtk_widget_show_all(notebook);
 		g_dir_close(dir);
 	}
 	g_free(path);
+	dir_list = g_list_sort(dir_list,list_sort);
+	g_list_foreach(dir_list,scan_for_gauges,notebook);
 
-	g_hash_table_destroy(list);
+	g_list_foreach(dir_list,(GFunc)g_free,NULL);
+	g_list_free(dir_list);
 
 	created = TRUE;
 	prop_created = TRUE;
 	return TRUE;
+}
+
+
+void scan_for_gauges(gpointer data, gpointer user_data)
+{
+	gchar * d_name = NULL;
+	guint i = 0;
+	gint t_num = -1;
+	GtkWidget * notebook = NULL;
+	GtkWidget * gauge = NULL;
+	GtkWidget * table = NULL;
+	GtkWidget * window = NULL;
+	GtkWidget * label = NULL;
+	GtkWidget * swin = NULL;
+	GtkWidget * ebox = NULL;
+	GtkWidget * vbox = NULL;
+	GArray *classes = NULL;
+	gchar * filename = NULL;
+	gchar * path = NULL;
+	gchar ** files = NULL;
+	GList *p_list = NULL;
+	GList *s_list = NULL;
+
+
+	d_name = (gchar *)data;
+	notebook = (GtkWidget *)user_data;
+
+	g_return_if_fail(d_name);
+	g_return_if_fail(notebook);
+	files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"),&classes);
+	if (files)
+	{
+		i = 0;
+		while (files[i])
+		{
+			if (g_array_index(classes,FileClass,i) == PERSONAL)
+				p_list = g_list_append(p_list,g_strdup(files[i]));
+			if (g_array_index(classes,FileClass,i) == SYSTEM)
+				s_list = g_list_append(s_list,g_strdup(files[i]));
+			i++;
+		}
+		p_list = g_list_sort(p_list,list_sort);
+		s_list = g_list_sort(s_list,list_sort);
+
+		ebox = gtk_event_box_new();
+		g_signal_connect(G_OBJECT(ebox),
+				"button_press_event",
+				G_CALLBACK(gauge_choice_button_event),
+				NULL);
+		swin = gtk_scrolled_window_new(NULL,NULL);
+		gtk_scrolled_window_set_policy(
+				GTK_SCROLLED_WINDOW(swin),
+				GTK_POLICY_AUTOMATIC,
+				GTK_POLICY_AUTOMATIC);
+		gtk_scrolled_window_add_with_viewport(
+				GTK_SCROLLED_WINDOW(swin),
+				ebox);
+		vbox = gtk_vbox_new(FALSE,0);
+		gtk_container_add(GTK_CONTAINER(ebox),vbox);
+		table = gtk_table_new(1,1,FALSE);
+		gtk_box_pack_start(GTK_BOX(vbox),table,TRUE,TRUE,0);
+		OBJ_SET((ebox),"table",table);
+		label = gtk_label_new(d_name);
+		t_num = gtk_notebook_append_page(
+				GTK_NOTEBOOK(notebook),
+				swin,label);
+		i = 0;
+		gtk_widget_show_all(ebox);
+		for (i=0;i<g_list_length(p_list);i++)
+		{
+			ebox = gtk_event_box_new();
+			gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
+			gauge = mtx_gauge_face_new();
+			gtk_container_add(GTK_CONTAINER(ebox),gauge);
+			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(p_list,i));
+			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
+			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&home_color);
+			gtk_widget_show(gauge);
+			if (gtk_events_pending())
+				gtk_main_iteration();
+		}
+		for (i=0;i<g_list_length(s_list);i++)
+		{
+			ebox = gtk_event_box_new();
+			gtk_table_attach_defaults(GTK_TABLE(table),ebox,0,1,i,i+1);
+			gauge = mtx_gauge_face_new();
+			gtk_container_add(GTK_CONTAINER(ebox),gauge);
+			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(s_list,i));
+			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
+			gtk_widget_modify_bg(GTK_WIDGET(ebox),GTK_STATE_NORMAL,&white);
+			gtk_widget_show(gauge);
+			if (gtk_events_pending())
+				gtk_main_iteration();
+		}
+		g_array_free(classes,TRUE);
+		classes = NULL;
+		g_strfreev(files);
+		g_list_foreach(p_list,free_element,NULL);
+		g_list_foreach(s_list,free_element,NULL);
+		g_list_free(p_list);
+		g_list_free(s_list);
+		p_list = NULL;
+		s_list = NULL;
+	}
+	gtk_widget_show_all(table);
+	gtk_widget_show_all(notebook);
+	/*
+	   while (gdk_events_pending())
+	   {
+	   gtk_main_iteration();
+	   }
+	 */
+
 }
 
 
@@ -984,8 +919,7 @@ gint list_sort(gconstpointer a, gconstpointer b)
 {
 	gchar *a1 = (gchar *)a;
 	gchar *b1 = (gchar *)b;
-	//return g_ascii_strcasecmp(a1,b1);
-	return g_strcmp0(a1,b1);
+	return g_ascii_strcasecmp(a1,b1);
 }
 
 void free_element(gpointer data, gpointer user_data)
