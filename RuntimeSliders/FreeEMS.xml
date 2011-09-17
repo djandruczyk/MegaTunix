@@ -164,9 +164,9 @@
 		<source>LoadMain</source>
 	</ve3d_rts>
 	<ve3d_rts>
-		<slider_name>ve3d_clt</slider_name>
+		<slider_name>ve3d_cht</slider_name>
 		<table>1</table>
 		<row>1</row>
-		<source>CLT</source>
+		<source>CHT</source>
 	</ve3d_rts>
 </runtimestatus>
