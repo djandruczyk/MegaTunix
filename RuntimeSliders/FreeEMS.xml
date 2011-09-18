@@ -18,28 +18,34 @@
 		<source>EGO</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>advance</slider_name>
+		<slider_name>iat</slider_name>
 		<table>0</table>
 		<row>2</row>
-		<source>Advance</source>
+		<source>IAT</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>dwell</slider_name>
+		<slider_name>cht</slider_name>
 		<table>0</table>
 		<row>3</row>
-		<source>Dwell</source>
+		<source>CHT</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>advance</slider_name>
+		<table>0</table>
+		<row>4</row>
+		<source>Advance</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>effectivepw</slider_name>
 		<table>0</table>
-		<row>4</row>
+		<row>5</row>
 		<source>EffectivePW</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>refpw</slider_name>
+		<slider_name>fuelduty</slider_name>
 		<table>0</table>
-		<row>5</row>
-		<source>RefPW</source>
+		<row>6</row>
+		<source>FuelDuty</source>
 	</rt_rts>
 
 <!-- Right Top Table Contents -->
@@ -62,22 +68,28 @@
 		<source>AAP</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>iat</slider_name>
-		<table>1</table>
-		<row>3</row>
-		<source>IAT</source>
-	</rt_rts>
-	<rt_rts>
-		<slider_name>cht</slider_name>
-		<table>1</table>
-		<row>4</row>
-		<source>CHT</source>
-	</rt_rts>
-	<rt_rts>
 		<slider_name>brv</slider_name>
 		<table>1</table>
-		<row>5</row>
+		<row>3</row>
 		<source>BRV</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>dwell</slider_name>
+		<table>1</table>
+		<row>4</row>
+		<source>Dwell</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>refpw</slider_name>
+		<table>1</table>
+		<row>5</row>
+		<source>RefPW</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>elecduty</slider_name>
+		<table>1</table>
+		<row>6</row>
+		<source>ElecDuty</source>
 	</rt_rts>
 
 <!-- Left Lower Table Contents -->

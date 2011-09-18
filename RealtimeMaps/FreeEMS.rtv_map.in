@@ -760,8 +760,8 @@ internal_names=inHg
 _dlog_gui_name=Vacuum
 dlog_field_name=inHg
 offset=8
-real_lower=0
-real_upper=35
+real_lower=-30
+real_upper=0
 fromecu_mult=0.00295300586467
 fromecu_add=-29.92133192
 # 29.92133192 inHg is standard atmospheric pressure (101.325kPa)

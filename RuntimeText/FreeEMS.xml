@@ -52,6 +52,10 @@
 		<datasource>Dwell</datasource>
 	</rtt>
 	<rtt>
+		<internal_name>Coil Duty</internal_name>
+		<datasource>CoilDuty</datasource>
+	</rtt>
+	<rtt>
 		<internal_name>Load</internal_name>
 		<datasource>LoadMain</datasource>
 	</rtt>
@@ -86,6 +90,14 @@
 	<rtt>
 		<internal_name>Elec. PW</internal_name>
 		<datasource>RefPW</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Elec. Duty</internal_name>
+		<datasource>ElecDuty</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Fuel Duty</internal_name>
+		<datasource>FuelDuty</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>Sync Losses</internal_name>
