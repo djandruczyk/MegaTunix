@@ -222,6 +222,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
                         gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 
 			gauge = mtx_gauge_face_new();
+			OBJ_SET(vbox,"gauge",gauge);
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),(gchar *)g_list_nth_data(p_list,i));
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
@@ -248,6 +249,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
                         gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 
 			gauge = mtx_gauge_face_new();
+			OBJ_SET(vbox,"gauge",gauge);
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),(gchar *)g_list_nth_data(s_list,i));
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
@@ -399,6 +401,7 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 			ebox = gtk_event_box_new();
 			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 			gauge = mtx_gauge_face_new();
+			OBJ_SET(vbox,"gauge",gauge);
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(p_list,i));
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
@@ -426,6 +429,7 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 			ebox = gtk_event_box_new();
 			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 			gauge = mtx_gauge_face_new();
+			OBJ_SET(vbox,"gauge",gauge);
 			gtk_container_add(GTK_CONTAINER(ebox),gauge);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge), (gchar *)g_list_nth_data(s_list,i));
 			gtk_widget_set_usize(GTK_WIDGET(gauge),200,200);
@@ -495,20 +499,23 @@ G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventBu
 
 	if (event->button == 1)
 	{
-		for (i=0;i<total_gauges;i++)
+		for (i=1;i<total_gauges;i++)
 		{
 			child = (GtkTableChild *) g_list_nth_data(GTK_TABLE(table)->children,i);
 			if (row == child->top_attach)
 			{
-				if (GTK_IS_EVENT_BOX(child->widget))
-					filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gtk_bin_get_child(GTK_BIN(child->widget))));
+				if (GTK_IS_BOX(child->widget))
+				{
+					gauge = OBJ_GET(child->widget, "gauge");
+					filename = mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge));
+				}
 			}
 		}
 		dash =  GTK_WIDGET(gtk_builder_get_object(toplevel,"dashboard"));
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,130,130);
 		if (!filename)
-			printf("Gonna crash,  can't locate file!!!!\n");
+			printf("DASH PROBLEM, gauge filename is UNDEFINED for a gauge!\n");
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_show_all(dash);
 		g_free(filename);
