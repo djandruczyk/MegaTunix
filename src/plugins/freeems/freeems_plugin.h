@@ -61,7 +61,7 @@ EXTERN gint (*reverse_lookup_f)(gconstpointer *, gint );
 EXTERN gfloat (*lookup_data_f)(gconstpointer *, gint );
 EXTERN gint (*translate_string_f)(const gchar *);
 EXTERN GtkWidget *(*lookup_widget_f)(const gchar *);
-EXTERN void (*set_group_color_f)(GuiColor, const gchar * );
+EXTERN void (*thread_set_group_color_f)(GuiColor, const gchar * );
 EXTERN gint (*get_multiplier_f)(DataSize);
 EXTERN guint (*get_bitshift_f)(guint);
 EXTERN GtkWidget *(*spin_button_handler_f)(GtkWidget *, gpointer);

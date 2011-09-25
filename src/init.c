@@ -985,6 +985,7 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
 
 	output = g_new0(OutputData, 1);
 	output->data = g_new0(gconstpointer, 1);
+	DATA_SET(output->data,"_WILL_NEVER_USE_",GINT_TO_POINTER(1));
 	return output;
 }
 

@@ -882,15 +882,15 @@ red_or_black:
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
 			firmware->page_params[i]->needs_burn = TRUE;
-			set_group_color_f(RED,"burners");
-/*			slaves_set_color(RED,"burners");*/
+			thread_set_group_color_f(RED,"burners");
+/*			thread_slaves_set_color(RED,"burners");*/
 			return;
 		}
 		else
 			firmware->page_params[i]->needs_burn = FALSE;
 	}
-	set_group_color_f(BLACK,"burners");
-/*	slaves_set_color(BLACK,"burners");*/
+	thread_set_group_color_f(BLACK,"burners");
+/*	thread_slaves_set_color(BLACK,"burners");*/
 	return;
 }
 

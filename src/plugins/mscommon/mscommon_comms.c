@@ -695,7 +695,7 @@ red_or_black:
 		{
 			firmware->page_params[i]->needs_burn = TRUE;
 			gdk_threads_enter();
-			set_group_color_f(RED,"burners");
+			thread_set_group_color_f(RED,"burners");
 			slaves_set_color(RED,"burners");
 			gdk_threads_leave();
 			return;
@@ -704,7 +704,7 @@ red_or_black:
 			firmware->page_params[i]->needs_burn = FALSE;
 	}
 	gdk_threads_enter();
-	set_group_color_f(BLACK,"burners");
+	thread_set_group_color_f(BLACK,"burners");
 	slaves_set_color(BLACK,"burners");
 	gdk_threads_leave();
 	return;

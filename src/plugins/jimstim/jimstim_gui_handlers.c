@@ -20,6 +20,7 @@
 
 #include <jimstim_gui_handlers.h>
 #include <jimstim_sweeper.h>
+#include <gtk/gtk.h>
 
 extern gconstpointer *global_data;
 
@@ -80,7 +81,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
   */
 G_MODULE_EXPORT gboolean ecu_bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	return TRUE;
 }
 
 
@@ -92,7 +93,7 @@ G_MODULE_EXPORT gboolean ecu_bitmask_button_handler(GtkWidget *widget, gpointer 
   */
 G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	return TRUE;
 }
 
 
@@ -104,7 +105,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
   */
 G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	return TRUE;
 }
 
 
@@ -117,7 +118,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	return TRUE;
 }
 
 
@@ -129,7 +130,35 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	return TRUE;
+}
+
+
+/*!
+  \brief ECU specific plugin handler for combo boxes
+  \param widget is the pointer to the combo box 
+  \param data is unused
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean jimstim_rpm_value_changed(GtkWidget *widget, gpointer data)
+{
+	gchar *tmpbuf = NULL;
+	gchar *widget_name = NULL;
+	GtkWidget *entry = NULL;
+	gint val = 0;
+	widget_name = OBJ_GET(widget,"special");
+	g_return_val_if_fail(widget_name,FALSE);
+	entry = lookup_widget_f(widget_name);
+	g_return_val_if_fail(entry,FALSE);
+	val = (GINT)gtk_range_get_value(GTK_RANGE(widget));
+	if (GTK_IS_ENTRY(entry))
+	{
+		tmpbuf = g_strdup_printf("%i",val);
+		gtk_entry_set_text(GTK_ENTRY(entry),tmpbuf);
+		g_signal_emit_by_name(entry,"activate");
+		g_free(tmpbuf);
+	}
+	return TRUE;
 }
 
 

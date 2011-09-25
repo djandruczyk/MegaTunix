@@ -1836,11 +1836,7 @@ close_control:
 				{
 					state = WAITING_FOR_CMD;
 					if (substate == SET_COLOR)
-					{
-						gdk_threads_enter();
-						set_group_color_f(color,string);
-						gdk_threads_leave();
-					}
+						thread_set_group_color_f(color,string);
 					g_free(string);
 					index = 0;
 				}
@@ -3911,11 +3907,7 @@ close_control:
 				{
 					state = WAITING_FOR_CMD;
 					if (substate == SET_COLOR)
-					{
-						gdk_threads_enter();
-						set_group_color_f(color,string);
-						gdk_threads_leave();
-					}
+						thread_set_group_color_f(color,string);
 					g_free(string);
 					index = 0;
 				}

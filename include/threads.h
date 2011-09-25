@@ -54,9 +54,11 @@ struct _QFunction
 struct _Widget_Update
 {
 	const gchar *widget_name;	/*!< Widget name */
-	WidgetType type;	/*!< what type of widget are we updating */
-	gchar *msg;		/*!< message to display */
-	gboolean state;		/*!< state to set widget (MTX_SENSITIVE) */
+	WidgetType type;		/*!< type of widget are we updating */
+	gchar *msg;			/*!< message to display (if any) */
+	gboolean state;			/*!< state to set widget (MTX_SENSITIVE) */
+	const gchar *group_name;	/*!< Group name */
+	GuiColor color;			/*!< Color */
 };
 
 
@@ -126,9 +128,8 @@ void thread_refresh_widget(GtkWidget *);
 void thread_refresh_widget_range(gint, gint, gint);
 void thread_refresh_widgets_at_offset(gint, gint);
 void thread_widget_set_sensitive(const gchar * widget_name, gboolean state);
-
+void thread_set_group_color(GuiColor, const gchar *);
 gboolean queue_function(const gchar * );
-
 /* Prototypes */
 
 #endif

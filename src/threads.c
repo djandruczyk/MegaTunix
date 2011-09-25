@@ -502,4 +502,34 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	return;
 }
 
+/*!
+  \brief Sends a message to the gui dispatcher to set a group of widgets to
+  a specific color enumeration
+  */
+G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
+{
+	static GAsyncQueue *gui_dispatch_queue = NULL;
+	Io_Message *message = NULL;
+	Widget_Update *w_update = NULL;
+	gint tmp = 0;
 
+	if (!gui_dispatch_queue)
+		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+	message = initialize_io_message();
+
+	w_update = g_new0(Widget_Update, 1);
+	w_update->group_name = group;
+	w_update->color = color;
+	w_update->type = MTX_GROUP_COLOR;
+	w_update->msg = NULL;
+
+	message->payload = w_update;
+	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_WIDGET;
+	g_array_append_val(message->functions,tmp);
+
+	g_async_queue_ref(gui_dispatch_queue);
+	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	g_async_queue_unref(gui_dispatch_queue);
+	return;
+}

@@ -295,6 +295,13 @@ trypop:
 					w_update = (Widget_Update *)message->payload;
 					switch (w_update->type)
 					{
+						case MTX_GROUP_COLOR:
+							/*printf("group color\n");*/
+							gdk_threads_enter();
+							set_group_color(w_update->color,w_update->group_name);
+							gdk_threads_leave();
+							break;
+
 						case MTX_ENTRY:
 							/*printf("entry\n");*/
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))

@@ -40,6 +40,8 @@ gboolean ecu_bitmask_button_handler(GtkWidget *, gpointer);
 gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
 gboolean ecu_update_combo(GtkWidget *, gpointer);
+gboolean jimstim_rpm_value_changed(GtkWidget *, gpointer);
+
 /* Prototypes */
 
 

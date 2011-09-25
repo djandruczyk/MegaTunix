@@ -286,14 +286,15 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 
 
 /*
- *\brief handle_transaction is defined in comm.xml to handle the results
- of certain IO operations
+ *\brief handle_transaction_hf is defined in comm.xml to handle the results
+ of certain IO operations. This runs in the IOthread context so it CAN NOT
+ do any GUI operations, but can queue gui ops via the thread_update_* calls
  \param data is a pointer to an Io_Message structure
  \param type is the FuncCall enumeration
  \see Io_Message
  \see FuncCall
  */
-G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
+G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 {
 	static GRand *rand = NULL;
 	static Firmware_Details *firmware = NULL;
@@ -391,11 +392,11 @@ G_MODULE_EXPORT void handle_transaction(void * data, FuncCall type)
 				{
 					errorcode = ((guint8)packet->data[packet->payload_base_offset] << 8) + (guint8)packet->data[packet->payload_base_offset+1];
 					errmsg = lookup_error(errorcode);
-					update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE,FALSE);
+					thread_update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE);
 					g_free(errmsg);
 				}
 				else
-					update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Packet accepted...\n")),FALSE,FALSE,FALSE);
+					thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Packet accepted...\n")),FALSE,FALSE);
 				freeems_packet_cleanup(packet);
 			}
 			break;
@@ -456,7 +457,6 @@ handle_write:
 					post_single_burn_pf(data);
 					update_write_status(data);
 				}
-
 				freeems_packet_cleanup(packet);
 			}
 			else
