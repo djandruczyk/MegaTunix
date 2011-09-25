@@ -324,6 +324,7 @@ page=0
 offset=571
 size=_S16_
 fromecu_mult=0.01
+raw_upper=10000
 precision=1
 _tooltip=See MS2-Extra Manuals
 

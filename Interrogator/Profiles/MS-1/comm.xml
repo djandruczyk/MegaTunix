@@ -78,7 +78,7 @@
 				<arg>PAUSE_100MS</arg>
 				<arg>SEND_X</arg>
 			</args>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS1_GETERROR_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
@@ -90,7 +90,7 @@
 			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
 			<type>_WRITE_CMD_</type>
 			<base>A</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
@@ -105,7 +105,7 @@
 			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
 			<type>_WRITE_CMD_</type>
 			<base>R</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
@@ -177,7 +177,7 @@
 			<desc>Triggers the ecu to echo back it's 8bit clock</desc>
 			<type>_WRITE_CMD_</type>
 			<base>C</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS1_CLOCK_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -185,7 +185,7 @@
 			<desc>Triggers the ecu to echo back it's textual revision</desc>
 			<type>_WRITE_CMD_</type>
 			<base>T</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_TEXT_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -193,7 +193,7 @@
 			<desc>Triggers the ecu to echo back it's api signature</desc>
 			<type>_WRITE_CMD_</type>
 			<base>S</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_SIGNATURE_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -201,7 +201,7 @@
 			<desc>Triggers the ecu to echo back it's version number</desc>
 			<type>_WRITE_CMD_</type>
 			<base>Q</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_NUM_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -209,7 +209,7 @@
 			<desc>Triggers the MS1 to return the VE/Constants for the previously set page</desc>
 			<type>_WRITE_CMD_</type>
 			<base>V</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS1_VECONST_</helper_func_arg>
 		</cmd>
 		<cmd>

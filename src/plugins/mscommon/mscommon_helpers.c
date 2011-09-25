@@ -309,7 +309,7 @@ G_MODULE_EXPORT void enable_ttm_buttons_pf(void)
   \param data is a pointer to a Io_Message structure
   \param func is an enum representing the action we need to handle
   */
-G_MODULE_EXPORT void simple_read_pf(void * data, FuncCall func)
+G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 {
 	static guint16 lastcount = 0;
 	static gboolean just_starting = TRUE;

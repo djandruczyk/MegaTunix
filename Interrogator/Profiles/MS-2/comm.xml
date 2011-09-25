@@ -91,7 +91,7 @@
 			<desc>Gets the realtime vars from the ECU, returns a var length block</desc>
 			<type>_WRITE_CMD_</type>
 			<base>A</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
@@ -110,7 +110,7 @@
 				<arg>MS2_CAN_ID</arg>
 				<arg>MS2_TABLE_INDEX</arg>
 			</args>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS2_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
@@ -164,7 +164,7 @@
 				<arg>MS2_NUM_BYTES</arg>
 				<arg>DATACHUNK</arg>
 			</args>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_WRITE_VERIFY_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
@@ -181,7 +181,7 @@
 				<arg>MS2_CAN_ID</arg>
 				<arg>MS2_TABLE_INDEX</arg>
 			</args>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MISMATCH_COUNT_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -228,7 +228,7 @@
 			<desc>Triggers the ecu to echo back it's 16 bit clock</desc>
 			<type>_WRITE_CMD_</type>
 			<base>c</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS2_CLOCK_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -236,7 +236,7 @@
 			<desc>Triggers the ecu to echo back it's textual revision</desc>
 			<type>_WRITE_CMD_</type>
 			<base>Q</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_TEXT_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -244,7 +244,7 @@
 			<desc>Triggers the ecu to echo back it's api signature</desc>
 			<type>_WRITE_CMD_</type>
 			<base>S</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_SIGNATURE_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -252,7 +252,7 @@
 			<desc>Triggers the ecu to echo back it's version number</desc>
 			<type>_WRITE_CMD_</type>
 			<base>Q</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_NUM_REV_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -266,7 +266,7 @@
 				<arg>MS2_OFFSET</arg>
 				<arg>MS2_NUM_BYTES</arg>
 			</args>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS2_VECONST_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -288,7 +288,7 @@
 			<desc>Triggers the ecu to reboot into the bootloader</desc>
 			<type>_WRITE_CMD_</type>
 			<base>!!!x</base>
-			<helper_func>simple_read_pf</helper_func>
+			<helper_func>simple_read_hf</helper_func>
 			<helper_func_arg>_MS2_BOOTLOADER_</helper_func_arg>
 		</cmd>
 		<cmd>

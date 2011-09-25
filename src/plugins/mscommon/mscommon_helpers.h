@@ -52,7 +52,7 @@ typedef enum
 /* Prototypes */
 void spawn_read_all_pf(void);
 void enable_get_data_buttons_pf(void);
-void simple_read_pf(void *, FuncCall);
+void simple_read_hf(void *, FuncCall);
 gboolean read_ve_const(void *, FuncCall);
 gboolean burn_all_helper(void *, FuncCall);
 void post_single_burn_pf(void *data);

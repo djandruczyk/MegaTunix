@@ -220,9 +220,7 @@ fast_exit:
 				{
 					if (DATA_GET(global_data,"leaving"))
 						goto fast_exit;
-					gdk_threads_enter();
 					message->command->helper_function(message, message->command->helper_func_arg);
-					gdk_threads_leave();
 				}
 				/*printf("Write command with post function time %f\n",g_timer_elapsed(clock,NULL));*/
 				break;

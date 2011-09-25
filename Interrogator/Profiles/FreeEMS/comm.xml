@@ -76,7 +76,7 @@
 				<arg>DATACHUNK</arg>
 				<arg>DATA_LENGTH</arg>
 			</args>
-			<helper_func>handle_transaction</helper_func>
+			<helper_func>handle_transaction_hf</helper_func>
                         <helper_func_arg>_BENCHTEST_RESPONSE_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -105,7 +105,7 @@
 				<arg>OFFSET</arg>
 				<arg>DATA_LENGTH</arg>
                         </args>
-			<helper_func>handle_transaction</helper_func>
+			<helper_func>handle_transaction_hf</helper_func>
                         <helper_func_arg>_GENERIC_BURN_</helper_func_arg>
                 </cmd>
 		<cmd>
@@ -132,7 +132,7 @@
 				<arg>DATA_LENGTH</arg>
 				<arg>DATACHUNK</arg>
 			</args>
-			<helper_func>handle_transaction</helper_func>
+			<helper_func>handle_transaction_hf</helper_func>
                         <helper_func_arg>_GENERIC_RAM_WRITE_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -147,7 +147,7 @@
 				<arg>DATA_LENGTH</arg>
 				<arg>DATACHUNK</arg>
 			</args>
-			<helper_func>handle_transaction</helper_func>
+			<helper_func>handle_transaction_hf</helper_func>
                         <helper_func_arg>_GENERIC_FLASH_WRITE_</helper_func_arg>
 		</cmd>
 		<cmd>
@@ -161,7 +161,7 @@
 				<arg>OFFSET</arg>
 				<arg>DATA_LENGTH</arg>
 			</args>
-			<helper_func>handle_transaction</helper_func>
+			<helper_func>handle_transaction_hf</helper_func>
                         <helper_func_arg>_GENERIC_READ_</helper_func_arg>
 		</cmd>
 		<cmd>

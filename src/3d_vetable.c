@@ -729,8 +729,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_widget_show_all(window);
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-//	gdk_threads_add_timeout(500,delayed_reconfigure,ve_view);
-//	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,ve_view,NULL);
+	gdk_threads_add_timeout(500,delayed_reconfigure,ve_view);
+	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,ve_view,NULL);
 	return TRUE;
 }
 
@@ -2422,7 +2422,6 @@ G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
-return FALSE;
 	g_return_val_if_fail(ve_view,FALSE);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
@@ -3117,7 +3116,6 @@ gboolean delayed_expose(gpointer data)
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
-return FALSE;
 	g_return_val_if_fail(ve_view,FALSE);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
@@ -3138,7 +3136,6 @@ gboolean delayed_reconfigure(gpointer data)
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
 	GtkAllocation allocation;
 	GdkWindow *window = gtk_widget_get_window(ve_view->drawing_area);
-return FALSE;
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
@@ -3178,7 +3175,6 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(firmware,FALSE);
 
-return FALSE;
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 

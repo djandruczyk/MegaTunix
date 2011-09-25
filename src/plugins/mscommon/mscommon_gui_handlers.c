@@ -236,7 +236,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
-	if (firmware->capabilities & MS1_E)
+	if (firmware->capabilities & ~JIMSTIM)
 	{
 		if (!interdep_vars)
 			interdep_vars = DATA_GET(global_data,"interdep_vars");
@@ -565,7 +565,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
-	if (firmware->capabilities & MS1_E)
+	if (firmware->capabilities & ~JIMSTIM)
 	{
 		if (!interdep_vars)
 			interdep_vars = DATA_GET(global_data,"interdep_vars");
@@ -1070,7 +1070,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
-	if (firmware->capabilities & MS1_E)
+	if (firmware->capabilities & ~JIMSTIM)
 	{
 		if (!interdep_vars)
 			interdep_vars = DATA_GET(global_data,"interdep_vars");
@@ -1432,8 +1432,10 @@ void update_entry(GtkWidget *widget)
 		widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 		tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 		/* If different, update it */
+		//printf("widget text %s, new text %s\n",widget_text,tmpbuf);
 		if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 		{
+		//	printf("updating entry!\n");
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			changed = TRUE;
 		}
