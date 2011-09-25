@@ -47,7 +47,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	static GAsyncQueue *pf_dispatch_queue = NULL;
 	static GCond *pf_dispatch_cond = NULL;
 	static GMutex *pf_dispatch_mutex = NULL;
-	gint loops = 0;
  	gint len=0;
 	gint i=0;
 	PostFunction *pf=NULL;

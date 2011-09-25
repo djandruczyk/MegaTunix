@@ -51,6 +51,7 @@ struct _Serial_Params
 	gint errcount;		/*!< Serial I/O errors read error count */
 	gboolean net_mode;	/*!< When using TCP/IP socket mode */
 };
+
 #else
 struct _Serial_Params
 {

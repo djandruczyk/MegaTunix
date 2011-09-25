@@ -19,6 +19,7 @@
   */
 
 #include <jimstim_gui_handlers.h>
+#include <jimstim_sweeper.h>
 
 extern gconstpointer *global_data;
 
@@ -118,4 +119,17 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 {
 	        return TRUE;
 }
+
+
+/*!
+  \brief ECU specific plugin handler for combo boxes
+  \param widget is the pointer to the combo box 
+  \param data is unused
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget *widget, gpointer data)
+{
+	        return TRUE;
+}
+
 

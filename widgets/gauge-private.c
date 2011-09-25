@@ -703,10 +703,12 @@ cairo_jump_out_of_alerts:
 				priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius),
 				priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius));
 		cairo_show_text (cr, message);
+		/*
 		priv->value_bounding_box.x = priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius);
 		priv->value_bounding_box.y = priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius)-extents.height;
 		priv->value_bounding_box.width = extents.width + extents.x_advance + 2; 
 		priv->value_bounding_box.height = extents.height + extents.y_advance + 2;
+		*/
 		/*printf("Value bounding box is at %i,%i, width/height %i,%i\n",priv->value_bounding_box.x,priv->value_bounding_box.y,priv->value_bounding_box.width,priv->value_bounding_box.height); */
 
 		g_free(message);

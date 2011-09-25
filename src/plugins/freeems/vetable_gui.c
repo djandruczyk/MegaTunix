@@ -392,9 +392,11 @@ redraw:
 		{
 			widget = last_widgets[table][last[table][i]];
 			gtk_widget_get_allocation(widget,&allocation);
+			/*
 #ifdef __WIN32__
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&old_colors[table][last[table][i]]);
 #else
+*/
 			window = gtk_entry_get_text_window(GTK_ENTRY(widget));
 			if (GDK_IS_DRAWABLE(window))
 			{
@@ -405,7 +407,7 @@ redraw:
 				cairo_stroke(cr);
 				cairo_destroy(cr);
 			}
-#endif
+//#endif
 		}
 	}
 
@@ -465,9 +467,11 @@ redraw:
 		 * recalc all the way thru the widget tree, which is 
 		 * atrociously expensive!
 		 */
+		/*
 #ifdef __WIN32__
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 #else
+*/
 		window = gtk_entry_get_text_window(GTK_ENTRY(widget));
 		if (GDK_IS_DRAWABLE(window))
 		{
@@ -478,6 +482,6 @@ redraw:
 			cairo_stroke(cr);
 			cairo_destroy(cr);
 		}
-#endif
+//#endif
 	}
 }

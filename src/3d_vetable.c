@@ -861,7 +861,7 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	GLfloat w;
 	GLfloat h;
 
-	printf("app configure event entered!\n");
+	//printf("app configure event entered!\n");
 
 	gtk_widget_get_allocation(widget,&allocation);
 	w = allocation.width;
@@ -875,12 +875,12 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	gldrawable = gtk_widget_get_gl_drawable(widget);
 	if (!glcontext)
 	{
-		printf("app configure event left (no glcontext!) FALSE!\n");
+		//printf("app configure event left (no glcontext!) FALSE!\n");
 		return FALSE;
 	}
 	if (!gldrawable)
 	{
-		printf("app configure event left (no gldrawable!) FALSE!\n");
+		//printf("app configure event left (no gldrawable!) FALSE!\n");
 		return FALSE;
 	}
 
@@ -895,7 +895,7 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_configure_event() Complete!\n"));
-	printf("app configure event left TRUE!\n");
+	//printf("app configure event left TRUE!\n");
 	return TRUE;
 }
 
@@ -917,7 +917,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	Cur_Vals *cur_vals = NULL;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 
-	printf("app expose event entered!\n");
+	//printf("app expose event entered!\n");
 	glcontext = gtk_widget_get_gl_context(widget);
 	gldrawable = gtk_widget_get_gl_drawable(widget);
 
@@ -928,7 +928,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 
 	if (!ve_view->gl_initialized)
 	{
-		printf( "gl not initted yet, calling gl_init routine!\n");
+		//printf( "gl not initted yet, calling gl_init routine!\n");
 		ve_view->gl_initialized = TRUE;
 		gl_init(widget);
 	}
@@ -981,7 +981,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_expose_event() Completed!\n"));
-	printf("app expose event left (TRUE)!\n");
+	//printf("app expose event left (TRUE)!\n");
 	return TRUE;
 }
 
@@ -1076,9 +1076,9 @@ G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	GdkWindow *window = gtk_widget_get_window(widget);
 	dbg_func(OPENGL,g_strdup(__FILE__": ve3d_realize() 3D View Realization\n"));
-	printf("app realize entered!\n");
+	//printf("app realize entered!\n");
 	gdk_window_ensure_native(window);
-	printf("app realize left!\n");
+	//printf("app realize left!\n");
 	return TRUE;
 }
 
@@ -1091,7 +1091,7 @@ void gl_init(GtkWidget *widget)
 	g_return_if_fail(glcontext);
 	g_return_if_fail(gldrawable);
 
-	printf("app gl_init entered!\n");
+	//printf("app gl_init entered!\n");
 	/*! Stuff we used to do in the realize handler... */
 	/*** OpenGL BEGIN ***/
 	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
@@ -1113,7 +1113,7 @@ void gl_init(GtkWidget *widget)
 	glMatrixMode(GL_MODELVIEW);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
-	printf("app gl_init left (void)!\n");
+	//printf("app gl_init left (void)!\n");
 }
 
 

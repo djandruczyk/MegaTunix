@@ -78,6 +78,15 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	{
 #ifdef __WIN32__
 		fd = open(port_name, O_RDWR | O_BINARY);
+//		serial_params->comm_handle = CreateFile(port_name,
+//				GENERIC_READ|GENERIC_WRITE, /* Access */
+//				0, /* not shared */
+//				0, /* No security */
+//				OPEN_EXISTING, /* Don't create a file */
+//				FILE_FLAG_OVERLAPPED, /* Overlapped IO */
+//				0 /* No templates... */
+//				);
+//		fd = _open_osfhandle(serial_params->comm_handle, 0);
 #else
 		fd = open(port_name, O_RDWR | O_NOCTTY | O_NDELAY);
 #endif

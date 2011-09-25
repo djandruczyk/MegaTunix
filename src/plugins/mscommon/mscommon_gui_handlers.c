@@ -235,10 +235,13 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
-	if (!interdep_vars)
-		interdep_vars = DATA_GET(global_data,"interdep_vars");
 	g_return_val_if_fail(firmware,FALSE);
-	g_return_val_if_fail(interdep_vars,FALSE);
+	if (firmware->capabilities & MS1_E)
+	{
+		if (!interdep_vars)
+			interdep_vars = DATA_GET(global_data,"interdep_vars");
+		g_return_val_if_fail(interdep_vars,FALSE);
+	}
 
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
 		gtk_toggle_button_set_inconsistent(GTK_TOGGLE_BUTTON(widget),FALSE);
@@ -561,11 +564,14 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
-	if (!interdep_vars)
-		interdep_vars = DATA_GET(global_data,"interdep_vars");
-
 	g_return_val_if_fail(firmware,FALSE);
-	g_return_val_if_fail(interdep_vars,FALSE);
+	if (firmware->capabilities & MS1_E)
+	{
+		if (!interdep_vars)
+			interdep_vars = DATA_GET(global_data,"interdep_vars");
+		g_return_val_if_fail(interdep_vars,FALSE);
+	}
+
 
 	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
 
@@ -1063,10 +1069,13 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
-	if (!interdep_vars)
-		interdep_vars = DATA_GET(global_data,"interdep_vars");
 	g_return_val_if_fail(firmware,FALSE);
-	g_return_val_if_fail(interdep_vars,FALSE);
+	if (firmware->capabilities & MS1_E)
+	{
+		if (!interdep_vars)
+			interdep_vars = DATA_GET(global_data,"interdep_vars");
+		g_return_val_if_fail(interdep_vars,FALSE);
+	}
 
 	handler = (MSCommonStdHandler)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
