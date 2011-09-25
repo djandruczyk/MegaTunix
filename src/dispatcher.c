@@ -34,6 +34,9 @@
 #include <tabloader.h>
 #include <widgetmgmt.h>
 
+/* Change to 1 to debug an insane amount of messages.... */
+#define DISPATCHER_DBG 0
+
 /*!
   \brief pf_dispatcher() is a GTK+ timeout that runs 10 times per second 
   checking for message on the dispatch queue which handles gui operations
@@ -54,7 +57,8 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	/*GTimeVal time;*/
 	extern gconstpointer *global_data;
 
-	/*printf("pf_dispatcher running!\n");*/
+	if (DISPATCHER_DBG)
+		printf("pf_dispatcher running!\n");
 	if (!pf_dispatch_cond)
 		pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
 	if (!pf_dispatch_mutex)
@@ -87,13 +91,13 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	message = g_async_queue_try_pop(pf_dispatch_queue);
 	if (!message)
 	{
-		/*printf("no messages waiting, signalling\n");
-		printf("no messages waiting, returning\n");
-		*/
+		if (DISPATCHER_DBG)
+			printf("no messages waiting, signalling\n");
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
 		g_mutex_unlock(pf_dispatch_mutex);
-		/*printf("returning!\n");*/
+		if (DISPATCHER_DBG)
+			printf("no messages waiting, returning\n");
 		return TRUE;
 	}
 	if (!message->status)
@@ -114,7 +118,8 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		for (i=0;i<len;i++)
 		{
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
-			/*printf("dispatching post function %s\n",pf->name);*/
+			if (DISPATCHER_DBG)
+				printf("dispatching post function %s\n",pf->name);
 			if (!pf)
 			{
 				printf(_("ERROR postfunction was NULL, continuing\n"));
@@ -138,9 +143,10 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		}
 	}
 	dealloc_message(message);
-	/*printf ("deallocation of dispatch message complete\n");*/
+	if (DISPATCHER_DBG)
+		printf ("deallocation of dispatch message complete\n");
 
-	/*
+	/* Causes issues on shit machines
 	gdk_threads_enter();
 	while (gtk_events_pending())
 	{
@@ -220,7 +226,8 @@ trypop:
 	message = g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
 	{
-		/*	printf("no messages waiting, returning\n");*/
+		if (DISPATCHER_DBG)
+			printf("no messages waiting, returning\n");
 		g_mutex_lock(gui_dispatch_mutex);
 		g_cond_signal(gui_dispatch_cond);
 		g_mutex_unlock(gui_dispatch_mutex);
@@ -233,16 +240,19 @@ trypop:
 		for (i=0;i<len;i++)
 		{
 			val = g_array_index(message->functions,UpdateFunction, i);
-			/*printf("gui_dispatcher\n");*/
+			if (DISPATCHER_DBG)
+				printf("gui_dispatcher\n");
 			switch ((UpdateFunction)val)
 			{
 				case UPD_REFRESH:
+					if (DISPATCHER_DBG)
+						printf("Single widget update\n");
 					widget = (GtkWidget *)message->payload;
 					if (GTK_IS_WIDGET(widget))
 					{
+						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 						if (!update_widget_f)
 							get_symbol("update_widget",(void *)&update_widget_f);
-						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 						gdk_threads_enter();
 						update_widget_f(widget,NULL);
 						gdk_threads_leave();
@@ -251,6 +261,8 @@ trypop:
 					}
 					break;
 				case UPD_REFRESH_RANGE:
+					if (DISPATCHER_DBG)
+						printf("Widget range update\n");
 					range = (Widget_Range *)message->payload;
 					if (!range)
 						break;
@@ -271,7 +283,8 @@ trypop:
 					message->payload = NULL;
 					break;
 				case UPD_LOGBAR:
-					/*printf("logbar update\n");*/
+					if (DISPATCHER_DBG)
+						printf("logbar update\n");
 					t_message = (Text_Message *)message->payload;
 					gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear,FALSE);
@@ -280,7 +293,8 @@ trypop:
 					message->payload = NULL;
 					break;
 				case UPD_RUN_FUNCTION:
-					/*printf("run function\n");*/
+					if (DISPATCHER_DBG)
+						printf("run function\n");
 					qfunc = (QFunction *)message->payload;
 					gdk_threads_enter();
 					run_post_functions(qfunc->func_name);
@@ -290,20 +304,23 @@ trypop:
 					break;
 
 				case UPD_WIDGET:
-					/*printf("widget update\n");*/
+					if (DISPATCHER_DBG)
+						printf("widget update\n");
 					widget = NULL;
 					w_update = (Widget_Update *)message->payload;
 					switch (w_update->type)
 					{
 						case MTX_GROUP_COLOR:
-							/*printf("group color\n");*/
+							if (DISPATCHER_DBG)
+								printf("group color\n");
 							gdk_threads_enter();
 							set_group_color(w_update->color,w_update->group_name);
 							gdk_threads_leave();
 							break;
 
 						case MTX_ENTRY:
-							/*printf("entry\n");*/
+							if (DISPATCHER_DBG)
+								printf("entry\n");
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gdk_threads_enter();
@@ -311,7 +328,8 @@ trypop:
 							gdk_threads_leave();
 							break;
 						case MTX_LABEL:
-							/*printf("label\n");*/
+							if (DISPATCHER_DBG)
+								printf("label\n");
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gdk_threads_enter();
@@ -319,13 +337,15 @@ trypop:
 							gdk_threads_leave();
 							break;
 						case MTX_TITLE:
-							/*printf("title\n");*/
+							if (DISPATCHER_DBG)
+								printf("title\n");
 							gdk_threads_enter();
 							set_title(g_strdup(w_update->msg));
 							gdk_threads_leave();
 							break;
 						case MTX_SENSITIVE:
-							/*printf("sensitivity change\n");*/
+							if (DISPATCHER_DBG)
+								printf("sensitivity change\n");
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
 							gdk_threads_enter();
@@ -356,7 +376,8 @@ trypop:
 	}
 dealloc:
 	dealloc_message(message);
-	/*printf ("deallocation of dispatch message complete\n");*/
+	if (DISPATCHER_DBG)
+		printf ("deallocation of dispatch message complete\n");
 	count++;
 	/* try to handle up to 4 messages at a time.  If this is 
 	 * set too high, we can cause the timeout to hog the gui if it's
@@ -364,10 +385,12 @@ dealloc:
 	 * */
 	if ((count < 3) && (!DATA_GET(global_data,"leaving")))
 	{
-		/*printf("trying to handle another message\n");*/
+		if (DISPATCHER_DBG)
+			printf("trying to handle another message\n");
 		goto trypop;
 	}
-	/*printf("returning\n");*/
+	if (DISPATCHER_DBG)
+		printf("gui_dispatcher() returning\n");
 	g_mutex_lock(gui_dispatch_mutex);
 	g_cond_signal(gui_dispatch_cond);
 	g_mutex_unlock(gui_dispatch_mutex);

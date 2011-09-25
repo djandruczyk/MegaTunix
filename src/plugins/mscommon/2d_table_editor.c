@@ -129,8 +129,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	bind_to_lists_f(widget,"burners");
 	widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
+	/*
 	widget = glade_xml_get_widget(xml,"curve_editor_menuitem");
 	gtk_widget_set_sensitive(GTK_WIDGET(widget), FALSE);
+	*/
 
 	widget = glade_xml_get_widget(xml,"close_menuitem");
 	OBJ_SET(widget,"window",(gpointer)window);
@@ -507,8 +509,10 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		bind_to_lists_f(widget,"burners");
 		widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
+		/*
 		widget = glade_xml_get_widget(xml,"curve_editor_menuitem");
 		gtk_widget_set_sensitive(GTK_WIDGET(widget), FALSE);
+		*/
 
 		widget = glade_xml_get_widget(xml,"close_menuitem");
 		OBJ_SET(widget,"window",(gpointer)window);
@@ -872,14 +876,10 @@ G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	remove_from_lists_f(OBJ_GET(widget_ptr,"bind_to_list"),widget_ptr);
-	if (OBJ_GET(widget_ptr,"page"))
-		page = (GINT)OBJ_GET(widget_ptr,"page");
-	else
-		page = -1;
-	if (OBJ_GET(widget_ptr,"offset"))
-		offset = (GINT)OBJ_GET(widget_ptr,"offset");
-	else
-		offset = -1;
+	if (!GTK_IS_ENTRY(widget_ptr))
+		return;
+	page = (GINT)OBJ_GET(widget_ptr,"page");
+	offset = (GINT)OBJ_GET(widget_ptr,"offset");
 	if (( page >= 0 ) && (offset >= 0))
 		ecu_widgets[page][offset] = g_list_remove(ecu_widgets[page][offset],widget_ptr);
 	/*dealloc_widget(widget_ptr,NULL);*/

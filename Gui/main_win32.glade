@@ -1977,6 +1977,7 @@
                     <property name="use_underline">True</property>
                     <child>
                       <widget class="GtkMenu" id="tools_menuitem_menu">
+		      <!--
                         <child>
                           <widget class="GtkImageMenuItem" id="curve_editor_menuitem">
                             <property name="label">Curve Wizard</property>
@@ -1991,6 +1992,7 @@
                             </child>
                           </widget>
                         </child>
+			-->
                       </widget>
                     </child>
                   </widget>
