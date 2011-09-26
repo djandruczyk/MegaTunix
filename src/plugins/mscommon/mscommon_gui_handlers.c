@@ -1251,14 +1251,14 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	gint tmpi = 0;
 	gdouble value = 0.0;
 
+	if (!insert_text_handler)
+		get_symbol_f("insert_text_handler",(void *)&insert_text_handler);
+	g_return_if_fail(insert_text_handler);
+
 	if (DATA_GET(global_data,"leaving"))
 		return;
 	if (!GTK_IS_WIDGET(widget))
 		return;
-	if (!insert_text_handler)
-		get_symbol_f("insert_text_handler",(void *)&insert_text_handler);
-
-	g_return_if_fail(insert_text_handler);
 	/* If passed widget and user data are identical,  break out as
 	 * we already updated the widget.
 	 */

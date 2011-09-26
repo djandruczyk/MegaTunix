@@ -261,6 +261,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		{
 			/* X Column */
 			entry = gtk_entry_new();
+			OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),7);
 			OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
 			g_array_insert_val(x_entries,i,entry);
@@ -313,6 +314,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 
 			/* Y Column */
 			entry = gtk_entry_new();
+			OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),7);
 			OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
 			g_array_insert_val(y_entries,i,entry);
@@ -609,6 +611,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	{
 		/* X Column */
 		entry = gtk_entry_new();
+		OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
 		gtk_entry_set_width_chars(GTK_ENTRY(entry),7);
 		OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
@@ -665,6 +668,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 
 		/* Y Column */
 		entry = gtk_entry_new();
+		OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		gtk_entry_set_width_chars(GTK_ENTRY(entry),7);
 		OBJ_SET(entry,"curve_index",GINT_TO_POINTER(i));
 		g_array_insert_val(y_entries,i,entry);
