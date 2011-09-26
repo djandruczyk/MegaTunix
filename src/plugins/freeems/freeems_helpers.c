@@ -362,9 +362,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 			}
 			else
 			{
-				printf("timeout, no packet found in queue for sequence %i (%.2X), locID %i, resting for 100ms to give the wee ECU time to catch up\n",seq,seq,locID);
-				g_usleep(100000);
-				printf("Re-issuing command!\n");
+				printf("timeout, no packet found in GENERIC_READ queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
 				seq = g_rand_int_range(rand,2,255);
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
@@ -420,8 +418,7 @@ handle_write:
 			}
 			else
 			{
-				printf("timeout, no packet found in queue for sequence %i (%.2X), locID %i, resting for 100ms to give the wee ECU time to catch up\n",seq,seq,locID);
-				g_usleep(100000);
+				printf("timeout, no packet found in GENERIC_[RAM|FLASH]_WRITE queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
 				seq = g_rand_int_range(rand,2,255);
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
@@ -462,8 +459,7 @@ handle_write:
 			}
 			else
 			{
-				printf("timeout, no packet found in queue for generic BURN sequence %i (%.2X), locID %i, resting for 100ms to give the wee ECU time to catch up\n",seq,seq,locID);
-				g_usleep(100000);
+				printf("timeout, no packet found in GENERIC_BURN queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
 				seq = g_rand_int_range(rand,2,255);
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
