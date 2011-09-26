@@ -318,7 +318,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	if (tmpi < lower)
 	{
 		if (dl_type != IGNORED)
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value  out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
+			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
 		tmpi = lower;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
