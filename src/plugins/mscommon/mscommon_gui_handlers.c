@@ -236,7 +236,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
-	if (firmware->capabilities & ~JIMSTIM)
+	if (!(firmware->capabilities & JIMSTIM))
 	{
 		if (!interdep_vars)
 			interdep_vars = DATA_GET(global_data,"interdep_vars");
@@ -565,7 +565,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
-	if (firmware->capabilities & ~JIMSTIM)
+	if (!(firmware->capabilities & JIMSTIM))
 	{
 		if (!interdep_vars)
 			interdep_vars = DATA_GET(global_data,"interdep_vars");
@@ -1070,7 +1070,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
-	if (firmware->capabilities & ~JIMSTIM)
+	if (!(firmware->capabilities & JIMSTIM))
 	{
 		if (!interdep_vars)
 			interdep_vars = DATA_GET(global_data,"interdep_vars");
@@ -1500,6 +1500,7 @@ void update_combo(GtkWidget *widget)
 	gchar * tmpbuf = NULL; 
 	GdkColor red = {0,65535,0,0};
 	GdkColor white = {0,65535,65535,65535};
+	gint dl_type = 0;
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
@@ -1508,8 +1509,12 @@ void update_combo(GtkWidget *widget)
 	if (!ecu_update_combo)
 		get_symbol_f("ecu_update_combo",(void *)&ecu_update_combo);
 	g_return_if_fail(ecu_update_combo);
+	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 
 	ecu_update_combo(widget);
+
+	if (dl_type == DEFERRED)
+		return;
 
 	get_essential_bits(widget,&canID, &page, &offset, &bitval, &bitmask, &bitshift);
 	/*printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(GINT)value);*/

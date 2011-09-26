@@ -18,7 +18,9 @@
   \author David Andruczyk
   */
 
+#include <combo_loader.h>
 #include <jimstim_gui_handlers.h>
+#include <jimstim_plugin.h>
 #include <jimstim_sweeper.h>
 #include <gtk/gtk.h>
 
@@ -118,6 +120,62 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 {
+	gint canID = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint bitval = 0;
+	gint bitmask = 0;
+	gint bitshift = 0;
+	gint dl_type = 0;
+	gint last_rpm = 0;
+	gint dload_val = 0;
+	DataSize size = MTX_U08;
+	GtkTreeIter iter;
+	GtkTreeModel *model = NULL;
+	gchar *tmpbuf = NULL;
+	GtkWidget *partner = NULL;
+	gboolean state = FALSE;
+	MSCommonStdHandler handler = 0;
+
+	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
+
+	dl_type = (GINT) OBJ_GET(widget,"dl_type");
+	handler = (GINT) OBJ_GET(widget,"handler");
+	size = (DataSize)OBJ_GET(widget,"size");
+
+	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
+	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+	if (!state)
+	{
+		/* Not selected by combo popdown button, thus is being edited. 
+		 * Do a model scan to see if we actually hit the jackpot or 
+		 * not, and get the iter for it...
+		 */
+		if (!search_model(model,widget,&iter))
+			return FALSE;
+	}
+	gtk_tree_model_get(model,&iter,BITVAL_COL,&bitval,-1);
+	printf("bitval chosen %i\n",bitval);
+
+	switch ((JimStimStdHandler)handler)
+	{
+		case RPM_MODE:
+			partner = lookup_widget_f((const gchar *)OBJ_GET(widget,"special"));
+			g_return_val_if_fail(partner,FALSE);
+			tmpbuf = (gchar *)gtk_entry_get_text(GTK_ENTRY(partner));
+			last_rpm =  (GINT)g_strtod(tmpbuf,NULL);
+			printf("last RPM %i\n",last_rpm);
+			if (bitval == 255) /* manual mode */
+				dload_val = 65535;
+			else
+				dload_val = last_rpm;
+			printf("Attempted to set dload_val to %i\n",dload_val);
+			break;
+		default:
+			printf("ERROR, case not handled, jimstim ecu combo button handler!\n");
+			break;
+	}
+        ms_send_to_ecu_f(canID, page, offset, size, dload_val, FALSE);
 	return TRUE;
 }
 

@@ -31,17 +31,19 @@
 #endif
 
 /* Function Pointers */
-EXTERN void (*error_msg_f)(const gchar *) = NULL;
-EXTERN gboolean (*get_symbol_f)(const gchar *, void **) = NULL;
-EXTERN GtkWidget *(*lookup_widget_f)(const gchar *) = NULL;
-EXTERN void (*io_cmd_f)(const gchar *,void *) = NULL;
-EXTERN OutputData *(*initialize_outputdata_f)(void) = NULL;
-EXTERN void *(*dbg_func_f)(int,gchar *) = NULL;
-EXTERN void (*start_tickler_f)(gint) = NULL;
-EXTERN void (*stop_tickler_f)(gint) = NULL;
-EXTERN GList *(*get_list_f)(gchar *) = NULL;
-EXTERN void (*set_widget_sensitive_f)(gpointer, gpointer) = NULL;
-EXTERN void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean) = NULL;
+EXTERN gint (*convert_before_download_f)(GtkWidget *, gfloat);
+EXTERN void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
+EXTERN void (*error_msg_f)(const gchar *);
+EXTERN gboolean (*get_symbol_f)(const gchar *, void **);
+EXTERN GtkWidget *(*lookup_widget_f)(const gchar *);
+EXTERN void (*io_cmd_f)(const gchar *,void *);
+EXTERN OutputData *(*initialize_outputdata_f)(void);
+EXTERN void *(*dbg_func_f)(int,gchar *);
+EXTERN void (*start_tickler_f)(gint);
+EXTERN void (*stop_tickler_f)(gint);
+EXTERN GList *(*get_list_f)(gchar *);
+EXTERN void (*set_widget_sensitive_f)(gpointer, gpointer);
+EXTERN void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
 /* Function Pointers */
 
 

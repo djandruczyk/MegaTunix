@@ -56,6 +56,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	GdkColor black = { 0, 0, 0, 0};
 
 	/* Get widget ptrs */
+	if (!jsdata.manual_f)
+		jsdata.manual_f = lookup_widget_f("JS_manual_rpm_frame");
 	if (!jsdata.start_e)
 		jsdata.start_e = lookup_widget_f("JS_start_rpm_entry");
 	if (!jsdata.end_e)
@@ -182,6 +184,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	jsdata.current = jsdata.start;
 	jsdata.reset = TRUE;
 
+	gtk_widget_set_sensitive(jsdata.manual_f,FALSE);
 	gtk_widget_set_sensitive(jsdata.start_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.end_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.step_e,FALSE);
@@ -216,6 +219,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 		if (jsdata->sweep_id)
 			g_source_remove(jsdata->sweep_id);
 		jsdata->reset = TRUE;
+		gtk_widget_set_sensitive(jsdata->manual_f,TRUE);
 		gtk_widget_set_sensitive(jsdata->start_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->end_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->step_e,TRUE);

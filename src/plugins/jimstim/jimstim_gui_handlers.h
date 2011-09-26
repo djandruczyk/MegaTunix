@@ -29,7 +29,8 @@
 typedef enum
 {
         SWEEP_START = LAST_COMMON_STD_HANDLER_ENUM + 1,
-        SWEEP_STOP
+        SWEEP_STOP,
+	RPM_MODE
 }JimStimStdHandler;
 
 /* Prototypes */
@@ -41,9 +42,6 @@ gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
 gboolean ecu_update_combo(GtkWidget *, gpointer);
 gboolean jimstim_rpm_value_changed(GtkWidget *, gpointer);
-
 /* Prototypes */
-
-
 #endif
 

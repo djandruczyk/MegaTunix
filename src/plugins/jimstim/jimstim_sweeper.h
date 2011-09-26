@@ -55,6 +55,7 @@ struct _JimStim_Data
 	GtkWidget *step_rb;	/*!< Favor step radiobutton */
 	GtkWidget *sweep_rb;	/*!< Favor sweep radiobutton */
 	GtkWidget *frame;	/*!< JS controls frame */
+	GtkWidget *manual_f;	/*!< Manual RPM control frame */
 	gint start;		/*!< start value */
 	gint end;		/*!< end value */
 	gint step;		/*!< step value */

@@ -45,6 +45,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f = DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
 
+	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
+	g_assert(convert_before_download_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	g_assert(dbg_func_f);
 	get_symbol_f("get_list",(void *)&get_list_f);
@@ -55,6 +57,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_assert(io_cmd_f);
 	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
 	g_assert(lookup_widget_f);
+	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
+	g_assert(ms_send_to_ecu_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	g_assert(set_widget_sensitive_f);
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);
@@ -93,6 +97,8 @@ void register_ecu_enums(void)
 				GINT_TO_POINTER (SWEEP_START));
 		g_hash_table_insert (str_2_enum, "_SWEEP_STOP_",
 				GINT_TO_POINTER (SWEEP_STOP));
+		g_hash_table_insert (str_2_enum, "_RPM_MODE_",
+				GINT_TO_POINTER (RPM_MODE));
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
@@ -111,6 +117,7 @@ void deregister_ecu_enums(void)
 	{
 		g_hash_table_remove (str_2_enum, "_SWEEP_START_");
 		g_hash_table_remove (str_2_enum, "_SWEEP_STOP_");
+		g_hash_table_remove (str_2_enum, "_RPM_MODE_");
 
 	}
 	else
