@@ -121,21 +121,21 @@ tooltip=Commanded RPM, valid range of 0,60 to 65534 RPM.  Set to 65535 to re-ena
 [start_rpm_entry]
 keys=size,raw_lower,raw_upper,tooltip
 size=_U16_
-raw_lower=60
-raw_upper=65534
-tooltip=Start RPM for RPM sweeping, 60-65534 range
+raw_lower=-1
+raw_upper=65533
+tooltip=Start RPM for RPM sweeping, 0-65533 range
 
 [end_rpm_entry]
 keys=size,raw_lower,raw_upper,tooltip
 size=_U16_
-raw_lower=61
+raw_lower=0
 raw_upper=65534
-tooltip=End RPM for RPM sweeping, 60-65534 range
+tooltip=End RPM for RPM sweeping, 1-65534 range
 
 [step_rpm_entry]
 keys=size,raw_upper,tooltip
 size=_U16_
-raw_upper=1000
+raw_upper=2001
 tooltip=RPM Step, how many RPM to increase or decrese on each update
 
 [sweep_time_entry]
