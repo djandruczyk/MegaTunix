@@ -32,6 +32,7 @@
 
 /* Function Pointers */
 EXTERN gint (*convert_before_download_f)(GtkWidget *, gfloat);
+EXTERN gfloat (*convert_after_upload_f)(GtkWidget *);
 EXTERN void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
 EXTERN void (*error_msg_f)(const gchar *);
 EXTERN gboolean (*get_symbol_f)(const gchar *, void **);

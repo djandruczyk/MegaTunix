@@ -523,7 +523,7 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="adjustment">0 0 20000 1 1 1</property>
-                                        <signal name="value_changed" handler="jimstim_rpm_value_changed"/>
+                                        <signal name="value_changed" handler="common_slider_handler"/>
                                       </widget>
                                       <packing>
                                         <property name="left_attach">2</property>

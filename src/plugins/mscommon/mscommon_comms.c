@@ -440,86 +440,120 @@ G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize
 		default:
 			printf(_("ms_send_to_ecu() ERROR!!! Size undefined for variable at canID %i, page %i, offset %i\n"),canID,page,offset);
 	}
-	output = initialize_outputdata_f();
-	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
-	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
-	DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
-	DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
-	DATA_SET(output->data,"value", GINT_TO_POINTER(value));
-	DATA_SET(output->data,"size", GINT_TO_POINTER(size));
-	DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(get_multiplier_f(size)));
-	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
-	/* SPECIAL case for MS2,  as it's write always assume a "datablock"
-	 * and it doesn't have a simple easy write api due to it's use of 
-	 * different sized vars,  hence the extra complexity.
+	/* If the ecu is multi-page, run the handler to take care of queing
+	 * burns and/or page changing
 	 */
-	if (firmware->capabilities & MS2)
+	if (firmware->multi_page)
+		ms_handle_page_change(page,(GINT)DATA_GET(global_data,"last_page"));
+	/* VERY special case for busted as MS-1 which can only accept 8 bit
+	   writes
+	   */
+	if ((firmware->capabilities & MS1) && ((size == MTX_U16) || (size == MTX_S16)))
 	{
-		/* Get memory */
-		data = g_new0(guint8,get_multiplier_f(size));
-		switch (size)
+		/* First byte */
+		output = initialize_outputdata_f();
+		output->queue_update = queue_update;
+		DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
+		DATA_SET(output->data,"page", GINT_TO_POINTER(page));
+		DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+		DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
+		DATA_SET(output->data,"value", GINT_TO_POINTER((value & 0xff00)>> 8));
+		DATA_SET(output->data,"size", GINT_TO_POINTER(MTX_U08));
+		DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(get_multiplier_f(MTX_U08)));
+		DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
+		io_cmd_f(firmware->write_command,output);
+		/* Second byte */
+		output = initialize_outputdata_f();
+		output->queue_update = queue_update;
+		DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
+		DATA_SET(output->data,"page", GINT_TO_POINTER(page));
+		DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+		DATA_SET(output->data,"offset", GINT_TO_POINTER(offset+1));
+		DATA_SET(output->data,"value", GINT_TO_POINTER(value & 0xff));
+		DATA_SET(output->data,"size", GINT_TO_POINTER(MTX_U08));
+		DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(get_multiplier_f(MTX_U08)));
+		DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
+		io_cmd_f(firmware->write_command,output);
+	}
+	else
+	{
+		/* Normal 8 bit stuff */
+		output = initialize_outputdata_f();
+		output->queue_update = queue_update;
+		DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
+		DATA_SET(output->data,"page", GINT_TO_POINTER(page));
+		DATA_SET(output->data,"phys_ecu_page", GINT_TO_POINTER(firmware->page_params[page]->phys_ecu_page));
+		DATA_SET(output->data,"offset", GINT_TO_POINTER(offset));
+		DATA_SET(output->data,"value", GINT_TO_POINTER(value));
+		DATA_SET(output->data,"size", GINT_TO_POINTER(size));
+		DATA_SET(output->data,"num_bytes", GINT_TO_POINTER(get_multiplier_f(size)));
+		DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_SIMPLE_WRITE));
+		/* SPECIAL case for MS2, as it's write always assume a "datablock"
+		 * and it doesn't have a simple easy write api due to it's use of 
+		 * different sized vars,  hence the extra complexity.
+		 */
+		if (firmware->capabilities & MS2)
 		{
-			case MTX_CHAR:
-			case MTX_U08:
-				data[0] = (guint8)value;
-				break;
-			case MTX_S08:
-				data[0] = (gint8)value;
-				break;
-			case MTX_U16:
-				if (firmware->bigendian)
-					u16 = GUINT16_TO_BE((guint16)value);
-				else
-					u16 = GUINT16_TO_LE((guint16)value);
-				data[0] = (guint8)u16;
-				data[1] = (guint8)((guint16)u16 >> 8);
-				break;
-			case MTX_S16:
-				if (firmware->bigendian)
-					s16 = GINT16_TO_BE((gint16)value);
-				else
-					s16 = GINT16_TO_LE((gint16)value);
-				data[0] = (guint8)s16;
-				data[1] = (guint8)((gint16)s16 >> 8);
-				break;
-			case MTX_S32:
-				if (firmware->bigendian)
-					s32 = GINT32_TO_BE((gint32)value);
-				else
-					s32 = GINT32_TO_LE((gint32)value);
-				data[0] = (guint8)s32;
-				data[1] = (guint8)((gint32)s32 >> 8);
-				data[2] = (guint8)((gint32)s32 >> 16);
-				data[3] = (guint8)((gint32)s32 >> 24);
-				break;
-			case MTX_U32:
-				if (firmware->bigendian)
-					u32 = GUINT32_TO_BE((guint32)value);
-				else
-					u32 = GUINT32_TO_LE((guint32)value);
-				data[0] = (guint8)u32;
-				data[1] = (guint8)((guint32)u32 >> 8);
-				data[2] = (guint8)((guint32)u32 >> 16);
-				data[3] = (guint8)((guint32)u32 >> 24);
-				break;
-			default:
-				break;
+			/* Get memory */
+			data = g_new0(guint8,get_multiplier_f(size));
+			switch (size)
+			{
+				case MTX_CHAR:
+				case MTX_U08:
+					data[0] = (guint8)value;
+					break;
+				case MTX_S08:
+					data[0] = (gint8)value;
+					break;
+				case MTX_U16:
+					if (firmware->bigendian)
+						u16 = GUINT16_TO_BE((guint16)value);
+					else
+						u16 = GUINT16_TO_LE((guint16)value);
+					data[0] = (guint8)u16;
+					data[1] = (guint8)((guint16)u16 >> 8);
+					break;
+				case MTX_S16:
+					if (firmware->bigendian)
+						s16 = GINT16_TO_BE((gint16)value);
+					else
+						s16 = GINT16_TO_LE((gint16)value);
+					data[0] = (guint8)s16;
+					data[1] = (guint8)((gint16)s16 >> 8);
+					break;
+				case MTX_S32:
+					if (firmware->bigendian)
+						s32 = GINT32_TO_BE((gint32)value);
+					else
+						s32 = GINT32_TO_LE((gint32)value);
+					data[0] = (guint8)s32;
+					data[1] = (guint8)((gint32)s32 >> 8);
+					data[2] = (guint8)((gint32)s32 >> 16);
+					data[3] = (guint8)((gint32)s32 >> 24);
+					break;
+				case MTX_U32:
+					if (firmware->bigendian)
+						u32 = GUINT32_TO_BE((guint32)value);
+					else
+						u32 = GUINT32_TO_LE((guint32)value);
+					data[0] = (guint8)u32;
+					data[1] = (guint8)((guint32)u32 >> 8);
+					data[2] = (guint8)((guint32)u32 >> 16);
+					data[3] = (guint8)((guint32)u32 >> 24);
+					break;
+				default:
+					break;
+			}
+			DATA_SET_FULL(output->data,"data", (gpointer)data,g_free);
 		}
-		DATA_SET_FULL(output->data,"data", (gpointer)data,g_free);
+		io_cmd_f(firmware->write_command,output);
 	}
 
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */
 	ms_set_ecu_data(canID,page,offset,size,value);
-	/* If the ecu is multi-page, run the handler to take care of queing
-	 * burns and/or page changing
-	 */
-	if (firmware->multi_page)
-		ms_handle_page_change(page,(GINT)DATA_GET(global_data,"last_page"));
 
-	output->queue_update = queue_update;
-	io_cmd_f(firmware->write_command,output);
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
 	return;
 }
@@ -649,7 +683,6 @@ G_MODULE_EXPORT void update_write_status(void *data)
 
 	if (output->queue_update)
 	{
-		/*printf("queue update!\n");*/
 		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 		for (i=0;i<firmware->total_tables;i++)
 		{

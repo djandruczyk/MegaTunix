@@ -60,6 +60,7 @@ gboolean common_slider_handler(GtkWidget *, gpointer);
 gboolean common_combo_handler(GtkWidget *, gpointer);
 gboolean common_spin_button_handler(GtkWidget *, gpointer);
 
+void update_range(GtkWidget *, gfloat);
 void update_combo(GtkWidget *);
 void update_entry(GtkWidget *);
 void update_checkbutton(GtkWidget *);

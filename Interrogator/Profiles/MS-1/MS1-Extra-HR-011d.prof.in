@@ -530,7 +530,7 @@ SliderMapFile=MS1-Extra
 RuntimeTextMapFile=MS1-Extra
 StatusMapFile=MS1-Extra
 
-LoadTabs=runtime,datalogging,logviewer,tools,ms1-e-features,ms1-e-fuelconstants,ms1-e-idle,ms1-e-ego,ms1-e-boost-knock,ms1-e-water-nos-launch,ms1-e-crank-ase,ms1-e-hr_011x-output-pins,ms1-e-outputs-sel,ms1-e-traction,ms1-e-hr_11d-wheeldecode,ms1-e-advanced,ms1-e-accelwizard,generic-vetable_12x12x3,generic-sparktable_12x12x2,generic-afrtable_8x8x2,generic-boost_6x6x3,rotary-trail,ms1-e-toothtrigger,error_status
+LoadTabs=runtime,datalogging,logviewer,tools,ms1-e-features,ms1-e-fuelconstants,ms1-e-idle,ms1-e-ego,ms1-e-boost-knock,ms1-e-water-nos-launch,ms1-e-crank-ase,ms1-e-hr_011x-output-pins,ms1-e-outputs-sel,ms1-e-traction,ms1-e-hr_011d-wheeldecode,ms1-e-advanced,ms1-e-accelwizard,generic-vetable_12x12x3,generic-sparktable_12x12x2,generic-afrtable_8x8x2,generic-boost_6x6x3,rotary-trail,ms1-e-toothtrigger,error_status
 
 TabConfs=runtime,datalogging,logviewer,tools,ms1-e-029x-features,ms1-e-hr-fuelconstants,ms1-e-hr-idle,ms1-e-029x-ego,ms1-e-029x-boost-knock,ms1-e-029x-water-nos-launch,ms1-e-029x-crank-ase,ms1-e-hr_011x-output-pins,ms1-e-029x-outputs-sel,ms1-e-029x-traction,ms1-e-hr_011d-wheeldecode,ms1-e-029x-advanced,ms1-e-029x-accelwizard,ms1-e-029x-vetable_12x12x3,ms1-e-029x-sparktable_12x12x2,ms1-e-029x-afrtable_8x8x2,ms1-e-029x-boost_6x6x3,ms1-e-029x-rotary-trail,ms1-e-029x-toothtrigger,error_status
 

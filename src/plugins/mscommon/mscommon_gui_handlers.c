@@ -157,16 +157,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		 * and wasting time.
 		 */
 		if (dload_val != ms_get_ecu_data(canID,page,offset,size))
-		{
-			/* special case for the ODD MS-1 variants and the very rare 167 bit variables */
-			if ((firmware->capabilities & MS1) && ((size == MTX_U16) || (size == MTX_S16)))
-			{
-				ms_send_to_ecu(canID, page, offset, MTX_U08, (dload_val &0xff00) >> 8, TRUE);
-				ms_send_to_ecu(canID, page, offset+1, MTX_U08, (dload_val &0x00ff), TRUE);
-			}
-			else
-				ms_send_to_ecu(canID, page, offset, size, dload_val, TRUE);
-		}
+			ms_send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	if (OBJ_GET(widget,"use_color"))
@@ -424,6 +415,7 @@ G_MODULE_EXPORT gboolean common_slider_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	gint dload_val = 0;
 
+	printf("common slider handler!\n");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	get_essentials(widget,&canID,&page,&offset,&size,NULL);
 
@@ -986,33 +978,6 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 		gdk_threads_leave();
 	}
 
-
-	/* OK this is terribly inefficient,  why update 95% of controls that are 
-	   NOT EVEN VISIBLE to the end user.  This causes ver y very bad performance
-	   with firmwares that are complex (MS2-Extra/MS3) or on slow machines (mine)
-
-	   A Better solution is to update the controls WHEN the tab is made visible...
-	   */
-	/* Update all on screen controls (except bitfields (done above)*/
-	/*
-	gdk_threads_enter();
-	for (page=0;page<firmware->total_pages;page++)
-	{
-		if ((DATA_GET(global_data,"leaving")) || (!firmware))
-			return;
-		if (!firmware->page_params[page]->dl_by_default)
-			continue;
-		thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Updating Controls on Page %i</b>"),page));
-		for (offset=0;offset<firmware->page_params[page]->length;offset++)
-		{
-			if ((DATA_GET(global_data,"leaving")) || (!firmware))
-				return;
-			if (ecu_widgets[page][offset] != NULL)
-				g_list_foreach(ecu_widgets[page][offset],
-						update_widget,NULL);
-		}
-	}
-	*/
 	for (i=0;i<firmware->total_tables;i++)
 		firmware->table_params[i]->color_update = TRUE;
 
@@ -1305,7 +1270,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	else if (GTK_IS_CHECK_BUTTON(widget))
 		update_checkbutton(widget);
 	else if (GTK_IS_RANGE(widget))
-		gtk_range_set_value(GTK_RANGE(widget),value);
+		update_range(widget,value);
 	else if (GTK_IS_SCROLLED_WINDOW(widget))
 	{
 		/* This will looks really weird, but is used in the 
@@ -1318,6 +1283,42 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 		update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
 	}
 	/* IF control has groups linked to it's state, adjust */
+}
+
+
+/*!
+  \brief updates a gtk range 
+  \param widget is the pointer to the range
+  */
+void update_range(GtkWidget *widget, gfloat value)
+{
+	gint dl_type = 0;
+	GtkAdjustment *adj = NULL;
+
+	dl_type = (GINT)OBJ_GET(widget,"dl_type");
+	adj = gtk_range_get_adjustment(GTK_RANGE(widget));
+
+	printf("blocking!\n");
+	g_signal_handlers_block_by_func(G_OBJECT(widget),
+			G_CALLBACK(common_slider_handler), NULL);
+	if (value > adj->upper)
+	{
+		printf("setting value to upper!\n");
+		gtk_range_set_value(GTK_RANGE(widget),adj->upper);
+	}
+	else if (value < adj->lower)
+	{
+		printf("setting value to lower!\n");
+		gtk_range_set_value(GTK_RANGE(widget),adj->lower);
+	}
+	else
+	{
+		printf("setting value to %f!\n",value);
+		gtk_range_set_value(GTK_RANGE(widget),value);
+	}
+	printf("unblocking!\n");
+	g_signal_handlers_unblock_by_func(G_OBJECT(widget),
+			G_CALLBACK(common_slider_handler), NULL);
 }
 
 

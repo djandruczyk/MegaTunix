@@ -98,6 +98,7 @@ bitvals=0,255
 tooltip=Sets the RPM output of the jimstim to be either controlled by megatunix or set by the Pot(s) on the jimstim itself
 
 #----- Sliders ---------------------------------------------------------------
+
 [rpm_slider]
 keys=offset,size,raw_lower,raw_upper,tooltip,special
 offset=1

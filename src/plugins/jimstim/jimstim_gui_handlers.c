@@ -155,7 +155,6 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			return FALSE;
 	}
 	gtk_tree_model_get(model,&iter,BITVAL_COL,&bitval,-1);
-	printf("bitval chosen %i\n",bitval);
 
 	switch ((JimStimStdHandler)handler)
 	{
@@ -164,18 +163,22 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			g_return_val_if_fail(partner,FALSE);
 			tmpbuf = (gchar *)gtk_entry_get_text(GTK_ENTRY(partner));
 			last_rpm =  (GINT)g_strtod(tmpbuf,NULL);
-			printf("last RPM %i\n",last_rpm);
 			if (bitval == 255) /* manual mode */
+			{
+				gtk_widget_set_sensitive(lookup_widget_f("JS_manual_rpm_frame"),FALSE);
 				dload_val = 65535;
+			}
 			else
+			{
+				gtk_widget_set_sensitive(lookup_widget_f("JS_manual_rpm_frame"),TRUE);
 				dload_val = last_rpm;
-			printf("Attempted to set dload_val to %i\n",dload_val);
+			}
 			break;
 		default:
 			printf("ERROR, case not handled, jimstim ecu combo button handler!\n");
 			break;
 	}
-        ms_send_to_ecu_f(canID, page, offset, size, dload_val, FALSE);
+	ms_send_to_ecu_f(canID, page, offset, MTX_U16, dload_val, FALSE);
 	return TRUE;
 }
 
@@ -188,6 +191,26 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget *widget, gpointer data)
 {
+	gfloat value = 0.0;
+	GtkTreeModel *model = NULL;
+	GtkTreeIter iter;
+	JimStimStdHandler handler;
+	GdkColor white = {0,65535,65535,65535};
+
+	handler = (JimStimStdHandler)OBJ_GET(widget,"handler");
+	if (handler == RPM_MODE)
+	{
+		value = convert_after_upload_f(widget);
+		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
+
+		/* If set to 65535, pick secodn choice, otherwise first one..
+		   */
+		gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model),&iter);
+		if ((GINT)value == 65535)
+			gtk_tree_model_iter_next (GTK_TREE_MODEL(model), &iter);
+		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
+		gtk_widget_modify_base(gtk_bin_get_child(GTK_BIN(widget)),GTK_STATE_NORMAL,&white);
+	}
 	return TRUE;
 }
 
@@ -204,6 +227,8 @@ G_MODULE_EXPORT gboolean jimstim_rpm_value_changed(GtkWidget *widget, gpointer d
 	gchar *widget_name = NULL;
 	GtkWidget *entry = NULL;
 	gint val = 0;
+
+	printf("slider moved!\n");
 	widget_name = OBJ_GET(widget,"special");
 	g_return_val_if_fail(widget_name,FALSE);
 	entry = lookup_widget_f(widget_name);
