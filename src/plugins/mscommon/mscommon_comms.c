@@ -868,7 +868,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	{
 		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port considered open, but throwing errors\n"));
 		i = 0;
-		while (i <= 5)
+		while (i <= 2)
 		{
 			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Calling comms_test, attempt %i\n",i));
 			if (comms_test())
@@ -922,7 +922,8 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 				g_usleep(200000);
 				continue;
 			}
-			g_usleep(100000);
+			/* Wait 200 ms to avoid deadlocking */
+			g_usleep(200000);
 			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Attempting to open port %s\n",vector[i]));
 			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open port %s\n"),vector[i]),FALSE,FALSE);
 			if (lock_serial_f(vector[i]))
