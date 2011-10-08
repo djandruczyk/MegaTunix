@@ -174,6 +174,9 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	GCond *rtv_thread_cond = NULL;
 	GMutex *rtv_thread_mutex = NULL;
 	gint count = 0;
+	gint io_queue_len = 0;
+	gint pf_queue_len = 0;
+	gint delay = 0;
 
 	g_mutex_lock(mutex);
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -211,18 +214,22 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		count = 0;
 
 		/* Auto-throttling if gui gets sluggish */
-		while (( g_async_queue_length(io_data_queue) > 2) || 
-				(g_async_queue_length(pf_dispatch_queue) > 3))
+		while ((g_async_queue_length(io_data_queue) > 2) || (g_async_queue_length(pf_dispatch_queue) > 3))
 		{
 			count++;
-			//printf("Auto-throttling, io queue length %i, pf queue length %i, loop iterations %i\n",g_async_queue_length(io_data_queue), g_async_queue_length(pf_dispatch_queue),count);
-			//pf_dispatcher(NULL);
+			pf_queue_len = g_async_queue_length(pf_dispatch_queue);
+			io_queue_len = g_async_queue_length(io_data_queue);
+			//printf("Auto-throttling, io queue length %i, pf queue length %i, loop iterations %i\n",io_queue_len,pf_queue_len,count);
 			g_get_current_time(&time);
-			g_time_val_add(&time,10000*g_async_queue_length(pf_dispatch_queue));
+			delay = MAX(io_queue_len,pf_queue_len);
+
+			g_time_val_add(&time,10000*(delay));
+			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
 			if (g_cond_timed_wait(rtv_thread_cond,rtv_thread_mutex,&time))
 				goto breakout;
 		}
 		g_get_current_time(&time);
+		//printf("serial_params->read_wait is %i\n",serial_params->read_wait);
 		g_time_val_add(&time,serial_params->read_wait*1000);
 		if (g_cond_timed_wait(rtv_thread_cond,rtv_thread_mutex,&time))
 			goto breakout;

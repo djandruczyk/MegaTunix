@@ -918,12 +918,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			{
 				dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s does NOT exist\n",vector[i]));
 
-				/* Wait 200 ms to avoid deadlocking */
-				g_usleep(200000);
+				/* Wait 100 ms to avoid deadlocking */
+				g_usleep(100000);
 				continue;
 			}
-			/* Wait 200 ms to avoid deadlocking */
-			g_usleep(200000);
+			/* Wait 100 ms to avoid deadlocking */
+			g_usleep(100000);
 			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Attempting to open port %s\n",vector[i]));
 			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open port %s\n"),vector[i]),FALSE,FALSE);
 			if (lock_serial_f(vector[i]))
