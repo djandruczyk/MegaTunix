@@ -536,7 +536,7 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 		}
 		else
 		{
-			test->result_type=translate_string_f(tmpbuf);
+			test->result_type = translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if (!cfg_read_string(cfgfile,section,"test_func",&test->test_func))
@@ -734,26 +734,46 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 		{
 			case COUNT:
 				if (test->num_bytes == atoi(vector[1]))
-					pass=TRUE;
+					pass = TRUE;
 				break;
 			case NUMMATCH:
-				if ((GINT)(test->result_str[0]) == atoi(vector[1]))
-					pass=TRUE;
+				if (test->result_str)
+				{
+					if ((GINT)(test->result_str[0]) == atoi(vector[1]))
+						pass = TRUE;
+				}
+				else
+					pass = FALSE;
 				break;
 			case SUBMATCH:
-				if (strstr(test->result_str,vector[1]) != NULL)
-					pass=TRUE;
+				if (test->result_str)
+				{
+					if (strstr(test->result_str,vector[1]) != NULL)
+						pass = TRUE;
+				}
+				else
+					pass = FALSE;
 				break;
 			case FULLMATCH:
-				if (g_ascii_strcasecmp(test->result_str,vector[1]) == 0)
-					pass=TRUE;
+				if (test->result_str)
+				{
+					if (g_ascii_strcasecmp(test->result_str,vector[1]) == 0)
+						pass = TRUE;
+				}
+				else
+					pass = FALSE;
 				break;
 			case REGEX:
-				if (g_regex_match_simple(vector[1],test->result_str,0,0))
-					pass=TRUE;
+				if (test->result_str)
+				{
+					if (g_regex_match_simple(vector[1],test->result_str,0,0))
+						pass = TRUE;
+				}
+				else
+					pass = FALSE;
 				break;
 			default:
-				pass=FALSE;
+				pass = FALSE;
 		}
 		g_strfreev(vector);
 		if (pass == TRUE)
