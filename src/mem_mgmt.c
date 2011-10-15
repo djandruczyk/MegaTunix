@@ -97,7 +97,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			return (gint32)result;
 			break;
 		default:
-			printf(__FILE__": _get_sized_data() SIZE INVALID!!!\n");
+			printf(__FILE__": _get_sized_data() Data type invalid! (SIZE INVALID!!!) Try one of U08,U16,U32,S08,S16,S32...\n");
 			break;
 	}
 	return 0;

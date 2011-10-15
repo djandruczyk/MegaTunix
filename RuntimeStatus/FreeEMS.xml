@@ -18,7 +18,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>AllFlags</source>
+		<source>decoderFlags</source>
 		<bitval>1</bitval>
 		<bitmask>1</bitmask>
 	</status>
@@ -27,7 +27,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>AllFlags</source>
+		<source>decoderFlags</source>
 		<bitval>1</bitval>
 		<bitmask>2</bitmask>
 	</status>
@@ -36,7 +36,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>AllFlags</source>
+		<source>decoderFlags</source>
 		<bitval>1</bitval>
 		<bitmask>4</bitmask>
 	</status>
@@ -45,7 +45,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>AllFlags</source>
+		<source>decoderFlags</source>
 		<bitval>1</bitval>
 		<bitmask>8</bitmask>
 	</status>
@@ -54,7 +54,7 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>AllFlags</source>
+		<source>decoderFlags</source>
 		<bitval>1</bitval>
 		<bitmask>16</bitmask>
 	</status>
@@ -63,8 +63,134 @@
 		<active_fg>red</active_fg>
 		<inactive_fg>dim grey</inactive_fg>
 		<bind_to_list>runtime_status</bind_to_list>
-		<source>AllFlags</source>
+		<source>coreStatusA</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>Calls To Unimplemented ISRs</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>Low Voltage Conditions</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>2</bitmask>
+	</status>
+	<status>
+		<label>Decoder Sync Losses</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>4</bitmask>
+	</status>
+	<status>
+		<label>Decoder Sync Corrections</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>8</bitmask>
+	</status>
+	<status>
+		<label>Decoder Sync State Clears</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>16</bitmask>
+	</status>
+	<status>
+		<label>Serial Noise Errors</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>32</bitmask>
+	</status>
+	<status>
+		<label>Serial Framing Errors</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>64</bitmask>
+	</status>
+	<status>
+		<label>Serial Parity Errors</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>128</bitmask>
+	</status>
+	<status>
+		<label>Serial Overrun Errors</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
 		<bitval>1</bitval>
 		<bitmask>256</bitmask>
+	</status>
+	<status>
+		<label>Serial Escape Pair Mismatches</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>512</bitmask>
+	</status>
+	<status>
+		<label>Serial Starts Inside A Packet</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>1024</bitmask>
+	</status>
+	<status>
+		<label>Serial Packets Over Length</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>2048</bitmask>
+	</status>
+	<status>
+		<label>Serial Checksum Mismatches</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>4096</bitmask>
+	</status>
+	<status>
+		<label>Serial Packets Under Length</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>flaggableFlags</source>
+		<bitval>1</bitval>
+		<bitmask>8192</bitmask>
 	</status>
 </runtimestatus>

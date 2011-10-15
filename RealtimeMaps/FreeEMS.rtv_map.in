@@ -5,7 +5,11 @@ minor=7
 [realtime_map]
 persona=FreeEMS
 applicable_firmwares=FreeEMS 0.0.0
-derived_total=54
+derived_total=60
+
+# -----------------------------------------------------------------------------
+# The first variable is MegaTunix's internal high resolution clock, not from us
+# -----------------------------------------------------------------------------
 
 [derived_0]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,special,precision,tooltip,real_lower,real_upper,log_by_default
@@ -19,6 +23,10 @@ precision=3
 special=hr_clock
 _tooltip="HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.
 log_by_default=TRUE
+
+# -----------------------------------------------------------------------------
+# CoreVars struct contents
+# -----------------------------------------------------------------------------
 
 [derived_1]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,tooltip,real_lower,real_upper,temp_dep,precision,log_by_default
@@ -244,6 +252,10 @@ precision=1
 _tooltip="DDRPM" will be the Delta Delta Engine RPM in RPM/second^2 or similar but is currently unused
 log_by_default=TRUE
 
+# -----------------------------------------------------------------------------
+# DerivedVars struct contents
+# -----------------------------------------------------------------------------
+
 [derived_17]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
@@ -425,6 +437,10 @@ precision=3
 _tooltip="Dwell" is the time a coil spends on before it fires, in ms
 log_by_default=TRUE
 
+# -----------------------------------------------------------------------------
+# KeyUserDebugs struct contents
+# -----------------------------------------------------------------------------
+
 [derived_30]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
@@ -440,111 +456,187 @@ log_by_default=TRUE
 
 [derived_31]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=AllFlags
-_dlog_gui_name=AllFlags
-dlog_field_name=AllFlags
+size=_U08_
+internal_names=coreStatusA
+_dlog_gui_name=coreStatusA
+dlog_field_name=coreStatusA
 offset=60
 real_lower=0
-real_upper=65535
+real_upper=255
 precision=0
-_tooltip="AllFlags" is actually two 8 bit fields, but Fred didn't want to attempt that change...
+_tooltip=FreeEMS status bits, right now, not much, just fuel pump prime
 log_by_default=TRUE
 
 [derived_32]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=zsp17
-_dlog_gui_name=zsp17
-dlog_field_name=zsp17
-offset=62
+size=_U08_
+internal_names=decoderFlags
+_dlog_gui_name=decoderFlags
+dlog_field_name=decoderFlags
+offset=61
 real_lower=0
-real_upper=65535
+real_upper=255
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=Decoder status bits, sync levels, and other details
 log_by_default=TRUE
 
 [derived_33]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
-internal_names=zsp16
-_dlog_gui_name=Sync Corrections
-dlog_field_name=zsp16
-offset=64
-# Upper should be 65535 but we're using it for an 8 bit var in the firmware.
+internal_names=flaggableFlags
+_dlog_gui_name=flaggableFlags
+dlog_field_name=flaggableFlags
+offset=62
 real_lower=0
-real_upper=255
+real_upper=65535
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=Counter incremented status bits for various things like comms and decoders etc.
 log_by_default=TRUE
 
 [derived_34]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=zsp15
-_dlog_gui_name=Sync Losses
-dlog_field_name=zsp15
-offset=66
-# Upper should be 65535 but we're using it for an 8 bit var in the firmware.
+size=_U08_
+internal_names=currentEvent
+_dlog_gui_name=currentEvent
+dlog_field_name=currentEvent
+offset=64
 real_lower=0
 real_upper=255
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=The input event which was last to come in
 log_by_default=TRUE
 
 [derived_35]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=zsp14
-_dlog_gui_name=zsp14
-dlog_field_name=zsp14
-offset=68
+size=_U08_
+internal_names=syncLostWithThisID
+_dlog_gui_name=syncLostWithThisID
+dlog_field_name=syncLostWithThisID
+offset=65
 real_lower=0
-real_upper=65535
+real_upper=255
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=A unique identifier for the reason behind a loss of sync
 log_by_default=TRUE
 
 [derived_36]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=zsp13
-_dlog_gui_name=zsp13
-dlog_field_name=zsp13
-offset=70
+size=_U08_
+internal_names=syncLostOnThisEvent
+_dlog_gui_name=syncLostOnThisEvent
+dlog_field_name=syncLostOnThisEvent
+offset=66
 real_lower=0
-real_upper=65535
+real_upper=255
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=Where in the input pattern it all went very badly wrong
 log_by_default=TRUE
 
 [derived_37]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=zsp12
-_dlog_gui_name=zsp12
-dlog_field_name=zsp12
-offset=72
+size=_U08_
+internal_names=syncCaughtOnThisEvent
+_dlog_gui_name=syncCaughtOnThisEvent
+dlog_field_name=syncCaughtOnThisEvent
+offset=67
 real_lower=0
-real_upper=65535
+real_upper=255
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=Where in the input pattern that things started making sense
 log_by_default=TRUE
 
 [derived_38]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
-internal_names=zsp11
-_dlog_gui_name=zsp11
-dlog_field_name=zsp11
-offset=74
+size=_U08_
+internal_names=syncResetCalls
+_dlog_gui_name=syncResetCalls
+dlog_field_name=syncResetCalls
+offset=68
 real_lower=0
-real_upper=65535
+real_upper=255
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=Sum of losses, corrections and state clears
 log_by_default=TRUE
 
 [derived_39]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U08_
+internal_names=primaryTeethSeen
+_dlog_gui_name=primaryTeethSeen
+dlog_field_name=primaryTeethSeen
+offset=69
+real_lower=0
+real_upper=255
+precision=0
+_tooltip=Free running counters for number of input events, useful at lower RPM
+log_by_default=TRUE
+
+[derived_40]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U08_
+internal_names=secondaryTeethSeen
+_dlog_gui_name=secondaryTeethSeen
+dlog_field_name=secondaryTeethSeen
+offset=70
+real_lower=0
+real_upper=255
+precision=0
+_tooltip=Free running counters for number of input events, useful at lower RPM
+log_by_default=TRUE
+
+[derived_41]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U08_
+internal_names=serialOverrunErrors
+_dlog_gui_name=serialOverrunErrors
+dlog_field_name=serialOverrunErrors
+offset=71
+real_lower=0
+real_upper=255
+precision=0
+_tooltip=Incremented when an overrun occurs due to high interrupt load, not a fault, just a fact of life at high RPM
+log_by_default=TRUE
+
+[derived_42]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U08_
+internal_names=serialHardwareErrors
+_dlog_gui_name=serialHardwareErrors
+dlog_field_name=serialHardwareErrors
+offset=72
+real_lower=0
+real_upper=255
+precision=0
+_tooltip=Sum of noise, parity, and framing errors
+log_by_default=TRUE
+
+[derived_43]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U08_
+internal_names=serialAndCommsCodeErrors
+_dlog_gui_name=serialAndCommsCodeErrors
+dlog_field_name=serialAndCommsCodeErrors
+offset=73
+real_lower=0
+real_upper=255
+precision=0
+_tooltip=Sum of checksum, escape mismatches, starts inside, and over/under length
+log_by_default=TRUE
+
+[derived_44]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
+size=_U16_
+internal_names=inputEventTimeTolerance
+_dlog_gui_name=inputEventTimeTolerance
+dlog_field_name=inputEventTimeTolerance
+offset=74
+real_lower=0
+real_upper=3000
+precision=0
+_tooltip=This describes the error in the timing of one input event to the next. 1000 means steady state RPM with decoder functioning perfectly
+log_by_default=TRUE
+
+[derived_45]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=zsp10
@@ -557,7 +649,7 @@ precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
 
-[derived_40]
+[derived_46]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=zsp9
@@ -570,7 +662,7 @@ precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
 
-[derived_41]
+[derived_47]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=zsp8
@@ -583,7 +675,7 @@ precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
 
-[derived_42]
+[derived_48]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=zsp7
@@ -596,7 +688,7 @@ precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
 
-[derived_43]
+[derived_49]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=zsp6
@@ -609,7 +701,7 @@ precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
 
-[derived_44]
+[derived_50]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=zsp5
@@ -622,7 +714,7 @@ precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
 
-[derived_45]
+[derived_51]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=zsp4
@@ -635,7 +727,7 @@ precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
 
-[derived_46]
+[derived_52]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=zsp3
@@ -648,33 +740,38 @@ precision=0
 _tooltip=This is a spare unsigned 16 bit integer variable
 log_by_default=TRUE
 
-[derived_47]
+[derived_53]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
-internal_names=zsp2
-_dlog_gui_name=zsp2
-dlog_field_name=zsp2
+internal_names=clockInMilliSeconds
+_dlog_gui_name=clockInMilliSeconds
+dlog_field_name=clockInMilliSeconds
 offset=92
 real_lower=0
 real_upper=65535
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=Standard internal clock in milli seconds
 log_by_default=TRUE
 
-[derived_48]
-keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
+[derived_54]
+keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
-internal_names=zsp1
-_dlog_gui_name=zsp1
-dlog_field_name=zsp1
+internal_names=clock8thMSsInMillis
+_dlog_gui_name=clock8thMSsInMillis
+dlog_field_name=clock8thMSsInMillis
 offset=94
 real_lower=0
 real_upper=65535
+fromecu_mult=0.125
 precision=0
-_tooltip=This is a spare unsigned 16 bit integer variable
+_tooltip=High resolution internal clock, in milli seconds, precision is 1/8th of a milli second
 log_by_default=TRUE
 
-[derived_49]
+# -----------------------------------------------------------------------------
+# Calculated variables below, last one above should equal field count from code
+# -----------------------------------------------------------------------------
+
+[derived_55]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_conv_expr,fromecu_complex,tooltip,real_lower,real_upper,log_by_default
 internal_names=FuelDuty
 _dlog_gui_name=Fuel Duty
@@ -695,7 +792,7 @@ RawRPM_size=_U16_
 _tooltip="Fuel Duty" is the duty cycle of the flow period of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.
 log_by_default=FALSE
 
-[derived_50]
+[derived_56]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_conv_expr,fromecu_complex,tooltip,real_lower,real_upper,log_by_default
 internal_names=ElecDuty
 _dlog_gui_name=Elec. Duty
@@ -716,7 +813,7 @@ RawRPM_size=_U16_
 _tooltip="Elec. Duty" is the duty cycle of the electrical pulse width (dead time AND fuel flow) of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.
 log_by_default=FALSE
 
-[derived_51]
+[derived_57]
 keys=internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_conv_expr,fromecu_complex,tooltip,real_lower,real_upper,log_by_default
 internal_names=CoilDuty
 _dlog_gui_name=Coil Duty
@@ -737,7 +834,7 @@ RawRPM_size=_U16_
 _tooltip="Coil Duty" is the duty cycle of the coils for coil on/near/per plug applications. Note if you're wasted spark, this is out by a factor of two, and even worse for dizzy stuff.
 log_by_default=FALSE
 
-[derived_52]
+[derived_58]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,fromecu_add,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=PSI
@@ -753,7 +850,7 @@ precision=2
 _tooltip="Boost" is the manifold pressure in PSI above standard atmospheric pressure
 log_by_default=FALSE
 
-[derived_53]
+[derived_59]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,fromecu_mult,fromecu_add,tooltip,real_lower,real_upper,precision,log_by_default
 size=_U16_
 internal_names=inHg

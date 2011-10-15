@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <runtimestatus>
-        <api>
-                <major>1</major>
-                <minor>0</minor>
-        </api>
+	<api>
+		<major>1</major>
+		<minor>0</minor>
+	</api>
 <!-- Left Top Table Contents -->
 	<rt_rts>
 		<slider_name>rpm</slider_name>
@@ -112,16 +112,28 @@
 		<source>IntegralLambda</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>synclosses</slider_name>
+		<slider_name>syncresets</slider_name>
 		<table>2</table>
 		<row>3</row>
-		<source>zsp15</source>
+		<source>syncResetCalls</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>syncfixes</slider_name>
+		<slider_name>timetolerance</slider_name>
 		<table>2</table>
 		<row>4</row>
-		<source>zsp16</source>
+		<source>inputEventTimeTolerance</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>clock</slider_name>
+		<table>2</table>
+		<row>5</row>
+		<source>tempClock</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>fastclock</slider_name>
+		<table>2</table>
+		<row>6</row>
+		<source>clockInMilliSeconds</source>
 	</rt_rts>
 
 <!-- Right Lower Table Contents -->
@@ -150,10 +162,22 @@
 		<source>TFCTotal</source>
 	</rt_rts>
 	<rt_rts>
-		<slider_name>clock</slider_name>
+		<slider_name>overrunerrors</slider_name>
 		<table>3</table>
 		<row>4</row>
-		<source>tempClock</source>
+		<source>serialOverrunErrors</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>hardwareerrors</slider_name>
+		<table>3</table>
+		<row>5</row>
+		<source>serialHardwareErrors</source>
+	</rt_rts>
+	<rt_rts>
+		<slider_name>codeerrors</slider_name>
+		<table>3</table>
+		<row>6</row>
+		<source>serialAndCommsCodeErrors</source>
 	</rt_rts>
 
 <!--  -->

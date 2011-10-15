@@ -100,11 +100,31 @@
 		<datasource>FuelDuty</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>Sync Losses</internal_name>
-		<datasource>zsp15</datasource>
+		<internal_name>Sync Resets</internal_name>
+		<datasource>syncResetCalls</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>Sync Fixes</internal_name>
-		<datasource>zsp16</datasource>
+		<internal_name>Sync Loss Reason</internal_name>
+		<datasource>syncLostWithThisID</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Sync Loss Event</internal_name>
+		<datasource>syncLostOnThisEvent</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Serial Overruns</internal_name>
+		<datasource>serialOverrunErrors</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Serial HW Errors</internal_name>
+		<datasource>serialHardwareErrors</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Comms Code Errors</internal_name>
+		<datasource>serialAndCommsCodeErrors</datasource>
+	</rtt>
+	<rtt>
+		<internal_name>Time Tolerance</internal_name>
+		<datasource>inputEventTimeTolerance</datasource>
 	</rtt>
 </runtimetext>

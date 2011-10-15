@@ -34,7 +34,7 @@ keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
-source=AllFlags
+source=decoderFlags
 bitval=1
 bitmask=1
 
@@ -43,7 +43,7 @@ keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
-source=AllFlags
+source=decoderFlags
 bitval=1
 bitmask=2
 
@@ -52,7 +52,7 @@ keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
-source=AllFlags
+source=decoderFlags
 bitval=1
 bitmask=4
 
@@ -61,7 +61,7 @@ keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
-source=AllFlags
+source=decoderFlags
 bitval=1
 bitmask=8
 
@@ -70,7 +70,7 @@ keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
-source=AllFlags
+source=decoderFlags
 bitval=1
 bitmask=16
 
@@ -79,7 +79,7 @@ keys=bind_to_list,source,bitval,bitmask,active_fg,inactive_fg
 active_fg=red
 inactive_fg=dim grey
 bind_to_list=runtime_status
-source=AllFlags
+source=coreStatusA
 bitval=1
-bitmask=256
+bitmask=1
 
