@@ -52,3 +52,4 @@ Doxyfile
 doxygen.errors
 *.swp
 megatunix-*
+po/tmp
