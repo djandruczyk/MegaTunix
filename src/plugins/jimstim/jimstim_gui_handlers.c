@@ -137,7 +137,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	gboolean state = FALSE;
 	MSCommonStdHandler handler = 0;
 
-	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
+	get_essential_bits_f(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
 
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	handler = (GINT) OBJ_GET(widget,"handler");
@@ -151,7 +151,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 		 * Do a model scan to see if we actually hit the jackpot or 
 		 * not, and get the iter for it...
 		 */
-		if (!search_model(model,widget,&iter))
+		if (!search_model_f(model,widget,&iter))
 			return FALSE;
 	}
 	gtk_tree_model_get(model,&iter,BITVAL_COL,&bitval,-1);

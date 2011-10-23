@@ -36,6 +36,7 @@ EXTERN gfloat (*convert_after_upload_f)(GtkWidget *);
 EXTERN void (*ms_send_to_ecu_f)(gint, gint, gint, DataSize, gint, gboolean);
 EXTERN void (*error_msg_f)(const gchar *);
 EXTERN gboolean (*get_symbol_f)(const gchar *, void **);
+EXTERN void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *,gint *, gint *);
 EXTERN GtkWidget *(*lookup_widget_f)(const gchar *);
 EXTERN void (*io_cmd_f)(const gchar *,void *);
 EXTERN OutputData *(*initialize_outputdata_f)(void);
@@ -43,6 +44,7 @@ EXTERN void *(*dbg_func_f)(int,gchar *);
 EXTERN void (*start_tickler_f)(gint);
 EXTERN void (*stop_tickler_f)(gint);
 EXTERN GList *(*get_list_f)(gchar *);
+EXTERN gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 EXTERN void (*set_widget_sensitive_f)(gpointer, gpointer);
 EXTERN void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
 /* Function Pointers */

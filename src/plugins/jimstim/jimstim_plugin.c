@@ -51,6 +51,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_assert(convert_before_download_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	g_assert(dbg_func_f);
+	get_symbol_f("get_essential_bits",(void *)&get_essential_bits_f);
+	g_assert(get_essential_bits_f);
 	get_symbol_f("get_list",(void *)&get_list_f);
 	g_assert(get_list_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
@@ -61,6 +63,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_assert(lookup_widget_f);
 	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
 	g_assert(ms_send_to_ecu_f);
+	get_symbol_f("search_model",(void *)&search_model_f);
+	g_assert(search_model_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	g_assert(set_widget_sensitive_f);
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);
