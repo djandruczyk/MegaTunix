@@ -12,12 +12,12 @@ FILETYPE 1
 		{
 			VALUE "CompanyName", "N/A"
 				VALUE "FileDescription", "MegaTunix Tuning Software"
-				VALUE "FileVersion", "@MTX_MAJOR_VERSION@.@MTX_MINOR_VERSION@.@MTX_MICRO_VERSION@-@MTX_VER_SUFFIX@"
+				VALUE "FileVersion", "@MTX_VER_STRING@"
 				VALUE "InternalName", "MegaTunix"
 				VALUE "LegalCopyright", "GNU Public License v2"
 				VALUE "OriginalFilename", "Lots of em..."
 				VALUE "ProductName", "MegaTunix"
-				VALUE "ProductVersion", "@MTX_MAJOR_VERSION@.@MTX_MINOR_VERSION@.@MTX_MICRO_VERSION@-@MTX_VER_SUFFIX@"
+				VALUE "ProductVersion", "@MTX_VER_STRING@"
 		}
 	}
 }
