@@ -23,6 +23,7 @@
   */
 
 #include <args.h>
+#include <config.h>
 #include <debugging.h>
 #include <glade/glade.h>
 #include <glib/gstdio.h>
@@ -369,9 +370,9 @@ G_MODULE_EXPORT void save_config(void)
 	if (!cfgfile)
 		cfgfile = cfg_new();
 
-	cfg_write_int(cfgfile, "Global", "major_ver", _MAJOR_);
-	cfg_write_int(cfgfile, "Global", "minor_ver", _MINOR_);
-	cfg_write_int(cfgfile, "Global", "micro_ver", _MICRO_);
+	cfg_write_int(cfgfile, "Global", "major_ver", MTX_MAJOR);
+	cfg_write_int(cfgfile, "Global", "minor_ver", MTX_MINOR);
+	cfg_write_int(cfgfile, "Global", "micro_ver", MTX_MICRO);
 	cfg_write_boolean(cfgfile, "Global", "Tooltips",(GBOOLEAN)DATA_GET(global_data,"tips_in_use"));
 	cfg_write_boolean(cfgfile, "Global", "LogRawDatastream",(GBOOLEAN)DATA_GET(global_data,"log_raw_datastream"));
 	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(global_data,"network_access"));

@@ -221,10 +221,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	}
 	if (args->version)
 	{
-		if (g_strcasecmp(_VER_SUFFIX_,"") == 0)
-			printf("%i.%i.%i\n",_MAJOR_,_MINOR_,_MICRO_);
-		else
-			printf("%i.%i.%i-%s\n",_MAJOR_,_MINOR_,_MICRO_,_VER_SUFFIX_);
+		printf("MegaTunix Version: %s\n",VERSION);
 		exit(0);
 	}
 	DATA_SET_FULL(global_data,"args",args,args_free);
