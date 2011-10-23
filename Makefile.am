@@ -1,6 +1,6 @@
 # If you want to build these components, please cd to their respective
 # directories and type `make'.
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = gnu
 ACLOCAL_AMFLAGS = -I m4
 
 subdirs = include mtxmatheval mtxcommon widgets msloader src gaugedesigner dashdesigner ecu_snapshots Interrogator LookupTables RealtimeMaps RuntimeSliders RuntimeStatus RuntimeText Gui menu category icons desktop po

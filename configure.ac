@@ -1,8 +1,13 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT
+dnl Version number here MUST be static (uggh, fuck you autoconf!!)
+AC_INIT(megatunix,0.9.24)
 AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_HEADERS([config.h])
+dnl Need to be able to do long paths (over 100chars)
+AM_INIT_AUTOMAKE(tar-ustar)
+AM_MAINTAINER_MODE([enable])
 
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
@@ -17,7 +22,6 @@ else
 	MTX_GIT_HASH="Not built from Git"
 fi
 
-
 AC_CONFIG_SUBDIRS(src/main.c)
 if test x"$MTX_VER_SUFFIX" != "x"; then
 	MTX_VER_STRING="$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION-$MTX_VER_SUFFIX"
@@ -25,10 +29,7 @@ else
 	MTX_VER_STRING="$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION"
 fi
 AC_SUBST(MTX_VER_STRING)
-AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE(megatunix, "$MTX_VER_STRING")
 
-AM_MAINTAINER_MODE([enable])
 
 dnl Checks for programs.
 

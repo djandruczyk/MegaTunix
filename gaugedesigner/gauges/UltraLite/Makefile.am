@@ -10,7 +10,7 @@ gauges_files = 	\
 		ultralite_autometer_temp_Gauge.xml	\
 		ultralite_autometer_afr_Gauge.xml	\
 		ultralite_autometer_volts_Gauge.xml	\
-		ultralite_autometer_MAT_degC_Gauge.xml	\
+		ultralite_autometer_MAT_degC_Gauge.xml  \
 		ultralite_autometer_temp_degC_Gauge.xml \
 		ultralite_autometer_dc_Gauge.xml	\
 		ultralite_autometer_dc2_Gauge.xml
