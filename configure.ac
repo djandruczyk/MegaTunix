@@ -7,7 +7,14 @@ AC_CONFIG_MACRO_DIR([m4])
 MTX_MAJOR_VERSION=0
 MTX_MINOR_VERSION=9
 MTX_MICRO_VERSION=24
-MTX_VER_SUFFIX=`if test -d ./.git ; then echo -n "SNAPSHOT_" ; git show-ref --head HEAD |head -1 |cut -b1-6 ; fi`
+AC_ARG_ENABLE([release], AS_HELP_STRING([--enable-release],[Enable Release versioning]))
+if test "x$enable_release" != "xyes"; 
+then
+	MTX_VER_SUFFIX=`if test -d ./.git ; then echo -n "SNAPSHOT_" ; git show-ref --head HEAD |head -1 |cut -b1-6 ; fi`
+else
+	MTX_VER_SUFFIX=""
+fi
+
 AC_SUBST(MTX_MAJOR_VERSION)
 AC_SUBST(MTX_MINOR_VERSION)
 AC_SUBST(MTX_MICRO_VERSION)
@@ -23,7 +30,7 @@ AC_SUBST(MTX_VER_STRING)
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE(megatunix, "$MTX_VER_STRING")
 
-AM_MAINTAINER_MODE
+AM_MAINTAINER_MODE([enable])
 
 dnl Checks for programs.
 
