@@ -15,8 +15,8 @@ MTX_MICRO_VERSION=24
 AC_ARG_ENABLE([release], AS_HELP_STRING([--enable-release],[Enable Release versioning]))
 if test "x$enable_release" != "xyes"; 
 then
-	MTX_VER_SUFFIX=`if test -d ./.git ; then echo -n "SNAPSHOT_" ; git show-ref --head HEAD |head -1 |cut -b1-6 ; fi`
-	MTX_GIT_HASH=`if test -d ./.git ; then git show-ref --head HEAD |head -1 |cut -f1 -d\  ; fi`
+	MTX_VER_SUFFIX=`if test -d ./.git ; then echo -n "SNAPSHOT_" ; git show-ref --head HEAD |head -1 |cut -b1-6 |tr -d '\n\r'; fi`
+	MTX_GIT_HASH=`if test -d ./.git ; then git show-ref --head HEAD |head -1 |cut -f1 -d\  |tr -d '\n\r' ; fi`
 else
 	MTX_VER_SUFFIX=""
 	MTX_GIT_HASH="Not built from Git"
