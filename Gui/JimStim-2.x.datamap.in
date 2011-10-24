@@ -110,6 +110,12 @@ tooltip=Commanded RPM, valid range of 60 to 65534 RPM.  Set to 65535 to re-enabl
 
 #----- Entries ---------------------------------------------------------------
 
+[wheel_mode_entry]
+keys=offset,raw_upper,tooltip
+offset=0
+raw_upper=63
+tooltip=Wheel mode to simulate
+
 [rpm_entry]
 keys=offset,size,raw_lower,raw_upper,tooltip
 offset=1

@@ -53,6 +53,12 @@ tooltip=Wheel mode to simulate
 
 #----- Entries ---------------------------------------------------------------
 
+[wheel_mode_entry]
+keys=offset,raw_upper,tooltip
+offset=0
+raw_upper=31
+tooltip=Wheel mode to simulate
+
 [rpm_entry]
 keys=offset,size,raw_upper,tooltip
 offset=1
