@@ -57,8 +57,8 @@ warning=foreground,red
 [wheel_mode_combo]
 keys=offset,choices,bitvals,bitmask,tooltip
 offset=0
-choices=Distributor/EDIS,36-1,60-2,4-1,24/2 (Nippondenso),36-1+1,36-2-2-2,6-1,Neon/420A,24+rising/falling LS1,12-1,Subaru 6/7,Trigger return dizzy,Oddfire dizzy,Mitsubishi 6G72,CAS 4/1,4G63 (Miata),Renix 44-2-2,Twin trigger even,Twin trigger odd,Suzuki Swift,Suzuki Vitara 2.0,Daihatsu 3 cyl,Daihatsu 4 cyl,Miata 99-00,Rover 36-1-1,Rover 36-1-1-1-1,Rover 36-2-2,Honda RC51,Chrysler 2.2/2.5,GM 7X (crank only),32-2 Harley,6/1,8/1,10/1,Honda VTR1000 12-3,IAW Weber-Marelli,Fiat 1.8 16V,CAS 360 6cyl,CAS 360 8cyl,4.0 Jeep 2000,3.7 Jeep 2002
-bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,32,33,34,35,36,37,38,39,40,41,42,43
+choices=0: Distributor/EDIS,1: 36-1,2: 60-2,3: 4-1,4: 24/2 (Nippondenso),5: NGC 4 cyl. 36-1+1,6: 36-2-2-2,7: 6-1,8: Neon/420A,9: 24+rising/falling LS1,10: 12-1,11: Subaru 6/7,12: Trigger return dizzy,13: Oddfire dizzy,14: Mitsubishi 6G72,15: Enable Serial Port,16: CAS 4/1,17: 4G63 (Miata),18: Renix 44-2-2,19: Twin trigger even,20: Twin trigger odd,21: Suzuki Swift,22: Suzuki Vitara 2.0,23: Daihatsu 3 cyl,24: Daihatsu 4 cyl,25: Miata 99-00,26: Rover 36-1-1,27: Rover 36-1-1-1-1,28: Rover 36-2-2,29: Honda RC51,30: Chrysler 2.2/2.5,31: DO NOT SELECT,32: GM 7X (crank only),33: 32-2 Harley,34: 6/1,35: 8/1,36: 10/1,37: Honda VTR1000 12-3,38: IAW Weber-Marelli,39: Fiat 1.8 16V,40: Mitsubishi 360 tooth CAS (6cyl),41: Mitsubishi 360 tooth CAS (8cyl),42: 4.0 Jeep 2000,43: 3.7 Jeep 2002,44: NGC 6 cyl. 36-1+1, 45: NGC 8cyl. 36-1+1,46: Custom,47: Custom,48: Custom,49: Custom,50: Custom,51: Custom,52: Custom,53: Custom,54: Custom,55: Custom,56: Custom,57: Custom,58: Custom,59: Custom,60: Custom,61: Custom,62: Custom,63: Custom
+bitvals=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63
 bitmask=63
 tooltip=Wheel mode to simulate
 
