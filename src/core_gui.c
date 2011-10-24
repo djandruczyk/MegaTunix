@@ -129,7 +129,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 	gtk_window_move((GtkWindow *)window, x, y);
 	gtk_widget_set_size_request(window,def_width,def_height);
 	gtk_window_resize(GTK_WINDOW(window),w,h);
-	gtk_window_set_title(GTK_WINDOW(window),"MegaTunix "VERSION);
+	gtk_window_set_title(GTK_WINDOW(window),"MegaTunix "MTX_VER_STRING);
 	finalize_core_gui(xml);
 
 	if (!args->hide_maingui)
@@ -190,7 +190,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("toplevel_notebook",widget);
 	/* Set about tab title */
 	label = glade_xml_get_widget(xml,"about_title_label");
-	tmpbuf = g_strdup_printf(_("MegaTunix %s Tuning Software for Unix-class OS's"),VERSION);
+	tmpbuf = g_strdup_printf(_("MegaTunix %s Tuning Software for Unix-class OS's"),MTX_VER_STRING);
 	gtk_label_set_text(GTK_LABEL(label),tmpbuf);
 	g_free(tmpbuf);
 

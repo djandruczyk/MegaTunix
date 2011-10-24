@@ -389,12 +389,12 @@ G_MODULE_EXPORT void set_title(gchar * text)
 	if (firmware)
 	{
 		if (firmware->actual_signature)
-			tmpbuf = g_strdup_printf("MegaTunix %s,   (%s)   %s",VERSION,firmware->actual_signature,text);
+			tmpbuf = g_strdup_printf("MegaTunix %s,   (%s)   %s",MTX_VER_STRING,firmware->actual_signature,text);
 		else
-			tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+			tmpbuf = g_strconcat("MegaTunix ",MTX_VER_STRING,",   ",text,NULL);
 	}
 	else
-		tmpbuf = g_strconcat("MegaTunix ",VERSION,",   ",text,NULL);
+		tmpbuf = g_strconcat("MegaTunix ",MTX_VER_STRING,",   ",text,NULL);
 
 	gtk_window_set_title(GTK_WINDOW(lookup_widget("main_window")),tmpbuf);
 	g_free(tmpbuf);

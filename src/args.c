@@ -221,7 +221,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	}
 	if (args->version)
 	{
-		printf("MegaTunix Version: %s\n",VERSION);
+		printf("MegaTunix Version: %s\n",MTX_VER_STRING);
 		exit(0);
 	}
 	DATA_SET_FULL(global_data,"args",args,args_free);
