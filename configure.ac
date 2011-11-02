@@ -71,8 +71,8 @@ AC_DEFINE([GETTEXT_PACKAGE], [], ["$GETTEXT_PACKAGE"])
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE")
 ALL_LINGUAS="es fi fr de"
 AM_GLIB_GNU_GETTEXT
-dnl AM_GNU_GETTEXT([external])
-MTXLOCALEDIR=[${prefix}/share/MegaTunix/locale]
+
+MTXLOCALEDIR='${prefix}/share/MegaTunix/locale'
 AC_SUBST(MTXLOCALEDIR)
 
 dnl Checks for header files.

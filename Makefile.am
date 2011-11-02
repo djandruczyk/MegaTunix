@@ -19,10 +19,8 @@ CLEANFILES = *~ core autom4te.cache gmon.out
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update po/.intltool-merge-cache
 
-#EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE ${INTLTOOL_FILES}
-EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE 
-
-
+EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE ${INTLTOOL_FILES}
+#EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE 
 doc:
 	@doxygen
 

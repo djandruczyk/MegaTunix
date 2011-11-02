@@ -132,7 +132,7 @@ do
       fi
       if grep "^AC_PROG_INTLTOOL" "$bn" >/dev/null; then
         echo "Running intltoolize..."
-	intltoolize --copy --automake 1>/dev/null
+	intltoolize --force --copy --automake 1>/dev/null
       fi
       if grep "^AM_PROG_XML_I18N_TOOLS" "$bn" >/dev/null; then
         echo "Running xml-i18n-toolize..."
@@ -148,14 +148,14 @@ do
 	  fi
 	fi
       fi
-      if test -e ./po/Makefile.in.in ; then
-      		echo "Removing the borked po/Makefile.in.in..."
-      		rm -f ./po/Makefile.in.in
-      fi
-      if test -e ./po/working-Makefile.in.in ; then
-      		echo "Unborking the po/Makefile.in.in with custom file"
-      		cp -f ./po/working-Makefile.in.in ./po/Makefile.in.in
-      fi
+#      if test -e ./po/Makefile.in.in ; then
+#      		echo "Removing the borked po/Makefile.in.in..."
+#      		rm -f ./po/Makefile.in.in
+#      fi
+#      if test -e ./po/working-Makefile.in.in ; then
+#      		echo "Unborking the po/Makefile.in.in with custom file"
+#      		cp -f ./po/working-Makefile.in.in ./po/Makefile.in.in
+#      fi
       echo "Running aclocal $aclocalinclude ..."
       aclocal $aclocalinclude
       if grep "^A[CM]_CONFIG_HEADERS" "$bn" >/dev/null; then
