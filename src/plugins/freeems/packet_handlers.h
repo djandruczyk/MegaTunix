@@ -215,8 +215,6 @@ void freeems_packet_cleanup(FreeEMS_Packet *);
 guint8 *finalize_packet(guint8 *, gint, gint *);
 void build_output_message(Io_Message *, Command *, gpointer);
 void mtxlog_packet(const void *, size_t, gboolean);
-
-
 /* Prototypes */
 
 #endif
