@@ -55,6 +55,7 @@ gint main(gint argc, gchar ** argv)
 	bindtextdomain(PACKAGE, "C:\\Program Files\\MegaTunix\\dist\\locale");
 #else
 	bindtextdomain(PACKAGE, LOCALEDIR);
+	printf("localedir is %s\n",LOCALEDIR);
 #endif
 	textdomain (PACKAGE);
 
