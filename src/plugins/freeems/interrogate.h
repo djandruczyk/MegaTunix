@@ -89,7 +89,6 @@ gboolean interrogate_ecu(void);
 gchar *request_firmware_version(gint *);
 gchar *request_interface_version(gint *);
 GList *request_location_ids(gint *);
-gchar *request_detailed_interface_version(guint8 *, guint8 *, guint8 *);
 Location_Details *request_location_id_details(guint16);
 gboolean validate_and_load_tests(GArray **, GHashTable **);
 gboolean determine_ecu(GArray *, GHashTable *);

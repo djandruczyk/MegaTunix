@@ -1000,35 +1000,47 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
   */
 G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 {
-	OutputData *payload;
-	/*printf("dealloc_message\n");*/
+	OutputData *payload = NULL;
+	if (!message)
+		return;
+	/*printf("dealloc_message\n");
+	printf ("message pointer %p\n",message);
+	printf ("message->functions pointer %p\n",message->functions);
+	*/
 	if (message->functions)
 		dealloc_array(message->functions, FUNCTIONS);
 	message->functions = NULL;
+	/*printf ("message->sequence pointer %p\n",message->sequence);*/
 	if (message->sequence)
 		dealloc_array(message->sequence, SEQUENCE);
 	message->sequence = NULL;
-	cleanup (message->recv_buf);
+	/*printf ("message->recv_buf pointer %p\n",message->recv_buf);*/
+	if (message->recv_buf)
+		cleanup (message->recv_buf);
+	/*printf ("message->command pointer %p\n",message->command);*/
 	if (message->command)
 	{
 		if (message->command->dynamic)
 		{
+			/*printf ("message->command->post_functions pointer %p\n",message->command->post_functions);*/
 			if (message->command->post_functions)
+			{
+				cleanup(message->command);
 				/*dealloc_array(message->command->post_functions,POST_FUNCTIONS);*/
-			cleanup(message->command);
+			}
 		}
 	}
 	message->command = NULL;
+	/*printf ("message->payload pointer %p\n",message->payload);*/
         if (message->payload)
 	{
 		payload = (OutputData *)message->payload;
+		/*printf ("payload pointer %p\n",payload);*/
 		if (payload)
 		{
+			/*printf ("payload->data pointer %p\n",payload->data);*/
 			if (payload->data)
-			{
 				g_dataset_destroy(payload->data);
-				cleanup(payload->data);
-			}
 			cleanup(payload);
 		}
 	}

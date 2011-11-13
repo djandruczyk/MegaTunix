@@ -235,77 +235,6 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 }
 
 
-/*!
-  \brief Issues a packet to the ECU to get its detailed interface version. 
-  \param major is a pointer to where to store the major version or NULL
-  \param minor is a pointer to where to store the minor version or NULL
-  \param micro is a pointer to where to store the micro version or NULL
-  \returns the Firmware detailed interface version as a text string
-  */
-G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8 *minor, guint8 *micro)
-{
-	OutputData *output = NULL;
-	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
-	gchar *version = NULL;
-	gchar *tmpbuf = NULL;
-	GTimeVal tval;
-	Serial_Params *serial_params = NULL;
-	guint8 *buf = NULL;
-	/* Raw packet */
-	guint8 pkt[INTVER_REQ_PKT_LEN];
-	gint res = 0;
-	gint len = 0;
-	gint i = 0;
-	guint8 sum = 0;
-	gint one,two,three;
-	gint tmit_len = 0;
-
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_val_if_fail(serial_params,NULL);
-
-	if (DATA_GET(global_data,"offline"))
-	{
-		if (major)
-			*major = 0;
-		if (minor)
-			*minor = 0;
-		if (micro)
-			*micro = 0;
-		return g_strdup("Offline");
-	}
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0x00ff );
-	for (i=0;i<INTVER_REQ_PKT_LEN-1;i++)
-		sum += pkt[i];
-	pkt[INTVER_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,INTVER_REQ_PKT_LEN,&tmit_len);
-	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
-	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
-	{
-		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
-		g_free(buf);
-		g_async_queue_unref(queue);
-		return NULL;
-	}
-	g_free(buf);
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
-	g_async_queue_unref(queue);
-
-	if (packet)
-	{
-		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		res = sscanf(version,"%*s %*s %d.%d.%d",major,minor,micro);
-		freeems_packet_cleanup(packet);
-	}
-	return version;
-}
-
 
 /*
  \brief Queries the ECU for a location ID list
@@ -804,9 +733,6 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 {
 	gchar *version = NULL;
 	gchar *fw_version = NULL;
-	guint8 major = 0;
-	guint8 minor = 0;
-	guint8 micro = 0;
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
@@ -817,11 +743,11 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	g_free(fw_version);
 
 	/* Request interface version */
-	version = request_detailed_interface_version(&major, &minor, &micro);
+	version = request_interface_version(NULL);
 	thread_update_widget_f("ecu_text_version_label",MTX_LABEL,g_strdup("ECU Interface Version"));
 	thread_update_widget_f("ecu_text_version_entry",MTX_ENTRY,g_strdup(version));
 	thread_update_widget_f("ecu_numeric_version_label",MTX_LABEL,g_strdup("Firmware Revision"));
-	thread_update_widget_f("ecu_numeric_version_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
+//	thread_update_widget_f("ecu_numeric_version_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
 	g_free(version);
 }
 
