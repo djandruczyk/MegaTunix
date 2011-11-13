@@ -784,7 +784,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <widget class="GtkLabel" id="label17">
+                                                  <widget class="GtkLabel" id="ecu_numeric_version_label">
                                                     <property name="visible">True</property>
                                                     <property name="xalign">0</property>
                                                     <property name="label" translatable="yes">ECU Revision Number</property>
@@ -800,7 +800,7 @@
                                                   <widget class="GtkHBox" id="hbox9">
                                                     <property name="visible">True</property>
                                                     <child>
-                                                      <widget class="GtkEntry" id="ecu_revision_entry">
+                                                      <widget class="GtkEntry" id="ecu_numeric_version_entry">
                                                         <property name="visible">True</property>
                                                         <property name="can_focus">True</property>
                                                         <property name="editable">False</property>
@@ -824,7 +824,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <widget class="GtkLabel" id="label18">
+                                                  <widget class="GtkLabel" id="ecu_text_version_label">
                                                     <property name="visible">True</property>
                                                     <property name="xalign">0</property>
                                                     <property name="label" translatable="yes">Textual Version</property>
@@ -837,7 +837,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <widget class="GtkLabel" id="label19">
+                                                  <widget class="GtkLabel" id="ecu_firmware_signature_label">
                                                     <property name="visible">True</property>
                                                     <property name="xalign">0</property>
                                                     <property name="label" translatable="yes">ECU Signature String</property>
@@ -850,7 +850,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <widget class="GtkEntry" id="text_version_entry">
+                                                  <widget class="GtkEntry" id="ecu_text_version_entry">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="editable">False</property>
@@ -865,7 +865,7 @@
                                                   </packing>
                                                 </child>
                                                 <child>
-                                                  <widget class="GtkEntry" id="ecu_signature_entry">
+                                                  <widget class="GtkEntry" id="ecu_firmware_signature_entry">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="editable">False</property>

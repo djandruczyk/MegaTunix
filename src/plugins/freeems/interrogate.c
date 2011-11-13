@@ -224,9 +224,11 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 
 	if (packet)
 	{
-		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
+		/* SWAP THESE when fred gets his act together... */
+//		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
+		version = g_memdup((packet->data+packet->payload_base_offset+3),packet->payload_length-3);
 		if (len)
-			*len = packet->payload_length;
+			*len = packet->payload_length-3;
 		freeems_packet_cleanup(packet);
 	}
 	return version;
@@ -295,10 +297,11 @@ G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8
 
 	if (packet)
 	{
-		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset+3),packet->payload_length-3);
-		*major = (guint8)(packet->data[packet->payload_base_offset]);
-		*minor = (guint8)(packet->data[packet->payload_base_offset+1]);
-		*micro = (guint8)(packet->data[packet->payload_base_offset+2]);
+		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
+//		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset+3),packet->payload_length-3);
+//		*major = (guint8)(packet->data[packet->payload_base_offset]);
+//		*minor = (guint8)(packet->data[packet->payload_base_offset+1]);
+//		*micro = (guint8)(packet->data[packet->payload_base_offset+2]);
 		freeems_packet_cleanup(packet);
 	}
 	return version;
@@ -810,13 +813,16 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 		return;
 	/* Request firmware version */
 	fw_version = request_firmware_version(NULL);
-	thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strdup(fw_version));
+	thread_update_widget_f("ecu_firmware_signature_label",MTX_LABEL,g_strdup("ECU Firmware Version"));
+	thread_update_widget_f("ecu_firmware_signature_entry",MTX_ENTRY,g_strdup(fw_version));
 	g_free(fw_version);
 
 	/* Request interface version */
 	version = request_detailed_interface_version(&major, &minor, &micro);
-	thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strdup(version));
-	thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
+	thread_update_widget_f("ecu_text_version_label",MTX_LABEL,g_strdup("ECU Interface Version"));
+	thread_update_widget_f("ecu_text_version_entry",MTX_ENTRY,g_strdup(version));
+	thread_update_widget_f("ecu_numeric_version_label",MTX_LABEL,g_strdup("Firmware Revision"));
+	thread_update_widget_f("ecu_numeric_version_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
 	g_free(version);
 }
 

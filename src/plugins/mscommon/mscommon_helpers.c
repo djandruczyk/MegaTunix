@@ -353,7 +353,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (count > 0)
 				thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
 			else
-				thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup(""));
+				thread_update_widget_f("ecu_numeric_version_entry",MTX_ENTRY,g_strdup(""));
 			break;
 		case TEXT_REV:
 			if (DATA_GET(global_data,"offline"))
@@ -361,7 +361,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			count = read_data_f(-1,&message->recv_buf,FALSE);
 			if (count > 0)
 			{
-				thread_update_widget_f("text_version_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
+				thread_update_widget_f("ecu_text_version_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
 				firmware->txt_rev_len = count;
 				firmware->text_revision = g_strndup(message->recv_buf,count);
 			}
@@ -372,7 +372,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			count = read_data_f(-1,&message->recv_buf,FALSE);
 			if (count > 0)
 			{
-				thread_update_widget_f("ecu_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
+				thread_update_widget_f("ecu_firmware_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
 				firmware->signature_len = count;
 				firmware->actual_signature = g_strndup(message->recv_buf,count);
 			}

@@ -73,9 +73,10 @@ MultiPage=FALSE
 ;length=125
 
 [interrogation]
-match_on=FW_VER
-#IFACE_VER=_REGEX_,FreeEMS Vanilla
-FW_VER=_REGEX_,FreeEMS Vanilla 0.1.2 SNAPSHOT
+#match_on=FW_VER
+match_on=IFACE_VER
+IFACE_VER=_REGEX_,FreeEMS Vanilla
+#FW_VER=_REGEX_,FreeEMS Vanilla 0.1.2 SNAPSHOT
 
 [gui]
 RealtimeMapFile=FreeEMS
