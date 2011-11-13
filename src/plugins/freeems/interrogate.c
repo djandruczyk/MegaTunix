@@ -225,10 +225,10 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 	if (packet)
 	{
 		/* SWAP THESE when fred gets his act together... */
-//		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		version = g_memdup((packet->data+packet->payload_base_offset+3),packet->payload_length-3);
+		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
+//		version = g_memdup((packet->data+packet->payload_base_offset+3),packet->payload_length-3);
 		if (len)
-			*len = packet->payload_length-3;
+			*len = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
 	return version;
@@ -248,6 +248,7 @@ G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
 	gchar *version = NULL;
+	gchar *tmpbuf = NULL;
 	GTimeVal tval;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
@@ -257,6 +258,7 @@ G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8
 	gint len = 0;
 	gint i = 0;
 	guint8 sum = 0;
+	gint one,two,three;
 	gint tmit_len = 0;
 
 	serial_params = DATA_GET(global_data,"serial_params");
@@ -298,10 +300,7 @@ G_MODULE_EXPORT gchar * request_detailed_interface_version(guint8 *major, guint8
 	if (packet)
 	{
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-//		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset+3),packet->payload_length-3);
-//		*major = (guint8)(packet->data[packet->payload_base_offset]);
-//		*minor = (guint8)(packet->data[packet->payload_base_offset+1]);
-//		*micro = (guint8)(packet->data[packet->payload_base_offset+2]);
+		res = sscanf(version,"%*s %*s %d.%d.%d",major,minor,micro);
 		freeems_packet_cleanup(packet);
 	}
 	return version;

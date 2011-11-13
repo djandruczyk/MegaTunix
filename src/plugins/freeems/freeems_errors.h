@@ -105,7 +105,7 @@ static struct _FreeEMS_Errors
 	{0x6010,"Error base 2D table axis!"},
 	{0x6011,"Invalid 2D table axis order!"},
 	{0x6012,"Invalid 2D table index!"},
-	{0x7777,"This firmware is notthe Bench Test Decoder Firmware!"},
+	{0x7777,"This firmware is not the Bench Test Decoder Firmware!"},
 	{0x7778,"Too short of a PulseWidth to test!"},
 	{0x7779,"Unimplementated Test Mode!"},
 	{0x777A,"Invalid Events per Cycle!"},
