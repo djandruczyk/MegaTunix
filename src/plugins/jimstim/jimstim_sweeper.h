@@ -45,17 +45,19 @@ typedef struct _JimStim_Data JimStim_Data;
   */
 struct _JimStim_Data
 {
+	GtkWidget *manual_rpm_e;/*!< manual rpm entry */
 	GtkWidget *start_e;	/*!< start entry */
 	GtkWidget *end_e;	/*!< end entry */
 	GtkWidget *step_e;	/*!< step entry */
-	GtkWidget *sweep_e;	/*!< sweep time entry */
+	GtkWidget *sweeptime_e;	/*!< sweep time entry */
 	GtkWidget *start_b;	/*!< start button */
 	GtkWidget *stop_b;	/*!< end button */
 	GtkWidget *rpm_e;	/*!< commanded rpm entry */
 	GtkWidget *step_rb;	/*!< Favor step radiobutton */
-	GtkWidget *sweep_rb;	/*!< Favor sweep radiobutton */
+	GtkWidget *sweeptime_rb;/*!< Favor sweep radiobutton */
 	GtkWidget *frame;	/*!< JS controls frame */
 	GtkWidget *manual_f;	/*!< Manual RPM control frame */
+	gint manual_rpm;	/*!< Manual RPM value */
 	gint start;		/*!< start value */
 	gint end;		/*!< end value */
 	gint step;		/*!< step value */

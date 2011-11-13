@@ -255,9 +255,11 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			/*		printf("Block type of DATA!\n");*/
 			if (block->len > 100)
 				notifies = TRUE;
+			/* ICK bad form man, writing one byte at a time,  due to ECU's that can't take full wire speed without
+			   dropping chars due to uber tiny buffers */
 			for (j=0;j<block->len;j++)
 			{
-				/*printf("comms.c data[%i] is %i\n",j,block->data[j]);*/
+				/*printf("comms.c data[%i] is %i, block len is %i\n",j,block->data[j],block->len);*/
 				if ((notifies) && ((j % notif_divisor) == 0))
 					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<b>Sending %i of %i bytes</b>"),j,block->len));
 				if (i == 0)

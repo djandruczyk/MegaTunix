@@ -604,13 +604,11 @@ G_MODULE_EXPORT gboolean std_entry_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 
+	g_return_val_if_fail(GTK_IS_OBJECT(widget),FALSE);
+
 	if (!common_handler)
 		get_symbol("common_entry_handler",(void *)&common_handler);
 	g_return_val_if_fail(common_handler,FALSE);
-
-
-	if (!GTK_IS_OBJECT(widget))
-		return FALSE;
 
 	if ((DATA_GET(global_data,"paused_handlers")) ||
 			(!DATA_GET(global_data,"ready")))

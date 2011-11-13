@@ -58,28 +58,34 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	/* Get widget ptrs */
 	if (!jsdata.manual_f)
 		jsdata.manual_f = lookup_widget_f("JS_manual_rpm_frame");
+	if (!jsdata.manual_rpm_e)
+		jsdata.manual_rpm_e = lookup_widget_f("JS_rpm_entry");
 	if (!jsdata.start_e)
 		jsdata.start_e = lookup_widget_f("JS_start_rpm_entry");
 	if (!jsdata.end_e)
 		jsdata.end_e = lookup_widget_f("JS_end_rpm_entry");
 	if (!jsdata.step_e)
 		jsdata.step_e = lookup_widget_f("JS_step_rpm_entry");
-	if (!jsdata.sweep_e)
-		jsdata.sweep_e = lookup_widget_f("JS_sweep_time_entry");
+	if (!jsdata.sweeptime_e)
+		jsdata.sweeptime_e = lookup_widget_f("JS_sweep_time_entry");
 	if (!jsdata.start_b)
 		jsdata.start_b = lookup_widget_f("JS_start_sweep_button");
 	if (!jsdata.stop_b)
 		jsdata.stop_b = lookup_widget_f("JS_stop_sweep_button");
 	if (!jsdata.step_rb)
 		jsdata.step_rb = lookup_widget_f("JS_step_radio");
-	if (!jsdata.sweep_rb)
-		jsdata.sweep_rb = lookup_widget_f("JS_sweep_radio");
+	if (!jsdata.sweeptime_rb)
+		jsdata.sweeptime_rb = lookup_widget_f("JS_sweep_radio");
 	if (!jsdata.rpm_e)
 		jsdata.rpm_e = lookup_widget_f("JS_commanded_rpm");
 	if (!jsdata.frame)
 		jsdata.frame = lookup_widget_f("JS_basics_frame");
 
 	OBJ_SET(jsdata.stop_b,"jsdata", (gpointer)&jsdata);
+	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.manual_rpm_e),0,-1); 
+	jsdata.manual_rpm = (GINT)g_strtod(text,NULL);
+	g_free(text);
+
 	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.start_e),0,-1); 
 	jsdata.start = (GINT)g_strtod(text,NULL);
 	g_free(text);
@@ -92,7 +98,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	jsdata.step = (GINT)g_strtod(text,NULL);
 	g_free(text);
 
-	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.sweep_e),0,-1); 
+	text = gtk_editable_get_chars(GTK_EDITABLE(jsdata.sweeptime_e),0,-1); 
 	jsdata.sweep = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
 	g_free(text);
 
@@ -141,16 +147,16 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
-	lower_f = (gfloat)strtod(OBJ_GET(jsdata.sweep_e,"raw_lower"),NULL);
-	upper_f = (gfloat)strtod(OBJ_GET(jsdata.sweep_e,"raw_upper"),NULL);
+	lower_f = (gfloat)strtod(OBJ_GET(jsdata.sweeptime_e,"raw_lower"),NULL);
+	upper_f = (gfloat)strtod(OBJ_GET(jsdata.sweeptime_e,"raw_upper"),NULL);
 	if ((jsdata.sweep <= lower_f) || (jsdata.sweep >= upper_f))
 	{	
 		fault = TRUE;
-		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&red);
+		gtk_widget_modify_text(jsdata.sweeptime_e,GTK_STATE_NORMAL,&red);
 		update_logbar_f("jimstim_view","warning",g_strdup_printf(_("RPM sweep time value (%i) is out of range (%f<->%f\n"),jsdata.step,lower_f,upper_f),FALSE,FALSE,FALSE);
 	}
 	else if (!fault)
-		gtk_widget_modify_text(jsdata.sweep_e,GTK_STATE_NORMAL,&black);
+		gtk_widget_modify_text(jsdata.sweeptime_e,GTK_STATE_NORMAL,&black);
 
 	if (fault)
 	{
@@ -162,13 +168,13 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	g_usleep(10000);
 	steps = abs(jsdata.end-jsdata.start)/jsdata.step;
 	interval = (1000*jsdata.sweep)/steps;
-	if (interval < 5.0)
+	if (interval < 10.0)
 	{
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(jsdata.step_rb)))
 		{
-			jsdata.sweep = (5.0*steps)/1000;
+			jsdata.sweep = (10.0*steps)/1000;
 			tmpbuf = g_strdup_printf("%1$.*2$f",jsdata.sweep,1);
-			gtk_entry_set_text(GTK_ENTRY(jsdata.sweep_e),tmpbuf);
+			gtk_entry_set_text(GTK_ENTRY(jsdata.sweeptime_e),tmpbuf);
 			g_free(tmpbuf);
 		}
 		else
@@ -179,8 +185,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 			g_free(tmpbuf);
 		}
 	}
-	/* Clamp interval at 5 ms, max 200 theoretical updates/sec */
-	interval = interval > 5.0 ? interval:5.0;
+	/* Clamp interval at 10 ms, max 100 theoretical updates/sec */
+	interval = interval > 10.0 ? interval:10.0;
 	jsdata.current = jsdata.start;
 	jsdata.reset = TRUE;
 
@@ -188,13 +194,14 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(jsdata.start_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.end_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.step_e,FALSE);
-	gtk_widget_set_sensitive(jsdata.sweep_e,FALSE);
+	gtk_widget_set_sensitive(jsdata.sweeptime_e,FALSE);
 	gtk_widget_set_sensitive(jsdata.start_b,FALSE);
 	gtk_widget_set_sensitive(jsdata.stop_b,TRUE);
 	gtk_widget_set_sensitive(jsdata.rpm_e,TRUE);
 	gtk_widget_set_sensitive(jsdata.frame,FALSE);
 	g_list_foreach(get_list_f("js_controls"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
-	update_logbar_f("jimstim_view",NULL,g_strdup_printf(_("Sweep Parameters are OK, Enabling sweeper from %i to %i RPM in %iRPM steps in about %.2f seconds\n"),jsdata.start,jsdata.end,jsdata.step,new),FALSE,FALSE,FALSE);
+	new = (((jsdata.end-jsdata.start)/jsdata.step)*interval*2)/1000.0;
+	update_logbar_f("jimstim_view",NULL,g_strdup_printf(_("Sweep Parameters are OK, Enabling sweeper from %i to %i RPM with %i RPM steps for about %.2f seconds per sweep cycle\n"),jsdata.start,jsdata.end,jsdata.step,new),FALSE,FALSE,FALSE);
 	io_cmd_f("jimstim_interactive",NULL);
 	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
@@ -213,6 +220,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 {
 	OutputData *output = NULL;
 	JimStim_Data *jsdata = NULL;
+	gchar *tmpbuf = NULL;
 	jsdata = OBJ_GET(widget,"jsdata");
 	if (jsdata)
 	{
@@ -223,7 +231,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 		gtk_widget_set_sensitive(jsdata->start_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->end_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->step_e,TRUE);
-		gtk_widget_set_sensitive(jsdata->sweep_e,TRUE);
+		gtk_widget_set_sensitive(jsdata->sweeptime_e,TRUE);
 		gtk_widget_set_sensitive(jsdata->start_b,TRUE);
 		gtk_widget_set_sensitive(jsdata->stop_b,FALSE);
 		gtk_widget_set_sensitive(jsdata->rpm_e,FALSE);
@@ -244,6 +252,19 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 	DATA_SET(output->data,"value",GINT_TO_POINTER(255));
 	io_cmd_f("jimstim_interactive_write",output);
 	start_tickler_f(RTV_TICKLER);
+	/* Reset RPM to original value, however we need to do it TWICE,
+	   once to something DIFFERENT than the original as Mtx optimizes
+	   out duplicate sets of the same value,, so we set it to orig+1, then
+	   original value to get around this optimization.
+	 */ 
+	tmpbuf = g_strdup_printf("%i",jsdata->manual_rpm+1);
+	gtk_entry_set_text(GTK_ENTRY(jsdata->manual_rpm_e),tmpbuf);
+	g_signal_emit_by_name(jsdata->manual_rpm_e,"activate");
+	g_free(tmpbuf);
+	tmpbuf = g_strdup_printf("%i",jsdata->manual_rpm);
+	gtk_entry_set_text(GTK_ENTRY(jsdata->manual_rpm_e),tmpbuf);
+	g_signal_emit_by_name(jsdata->manual_rpm_e,"activate");
+	g_free(tmpbuf);
 	return TRUE;
 }
 
