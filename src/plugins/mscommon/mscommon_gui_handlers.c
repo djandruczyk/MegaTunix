@@ -415,7 +415,6 @@ G_MODULE_EXPORT gboolean common_slider_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	gint dload_val = 0;
 
-	printf("common slider handler!\n");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	get_essentials(widget,&canID,&page,&offset,&size,NULL);
 
@@ -563,7 +562,6 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 			interdep_vars = DATA_GET(global_data,"interdep_vars");
 		g_return_val_if_fail(interdep_vars,FALSE);
 	}
-
 
 	get_essential_bits(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
 
@@ -1298,25 +1296,14 @@ void update_range(GtkWidget *widget, gfloat value)
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	adj = gtk_range_get_adjustment(GTK_RANGE(widget));
 
-	printf("blocking!\n");
 	g_signal_handlers_block_by_func(G_OBJECT(widget),
 			G_CALLBACK(common_slider_handler), NULL);
 	if (value > adj->upper)
-	{
-		printf("setting value to upper!\n");
 		gtk_range_set_value(GTK_RANGE(widget),adj->upper);
-	}
 	else if (value < adj->lower)
-	{
-		printf("setting value to lower!\n");
 		gtk_range_set_value(GTK_RANGE(widget),adj->lower);
-	}
 	else
-	{
-		printf("setting value to %f!\n",value);
 		gtk_range_set_value(GTK_RANGE(widget),value);
-	}
-	printf("unblocking!\n");
 	g_signal_handlers_unblock_by_func(G_OBJECT(widget),
 			G_CALLBACK(common_slider_handler), NULL);
 }

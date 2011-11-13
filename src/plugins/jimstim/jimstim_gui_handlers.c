@@ -203,13 +203,16 @@ G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget *widget, gpointer data)
 		value = convert_after_upload_f(widget);
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
 
-		/* If set to 65535, pick secodn choice, otherwise first one..
+		/* If set to 65535, pick second choice, otherwise first one..
 		   */
 		gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model),&iter);
 		if ((GINT)value == 65535)
 			gtk_tree_model_iter_next (GTK_TREE_MODEL(model), &iter);
+                g_signal_handlers_block_by_func(widget,(gpointer)std_combo_handler,NULL);
+
 		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 		gtk_widget_modify_base(gtk_bin_get_child(GTK_BIN(widget)),GTK_STATE_NORMAL,&white);
+                g_signal_handlers_unblock_by_func(widget,(gpointer)std_combo_handler,NULL);
 	}
 	return TRUE;
 }
