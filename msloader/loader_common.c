@@ -329,6 +329,7 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 	   
 #else	/* Linux/OS-X where sane I/O lives */
 	fd_set readfds;
+	fd_set errfds;
 	struct timeval t;
 	gint attempts = 0;
 	gint read_pos = 0;
@@ -340,10 +341,12 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 	while (wanted > 0)
 	{
 		FD_ZERO(&readfds);
+		FD_ZERO(&errfds);
 		t.tv_sec = 0;
 		t.tv_usec = 200000;
 		FD_SET(fd,&readfds);
-		res = select (fd+1, &readfds,NULL,NULL, &t);
+		FD_SET(fd,&errfds);
+		res = select (fd+1, &readfds,NULL,&errfds, &t);
 		if (res == -1)
 		{
 			output("ERROR, select() failure!\n",FALSE);
@@ -351,18 +354,24 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 		}
 		if (res == 0) /* Timeout */
 		{
-			/*printf("timeout!\n");*/
+			/*printf("select() (read) timeout!\n");*/
 			attempts++;
-			if (attempts > POLL_ATTEMPTS)
-				return total;
 		}
+		/* OK we have an error condition waiting for us, read it */
+		if (FD_ISSET(fd,&errfds))
+		{
+			printf("select() (read) ERROR !\n");
+			attempts++;
+		}
+		if (attempts > POLL_ATTEMPTS)
+			return total;
 		/* OK we have something waiting for us, read it */
 		if (FD_ISSET(fd,&readfds))
 		{
 			/*printf("data avail!\n");*/
 			read_pos = requested - wanted;
 			received = read(fd, &buf[read_pos], wanted);
-			if (received == -1)
+			if (received <= 0)
 			{
 				output("Serial I/O Error, read failure\n",FALSE);
 				return -1;
@@ -383,6 +392,7 @@ gint write_wrapper(gint fd, guchar *buf, gint total)
 	return write(fd,buf,total);
 #else	/* Linux/OS-X where sane IO lives */
 	fd_set writefds;
+	fd_set errfds;
 	struct timeval t;
 	gint attempts = 0;
 	gint write_pos = 0;
@@ -395,10 +405,12 @@ gint write_wrapper(gint fd, guchar *buf, gint total)
 	while (to_send > 0)
 	{
 		FD_ZERO(&writefds);
+		FD_ZERO(&errfds);
 		t.tv_sec = 0;
 		t.tv_usec = 200000;
 		FD_SET(fd,&writefds);
-		res = select (fd+1, NULL,&writefds,NULL, &t);
+		FD_SET(fd,&errfds);
+		res = select (fd+1, NULL,&writefds,&errfds, &t);
 		if (res == -1)
 		{
 			output("ERROR, select() failure!\n",FALSE);
@@ -406,18 +418,24 @@ gint write_wrapper(gint fd, guchar *buf, gint total)
 		}
 		if (res == 0) /* Timeout */
 		{
-			/*printf("timeout!\n");*/
+			/*printf("select() (write) timeout!\n");*/
 			attempts++;
-			if (attempts > POLL_ATTEMPTS)
-				return total;
 		}
+		/* Error condition set? */
+		if (FD_ISSET(fd,&errfds))
+		{
+			printf("select() (write) ERROR !\n");
+			attempts++;
+		}
+		if (attempts > POLL_ATTEMPTS)
+			return sent;
 		/* OK we can now write, write it */
 		if (FD_ISSET(fd,&writefds))
 		{
 			/*printf("data avail!\n");*/
 			write_pos = total - to_send;
 			count = write(fd, &buf[write_pos], to_send);
-			if (count == -1)
+			if (count <= 0)
 			{
 				output("Serial I/O Error, write failure\n",FALSE);
 				return -1;
