@@ -458,7 +458,7 @@ void *unix_reader(gpointer data)
 			read_pos = requested-wanted;
 			received = read(fd, &buf[read_pos], wanted);
 			/*printf("Want %i, got %i,",wanted, received); */
-			if (received == -1)
+			if (received <= 0)
 			{
 				DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 				g_cond_signal(cond);
