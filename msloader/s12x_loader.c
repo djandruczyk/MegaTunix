@@ -312,7 +312,7 @@ gboolean check_status(gint port_fd)
 	}
 	if (res != 3)
 	{
-		output(g_strdup_printf("error reading error/status/prompt Code, requested 3 bytes got %i\n",res),TRUE);
+		output(g_strdup_printf("Error reading error/status/prompt Code\nrequested 3 bytes got %i\n",res),TRUE);
 		return FALSE;
 	}
 	errorCode = buf[0];
