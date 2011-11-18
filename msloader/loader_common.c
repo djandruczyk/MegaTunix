@@ -46,7 +46,7 @@
 #ifndef CRTSCTS
 #define CRTSCTS 0
 #endif
-#define POLL_ATTEMPTS 15
+#define POLL_ATTEMPTS 4
 
 /* Globals */
 #ifndef __WIN32__
@@ -61,9 +61,8 @@ gint open_port(gchar * port_name)
 #ifdef __WIN32__
 	fd = open(port_name, O_RDWR | O_BINARY );
 #else
-	/* Open No0nblocking for OS-X, then flip to blocking */
+	/* Open Nonblocking */
 	fd = open(port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
-	fcntl (fd, F_SETFL, ~O_NONBLOCK);
 #endif
 	return fd;
 }
@@ -129,8 +128,9 @@ gint setup_port(gint fd, gint baud)
 	newtio.c_cc[VKILL]    = 0;     /* @ */
 	newtio.c_cc[VEOF]     = 0;     /* Ctrl-d */
 	newtio.c_cc[VEOL]     = 0;     /* '\0' */
-	newtio.c_cc[VMIN]     = 1;     /* No min chars requirement */
-	newtio.c_cc[VTIME]    = 1;     /* 100ms timeout */
+	/* These are ZERO becasue we are using select() */
+	newtio.c_cc[VMIN]     = 0;     /* No min chars requirement */
+	newtio.c_cc[VTIME]    = 0;     /* 0ms timeout */
 
 	tcsetattr(fd,TCSANOW,&newtio);
 #endif
@@ -342,8 +342,8 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 	{
 		FD_ZERO(&readfds);
 		FD_ZERO(&errfds);
-		t.tv_sec = 0;
-		t.tv_usec = 200000;
+		t.tv_sec = 1;
+		t.tv_usec = 0;
 		FD_SET(fd,&readfds);
 		FD_SET(fd,&errfds);
 		res = select (fd+1, &readfds,NULL,&errfds, &t);
@@ -354,13 +354,13 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 		}
 		if (res == 0) /* Timeout */
 		{
-			/*printf("select() (read) timeout!\n");*/
+			output(g_strdup_printf("select() (read) timeout, attempts %i!\n",attempts),TRUE);
 			attempts++;
 		}
 		/* OK we have an error condition waiting for us, read it */
 		if (FD_ISSET(fd,&errfds))
 		{
-			printf("select() (read) ERROR !\n");
+			output("select() (read) ERROR !\n",FALSE);
 			attempts++;
 		}
 		if (attempts > POLL_ATTEMPTS)
