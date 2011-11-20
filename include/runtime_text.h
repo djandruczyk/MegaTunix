@@ -34,10 +34,13 @@ typedef enum
 	COL_RTT_INT_NAME,
 	COL_RTT_DATA,
 	COL_RTT_LAST,
+	COL_RTT_FGCOLOR,
+	COL_RTT_BGCOLOR,
 	RTT_NUM_COLS
 }RttTVCols;
 
 typedef struct _Rt_Text Rt_Text;
+typedef struct _Rtt_Threshold Rtt_Threshold;
 
 /*!
  \brief The _Rt_Text struct contains info on the floating runtime var text 
@@ -58,6 +61,15 @@ struct _Rt_Text
 	gint last_upd;		/*!< used to making sure things update */
 	gboolean show_prefix;	/*!< show prefix (friendly name) or not */
 	gboolean markup;	/*!< Uses markup or not? */
+	GPtrArray *thresholds;	/*!< Array of threshold objects */
+};
+
+struct _Rtt_Threshold
+{
+	gfloat low;		/*!< Low threshold */
+	gfloat high;		/*!< Low threshold */
+	gchar *fg;		/*!< FG Color */
+	gchar *bg;		/*!< BG Color */
 };
 
 /* Prototypes */
@@ -68,8 +80,10 @@ void rtt_update_values(gpointer,gpointer,gpointer);
 void rtt_update_start_watches(gpointer,gpointer,gpointer);
 void add_additional_rtt(GtkWidget *);
 gboolean load_rtt_xml_elements(xmlNode *, GtkListStore *, GtkWidget *);
+Rtt_Threshold *load_rtt_threshold(xmlNode *);
 void load_rtt(xmlNode *, GtkListStore *, GtkWidget *);
 void setup_rtt_treeview(GtkWidget *);
+void rtt_thresh_free(gpointer);
 gboolean rtt_foreach(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 gboolean update_rttext(gpointer);
 

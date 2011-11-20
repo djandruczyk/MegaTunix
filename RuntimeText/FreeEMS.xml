@@ -10,10 +10,66 @@
 	<rtt>
 		<internal_name>Clock</internal_name>
 		<datasource>tempClock</datasource>
+		<threshold>
+			<low>0</low>
+			<high>20</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>65535</red>
+				<green>65535</green>
+				<blue>65535</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>20</low>
+			<high>60</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>RPM</internal_name>
 		<datasource>RPM</datasource>
+		<threshold>
+			<low>6000</low>
+			<high>6999</high>
+			<bg_color>
+				<red>65535</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>7000</low>
+			<high>7500</high>
+			<bg_color>
+				<red>65500</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>TPS</internal_name>

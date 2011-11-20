@@ -112,7 +112,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	}
 
 	/*Get the root element node */
-	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT);
+	store = gtk_list_store_new(RTT_NUM_COLS,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT,G_TYPE_STRING,G_TYPE_STRING);
 	DATA_SET(global_data,"rtt_model",store);
 	treeview = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	gtk_box_pack_start(GTK_BOX(parent),treeview,TRUE,TRUE,0);
@@ -167,9 +167,68 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 	return TRUE;
 }
 
+/*
+  \brief load the RTT threshold details at this XML node, creates the RTTthreshold object
+  and returns it to the caller
+  \param node is the pointer to XML node
+  \returns pointer to a Rtt_Thresold object
+  */
+
+G_MODULE_EXPORT Rtt_Threshold *load_rtt_threshold(xmlNode *node)
+{
+	Rtt_Threshold *thresh = NULL;
+	xmlNode *cur_node = NULL;
+	GdkColor color;
+	if (!node->children)
+	{
+		printf(_("ERROR, load_rtt_threshold, xml node is empty!!\n"));
+		return NULL;
+	}
+	cur_node = node->children;
+	thresh = g_new0(Rtt_Threshold,1);
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,"low") == 0)
+				generic_xml_gfloat_import(cur_node,&thresh->low);
+			if (g_strcasecmp((gchar *)cur_node->name,"high") == 0)
+				generic_xml_gfloat_import(cur_node,&thresh->high);
+			if (g_strcasecmp((gchar *)cur_node->name,"fg_color") == 0)
+			{
+				generic_xml_color_import(cur_node,&color);
+				thresh->fg = gdk_color_to_string(&color);
+			}
+			if (g_strcasecmp((gchar *)cur_node->name,"bg_color") == 0)
+			{
+				generic_xml_color_import(cur_node,&color);
+				thresh->bg = gdk_color_to_string(&color);
+			}
+		}
+		cur_node = cur_node->next;
+	}
+	/*
+	printf("low, %f, high %f, bg (%s), fg (%s)\n",thresh->low,thresh->high,thresh->bg,thresh->fg);
+	*/
+	return thresh;
+}
+
 
 /*
-  \brief loda the RTT specifics at this XML node, creates the RTT object and 
+  \brief Frees memory of an Rtt_Threshold object
+  \param data is hte pointer to the Rtt_Threshold object
+  */
+void rtt_thresh_free(gpointer data)
+{
+	Rtt_Threshold *thresh = (Rtt_Threshold *)data;
+	g_free(thresh->fg);
+	g_free(thresh->bg);
+	g_free(thresh);
+}
+
+
+/*
+  \brief load the RTT specifics at this XML node, creates the RTT object and 
   stores it in the ListStore
   \param node is the pointer to XML node
   \param store is the pointer to ListStore where we save it
@@ -182,10 +241,12 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 	Rt_Text *rt_text = NULL;
 	GtkTreeIter iter;
 	xmlNode *cur_node = NULL;
+	Rtt_Threshold *thresh = NULL;
+	GPtrArray *thresh_array = g_ptr_array_new_with_free_func(rtt_thresh_free);
 
 	if (!node->children)
 	{
-		printf(_("ERROR, load_potential_args, xml node is empty!!\n"));
+		printf(_("ERROR, load_rtt, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -197,11 +258,23 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 				generic_xml_gchar_import(cur_node,&int_name);
 			if (g_strcasecmp((gchar *)cur_node->name,"datasource") == 0)
 				generic_xml_gchar_import(cur_node,&source);
+			if (g_strcasecmp((gchar *)cur_node->name,"threshold") == 0)
+			{
+				thresh = load_rtt_threshold(cur_node);
+				if (thresh)
+					g_ptr_array_add(thresh_array, thresh);
+			}
+
 		}
 		cur_node = cur_node->next;
 	}
 	if ((int_name) && (source))
 		rt_text = create_rtt(int_name,source,TRUE);
+	if (thresh_array->len > 0)
+		rt_text->thresholds = thresh_array;
+	else
+		g_ptr_array_unref(thresh_array);
+
 	if (rt_text)
 	{
 		gtk_list_store_append(store, &iter);
@@ -455,7 +528,7 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 
 /*!
   \brief Sets up the runtime text treeview
-  \param treeview is the pointer to the treeviedw to setup
+  \param treeview is the pointer to the treeview to setup
   */
 G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 {
@@ -475,7 +548,10 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 	renderer = gtk_cell_renderer_text_new();
 	/*gtk_cell_renderer_set_fixed_size(GTK_CELL_RENDERER(renderer),65, 1);*/
 	g_object_set(renderer, "background-gdk", &style->bg[GTK_STATE_NORMAL], NULL);
-	column = gtk_tree_view_column_new_with_attributes("",renderer, "markup", COL_RTT_DATA,  NULL);
+	column = gtk_tree_view_column_new_with_attributes("",renderer, 
+			"markup", COL_RTT_DATA, 
+			"background", COL_RTT_BGCOLOR, 
+			"foreground",COL_RTT_FGCOLOR, NULL);
 	g_object_set(column, "alignment", 1.0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), column);
 
@@ -496,8 +572,11 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 {
 	static GMutex *rtv_mutex = NULL;
 	Rt_Text *rtt = NULL;
+	Rtt_Threshold *thresh = NULL;
 	gint count = 0;
+	gboolean in_thresh = FALSE;
 	gint last_upd = 0;
+	gint i = 0;
 	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
@@ -528,11 +607,41 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	if ((current != previous) || (DATA_GET(global_data,"forced_update")))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-		gdk_threads_enter();
-		gtk_list_store_set(GTK_LIST_STORE(model), iter,
-				COL_RTT_DATA, tmpbuf,
-			        COL_RTT_LAST, current,	-1);
-		gdk_threads_leave();
+		if (rtt->thresholds)
+		{
+			/* Need to check for a proper match */
+			for (i=0;i<rtt->thresholds->len;i++)
+			{
+				thresh = g_ptr_array_index(rtt->thresholds,i);
+				if ((current >thresh->low) && (current <= thresh->high))
+				{
+					in_thresh = TRUE;
+					gdk_threads_enter();
+					gtk_list_store_set(GTK_LIST_STORE(model), iter,
+							COL_RTT_DATA, tmpbuf,
+							COL_RTT_BGCOLOR, thresh->bg,
+							COL_RTT_FGCOLOR, thresh->fg,
+							COL_RTT_LAST, current,	-1);
+					gdk_threads_leave();
+					break;
+				}
+			}
+			/* Value wasn't within threshold range, render without colors */
+			if (!in_thresh)
+				goto not_in_thresh;
+		}
+		else
+		{
+not_in_thresh:
+			gdk_threads_enter();
+			gtk_list_store_set(GTK_LIST_STORE(model), iter,
+					COL_RTT_DATA, tmpbuf,
+					COL_RTT_BGCOLOR, NULL,
+					COL_RTT_FGCOLOR, NULL,
+					COL_RTT_LAST, current,	-1);
+			gdk_threads_leave();
+		}
+
 		g_free(tmpbuf);
 		last_upd = count;
 	}
@@ -541,7 +650,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 
 
 /*!
-  \brief  calls the rtt_foreach handler to update each runtime text entry
+  \brief calls the rtt_foreach handler to update each runtime text entry
   \param data is unused
   \returns TRUE on success, FALSE if Mtx is shutting down
   */
