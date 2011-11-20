@@ -62,7 +62,8 @@ gint open_port(gchar * port_name)
 	fd = open(port_name, O_RDWR | O_BINARY );
 #else
 	/* Open Nonblocking */
-	fd = open(port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
+	//fd = open(port_name, O_RDWR | O_NOCTTY | O_NONBLOCK);
+	fd = open(port_name, O_RDWR | O_NOCTTY | O_NDELAY);
 #endif
 	return fd;
 }
@@ -140,10 +141,10 @@ gint setup_port(gint fd, gint baud)
 
 void close_port(gint fd)
 {
-#ifndef __WIN32__
-	tcsetattr(fd,TCSANOW,&oldtio);
-#else
+#ifdef __WIN32__
 	WSACleanup();
+#else
+	tcsetattr(fd,TCSANOW,&oldtio);
 #endif
 	close(fd);
 	return;
@@ -424,7 +425,7 @@ gint write_wrapper(gint fd, guchar *buf, gint total)
 		/* Error condition set? */
 		if (FD_ISSET(fd,&errfds))
 		{
-			printf("select() (write) ERROR !\n");
+			output("select() (write) ERROR !\n",FALSE);
 			attempts++;
 		}
 		if (attempts > POLL_ATTEMPTS)
