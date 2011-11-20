@@ -237,7 +237,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 		gtk_widget_set_sensitive(jsdata->rpm_e,FALSE);
 		gtk_widget_set_sensitive(jsdata->frame,TRUE);
 		g_list_foreach(get_list_f("js_controls"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
-		update_logbar_f("jimstim_view",NULL,g_strdup(_("Sweeper disabled, Thanks for playing!\n")),FALSE,FALSE,FALSE);
+		update_logbar_f("jimstim_view",NULL,g_strdup(_("Sweeper stopped\n")),FALSE,FALSE,FALSE);
 	}
 	/* Send 65535 to disable dynamic mode */
 	gtk_entry_set_text(GTK_ENTRY(jsdata->rpm_e),"");
