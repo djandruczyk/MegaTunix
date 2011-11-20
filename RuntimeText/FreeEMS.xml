@@ -12,7 +12,7 @@
 		<datasource>tempClock</datasource>
 		<threshold>
 			<low>0</low>
-			<high>20</high>
+			<high>200</high>
 			<bg_color>
 				<red>65535</red>
 				<green>0</green>
@@ -25,8 +25,8 @@
 			</fg_color>
 		</threshold>
 		<threshold>
-			<low>20</low>
-			<high>60</high>
+			<low>200</low>
+			<high>1000</high>
 			<bg_color>
 				<red>65500</red>
 				<green>62985</green>
