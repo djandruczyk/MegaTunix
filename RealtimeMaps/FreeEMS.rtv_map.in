@@ -443,13 +443,13 @@ log_by_default=TRUE
 
 [derived_30]
 keys=size,internal_names,dlog_gui_name,dlog_field_name,offset,tooltip,real_lower,real_upper,precision,log_by_default
-size=_U16_
+size=_U08_
 internal_names=tempClock
 _dlog_gui_name=Clock/Logs Sent
 dlog_field_name=tempClock
 offset=58
 real_lower=0
-real_upper=65535
+real_upper=255
 precision=0
 _tooltip="tempClock" is a variable that is incremented each time a datalog is sent
 log_by_default=TRUE
