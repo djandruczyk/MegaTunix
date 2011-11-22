@@ -36,41 +36,65 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	OutputData *output = NULL;
 	FreeEMS_Packet *packet = NULL;
 	GTimeVal tval;
-	guint8 *buf = NULL;
 	gint res = 0;
 	gint tmit_len = 0;
 	gint len = 0;
 	gint base = 0;
-	guint8 sum = 0;
+	guint8 byte = 0;
 	gint i = 0;
 	gint seq = 69;
+	guint8 *buf = NULL;
+	GByteArray *payload;
 	Bt_Data data;
 
 
 	pull_data_from_gui(&data);
+	payload = g_byte_array_new();
 	buf = g_new0(guint8,(BENCH_TEST_PKT_LEN-4));
 	/* Mode currently fixed at 0x01 */
+	byte = 1;
 	buf[0] = 1;
+	g_byte_array_append(payload,&byte,1);
 	/* Events per Cycle (8 bit) */
 	buf[1] = data.events_per_cycle;
+	g_byte_array_append(payload,&data.events_per_cycle,1);
 	/* Cycles (16 bit) */
 	buf[2] = (data.cycles & 0xff00 ) >> 8;
-	buf[3] = (data.cycles & 0x00ff );
+	buf[3] = data.cycles & 0x00ff;
+	byte = (data.cycles & 0xff00 ) >> 8;
+	g_byte_array_append(payload,&byte,1);
+	byte = (data.cycles & 0x00ff );
+	g_byte_array_append(payload,&byte,1);
 	/* Cycles (16 bit) */
 	buf[4] = (data.ticks_per_event & 0xff00 ) >> 8;
-	buf[5] = (data.ticks_per_event & 0x00ff );
+	buf[5] = data.ticks_per_event & 0x00ff;
+	byte = (data.ticks_per_event & 0xff00 ) >> 8;
+	g_byte_array_append(payload,&byte,1);
+	byte = (data.ticks_per_event & 0x00ff );
+	g_byte_array_append(payload,&byte,1);
 	/* Events to fire on (6 8 bit values) */
+	base=6;
 	for (i=0;i<6;i++)
-		buf[6+i] = data.events[i];
+	{
+		buf[base+i] = data.events[i];
+		g_byte_array_append(payload,&data.events[i],1);
+	}
 	/* PW Sources (6 16 bit values) */
 	base=12;
 	for (i=0;i<6;i++)
 	{
+		byte = (data.pw_sources[i] & 0xff00 ) >> 8;
+		g_byte_array_append(payload,&byte,1);
+		byte = (data.pw_sources[i] & 0x00ff );
+		g_byte_array_append(payload,&byte,1);
 		buf[base] = (data.pw_sources[i] & 0xff00 ) >> 8;
 		base++;
 		buf[base] = (data.pw_sources[i] & 0x00ff );
 		base++;
 	}
+	printf("base %i, bytearray length %i\n",base,payload->len);
+	for (i=0;i<23;i++)
+		printf("buf[%i], payload[%i]\n",(guint8) buf[i],payload->data[i]);
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
