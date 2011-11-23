@@ -119,7 +119,7 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	gtk_widget_set_sensitive(lookup_widget_f("BTest_stop_test_button"),FALSE);
 	gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_button"),FALSE);
 	gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_entry"),FALSE);
-	gtk_label_set_text(GTK_LABEL(lookup_widget_f("BTest_time_remain_label")),"HH:MM:SS");
+	gtk_label_set_markup(GTK_LABEL(lookup_widget_f("BTest_time_remain_label")),"<b>HH:MM:SS</b>");
 
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x00 to stop */
@@ -319,8 +319,8 @@ gboolean benchtest_clock_update(gpointer data)
 	/*printf("hour %i, min %i, sec %i, msec %i\n",hour,min,sec,msec);*/
 	if (total > 0)
 	{
-		tmpbuf = g_strdup_printf("%.2i:%.2i:%.2i",hour,min,sec);
-		gtk_label_set_text(GTK_LABEL(label),tmpbuf);
+		tmpbuf = g_strdup_printf("<b>%.2i:%.2i:%.2i</b>",hour,min,sec);
+		gtk_label_set_markup(GTK_LABEL(label),tmpbuf);
 		g_free(tmpbuf);
 		return TRUE;
 	}
@@ -331,7 +331,7 @@ gboolean benchtest_clock_update(gpointer data)
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_stop_test_button"),FALSE);
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_button"),FALSE);
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_entry"),FALSE);
-		gtk_label_set_text(GTK_LABEL(label),"HH:MM:SS");
+		gtk_label_set_markup(GTK_LABEL(label),"<b>HH:MM:SS</b>");
 		thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest completed...\n")),FALSE,FALSE);
 		return FALSE;
 	}
