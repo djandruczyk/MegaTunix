@@ -384,6 +384,7 @@
                                     <child>
                                       <widget class="GtkTable" id="table2">
                                         <property name="visible">True</property>
+                                        <property name="n_rows">2</property>
                                         <property name="n_columns">2</property>
                                         <property name="column_spacing">20</property>
                                         <property name="homogeneous">True</property>
@@ -407,6 +408,59 @@
                                           <packing>
                                             <property name="left_attach">1</property>
                                             <property name="right_attach">2</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkTable" id="table6">
+                                            <property name="visible">True</property>
+                                            <property name="n_columns">3</property>
+                                            <property name="column_spacing">3</property>
+                                            <child>
+                                              <widget class="GtkEntry" id="iterations_entry">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="max_length">7</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">7</property>
+                                                <property name="text" translatable="yes">50000</property>
+                                                <signal name="changed" handler="entry_changed_handler"/>
+                                                <signal name="key_press_event" handler="key_event"/>
+                                                <signal name="insert_text" handler="insert_text_handler"/>
+                                                <signal name="focus_out_event" handler="focus_out_handler"/>
+                                                <signal name="activate" handler="std_entry_handler"/>
+                                                <signal name="key_release_event" handler="key_event"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkButton" id="bump_button">
+                                                <property name="label" translatable="yes">Reset Iterations</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">True</property>
+                                                <signal name="activate" handler="std_button_handler"/>
+                                              </widget>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="time_remain_label">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">HH:MM:SS</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                          <packing>
+                                            <property name="right_attach">2</property>
+                                            <property name="top_attach">1</property>
+                                            <property name="bottom_attach">2</property>
                                           </packing>
                                         </child>
                                       </widget>

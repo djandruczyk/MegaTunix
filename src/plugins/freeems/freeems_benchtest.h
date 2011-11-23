@@ -38,6 +38,7 @@ struct _Bt_Data
 void benchtest_validate_and_run(void);
 void benchtest_stop(void);
 gboolean pull_data_from_gui(Bt_Data *);
+gboolean benchtest_clock_update(gpointer);
 /* Prototypes */
 
 #endif

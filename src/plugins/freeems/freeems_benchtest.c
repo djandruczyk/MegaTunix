@@ -33,6 +33,7 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void benchtest_validate_and_run(void)
 {
+	static gint id = 0;
 	GAsyncQueue *queue = NULL;
 	OutputData *output = NULL;
 	FreeEMS_Packet *packet = NULL;
@@ -49,8 +50,11 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	Bt_Data data;
 
 	pull_data_from_gui(&data);
+	if (id)
+		g_source_remove(id);
 	
 	thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Total benchtest runtime should be %.1f seconds...\n"),(data.events_per_cycle*data.cycles*data.ticks_per_event)/1250000.0),FALSE,FALSE);
+	id = g_timeout_add(500,benchtest_clock_update,GINT_TO_POINTER((GINT)((data.events_per_cycle*data.cycles*data.ticks_per_event)/1250)));
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x01 */
 	byte = 1;
@@ -216,4 +220,54 @@ gboolean pull_data_from_gui(Bt_Data *data)
 	g_free(text);
 
 	return TRUE;
+}
+
+
+gboolean benchtest_clock_update(gpointer data)
+{
+	static gint total = 0;
+	static GTimeVal cur;
+	static GTimeVal last;
+	static GtkWidget *label = NULL;
+	gchar *tmpbuf = NULL;
+	gint hour = 0;
+	gint min = 0;
+	gint sec = 0;
+	gint msec = 0;
+	gint diff = 0;
+
+	if (!label)
+		label = lookup_widget_f("BTest_time_remain_label");
+	g_return_val_if_fail(label,FALSE);
+
+	last = cur;
+	g_get_current_time(&cur);
+
+	if (total == 0 )
+		total = (GINT)data;
+	else
+	{
+		diff = ((cur.tv_sec-last.tv_sec) * 1000000) + (cur.tv_usec-last.tv_usec); 
+		total -= (diff/1000);
+		if (total <= 0 )
+			total = 0;
+	}
+//	printf("Total time in msec %i\n",total);
+	hour = total / 3600000;
+	min = (total % 3600000) / 60000;
+	sec = ((total % 3600000) % 60000)/1000;
+	msec = (((total % 3600000) % 60000) % 1000);
+//	printf("hour %i, min %i, sec %i, msec %i\n",hour,min,sec,msec);
+	if (total > 0)
+	{
+		tmpbuf = g_strdup_printf("%.2i:%.2i:%.2i",hour,min,sec);
+		gtk_label_set_text(GTK_LABEL(label),tmpbuf);
+		g_free(tmpbuf);
+		return TRUE;
+	}
+	else
+	{
+		gtk_label_set_text(GTK_LABEL(label),"HH:MM:SS");
+		return FALSE;
+	}
 }
