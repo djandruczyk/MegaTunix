@@ -30,7 +30,6 @@
 
 extern gconstpointer *global_data;
 
-#define PKT_DEBUG 0
 
 /*!
   \brief This functions handles all incoing data from the ECU and validates
@@ -273,8 +272,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	packet->payload_base_offset = tmpi;
 	packet->is_nack = ((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0;
 
-	/*if ((PKT_DEBUG) || (packet->is_nack))*/
-	if (PKT_DEBUG)
+	if (getenv("PKT_DEBUG"))
 	{
 		printf("Full packet received, %i bytes!\n",packet->raw_length);
 		if (packet->is_nack)
@@ -544,6 +542,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	gboolean have_locid = FALSE;
 	gboolean have_offset = FALSE;
 	guint8 *payload_data = NULL;
+	GByteArray *array = NULL;
 	gint length = 0;
 	gint payload_data_length = 0;
 	gint byte = 0;
@@ -611,13 +610,20 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				have_payload_data = TRUE;
 				payload_data = (guint8 *)DATA_GET(output->data,arg->internal_name);
 				break;
+			case PAYLOAD_DATA:
+				have_payload_data = TRUE;
+				array = (GByteArray *)DATA_GET(output->data,arg->internal_name);
+				packet_length += 2;
+				length = array->len;
+				payload_data = (guint8 *)array->data;
+				break;
 			default:
 				printf("FreeEMS doesn't handle this type %s\n",arg->name);
 				break;
 		}
 	}
 
-	if (PKT_DEBUG)
+	if (getenv("PKT_DEBUG"))
 	{
 		printf("build_output_message(): ACTION being created!\n");
 		printf("Sequence number %i\n",seq_num);
@@ -704,11 +710,11 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	pos++;
 
 	/*
-	printf("RAW PACKET -> ");
-	for (i=0;i<packet_length;i++)
-		printf("%.2X ",buf[i]);
-	printf("\n\n");
-	*/
+	   printf("RAW PACKET -> ");
+	   for (i=0;i<packet_length;i++)
+	   printf("%.2X ",buf[i]);
+	   printf("\n\n");
+	 */
 	/* Escape + start/stop it */
 	block = g_new0(DBlock, 1);
 	block->type = DATA;

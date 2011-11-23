@@ -34,9 +34,9 @@ _tooltip=This button will turn red when a value is changed in the ECU's RAM but 
 keys=handler
 handler=_BENCHTEST_START_
 
-[reset_ecu_button]
+[stop_test_button]
 keys=handler
-handler=_SOFT_BOOT_ECU_
+handler=_BENCHTEST_STOP_
 
 #----- Widgets ---------------------------------------------------------------
 

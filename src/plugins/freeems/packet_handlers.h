@@ -35,7 +35,8 @@ typedef enum
 	LOCATION_ID,
 	OFFSET,
 	DATA_LENGTH,
-	DATABYTE
+	DATABYTE,
+	PAYLOAD_DATA
 }FreeEMSArgTypes;
 
 /* For raw packet generation in interrogator */

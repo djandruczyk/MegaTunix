@@ -278,6 +278,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(DATA_LENGTH));
 		g_hash_table_insert (str_2_enum, "_DATABYTE_",
 				GINT_TO_POINTER(DATABYTE));
+		g_hash_table_insert (str_2_enum, "_PAYLOAD_DATA_",
+				GINT_TO_POINTER(PAYLOAD_DATA));
 		g_hash_table_insert (str_2_enum, "_FREEEMS_ALL_",
 				GINT_TO_POINTER(FREEEMS_ALL));
 		g_hash_table_insert (str_2_enum, "_GENERIC_READ_",
@@ -297,6 +299,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(HARD_BOOT_ECU));
 		g_hash_table_insert (str_2_enum, "_BENCHTEST_START_",
 				GINT_TO_POINTER(BENCHTEST_START));
+		g_hash_table_insert (str_2_enum, "_BENCHTEST_STOP_",
+				GINT_TO_POINTER(BENCHTEST_STOP));
 		g_hash_table_insert (str_2_enum, "_GENERIC_",
 				GINT_TO_POINTER(GENERIC));
 		g_hash_table_insert (str_2_enum, "_NOOP_",
@@ -337,6 +341,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_OFFSET_");
 		g_hash_table_remove (str_2_enum, "_DATA_LENGTH_");
 		g_hash_table_remove (str_2_enum, "_DATABYTE_");
+		g_hash_table_remove (str_2_enum, "_PAYLOAD_DATA_");
 		g_hash_table_remove (str_2_enum, "_FREEEMS_ALL_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_READ_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_RAM_WRITE_");
@@ -347,6 +352,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_SOFT_BOOT_ECU_");
 		g_hash_table_remove (str_2_enum, "_HARD_BOOT_ECU_");
 		g_hash_table_remove (str_2_enum, "_BENCHTEST_START_");
+		g_hash_table_remove (str_2_enum, "_BENCHTEST_STOP_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_");
 		g_hash_table_remove (str_2_enum, "_NOOP_");
 	}

@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <defines.h>
 #include <freeems_benchtest.h>
 #include <freeems_plugin.h>
 #include <gtk/gtk.h>
@@ -47,59 +48,77 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	GByteArray *payload;
 	Bt_Data data;
 
-
 	pull_data_from_gui(&data);
+	
+	thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Total benchtest runtime should be %.1f seconds...\n"),(data.events_per_cycle*data.cycles*data.ticks_per_event)/1250000.0),FALSE,FALSE);
 	payload = g_byte_array_new();
-	buf = g_new0(guint8,(BENCH_TEST_PKT_LEN-4));
 	/* Mode currently fixed at 0x01 */
 	byte = 1;
-	buf[0] = 1;
 	g_byte_array_append(payload,&byte,1);
 	/* Events per Cycle (8 bit) */
-	buf[1] = data.events_per_cycle;
 	g_byte_array_append(payload,&data.events_per_cycle,1);
 	/* Cycles (16 bit) */
-	buf[2] = (data.cycles & 0xff00 ) >> 8;
-	buf[3] = data.cycles & 0x00ff;
 	byte = (data.cycles & 0xff00 ) >> 8;
 	g_byte_array_append(payload,&byte,1);
 	byte = (data.cycles & 0x00ff );
 	g_byte_array_append(payload,&byte,1);
 	/* Cycles (16 bit) */
-	buf[4] = (data.ticks_per_event & 0xff00 ) >> 8;
-	buf[5] = data.ticks_per_event & 0x00ff;
 	byte = (data.ticks_per_event & 0xff00 ) >> 8;
 	g_byte_array_append(payload,&byte,1);
 	byte = (data.ticks_per_event & 0x00ff );
 	g_byte_array_append(payload,&byte,1);
 	/* Events to fire on (6 8 bit values) */
-	base=6;
 	for (i=0;i<6;i++)
-	{
-		buf[base+i] = data.events[i];
 		g_byte_array_append(payload,&data.events[i],1);
-	}
 	/* PW Sources (6 16 bit values) */
-	base=12;
 	for (i=0;i<6;i++)
 	{
 		byte = (data.pw_sources[i] & 0xff00 ) >> 8;
 		g_byte_array_append(payload,&byte,1);
 		byte = (data.pw_sources[i] & 0x00ff );
 		g_byte_array_append(payload,&byte,1);
-		buf[base] = (data.pw_sources[i] & 0xff00 ) >> 8;
-		base++;
-		buf[base] = (data.pw_sources[i] & 0x00ff );
-		base++;
 	}
-	printf("base %i, bytearray length %i\n",base,payload->len);
-	for (i=0;i<23;i++)
-		printf("buf[%i], payload[%i]\n",(guint8) buf[i],payload->data[i]);
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
-	DATA_SET(output->data,"data",buf);
-	DATA_SET(output->data,"data_length",GINT_TO_POINTER(BENCH_TEST_PKT_LEN-4));
+	DATA_SET_FULL(output->data,"payload_data_array",payload,g_byte_array_unref);
+	queue = g_async_queue_new();
+	register_packet_queue(SEQUENCE_NUM,queue,seq);
+	DATA_SET(output->data,"queue",queue);
+	io_cmd_f("benchtest_pkt",output);
+
+	return;
+}
+
+
+/*!
+  \brief Stops the benchtest
+  */
+G_MODULE_EXPORT void benchtest_stop(void)
+{
+	GAsyncQueue *queue = NULL;
+	OutputData *output = NULL;
+	FreeEMS_Packet *packet = NULL;
+	GTimeVal tval;
+	gint res = 0;
+	gint tmit_len = 0;
+	gint len = 0;
+	gint base = 0;
+	guint8 byte = 0;
+	gint i = 0;
+	gint seq = 70;
+	guint8 *buf = NULL;
+	GByteArray *payload;
+	Bt_Data data;
+
+	payload = g_byte_array_new();
+	/* Mode currently fixed at 0x00 to stop */
+	byte = 0;
+	g_byte_array_append(payload,&byte,1);
+	output = initialize_outputdata_f();
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
+	DATA_SET_FULL(output->data,"payload_data_array",payload,g_byte_array_unref);
 	queue = g_async_queue_new();
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
 	DATA_SET(output->data,"queue",queue);

@@ -2,6 +2,13 @@
 <comms>
 	<potential_args>
 		<arg>	
+			<name>PAYLOAD_DATA</name>
+			<desc>Data to transfer to ECU, length is variable, packet int oa g_byte_array structure, length is part of the structure.</desc>
+			<type>_PAYLOAD_DATA_</type>
+			<internal_name>payload_data_array</internal_name>
+			<size>_UNDEF_</size>
+		</arg>
+		<arg>	
 			<name>DATACHUNK</name>
 			<desc>Data to transfer to ECU, length is variable.</desc>
 			<type>_DATA_</type>
@@ -73,8 +80,9 @@
 			<args>
 				<arg>SEQUENCE_NUM</arg> 
 				<arg>PAYLOAD_ID</arg>
-				<arg>DATACHUNK</arg>
-				<arg>DATA_LENGTH</arg>
+				<arg>PAYLOAD_DATA</arg>
+			<!--	<arg>DATACHUNK</arg>
+				<arg>DATA_LENGTH</arg> -->
 			</args>
 			<helper_func>handle_transaction_hf</helper_func>
                         <helper_func_arg>_BENCHTEST_RESPONSE_</helper_func_arg>

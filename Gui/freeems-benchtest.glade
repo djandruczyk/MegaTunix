@@ -57,7 +57,7 @@
                                             <property name="cursor_visible">False</property>
                                             <property name="text" translatable="yes">Notes:
 
-* Once you hit start the ONLY way (currently) to stop the test, click on the "Reset ECU" button
+* Once you hit start the ONLY way (currently) to stop the test, click on the "Stop Test" button
 * To determine how long your test will run for, simply multiply the first three values together!
 * To determine the duty cycle divide the PW (if chosen explicitly) by the result of multiplying the "Events Per Cycle" by "Time Per Event" together.
 * Events To Fire values equal to, or in excess of, Events Per Cycle are considered off!
@@ -397,8 +397,8 @@
                                           </widget>
                                         </child>
                                         <child>
-                                          <widget class="GtkButton" id="reset_ecu_button">
-                                            <property name="label" translatable="yes">Reset ECU</property>
+                                          <widget class="GtkButton" id="stop_test_button">
+                                            <property name="label" translatable="yes">Stop Test</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">True</property>
