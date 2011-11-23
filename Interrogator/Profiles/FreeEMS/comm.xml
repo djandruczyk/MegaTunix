@@ -97,6 +97,18 @@
 			</args>
 		</cmd>
 		<cmd>
+			<name>datalog_post_functions</name>
+			<desc>datalog stream post functions</desc>
+			<type>_NULL_CMD_</type>
+			<defer_post_functions>FALSE</defer_post_functions>
+			<post_functions>
+				<function>update_runtime_status_pf</function>
+				<function>update_logview_traces_pf</function>
+                                <function>fire_off_rtv_watches_pf</function>
+                                <function>run_datalog_pf</function>
+			</post_functions>
+		</cmd>
+		<cmd>
                         <name>burn_all</name>
                         <desc>Calls a function to burn ALL applicable pages to flash</desc>
                         <type>_FUNC_CALL_</type>
@@ -116,18 +128,6 @@
 			<helper_func>handle_transaction_hf</helper_func>
                         <helper_func_arg>_GENERIC_BURN_</helper_func_arg>
                 </cmd>
-		<cmd>
-			<name>datalog_post_functions</name>
-			<desc>datalog stream post functions</desc>
-			<type>_NULL_CMD_</type>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function>update_runtime_status_pf</function>
-				<function>update_logview_traces_pf</function>
-                                <function>fire_off_rtv_watches_pf</function>
-                                <function>run_datalog_pf</function>
-			</post_functions>
-		</cmd>
 		<cmd>
 			<name>generic_RAM_write</name>
 			<desc>Generic RAM write function</desc>
