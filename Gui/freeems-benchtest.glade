@@ -711,7 +711,7 @@
                                             </child>
                                             <child>
                                               <widget class="GtkButton" id="bump_button">
-                                                <property name="label" translatable="yes">Reset Iterations</property>
+                                                <property name="label" translatable="yes">Add Iterations</property>
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
                                                 <property name="can_focus">True</property>
