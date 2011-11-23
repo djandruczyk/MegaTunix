@@ -10,34 +10,6 @@
 	<rtt>
 		<internal_name>Clock</internal_name>
 		<datasource>tempClock</datasource>
-		<threshold>
-			<low>128</low>
-			<high>191</high>
-			<bg_color>
-				<red>65535</red>
-				<green>0</green>
-				<blue>0</blue>
-			</bg_color>
-			<fg_color>
-				<red>65535</red>
-				<green>65535</green>
-				<blue>65535</blue>
-			</fg_color>
-		</threshold>
-		<threshold>
-			<low>192</low>
-			<high>255</high>
-			<bg_color>
-				<red>65500</red>
-				<green>62985</green>
-				<blue>0</blue>
-			</bg_color>
-			<fg_color>
-				<red>0</red>
-				<green>0</green>
-				<blue>0</blue>
-			</fg_color>
-		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>RPM</internal_name>
@@ -98,6 +70,62 @@
 	<rtt>
 		<internal_name>BRV</internal_name>
 		<datasource>BRV</datasource>
+		<threshold>
+			<low>0</low>
+			<high>13.599</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>13.600</low>
+			<high>13.799</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>14.401</low>
+			<high>14.599</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>14.600</low>
+			<high>65.535</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>Ign. Adv.</internal_name>
@@ -150,37 +178,220 @@
 	<rtt>
 		<internal_name>Elec. Duty</internal_name>
 		<datasource>ElecDuty</datasource>
+		<threshold>
+			<low>80</low>
+			<high>89</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>90</low>
+			<high>100</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>Fuel Duty</internal_name>
 		<datasource>FuelDuty</datasource>
+		<threshold>
+			<low>70</low>
+			<high>79</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>80</low>
+			<high>100</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>Sync Resets</internal_name>
 		<datasource>syncResetCalls</datasource>
+		<threshold>
+			<low>1</low>
+			<high>255</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>Sync Loss Reason</internal_name>
 		<datasource>syncLostWithThisID</datasource>
+		<threshold>
+			<low>1</low>
+			<high>255</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>Sync Loss Event</internal_name>
 		<datasource>syncLostOnThisEvent</datasource>
+		<!-- Zero can be bad too, so should stay white, unless colour could depend on another field? IE, highlight this only if sync resets is non-zero. -->
 	</rtt>
 	<rtt>
 		<internal_name>Serial Overruns</internal_name>
 		<datasource>serialOverrunErrors</datasource>
+		<threshold>
+			<low>1</low>
+			<high>255</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>Serial HW Errors</internal_name>
 		<datasource>serialHardwareErrors</datasource>
+		<threshold>
+			<low>1</low>
+			<high>255</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>Comms Code Errors</internal_name>
 		<datasource>serialAndCommsCodeErrors</datasource>
+		<threshold>
+			<low>1</low>
+			<high>255</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 	</rtt>
 	<rtt>
 		<internal_name>Time Tolerance</internal_name>
 		<datasource>inputEventTimeTolerance</datasource>
 	</rtt>
+		<threshold>
+			<low>0</low>
+			<high>500</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>501</low>
+			<high>667</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>1500</low>
+			<high>1999</high>
+			<bg_color>
+				<red>65500</red>
+				<green>62985</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
+		<threshold>
+			<low>2000</low>
+			<high>65535</high>
+			<bg_color>
+				<red>65535</red>
+				<green>0</green>
+				<blue>0</blue>
+			</bg_color>
+			<fg_color>
+				<red>0</red>
+				<green>0</green>
+				<blue>0</blue>
+			</fg_color>
+		</threshold>
 </runtimetext>
