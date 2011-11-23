@@ -394,8 +394,9 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					thread_update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE);
 					g_free(errmsg);
 				}
+				/*
 				else
-					thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Packet accepted...\n")),FALSE,FALSE);
+				thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Packet accepted...\n")),FALSE,FALSE);
 				freeems_packet_cleanup(packet);
 			}
 			break;

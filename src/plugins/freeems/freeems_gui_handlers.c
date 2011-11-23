@@ -115,6 +115,9 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 		case BENCHTEST_STOP:
 			benchtest_stop();
 			break;
+		case BENCHTEST_BUMP:
+			benchtest_bump();
+			break;
 		default:
 			if (!ecu_handler)
 			{

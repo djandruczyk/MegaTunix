@@ -38,24 +38,17 @@ handler=_BENCHTEST_START_
 keys=handler
 handler=_BENCHTEST_STOP_
 
-#----- Widgets ---------------------------------------------------------------
+[bump_button]
+keys=handler
+handler=_BENCHTEST_BUMP_
 
-#[sweeper_frame]
-#keys=post_functions_with_arg
-#post_functions_with_arg=jimstim_sweeper_init
-#
-#[jimstim_view]
-#keys=create_tags,register_as
-#register_as=jimstim_view
-#create_tags=warning
-#warning=foreground,red
+#----- Widgets ---------------------------------------------------------------
 
 [freeems_benchtest_view]
 keys=create_tags,register_as
 register_as=freeems_benchtest_view
 create_tags=warning
 warning=foreground,red
-
 
 #----- Labels ----------------------------------------------------------------
 
@@ -147,4 +140,10 @@ keys=size,raw_upper,tooltip
 size=_U16_
 raw_upper=65535
 tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
+
+[bump_entry]
+keys=size,raw_upper,tooltip
+size=_U08_
+raw_upper=255
+tooltip=0 means error, Any value from 1-255 is the new number of cycles to append to the running test.  The clock should update accordingly.
 

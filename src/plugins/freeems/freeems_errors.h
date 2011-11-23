@@ -93,6 +93,8 @@ static struct _FreeEMS_Errors
 	{0x4015,"No such location ID list type!"},
 	{0x4016,"Payload shorter than required for test!"},
 	{0x4017,"No such unit test ID!"},
+	{0x4018,"Attempting to write to READ ONLY block!"},
+	/* Table error Codes */
 	{0x6000,"Error base main table RPM!"},
 	{0x6001,"Invalid main table RPM order!"},
 	{0x6002,"Invalid main table RPM index!"},
@@ -102,16 +104,23 @@ static struct _FreeEMS_Errors
 	{0x6006,"Invalid main table Load index!"},
 	{0x6007,"Invalid main table Load length!"},
 	{0x6008,"Invalid main table Main length!"},
+	/* 2D Table error Codes */
 	{0x6010,"Error base 2D table axis!"},
 	{0x6011,"Invalid 2D table axis order!"},
 	{0x6012,"Invalid 2D table index!"},
+	/* Benchtest error Codes */
 	{0x7777,"This firmware is not the Bench Test Decoder Firmware!"},
 	{0x7778,"Too short of a PulseWidth to test!"},
 	{0x7779,"Unimplementated Test Mode!"},
 	{0x777A,"Invalid Events per Cycle!"},
 	{0x777B,"Invalid Number of Cycles!"},
 	{0x777C,"Too shor of an Event Period!"},
-	{0x777D,"No channels configured to test!"}
+	{0x777D,"No channels configured to test!"},
+	{0x777E,"Bench test already running!"},
+	{0x777F,"Packet size wrong for test mode!"},
+	{0x7780,"Bumping by zero iterations makes no sense!"},
+	{0x7781,"Bench test NOT running to stop!"},
+	{0x7782,"Bench test NOT running to bump!"}
 };
 
 /* Prototypes */

@@ -26,6 +26,8 @@
 #include <serialio.h>
 
 extern gconstpointer *global_data;
+static gint id = 0;
+static gint total = 0;
 
 /*!
   \brief Validates the on screen data, prompting if necessary and creating
@@ -33,7 +35,6 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void benchtest_validate_and_run(void)
 {
-	static gint id = 0;
 	GAsyncQueue *queue = NULL;
 	OutputData *output = NULL;
 	FreeEMS_Packet *packet = NULL;
@@ -104,16 +105,21 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	OutputData *output = NULL;
 	FreeEMS_Packet *packet = NULL;
 	GTimeVal tval;
-	gint res = 0;
-	gint tmit_len = 0;
-	gint len = 0;
-	gint base = 0;
 	guint8 byte = 0;
 	gint i = 0;
 	gint seq = 70;
 	guint8 *buf = NULL;
 	GByteArray *payload;
-	Bt_Data data;
+
+	total = 0;
+	if (id)
+		g_source_remove(id);
+	gtk_widget_set_sensitive(lookup_widget_f("BTest_params_table"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget_f("BTest_start_test_button"),TRUE);
+	gtk_widget_set_sensitive(lookup_widget_f("BTest_stop_test_button"),FALSE);
+	gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_button"),FALSE);
+	gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_entry"),FALSE);
+	gtk_label_set_text(GTK_LABEL(lookup_widget_f("BTest_time_remain_label")),"HH:MM:SS");
 
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x00 to stop */
@@ -127,6 +133,52 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("benchtest_pkt",output);
+	thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest stopped by the user...\n")),FALSE,FALSE);
+
+	return;
+}
+
+
+/*!
+  \brief Bumps the benchtest
+  */
+G_MODULE_EXPORT void benchtest_bump(void)
+{
+	GAsyncQueue *queue = NULL;
+	OutputData *output = NULL;
+	FreeEMS_Packet *packet = NULL;
+	guint8 byte = 0;
+	gint seq = 71;
+	gint addition = 0;
+	guint8 bump = 0;
+	guint8 *buf = NULL;
+	GByteArray *payload = NULL;
+	Bt_Data data;
+	gchar * text = NULL;
+
+	pull_data_from_gui(&data);
+
+        text = gtk_editable_get_chars(GTK_EDITABLE(lookup_widget_f("BTest_bump_entry")),0,-1);
+	bump = (guint8)g_strtod(text,NULL);
+	g_free(text);
+	addition = (data.events_per_cycle*bump*data.ticks_per_event)/1250;
+	total += addition;
+
+	payload = g_byte_array_new();
+	/* Mode currently fixed at 0x02 to bump */
+	byte = 2;
+	g_byte_array_append(payload,&byte,1);
+	/* Add the amount of time to bump by */
+	g_byte_array_append(payload,&bump,1);
+	output = initialize_outputdata_f();
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
+	DATA_SET_FULL(output->data,"payload_data_array",payload,g_byte_array_unref);
+	queue = g_async_queue_new();
+	register_packet_queue(SEQUENCE_NUM,queue,seq);
+	DATA_SET(output->data,"queue",queue);
+	io_cmd_f("benchtest_pkt",output);
+	thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock)...\n"),addition/1000.0),FALSE,FALSE);
 
 	return;
 }
@@ -225,7 +277,6 @@ gboolean pull_data_from_gui(Bt_Data *data)
 
 gboolean benchtest_clock_update(gpointer data)
 {
-	static gint total = 0;
 	static GTimeVal cur;
 	static GTimeVal last;
 	static GtkWidget *label = NULL;
@@ -248,6 +299,9 @@ gboolean benchtest_clock_update(gpointer data)
 	{
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_params_table"),FALSE);
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_start_test_button"),FALSE);
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_stop_test_button"),TRUE);
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_button"),TRUE);
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_entry"),TRUE);
 		total = (GINT)data;
 	}
 	else
@@ -257,12 +311,12 @@ gboolean benchtest_clock_update(gpointer data)
 		if (total <= 0 )
 			total = 0;
 	}
-//	printf("Total time in msec %i\n",total);
+	/*printf("Total time in msec %i\n",total);*/
 	hour = total / 3600000;
 	min = (total % 3600000) / 60000;
 	sec = ((total % 3600000) % 60000)/1000;
 	msec = (((total % 3600000) % 60000) % 1000);
-//	printf("hour %i, min %i, sec %i, msec %i\n",hour,min,sec,msec);
+	/*printf("hour %i, min %i, sec %i, msec %i\n",hour,min,sec,msec);*/
 	if (total > 0)
 	{
 		tmpbuf = g_strdup_printf("%.2i:%.2i:%.2i",hour,min,sec);
@@ -274,7 +328,11 @@ gboolean benchtest_clock_update(gpointer data)
 	{
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_params_table"),TRUE);
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_start_test_button"),TRUE);
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_stop_test_button"),FALSE);
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_button"),FALSE);
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_entry"),FALSE);
 		gtk_label_set_text(GTK_LABEL(label),"HH:MM:SS");
+		thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest completed...\n")),FALSE,FALSE);
 		return FALSE;
 	}
 }

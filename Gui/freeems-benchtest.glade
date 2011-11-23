@@ -671,6 +671,7 @@
                                           <widget class="GtkButton" id="stop_test_button">
                                             <property name="label" translatable="yes">Stop Test</property>
                                             <property name="visible">True</property>
+                                            <property name="sensitive">False</property>
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">True</property>
                                             <signal name="clicked" handler="std_button_handler"/>
@@ -686,13 +687,14 @@
                                             <property name="n_columns">3</property>
                                             <property name="column_spacing">3</property>
                                             <child>
-                                              <widget class="GtkEntry" id="iterations_entry">
+                                              <widget class="GtkEntry" id="bump_entry">
                                                 <property name="visible">True</property>
+                                                <property name="sensitive">False</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="max_length">7</property>
                                                 <property name="invisible_char">&#x25CF;</property>
-                                                <property name="width_chars">7</property>
-                                                <property name="text" translatable="yes">50000</property>
+                                                <property name="width_chars">5</property>
+                                                <property name="text" translatable="yes">50</property>
                                                 <signal name="changed" handler="entry_changed_handler"/>
                                                 <signal name="key_press_event" handler="key_event"/>
                                                 <signal name="insert_text" handler="insert_text_handler"/>
@@ -703,7 +705,7 @@
                                               <packing>
                                                 <property name="left_attach">1</property>
                                                 <property name="right_attach">2</property>
-                                                <property name="x_options"></property>
+                                                <property name="x_options">GTK_FILL</property>
                                                 <property name="y_options"></property>
                                               </packing>
                                             </child>
@@ -711,10 +713,14 @@
                                               <widget class="GtkButton" id="bump_button">
                                                 <property name="label" translatable="yes">Reset Iterations</property>
                                                 <property name="visible">True</property>
+                                                <property name="sensitive">False</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">True</property>
-                                                <signal name="activate" handler="std_button_handler"/>
+                                                <signal name="clicked" handler="std_button_handler"/>
                                               </widget>
+                                              <packing>
+                                                <property name="x_options">GTK_FILL</property>
+                                              </packing>
                                             </child>
                                             <child>
                                               <widget class="GtkLabel" id="time_remain_label">
@@ -724,6 +730,7 @@
                                               <packing>
                                                 <property name="left_attach">2</property>
                                                 <property name="right_attach">3</property>
+                                                <property name="x_options">GTK_EXPAND</property>
                                               </packing>
                                             </child>
                                           </widget>

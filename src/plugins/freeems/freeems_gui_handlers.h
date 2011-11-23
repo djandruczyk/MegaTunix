@@ -32,6 +32,7 @@ typedef enum
 	HARD_BOOT_ECU,
 	BENCHTEST_START,
 	BENCHTEST_STOP,
+	BENCHTEST_BUMP,
         GENERIC,
 	NOOP
 }FreeEMSCommonStdHandler;
