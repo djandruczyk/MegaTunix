@@ -243,8 +243,13 @@ gboolean benchtest_clock_update(gpointer data)
 	last = cur;
 	g_get_current_time(&cur);
 
+	/* First run, grey out the main controls */
 	if (total == 0 )
+	{
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_params_table"),FALSE);
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_start_test_button"),FALSE);
 		total = (GINT)data;
+	}
 	else
 	{
 		diff = ((cur.tv_sec-last.tv_sec) * 1000000) + (cur.tv_usec-last.tv_usec); 
@@ -267,6 +272,8 @@ gboolean benchtest_clock_update(gpointer data)
 	}
 	else
 	{
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_params_table"),TRUE);
+		gtk_widget_set_sensitive(lookup_widget_f("BTest_start_test_button"),TRUE);
 		gtk_label_set_text(GTK_LABEL(label),"HH:MM:SS");
 		return FALSE;
 	}
