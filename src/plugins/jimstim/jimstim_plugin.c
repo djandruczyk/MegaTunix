@@ -69,6 +69,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_assert(set_widget_sensitive_f);
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);
 	g_assert(start_tickler_f);
+	get_symbol_f("std_combo_handler",(void *)&std_combo_handler_f);
+	g_assert(std_combo_handler_f);
 	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
 	g_assert(stop_tickler_f);
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);

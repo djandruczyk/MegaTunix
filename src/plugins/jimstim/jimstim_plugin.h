@@ -47,6 +47,7 @@ EXTERN GList *(*get_list_f)(gchar *);
 EXTERN gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 EXTERN void (*set_widget_sensitive_f)(gpointer, gpointer);
 EXTERN void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
+EXTERN gboolean (*std_combo_handler_f)(GtkWidget *, gpointer);
 /* Function Pointers */
 
 
