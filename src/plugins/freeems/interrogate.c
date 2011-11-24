@@ -120,7 +120,7 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 	Serial_Params *serial_params = NULL;
 	/* Raw packet */
 	guint8 *buf = NULL;
-	guint8 pkt[FIRM_REQ_PKT_LEN];
+	guint8 pkt[FIRMWARE_VERSION_REQ_PKT_LEN];
 	gint res = 0;
 	gint i = 0;
 	guint8 sum = 0;
@@ -135,10 +135,10 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_FIRMWARE_VERSION & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_FIRMWARE_VERSION & 0x00ff );
-	for (i=0;i<FIRM_REQ_PKT_LEN-1;i++)
+	for (i=0;i<FIRMWARE_VERSION_REQ_PKT_LEN-1;i++)
 		sum += pkt[i];
-	pkt[FIRM_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,FIRM_REQ_PKT_LEN,&tmit_len);
+	pkt[FIRMWARE_VERSION_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,FIRMWARE_VERSION_REQ_PKT_LEN,&tmit_len);
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
 	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
@@ -166,6 +166,198 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 
 
 /*!
+  \brief Issues a packet to the ECU to get its build date
+  \param len is a pointer to a location to store the length of the data
+  received, or NULL
+  \returns the Firmware version as a text string
+  */
+G_MODULE_EXPORT gchar *request_firmware_build_date(gint *length)
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	gchar *retval = NULL;
+	GTimeVal tval;
+	Serial_Params *serial_params = NULL;
+	/* Raw packet */
+	guint8 *buf = NULL;
+	gint len = FIRMWARE_BUILD_DATE_REQ_PKT_LEN;
+	guint8 pkt[FIRMWARE_BUILD_DATE_REQ_PKT_LEN];
+	gint req = REQUEST_FIRMWARE_BUILD_DATE;
+	gint resp = RESPONSE_FIRMWARE_BUILD_DATE;
+	gint res = 0;
+	gint i = 0;
+	guint8 sum = 0;
+	gint tmit_len = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_val_if_fail(serial_params,NULL);
+
+	if (DATA_GET(global_data,"offline"))
+		return g_strdup("Offline");
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
+	for (i=0;i<len-1;i++)
+		sum += pkt[i];
+	pkt[len-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,resp);
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,resp);
+		g_free(buf);
+		g_async_queue_unref(queue);
+		return NULL;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,resp);
+	g_async_queue_unref(queue);
+	if (packet)
+	{
+		retval = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
+		if (length)
+			*length = packet->payload_length;
+		freeems_packet_cleanup(packet);
+	}
+	return retval;
+}
+
+
+/*!
+  \brief Issues a packet to the ECU to get its build compiler
+  \param len is a pointer to a location to store the length of the data
+  received, or NULL
+  \returns the Firmware version as a text string
+  */
+G_MODULE_EXPORT gchar *request_firmware_compiler(gint *length)
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	gchar *retval = NULL;
+	GTimeVal tval;
+	Serial_Params *serial_params = NULL;
+	/* Raw packet */
+	guint8 *buf = NULL;
+	gint len = FIRMWARE_COMPILER_VER_REQ_PKT_LEN;
+	guint8 pkt[FIRMWARE_COMPILER_VER_REQ_PKT_LEN];
+	gint req = REQUEST_FIRMWARE_COMPILER_VERSION;
+	gint resp = RESPONSE_FIRMWARE_COMPILER_VERSION;
+	gint res = 0;
+	gint i = 0;
+	guint8 sum = 0;
+	gint tmit_len = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_val_if_fail(serial_params,NULL);
+
+	if (DATA_GET(global_data,"offline"))
+		return g_strdup("Offline");
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
+	for (i=0;i<len-1;i++)
+		sum += pkt[i];
+	pkt[len-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,resp);
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,resp);
+		g_free(buf);
+		g_async_queue_unref(queue);
+		return NULL;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,resp);
+	g_async_queue_unref(queue);
+	if (packet)
+	{
+		retval = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
+		if (len)
+			*length = packet->payload_length;
+		freeems_packet_cleanup(packet);
+	}
+	return retval;
+}
+
+
+/*!
+  \brief Issues a packet to the ECU to get its build os
+  \param len is a pointer to a location to store the length of the data
+  received, or NULL
+  \returns the Firmware version as a text string
+  */
+G_MODULE_EXPORT gchar *request_firmware_build_os(gint *length)
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	gchar *retval = NULL;
+	GTimeVal tval;
+	Serial_Params *serial_params = NULL;
+	/* Raw packet */
+	guint8 *buf = NULL;
+	gint len = FIRMWARE_COMPILER_OS_REQ_PKT_LEN;
+	guint8 pkt[FIRMWARE_COMPILER_OS_REQ_PKT_LEN];
+	gint req = REQUEST_FIRMWARE_COMPILER_OS;
+	gint resp = RESPONSE_FIRMWARE_COMPILER_OS;
+	gint res = 0;
+	gint i = 0;
+	guint8 sum = 0;
+	gint tmit_len = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_val_if_fail(serial_params,NULL);
+
+	if (DATA_GET(global_data,"offline"))
+		return g_strdup("Offline");
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
+	for (i=0;i<len-1;i++)
+		sum += pkt[i];
+	pkt[len-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,resp);
+	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,resp);
+		g_free(buf);
+		g_async_queue_unref(queue);
+		return NULL;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,resp);
+	g_async_queue_unref(queue);
+	if (packet)
+	{
+		retval = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
+		if (len)
+			*length = packet->payload_length;
+		freeems_packet_cleanup(packet);
+	}
+	return retval;
+}
+
+
+/*!
   \brief Issues a packet to the ECU to get its interface version. 
   \param len is a pointer to a location to store the length of the data
   received, or NULL
@@ -181,7 +373,7 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
 	/* Raw packet */
-	guint8 pkt[INTVER_REQ_PKT_LEN];
+	guint8 pkt[INTERFACE_VERSION_REQ_PKT_LEN];
 	gint res = 0;
 	gint i = 0;
 	guint8 sum = 0;
@@ -196,10 +388,10 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
 	pkt[L_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0x00ff );
-	for (i=0;i<INTVER_REQ_PKT_LEN-1;i++)
+	for (i=0;i<INTERFACE_VERSION_REQ_PKT_LEN-1;i++)
 		sum += pkt[i];
-	pkt[INTVER_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,INTVER_REQ_PKT_LEN,&tmit_len);
+	pkt[INTERFACE_VERSION_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,INTERFACE_VERSION_REQ_PKT_LEN,&tmit_len);
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
@@ -224,9 +416,7 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 
 	if (packet)
 	{
-		/* SWAP THESE when fred gets his act together... */
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-//		version = g_memdup((packet->data+packet->payload_base_offset+3),packet->payload_length-3);
 		if (len)
 			*len = packet->payload_length;
 		freeems_packet_cleanup(packet);
@@ -252,7 +442,7 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
 	/* Raw packet */
-	guint8 pkt[LOC_ID_LIST_REQ_PKT_LEN];
+	guint8 pkt[LOCATION_ID_LIST_REQ_PKT_LEN];
 	gint res = 0;
 	gint i = 0;
 	gint h = 0;
@@ -267,21 +457,21 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 	g_return_val_if_fail(serial_params,NULL);
 
 	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LIST_OF_LOCATION_IDS & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LIST_OF_LOCATION_IDS & 0x00ff );
+	pkt[H_PAYLOAD_IDX] = (REQUEST_LIST_OF_LOCATION_IDS & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (REQUEST_LIST_OF_LOCATION_IDS & 0x00ff );
 	pkt[L_PAYLOAD_IDX+1] = flag;	/* AND/OR */
 	bits |= BLOCK_IS_INDEXABLE | BLOCK_IN_RAM;
 	pkt[L_PAYLOAD_IDX+2] = (bits & 0xff00) >> 8;	/* H bits */
 	pkt[L_PAYLOAD_IDX+3] = (bits & 0x00ff); 	/* L bits */
-	for (i=0;i<LOC_ID_LIST_REQ_PKT_LEN-1;i++)
+	for (i=0;i<LOCATION_ID_LIST_REQ_PKT_LEN-1;i++)
 		sum += pkt[i];
-	pkt[LOC_ID_LIST_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,LOC_ID_LIST_REQ_PKT_LEN,&tmit_len);
+	pkt[LOCATION_ID_LIST_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,LOCATION_ID_LIST_REQ_PKT_LEN,&tmit_len);
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LIST_OF_LOCATION_IDS);
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_LIST_OF_LOCATION_IDS);
 	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
-		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LIST_OF_LOCATION_IDS);
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LIST_OF_LOCATION_IDS);
 		g_free(buf);
 		g_async_queue_unref(queue);
 		return NULL;
@@ -290,7 +480,7 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LIST_OF_LOCATION_IDS);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LIST_OF_LOCATION_IDS);
 	g_async_queue_unref(queue);
 	if (packet)
 	{
@@ -329,7 +519,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	guint8 *buf = NULL;
 	Location_Details *details = NULL;
 	/* Raw packet */
-	guint8 pkt[LOC_ID_DETAILS_REQ_PKT_LEN];
+	guint8 pkt[LOCATION_ID_DETAILS_REQ_PKT_LEN];
 	gint res = 0;
 	gint i = 0;
 	gint h = 0;
@@ -342,19 +532,19 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	g_return_val_if_fail(serial_params,NULL);
 
 	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LOCATION_ID_DETAILS & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_RETRIEVE_LOCATION_ID_DETAILS & 0x00ff );
+	pkt[H_PAYLOAD_IDX] = (REQUEST_LOCATION_ID_DETAILS & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (REQUEST_LOCATION_ID_DETAILS & 0x00ff );
 	pkt[L_PAYLOAD_IDX+1] = (loc_id & 0xff00) >> 8;	/* H location bits */
 	pkt[L_PAYLOAD_IDX+2] = (loc_id & 0x00ff); 	/* L location bits */
-	for (i=0;i<LOC_ID_DETAILS_REQ_PKT_LEN-1;i++)
+	for (i=0;i<LOCATION_ID_DETAILS_REQ_PKT_LEN-1;i++)
 		sum += pkt[i];
-	pkt[LOC_ID_DETAILS_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,LOC_ID_DETAILS_REQ_PKT_LEN,&tmit_len);
+	pkt[LOCATION_ID_DETAILS_REQ_PKT_LEN-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,LOCATION_ID_DETAILS_REQ_PKT_LEN,&tmit_len);
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LOCATION_ID_DETAILS);
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_LOCATION_ID_DETAILS);
 	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
-		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LOCATION_ID_DETAILS);
+		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LOCATION_ID_DETAILS);
 		g_free(buf);
 		g_async_queue_unref(queue);
 		return NULL;
@@ -363,7 +553,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_RETRIEVE_LOCATION_ID_DETAILS);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LOCATION_ID_DETAILS);
 	g_async_queue_unref(queue);
 	if (packet)
 	{
@@ -747,7 +937,7 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	thread_update_widget_f("ecu_text_version_label",MTX_LABEL,g_strdup("ECU Interface Version"));
 	thread_update_widget_f("ecu_text_version_entry",MTX_ENTRY,g_strdup(version));
 	thread_update_widget_f("ecu_numeric_version_label",MTX_LABEL,g_strdup("Firmware Revision"));
-//	thread_update_widget_f("ecu_numeric_version_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));
+	/*thread_update_widget_f("ecu_numeric_version_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));*/
 	g_free(version);
 }
 
