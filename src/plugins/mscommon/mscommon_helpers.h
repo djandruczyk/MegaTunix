@@ -23,6 +23,7 @@
 
 #include <defines.h>
 #include <enums.h>
+#include <firmware.h>
 #include <gtk/gtk.h>
 #include <threads.h>
 
@@ -58,6 +59,8 @@ gboolean burn_all_helper(void *, FuncCall);
 void post_single_burn_pf(void *data);
 void post_burn_pf(void);
 void startup_tcpip_sockets_pf(void);
+void ecu_info_update(Firmware_Details *);
+
 /* Prototypes */
 
 #endif

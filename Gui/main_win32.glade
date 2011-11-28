@@ -725,10 +725,73 @@
                                               <widget class="GtkTable" id="table1">
                                                 <property name="visible">True</property>
                                                 <property name="border_width">5</property>
-                                                <property name="n_rows">2</property>
+                                                <property name="n_rows">3</property>
                                                 <property name="n_columns">2</property>
                                                 <property name="column_spacing">5</property>
                                                 <property name="row_spacing">3</property>
+                                                <child>
+                                                  <widget class="GtkHBox" id="hbox8">
+                                                    <property name="visible">True</property>
+                                                    <property name="spacing">20</property>
+                                                    <property name="homogeneous">True</property>
+                                                    <child>
+                                                      <widget class="GtkEventBox" id="interrogate_button_ebox">
+                                                        <property name="visible">True</property>
+                                                        <child>
+                                                          <widget class="GtkButton" id="interrogate_button">
+                                                            <property name="label" translatable="yes">Interrogate ECU</property>
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="receives_default">False</property>
+                                                            <property name="use_underline">True</property>
+                                                            <signal name="clicked" handler="std_button_handler"/>
+                                                          </widget>
+                                                        </child>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <widget class="GtkEventBox" id="offline_mode_ebox">
+                                                        <property name="visible">True</property>
+                                                        <child>
+                                                          <widget class="GtkButton" id="offline_button">
+                                                            <property name="label" translatable="yes">Use Offline Mode</property>
+                                                            <property name="visible">True</property>
+                                                            <property name="can_focus">True</property>
+                                                            <property name="receives_default">False</property>
+                                                            <property name="use_underline">True</property>
+                                                            <signal name="clicked" handler="std_button_handler"/>
+                                                          </widget>
+                                                        </child>
+                                                      </widget>
+                                                      <packing>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <widget class="GtkLabel" id="ecu_info_label">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="label" translatable="yes">ECU Information</property>
+                                                    <property name="use_markup">True</property>
+                                                  </widget>
+                                                  <packing>
+                                                    <property name="right_attach">2</property>
+                                                    <property name="top_attach">1</property>
+                                                    <property name="bottom_attach">2</property>
+                                                    <property name="x_options">GTK_FILL</property>
+                                                    <property name="y_options"></property>
+                                                  </packing>
+                                                </child>
                                                 <child>
                                                   <widget class="GtkEventBox" id="interrogation_status_ebox">
                                                     <property name="visible">True</property>
@@ -777,22 +840,10 @@
                                                   </widget>
                                                   <packing>
                                                     <property name="right_attach">2</property>
-                                                    <property name="top_attach">1</property>
-                                                    <property name="bottom_attach">2</property>
+                                                    <property name="top_attach">2</property>
+                                                    <property name="bottom_attach">3</property>
                                                     <property name="x_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
                                                     <property name="y_options">GTK_EXPAND | GTK_SHRINK | GTK_FILL</property>
-                                                  </packing>
-                                                </child>
-                                                <child>
-                                                  <widget class="GtkLabel" id="ecu_info_label">
-                                                    <property name="visible">True</property>
-                                                    <property name="xalign">0</property>
-                                                    <property name="label" translatable="yes">ECU Information</property>
-                                                  </widget>
-                                                  <packing>
-                                                    <property name="right_attach">2</property>
-                                                    <property name="x_options">GTK_FILL</property>
-                                                    <property name="y_options"></property>
                                                   </packing>
                                                 </child>
                                               </widget>

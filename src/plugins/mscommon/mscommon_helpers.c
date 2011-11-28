@@ -348,12 +348,12 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (DATA_GET(global_data,"offline"))
 				break;
 			count = read_data_f(-1,&message->recv_buf,FALSE);
-			ptr8 = (guchar *)message->recv_buf;
-			firmware->ecu_revision=(gint)ptr8[0];
 			if (count > 0)
-				thread_update_widget_f("ecu_revision_entry",MTX_ENTRY,g_strdup_printf("%.1f",((gint)ptr8[0]/10.0)));
-			else
-				thread_update_widget_f("ecu_numeric_version_entry",MTX_ENTRY,g_strdup(""));
+			{
+				ptr8 = (guchar *)message->recv_buf;
+				firmware->ecu_revision=(gint)ptr8[0];
+				ecu_info_update(firmware);
+			}
 			break;
 		case TEXT_REV:
 			if (DATA_GET(global_data,"offline"))
@@ -361,9 +361,9 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			count = read_data_f(-1,&message->recv_buf,FALSE);
 			if (count > 0)
 			{
-				thread_update_widget_f("ecu_text_version_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
 				firmware->txt_rev_len = count;
 				firmware->text_revision = g_strndup(message->recv_buf,count);
+				ecu_info_update(firmware);
 			}
 			break;
 		case SIGNATURE:
@@ -372,9 +372,9 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			count = read_data_f(-1,&message->recv_buf,FALSE);
 			if (count > 0)
 			{
-				thread_update_widget_f("ecu_firmware_signature_entry",MTX_ENTRY,g_strndup(message->recv_buf,count));
 				firmware->signature_len = count;
 				firmware->actual_signature = g_strndup(message->recv_buf,count);
+				ecu_info_update(firmware);
 			}
 			break;
 		case MS1_VECONST:
@@ -555,4 +555,18 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
 
 	return;
+}
+
+
+/*!
+ \brief Updates General tab ECU info box
+ */
+G_MODULE_EXPORT void ecu_info_update(Firmware_Details *firmware)
+{
+	gchar *tmpbuf = NULL;
+	g_return_if_fail(firmware);
+	tmpbuf = g_strdup_printf("<b>Firmware version:</b> %s\n<b>Firmware Signature:</b> %s\n<b>Numeric Version:</b> %.1f",firmware->text_revision,firmware->actual_signature,firmware->ecu_revision/10.0);
+	thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(tmpbuf));
+	g_free(tmpbuf);
+
 }
