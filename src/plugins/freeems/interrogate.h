@@ -86,6 +86,9 @@ struct _Location_Details
 /* Prototypes */
 void test_cleanup(gpointer);
 gboolean interrogate_ecu(void);
+gchar *request_firmware_compiler(gint *);
+gchar *request_firmware_build_os(gint *);
+gchar *request_firmware_build_date(gint *);
 gchar *request_firmware_version(gint *);
 gchar *request_interface_version(gint *);
 GList *request_location_ids(gint *);

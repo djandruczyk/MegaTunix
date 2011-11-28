@@ -283,7 +283,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	/* START, Header, Payload ID H, PAyload ID L, CKsum, STOP */
 	guint8 *buf = NULL;
 	/* Raw packet */
-	guint8 pkt[INTVER_REQ_PKT_LEN];
+	guint8 pkt[INTERFACE_VERSION_REQ_PKT_LEN];
 	guint8 sum = 0;
 	gint tmit_len = 0;
 	gint i = 0;
@@ -317,10 +317,10 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		pkt[HEADER_IDX] = 0;
 		pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
 		pkt[L_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0x00ff );
-		for (i=0;i<INTVER_REQ_PKT_LEN-1;i++)
+		for (i=0;i<INTERFACE_VERSION_REQ_PKT_LEN-1;i++)
 			sum += pkt[i];
-		pkt[INTVER_REQ_PKT_LEN-1] = sum;
-		buf = finalize_packet((guint8 *)&pkt,INTVER_REQ_PKT_LEN,&tmit_len);
+		pkt[INTERFACE_VERSION_REQ_PKT_LEN-1] = sum;
+		buf = finalize_packet((guint8 *)&pkt,INTERFACE_VERSION_REQ_PKT_LEN,&tmit_len);
 
 		if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
 		{
