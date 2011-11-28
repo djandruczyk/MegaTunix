@@ -837,11 +837,13 @@ G_MODULE_EXPORT void update_write_status(void *data)
 
 		if (!message->status) /* Bad write! */
 		{
-			dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
+			dbg_func_f(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
 			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
 		}
 		else if (block)
+		{
 			freeems_store_new_block(canID,locID,offset,block,length);
+		}
 	}
 
 	if (output->queue_update)
@@ -861,10 +863,9 @@ G_MODULE_EXPORT void update_write_status(void *data)
 					firmware->table_params[i]->color_update = FALSE;
 			}
 		}
-
+		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 		thread_refresh_widget_range_f(page,offset,length);
 
-		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 	}
 	/* We check to see if the last burn copy of the VE/constants matches 
 	 * the currently set, if so take away the "burn now" notification.

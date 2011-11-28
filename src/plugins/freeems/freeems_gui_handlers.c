@@ -344,6 +344,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 	}
 	OBJ_SET(widget,"not_sent",GINT_TO_POINTER(FALSE));
+	OBJ_SET(widget,"last_value",GINT_TO_POINTER(tmpi*1000));
 	return TRUE;
 }
 

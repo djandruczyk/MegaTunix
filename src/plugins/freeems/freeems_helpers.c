@@ -349,7 +349,6 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
  */
 G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 {
-	static GRand *rand = NULL;
 	static Firmware_Details *firmware = NULL;
 	Io_Message *message = NULL;
 	OutputData *output = NULL;
@@ -375,9 +374,6 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	g_return_if_fail(firmware);
 	g_return_if_fail(message);
 	g_return_if_fail(output);
-
-	if (!rand)
-		rand = g_rand_new();
 
 	/* Get common data */
 	seq = (GINT)DATA_GET(output->data,"sequence_num");
@@ -417,7 +413,8 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 			{
 				printf("timeout, no packet found in GENERIC_READ queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
-				seq = g_rand_int_range(rand,2,255);
+				seq++;
+				seq = seq < 256? seq:2;
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
 				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
 				DATA_SET(retry->data,"location_id",DATA_GET(output->data,"location_id"));
@@ -461,17 +458,19 @@ handle_write:
 			{
 				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
 				if (packet->is_nack)
+				{
 					printf("DATA Write Response PACKET NACK ERROR, rollback not implemented yet!!!!\n");
-				else
-					update_write_status(data);
-
+					message->status = FALSE;
+				}
+				update_write_status(data);
 				freeems_packet_cleanup(packet);
 			}
 			else
 			{
 				printf("timeout, no packet found in GENERIC_[RAM|FLASH]_WRITE queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
-				seq = g_rand_int_range(rand,2,255);
+				seq++;
+				seq = seq < 256? seq:2;
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
 				DATA_SET(retry->data,"page",DATA_GET(output->data,"page"));
 				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
@@ -501,20 +500,22 @@ handle_write:
 				if (packet->is_nack)
 				{
 					printf("BURN Flash Response PACKET NACK ERROR. Ack! I Don't know what to do now!!!!\n");
+					message->status = FALSE;
 				}
 				else
 				{
 					/*printf("burn success!\n");*/
 					post_single_burn_pf(data);
-					update_write_status(data);
 				}
+				update_write_status(data);
 				freeems_packet_cleanup(packet);
 			}
 			else
 			{
 				printf("timeout, no packet found in GENERIC_BURN queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
-				seq = g_rand_int_range(rand,2,255);
+				seq++;
+				seq = seq < 256? seq:2;
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
 				DATA_SET(retry->data,"page",DATA_GET(output->data,"page"));
 				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));

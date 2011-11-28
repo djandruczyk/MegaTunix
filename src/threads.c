@@ -470,7 +470,7 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 /*!
   \brief To be called from within threads to force a widget rerender
   \param page is the MTX-ecu page
-  \param offset is the offset from beginnig of page
+  \param offset is the offset from beginning of the page
   \param len How many bytes worth of widgets to search for an update
   */
 G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint len)
