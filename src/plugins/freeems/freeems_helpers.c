@@ -291,7 +291,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 	static GRand *rand = NULL;
 	OutputData *output = NULL;
 	Command *command = NULL;
-	gint seq = 0;
+	static gint seq = 2;
 	GAsyncQueue *queue = NULL;
 	gint i = 0;
 
@@ -312,7 +312,8 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
 					seq = g_rand_int_range(rand,2,255);
-
+					seq++;
+					seq = seq < 256? seq:2;
 					output = initialize_outputdata_f();
 					DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 					DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
@@ -394,15 +395,15 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 			if (packet)
 			{
 				if (packet->is_nack)
-					printf("packet ACK FAILURE!\n");
+					printf("GENERIC_READ packet ACK FAILURE!\n");
 				else
 				{
 
 					/*printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
 					printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
 					*/
-					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
 					freeems_backup_current_data(canID,locID);
+					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
 
 					freeems_packet_cleanup(packet);
 					tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
@@ -496,7 +497,7 @@ handle_write:
 			packet = retrieve_packet(output->data,"burn_queue");
 			if (packet)
 			{
-				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
+				/*printf("Packet arrived for GENERIC_BURN case locID %i\n",locID);*/
 				if (packet->is_nack)
 				{
 					printf("BURN Flash Response PACKET NACK ERROR. Ack! I Don't know what to do now!!!!\n");
