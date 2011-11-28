@@ -461,9 +461,7 @@ handle_write:
 			{
 				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
 				if (packet->is_nack)
-				{
 					printf("DATA Write Response PACKET NACK ERROR, rollback not implemented yet!!!!\n");
-				}
 				else
 					update_write_status(data);
 
@@ -501,7 +499,9 @@ handle_write:
 			{
 				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
 				if (packet->is_nack)
-					printf("BURN Flash Response PACKET NACK ERROR!!!!\n");
+				{
+					printf("BURN Flash Response PACKET NACK ERROR. Ack! I Don't know what to do now!!!!\n");
+				}
 				else
 				{
 					/*printf("burn success!\n");*/
@@ -530,7 +530,7 @@ handle_write:
 			}
 			break;
 		default:
-			printf("Don't know how to handle this type..\n");
+			printf("Don't know how to handle this packet response type..\n");
 			break;
 	}
 }
