@@ -320,20 +320,9 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("offline_button",button);
 	OBJ_SET(button,"handler",GINT_TO_POINTER(OFFLINE_MODE));
 
-	/* Interrogation results entries */
-	widget = glade_xml_get_widget(xml,"ecu_numeric_version_entry");
-	register_widget("ecu_numeric_version_entry",widget);
-	widget = glade_xml_get_widget(xml,"ecu_text_version_entry");
-	register_widget("ecu_text_version_entry",widget);
-	widget = glade_xml_get_widget(xml,"ecu_firmware_signature_entry");
-	register_widget("ecu_firmware_signature_entry",widget);
-	/* Interrogation Label widgets */
-	widget = glade_xml_get_widget(xml,"ecu_numeric_version_label");
-	register_widget("ecu_numeric_version_label",widget);
-	widget = glade_xml_get_widget(xml,"ecu_text_version_label");
-	register_widget("ecu_text_version_label",widget);
-	widget = glade_xml_get_widget(xml,"ecu_firmware_signature_label");
-	register_widget("ecu_firmware_signature_label",widget);
+	/* Interrogation results label */
+	widget = glade_xml_get_widget(xml,"ecu_info_label");
+	register_widget("ecu_info_label",widget);
 
 	/* General Tab Textview */
 	ebox = glade_xml_get_widget(xml,"interrogation_status_ebox");

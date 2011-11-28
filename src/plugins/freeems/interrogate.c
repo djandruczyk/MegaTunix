@@ -110,7 +110,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
   received, or NULL
   \returns the Firmware version as a text string
   */
-G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
+G_MODULE_EXPORT gchar *request_firmware_version(gint *length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -120,7 +120,10 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 	Serial_Params *serial_params = NULL;
 	/* Raw packet */
 	guint8 *buf = NULL;
+	gint len = FIRMWARE_VERSION_REQ_PKT_LEN;
 	guint8 pkt[FIRMWARE_VERSION_REQ_PKT_LEN];
+	gint req = REQUEST_FIRMWARE_VERSION;
+	gint resp = RESPONSE_FIRMWARE_VERSION;
 	gint res = 0;
 	gint i = 0;
 	guint8 sum = 0;
@@ -133,17 +136,17 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 		return g_strdup("Offline");
 
 	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_FIRMWARE_VERSION & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_FIRMWARE_VERSION & 0x00ff );
-	for (i=0;i<FIRMWARE_VERSION_REQ_PKT_LEN-1;i++)
+	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
+	for (i=0;i<len-1;i++)
 		sum += pkt[i];
-	pkt[FIRMWARE_VERSION_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,FIRMWARE_VERSION_REQ_PKT_LEN,&tmit_len);
+	pkt[len-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	register_packet_queue(PAYLOAD_ID,queue,resp);
 	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
-		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+		deregister_packet_queue(PAYLOAD_ID,queue,resp);
 		g_free(buf);
 		g_async_queue_unref(queue);
 		return NULL;
@@ -152,13 +155,13 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *len)
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
 	{
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		if (len)
-			*len = packet->payload_length;
+		if (length)
+			*length = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
 	return version;
@@ -285,7 +288,7 @@ G_MODULE_EXPORT gchar *request_firmware_compiler(gint *length)
 	if (packet)
 	{
 		retval = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		if (len)
+		if (length)
 			*length = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
@@ -349,7 +352,7 @@ G_MODULE_EXPORT gchar *request_firmware_build_os(gint *length)
 	if (packet)
 	{
 		retval = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		if (len)
+		if (length)
 			*length = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
@@ -363,7 +366,7 @@ G_MODULE_EXPORT gchar *request_firmware_build_os(gint *length)
   received, or NULL
   \returns the Firmware interface version as a text string
   */
-G_MODULE_EXPORT gchar * request_interface_version(gint *len)
+G_MODULE_EXPORT gchar * request_interface_version(gint *length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -373,7 +376,10 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
 	/* Raw packet */
+	gint len = INTERFACE_VERSION_REQ_PKT_LEN;
 	guint8 pkt[INTERFACE_VERSION_REQ_PKT_LEN];
+	gint req = REQUEST_INTERFACE_VERSION;
+	gint resp = RESPONSE_INTERFACE_VERSION;
 	gint res = 0;
 	gint i = 0;
 	guint8 sum = 0;
@@ -386,17 +392,17 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 		return g_strdup("Offline");
 
 	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0x00ff );
-	for (i=0;i<INTERFACE_VERSION_REQ_PKT_LEN-1;i++)
+	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
+	for (i=0;i<len-1;i++)
 		sum += pkt[i];
-	pkt[INTERFACE_VERSION_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,INTERFACE_VERSION_REQ_PKT_LEN,&tmit_len);
+	pkt[len-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+	register_packet_queue(PAYLOAD_ID,queue,resp);
 	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
-		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+		deregister_packet_queue(PAYLOAD_ID,queue,resp);
 		g_free(buf);
 		g_async_queue_unref(queue);
 		return NULL;
@@ -405,7 +411,7 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	/*
 	   if (packet)
@@ -417,8 +423,8 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
 	if (packet)
 	{
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		if (len)
-			*len = packet->payload_length;
+		if (length)
+			*length = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
 	return version;
@@ -432,7 +438,7 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *len)
  length of data received, or NULL
  \returns a pointer to a Link list (GList) of location ID's
  */
-G_MODULE_EXPORT GList *request_location_ids(gint * len)
+G_MODULE_EXPORT GList *request_location_ids(gint * length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -442,7 +448,10 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
 	/* Raw packet */
+	gint len = LOCATION_ID_LIST_REQ_PKT_LEN;
 	guint8 pkt[LOCATION_ID_LIST_REQ_PKT_LEN];
+	gint req = REQUEST_LIST_OF_LOCATION_IDS;
+	gint resp = RESPONSE_LIST_OF_LOCATION_IDS;
 	gint res = 0;
 	gint i = 0;
 	gint h = 0;
@@ -457,21 +466,21 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 	g_return_val_if_fail(serial_params,NULL);
 
 	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_LIST_OF_LOCATION_IDS & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_LIST_OF_LOCATION_IDS & 0x00ff );
+	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
 	pkt[L_PAYLOAD_IDX+1] = flag;	/* AND/OR */
 	bits |= BLOCK_IS_INDEXABLE | BLOCK_IN_RAM;
 	pkt[L_PAYLOAD_IDX+2] = (bits & 0xff00) >> 8;	/* H bits */
 	pkt[L_PAYLOAD_IDX+3] = (bits & 0x00ff); 	/* L bits */
-	for (i=0;i<LOCATION_ID_LIST_REQ_PKT_LEN-1;i++)
+	for (i=0;i<len-1;i++)
 		sum += pkt[i];
-	pkt[LOCATION_ID_LIST_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,LOCATION_ID_LIST_REQ_PKT_LEN,&tmit_len);
+	pkt[len-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_LIST_OF_LOCATION_IDS);
+	register_packet_queue(PAYLOAD_ID,queue,resp);
 	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
 	{
-		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LIST_OF_LOCATION_IDS);
+		deregister_packet_queue(PAYLOAD_ID,queue,resp);
 		g_free(buf);
 		g_async_queue_unref(queue);
 		return NULL;
@@ -480,7 +489,7 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LIST_OF_LOCATION_IDS);
+	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
 	{
@@ -493,8 +502,8 @@ G_MODULE_EXPORT GList *request_location_ids(gint * len)
 			tmpi = (h << 8) + l;
 			list = g_list_append(list,GINT_TO_POINTER(tmpi));
 		}
-		if (len)
-			*len = packet->payload_length;
+		if (length)
+			*length = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
 	return list;
@@ -746,18 +755,18 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 		test = g_array_index(tests,Detection_Test *,i);
 		if (test->result_type == RESULT_DATA)
 		{
-			dbg_func_f(INTERROGATOR,g_strdup_printf("\tCommand (%s), returned %i byts\n",test->test_desc,test->num_bytes));
-			thread_update_logbar_f("interr_view","info",g_strdup_printf("\tCommand (%s), returned %i bytes)\n",test->test_desc,test->num_bytes),FALSE,FALSE);
+			dbg_func_f(INTERROGATOR,g_strdup_printf("Command (%s): returned %i byts\n",test->test_desc,test->num_bytes));
+			thread_update_logbar_f("interr_view","info",g_strdup_printf("Command (%s): returned %i bytes)\n",test->test_desc,test->num_bytes),FALSE,FALSE);
 		}
 		if (test->result_type == RESULT_TEXT)
 		{
-			dbg_func_f(INTERROGATOR,g_strdup_printf("\tCommand (%s), returned (%s)\n",test->test_desc,test->result_str));
-			thread_update_logbar_f("interr_view","info",g_strdup_printf("\tCommand (%s), returned (%s)\n",test->test_desc,test->result_str),FALSE,FALSE);
+			dbg_func_f(INTERROGATOR,g_strdup_printf("Command (%s): returned (%s)\n",test->test_desc,test->result_str));
+			thread_update_logbar_f("interr_view","info",g_strdup_printf("Command (%s): returned (%s)\n",test->test_desc,test->result_str),FALSE,FALSE);
 		}
 		else if (test->result_type == RESULT_LIST)
 		{
-			dbg_func_f(INTERROGATOR,g_strdup_printf("\tCommand (%s), returned %i elements\n",test->test_desc,g_list_length((GList *)test->result)));
-			thread_update_logbar_f("interr_view","info",g_strdup_printf("\tCommand (%s), returned %i elements\n",test->test_desc,g_list_length((GList *)test->result)),FALSE,FALSE);
+			dbg_func_f(INTERROGATOR,g_strdup_printf("Command (%s): returned %i elements\n",test->test_desc,g_list_length((GList *)test->result)));
+			thread_update_logbar_f("interr_view","info",g_strdup_printf("Command (%s): returned %i elements\n",test->test_desc,g_list_length((GList *)test->result)),FALSE,FALSE);
 		}
 	}
 	if (match == FALSE) /* (we DID NOT find one) */
@@ -921,24 +930,29 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
   */
 G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 {
-	gchar *version = NULL;
+	gchar *int_version = NULL;
 	gchar *fw_version = NULL;
+	gchar *build_date = NULL;
+	gchar *build_os = NULL;
+	gchar *compiler = NULL;
+	gchar *info = NULL;
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
 	/* Request firmware version */
 	fw_version = request_firmware_version(NULL);
-	thread_update_widget_f("ecu_firmware_signature_label",MTX_LABEL,g_strdup("ECU Firmware Version"));
-	thread_update_widget_f("ecu_firmware_signature_entry",MTX_ENTRY,g_strdup(fw_version));
+	int_version = request_interface_version(NULL);
+	build_date = request_firmware_build_date(NULL);
+	build_os = request_firmware_build_os(NULL);
+	compiler = request_firmware_compiler(NULL);
+	info = g_strdup_printf("<b>Firmware Version:</b> %s\n<b>Interface version:</b> %s\nThis firmware was built on %s using the %s compiler on %s",fw_version,int_version,build_date,compiler,build_os);
+	thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(info));
+	g_free(info);
 	g_free(fw_version);
-
-	/* Request interface version */
-	version = request_interface_version(NULL);
-	thread_update_widget_f("ecu_text_version_label",MTX_LABEL,g_strdup("ECU Interface Version"));
-	thread_update_widget_f("ecu_text_version_entry",MTX_ENTRY,g_strdup(version));
-	thread_update_widget_f("ecu_numeric_version_label",MTX_LABEL,g_strdup("Firmware Revision"));
-	/*thread_update_widget_f("ecu_numeric_version_entry",MTX_ENTRY,g_strdup_printf("%i.%i.%i",major,minor,micro));*/
-	g_free(version);
+	g_free(int_version);
+	g_free(build_date);
+	g_free(build_os);
+	g_free(compiler);
 }
 
 
