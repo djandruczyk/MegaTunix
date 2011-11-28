@@ -106,7 +106,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 /*!
   \brief Issues a packet to the ECU to get its revision information. 
-  \param len is a pointer to a location to store the length of the data
+  \param length is a pointer to a location to store the length of the data
   received, or NULL
   \returns the Firmware version as a text string
   */
@@ -170,7 +170,7 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *length)
 
 /*!
   \brief Issues a packet to the ECU to get its build date
-  \param len is a pointer to a location to store the length of the data
+  \param length is a pointer to a location to store the length of the data
   received, or NULL
   \returns the Firmware version as a text string
   */
@@ -234,7 +234,7 @@ G_MODULE_EXPORT gchar *request_firmware_build_date(gint *length)
 
 /*!
   \brief Issues a packet to the ECU to get its build compiler
-  \param len is a pointer to a location to store the length of the data
+  \param length is a pointer to a location to store the length of the data
   received, or NULL
   \returns the Firmware version as a text string
   */
@@ -298,7 +298,7 @@ G_MODULE_EXPORT gchar *request_firmware_compiler(gint *length)
 
 /*!
   \brief Issues a packet to the ECU to get its build os
-  \param len is a pointer to a location to store the length of the data
+  \param length is a pointer to a location to store the length of the data
   received, or NULL
   \returns the Firmware version as a text string
   */
@@ -362,7 +362,7 @@ G_MODULE_EXPORT gchar *request_firmware_build_os(gint *length)
 
 /*!
   \brief Issues a packet to the ECU to get its interface version. 
-  \param len is a pointer to a location to store the length of the data
+  \param length is a pointer to a location to store the length of the data
   received, or NULL
   \returns the Firmware interface version as a text string
   */
@@ -434,7 +434,7 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *length)
 
 /*
  \brief Queries the ECU for a location ID list
- \paranm len is a pointer to a location where this function can store the
+ \paranm length is a pointer to a location where this function can store the
  length of data received, or NULL
  \returns a pointer to a Link list (GList) of location ID's
  */
