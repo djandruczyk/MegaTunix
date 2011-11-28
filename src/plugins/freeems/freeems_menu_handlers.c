@@ -98,6 +98,14 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	/* Tools Menu */
 	menu = glade_xml_get_widget (xml, "tools_menu_menu");
 
+	item = gtk_image_menu_item_new_with_mnemonic("_Reset ALL Counters");
+	image = gtk_image_new_from_stock("gtk-execute",GTK_ICON_SIZE_MENU);
+	g_object_set(item,"image",image,NULL);
+	if (gtk_minor_version >= 16)
+		g_object_set(item,"always-show-image",TRUE,NULL);
+	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(reset_counters),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+
 	item = gtk_image_menu_item_new_with_mnemonic("_Stop HiSpeed Streaming");
 	image = gtk_image_new_from_stock("gtk-stop",GTK_ICON_SIZE_MENU);
 	g_object_set(item,"image",image,NULL);

@@ -34,6 +34,59 @@ extern gconstpointer *global_data;
 
 
 /*!
+  \brief Sends a packet to rest the ECU counters
+  */
+G_MODULE_EXPORT void reset_counters(void)
+{
+	GAsyncQueue *queue = NULL;
+	FreeEMS_Packet *packet = NULL;
+	GTimeVal tval;
+	gint seq = 6;
+	Serial_Params *serial_params = NULL;
+	guint8 *buf = NULL;
+	guint8 len = CLEAR_COUNTERS_REQ_PKT_LEN; 
+	guint8 pkt[CLEAR_COUNTERS_REQ_PKT_LEN]; 
+	gint req = REQUEST_CLEAR_COUNTERS_AND_FLAGS_TO_ZERO;
+	gint resp = RESPONSE_CLEAR_COUNTERS_AND_FLAGS_TO_ZERO;
+	gint res = 0;
+	gint tmit_len = 0;
+	guint8 sum = 0;
+	gint i = 0;
+
+	serial_params = DATA_GET(global_data,"serial_params");
+	g_return_if_fail(serial_params);
+
+	pkt[HEADER_IDX] = 0;
+	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
+	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
+	pkt[L_PAYLOAD_IDX+1] = 0;
+	for (i=0;i<len-1;i++)
+		sum += pkt[i];
+	pkt[len-1] = sum;
+	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
+
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,resp);
+	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
+	{
+		g_free(buf);
+		deregister_packet_queue(PAYLOAD_ID,queue,resp);
+		g_async_queue_unref(queue);
+		return;
+	}
+	g_free(buf);
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = g_async_queue_timed_pop(queue,&tval);
+	deregister_packet_queue(PAYLOAD_ID,queue,resp);
+	g_async_queue_unref(queue);
+	if (packet)
+		freeems_packet_cleanup(packet);
+	return;
+}
+
+
+/*!
   \brief Sends a packet to stop the datalog streaming from the ECU
   */
 G_MODULE_EXPORT void stop_streaming(void)
@@ -65,7 +118,7 @@ G_MODULE_EXPORT void stop_streaming(void)
 
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
+	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
 	{
 		g_free(buf);
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
@@ -117,7 +170,7 @@ G_MODULE_EXPORT void start_streaming(void)
 
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
+	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
 	{
 		g_free(buf);
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
@@ -139,7 +192,7 @@ G_MODULE_EXPORT void start_streaming(void)
 /*!
   \brief Sends a packet to soft-boot the ECU
   */
-void soft_boot_ecu(void)
+G_MODULE_EXPORT void soft_boot_ecu(void)
 {
 	GTimeVal tval;
 	Serial_Params *serial_params = NULL;
@@ -163,7 +216,7 @@ void soft_boot_ecu(void)
 		sum += pkt[i];
 	pkt[SOFT_SYSTEM_RESET_PKT_LEN-1] = sum;
 	buf = finalize_packet((guint8 *)&pkt,SOFT_SYSTEM_RESET_PKT_LEN,&tmit_len);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
+	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
 	{
 		g_free(buf);
 		return;
@@ -176,7 +229,7 @@ void soft_boot_ecu(void)
 /*!
   \brief Sends a packet to hard-boot the ECU
   */
-void hard_boot_ecu(void)
+G_MODULE_EXPORT void hard_boot_ecu(void)
 {
 	GTimeVal tval;
 	Serial_Params *serial_params = NULL;
@@ -200,7 +253,7 @@ void hard_boot_ecu(void)
 		sum += pkt[i];
 	pkt[HARD_SYSTEM_RESET_PKT_LEN-1] = sum;
 	buf = finalize_packet((guint8 *)&pkt,HARD_SYSTEM_RESET_PKT_LEN,&tmit_len);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, &len))
+	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
 	{
 		g_free(buf);
 		return;
@@ -394,9 +447,6 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					thread_update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE);
 					g_free(errmsg);
 				}
-				/*
-				else
-				thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Packet accepted...\n")),FALSE,FALSE);
 				freeems_packet_cleanup(packet);
 			}
 			break;
@@ -411,7 +461,9 @@ handle_write:
 			{
 				/*printf("Packet arrived for GENERIC_RAM_WRITE case locID %i\n",locID);*/
 				if (packet->is_nack)
-					printf("DATA Write Response PACKET NACK ERROR!!!!\n");
+				{
+					printf("DATA Write Response PACKET NACK ERROR, rollback not implemented yet!!!!\n");
+				}
 				else
 					update_write_status(data);
 

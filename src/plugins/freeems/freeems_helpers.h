@@ -39,6 +39,7 @@ typedef enum
 
 
 /* Prototypes */
+void reset_counters(void);
 void stop_streaming(void);
 void start_streaming(void);
 void soft_boot_ecu(void);
