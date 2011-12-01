@@ -40,7 +40,6 @@
 			<helper_func_arg>_MS1_RT_VARS_</helper_func_arg>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
-				<function>update_runtime_status_pf</function>
 				<function>update_logview_traces_pf</function>
 				<function>fire_off_rtv_watches_pf</function>
 				<function>run_datalog_pf</function>

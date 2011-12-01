@@ -30,6 +30,7 @@
 #include <notifications.h>
 #include <plugin.h>
 #include <runtime_sliders.h>
+#include <runtime_status.h>
 #include <runtime_text.h>
 #include <timeout_handlers.h>
 #include <widgetmgmt.h>
@@ -175,6 +176,10 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	rate = (GINT)DATA_GET(global_data,"rttext_fps");
 	source = g_timeout_add_full(180,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL,NULL);
 	DATA_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
+
+	rate = (GINT)DATA_GET(global_data,"rttext_fps");
+	source = g_timeout_add_full(220,(GINT)(2000.0/(gfloat)rate),(GSourceFunc)update_rtstatus,NULL,NULL);
+	DATA_SET(global_data,"rtstatus_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"dashboard_fps");
 	source = g_timeout_add_full(135,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL,NULL);

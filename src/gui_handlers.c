@@ -49,6 +49,7 @@
 #include <notifications.h>
 #include <plugin.h>
 #include <runtime_sliders.h>
+#include <runtime_status.h>
 #include <runtime_text.h>
 #include <serialio.h>
 #include <stdio.h>
@@ -821,6 +822,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	 */
 	static gboolean (*common_handler)(GtkWidget *, gpointer) = NULL;
 	gint tmpi = 0;
+	gint id = 0;
 	gint handler = -1;
 	gint source = 0;
 	gfloat value = 0.0;
@@ -859,25 +861,38 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			DATA_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
 			source = (GINT)DATA_GET(global_data,"rtslider_id");
 			if (source)
+			{
 				g_source_remove(source);
-			tmpi = g_timeout_add((GINT)(1000/(float)tmpi),(GSourceFunc)update_rtsliders,NULL);
-			DATA_SET(global_data,"rtslider_id",GINT_TO_POINTER(tmpi));
+				id = g_timeout_add_full(175,(GINT)(1000/(float)tmpi),(GSourceFunc)update_rtsliders,NULL,NULL);
+				DATA_SET(global_data,"rtslider_id",GINT_TO_POINTER(id));
+			}
 			break;
 		case RTTEXT_FPS:
 			DATA_SET(global_data,"rttext_fps",GINT_TO_POINTER(tmpi));
 			source = (GINT)DATA_GET(global_data,"rttext_id");
 			if (source)
+			{
 				g_source_remove(source);
-			tmpi = g_timeout_add((GINT)(1000.0/(float)tmpi),(GSourceFunc)update_rttext,NULL);
-			DATA_SET(global_data,"rttext_id",GINT_TO_POINTER(tmpi));
+				id = g_timeout_add_full(180,(GINT)(1000.0/(float)tmpi),(GSourceFunc)update_rttext,NULL,NULL);
+				DATA_SET(global_data,"rttext_id",GINT_TO_POINTER(id));
+			}
+			source = (GINT)DATA_GET(global_data,"rtstatus_id");
+			if (source)
+			{
+				g_source_remove(source);
+				id = g_timeout_add_full(220,(GINT)(2000.0/(float)tmpi),(GSourceFunc)update_rtstatus,NULL,NULL);
+				DATA_SET(global_data,"rtstatus_id",GINT_TO_POINTER(id));
+			}
 			break;
 		case DASHBOARD_FPS:
 			DATA_SET(global_data,"dashboard_fps",GINT_TO_POINTER(tmpi));
 			source = (GINT)DATA_GET(global_data,"dashboard_id");
 			if (source)
+			{
 				g_source_remove(source);
-			tmpi = g_timeout_add((GINT)(1000.0/(float)tmpi),(GSourceFunc)update_dashboards,NULL);
-			DATA_SET(global_data,"dashboard_id",GINT_TO_POINTER(tmpi));
+				id = g_timeout_add_full(135,(GINT)(1000.0/(float)tmpi),(GSourceFunc)update_dashboards,NULL,NULL);
+				DATA_SET(global_data,"dashboard_id",GINT_TO_POINTER(id));
+			}
 			break;
 		case VE3D_FPS:
 			DATA_SET(global_data,"ve3d_fps",GINT_TO_POINTER(tmpi));

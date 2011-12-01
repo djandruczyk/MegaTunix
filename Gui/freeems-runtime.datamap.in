@@ -13,14 +13,6 @@ size=_U08_
 
 #----- Buttons ---------------------------------------------------------------
 
-[runtime_start_realtime_button]
-keys=handler
-handler=_START_REALTIME_
-
-[runtime_stop_realtime_button]
-keys=handler
-handler=_STOP_REALTIME_
-
 #------ Gui objects ---------------------------------------------------------
 
 [topframe]

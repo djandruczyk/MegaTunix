@@ -102,7 +102,6 @@
 			<type>_NULL_CMD_</type>
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
-				<function>update_runtime_status_pf</function>
 				<function>update_logview_traces_pf</function>
                                 <function>fire_off_rtv_watches_pf</function>
                                 <function>run_datalog_pf</function>
@@ -183,7 +182,6 @@
 				<function>update_ecu_controls_pf</function>
 				<function>set_store_black_pf</function>
 				<function>enable_get_data_buttons_pf</function>
-				<function>conditional_start_rtv_tickler_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -203,6 +201,7 @@
 				<function>start_statuscounts_pf</function>
 				<function>startup_default_timeouts_pf</function>
 				<function>reset_temps_pf</function>
+				<function>setup_rtv_pf</function>
 				<function>ready_msg_pf</function>
 			</post_functions>
 		</cmd>

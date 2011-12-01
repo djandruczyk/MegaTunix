@@ -250,10 +250,10 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 
 
 /*!
-  \brief update_runtime_status_pf() updates all of the runtime status 
+  \brief update_rtstatus() updates all of the runtime status 
   indicators on the gui
   */
-G_MODULE_EXPORT gboolean update_runtime_status_pf(void)
+G_MODULE_EXPORT gboolean update_rtstatus(void)
 {
 	static gint count = 0;
 	static gboolean conn_status = FALSE;

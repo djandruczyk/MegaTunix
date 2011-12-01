@@ -607,3 +607,4 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 	packet = g_async_queue_timed_pop(queue,&tval);
 	return packet;
 }
+

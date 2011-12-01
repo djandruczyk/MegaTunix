@@ -160,6 +160,7 @@ G_MODULE_EXPORT void plugin_shutdown()
 	GMutex *mutex = NULL;
 	gint id = 0;
 
+	teardown_rtv();
 	freeems_serial_disable();
 
 	thread = DATA_GET(global_data,"packet_handler_thread");

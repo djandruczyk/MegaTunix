@@ -154,7 +154,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 
 /*!
   \brief signal_read_rtvars_thread() is thread which fires off the read msg
-  to get a new set of realtiem variables.  It does so by queing messages to
+  to get a new set of realtime variables.  It does so by queing messages to
   a thread which handles I/O.  This function will check the queue depth and 
   if the queue is backed up it will skip sending a request for data, as that 
   will only aggravate the queue roadblock.
@@ -240,7 +240,7 @@ breakout:
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
 	g_mutex_unlock(rtv_thread_mutex);
-	teardown_rtv();
+//	teardown_rtv();
 	g_thread_exit(0);
 	return NULL;
 }

@@ -41,7 +41,7 @@ gboolean load_status_xml_elements(xmlNode *, GtkWidget *);
 void load_status(xmlNode *, GtkWidget *);
 void setup_status_treeview(GtkWidget *);
 gboolean status_foreach(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
-gboolean update_runtime_status_pf(void);
+gboolean update_rtstatus(void);
 
 /* Prototypes */
 

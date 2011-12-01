@@ -485,7 +485,7 @@ void *unix_reader(gpointer data)
   the queue
   \returns TRUE
   */
-G_MODULE_EXPORT gboolean setup_rtv(void)
+G_MODULE_EXPORT void setup_rtv_pf(void)
 {
 	GAsyncQueue *queue = NULL;
 	GThread *thread = NULL;
@@ -495,8 +495,10 @@ G_MODULE_EXPORT gboolean setup_rtv(void)
 	thread = g_thread_create(rtv_subscriber,queue,TRUE,NULL);
 	DATA_SET(global_data,"rtv_subscriber_thread", thread);
 	/* This sends packets to the rtv_subscriber queue */
-	register_packet_queue(SEQUENCE_NUM,queue,1);
-	return TRUE;
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	/* Fake out so tickler doesn't try to start it */
+	DATA_SET(global_data,"realtime_id",GINT_TO_POINTER(1));
+	return;
 }
 
 
@@ -520,8 +522,9 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 		DATA_SET(global_data,"rtv_subscriber_thread_exit",NULL);
 	}
 	queue = DATA_GET(global_data,"rtv_subscriber_queue");
-	deregister_packet_queue(SEQUENCE_NUM,queue,1);
+	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
+	DATA_SET(global_data,"realtime_id",NULL);
 	return TRUE;
 }
 
@@ -547,7 +550,7 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 		{
 			DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER((GINT)DATA_GET(global_data,"rt_goodread_count")+1));
 			process_rt_vars_f(packet->data+packet->payload_base_offset,packet->payload_length);
-			io_cmd_f("datalog_post_functions",NULL);
+			//io_cmd_f("datalog_post_functions",NULL);
 			freeems_packet_cleanup(packet);
 		}
 	}
