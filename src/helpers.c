@@ -189,6 +189,8 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	source = g_timeout_add_full(500,1000,(GSourceFunc)run_datalog,NULL,NULL);
 	DATA_SET(global_data,"datalog_id", GINT_TO_POINTER(source));
 
+	source = g_timeout_add_full(210,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)fire_off_rtv_watches,NULL,NULL);
+
 	gdk_threads_enter();
 	set_title(g_strdup(_("Data renderers running...")));
 	gdk_threads_leave();

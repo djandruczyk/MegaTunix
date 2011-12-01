@@ -617,6 +617,40 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 
 
 /*!
+  \brief lookup_current_index() gets the current index of the derived
+  variable requested by name.
+  \param internal_name is the name of the variable to get the data for.
+  \param value is where to put the value
+  \returns TRUE on successful lookup, FALSE on failure
+  */
+G_MODULE_EXPORT gboolean lookup_current_index(const gchar *internal_name, gint *value)
+{
+	static GMutex *rtv_mutex = NULL;
+	Rtv_Map *rtv_map = NULL;
+	gconstpointer * object = NULL;
+	GArray * history = NULL;
+	rtv_map = DATA_GET(global_data,"rtv_map");
+
+	if (!rtv_mutex)
+		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+	*value = 0;
+	if (!internal_name)
+		return FALSE;
+
+	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	if (!object)
+		return FALSE;
+
+	history = (GArray *)DATA_GET(object,"history");
+	if (!history)
+		return FALSE;
+
+	*value = history->len;
+	return TRUE;
+}
+
+
+/*!
   \brief lookup_current_value() gets the current value of the derived
   variable requested by name.
   \param internal_name is the name of the variable to get the data for.
@@ -630,7 +664,7 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	rtv_map = DATA_GET(global_data,"rtv_map");
-	
+
 	if (!rtv_mutex)
 		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;

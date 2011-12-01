@@ -39,6 +39,7 @@ typedef enum
 	RANGE,			/*!< Range val watch (not implemented yet) */
 	VALUE_CHANGE,		/*!< Watch that triggers only on valud changes */
 	MULTI_VALUE,		/*!< Calls function with multiple values */
+	MULTI_VALUE_HISTORY,	/*!< Calls function with multiple historical values */
 	WATCH_COUNT
 }WatchStyle;
 
@@ -64,18 +65,22 @@ struct _DataWatch
 	gboolean one_shot;	/*!< Run only once then evaporate */
 	gchar * function;	/*!< function to call when watch strikes */
 	gint num_vars;		/*!< number of variables */
+	gint last_index;	/*!< Last index for historical watches */
+	gint count;		/*!< How many values in the historical buffer */
 	gfloat val;		/*!< single value result location */
 	gfloat last_val;	/*!< Last value */
 	gfloat *vals;		/*!< multi value result location */
+	gfloat **hist_vals;	/*!< multi value historical result location */
 	void (*func) (DataWatch *);/*!< Function pointer */
 	gchar * varname;	/*!< Variable name (rtv internal name) to check */
 	gchar ** varnames;	/*!< List of Variable names (rtv internal name) to check */
 };
 /* Prototypes */
- void fire_off_rtv_watches_pf(void);
+gboolean fire_off_rtv_watches(void);
 guint32 create_single_bit_state_watch(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
 guint32 create_single_bit_change_watch(const gchar *, gint, gboolean, const gchar *, gpointer);
 guint32 create_value_change_watch(const gchar *, gboolean, const gchar *, gpointer);
+guint32 create_multi_value_historical_watch(gchar **, gboolean, const gchar *, gpointer);
 guint32 create_multi_value_watch(gchar **, gboolean, const gchar *, gpointer);
 void watch_destroy(gpointer);
 void remove_watch(guint32);

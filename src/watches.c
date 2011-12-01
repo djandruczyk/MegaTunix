@@ -30,10 +30,11 @@ static GHashTable *watch_hash;
   \brief fire_off_rtv_watches_pf() Trolls through the watch list and if
   conditions are met, calls the corresponding fucntion(s)
   */
-G_MODULE_EXPORT void fire_off_rtv_watches_pf(void)
+G_MODULE_EXPORT gboolean fire_off_rtv_watches(void)
 {
 	if (watch_hash)
 		g_hash_table_foreach(watch_hash,process_watches,NULL);
+	return TRUE;
 }
 
 
@@ -163,17 +164,56 @@ G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one
 
 
 /*!
+  \brief Creates a watch that monitors for multiple variable's values to change.
+  \param varnames A CSV list of internal names of the variables we want 
+  to watch for changes in value
+  \param one_shot if TRUE, this watch is called only once then expires
+  \param fname is the function name to call when this watch fires
+  \param user_data the pointer to data to pass to the function when this watch
+  fires
+  \returns ID for this watch so it can be cancelled whe nno longer used.
+  */
+G_MODULE_EXPORT guint32 create_multi_value_historical_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
+{
+	DataWatch *watch = NULL;
+
+	watch = g_new0(DataWatch,1);
+	watch->style = MULTI_VALUE_HISTORY;
+	lookup_current_index(varnames[0],&watch->last_index);
+	watch->num_vars = g_strv_length(varnames);
+	watch->hist_vals = g_new0(gfloat *,watch->num_vars);
+	watch->varnames = g_strdupv(varnames);
+	watch->function = g_strdup(fname);
+	watch->user_data = user_data;
+	watch->id = g_random_int();
+	watch->one_shot = one_shot;
+	get_symbol(watch->function,(void *)&watch->func);
+	if (!watch_hash)
+		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
+	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
+	return watch->id;
+}
+
+
+/*!
   \brief destroys a watch given the pointer passed
   \param data is the pointer to the DataWatch structure we need to destroy
   */
 G_MODULE_EXPORT void watch_destroy(gpointer data)
 {
+	gint i = 0;
 	DataWatch *watch = (DataWatch *)data;
 	/*printf("destroying watch %ui\n",watch->id);*/
 	if (watch->varname)
 		g_free(watch->varname);
 	if (watch->vals)
 		g_free(watch->vals);
+	if (watch->hist_vals)
+	{
+		for(i=0;i<watch->num_vars;i++)
+			g_free(watch->hist_vals[i]);
+		g_free(watch->hist_vals);
+	}
 	if (watch->varnames)
 		g_strfreev(watch->varnames);
 	if (watch->function)
@@ -207,6 +247,8 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 	gfloat tmpf = 0.0;
 	guint8 tmpi = 0;
 	guint8 tmpi2 = 0;
+	gint index = 0;
+	gint new = 0;
 	gint i = 0;
 	/*printf("process watches running\n");*/
 	switch (watch->style)
@@ -289,6 +331,29 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 					lookup_current_value(watch->varnames[i], &watch->vals[i]);
 				else
 					watch->vals[i]=0.0;
+			}
+			gdk_threads_enter();
+			watch->func(watch);
+			gdk_threads_leave();
+			if (watch->one_shot)
+			{
+				remove_watch(watch->id);
+				break;
+			}
+			break;
+		case MULTI_VALUE_HISTORY:
+			/*printf("multi value historical watch\n");*/
+			lookup_current_index(watch->varnames[0],&index);
+			new = index - watch->last_index;
+			watch->last_index = index;
+			watch->count = new;
+			for (i=0;i<watch->num_vars;i++)
+			{
+				watch->hist_vals[i] = g_renew(gfloat,watch->hist_vals[i],new);
+				if (watch->varnames[i])
+					lookup_previous_n_values(watch->varnames[i], new, watch->hist_vals[i]);
+				else
+					*watch->hist_vals[i]=0.0;
 			}
 			gdk_threads_enter();
 			watch->func(watch);

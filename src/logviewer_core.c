@@ -85,7 +85,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 			precision = 0;
 		mtx_stripchart_add_trace(MTX_STRIPCHART(chart),(gfloat)min,(gfloat)max,precision,name,NULL);
 	}
-	create_multi_value_watch(sources,FALSE,"update_stripchart_data",chart);
+	create_multi_value_historical_watch(sources,FALSE,"update_stripchart_data",chart);
 	g_strfreev(sources);
 	gtk_widget_show_all(parent);
 
@@ -98,7 +98,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
   */
 G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
 {
-	mtx_stripchart_set_values(MTX_STRIPCHART(watch->user_data),watch->vals);
+	mtx_stripchart_set_n_values(MTX_STRIPCHART(watch->user_data),watch->count,watch->hist_vals);
 }
 
 

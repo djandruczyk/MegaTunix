@@ -89,11 +89,31 @@ gboolean update_stripchart(gpointer data)
 	GtkWidget *chart = data;
 	gint min = -1000;
 	gint max = 11000;
+	gint i = 0;
 	static gfloat vals[3] = {0.0,0.0,0.0};
+	static gfloat **hist_vals = NULL;
+
+	if (!hist_vals)
+	{
+		hist_vals = g_new0(gfloat *, 3);
+		for (i=0;i<3;i++)
+			hist_vals[i] = g_new0(gfloat, 3);
+	}
+	/* Simple one at a time */
 	vals[0]++;
 	vals[1]+=1.25;
 	vals[2]+=2.125;
-	mtx_stripchart_set_values(MTX_STRIPCHART(chart),vals);
+	hist_vals[0][0]++;
+	hist_vals[0][1]++;
+	hist_vals[0][2]++;
+	hist_vals[1][0]+=1.25;
+	hist_vals[1][1]+=1.25;
+	hist_vals[1][2]+=1.25;
+	hist_vals[2][0]+=2.125;
+	hist_vals[2][1]+=2.125;
+	hist_vals[2][2]+=2.125;
+	//mtx_stripchart_set_values(MTX_STRIPCHART(chart),vals);
+	mtx_stripchart_set_n_values(MTX_STRIPCHART(chart),3,hist_vals);
 /*	printf("This should scroll stripchart \n"); */
 
 	return TRUE;

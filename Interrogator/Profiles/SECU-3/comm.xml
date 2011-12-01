@@ -122,7 +122,6 @@
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
 				<function>update_logview_traces_pf</function>
-				<function>fire_off_rtv_watches_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -135,7 +134,6 @@
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
 				<function>update_logview_traces_pf</function>
-				<function>fire_off_rtv_watches_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -152,7 +150,6 @@
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
 				<function>update_logview_traces_pf</function>
-				<function>fire_off_rtv_watches_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>
@@ -561,7 +558,6 @@
 			<defer_post_functions>FALSE</defer_post_functions>
 			<post_functions>
 				<function>update_logview_traces_pf</function>
-				<function>fire_off_rtv_watches_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>

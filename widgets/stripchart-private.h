@@ -64,6 +64,7 @@ struct _MtxStripChartPrivate
 	gfloat mouse_x;		/*!< motion event X coord */
 	gfloat mouse_y;		/*!< motion event X coord */
 	gint num_traces;	/*!< Number of active traces */
+	gint newsamples;	/*!< New sample count */
 	gboolean mouse_tracking;/*!< If true, render tracer line at mouse pos */
 	gboolean update_pending;/*!< If true, don't schedule another */
 	GArray *traces;		/*!< Array of trace specific data */

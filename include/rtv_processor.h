@@ -28,6 +28,7 @@
 /* Prototypes */
 void process_rt_vars(void *,gint);
 gboolean lookup_precision(const gchar *, gint *);
+gboolean lookup_current_index(const gchar *, gint *);
 gboolean lookup_current_value(const gchar *, gfloat *);
 gboolean lookup_previous_value(const gchar *, gfloat *);
 gboolean lookup_previous_nth_value(const gchar *, gint, gfloat *);

@@ -242,11 +242,13 @@ void update_stripchart_position (MtxStripChart *chart)
 	gfloat needle_pos = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar * message = NULL;
+	gint shift = 0;
 	gfloat start_x = 0.0;
 	gfloat start_y = 0.0;
 	gfloat buffer = 0.0;
 	gboolean draw_quarters = TRUE;
 	gint i = 0;
+	gint j = 0;
 	gfloat x = 0.0;
 	gfloat y = 0.0;
 	gfloat text_offset[NUM_TXTS] = {0.0,0.0,0.0,0.0,0.0};
@@ -258,17 +260,18 @@ void update_stripchart_position (MtxStripChart *chart)
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
 
 	widget = GTK_WIDGET(chart);
+	shift = priv->newsamples;
 
 	/* Draw new data to trace pixmap */
 
 	/* Scroll trace pixmap */
 
 	cr = gdk_cairo_create(priv->trace_pixmap);
-	gdk_cairo_set_source_pixmap(cr,priv->trace_pixmap,-1,0);
+	gdk_cairo_set_source_pixmap(cr,priv->trace_pixmap,-shift,0);
 	cairo_rectangle(cr,0,0,priv->w,priv->h);
 	cairo_fill(cr);
 	cairo_set_source_rgb(cr,0,0,0);
-	cairo_rectangle(cr,priv->w-1,0,1,priv->h);
+	cairo_rectangle(cr,priv->w-shift,0,shift,priv->h);
 	cairo_fill(cr);
 	/* Render new data */
 
@@ -281,15 +284,18 @@ void update_stripchart_position (MtxStripChart *chart)
 				trace->color.red/65535.0,
 				trace->color.green/65535.0,
 				trace->color.blue/65535.0);
-		start_x = priv->w - 1;
-		if (trace->history->len > 1)
+		for(j=shift;j>0;j--)
 		{
-			start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-2)-trace->min) / (trace->max - trace->min))*priv->h);
-			cairo_move_to(cr,start_x,start_y);
-			x = priv->w;
-			y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-1)-trace->min) / (trace->max - trace->min))*priv->h);
-			cairo_line_to(cr,x,y);
-			cairo_stroke(cr);
+			if (trace->history->len > 1)
+			{
+				start_x = priv->w - j;
+				start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-j-1)-trace->min) / (trace->max - trace->min))*priv->h);
+				cairo_move_to(cr,start_x,start_y);
+				x = priv->w-j+1;
+				y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-j)-trace->min) / (trace->max - trace->min))*priv->h);
+				cairo_line_to(cr,x,y);
+				cairo_stroke(cr);
+			}
 		}
 	}
 	cairo_destroy(cr);

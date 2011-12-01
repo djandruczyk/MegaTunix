@@ -63,7 +63,6 @@ gboolean mtx_stripchart_get_latest_values (MtxStripChart *stripchart, gfloat *va
 gboolean mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 {
 	gint i = 0;
-	static gint count = 0;
 	gfloat val = 0.0;
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
@@ -80,6 +79,51 @@ gboolean mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 		if (trace->history->len > 2*priv->w)
 			trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
 	}
+	priv->newsamples = 1;
+	g_object_thaw_notify (G_OBJECT (chart));
+#if GTK_MINOR_VERSION >= 18
+	if (!gtk_widget_is_sensitive(GTK_WIDGET(chart)))
+		return TRUE;
+#else
+	if (!GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(chart)))
+		return TRUE;
+#endif
+
+	mtx_stripchart_redraw(chart);
+	return TRUE;
+}
+
+
+/*!
+ \brief sets a block of current values
+ \param chart is the pointer to the stripchart object
+ \param values is the new set of values. This code makes some bad assumptions
+ \returns TRUE on success, FALSE otherwise
+ */
+gboolean mtx_stripchart_set_n_values (MtxStripChart *chart, gint count, gfloat** values)
+{
+	gint i = 0;
+	gint j = 0;
+	gfloat val = 0.0;
+	MtxStripChartTrace *trace = NULL;
+	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);
+	g_return_val_if_fail (MTX_IS_STRIPCHART (chart),FALSE);
+	g_return_val_if_fail (values,FALSE);
+
+	g_object_freeze_notify (G_OBJECT (chart));
+	for (j=0;j<count;j++)
+	{
+		for (i=0;i<priv->num_traces;i++)
+		{
+			trace = g_array_index(priv->traces, MtxStripChartTrace *, i);
+			val = values[i][j] > trace->max ? trace->max:values[i][j];
+			val = val < trace->min ? trace->min:val;
+			trace->history = g_array_append_val(trace->history,val);
+			if (trace->history->len > 2*priv->w)
+				trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
+		}
+	}
+	priv->newsamples = count;
 	g_object_thaw_notify (G_OBJECT (chart));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(chart)))
