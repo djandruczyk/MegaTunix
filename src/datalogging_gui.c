@@ -45,6 +45,8 @@ extern gconstpointer *global_data;
 /* Static vars to all functions in this file... */
 static gboolean logging_active = FALSE;
 static gboolean header_needed = FALSE;
+static GList *object_list = NULL;
+static gint last_len = 0;
 
 
 /*!
@@ -228,6 +230,9 @@ G_MODULE_EXPORT void stop_datalogging(void)
 		g_io_channel_unref(iochannel);
 	}
 
+	g_list_free(object_list);
+	object_list = NULL;
+	last_len = 0;
 	OBJ_SET(lookup_widget("dlog_select_log_button"),"data",NULL);
 
 	return;
@@ -265,6 +270,7 @@ G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
   */
 G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 {
+	GList *list = NULL;
 	guint i = 0;
 	gint j = 0;
 	gint total_logables = 0;
@@ -287,26 +293,25 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	{
 		object = g_ptr_array_index(rtv_map->rtv_list,i);
 		if((override) || ((GBOOLEAN)DATA_GET(object,"being_logged")))
-			total_logables++;
+			list = g_list_prepend(list,object);
 	}
+	list = g_list_reverse(list);
 	output = g_string_sized_new(64); /* pre-allccate for 64 chars */
 
 	string = g_strdup_printf("\"%s\"\r\n",firmware->actual_signature);
 	output = g_string_append(output,string); 
 	g_free(string);
-	for (i=0;i<rtv_map->derived_total;i++)
+	total_logables = g_list_length(list);
+	for (i=0;i<total_logables;i++)
 	{
-		object = g_ptr_array_index(rtv_map->rtv_list,i);
-		if((override) || ((GBOOLEAN)DATA_GET(object,"being_logged")))
-		{
-			/* If space delimited, QUOTE the header names */
-			string = (gchar *)DATA_GET(object,"dlog_field_name");
-			output = g_string_append(output,string); 
+		object = g_list_nth_data(list,i);
+		/* If space delimited, QUOTE the header names */
+		string = (gchar *)DATA_GET(object,"dlog_field_name");
+		output = g_string_append(output,string); 
 
-			j++;
-			if (j < total_logables)
-				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
-		}
+		j++;
+		if (j < total_logables)
+			output = g_string_append(output,DATA_GET(global_data,"delimiter"));
 	}
 	output = g_string_append(output,"\r\n");
 	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
@@ -316,20 +321,24 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 
 
 /*!
-  \brief run_datalog_pf() gets called each time data arrives after rtvar 
-  processing and logs the selected values to the file
+  \brief run_datalog() gets called periodically to log whatever is currently selected
+  to the datalog file
   */
-G_MODULE_EXPORT void run_datalog_pf(void)
+G_MODULE_EXPORT gboolean run_datalog(void)
 {
 	guint i = 0;
 	gint j = 0;
+	gint k = 0;
+	gint base = 0;
 	gsize count = 0;
+	gint cur_len = 0;
 	gint total_logables = 0;
 	GString *output;
 	GIOChannel *iochannel = NULL;
 	gconstpointer *object = NULL;
 	gfloat value = 0.0;
 	GArray *history = NULL;
+	GArray *array = NULL;
 	gint precision = 0;
 	gchar *tmpbuf = NULL;
 	Rtv_Map *rtv_map = NULL;
@@ -337,26 +346,30 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 	rtv_map = DATA_GET(global_data,"rtv_map");
 
 	if (!((DATA_GET(global_data,"connected")) && (DATA_GET(global_data,"interrogated"))))
-		return;
+		return TRUE;
 
 	if (!logging_active) /* Logging isn't enabled.... */
-		return;
+		return TRUE;
 
 	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
 	if (!iochannel)
 	{
 		dbg_func(CRITICAL,g_strdup(__FILE__": run_datalog_pf()\n\tIo_File undefined, returning NOW!!!\n"));
-		return;
+		return TRUE;
 	}
 
-	for (i=0;i<rtv_map->derived_total;i++)
+	if (!object_list)
 	{
-		object = g_ptr_array_index(rtv_map->rtv_list,i);
-		if((GBOOLEAN)DATA_GET(object,"being_logged"))
-			total_logables++;
+		for (i=0;i<rtv_map->derived_total;i++)
+		{
+			object = g_ptr_array_index(rtv_map->rtv_list,i);
+			if((GBOOLEAN)DATA_GET(object,"being_logged"))
+				object_list = g_list_prepend(object_list,object);
+		}
+		object_list = g_list_reverse(object_list);
 	}
 
-	output = g_string_sized_new(64); /*64 char initial size */
+	output = g_string_sized_new(128); /* 128 char initial size */
 
 	if (header_needed)
 	{
@@ -364,35 +377,51 @@ G_MODULE_EXPORT void run_datalog_pf(void)
 		header_needed = FALSE;
 		DATA_SET(global_data,"begin",GINT_TO_POINTER(TRUE));
 	}
-	j = 0;
-	for(i=0;i<rtv_map->derived_total;i++)
+	
+	/* Get current array length */
+	array = (GArray *)DATA_GET(g_list_nth_data(object_list,0),"history");
+	cur_len = array->len;
+	if (cur_len > last_len)
 	{
-		object = g_ptr_array_index(rtv_map->rtv_list,i);
-		if (!((GBOOLEAN)DATA_GET(object,"being_logged")))
-			continue;
-
-		history = (GArray *)DATA_GET(object,"history");
-		precision = (GINT)DATA_GET(object,"precision");
-		if ((GINT)history->len-1 <= 0)
-			value = 0.0;
-		else
-			value = g_array_index(history, gfloat, history->len-1);
-
-		tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precision),",",'.');
-		g_string_append(output,tmpbuf);
-		g_free(tmpbuf);
-		j++;
-
-		/* Print delimiter to log here so there isnt an extra
-		 * char at the end fo the line 
-		 */
-		if (j < total_logables)
-			output = g_string_append(output,DATA_GET(global_data,"delimiter"));
+		base = last_len;
+		count = cur_len-last_len;
 	}
-	output = g_string_append(output,"\r\n");
+	else	/* Arrays have been reset! */
+	{
+		base = 0;
+		count = cur_len;
+	}
+	total_logables = g_list_length(object_list);
+	for(j=base;j<count;j++)
+	{
+		k = 0;
+		for(i=0;i<total_logables;i++)
+		{
+			object = g_list_nth_data(object_list,i);
+			history = (GArray *)DATA_GET(object,"history");
+			precision = (GINT)DATA_GET(object,"precision");
+			if ((GINT)j <= 0)
+				value = 0.0;
+			else
+				value = g_array_index(history, gfloat, j);
+
+			tmpbuf = g_strdelimit(g_strdup_printf("%1$.*2$f",value,precision),",",'.');
+			g_string_append(output,tmpbuf);
+			g_free(tmpbuf);
+			k++;
+
+			/* Print delimiter to log here so there isnt an extra
+			 * char at the end fo the line 
+			 */
+			if (k < total_logables)
+				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
+		}
+		output = g_string_append(output,"\r\n");
+	}
+	last_len = cur_len;
 	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
 	g_string_free(output,TRUE);
-
+	return TRUE;
 }
 
 

@@ -34,7 +34,7 @@ void stop_datalogging(void);
 void clear_logables(void);
 gboolean log_value_set(GtkWidget *, gpointer);
 void write_log_header(GIOChannel *, gboolean);
-void run_datalog_pf(void);
+gboolean run_datalog(void);
 gboolean set_logging_mode(GtkWidget * , gpointer);
 void dlog_select_defaults(void);
 void dlog_select_all(void);

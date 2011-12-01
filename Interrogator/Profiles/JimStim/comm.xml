@@ -42,7 +42,6 @@
 			<post_functions>
 				<function>update_logview_traces_pf</function>
 				<function>fire_off_rtv_watches_pf</function>
-				<function>run_datalog_pf</function>
 			</post_functions>
 		</cmd>
 		<cmd>

@@ -25,6 +25,7 @@
 #include <3d_vetable.h>
 #include <conversions.h>
 #include <dashboard.h>
+#include <datalogging_gui.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <notifications.h>
@@ -184,6 +185,9 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	rate = (GINT)DATA_GET(global_data,"dashboard_fps");
 	source = g_timeout_add_full(135,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL,NULL);
 	DATA_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
+
+	source = g_timeout_add_full(500,1000,(GSourceFunc)run_datalog,NULL,NULL);
+	DATA_SET(global_data,"datalog_id", GINT_TO_POINTER(source));
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Data renderers running...")));

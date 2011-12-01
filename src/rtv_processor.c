@@ -906,7 +906,7 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 				continue;
 			g_mutex_lock(rtv_mutex);
 			history = (GArray *)DATA_GET(object,"history");
-			/* TRuncate array,  but don't free/recreate as it
+			/* Truncate array,  but don't free/recreate as it
 			 * makes the logviewer explode!
 			 */
 			g_array_free(history,TRUE);
@@ -915,8 +915,6 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 			g_mutex_unlock(rtv_mutex);
 	                /* bind history array to object for future retrieval */
 		}
-
 	}
 	thread_update_logbar("dlog_view","warning",g_strdup(_("Realtime Variables History buffers flushed...\n")),FALSE,FALSE);
-
 }
