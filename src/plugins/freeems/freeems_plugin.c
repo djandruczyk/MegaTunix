@@ -283,6 +283,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER(PAYLOAD_DATA));
 		g_hash_table_insert (str_2_enum, "_FREEEMS_ALL_",
 				GINT_TO_POINTER(FREEEMS_ALL));
+		g_hash_table_insert (str_2_enum, "_CALLBACK_",
+				GINT_TO_POINTER(CALLBACK));
 		g_hash_table_insert (str_2_enum, "_EMPTY_PAYLOAD_",
 				GINT_TO_POINTER(EMPTY_PAYLOAD));
 		g_hash_table_insert (str_2_enum, "_GENERIC_READ_",
@@ -346,6 +348,7 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_OFFSET_");
 		g_hash_table_remove (str_2_enum, "_DATA_LENGTH_");
 		g_hash_table_remove (str_2_enum, "_DATABYTE_");
+		g_hash_table_remove (str_2_enum, "_CALLBACK_");
 		g_hash_table_remove (str_2_enum, "_EMPTY_PAYLOAD_");
 		g_hash_table_remove (str_2_enum, "_FREEEMS_ALL_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_READ_");

@@ -86,11 +86,13 @@ struct _Location_Details
 /* Prototypes */
 void test_cleanup(gpointer);
 gboolean interrogate_ecu(void);
-gchar *request_firmware_compiler(gint *);
-gchar *request_firmware_build_os(gint *);
-gchar *request_firmware_build_date(gint *);
-gchar *request_firmware_version(gint *);
-gchar *request_interface_version(gint *);
+void request_firmware_compiler(void);
+void request_firmware_build_os(void);
+void request_firmware_build_date(void);
+void request_interface_version(void);
+void request_firmware_version(void);
+gchar *request_firmware_version_callback(gint *);
+void update_ecu_info(void);
 GList *request_location_ids(gint *);
 Location_Details *request_location_id_details(guint16);
 gboolean validate_and_load_tests(GArray **, GHashTable **);

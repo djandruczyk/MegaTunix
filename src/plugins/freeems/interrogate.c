@@ -105,12 +105,12 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 
 /*!
-  \brief Issues a packet to the ECU to get its revision information. 
-  \param length is a pointer to a location to store the length of the data
-  received, or NULL
-  \returns the Firmware version as a text string
-  */
-G_MODULE_EXPORT gchar *request_firmware_version(gint *length)
+ \brief Issues a packet to the ECU to get its revision information. 
+ \param length is a pointer to a location to store the length of the data
+ received, or NULL
+ \returns the Firmware version as a text string
+ */
+G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -169,204 +169,12 @@ G_MODULE_EXPORT gchar *request_firmware_version(gint *length)
 
 
 /*!
-  \brief Issues a packet to the ECU to get its build date
-  \param length is a pointer to a location to store the length of the data
-  received, or NULL
-  \returns the Firmware version as a text string
-  */
-G_MODULE_EXPORT gchar *request_firmware_build_date(gint *length)
-{
-	OutputData *output = NULL;
-	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
-	gchar *retval = NULL;
-	GTimeVal tval;
-	Serial_Params *serial_params = NULL;
-	/* Raw packet */
-	guint8 *buf = NULL;
-	gint len = FIRMWARE_BUILD_DATE_REQ_PKT_LEN;
-	guint8 pkt[FIRMWARE_BUILD_DATE_REQ_PKT_LEN];
-	gint req = REQUEST_FIRMWARE_BUILD_DATE;
-	gint resp = RESPONSE_FIRMWARE_BUILD_DATE;
-	gint res = 0;
-	gint i = 0;
-	guint8 sum = 0;
-	gint tmit_len = 0;
-
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_val_if_fail(serial_params,NULL);
-
-	if (DATA_GET(global_data,"offline"))
-		return g_strdup("Offline");
-
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
-	for (i=0;i<len-1;i++)
-		sum += pkt[i];
-	pkt[len-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
-	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,resp);
-	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
-	{
-		deregister_packet_queue(PAYLOAD_ID,queue,resp);
-		g_free(buf);
-		g_async_queue_unref(queue);
-		return NULL;
-	}
-	g_free(buf);
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,resp);
-	g_async_queue_unref(queue);
-	if (packet)
-	{
-		retval = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		if (length)
-			*length = packet->payload_length;
-		freeems_packet_cleanup(packet);
-	}
-	return retval;
-}
-
-
-/*!
-  \brief Issues a packet to the ECU to get its build compiler
-  \param length is a pointer to a location to store the length of the data
-  received, or NULL
-  \returns the Firmware version as a text string
-  */
-G_MODULE_EXPORT gchar *request_firmware_compiler(gint *length)
-{
-	OutputData *output = NULL;
-	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
-	gchar *retval = NULL;
-	GTimeVal tval;
-	Serial_Params *serial_params = NULL;
-	/* Raw packet */
-	guint8 *buf = NULL;
-	gint len = FIRMWARE_COMPILER_VER_REQ_PKT_LEN;
-	guint8 pkt[FIRMWARE_COMPILER_VER_REQ_PKT_LEN];
-	gint req = REQUEST_FIRMWARE_COMPILER_VERSION;
-	gint resp = RESPONSE_FIRMWARE_COMPILER_VERSION;
-	gint res = 0;
-	gint i = 0;
-	guint8 sum = 0;
-	gint tmit_len = 0;
-
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_val_if_fail(serial_params,NULL);
-
-	if (DATA_GET(global_data,"offline"))
-		return g_strdup("Offline");
-
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
-	for (i=0;i<len-1;i++)
-		sum += pkt[i];
-	pkt[len-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
-	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,resp);
-	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
-	{
-		deregister_packet_queue(PAYLOAD_ID,queue,resp);
-		g_free(buf);
-		g_async_queue_unref(queue);
-		return NULL;
-	}
-	g_free(buf);
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,resp);
-	g_async_queue_unref(queue);
-	if (packet)
-	{
-		retval = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		if (length)
-			*length = packet->payload_length;
-		freeems_packet_cleanup(packet);
-	}
-	return retval;
-}
-
-
-/*!
-  \brief Issues a packet to the ECU to get its build os
-  \param length is a pointer to a location to store the length of the data
-  received, or NULL
-  \returns the Firmware version as a text string
-  */
-G_MODULE_EXPORT gchar *request_firmware_build_os(gint *length)
-{
-	OutputData *output = NULL;
-	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
-	gchar *retval = NULL;
-	GTimeVal tval;
-	Serial_Params *serial_params = NULL;
-	/* Raw packet */
-	guint8 *buf = NULL;
-	gint len = FIRMWARE_COMPILER_OS_REQ_PKT_LEN;
-	guint8 pkt[FIRMWARE_COMPILER_OS_REQ_PKT_LEN];
-	gint req = REQUEST_FIRMWARE_COMPILER_OS;
-	gint resp = RESPONSE_FIRMWARE_COMPILER_OS;
-	gint res = 0;
-	gint i = 0;
-	guint8 sum = 0;
-	gint tmit_len = 0;
-
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_val_if_fail(serial_params,NULL);
-
-	if (DATA_GET(global_data,"offline"))
-		return g_strdup("Offline");
-
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
-	for (i=0;i<len-1;i++)
-		sum += pkt[i];
-	pkt[len-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
-	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,resp);
-	if (!write_wrapper_f(serial_params->fd,buf, tmit_len, NULL))
-	{
-		deregister_packet_queue(PAYLOAD_ID,queue,resp);
-		g_free(buf);
-		g_async_queue_unref(queue);
-		return NULL;
-	}
-	g_free(buf);
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,resp);
-	g_async_queue_unref(queue);
-	if (packet)
-	{
-		retval = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
-		if (length)
-			*length = packet->payload_length;
-		freeems_packet_cleanup(packet);
-	}
-	return retval;
-}
-
-
-/*!
-  \brief Issues a packet to the ECU to get its interface version. 
-  \param length is a pointer to a location to store the length of the data
-  received, or NULL
-  \returns the Firmware interface version as a text string
-  */
-G_MODULE_EXPORT gchar * request_interface_version(gint *length)
+ \brief Issues a packet to the ECU to get its interface version. 
+ \param length is a pointer to a location to store the length of the data
+ received, or NULL
+ \returns the Firmware interface version as a text string
+ */
+G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -432,13 +240,108 @@ G_MODULE_EXPORT gchar * request_interface_version(gint *length)
 
 
 
+/*!
+ \brief Issues a packet to the ECU to get its revision information. 
+ received, or NULL
+ */
+G_MODULE_EXPORT void request_firmware_version()
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	output = initialize_outputdata_f();
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_VERSION));
+	DATA_SET(output->data,"queue",queue);
+	io_cmd_f("empty_payload_pkt",output);
+	return;
+}
+
+
+/*!
+ \brief Issues a packet to the ECU to get its build date
+ */
+G_MODULE_EXPORT void request_firmware_build_date()
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	output = initialize_outputdata_f();
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_BUILD_DATE);
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_BUILD_DATE));
+	DATA_SET(output->data,"queue",queue);
+	io_cmd_f("empty_payload_pkt",output);
+	return;
+}
+
+
+/*!
+ \brief Issues a packet to the ECU to get its build compiler
+ \param length is a pointer to a location to store the length of the data
+ received, or NULL
+ \returns the Firmware version as a text string
+ */
+G_MODULE_EXPORT void request_firmware_compiler()
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	output = initialize_outputdata_f();
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_COMPILER_VERSION);
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_COMPILER_VERSION));
+	DATA_SET(output->data,"queue",queue);
+	io_cmd_f("empty_payload_pkt",output);
+	return;
+}
+
+
+/*!
+ \brief Issues a packet to the ECU to get its build os
+ \param length is a pointer to a location to store the length of the data
+ received, or NULL
+ \returns the Firmware version as a text string
+ */
+G_MODULE_EXPORT void request_firmware_build_os()
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	output = initialize_outputdata_f();
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_COMPILER_OS);
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_COMPILER_OS));
+	DATA_SET(output->data,"queue",queue);
+	io_cmd_f("empty_payload_pkt",output);
+	return;
+}
+
+
+/*!
+ \brief Issues a packet to the ECU to get its interface version. 
+ \param length is a pointer to a location to store the length of the data
+ received, or NULL
+ \returns the Firmware interface version as a text string
+ */
+G_MODULE_EXPORT void request_interface_version()
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	output = initialize_outputdata_f();
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_INTERFACE_VERSION));
+	DATA_SET(output->data,"queue",queue);
+	io_cmd_f("empty_payload_pkt",output);
+	return;
+}
+
+
 /*
  \brief Queries the ECU for a location ID list
  \paranm length is a pointer to a location where this function can store the
  length of data received, or NULL
  \returns a pointer to a Link list (GList) of location ID's
  */
-G_MODULE_EXPORT GList *request_location_ids(gint * length)
+G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
@@ -703,7 +606,8 @@ G_MODULE_EXPORT void test_cleanup(gpointer data)
 	if (test->result_type == RESULT_LIST)
 		g_list_free((GList *)test->result);
 	else
-		cleanup_f(test->result);
+		if (test->result)
+			cleanup_f(test->result);
 	cleanup_f(test);
 }
 
@@ -928,7 +832,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
   \brief updates the interrogation Gui (General Tab) with the Firmware and 
   Interface Versions
   */
-G_MODULE_EXPORT void update_interrogation_gui_pf(void)
+G_MODULE_EXPORT void update_ecu_info(void)
 {
 	gchar *int_version = NULL;
 	gchar *fw_version = NULL;
@@ -937,22 +841,34 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	gchar *compiler = NULL;
 	gchar *info = NULL;
 
+	fw_version = DATA_GET(global_data,"fw_version");
+	int_version = DATA_GET(global_data,"int_version");
+	build_date = DATA_GET(global_data,"build_date");
+	build_os = DATA_GET(global_data,"build_os");
+	compiler = DATA_GET(global_data,"compiler");
+	if ((fw_version) && (int_version) && (build_date) && (build_os) && (compiler))
+	{
+		info = g_strdup_printf("<b>Firmware Version:</b> %s\n<b>Interface version:</b> %s\nThis firmware was built on %s using the %s compiler on %s",fw_version,int_version,build_date,compiler,build_os);
+		thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(info));
+		g_free(info);
+	}
+}
+
+
+/*!
+  \brief Initiates the calls to get the info to update the tab with the
+  interrogated ECU infomation
+  */
+G_MODULE_EXPORT void update_interrogation_gui_pf(void)
+{
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
 	/* Request firmware version */
-	fw_version = request_firmware_version(NULL);
-	int_version = request_interface_version(NULL);
-	build_date = request_firmware_build_date(NULL);
-	build_os = request_firmware_build_os(NULL);
-	compiler = request_firmware_compiler(NULL);
-	info = g_strdup_printf("<b>Firmware Version:</b> %s\n<b>Interface version:</b> %s\nThis firmware was built on %s using the %s compiler on %s",fw_version,int_version,build_date,compiler,build_os);
-	thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(info));
-	g_free(info);
-	g_free(fw_version);
-	g_free(int_version);
-	g_free(build_date);
-	g_free(build_os);
-	g_free(compiler);
+	request_firmware_version();
+	request_interface_version();
+	request_firmware_build_date();
+	request_firmware_build_os();
+	request_firmware_compiler();
 }
 
 
@@ -1074,7 +990,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		dbg_func_f(INTERROGATOR|CRITICAL,g_strdup(__FILE__": load_firmware_details()\n\t\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));
 
 	/* Mtx maps location id's as pseudo "pages" */
-	locations = request_location_ids(NULL);
+	locations = raw_request_location_ids(NULL);
 	if (locations)
 	{
 		firmware->total_pages = g_list_length(locations);

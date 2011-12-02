@@ -27,6 +27,7 @@
 #include <freeems_errors.h>
 #include <freeems_helpers.h>
 #include <freeems_plugin.h>
+#include <interrogate.h>
 #include <serialio.h>
 #include <stdio.h>
 
@@ -203,6 +204,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	OutputData *retry = NULL;
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
+	gint payload_id = 0;
 	gint seq = 0;
 	gint tmpi = 0;
 	gint canID = 0;
@@ -385,14 +387,39 @@ handle_write:
 				packet = retrieve_packet(output->data,NULL);
 				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
 				if (packet)
-					printf("packet arrived, sequence %i!\n",seq);
+				{
+					payload_id = (GINT)DATA_GET(output->data,"payload_id");
+					switch (payload_id)
+					{
+						case RESPONSE_FIRMWARE_VERSION:
+							DATA_SET_FULL(global_data,"fw_version",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+							update_ecu_info();
+							break;
+						case RESPONSE_INTERFACE_VERSION:
+							DATA_SET_FULL(global_data,"int_version",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+							update_ecu_info();
+							break;
+						case RESPONSE_FIRMWARE_BUILD_DATE:
+							DATA_SET_FULL(global_data,"build_date",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+							update_ecu_info();
+							break;
+						case RESPONSE_FIRMWARE_COMPILER_VERSION:
+							DATA_SET_FULL(global_data,"compiler",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+							update_ecu_info();
+							break;
+						case RESPONSE_FIRMWARE_COMPILER_OS:
+							DATA_SET_FULL(global_data,"build_os",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+							update_ecu_info();
+							break;
+					}
+					freeems_packet_cleanup(packet);
+				}
 				else
 					printf("TIMEOUT!!\n");
-				freeems_packet_cleanup(packet);
 			}
 			break;
 		default:
-			printf("Don't know how to handle this packet response type..\n");
+			printf("MegaTunix does NOT know how to handle this packet response type..\n");
 			break;
 	}
 }
