@@ -388,7 +388,7 @@ handle_write:
 				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
 				if (packet)
 				{
-					payload_id = (GINT)DATA_GET(output->data,"payload_id");
+					payload_id = packet->payload_id;
 					switch (payload_id)
 					{
 						case RESPONSE_FIRMWARE_VERSION:
@@ -410,6 +410,9 @@ handle_write:
 						case RESPONSE_FIRMWARE_COMPILER_OS:
 							DATA_SET_FULL(global_data,"build_os",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
 							update_ecu_info();
+							break;
+						default:
+							printf("payload ID not matched, %i!\n",payload_id);
 							break;
 					}
 					freeems_packet_cleanup(packet);

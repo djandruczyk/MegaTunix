@@ -852,6 +852,7 @@ G_MODULE_EXPORT void update_ecu_info(void)
 		thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(info));
 		g_free(info);
 	}
+	return;
 }
 
 
