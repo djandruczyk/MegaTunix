@@ -744,7 +744,8 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */
-	/*freeems_set_ecu_data(canID,locID,offset,size,value);*/
+	freeems_set_ecu_data(canID,locID,offset,size,value);
+	/* IF the packet fails, update_write_status will rollback properly */
 
 	output->queue_update = queue_update;
 	io_cmd_f(firmware->write_command,output);
@@ -779,16 +780,6 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
-	/* save it otherwise the burn checker can miss it due to a potential
-	 * race condition
-	 */
-	/* This should be stored in the ACK for the packet NOT here*/
-	/*freeems_store_new_block(canID,locID,offset,block,num_bytes);*/
-
-	/*
-	if (firmware->multi_page)
-		ms_handle_page_change(page,(GINT)DATA_GET(global_data,"last_page"));
-	*/
 	output->queue_update = TRUE;
 	io_cmd_f(firmware->write_command,output);
 	/*
@@ -843,10 +834,11 @@ G_MODULE_EXPORT void update_write_status(void *data)
 			dbg_func_f(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
 			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
 		}
-		else if (block)
-		{
-			freeems_store_new_block(canID,locID,offset,block,length);
-		}
+//		else if (block)
+//		{
+//			freeems_backup_current_data(canID,locID);
+//			freeems_store_new_block(canID,locID,offset,block,length);
+//		}
 	}
 
 	if (output->queue_update)
@@ -885,6 +877,7 @@ red_or_black:
 
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
+			printf("Found difference on page %i\n",i);
 			firmware->page_params[i]->needs_burn = TRUE;
 			thread_set_group_color_f(RED,"burners");
 /*			thread_slaves_set_color(RED,"burners");*/

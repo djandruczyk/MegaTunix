@@ -23,39 +23,11 @@
 			<size>_U16_</size>
 		</arg>
 		<arg>
-			<name>MS1_NUM_BYTES</name>
-			<desc>Length of data to transfer (read or write)</desc>
-			<type>_DATA_</type>
-			<internal_name>num_bytes</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>MS1_PAGE</name>
-			<desc>Page inside ECU firmware</desc>
-			<type>_DATA_</type>
-			<internal_name>phys_ecu_page</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>MS1_OFFSET</name>
-			<desc>Offset from the beginning of the page.</desc>
-			<type>_DATA_</type>
-			<internal_name>offset</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
 			<name>MS2_OFFSET</name>
 			<desc>Offset from the beginning of the table. This is in MSB format</desc>
 			<type>_DATA_</type>
 			<internal_name>offset</internal_name>
 			<size>_U16_</size>
-		</arg>
-		<arg>
-			<name>MS1_BYTE</name>
-			<desc>byte to transfer to ECU, length is 1 byte </desc>
-			<type>_DATA_</type>
-			<internal_name>value</internal_name>
-			<size>_U08_</size>
 		</arg>
 		<arg>	
 			<name>DATACHUNK</name>
@@ -251,7 +223,7 @@
 		</cmd>
 		<cmd>
 			<name>ms2_veconst</name>
-			<desc>Triggers the MS1 to return the VE/Constants for canID and page passed</desc>
+			<desc>Triggers the MS2 to return the VE/Constants for canID and page passed</desc>
 			<type>_WRITE_CMD_</type>
 			<base>r</base>
 			<args>

@@ -303,6 +303,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 				return ecu_handler(widget,data);
 			break;
 	}
+	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	if (dl_type == IMMEDIATE)
 	{
 		/* If data has NOT changed,  don't bother updating 
@@ -310,8 +311,12 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		 */
 		if (dload_val != get_ecu_data(widget))
 			send_to_ecu(widget, dload_val, TRUE);
+		else
+		{
+			OBJ_SET(widget,"not_sent",GINT_TO_POINTER(FALSE));
+			return;
+		}
 	}
-	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	if (OBJ_GET(widget,"use_color"))
 	{
 		if (OBJ_GET(widget,"table_num"))
@@ -659,7 +664,10 @@ void update_entry(GtkWidget *widget)
 		}
 	}
 	if (OBJ_GET(widget,"not_sent"))
+	{
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+		OBJ_SET(widget,"not_sent",NULL);
+	}
 }
 
 

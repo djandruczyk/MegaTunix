@@ -24,7 +24,7 @@ page=6
 size=_U16_
 fromecu_mult=0.01
 precision=1
-use_color=TRUE
+use_color=FALSE
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Lambda Table define the vertexes (points on the Lambda Table map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_1]
@@ -33,7 +33,7 @@ page=6
 size=_U16_
 fromecu_mult=0.5
 precision=0
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Lambda Table define the vertexes (points on the Lambda Table map).  The ECU will interpolate between vertexes providing a smooth transition between points on the Lambda Table map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [lambda_1]

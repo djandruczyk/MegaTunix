@@ -254,8 +254,8 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					/*printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
 					  printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
 					 */
-					freeems_backup_current_data(canID,locID);
 					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
+					freeems_backup_current_data(canID,locID);
 
 					freeems_packet_cleanup(packet);
 					tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
@@ -305,7 +305,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					if (DATA_GET(output->data,"bump"))
 					{
 					        thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock)...\n"),clock/1000.0),FALSE,FALSE);
-						DATA_SET(global_data,"benchtest_total",DATA_GET(global_data,"benchtest_total")+clock);
+						DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(((GINT)DATA_GET(global_data,"benchtest_total")+clock)));
 					}
 					else if (DATA_GET(output->data, "start")) /* start */
 					{
