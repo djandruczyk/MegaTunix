@@ -298,7 +298,8 @@ struct _Page_Params
 {
 	gint length;		/*!< How big this page is... */
 	gint phys_ecu_page;	/*!< True pagenumber to send */
-	gboolean dl_by_default;	/*!< Download this page or not? */
+	gboolean dl_by_default;	/*!< Download this page normally */
+	gboolean read_only;	/*!< This page is NOT writable */
 	gint is_spark;		/*!< does this require alt write cmd? (hacky) */
 	gint spconfig_offset;	/*!< Where spconfig value is located (hacky) */
 	gboolean needs_burn;	/*!< Flag to indicate burn needed */

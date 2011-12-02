@@ -880,7 +880,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 red_or_black:
 	for (i=0;i<firmware->total_pages;i++)
 	{
-		if (!firmware->page_params[i]->dl_by_default)
+		if (firmware->page_params[i]->read_only)
 			continue;
 
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
@@ -918,7 +918,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 	page = (GINT)DATA_GET(output->data,"page");
 
 	/* sync temp buffer with current burned settings */
-	if (!firmware->page_params[page]->dl_by_default)
+	if (firmware->page_params[page]->read_only)
 		return;
 	freeems_backup_current_data(firmware->canID,locID);
 

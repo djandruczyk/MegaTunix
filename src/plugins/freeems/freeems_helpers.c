@@ -452,7 +452,7 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 		/* FreeEMS allows all pages to be in ram at will*/
 		for (i=0;i<firmware->total_pages;i++)
 		{
-			if (!firmware->page_params[i]->dl_by_default)
+			if (firmware->page_params[i]->read_only)
 				continue;
 			if (firmware->page_params[i]->needs_burn)
 			{

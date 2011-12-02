@@ -1006,6 +1006,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 			{
 				firmware->page_params[i]->length = details->length;
 				firmware->page_params[i]->dl_by_default = (details->flags & BLOCK_IS_INDEXABLE);
+				firmware->page_params[i]->read_only = (details->flags & BLOCK_IS_READONLY);
 					g_free(details);
 			}
 		}

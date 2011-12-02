@@ -394,7 +394,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	{
 		if ((DATA_GET(global_data,"leaving")) || (!firmware))
 			return;
-		if (!firmware->page_params[page]->dl_by_default)
+		if (firmware->page_params[page]->dl_by_default)
 			continue;
 		thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Updating Controls on Page %i</b>"),page));
 		for (offset=0;offset<firmware->page_params[page]->length;offset++)
