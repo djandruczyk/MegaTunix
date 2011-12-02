@@ -59,7 +59,6 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	}
 	
 	clock = (data.events_per_cycle*data.cycles*data.ticks_per_event)/1250;
-	DATA_SET(output->data,"clock",GINT_TO_POINTER(clock));
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x01 */
 	byte = 1;
@@ -88,6 +87,7 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 		g_byte_array_append(payload,&byte,1);
 	}
 	output = initialize_outputdata_f();
+	DATA_SET(output->data,"clock",GINT_TO_POINTER(clock));
 	DATA_SET(output->data,"start",GINT_TO_POINTER(TRUE));
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
