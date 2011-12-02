@@ -15,6 +15,10 @@ INTLTOOL_FILES = intltool-extract.in \
 		intltool-merge.in \
 		intltool-update.in
 
+# Release tag message file
+RELTAG = gitTagMessage.txt
+TAGNAME = gitTagName.txt
+
 CLEANFILES = *~ core autom4te.cache gmon.out
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update po/.intltool-merge-cache
@@ -52,4 +56,31 @@ update-po: check-gettext
 	fi \
 	&& cd po && $(MAKE) $(AM_MAKEFLAGS) update-po)
 
-.PHONY: check-gettext update-po doc
+testgit:
+	@echo "################################################################################"
+	@echo "#                            Checking git status...                            #"
+	@echo "################################################################################"
+	@echo -n "Are we on master? "
+	@if [ `git symbolic-ref HEAD` = refs/heads/master ] ; then echo "YES" ; else echo "NO!" ; exit 1 ; fi
+	@echo -n "Is everything checked in? "
+	@if [ `git status -s | wc -l` -gt 0 ] ; then echo "NO! Stuff not checked in...." ; exit 1 ; fi
+	@echo "Fetching from origin..."
+	git fetch
+	@echo "Are we behind?"
+	test `git rev-list \`git show-ref --hash refs/heads/master\`..\`git show-ref --hash refs/remotes/origin/master\` | wc -l` -eq 0
+	@echo "Are we ahead?"
+	test `git rev-list \`git show-ref --hash refs/remotes/origin/master\`..\`git show-ref --hash refs/heads/master\` | wc -l` -eq 0
+		
+tagmessage:
+	vim $(RELTAG)
+
+tagname:
+	vim $(TAGNAME)
+
+tagrelease: tagname tagmessage
+	git tag -F $(RELTAG) `cat $(TAGNAME)` HEAD
+
+release: testgit relbuild relperf
+relperf: relcommit tagrelease
+.PHONY: check-gettext update-po doc 
+.PHONY: testgit relbuild relperf tagrelease

@@ -53,3 +53,5 @@ doxygen.errors
 *.swp
 megatunix-*
 po/tmp
+gitTagMessage.txt
+gitTagName.txt
