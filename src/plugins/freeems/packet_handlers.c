@@ -625,12 +625,12 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 
 	if (getenv("PKT_DEBUG"))
 	{
-		printf("build_output_message(): ACTION being created!\n");
+		printf("build_output_message(): \n");
 		printf("Sequence number %i\n",seq_num);
 		printf("Payload ID number 0x%0X\n",payload_id);
 		printf("Location ID number %i\n",location_id);
 		printf("Offset %i\n",offset);
-		printf("Payload write DATA length %i\n",length);
+		printf("Payload DATA length %i\n",length);
 	}
 	if (have_payload_data)
 	{
@@ -709,12 +709,13 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	mtxlog_packet(buf,packet_length,TRUE);
 	pos++;
 
-	/*
-	   printf("RAW PACKET -> ");
-	   for (i=0;i<packet_length;i++)
-	   printf("%.2X ",buf[i]);
-	   printf("\n\n");
-	 */
+	if (getenv("PKT_DEBUG"))
+	{
+		printf("RAW PACKET -> ");
+		for (i=0;i<packet_length;i++)
+			printf("%.2X ",buf[i]);
+		printf("\n\n");
+	}
 	/* Escape + start/stop it */
 	block = g_new0(DBlock, 1);
 	block->type = DATA;

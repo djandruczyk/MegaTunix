@@ -38,50 +38,15 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void reset_counters(void)
 {
+	OutputData *output = NULL;
+	GByteArray *payload = NULL;
+	guint8 byte = 0;
 	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
-	GTimeVal tval;
-	gint seq = 6;
-	Serial_Params *serial_params = NULL;
-	guint8 *buf = NULL;
-	guint8 len = CLEAR_COUNTERS_REQ_PKT_LEN; 
-	guint8 pkt[CLEAR_COUNTERS_REQ_PKT_LEN]; 
-	gint req = REQUEST_CLEAR_COUNTERS_AND_FLAGS_TO_ZERO;
-	gint resp = RESPONSE_CLEAR_COUNTERS_AND_FLAGS_TO_ZERO;
-	gint res = 0;
-	gint tmit_len = 0;
-	guint8 sum = 0;
-	gint i = 0;
 
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_if_fail(serial_params);
+	output = initialize_outputdata_f();
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_CLEAR_COUNTERS_AND_FLAGS_TO_ZERO));
+	io_cmd_f("empty_payload_pkt",output);
 
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (req & 0x00ff );
-	pkt[L_PAYLOAD_IDX+1] = 0;
-	for (i=0;i<len-1;i++)
-		sum += pkt[i];
-	pkt[len-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,len,&tmit_len);
-
-	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,resp);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
-	{
-		g_free(buf);
-		deregister_packet_queue(PAYLOAD_ID,queue,resp);
-		g_async_queue_unref(queue);
-		return;
-	}
-	g_free(buf);
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,resp);
-	g_async_queue_unref(queue);
-	if (packet)
-		freeems_packet_cleanup(packet);
 	return;
 }
 
@@ -400,8 +365,8 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 				{
 
 					/*printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
-					printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
-					*/
+					  printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
+					 */
 					freeems_backup_current_data(canID,locID);
 					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
 
@@ -530,6 +495,9 @@ handle_write:
 				DATA_SET(retry->data,"queue",queue);
 				io_cmd_f(firmware->burn_command,retry);
 			}
+			break;
+		case EMPTY_PAYLOAD:
+				freeems_packet_cleanup(packet);
 			break;
 		default:
 			printf("Don't know how to handle this packet response type..\n");
