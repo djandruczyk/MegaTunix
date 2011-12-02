@@ -67,9 +67,9 @@ testgit:
 	@echo "Fetching from origin..."
 	git fetch
 	@echo "Are we behind?"
-	test `git rev-list \`git show-ref --hash refs/heads/master\`..\`git show-ref --hash refs/remotes/origin/master\` | wc -l` -eq 0
+	test `git rev-list \`git show-ref --hash refs/heads/master\` \`git show-ref --hash refs/remotes/origin/master\` | wc -l` -eq 0
 	@echo "Are we ahead?"
-	test `git rev-list \`git show-ref --hash refs/remotes/origin/master\`..\`git show-ref --hash refs/heads/master\` | wc -l` -eq 0
+	test `git rev-list \`git show-ref --hash refs/remotes/origin/master\` \`git show-ref --hash refs/heads/master\` | wc -l` -eq 0
 		
 tagmessage:
 	vim $(RELTAG)
