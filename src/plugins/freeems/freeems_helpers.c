@@ -39,10 +39,6 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT void reset_counters(void)
 {
 	OutputData *output = NULL;
-	GByteArray *payload = NULL;
-	guint8 byte = 0;
-	GAsyncQueue *queue = NULL;
-
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_CLEAR_COUNTERS_AND_FLAGS_TO_ZERO));
 	io_cmd_f("empty_payload_pkt",output);
@@ -56,48 +52,16 @@ G_MODULE_EXPORT void reset_counters(void)
   */
 G_MODULE_EXPORT void stop_streaming(void)
 {
-	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
-	GTimeVal tval;
-	gint seq = 6;
-	Serial_Params *serial_params = NULL;
-	guint8 *buf = NULL;
-	guint8 pkt[DATALOG_REQ_PKT_LEN]; 
-	gint res = 0;
-	gint tmit_len = 0;
-	gint len = 0;
-	guint8 sum = 0;
-	gint i = 0;
+	OutputData *output = NULL;
+	GByteArray *payload = NULL;
+	guint8 byte = 0; /*Stop Streaming */
 
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_if_fail(serial_params);
-
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_SET_ASYNC_DATALOG_TYPE & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_SET_ASYNC_DATALOG_TYPE & 0x00ff );
-	pkt[L_PAYLOAD_IDX+1] = 0;
-	for (i=0;i<DATALOG_REQ_PKT_LEN-1;i++)
-		sum += pkt[i];
-	pkt[DATALOG_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,DATALOG_REQ_PKT_LEN,&tmit_len);
-
-	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
-	{
-		g_free(buf);
-		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
-		g_async_queue_unref(queue);
-		return;
-	}
-	g_free(buf);
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
-	g_async_queue_unref(queue);
-	if (packet)
-		freeems_packet_cleanup(packet);
+	output = initialize_outputdata_f();
+	payload = g_byte_array_new();
+	g_byte_array_append(payload,&byte,1);
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_ASYNC_DATALOG_TYPE));
+	DATA_SET(output->data,"payload_data_array",payload);
+	io_cmd_f("basic_payload_pkt",output);
 	return;
 }
 
@@ -107,49 +71,16 @@ G_MODULE_EXPORT void stop_streaming(void)
   */
 G_MODULE_EXPORT void start_streaming(void)
 {
-	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
-	GTimeVal tval;
-	gint seq = 6;
-	Serial_Params *serial_params = NULL;
-	guint8 *buf = NULL;
-	guint8 pkt[DATALOG_REQ_PKT_LEN]; 
-	gint res = 0;
-	gint tmit_len = 0;
-	gint len = 0;
-	guint8 sum = 0;
-	gint i = 0;
+	OutputData *output = NULL;
+	GByteArray *payload = NULL;
+	guint8 byte = 1;/* Start streaming */
 
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_if_fail(serial_params);
-
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_SET_ASYNC_DATALOG_TYPE & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_SET_ASYNC_DATALOG_TYPE & 0x00ff );
-	/* Turn on normal streaming */
-	pkt[L_PAYLOAD_IDX+1] = 1;
-	for (i=0;i<DATALOG_REQ_PKT_LEN-1;i++)
-		sum += pkt[i];
-	pkt[DATALOG_REQ_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,DATALOG_REQ_PKT_LEN,&tmit_len);
-
-	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
-	{
-		g_free(buf);
-		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
-		g_async_queue_unref(queue);
-		return;
-	}
-	g_free(buf);
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
-	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_SET_ASYNC_DATALOG_TYPE);
-	g_async_queue_unref(queue);
-	if (packet)
-		freeems_packet_cleanup(packet);
+	output = initialize_outputdata_f();
+	payload = g_byte_array_new();
+	g_byte_array_append(payload,&byte,1);
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_ASYNC_DATALOG_TYPE));
+	DATA_SET(output->data,"payload_data_array",payload);
+	io_cmd_f("basic_payload_pkt",output);
 	return;
 }
 
@@ -159,34 +90,10 @@ G_MODULE_EXPORT void start_streaming(void)
   */
 G_MODULE_EXPORT void soft_boot_ecu(void)
 {
-	GTimeVal tval;
-	Serial_Params *serial_params = NULL;
-	guint8 *buf = NULL;
-	guint8 pkt[SOFT_SYSTEM_RESET_PKT_LEN]; 
-	gint res = 0;
-	gint tmit_len = 0;
-	gint len = 0;
-	guint8 sum = 0;
-	gint i = 0;
-
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_if_fail(serial_params);
-
-	if (DATA_GET(global_data,"offline"))
-		return;
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_SOFT_SYSTEM_RESET & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_SOFT_SYSTEM_RESET & 0x00ff );
-	for (i=0;i<SOFT_SYSTEM_RESET_PKT_LEN-1;i++)
-		sum += pkt[i];
-	pkt[SOFT_SYSTEM_RESET_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,SOFT_SYSTEM_RESET_PKT_LEN,&tmit_len);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
-	{
-		g_free(buf);
-		return;
-	}
-	g_free(buf);
+	OutputData *output = NULL;
+	output = initialize_outputdata_f();
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SOFT_SYSTEM_RESET));
+	io_cmd_f("empty_payload_pkt",output);
 	return;
 }
 
@@ -196,34 +103,10 @@ G_MODULE_EXPORT void soft_boot_ecu(void)
   */
 G_MODULE_EXPORT void hard_boot_ecu(void)
 {
-	GTimeVal tval;
-	Serial_Params *serial_params = NULL;
-	guint8 *buf = NULL;
-	guint8 pkt[HARD_SYSTEM_RESET_PKT_LEN]; 
-	gint res = 0;
-	gint tmit_len = 0;
-	gint len = 0;
-	guint8 sum = 0;
-	gint i = 0;
-
-	serial_params = DATA_GET(global_data,"serial_params");
-	g_return_if_fail(serial_params);
-
-	if (DATA_GET(global_data,"offline"))
-		return;
-	pkt[HEADER_IDX] = 0;
-	pkt[H_PAYLOAD_IDX] = (REQUEST_HARD_SYSTEM_RESET & 0xff00 ) >> 8;
-	pkt[L_PAYLOAD_IDX] = (REQUEST_HARD_SYSTEM_RESET & 0x00ff );
-	for (i=0;i<HARD_SYSTEM_RESET_PKT_LEN-1;i++)
-		sum += pkt[i];
-	pkt[HARD_SYSTEM_RESET_PKT_LEN-1] = sum;
-	buf = finalize_packet((guint8 *)&pkt,HARD_SYSTEM_RESET_PKT_LEN,&tmit_len);
-	if (!write_wrapper_f(serial_params->fd, buf, tmit_len, NULL))
-	{
-		g_free(buf);
-		return;
-	}
-	g_free(buf);
+	OutputData *output = NULL;
+	output = initialize_outputdata_f();
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_HARD_SYSTEM_RESET));
+	io_cmd_f("empty_payload_pkt",output);
 	return;
 }
 
@@ -276,7 +159,6 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
-					seq = g_rand_int_range(rand,2,255);
 					seq++;
 					seq = seq < 256? seq:2;
 					output = initialize_outputdata_f();
@@ -497,7 +379,17 @@ handle_write:
 			}
 			break;
 		case EMPTY_PAYLOAD:
+			queue = DATA_GET(output->data,"queue");
+			if (queue)
+			{
+				packet = retrieve_packet(output->data,NULL);
+				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
+				if (packet)
+					printf("packet arrived, sequence %i!\n",seq);
+				else
+					printf("TIMEOUT!!\n");
 				freeems_packet_cleanup(packet);
+			}
 			break;
 		default:
 			printf("Don't know how to handle this packet response type..\n");

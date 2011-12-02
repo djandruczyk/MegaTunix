@@ -74,8 +74,20 @@
 	</potential_args>
 	<commands>
 		<cmd>
+			<name>basic_payload_pkt</name>
+			<desc>Special Case Throwaway Payload packet</desc>
+			<type>_WRITE_CMD_</type>
+			<args>
+				<arg>SEQUENCE_NUM</arg> 
+				<arg>PAYLOAD_ID</arg>
+				<arg>PAYLOAD_DATA</arg>
+			</args>
+			<helper_func>handle_transaction_hf</helper_func>
+                        <helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
+		</cmd>
+		<cmd>
 			<name>empty_payload_pkt</name>
-			<desc>Special Case Payload only (no location) pkt</desc>
+			<desc>Special Case Empty Payload packet</desc>
 			<type>_WRITE_CMD_</type>
 			<args>
 				<arg>SEQUENCE_NUM</arg> 
