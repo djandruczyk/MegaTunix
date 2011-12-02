@@ -23,6 +23,7 @@
 
 #include <datamgmt.h>
 #include <firmware.h>
+#include <freeems_benchtest.h>
 #include <freeems_comms.h>
 #include <freeems_errors.h>
 #include <freeems_helpers.h>
@@ -206,6 +207,8 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	FreeEMS_Packet *packet = NULL;
 	gint payload_id = 0;
 	gint seq = 0;
+	gint clock = 0;
+	gint id = 0;
 	gint tmpi = 0;
 	gint canID = 0;
 	gint data_length = 0;
@@ -291,8 +294,28 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 				{
 					errorcode = ((guint8)packet->data[packet->payload_base_offset] << 8) + (guint8)packet->data[packet->payload_base_offset+1];
 					errmsg = lookup_error(errorcode);
-					thread_update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE);
+					thread_update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Benchtest Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE);
 					g_free(errmsg);
+				}
+				else
+				{
+					/* get the current clock/addition value*/
+					clock = (GINT)DATA_GET(output->data,"clock");
+					/* If bumping, increase the total time */
+					if (DATA_GET(output->data,"bump"))
+					{
+					        thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock)...\n"),clock/1000.0),FALSE,FALSE);
+						DATA_SET(global_data,"benchtest_total",DATA_GET(global_data,"benchtest_total")+clock);
+					}
+					else if (DATA_GET(output->data, "start")) /* start */
+					{
+						thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Initiating FreeEMS Benchtest: Run time should be about %.1f seconds...\n"),clock/1000.0),FALSE,FALSE);
+						id = g_timeout_add(500,benchtest_clock_update,GINT_TO_POINTER(clock));
+						DATA_SET(global_data,"benchtest_clock_id",GINT_TO_POINTER(id));
+					}
+					else if (DATA_GET(output->data, "stop")) /* stop */
+					        thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest stopped by the user...\n")),FALSE,FALSE);
+
 				}
 				freeems_packet_cleanup(packet);
 			}

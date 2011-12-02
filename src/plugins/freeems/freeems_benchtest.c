@@ -27,7 +27,6 @@
 
 extern gconstpointer *global_data;
 static gint id = 0;
-static gint total = 0;
 
 /*!
   \brief Validates the on screen data, prompting if necessary and creating
@@ -43,6 +42,7 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	gint tmit_len = 0;
 	gint len = 0;
 	gint base = 0;
+	gint clock = 0;
 	guint8 byte = 0;
 	gint i = 0;
 	gint seq = 69;
@@ -51,11 +51,15 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	Bt_Data data;
 
 	pull_data_from_gui(&data);
+	id = (GINT)DATA_GET(global_data,"benchtest_clock_id");
 	if (id)
+	{
 		g_source_remove(id);
+		DATA_SET(global_data,"benchtest_clock_id",NULL);
+	}
 	
-	thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Total benchtest runtime should be %.1f seconds...\n"),(data.events_per_cycle*data.cycles*data.ticks_per_event)/1250000.0),FALSE,FALSE);
-	id = g_timeout_add(500,benchtest_clock_update,GINT_TO_POINTER((GINT)((data.events_per_cycle*data.cycles*data.ticks_per_event)/1250)));
+	clock = (data.events_per_cycle*data.cycles*data.ticks_per_event)/1250;
+	DATA_SET(output->data,"clock",GINT_TO_POINTER(clock));
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x01 */
 	byte = 1;
@@ -84,6 +88,7 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 		g_byte_array_append(payload,&byte,1);
 	}
 	output = initialize_outputdata_f();
+	DATA_SET(output->data,"start",GINT_TO_POINTER(TRUE));
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
 	DATA_SET_FULL(output->data,"payload_data_array",payload,g_byte_array_unref);
@@ -111,9 +116,14 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	guint8 *buf = NULL;
 	GByteArray *payload;
 
-	total = 0;
+	DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(0));
+	id = (GINT)DATA_GET(global_data,"benchtest_clock_id");
 	if (id)
+	{
 		g_source_remove(id);
+		DATA_SET(global_data,"benchtest_clock_id",NULL);
+	}
+
 	gtk_widget_set_sensitive(lookup_widget_f("BTest_params_table"),TRUE);
 	gtk_widget_set_sensitive(lookup_widget_f("BTest_start_test_button"),TRUE);
 	gtk_widget_set_sensitive(lookup_widget_f("BTest_stop_test_button"),FALSE);
@@ -126,6 +136,7 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	byte = 0;
 	g_byte_array_append(payload,&byte,1);
 	output = initialize_outputdata_f();
+	DATA_SET(output->data,"stop",GINT_TO_POINTER(TRUE));
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
 	DATA_SET_FULL(output->data,"payload_data_array",payload,g_byte_array_unref);
@@ -133,8 +144,6 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("benchtest_pkt",output);
-	thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest stopped by the user...\n")),FALSE,FALSE);
-
 	return;
 }
 
@@ -162,7 +171,6 @@ G_MODULE_EXPORT void benchtest_bump(void)
 	bump = (guint8)g_strtod(text,NULL);
 	g_free(text);
 	addition = (data.events_per_cycle*bump*data.ticks_per_event)/1250;
-	total += addition;
 
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x02 to bump */
@@ -171,6 +179,8 @@ G_MODULE_EXPORT void benchtest_bump(void)
 	/* Add the amount of time to bump by */
 	g_byte_array_append(payload,&bump,1);
 	output = initialize_outputdata_f();
+	DATA_SET(output->data,"bump",GINT_TO_POINTER(TRUE));
+	DATA_SET(output->data,"clock",GINT_TO_POINTER(addition));
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
 	DATA_SET_FULL(output->data,"payload_data_array",payload,g_byte_array_unref);
@@ -286,6 +296,7 @@ gboolean benchtest_clock_update(gpointer data)
 	gint sec = 0;
 	gint msec = 0;
 	gint diff = 0;
+	gint total = 0;
 
 	if (!label)
 		label = lookup_widget_f("BTest_time_remain_label");
@@ -295,6 +306,7 @@ gboolean benchtest_clock_update(gpointer data)
 	g_get_current_time(&cur);
 
 	/* First run, grey out the main controls */
+	total = (GINT)DATA_GET(global_data,"benchtest_total");
 	if (total == 0 )
 	{
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_params_table"),FALSE);
@@ -311,6 +323,7 @@ gboolean benchtest_clock_update(gpointer data)
 		if (total <= 0 )
 			total = 0;
 	}
+	DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(total));
 	/*printf("Total time in msec %i\n",total);*/
 	hour = total / 3600000;
 	min = (total % 3600000) / 60000;
