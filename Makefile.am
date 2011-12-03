@@ -83,4 +83,4 @@ tagrelease: tagname tagmessage
 release: testgit relbuild relperf
 relperf: relcommit tagrelease
 .PHONY: check-gettext update-po doc 
-.PHONY: testgit relbuild relperf tagrelease
+.PHONY: testgit relbuild relperf tagrelease relcommit
