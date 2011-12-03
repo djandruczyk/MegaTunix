@@ -349,14 +349,12 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	}
 
 	if (lookup_current_value(source,&tmpf))
-	{
 		value = (GINT) tmpf;
-		DATA_SET(object,"last",GINT_TO_POINTER(value));
-	}
 	else
 		dbg_func(CRITICAL,g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get current value for %s\n",source));
 
-	previous_value = (GINT)DATA_GET(object,"last");
+	previous_value = (GINT)OBJ_GET(widget,"last");
+	OBJ_SET(widget,"last",GINT_TO_POINTER(value));
 
 	bitval = (GINT)OBJ_GET(widget,"bitval");
 	bitmask = (GINT)OBJ_GET(widget,"bitmask");
@@ -371,7 +369,6 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 	else	/* disable it.. */
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
-
 	last_source = source;
 }
 
