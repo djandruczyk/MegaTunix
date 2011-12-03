@@ -66,10 +66,10 @@ testgit:
 	@if [ `git status -s | wc -l` -gt 0 ] ; then echo "NO! Stuff not checked in...." ; exit 1 ; fi
 	@echo "Fetching from origin..."
 	git fetch
-	@echo -n "Are we behind?"
-	if [ $$(git rev-list `git show-ref --hash refs/heads/master`..`git show-ref --hash refs/remotes/origin/master` | wc -l) -gt 0 ] ; then echo "Yes!" ; exit 1; else echo "nope, we're good" ; fi
-	@echo "Are we ahead?"
-	test `git rev-list \`git show-ref --hash refs/remotes/origin/master\` \`git show-ref --hash refs/heads/master\` | wc -l` -eq 0
+	@echo -n "Are we behind? "
+	@if [ $$(git rev-list `git show-ref --hash refs/heads/master`..`git show-ref --hash refs/remotes/origin/master` | wc -l) -gt 0 ] ; then echo "Yes!" ; exit 1; else echo "nope, we're good" ; fi
+	@echo -n "Are we ahead? "
+	@if [ $$(git rev-list `git show-ref --hash refs/remotes/origin/master`..`git show-ref --hash refs/heads/master` | wc -l) -gt 0 ] ; then echo "Yes!" ; exit 1; else echo "nope, we're good" ; fi
 		
 tagmessage:
 	vim $(RELTAG)
