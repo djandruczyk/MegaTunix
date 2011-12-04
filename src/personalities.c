@@ -63,7 +63,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	dirs = get_dirs(g_build_path(PSEP,INTERROGATOR_DATA_DIR,"Profiles",NULL),&classes);
 	if (!dirs)
 	{
-		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
+		MTXDBG(CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n"));
 		return FALSE;
 	}
 	i = 0;
@@ -74,7 +74,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		g_free(tmpbuf);
 		if (!cfgfile)
 		{
-	//		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" file missing!, was MegaTunix installed properly?\n\n"));
+			MTXDBG(CRITICAL,_("\"details.cfg\" file missing!, was MegaTunix installed properly?\n"));
 			i++;
 			continue;
 
@@ -86,7 +86,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		cfg_read_string(cfgfile,"Family","ecu_lib",&element->ecu_lib);
 		cfg_read_string(cfgfile,"Family","common_lib",&element->common_lib);
 		if (!cfg_read_string(cfgfile,"Family","baud",&element->baud_str))
-			MTXDBG(CRITICAL,g_strdup_printf(__FILE__": personality_choice()\n\t \"details.cfg\" baud string undefined!, was MegaTunix installed properly?\n\n"));
+			MTXDBG(CRITICAL,_("\"details.cfg\" baud string undefined!, was MegaTunix installed properly?\n"));
 		element->dirname = g_strdup(dirs[i]);
 		element->filename = g_path_get_basename(dirs[i]);
 		if (g_strcasecmp(element->filename,(gchar *)DATA_GET(global_data,"last_ecu_family")) == 0)

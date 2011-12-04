@@ -90,7 +90,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 
 	/* Set the port properties and write the string out the port. */
 	if(SetCommState((HANDLE) _get_osfhandle (fd) ,&dcb) == 0)
-		MTXDBG(CRITICAL,g_strdup(__FILE__": win32_setup_serial_params()\n\tERROR setting serial attributes\n"));
+		MTXDBG(CRITICAL,_("ERROR setting serial attributes\n"));
 
 	/* Set timeout params in a fashion that mimics linux behavior */
 	GetCommTimeouts((HANDLE) _get_osfhandle (fd), &timeouts);

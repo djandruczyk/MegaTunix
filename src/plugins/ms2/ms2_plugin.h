@@ -35,7 +35,7 @@
 EXTERN void (*error_msg_f)(const gchar *);
 EXTERN gboolean (*get_symbol_f)(const gchar *, void **);
 EXTERN void (*io_cmd_f)(const gchar *, void *);
-EXTERN void (*dbg_func_f)(int,gchar *);
+EXTERN void (*dbg_func_f)(int,const gchar *, const gchar *, gint ,const gchar *, ...);
 EXTERN void (*start_tickler_f)(gint);
 EXTERN void (*stop_tickler_f)(gint);
 EXTERN void (*signal_read_rtvars_f)(void);

@@ -49,7 +49,7 @@ G_MODULE_EXPORT void plugins_init()
 	/* MegaTunix itself */
 	module[MAIN] = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module[MAIN])
-		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": plugin_init()\n\tUnable to call g_module_open for MegaTunix itself, error: %s\n",g_module_error()));
+		MTXDBG(CRITICAL,_("Unable to call g_module_open for MegaTunix itself, error: %s\n"),g_module_error());
 	DATA_SET_FULL(global_data,"megatunix_module",(gpointer)module[0],g_module_close);
 
 	/* Common Library */
@@ -64,7 +64,7 @@ G_MODULE_EXPORT void plugins_init()
 #endif
 		module[COMMON] = g_module_open(libpath,G_MODULE_BIND_LAZY);
 		if (!module[COMMON])
-			MTXDBG(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening Common library module error:\n\t%s\n",g_module_error()));
+			MTXDBG(CRITICAL,_("Opening Common library module error:\n\t%s\n"),g_module_error());
 		g_free(libpath);
 		DATA_SET_FULL(global_data,"common_module",(gpointer)module[COMMON],g_module_close);
 	}
@@ -80,7 +80,7 @@ G_MODULE_EXPORT void plugins_init()
 #endif
 		module[ECU] = g_module_open(libpath,G_MODULE_BIND_LAZY);
 		if (!module[ECU])
-			MTXDBG(CRITICAL,g_strdup_printf(__FILE__": plugins_init()\n\tOpening ECU library module error:\n\t%s\n",g_module_error()));
+			MTXDBG(CRITICAL,_("Opening ECU library module error:\n\t%s\n"),g_module_error());
 		g_free(libpath);
 		DATA_SET_FULL(global_data,"ecu_module",(gpointer)module[ECU],g_module_close);
 	}
@@ -186,7 +186,7 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 			}
 	}
 	if (!found)
-		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": get_symbol()\n\tError finding symbol \"%s\" in any plugins\n",name));
+		MTXDBG(CRITICAL,_("Error finding symbol \"%s\" in any plugins\n"),name);
 
 	return found;
 }

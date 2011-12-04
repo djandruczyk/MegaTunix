@@ -41,7 +41,7 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 
 	if (filename == NULL)
 	{
-		MTXDBG(CRITICAL,g_strdup(_("comm xml filename is NULL!\n")));
+		MTXDBG(CRITICAL,_("XML filename is NULL!\n"));
 		return;
 	}
 
@@ -52,7 +52,7 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 
 	if (doc == NULL)
 	{
-		MTXDBG(CRITICAL,g_strdup_printf(_("error: could not parse file %s\n"),filename));
+		MTXDBG(CRITICAL,_("Could not parse file %s\n"),filename);
 		return;
 	}
 
@@ -110,7 +110,7 @@ G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 
 	if (!node->children)
 	{
-		MTXDBG(CRITICAL,g_strdup(_("ERROR, get_potential_arg_name, xml node is empty!!\n")));
+		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -145,7 +145,7 @@ G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 
 	if (!node->children)
 	{
-		MTXDBG(CRITICAL,g_strdup(_("ERROR, load_commands, xml node is empty!!\n")));
+		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -181,7 +181,7 @@ G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 
 	if (!node->children)
 	{
-		MTXDBG(CRITICAL,g_strdup(_("ERROR, load_arg_details, xml node is empty!!\n")));
+		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -248,7 +248,7 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		MTXDBG(CRITICAL,g_strdup(_("ERROR, load_cmd_details, xml node is empty!!\n")));
+		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -324,7 +324,7 @@ G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		MTXDBG(CRITICAL,g_strdup(_("ERROR, load_cmd_args, xml node is empty!!\n")));
+		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -358,7 +358,7 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 
 	if (!node->children)
 	{
-		MTXDBG(CRITICAL,g_strdup(_("ERROR, load_cmd_post_functions, xml node is empty!!\n")));
+		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
 		return;
 	}
 

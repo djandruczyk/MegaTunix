@@ -39,7 +39,7 @@ EXTERN void (*error_msg_f)(const gchar *);
 EXTERN gboolean (*get_symbol_f)(const gchar *,void **);
 EXTERN void (*cleanup_f)(void *);
 EXTERN void (*io_cmd_f)(const gchar *,void *);
-EXTERN void (*new_dbg_func_f)(gint, const gchar *, ...);
+EXTERN void (*dbg_func_f)(gint, const gchar *, const gchar *, gint, const gchar *, ...);
 EXTERN GList *(*get_list_f)(gchar *);
 EXTERN OutputData *(*initialize_outputdata_f)(void);
 EXTERN void (*set_title_f)(const gchar *);

@@ -119,7 +119,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	void *(*serial_repair_thread)(gpointer data) = NULL;
 	/*	GTimer *clock;*/
 
-	MTXDBG(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tThread created!\n"));
+	MTXDBG(THREADS,_("Thread created!\n"));
 
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
@@ -153,7 +153,7 @@ fast_exit:
 			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
 				dealloc_message(message);
 
-			MTXDBG(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tMegaTunix is closing, Thread exiting !!\n"));
+			MTXDBG(THREADS,_("MegaTunix is closing, Thread exiting !!\n"));
 			g_mutex_lock(io_dispatch_mutex);
 			g_cond_signal(io_dispatch_cond);
 			g_mutex_unlock(io_dispatch_mutex);
@@ -171,21 +171,22 @@ fast_exit:
 			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",DATA_GET(global_data,"connected"),DATA_GET(global_data,"offline"),serial_params->open);*/
 			if (args->network_mode)
 			{
-				MTXDBG(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating NETWORK repair thread!\n"));
+				MTXDBG(THREADS|CRITICAL,_("LINK DOWN, Initiating NETWORK repair thread!\n"));
 				repair_thread = g_thread_create(network_repair_thread,NULL,TRUE,NULL);
 			}
 			else
 			{
-				MTXDBG(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Initiating serial repair thread!\n"));
+				MTXDBG(THREADS|CRITICAL,_("LINK DOWN, Initiating serial repair thread!\n"));
 				repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
 			}
 			g_thread_join(repair_thread);
 		}
 		if ((!serial_params->open) && (!DATA_GET(global_data,"offline")))
 		{
-			MTXDBG(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\tLINK DOWN, Can't process requested command, aborting call\n"));
+			MTXDBG(THREADS|CRITICAL,_("LINK DOWN, Can't process requested command, aborting call\n"));
 			thread_update_logbar("comm_view","warning",g_strdup("Disconnected Serial Link. Check Communications link/cable...\n"),FALSE,FALSE);
 			thread_update_widget("titlebar",MTX_TITLE,g_strdup("Disconnected link, check Communications tab..."));
+			message->status = FALSE;
 			continue;
 		}
 
@@ -229,7 +230,7 @@ fast_exit:
 				break;
 
 			default:
-				MTXDBG(THREADS|CRITICAL,g_strdup_printf(__FILE__": thread_dispatcher()\n\t Hit default case, this SHOULD NOT HAPPEN it's a bug, notify author! \n"));
+				MTXDBG(THREADS|CRITICAL,_("Hit default case, this SHOULD NOT HAPPEN it's a bug, notify author! \n"));
 
 				break;
 
@@ -247,7 +248,7 @@ fast_exit:
 			g_async_queue_unref(pf_dispatch_queue);
 		}
 	}
-	MTXDBG(THREADS|CRITICAL,g_strdup(__FILE__": thread_dispatcher()\n\texiting!!\n"));
+	MTXDBG(THREADS,_("Thread exiting!!\n"));
 	DATA_SET(global_data,"thread_dispatcher_id",NULL);
 	g_thread_exit(0);
 }
