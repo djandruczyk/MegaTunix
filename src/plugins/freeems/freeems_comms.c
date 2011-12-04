@@ -19,10 +19,11 @@
   */
 
 #include <datamgmt.h>
-#include <debugging.h>
+#include <defines.h>
 #include <firmware.h>
 #include <freeems_comms.h>
 #include <freeems_plugin.h>
+#include <debugging.h>
 #include <packet_handlers.h>
 #ifdef __WIN32__
 #include <winsock2.h>
@@ -81,12 +82,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	get_symbol_f("close_serial",(void *)&close_serial_f);
 	get_symbol_f("lock_serial",(void *)&lock_serial_f);
 	get_symbol_f("unlock_serial",(void *)&unlock_serial_f);
-	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread created!\n"));
+	DEBUG_FUNC(THREADS|CRITICAL,_("Thread created!\n"));
 
 	if (DATA_GET(global_data,"offline"))
 	{
 		g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
-		dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, offline mode!\n"));
+		DEBUG_FUNC(THREADS|CRITICAL,_("Thread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
 	if (!io_repair_queue)
@@ -98,7 +99,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	 */
 	if (serial_is_open == TRUE)
 	{
-		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port considered open, but throwing errors\n"));
+		DEBUG_FUNC(SERIAL_RD|SERIAL_WR,_("Port considered open, but throwing errors\n"));
 		freeems_serial_disable();
 		close_serial_f();
 		unlock_serial_f();
@@ -110,7 +111,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 		/* If "leaving" flag set, EXIT now */
 		if (DATA_GET(global_data,"leaving"))
 			g_thread_exit(0);
-		dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port NOT considered open yet.\n"));
+		DEBUG_FUNC(SERIAL_RD|SERIAL_WR,_("Port NOT considered open yet.\n"));
 		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
 		if (!autodetect) /* User thinks he/she is S M A R T */
 		{
@@ -132,19 +133,19 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
 				g_timeout_add(300,(GSourceFunc)queue_function_f,"kill_conn_warning");
-				dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, told to!\n"));
+				DEBUG_FUNC(THREADS|CRITICAL,_("Thread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
 			{
-				dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s does NOT exist\n",vector[i]));
+				DEBUG_FUNC(SERIAL_RD|SERIAL_WR,_("Port %s does NOT exist\n"),vector[i]);
 
 				/* Wait 100 ms to avoid deadlocking */
 				g_usleep(100000);
 				continue;
 			}
 			g_usleep(100000);
-			dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Attempting to open port %s\n",vector[i]));
+			DEBUG_FUNC(SERIAL_RD|SERIAL_WR,_("Attempting to open port %s\n"),vector[i]);
 			thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Attempting to open port %s\n"),vector[i]),FALSE,FALSE);
 			if (lock_serial_f(vector[i]))
 			{
@@ -152,12 +153,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 				{
 					if (autodetect)
 						thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
-					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s opened\n",vector[i]));
+					DEBUG_FUNC(SERIAL_RD|SERIAL_WR,_("Port %s opened\n"),vector[i]);
 					setup_serial_params_f();
 					freeems_serial_enable();
 
 					thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Searching for ECU\n")),FALSE,FALSE);
-					dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Performing ECU comms test via port %s.\n",vector[i]));
+					DEBUG_FUNC(SERIAL_RD|SERIAL_WR,_("Performing ECU comms test via port %s.\n"),vector[i]);
 					if (comms_test())
 					{       /* We have a winner !!  Abort loop */
 						thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Search successfull\n")),FALSE,FALSE);
@@ -166,7 +167,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 					}
 					else
 					{
-						dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t COMMS test failed, no ECU found, closing port %s.\n",vector[i]));
+						DEBUG_FUNC(SERIAL_RD|SERIAL_WR,_("COMMS test failed, no ECU found, closing port %s.\n"),vector[i]);
 						thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("No ECU found...\n")),FALSE,FALSE);
 						freeems_serial_disable();
 						close_serial_f();
@@ -178,7 +179,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			}
 			else
 			{
-				dbg_func_f(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" serial_repair_thread()\n\t Port %s is open by another application\n",vector[i]));
+				DEBUG_FUNC(SERIAL_RD|SERIAL_WR,_("Port %s is open by another application\n"),vector[i]);
 				thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Port %s is open by another application\n"),vector[i]),FALSE,FALSE);
 			}
 		}
@@ -192,7 +193,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	}
 	if (vector)
 		g_strfreev(vector);
-	dbg_func_f(THREADS|CRITICAL,g_strdup(__FILE__": serial_repair_thread()\n\tThread exiting, device found!\n"));
+	DEBUG_FUNC(THREADS|CRITICAL,_("Thread exiting, device found!\n"));
 	g_thread_exit(0);
 	return NULL;
 }
@@ -250,7 +251,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	serial_params = DATA_GET(global_data,"serial_params");
 	if ((!serial_params->open) || (!serial_params->fd))
 	{
-		dbg_func_f(CRITICAL,g_strdup(_(__FILE__": freeems_serial_setup, serial port is NOT open, or filedescriptor is invalid!\n")));
+		DEBUG_FUNC(CRITICAL,_("Serial port is NOT open, or filedescriptor is invalid!\n"));
 		return;
 	}
 
@@ -293,7 +294,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	serial_params = DATA_GET(global_data,"serial_params");
 	queue = DATA_GET(global_data,"packet_queue");
 
-	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\t Entered...\n"));
+	DEBUG_FUNC(SERIAL_RD,_("Entered...\n"));
 	if (!serial_params)
 		return FALSE;
 	queue = g_async_queue_new();
@@ -304,7 +305,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	if (packet)
 	{
-		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound streaming ECU!!\n"));
+		DEBUG_FUNC(SERIAL_RD,_("Found streaming ECU!!\n"));
 		g_async_queue_unref(queue);
 		freeems_packet_cleanup(packet);
 		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
@@ -312,7 +313,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	}
 	else
 	{ /* Assume ECU is in non-streaming mode, try and probe it */
-		dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tRequesting FreeEMS Interface Version\n"));
+		DEBUG_FUNC(SERIAL_RD,_("Requesting FreeEMS Interface Version\n"));
 		register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		pkt[HEADER_IDX] = 0;
 		pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
@@ -337,14 +338,14 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		g_async_queue_unref(queue);
 		if (packet)
 		{
-			dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tFound via probing!!\n"));
+			DEBUG_FUNC(SERIAL_RD,_("Found via probing!!\n"));
 			freeems_packet_cleanup(packet);
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 			return TRUE; 
 		}
 	}
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
-	dbg_func_f(SERIAL_RD,g_strdup(__FILE__": comms_test()\n\tNo device found...\n"));
+	DEBUG_FUNC(SERIAL_RD,_("No device found...\n"));
 	return FALSE;
 }
 
@@ -662,7 +663,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 	g_return_if_fail(firmware);
 	g_return_if_fail(offset >= 0);
 
-	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": freeems_send_to_ecu()\n\t Sending locID %i, offset %i, value %i \n",locID,offset,value));
+	DEBUG_FUNC(SERIAL_WR,_("Sending locID %i, offset %i, value %i \n"),locID,offset,value);
 
 	switch (size)
 	{
@@ -770,7 +771,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	dbg_func_f(SERIAL_WR,g_strdup_printf(__FILE__": freeems_chunk_write()\n\t Sending canID %i, locID %i, offset %i, num_bytes %i, data %p\n",canID,locID,offset,num_bytes,block));
+	DEBUG_FUNC(SERIAL_WR,_("Sending canID %i, locID %i, offset %i, num_bytes %i, data %p\n"),canID,locID,offset,num_bytes,block);
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"canID", GINT_TO_POINTER(canID));
 	DATA_SET(output->data,"location_id", GINT_TO_POINTER(locID));
@@ -831,14 +832,9 @@ G_MODULE_EXPORT void update_write_status(void *data)
 
 		if (!message->status) /* Bad write! */
 		{
-			dbg_func_f(CRITICAL|SERIAL_WR,g_strdup_printf(__FILE__": update_write_status()\n\tWRITE failed, rolling back!\n"));
+			DEBUG_FUNC(CRITICAL|SERIAL_WR,_("WRITE failed, rolling back!\n"));
 			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
 		}
-//		else if (block)
-//		{
-//			freeems_backup_current_data(canID,locID);
-//			freeems_store_new_block(canID,locID,offset,block,length);
-//		}
 	}
 
 	if (output->queue_update)
@@ -915,7 +911,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 		return;
 	freeems_backup_current_data(firmware->canID,locID);
 
-	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
+	DEBUG_FUNC(SERIAL_WR,_("Burn to Flash Completed\n"));
 
 	return;
 }

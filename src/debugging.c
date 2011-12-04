@@ -108,6 +108,60 @@ G_MODULE_EXPORT void close_debug(void)
 	g_static_mutex_unlock(&dbg_mutex);
 }
 
+
+/*!
+  \brief new_dbg_func() writes debugggin output to the console based on if the
+  passed debug level is marked in the current debugging mask.
+  \param level iss theDbg_Class enumeration defining the debug level
+  \param str is the message to print out
+  */
+
+G_MODULE_EXPORT void new_dbg_func(Dbg_Class level, const gchar * file, const gchar * func, gint line, const gchar *format, ...)
+{
+	gchar * tmpbuf = NULL;
+	gsize count = 0;
+	gchar * str = NULL;
+	GError *error = NULL;
+	gint dbg_lvl = -1;
+	va_list args;
+
+	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
+	/*
+	   static struct tm *tm = NULL;
+	   static time_t *t = NULL;
+	 */
+
+	if (!dbg_channel)
+		return;
+	/* IF we don't debug this level, free message and exit */
+	if (!(dbg_lvl & level))
+		return;
+
+	g_static_mutex_lock(&dbg_mutex);
+
+	va_start(args,format);
+	str = g_strdup_vprintf(format,args);
+	va_end(args);
+	if ((file) && (func) && (line))
+	{
+		tmpbuf = g_strdup_printf("[%s: %s(): line: %i]\n",file,func,line);
+		g_io_channel_write_chars(dbg_channel,tmpbuf,-1,&count,&error);
+	}
+	g_io_channel_write_chars(dbg_channel,str,-1,&count,&error);
+#ifdef DEBUG
+	if (level & CRITICAL)
+	{
+		if (tmpbuf)
+			printf("%s",tmpbuf);
+		printf("%s",str);
+	}
+#endif
+	g_free(tmpbuf);
+	g_free(str);
+	g_io_channel_flush(dbg_channel,&error);
+	g_static_mutex_unlock(&dbg_mutex);
+}
+
 /*!
   \brief dbg_func() writes debugggin output to the console based on if the
   passed debug level is marked in the current debugging mask.
@@ -122,9 +176,9 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, gchar *str)
 
 	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 	/*
-	static struct tm *tm = NULL;
-	static time_t *t = NULL;
-	*/
+	   static struct tm *tm = NULL;
+	   static time_t *t = NULL;
+	 */
 
 	/* IF we don't debug this level, free message and exit */
 	if (!(dbg_lvl & level))

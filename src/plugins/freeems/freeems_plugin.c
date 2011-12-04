@@ -67,7 +67,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("combo_toggle_labels_linked",(void *)&combo_toggle_labels_linked_f);
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
-	get_symbol_f("dbg_func",(void *)&dbg_func_f);
+	get_symbol_f("new_dbg_func",(void *)&new_dbg_func_f);
 	get_symbol_f("dump_output",(void *)&dump_output_f);
 	get_symbol_f("entry_changed_handler",(void *)&entry_changed_handler_f);
 	get_symbol_f("evaluator_create",(void *)&evaluator_create_f);

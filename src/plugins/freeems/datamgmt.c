@@ -19,9 +19,9 @@
   */
 
 #include <datamgmt.h>
-#include <debugging.h>
 #include <firmware.h>
 #include <freeems_plugin.h>
+#include <debugging.h>
 #include <string.h>
 
 
@@ -331,7 +331,7 @@ G_MODULE_EXPORT void freeems_store_new_block(gint canID, gint locID, gint offset
 	if ((offset + count ) <= (firmware->page_params[page]->length))
 		memcpy (ecu_data[page]+offset,buf,count);
 	else
-		dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": Attempted to write beyond end of Location ID (%i), page (%i)\n Loc ID size %i, write offset %i, length %i\n",locID,page,firmware->page_params[page]->length,offset,count));
+		DEBUG_FUNC(CRITICAL,_("Attempted to write beyond end of Location ID (%i), page (%i)\n Loc ID size %i, write offset %i, length %i\n"),locID,page,firmware->page_params[page]->length,offset,count);
 		
 }
 

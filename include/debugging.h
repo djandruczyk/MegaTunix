@@ -23,6 +23,15 @@
 
 #include <gtk/gtk.h>
 
+/* Handy wrapper to inject filename/function name nad line number into debugging
+   */
+#ifdef IN_PLUGIN
+#define DEBUG_FUNC(level, ...) new_dbg_func_f(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+#define QUIET_DEBUG_FUNC(level, ...) new_dbg_func_f(level,NULL,NULL,NULL, __VA_ARGS__)
+#else
+#define DEBUG_FUNC(level, ...) new_dbg_func(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+#define QUIET_DEBUG_FUNC(level, ...) new_dbg_func(level,NULL,NULL,NULL, __VA_ARGS__)
+#endif
 
 /* Debugging Enumerations */
 typedef enum
@@ -89,6 +98,7 @@ struct _DebugLevel
 void close_debug(void);
 void open_debug(void);
 void dbg_func(Dbg_Class, gchar *);
+void new_dbg_func(Dbg_Class, const gchar *, const gchar *, gint, const gchar *, ...);
 void populate_debugging(GtkWidget *);
 /* Prototypes */
 
