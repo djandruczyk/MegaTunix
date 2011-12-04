@@ -56,7 +56,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 
 	if (!cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expressions()\n\t Can't find \"multi_expr_keys\" in the \"[%s]\" section, exiting!\n",section));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": load_multi_expressions()\n\t Can't find \"multi_expr_keys\" in the \"[%s]\" section, exiting!\n",section));
 		exit (-4);
 	}
 	else
@@ -67,7 +67,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 
 	if (!cfg_read_string(cfgfile,section,"lower_limits",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"lower_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"lower_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
@@ -77,7 +77,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	}
 	if (!cfg_read_string(cfgfile,section,"upper_limits",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"upper_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"upper_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
@@ -87,7 +87,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	}
 	if (!cfg_read_string(cfgfile,section,"multi_lookuptables",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
@@ -97,7 +97,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	}
 	if (!cfg_read_string(cfgfile,section,"fromecu_mults",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"fromecu_mults\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"fromecu_mults\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else
@@ -107,7 +107,7 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	}
 	if (!cfg_read_string(cfgfile,section,"fromecu_adds",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"fromecu_adds\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": load_multi_expression()\n\t Key \"fromecu_adds\" NOT FOUND in section \"[%s]\", EXITING!!\n",section));
 		exit (-4);
 	}
 	else

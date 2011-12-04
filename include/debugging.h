@@ -23,14 +23,14 @@
 
 #include <gtk/gtk.h>
 
-/* Handy wrapper to inject filename/function name nad line number into debugging
-   */
+/* When inside a plugin, use the alt dest function name (namespace issues) */
 #ifdef IN_PLUGIN
-#define DEBUG_FUNC(level, ...) new_dbg_func_f(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
-#define QUIET_DEBUG_FUNC(level, ...) new_dbg_func_f(level,NULL,NULL,NULL, __VA_ARGS__)
+#define MTXDBG(level, ...) new_dbg_func_f(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+#define QUIET_MTXDBG(level, ...) new_dbg_func_f(level,NULL,NULL,0, __VA_ARGS__)
 #else
-#define DEBUG_FUNC(level, ...) new_dbg_func(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
-#define QUIET_DEBUG_FUNC(level, ...) new_dbg_func(level,NULL,NULL,NULL, __VA_ARGS__)
+/* When inside mtx core, use the default dest function name */
+#define MTXDBG(level, ...) new_dbg_func(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+#define QUIET_MTXDBG(level, ...) new_dbg_func(level,NULL,NULL,0, __VA_ARGS__)
 #endif
 
 /* Debugging Enumerations */
@@ -53,6 +53,7 @@ typedef enum
 	MTXSOCKET	= 1<<13,
 	PLUGINS		= 1<<14,
 	PACKETS		= 1<<15,
+	DISPATCHER	= 1<<16,
 	CRITICAL	= 1<<30
 }Dbg_Class;
 
@@ -74,6 +75,7 @@ typedef enum guint
 	MTXSOCKET_SHIFT		= 13,
 	PLUGINS_SHIFT		= 14,
 	PACKETS_SHIFT		= 15,
+	DISPATCHER_SHIFT	= 16,
 	CRITICAL_SHIFT		= 30
 }Dbg_Shift;
 

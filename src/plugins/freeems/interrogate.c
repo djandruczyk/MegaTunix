@@ -54,7 +54,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 	/* prevent multiple runs of interrogator simultaneously */
 	g_static_mutex_lock(&mutex);
-	DEBUG_FUNC(INTERROGATOR,_("ENTERED\n\n"));
+	MTXDBG(INTERROGATOR,_("ENTERED\n\n"));
 
 	/* ECU has already been detected via comms test
 	   Now we need to figure out its variant and adapt to it
@@ -65,7 +65,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	/* Load tests from tests.cfg file */
 	if (!validate_and_load_tests(&tests,&tests_hash))
 	{
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("Didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("Didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
 		update_logbar_f("interr_view",NULL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"),FALSE,FALSE,TRUE);
 		g_static_mutex_unlock(&mutex);
 		return FALSE;
@@ -548,7 +548,7 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 
 	*tests_hash = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,test_cleanup);
 
-	DEBUG_FUNC(INTERROGATOR,_("File %s, opened successfully\n"),filename);
+	MTXDBG(INTERROGATOR,_("File %s, opened successfully\n"),filename);
 	*tests = g_array_new(FALSE,TRUE,sizeof(Detection_Test *));
 	cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
 	for (i=0;i<total_tests;i++)
@@ -557,13 +557,13 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 		section = g_strdup_printf("test_%.2i",i);
 		if (!cfg_read_string(cfgfile,section,"test_name",&test->test_name))
 		{
-			DEBUG_FUNC(INTERROGATOR,_("test_name for %s is NULL\n"),section);
+			MTXDBG(INTERROGATOR,_("test_name for %s is NULL\n"),section);
 			g_free(section);
 			break;
 		}
 		if (!cfg_read_string(cfgfile,section,"test_result_type",&tmpbuf))
 		{
-			DEBUG_FUNC(INTERROGATOR,_("test_result_type for %s is NULL\n"),section);
+			MTXDBG(INTERROGATOR,_("test_result_type for %s is NULL\n"),section);
 			g_free(section);
 			break;
 		}
@@ -574,7 +574,7 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 		}
 		if (!cfg_read_string(cfgfile,section,"test_func",&test->test_func))
 		{
-			DEBUG_FUNC(INTERROGATOR,_("test_function for %s is NULL\n"),section);
+			MTXDBG(INTERROGATOR,_("test_function for %s is NULL\n"),section);
 			g_free(section);
 			break;
 		}
@@ -637,7 +637,7 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
 	if (!filenames)
 	{
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
 		return FALSE;
 	}
 	i = 0;
@@ -659,23 +659,23 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 		test = g_array_index(tests,Detection_Test *,i);
 		if (test->result_type == RESULT_DATA)
 		{
-			DEBUG_FUNC(INTERROGATOR,_("Command (%s): returned %i byts\n"),test->test_desc,test->num_bytes);
+			MTXDBG(INTERROGATOR,_("Command (%s): returned %i byts\n"),test->test_desc,test->num_bytes);
 			thread_update_logbar_f("interr_view","info",g_strdup_printf("Command (%s): returned %i bytes)\n",test->test_desc,test->num_bytes),FALSE,FALSE);
 		}
 		if (test->result_type == RESULT_TEXT)
 		{
-			DEBUG_FUNC(INTERROGATOR,_("Command (%s): returned (%s)\n"),test->test_desc,test->result_str);
+			MTXDBG(INTERROGATOR,_("Command (%s): returned (%s)\n"),test->test_desc,test->result_str);
 			thread_update_logbar_f("interr_view","info",g_strdup_printf("Command (%s): returned (%s)\n",test->test_desc,test->result_str),FALSE,FALSE);
 		}
 		else if (test->result_type == RESULT_LIST)
 		{
-			DEBUG_FUNC(INTERROGATOR,_("Command (%s): returned %i elements\n"),test->test_desc,g_list_length((GList *)test->result));
+			MTXDBG(INTERROGATOR,_("Command (%s): returned %i elements\n"),test->test_desc,g_list_length((GList *)test->result));
 			thread_update_logbar_f("interr_view","info",g_strdup_printf("Command (%s): returned %i elements\n",test->test_desc,g_list_length((GList *)test->result)),FALSE,FALSE);
 		}
 	}
 	if (match == FALSE) /* (we DID NOT find one) */
 	{
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
 		update_logbar_f("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE,TRUE);
 		retval = FALSE;
 	}
@@ -750,7 +750,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 		 */
 		if (!cfg_read_string(cfgfile,"interrogation",test->test_name,&tmpbuf))
 		{
-			DEBUG_FUNC(INTERROGATOR,_("MISMATCH,\"%s\" is NOT a match...\n\n"),filename);
+			MTXDBG(INTERROGATOR,_("MISMATCH,\"%s\" is NOT a match...\n\n"),filename);
 			cfg_free(cfgfile);
 			g_strfreev(match_on);
 			return FALSE;
@@ -814,7 +814,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 			continue;
 		else
 		{
-			DEBUG_FUNC(INTERROGATOR,_("MISMATCH,\"%s\" is NOT a match...\n\n"),filename);
+			MTXDBG(INTERROGATOR,_("MISMATCH,\"%s\" is NOT a match...\n\n"),filename);
 			g_strfreev(match_on);
 			cfg_free(cfgfile);
 			return FALSE;
@@ -822,7 +822,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 
 	}
 	g_strfreev(match_on);
-	DEBUG_FUNC(INTERROGATOR,_("\"%s\" is a match for all conditions ...\n\n"),filename);
+	MTXDBG(INTERROGATOR,_("\"%s\" is a match for all conditions ...\n\n"),filename);
 	cfg_free(cfgfile);
 	return TRUE;
 }
@@ -896,7 +896,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 
 	cfgfile = cfg_open_file((gchar *)filename);
 	if (!cfgfile)
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("File \"%s\" NOT OPENED successfully\n"),filename);
+		MTXDBG(INTERROGATOR|CRITICAL,_("File \"%s\" NOT OPENED successfully\n"),filename);
 	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
@@ -904,7 +904,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		cfg_free(cfgfile);
 		return FALSE;
 	}
-	DEBUG_FUNC(INTERROGATOR,_("File:%s opened successfully\n"),filename);
+	MTXDBG(INTERROGATOR,_("File:%s opened successfully\n"),filename);
 
 	firmware->profile_filename = g_strdup(filename);
 	cfg_read_string(cfgfile,"interrogation_profile","name",&firmware->name);
@@ -914,16 +914,16 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		g_free(tmpbuf);
 	}
 	else
-		DEBUG_FUNC(INTERROGATOR,_("Failed to find EcuTempUnits key in interrogation profile\n"));
+		MTXDBG(INTERROGATOR,_("Failed to find EcuTempUnits key in interrogation profile\n"));
 
 	if(!cfg_read_boolean(cfgfile,"parameters","BigEndian",&firmware->bigendian))
 	{
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"BigEndian\" key not found in interrogation profile, assuming ECU firmware byte order is big endian, ERROR in interrogation profile\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"BigEndian\" key not found in interrogation profile, assuming ECU firmware byte order is big endian, ERROR in interrogation profile\n"));
 		firmware->bigendian = TRUE;
 	}
 	if(!cfg_read_string(cfgfile,"parameters","Capabilities",
 				&tmpbuf))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"));
 	else
 	{
 		firmware->capabilities = translate_capabilities(tmpbuf);
@@ -931,39 +931,39 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	}
 	/* Commands to map against the comm.xml */
 	if(!cfg_read_string(cfgfile,"parameters","RT_Command",&firmware->rt_command))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"RT_Command\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"RT_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_int(cfgfile,"parameters","RT_total_bytes",
 				&firmware->rtvars_size))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"RT_total_bytes\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"RT_total_bytes\" variable not found in interrogation profile, ERROR\n"));
 
 	if(!cfg_read_string(cfgfile,"parameters","Get_All_Command",
 				&firmware->get_all_command))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Read_Command",
 				&firmware->read_command))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"Read_Command\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"Read_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Write_Command",
 				&firmware->write_command))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"Write_Command\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"Write_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Burn_Command",
 				&firmware->burn_command))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"Burn_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"parameters","Burn_All_Command",
 				&firmware->burn_all_command))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"Burn_All_Command\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"Burn_All_Command\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_boolean(cfgfile,"parameters","ChunkWriteSupport",
 				&firmware->chunk_support))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"ChunkWriteSupport\" flag not found in parameters section in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"ChunkWriteSupport\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	if (firmware->chunk_support)
 	{
 		if(!cfg_read_string(cfgfile,"parameters","Chunk_Write_Command",
 					&firmware->chunk_write_command))
-			DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"Chunk_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
+			MTXDBG(INTERROGATOR|CRITICAL,_("\"Chunk_Write_Command\" flag not found in parameters section in interrogation profile, ERROR\n"));
 	}
 
 	/* Gui Section */
 	if(!cfg_read_string(cfgfile,"gui","LoadTabs",&tmpbuf))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"LoadTabs\" list not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"LoadTabs\" list not found in interrogation profile, ERROR\n"));
 	else
 	{
 		firmware->tab_list = g_strsplit(tmpbuf,",",0);
@@ -971,7 +971,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	}
 	if(!cfg_read_string(cfgfile,"gui","TabConfs",
 				&tmpbuf))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"TabConfs\" list not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"TabConfs\" list not found in interrogation profile, ERROR\n"));
 	else
 	{
 		firmware->tab_confs = g_strsplit(tmpbuf,",",0);
@@ -979,16 +979,16 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	}
 	if(!cfg_read_string(cfgfile,"gui","RealtimeMapFile",
 				&firmware->rtv_map_file))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"gui","SliderMapFile",
 				&firmware->sliders_map_file))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"gui","RuntimeTextMapFile",
 				&firmware->rtt_map_file))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"));
 	if(!cfg_read_string(cfgfile,"gui","StatusMapFile",
 				&firmware->status_map_file))
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"));
 
 	/* Mtx maps location id's as pseudo "pages" */
 	locations = raw_request_location_ids(NULL);
@@ -1109,11 +1109,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	if (mem_alloc_f)
 		mem_alloc_f();
 	else
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("FAILED TO LOCATE \"mem_alloc\" function within core/plugins\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("FAILED TO LOCATE \"mem_alloc\" function within core/plugins\n"));
 
 	/* Display firmware version in the window... */
 
-	DEBUG_FUNC(INTERROGATOR|CRITICAL,_("Detected Firmware: %s\n"),firmware->name);
+	MTXDBG(INTERROGATOR|CRITICAL,_("Detected Firmware: %s\n"),firmware->name);
 	thread_update_logbar_f("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE);
 	thread_update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE);
 	cfg_free(cfgfile);
@@ -1138,17 +1138,17 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 
 	if (!string)
 	{
-		DEBUG_FUNC(INTERROGATOR|CRITICAL,_("String fed is NULL!\n"));
+		MTXDBG(INTERROGATOR|CRITICAL,_("String fed is NULL!\n"));
 		return -1;
 	}
 
 	vector = g_strsplit(string,",",0);
-	DEBUG_FUNC(INTERROGATOR,_("String fed is %s\n"),string);
+	MTXDBG(INTERROGATOR,_("String fed is %s\n"),string);
 	while (vector[i] != NULL)
 	{
-		DEBUG_FUNC(INTERROGATOR,_("Trying to translate %s\n"),vector[i]);
+		MTXDBG(INTERROGATOR,_("Trying to translate %s\n"),vector[i]);
 		tmpi = translate_string_f(vector[i]);
-		DEBUG_FUNC(INTERROGATOR,_("Translated value of %s is %i\n"),vector[i],value);
+		MTXDBG(INTERROGATOR,_("Translated value of %s is %i\n"),vector[i],value);
 		value += tmpi;
 		i++;
 	}

@@ -105,7 +105,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		map_file = get_file(g_build_path(PSEP,GUI_DATA_DIR,firmware->tab_confs[i],NULL),g_strdup("datamap"));
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));
+			MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tGLADE FILE: \"%s.glade\" NOT FOUND\n",firmware->tab_list[i]));
 			thread_update_logbar("interr_view","warning",g_strdup(_("Glade File: ")),FALSE,FALSE);
 			thread_update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
 			thread_update_logbar("interr_view","warning",g_strdup(_("  is MISSING!\n")),FALSE,FALSE);
@@ -114,7 +114,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		}
 		if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
 		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_confs[i]));
+			MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\tDATAMAP: \"%s.datamap\" NOT FOUND\n",firmware->tab_confs[i]));
 			thread_update_logbar("interr_view","warning",g_strdup(_("Datamap File: ")),FALSE,FALSE);
 			thread_update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]),FALSE,FALSE);
 			thread_update_logbar("interr_view","warning",g_strdup(_("  is MISSING!\n")),FALSE,FALSE);
@@ -201,7 +201,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	g_timeout_add(500,(GSourceFunc)preload_deps,tabinfos);
 	DATA_SET(global_data,"tabinfos",tabinfos);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
-	dbg_func(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
+	MTXDBG(TABLOADER,g_strdup(__FILE__": load_gui_tabs_pf()\n\t All is well, leaving...\n\n"));
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
 	gdk_threads_leave();
 	return TRUE;
@@ -246,7 +246,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		topframe = glade_xml_get_widget(xml,"topframe");
 		if (topframe == NULL)
 		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
+			MTXDBG(TABLOADER|CRITICAL,g_strdup(__FILE__": load_gui_tabs_pf()\n\t\"topframe\" not found in xml, ABORTING!!\n"));
 			set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
 			return FALSE;
 		}
@@ -277,7 +277,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		}
 
 		/*
-		   dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
+		   MTXDBG(TABLOADER,g_strdup_printf(__FILE__": load_gui_tabs_pf()\n\t Tab %s successfully loaded...\n\n",tab_name));
 		   g_free(tab_name);
 		 */
 
@@ -357,7 +357,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
 		groupnames = parse_keys(tmpbuf,&num_groups,",");
-		dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\tNumber of groups to load settings for is %i\n",num_groups));
+		MTXDBG(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\tNumber of groups to load settings for is %i\n",num_groups));
 		g_free(tmpbuf);
 	}
 	else
@@ -374,12 +374,12 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		if(cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
 			group->keys = parse_keys(tmpbuf,&group->num_keys,",");
-			dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys for section %s is %i\n",section,group->num_keys));
+			MTXDBG(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\tNumber of keys for section %s is %i\n",section,group->num_keys));
 			g_free(tmpbuf);
 		}
 		else
 		{
-			dbg_func(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\t\"keys\" key in section \"%s\" NOT found, aborting this group.\n",section));
+			MTXDBG(TABLOADER,g_strdup_printf(__FILE__": load_groups()\n\t\"keys\" key in section \"%s\" NOT found, aborting this group.\n",section));
 			g_free(group);
 			g_free(section);
 			continue;
@@ -442,7 +442,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 	group = g_hash_table_lookup(groups,groupname);
 	if (!group)
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_group_data()\n\t group \"%s\" not found in file %s\n",groupname,cfg->filename));
+		MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_group_data()\n\t group \"%s\" not found in file %s\n",groupname,cfg->filename));
 		return -1;
 	}
 	/* Copy data from the group object to the */
@@ -626,7 +626,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	if(cfg_read_string(cfgfile, section, "keys", &tmpbuf))
 	{
 		keys = parse_keys(tmpbuf,&num_keys,",");
-		dbg_func(TABLOADER,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys for %s is %i\n",section,num_keys));
+		MTXDBG(TABLOADER,g_strdup_printf(__FILE__": bind_data()\n\tNumber of keys for %s is %i\n",section,num_keys));
 		g_free(tmpbuf);
 	}
 	else 
@@ -651,7 +651,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 	if ((!cfg_read_int(cfgfile, section, "page", &page)) && (page == -1))
 	{
-		dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section));	
+		MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tObject %s doesn't have a page assigned!!!!\n",section));	
 
 	}
 	/* Bind widgets to lists if they have the bind_to_list flag set...
@@ -765,7 +765,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	if (cfg_read_string(cfgfile,section,"initializer",&initializer))
 	{
 		if (!cfg_read_string(cfgfile,section,"widget_type",&tmpbuf))
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tObject %s has initializer, but no widget_type!!!!\n",section));	
+			MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tObject %s has initializer, but no widget_type!!!!\n",section));	
 		else
 			widget_type = translate_string(tmpbuf);
 		g_free(tmpbuf);
@@ -805,7 +805,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 			}
 			else
 			{
-				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tIndexed Object %s has index and offset, but no size!!!!\n",section));     
+				MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\tIndexed Object %s has index and offset, but no size!!!!\n",section));     
 				g_free(section);
 				return;
 			}
@@ -821,14 +821,14 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		 */
 		if (page < 0)
 		{
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, page %i, at offset %i...\n\n",section,page,offset));
+			MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, page %i, at offset %i...\n\n",section,page,offset));
 			g_free(section);
 			return;
 		}
 		if (page < firmware->total_pages)
 		{
 			if (offset >= firmware->page_params[page]->length)
-				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
+				MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n",section,offset));
 			else
 			{
 
@@ -839,7 +839,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 			}
 		}
 		else
-			dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n",section,page,offset));
+			MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": bind_data()\n\t Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n",section,page,offset));
 
 	}
 	/* If there is a "group" key in a section it means that it gets the
@@ -879,7 +879,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 				g_array_append_val(firmware->table_params[table_num]->table,widget);
 		}
 	}
-	dbg_func(TABLOADER,g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));
+	MTXDBG(TABLOADER,g_strdup(__FILE__": bind_data()\n\t All is well, leaving...\n\n"));
 }
 
 
@@ -919,14 +919,14 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 			if (get_symbol(vector[i],(void *)&post_func_w_arg))
 				post_func_w_arg(widget);
 			else
-				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
+				MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
 		}
 		else /* If no widget find funct with no args.. */
 		{
 			if (get_symbol(vector[i],(void *)&post_func))
 				post_func();
 			else
-				dbg_func(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
+				MTXDBG(TABLOADER|CRITICAL,g_strdup_printf(__FILE__": run_post_functions_with_arg()\n\tError finding symbol \"%s\", error:\n\t%s\n",vector[i],g_module_error()));
 		}
 	}
 	g_strfreev(vector);

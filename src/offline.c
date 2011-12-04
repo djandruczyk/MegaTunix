@@ -248,7 +248,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
 	if (!filenames)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": present_firmware_choices()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": present_firmware_choices()\n\t NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
 		return NULL;
 	}
 	i = 0;
@@ -257,7 +257,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		cfgfile = cfg_open_file(filenames[i]);
 		if (!cfgfile)
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": present_firmware_choices()\n\t Interrogation profile damaged!, was MegaTunix installed properly?\n\n"));
+			MTXDBG(CRITICAL,g_strdup_printf(__FILE__": present_firmware_choices()\n\t Interrogation profile damaged!, was MegaTunix installed properly?\n\n"));
 			i++;
 			continue;
 		}

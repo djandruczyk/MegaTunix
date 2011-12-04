@@ -70,7 +70,7 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 
 	if (!cfg_read_string(cfgfile,section,"bitvals",&tmpbuf))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": combo_loader()\n\t\"bitvals\" key is MISSING, critical fault, not setting up control \n"));
+		MTXDBG(CRITICAL,_("\"bitvals\" key is MISSING, critical fault, not setting up control \n"));
 		return;
 	}
 	vector = parse_keys(tmpbuf,&num_bitvals,",");
@@ -78,7 +78,7 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 	if (num_bitvals != num_choices)
 	{
 		name = glade_get_widget_name(GTK_WIDGET(object));
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": combo_loader()\n\t\"bitvals\" BIG PROBLEM, combobox %s choices %i and bits %i don't match up\n",(name == NULL ? "undefined" : name),num_choices,num_bitvals));
+		MTXDBG(CRITICAL,_("\"bitvals\" BIG PROBLEM, combobox %s choices %i and bits %i don't match up\n"),(name == NULL ? "undefined" : name),num_choices,num_bitvals);
 		return;
 	}
 

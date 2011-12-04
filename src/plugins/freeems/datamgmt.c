@@ -331,7 +331,7 @@ G_MODULE_EXPORT void freeems_store_new_block(gint canID, gint locID, gint offset
 	if ((offset + count ) <= (firmware->page_params[page]->length))
 		memcpy (ecu_data[page]+offset,buf,count);
 	else
-		DEBUG_FUNC(CRITICAL,_("Attempted to write beyond end of Location ID (%i), page (%i)\n Loc ID size %i, write offset %i, length %i\n"),locID,page,firmware->page_params[page]->length,offset,count);
+		MTXDBG(CRITICAL,_("Attempted to write beyond end of Location ID (%i), page (%i)\n Loc ID size %i, write offset %i, length %i\n"),locID,page,firmware->page_params[page]->length,offset,count);
 		
 }
 

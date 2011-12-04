@@ -803,14 +803,14 @@ G_MODULE_EXPORT void mtxlog_packet(const void *buf, size_t len, gboolean toecu)
 	guint8 *ptr = (guint8 *)buf;
 
 	if (toecu)
-		DEBUG_FUNC(PACKETS,_("Packet TO ECU %i bytes \n\t"),(gint)len);
+		MTXDBG(PACKETS,_("Packet TO ECU %i bytes \n\t"),(gint)len);
 	else
-		DEBUG_FUNC(PACKETS,_("Packet FROM ECU %i bytes \n\t"),(gint)len);
+		MTXDBG(PACKETS,_("Packet FROM ECU %i bytes \n\t"),(gint)len);
 	for (i=0;i<len;i++)
 	{
-		QUIET_DEBUG_FUNC(PACKETS,_("%.2X "),ptr[i]);
+		QUIET_MTXDBG(PACKETS,_("%.2X "),ptr[i]);
 		if (!((i+1)%16))
-			QUIET_DEBUG_FUNC(PACKETS,_("\n\t"));
+			QUIET_MTXDBG(PACKETS,_("\n\t"));
 	}
-	QUIET_DEBUG_FUNC(PACKETS,_("\n"));
+	QUIET_MTXDBG(PACKETS,_("\n"));
 }

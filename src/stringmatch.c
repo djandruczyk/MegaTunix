@@ -478,7 +478,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
   */
 G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
 {
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %i\n",(gchar *)key, (GINT)value));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": dump_hash()\n\tKey %s, Value %i\n",(gchar *)key, (GINT)value));
 }
 
 
@@ -499,7 +499,7 @@ G_MODULE_EXPORT gint translate_string(const gchar *string)
 	value = (GINT)g_hash_table_lookup(str_2_enum,string);
 	if (value == 0)
 	{
-		/*dbg_func(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
+		/*MTXDBG(CRITICAL,g_strdup_printf(__FILE__": translate_string()\n\tString \"%s\" NOT FOUND in hashtable....\n",string));*/
 		return (MTX_UNKNOWN);
 	}
 	else

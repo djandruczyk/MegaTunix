@@ -75,7 +75,7 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 				if (get_symbol_f("ecu_toggle_button_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					DEBUG_FUNC(CRITICAL,_("Default case, but there is NO ecu_toggle_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_toggle_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -124,7 +124,7 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 				if (get_symbol_f("ecu_std_button_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					DEBUG_FUNC(CRITICAL,_("Default case, but there is NO ecu_std_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_std_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -159,7 +159,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 				if (get_symbol_f("ecu_bitmask_button_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					DEBUG_FUNC(CRITICAL,_("Default case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -297,7 +297,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 				if (get_symbol_f("ecu_entry_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					DEBUG_FUNC(CRITICAL,_("Default case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -606,7 +606,7 @@ void update_entry(GtkWidget *widget)
 			if (get_symbol_f("ecu_update_entry",(void *)&update_handler))
 				update_handler(widget);
 			else
-				DEBUG_FUNC(CRITICAL,_("Default case, but there is NO ecu_update_entry function available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
+				MTXDBG(CRITICAL,_("Default case, but there is NO ecu_update_entry function available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 		}
 		else
 			update_handler(widget);

@@ -71,7 +71,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 		return;
 	if (!firmware->status_map_file)
 	{
-		//dbg_func(CRITICAL,g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
+		//MTXDBG(CRITICAL,g_strdup_printf(__FILE__": firmware->status_map_file is UNDEFINED,\n\texiting status window creation routine!!!!\n"));
 		return;
 	}
 
@@ -80,7 +80,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 	filename = get_file(g_build_path(PSEP,RTSTATUS_DATA_DIR,firmware->status_map_file,NULL),g_strdup("xml"));
 	if (!filename)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->status_map_file));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": load_runtime_status()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->status_map_file));
 		set_title(g_strdup(_("ERROR RT Statusfile DOES NOT EXIST!!!")));
 		gdk_threads_leave();
 		return;
@@ -156,7 +156,7 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
 			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
 				if (!xml_api_check(cur_node,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API))
 				{
-					dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_status_xml_elements()\n\tAPI mismatch, won't load this file!!\n"));
+					MTXDBG(CRITICAL,g_strdup_printf(__FILE__": load_status_xml_elements()\n\tAPI mismatch, won't load this file!!\n"));
 					return FALSE;
 				}
 			if (g_strcasecmp((gchar *)cur_node->name,"status") == 0)
@@ -351,7 +351,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	if (lookup_current_value(source,&tmpf))
 		value = (GINT) tmpf;
 	else
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get current value for %s\n",source));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": rt_update_status()\n\t COULD NOT get current value for %s\n",source));
 
 	previous_value = (GINT)OBJ_GET(widget,"last");
 	OBJ_SET(widget,"last",GINT_TO_POINTER(value));

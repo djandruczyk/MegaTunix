@@ -49,6 +49,7 @@ static DebugLevel dbglevels[] =
 	{ "Network Socket", DEBUG_LEVEL, MTXSOCKET, MTXSOCKET_SHIFT, FALSE},
 	{ "Plugins", DEBUG_LEVEL, PLUGINS, PLUGINS_SHIFT, FALSE},
 	{ "Packets", DEBUG_LEVEL, PACKETS, PACKETS_SHIFT, FALSE},
+	{ "Dispatcher", DEBUG_LEVEL, DISPATCHER, DISPATCHER_SHIFT, FALSE},
 	{ "Critical Errors", DEBUG_LEVEL, CRITICAL, CRITICAL_SHIFT, FALSE},
 };
 
@@ -142,7 +143,7 @@ G_MODULE_EXPORT void new_dbg_func(Dbg_Class level, const gchar * file, const gch
 	va_start(args,format);
 	str = g_strdup_vprintf(format,args);
 	va_end(args);
-	if ((file) && (func) && (line))
+	if ((file) && (func) && (line > 0))
 	{
 		tmpbuf = g_strdup_printf("[%s: %s(): line: %i]\n",file,func,line);
 		g_io_channel_write_chars(dbg_channel,tmpbuf,-1,&count,&error);

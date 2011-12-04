@@ -78,7 +78,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 		return;
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": populate_dlog_choices_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions are NOT LOADED!!!\n"));
 		return;
 	}
 	set_title(g_strdup(_("Populating Datalogger...")));
@@ -285,7 +285,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	firmware = DATA_GET(global_data,"firmware");
 	if (!iochannel)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": write_log_header()\n\tIOChannel pointer was undefined, returning NOW...\n"));
+		MTXDBG(CRITICAL,_("IOChannel pointer was undefined, returning NOW...\n"));
 		return;
 	}
 	/* Count total logable variables */
@@ -354,7 +354,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
 	if (!iochannel)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": run_datalog_pf()\n\tIo_File undefined, returning NOW!!!\n"));
+		MTXDBG(CRITICAL,_("IO Channel undefined, returning NOW!!!\n"));
 		return TRUE;
 	}
 

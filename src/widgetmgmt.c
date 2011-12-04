@@ -81,7 +81,7 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 	if (!g_hash_table_lookup(dynamic_widgets,fullname))
 		g_hash_table_insert(dynamic_widgets,g_strdup(fullname),(gpointer)widget);
 	else
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": populate_master()\n\tKey %s  for widget %s from file %s already exists in master table\n",name,fullname,cfg->filename));
 
 	g_free(prefix);
 	g_free(fullname);
@@ -109,7 +109,7 @@ G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
 	{
 		
 		g_hash_table_replace(dynamic_widgets,g_strdup(name),(gpointer)widget);
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_widget()\n\tWidget named \"%s\" already exists in master table replacing it!\n",name));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": register_widget()\n\tWidget named \"%s\" already exists in master table replacing it!\n",name));
 	}
 	else
 		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);

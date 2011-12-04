@@ -321,7 +321,7 @@ G_MODULE_EXPORT gboolean read_config(void)
 	else
 	{
 		serial_params->port_name = g_strdup(DEFAULT_PORT);
-		dbg_func(CRITICAL,g_strdup(__FILE__": read_config()\n\tConfig file not found, using defaults\n"));
+		MTXDBG(CRITICAL,g_strdup(__FILE__": read_config()\n\tConfig file not found, using defaults\n"));
 		cleanup(filename);
 		save_config();
 		return FALSE;	/* No file found */

@@ -36,7 +36,7 @@ G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gc
 	assert(string);
 	if (!string)
 	{
-		dbg_func(KEYPARSER|CRITICAL,g_strdup(__FILE__": parse_keys()\n\t String passed was NULL\n"));
+		MTXDBG(KEYPARSER|CRITICAL,g_strdup(__FILE__": parse_keys()\n\t String passed was NULL\n"));
 		*count = 0;
 		return NULL;
 	}
@@ -63,7 +63,7 @@ G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const 
 	assert(string);
 	if (!string)
 	{
-		dbg_func(KEYPARSER|CRITICAL,g_strdup(__FILE__": parse_keytypes()\n\t String passed was NULL\n"));
+		MTXDBG(KEYPARSER|CRITICAL,g_strdup(__FILE__": parse_keytypes()\n\t String passed was NULL\n"));
 		*count = 0;
 		return 0;
 	}
@@ -74,9 +74,9 @@ G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const 
 	keytypes = (gint *)g_malloc0(ct*sizeof(gint));	
 	while (vector[i])
 	{
-		dbg_func(KEYPARSER,g_strdup_printf(__FILE__": parse_keytypes()\n\ttrying to translate %s\n",vector[i]));
+		MTXDBG(KEYPARSER,g_strdup_printf(__FILE__": parse_keytypes()\n\ttrying to translate %s\n",vector[i]));
 		keytypes[i] = translate_string(vector[i]);
-		dbg_func(KEYPARSER,g_strdup_printf(__FILE__": parse_keytypes()\n\ttranslated value of %s is %i\n",vector[i],keytypes[i]));
+		MTXDBG(KEYPARSER,g_strdup_printf(__FILE__": parse_keytypes()\n\ttranslated value of %s is %i\n",vector[i],keytypes[i]));
 		i++;
 	}
 	g_strfreev(vector);

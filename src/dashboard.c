@@ -395,7 +395,7 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 		rtv_obj = g_hash_table_lookup(rtv_map->rtv_hash,source);
 		if (!(rtv_obj))
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": link_dash_datasources\n\tBad things man!, object doesn't exist for %s\n",source));
+			MTXDBG(CRITICAL,_("Bad things man!, object doesn't exist for %s\n"),source);
 			continue ;
 		}
 		d_gauge = g_new0(Dash_Gauge, 1);

@@ -123,12 +123,12 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	/* Stop timeout functions */
 	stop_tickler(RTV_TICKLER);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_realtime\n"));
 	stop_tickler(LV_PLAYBACK_TICKLER);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_lv_playback\n"));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_lv_playback\n"));
 
 	stop_datalogging();
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after stop_datalogging\n"));
 
 	/* Set global flag */
 	DATA_SET(global_data,"leaving",GINT_TO_POINTER(TRUE));
@@ -140,14 +140,14 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		g_async_queue_push(io_repair_queue,&tmp);
 
 	/* Commits any pending data to ECU flash */
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() before burn\n"));
 	if ((DATA_GET(global_data,"connected")) && 
 			(DATA_GET(global_data,"interrogated")) && 
 			(!DATA_GET(global_data,"offline")))
 		io_cmd(firmware->burn_all_command,NULL);
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after burn\n"));
 
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() configuration saved\n"));
 	g_static_mutex_lock(&leave_mutex);
 
 
@@ -216,13 +216,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	 *
 	 if (ascii_socket_id)
 	 g_thread_join(ascii_socket_id);
-	 dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after ascii socket thread shutdown\n"));
+	 MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after ascii socket thread shutdown\n"));
 	 if (binary_socket_id)
 	 g_thread_join(binary_socket_id);
-	 dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after binary socket thread shutdown\n"));
+	 MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after binary socket thread shutdown\n"));
 	 if (control_socket_id)
 	 g_thread_join(control_socket_id);
-	 dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after control socket thread shutdown\n"));
+	 MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after control socket thread shutdown\n"));
 	 */
 
 	if (lookup_widget("dlog_select_log_button"))
@@ -233,7 +233,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		g_io_channel_shutdown(iochannel,TRUE,NULL);
 		g_io_channel_unref(iochannel);
 	}
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() after iochannel\n"));
 
 	rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	g_mutex_trylock(rtv_mutex);  /* <-- this makes us wait */
@@ -255,7 +255,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	/* Free all buffers */
 	mem_dealloc();
-	dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
+	MTXDBG(CRITICAL,g_strdup_printf(__FILE__": LEAVE() mem deallocated, closing log and exiting\n"));
 	close_debug();
 	gtk_main_quit();
 	exit(0);
@@ -383,7 +383,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 						return common_handler(widget,data);
 					else
 					{
-						dbg_func(CRITICAL,g_strdup_printf(__FILE__": toggle_button_handler()\n\tToggle button handler in common plugin is MISSING, BUG!\n"));
+						MTXDBG(CRITICAL,g_strdup_printf(__FILE__": toggle_button_handler()\n\tToggle button handler in common plugin is MISSING, BUG!\n"));
 						return FALSE;
 					}
 				}
@@ -436,7 +436,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 						return common_handler(widget,data);
 					else
 					{
-						dbg_func(CRITICAL,g_strdup_printf(__FILE__": toggle_button_handler()\n\tToggle button handler in common plugin is MISSING, BUG!\n"));
+						MTXDBG(CRITICAL,g_strdup_printf(__FILE__": toggle_button_handler()\n\tToggle button handler in common plugin is MISSING, BUG!\n"));
 						return FALSE;
 					}
 				}
@@ -499,7 +499,7 @@ G_MODULE_EXPORT gboolean bitmask_button_handler(GtkWidget *widget, gpointer data
 					return common_handler(widget,data);
 				else
 				{
-					dbg_func(CRITICAL,g_strdup_printf(__FILE__": bitmask_button_handler()\n\tiBitmask button handler in common plugin is MISSING, BUG!\n"));
+					MTXDBG(CRITICAL,g_strdup_printf(__FILE__": bitmask_button_handler()\n\tiBitmask button handler in common plugin is MISSING, BUG!\n"));
 					return FALSE;
 				}
 			}
@@ -581,7 +581,7 @@ G_MODULE_EXPORT gboolean slider_value_changed(GtkWidget *widget, gpointer data)
 			return common_handler(widget,data);
 		else
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": slider_value_changes()\n\tSlider handler in common plugin is MISSING, BUG!\n"));
+			MTXDBG(CRITICAL,g_strdup_printf(__FILE__": slider_value_changes()\n\tSlider handler in common plugin is MISSING, BUG!\n"));
 			return FALSE;
 		}
 	}
@@ -656,7 +656,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 
 	if (handler == 0)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\thandler not bound to object, CRITICAL ERROR, aborting\n"));
+		MTXDBG(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\thandler not bound to object, CRITICAL ERROR, aborting\n"));
 		return FALSE;
 	}
 
@@ -761,7 +761,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 				if (get_symbol("common_std_button_handler",(void *)&common_handler))
 					return common_handler(widget,data);
 				else
-					dbg_func(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\tDefault case, common handler NOT found in plugins, BUG!\n"));
+					MTXDBG(CRITICAL,g_strdup(__FILE__": std_button_handler()\n\tDefault case, common handler NOT found in plugins, BUG!\n"));
 			}
 			else
 				return common_handler(widget,data);
@@ -796,7 +796,7 @@ G_MODULE_EXPORT gboolean std_combo_handler(GtkWidget *widget, gpointer data)
 			return common_handler(widget,data);
 		else
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": std_combo_handler()\n\tCombo handler in common plugin is MISSING, BUG!\n"));
+			MTXDBG(CRITICAL,g_strdup_printf(__FILE__": std_combo_handler()\n\tCombo handler in common plugin is MISSING, BUG!\n"));
 			return FALSE;
 		}
 	}
@@ -833,7 +833,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 
 	if (!GTK_IS_WIDGET(widget))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n"));
+		MTXDBG(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\twidget pointer is NOT valid\n"));
 		return FALSE;
 	}
 	if ((DATA_GET(global_data,"paused_handlers")) || 
@@ -911,7 +911,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 					return common_handler(widget,data);
 				else
 				{
-					dbg_func(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tDefault case, common handler NOT found in plugins, BUG!\n"));
+					MTXDBG(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tDefault case, common handler NOT found in plugins, BUG!\n"));
 					return TRUE;
 				}
 			}
@@ -1319,7 +1319,7 @@ testit:
 	frame_name = (gchar *)OBJ_GET(parent,"rescaler_frame");
 	if (!frame_name)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": widget_grab()\n\t\"rescaler_frame\" key could NOT be found\n"));
+		MTXDBG(CRITICAL,g_strdup(__FILE__": widget_grab()\n\t\"rescaler_frame\" key could NOT be found\n"));
 		return FALSE;
 	}
 
@@ -1909,7 +1909,7 @@ G_MODULE_EXPORT void set_widget_labels(const gchar *input)
 	vector = parse_keys(input,&count,",");
 	if (count%2 != 0)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input));
+		MTXDBG(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\tstring passed was not properly formatted, should be an even number of elements, Total elements %i, string itself \"%s\"",count,input));
 
 		return;
 	}
@@ -1919,7 +1919,7 @@ G_MODULE_EXPORT void set_widget_labels(const gchar *input)
 		if ((widget) && (GTK_IS_LABEL(widget)))
 			gtk_label_set_text(GTK_LABEL(widget),vector[i+1]);
 		else
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]));
+			MTXDBG(CRITICAL,g_strdup_printf(__FILE__": set_widget_labels()\n\t Widget \"%s\" could NOT be located or is NOT a label\n",vector[i]));
 
 	}
 	g_strfreev(vector);
@@ -2108,7 +2108,7 @@ void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
 	vector = g_strsplit(set_labels,",",-1);
 	if ((g_strv_length(vector)%(total+1)) != 0)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": combo_set_labels()\n\tProblem wiht set_labels, counts don't match up\n"));
+		MTXDBG(CRITICAL,g_strdup(__FILE__": combo_set_labels()\n\tProblem wiht set_labels, counts don't match up\n"));
 		return;
 	}
 	for (i=0;i<(g_strv_length(vector)/(total+1));i++)

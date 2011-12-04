@@ -237,7 +237,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 		cfg_read_string(cfgfile,"Firmware","name",&tmpbuf);
 		if (g_ascii_strcasecmp(g_strdelimit(tmpbuf," ,",'_'),g_strdelimit(firmware->name," ,",'_')) != 0)
 		{
-			DEBUG_FUNC(CRITICAL,_("Firmware name mismatch:\"%s\" != \"%s\",cannot load this file for restoration\n"),tmpbuf,firmware->name);
+			MTXDBG(CRITICAL,_("Firmware name mismatch:\"%s\" != \"%s\",cannot load this file for restoration\n"),tmpbuf,firmware->name);
 
 			update_logbar_f("tools_view","warning",g_strdup_printf(_(": restore_all_ecu_settings()\nFirmware name mismatch: \"%s\" != \"%s\"\ncan NOT load this file for restoration!\n"),tmpbuf,firmware->name),FALSE,FALSE,TRUE);
 			if (tmpbuf)
@@ -258,7 +258,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 				if (tmpi != firmware->page_params[page]->length)
 				{
 					update_logbar_f("tools_view","warning",g_strdup_printf(_(": restore_all_ecu_settings()\n\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n"),tmpi,firmware->page_params[page]->length),FALSE,FALSE,TRUE);
-					DEBUG_FUNC(CRITICAL,_("Number of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n"),tmpi,firmware->page_params[page]->length);
+					MTXDBG(CRITICAL,_("Number of variables in backup \"%i\" and firmware specification \"%i\" do NOT match,\n\tcorruption SHOULD be expected\n"),tmpi,firmware->page_params[page]->length);
 				}
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
@@ -266,7 +266,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 				if (num_keys != firmware->page_params[page]->length)
 				{
 					update_logbar_f("tools_view","warning",g_strdup_printf(_(": restore_all_ecu_settings()\n\tNumber of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n"),num_keys,firmware->page_params[page]->length),FALSE,FALSE,TRUE);
-					DEBUG_FUNC(CRITICAL,_("Number of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n"),num_keys,firmware->page_params[page]->length);
+					MTXDBG(CRITICAL,_("Number of variables in this backup \"%i\" does NOT match the length of the table \"%i\", expect a crash!!!\n"),num_keys,firmware->page_params[page]->length);
 				}
 				if (firmware->chunk_support)
 				{

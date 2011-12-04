@@ -77,7 +77,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 
 	if (!darea)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": present_viewer_choices()\n\tpointer to drawing area was NULL, returning!!!\n"));
+		MTXDBG(CRITICAL,g_strdup(__FILE__": present_viewer_choices()\n\tpointer to drawing area was NULL, returning!!!\n"));
 		return;
 	}
 
@@ -312,7 +312,7 @@ G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
 	object = (gconstpointer *)OBJ_GET(widget,"object");
 	if (!object)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": view_value_set()\n\t NO object was bound to the button\n"));
+		MTXDBG(CRITICAL,g_strdup(__FILE__": view_value_set()\n\t NO object was bound to the button\n"));
 	}
 	DATA_SET(object,"being_viewed",GINT_TO_POINTER(state));
 	populate_viewer();
@@ -376,9 +376,9 @@ G_MODULE_EXPORT void populate_viewer(void)
 			name = DATA_GET(object,"dlog_gui_name");
 		}
 		if (!name)
-			dbg_func(CRITICAL,g_strdup("ERROR, name is NULL\n"));
+			MTXDBG(CRITICAL,g_strdup("ERROR, name is NULL\n"));
 		if (!object)
-			dbg_func(CRITICAL,g_strdup("ERROR, object is NULL\n"));
+			MTXDBG(CRITICAL,g_strdup("ERROR, object is NULL\n"));
 
 		being_viewed = (GBOOLEAN)DATA_GET(object,"being_viewed");
 		/* if not found in table check to see if we need to insert*/

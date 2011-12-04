@@ -78,12 +78,11 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	Serial_Params *serial_params = NULL;;
 	serial_params = DATA_GET(global_data,"serial_params");
 
+	MTXDBG(IO_PROCESS,_("Entered\n"));
 	if (!serio_mutex)
 		serio_mutex = DATA_GET(global_data,"serio_mutex");
 
 	g_static_mutex_lock(&mutex);
-
-	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data()\tENTERED...\n\n"));
 
 	total_read = 0;
 	zerocount = 0;
@@ -106,7 +105,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	g_mutex_lock(serio_mutex);
 	while ((total_read < total_wanted ) && ((total_wanted-total_read) > 0))
 	{
-		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\t requesting %i bytes\n",total_wanted-total_read));
+		MTXDBG(IO_PROCESS,_("Requesting %i bytes\n"),total_wanted-total_read);
 
 		res = read_wrapper(serial_params->fd,
 				ptr+total_read,
@@ -116,7 +115,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		/* Increment bad read counter.... */
 		if (!res) /* I/O Error Device disappearance or other */
 		{
-			dbg_func(IO_PROCESS|CRITICAL,g_strdup_printf(__FILE__"\tI/O ERROR: \"%s\"\n",(gchar *)g_strerror(errno)));
+			MTXDBG(IO_PROCESS|CRITICAL,_("I/O ERROR: \"%s\"\n"),(gchar *)g_strerror(errno));
 			bad_read = TRUE;
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			break;
@@ -129,12 +128,12 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 			break;
 		}
 
-		dbg_func(IO_PROCESS,g_strdup_printf(__FILE__"\tread %i bytes, running total %i\n",len,total_read));
+		MTXDBG(IO_PROCESS,_("Read %i bytes, running total %i\n"),len,total_read);
 	}
 	g_mutex_unlock(serio_mutex);
 	if ((bad_read) && (!ignore_errors))
 	{
-		dbg_func(IO_PROCESS|CRITICAL,g_strdup(__FILE__": read_data()\n\tError reading from ECU\n"));
+		MTXDBG(IO_PROCESS|CRITICAL,_("Error reading from ECU\n"));
 
 		serial_params->errcount++;
 		if ((reset_on_fail) && (!reset))
@@ -155,8 +154,8 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	if (buffer)
 		*buffer = g_memdup(buf,total_read);
 	dump_output(total_read,buf);
-	dbg_func(IO_PROCESS,g_strdup("\n"__FILE__": read_data\tLEAVING...\n\n"));
 	g_static_mutex_unlock(&mutex);
+	MTXDBG(IO_PROCESS,_("Leaving\n"));
 	return total_read;
 }
 
@@ -246,7 +245,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 			if (block->action == SLEEP)
 			{
 				/*			printf("Sleeping for %i usec\n", block->arg);*/
-				dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tSleeping for %i microseconds \n",block->arg));
+				MTXDBG(SERIAL_WR,_("Sleeping for %i microseconds \n"),block->arg);
 				g_usleep((*factor)*block->arg);
 			}
 		}
@@ -263,14 +262,14 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 				if ((notifies) && ((j % notif_divisor) == 0))
 					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<b>Sending %i of %i bytes</b>"),j,block->len));
 				if (i == 0)
-					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%.2X\", (\"%c\")\n",i,j+1,block->len,block->data[j], (gchar)block->data[j]));
+					QUIET_MTXDBG(SERIAL_WR,_("Writing argument %i byte %i of %i, \"%.2X\", (\"%c\")\n"),i,j+1,block->len,block->data[j], (gchar)block->data[j]);
 				else
-					dbg_func(SERIAL_WR,g_strdup_printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%.2X\"\n",i,j+1,block->len,block->data[j]));
+					QUIET_MTXDBG(SERIAL_WR,_("Writing argument %i byte %i of %i, \"%.2X\"\n"),i,j+1,block->len,block->data[j]);
 				/*printf(__FILE__": write_data()\n\tWriting argument %i byte %i of %i, \"%i\"\n",i,j+1,block->len,block->data[j]);*/
 				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);	/* Send write command */
 				if (!res)
 				{
-					dbg_func(SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": write_data()\n\tError writing block offset %i, value %i ERROR \"%s\"!!!\n",j,block->data[j],err_text));
+					MTXDBG(SERIAL_WR|CRITICAL,_("Error writing block offset %i, value %i ERROR \"%s\"!!!\n"),j,block->data[j],err_text);
 					retval = FALSE;
 				}
 				if (firmware->capabilities & MS2)
@@ -320,19 +319,19 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 		p = buf;
 		if (dbg_lvl & SERIAL_RD)
 		{
-			dbg_func(SERIAL_RD,g_strdup_printf(__FILE__": dataio.c()\n\tDumping output, enable IO_PROCESS debug to see the cmd's that were sent\n"));
+			MTXDBG(SERIAL_RD,_("Dumping output, enable IO_PROCESS debug to see the cmd's that were sent\n"));
 			tmpbuf = g_strndup(((gchar *)buf),total_read);
-			dbg_func(SERIAL_RD,g_strdup_printf(__FILE__": dataio.c()\n\tDumping Output string: \"%s\"\n",tmpbuf));
+			QUIET_MTXDBG(SERIAL_RD,_("Dumping Output string: \"%s\"\n"),tmpbuf);
 			g_free(tmpbuf);
-			dbg_func(SERIAL_RD,g_strdup_printf("Data is in HEX!!\n"));
+			QUIET_MTXDBG(SERIAL_RD,_("Data is in HEX!!\n"));
 		}
 		for (j=0;j<total_read;j++)
 		{
-			dbg_func(SERIAL_RD,g_strdup_printf("%.2X ", p[j]));
+			QUIET_MTXDBG(SERIAL_RD,_("%.2X "), p[j]);
 			if (!((j+1)%16))
-				dbg_func(SERIAL_RD,g_strdup("\n"));
+				QUIET_MTXDBG(SERIAL_RD,_("\n"));
 		}
-		dbg_func(SERIAL_RD,g_strdup("\n\n"));
+		QUIET_MTXDBG(SERIAL_RD,_("\n\n"));
 	}
 }
 
@@ -414,7 +413,7 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 #endif
 		if (res == -1)
 		{
-			dbg_func(CRITICAL|SERIAL_WR,g_strdup_printf("\n"__FILE__": write_wrapper()\n\tg_socket_send_error \"%s\"\n\n",error->message));
+			MTXDBG(CRITICAL|SERIAL_WR,_("g_socket_send_error \"%s\"\n\n"),error->message);
 			g_error_free(error);
 		}
 	}
