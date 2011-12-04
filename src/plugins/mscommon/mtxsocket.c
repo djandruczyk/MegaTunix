@@ -42,10 +42,10 @@
 #include <serialio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/select.h>
 #ifndef __WIN32__
 #include <poll.h>
 #include <arpa/inet.h>
+#include <sys/select.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #endif
