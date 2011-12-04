@@ -22,13 +22,13 @@
 #include <configfile.h>
 #include <datamgmt.h>
 #include <defines.h>
-#include <debugging.h>
 #include <enums.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <math.h>
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
+#include <debugging.h>
 #include <req_fuel.h>
 
 extern gconstpointer *global_data;
@@ -55,7 +55,7 @@ G_MODULE_EXPORT void reqd_fuel_change(GtkWidget *widget)
 		reqd_fuel = (Reqd_Fuel *) OBJ_GET(widget,"reqd_fuel");
 	else
 	{
-		dbg_func_f(REQ_FUEL|CRITICAL,g_strdup(__FILE__": reqd_fuel_change()\n\treqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n"));
+		MTXDBG(REQ_FUEL|CRITICAL,_("reqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n"));
 		return;
 	}
 
@@ -67,11 +67,11 @@ G_MODULE_EXPORT void reqd_fuel_change(GtkWidget *widget)
 	reqd_fuel->actual_inj_flow = ((double)reqd_fuel->rated_inj_flow *
 			sqrt((double)reqd_fuel->actual_pressure / (double)reqd_fuel->rated_pressure));
 
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tRated injector flow is %f lbs/hr\n",reqd_fuel->rated_inj_flow));
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tRated fuel pressure is %f bar\n",reqd_fuel->rated_pressure));
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tActual fuel pressure is %f bar\n",reqd_fuel->actual_pressure));
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tCalculated injector flow rate is %f lbs/hr\n",reqd_fuel->actual_inj_flow));
-	dbg_func_f(REQ_FUEL,g_strdup_printf(__FILE__": reqd_fuel_change()\n\tTarget AFR is %f lbs/hr\n",reqd_fuel->target_afr));
+	MTXDBG(REQ_FUEL,_("Rated injector flow is %f lbs/hr\n"),reqd_fuel->rated_inj_flow);
+	MTXDBG(REQ_FUEL,_("Rated fuel pressure is %f bar\n"),reqd_fuel->rated_pressure);
+	MTXDBG(REQ_FUEL,_("Actual fuel pressure is %f bar\n"),reqd_fuel->actual_pressure);
+	MTXDBG(REQ_FUEL,_("Calculated injector flow rate is %f lbs/hr\n"),reqd_fuel->actual_inj_flow);
+	MTXDBG(REQ_FUEL,_("Target AFR is %f lbs/hr\n"),reqd_fuel->target_afr);
 
 	tmp1 = 36.0*((double)reqd_fuel->disp)*4.27793;
 	tmp2 = ((double) reqd_fuel->cyls) \

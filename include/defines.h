@@ -23,11 +23,17 @@
 
 #include <config.h>
 #include <libintl.h>
+#include <math.h>
 
 /* Definitions */
 #define BAUDRATE B9600
 
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
+
+/* C99 weirdness */
+#ifndef M_PI
+#define M_PI           3.14159265358979323846  /* pi */
+#endif
 
 /* Windows specific for exporting symbols for glade... */
 #ifdef __WIN32__

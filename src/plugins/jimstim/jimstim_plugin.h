@@ -23,6 +23,7 @@
 
 #include <gtk/gtk.h>
 #include <threads.h>
+#include <plugindefines.h>
 
 #ifdef __JIMSTIM_PLUGIN_C__
 #define EXTERN

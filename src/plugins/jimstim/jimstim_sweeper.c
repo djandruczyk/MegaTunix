@@ -20,11 +20,12 @@
 
 #include <args.h>
 #include <config.h>
-#include <debugging.h>
 #include <defines.h>
 #include <init.h>
 #include <math.h>
 #include <jimstim_sweeper.h>
+#include <jimstim_plugin.h>
+#include <debugging.h>
 #include <stdlib.h>
 #include <string.h>
 #include <threads.h>

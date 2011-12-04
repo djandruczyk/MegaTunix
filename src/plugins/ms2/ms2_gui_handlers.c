@@ -19,11 +19,11 @@
   */
 
 #include <combo_loader.h>
-#include <debugging.h>
 #include <firmware.h>
 #include <glade/glade.h>
 #include <ms2_gui_handlers.h>
 #include <ms2_plugin.h>
+#include <debugging.h>
 #include <ms2_tlogger.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,7 +41,7 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 {
-	dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_entry_handler()\n\tERROR handler NOT found for widget %s, command aborted! BUG!!!\n",glade_get_widget_name(widget)));
+	MTXDBG(CRITICAL,_("ERROR handler NOT found for widget %s, command aborted! BUG!!!\n"),glade_get_widget_name(widget));
 	return TRUE;
 
 }
@@ -74,7 +74,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 			g_free(tmpbuf);
 			break;
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_std_button_handler()\n\tERROR handler NOT found for widget %s, command aborted! BUG!!!\n",glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,_("ERROR handler NOT found for widget %s, command aborted! BUG!!!\n"),glade_get_widget_name(widget));
 			break;
 	}
 	return TRUE;
@@ -139,7 +139,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),TRUE);
 				break;
 			default:
-				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_toggle_button_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins for widget %s, BUG!\n",glade_get_widget_name(widget)));
+				MTXDBG(CRITICAL,_("Default case reached,  i.e. handler not found in global, common or ECU plugins for widget %s, BUG!\n"),glade_get_widget_name(widget));
 				break;
 		}
 	}
@@ -288,7 +288,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			break;
 
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_combo_handler()\n\tdefault case reached,  i.e. handler not found in global, common or ECU plugins for widget %s, BUG!\n",glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,_("Default case reached,  i.e. handler not found in global, common or ECU plugins for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			return TRUE;
 			break;
 	}

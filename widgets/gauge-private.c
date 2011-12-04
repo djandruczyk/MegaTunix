@@ -31,6 +31,7 @@
   \author David Andruczyk
  */
 
+#include <defines.h>
 #include <gauge-private.h>
 #include <gauge-xml.h>
 #include <gdk/gdkkeysyms.h>

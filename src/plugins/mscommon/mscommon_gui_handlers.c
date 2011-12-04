@@ -21,7 +21,6 @@
 #include <config.h>
 #include <combo_loader.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
@@ -29,6 +28,7 @@
 #include <mscommon_comms.h>
 #include <mscommon_gui_handlers.h>
 #include <mscommon_plugin.h>
+#include <debugging.h>
 #include <req_fuel.h>
 #include <serialio.h>
 #include <stdlib.h>
@@ -145,7 +145,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 				if (get_symbol_f("ecu_entry_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_entry_handler()\n\tDefault case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -321,12 +321,12 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 				if (get_symbol_f("ecu_bitmask_button_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_bitmask_button_handler()\n\tDefault case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
 
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": bitmask_button_handler()\n\tbitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n",page,offset));
+			MTXDBG(CRITICAL,_("Bitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n"),page,offset);
 			return FALSE;
 			break;
 
@@ -387,7 +387,7 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 					return ecu_handler(widget,data);
 				else
 				{
-					dbg_func_f(CRITICAL,g_strdup(__FILE__": common_toggle_button_handler()\n\tDefault case, ecu handler NOT found in plugins, BUG!\n"));
+					MTXDBG(CRITICAL,_("Default case, ecu handler NOT found in plugins, BUG!\n"));
 					return TRUE;
 				}
 			}
@@ -497,7 +497,7 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 					return ecu_handler(widget,data);
 				else
 				{
-					dbg_func_f(CRITICAL,g_strdup(__FILE__": common_std_button_handler()\n\tDefault case, ecu handler NOT found in plugins, BUG!\n"));
+					MTXDBG(CRITICAL,_("Default case, ecu handler NOT found in plugins, BUG!\n"));
 					return TRUE;
 				}
 			}
@@ -670,7 +670,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 					return ecu_handler(widget,data);
 				else
 				{
-					dbg_func_f(CRITICAL,g_strdup(__FILE__": common_combo_handler()\n\tDefault case, ecu handler NOT found in plugins, BUG!\n"));
+					MTXDBG(CRITICAL,_("Default case, ecu handler NOT found in plugins, BUG!\n"));
 					return TRUE;
 				}
 			}
@@ -692,7 +692,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 		vector = g_strsplit(set_labels,",",-1);
 		if ((g_strv_length(vector)%(total+1)) != 0)
 		{
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": common_combo_handler()\n\tProblem with set_widget_labels, counts don't match up\n"));
+			MTXDBG(CRITICAL,_("Problem with set_widget_labels, counts don't match up\n"));
 			goto combo_download;
 		}
 		for (i=0;i<(g_strv_length(vector)/(total+1));i++)
@@ -1178,7 +1178,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 					return ecu_handler(widget,data);
 				else
 				{
-					dbg_func_f(CRITICAL,g_strdup(__FILE__": common_spin_handler()\n\tDefault case, ecu handler NOT found in plugins, BUG!\n"));
+					MTXDBG(CRITICAL,_("Default case, ecu handler NOT found in plugins, BUG!\n"));
 					return TRUE;
 				}
 			}
@@ -1401,7 +1401,7 @@ void update_entry(GtkWidget *widget)
 			if (get_symbol_f("ecu_update_entry",(void *)&update_handler))
 				update_handler(widget);
 			else
-				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_entry()\n\tDefault case, but there is NO ecu_update_entry function available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+				MTXDBG(CRITICAL,_("Default case, but there is NO ecu_update_entry function available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 		}
 		else
 			update_handler(widget);
@@ -1573,7 +1573,7 @@ void combo_handle_group_2_update(GtkWidget *widget)
 	vector = g_strsplit(source_values,",",-1);
 	if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
 	{
-		dbg_func_f(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with source_values, length mismatch, check datamap\n"));
+		MTXDBG(CRITICAL,_("COMBOBOX Problem with source_values, length mismatch, check datamap\n"));
 		g_strfreev(vector);
 		return ;
 	}
@@ -1606,7 +1606,7 @@ void combo_handle_algorithms(GtkWidget *widget)
 		vector = g_strsplit(tmpbuf,",",-1);
 		if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
 		{
-			dbg_func_f(CRITICAL,g_strdup(__FILE__": update_widget()\n\tCOMBOBOX Problem with algorithms, length mismatch, check datamap\n"));
+			MTXDBG(CRITICAL,_("COMBOBOX Problem with algorithms, length mismatch, check datamap\n"));
 			g_free(vector);
 			return ;
 		}
@@ -1616,7 +1616,7 @@ void combo_handle_algorithms(GtkWidget *widget)
 		tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
 		if (!tmpbuf)
 		{
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t Check/Radio button %s has algorithm defined, but no applicable tables, BUG!\n",(gchar *)glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,_("Check/Radio button %s has algorithm defined, but no applicable tables, BUG!\n"),(gchar *)glade_get_widget_name(widget));
 			return;
 		}
 
@@ -1654,7 +1654,7 @@ void handle_algorithm(GtkWidget *widget)
 		tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
 		if (!tmpbuf)
 		{
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t Check/Radio button  %s has algorithm defines but no applicable tables, BUG!\n",(gchar *)glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,_("Check/Radio button  %s has algorithm defines but no applicable tables, BUG!\n"),(gchar *)glade_get_widget_name(widget));
 			return;
 		}
 

@@ -22,6 +22,7 @@
 #include <args.h>
 #include <xmlbase.h>
 #include <dashboard.h>
+#include <defines.h>
 #include <debugging.h>
 #include <getfiles.h>
 #include <gdk/gdkkeysyms.h>

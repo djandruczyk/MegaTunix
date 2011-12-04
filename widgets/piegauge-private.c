@@ -19,6 +19,7 @@
   \author David Andruczyk
  */
 
+#include <defines.h>
 #include <piegauge-private.h>
 #include <math.h>
 #include <stdio.h>

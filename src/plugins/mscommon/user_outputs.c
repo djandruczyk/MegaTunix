@@ -24,11 +24,11 @@
 #include <config.h>
 #include <datamgmt.h>
 #include <defines.h>
-#include <debugging.h>
 #include <enums.h>
 #include <lookuptables.h>
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
+#include <debugging.h>
 #include <multi_expr_loader.h>
 #include <rtv_map_loader.h>
 #include <stdlib.h>
@@ -83,7 +83,7 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
-		dbg_func_f(CRITICAL,g_strdup(__FILE__": build_model_and_view()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		MTXDBG(CRITICAL,_("Realtime Variable definitions NOT LOADED!!!\n"));
 		return;
 	}
 

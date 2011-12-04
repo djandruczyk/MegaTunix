@@ -150,9 +150,9 @@ AC_ARG_ENABLE(debug,
 
 if test "$enable_debug" = yes ; then
 DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
-CFLAGS="-O0 -Wno-variadic-macros"
+CFLAGS="-O0 -std=c99 -Wno-variadic-macros"
 else
-CFLAGS="-O2 -Wno-variadic-macros"
+CFLAGS="-O2 -std=c99 -Wno-variadic-macros"
 fi
 AC_SUBST(DEBUG_FLAGS)
 AC_SUBST(CFLAGS)

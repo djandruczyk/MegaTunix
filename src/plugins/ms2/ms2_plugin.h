@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <defines.h>
 #include <enums.h>
+#include <plugindefines.h>
 
 #ifdef __MS2_PLUGIN_C__
 #define EXTERN
