@@ -3057,7 +3057,7 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	z_page = ve_view->z_page;
 	z_mult = ve_view->z_mult;
 
-	ve_view->z_minval=1000;
+	ve_view->z_minval=100000;
 	ve_view->z_maxval=0;
 	/* Draw QUAD MESH into stored grid (Calc'd once*/
 	for(y=0;y<ve_view->x_bincount*ve_view->y_bincount;++y)
@@ -3074,7 +3074,8 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		ve_view->z_minval-=10;
 		ve_view->z_maxval+=10;
 	}
-	scaler = (256.0/((ve_view->z_maxval-ve_view->z_minval)*1.05));
+	/*printf("min %i, max %i\n",ve_view->z_minval,ve_view->z_maxval);*/
+	scaler = (256.0/(((ve_view->z_maxval-ve_view->z_minval)*1.05)+0.1));
 	for(y=0;y<ve_view->y_bincount-1;++y)
 	{
 		for(x=0;x<ve_view->x_bincount-1;++x)

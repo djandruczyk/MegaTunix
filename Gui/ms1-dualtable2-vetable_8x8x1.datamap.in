@@ -19,13 +19,13 @@ handler=_GENERIC_
 
 [load]
 keys=use_color,tooltip
-use_color=TRUE
+use_color=FALSE
 _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm]
 keys=fromecu_mult,use_color,tooltip
 fromecu_mult=100
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [vetable]

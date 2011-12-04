@@ -21,7 +21,7 @@ handler=_GENERIC_
 keys=size,raw_upper,fromecu_mult,use_color,precision,tooltip
 size=_U16_
 raw_upper=40000
-use_color=TRUE
+use_color=FALSE
 fromecu_mult=0.01
 precision=1
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -30,7 +30,7 @@ _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Spa
 keys=size,raw_upper,use_color,tooltip
 size=_U16_
 raw_upper=15000
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_1]
@@ -60,7 +60,7 @@ keys=page,size,raw_upper,fromecu_mult,use_color,precision,tooltip
 page=3
 size=_U16_
 raw_upper=40000
-use_color=TRUE
+use_color=FALSE
 fromecu_mult=0.01
 precision=1
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -70,7 +70,7 @@ keys=page,size,raw_upper,use_color,tooltip
 page=3
 size=_U16_
 raw_upper=15000
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_3]

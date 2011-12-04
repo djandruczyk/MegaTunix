@@ -2266,6 +2266,7 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	}
 	firmware->table_params[table_num]->z_maxval = max;
 	firmware->table_params[table_num]->z_minval = min;
+	/*printf("table %i min %i, max %i\n",table_num,min,max); */
 	g_object_unref(container);
 	return;
 }

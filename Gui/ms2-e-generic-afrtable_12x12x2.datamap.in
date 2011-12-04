@@ -23,7 +23,7 @@ keys=raw_upper,size,fromecu_mult,use_color,precision,tooltip
 size=_S16_
 raw_upper=4000
 fromecu_mult=0.1
-use_color=TRUE
+use_color=FALSE
 precision=1
 _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the AFRtable define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
@@ -31,7 +31,7 @@ _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM 
 keys=raw_upper,size,use_color,tooltip
 size=_U16_
 raw_upper=15000
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the AFRtable define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between points on the AFRmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 
@@ -48,7 +48,7 @@ keys=raw_upper,size,fromecu_mult,use_color,precision,tooltip
 size=_S16_
 raw_upper=4000
 fromecu_mult=0.1
-use_color=TRUE
+use_color=FALSE
 precision=1
 _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM bins on the bottom of the AFRtable define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
@@ -56,7 +56,7 @@ _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM 
 keys=raw_upper,size,use_color,tooltip
 size=_U16_
 raw_upper=15000
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the AFRtable define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between points on the AFRmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [afr_2]
