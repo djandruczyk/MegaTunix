@@ -219,7 +219,7 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	if (!OBJ_GET(widget,"bind_to_list"))
 	{
 		name = glade_get_widget_name(widget);
-		printf(_("alter_widget_state(): Error with widget %s, bind_to_list is null\n"),(name == NULL ? "undefined":name));
+		/*MTXDBG(CRITICAL,(_("alter_widget_state(): Error with widget \"%s\", bind_to_list is null\n"),(name == NULL ? "undefined":name)));*/
 		return;
 	}
 	else

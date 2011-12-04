@@ -71,14 +71,15 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	{
 		tmpbuf = g_strdup_printf("%s%s%s",dirs[i],PSEP,"details.cfg");
 		cfgfile = cfg_open_file(tmpbuf);
-		g_free(tmpbuf);
 		if (!cfgfile)
 		{
-			MTXDBG(CRITICAL,_("\"details.cfg\" file missing!, was MegaTunix installed properly?\n"));
+			/*MTXDBG(CRITICAL,_("\"%s\" file missing!, was MegaTunix installed properly?\n"),tmpbuf);*/
 			i++;
+			g_free(tmpbuf);
 			continue;
 
 		}
+		g_free(tmpbuf);
 		element = g_new0(PersonaElement, 1);
 		cfg_read_string(cfgfile,"Family","sequence",&element->sequence);
 		cfg_read_string(cfgfile,"Family","friendly_name",&element->name);

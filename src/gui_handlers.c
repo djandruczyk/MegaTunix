@@ -2408,6 +2408,7 @@ G_MODULE_EXPORT void update_current_notebook_page()
 	notebook = lookup_widget("toplevel_notebook");
 	g_return_if_fail(notebook);
 
+	DATA_SET(global_data,"force_update",GINT_TO_POINTER(1));
 	widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),gtk_notebook_get_current_page(GTK_NOTEBOOK(notebook)));
 	topframe = OBJ_GET(widget,"topframe");
 	if (!topframe)
@@ -2423,6 +2424,7 @@ G_MODULE_EXPORT void update_current_notebook_page()
 		printf("WARNING: this tab has no tab_widgets list assigned\n");
 	*/
 	set_title(g_strdup(_("Ready...")));
+	DATA_SET(global_data,"force_update",NULL);
 }
 
 

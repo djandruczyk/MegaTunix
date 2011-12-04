@@ -838,22 +838,17 @@ G_MODULE_EXPORT void update_write_status(void *data)
 
 	if (output->queue_update)
 	{
-		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 		for (i=0;i<firmware->total_tables;i++)
 		{
-			/* This at least only recalcs the limits on one... */
-			if (((firmware->table_params[i]->x_page == page) ||
-						(firmware->table_params[i]->y_page == page) ||
-						(firmware->table_params[i]->z_page == page)) && (firmware->table_params[i]->color_update == FALSE))
+			if (firmware->table_params[i]->z_page == page)
 			{
 				recalc_table_limits_f(canID,i);
 				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
-					firmware->table_params[i]->color_update = TRUE;
-				else
-					firmware->table_params[i]->color_update = FALSE;
+				{
+					printf("color limits for table %i have changed, should rerender all widgets in that table, but not implemented yet\n",i);
+				}
 			}
 		}
-		DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 		thread_refresh_widget_range_f(page,offset,length);
 
 	}
@@ -872,7 +867,6 @@ red_or_black:
 
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
-			printf("Found difference on page %i\n",i);
 			firmware->page_params[i]->needs_burn = TRUE;
 			thread_set_group_color_f(RED,"burners");
 /*			thread_slaves_set_color(RED,"burners");*/
