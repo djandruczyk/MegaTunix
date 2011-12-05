@@ -2484,6 +2484,8 @@ gboolean table_color_refresh(gpointer data)
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
+	gint mult = 0;
+	DataSize size;
 	gchar * tmpbuf = NULL;
 
 	if (!firmware)
@@ -2499,8 +2501,10 @@ gboolean table_color_refresh(gpointer data)
 	g_free(tmpbuf);
 
 	base = firmware->table_params[table_num]->z_base;
+	size = firmware->table_params[table_num]->z_size;
+	mult = get_multiplier(size);
 	length = firmware->table_params[table_num]->x_bincount *
-		firmware->table_params[table_num]->y_bincount;
+		firmware->table_params[table_num]->y_bincount * mult;
 	page =  firmware->table_params[table_num]->z_page;
 	for (offset=base;offset<base+length;offset++)
 	{
