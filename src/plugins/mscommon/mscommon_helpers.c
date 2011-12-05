@@ -20,11 +20,11 @@
 
 #include <args.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <firmware.h>
 #include <mscommon_comms.h>
 #include <mscommon_helpers.h>
 #include <mscommon_plugin.h>
+#include <debugging.h>
 #include <mtxsocket.h>
 #include <stdio.h>
 
@@ -499,7 +499,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			{
 				thread_update_logbar_f("error_status_view",NULL,g_strndup(((gchar *)message->recv_buf+7)+1,count-8),FALSE,FALSE);
 				tmpbuf = g_strndup(((gchar *)message->recv_buf)+1,count-1);
-				dbg_func_f(IO_PROCESS|SERIAL_RD,g_strdup_printf(__FILE__"\tECU  ERROR string: \"%s\"\n",tmpbuf));
+				MTXDBG(IO_PROCESS|SERIAL_RD,_("ECU ERROR string: \"%s\"\n"),tmpbuf);
 				g_free(tmpbuf);
 			}
 			else
@@ -528,7 +528,7 @@ G_MODULE_EXPORT void post_burn_pf(void)
 		ms_backup_current_data(firmware->canID,i);
 	}
 
-	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_burn_pf()\n\tBurn to Flash Completed\n"));
+	MTXDBG(SERIAL_WR,_("Burn to Flash Completed\n"));
 
 	return;
 }
@@ -552,7 +552,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 		return;
 	ms_backup_current_data(firmware->canID,page);
 
-	dbg_func_f(SERIAL_WR,g_strdup(__FILE__": post_single_burn_pf()\n\tBurn to Flash Completed\n"));
+	MTXDBG(SERIAL_WR,_("Burn to Flash Completed\n"));
 
 	return;
 }

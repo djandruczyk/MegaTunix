@@ -70,7 +70,7 @@ G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer use
 	}
 	if (!status)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_lookuptables()\n\tFAILURE loading \"%s\" lookuptable, EXITING!!\n",(gchar *)table_name));
+		MTXDBG(CRITICAL,_("FAILURE loading \"%s\" lookuptable, EXITING!!\n"),(gchar *)table_name);
 		exit (-2);
 	}
 
@@ -104,7 +104,7 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_lookuptables()\n\tError seeking to beginning of the file\n"));
+		MTXDBG(CRITICAL,_("Error seeking to beginning of the file\n"));
 	}
 	while (!done)	
 	{
@@ -190,7 +190,7 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": reverse_lookup()\n\tCould NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
 		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
@@ -280,7 +280,7 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": reverse_lookup_obj()\n\tCould NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
 		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
@@ -426,7 +426,7 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data()\n\tCould NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
 	{
@@ -441,7 +441,7 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 
 	if (!lookuptable)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) DATA_GET(object,"internal_names")));
+		MTXDBG(CRITICAL,_("Lookuptable is NULL for control %s\n"),(gchar *) DATA_GET(object,"internal_names"));
 		return 0.0;
 	}
 	return lookuptable->array[offset];
@@ -476,7 +476,7 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data_obj()\n\tCould NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
 	{
@@ -491,7 +491,7 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 
 	if (!lookuptable)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": lookup_data()\n\t Lookuptable is NULL for control %s\n",(gchar *) DATA_GET(object,"internal_names")));
+		MTXDBG(CRITICAL,_("Lookuptable is NULL for control %s\n"),(gchar *) DATA_GET(object,"internal_names"));
 		return 0.0;
 	}
 	return lookuptable->array[offset];
@@ -757,7 +757,7 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 		count = 0;
 		while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
 		{
-			dbg_func(CRITICAL,g_strdup_printf(__FILE__": LEAVE() draining I/O Queue,  current length %i\n",g_async_queue_length(io_data_queue)));
+			MTXDBG(CRITICAL,_("Draining I/O Queue, current length %i\n"),g_async_queue_length(io_data_queue));
 			while (gtk_events_pending())
 				gtk_main_iteration();
 			count++;

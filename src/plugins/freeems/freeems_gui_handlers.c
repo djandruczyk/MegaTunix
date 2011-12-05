@@ -21,7 +21,6 @@
 #include <config.h>
 #include <combo_loader.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
 #include <freeems_benchtest.h>
@@ -29,6 +28,7 @@
 #include <freeems_helpers.h>
 #include <freeems_gui_handlers.h>
 #include <freeems_plugin.h>
+#include <debugging.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
 
@@ -75,7 +75,7 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 				if (get_symbol_f("ecu_toggle_button_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_toggle_button_handler()\n\tDefault case, but there is NO ecu_toggle_button_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_toggle_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -124,7 +124,7 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 				if (get_symbol_f("ecu_std_button_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_std_button_handler()\n\tDefault case, but there is NO ecu_std_button_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_std_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -159,7 +159,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 				if (get_symbol_f("ecu_bitmask_button_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_bitmask_button_handler()\n\tDefault case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -223,16 +223,13 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpi = (GINT)strtol(text,NULL,10);
 	tmpf = (gfloat)g_ascii_strtod(g_strdelimit(text,",.",'.'),NULL);
-	/*
-	 printf("text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",text,tmpi,tmpf,precision);
-	 */
+	/*printf("text \"%s\" int val \"%i\", float val \"%f\" precision %i \n",text,tmpi,tmpf,precision);*/
 
 	g_free(text);
 
 	if ((tmpf != (gfloat)tmpi) && (precision == 0))
 	{
 		/* Pause signals while we change the value */
-		/*              printf("resetting\n");*/
 		g_signal_handlers_block_by_func (widget,(gpointer)std_entry_handler_f, data);
 		g_signal_handlers_block_by_func (widget,(gpointer)entry_changed_handler_f, data);
 		tmpbuf = g_strdup_printf("%i",tmpi);
@@ -297,7 +294,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 				if (get_symbol_f("ecu_entry_handler",(void *)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
-					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": common_entry_handler()\n\tDefault case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
 				return ecu_handler(widget,data);
@@ -310,43 +307,16 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		 * and wasting time.
 		 */
 		if (dload_val != get_ecu_data(widget))
+		{
+			/*printf("Value changed (%i != %i), update it\n",dload_val,get_ecu_data(widget));*/
 			send_to_ecu(widget, dload_val, TRUE);
+		}
 		else
 		{
+			/*printf("not sent, returning!\n");*/
 			OBJ_SET(widget,"not_sent",GINT_TO_POINTER(FALSE));
 			return;
 		}
-	}
-	if (OBJ_GET(widget,"use_color"))
-	{
-		if (OBJ_GET(widget,"table_num"))
-		{
-			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-			if (firmware->table_params[table_num]->color_update == FALSE)
-			{
-				/*recalc_table_limits(locID,table_num);*/
-				if ((firmware->table_params[table_num]->last_z_maxval != firmware->table_params[table_num]->z_maxval) || (firmware->table_params[table_num]->last_z_minval != firmware->table_params[table_num]->z_minval))
-					firmware->table_params[table_num]->color_update = TRUE;
-				else
-					firmware->table_params[table_num]->color_update = FALSE;
-			}
-
-			scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
-			color = get_colors_from_hue_f(256 - (dload_val - firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
-		}
-		else
-		{
-			if (OBJ_GET(widget,"raw_lower"))
-				raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
-			else
-				raw_lower = get_extreme_from_size_f(size,LOWER);
-			if (OBJ_GET(widget,"raw_upper"))
-				raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
-			else
-				raw_upper = get_extreme_from_size_f(size,UPPER);
-			color = get_colors_from_hue_f(((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
-		}
-		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 	}
 	OBJ_SET(widget,"not_sent",GINT_TO_POINTER(FALSE));
 	OBJ_SET(widget,"last_value",GINT_TO_POINTER(tmpi*1000));
@@ -378,44 +348,18 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	gdk_threads_enter();
         set_title_f(g_strdup(_("Updating Controls...")));
         gdk_threads_leave();
-        DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		if (firmware->table_params[i]->color_update == FALSE)
-		{
-			recalc_table_limits_f(0,i);
-			if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
-				firmware->table_params[i]->color_update = TRUE;
-			else
-				firmware->table_params[i]->color_update = FALSE;
-		}
+		recalc_table_limits_f(0,i);
+		/*
+		   if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+		   firmware->table_params[i]->color_update = TRUE;
+		   else
+		   firmware->table_params[i]->color_update = FALSE;
+		 */
 	}
 
-	/* Update all on screen controls (except bitfields (done above)*/
-	/*
-	gdk_threads_enter();
-	for (page=0;page<firmware->total_pages;page++)
-	{
-		if ((DATA_GET(global_data,"leaving")) || (!firmware))
-			return;
-		if (firmware->page_params[page]->dl_by_default)
-			continue;
-		thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Updating Controls on Page %i</b>"),page));
-		for (offset=0;offset<firmware->page_params[page]->length;offset++)
-		{
-			if ((DATA_GET(global_data,"leaving")) || (!firmware))
-				return;
-			if (ecu_widgets[page][offset] != NULL)
-				g_list_foreach(ecu_widgets[page][offset],
-						update_widget,NULL);
-		}
-	}
-*/
-	for (i=0;i<firmware->total_tables;i++)
-		firmware->table_params[i]->color_update = FALSE;
-
-	DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 	thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Ready...</b>")));
 	gdk_threads_enter();
         update_current_notebook_page_f();
@@ -466,7 +410,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 		}
 	}
 
-	/*printf("update_widget %s, page %i, offset %i bitval %i, mask %i, shift %i\n",(gchar *)glade_get_widget_name(widget), page,offset,bitval,bitmask,bitshift);*/
+	/*printf("update_widget %s\n",(gchar *)glade_get_widget_name(widget));*/
 	/* update widget whether spin,radio or checkbutton  
 	 * (checkbutton encompases radio)
 	 */
@@ -474,7 +418,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	tmpi = value*1000;
         last = (GINT)OBJ_GET(widget,"last_value");
         /*printf("Old %i, new %i\n",last, tmpi);*/
-        if (tmpi == last)
+        if ((tmpi == last) && (!DATA_GET(global_data,"force_update")))
         {
                 /*printf("new and old match, exiting early....\n");*/
                 return;
@@ -488,7 +432,11 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	if (GTK_IS_ENTRY(widget) || GTK_IS_SPIN_BUTTON(widget))
 	{
 		g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler,NULL);
+		g_signal_handlers_block_by_func(widget,(gpointer)std_entry_handler,NULL);
+		g_signal_handlers_block_by_func(widget,(gpointer)entry_changed_handler,NULL);
 		update_entry(widget);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)entry_changed_handler,NULL);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)std_entry_handler,NULL);
 		g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler,NULL);
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
@@ -586,7 +534,6 @@ void update_entry(GtkWidget *widget)
 	gint table_num = -1;
 	gint precision = 0;
 	gfloat spin_value = 0.0;
-	gboolean force_color_update = FALSE;
 	GdkColor color;
 	GdkColor black = {0,0,0,0};
 
@@ -606,7 +553,7 @@ void update_entry(GtkWidget *widget)
 			if (get_symbol_f("ecu_update_entry",(void *)&update_handler))
 				update_handler(widget);
 			else
-				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_entry()\n\tDefault case, but there is NO ecu_update_entry function available, unhandled case for widget %s, BUG!\n",glade_get_widget_name(widget)));
+				MTXDBG(CRITICAL,_("Default case, but there is NO ecu_update_entry function available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 		}
 		else
 			update_handler(widget);
@@ -622,7 +569,6 @@ void update_entry(GtkWidget *widget)
 	}
 	else
 	{
-
 		widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 		tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 		/* If different, update it */
@@ -636,19 +582,18 @@ void update_entry(GtkWidget *widget)
 
 	if (OBJ_GET(widget,"use_color"))
 	{
-		force_color_update = (GBOOLEAN)OBJ_GET(widget,"force_color_update");
 		if (OBJ_GET(widget,"table_num"))
 			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 
-		if ((table_num >= 0) && (firmware->table_params[table_num]->color_update))
+		if (table_num >= 0)
 		{
-			scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
+			scaler = 256.0/(((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05)+0.1);
 			color = get_colors_from_hue_f(256.0 - (get_ecu_data(widget)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
 			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 		}
 		else
 		{
-			if ((changed) || (value == 0) || (force_color_update))
+			if ((changed) || (value == 0))
 			{
 				if (OBJ_GET(widget,"raw_lower"))
 					raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);

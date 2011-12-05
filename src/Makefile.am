@@ -78,7 +78,7 @@ megatunix_LDFLAGS = $(LTLIBINTL)
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 
 
-AM_CFLAGS = $(COMMON_FLAGS) -Wall 
+AM_CFLAGS = $(COMMON_FLAGS) -Wall
 
 CLEANFILES = *~ core gmon.out nohup.out 
 

@@ -18,10 +18,10 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
 #include <firmware.h>
 #include <math.h>
 #include <ms1_plugin.h>
+#include <debugging.h>
 #include <ms1_tlogger.h>
 #include <stdio.h>
 
@@ -556,7 +556,7 @@ void start(EcuPluginTickler type)
 				DATA_SET(global_data,"toothmon_id",GINT_TO_POINTER(tmpi));
 			}
 			else
-				dbg_func_f(CRITICAL,g_strdup(__FILE__": start()\n\tToothmon tickler already active \n"));
+				MTXDBG(CRITICAL,_("Toothmon tickler already active \n"));
 			break;
 		case TRIGMON_TICKLER:
 			if (DATA_GET(global_data,"offline"))
@@ -573,7 +573,7 @@ void start(EcuPluginTickler type)
 				DATA_SET(global_data,"trigmon_id",GINT_TO_POINTER(tmpi));
 			}
 			else
-				dbg_func_f(CRITICAL,g_strdup(__FILE__": start()\n\tTrigmon tickler already active \n"));
+				MTXDBG(CRITICAL,_("Trigmon tickler already active \n"));
 			break;
 	}
 }
@@ -631,7 +631,7 @@ gboolean signal_toothtrig_read(EcuPluginTickler type)
 	Firmware_Details * firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
-	dbg_func_f(IO_MSG,g_strdup(__FILE__": signal_toothtrig_read()\n\tsending message to thread to read ToothTrigger data\n"));
+	MTXDBG(IO_MSG,_("Sending message to thread to read ToothTrigger data\n"));
 
 	/* Make the gauges stay up to date,  even if rather slowly 
 	 * Also gets us access to current RPM and other vars for calculating 

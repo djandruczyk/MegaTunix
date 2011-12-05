@@ -44,6 +44,7 @@ headers = \
 	offline.h \
 	personalities.h \
 	plugin.h \
+	plugindefines.h \
 	rtv_map_loader.h \
 	rtv_processor.h \
 	runtime_sliders.h \

@@ -75,7 +75,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 				DATA_SET(global_data,"playback_id",GINT_TO_POINTER(id));
 			}
 			else
-				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tPlayback already running \n"));
+				MTXDBG(CRITICAL,_("Playback already running \n"));
 			break;
 		case SCOUNTS_TICKLER:
 			if (DATA_GET(global_data,"offline"))
@@ -89,7 +89,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 				DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(id));
 			}
 			else
-				dbg_func(CRITICAL,g_strdup(__FILE__": start_tickler()\n\tStatuscounts tickler already active \n"));
+				MTXDBG(CRITICAL,_("Statuscounts tickler already active \n"));
 			break;
 		default:
 			/* Search for registered handlers from plugins */
@@ -208,7 +208,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	g_mutex_lock(rtv_thread_mutex);
 	while (TRUE)
 	{
-		dbg_func(IO_MSG|THREADS,g_strdup(__FILE__": signal_read_rtvars_thread()\n\tsending message to thread to read RT vars\n"));
+		MTXDBG(IO_MSG|THREADS,_("Sending message to thread to read RT vars\n"));
 
 		signal_read_rtvars();
 		count = 0;

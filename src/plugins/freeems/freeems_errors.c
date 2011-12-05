@@ -19,6 +19,7 @@
   */
 
 #include <freeems_errors.h>
+#include <freeems_plugin.h>
 
 
 /*!

@@ -23,6 +23,15 @@
 
 #include <gtk/gtk.h>
 
+/* When inside a plugin, use the alt dest function name (namespace issues) */
+#ifdef IN_PLUGIN
+#define MTXDBG(level, ...) dbg_func_f(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+#define QUIET_MTXDBG(level, ...) dbg_func_f(level,NULL,NULL,0, __VA_ARGS__)
+#else
+/* When inside mtx core, use the default dest function name */
+#define MTXDBG(level, ...) dbg_func(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+#define QUIET_MTXDBG(level, ...) dbg_func(level,NULL,NULL,0, __VA_ARGS__)
+#endif
 
 /* Debugging Enumerations */
 typedef enum
@@ -44,6 +53,7 @@ typedef enum
 	MTXSOCKET	= 1<<13,
 	PLUGINS		= 1<<14,
 	PACKETS		= 1<<15,
+	DISPATCHER	= 1<<16,
 	CRITICAL	= 1<<30
 }Dbg_Class;
 
@@ -65,6 +75,7 @@ typedef enum guint
 	MTXSOCKET_SHIFT		= 13,
 	PLUGINS_SHIFT		= 14,
 	PACKETS_SHIFT		= 15,
+	DISPATCHER_SHIFT	= 16,
 	CRITICAL_SHIFT		= 30
 }Dbg_Shift;
 
@@ -88,7 +99,7 @@ struct _DebugLevel
 /* Prototypes */
 void close_debug(void);
 void open_debug(void);
-void dbg_func(Dbg_Class, gchar *);
+void dbg_func(Dbg_Class, const gchar *, const gchar *, gint, const gchar *, ...);
 void populate_debugging(GtkWidget *);
 /* Prototypes */
 

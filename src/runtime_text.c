@@ -63,7 +63,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 		return;
 	if (!firmware->rtt_map_file)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": firmware->rtt_map_file is UNDEFINED,\n\texiting runtime text window creation routine!!!!\n"));
+		MTXDBG(CRITICAL,_("Firmware->rtt_map_file is UNDEFINED, exiting runtime text window creation routine!!!!\n"));
 		return;
 	}
 
@@ -73,7 +73,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_text_pf()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n"));
 		return;
 	}
 	gdk_threads_enter();
@@ -82,7 +82,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	filename = get_file(g_build_path(PSEP,RTTEXT_DATA_DIR,firmware->rtt_map_file,NULL),g_strdup("xml"));
 	if (!filename)
 	{
-		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_rt_text_pf()\n\t File \"%s.xml\" not found!!, exiting function\n",firmware->rtt_map_file));
+		MTXDBG(RTMLOADER|CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->rtt_map_file);
 		set_title(g_strdup(_("ERROR RunTimeText Map XML file DOES NOT EXIST!!!")));
 		gdk_threads_leave();
 		return; 
@@ -155,7 +155,7 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
 				if (!xml_api_check(cur_node,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API))
 				{
-					dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rtt_xml_elements()\n\tAPI mismatch, won't load this file!!\n"));
+					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
 					return FALSE;
 				}
 			if (g_strcasecmp((gchar *)cur_node->name,"rtt") == 0)
@@ -311,13 +311,13 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 
 	if (!rtv_map)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": create_rtt()\n\tBad things man, rtv_map is null!!\n"));
+		MTXDBG(CRITICAL,_("Bad things man, rtv_map is null!!\n"));
 		return NULL;
 	}
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": create_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
+		MTXDBG(CRITICAL,_("Bad things man, object doesn't exist for %s\n"),source);
 		return NULL;
 	}
 
@@ -361,14 +361,14 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 
 	if (!rtv_map)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, rtv_map is null!!\n"));
+		MTXDBG(CRITICAL,_("Bad things man, rtv_map is null!!\n"));
 		return NULL;
 	}
 
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_rtt()\n\tBad things man, object doesn't exist for %s\n",source));
+		MTXDBG(CRITICAL,_("Bad things man, object doesn't exist for %s\n"),source);
 		return NULL;
 	}
 

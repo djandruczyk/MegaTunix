@@ -20,7 +20,7 @@ handler=_GENERIC_
 
 [load_1]
 keys=source_key,multi_expr_keys,fromecu_mults,fromecu_adds,use_color,bind_to_list,tooltip
-use_color=TRUE
+use_color=FALSE
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 fromecu_mults=1,1,1.213675,1.6197783,0.01961
@@ -30,7 +30,7 @@ _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM 
 
 [load_2]
 keys=source_key,multi_expr_keys,fromecu_mults,fromecu_adds,use_color,bind_to_list,tooltip
-use_color=TRUE
+use_color=FALSE
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 fromecu_mults=1,1,1.213675,1.6197783,0.01961
@@ -41,7 +41,7 @@ _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM 
 [rpm]
 keys=fromecu_mult,use_color,tooltip
 fromecu_mult=100
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the AFR-Table define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between points on the AFR map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [afrtable1]

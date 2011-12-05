@@ -20,11 +20,12 @@
 
 #include <args.h>
 #include <config.h>
-#include <debugging.h>
 #include <defines.h>
 #include <init.h>
 #include <math.h>
 #include <jimstim_sweeper.h>
+#include <jimstim_plugin.h>
+#include <debugging.h>
 #include <stdlib.h>
 #include <string.h>
 #include <threads.h>
@@ -160,8 +161,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 
 	if (fault)
 	{
-		dbg_func_f(PLUGINS,g_strdup(_("Jimstim parameter issue, please check!\n")));
-		/*warn_user_f(_("Jimstim parameter issue, please check!\n"));*/
+		MTXDBG(PLUGINS,_("Jimstim parameter issue, please check!\n"));
 		return TRUE;
 	}
 	stop_tickler_f(RTV_TICKLER);

@@ -23,6 +23,7 @@
 
 #include <gtk/gtk.h>
 #include <threads.h>
+#include <plugindefines.h>
 
 #ifdef __JIMSTIM_PLUGIN_C__
 #define EXTERN
@@ -40,7 +41,7 @@ EXTERN void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *,
 EXTERN GtkWidget *(*lookup_widget_f)(const gchar *);
 EXTERN void (*io_cmd_f)(const gchar *,void *);
 EXTERN OutputData *(*initialize_outputdata_f)(void);
-EXTERN void *(*dbg_func_f)(int,gchar *);
+EXTERN void *(*dbg_func_f)(int,const gchar *, const gchar *, gint, const gchar *, ...);
 EXTERN void (*start_tickler_f)(gint);
 EXTERN void (*stop_tickler_f)(gint);
 EXTERN GList *(*get_list_f)(gchar *);

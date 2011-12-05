@@ -25,14 +25,14 @@ size=_S16_
 raw_upper=4000
 fromecu_mult=0.1
 precision=1
-use_color=TRUE
+use_color=FALSE
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_1]
 keys=size,raw_upper,use_color,tooltip
 size=_U16_
 raw_upper=15000
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [ve_1]
@@ -47,14 +47,14 @@ size=_S16_
 raw_upper=4000
 fromecu_mult=0.1
 precision=1
-use_color=TRUE
+use_color=FALSE
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_2]
 keys=size,raw_upper,use_color,tooltip
 size=_U16_
 raw_upper=15000
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [ve_2]
@@ -69,14 +69,14 @@ size=_S16_
 raw_upper=4000
 fromecu_mult=0.1
 precision=1
-use_color=TRUE
+use_color=FALSE
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [rpm_3]
 keys=size,raw_upper,use_color,tooltip
 size=_U16_
 raw_upper=15000
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [ve_3]

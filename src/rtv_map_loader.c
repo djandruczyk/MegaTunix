@@ -73,6 +73,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	Firmware_Details *firmware = NULL;
 	static void (*load_deps)(gconstpointer *,ConfigFile *,const gchar *, const gchar *) = NULL;
 
+	MTXDBG(RTMLOADER,_("Entered"));
 	firmware = DATA_GET(global_data,"firmware");
 
 	if ((!DATA_GET(global_data,"interrogated")) && 
@@ -84,7 +85,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	filename = get_file(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
 	if (!filename)
 	{
-		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\t File \"%s.rtv_map\" not found!!, exiting function\n",firmware->rtv_map_file));
+		MTXDBG(RTMLOADER|CRITICAL,_("File \"%s.rtv_map\" not found!!, exiting function\n"),firmware->rtv_map_file);
 		set_title(g_strdup(_("ERROR RT Map file DOES NOT EXIST!!!")));
 		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_("\n<b>MegaTunix</b> Realtime Variable map \"%s.rtv_map\" for this firmware doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i>??\n You should notify the author of this bug\n\n"),firmware->rtv_map_file);
 
@@ -103,7 +104,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 	{
-		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find realtime vars map file %s\n\n",filename));
+		MTXDBG(RTMLOADER|CRITICAL,_("Can't find realtime vars map file %s\n\n"),filename);
 		g_free(filename);
 		set_title(g_strdup(_("ERROR RT Map file could NOT be opened!!!")));
 		gdk_threads_leave();
@@ -112,20 +113,20 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	get_file_api(cfgfile,&major,&minor);
 	if ((major != RTV_MAP_MAJOR_API) || (minor != RTV_MAP_MINOR_API))
 	{
-		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tRealTimeMap profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n",major,minor,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API,filename));
+		MTXDBG(RTMLOADER|CRITICAL,_("RealTimeMap profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API,filename);
 		g_free(filename);
 		set_title(g_strdup(_("ERROR RT Map API MISMATCH!!!")));
 		gdk_threads_leave();
 		return FALSE;
 	}
 	else
-		dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tLoading realtime map from %s\n",filename));
+		MTXDBG(RTMLOADER,_("Loading realtime map from %s\n"),filename);
 	g_free(filename);
 
 	/* If file found we continue... */
 	if(!cfg_read_string(cfgfile,"realtime_map","applicable_firmwares",&tmpbuf))
 	{
-		dbg_func(RTMLOADER|CRITICAL,g_strdup(__FILE__": load_realtime_map_pf()\n\tCan't find \"applicable_firmwares\" key, ABORTING!!\n"));
+		MTXDBG(RTMLOADER|CRITICAL,_("Can't find \"applicable_firmwares\" key, ABORTING!!\n"));
 		cfg_free(cfgfile);
 		set_title(g_strdup(_("ERROR RT Map missing data!!!")));
 		gdk_threads_leave();
@@ -133,7 +134,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	}
 	if (strstr(tmpbuf,firmware->name) == NULL)	
 	{
-		dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tFirmware signature \"%s\"\n\tis NOT found in this file:\n\t(%s)\n\tPotential firmware choices are \"%s\", ABORT!\n\n",firmware->actual_signature,cfgfile->filename,tmpbuf));
+		MTXDBG(RTMLOADER|CRITICAL,_("Firmware signature \"%s\"\n\tis NOT found in this file:(%s) Potential firmware choices are \"%s\", ABORT!\n\n"),firmware->actual_signature,cfgfile->filename,tmpbuf);
 		cfg_free(cfgfile);
 		g_free(tmpbuf);
 		set_title(g_strdup(_("ERROR RT Map signature MISMATCH!!!")));
@@ -147,7 +148,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	 */
 	if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
 	{
-		dbg_func(RTMLOADER|CRITICAL,g_strdup(__FILE__": load_realtime_map_pf()\n\tcan't find \"derived_total\" in the \"[realtime_map]\" section\n"));
+		MTXDBG(RTMLOADER|CRITICAL,_("Can't find \"derived_total\" in the \"[realtime_map]\" section\n"));
 	}
 
 	tmpbuf = NULL;
@@ -175,7 +176,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		/* Get key list and parse */
 		if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
 		{
-			dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find \"keys\" in the \"[%s]\" section, ABORTING!!!\n\n ",section));
+			MTXDBG(RTMLOADER|CRITICAL,_("Can't find \"keys\" in the \"[%s]\" section, ABORTING!!!\n"),section);
 			g_free(section);
 			set_title(g_strdup(_("ERROR RT Map missing data problem!!!")));
 			gdk_threads_leave();
@@ -188,7 +189,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		}
 		if (!cfg_read_int(cfgfile,section,"offset",&offset))
 		{
-			dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tCan't find \"offset\" in the \"[%s]\" section, ABORTING!!!\n\n",section));
+			MTXDBG(RTMLOADER|CRITICAL,_("Can't find \"offset\" in the \"[%s]\" section, ABORTING!!!\n\n"),section);
 			g_free(section);
 			g_strfreev(keys);
 			set_title(g_strdup(_("ERROR RT Map offset missing!!!")));
@@ -216,7 +217,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			if (load_deps)
 				load_deps(object,cfgfile,section,"depend_on");
 			else
-				dbg_func(CRITICAL|RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tfunction pointer for \"load_dependancies\" could NOT be found in plugins, BUG!\n"));
+				MTXDBG(CRITICAL|RTMLOADER,_("Function pointer for \"load_dependancies\" could NOT be found in plugins, BUG!\n"));
 			g_free(tmpbuf);
 		}
 		if (cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
@@ -232,33 +233,33 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 				case MTX_INT:
 					if (cfg_read_int(cfgfile,section,keys[j],&tmpi))
 					{
-						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding INT \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
+						MTXDBG(RTMLOADER,_("Binding INT \"%s\",\"%i\" to widget \"%s\"\n"),keys[j],tmpi,section);
 						DATA_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
 					}
 					else
-						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_INT: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+						MTXDBG(RTMLOADER|CRITICAL,_("MTX_INT: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
 					break;
 				case MTX_ENUM:
 					if (cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
 						tmpi = translate_string(tmpbuf);
-						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding ENUM \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
+						MTXDBG(RTMLOADER,_("Binding ENUM \"%s\",\"%i\" to widget \"%s\"\n"),keys[j],tmpi,section);
 						DATA_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
 						g_free(tmpbuf);
 					}
 					else
-						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_ENUM: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+						MTXDBG(RTMLOADER|CRITICAL,_("MTX_ENUM: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
 					break;
 				case MTX_BOOL:
 					if (cfg_read_boolean(cfgfile,section,keys[j],&tmpi))
 					{
 						if (tmpi == 0)
 							tmpi = -1;
-						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding BOOL \"%s\",\"%i\" to widget \"%s\"\n",keys[j],tmpi,section));
+						MTXDBG(RTMLOADER,("Binding BOOL \"%s\",\"%i\" to widget \"%s\"\n"),keys[j],tmpi,section);
 						DATA_SET(object,
 								keys[j],
 								GINT_TO_POINTER(tmpi));
@@ -266,7 +267,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 							load_complex_params(object,cfgfile,section);
 					}
 					else
-						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_BOOL: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+						MTXDBG(RTMLOADER|CRITICAL,_("MTX_BOOL: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
 					break;
 				case MTX_FLOAT:
 					if (cfg_read_float(cfgfile,section,keys[j],&tmpf))
@@ -279,13 +280,13 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 								(gpointer)newfloat,g_free);
 					}
 					else
-						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_FLOAT: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+						MTXDBG(RTMLOADER|CRITICAL,_("MTX_FLOAT: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
 					break;
 
 				case MTX_STRING:
 					if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
 					{
-						dbg_func(RTMLOADER,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tbinding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n",keys[j],tmpbuf,section));
+						MTXDBG(RTMLOADER,_("Binding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n"),keys[j],tmpbuf,section);
 						if ((strstr(keys[j],"dlog_gui_name")) || (strstr(keys[j],"tooltip")))
 						{
 							DATA_SET_FULL(object,
@@ -303,10 +304,10 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 						g_free(tmpbuf);
 					}
 					else
-						dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_STRING: read of key \"%s\" from section \"%s\" failed\n",keys[j],section));
+						MTXDBG(RTMLOADER|CRITICAL,_("MTX_STRING: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
 					break;
 				case MTX_UNKNOWN:
-					dbg_func(RTMLOADER|CRITICAL,g_strdup_printf(__FILE__": load_realtime_map_pf()\n\tMTX_UNKNWON: key \"%s\" DON'T KNOW HOW TO HANDLE, missing stringmatch association!\n",keys[j]));
+					MTXDBG(RTMLOADER|CRITICAL,_("MTX_UNKNWON: key \"%s\" DON'T KNOW HOW TO HANDLE, missing stringmatch association!\n"),keys[j]);
 					break;
 
 				default:
@@ -332,10 +333,10 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		/*g_datalist_foreach(object,dump_datalist,NULL);*/
 	}
 	cfg_free(cfgfile);
-	dbg_func(RTMLOADER,g_strdup(__FILE__": load_realtime_map_pf()\n\t All is well, leaving...\n\n"));
 	DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
 	set_title(g_strdup(_("RT Map loaded...")));
 	gdk_threads_leave();
+	MTXDBG(RTMLOADER,_("Leaving"));
 	return TRUE;
 }
 
@@ -370,7 +371,7 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 	g_return_if_fail(common_rtv_loader);
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{
-		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tRead of \"expr_symbols\" from section \"[%s]\" failed ABORTING!!!\n\n",section));
+		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Read of \"expr_symbols\" from section \"[%s]\" failed ABORTING!!!\n\n"),section);
 		g_free(tmpbuf);
 		return;
 	}
@@ -381,7 +382,7 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 	}
 	if (!cfg_read_string(cfgfile,section,"expr_types",&tmpbuf))
 	{
-		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tRead of \"expr_types\" from section \"[%s]\" failed, ABORTING!!!\n\n",section));
+		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Read of \"expr_types\" from section \"[%s]\" failed, ABORTING!!!\n"),section);
 		g_strfreev(expr_symbols);
 		g_free(tmpbuf);
 		return;
@@ -393,7 +394,7 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 	}
 	if (total_symbols!=total_symtypes)
 	{
-		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tNumber of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n\n",total_symbols,total_symtypes));
+		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Number of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n"),total_symbols,total_symtypes);
 		g_free(expr_types);
 		g_strfreev(expr_symbols);
 		return;
@@ -417,14 +418,14 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_VAR, failure looking for:%s\n",name));
+					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_VAR, failure looking for:%s\n"),name);
 				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_size",expr_symbols[i]);
 				if (!cfg_read_string(cfgfile,section,name,&tmpbuf))
 				{
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_VAR, failure looking for:%s\n",name));
+					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_VAR, failure looking for:%s\n"),name);
 					tmpi = MTX_U08;
 				}
 				else
@@ -441,20 +442,20 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
+					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_EMB_BIT, failure looking for:%s\n"),name);
 				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
+					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n"),name);
 				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				break;
 
 			default:
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params(), expr_type %i is UNDEFINED, this will cause a crash!!\n",expr_types[i]));
+				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("expr_type %i is UNDEFINED, this will cause a crash!!\n"),expr_types[i]);
 		}
 	}
 }
@@ -489,7 +490,7 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
 	{
-		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tRead of \"expr_symbols\" from section \"[%s]\" failed ABORTING!!!\n\n",section));
+		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Read of \"expr_symbols\" from section \"[%s]\" failed ABORTING!!!\n\n"),section);
 		g_free(tmpbuf);
 		return;
 	}
@@ -500,7 +501,7 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 	}
 	if (!cfg_read_string(cfgfile,section,"expr_types",&tmpbuf))
 	{
-		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tRead of \"expr_types\" from section \"[%s]\" failed, ABORTING!!!\n\n",section));
+		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Read of \"expr_types\" from section \"[%s]\" failed, ABORTING!!!\n\n"),section);
 		g_strfreev(expr_symbols);
 		g_free(tmpbuf);
 		return;
@@ -512,7 +513,7 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 	}
 	if (total_symbols!=total_symtypes)
 	{
-		dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_complex_params()\n\tNumber of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n\n",total_symbols,total_symtypes));
+		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Number of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n\n"),total_symbols,total_symtypes);
 		g_free(expr_types);
 		g_strfreev(expr_symbols);
 		return;
@@ -536,14 +537,14 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_VAR, failure looking for:%s\n",name));
+					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_VAR, failure looking for:%s\n"),name);
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_size",expr_symbols[i]);
 				if (!cfg_read_string(cfgfile,section,name,&tmpbuf))
 				{
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_VAR, failure looking for:%s\n",name));
+					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_VAR, failure looking for:%s\n"),name);
 					tmpi = MTX_U08;
 				}
 				else
@@ -560,20 +561,20 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
+					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_EMB_BIT, failure looking for:%s\n"),name);
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
 				if (!cfg_read_int(cfgfile,section,name,&tmpi))
-					dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup_printf(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n",name));
+					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_EMB_BIT, failure looking for:%s\n"),name);
 				OBJ_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				break;
 
 			default:
-				dbg_func(RTMLOADER|COMPLEX_EXPR|CRITICAL,g_strdup(__FILE__": load_complex_params(), expr_type is UNDEFINED, this will cause a crash!!\n"));
+				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("expr_type is UNDEFINED, this will cause a crash!!\n"));
 		}
 	}
 }

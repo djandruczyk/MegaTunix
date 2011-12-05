@@ -61,18 +61,18 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_sliders()\n\tERROR, NOT interrogated, returning!\n\n"));
+		MTXDBG(CRITICAL,_("ERROR, NOT interrogated, returning!\n"));
 		return;
 	}
 
 	if (DATA_GET(global_data,"leaving"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_sliders()\n\tERROR, LEAVING set, returning!\n\n"));
+		MTXDBG(CRITICAL,_("ERROR, \"leaving\" set, returning!\n"));
 		return;
 	}
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n"));
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Sliders...")));
@@ -96,7 +96,7 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"rt_rts",rt_sliders,0,RUNTIME_TAB);
 	if (!res)
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_rt_sliders()\n\tRuntime Sliders XML parse/load failure\n"));
+		MTXDBG(CRITICAL,_("Runtime Sliders XML parse/load failure\n"));
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
@@ -122,18 +122,18 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_ww_sliders()\n\tERROR, NOT interrogated, returning!\n\n"));
+		MTXDBG(CRITICAL,_("ERROR, NOT interrogated, returning!\n"));
 		return;
 	}
 
 	if (DATA_GET(global_data,"leaving"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_ww_sliders()\n\tERROR, LEAVING set, returning!\n\n"));
+		MTXDBG(CRITICAL,_("ERROR, \"leaving\" set, returning!\n"));
 		return;
 	}
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_ww_sliders()\n\tCRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n\n"));
+		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n"));
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Sliders...")));
@@ -157,7 +157,7 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"ww_rts",ww_sliders,0,WARMUP_WIZ_TAB);
 	if (!res)
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_ww_sliders()\n\tWarmup Wizard Sliders XML parse/load failure\n"));
+		MTXDBG(CRITICAL,_("Warmup Wizard Sliders XML parse/load failure\n"));
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
@@ -187,7 +187,7 @@ G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *pre
 			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
 				if (!xml_api_check(cur_node,RT_SLIDERS_MAJOR_API,RT_SLIDERS_MINOR_API))
 				{
-					dbg_func(CRITICAL,g_strdup_printf(__FILE__": load_rtt_xml_elements()\n\tAPI mismatch, won't load this file!!\n"));
+					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
 					return FALSE;
 				}
 			if (g_strcasecmp((gchar *)cur_node->name,prefix) == 0)
@@ -269,7 +269,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
 			(!(DATA_GET(global_data,"tabs_loaded"))))
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_ve3d_sliders()\n\tCRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n\n"));
+		MTXDBG(CRITICAL,_("CRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n"));
 		return;
 	}
 
@@ -295,7 +295,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"ve3d_rts",ve3d_sliders[table_num],table_num,VE3D_VIEWER_TAB);
 	if (!res)
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_ve3d_sliders()\n\tRuntime Sliders XML parse/load failure\n"));
+		MTXDBG(CRITICAL,_("Runtime Sliders XML parse/load failure\n"));
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
@@ -330,7 +330,7 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": ERROR!: add_slider()\n\t Request to create slider for non-existant datasource \"%s\"\n",source));
+		MTXDBG(CRITICAL,_("Request to create slider for non-existant datasource \"%s\"\n"),source);
 		return NULL;
 	}
 
@@ -342,13 +342,13 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 		name = g_strdup_printf("ve3d_rt_table%i_%i",tbl,table_num);
 	else
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\tpage ident passed is not handled, ERROR, widget add aborted\n"));
+		MTXDBG(CRITICAL,_("Page ident passed is not handled, ERROR, widget add aborted\n"));
 		return NULL;
 	}
 	table = lookup_widget(name);
 	if (!table)
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": add_slider()\n\t table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n",name));
+		MTXDBG(CRITICAL,_("Table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n"),name);
 		g_free(name);
 		return NULL;
 	}
@@ -366,11 +366,11 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	if ((gchar *)DATA_GET(object,"real_lower"))
 		slider->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
 	else
-		dbg_func(CRITICAL,g_strdup_printf(_(__FILE__"No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source));
+		MTXDBG(CRITICAL,_("No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
 	if ((gchar *)DATA_GET(object,"real_upper"))
 		slider->upper = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
 	else
-		dbg_func(CRITICAL,g_strdup_printf(_(__FILE__"No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source));
+		MTXDBG(CRITICAL,_("No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
 	slider->history = (GArray *) DATA_GET(object,"history");
 	slider->object = object;
 	hbox = gtk_hbox_new(FALSE,5);
@@ -487,7 +487,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	
 	if  (!(object))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": register_rt_range()\n\t ERROR! There is no datasource named \"%s\", Check config of widget %s\n",source,(name == NULL ? "undefined":name)));
+		MTXDBG(CRITICAL,_("ERROR! There is no datasource named \"%s\", Check config of widget %s\n"),source,(name == NULL ? "undefined":name));
 		return;
 	}
 	slider->ctrl_name = g_strdup((name == NULL ? "undefined":name));
@@ -674,7 +674,7 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
-			dbg_func(CRITICAL,g_strdup(__FILE__": update_rtsliders()\n\t Error getting current value of \"cltdeg\" from datasource\n"));
+			MTXDBG(CRITICAL,_("Error getting current value of \"cltdeg\" from datasource\n"));
 		if ((coolant != last_coolant) || 
 				(DATA_GET(global_data,"rt_forced_update")))
 			warmwizard_update_status(coolant);

@@ -277,7 +277,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
 			OBJ_SET(entry,"temp_dep",GINT_TO_POINTER(firmware->te_params[table_num]->x_temp_dep));
 			OBJ_SET(entry,"use_color",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
-			OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
+//			OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
 			if(firmware->te_params[table_num]->x_temp_dep)
 			{
 				OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
@@ -330,7 +330,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
 			OBJ_SET(entry,"temp_dep",GINT_TO_POINTER(firmware->te_params[table_num]->y_temp_dep));
 			OBJ_SET(entry,"use_color",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
-			OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
+//			OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
 			if(firmware->te_params[table_num]->y_temp_dep)
 			{
 				OBJ_SET(entry,"widget_temp",DATA_GET(global_data,"mtx_temp_units"));
@@ -628,7 +628,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->x_page));
 		OBJ_SET(entry,"temp_dep",GINT_TO_POINTER(firmware->te_params[table_num]->x_temp_dep));
 		OBJ_SET(entry,"use_color",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
-		OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
+//		OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->x_use_color));
 
 		if(firmware->te_params[table_num]->x_temp_dep)
 		{
@@ -684,7 +684,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		OBJ_SET(entry,"page",GINT_TO_POINTER(firmware->te_params[table_num]->y_page));
 		OBJ_SET(entry,"temp_dep",GINT_TO_POINTER(firmware->te_params[table_num]->y_temp_dep));
 		OBJ_SET(entry,"use_color",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
-		OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
+//		OBJ_SET(entry,"force_color_update",GINT_TO_POINTER(firmware->te_params[table_num]->y_use_color));
 
 		if(firmware->te_params[table_num]->y_temp_dep)
 		{

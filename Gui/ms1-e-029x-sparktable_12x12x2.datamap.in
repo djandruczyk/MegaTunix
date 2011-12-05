@@ -20,7 +20,7 @@ handler=_GENERIC_
 [load_1]
 keys=table_num,source_key,multi_expr_keys,fromecu_mults,fromecu_adds,use_color,bind_to_list,tooltip
 table_num=3
-use_color=TRUE
+use_color=FALSE
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 fromecu_mults=1,1,1.213675,1.6197783,0.01961
@@ -31,7 +31,7 @@ _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM 
 [rpm_1]
 keys=fromecu_mult,use_color,tooltip
 fromecu_mult=100
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_1]
@@ -47,7 +47,7 @@ _tooltip=The Spark Advance Entries control the engine igntion timing.  The value
 keys=page,table_num,source_key,multi_expr_keys,fromecu_mults,fromecu_adds,use_color,bind_to_list,tooltip
 table_num=4
 page=4
-use_color=TRUE
+use_color=FALSE
 source_key=map_sensor
 multi_expr_keys=DEFAULT,MPX4250,MPX6300,MPX6400,AFM_VOLTS
 fromecu_mults=1,1,1.213675,1.6197783,0.01961
@@ -59,7 +59,7 @@ _tooltip=The LOAD (whether they be MAP or TPS) bins in combination with the RPM 
 keys=page,fromecu_mult,use_color,tooltip
 page=4
 fromecu_mult=100
-use_color=TRUE
+use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Sparktable define the vertexes (points on the Spark map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [spark_2]

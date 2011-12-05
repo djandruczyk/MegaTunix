@@ -21,9 +21,9 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
 #include <freeems_errors.h>
 #include <freeems_plugin.h>
+#include <debugging.h>
 #include <packet_handlers.h>
 #include <stdio.h>
 #include <string.h>
@@ -803,14 +803,14 @@ G_MODULE_EXPORT void mtxlog_packet(const void *buf, size_t len, gboolean toecu)
 	guint8 *ptr = (guint8 *)buf;
 
 	if (toecu)
-		dbg_func_f(PACKETS,g_strdup_printf(__FILE__": mtxlog_packet\n\tPacket TO ECU %i bytes \n\t",(gint)len));
+		MTXDBG(PACKETS,_("Packet TO ECU %i bytes \n\t"),(gint)len);
 	else
-		dbg_func_f(PACKETS,g_strdup_printf(__FILE__": mtxlog_packet\n\tPacket FROM ECU %i bytes \n\t",(gint)len));
+		MTXDBG(PACKETS,_("Packet FROM ECU %i bytes \n\t"),(gint)len);
 	for (i=0;i<len;i++)
 	{
-		dbg_func_f(PACKETS,g_strdup_printf("%.2X ",ptr[i]));
+		QUIET_MTXDBG(PACKETS,_("%.2X "),ptr[i]);
 		if (!((i+1)%16))
-			dbg_func_f(PACKETS,g_strdup("\n\t"));
+			QUIET_MTXDBG(PACKETS,_("\n\t"));
 	}
-	dbg_func_f(PACKETS,g_strdup("\n"));
+	QUIET_MTXDBG(PACKETS,_("\n"));
 }

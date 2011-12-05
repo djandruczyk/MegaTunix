@@ -22,20 +22,8 @@
 #define __JIMSTIM_SWEEPER_H__
 
 #include <gtk/gtk.h>
+#include <jimstim_plugin.h>
 #include <threads.h>
-
-/* Externs */
-extern void (*error_msg_f)(const gchar *);
-extern GtkWidget *(*lookup_widget_f)(const gchar *);
-extern void (*io_cmd_f)(const gchar *,void *);
-extern OutputData *(*initialize_outputdata_f)(void);
-extern void *(*dbg_func_f)(int,gchar *);
-extern void (*start_tickler_f)(gint);
-extern void (*stop_tickler_f)(gint);
-extern GList *(*get_list_f)(gchar *);
-extern void (*set_widget_sensitive_f)(gpointer, gpointer);
-extern void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);
-/* Externs */
 
 typedef struct _JimStim_Data JimStim_Data;
 

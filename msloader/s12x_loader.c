@@ -211,7 +211,7 @@ gint read_s19 (gint file_fd)
 			output(g_strdup_printf("%s", buf),TRUE);
 		}
 		ms2_chomp(buf);
-		fileBuf[count] = strdup(buf);
+		fileBuf[count] = g_strdup(buf);
 		g_free(buf);
 		count++;
 	}

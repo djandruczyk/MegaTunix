@@ -20,12 +20,12 @@
 
 #include <config.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <mscommon_gui_handlers.h>
 #include <mscommon_menu_handlers.h>
 #include <mscommon_plugin.h>
+#include <debugging.h>
 
 extern gconstpointer *global_data;
 
@@ -164,14 +164,14 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	item = glade_xml_get_widget (xml, "spark_table_combo");
 	if (!item)
 	{
-		dbg_func_f(CRITICAL, g_strdup_printf(__FILE__ ": create_ignition_map():\n\tUnable to find spark table combo! where am I?\n"));
+		MTXDBG(CRITICAL,_("Unable to find spark table combo! where am I?\n"));
 		return TRUE;
 	}
 
 	/* the selected text in the combo box */
 	if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(item),&iter))
 	{
-		dbg_func_f(CRITICAL, g_strdup_printf(__FILE__ ": create_ignition_map():\n\ttable_title was unavailable\n"));
+		MTXDBG(CRITICAL,_("Table was not found!\n"));
 		return TRUE;
 	}
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(item));

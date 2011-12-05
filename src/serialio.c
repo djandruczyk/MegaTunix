@@ -108,7 +108,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 		serial_params->open = TRUE;
 		port_open = TRUE;
 		serial_params->fd = fd;
-		dbg_func(SERIAL_RD|SERIAL_WR,g_strdup_printf(__FILE__" open_serial()\n\t%s Opened Successfully\n",port_name));
+		MTXDBG(SERIAL_RD|SERIAL_WR,_("\"%s\" Opened Successfully\n"),port_name);
 		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("%s Opened Successfully\n"),port_name),FALSE,FALSE);
 
 	}
@@ -123,8 +123,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 		serial_params->open = FALSE;
 		serial_params->fd = -1;
 		err_text = (gchar *)g_strerror(errno);
-		/*printf("Error Opening \"%s\", Error Code: \"%s\"\n",port_name,g_strdup(err_text));*/
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL,g_strdup_printf(__FILE__": open_serial()\n\tError Opening \"%s\", Error Code: \"%s\"\n",port_name,err_text));
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL,_("Error Opening \"%s\", Error Code: \"%s\"\n"),port_name,err_text);
 		thread_update_widget("titlebar",MTX_TITLE,g_strdup_printf(_("Error Opening \"%s\", Error Code: \"%s\""),port_name,err_text));
 
 		thread_update_logbar("comms_view","warning",g_strdup_printf(_("Error Opening \"%s\", Error Code: %s \n"),port_name,err_text),FALSE,FALSE);
@@ -200,7 +199,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	baud_str = DATA_GET(global_data,"ecu_baud_str");
 
 	if (!parse_baud_str(baud_str,&baudrate,&bits,&parity,&stop))
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tERROR! couldn't parse ecu_baud string %s\n",baud_str));
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL,_("ERROR! couldn't parse ecu_baud string %s\n"),baud_str);
 
 	DATA_SET(global_data,"ecu_baud",GINT_TO_POINTER(baudrate));
 	if (serial_params->open == FALSE)
@@ -359,10 +358,10 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	/* PIS Specific (odd baud rate) DISABLED */
 	/*
 	if (ioctl(serial_params->fd, TIOCGSERIAL, &serial_params->oldctl) != 0)
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tError getting serial line information error %s\n",strerror(errno)));
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL, _("Error getting serial line information error %s\n"),strerror(errno));
 	else
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR, g_strdup_printf(__FILE__": setup_serial_params()\tget serial line info call OK\n"));
+		MTXDBG(SERIAL_RD|SERIAL_WR, _("Get serial line info call OK\n"));
 		// copy ioctl structure
 		memcpy(&serial_params->newctl, &serial_params->oldctl, sizeof(serial_params->newctl));
 
@@ -376,9 +375,9 @@ G_MODULE_EXPORT void setup_serial_params(void)
 			serial_params->newctl.flags |= (ASYNC_SPD_MASK & ASYNC_SPD_CUST);
 
 			if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->newctl) != 0)
-				dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tError setting ioctl\n"));
+				MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL,_("Error setting ioctl\n"));
 			else
-				dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": setup_serial_params()\tset ioctl OK\n"));
+				MTXDBG(SERIAL_RD|SERIAL_WR,_("Set ioctl OK\n"));
 		}
 	}
 	*/
@@ -411,9 +410,9 @@ G_MODULE_EXPORT void close_serial(void)
 #ifndef __WIN32__
 	/* OLD PIS stuff disabled
 	if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->oldctl) != 0)
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": close_serial()\tError restoring serial line config\n"));
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL,_("Error restoring serial line config\n"));
 	else
-		dbg_func(SERIAL_RD|SERIAL_WR, g_strdup_printf(__FILE__": close_serial()\tserial line settings restored OK\n"));
+		MTXDBG(SERIAL_RD|SERIAL_WR,_("Serial line settings restored OK\n"));
 	*/
 
 	tcsetattr(serial_params->fd,TCSANOW,&serial_params->oldtio);
@@ -428,7 +427,7 @@ G_MODULE_EXPORT void close_serial(void)
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 
 	/* An Closing the comm port */
-	dbg_func(SERIAL_RD|SERIAL_WR,g_strdup(__FILE__": close_serial()\n\tSerial Port Closed\n"));
+	MTXDBG(SERIAL_RD|SERIAL_WR,_("Serial Port Closed\n"));
 	if (!DATA_GET(global_data,"leaving"))
 		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
 	g_mutex_unlock(serio_mutex);
@@ -451,7 +450,7 @@ G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits,
 	vector = g_strsplit(baud_str,",",-1);
 	if (g_strv_length(vector) != 4)
 	{
-		dbg_func(SERIAL_RD|SERIAL_WR|CRITICAL, g_strdup_printf(__FILE__": pause_baud_str()\tbaud string is NOT in correct format 'baud,bits,parity,stop'\n"));
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL,_("Baud string is NOT in correct format 'baud,bits,parity,stop'\n"));
 		g_strfreev(vector);
 		return FALSE;
 	}

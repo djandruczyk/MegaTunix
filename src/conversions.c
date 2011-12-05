@@ -210,17 +210,17 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		}
 	}
 	name = glade_get_widget_name(widget);
-	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_before_dl():\n\t widget %s raw %.2f, sent %i\n",(name == NULL ? "undefined" : name),value,return_value));
+	MTXDBG(CONVERSIONS,_("Widget %s raw %.2f, sent %i\n"),(name == NULL ? "undefined" : name),value,return_value);
 	if (return_value > upper)
 	{
 		if (dl_type != IGNORED)
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",upper,lower,value,upper));
+			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING value clamped at %f (%f <- %f -> %f)!!\n"),upper,lower,value,upper);
 		return_value = upper;
 	}
 	if (return_value < lower)
 	{
 		if (dl_type != IGNORED)
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_before_download()\n\t WARNING value clamped at %f (%f <- %f -> %f)!!\n",lower,lower,value,upper));
+			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING value clamped at %f (%f <- %f -> %f)!!\n"),lower,lower,value,upper);
 		return_value = lower;
 	}
 
@@ -318,14 +318,14 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	if (tmpi < lower)
 	{
 		if (dl_type != IGNORED)
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
+			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),lower,lower,tmpi,upper);
 		tmpi = lower;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
 	if (tmpi > upper)
 	{
 		if (dl_type != IGNORED)
-			dbg_func(CONVERSIONS|CRITICAL,g_strdup_printf(__FILE__": convert_after_upload()\n\t WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n",(name == NULL ? "undefined" : name),lower,lower,tmpi,upper));
+			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),lower,lower,tmpi,upper);
 		tmpi = upper;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
@@ -443,11 +443,9 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 				return_value = (gfloat)tmpi * (*multiplier);
 			else
 				return_value = (gfloat)tmpi;
-			/*dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul():\n\tNo/Fast CONVERSION defined for  widget %s, value %f\n",(name == NULL ? "undefined" : name), return_value));*/
 		}
 
 	}
-//	dbg_func(CONVERSIONS,g_strdup_printf(__FILE__": convert_after_ul()\n\t page %i,offset %i, raw %i, val %f\n",page,offset,tmpi,return_value));
 	g_static_mutex_unlock(&mutex);
 	return (return_value);
 }
@@ -485,10 +483,10 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 		return;
 	if (!check_deps)
 		if (!get_symbol("check_dependancies",(void *)&check_deps))
-			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tCan NOT locate \"check_dependancies\" function pointer in plugins, BUG!\n"));
+			MTXDBG(CRITICAL|CONVERSIONS,_("Can NOT locate \"check_dependancies\" function pointer in plugins, BUG!\n"));
 	if (!update_widget_f)
 		if(!get_symbol("update_widget",(void *)&update_widget_f))
-			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tCan NOT locate \"update_widget\" function pointer in plugins, BUG!\n"));
+			MTXDBG(CRITICAL|CONVERSIONS,_("Can NOT locate \"update_widget\" function pointer in plugins, BUG!\n"));
 	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
 	name = glade_get_widget_name(widget);
@@ -497,13 +495,12 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			dbg_func(CRITICAL|CONVERSIONS,g_strdup_printf(__FILE__": convert_temps()\n\tWidget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n",(name == NULL ? "undefined" : name)));
+			MTXDBG(CRITICAL|CONVERSIONS,_("Widget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n"),(name == NULL ? "undefined" : name));
 	}
 
 	switch ((TempUnits)units)
 	{
 		case FAHRENHEIT:
-			/*printf("fahr %s\n",(name == NULL ? "undefined" : name));*/
 			if (GTK_IS_LABEL(widget))
 			{
 				if ((dep_obj) && (state))	

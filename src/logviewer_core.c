@@ -160,7 +160,7 @@ G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 	Log_Info *log_info = NULL;
 	if (!iochannel)
 	{
-		dbg_func(CRITICAL,g_strdup(__FILE__": load_logviewer_file()\n\tIo_File pointer NULL,returning!!\n"));
+		MTXDBG(CRITICAL,_("IO Channel pointer is NULL, returning!!\n"));
 		return;
 	}
 	log_info = initialize_log_info();

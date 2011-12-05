@@ -31,6 +31,7 @@
 #endif
 
 /* Function Pointers */
+EXTERN void (*dbg_func_f)(int,const gchar *, const gchar *, gint ,const gchar *, ...);
 /* Function Pointers */
 
 /* Prototypes */

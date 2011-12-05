@@ -61,15 +61,15 @@ testgit:
 	@echo "#                            Checking git status...                            #"
 	@echo "################################################################################"
 	@echo -n "Are we on master? "
-	@if [ `git symbolic-ref HEAD` = refs/heads/master ] ; then echo "YES" ; else echo "NO!" ; exit 1 ; fi
+	@if [ `git symbolic-ref HEAD` = refs/heads/master ] ; then echo "Yes, we're on master" ; else echo "No we are NOT!" ; exit 1 ; fi
 	@echo -n "Is everything checked in? "
-	@if [ `git status -s | wc -l` -gt 0 ] ; then echo "NO! Stuff not checked in...." ; exit 1 ; fi
+	@if [ `git status -s | wc -l` -gt 0 ] ; then echo "NO! There's stuff not checked in, go fix that..." ; exit 1 ; fi
 	@echo "Fetching from origin..."
-	git fetch
-	@echo "Are we behind?"
-	test `git rev-list \`git show-ref --hash refs/heads/master\` \`git show-ref --hash refs/remotes/origin/master\` | wc -l` -eq 0
-	@echo "Are we ahead?"
-	test `git rev-list \`git show-ref --hash refs/remotes/origin/master\` \`git show-ref --hash refs/heads/master\` | wc -l` -eq 0
+	@git fetch
+	@echo -n "Are we behind? "
+	@if [ $$(git rev-list `git show-ref --hash refs/heads/master`..`git show-ref --hash refs/remotes/origin/master` | wc -l) -gt 0 ] ; then echo "Yes, go fix that!!" ; exit 1; else echo "nope, we're good..." ; fi
+	@echo -n "Are we ahead? "
+	@if [ $$(git rev-list `git show-ref --hash refs/remotes/origin/master`..`git show-ref --hash refs/heads/master` | wc -l) -gt 0 ] ; then echo "Yes, go fix that!!" ; exit 1; else echo "nope, we're good..." ; fi
 		
 tagmessage:
 	vim $(RELTAG)
@@ -83,4 +83,4 @@ tagrelease: tagname tagmessage
 release: testgit relbuild relperf
 relperf: relcommit tagrelease
 .PHONY: check-gettext update-po doc 
-.PHONY: testgit relbuild relperf tagrelease
+.PHONY: testgit relbuild relperf tagrelease relcommit

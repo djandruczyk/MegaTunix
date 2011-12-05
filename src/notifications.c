@@ -183,7 +183,7 @@ G_MODULE_EXPORT void  update_logbar(
 
 	if (!GTK_IS_OBJECT(widget))
 	{
-		dbg_func(CRITICAL,g_strdup_printf(__FILE__": update_logbar()\n\t Textview name passed: \"%s\" wasn't registered, not updating\n",view_name));
+		MTXDBG(CRITICAL,_("Textview name passed: \"%s\" wasn't registered, not updating\n"),view_name);
 		return;
 	}
 

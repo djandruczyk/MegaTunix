@@ -19,10 +19,10 @@
   */
 
 #include <config.h>
-#include <debugging.h>
 #include <defines.h>
 #include <glade/glade.h>
 #include <ms1_plugin.h>
+#include <debugging.h>
 #include <ms1_gui_handlers.h>
 #include <ms1_tlogger.h>
 #include <firmware.h>
@@ -92,7 +92,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 			offset = (GINT)OBJ_GET(widget,"spconfig_offset");
 			if (offset == 0)
 			{
-				dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_entry_handler()\n\tERROR Trigger Angle entry call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
+				MTXDBG(CRITICAL,_("ERROR Trigger Angle entry call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;
 				break;
 
@@ -128,7 +128,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 			offset = (GINT)OBJ_GET(widget,"oddfire_bit_offset");
 			if (offset == 0)
 			{
-				dbg_func_f(CRITICAL,g_strdup(__FILE__": ecu_entry_handler()\n\tERROR Offset Angle entry changed call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
+				MTXDBG(CRITICAL,_("ERROR Offset Angle entry changed call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;
 				break;
 
@@ -161,7 +161,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 
 			break;
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_entry_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,_("ERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
 			break;
 
 	}
@@ -184,6 +184,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	}
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+	/*
 	if (OBJ_GET(widget,"use_color"))
 	{
 		if (OBJ_GET(widget,"table_num"))
@@ -217,6 +218,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 		}
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 	}
+	*/
 
 	OBJ_SET(widget,"not_sent",GINT_TO_POINTER(FALSE));
 	return TRUE;
@@ -271,7 +273,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 			offset = (GINT)OBJ_GET(widget,"spconfig_offset");
 			if (offset == 0)
 			{
-				dbg_func_f(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tERROR Trigger Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
+				MTXDBG(CRITICAL,_("ERROR Trigger Angle spinbutton call, but spconfig_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;
 				break;
 
@@ -307,7 +309,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 			offset = (GINT)OBJ_GET(widget,"oddfire_bit_offset");
 			if (offset == 0)
 			{
-				dbg_func_f(CRITICAL,g_strdup(__FILE__": spin_button_handler()\n\tERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
+				MTXDBG(CRITICAL,("ERROR Offset Angle spinbutton call, but oddfire_bit_offset variable is unset, Aborting handler!!!\n"));
 				dl_type = 0;
 				break;
 
@@ -340,7 +342,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 
 			break;
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_spin_button_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,_("ERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
 
 			break;
 	}
@@ -387,7 +389,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 				start_tickler_f(RTV_TICKLER);
 			break;
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_std_button_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,_("ERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
 			break;
 	}
 	return TRUE;
@@ -437,7 +439,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
 				break;
 			default:
-				dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_toggle_button_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
+				MTXDBG(CRITICAL,_("ERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
 				break;
 		}
 	}
@@ -483,7 +485,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	switch (handler)
 	{
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_combo_button_handler()\n\tERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,("ERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
 			return TRUE;
 			break;
 	}
@@ -531,7 +533,7 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 					value += 0;
 					break;
 				default:
-					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ecu_data[%i][%i], ERROR\n",(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset")));
+					MTXDBG(CRITICAL,_("TRIGGER_ANGLE_UPDATE invalid value for spconfig_offset at ecu_data[%i][%i], ERROR\n"),(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset"));
 
 			}
 			if (GTK_IS_ENTRY(widget))
@@ -559,7 +561,7 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 					value += 0;
 					break;
 				default:
-					dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": update_widget()\n\t ODDFIRE_ANGLE_UPDATE invalid value for oddfire_offset at ecu_data[%i][%i], ERROR\n",(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset")));
+					MTXDBG(CRITICAL,_("ODDFIRE_ANGLE_UPDATE invalid value for oddfire_offset at ecu_data[%i][%i], ERROR\n"),(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset"));
 
 			}
 			if (GTK_IS_ENTRY(widget))
@@ -574,7 +576,7 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 			break;
 
 		default:
-			dbg_func_f(CRITICAL,g_strdup_printf(__FILE__": ecu_update_entry()\n\tERROR handler (%i) NOT found for widget %s, command aborted! BUG!!!\n",handler,glade_get_widget_name(widget)));
+			MTXDBG(CRITICAL,_("ERROR handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
 	}
 
 }
