@@ -2434,3 +2434,43 @@ G_MODULE_EXPORT void cancel_visible_function(GtkNotebook *notebook, GtkWidget *p
 	g_source_remove((GINT)data);
 	return;
 }
+
+
+G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gboolean in_table, gboolean force)
+{
+	static gint (*get_ecu_data_f)(gpointer) = NULL;
+	static Firmware_Details *firmware = NULL;
+	gfloat scaler = 0.0;
+	GdkColor color;
+	gint raw_lower = 0;
+	gint raw_upper = 0;
+	gint size = 0;
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!get_ecu_data_f)
+		get_symbol("get_ecu_data",(void *)&get_ecu_data_f);
+	g_return_if_fail(firmware);
+	g_return_if_fail(get_ecu_data_f);
+
+	if (in_table)
+	{
+		scaler = 256.0/(((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05)+0.1);
+		color = get_colors_from_hue(256.0 - (get_ecu_data_f(widget)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
+		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+	}
+	else if (force)
+	{
+		if (OBJ_GET(widget,"raw_lower"))
+			raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+		else
+			raw_lower = get_extreme_from_size(size,LOWER);
+		if (OBJ_GET(widget,"raw_upper"))
+			raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+		else
+			raw_upper = get_extreme_from_size(size,UPPER);
+		color = get_colors_from_hue(((gfloat)(get_ecu_data_f(widget)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
+		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
+	}
+}
+

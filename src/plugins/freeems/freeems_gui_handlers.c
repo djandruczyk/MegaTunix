@@ -205,7 +205,6 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gfloat scaler = 0.0;
 	gboolean temp_dep = FALSE;
 	gfloat real_value = 0.0;
-	gboolean use_color = FALSE;
 	DataSize size = 0;
 	gint raw_lower = 0;
 	gint raw_upper = 0;
@@ -350,15 +349,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
         gdk_threads_leave();
 
 	for (i=0;i<firmware->total_tables;i++)
-	{
 		recalc_table_limits_f(0,i);
-		/*
-		   if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
-		   firmware->table_params[i]->color_update = TRUE;
-		   else
-		   firmware->table_params[i]->color_update = FALSE;
-		 */
-	}
 
 	thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Ready...</b>")));
 	gdk_threads_enter();
@@ -586,27 +577,9 @@ void update_entry(GtkWidget *widget)
 			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
 
 		if (table_num >= 0)
-		{
-			scaler = 256.0/(((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05)+0.1);
-			color = get_colors_from_hue_f(256.0 - (get_ecu_data(widget)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
-			gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
-		}
+			update_entry_color_f(widget,table_num,TRUE,FALSE);
 		else
-		{
-			if ((changed) || (value == 0))
-			{
-				if (OBJ_GET(widget,"raw_lower"))
-					raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
-				else
-					raw_lower = get_extreme_from_size_f(size,LOWER);
-				if (OBJ_GET(widget,"raw_upper"))
-					raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
-				else
-					raw_upper = get_extreme_from_size_f(size,UPPER);
-				color = get_colors_from_hue_f(((gfloat)(get_ecu_data(widget)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
-				gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
-			}
-		}
+			update_entry_color_f(widget,0,FALSE,((changed) || (value == 0)));
 	}
 	if (OBJ_GET(widget,"not_sent"))
 	{

@@ -147,6 +147,7 @@ void update_sources_pf(void);
 void process_interdependancy(gpointer, gpointer);
 void process_source(gpointer, gpointer);
 void update_current_notebook_page(void);
+void update_entry_color(GtkWidget *, gint, gboolean, gboolean);
 /* Prototypes */
 
 #endif

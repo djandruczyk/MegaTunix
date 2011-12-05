@@ -184,42 +184,6 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	}
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-	/*
-	if (OBJ_GET(widget,"use_color"))
-	{
-		if (OBJ_GET(widget,"table_num"))
-			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
-		if (table_num >= 0)
-		{
-			if (firmware->table_params[table_num]->color_update == FALSE)
-			{
-				recalc_table_limits_f(canID,table_num);
-				if ((firmware->table_params[table_num]->last_z_maxval != firmware->table_params[table_num]->z_maxval) || (firmware->table_params[table_num]->last_z_minval != firmware->table_params[table_num]->z_minval))
-					firmware->table_params[table_num]->color_update = TRUE;
-				else
-					firmware->table_params[table_num]->color_update = FALSE;
-			}
-
-			scaler = 256.0/((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05);
-			color = get_colors_from_hue_f(256 - (dload_val - firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
-		}
-		else
-		{
-			if (OBJ_GET(widget,"raw_lower"))
-				raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
-			else
-				raw_lower = get_extreme_from_size_f(size,LOWER);
-			if (OBJ_GET(widget,"raw_upper"))
-				raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
-			else
-				raw_upper = get_extreme_from_size_f(size,UPPER);
-
-			color = get_colors_from_hue_f(((gfloat)(dload_val-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
-		}
-		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
-	}
-	*/
-
 	OBJ_SET(widget,"not_sent",GINT_TO_POINTER(FALSE));
 	return TRUE;
 }

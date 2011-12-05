@@ -122,6 +122,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("thread_widget_set_sensitive",(void *)&thread_widget_set_sensitive_f);
 	get_symbol_f("translate_string",(void *)&translate_string_f);
 	get_symbol_f("update_current_notebook_page",(void *)&update_current_notebook_page_f);
+	get_symbol_f("update_entry_color",(void *)&update_entry_color_f);
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
 	get_symbol_f("update_ve3d_if_necessary",(void *)&update_ve3d_if_necessary_f);
 	get_symbol_f("warn_user",(void *)&warn_user_f);
