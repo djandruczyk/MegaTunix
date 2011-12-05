@@ -221,7 +221,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	mult = get_multiplier_f(size);
 
 	multiplier = firmware->table_params[table]->x_fromecu_mult;
-	adder = firmware->table_params[table]->x_fromecu_mult;
+	adder = firmware->table_params[table]->x_fromecu_add;
 
 	/* fetch us a copy of the x bins */
 	for (i=0; i != firmware->table_params[table]->x_bincount; i++)
@@ -242,18 +242,18 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	mult = get_multiplier_f(size);
 
 	multiplier = firmware->table_params[table]->y_fromecu_mult;
-	adder = firmware->table_params[table]->y_fromecu_mult;
+	adder = firmware->table_params[table]->y_fromecu_add;
 
 	/* fetch us a copy of the y bins */
 	for (i=0; i != firmware->table_params[table]->y_bincount; i++)
 	{
 		raw = ms_get_ecu_data(canID, page, base+(i*mult), size);
 		if ((multiplier) && (adder))
-			x_bin[i] = (raw * (*multiplier)) + (*adder);
+			y_bin[i] = (raw * (*multiplier)) + (*adder);
 		else if (multiplier)
-			x_bin[i] = (raw * (*multiplier));
+			y_bin[i] = (raw * (*multiplier));
 		else
-			x_bin[i] = raw;
+			y_bin[i] = raw;
 	}
 
 	page = firmware->table_params[table]->z_page;

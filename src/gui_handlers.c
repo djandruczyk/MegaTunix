@@ -2474,3 +2474,48 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 	}
 }
 
+
+gboolean table_color_refresh(gpointer data)
+{
+	static Firmware_Details *firmware = NULL;
+	static GList ***ecu_widgets = NULL;
+	gint table_num = 0;
+	gint base = 0;
+	gint page = 0;
+	gint offset = 0;
+	gint length = 0;
+	gchar * tmpbuf = NULL;
+
+	if (!firmware)
+		firmware = DATA_GET(global_data,"firmware");
+	if (!ecu_widgets)
+		ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(ecu_widgets,FALSE);
+
+	table_num = (GINT)data;
+	tmpbuf = g_strdup_printf("table%i_color_id",table_num);
+	DATA_SET(global_data,tmpbuf,NULL);
+	g_free(tmpbuf);
+
+	base = firmware->table_params[table_num]->z_base;
+	length = firmware->table_params[table_num]->x_bincount *
+		firmware->table_params[table_num]->y_bincount;
+	page =  firmware->table_params[table_num]->z_page;
+	for (offset=base;offset<base+length;offset++)
+	{
+		if (DATA_GET(global_data,"leaving"))
+			return FALSE;
+		if (ecu_widgets[page][offset] != NULL)
+			g_list_foreach(ecu_widgets[page][offset],update_entry_color_wrapper,GINT_TO_POINTER(table_num));
+	}
+	return FALSE;
+}
+
+
+void update_entry_color_wrapper(gpointer object, gpointer data)
+{
+	GtkWidget *widget = (GtkWidget *)object;
+	gint table_num = (GINT)data;
+	update_entry_color(widget,table_num,TRUE,FALSE);
+}

@@ -656,6 +656,8 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
+	gint id = 0;
+	gchar * tmpbuf = NULL;
 	WriteMode mode = MTX_CMD_WRITE;
 	gint z = 0;
 	Firmware_Details *firmware = NULL;
@@ -680,7 +682,6 @@ G_MODULE_EXPORT void update_write_status(void *data)
 			memcpy(ecu_data[page]+offset, ecu_data_last[page]+offset,length);
 		}
 	}
-
 	if (output->queue_update)
 	{
 		for (i=0;i<firmware->total_tables;i++)
@@ -693,7 +694,13 @@ G_MODULE_EXPORT void update_write_status(void *data)
 				gdk_threads_leave();
 				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 				{
-					printf("color limits for table %i have changed, should rerender all widgets in that table, but not implemented yet\n",i);
+					tmpbuf = g_strdup_printf("table%i_color_id",i);
+					if (!DATA_GET(global_data,tmpbuf))
+					{
+						id = gdk_threads_add_timeout(200,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
+						DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
+					}
+					g_free(tmpbuf);
 				}
 			}
 		}

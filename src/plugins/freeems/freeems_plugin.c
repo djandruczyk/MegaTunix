@@ -100,6 +100,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("set_title",(void *)&set_title_f);
 	get_symbol_f("swap_labels",(void *)&swap_labels_f);
+	get_symbol_f("table_color_refresh",(void *)&table_color_refresh_f);
 	get_symbol_f("temp_to_ecu",(void *)&temp_to_ecu_f);
 	get_symbol_f("temp_to_host",(void *)&temp_to_host_f);
 

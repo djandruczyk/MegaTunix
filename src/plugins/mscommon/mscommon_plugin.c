@@ -102,6 +102,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("reverse_lookup",(void *)&reverse_lookup_f);
 	get_symbol_f("search_model",(void *)&search_model_f);
 	get_symbol_f("set_file_api",(void *)&set_file_api_f);
+	get_symbol_f("table_color_refresh",(void *)&table_color_refresh_f);
 	get_symbol_f("thread_set_group_color",(void *)&thread_set_group_color_f);
 	get_symbol_f("set_reqfuel_color",(void *)&set_reqfuel_color_f);
 	get_symbol_f("set_title",(void *)&set_title_f);
