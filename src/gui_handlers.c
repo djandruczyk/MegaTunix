@@ -1161,6 +1161,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		case GDK_H:
 		case GDK_h:
 		case GDK_KP_Left:
+		case GDK_Left:
 			if (active_table >= 0)
 			{
 				refocus_cell(widget,GO_LEFT);
@@ -1172,6 +1173,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		case GDK_L:
 		case GDK_l:
 		case GDK_KP_Right:
+		case GDK_Right:
 			if (active_table >= 0)
 			{
 				refocus_cell(widget,GO_RIGHT);
