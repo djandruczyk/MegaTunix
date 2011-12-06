@@ -697,7 +697,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 					tmpbuf = g_strdup_printf("table%i_color_id",i);
 					if (!DATA_GET(global_data,tmpbuf))
 					{
-						id = gdk_threads_add_timeout(750,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
+						id = gdk_threads_add_timeout(5000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
 						DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
 					}
 					g_free(tmpbuf);
