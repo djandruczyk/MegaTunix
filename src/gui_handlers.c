@@ -1185,6 +1185,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		case GDK_K:
 		case GDK_k:
 		case GDK_KP_Up:
+		case GDK_Up:
 			if (active_table >= 0)
 			{
 				refocus_cell(widget,GO_UP);
@@ -1196,6 +1197,7 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 		case GDK_J:
 		case GDK_j:
 		case GDK_KP_Down:
+		case GDK_Down:
 			if (active_table >= 0)
 			{
 				refocus_cell(widget,GO_DOWN);
