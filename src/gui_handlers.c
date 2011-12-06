@@ -1064,14 +1064,14 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 				if (value >= (lower+bigstep))
 					dload_val = value - bigstep;
 				else
-					return FALSE;
+					dload_val = lower;
 			}
 			else 
 			{
 				if (value <= (upper-bigstep))
 					dload_val = value + bigstep;
 				else
-					return FALSE;
+					dload_val = upper;
 			}
 			send = TRUE;
 			retval = TRUE;
@@ -1082,14 +1082,14 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 				if (value <= (upper-bigstep))
 					dload_val = value + bigstep;
 				else
-					return FALSE;
+					dload_val = upper;
 			}
 			else 
 			{
 				if (value >= (lower+bigstep))
 					dload_val = value - bigstep;
 				else
-					return FALSE;
+					dload_val = lower;
 			}
 			send = TRUE;
 			retval = TRUE;
@@ -1105,14 +1105,14 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 				if (value >= (lower+smallstep))
 					dload_val = value - smallstep;
 				else
-					return FALSE;
+					dload_val = lower;
 			}
 			else 
 			{
 				if (value <= (upper-smallstep))
 					dload_val = value + smallstep;
 				else
-					return FALSE;
+					dload_val = upper;
 			}
 			send = TRUE;
 			retval = TRUE;
@@ -1124,13 +1124,14 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 				if (value <= (upper-smallstep))
 					dload_val = value + smallstep;
 				else
-					return FALSE;
+					dload_val = upper;
 			}
 			else 
 			{
 				if (value >= (lower+smallstep))
 					dload_val = value - smallstep;
 				else
+					dload_val = lower;
 					return FALSE;
 			}
 			send = TRUE;
@@ -1145,14 +1146,14 @@ G_MODULE_EXPORT gboolean key_event(GtkWidget *widget, GdkEventKey *event, gpoint
 					if (value <= (upper-smallstep))
 						dload_val = value + smallstep;
 					else
-						return FALSE;
+						dload_val = upper;
 				}
 				else 
 				{
 					if (value >= (lower+smallstep))
 						dload_val = value - smallstep;
 					else
-						return FALSE;
+						dload_val = lower;
 				}
 				send = TRUE;
 				retval = TRUE;
