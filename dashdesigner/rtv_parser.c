@@ -142,6 +142,6 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 
 gint sort(gconstpointer a, gconstpointer b)
 {
-	return strcasecmp((gchar *)a, (gchar *)b);
+	return g_strcasecmp((gchar *)a, (gchar *)b);
 }
 

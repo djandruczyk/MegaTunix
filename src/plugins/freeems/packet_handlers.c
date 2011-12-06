@@ -272,7 +272,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	packet->payload_base_offset = tmpi;
 	packet->is_nack = ((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0;
 
-	if (getenv("PKT_DEBUG"))
+	if (g_getenv("PKT_DEBUG"))
 	{
 		printf("Full packet received, %i bytes!\n",packet->raw_length);
 		if (packet->is_nack)
@@ -623,7 +623,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		}
 	}
 
-	if (getenv("PKT_DEBUG"))
+	if (g_getenv("PKT_DEBUG"))
 	{
 		printf("build_output_message(): \n");
 		printf("Sequence number %i\n",seq_num);
@@ -709,7 +709,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	mtxlog_packet(buf,packet_length,TRUE);
 	pos++;
 
-	if (getenv("PKT_DEBUG"))
+	if (g_getenv("PKT_DEBUG"))
 	{
 		printf("RAW PACKET -> ");
 		for (i=0;i<packet_length;i++)

@@ -81,6 +81,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("get_multiplier",(void *)&get_multiplier_f);
 	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
 	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
+	get_symbol_f("insert_text_handler",(void *)&insert_text_handler_f);
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
 	get_symbol_f("jump_to_tab",(void *)&jump_to_tab_f);
@@ -99,6 +100,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("set_widget_labels",(void *)&set_widget_labels_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
 	get_symbol_f("set_title",(void *)&set_title_f);
+	get_symbol_f("std_entry_handler",(void *)&std_entry_handler_f);
 	get_symbol_f("swap_labels",(void *)&swap_labels_f);
 	get_symbol_f("table_color_refresh",(void *)&table_color_refresh_f);
 	get_symbol_f("temp_to_ecu",(void *)&temp_to_ecu_f);

@@ -229,13 +229,15 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	if ((tmpf != (gfloat)tmpi) && (precision == 0))
 	{
 		/* Pause signals while we change the value */
-		g_signal_handlers_block_by_func (widget,(gpointer)std_entry_handler_f, data);
-		g_signal_handlers_block_by_func (widget,(gpointer)entry_changed_handler_f, data);
+		g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler_f,data);
+		g_signal_handlers_block_by_func(widget,(gpointer)std_entry_handler_f, data);
+		g_signal_handlers_block_by_func(widget,(gpointer)entry_changed_handler_f, data);
 		tmpbuf = g_strdup_printf("%i",tmpi);
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 		g_free(tmpbuf);
-		g_signal_handlers_unblock_by_func (widget,(gpointer)entry_changed_handler_f, data);
-		g_signal_handlers_unblock_by_func (widget,(gpointer)std_entry_handler_f, data);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)entry_changed_handler_f, data);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)std_entry_handler_f, data);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler_f,data);
 	}
 	switch (handler)
 	{
@@ -246,13 +248,15 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			else
 				value = tmpf;
 			dload_val = convert_before_download_f(widget,value);
-			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
-			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);
+			g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler_f,data);
+			g_signal_handlers_block_by_func(widget,(gpointer) std_entry_handler_f, data);
+			g_signal_handlers_block_by_func(widget,(gpointer) entry_changed_handler_f, data);
 			tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)dload_val,precision);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
-			g_signal_handlers_unblock_by_func (widget,(gpointer) entry_changed_handler_f, data);
-			g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,(gpointer) entry_changed_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,(gpointer) std_entry_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler_f,data);
 			break;
 
 		case GENERIC:
@@ -267,8 +271,9 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			 * if the user inputs something in between,  thus 
 			 * we can reset the display to a sane value...
 			 */
-			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
-			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);
+			g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler_f,data);
+			g_signal_handlers_block_by_func(widget,(gpointer)std_entry_handler_f, data);
+			g_signal_handlers_block_by_func(widget,(gpointer)entry_changed_handler_f, data);
 			old = get_ecu_data(widget);
 			set_ecu_data(widget,&dload_val);
 
@@ -282,8 +287,9 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
-			g_signal_handlers_unblock_by_func (widget,(gpointer) entry_changed_handler_f, data);
-			g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,(gpointer)entry_changed_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,(gpointer)std_entry_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler_f,data);
 			break;
 		default:
 			/* We need to fall to ECU SPECIFIC entry handler for 
@@ -364,10 +370,10 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
   \brief This function handles caling the appropriate update function
   based on the widget type.
   \param object is the pointer to the widget in question
-  \param user_data is a pointer to verify we don't do duplicate updates and
+  \param data is a pointer to verify we don't do duplicate updates and
   allows us to break out of a recursive loop
   */
-G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
+G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 {
 	static gint upd_count = 0;
 	static void (*insert_text_handler)(GtkEntry *, const gchar *, gint, gint *, gpointer);
@@ -387,7 +393,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	/* If passed widget and user data are identical,  break out as
 	 * we already updated the widget.
 	 */
-	if ((GTK_IS_WIDGET(user_data)) && (widget == user_data))
+	if ((GTK_IS_WIDGET(data)) && (widget == data))
 		return;
 
 	upd_count++;
@@ -422,13 +428,13 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 
 	if (GTK_IS_ENTRY(widget) || GTK_IS_SPIN_BUTTON(widget))
 	{
-		g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler,NULL);
-		g_signal_handlers_block_by_func(widget,(gpointer)std_entry_handler,NULL);
-		g_signal_handlers_block_by_func(widget,(gpointer)entry_changed_handler,NULL);
+		g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler_f,NULL);
+		g_signal_handlers_block_by_func(widget,(gpointer)std_entry_handler_f,NULL);
+		g_signal_handlers_block_by_func(widget,(gpointer)entry_changed_handler_f,NULL);
 		update_entry(widget);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)entry_changed_handler,NULL);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)std_entry_handler,NULL);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler,NULL);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)entry_changed_handler_f,NULL);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)std_entry_handler_f,NULL);
+		g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler_f,NULL);
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
 		update_combo(widget);
