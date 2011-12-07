@@ -1064,8 +1064,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[1]->x_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[1]->y_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[1]->z_fromecu_mult = g_new0(gfloat, 1);
-	firmware->table_params[1]->z_raw_lower = 22222;
-	firmware->table_params[1]->z_raw_upper = 44444;
+	firmware->table_params[1]->z_raw_lower = 22282;
+	firmware->table_params[1]->z_raw_upper = 44565;
 	*(firmware->table_params[1]->x_fromecu_mult) = 0.5;
 	*(firmware->table_params[1]->y_fromecu_mult) = 0.01;
 	*(firmware->table_params[1]->z_fromecu_mult) = 0.000030518;
