@@ -37,13 +37,15 @@ use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the Lambda Table define the vertexes (points on the Lambda Table map).  The ECU will interpolate between vertexes providing a smooth transition between points on the Lambda Table map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [lambda_1]
-keys=page,size,use_color,precision,table_num,fromecu_mult,tooltip
+keys=page,size,use_color,raw_lower,raw_upper,precision,table_num,fromecu_mult,tooltip
 page=6
 size=_U16_
 table_num=1
 use_color=TRUE
 fromecu_mult=0.000030518
 precision=2
+raw_upper=44444
+raw_lower=22222
 _tooltip=Integral tuned lambda value. Adjust this and VE until the numbers here match the EGO readings. Once VE is tuned, a change in lambda only requires a change to this table.
 
 #----- Labels ----------------------------------------------------------------
