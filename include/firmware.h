@@ -200,6 +200,8 @@ struct _Table_Params
 	DataSize reqfuel_size;	/*!< Size of variable, (ms2 uses larger) */
 	gint x_page;		/*!< what page the rpm (X axis) resides in */
 	gint x_base;		/*!< where rpm table starts (X axis) */
+	gint x_raw_lower;	/*!< Raw lower value Limit */
+	gint x_raw_upper;	/*!< Raw upper value Limit */
 	DataSize x_size;	/*!< enumeration size for the var */
 	gint x_bincount;	/*!< how many RPM bins (X axis) */
 	gchar *table_name;	/*!< Name for the 3D Table editor title */
@@ -230,6 +232,8 @@ struct _Table_Params
 
 	gint y_page;		/*!< what page the load (Y axis) resides in */
 	gint y_base;		/*!< where load table starts  (Y Axis) */
+	gint y_raw_lower;	/*!< Raw lower value Limit */
+	gint y_raw_upper;	/*!< Raw upper value Limit */
 	DataSize y_size;	/*!< enumeration size for the var */
 	gint y_bincount;	/*!< how many load bins (Y axis) */
 	gboolean y_multi_source;/*!< uses multiple keyed sources? */
@@ -257,6 +261,8 @@ struct _Table_Params
 
 	gint z_page;		/*!< what page the vetable resides in */
 	gint z_base;		/*!< where the vetable starts */
+	gint z_raw_lower;	/*!< Raw lower value Limit */
+	gint z_raw_upper;	/*!< Raw upper value Limit */
 	DataSize z_size;	/*!< enumeration size for the var */
 	gboolean z_multi_source;/*!< uses multiple keyed sources? */
 	gchar *z_source_key;	/*!< text name of variable we find to determine

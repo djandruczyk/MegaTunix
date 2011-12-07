@@ -10220,7 +10220,7 @@ msgstr "MegaTunix Salir, sí / no?"
 
 #: ../src/gui_handlers.c:1686
 msgid "Are you sure you want to quit?"
-msgstr "¿Estás seguro de que desea dejar de fumar?"
+msgstr "¿Seguro que quieres salir?"
 
 #: ../src/gui_handlers.c:1915
 #, c-format
