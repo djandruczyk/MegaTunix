@@ -315,6 +315,8 @@ z_size=_S16_
 z_source=sparkangle
 z_suffix=deg
 z_fromecu_mult=0.1
+z_raw_lower=-100
+z_raw_upper=900
 z_precision=1
 
 [table_7]
@@ -344,6 +346,8 @@ z_size=_S16_
 z_source=sparkangle
 z_suffix=deg
 z_fromecu_mult=0.1
+z_raw_lower=-100
+z_raw_upper=900
 z_precision=1
 
 [table_8]
@@ -372,6 +376,8 @@ z_size=_S16_
 z_source=sparkangle
 z_suffix=deg
 z_fromecu_mult=0.1
+z_raw_lower=-100
+z_raw_upper=900
 z_precision=1
 
 [table_9]
@@ -544,7 +550,7 @@ z_size=_S16_
 z_source=
 z_suffix=(deg)
 z_fromecu_mult=0.1
-z_raw_lower=-1.1.003600
+z_raw_lower=-3600
 z_raw_upper=7200
 z_precision=1
 
@@ -641,8 +647,6 @@ z_source=
 z_suffix=(%)
 z_fromecu_mult=0.09765625
 fromecu_add=1024
-z_raw_lower=-128
-z_raw_upper=127
 z_precision=1
 
 [table_18]
@@ -674,8 +678,6 @@ z_source=
 z_suffix=(%)
 z_fromecu_mult=0.09765625
 fromecu_add=1024
-z_raw_lower=-128
-z_raw_upper=127
 z_precision=1
 
 [table_19]
@@ -707,8 +709,6 @@ z_source=
 z_suffix=(%)
 z_fromecu_mult=0.09765625
 fromecu_add=1024
-z_raw_lower=-128
-z_raw_upper=127
 z_precision=1
 
 [table_20]
@@ -740,8 +740,6 @@ z_source=
 z_suffix=(%)
 z_fromecu_mult=0.09765625
 fromecu_add=1024
-z_raw_lower=-128
-z_raw_upper=127
 z_precision=1
 
 [table_21]

@@ -306,6 +306,8 @@ z_size=_S16_
 z_source=sparkangle
 z_suffix=deg
 z_fromecu_mult=0.1
+z_raw_lower=-100
+z_raw_upper=900
 z_precision=1
 
 [table_7]
@@ -333,6 +335,8 @@ z_size=_S16_
 z_source=sparkangle
 z_suffix=deg
 z_fromecu_mult=0.1
+z_raw_lower=-100
+z_raw_upper=900
 z_precision=1
 
 [table_8]
@@ -360,6 +364,8 @@ z_size=_S16_
 z_source=sparkangle
 z_suffix=deg
 z_fromecu_mult=0.1
+z_raw_lower=-100
+z_raw_upper=900
 z_precision=1
 
 [table_9]

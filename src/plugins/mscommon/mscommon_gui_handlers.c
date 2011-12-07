@@ -68,7 +68,6 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gint spconfig_offset = -1;
 	gint oddfire_bit_offset = -1;
 	gint mtx_temp_units = 0;
-	gfloat scaler = 0.0;
 	gboolean temp_dep = FALSE;
 	gfloat real_value = 0.0;
 	DataSize size = 0;
@@ -834,7 +833,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	}
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		recalc_table_limits_f(0,i);
+		//recalc_table_limits_f(0,i);
 		if (firmware->table_params[i]->reqfuel_offset < 0)
 			continue;
 
@@ -1331,7 +1330,6 @@ void update_entry(GtkWidget *widget)
 	gint handler = -1;
 	gchar * widget_text = NULL;
 	gchar * tmpbuf = NULL;
-	gfloat scaler = 0.0;
 	gdouble value = 0.0;
 	gint raw_lower = 0;
 	gint raw_upper = 0;

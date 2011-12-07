@@ -684,9 +684,10 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	}
 	if (output->queue_update)
 	{
+		/*
 		for (i=0;i<firmware->total_tables;i++)
 		{
-			/* This at least only recalcs the limits on one... */
+			// This at least only recalcs the limits on one... 
 			if (firmware->table_params[i]->z_page == page)
 			{
 				gdk_threads_enter();
@@ -704,6 +705,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 				}
 			}
 		}
+		*/
 
 		if (mode == MTX_CHUNK_WRITE)
 			thread_refresh_widget_range_f(page,offset,length);

@@ -157,6 +157,8 @@ z_size=_S16_
 z_source=sparkangle
 z_suffix=deg
 z_fromecu_mult=0.1
+z_raw_lower=-100
+z_raw_upper=900
 z_precision=1
 
 [table_3]
@@ -248,6 +250,8 @@ z_size=_S16_
 z_source=calcMAP
 z_suffix=kPa
 z_fromecu_mult=0.1
+z_raw_lower=0
+z_raw_upper=2000
 z_precision=1
 
 [te_table_0]

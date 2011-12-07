@@ -156,6 +156,8 @@ struct _Ve_View_3D
 	DataSize y_size;	/*!< Y variable size (8,16,32 signed/unsigned)*/
 	gint z_base;		/*!< Z base offset */
 	gint z_page;		/*!< Z page */
+	gint z_raw_lower;	/*!< Raw low Z value */
+	gint z_raw_upper;	/*!< Raw upper Z value */
 	DataSize z_size;	/*!< Z variable size (8,16,32 signed/unsigned)*/
 	gchar *table_name;	/*!< Table name */
 	gint table_num;		/*!< Table number */

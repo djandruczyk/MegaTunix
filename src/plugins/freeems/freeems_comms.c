@@ -840,6 +840,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 
 	if (output->queue_update)
 	{
+		/*
 		for (i=0;i<firmware->total_tables;i++)
 		{
 			if (firmware->table_params[i]->z_page == page)
@@ -859,6 +860,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 				}
 			}
 		}
+		*/
 		thread_refresh_widget_range_f(page,offset,length);
 
 	}
