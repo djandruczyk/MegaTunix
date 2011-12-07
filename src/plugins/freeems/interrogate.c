@@ -1033,6 +1033,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->x_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[0]->y_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[0]->z_fromecu_mult = g_new0(gfloat, 1);
+	firmware->table_params[0]->z_raw_lower = 0;
+	firmware->table_params[0]->z_raw_upper = 65535;
 	*(firmware->table_params[0]->x_fromecu_mult) = 0.5;
 	*(firmware->table_params[0]->y_fromecu_mult) = 0.01;
 	*(firmware->table_params[0]->z_fromecu_mult) = 0.001953125;
@@ -1062,6 +1064,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[1]->x_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[1]->y_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[1]->z_fromecu_mult = g_new0(gfloat, 1);
+	firmware->table_params[1]->z_raw_lower = 0;
+	firmware->table_params[1]->z_raw_upper = 65535;
 	*(firmware->table_params[1]->x_fromecu_mult) = 0.5;
 	*(firmware->table_params[1]->y_fromecu_mult) = 0.01;
 	*(firmware->table_params[1]->z_fromecu_mult) = 0.000030518;
@@ -1092,6 +1096,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[2]->x_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[2]->y_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[2]->z_fromecu_mult = g_new0(gfloat, 1);
+	firmware->table_params[2]->z_raw_lower = 0;
+	firmware->table_params[2]->z_raw_upper = 65535;
 	*(firmware->table_params[2]->x_fromecu_mult) = 0.5;
 	*(firmware->table_params[2]->y_fromecu_mult) = 0.01;
 	*(firmware->table_params[2]->z_fromecu_mult) = 0.000976563;

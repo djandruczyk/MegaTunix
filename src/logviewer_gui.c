@@ -697,8 +697,10 @@ G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 
 	/*printf("get_color_from_hue count %i\n",count); */
 
-	while (hue >= 360.0)
+	hue = (gint)hue % 360;
+/*	while (hue >= 360.0)
 		hue -= 360.0;
+		*/
 	while (hue < 0.0)
 		hue += 360.0;
 	tmp = hue/60.0;
