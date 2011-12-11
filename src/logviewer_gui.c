@@ -1132,7 +1132,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			v_value->last_y = (GINT)((percent*(h-2))+1);
 
 		/* If watching at the edge (full realtime) */
-		if (log_pos == 100)
+		if (log_pos >= 100)
 		{
 			v_value->last_index = array->len-1;
 			percent = 1.0-(val/(float)(v_value->upper-v_value->lower));

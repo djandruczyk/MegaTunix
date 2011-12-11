@@ -428,6 +428,8 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				DATA_SET(global_data,"log_raw_datastream",GINT_TO_POINTER(FALSE));
 				close_binary_logs();
 				break;
+			case TOGGLE_FIXED_COLOR_SCALE:
+			case TOGGLE_AUTO_COLOR_SCALE:
 			case TOGGLE_FAHRENHEIT:
 			case TOGGLE_CELSIUS:
 			case TOGGLE_KELVIN:

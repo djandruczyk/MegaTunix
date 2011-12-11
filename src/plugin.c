@@ -37,7 +37,7 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void plugins_init()
 {
-	GModule *module[3] = {NULL,NULL,NULL};
+	GModule *module[NUM_MODULES] = {NULL,NULL,NULL};
 	GThread *id = NULL;
 #ifdef __WIN32__
 	gchar * libname = NULL;
@@ -50,7 +50,7 @@ G_MODULE_EXPORT void plugins_init()
 	module[MAIN] = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module[MAIN])
 		MTXDBG(CRITICAL,_("Unable to call g_module_open for MegaTunix itself, error: %s\n"),g_module_error());
-	DATA_SET_FULL(global_data,"megatunix_module",(gpointer)module[0],g_module_close);
+	DATA_SET_FULL(global_data,"megatunix_module",(gpointer)module[MAIN],g_module_close);
 
 	/* Common Library */
 	if (DATA_GET(global_data,"common_lib"))
@@ -162,7 +162,7 @@ G_MODULE_EXPORT void plugins_shutdown()
   */
 G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 {
-	GModule *module[3] = {NULL,NULL,NULL};
+	GModule *module[NUM_MODULES] = {NULL,NULL,NULL};
 	ModIndex i = MAIN;
 	gboolean found = FALSE;
 	extern gconstpointer *global_data;
