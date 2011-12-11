@@ -7,11 +7,9 @@ groups=defaults
 #----- Groups ----------------------------------------------------------------
 
 [defaults]
-keys=page,handler,size,raw_lower,raw_upper,dl_type,handler
+keys=page,handler,size,dl_type,handler
 page=0
 size=_U08_
-raw_lower=0
-raw_upper=255
 dl_type=_IGNORED_
 handler=_NOOP_
 
@@ -55,95 +53,76 @@ warning=foreground,red
 #----- Entries ---------------------------------------------------------------
 
 [events_per_cycle_entry]
-keys=size,raw_lower,tooltip
-size=_U08_
+keys=raw_lower,tooltip
 raw_lower=1
-raw_upper=255
 tooltip=Events per cycle (1-255 range)
 
 [cycles_entry]
-keys=size,raw_lower,raw_upper,tooltip
+keys=size,raw_lower,tooltip
 size=_U16_
 raw_lower=1
-raw_upper=65535
 tooltip=Number of cycles to run (1-65535 range)
 
 [time_per_event_entry]
-keys=size,raw_lower,raw_upper,tooltip
+keys=size,tooltip
 size=_U16_
-raw_lower=0
-raw_upper=65535
 tooltip=Time per event in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [events_to_fire_from_entry1]
-keys=size,tooltip
-size=_U08_
+keys=tooltip
 tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry2]
-keys=size,tooltip
-size=_U08_
+keys=tooltip
 tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry3]
-keys=size,tooltip
-size=_U08_
+keys=tooltip
 tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry4]
-keys=size,tooltip
-size=_U08_
+keys=tooltip
 tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry5]
-keys=size,tooltip
-size=_U08_
+keys=tooltip
 tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [events_to_fire_from_entry6]
-keys=size,tooltip
-size=_U08_
+keys=tooltip
 tooltip=Should be less than Events per Cycle, equal to or greater than means off.
 
 [pw_source_entry1]
-keys=size,raw_upper,tooltip
+keys=size,tooltip
 size=_U16_
-raw_upper=65535
 tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry2]
-keys=size,raw_upper,tooltip
+keys=size,tooltip
 size=_U16_
-raw_upper=65535
 tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry3]
-keys=size,raw_upper,tooltip
+keys=size,tooltip
 size=_U16_
-raw_upper=65535
 tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry4]
-keys=size,raw_upper,tooltip
+keys=size,tooltip
 size=_U16_
-raw_upper=65535
 tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry5]
-keys=size,raw_upper,tooltip
+keys=size,tooltip
 size=_U16_
-raw_upper=65535
 tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [pw_source_entry6]
-keys=size,raw_upper,tooltip
+keys=size,tooltip
 size=_U16_
-raw_upper=65535
 tooltip=0 means OFF, 1 means use RefPW, 2 means use Dwell, above some arbitrary value this is a literal PW in 0.8us ticks (divide by 1250 for milliseconds, 0-65535 range)
 
 [bump_entry]
-keys=size,raw_upper,tooltip
-size=_U08_
-raw_upper=255
+keys=tooltip
 tooltip=0 means error, Any value from 1-255 is the new number of cycles to append to the running test.  The clock should update accordingly.
 

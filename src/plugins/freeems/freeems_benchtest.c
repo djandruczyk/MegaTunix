@@ -42,11 +42,10 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	gint tmit_len = 0;
 	gint len = 0;
 	gint base = 0;
-	gint clock = 0;
+	guint64 clock = 0;
 	guint8 byte = 0;
 	gint i = 0;
 	gint seq = 69;
-	guint8 *buf = NULL;
 	GByteArray *payload;
 	Bt_Data data;
 
@@ -58,7 +57,10 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 		DATA_SET(global_data,"benchtest_clock_id",NULL);
 	}
 	
-	clock = (data.events_per_cycle*data.cycles*data.ticks_per_event)/1250;
+	clock = data.events_per_cycle;
+	clock *= data.cycles;
+	clock *= data.ticks_per_event;
+	clock /= 1250;
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x01 */
 	byte = 1;
@@ -87,7 +89,7 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 		g_byte_array_append(payload,&byte,1);
 	}
 	output = initialize_outputdata_f();
-	DATA_SET(output->data,"clock",GINT_TO_POINTER(clock));
+	DATA_SET(output->data,"clock",GINT_TO_POINTER((gint)clock));
 	DATA_SET(output->data,"start",GINT_TO_POINTER(TRUE));
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
@@ -113,7 +115,6 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	guint8 byte = 0;
 	gint i = 0;
 	gint seq = 70;
-	guint8 *buf = NULL;
 	GByteArray *payload;
 
 	DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(0));
@@ -158,9 +159,8 @@ G_MODULE_EXPORT void benchtest_bump(void)
 	FreeEMS_Packet *packet = NULL;
 	guint8 byte = 0;
 	gint seq = 71;
-	gint addition = 0;
+	guint64 addition = 0;
 	guint8 bump = 0;
-	guint8 *buf = NULL;
 	GByteArray *payload = NULL;
 	Bt_Data data;
 	gchar * text = NULL;
@@ -168,9 +168,12 @@ G_MODULE_EXPORT void benchtest_bump(void)
 	pull_data_from_gui(&data);
 
         text = gtk_editable_get_chars(GTK_EDITABLE(lookup_widget_f("BTest_bump_entry")),0,-1);
-	bump = (guint8)g_strtod(text,NULL);
+	bump = (guint16)g_strtod(text,NULL);
 	g_free(text);
-	addition = (data.events_per_cycle*bump*data.ticks_per_event)/1250;
+	addition = data.events_per_cycle;
+	addition *= bump;
+	addition *= data.ticks_per_event;
+	addition /= 1250;
 
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x02 to bump */
@@ -180,7 +183,7 @@ G_MODULE_EXPORT void benchtest_bump(void)
 	g_byte_array_append(payload,&bump,1);
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"bump",GINT_TO_POINTER(TRUE));
-	DATA_SET(output->data,"clock",GINT_TO_POINTER(addition));
+	DATA_SET(output->data,"clock",GINT_TO_POINTER((gint)addition));
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_BENCH_TEST_DATA));
 	DATA_SET_FULL(output->data,"payload_data_array",payload,g_byte_array_unref);
@@ -188,7 +191,6 @@ G_MODULE_EXPORT void benchtest_bump(void)
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("benchtest_pkt",output);
-	thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock)...\n"),addition/1000.0),FALSE,FALSE);
 
 	return;
 }

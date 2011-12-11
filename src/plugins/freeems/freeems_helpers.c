@@ -304,7 +304,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					/* If bumping, increase the total time */
 					if (DATA_GET(output->data,"bump"))
 					{
-					        thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock)...\n"),clock/1000.0),FALSE,FALSE);
+					        thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock, Total time remaining is now %.2f seconds\n"),clock/1000.0, ((GINT)DATA_GET(global_data,"benchtest_total")+clock)/1000.0),FALSE,FALSE);
 						DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(((GINT)DATA_GET(global_data,"benchtest_total")+clock)));
 					}
 					else if (DATA_GET(output->data, "start")) /* start */
