@@ -299,8 +299,14 @@ typedef enum
 
 typedef enum 
 {
-	FROMECU=0xffaa,
+	FROMECU=0xffa0,
 	TOECU
 }ConvDir;
+
+typedef enum 
+{
+	FIXED_COLOR_SCALE=0xffb0,
+	AUTO_COLOR_SCALE
+}ColorScale;
 
 #endif

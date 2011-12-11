@@ -181,10 +181,12 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	GdkPixbuf *pixbuf = NULL;
 	gchar * tmpbuf = NULL;
 	gint mtx_temp_units;
+	gint mtx_color_scale;
 	Serial_Params *serial_params = NULL;
 
 	serial_params = DATA_GET(global_data,"serial_params");
 	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
+	mtx_color_scale = (GINT)DATA_GET(global_data,"mtx_color_scale");
 
 	widget = glade_xml_get_widget(xml,"toplevel_notebook");
 	register_widget("toplevel_notebook",widget);
@@ -222,6 +224,17 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	button = glade_xml_get_widget(xml,"log_raw_cbutton");
 	OBJ_SET(button,"handler",GINT_TO_POINTER(LOG_RAW_DATASTREAM));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(global_data,"log_raw_datastream"));
+
+	/* General Tab, Color Scaling */
+	button = glade_xml_get_widget(xml,"fixed_color_rbutton");
+	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_FIXED_COLOR_SCALE));
+	if (mtx_color_scale == FIXED_COLOR_SCALE)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+
+	button = glade_xml_get_widget(xml,"auto_color_rbutton");
+	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_AUTO_COLOR_SCALE));
+	if (mtx_color_scale == AUTO_COLOR_SCALE)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	/* General Tab, Temp Scales */
 	button = glade_xml_get_widget(xml,"fahrenheit_rbutton");

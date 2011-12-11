@@ -3040,6 +3040,9 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gint z_base = 0;
 	gfloat scaler = 0.0;
 	gint canID = 0;
+	gint color_scale = 0;
+	gint tmpi = 0;
+	gfloat low = 0.0;
 	Quad * quad = NULL;
 	GObject *z_container = NULL;
 	Firmware_Details *firmware = NULL;
@@ -3066,7 +3069,6 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	ve_view->z_minval=100000;
 	ve_view->z_maxval=0;
 	/* Draw QUAD MESH into stored grid (Calc'd once*/
-	/*
 	for(y=0;y<ve_view->x_bincount*ve_view->y_bincount;++y)
 	{
 		OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(y*z_mult)));
@@ -3081,10 +3083,21 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		ve_view->z_minval-=10;
 		ve_view->z_maxval+=10;
 	}
-	*/
 	/*printf("min %i, max %i\n",ve_view->z_minval,ve_view->z_maxval);*/
 	/*scaler = (256.0/(((ve_view->z_maxval-ve_view->z_minval)*1.05)+0.1));*/
-	scaler = (ve_view->z_raw_upper-ve_view->z_raw_lower)+0.1;
+	color_scale = (GINT)DATA_GET(global_data,"mtx_color_scale");
+	if (color_scale == FIXED_COLOR_SCALE)
+	{
+		scaler = (ve_view->z_raw_upper-ve_view->z_raw_lower)+0.1;
+		low = ve_view->z_raw_lower;
+	}
+	else if (color_scale == AUTO_COLOR_SCALE)
+	{
+		scaler = (ve_view->z_maxval-ve_view->z_minval)+0.1;
+		low = ve_view->z_minval;
+	}
+	else
+		MTXDBG(CRITICAL,_("mtx_color_scale value is undefined (%i)\n"),color_scale);
 	for(y=0;y<ve_view->y_bincount-1;++y)
 	{
 		for(x=0;x<ve_view->x_bincount-1;++x)
@@ -3098,28 +3111,28 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x)*z_mult)));
 				//quad->color[0] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
-				quad->color[0] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler)+135),0.75, 1.0);
+				quad->color[0] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[1] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x+1)*z_mult)));
 				//quad->color[1] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
-				quad->color[1] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler)+135),0.75, 1.0);
+				quad->color[1] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[2] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult)));
 				//quad->color[2] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
-				quad->color[2] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler)+135),0.75, 1.0);
+				quad->color[2] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[3] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult)));
 				//quad->color[3] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
-				quad->color[3] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler)+135),0.75, 1.0);
+				quad->color[3] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 			}
 			else
 			{
@@ -3129,28 +3142,28 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x)*z_mult)));
 				//quad->color[0] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
-				quad->color[0] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler)+135),0.75, 1.0);
+				quad->color[0] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[1] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x+1)*z_mult)));
 				//quad->color[1] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
-				quad->color[1] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler)+135),0.75, 1.0);
+				quad->color[1] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[2] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult)));
 				//quad->color[2] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
-				quad->color[2] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler)+135),0.75, 1.0);
+				quad->color[2] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[3] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult)));
 				//quad->color[3] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
-				quad->color[3] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler)+135),0.75, 1.0);
+				quad->color[3] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 			}
 		}
 	}

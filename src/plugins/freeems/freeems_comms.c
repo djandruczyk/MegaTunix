@@ -840,27 +840,28 @@ G_MODULE_EXPORT void update_write_status(void *data)
 
 	if (output->queue_update)
 	{
-		/*
-		for (i=0;i<firmware->total_tables;i++)
-		{
-			if (firmware->table_params[i]->z_page == page)
+		if ((GINT)DATA_GET(global_data,"mtx_color_scale") == AUTO_COLOR_SCALE)
+		{	
+			for (i=0;i<firmware->total_tables;i++)
 			{
-				gdk_threads_enter();
-				recalc_table_limits_f(canID,i);
-				gdk_threads_leave();
-				if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+				if (firmware->table_params[i]->z_page == page)
 				{
-					tmpbuf = g_strdup_printf("table%i_color_id",i);
-					if (!DATA_GET(global_data,tmpbuf))
+					gdk_threads_enter();
+					recalc_table_limits_f(canID,i);
+					gdk_threads_leave();
+					if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 					{
-						id = gdk_threads_add_timeout(7500,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
-						DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
+						tmpbuf = g_strdup_printf("table%i_color_id",i);
+						if (!DATA_GET(global_data,tmpbuf))
+						{
+							id = gdk_threads_add_timeout(7500,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
+							DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
+						}
+						g_free(tmpbuf);
 					}
-					g_free(tmpbuf);
 				}
 			}
 		}
-		*/
 		thread_refresh_widget_range_f(page,offset,length);
 
 	}

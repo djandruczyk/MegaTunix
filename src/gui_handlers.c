@@ -348,6 +348,12 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				DATA_SET(global_data,"log_raw_datastream",GINT_TO_POINTER(TRUE));
 				open_binary_logs();
 				break;
+			case TOGGLE_FIXED_COLOR_SCALE:
+				DATA_SET(global_data,"mtx_color_scale",GINT_TO_POINTER(FIXED_COLOR_SCALE));
+				break;
+			case TOGGLE_AUTO_COLOR_SCALE:
+				DATA_SET(global_data,"mtx_color_scale",GINT_TO_POINTER(AUTO_COLOR_SCALE));
+				break;
 			case TOGGLE_FAHRENHEIT:
 				DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(FAHRENHEIT));
 				reset_temps(GINT_TO_POINTER(FAHRENHEIT));
@@ -2449,6 +2455,8 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 	gint raw_lower = 0;
 	gint raw_upper = 0;
 	gint size = 0;
+	gint low = 0;
+	gint color_scale;
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
@@ -2459,10 +2467,21 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 
 	if (in_table)
 	{
-		//scaler = 256.0/(((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05)+0.1);
-		//color = get_colors_from_hue(256.0 - (get_ecu_data_f(widget)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
-		scaler = (firmware->table_params[table_num]->z_raw_upper - firmware->table_params[table_num]->z_raw_lower)+0.1;
-		color = get_colors_from_hue(-(220*((get_ecu_data_f(widget)-firmware->table_params[table_num]->z_raw_lower)/scaler)+135), 0.50, 1.0);
+		color_scale = (GINT)DATA_GET(global_data,"mtx_color_scale");
+		if (color_scale == FIXED_COLOR_SCALE)
+		{
+			scaler = (firmware->table_params[table_num]->z_raw_upper - firmware->table_params[table_num]->z_raw_lower)+0.1;
+			low = firmware->table_params[table_num]->z_raw_lower;
+		}
+		else if (color_scale == AUTO_COLOR_SCALE)
+		{
+			scaler = (firmware->table_params[table_num]->z_maxval-firmware->table_params[table_num]->z_minval)+0.1;
+			scaler = (firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)+0.1;
+			low = firmware->table_params[table_num]->z_minval;
+		}
+		else
+			MTXDBG(CRITICAL,_("mtx_color_scale value is undefined (%i)\n"),color_scale);
+		color = get_colors_from_hue(-(220*((get_ecu_data_f(widget)-low)/scaler)+135), 0.50, 1.0);
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 	}
 	else if (force)
@@ -2475,7 +2494,8 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 			raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 		else
 			raw_upper = get_extreme_from_size(size,UPPER);
-		color = get_colors_from_hue(((gfloat)(get_ecu_data_f(widget)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
+		color = get_colors_from_hue(-(220*((get_ecu_data_f(widget)-firmware->table_params[table_num]->z_raw_lower)/scaler)+135), 0.50, 1.0);
+		//color = get_colors_from_hue(((gfloat)(get_ecu_data_f(widget)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 	}
 }

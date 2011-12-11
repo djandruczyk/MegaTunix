@@ -86,6 +86,7 @@ G_MODULE_EXPORT void init(void)
 	DATA_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));	/* Disallow network connections by default */
 	DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
 	DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(FAHRENHEIT));/* Use SAE units by default */
+	DATA_SET(global_data,"mtx_color_scale",GINT_TO_POINTER(AUTO_COLOR_SCALE));/* Use automatic color units by default */
 	DATA_SET(global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
 	DATA_SET(global_data,"status_width",GINT_TO_POINTER(130));
 	DATA_SET(global_data,"status_height",GINT_TO_POINTER(386));
@@ -205,6 +206,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 		}
 		if(cfg_read_int(cfgfile, "Global", "Temp_Units", &tmpi))
 			DATA_SET(global_data,"mtx_temp_units",GINT_TO_POINTER(tmpi));
+		if(cfg_read_int(cfgfile, "Global", "Color_Scaling", &tmpi))
+			DATA_SET(global_data,"mtx_color_scale",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTSlider_FPS", &tmpi))
 			DATA_SET(global_data,"rtslider_fps",GINT_TO_POINTER(tmpi));
 		if(cfg_read_int(cfgfile, "Global", "RTText_FPS", &tmpi))
@@ -378,6 +381,7 @@ G_MODULE_EXPORT void save_config(void)
 	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(global_data,"network_access"));
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Units", (GINT)DATA_GET(global_data,"mtx_temp_units"));
+	cfg_write_int(cfgfile, "Global", "Color_Scaling", (GINT)DATA_GET(global_data,"mtx_color_scale"));
 	cfg_write_string(cfgfile, "Global", "Last_ECU_Family",DATA_GET(global_data,"ecu_family"));
 	if (firmware)
 		if (firmware->actual_signature)

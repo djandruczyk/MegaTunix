@@ -833,7 +833,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	}
 	for (i=0;i<firmware->total_tables;i++)
 	{
-		//recalc_table_limits_f(0,i);
+		recalc_table_limits_f(0,i);
 		if (firmware->table_params[i]->reqfuel_offset < 0)
 			continue;
 
