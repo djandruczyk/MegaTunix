@@ -2462,7 +2462,7 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 		//scaler = 256.0/(((firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)*1.05)+0.1);
 		//color = get_colors_from_hue(256.0 - (get_ecu_data_f(widget)-firmware->table_params[table_num]->z_minval)*scaler, 0.50, 1.0);
 		scaler = (firmware->table_params[table_num]->z_raw_upper - firmware->table_params[table_num]->z_raw_lower)+0.1;
-		color = get_colors_from_hue(270*((get_ecu_data_f(widget)-firmware->table_params[table_num]->z_raw_lower)/scaler), 0.50, 1.0);
+		color = get_colors_from_hue(-(220*((get_ecu_data_f(widget)-firmware->table_params[table_num]->z_raw_lower)/scaler)+135), 0.50, 1.0);
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 	}
 	else if (force)
