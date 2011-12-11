@@ -721,7 +721,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			set_title(g_strdup(_("Reading VE/Constants...")));
 			io_cmd(firmware->get_all_command, NULL);
 			break;
-		case BURN_MS_FLASH:
+		case BURN_FLASH:
 			io_cmd(firmware->burn_all_command,NULL);
 			break;
 		case DLOG_SELECT_ALL:

@@ -478,7 +478,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		g_list_foreach(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
-		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_FLASH));
 		OBJ_SET_FULL(item,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(item,"burners");
 		/* Force them to update */

@@ -26,7 +26,7 @@ bind_to_list=get_data_buttons
 
 [burn_data_button]
 keys=handler,bind_to_list
-handler=_BURN_MS_FLASH_
+handler=_BURN_FLASH_
 bind_to_list=burners
 
 #----- Labels ----------------------------------------------------------------

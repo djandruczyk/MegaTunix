@@ -107,8 +107,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(TE_TABLE_GROUP));
 	g_hash_table_insert(str_2_enum,"_READ_VE_CONST_",
 			GINT_TO_POINTER(READ_VE_CONST));
-	g_hash_table_insert(str_2_enum,"_BURN_MS_FLASH_",
-			GINT_TO_POINTER(BURN_MS_FLASH));
+	g_hash_table_insert(str_2_enum,"_BURN_FLASH_",
+			GINT_TO_POINTER(BURN_FLASH));
 	g_hash_table_insert(str_2_enum,"_START_DATALOGGING_",
 			GINT_TO_POINTER(START_DATALOGGING));
 	g_hash_table_insert(str_2_enum,"_STOP_DATALOGGING_",

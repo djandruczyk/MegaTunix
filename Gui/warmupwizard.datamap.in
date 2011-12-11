@@ -42,7 +42,7 @@ handler=_STOP_REALTIME_
 
 [ww_burn_data_button]
 keys=handler,bind_to_list
-handler=_BURN_MS_FLASH_
+handler=_BURN_FLASH_
 bind_to_list=burners
 
 #----- Dynamic Labels (temp dependant) ---------------------------------------

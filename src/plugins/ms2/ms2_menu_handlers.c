@@ -462,7 +462,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		OBJ_SET_FULL(item,"bind_to_list",g_strdup("get_data_buttons"),g_free);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
-		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_FLASH));
 		OBJ_SET_FULL(item,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(item,"burners");
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
@@ -551,7 +551,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET_FULL(item,"bind_to_list",g_strdup("get_data_buttons"),g_free);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
-		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_FLASH));
 		OBJ_SET_FULL(item,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(item,"burners");
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));

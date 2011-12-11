@@ -27,7 +27,7 @@ _tooltip=This button retrieves the VE/Constants block of data (all pages) and up
 
 [burn_data_button]
 keys=handler,bind_to_list,tooltip
-handler=_BURN_MS_FLASH_
+handler=_BURN_FLASH_
 bind_to_list=burners
 _tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 

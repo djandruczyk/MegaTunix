@@ -517,7 +517,7 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	message = initialize_io_message();
 
 	w_update = g_new0(Widget_Update, 1);
-	w_update->group_name = group;
+	w_update->group_name = g_strdup(group);
 	w_update->color = color;
 	w_update->type = MTX_GROUP_COLOR;
 	w_update->msg = NULL;

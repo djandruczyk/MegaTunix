@@ -67,7 +67,7 @@ typedef enum
         STOP_PLAYBACK,
         READ_VE_CONST,
         READ_RAW_MEMORY,
-        BURN_MS_FLASH,
+        BURN_FLASH,
         INTERROGATE_ECU,
         OFFLINE_MODE,
         SELECT_DLOG_EXP,

@@ -984,7 +984,7 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 			else
 				socket_set_ecu_var(client,arg2,MTX_S32);
 			break;
-		case BURN_FLASH:
+		case GO_BURN_FLASH:
 			io_cmd_f(firmware->burn_all_command,NULL);
 
 			break;
@@ -1710,6 +1710,7 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
+	gint id = 0;
 	guint8 offset_h = 0;
 	guint8 offset_l = 0;
 	gint count = 0;
@@ -1718,11 +1719,13 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 	gint index = 0;
 	RemoteAction action = 0;
 	GuiColor color = BLACK;
+	gchar *tmpbuf = NULL;
 	gchar *string = NULL;
 	guint8 *buffer = NULL;
 	State state;
 	State substate;
 	GError *error = NULL;
+	Firmware_Details *firmware = NULL;
 
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
@@ -1744,7 +1747,7 @@ close_control:
 			g_thread_exit(0);
 		}
 		MTXDBG(MTXSOCKET,_("controlsocket Data arrived!\n"));
-		MTXDBG(MTXSOCKET,_("Data %i, %c\n"),(GINT)buf,(gchar)buf); 
+		MTXDBG(MTXSOCKET,_("Integer \"%i\", Hex \"%.2X\"\n"),(GINT)buf,buf); 
 		switch (state)
 		{
 			case WAITING_FOR_CMD:
@@ -1774,7 +1777,7 @@ close_control:
 					state = WAITING_FOR_CMD;
 				continue;
 			case GET_COLOR:
-				MTXDBG(MTXSOCKET,_("got color\n"));
+				MTXDBG(MTXSOCKET,_("got color message\n"));
 				color = (GuiColor)buf;
 				state = GET_HIGH_COUNT;
 				substate = GET_STRING;
@@ -1830,13 +1833,18 @@ close_control:
 				}
 				continue;
 			case GET_STRING:
+				MTXDBG(MTXSOCKET,_("get_string\n"));
 				string[index] = (gchar)buf;
+				MTXDBG(MTXSOCKET,_("Charactor \"%c\"\n"),(gchar)buf);
 				index++;
 				if (index >= count)
 				{
 					state = WAITING_FOR_CMD;
 					if (substate == SET_COLOR)
+					{
+						MTXDBG(MTXSOCKET,_("setting group \"%s\" color \n"),string);
 						thread_set_group_color_f(color,string);
+					}
 					g_free(string);
 					index = 0;
 				}
@@ -1854,6 +1862,34 @@ close_control:
 					state = WAITING_FOR_CMD;
 					ms_store_new_block(canID,page,offset,buffer,count);
 					/* Update gui with changes */
+					if ((GINT)DATA_GET(global_data,"mtx_color_scale") == AUTO_COLOR_SCALE)
+					{                       
+						if (!firmware)
+						{
+							firmware = DATA_GET(global_data,"firmware");
+							g_return_val_if_fail(firmware,NULL);
+						}
+						for (i=0;i<firmware->total_tables;i++)
+						{                       
+							// This at least only recalcs the limits on one... 
+							if (firmware->table_params[i]->z_page == page)
+							{                       
+								gdk_threads_enter();
+								recalc_table_limits_f(canID,i);
+								gdk_threads_leave();
+								if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
+								{                       
+									tmpbuf = g_strdup_printf("table%i_color_id",i);
+									if (!DATA_GET(global_data,tmpbuf))
+									{                       
+										id = gdk_threads_add_timeout(2000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
+										DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
+									}               
+									g_free(tmpbuf); 
+								}               
+							}               
+						}               
+					}
 					thread_refresh_widget_range_f(page,offset,count);
 					g_free(buffer);
 					index = 0;

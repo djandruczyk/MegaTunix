@@ -1126,6 +1126,7 @@ G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 {
 	/*printf("dealloc_w_update\n");*/
+        cleanup (w_update->group_name);
         cleanup (w_update->msg);
         cleanup (w_update);
 }

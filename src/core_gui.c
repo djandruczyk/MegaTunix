@@ -227,11 +227,13 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Color Scaling */
 	button = glade_xml_get_widget(xml,"fixed_color_rbutton");
+	gtk_widget_set_tooltip_text(button,_("Sets the Tables (VE/Fuel/Spark, etc to use a fixed scale as set in the interrogation profile for determining the colors that go with the values"));
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_FIXED_COLOR_SCALE));
 	if (mtx_color_scale == FIXED_COLOR_SCALE)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
 	button = glade_xml_get_widget(xml,"auto_color_rbutton");
+	gtk_widget_set_tooltip_text(button,_("Sets the Tables (VE/Fuel/Spark, etc to use an automaticlaly generated color scale which in all cases except a flat table provide maximum color contrast acoss the table's values"));
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_AUTO_COLOR_SCALE));
 	if (mtx_color_scale == AUTO_COLOR_SCALE)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
@@ -254,7 +256,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Dashboard Ebox */
 	ebox = glade_xml_get_widget(xml,"dash_ebox");
-	gtk_widget_set_tooltip_text(ebox,"This box provides your choice for the active dashboard to be used");
+	gtk_widget_set_tooltip_text(ebox,_("This box provides your choice for the active dashboard to be used"));
 
 	/* General Tab, Dashboard 1 */
 	button = glade_xml_get_widget(xml,"dash1_choice_button");
@@ -311,24 +313,24 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Debugging frame */
 	ebox = glade_xml_get_widget(xml,"debugging_ebox");
-	gtk_widget_set_tooltip_text(ebox,"This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will be written to MTXlog.txt file in your homedir, or in C:\\program files\\megatunix on Win32 platforms...");
+	gtk_widget_set_tooltip_text(ebox,_("This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will be written to MTXlog.txt file in your homedir, or in C:\\program files\\megatunix on Win32 platforms..."));
 	widget = glade_xml_get_widget(xml,"debugging_frame");
 	populate_debugging(widget);
 
 	/* General Tab Interrogation frame */
 	ebox = glade_xml_get_widget(xml,"ecu_info_ebox");
-	gtk_widget_set_tooltip_text(ebox,"This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you some feedback about how the MS responds to various commands and suggests what it thinks is the closest match.");
+	gtk_widget_set_tooltip_text(ebox,_("This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you some feedback about how the MS responds to various commands and suggests what it thinks is the closest match."));
 
 	/* General Tab Interrogation button */
 	ebox = glade_xml_get_widget(xml,"interrogate_button_ebox");
-	gtk_widget_set_tooltip_text(ebox,"This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100% foolproof, but it works about 99.5% of the time.  If it MIS-detects your ECU contact the developer with your firmware details.");
+	gtk_widget_set_tooltip_text(ebox,_("This button interrogates the connected ECU to attempt to determine what firmware is loaded and to setup the gui to adapt to the capabilities of the loaded version. This method is not 100% foolproof, but it works about 99.5% of the time.  If it MIS-detects your ECU contact the developer with your firmware details."));
 	button = glade_xml_get_widget(xml,"interrogate_button");
 	register_widget("interrogate_button",button);
 	OBJ_SET(button,"handler",GINT_TO_POINTER(INTERROGATE_ECU));
 
 	/* General Tab OFfline mode button */
 	ebox = glade_xml_get_widget(xml,"offline_mode_ebox");
-	gtk_widget_set_tooltip_text(ebox,"This button Enables \"Offline Mode\" so that you can load tabs specific to an ECU and set settings, modify maps without doing any Serial I/O. This will allow you to modify maps offline when not connected to the vehicle/ECU.");
+	gtk_widget_set_tooltip_text(ebox,_("This button Enables \"Offline Mode\" so that you can load tabs specific to an ECU and set settings, modify maps without doing any Serial I/O. This will allow you to modify maps offline when not connected to the vehicle/ECU."));
 	button = glade_xml_get_widget(xml,"offline_button");
 	register_widget("offline_button",button);
 	OBJ_SET(button,"handler",GINT_TO_POINTER(OFFLINE_MODE));
@@ -339,7 +341,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab Textview */
 	ebox = glade_xml_get_widget(xml,"interrogation_status_ebox");
-	gtk_widget_set_tooltip_text(ebox,"This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.  The commands sent are:\n \"R\", which returns the extended runtime variables (only supported by a subset of firmwares, like MSnS-Extra \n \"A\" which returns the runtime variables (22 bytes usually)\n \"C\" which should return the MS clock (1 byte,  but this call fails on the (very old) version 1 MS's)\n \"Q\" Which should return the version number of the firmware multipled by 10\n \"V\" which should return the VEtable and constants, this size varies based on the firmware\n \"S\" which is a \"Signature Echo\" used in some of the variants.  Similar to the \"T\" command (Text version)\n \"I\" which returns the igntion table and related constants (ignition variants ONLY)\n The \"F0/1\" Commands return the raw memory of the MegaSquirt ECU (DT Firmwares only).");
+	gtk_widget_set_tooltip_text(ebox,_("This window shows the status of the ECU interrogation progress.  The way it works is that we send commands to the ECU and count how much data is returned, which helps us hone in to which firmware for the MS is in use.  This method is not 100% foolproof, as some firmware editions return the same amount of data, AND the same version number making them indistinguishable from the outside interface.\n"));
 
 	widget = glade_xml_get_widget(xml,"interr_view");
 	register_widget("interr_view",widget);
@@ -359,7 +361,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Commport frame */
 	ebox = glade_xml_get_widget(xml,"commport_ebox");
-	gtk_widget_set_tooltip_text(ebox,"These controls set parameters specific to Serial/Network communication.  The read timeout should be set to 100 ms for serial and low latency network links. Increase this to 300-500 for slower links over long distances.  Since megatunix 0.9.18 serial port setup is dynamic for Linux and Windows,  OS-X users may need to disable auto-scanning and manually type in the device name (/dev/cu...) Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)");
+	gtk_widget_set_tooltip_text(ebox,_("These controls set parameters specific to Serial/Network communication.  The read timeout should be set to 100 ms for serial and low latency network links. Increase this to 300-500 for slower links over long distances.  Since megatunix 0.9.18 serial port setup is dynamic for Linux and Windows,  OS-X users may need to disable auto-scanning and manually type in the device name (/dev/cu...) Type in the device name of your serial connection (Typical values under Windows would be COM1, COM2, etc, Linux would be /dev/ttyS0 or /dev/ttyUSB0, under Mac OS-X with a USB/Serial adapter would be /dev/tty.usbserial0, and under FreeBSD /dev/cuaa0)"));
 
 	/* Locate Port button */
 #ifdef __WIN32__

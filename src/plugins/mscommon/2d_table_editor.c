@@ -124,7 +124,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
 	widget = glade_xml_get_widget(xml,"burn_data_button");
-	OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+	OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_FLASH));
 	OBJ_SET_FULL(widget,"bind_to_list",g_strdup("burners"),g_free);
 	bind_to_lists_f(widget,"burners");
 	widget_list = g_list_prepend(widget_list,(gpointer)widget);
@@ -504,7 +504,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		widget_list = g_list_prepend(widget_list,(gpointer)widget);
 
 		widget = glade_xml_get_widget(xml,"burn_data_button");
-		OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_MS_FLASH));
+		OBJ_SET(widget,"handler",GINT_TO_POINTER(BURN_FLASH));
 		OBJ_SET_FULL(widget,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(widget,"burners");
 		widget_list = g_list_prepend(widget_list,(gpointer)widget);

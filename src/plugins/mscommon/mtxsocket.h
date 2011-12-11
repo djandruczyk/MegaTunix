@@ -23,10 +23,8 @@
 
 #include <gtk/gtk.h>
 #include <enums.h>
+#include <gui_handlers.h>
 #include <threads.h>
-
-
-#if GTK_MINOR_VERSION >= 18
 #include <gio/gio.h>
 
 
@@ -106,7 +104,7 @@ typedef enum
 	SET_ECU_VAR_S16,
 	SET_ECU_VAR_U32,
 	SET_ECU_VAR_S32,
-	BURN_FLASH,
+	GO_BURN_FLASH = BURN_FLASH,
 	GET_RAW_ECU,
 	SET_RAW_ECU
 }TcpCommand;
@@ -198,179 +196,4 @@ guint8 * build_status_update(guint8,SlaveMessage *,gint *);
 gint net_send(GSocket *, guint8 *, gint);
 /* Prototypes */
 
-#else
-
-/* Legacy GTK+ less than 2.18.x which doesn't have GSocket */
-
-
-typedef struct _MtxSocketClient MtxSocketClient;
-typedef struct _MtxSocketData MtxSocketData;
-typedef struct _MtxSocket MtxSocket;
-typedef struct _SlaveMessage SlaveMessage;
-
-/*!
-  \brief Different types of socket connections
-  */
-typedef enum
-{
-	MTX_SOCKET_ASCII = 0x410,
-	MTX_SOCKET_BINARY,
-	MTX_SOCKET_CONTROL
-}SocketType;
-
-/*!
-  \brief Socket States used in the socket state machine
-  */
-typedef enum
-{
-	WAITING_FOR_CMD = 0x420,
-	GET_REINIT_OR_REBOOT,
-	GET_MS1_EXTRA_REBOOT,
-	GET_MS2_REBOOT,
-	GET_CAN_ID,
-	GET_TABLE_ID,
-	GET_HIGH_OFFSET,
-	GET_LOW_OFFSET,
-	GET_HIGH_COUNT,
-	GET_LOW_COUNT,
-	GET_DATABLOCK,
-	GET_SINGLE_BYTE,
-	GET_MTX_PAGE,
-	GET_MS1_PAGE,
-	GET_MS1_OFFSET,
-	GET_MS1_BYTE,
-	GET_MS1_COUNT,
-	GET_COLOR,
-	GET_ACTION,
-	GET_STRING,
-	SET_COLOR
-}State;
-
-/*!
-  \brief Socket SubStates used in the socket state machine
-  */
-typedef enum
-{
-	UNDEFINED_SUBSTATE = 0x430,
-	SEND_FULL_TABLE,
-	SEND_PARTIAL_TABLE,
-	BURN_MS2_FLASH,
-	GET_VAR_DATA,
-	RECV_LOOKUPTABLE
-}SubState;
-
-/*!
-  \brief Allowed Commands used in the socket state machine
-  */
-typedef enum
-{
-	HELP = 0x3F0,
-	QUIT,
-	GET_SIGNATURE,
-	GET_REVISION,
-	GET_RT_VARS,
-	GET_RTV_LIST,
-	GET_ECU_PAGE,
-	GET_ECU_VAR_U08,
-	GET_ECU_VAR_S08,
-	GET_ECU_VAR_U16,
-	GET_ECU_VAR_S16,
-	GET_ECU_VAR_U32,
-	GET_ECU_VAR_S32,
-	SET_ECU_VAR_U08,
-	SET_ECU_VAR_S08,
-	SET_ECU_VAR_U16,
-	SET_ECU_VAR_S16,
-	SET_ECU_VAR_U32,
-	SET_ECU_VAR_S32,
-	BURN_FLASH,
-	GET_RAW_ECU,
-	SET_RAW_ECU
-}TcpCommand;
-
-/*!
-  \brief Structure to keep all client data together
-  */
-struct _MtxSocketClient 
-{
-	gchar *ip;		/*!< Client IP */
-	guint16 port;		/*!< Client Port */
-	guint8 ** ecu_data;	/*!< Copy of ECU data */
-	gint fd;		/*!< filedescriptor for this socket */
-	gint control_fd;	/*!< Control filedescriptor for this socket */
-	SocketType type;	/*!< Ascii, binary, other? */
-	gpointer container;	/*!< Container pointer */
-};
-
-/*!
-  \brief Structure to for passing data around to socket sub functions
-  */
-struct _MtxSocketData
-{
-	guchar cmd;		/*!< Command to execute */
-	guint8 canID;		/*!< Can ID */
-	guint8 tableID;		/*!< Table ID (Page?) */
-	guint16 offset;		/*!< offset */
-	guint16 count;		/*!< how many bytes */
-};
-
-/*!
-  \brief MtxSocket wrapper
-  */
-struct _MtxSocket
-{
-	gint fd;		/*!< Filedescriptor */
-	SocketType type;	/*!< Type of socket client */
-};
-
-/*!
-  \brief Notification message to slaves 
-  */
-struct _SlaveMessage
-{
-	guint8 canID;		/*!< can ID */
-	guint8 page;		/*!< Page */
-	guint16 offset;		/*!< Offset */
-	guint16 length;		/*!< Length */
-	DataSize size;		/*!< Size */
-	gint value;		/*!< Value */
-	void * data;		/*!< Vata block */
-	WriteMode mode;		/*!< Type of write */
-	SlaveMsgType type;	/*!< Slave message type */
-	RemoteAction action;	/*!< Remote Action Message */
-};
-
-/* Prototypes */
-void open_tcpip_sockets(void);
-void close_tcpip_sockets(void);
-gboolean setup_socket(gint);
-void *socket_thread_manager(gpointer);
-void * ascii_socket_server(gpointer );
-void * binary_socket_server(gpointer );
-void * control_socket_client(gpointer );
-void * notify_slaves_thread(gpointer );
-gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
-void return_socket_error(gint);
-void socket_get_rt_vars(gint, gchar *);
-void socket_get_rtv_list(gint);
-void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
-void socket_get_ecu_page(MtxSocketClient *, gchar *);
-void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
-void dealloc_client_data(MtxSocketClient *);
-gboolean check_for_changes(MtxSocketClient *);
-gint * convert_socket_data(gchar *, gint);
-void *network_repair_thread(gpointer);
-gboolean open_network(gchar *, gint);
-gboolean open_notification_link(gchar *, gint);
-gboolean close_network(void);
-gboolean close_control_socket(void);
-gint socket_get_more_data(gint, void *, gint, gint);
-gboolean open_control_socket(gchar *, gint);
-void notify_slave(gpointer, gpointer);
-guint8 * build_netmsg(guint8,SlaveMessage *,gint *);
-guint8 * build_status_update(guint8,SlaveMessage *,gint *);
-gint net_send(gint,guint8 *, gint, gint);
-/* Prototypes */
-
-#endif
 #endif

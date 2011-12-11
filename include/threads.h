@@ -57,7 +57,7 @@ struct _Widget_Update
 	WidgetType type;		/*!< type of widget are we updating */
 	gchar *msg;			/*!< message to display (if any) */
 	gboolean state;			/*!< state to set widget (MTX_SENSITIVE) */
-	const gchar *group_name;	/*!< Group name */
+	gchar *group_name;		/*!< Group name */
 	GuiColor color;			/*!< Color */
 };
 
