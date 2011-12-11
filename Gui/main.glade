@@ -415,7 +415,7 @@
                                             <property name="border_width">3</property>
                                             <child>
                                               <widget class="GtkCheckButton" id="tooltips_cbutton">
-                                                <property name="label" translatable="yes">Use ToolTips</property>
+                                                <property name="label" translatable="yes">Use Tool Tips</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
@@ -434,7 +434,7 @@
                                         <child>
                                           <widget class="GtkLabel" id="label11">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Context Sensitve Help</property>
+                                            <property name="label" translatable="yes">Contextual Help</property>
                                             <property name="use_markup">True</property>
                                           </widget>
                                           <packing>
@@ -455,7 +455,7 @@
                                             <property name="visible">True</property>
                                             <child>
                                               <widget class="GtkCheckButton" id="log_raw_cbutton">
-                                                <property name="label" translatable="yes">Log Raw DataStream</property>
+                                                <property name="label" translatable="yes">Log  Raw Stream</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="receives_default">False</property>
@@ -484,6 +484,59 @@
                                       </widget>
                                       <packing>
                                         <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkFrame" id="frame5">
+                                        <property name="visible">True</property>
+                                        <property name="label_xalign">0</property>
+                                        <child>
+                                          <widget class="GtkHBox" id="hbox9">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <widget class="GtkRadioButton" id="fixed_color_rbutton">
+                                                <property name="label" translatable="yes">Fixed</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal name="toggled" handler="toggle_button_handler"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkRadioButton" id="auto_color_rbutton">
+                                                <property name="label" translatable="yes">Auto</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <property name="group">fixed_color_rbutton</property>
+                                                <signal name="toggled" handler="toggle_button_handler"/>
+                                              </widget>
+                                              <packing>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                        <child>
+                                          <widget class="GtkLabel" id="label5">
+                                            <property name="visible">True</property>
+                                            <property name="label" translatable="yes">Table Color Scale</property>
+                                            <property name="use_markup">True</property>
+                                          </widget>
+                                          <packing>
+                                            <property name="type">label_item</property>
+                                          </packing>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="position">2</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -555,7 +608,7 @@
                                         </child>
                                       </widget>
                                       <packing>
-                                        <property name="position">2</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                   </widget>
