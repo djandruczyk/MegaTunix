@@ -2486,7 +2486,7 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 		color = get_colors_from_hue(-(220*((get_ecu_data_f(widget)-low)/scaler)+135), 0.50, 1.0);
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 	}
-	else if (force)
+	else 
 	{
 		if (OBJ_GET(widget,"raw_lower"))
 			raw_lower = (GINT)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
@@ -2496,8 +2496,8 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 			raw_upper = (GINT)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
 		else
 			raw_upper = get_extreme_from_size(size,UPPER);
-		color = get_colors_from_hue(-(220*((get_ecu_data_f(widget)-firmware->table_params[table_num]->z_raw_lower)/scaler)+135), 0.50, 1.0);
-		//color = get_colors_from_hue(((gfloat)(get_ecu_data_f(widget)-raw_lower)/raw_upper)*-300.0+180, 0.50, 1.0);
+		scaler = (raw_upper - raw_lower)+0.1;
+		color = get_colors_from_hue(-(220*((get_ecu_data_f(widget)-raw_lower)/scaler)+135), 0.50, 1.0);
 		gtk_widget_modify_base(GTK_WIDGET(widget),GTK_STATE_NORMAL,&color);
 	}
 }

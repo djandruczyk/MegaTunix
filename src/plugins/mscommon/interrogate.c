@@ -691,12 +691,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		}
 		if(!cfg_read_int(cfgfile,section,"z_raw_lower",&firmware->table_params[i]->z_raw_lower))
 		{
-			MTXDBG(INTERROGATOR|CRITICAL,_("\"z_raw_lower\" limit used for colors not found in interrogation profile, guessing!, ERROR\n"));
 			firmware->table_params[i]->z_raw_lower = get_extreme_from_size_f(firmware->table_params[i]->z_size,LOWER);
 		}
 		if(!cfg_read_int(cfgfile,section,"z_raw_upper",&firmware->table_params[i]->z_raw_upper))
 		{
-			MTXDBG(INTERROGATOR|CRITICAL,_("\"z_raw_upper\" limit used for colors not found in interrogation profile, guessing!, ERROR\n"));
 			firmware->table_params[i]->z_raw_upper = get_extreme_from_size_f(firmware->table_params[i]->z_size,UPPER);
 		}
 		if(!cfg_read_int(cfgfile,section,"y_bincount",&firmware->table_params[i]->y_bincount))

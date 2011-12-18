@@ -365,6 +365,7 @@ gboolean check_status(gint port_fd)
 	switch(statusCode) 
 	{
 		case S_ACTIVE:
+			/* Good! */
 			retval = TRUE;
 			break;
 		case S_RUNNING:
