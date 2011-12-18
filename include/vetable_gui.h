@@ -27,7 +27,7 @@
 /* Prototypes */
 
 void rescale_table(GtkWidget * );
-void draw_ve_marker(void );
+gboolean draw_ve_marker(void );
 gfloat rescale(gfloat , ScaleOp , gfloat );
 
 /* Prototypes */

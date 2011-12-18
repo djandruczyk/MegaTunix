@@ -152,13 +152,13 @@ G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 /*!
   \brief Draws the VE marker on the table via calling the appropriate plugin
   */
-G_MODULE_EXPORT void draw_ve_marker(void)
+G_MODULE_EXPORT gboolean draw_ve_marker(void)
 {
 	static void (*common_draw_ve_marker)(void) = NULL;
-	//printf("draw ve marker...\n");
 
 	if (!common_draw_ve_marker)
 		get_symbol("common_draw_ve_marker",(void *)&common_draw_ve_marker);
-	g_return_if_fail(common_draw_ve_marker);
+	g_return_val_if_fail(common_draw_ve_marker,FALSE);
 	common_draw_ve_marker();
+	return TRUE;
 }
