@@ -115,12 +115,14 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 		free_s19(count);
 		return FALSE;
 	}
+	/*
 	if (!erase_S12(port_fd))
 	{
 		output("Unable to ERASE device!\n",FALSE);
 		free_s19(count);
 		return FALSE;
 	}
+	*/
 	if (!send_S12(port_fd,count))
 	{
 		output("Unable to Send firmware to device!\n",FALSE);
@@ -147,12 +149,14 @@ gboolean do_freeems_load(gint port_fd, gint file_fd)
 		free_s19(count);
 		return FALSE;
 	}
+	/*
 	if (!erase_S12(port_fd))
 	{
 		output("Unable to ERASE device!\n",FALSE);
 		free_s19(count);
 		return FALSE;
 	}
+	*/
 	if (!send_S12(port_fd,count))
 	{
 		output("Unable to Send firmware to device!\n",FALSE);
@@ -323,6 +327,11 @@ gboolean check_status(gint port_fd)
 		output(g_strdup_printf("RX: %02x %02x %02x\n", errorCode,statusCode, prompt),TRUE);
 	}
 
+	if ((errorCode == E_COMMAND) && (statusCode == S_ACTIVE) && (prompt == '>'))
+	{
+		output(g_strdup_printf("Loader Ready\n"),TRUE);
+		return TRUE;
+	}
 	switch(errorCode) 
 	{
 		case E_NONE:
@@ -397,7 +406,7 @@ gboolean check_status(gint port_fd)
 
 	if (prompt != '>') 
 	{
-		output(g_strdup_printf("Prompt was expected to be \">\" but returned as \"%.2x,(%c)\" \n",prompt,prompt),TRUE);
+		output(g_strdup_printf("Prompt was expected to be \">\" but returned as \"0x%02x\" \n",prompt),TRUE);
 		retval = FALSE;
 	} 
 	else
