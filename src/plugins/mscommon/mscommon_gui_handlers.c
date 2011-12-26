@@ -1435,8 +1435,9 @@ void update_combo(GtkWidget *widget)
 
 	ecu_update_combo(widget);
 
-	if (dl_type == DEFERRED)
+/*	if (dl_type == DEFERRED)
 		return;
+		*/
 
 	get_essential_bits(widget,&canID, &page, &offset, &bitval, &bitmask, &bitshift);
 	/*printf("Combo at page %i, offset %i, bitmask %i, bitshift %i, value %i\n",page,offset,bitmask,bitshift,(GINT)value);*/
