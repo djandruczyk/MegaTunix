@@ -175,7 +175,7 @@ keys=offset,choices,bitvals,bitmask,tooltip
 choices=Don't Multiply,Multiply
 bitvals=0,1
 offset=733
-bitmask=2
+bitmask=4
 _tooltip=See MS2-Extra Manuals
 
 [incorp_afrtarget_combo]
@@ -183,7 +183,7 @@ keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
 choices=Don't include AFRTarget,Include AFRTarget
 bitvals=0,1
 offset=733
-bitmask=4
+bitmask=8
 toggle_groups=,incorp_afrtarget
 _tooltip=See MS2-Extra Manuals
 
