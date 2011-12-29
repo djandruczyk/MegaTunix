@@ -3730,6 +3730,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
             </child>
             <child>
               <widget class="GtkEntry" id="offset_entry">
+                <property name="text" translatable="yes">-9999.0</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="invisible_char">&#x25CF;</property>

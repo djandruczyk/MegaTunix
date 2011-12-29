@@ -414,10 +414,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	GList ***ecu_widgets = NULL;
-	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
-	if (!update_widget_f)
-		get_symbol_f("update_widget",(void *)&update_widget_f);
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
 
@@ -428,6 +425,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 
 	if (!GTK_IS_WIDGET(window))
 	{
+		printf("Showing trigger offset window!\n");
 		xml = glade_xml_new(main_xml->filename,"trigger_offset_window",NULL);
 		window = glade_xml_get_widget(xml,"trigger_offset_window");
 		glade_xml_signal_autoconnect(xml);
@@ -459,23 +457,27 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		add_additional_rtt_f(item);
 
 		item = glade_xml_get_widget(xml,"offset_entry");
+		g_return_val_if_fail(GTK_IS_WIDGET(item),FALSE);
 		register_widget_f("offset_entry",item);
 		if (firmware->capabilities & MS1_E)
 			partner = lookup_widget_f("WD_trim_angle_entry");
 		else /* MS2 */
 			partner = lookup_widget_f("IGN_trigger_offset_entry");
+
+		g_return_val_if_fail(GTK_IS_WIDGET(partner),FALSE);
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
 		OBJ_SET(item,"page",OBJ_GET(partner,"page"));
 		OBJ_SET(item,"offset",OBJ_GET(partner,"offset"));
+		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
 		OBJ_SET(item,"size",OBJ_GET(partner,"size"));
 		OBJ_SET(item,"raw_lower",OBJ_GET(partner,"raw_lower"));
 		OBJ_SET(item,"raw_upper",OBJ_GET(partner,"raw_upper"));
 		OBJ_SET(item,"fromecu_mult",OBJ_GET(partner,"fromecu_mult"));
 		OBJ_SET(item,"fromecu_add",OBJ_GET(partner,"fromecu_add"));
-		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
 		ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
-		g_list_foreach(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget_f,NULL);
+		printf("Offset entry SHOULD update now! widget %p\n",item);
+		g_list_foreach(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget,NULL);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_FLASH));

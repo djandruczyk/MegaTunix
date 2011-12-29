@@ -1346,6 +1346,7 @@ void update_entry(GtkWidget *widget)
 	handler = (GINT)OBJ_GET(widget,"handler");
 	precision = (GINT)OBJ_GET(widget,"precision");
 
+	printf("update mscommon entry\n");
 	/* Fringe case for module specific handlers */
 	if (OBJ_GET(widget,"modspecific"))
 	{
@@ -1373,13 +1374,15 @@ void update_entry(GtkWidget *widget)
 		widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 		tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 		/* If different, update it */
-		//printf("widget text %s, new text %s\n",widget_text,tmpbuf);
+		printf("widget text %s, new text %s\n",widget_text,tmpbuf);
 		if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 		{
-		//	printf("updating entry!\n");
+			printf("updating entry %p!\n",widget);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			changed = TRUE;
 		}
+		else
+			printf("not updating widget %p\n",widget);
 		g_free(tmpbuf);
 	}
 
