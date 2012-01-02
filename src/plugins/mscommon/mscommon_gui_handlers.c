@@ -158,7 +158,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			ms_send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-	OBJ_SET(widget,"not_sent",GINT_TO_POINTER(FALSE));
+	OBJ_SET(widget,"not_sent",NULL);
 	return TRUE;
 }
 
@@ -1166,7 +1166,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	static gint upd_count = 0;
 	static void (*insert_text_handler)(GtkEntry *, const gchar *, gint, gint *, gpointer);
 	GtkWidget * widget = object;
-	gint last = 0;
+	gint last = -G_MAXINT;
 	gint tmpi = 0;
 	gdouble value = 0.0;
 
@@ -1346,7 +1346,6 @@ void update_entry(GtkWidget *widget)
 	handler = (GINT)OBJ_GET(widget,"handler");
 	precision = (GINT)OBJ_GET(widget,"precision");
 
-	printf("update mscommon entry\n");
 	/* Fringe case for module specific handlers */
 	if (OBJ_GET(widget,"modspecific"))
 	{
@@ -1374,15 +1373,16 @@ void update_entry(GtkWidget *widget)
 		widget_text = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
 		tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 		/* If different, update it */
-		printf("widget text %s, new text %s\n",widget_text,tmpbuf);
+		/*printf("widget text %s, new text %s\n",widget_text,tmpbuf);*/
 		if (g_ascii_strcasecmp(widget_text,tmpbuf) != 0)
 		{
-			printf("updating entry %p!\n",widget);
+			/*printf("updating entry %p!\n",widget);*/
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			changed = TRUE;
 		}
+		/*
 		else
-			printf("not updating widget %p\n",widget);
+			printf("not updating widget %p\n",widget);*/
 		g_free(tmpbuf);
 	}
 

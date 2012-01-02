@@ -184,7 +184,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	}
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-	OBJ_SET(widget,"not_sent",GINT_TO_POINTER(FALSE));
+	OBJ_SET(widget,"not_sent",NULL);
 	return TRUE;
 }
 

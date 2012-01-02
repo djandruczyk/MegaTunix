@@ -350,6 +350,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		{
 			OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+			OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 			OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
 			OBJ_SET_FULL(item,"raw_upper",g_strdup("600"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -363,6 +364,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		{
 			OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+			OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 			OBJ_SET_FULL(item,"raw_lower",g_strdup("-1000"),g_free);
 			OBJ_SET_FULL(item,"raw_upper",g_strdup("32767"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -383,6 +385,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		{
 			OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+			OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 			OBJ_SET_FULL(item,"raw_lower",g_strdup("0"),g_free);
 			OBJ_SET_FULL(item,"raw_upper",g_strdup("600"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -396,6 +399,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		{
 			OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 			OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+			OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 			OBJ_SET_FULL(item,"raw_lower",g_strdup("-1000"),g_free);
 			OBJ_SET_FULL(item,"raw_upper",g_strdup("32767"),g_free);
 			OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -414,6 +418,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		register_widget_f("baro0_entry",item);
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET_FULL(item,"raw_lower",g_strdup("-32767"),g_free);
 		OBJ_SET_FULL(item,"raw_upper",g_strdup("32767"),g_free);
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -434,6 +439,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		register_widget_f("baro5_entry",item);
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET_FULL(item,"raw_lower",g_strdup("-32767"),g_free);
 		OBJ_SET_FULL(item,"raw_upper",g_strdup("32767"),g_free);
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -451,6 +457,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		register_widget_f("bcor0_entry",item);
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET_FULL(item,"raw_lower",g_strdup("-3276"),g_free);
 		OBJ_SET_FULL(item,"raw_upper",g_strdup("3276"),g_free);
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -465,6 +472,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		register_widget_f("bcormult_entry",item);
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET_FULL(item,"raw_lower",g_strdup("-200"),g_free);
 		OBJ_SET_FULL(item,"raw_upper",g_strdup("200"),g_free);
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
@@ -556,6 +564,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET(item,"offset",GINT_TO_POINTER(522));
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
 		tmpf = g_new0(gfloat, 1);
@@ -571,6 +580,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET(item,"offset",GINT_TO_POINTER(524));
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
 		tmpf = g_new0(gfloat, 1);
@@ -705,6 +715,7 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		register_widget_f("tpsMin_entry",item);
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		if (firmware->capabilities & PIS)
 			OBJ_SET(item,"offset",GINT_TO_POINTER(2676));
@@ -733,6 +744,7 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		register_widget_f("tpsMax_entry",item);
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		if (firmware->capabilities & PIS)
 			OBJ_SET(item,"offset",GINT_TO_POINTER(2678));

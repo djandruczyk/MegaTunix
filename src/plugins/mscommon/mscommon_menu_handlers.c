@@ -409,6 +409,8 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 {
 	static GtkWidget *window = NULL;
 	static Firmware_Details *firmware = NULL;
+	gint page = 0;
+	gint offset = 0;
 	GtkWidget *item = NULL;
 	GtkWidget *partner = NULL;
 	GladeXML *main_xml = NULL;
@@ -420,12 +422,16 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 
 	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
-	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+
+	g_return_val_if_fail(firmware,FALSE);
+	g_return_val_if_fail(ecu_widgets,FALSE);
+	g_return_val_if_fail(main_xml,FALSE);
+
+	if ((DATA_GET(global_data,"leaving")))
 		return TRUE;
 
 	if (!GTK_IS_WIDGET(window))
 	{
-		printf("Showing trigger offset window!\n");
 		xml = glade_xml_new(main_xml->filename,"trigger_offset_window",NULL);
 		window = glade_xml_get_widget(xml,"trigger_offset_window");
 		glade_xml_signal_autoconnect(xml);
@@ -465,25 +471,28 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 			partner = lookup_widget_f("IGN_trigger_offset_entry");
 
 		g_return_val_if_fail(GTK_IS_WIDGET(partner),FALSE);
+		page = (GINT)OBJ_GET(partner,"page");
+		offset = (GINT)OBJ_GET(partner,"offset");
+
+		OBJ_SET(item,"last_value",GINT_TO_POINTER(-G_MAXINT));
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GENERIC));
 		OBJ_SET(item,"dl_type",GINT_TO_POINTER(IMMEDIATE));
-		OBJ_SET(item,"page",OBJ_GET(partner,"page"));
-		OBJ_SET(item,"offset",OBJ_GET(partner,"offset"));
+		OBJ_SET(item,"page",GINT_TO_POINTER(page));
+		OBJ_SET(item,"offset",GINT_TO_POINTER(offset));
 		OBJ_SET(item,"precision",OBJ_GET(partner,"precision"));
 		OBJ_SET(item,"size",OBJ_GET(partner,"size"));
 		OBJ_SET(item,"raw_lower",OBJ_GET(partner,"raw_lower"));
 		OBJ_SET(item,"raw_upper",OBJ_GET(partner,"raw_upper"));
 		OBJ_SET(item,"fromecu_mult",OBJ_GET(partner,"fromecu_mult"));
 		OBJ_SET(item,"fromecu_add",OBJ_GET(partner,"fromecu_add"));
-		ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")] = g_list_prepend(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],(gpointer)item);
-		printf("Offset entry SHOULD update now! widget %p\n",item);
-		g_list_foreach(ecu_widgets[(GINT)OBJ_GET(partner,"page")][(GINT)OBJ_GET(partner,"offset")],update_widget,NULL);
+		ecu_widgets[page][offset] = g_list_prepend(ecu_widgets[page][offset],(gpointer)item);
+		/* Force them to update */
+		g_list_foreach(ecu_widgets[page][offset],update_widget,NULL);
 
 		item = glade_xml_get_widget(xml,"burn_data_button");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_FLASH));
 		OBJ_SET_FULL(item,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(item,"burners");
-		/* Force them to update */
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
 		return TRUE;
@@ -491,11 +500,13 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_get_visible(GTK_WIDGET(window)))
 #else
-		if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-			gtk_widget_hide_all(GTK_WIDGET(window));
-		else
-			gtk_widget_show_all(GTK_WIDGET(window));
+		gtk_widget_hide_all(GTK_WIDGET(window));
+	else
+		gtk_widget_show_all(GTK_WIDGET(window));
+
+
 	return TRUE;
 }
 
