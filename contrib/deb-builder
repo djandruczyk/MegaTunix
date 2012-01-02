@@ -1,10 +1,10 @@
 #!/bin/bash
 
-DEB_RELEASES="lenny hardy jaunty karmic lucid"
+DEB_RELEASES="lenny hardy lucid maverick oneiric precise"
 
 trap "{ echo \"ABORT!!\"; exit 255; }" SIGINT SIGTERM
 
-if [ $# -gt 1 ]; then
+if [ $# -gt 0 ]; then
 	dists="$*"
 	echo "Dist(s) specified on CLI is \"$dists\""
 else
