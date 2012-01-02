@@ -14,6 +14,7 @@ gui_glade_files = 	\
 		PIS-ego_16x16.glade \
 		PIS-runtime.glade \
 	       	PIS-settings.glade \
+		generictable_XxYxZ.glade \
 		generic-afrtable_8x8x2.glade \
 		generic-afrtable_12x12x2.glade \
 		generic-boost_6x6x3.glade \

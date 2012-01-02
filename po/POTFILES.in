@@ -231,6 +231,9 @@ dashdesigner/main.c
 dashdesigner/menu_handlers.c
 dashdesigner/rtv_parser.c
 dashdesigner/xml.c
+dashdesigner/main.ui
+dashdesigner/preview.ui
+dashdesigner/propeditor.ui
 gaugedesigner/alerts.c
 gaugedesigner/events.c
 gaugedesigner/gd_init.c
@@ -242,6 +245,12 @@ gaugedesigner/polygons.c
 gaugedesigner/tblocks.c
 gaugedesigner/tgroups.c
 gaugedesigner/warnings.c
+gaugedesigner/a_range.ui
+gaugedesigner/main.ui
+gaugedesigner/polygon.ui
+gaugedesigner/tblock.ui
+gaugedesigner/tgroup.ui
+gaugedesigner/w_range.ui
 widgets/combo_mask.c
 widgets/curve.c
 widgets/curve-demo.c
@@ -265,3 +274,7 @@ msloader/main.c
 msloader/mtxloader.c
 msloader/s12x_loader.c
 msloader/winserialio.c
+menu/dashdesigner.desktop.in
+menu/gaugedesigner.desktop.in
+menu/megatunix.desktop.in
+menu/mtxloader.desktop.in

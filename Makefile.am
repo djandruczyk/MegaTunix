@@ -36,9 +36,11 @@ update-po: check-gettext
 	(if [ -f $(srcdir)/po/POTFILES.in.2 ] ; then \
 	 	rm -f $(srcdir)/po/POTFILES.in.2 ; \
 	 fi ; \
-	  for dir in $$(echo Gui src dashdesigner gaugedesigner widgets msloader); do \
+	  for dir in $$(echo Gui src dashdesigner gaugedesigner widgets msloader menu); do \
 		find $$dir -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 		find $$dir -name "*.glade" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
+		find $$dir -name "*.ui" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
+	  	find $$dir -name "*.desktop.in" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 	  done ;\
 	if diff $(srcdir)/po/POTFILES.in $(srcdir)/po/POTFILES.in.2 >/dev/null 2>&1 ; then \
 		rm -f $(srcdir)/po/POTFILES.in.2 ; \
