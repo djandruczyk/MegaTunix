@@ -175,7 +175,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 			multiplier = DATA_GET(object,"fromecu_mult");
 			adder = DATA_GET(object,"fromecu_add");
 			if ((multiplier) && (adder))
-				tmpf = (x * (*multiplier)) + (*adder);
+				tmpf = (x + (*adder)) * (*multiplier);
 			else if (multiplier)
 				tmpf = x * (*multiplier);
 			else
@@ -562,7 +562,7 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 	multiplier = multi->fromecu_mult;
 	adder = multi->fromecu_add;
 	if ((multiplier) && (adder))
-		result = (x * (*multiplier)) + (*adder);
+		result = (x + (*adder)) * (*multiplier);
 	else if (multiplier)
 		result = (x * (*multiplier));
 	else

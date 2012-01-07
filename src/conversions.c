@@ -174,7 +174,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		}
 		/* Reverse calc due to this being TO the ecu */
 		if ((multiplier) && (adder))
-			return_value = (GINT)((value - (*adder))/(*multiplier));
+			return_value = (GINT)((value/(*multiplier)) - (*adder));
 		else if (multiplier)
 			return_value = (GINT)(value/(*multiplier));
 		else
@@ -202,7 +202,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			adder = (gfloat *)OBJ_GET(widget,"fromecu_add");
 			/* Handle all cases of with or without multiplier/adder*/
 			if ((multiplier) && (adder))
-				return_value = (GINT)((value - (*adder))/(*multiplier));
+				return_value = (GINT)((value/(*multiplier)) - (*adder));
 			else if (multiplier)
 				return_value = (GINT)(value/(*multiplier));
 			else
@@ -413,7 +413,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			}
 		}
 		if ((multiplier) && (adder))
-			return_value = (((gfloat)tmpi * (*multiplier)) + (*adder));
+			return_value = (((gfloat)tmpi + (*adder)) * (*multiplier));
 		else if (multiplier)
 			return_value = (gfloat)tmpi * (*multiplier);
 		else
@@ -438,7 +438,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			multiplier = OBJ_GET(widget,"fromecu_mult");
 			adder = OBJ_GET(widget,"fromecu_add");
 			if ((multiplier) && (adder))
-				return_value = (((gfloat)tmpi * (*multiplier)) + (*adder));
+				return_value = (((gfloat)tmpi + (*adder)) * (*multiplier));
 			else if (multiplier)
 				return_value = (gfloat)tmpi * (*multiplier);
 			else

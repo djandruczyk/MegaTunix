@@ -236,10 +236,13 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 
 	glade_file = OBJ_GET(label,"glade_file");
 	map_file = OBJ_GET(label,"datamap_file");
-	thread_update_logbar("interr_view",NULL,g_strdup(_("Load of tab: ")),FALSE,FALSE);
-	thread_update_logbar("interr_view","info", g_strdup_printf("\"%s\"",glade_file),FALSE,FALSE);
 	xml = glade_xml_new(glade_file,"topframe",NULL);
 	g_return_val_if_fail(xml,FALSE);
+	thread_update_logbar("interr_view",NULL,g_strdup(_("Load of tab: ")),FALSE,FALSE);
+	thread_update_logbar("interr_view","info", g_strdup_printf("\"%s\"",glade_file),FALSE,FALSE);
+	thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
+	thread_update_logbar("interr_view",NULL,g_strdup(_("Load of tabconf: ")),FALSE,FALSE);
+	thread_update_logbar("interr_view","info", g_strdup_printf("\"%s\"",map_file),FALSE,FALSE);
 	cfgfile = cfg_open_file(map_file);
 	if (cfgfile)
 	{
