@@ -1173,10 +1173,10 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	if (!insert_text_handler)
 		get_symbol_f("insert_text_handler",(void *)&insert_text_handler);
 	g_return_if_fail(insert_text_handler);
+	g_return_if_fail(widget);
+	g_return_if_fail(GTK_IS_WIDGET(widget));
 
 	if (DATA_GET(global_data,"leaving"))
-		return;
-	if (!GTK_IS_WIDGET(widget))
 		return;
 	/* If passed widget and user data are identical,  break out as
 	 * we already updated the widget.

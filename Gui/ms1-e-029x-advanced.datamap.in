@@ -173,7 +173,8 @@ bind_to_list=025_spark
 _tooltip=Enables or disables the False Trigger detection code in the firmware. Filters if triggertime is too short in wheel mode.
 
 [barocorr_combo]
-keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
+keys=page,offset,choices,bitvals,bitmask,toggle_groups,tooltip
+page=1
 offset=184
 bitvals=0,1
 bitmask=8
@@ -186,8 +187,8 @@ keys=offset,choices,bitvals,bitmask,tooltip
 offset=184
 bitvals=0,1
 bitmask=128
-choices=Disabled,Enabled
-_tooltip=Enables or Disables constant baro correction in normal modes
+choices=Not Fitted,Extra MAP on X7
+_tooltip=Enables or Disables constant baro correction in normal modes, requires additional map sensor and circuitry and wired to the X7 input.  This is MUTUALLY EXCLUSIVE to using a MAF Sensor.
 
 [const_an_baro_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip

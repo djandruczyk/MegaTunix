@@ -2107,7 +2107,7 @@ G_MODULE_EXPORT void combo_toggle_groups_linked(GtkWidget *widget,gint active)
 /*!
   \brief If a comboboxentry has a "set_labels" attribute handle it
   */
-void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
+G_MODULE_EXPORT void combo_set_labels(GtkWidget *widget, GtkTreeModel *model)
 {
 	gint total = 0;
 	gint tmpi = 0;
@@ -2165,7 +2165,7 @@ G_MODULE_EXPORT gint get_choice_count(GtkTreeModel *model)
  * \param widget is the combo button
  * \param active is the entry in list was selected
  */
-       G_MODULE_EXPORT void combo_toggle_labels_linked(GtkWidget *widget,gint active)
+G_MODULE_EXPORT void combo_toggle_labels_linked(GtkWidget *widget,gint active)
 {
 	gint num_groups = 0;
 	gint i = 0;
