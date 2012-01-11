@@ -34,6 +34,7 @@
 
 
 /* Function Pointers */
+EXTERN void (*alter_widget_state_f)(gpointer, gpointer);
 EXTERN void (*error_msg_f)(const gchar *);
 EXTERN gboolean (*get_symbol_f)(const gchar *,void **);
 EXTERN void (*io_cmd_f)(const gchar *,void *);

@@ -165,7 +165,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 {
 	static void (*signal_read_rtvars)(void);
 	static gboolean (*setup_rtv)(void);
-	static gboolean (*teardown_rtv)(void);
 	Serial_Params *serial_params;
 	GMutex * mutex = g_mutex_new();
 	GTimeVal time;
@@ -186,7 +185,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	rtv_thread_mutex = DATA_GET(global_data,"rtv_thread_mutex");
 	get_symbol("signal_read_rtvars",(void *)&signal_read_rtvars);
 	get_symbol("setup_rtv",(void *)&setup_rtv);
-	get_symbol("teardown_rtv",(void *)&teardown_rtv);
 
 	g_return_val_if_fail(serial_params,NULL);
 	g_return_val_if_fail(signal_read_rtvars,NULL);
@@ -195,7 +193,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	g_return_val_if_fail(rtv_thread_cond,NULL);
 	g_return_val_if_fail(rtv_thread_mutex,NULL);
 	g_return_val_if_fail(setup_rtv,NULL);
-	g_return_val_if_fail(teardown_rtv,NULL);
 
 	if (!setup_rtv())
 	{
@@ -240,7 +237,6 @@ breakout:
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
 	g_mutex_unlock(rtv_thread_mutex);
-//	teardown_rtv();
 	g_thread_exit(0);
 	return NULL;
 }

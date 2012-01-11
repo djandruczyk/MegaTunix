@@ -96,7 +96,7 @@ offset=0
 bitvals=0,1,2,4,12,16,48,64,128
 bitmask=255
 choices=Fuel Only,MSnS Distributor Mode,Neon/420 Wheel,Generic N-1 wheel,Generic N-2 wheel,EDIS,Dual EDIS,Ford TFI,GM 7pin HEI
-toggle_groups=,spark_controls:nonedis_controls,spark_controls:nonedis_controls,spark_controls:wheel_decode:nonedis_controls,spark_controls:wheel_decode:nonedis_controls,spark_controls:edis_controls,spark_controls:edis_controls,spark_controls:nonedis_controls,spark_controls:nonedis_controls
+toggle_groups=,spark_controls:nonedis_controls,spark_controls:nonedis_controls:toothmon_buttons,spark_controls:wheel_decode:nonedis_controls:toothmon_buttons,spark_controls:wheel_decode:nonedis_controls:toothmon_buttons,spark_controls:edis_controls,spark_controls:edis_controls,spark_controls:nonedis_controls,spark_controls:nonedis_controls
 _tooltip=Sets the ECU ignition mode to one of the following: Fuel Only, Simple Distributor mode, Neon/420a wheel, Generic N-1 wheel (i.e. 12-1, 36-1), Generic N-2 wheel (60-2), EDIS, Dual EDIS, Ford TFI, or GM 7 pin HEI
 
 [edis_multispark_combo]

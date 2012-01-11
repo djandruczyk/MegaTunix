@@ -263,16 +263,16 @@ void crunch_trigtooth_data(void)
 	max = 1;
 	for (i=0;i<93;i++)
 	{
+		/*printf ("%i ",ttm_data->current[i]);*/
 		if ((ttm_data->current[i] < min) && (ttm_data->current[i] != 0))
 			min = ttm_data->current[i];
 		if (ttm_data->current[i] > max)
 			max = ttm_data->current[i];
 	}
+	/*printf ("\n"); */
 	ttm_data->min_time = min;
 	ttm_data->max_time = max;
-	/*
-	   printf("min %i, max %i\n",min,max);
-	 */
+	/*printf("min %i, max %i\n",min,max);*/
 	/* Ratio of min to max,  may not work for complex wheel
 	 * patterns
 	 */
@@ -322,12 +322,15 @@ void crunch_trigtooth_data(void)
 		   printf("Minimum tooth time: %i, max tooth time %i\n",min,max);
 		   printf ("Teeth per second is %f\n",1.0/(((float)min*ttm_data->units)/1000000.0));
 		 */
+		/*printf("min %i, units %i\n",min,ttm_data->units);*/
 		suggested_sample_time = 186000.0/((1.0/(((float)min*ttm_data->units)/1000000.0)));
+		/*printf("suggested  sample time %f\n",suggested_sample_time);*/
 		if (suggested_sample_time < 0)
 			suggested_sample_time = 0;
 		min_sampling_time = 500; /* milliseconds */
 
 		ttm_data->sample_time = suggested_sample_time < min_sampling_time ? min_sampling_time : suggested_sample_time;
+		/*printf("ttm_data->sample_time %i\n",ttm_data->sample_time);*/
 
 		/*
 		   printf("Suggested Sampling time is %f ms.\n",suggested_sample_time);
@@ -342,6 +345,8 @@ void crunch_trigtooth_data(void)
 		}
 
 	}
+	if (ttm_data->page == 10) /* Trigger logger fixed sample time */
+		ttm_data->sample_time = 750;
 	/*
 	   printf("Data for this block\n");
 	   for (i=0;i<93;i++)

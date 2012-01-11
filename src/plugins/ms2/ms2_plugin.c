@@ -46,7 +46,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_assert(error_msg_f);
 	get_symbol_f = (void *)DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
-
+	get_symbol_f("alter_widget_state",(void *)&alter_widget_state_f);
 	get_symbol_f("bind_to_lists",(void *)&bind_to_lists_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("calc_value",(void *)&calc_value_f);

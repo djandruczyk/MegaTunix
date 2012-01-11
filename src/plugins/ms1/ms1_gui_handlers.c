@@ -394,13 +394,13 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 				stop(TOOTHMON_TICKLER);
 				tmpwidget = lookup_widget_f("triggerlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
-					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
+					alter_widget_state_f(tmpwidget,NULL);
 				break;
 			case STOP_TRIGMON_LOGGER:
 				stop(TRIGMON_TICKLER);
 				tmpwidget = lookup_widget_f("toothlogger_buttons_table");
 				if (GTK_IS_WIDGET(tmpwidget))
-					gtk_widget_set_sensitive(GTK_WIDGET(tmpwidget),TRUE);
+					alter_widget_state_f(tmpwidget,NULL);
 				break;
 			default:
 				MTXDBG(CRITICAL,_("ERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));

@@ -118,8 +118,8 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 			case START_COMPOSITEMON_LOGGER:
 				ttm_data->stop = FALSE;
 				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_compositemon");
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),FALSE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),FALSE);
+				alter_widget_state_f(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),NULL);
+				alter_widget_state_f(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),NULL);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
 				io_cmd_f("ms2_e_read_compositemon",NULL);
 				break;
@@ -130,13 +130,13 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 				break;
 			case STOP_TRIGMON_LOGGER:
 				ttm_data->stop = TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),TRUE);
+				alter_widget_state_f(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),NULL);
+				alter_widget_state_f(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),NULL);
 				break;
 			case STOP_COMPOSITEMON_LOGGER:
 				ttm_data->stop = TRUE;
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),TRUE);
-				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),TRUE);
+				alter_widget_state_f(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),NULL);
+				alter_widget_state_f(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),NULL);
 				break;
 			default:
 				MTXDBG(CRITICAL,_("Default case reached,  i.e. handler not found in global, common or ECU plugins for widget %s, BUG!\n"),glade_get_widget_name(widget));
