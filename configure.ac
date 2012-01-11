@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-dnl Version number here MUST be static (uggh, fuck you autoconf!!)
+dnl Version number here MUST be static (uggh, $%^&-you autoconf!!)
 AC_INIT(megatunix,0.9.24)
 AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_MACRO_DIR([m4])
