@@ -171,19 +171,19 @@ fast_exit:
 			/*printf("somehow somethign went wrong,  connected is %i, offline is %i, serial_params->open is %i\n",DATA_GET(global_data,"connected"),DATA_GET(global_data,"offline"),serial_params->open);*/
 			if (args->network_mode)
 			{
-				MTXDBG(THREADS|CRITICAL,_("LINK DOWN, Initiating NETWORK repair thread!\n"));
+				MTXDBG(THREADS,_("LINK DOWN, Initiating NETWORK repair thread!\n"));
 				repair_thread = g_thread_create(network_repair_thread,NULL,TRUE,NULL);
 			}
 			else
 			{
-				MTXDBG(THREADS|CRITICAL,_("LINK DOWN, Initiating serial repair thread!\n"));
+				MTXDBG(THREADS,_("LINK DOWN, Initiating serial repair thread!\n"));
 				repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
 			}
 			g_thread_join(repair_thread);
 		}
 		if ((!serial_params->open) && (!DATA_GET(global_data,"offline")))
 		{
-			MTXDBG(THREADS|CRITICAL,_("LINK DOWN, Can't process requested command, aborting call\n"));
+			MTXDBG(THREADS,_("LINK DOWN, Can't process requested command, aborting call\n"));
 			thread_update_logbar("comm_view","warning",g_strdup("Disconnected Serial Link. Check Communications link/cable...\n"),FALSE,FALSE);
 			thread_update_widget("titlebar",MTX_TITLE,g_strdup("Disconnected link, check Communications tab..."));
 			message->status = FALSE;

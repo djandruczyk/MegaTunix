@@ -113,7 +113,7 @@ G_MODULE_EXPORT gint comms_test(void)
 		if (!write_wrapper_f(serial_params->fd,"C",1,&len))
 		{
 			err_text = (gchar *)g_strerror(errno);
-			MTXDBG(SERIAL_RD|CRITICAL,_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text);
+			MTXDBG(SERIAL_WR|CRITICAL,_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text);
 			thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			return FALSE;
@@ -127,7 +127,7 @@ G_MODULE_EXPORT gint comms_test(void)
 		if (!write_wrapper_f(serial_params->fd,"c",1,&len))
 		{
 			err_text = (gchar *)g_strerror(errno);
-			MTXDBG(SERIAL_RD|CRITICAL,_("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n"),err_text);
+			MTXDBG(SERIAL_WR|CRITICAL,_("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n"),err_text);
 			thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			return FALSE;
@@ -789,7 +789,7 @@ G_MODULE_EXPORT void *restore_update(gpointer data)
 	remaining_xfers = max_xfers;
 	last_xferd = max_xfers;
 
-	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
+	MTXDBG(THREADS,_("restore update thread created!\n"));
 	thread_update_logbar_f("tools_view","warning",g_strdup_printf(_("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n"),max_xfers),FALSE,FALSE);
 	while (remaining_xfers > 5)
 	{
@@ -804,7 +804,7 @@ G_MODULE_EXPORT void *restore_update(gpointer data)
 	}
 	thread_update_logbar_f("tools_view","info",g_strdup_printf(_("All Transactions complete\n")),FALSE,FALSE);
 
-	MTXDBG(THREADS|CRITICAL,_("Thread exiting!\n"));
+	MTXDBG(THREADS,_("restore update thread exiting!\n"));
 	return NULL;
 }
 
@@ -857,12 +857,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	g_return_val_if_fail(lock_serial_f,NULL);
 	g_return_val_if_fail(unlock_serial_f,NULL);
 
-	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
+	MTXDBG(THREADS,_("serial repair thread created!\n"));
 
 	if (DATA_GET(global_data,"offline"))
 	{
 		g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
-		MTXDBG(THREADS|CRITICAL,_("Thread exiting, offline mode!\n"));
+		MTXDBG(THREADS,_("Thread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
 
@@ -882,7 +882,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			MTXDBG(SERIAL_RD|SERIAL_WR,_("Calling comms_test, attempt %i\n"),i);
 			if (comms_test())
 			{
-				MTXDBG(THREADS|CRITICAL,_("Thread exiting, successfull comms test!\n"));
+				MTXDBG(THREADS,_("Thread exiting, successfull comms test!\n"));
 				g_thread_exit(0);
 			}
 			i++;
@@ -920,7 +920,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
 				g_timeout_add(300,(GSourceFunc)queue_function_f,"kill_conn_warning");
-				MTXDBG(THREADS|CRITICAL,_("Thread exiting, told to!\n"));
+				MTXDBG(THREADS,_("Thread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
@@ -981,7 +981,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(active));
 		g_free(active);
 	}
-	MTXDBG(THREADS|CRITICAL,_("Thread exiting, device found!\n"));
+	MTXDBG(THREADS,_("Thread exiting, device found!\n"));
 	g_thread_exit(0);
 	return NULL;
 }

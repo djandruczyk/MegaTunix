@@ -109,7 +109,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	if (DATA_GET(global_data,"leaving"))
 		return TRUE;
 
-	MTXDBG(CRITICAL,_("Entered\n"));
+	//MTXDBG(CRITICAL,_("Entered\n"));
 	if ((!args->be_quiet) && (DATA_GET(global_data,"interrogated")))
 	{
 		DATA_SET(global_data,"might_be_leaving",GINT_TO_POINTER(TRUE));
@@ -124,12 +124,12 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	/* Stop timeout functions */
 	stop_tickler(RTV_TICKLER);
-	QUIET_MTXDBG(CRITICAL,_("After stop_realtime\n"));
+	//QUIET_MTXDBG(CRITICAL,_("After stop_realtime\n"));
 	stop_tickler(LV_PLAYBACK_TICKLER);
-	QUIET_MTXDBG(CRITICAL,_("After stop_lv_playback\n"));
+	//QUIET_MTXDBG(CRITICAL,_("After stop_lv_playback\n"));
 
 	stop_datalogging();
-	QUIET_MTXDBG(CRITICAL,_("Aafter stop_datalogging\n"));
+	//QUIET_MTXDBG(CRITICAL,_("Aafter stop_datalogging\n"));
 
 	/* Set global flag */
 	DATA_SET(global_data,"leaving",GINT_TO_POINTER(TRUE));
@@ -141,14 +141,14 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		g_async_queue_push(io_repair_queue,&tmp);
 
 	/* Commits any pending data to ECU flash */
-	QUIET_MTXDBG(CRITICAL,_("Before burn\n"));
+	//QUIET_MTXDBG(CRITICAL,_("Before burn\n"));
 	if ((DATA_GET(global_data,"connected")) && 
 			(DATA_GET(global_data,"interrogated")) && 
 			(!DATA_GET(global_data,"offline")))
 		io_cmd(firmware->burn_all_command,NULL);
-	QUIET_MTXDBG(CRITICAL,_("After burn\n"));
+	//QUIET_MTXDBG(CRITICAL,_("After burn\n"));
 
-	QUIET_MTXDBG(CRITICAL,_("Configuration saved\n"));
+	//QUIET_MTXDBG(CRITICAL,_("Configuration saved\n"));
 	g_static_mutex_lock(&leave_mutex);
 
 	/* IO dispatch queue */
@@ -216,13 +216,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	 *
 	 if (ascii_socket_id)
 	 g_thread_join(ascii_socket_id);
-	 QUIET_MTXDBG(CRITICAL,_("After ascii socket thread shutdown\n"));
+	 //QUIET_MTXDBG(CRITICAL,_("After ascii socket thread shutdown\n"));
 	 if (binary_socket_id)
 	 g_thread_join(binary_socket_id);
-	 QUIET_MTXDBG(CRITICAL,_("After binary socket thread shutdown\n"));
+	 //QUIET_MTXDBG(CRITICAL,_("After binary socket thread shutdown\n"));
 	 if (control_socket_id)
 	 g_thread_join(control_socket_id);
-	 QUIET_MTXDBG(CRITICAL,_("After control socket thread shutdown\n"));
+	 //QUIET_MTXDBG(CRITICAL,_("After control socket thread shutdown\n"));
 	 */
 
 	if (lookup_widget("dlog_select_log_button"))
@@ -233,18 +233,18 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		g_io_channel_shutdown(iochannel,TRUE,NULL);
 		g_io_channel_unref(iochannel);
 	}
-	QUIET_MTXDBG(CRITICAL,_("After datalog iochannel shutdown\n"));
+	//QUIET_MTXDBG(CRITICAL,_("After datalog iochannel shutdown\n"));
 
 	rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	g_mutex_trylock(rtv_mutex);  /* <-- this makes us wait */
 	g_mutex_unlock(rtv_mutex); /* now unlock */
 
 	close_serial();
-	QUIET_MTXDBG(CRITICAL,_("After close_serial()\n"));
+	//QUIET_MTXDBG(CRITICAL,_("After close_serial()\n"));
 	unlock_serial();
-	QUIET_MTXDBG(CRITICAL,_("After unlock_serial()\n"));
+	//QUIET_MTXDBG(CRITICAL,_("After unlock_serial()\n"));
 	close_binary_logs();
-	QUIET_MTXDBG(CRITICAL,_("After close_binary_logs()\n"));
+	//QUIET_MTXDBG(CRITICAL,_("After close_binary_logs()\n"));
 
 	/* Grab and release all mutexes to get them to relinquish
 	 */

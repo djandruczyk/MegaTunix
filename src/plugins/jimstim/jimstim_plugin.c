@@ -46,35 +46,20 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	g_assert(get_symbol_f);
 
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
-	g_assert(convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
-	g_assert(convert_before_download_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
-	g_assert(dbg_func_f);
-	get_symbol_f("get_essential_bits",(void *)&get_essential_bits_f);
-	g_assert(get_essential_bits_f);
+	get_symbol_f("get_essential_bits_g",(void *)&get_essential_bits_f);
 	get_symbol_f("get_list",(void *)&get_list_f);
-	g_assert(get_list_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
-	g_assert(initialize_outputdata_f);
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
-	g_assert(io_cmd_f);
 	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
-	g_assert(lookup_widget_f);
 	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
-	g_assert(ms_send_to_ecu_f);
 	get_symbol_f("search_model",(void *)&search_model_f);
-	g_assert(search_model_f);
 	get_symbol_f("set_widget_sensitive",(void *)&set_widget_sensitive_f);
-	g_assert(set_widget_sensitive_f);
 	get_symbol_f("start_tickler",(void *)&start_tickler_f);
-	g_assert(start_tickler_f);
 	get_symbol_f("std_combo_handler",(void *)&std_combo_handler_f);
-	g_assert(std_combo_handler_f);
 	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
-	g_assert(stop_tickler_f);
 	get_symbol_f("update_logbar",(void *)&update_logbar_f);
-	g_assert(update_logbar_f);
 
 	register_ecu_enums();
 }

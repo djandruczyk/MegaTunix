@@ -186,7 +186,10 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 			}
 	}
 	if (!found)
-		MTXDBG(CRITICAL,_("Error finding symbol \"%s\" in any plugins\n"),name);
-
+	{
+		MTXDBG(CRITICAL,_("\nCRITICAL ERROR: Failed to find symbol/function\n\"%s\" in MegaTunix core or any plugins, Exiting in 5 seconds!!\n"),name);
+		g_usleep(5000000);
+		exit(-1);
+	}
 	return found;
 }

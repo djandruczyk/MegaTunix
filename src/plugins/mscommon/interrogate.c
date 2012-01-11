@@ -80,7 +80,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 	if (!DATA_GET(global_data,"connected"))
 	{
-		MTXDBG(INTERROGATOR|CRITICAL,_("NOT connected to ECU!!!!\n"));
+		MTXDBG(INTERROGATOR,_("NOT connected to ECU!!!!\n"));
 		g_static_mutex_unlock(&mutex);
 		return FALSE;
 	}
@@ -292,7 +292,7 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	}
 	if (match == FALSE) /* (we DID NOT find one) */
 	{
-		MTXDBG(INTERROGATOR|CRITICAL,_("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
+		MTXDBG(INTERROGATOR,_("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"));
 		update_logbar_f("interr_view","warning",g_strdup("Firmware NOT DETECTED, Enable Interrogation debugging, retry interrogation,\nclose megatunix, and send ~/MTXlog.txt to the author for analysis with a note\ndescribing which firmware you are attempting to talk to.\n"),FALSE,FALSE,TRUE);
 		retval = FALSE;
 	}
@@ -1123,14 +1123,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			}
 		}
 	}
-	if (mem_alloc_f)
-		mem_alloc_f();
-	else
-		MTXDBG(INTERROGATOR|CRITICAL,_("FAILED TO LOCATE \"mem_alloc\" function within core/plugins\n"));
+	mem_alloc_f();
 
 	/* Display firmware version in the window... */
 
-	MTXDBG(INTERROGATOR|CRITICAL,_("Detected Firmware: %s\n"),firmware->name);
+	MTXDBG(INTERROGATOR,_("Detected Firmware: %s\n"),firmware->name);
 	update_logbar_f("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE,TRUE);
 	update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE,TRUE);
 
