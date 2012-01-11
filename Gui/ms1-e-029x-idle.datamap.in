@@ -349,7 +349,7 @@ page=3
 offset=174
 precision=2
 fromecu_mult=0.352
-fromecu_add=-10
+fromecu_add=-28.4
 _tooltip=The Timing advance to use at idle if the next 3 conditions match. Set to -10 to disable this function and use the sparkmap entirely. Useful to keep a stable timing at idle to minimize hunting.
 
 [idle_tps_entry]
