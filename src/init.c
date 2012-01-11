@@ -221,6 +221,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 			tmpi |= CRITICAL;
 			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(tmpi));
 		}
+		else
+			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(CRITICAL));
 		if(cfg_read_string(cfgfile, "Global", "last_offline_profile", &tmpbuf))
 		{
 			DATA_SET_FULL(global_data,"last_offline_profile",g_strdup(tmpbuf),cleanup);
