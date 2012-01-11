@@ -26,12 +26,12 @@ page=10
 bind_to_list=ttm_buttons
 _tooltip=Enables Trigger Logger display
 
-#[compositelogger_enable_radio_button]
-#keys=handler,page,bind_to_list,tooltip
-#handler=_START_COMPOSITEMON_LOGGER_
-#page=11
+[compositelogger_enable_radio_button]
+keys=handler,page,tooltip
+handler=_START_COMPOSITEMON_LOGGER_
+page=11
 #bind_to_list=ttm_buttons
-#_tooltip=Enables Composite Logger display
+_tooltip=Enables Composite Logger display
 
 [toothlogger_disable_radio_button]
 keys=handler,bind_to_list,tooltip
@@ -46,12 +46,12 @@ page=10
 bind_to_list=ttm_buttons
 _tooltip=Disables Trigger Logger display
 
-#[compositelogger_disable_radio_button]
-#keys=handler,page,bind_to_list,tooltip
-#handler=_STOP_COMPOSITEMON_LOGGER_
-#page=11
+[compositelogger_disable_radio_button]
+keys=handler,page,tooltip
+handler=_STOP_COMPOSITEMON_LOGGER_
+page=11
 #bind_to_list=ttm_buttons
-#_tooltip=Disables Trigger Logger display
+_tooltip=Disables Trigger Logger display
 
 #----- Widgets ---------------------------------------------------------------
 
