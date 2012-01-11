@@ -126,9 +126,10 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
 	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
 	serial_params = DATA_GET(global_data,"serial_params");
-	get_symbol("network_repair_thread",(void*)&network_repair_thread);
 	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
 	args = DATA_GET(global_data,"args");
+	if (args->network_mode)
+		get_symbol("network_repair_thread",(void*)&network_repair_thread);
 
 	g_return_val_if_fail(args,NULL);
 	g_return_val_if_fail(io_data_queue,NULL);
@@ -136,7 +137,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	g_return_val_if_fail(io_dispatch_mutex,NULL);
 	g_return_val_if_fail(pf_dispatch_queue,NULL);
 	g_return_val_if_fail(serial_params,NULL);
-	g_return_val_if_fail(serial_repair_thread,NULL);
 	/*	clock = g_timer_new();*/
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
