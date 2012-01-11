@@ -48,7 +48,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
-	get_symbol_f("get_essential_bits_g",(void *)&get_essential_bits_f);
+	get_symbol_f("get_essential_bits",(void *)&get_essential_bits_f);
 	get_symbol_f("get_list",(void *)&get_list_f);
 	get_symbol_f("initialize_outputdata",(void *)&initialize_outputdata_f);
 	get_symbol_f("io_cmd",(void *)&io_cmd_f);
