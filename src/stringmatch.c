@@ -303,6 +303,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"hyst_widget",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"ignore_algorithm",
+			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"inactive_fg",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"index",
@@ -330,6 +332,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	g_hash_table_insert(str_2_enum,"modspecific",
 			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,"multi_expr_keys",
+			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,"multi_lookuptables",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"oddfire_bit_offset",
 			GINT_TO_POINTER(MTX_INT));
