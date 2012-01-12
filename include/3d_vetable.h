@@ -133,12 +133,15 @@ struct _Ve_View_3D
 	GObject ***z_objects;	/*!< Array of Z Objects */
 	/* Multi-sources */
 	gchar * x_source_key;	/*!< X Source key (multi-source only) */
+	gboolean x_ignore_algorithm;/*!< ignore algorithms */
 	gboolean x_multi_source;/*!< X Multi-source or not */
 	GHashTable *x_multi_hash;/*!< X Multi Hash */
 	gchar * y_source_key;	/*!< Y Source key (multi-source only) */
+	gboolean y_ignore_algorithm;/*!< ignore algorithms */
 	gboolean y_multi_source;/*!< Y Multi-source or not */
 	GHashTable *y_multi_hash;/*!< Y Multi Hash */
 	gchar * z_source_key;	/*!< Z Source key (multi-source only) */
+	gboolean z_ignore_algorithm;/*!< ignore algorithms */
 	gboolean z_multi_source;/*!< Z Multi-source or not */
 	GHashTable *z_multi_hash;/*!< Z Multi Hash */
 
@@ -195,18 +198,21 @@ struct _Cur_Vals
 	gchar *x_edit_text;	/*!< X Edit Text */
 	gchar *x_runtime_text;	/*!< X Runtime Text */
 	void *x_eval;		/*!< X Evaluator */
+	gint x_precision;	/*!< X Precision */
 	gfloat y_val;		/*!< Current Y Value */
 	gfloat p_y_vals[3];	/*!< Previous 3 Y values */
 	gfloat y_edit_value;	/*!< Y Edit value */
 	gchar *y_edit_text;	/*!< Y Edit Text */
 	gchar *y_runtime_text;	/*!< Y Runtime Text */
-	void *y_eval;		/*!< Y Evlautator */
+	void *y_eval;		/*!< Y Evalutator */
+	gint y_precision;	/*!< Y Precision */
 	gfloat z_val;		/*!< Current Z Value */
 	gfloat p_z_vals[3];	/*!< Previous 3 Z values */
 	gfloat z_edit_value;	/*!< Z Edit value */
 	gchar *z_edit_text;	/*!< Z Edit Text */
 	gchar *z_runtime_text;	/*!< Z Runtime Text */
 	void *z_eval;		/*!< Z Evaluator */
+	gint z_precision;	/*!< Z Precision */
 };
 
 /* Prototypes */

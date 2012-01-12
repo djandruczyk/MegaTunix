@@ -255,14 +255,16 @@ y_precisions=0,0,0,0,2
 z_page=6
 z_base_offset=0
 z_size=_U08_
-z_source=afr1
-z_suffix=AFR
-z_fromecu_mult=0.1
-z_lookuptable=nbo2_table
-z_alt_lookuptable=wbo2_table
-z_depend_on=z_o2_sensor
-z_o2_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,1
-z_precision=2
+z_multi_source=TRUE
+z_ignore_algorithm=TRUE
+z_source_key=afr_scale1
+z_multi_expr_keys=NARROW_AFR,NARROW_LAMBDA,WIDE_AFR,WIDE_LAMBDA,VOLTS
+z_sources=o2adc,o2adc,o2adc,o2adc,o2adc
+z_lookuptables=nbo2_table,nbo2_table,wbo2_table,wbo2_table
+_z_suffixes=NB AFR,NB Lambda,WB AFR,WB Lambda,Volts
+z_fromecu_mults=0.1,0.0068027211,0.1,0.0068027211,0.0196
+z_fromecu_adds=0,0,0,0,0
+z_precisions=1,2,1,2,2
 
 [table_6]
 _table_name=AFR Table 2, MS1-Extra
@@ -290,14 +292,16 @@ y_precisions=0,0,0,0,2
 z_page=6
 z_base_offset=80
 z_size=_U08_
-z_source=afr2
-z_suffix=AFR
-z_fromecu_mult=0.1
-z_lookuptable=nbo2_table
-z_alt_lookuptable=wbo2_table
-z_depend_on=z_o2_sensor
-z_o2_sensor=_ECU_EMB_BIT_,_U08_,1,184,2,1,1
-z_precision=2
+z_multi_source=TRUE
+z_ignore_algorithm=TRUE
+z_source_key=afr_scale2
+z_multi_expr_keys=NARROW_AFR,NARROW_LAMBDA,WIDE_AFR,WIDE_LAMBDA,VOLTS
+z_sources=o2adc,o2adc,o2adc,o2adc,o2adc
+z_lookuptables=nbo2_table,nbo2_table,wbo2_table,wbo2_table
+_z_suffixes=NB AFR,NB Lambda,WB AFR,WB Lambda,Volts
+z_fromecu_mults=0.1,0.0068027211,0.1,0.0068027211,0.0196
+z_fromecu_adds=0,0,0,0,0
+z_precisions=1,2,1,2,2
 
 [table_7]
 _table_name=Boost Table 1, KPA target: RPM vs TPS, MS1-Extra
@@ -329,7 +333,6 @@ z_suffixes=KPa,KPa,KPa,KPa
 z_fromecu_mults=1,1,1.213675,1.6197783
 z_fromecu_adds=0,0,1.53,2.147
 z_precisions=0,0,0,0
-
 
 [table_8]
 _table_name=Boost Table 2, DC Target: RPM vs TPS, MS1-Extra

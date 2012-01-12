@@ -219,9 +219,11 @@ struct _Table_Params
 	gfloat *x_fromecu_mult;	/*!< multiplier */
 	gfloat *x_fromecu_add;	/*!< multiplier */
 	gchar *x_precisions;	/*!< comma sep list of precisions */
+	gchar *x_lookuptables;	/*!< comma sep list of lookuptables */
 	GHashTable *x_multi_hash;/*!< Hash table to store the above */
 	gchar *x_source;	/*!< X datasource for 3d displays */
 	gchar *x_suffix;	/*!< text suffix used on 3D view */
+	gboolean x_ignore_algorithm;	/*!< If don't heed algorithms */
 	gboolean x_complex;	/*!< If using complex math */
 	gchar *x_fromecu_conv_expr;	/*!< x conversion expression */
 	gchar *x_toecu_conv_expr;	/*!< x conversion expression */
@@ -240,7 +242,7 @@ struct _Table_Params
 	gchar *y_source_key;	/*!< text name of variable we find to determine
 				 *  the correct key for y_multi_hash
 				 */
-	gchar *y_multi_expr_keys;/*!< keys to x_multi_hash */
+	gchar *y_multi_expr_keys;/*!< keys to y_multi_hash */
 	gchar *y_sources;	/*!< comma sep list of sources */
 	gchar *y_suffixes;	/*!< comma sep list of suffixes */
 	gchar *y_fromecu_mults;	/*!< comma sep list of x conv. multipliers */
@@ -248,9 +250,11 @@ struct _Table_Params
 	gfloat *y_fromecu_mult;	/*!< multiplier */
 	gfloat *y_fromecu_add;	/*!< multiplier */
 	gchar *y_precisions;	/*!< comma sep list of precisions */
+	gchar *y_lookuptables;	/*!< comma sep list of lookuptables */
 	GHashTable *y_multi_hash;/*!< Hash table to store the above */
 	gchar *y_source;	/*!< Y datasource for 3d displays */
 	gchar *y_suffix;	/*!< text suffix used on 3D view */
+	gboolean y_ignore_algorithm;	/*!< If don't heed algorithms */
 	gboolean y_complex;	/*!< If using complex math */
 	gchar *y_fromecu_conv_expr;	/*!< y conversion expression */
 	gchar *y_toecu_conv_expr;	/*!< y conversion expression */
@@ -268,7 +272,7 @@ struct _Table_Params
 	gchar *z_source_key;	/*!< text name of variable we find to determine
 				 * the correct key for z_multi_hash
 				 */
-	gchar *z_multi_expr_keys;/*!< keys to x_multi_hash */
+	gchar *z_multi_expr_keys;/*!< keys to z_multi_hash */
 	gchar *z_sources;	/*!< comma sep list of sources */
 	gchar *z_suffixes;	/*!< comma sep list of suffixes */
 	gchar *z_fromecu_mults;	/*!< comma sep list of x conv. multiplies */
@@ -276,9 +280,11 @@ struct _Table_Params
 	gfloat *z_fromecu_mult;	/*!< multiplier */
 	gfloat *z_fromecu_add;	/*!< multiplier */
 	gchar *z_precisions;	/*!< comma sep list of precisions */
+	gchar *z_lookuptables;	/*!< comma sep list of lookuptables */
 	GHashTable *z_multi_hash;/*!< Hash table to store the above */
 	gchar *z_source;	/*!< Z datasource for 3d displays */
 	gchar *z_suffix;	/*!< text suffix used on 3D view */
+	gboolean z_ignore_algorithm;	/*!< If don't heed algorithms */
 	gboolean z_complex;	/*!< If using complex math */
 	gchar *z_fromecu_conv_expr;	/*!< z conversion expression */
 	gchar *z_toecu_conv_expr;	/*!< z conversion expression */

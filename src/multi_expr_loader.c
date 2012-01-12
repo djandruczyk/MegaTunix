@@ -174,8 +174,8 @@ G_MODULE_EXPORT void free_multi_source(gpointer data)
 {
 	MultiSource *multi = (MultiSource *)data;
 	cleanup(multi->source);	
-	cleanup(multi->fromecu_mult);	
-	cleanup(multi->fromecu_add);	
+	cleanup(multi->multiplier);	
+	cleanup(multi->adder);	
 	cleanup(multi->suffix);
 	cleanup(multi);
 }

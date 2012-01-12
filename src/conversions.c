@@ -80,7 +80,6 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	GHashTable *sources_hash = NULL;
 
 	sources_hash = DATA_GET(global_data,"sources_hash");
-	algorithm = DATA_GET(global_data,"algorithm");
 
 	g_static_mutex_lock(&mutex);
 
@@ -113,7 +112,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			key_list = OBJ_GET(widget,"multi_expr_keys");
 			mult_list = OBJ_GET(widget,"fromecu_mults");
 			add_list = OBJ_GET(widget,"fromecu_addds");
-			table_list = OBJ_GET(widget,"multi_lookuptables");
+			table_list = OBJ_GET(widget,"lookuptables");
 			if (table_list)
 				tables = g_strsplit(table_list,",",-1);
 			keys = g_strsplit(key_list,",",-1);
@@ -169,12 +168,22 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		{
 			if((GINT)OBJ_GET(widget,"ignore_algorithm"))
 			{
-				multiplier = g_hash_table_lookup(mhash,hash_key);
-				adder = g_hash_table_lookup(ahash,hash_key);
-				table = g_hash_table_lookup(lhash,hash_key);
+				if (!hash_key)
+				{
+					multiplier = g_hash_table_lookup(mhash,"DEFAULT");
+					adder = g_hash_table_lookup(ahash,"DEFAULT");
+					table = g_hash_table_lookup(lhash,"DEFAULT");
+				}
+				else
+				{
+					multiplier = g_hash_table_lookup(mhash,hash_key);
+					adder = g_hash_table_lookup(ahash,hash_key);
+					table = g_hash_table_lookup(lhash,hash_key);
+				}
 			}
 			else
 			{
+				algorithm = DATA_GET(global_data,"algorithm");
 				switch (algorithm[table_num])
 				{
 					case SPEED_DENSITY:
@@ -385,7 +394,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			key_list = OBJ_GET(widget,"multi_expr_keys");
 			mult_list = OBJ_GET(widget,"fromecu_mults");
 			add_list = OBJ_GET(widget,"fromecu_adds");
-			table_list = OBJ_GET(widget,"multi_lookuptables");
+			table_list = OBJ_GET(widget,"lookuptables");
 			if (!mult_list)
 				MTXDBG(CRITICAL,_("BUG, widget %s is multi_expression but doesn't have fromecu_mults defined!\n"),(name == NULL ? "undefined" : name));
 			if (!add_list)
@@ -441,13 +450,22 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 				table = g_hash_table_lookup(lhash,(gchar *)hash_key);
 			}
 		}
-		else
+		else /* This is a 3d table */
 		{
 			if((GINT)OBJ_GET(widget,"ignore_algorithm"))
 			{
-				multiplier = g_hash_table_lookup(mhash,hash_key);
-				adder = g_hash_table_lookup(ahash,hash_key);
-				table = g_hash_table_lookup(lhash,hash_key);
+				if (!hash_key)
+				{
+					multiplier = g_hash_table_lookup(mhash,"DEFAULT");
+					adder = g_hash_table_lookup(ahash,"DEFAULT");
+					table = g_hash_table_lookup(lhash,"DEFAULT");
+				}
+				else
+				{
+					multiplier = g_hash_table_lookup(mhash,hash_key);
+					adder = g_hash_table_lookup(ahash,hash_key);
+					table = g_hash_table_lookup(lhash,hash_key);
+				}
 			}
 			else
 			{

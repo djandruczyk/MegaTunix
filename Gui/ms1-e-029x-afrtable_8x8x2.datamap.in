@@ -45,29 +45,29 @@ use_color=FALSE
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the AFR-Table define the vertexes (points on the AFR map).  The ECU will interpolate between vertexes providing a smooth transition between points on the AFR map. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [afrtable1]
-keys=table_num,ignore_algorithm,source_key,multi_expr_keys,multi_lookuptables,fromecu_mults,fromecu_adds,precision,use_color,bind_to_list,tooltip
+keys=table_num,ignore_algorithm,source_key,multi_expr_keys,lookuptables,fromecu_mults,fromecu_adds,precision,use_color,bind_to_list,tooltip
 table_num=5
 precision=2
 ignore_algorithm=TRUE
 source_key=afr_scale1
-multi_expr_keys=NARROW,WIDE,LAMBDA,VOLTS
-multi_lookuptables=nbo2_table,wbo2_table,wbo2_table
-fromecu_mults=0.1,0.1,0.0068027211,0.0196
-fromecu_adds=0,0,0,0
+multi_expr_keys=NARROW_AFR,NARROW_LAMBDA,WIDE_AFR,WIDE_LAMBDA,VOLTS
+lookuptables=nbo2_table,nbo2_table,wbo2_table,wbo2_table
+fromecu_mults=0.1,0.0068027211,0.1,0.0068027211,0.0196
+fromecu_adds=0,0,0,0,0
 bind_to_list=multi_expression
 use_color=TRUE
 _tooltip=The AFR Entries are the Air Fuel Radio values that the ECU should target.  The values are in O2 sensor VOLTS, not in actual AFR as the AFR reading is heavily dependant on having the proper lookup table selected, it was chosen to display the values in volts instead as that removes the ambiguity of "Do I have the right lookup table selected??".  The ECU will use these values after several conditions have been met including minimum RPM, coolant temp, engine runtime etc.. The ecu will attempt to keep the mixture set so that the O2 reading stays at the targeted value.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 [afrtable2]
-keys=table_num,ignore_algorithm,source_key,multi_expr_keys,multi_lookuptables,fromecu_mults,fromecu_adds,precision,use_color,bind_to_list,tooltip
+keys=table_num,ignore_algorithm,source_key,multi_expr_keys,lookuptables,fromecu_mults,fromecu_adds,precision,use_color,bind_to_list,tooltip
 table_num=6
 precision=2
 ignore_algorithm=TRUE
 source_key=afr_scale2
-multi_expr_keys=NARROW,WIDE,LAMBDA,VOLTS
-multi_lookuptables=nbo2_table,wbo2_table,wbo2_table
-fromecu_mults=0.1,0.1,0.0068027211,0.0196
-fromecu_adds=0,0,0,0
+multi_expr_keys=NARROW_AFR,NARROW_LAMBDA,WIDE_AFR,WIDE_LAMBDA,VOLTS
+lookuptables=nbo2_table,nbo2_table,wbo2_table,wbo2_table
+fromecu_mults=0.1,0.0068027211,0.1,0.0068027211,0.0196
+fromecu_adds=0,0,0,0,0
 bind_to_list=multi_expression
 use_color=TRUE
 _tooltip=The AFR Entries are the Air Fuel Radio values that the ECU should target.  The values are in O2 sensor VOLTS, not in actual AFR as the AFR reading is heavily dependant on having the proper lookup table selected, it was chosen to display the values in volts instead as that removes the ambiguity of "Do I have the right lookup table selected??".  The ECU will use these values after several conditions have been met including minimum RPM, coolant temp, engine runtime etc.. The ecu will attempt to keep the mixture set so that the O2 reading stays at the targeted value.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
@@ -340,12 +340,12 @@ post_functions_with_arg=lock_entry
 [afr_scale1_combo]
 keys=offset,choices,bitvals,bitmask,group_2_update,handler,source_key,source_values,tooltip
 offset=184
-bitmask=192
-bitvals=0,1,2,3
-choices=NarrowBand AFR,Wideband AFR,Lambda,Volts
+bitmask=224
+bitvals=0,1,2,3,4
 group_2_update=multi_expression
 source_key=afr_scale1
-source_values=NARROW,WIDE,LAMBDA,VOLTS
+choices=NB AFR,NB Lambda,WB AFR,WB Lambda,Volts
+source_values=NARROW_AFR,NARROW_LAMBDA,WIDE_AFR,WIDE_LAMBDA,VOLTS
 handler=_MULTI_EXPRESSION_
 _tooltip=Sets the Scale used for the AFR Table
 
@@ -353,12 +353,12 @@ _tooltip=Sets the Scale used for the AFR Table
 keys=page,offset,choices,bitvals,bitmask,group_2_update,handler,source_key,source_values,tooltip
 page=2
 offset=184
-bitmask=192
-bitvals=0,1,2,3
-choices=NarrowBand AFR,Wideband AFR,Lambda,Volts
+bitmask=224
+bitvals=0,1,2,3,4
 group_2_update=multi_expression
 source_key=afr_scale2
-source_values=NARROW,WIDE,LAMBDA,VOLTS
+choices=NB AFR,NB Lambda,WB AFR,WB Lambda,Volts
+source_values=NARROW_AFR,NARROW_LAMBDA,WIDE_AFR,WIDE_LAMBDA,VOLTS
 handler=_MULTI_EXPRESSION_
 _tooltip=Sets the Scale used for the AFR Table
 

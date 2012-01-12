@@ -332,6 +332,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	gchar **fromecu_adds = NULL;
 	gchar **precisions = NULL;
 	gchar **expr_keys = NULL;
+	gchar **tables = NULL;
 	gfloat tmpf = 0.0;
 	gint major = 0;
 	gint minor = 0;
@@ -668,6 +669,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"z_base_offset\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_int(cfgfile,section,"x_bincount",&firmware->table_params[i]->x_bincount))
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"x_bincount\" variable not found in interrogation profile, ERROR\n"));
+		if(!cfg_read_int(cfgfile,section,"y_bincount",&firmware->table_params[i]->y_bincount))
+			MTXDBG(INTERROGATOR|CRITICAL,_("\"y_bincount\" variable not found in interrogation profile, ERROR\n"));
 		if(!cfg_read_string(cfgfile,section,"x_size",&tmpbuf))
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"x_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
@@ -697,10 +700,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		{
 			firmware->table_params[i]->z_raw_upper = get_extreme_from_size_f(firmware->table_params[i]->z_size,UPPER);
 		}
-		if(!cfg_read_int(cfgfile,section,"y_bincount",&firmware->table_params[i]->y_bincount))
-			MTXDBG(INTERROGATOR|CRITICAL,_("\"y_bincount\" variable not found in interrogation profile, ERROR\n"));
-		cfg_read_boolean(cfgfile,section,"x_multi_source",&firmware->table_params[i]->x_multi_source);
-		if (firmware->table_params[i]->x_multi_source)
+		if(cfg_read_boolean(cfgfile,section,"x_multi_source",&firmware->table_params[i]->x_multi_source))
 		{
 			/* READ multi-source stuff, but do NOT create
 			 * evaluators,  we do that in the final copy
@@ -720,6 +720,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"x_fromecu_adds\" variable not found in interrogation profile, table %i, ERROR\n"),i);
 			if(!cfg_read_string(cfgfile,section,"x_precisions",&firmware->table_params[i]->x_precisions))
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"x_precisions\" variable not found in interrogation profile, ERROR\n"));
+			cfg_read_string(cfgfile,section,"x_lookuptables",&firmware->table_params[i]->x_lookuptables);
+			cfg_read_boolean(cfgfile,section,"x_ignore_algorithm",&firmware->table_params[i]->x_ignore_algorithm);
 		}
 		else
 		{
@@ -748,8 +750,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			if(!cfg_read_int(cfgfile,section,"x_precision",&firmware->table_params[i]->x_precision))
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"x_precision\" variable not found in interrogation profile for table %i, ERROR\n"),i);
 		}
-		cfg_read_boolean(cfgfile,section,"y_multi_source",&firmware->table_params[i]->y_multi_source);
-		if (firmware->table_params[i]->y_multi_source)
+		if(cfg_read_boolean(cfgfile,section,"y_multi_source",&firmware->table_params[i]->y_multi_source))
 		{
 			/* READ multi-source stuff, but do NOT create
 			 * evaluators,  we do that in the final copy
@@ -769,6 +770,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"y_fromecu_adds\" variable not found in interrogation profile, table %i, ERROR\n"),i);
 			if(!cfg_read_string(cfgfile,section,"y_precisions",&firmware->table_params[i]->y_precisions))
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"y_precisions\" variable not found in interrogation profile, ERROR\n"));
+			cfg_read_string(cfgfile,section,"y_lookuptables",&firmware->table_params[i]->y_lookuptables);
+			cfg_read_boolean(cfgfile,section,"y_ignore_algorithm",&firmware->table_params[i]->y_ignore_algorithm);
 
 		}
 		else
@@ -798,8 +801,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			if(!cfg_read_int(cfgfile,section,"y_precision",&firmware->table_params[i]->y_precision))
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"y_precision\" variable not found in interrogation profile for table %i, ERROR\n"),i);
 		}
-		cfg_read_boolean(cfgfile,section,"z_multi_source",&firmware->table_params[i]->z_multi_source);
-		if(firmware->table_params[i]->z_multi_source)
+		if(cfg_read_boolean(cfgfile,section,"z_multi_source",&firmware->table_params[i]->z_multi_source))
 		{
 			/* READ multi-source stuff, but do NOT create
 			 * evaluators,  we do that in the final copy
@@ -819,6 +821,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"z_fromecu_adds\" variable not found in interrogation profile, table %i, ERROR\n"),i);
 			if(!cfg_read_string(cfgfile,section,"z_precisions",&firmware->table_params[i]->z_precisions))
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"z_precisions\" variable not found in interrogation profile, ERROR\n"));
+			cfg_read_string(cfgfile,section,"z_lookuptables",&firmware->table_params[i]->z_lookuptables);
+			cfg_read_boolean(cfgfile,section,"z_ignore_algorithm",&firmware->table_params[i]->z_ignore_algorithm);
 
 		}
 		else
@@ -994,6 +998,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			fromecu_mults = g_strsplit(firmware->table_params[i]->x_fromecu_mults,",",-1);
 			fromecu_adds = g_strsplit(firmware->table_params[i]->x_fromecu_adds,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->x_precisions,",",-1);
+			if (firmware->table_params[i]->x_lookuptables)
+				tables = g_strsplit(firmware->table_params[i]->x_lookuptables,",",-1);
+			else
+				tables = NULL;
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
@@ -1006,12 +1014,16 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->fromecu_mult = g_new0(gfloat, 1);
-				multi->fromecu_add = g_new0(gfloat, 1);
-				*multi->fromecu_mult = (gfloat)g_strtod(fromecu_mults[j],NULL);
-				*multi->fromecu_add = (gfloat)g_strtod(fromecu_adds[j],NULL);
+				multi->multiplier = g_new0(gfloat, 1);
+				multi->adder = g_new0(gfloat, 1);
+				*multi->multiplier = (gfloat)g_strtod(fromecu_mults[j],NULL);
+				*multi->adder = (gfloat)g_strtod(fromecu_adds[j],NULL);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
+				if (tables && tables[j])
+					multi->lookuptable = g_strdup(tables[j]);
+				else
+					multi->lookuptable = NULL;
 				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
 			g_strfreev(expr_keys);
@@ -1020,6 +1032,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			g_strfreev(fromecu_mults);
 			g_strfreev(fromecu_adds);
 			g_strfreev(precisions);
+			if (tables)
+				g_strfreev(tables);
 		}
 		else
 		{
@@ -1040,6 +1054,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			fromecu_mults = g_strsplit(firmware->table_params[i]->y_fromecu_mults,",",-1);
 			fromecu_adds = g_strsplit(firmware->table_params[i]->y_fromecu_adds,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->y_precisions,",",-1);
+			if (firmware->table_params[i]->y_lookuptables)
+				tables = g_strsplit(firmware->table_params[i]->y_lookuptables,",",-1);
+			else
+				tables = NULL;
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
@@ -1052,12 +1070,16 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->fromecu_mult = g_new0(gfloat, 1);
-				multi->fromecu_add = g_new0(gfloat, 1);
-				*multi->fromecu_mult = (gfloat)g_strtod(fromecu_mults[j],NULL);
-				*multi->fromecu_add = (gfloat)g_strtod(fromecu_adds[j],NULL);
+				multi->multiplier = g_new0(gfloat, 1);
+				multi->adder = g_new0(gfloat, 1);
+				*multi->multiplier = (gfloat)g_strtod(fromecu_mults[j],NULL);
+				*multi->adder = (gfloat)g_strtod(fromecu_adds[j],NULL);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
+				if (tables && tables[j])
+					multi->lookuptable = g_strdup(tables[j]);
+				else
+					multi->lookuptable = NULL;
 				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
 			g_strfreev(expr_keys);
@@ -1066,6 +1088,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			g_strfreev(fromecu_mults);
 			g_strfreev(fromecu_adds);
 			g_strfreev(precisions);
+			if (tables)
+				g_strfreev(tables);
 		}
 		else
 		{
@@ -1087,6 +1111,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			fromecu_mults = g_strsplit(firmware->table_params[i]->z_fromecu_mults,",",-1);
 			fromecu_adds = g_strsplit(firmware->table_params[i]->z_fromecu_adds,",",-1);
 			precisions = g_strsplit(firmware->table_params[i]->z_precisions,",",-1);
+			if (firmware->table_params[i]->z_lookuptables)
+				tables = g_strsplit(firmware->table_params[i]->z_lookuptables,",",-1);
+			else
+				tables = NULL;
 			len1 = g_strv_length(expr_keys);
 			len2 = g_strv_length(sources);
 			len3 = g_strv_length(suffixes);
@@ -1099,12 +1127,16 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			{
 				multi = g_new0(MultiSource,1);
 				multi->source = g_strdup(sources[j]);
-				multi->fromecu_mult = g_new0(gfloat, 1);
-				multi->fromecu_add = g_new0(gfloat, 1);
-				*multi->fromecu_mult = (gfloat)g_strtod(fromecu_mults[j],NULL);
-				*multi->fromecu_add = (gfloat)g_strtod(fromecu_adds[j],NULL);
+				multi->multiplier = g_new0(gfloat, 1);
+				multi->adder = g_new0(gfloat, 1);
+				*multi->multiplier = (gfloat)g_strtod(fromecu_mults[j],NULL);
+				*multi->adder = (gfloat)g_strtod(fromecu_adds[j],NULL);
 				multi->suffix = g_strdup(suffixes[j]);
 				multi->precision = (gint)strtol(precisions[j],NULL,10);
+				if (tables && tables[j])
+					multi->lookuptable = g_strdup(tables[j]);
+				else
+					multi->lookuptable = NULL;
 				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
 			g_strfreev(expr_keys);
@@ -1113,6 +1145,8 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			g_strfreev(fromecu_mults);
 			g_strfreev(fromecu_adds);
 			g_strfreev(precisions);
+			if (tables)
+				g_strfreev(tables);
 		}
 		else
 		{

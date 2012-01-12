@@ -170,8 +170,8 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 
 		if (!multi)
 			return;
-		x_mult[table] = multi->fromecu_mult;
-                x_add[table] = multi->fromecu_add;
+		x_mult[table] = multi->multiplier;
+                x_add[table] = multi->adder;
 		lookup_current_value_f(multi->source,&x_source);
 	}
 	else
@@ -207,8 +207,8 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 		if (!multi)
 			return;
 
-		y_mult[table] = multi->fromecu_mult;
-                y_add[table] = multi->fromecu_add;
+		y_mult[table] = multi->multiplier;
+                y_add[table] = multi->adder;
 		lookup_current_value_f(multi->source,&y_source);
 	}
 	else

@@ -52,11 +52,12 @@ struct _MultiExpr
 struct _MultiSource
 {
 	gchar *source;		/*!< name of rtvars datasource */
-	gfloat *fromecu_mult;	/*!< conversion multipler ms units to real */
-	gfloat *fromecu_add;	/*!< conversion adder ms units to real */
+	gfloat *multiplier;	/*!< conversion multipler ms units to real */
+	gfloat *adder;		/*!< conversion adder ms units to real */
 	void * ul_eval;		/*!< evaluator pointer */
 	void * dl_eval;		/*!< evaluator pointer */
 	gchar * suffix;		/*!< textual suffix for this evaluator*/
+	gchar *lookuptable;	/*!< lookuptable */
 	gint precision;		/*!< Precision for floating point */
 };
 
