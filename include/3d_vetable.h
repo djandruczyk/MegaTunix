@@ -31,6 +31,7 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
+#include <multi_expr_loader.h>
 
 /* GL includes */
 #include <gtk/gtkwidget.h>
@@ -254,6 +255,8 @@ void ve3d_grey_window(Ve_View_3D *);
 void gl_print_string(GtkWidget *, const gchar *);
 void gl_destroy_font(GtkWidget *);
 void gl_create_font(GtkWidget *);
+gfloat multi_lookup_and_compute(MultiSource *);
+void multi_lookup_and_compute_n(MultiSource *, gint, gint, gfloat *);
 /* Prototypes */
 
 #endif

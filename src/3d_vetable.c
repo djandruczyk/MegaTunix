@@ -2661,11 +2661,7 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
   */
 G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 {
-	gfloat x_val = 0.0;
-	gfloat y_val = 0.0;
-	gfloat z_val = 0.0;
 	gfloat tmp = 0.0;
-	gint tmpi = 0;
 	gint *algorithm = NULL;
 	GHashTable *sources_hash = NULL;
 	GHashTable *hash = NULL;
@@ -2717,31 +2713,20 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		if (!multi)
 			MTXDBG(CRITICAL|OPENGL,_("BUG! X multi is null!\n"));
 
-		lookup_current_value(multi->source,&x_val);
-		if (multi->lookuptable)
-			tmpi = direct_lookup_data(multi->lookuptable,(gint)x_val);
-		else
-			tmpi = (gint)x_val;
-		if (multi->multiplier && multi->adder)
-			x_val = (((gfloat)tmpi + (*multi->adder)) * (*multi->multiplier));
-		else if (multi->multiplier)
-			x_val = (gfloat)tmpi * (*multi->multiplier);
-		else
-			x_val = (gfloat)tmpi;
-		cur_val->x_val = x_val;
-		lookup_previous_n_skip_x_values(multi->source,3,2,cur_val->p_x_vals);
-		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,multi->precision,multi->suffix);
+		lookup_current_value(multi->source,&cur_val->x_val);
+		cur_val->x_val = multi_lookup_and_compute(multi);
+		multi_lookup_and_compute_n(multi,3,2,cur_val->p_x_vals);
+		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",cur_val->x_val,multi->precision,multi->suffix);
 		cur_val->x_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
 		cur_val->x_precision = multi->precision;
 	}
 	else
 	{
 		/* Runtime value */
-		lookup_current_value(ve_view->x_source,&x_val);
-		cur_val->x_val = x_val;
+		lookup_current_value(ve_view->x_source,&cur_val->x_val);
 		lookup_previous_n_skip_x_values(ve_view->x_source,3,2,cur_val->p_x_vals);
 		cur_val->x_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->x_precision,ve_view->x_suffix);
-		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",x_val,ve_view->x_precision,ve_view->x_suffix);
+		cur_val->x_runtime_text = g_strdup_printf("%1$.*2$f %3$s",cur_val->x_val,ve_view->x_precision,ve_view->x_suffix);
 		cur_val->x_precision = ve_view->x_precision;
 	}
 	/* Y */
@@ -2781,30 +2766,18 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
 		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
 		/* runtime value */
-		lookup_current_value(multi->source,&y_val);
-		if (multi->lookuptable)
-			tmpi = direct_lookup_data(multi->lookuptable,(gint)y_val);
-		else
-			tmpi = (gint)y_val;
-		if (multi->multiplier && multi->adder)
-			y_val = (((gfloat)tmpi + (*multi->adder)) * (*multi->multiplier));
-		else if (multi->multiplier)
-			y_val = (gfloat)tmpi * (*multi->multiplier);
-		else
-			y_val = (gfloat)tmpi;
-		cur_val->y_val = y_val;
-		lookup_previous_n_skip_x_values(multi->source,3,2,cur_val->p_y_vals);
-		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",y_val,multi->precision,multi->suffix);
+		cur_val->y_val = multi_lookup_and_compute(multi);
+		multi_lookup_and_compute_n(multi,3,2,cur_val->p_y_vals);
+		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",cur_val->y_val,multi->precision,multi->suffix);
 		cur_val->y_precision = multi->precision;
 	}
 	else
 	{
 		/* Runtime value */
-		lookup_current_value(ve_view->y_source,&y_val);
-		cur_val->y_val = y_val;
+		lookup_current_value(ve_view->y_source,&cur_val->y_val);
 		lookup_previous_n_skip_x_values(ve_view->y_source,3,2,cur_val->p_y_vals);
 		cur_val->y_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->y_precision,ve_view->y_suffix);
-		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",y_val,ve_view->y_precision,ve_view->y_suffix);
+		cur_val->y_runtime_text = g_strdup_printf("%1$.*2$f %3$s",cur_val->y_val,ve_view->y_precision,ve_view->y_suffix);
 		cur_val->y_precision = ve_view->y_precision;
 	}
 
@@ -2845,31 +2818,18 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
 		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,multi->precision,multi->suffix);
 		/* runtime value */
-		lookup_current_value(multi->source,&z_val);
-		if (multi->lookuptable)
-			tmpi = direct_lookup_data(multi->lookuptable,(gint)z_val);
-		else
-			tmpi = (gint)z_val;
-		if (multi->multiplier && multi->adder)
-			z_val = (((gfloat)tmpi + (*multi->adder)) * (*multi->multiplier));
-		else if (multi->multiplier)
-			z_val = (gfloat)tmpi * (*multi->multiplier);
-		else
-			z_val = (gfloat)tmpi;
-
-		cur_val->z_val = z_val;
-		lookup_previous_n_skip_x_values(multi->source,3,2,cur_val->p_z_vals);
-		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",z_val,multi->precision,multi->suffix);
+		cur_val->z_val = multi_lookup_and_compute(multi);
+		multi_lookup_and_compute_n(multi,3,2,cur_val->p_z_vals);
+		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",cur_val->z_val,multi->precision,multi->suffix);
 		cur_val->z_precision = multi->precision;
 	}
 	else
 	{
 		/* runtime value */
-		lookup_current_value(ve_view->z_source,&z_val);
-		cur_val->z_val = z_val;
+		lookup_current_value(ve_view->z_source,&cur_val->z_val);
 		lookup_previous_n_skip_x_values(ve_view->z_source,3,2,cur_val->p_z_vals);
 		cur_val->z_edit_text = g_strdup_printf("%1$.*2$f %3$s",tmp,ve_view->z_precision,ve_view->z_suffix);
-		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",z_val,ve_view->z_precision,ve_view->z_suffix);
+		cur_val->z_runtime_text = g_strdup_printf("%1$.*2$f %3$s",cur_val->z_val,ve_view->z_precision,ve_view->z_suffix);
 		cur_val->z_precision = ve_view->z_precision;
 	}
 
@@ -3619,4 +3579,60 @@ void gl_print_string(GtkWidget *widget, const gchar *s)
 	}
 	g_object_unref(G_OBJECT(layout));
 	MTXDBG(OPENGL,_("Leaving\n"));
+}
+
+
+/*!
+ \brief Computes the value based on the based "MultiSource" structure in combination
+ with the input value, handles lookuptable multi/adder stuff
+ \param multi, \see MultiSource
+ \param in, input value to convert
+ */
+void multi_lookup_and_compute_n(MultiSource *multi, gint count, gint skip, gfloat *dest)
+{
+	gfloat tmpf = 0.0;
+	gfloat out = 0.0;
+	gint i = 0;
+
+	lookup_previous_n_skip_x_values(multi->source,count,skip,dest);
+	for (i=0;i<count;i++)
+	{
+
+		if (multi->lookuptable)
+			tmpf = direct_lookup_data(multi->lookuptable,(gint)dest[i]);
+		else
+			tmpf = dest[i];
+		if (multi->multiplier && multi->adder)
+			out = (((gfloat)tmpf + (*multi->adder)) * (*multi->multiplier));
+		else if (multi->multiplier)
+			out = (gfloat)tmpf * (*multi->multiplier);
+		else
+			out = (gfloat)tmpf;
+		dest[i] = out;
+	}
+}
+/*!
+ \brief Computes the value based on the based "MultiSource" structure in combination
+ with the input value, handles lookuptable multi/adder stuff
+ \param multi, \see MultiSource
+ \param in, input value to convert
+ */
+gfloat multi_lookup_and_compute(MultiSource *multi)
+{
+	gfloat tmpf = 0.0;
+	gfloat out = 0.0;
+	gfloat cur = 0.0;
+
+	lookup_current_value(multi->source,&cur);
+	if (multi->lookuptable)
+		tmpf = direct_lookup_data(multi->lookuptable,cur);
+	else
+		tmpf = cur;
+	if (multi->multiplier && multi->adder)
+		out = ((tmpf + (*multi->adder)) * (*multi->multiplier));
+	else if (multi->multiplier)
+		out = tmpf * (*multi->multiplier);
+	else
+		out = tmpf;
+	return out;
 }
