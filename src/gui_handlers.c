@@ -1730,7 +1730,7 @@ G_MODULE_EXPORT guint get_bitshift(guint mask)
 /*
   \brief sets the value of a miscelaneous gauge
   */
-G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
+G_MODULE_EXPORT void update_misc_gauge(RtvWatch *watch)
 {
 	if (GTK_IS_WIDGET(watch->user_data))
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),watch->val);

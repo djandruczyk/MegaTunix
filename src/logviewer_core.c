@@ -96,7 +96,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
   \brief updates a stripchart widget with new values
   \param watch is the pointer to the watch containing the new data
   */
-G_MODULE_EXPORT void update_stripchart_data(DataWatch* watch)
+G_MODULE_EXPORT void update_stripchart_data(RtvWatch* watch)
 {
 	mtx_stripchart_set_n_values(MTX_STRIPCHART(watch->user_data),watch->count,watch->hist_vals);
 }

@@ -129,7 +129,7 @@ gboolean trigger_group_update(gpointer );
 void prompt_to_save(void);
 gboolean prompt_r_u_sure(void);
 guint get_bitshift(guint );
-void update_misc_gauge(DataWatch *);
+void update_misc_gauge(RtvWatch *);
 glong get_extreme_from_size(DataSize, Extreme);
 gboolean clamp_value(GtkWidget *, gpointer);
 void refocus_cell(GtkWidget *, Direction);

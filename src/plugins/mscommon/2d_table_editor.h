@@ -36,7 +36,7 @@ void coords_changed(GtkWidget *, gpointer);
 void remove_widget(gpointer, gpointer);
 gboolean close_menu_handler(GtkWidget *, gpointer);
 void clean_curve(gpointer, gpointer);
-void update_curve_marker(DataWatch *);
+void update_curve_marker(RtvWatch *);
 void vertex_proximity(GtkWidget *, gpointer);
 void marker_proximity(GtkWidget *, gpointer);
 gboolean set_axis_locking(GtkWidget *, gpointer );

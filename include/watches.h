@@ -44,13 +44,13 @@ typedef enum
 }WatchStyle;
 
 
-typedef struct _DataWatch DataWatch;
+typedef struct _RtvWatch RtvWatch;
 
 
 /*!
-  \brief DataWatch structure contains the fields common to all watches
+  \brief RtvWatch structure contains the fields common to all watches
   */
-struct _DataWatch
+struct _RtvWatch
 {
 	guint32 id;		/*!< Watch ID */
 	gint bit;		/*!< Bit to watch */
@@ -71,7 +71,7 @@ struct _DataWatch
 	gfloat last_val;	/*!< Last value */
 	gfloat *vals;		/*!< multi value result location */
 	gfloat **hist_vals;	/*!< multi value historical result location */
-	void (*func) (DataWatch *);/*!< Function pointer */
+	void (*func) (RtvWatch *);/*!< Function pointer */
 	gchar * varname;	/*!< Variable name (rtv internal name) to check */
 	gchar ** varnames;	/*!< List of Variable names (rtv internal name) to check */
 };

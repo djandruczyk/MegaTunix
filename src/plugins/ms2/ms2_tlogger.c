@@ -368,7 +368,7 @@ void ms2_update_trigtooth_display()
  is fired off to take care of updating the MS2 TTM display
  \param watch is the pointer to the watch structure
  */
-G_MODULE_EXPORT void ms2_ttm_update(DataWatch *watch)
+G_MODULE_EXPORT void ms2_ttm_update(RtvWatch *watch)
 {
 	ms2_crunch_trigtooth_data();
 	ms2_update_trigtooth_display();

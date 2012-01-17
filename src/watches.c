@@ -54,9 +54,9 @@ G_MODULE_EXPORT gboolean fire_off_rtv_watches(void)
   */
 G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
-	DataWatch *watch = NULL;
+	RtvWatch *watch = NULL;
 
-	watch = g_new0(DataWatch,1);
+	watch = g_new0(RtvWatch,1);
 	watch->style = SINGLE_BIT_STATE;
 	watch->varname = g_strdup(varname);
 	watch->bit= bit;
@@ -87,9 +87,9 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname,
   */
 G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname, gint bit,gboolean one_shot,const gchar *fname, gpointer user_data)
 {
-	DataWatch *watch = NULL;
+	RtvWatch *watch = NULL;
 
-	watch = g_new0(DataWatch,1);
+	watch = g_new0(RtvWatch,1);
 	watch->style = SINGLE_BIT_CHANGE;
 	watch->varname = g_strdup(varname);
 	watch->bit= bit;
@@ -116,9 +116,9 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname
   */
 G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
-	DataWatch *watch = NULL;
+	RtvWatch *watch = NULL;
 
-	watch = g_new0(DataWatch,1);
+	watch = g_new0(RtvWatch,1);
 	watch->style = VALUE_CHANGE;
 	watch->varname = g_strdup(varname);
 	watch->function = g_strdup(fname);
@@ -145,9 +145,9 @@ G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gbo
   */
 G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
-	DataWatch *watch = NULL;
+	RtvWatch *watch = NULL;
 
-	watch = g_new0(DataWatch,1);
+	watch = g_new0(RtvWatch,1);
 	watch->style = MULTI_VALUE;
 	watch->num_vars = g_strv_length(varnames);
 	watch->vals = g_new0(gfloat,watch->num_vars);
@@ -176,9 +176,9 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean
   */
 G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
-	DataWatch *watch = NULL;
+	RtvWatch *watch = NULL;
 
-	watch = g_new0(DataWatch,1);
+	watch = g_new0(RtvWatch,1);
 	watch->style = MULTI_VALUE_HISTORY;
 	lookup_current_index(varnames[0],&watch->last_index);
 	watch->num_vars = g_strv_length(varnames);
@@ -198,12 +198,12 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varname
 
 /*!
   \brief destroys a watch given the pointer passed
-  \param data is the pointer to the DataWatch structure we need to destroy
+  \param data is the pointer to the RtvWatch structure we need to destroy
   */
 G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
 {
 	gint i = 0;
-	DataWatch *watch = (DataWatch *)data;
+	RtvWatch *watch = (RtvWatch *)data;
 	/*printf("destroying watch %ui\n",watch->id);*/
 	if (watch->varname)
 		g_free(watch->varname);
@@ -237,14 +237,14 @@ G_MODULE_EXPORT void remove_rtv_watch(guint32 watch_id)
 /*!
   \brief iterates over the has hof active watches and if they have fired
   call the corresponding watch function passing in the pointer to the 
-  DataWatch structure as the argument
+  RtvWatch structure as the argument
   \param key is unused
-  \param value is the pointer to DataWatch structure
+  \param value is the pointer to RtvWatch structure
   \param data is unused
   */
 G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer data)
 {
-	DataWatch * watch = (DataWatch *)value;
+	RtvWatch * watch = (RtvWatch *)value;
 	gfloat tmpf = 0.0;
 	guint8 tmpi = 0;
 	guint8 tmpi2 = 0;
