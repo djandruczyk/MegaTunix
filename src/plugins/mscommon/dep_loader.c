@@ -204,14 +204,13 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 		g_strfreev(vector);
 
 	}
-	DATA_SET(object,"dep_object",(gpointer)dep_obj);
-
+	DATA_SET_FULL(object,"dep_object",(gpointer)dep_obj,g_dataset_destroy);
 }
 
 
 /*!
  \brief load_dependancies_obj() is called when a "depend_on" key is found in
- a datamap or realtimemap, and triggers the loading of al lthe keys/values that
+ a datamap or realtimemap, and triggers the loading of all of the keys/values that
  will allow megatunix to process a dependancy (or multiple deps) on other
  variables
  \param object is a pointer to a place to store the retrieved data

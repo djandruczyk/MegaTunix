@@ -59,7 +59,8 @@ bind_to_list=interdep_0_ctrl,reqfuel_0_ctrl
 #----- Radio/Checkbuttons ----------------------------------------------------
 
 [fuel_strat_combo]
-keys=offset,choices,bitvals,bitmask,algorithms,applicable_tables,swap_labels,tooltip
+keys=mt_names,offset,choices,bitvals,bitmask,algorithms,applicable_tables,swap_labels,tooltip
+mt_names=algorithm
 offset=118
 bitvals=0,1
 bitmask=4
@@ -70,7 +71,8 @@ swap_labels=VE1_load_tbl_lab,VE1_load_tbl_units
 _tooltip=Sets the Algorithm used to calculate the fuel to be injected.
 
 [inj_style_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=mt_names,offset,choices,bitvals,bitmask,tooltip
+mt_names=injType
 offset=116
 bitvals=0,1
 bitmask=8
@@ -78,7 +80,8 @@ choices=Multi-Port,Throttle Body
 _tooltip=Sets the Injection style
 
 [stroke_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=mt_names,offset,choices,bitvals,bitmask,tooltip
+mt_names=twoStroke
 offset=116
 bitvals=0,1
 bitmask=4
@@ -86,7 +89,8 @@ choices=4 Stroke,2 Stroke
 _tooltip=Sets the engine stroke to either 4 stroke or 2 stroke
 
 [eng_style_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=mt_names,offset,choices,bitvals,bitmask,tooltip
+mt_names=engineType
 offset=118
 bitvals=0,1
 bitmask=1
@@ -94,7 +98,8 @@ choices=Even Fire,Odd Fire
 _tooltip=Sets the Engine firing pattern to even or odd fire
 
 [map_combo]
-keys=offset,choices,bitvals,bitmask,handler,group_2_update,source_key,source_values,tooltip
+keys=mt_names,offset,choices,bitvals,bitmask,handler,group_2_update,source_key,source_values,tooltip
+mt_names=mapType
 offset=116
 bitvals=0,1
 bitmask=3
@@ -106,7 +111,8 @@ source_values=MPX4115,MPX4250
 _tooltip=Sets the MAP sensor to 115KPa or 25KPa (forced induction capable)
 
 [baro_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=mt_names,offset,choices,bitvals,bitmask,tooltip
+mt_names=baroCorr
 offset=118
 bitvals=0,1
 bitmask=8
@@ -114,7 +120,8 @@ choices=Disabled,Enabled
 _tooltip=Enables or Disables barometer correction.
 
 [o2_combo]
-keys=offset,choices,bitvals,bitmask,tooltip
+keys=mt_names,offset,choices,bitvals,bitmask,tooltip
+mt_names=egoType
 offset=118
 bitvals=0,1
 bitmask=2
@@ -122,7 +129,8 @@ choices=Narrow-Band,Wide-Band
 _tooltip=Sets the O2 sensor type
 
 [alt_simul_combo]
-keys=offset,choices,bitvals,bitmask,dl_type,handler,table_num,tooltip
+keys=mt_names,offset,choices,bitvals,bitmask,dl_type,handler,table_num,tooltip
+mt_names=alternate
 offset=92
 bitvals=0,1
 bitmask=255
@@ -135,7 +143,8 @@ _tooltip=Sets the Injector firing pattern
 #----- SpinButtons -----------------------------------------------------------
 
 [req_fuel_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
+keys=mt_names,offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
+mt_names=reqFuel
 offset=90
 table_num=0
 dl_type=_DEFERRED_
@@ -158,7 +167,8 @@ alternate_bitmask=1
 register_as=req_fuel_per_cycle_0_spin
 
 [req_fuel_per_squirt_0_spin]
-keys=offset,table_num,fromecu_mult,bind_to_list,register_as
+keys=mt_names,offset,table_num,fromecu_mult,bind_to_list,register_as
+mt_names=reqFuel
 offset=90
 table_num=0
 fromecu_mult=0.1
@@ -166,29 +176,34 @@ bind_to_list=interdep_0_ctrl
 register_as=req_fuel_per_squirt_0_spin
 
 [inj_open_time_entry]
-keys=offset,precision,fromecu_mult
+keys=mt_names,offset,precision,fromecu_mult
+mt_names=injOpen
 offset=93
 precision=1
 fromecu_mult=0.1
 
 [batt_correction_entry]
-keys=offset,precision,fromecu_mult
+keys=mt_names,offset,precision,fromecu_mult
+mt_names=battFac
 offset=97
 precision=1
 fromecu_mult=0.016666667
 
 [pwm_limit_entry]
-keys=offset
+keys=mt_names,offset
+mt_names=injPwmP
 offset=95
 
 [pwm_time_thresh_entry]
-keys=offset,precision,fromecu_mult
+keys=mt_names,offset,precision,fromecu_mult
+mt_names=injPwmT
 offset=96
 precision=1
 fromecu_mult=0.1
 
 [fast_idle_thresh_temp_entry]
-keys=offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list
+keys=mt_names,offset,fromecu_mult,fromecu_add,temp_dep,bind_to_list
+mt_names=fastIdleT
 offset=121
 fromecu_mult=1
 fromecu_add=-40
@@ -196,7 +211,8 @@ temp_dep=TRUE
 bind_to_list=temperature
 
 [inj_per_cycle_0_spin]
-keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
+keys=mt_names,offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
+mt_names=divider
 offset=91
 table_num=0
 dl_type=_DEFERRED_
@@ -214,7 +230,8 @@ divider_1_offset=91
 register_as=inj_per_cycle_0_spin
 
 [num_injectors_0_spin]
-keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
+keys=mt_names,offset,bitmask,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
+mt_names=nInjectors
 offset=117
 bitmask=240
 table_num=0
@@ -231,7 +248,8 @@ injectors_1_bitmask=240
 register_as=num_injectors_0_spin
 
 [num_cylinders_0_spin]
-keys=offset,bitmask,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
+keys=mt_names,offset,bitmask,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,register_as
+mt_names=nCylinders
 offset=116
 bitmask=240
 table_num=0

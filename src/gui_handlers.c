@@ -2285,16 +2285,16 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 
 
 /*!
-  \brief Calls the process_interdependancy function for each item in the 
-  global dep_list List
+  \brief Calls the process_group function for each item in the 
+  global toggle_group_list List
   */
-G_MODULE_EXPORT void update_interdependancies_pf()
+G_MODULE_EXPORT void update_groups_pf()
 {
 	GList *list = NULL;
-	list = DATA_GET(global_data,"dep_list");
+	list = DATA_GET(global_data,"toggle_group_list");
 	if (!list)
 		return;
-	g_list_foreach(list,process_interdependancy,NULL);
+	g_list_foreach(list,process_group,NULL);
 }
 
 
@@ -2313,10 +2313,10 @@ G_MODULE_EXPORT void update_sources_pf()
 
 
 /*!
-  \brief deals with interdepenant controls loaded after ECU state is loaded
-  i.e. deferred tabs
+  \brief deals with interdepenant controls with "toggle_groups" keys 
+  loaded after ECU state is loaded.i.e. deferred tabs
   */
-void process_interdependancy(gpointer data, gpointer nothing)
+void process_group(gpointer data, gpointer nothing)
 {
 	GObject *object = (GObject *)data;
 	gint i = 0;
@@ -2360,7 +2360,7 @@ void process_interdependancy(gpointer data, gpointer nothing)
 
 
 /*!
-  \brief deals with mult_source controls loaded after ECU state is loaded
+  \brief deals with multi_source controls loaded after ECU state is loaded
   i.e. deferred tabs
   */
 void process_source(gpointer data, gpointer nothing)

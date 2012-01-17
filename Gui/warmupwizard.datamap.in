@@ -3,7 +3,7 @@ description=Object data map for Warmup Wizard
 _tab_name=_Warmup Wizard
 #id_prefix=WARMUP_WIZ_
 tab_ident=_WARMUP_WIZ_TAB_
-groups=defaults
+groups=defaults,warmup_bins
 post_functions=load_ww_sliders
 
 #----- Groups ----------------------------------------------------------------
@@ -14,6 +14,11 @@ page=0
 size=_U08_
 dl_type=_IMMEDIATE_
 handler=_GENERIC_
+
+[warmup_bins]
+keys=raw_lower,tooltip
+raw_lower=100
+_tooltip=The warmup enrichment value, 100 means no enrichment, 255 means 2.55x normal.
 
 #----- Widgets ---------------------------------------------------------------
 
@@ -146,73 +151,41 @@ bind_to_list=temperature
 #----- Spin Buttons ----------------------------------------------------------
 
 [ww_cpulse_neg40_entry]
-keys=offset,precision,fromecu_mult,tooltip
+keys=mt_names,offset,precision,fromecu_mult,tooltip
+mt_names=crankCold
 offset=64
 precision=1
 fromecu_mult=0.1
 _tooltip=Crank pulse at lower temp extreme,this combined with the lower pulse at the lower temp is used to determine the cranking pulse when in between these limits
 
 [ww_cpulse_pos170_entry]
-keys=offset,precision,fromecu_mult,tooltip
+keys=mt_names,offset,precision,fromecu_mult,tooltip
+mt_names=crankHot
 offset=65
 precision=1
 fromecu_mult=0.1
 _tooltip=Crank pulse at upper temp extreme,this combined with the lower pulse at the lower temp is used to determine the cranking pulse when in between these limits
 
 [ww_prime_pulse_entry]
-keys=offset,precision,fromecu_mult,tooltip
+keys=mt_names,offset,precision,fromecu_mult,tooltip
+mt_names=primePulse
 offset=119
 precision=1
 fromecu_mult=0.1
 _tooltip=Priming pulse entry, fired on ecu power up
 
 [ww_ase_%_entry]
-keys=offset
+keys=mt_names,offset
 offset=66
 
 [ww_ase_numcycles_entry]
-keys=offset
+keys=mt_names,offset
 offset=67
 
-[ww_warmup_entry_1]
-keys=offset
+[ww_warmup_entry]
+keys=group
 offset=68
-
-[ww_warmup_entry_2]
-keys=offset
-offset=69
-
-[ww_warmup_entry_3]
-keys=offset
-offset=70
-
-[ww_warmup_entry_4]
-keys=offset
-offset=71
-
-[ww_warmup_entry_5]
-keys=offset
-offset=72
-
-[ww_warmup_entry_6]
-keys=offset
-offset=73
-
-[ww_warmup_entry_7]
-keys=offset
-offset=74
-
-[ww_warmup_entry_8]
-keys=offset
-offset=75
-
-[ww_warmup_entry_9]
-keys=offset
-offset=76
-
-[ww_warmup_entry_10]
-keys=offset
-offset=77
+group=warmup_bins
 
 #------- WarmupWiard Status Indicators ---------------------------------------
 

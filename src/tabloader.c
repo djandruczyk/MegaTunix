@@ -295,7 +295,8 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		g_free(bindgroup);
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
 	}
-	update_interdependancies_pf();
+	update_groups_pf();
+	update_sources_pf();
 	/* Allow gui to update as it should.... */
 	while (gtk_events_pending())
 	{
@@ -1045,24 +1046,24 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	{
 		if (!cfg_read_string(cfgfile,info->name,"source_key",&source_key))
 		{
-			printf("%s needs source_key\n",info->name);
+			MTXDBG(TABLOADER|CRITICAL,_("%s needs source_key\n"),info->name);
 			return TRUE;
 		}
 		if (!cfg_read_int(cfgfile,info->name,"offset",&offset))
 		{
-			printf("%s needs offset\n",info->name);
+			MTXDBG(TABLOADER|CRITICAL,_("%s needs offset\n"),info->name);
 			return TRUE;
 		}
 		if (!cfg_read_int(cfgfile,info->name,"bitmask",&bitmask))
 		{
-			printf("%s needs bitmask\n",info->name);
+			MTXDBG(TABLOADER|CRITICAL,_("%s needs bitmask\n"),info->name);
 			return TRUE;
 		}
 		if (!cfg_read_string(cfgfile,info->name,"bitvals",&bitvals))
 		{
 			if (!cfg_read_int(cfgfile,info->name,"bitval",&bitval))
 			{
-				printf("%s needs bitvals or bitval\n",info->name);
+				MTXDBG(TABLOADER|CRITICAL,_("%s needs bitvals or bitval\n"),info->name);
 				return TRUE;
 			}
 		}
@@ -1070,7 +1071,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		{
 			if (!cfg_read_int(cfgfile,"defaults","page",&page))
 			{
-				printf("%s has no page defined!\n",info->name);
+				MTXDBG(TABLOADER|CRITICAL,_("%s has no page defined!\n"),info->name);
 				return TRUE;
 			}
 		}
@@ -1102,19 +1103,19 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	{
 		if (!cfg_read_int(cfgfile,info->name,"offset",&offset))
 		{
-			printf("%s needs offset\n",info->name);
+			MTXDBG(TABLOADER|CRITICAL,_("%s needs offset\n"),info->name);
 			return TRUE;
 		}
 		if (!cfg_read_int(cfgfile,info->name,"bitmask",&bitmask))
 		{
-			printf("%s needs bitmask\n",info->name);
+			MTXDBG(TABLOADER|CRITICAL,_("%s needs bitmask\n"),info->name);
 			return TRUE;
 		}
 		if (!cfg_read_string(cfgfile,info->name,"bitvals",&bitvals))
 		{
 			if (!cfg_read_int(cfgfile,info->name,"bitval",&bitval))
 			{
-				printf("%s needs bitvals or bitval\n",info->name);
+				MTXDBG(TABLOADER|CRITICAL,_("%s needs bitvals or bitval\n"),info->name);
 				return TRUE;
 			}
 		}
@@ -1122,7 +1123,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		{
 			if (!cfg_read_int(cfgfile,"defaults","page",&page))
 			{
-				printf("%s has no page defined!\n",info->name);
+				MTXDBG(TABLOADER|CRITICAL,_("%s has no page defined!\n"),info->name);
 				return TRUE;
 			}
 		}
@@ -1150,9 +1151,9 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		else
 			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
 		OBJ_SET_FULL(object,"toggle_groups",g_strdup(groups),cleanup);
-		list = DATA_GET(global_data,"dep_list");
+		list = DATA_GET(global_data,"toggle_group_list");
 		list = g_list_prepend(list,object);
-		DATA_SET(global_data,"dep_list",(gpointer)list);
+		DATA_SET(global_data,"toggle_group_list",(gpointer)list);
 		cleanup(groups);
 		cleanup(bitvals);
 		cleanup(source_key);

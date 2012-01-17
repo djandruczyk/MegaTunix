@@ -298,10 +298,11 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 			break;
 
 	}
-	/* Swaps the label of another control based on widget state... */
+	/* Sets the label of another control based on this widget's state... */
 	set_labels = (gchar *)OBJ_GET(widget,"set_widgets_label");
 	if ((set_labels) && gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		set_widget_labels_f(set_labels);
+	/* Swaps the label of another control based on widget state... */
 	if (OBJ_GET(widget,"swap_labels"))
 		swap_labels_f(widget,gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 	/* MUST use dispatcher, as the update functions run outside of the

@@ -314,10 +314,12 @@
 			<func_call_arg>_MS2_VECONST_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
+				<function>update_groups_pf</function>
+				<function>update_sources_pf</function>
 				<function>update_ecu_controls_pf</function>
 				<function>set_store_black_pf</function>
 				<function>enable_get_data_buttons_pf</function>
-				<function>enable_ttm_buttons_pf</function>
+			<!--	<function>enable_ttm_buttons_pf</function> -->
 				<function>conditional_start_rtv_tickler_pf</function>
 			</post_functions>
 		</cmd>

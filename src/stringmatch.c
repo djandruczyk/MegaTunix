@@ -333,6 +333,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_INT));
 	g_hash_table_insert(str_2_enum,"modspecific",
 			GINT_TO_POINTER(MTX_BOOL));
+	g_hash_table_insert(str_2_enum,"mt_names",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"multi_expr_keys",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,"oddfire_bit_offset",

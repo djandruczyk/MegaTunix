@@ -233,7 +233,7 @@
 			<func_call_arg>_MS1_VECONST_</func_call_arg>
 			<defer_post_functions>TRUE</defer_post_functions>
 			<post_functions>
-				<function>update_interdependancies_pf</function>
+				<function>update_groups_pf</function>
 				<function>update_sources_pf</function>
 				<function>update_ecu_controls_pf</function>
 				<function>set_store_black_pf</function>
