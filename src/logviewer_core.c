@@ -85,7 +85,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 			precision = 0;
 		mtx_stripchart_add_trace(MTX_STRIPCHART(chart),(gfloat)min,(gfloat)max,precision,name,NULL);
 	}
-	create_multi_value_historical_watch(sources,FALSE,"update_stripchart_data",chart);
+	create_rtv_multi_value_historical_watch(sources,FALSE,"update_stripchart_data",chart);
 	g_strfreev(sources);
 	gtk_widget_show_all(parent);
 

@@ -61,7 +61,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("combo_toggle_labels_linked",(void *)&combo_toggle_labels_linked_f);
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
-	get_symbol_f("create_value_change_watch",(void *)&create_value_change_watch_f);
+	get_symbol_f("create_rtv_value_change_watch",(void *)&create_rtv_value_change_watch_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	get_symbol_f("direct_lookup_data",(void *)&direct_lookup_data_f);
 	get_symbol_f("direct_reverse_lookup",(void *)&direct_reverse_lookup_f);
@@ -97,7 +97,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("read_wrapper",(void *)&read_wrapper_f);
 	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
 	get_symbol_f("register_widget",(void *)&register_widget_f);
-	get_symbol_f("remove_watch",(void *)&remove_watch_f);
+	get_symbol_f("remove_rtv_watch",(void *)&remove_rtv_watch_f);
 	get_symbol_f("remove_from_lists",(void *)&remove_from_lists_f);
 	get_symbol_f("reverse_lookup",(void *)&reverse_lookup_f);
 	get_symbol_f("search_model",(void *)&search_model_f);

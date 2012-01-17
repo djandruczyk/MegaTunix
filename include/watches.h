@@ -77,15 +77,15 @@ struct _DataWatch
 };
 /* Prototypes */
 gboolean fire_off_rtv_watches(void);
-guint32 create_single_bit_state_watch(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
-guint32 create_single_bit_change_watch(const gchar *, gint, gboolean, const gchar *, gpointer);
-guint32 create_value_change_watch(const gchar *, gboolean, const gchar *, gpointer);
-guint32 create_multi_value_historical_watch(gchar **, gboolean, const gchar *, gpointer);
-guint32 create_multi_value_watch(gchar **, gboolean, const gchar *, gpointer);
-void watch_destroy(gpointer);
-void remove_watch(guint32);
-void process_watches(gpointer, gpointer, gpointer);
-gboolean watch_active(guint32 );
+guint32 create_rtv_single_bit_state_watch(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
+guint32 create_rtv_single_bit_change_watch(const gchar *, gint, gboolean, const gchar *, gpointer);
+guint32 create_rtv_value_change_watch(const gchar *, gboolean, const gchar *, gpointer);
+guint32 create_rtv_multi_value_historical_watch(gchar **, gboolean, const gchar *, gpointer);
+guint32 create_rtv_multi_value_watch(gchar **, gboolean, const gchar *, gpointer);
+void rtv_watch_destroy(gpointer);
+void remove_rtv_watch(guint32);
+void process_rtv_watches(gpointer, gpointer, gpointer);
+gboolean rtv_watch_active(guint32 );
 /* Prototypes */
 
 #endif

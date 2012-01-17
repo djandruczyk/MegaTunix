@@ -395,7 +395,7 @@ G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
   */
 G_MODULE_EXPORT void ms2_ttm_watch(void)
 {
-	create_single_bit_state_watch_f("status3",1,TRUE,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
+	create_rtv_single_bit_state_watch_f("status3",1,TRUE,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
 }
 
 

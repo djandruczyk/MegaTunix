@@ -51,7 +51,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
 	get_symbol_f("calc_value",(void *)&calc_value_f);
 	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
-	get_symbol_f("create_single_bit_state_watch",(void *)&create_single_bit_state_watch_f);
+	get_symbol_f("create_rtv_single_bit_state_watch",(void *)&create_rtv_single_bit_state_watch_f);
 	get_symbol_f("dbg_func",(void *)&dbg_func_f);
 	get_symbol_f("evaluator_create",(void *)&evaluator_create_f);
 	get_symbol_f("evaluator_destroy",(void *)&evaluator_destroy_f);

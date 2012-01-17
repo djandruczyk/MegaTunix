@@ -1735,7 +1735,7 @@ G_MODULE_EXPORT void update_misc_gauge(DataWatch *watch)
 	if (GTK_IS_WIDGET(watch->user_data))
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(watch->user_data),watch->val);
 	else
-		remove_watch(watch->id);
+		remove_rtv_watch(watch->id);
 }
 
 

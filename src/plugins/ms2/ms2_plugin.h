@@ -45,7 +45,7 @@ EXTERN gint (*ms_get_ecu_data_f)(gint, gint, gint, DataSize);
 EXTERN GtkWidget *(*lookup_widget_f)(const gchar *);
 EXTERN gboolean (*lookup_current_value_f)(const gchar * internal_name, gfloat *value);
 EXTERN GdkGC *(*initialize_gc_f)(GdkDrawable *, GcType);
-EXTERN void (*create_single_bit_state_watch_f)(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
+EXTERN void (*create_rtv_single_bit_state_watch_f)(const gchar *, gint, gboolean, gboolean, const gchar *, gpointer);
 EXTERN void *(*evaluator_create_f)(char *);
 EXTERN void *(*evaluator_destroy_f)(void *);
 EXTERN double (*evaluator_evaluate_x_f)(void *, double);

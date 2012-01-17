@@ -24,7 +24,8 @@
 #include <stdio.h>
 #include <watches.h>
 
-static GHashTable *watch_hash;
+static GHashTable *rtv_watch_hash;
+//static GHashTable *ecu_watch_hash;
 
 /*!
   \brief fire_off_rtv_watches_pf() Trolls through the watch list and if
@@ -32,8 +33,8 @@ static GHashTable *watch_hash;
   */
 G_MODULE_EXPORT gboolean fire_off_rtv_watches(void)
 {
-	if (watch_hash)
-		g_hash_table_foreach(watch_hash,process_watches,NULL);
+	if (rtv_watch_hash)
+		g_hash_table_foreach(rtv_watch_hash,process_rtv_watches,NULL);
 	return TRUE;
 }
 
@@ -51,7 +52,7 @@ G_MODULE_EXPORT gboolean fire_off_rtv_watches(void)
   this watch fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 
@@ -65,9 +66,9 @@ G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gin
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void *)&watch->func);
-	if (!watch_hash)
-		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
-	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
+	if (!rtv_watch_hash)
+		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
+	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
 
@@ -84,7 +85,7 @@ G_MODULE_EXPORT guint32 create_single_bit_state_watch(const gchar * varname, gin
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-G_MODULE_EXPORT guint32 create_single_bit_change_watch(const gchar * varname, gint bit,gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname, gint bit,gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 
@@ -97,9 +98,9 @@ G_MODULE_EXPORT guint32 create_single_bit_change_watch(const gchar * varname, gi
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void *)&watch->func);
-	if (!watch_hash)
-		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
-	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
+	if (!rtv_watch_hash)
+		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
+	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
 
@@ -113,7 +114,7 @@ G_MODULE_EXPORT guint32 create_single_bit_change_watch(const gchar * varname, gi
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-G_MODULE_EXPORT guint32 create_value_change_watch(const gchar * varname, gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 
@@ -125,9 +126,9 @@ G_MODULE_EXPORT guint32 create_value_change_watch(const gchar * varname, gboolea
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void *)&watch->func);
-	if (!watch_hash)
-		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
-	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
+	if (!rtv_watch_hash)
+		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
+	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
 
@@ -142,7 +143,7 @@ G_MODULE_EXPORT guint32 create_value_change_watch(const gchar * varname, gboolea
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 
@@ -156,9 +157,9 @@ G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void *)&watch->func);
-	if (!watch_hash)
-		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
-	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
+	if (!rtv_watch_hash)
+		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
+	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
 
@@ -173,7 +174,7 @@ G_MODULE_EXPORT guint32 create_multi_value_watch(gchar ** varnames, gboolean one
   fires
   \returns ID for this watch so it can be cancelled whe nno longer used.
   */
-G_MODULE_EXPORT guint32 create_multi_value_historical_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
+G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	DataWatch *watch = NULL;
 
@@ -188,9 +189,9 @@ G_MODULE_EXPORT guint32 create_multi_value_historical_watch(gchar ** varnames, g
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void *)&watch->func);
-	if (!watch_hash)
-		watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,watch_destroy);
-	g_hash_table_insert(watch_hash,GINT_TO_POINTER(watch->id),watch);
+	if (!rtv_watch_hash)
+		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
+	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
 
@@ -199,7 +200,7 @@ G_MODULE_EXPORT guint32 create_multi_value_historical_watch(gchar ** varnames, g
   \brief destroys a watch given the pointer passed
   \param data is the pointer to the DataWatch structure we need to destroy
   */
-G_MODULE_EXPORT void watch_destroy(gpointer data)
+G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
 {
 	gint i = 0;
 	DataWatch *watch = (DataWatch *)data;
@@ -227,9 +228,9 @@ G_MODULE_EXPORT void watch_destroy(gpointer data)
   \param watch_id is the watch identifier as returned by any of the 
   create_*_watch functions
   */
-G_MODULE_EXPORT void remove_watch(guint32 watch_id)
+G_MODULE_EXPORT void remove_rtv_watch(guint32 watch_id)
 {
-	g_hash_table_remove(watch_hash,GINT_TO_POINTER(watch_id));
+	g_hash_table_remove(rtv_watch_hash,GINT_TO_POINTER(watch_id));
 }
 
 
@@ -241,7 +242,7 @@ G_MODULE_EXPORT void remove_watch(guint32 watch_id)
   \param value is the pointer to DataWatch structure
   \param data is unused
   */
-G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data)
+G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer data)
 {
 	DataWatch * watch = (DataWatch *)value;
 	gfloat tmpf = 0.0;
@@ -271,7 +272,7 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 				watch->func(watch);
 				gdk_threads_leave();
 				if (watch->one_shot)
-					remove_watch(watch->id);
+					remove_rtv_watch(watch->id);
 			}
 			break;
 		case SINGLE_BIT_CHANGE:
@@ -293,7 +294,7 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 				watch->func(watch);
 				gdk_threads_leave();
 				if (watch->one_shot)
-					remove_watch(watch->id);
+					remove_rtv_watch(watch->id);
 			}
 			break;
 		case VALUE_CHANGE:
@@ -309,7 +310,7 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 				gdk_threads_enter();
 				watch->func(watch);
 				gdk_threads_leave();
-				remove_watch(watch->id);
+				remove_rtv_watch(watch->id);
 				break;
 			}
 
@@ -337,7 +338,7 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 			gdk_threads_leave();
 			if (watch->one_shot)
 			{
-				remove_watch(watch->id);
+				remove_rtv_watch(watch->id);
 				break;
 			}
 			break;
@@ -360,7 +361,7 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
 			gdk_threads_leave();
 			if (watch->one_shot)
 			{
-				remove_watch(watch->id);
+				remove_rtv_watch(watch->id);
 				break;
 			}
 			break;
@@ -375,10 +376,10 @@ G_MODULE_EXPORT void process_watches(gpointer key, gpointer value, gpointer data
   \param id is the WatchID as returned by any of the create_*_watch functions
   \returns TRUE if the ID is valid, FALSE otherwise
   */
-G_MODULE_EXPORT gboolean watch_active(guint32 id)
+G_MODULE_EXPORT gboolean rtv_watch_active(guint32 id)
 {
 	/*printf("watch_active call for watch %ui\n",id);*/
-	if (g_hash_table_lookup(watch_hash,GINT_TO_POINTER(id)))
+	if (g_hash_table_lookup(rtv_watch_hash,GINT_TO_POINTER(id)))
 		return TRUE;
 	else
 		return FALSE;

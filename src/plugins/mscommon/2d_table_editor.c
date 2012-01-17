@@ -206,7 +206,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
 			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
 			g_free(filename);
-			id = create_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
+			id = create_rtv_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
 			OBJ_SET(gauge,"gauge_id",GINT_TO_POINTER(id));
 			gtk_container_add(GTK_CONTAINER(parent),gauge);
 		}
@@ -221,7 +221,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		cdata->curve = curve;
 		cdata->axis = _X_;
 		cdata->source = firmware->te_params[table_num]->x_source;
-		id = create_value_change_watch_f(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
+		id = create_rtv_value_change_watch_f(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
 		mtx_curve_set_show_x_marker(MTX_CURVE(curve),TRUE);
 		OBJ_SET(curve,"cdata",(gpointer)cdata);
 		OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
@@ -389,7 +389,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		OBJ_SET(curve,"y_entries",y_entries);
 		if (firmware->te_params[table_num]->bind_to_list)
 			g_list_foreach(get_list_f(firmware->te_params[table_num]->bind_to_list),alter_widget_state_f,NULL);
-		create_value_change_watch_f(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
+		create_rtv_value_change_watch_f(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
 		gtk_container_add(GTK_CONTAINER(curve_parent),curve);
 	}
 	OBJ_SET(window,"widget_list",widget_list);
@@ -552,7 +552,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
 
 		g_free(filename);
-		id = create_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
+		id = create_rtv_value_change_watch_f(firmware->te_params[table_num]->gauge_datasource,FALSE,"update_misc_gauge",(gpointer)gauge);
 		OBJ_SET(gauge,"gauge_id",GINT_TO_POINTER(id));
 		gtk_container_add(GTK_CONTAINER(parent),gauge);
 	}
@@ -794,9 +794,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 			firmware->te_params[table_num]->y_2d_upper_limit);
 
 	/* One shot to get marker drawn. */
-	create_value_change_watch_f(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
+	create_rtv_value_change_watch_f(cdata->source,TRUE,"update_curve_marker",(gpointer)cdata);
 	/* continuous to catch changes. */
-	id = create_value_change_watch_f(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
+	id = create_rtv_value_change_watch_f(cdata->source,FALSE,"update_curve_marker",(gpointer)cdata);
 	OBJ_SET(curve,"marker_id",GINT_TO_POINTER(id));
 	if (!embedded)
 	{
@@ -898,7 +898,7 @@ G_MODULE_EXPORT void gauge_cleanup(gpointer gauge_ptr, gpointer data)
 	if (OBJ_GET(widget, "gauge_id"))
 	{
 		id = (GINT)OBJ_GET(widget, "gauge_id");
-		remove_watch_f(id);
+		remove_rtv_watch_f(id);
 	}
 }
 
@@ -927,7 +927,7 @@ G_MODULE_EXPORT void clean_curve(gpointer curve_ptr, gpointer data)
 		g_free(cdata);
 	id = (guint32)(GINT)OBJ_GET(widget, "marker_id");
 	if (id > 0)
-		remove_watch_f(id);
+		remove_rtv_watch_f(id);
 }
 
 
@@ -1246,7 +1246,7 @@ G_MODULE_EXPORT void update_curve_marker(DataWatch *watch)
 	CurveData *cdata = (CurveData *)watch->user_data;
 	if (!MTX_IS_CURVE(cdata->curve))
 	{
-	        remove_watch_f(watch->id);
+	        remove_rtv_watch_f(watch->id);
 		return;
 	}
 	if (cdata->axis == _X_)
