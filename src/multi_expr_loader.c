@@ -24,6 +24,7 @@
 #include <debugging.h>
 #include <init.h>
 #include <multi_expr_loader.h>
+#include <mtxmatheval.h>
 #include <keyparser.h>
 #include <stdlib.h>
 #include <string.h>
@@ -177,5 +178,10 @@ G_MODULE_EXPORT void free_multi_source(gpointer data)
 	cleanup(multi->multiplier);	
 	cleanup(multi->adder);	
 	cleanup(multi->suffix);
+	cleanup(multi->lookuptable);
+	if (multi->dl_eval)
+		evaluator_destroy(multi->dl_eval);
+	if (multi->ul_eval)
+		evaluator_destroy(multi->ul_eval);
 	cleanup(multi);
 }

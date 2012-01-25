@@ -82,6 +82,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	}
 
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget("main_window")));
 	gtk_window_set_resizable(GTK_WINDOW(window),FALSE);
 	/* Playback mode..... */
 	if (playback)

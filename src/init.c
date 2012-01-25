@@ -959,7 +959,8 @@ G_MODULE_EXPORT void mem_dealloc(void)
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 	/*printf("removing data for %s\n",g_quark_to_string(key_id));*/
-	g_dataset_remove_data(global_data,g_quark_to_string(key_id));
+	//g_dataset_remove_data(global_data,g_quark_to_string(key_id));
+	g_dataset_remove_data(data,g_quark_to_string(key_id));
 }
 
 
@@ -1203,6 +1204,9 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 	cleanup(table_params->x_precisions);
 	cleanup(table_params->y_precisions);
 	cleanup(table_params->z_precisions);
+	cleanup(table_params->x_lookuptables);
+	cleanup(table_params->y_lookuptables);
+	cleanup(table_params->z_lookuptables);
 	cleanup(table_params->x_source);
 	cleanup(table_params->y_source);
 	cleanup(table_params->z_source);
@@ -1256,12 +1260,15 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 {
 	GArray * array = NULL;
+	gconstpointer dep_obj = NULL;
 	if (!(object))
 		return;
-	 /* For debugging: g_dataset_foreach(object,dump_dataset,NULL);*/
 	array = (GArray *)DATA_GET(object, "history");
 	if (array)
 		g_array_free(DATA_GET(object,"history"),TRUE);
+
+	/* Trigger dependant object if existing to deallocate */
+	DATA_SET(object,"dep_object",NULL);
 	/* This should release everything else bound via a DATA_SET_FULL */
 	g_dataset_foreach(object,dataset_dealloc,NULL);
 	g_dataset_destroy(object);

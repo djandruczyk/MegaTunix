@@ -151,6 +151,9 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	//QUIET_MTXDBG(CRITICAL,_("Configuration saved\n"));
 	g_static_mutex_lock(&leave_mutex);
 
+	/* Tell plugins to shutdown */
+	plugins_shutdown();
+
 	/* IO dispatch queue */
 	g_get_current_time(&now);
 	g_time_val_add(&now,250000);
@@ -205,7 +208,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_cond_timed_wait(gui_dispatch_cond,gui_dispatch_mutex,&now);
 	g_mutex_unlock(gui_dispatch_mutex);
 
-
 	save_config();
 
 	/*
@@ -251,9 +253,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 	g_mutex_lock(serio_mutex);
 	g_mutex_unlock(serio_mutex);
-
-	/* Tell plugins to shutdown */
-	plugins_shutdown();
 
 	/* Free all buffers */
 	mem_dealloc();
@@ -2400,6 +2399,7 @@ void process_source(gpointer data, gpointer nothing)
 		}
 	}
 	g_strfreev(vector);
+	g_strfreev(vector2);
 }
 
 
