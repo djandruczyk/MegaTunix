@@ -80,6 +80,7 @@ extern GdkColor white;
 G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 {
 	gint id;
+	gboolean res = FALSE;
 	/*
 	   extern GThread * ascii_socket_id;
 	   extern GThread * binary_socket_id;
@@ -120,6 +121,21 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		}
 		prompt_to_save();
 	}
+	g_static_mutex_lock(&leave_mutex);
+	/* Commits any pending data to ECU flash */
+/*	BUGGY CODE, causes deadlock, disabled....
+	if ((DATA_GET(global_data,"connected")) && 
+			(DATA_GET(global_data,"interrogated")) && 
+			(!DATA_GET(global_data,"offline")))
+	{
+		QUIET_MTXDBG(CRITICAL,_("Before burn\n"));
+		io_cmd(firmware->burn_all_command,NULL);
+		QUIET_MTXDBG(CRITICAL,_("After burn\n"));
+	}
+	*/
+	/* Set global flag */
+	DATA_SET(global_data,"leaving",GINT_TO_POINTER(TRUE));
+
 	main_window = lookup_widget("main_window");
 
 	/* Stop timeout functions */
@@ -131,25 +147,13 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	stop_datalogging();
 	//QUIET_MTXDBG(CRITICAL,_("Aafter stop_datalogging\n"));
 
-	/* Set global flag */
-	DATA_SET(global_data,"leaving",GINT_TO_POINTER(TRUE));
-
-
 	/* Message to trigger serial repair queue to exit immediately */
 	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
 	if (io_repair_queue)
 		g_async_queue_push(io_repair_queue,&tmp);
 
-	/* Commits any pending data to ECU flash */
-	//QUIET_MTXDBG(CRITICAL,_("Before burn\n"));
-	if ((DATA_GET(global_data,"connected")) && 
-			(DATA_GET(global_data,"interrogated")) && 
-			(!DATA_GET(global_data,"offline")))
-		io_cmd(firmware->burn_all_command,NULL);
-	//QUIET_MTXDBG(CRITICAL,_("After burn\n"));
 
 	//QUIET_MTXDBG(CRITICAL,_("Configuration saved\n"));
-	g_static_mutex_lock(&leave_mutex);
 
 	/* Tell plugins to shutdown */
 	plugins_shutdown();
@@ -160,7 +164,8 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
 	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
 	g_mutex_lock(io_dispatch_mutex);
-	g_cond_timed_wait(io_dispatch_cond,io_dispatch_mutex,&now);
+	res = g_cond_timed_wait(io_dispatch_cond,io_dispatch_mutex,&now);
+	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for io_dispatch_condition is %i\n"),res);*/
 	g_mutex_unlock(io_dispatch_mutex);
 
 	/* Binary Log flusher */
@@ -179,7 +184,8 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
 	pf_dispatch_mutex = DATA_GET(global_data,"pf_dispatch_mutex");
 	g_mutex_lock(pf_dispatch_mutex);
-	g_cond_timed_wait(pf_dispatch_cond,pf_dispatch_mutex,&now);
+	res = g_cond_timed_wait(pf_dispatch_cond,pf_dispatch_mutex,&now);
+	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for pf_dispatch_condition is %i\n"),res);*/
 	g_mutex_unlock(pf_dispatch_mutex);
 
 	/* Statuscounts timeout */
@@ -192,7 +198,8 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	statuscounts_cond = DATA_GET(global_data,"statuscounts_cond");
 	statuscounts_mutex = DATA_GET(global_data,"statuscounts_mutex");
 	g_mutex_lock(statuscounts_mutex);
-	g_cond_timed_wait(statuscounts_cond,statuscounts_mutex,&now);
+	res = g_cond_timed_wait(statuscounts_cond,statuscounts_mutex,&now);
+	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for statuscounts_condition is %i\n"),res);*/
 	g_mutex_unlock(statuscounts_mutex);
 
 	/* GUI Dispatch timeout */
@@ -205,7 +212,8 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
 	gui_dispatch_mutex = DATA_GET(global_data,"gui_dispatch_mutex");
 	g_mutex_lock(gui_dispatch_mutex);
-	g_cond_timed_wait(gui_dispatch_cond,gui_dispatch_mutex,&now);
+	res = g_cond_timed_wait(gui_dispatch_cond,gui_dispatch_mutex,&now);
+	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for gui dispatch_cond is %i\n"),res);*/
 	g_mutex_unlock(gui_dispatch_mutex);
 
 	save_config();

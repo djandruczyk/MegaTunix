@@ -148,15 +148,14 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		if (DATA_GET(global_data,"leaving") || 
 				DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
+			g_mutex_lock(io_dispatch_mutex);
+			g_cond_signal(io_dispatch_cond);
+			g_mutex_unlock(io_dispatch_mutex);
 fast_exit:
 			/* drain queue and exit thread */
 			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
 				dealloc_message(message);
 
-			MTXDBG(THREADS,_("MegaTunix is closing, Thread exiting !!\n"));
-			g_mutex_lock(io_dispatch_mutex);
-			g_cond_signal(io_dispatch_cond);
-			g_mutex_unlock(io_dispatch_mutex);
 			DATA_SET(global_data,"thread_dispatcher_id",NULL);
 			g_thread_exit(0);
 		}

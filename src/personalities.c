@@ -121,6 +121,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	{
 		g_list_foreach(p_list,free_persona_element,NULL);
 		g_list_foreach(s_list,free_persona_element,NULL);
+		g_list_free(p_list);
+		g_list_free(s_list);
 		DATA_SET(global_data,"cli_persona",NULL);
 		if (DATA_GET(global_data,"offline"))
 			goto jumpahead_offline;

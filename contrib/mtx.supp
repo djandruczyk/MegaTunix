@@ -386,3 +386,59 @@
 	...
 	fun:bind_data
 }
+{
+	glade_parse
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:xmlParseElement
+}
+{
+	mtx plugin false positives
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:*dl*
+	...
+	fun:plugins_init
+}
+{
+	mtx common false positives
+	Memcheck:Leak
+	fun:malloc
+	...
+	fun:*strdup
+	...
+	fun:plugins_init
+}
+{
+	gtk invisibles
+	Memcheck:Leak
+	fun:malloc
+	fun:descend_tree
+}
+{
+	Xorg misc
+	Memcheck:Leak
+	fun:malloc
+	...
+	fun:XPending
+	...
+	fun:main
+}
+{
+	Xorg misc
+	Memcheck:Leak
+	fun:malloc
+	...
+	fun:*Xlc*
+	...
+	fun:main
+}
+{
+	GTK IM stuff
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:*gtk_im_*
+}

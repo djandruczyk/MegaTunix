@@ -1,6 +1,8 @@
 ; -- MegaTunix.iss --
 ;SUFFIX=@MTX_VER_STRING@
 
+[Messages]
+WinVersionTooLowError=MegaTunix requires Windows XP or newer!  You have %1 %2
 
 [Setup]
 AppName=MegaTunix
@@ -9,6 +11,8 @@ DefaultDirName={pf}\MegaTunix
 DefaultGroupName=MegaTunix
 UninstallDisplayIcon={app}\megatunix.exe
 Compression=lzma
+; XP or newer ONLY
+MinVersion=0,5.0.9999
 ;Compression=zip
 SolidCompression=yes
 ; Page 0: Initial setup. Disable with DisableStartupPrompt

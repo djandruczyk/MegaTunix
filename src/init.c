@@ -959,7 +959,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
 	/*printf("removing data for %s\n",g_quark_to_string(key_id));*/
-	//g_dataset_remove_data(global_data,g_quark_to_string(key_id));
 	g_dataset_remove_data(data,g_quark_to_string(key_id));
 }
 
@@ -973,6 +972,7 @@ void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
   */
 G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 {
+	/*static gint count = 0;*/
 	Io_Message *message = NULL;
 
 	message = g_new0(Io_Message, 1);
@@ -983,6 +983,7 @@ G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 	message->recv_buf = NULL;
 	message->status = TRUE;
 
+	/*printf("Allocate message %i\n",count++); */
 	return message;
 }
 
@@ -1010,11 +1011,12 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
   */
 G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 {
+	/*static gint count = 0;*/
 	OutputData *payload = NULL;
 	if (!message)
 		return;
-	/*printf("dealloc_message\n");
-	printf ("message pointer %p\n",message);
+	/*printf("dealloc_message %i\n",count++);*/
+	/*printf ("message pointer %p\n",message);
 	printf ("message->functions pointer %p\n",message->functions);
 	*/
 	if (message->functions)
@@ -1050,7 +1052,11 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 		{
 			/*printf ("payload->data pointer %p\n",payload->data);*/
 			if (payload->data)
+			{
+				//DATA_SET(payload->data,"_WILL_NEVER_USE_",NULL);
 				g_dataset_destroy(payload->data);
+				cleanup(payload->data);
+			}
 			cleanup(payload);
 		}
 	}
@@ -1260,7 +1266,7 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 {
 	GArray * array = NULL;
-	gconstpointer dep_obj = NULL;
+	gconstpointer *dep_obj = NULL;
 	if (!(object))
 		return;
 	array = (GArray *)DATA_GET(object, "history");
@@ -1268,11 +1274,18 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 		g_array_free(DATA_GET(object,"history"),TRUE);
 
 	/* Trigger dependant object if existing to deallocate */
+	dep_obj = DATA_GET(object,"dep_object");
+	if (dep_obj)
+	{
+		g_dataset_foreach(dep_obj,dataset_dealloc,NULL);
+		g_dataset_destroy(dep_obj);
+		cleanup(dep_obj);
+	}
 	DATA_SET(object,"dep_object",NULL);
 	/* This should release everything else bound via a DATA_SET_FULL */
 	g_dataset_foreach(object,dataset_dealloc,NULL);
 	g_dataset_destroy(object);
-	g_free(object);
+	cleanup(object);
 }
 
 

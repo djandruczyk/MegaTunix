@@ -1,13 +1,11 @@
 
  MegaTunix v. @VERSION@ NO LONGER requires a separate GTK+ Runtime.
 
- If you still have it installed from a Previous version of MegaTunix,
- its recommended that you UNINSTALL IT so it doesn't not conflict
- with the integrated one within this installer.
+ IF you have a GTK+ Runtime installed, cancel this install and then
+ UNINSTALL IT FIRST, and reboot before resuming the MegaTunix install!
 
- NOTE: Windows 2000 will be phased out at some point.  The author
- strongly recommends moving to a more modern platform. We suggest 
- you use a Linux (Ubuntu recommended) or WinXP machine instead.
+ NOTE: Windows 2000 has been phased out. Please use Windows XP or Linux
+ for an optimal user experience.
  
 
 

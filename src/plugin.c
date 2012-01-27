@@ -123,13 +123,23 @@ G_MODULE_EXPORT void plugins_init()
 G_MODULE_EXPORT void plugins_shutdown()
 {
 	GModule *module = NULL;
+	GMutex *mutex = NULL;
+	GCond *cond = NULL;
 	GThread *id = NULL;
+	gboolean res = FALSE;
 	void (*plugin_shutdown)(void);
 
 	id = DATA_GET(global_data,"thread_dispatcher_id");
+	mutex = DATA_GET(global_data,"io_dispatch_mutex");
+	cond = DATA_GET(global_data,"io_dispatch_cond");
 	if (id != NULL)
 	{
+		/* Set mutex, toggle flag, wait on condition until signalled
+		   */
+		g_mutex_lock(mutex);
 		DATA_SET(global_data,"thread_dispatcher_exit",GINT_TO_POINTER(TRUE));
+		g_cond_wait(cond,mutex);
+		g_mutex_unlock(mutex);
 		g_thread_join(id);
 		DATA_SET(global_data,"thread_dispatcher_id",NULL);
 	}

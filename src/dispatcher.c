@@ -71,6 +71,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 			(DATA_GET(global_data,"leaving")) || 
 			(DATA_GET(global_data,"might_be_leaving")))
 	{
+		/*QUIET_MTXDBG(CRITICAL,_("no pf dispatch queue or leaving or might_be_leaving is set!\n"));*/
 		/* Flush the queue */
 		while (NULL != (message = g_async_queue_try_pop(pf_dispatch_queue)))
 			dealloc_message(message);
@@ -209,6 +210,7 @@ trypop:
 			(DATA_GET(global_data,"leaving")) ||
 			(DATA_GET(global_data,"might_be_leaving")))
 	{
+		/*QUIET_MTXDBG(CRITICAL,_("no Gui dispatch queue or leaving or might_be_leaving is set!\n"));*/
 		/* Flush the queue */
 		while (NULL != (message = g_async_queue_try_pop(gui_dispatch_queue)))
 			dealloc_message(message);
@@ -348,7 +350,10 @@ trypop:
 			while (gtk_events_pending())
 			{
 				if (DATA_GET(global_data,"leaving"))
+				{
+					/*QUIET_MTXDBG(CRITICAL,_("events_pending_loop, Gui handler, \"leaving\" flag was set, aborting\n"));*/
 					goto dealloc;
+				}
 				gtk_main_iteration();
 			}
 			//gdk_flush();
