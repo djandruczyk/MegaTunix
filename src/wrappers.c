@@ -21,6 +21,7 @@
 #include <combo_mask.h>
 #include <gauge.h>
 #include <mtxmatheval.h>
+#include <multi_expr_loader.h>
 
 /*!
   \brief wrapper for evaluator_create()
