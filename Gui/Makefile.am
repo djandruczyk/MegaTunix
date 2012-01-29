@@ -43,7 +43,6 @@ gui_glade_files = 	\
 		inj_timing_6x6x3.glade \
 		jimstim-runtime.glade \
 		logviewer.glade \
-		main_win32.glade \
 		main.glade \
 		memviewer.glade \
 		ms2-accel.glade \

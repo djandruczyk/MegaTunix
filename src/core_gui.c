@@ -71,11 +71,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 
 	args = DATA_GET(global_data,"args");
 	g_return_val_if_fail(args,FALSE);
-//#ifdef __WIN32__
-//	fname = g_build_filename(GUI_DATA_DIR,"main_win32.glade",NULL);
-//#else
 	fname = g_build_filename(GUI_DATA_DIR,"main.glade",NULL);
-//#endif
 	filename = get_file(g_strdup(fname),NULL);
 	if (!filename)
 	{
