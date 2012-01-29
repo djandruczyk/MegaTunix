@@ -42,7 +42,7 @@ handler=_REQ_FUEL_POPUP_
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirt ECU MSnS-Extra Fuel Constants
+set_label=MegaSquirt-1 Extra Fuel Constants
 
 [inj_mode_label]
 keys=bind_to_list

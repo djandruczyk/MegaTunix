@@ -180,7 +180,7 @@ sub-notebook=SP_spark_notebook
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirtnSpark Extra Spark Tables
+set_label=MS1-Extra Spark Tables
 
 [SP1_load_tbl_lab]
 keys=page,label,alt_label,depend_on

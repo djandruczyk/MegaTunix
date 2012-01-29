@@ -43,7 +43,7 @@ handler=_REQ_FUEL_POPUP_
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirt ECU Dualtable Constants
+set_label=ECU Dualtable Constants
 
 [table1_inj_sq_cyls_frame_title]
 keys=set_label

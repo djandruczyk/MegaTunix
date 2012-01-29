@@ -1,5 +1,5 @@
 [global]
-description=Object data map for MegaSquirt Tools (backup/restore, etc...)
+description=Object data map for Tools (backup/restore, etc...)
 _tab_name=_Tools
 #id_prefix=TOOLS_
 groups=defaults

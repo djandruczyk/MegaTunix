@@ -1,5 +1,5 @@
 [global]
-description=Object data map for MegaSquirt Runtime Display
+description=Object data map for Runtime Display
 _tab_name=_Runtime Display
 groups=defaults
 post_functions=load_rt_sliders

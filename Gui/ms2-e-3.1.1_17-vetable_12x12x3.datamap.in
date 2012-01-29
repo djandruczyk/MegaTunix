@@ -107,7 +107,7 @@ match_type=_OR_
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirtnSpark-Extra FUEL VE Tables
+set_label=MS2-Extra Fuel VE Tables
 
 #----- Buttons ---------------------------------------------------------------
 

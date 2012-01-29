@@ -105,7 +105,7 @@ bind_to_list=dt_controls
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirtnSpark-Extra FUEL VE Tables
+set_label=MS1-Extra Fuel VE Tables
 
 [VE1_load_tbl_lab]
 keys=label,alt_label,depend_on

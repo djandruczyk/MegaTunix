@@ -225,7 +225,7 @@ bind_to_list=ign,use_sparktable
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirtnSpark Extra Spark Tables
+set_label=MS2-Extra Spark Tables
 
 [SP2_notebook_tab_label]
 keys=bind_to_list

@@ -315,7 +315,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab Interrogation frame */
 	ebox = glade_xml_get_widget(xml,"ecu_info_ebox");
-	gtk_widget_set_tooltip_text(ebox,_("This box shows you the MegaSquirt Interrogation report.  Due to the rise of various MegaSquirt variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you some feedback about how the MS responds to various commands and suggests what it thinks is the closest match."));
+	gtk_widget_set_tooltip_text(ebox,_("This box shows you the ECU Interrogation report.  Due to the rise of various ECU variants, several of them unfortunately return the same version number except that their API's aren't compatible.  This window give you some feedback about how the MS responds to various commands and suggests what it thinks is the closest match."));
 
 	/* General Tab Interrogation button */
 	ebox = glade_xml_get_widget(xml,"interrogate_button_ebox");
@@ -432,7 +432,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* COMMS Tab Stats Frame */
 	ebox = glade_xml_get_widget(xml,"ms_stats_ebox");
-	gtk_widget_set_tooltip_text(ebox,"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the MegaSquirt hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable or wireless connection between this host computer and the MS.");
+	gtk_widget_set_tooltip_text(ebox,"This block shows you statistics on the number of good reads of the VE/Constants datablocks, RealTime datablocks and the ECU hard reset and Serial I/O error counts.  Hard resets are indicative of power problems or excessive electrical noise to the MS (causing cpu resets).  Serial I/O errors are indicative of a poor cable or wireless connection between this host computer and the MS.");
 
 	/* COMMS Tab Stats Entries */
 	widget = glade_xml_get_widget(xml,"comms_vecount_entry");

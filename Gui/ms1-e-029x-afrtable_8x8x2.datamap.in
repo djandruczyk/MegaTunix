@@ -174,10 +174,6 @@ set_label=Air Fuel Ratio Table for VE-Tables 1/3
 keys=set_label
 set_label=Air Fuel Ratio Table for VE-Table 2 (DT)
 
-[topframe_title]
-keys=set_label
-set_label=MegaSquirtnSpark-Extra AFR-Table 1
-
 [AFR1_load_tbl_lab]
 keys=page,label,alt_label,depend_on
 page=0

@@ -120,7 +120,7 @@ _tooltip=Trigger Offset (deg) (adv_offset in the code) is the advance before (or
 [skip_pulses_entry]
 keys=offset,tooltip
 offset=1
-_tooltip=Skip Pulses (no_skip_pulses) is the number of ignition pulses at start-up that MegaSquirt-II uses to calculate the rpm before sending calculated advance signals.  This allows the starter to get the engine up to a semi-stable speed first.
+_tooltip=Skip Pulses (no_skip_pulses) is the number of ignition pulses at start-up that MS-II uses to calculate the rpm before sending calculated advance signals.  This allows the starter to get the engine up to a semi-stable speed first.
 
 [alpha_entry]
 keys=offset,raw_lower,raw_upper,tooltip
@@ -187,7 +187,7 @@ require_reboot=TRUE
 keys=offset,tooltip,require_reboot
 offset=969
 require_reboot=TRUE
-_tooltip=Skip Teeth (No_Skip_Teeth): Number of teeth (between tach pulses) to be skipped. You must create the same number of 'tach' signals as you want ignition events. On a four cylinder four stroke engine, this is two per revolution. Suppose it has a 60-2 wheel. What you need to have happen is for MegaSquirt-II to 'skip' a certain number of teeth so the only the right number of teeth are counted as 'tach signals' per revolution. Since we have determined the number of tach signals we want is 2, we need to skip 60/2 or 30 teeth. For a eight cylinder 60-2, we need 4 ignition events per revolution, so we set skip teeth to 60/4 or 15. And for an eight cylinder 36-1 wheel, we would set skip teeth 36/4 or 9.
+_tooltip=Skip Teeth (No_Skip_Teeth): Number of teeth (between tach pulses) to be skipped. You must create the same number of 'tach' signals as you want ignition events. On a four cylinder four stroke engine, this is two per revolution. Suppose it has a 60-2 wheel. What you need to have happen is for MS-II to 'skip' a certain number of teeth so the only the right number of teeth are counted as 'tach signals' per revolution. Since we have determined the number of tach signals we want is 2, we need to skip 60/2 or 30 teeth. For a eight cylinder 60-2, we need 4 ignition events per revolution, so we set skip teeth to 60/4 or 15. And for an eight cylinder 36-1 wheel, we would set skip teeth 36/4 or 9.
 
 [delay_teeth_entry]
 keys=offset,tooltip,require_reboot

@@ -163,7 +163,7 @@ bind_to_list=seq_inj,extra_inj,bank2,ve_trim
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirtnSpark-Extra FUEL VE Tables
+set_label=MS2-Extra Fuel VE Tables
 
 #----- Buttons ---------------------------------------------------------------
 

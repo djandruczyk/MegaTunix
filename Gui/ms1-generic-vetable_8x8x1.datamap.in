@@ -88,7 +88,7 @@ datasource=afr
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirt VE-Table 1
+set_label=VE-Table 1
 
 [title]
 keys=set_label

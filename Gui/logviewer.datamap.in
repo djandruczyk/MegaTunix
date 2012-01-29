@@ -1,7 +1,7 @@
 # Visual Logviewer/playback tab
 
 [global]
-description=Object data map for MegaSquirt visual logviewer/playback tool
+description=Object data map for visual logviewer/playback tool
 _tab_name=_Logviewer
 groups=defaults
 post_functions=finish_logviewer

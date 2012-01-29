@@ -323,7 +323,7 @@ _tooltip=Trigger Offset (deg) (adv_offset in the code) is the advance before (or
 [skip_pulses_entry]
 keys=offset,tooltip
 offset=1
-_tooltip=Skip Pulses (no_skip_pulses) is the number of ignition pulses at start-up that MegaSquirt-II uses to calculate the rpm before sending calculated advance signals.  This allows the starter to get the engine up to a semi-stable speed first.
+_tooltip=Skip Pulses (no_skip_pulses) is the number of ignition pulses at start-up that MS-II uses to calculate the rpm before sending calculated advance signals.  This allows the starter to get the engine up to a semi-stable speed first.
 
 [main_return_angle_entry]
 keys=offset,size,precision,raw_lower,raw_upper,fromecu_mult,bind_to_list,tooltip

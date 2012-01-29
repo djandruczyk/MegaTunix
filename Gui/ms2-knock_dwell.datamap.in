@@ -176,7 +176,7 @@ keys=offset,precision,fromecu_mult,tooltip
 offset=5
 precision=1
 fromecu_mult=0.1
-_tooltip=Max Spark Duration is the amount of time MegaSquirt-II tries to wait before starting another charging cycle for the spark/ignition event to complete. setting this too high can limit max RPM capability. 
+_tooltip=Max Spark Duration is the amount of time MS-II tries to wait before starting another charging cycle for the spark/ignition event to complete. setting this too high can limit max RPM capability. 
 
 [accel_comp_entry]
 keys=offset,precision,fromecu_mult,tooltip

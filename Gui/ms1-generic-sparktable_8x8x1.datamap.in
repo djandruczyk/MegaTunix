@@ -83,7 +83,7 @@ visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [topframe_title]
 keys=set_label
-set_label=MegaSquirtnSpark 3.x Spark Table
+set_label=MS1-Extra Spark Table
 
 [title]
 keys=set_label

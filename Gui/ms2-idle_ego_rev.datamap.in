@@ -249,7 +249,7 @@ raw_upper=4000
 precision=1
 require_reboot=TRUE
 bind_to_list=iac_common
-_tooltip=This is the number of steps the pintle is retracted to the "wide-open" position when MegaSquirt is powered up, It it used in all temperatures.
+_tooltip=This is the number of steps the pintle is retracted to the "wide-open" position when the ECU is powered up, It it used in all temperatures.
 
 [cranking_pos_entry]
 keys=offset,size,raw_upper,bind_to_list,tooltip
