@@ -76,6 +76,7 @@
 			<base>!!</base>
 			<args>
 				<arg>PAUSE_100MS</arg>
+				<arg>PAUSE_100MS</arg>
 				<arg>SEND_X</arg>
 			</args>
 			<helper_func>simple_read_hf</helper_func>
