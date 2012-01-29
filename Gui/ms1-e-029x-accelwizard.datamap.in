@@ -45,6 +45,11 @@ bind_to_list=ae_tpsdot_controls,ae_normal_controls
 
 #----- Widgets ---------------------------------------------------------------
 
+[stripchart_container]
+keys=sources,post_functions_with_arg
+sources=mapdot,tpsdot,afr1
+post_functions_with_arg=create_stripchart
+
 [topframe]
 keys=tab_ident
 tab_ident=_ACCEL_WIZ_TAB_
