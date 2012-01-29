@@ -42,6 +42,7 @@ enum
 	N_COLS
 };
 
+void editing_started(GtkCellRenderer *renderer, GtkCellEditable *editable, gchar *path, gpointer data);
 /*!
   \brief get_table() gets a valid filehandle of the lookuptable from 
   get_file and passes it to load_table(void)
@@ -550,6 +551,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 	GtkWidget * vbox = NULL;
 	GtkWidget * tree = NULL;
 	GtkWidget * frame = NULL;
+	GtkWidget * label = NULL;
 	ListElement *element = NULL;
 	ConfigFile *cfgfile = NULL;
 	GArray *classes = NULL;
@@ -583,9 +585,12 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		ltc_created = TRUE;
 		ltc_visible = TRUE;
 		frame = gtk_frame_new("MegaTunix LookupTables");
-		gtk_box_pack_start (GTK_BOX(vbox),frame,FALSE,TRUE,5);
+		gtk_box_pack_start (GTK_BOX(vbox),frame,TRUE,TRUE,5);
 		vbox = gtk_vbox_new(FALSE,0);
 		gtk_container_add(GTK_CONTAINER(frame),vbox);
+		label = gtk_label_new(NULL);
+		gtk_label_set_markup(GTK_LABEL(label),_(" Click on the <i>LookupTable Filename</i> and press <b><u> Enter </u></b> to change "));
+		gtk_box_pack_start(GTK_BOX(vbox),label,TRUE,TRUE,5);
 
 		store = gtk_list_store_new(N_COLS,	/* total cols */
 				G_TYPE_STRING, /* int name */
@@ -667,12 +672,14 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree),TRUE);
 		gtk_box_pack_start(GTK_BOX(vbox),tree,TRUE,TRUE,0);
 		renderer = gtk_cell_renderer_text_new();
-		column = gtk_tree_view_column_new_with_attributes("Internal Name",renderer,"text",INTERNAL_NAME_COL,NULL);
+		column = gtk_tree_view_column_new_with_attributes("Internal Table Name",renderer,"text",INTERNAL_NAME_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
+
 		renderer = gtk_cell_renderer_combo_new();
-		g_object_set(G_OBJECT(renderer),"editable",TRUE,"model",combostore,"text-column",0,"style",PANGO_STYLE_ITALIC,NULL);
-		g_signal_connect(G_OBJECT(renderer),"edited", G_CALLBACK(lookuptable_change),store);
-		column = gtk_tree_view_column_new_with_attributes("Table Filename",renderer,"text",FILENAME_COL,NULL);
+		g_object_set(G_OBJECT(renderer),"has-entry",FALSE,"editable",TRUE,"model",combostore,"text-column",0,"style",PANGO_STYLE_ITALIC,NULL);
+		g_signal_connect(G_OBJECT(renderer),"changed", G_CALLBACK(lookuptable_changed),store);
+//		g_signal_connect(G_OBJECT(renderer),"editing-started", G_CALLBACK(editing_started),store);
+		column = gtk_tree_view_column_new_with_attributes("LookupTable Filename",renderer,"text",FILENAME_COL,NULL);
 		gtk_tree_view_append_column(GTK_TREE_VIEW(tree),column);
 
 		/*		renderer = gtk_cell_renderer_toggle_new();
@@ -682,6 +689,8 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		gtk_window_set_transient_for(GTK_WINDOW(lookuptables_config_window),GTK_WINDOW(lookup_widget("main_window")));
 		gtk_widget_show_all (lookuptables_config_window);
 		gtk_tree_view_columns_autosize( GTK_TREE_VIEW(tree));
+		gtk_tree_view_set_grid_lines( GTK_TREE_VIEW(tree),GTK_TREE_VIEW_GRID_LINES_BOTH);
+//		g_signal_connect(G_OBJECT(tree),"row-activated", G_CALLBACK(row_activated),NULL);
 	}
 	return TRUE;
 }
@@ -709,12 +718,14 @@ G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpoin
   \param data is unused
   \returns TRUE on success, FALSE otherwise
    */
-G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *path, gchar * new_text, gpointer data)
+//G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gchar *path, gchar * new_text, gpointer data)
+G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gchar *path, GtkTreeIter *new_iter, gpointer data)
 {
-	GtkListStore *store = NULL;
+	GtkTreeModel *combostore = NULL;
 	GtkTreeIter iter;
 	GtkTreeModel *model = data;
 	ConfigFile *cfgfile = NULL;
+	gchar * new_text = NULL;
 	gchar * int_name = NULL;
 	gchar * old = NULL;
 	gchar * new_name = NULL;
@@ -728,9 +739,13 @@ G_MODULE_EXPORT gboolean lookuptable_change(GtkCellRenderer *renderer, gchar *pa
 	io_data_queue = DATA_GET(global_data,"io_data_queue");
 
 	/* Get combo box model so we can set the combo to this new value */
-	g_object_get(G_OBJECT(renderer),"model",&store,NULL);
+	g_object_get(G_OBJECT(renderer),"model",&combostore,NULL);
+	gtk_tree_model_get(combostore,new_iter,0,&new_text,-1);
+
+	/* Get combo box model so we can set the combo to this new value */
 	gtk_tree_model_get_iter_from_string(model,&iter,path);
 	gtk_tree_model_get(model,&iter,INTERNAL_NAME_COL,&int_name,FILENAME_COL,&old,-1);
+	//printf("New text is %s, int name associated %s, filename %s\n",new_text,int_name,old);
 	if (g_strcasecmp(old,new_text) == 0) /* If no change, return */
 	{
 		g_free(int_name);
@@ -828,4 +843,31 @@ G_MODULE_EXPORT void dump_lookuptables(gpointer key, gpointer value, gpointer us
 	printf(_(": dump_hash()\n\tKey %s, Value %p, %s\n"),(gchar *)key, value,table->filename);
 }
 
+
+/*!
+  \brief row_activated() is a handler to expand hte combo box on double click of a row
+  \param treeview is the treeview widget
+  \param path is the path within the tree they clicked on
+  \param column is hte column they clicked on
+  \param user_data is unused...
+  */
+G_MODULE_EXPORT void row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *column, gpointer data)
+{
+	printf("A row was activated, should popdown the combo if possible...\n");
+	
+}
+
+G_MODULE_EXPORT void started(GtkCellRenderer *renderer, GtkCellEditable *editable, gchar *path, gpointer data)
+{
+	printf("combo editing-started signal!\n");
+	if (GTK_IS_ENTRY(editable))
+		printf("Its an entry\n");
+	else if (GTK_IS_COMBO_BOX(editable))
+	{
+		printf("Its a combo box\n");
+		g_signal_emit_by_name(editable,"popup");
+	}
+	else
+		printf("Not sure what widget this is...\n");
+}
 
