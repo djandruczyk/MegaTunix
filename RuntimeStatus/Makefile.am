@@ -7,6 +7,7 @@ rtstatus_files = \
 		MS1-Std.xml \
 		MS2-Extra.xml \
 		MS2-Extra-ALS.xml \
+		MS2-Extra-3.2.1.xml \
 		MS2-Std.xml \
 		PIS_V1_00.xml
 
