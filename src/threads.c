@@ -145,18 +145,19 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 		g_time_val_add(&cur,10000); /* 10 ms timeout */
 		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
-		if (DATA_GET(global_data,"leaving") || 
-				DATA_GET(global_data,"thread_dispatcher_exit"))
+//		if (DATA_GET(global_data,"leaving") || 
+//				DATA_GET(global_data,"thread_dispatcher_exit"))
+		if (DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
-			g_mutex_lock(io_dispatch_mutex);
-			g_cond_signal(io_dispatch_cond);
-			g_mutex_unlock(io_dispatch_mutex);
 fast_exit:
+			DATA_SET(global_data,"thread_dispatcher_id",NULL);
 			/* drain queue and exit thread */
 			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
 				dealloc_message(message);
 
-			DATA_SET(global_data,"thread_dispatcher_id",NULL);
+			g_mutex_lock(io_dispatch_mutex);
+			g_cond_signal(io_dispatch_cond);
+			g_mutex_unlock(io_dispatch_mutex);
 			g_thread_exit(0);
 		}
 		if (!message) /* NULL message */
