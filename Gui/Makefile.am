@@ -47,19 +47,21 @@ gui_glade_files = 	\
 		memviewer.glade \
 		ms2-accel.glade \
 		ms2-alpha-n_6x6x1.glade \
-		ms2-e-3.1.1_17-crank_idle_warmup.glade \
-		ms2-e-3.1.1_17-ego_rev.glade \
-		ms2-e-3.1.x-crank_idle_warmup.glade \
-		ms2-e-3.0.3v-ego_rev.glade \
 		ms2-e-3.0.3v-nitrous_staging_orfc.glade \
 		ms2-e-3.0.3y-ignition.glade \
 		ms2-e-3.0.3y-noise_lag.glade \
+		ms2-e-3.1.1_17-crank_idle_warmup.glade \
+		ms2-e-3.1.1_17-ego_rev.glade \
+		ms2-e-3.1.x-crank_idle_warmup.glade \
+		ms2-e-3.2.1-globals.glade \
+		ms2-e-3.2.1-sequential.glade \
 		ms2-e-3.x-als.glade \
 		ms2-e-3.x-boost_knock_launch.glade \
 		ms2-e-3.x-can.glade \
 		ms2-e-3.x-corrections_misc.glade \
 		ms2-e-3.x-crank_idle_warmup.glade \
 		ms2-e-3.x-debugging.glade \
+		ms2-e-3.x-ego_rev.glade \
 		ms2-e-3.x-globals.glade \
 		ms2-e-3.x-ignition.glade \
 		ms2-e-3.x-nitrous_staging_orfc.glade \
@@ -192,6 +194,7 @@ gui_in_files = 	\
 		ms2-e-3.1.1_17-vetable_16x16x3.datamap.in \
 		ms2-e-3.1.1_17-vetrim_16x16x4.datamap.in \
 		ms2-e-3.1.x-crank_idle_warmup.datamap.in \
+		ms2-e-3.2.1-ego_rev.datamap.in \
 		ms2-e-3.x-accel.datamap.in \
 		ms2-e-3.x-als.datamap.in \
 		ms2-e-3.x-boost_knock_launch.datamap.in \

@@ -254,12 +254,12 @@ _tooltip=Sets Number of ign coils/coil setup
 
 [sparka_pin_combo]
 keys=offset,choices,bitvals,bitmask,bind_to_list,tooltip
-choices=JS10,D14
+choices=JS10(IGN1),D14(Tachout)
 bitvals=0,1
 offset=988
 bitmask=1
 bind_to_list=spk_pin
-_tooltip=Sets ECU Spark Output pin for Spark A.
+_tooltip=Sets ECU Spark Output pin for Spark A, values in paranthesis are for Microsquirt variants
 
 [advance_source_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
