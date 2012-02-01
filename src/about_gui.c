@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2002-2011 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
+ * Copyright (C) 2002-2012 by Dave J. Andruczyk <djandruczyk at yahoo dot com>
  *
  * Linux Megasquirt Tuning software
  * 
@@ -93,7 +93,7 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 		gtk_show_about_dialog(GTK_WINDOW(lookup_widget("main_window")),
 				"name","MegaTunix Tuning Software",
 				"version",MTX_VER_STRING,
-				"copyright","David J. Andruczyk(2011)",
+				"copyright","David J. Andruczyk(2012)",
 				"comments",comments,
 				"license","GPL v2",
 				"website","http://megatunix.sourceforge.net",

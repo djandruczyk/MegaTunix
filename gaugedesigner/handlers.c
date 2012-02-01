@@ -346,7 +346,7 @@ G_MODULE_EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
 		gtk_show_about_dialog(GTK_WINDOW(main_window),
 				"name","MegaTunix Gauge Designer",
 				"version",VERSION,
-				"copyright","David J. Andruczyk(2011)",
+				"copyright","David J. Andruczyk(2012)",
 				"comments","MegaTunix Gauge Designer is a tool to design custom Gauges for the MegaTunix MegaSquirt tuning software",
 				"license","GNU GPL v2",
 				"website","http://megatunix.sourceforge.net",

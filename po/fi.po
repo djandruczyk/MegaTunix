@@ -1,7 +1,7 @@
 # MegaTunix Finnish translations
-# Copyright (C) 2011
+# Copyright (C) 2012
 # This file is distributed under the same license as the MegaTunix package.
-# David J. Andruczyk <dandruczyk@gmail.com>, 2011.
+# David J. Andruczyk <dandruczyk@gmail.com>, 2012.
 #
 # #, fuzzy
 msgid ""
@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: megatunix\n"
 "Report-Msgid-Bugs-To: djandruczyk@yahoo.com\n"
 "POT-Creation-Date: 2012-01-02 15:17-0500\n"
-"PO-Revision-Date: 2011-11-02 15:20-0400\n"
+"PO-Revision-Date: 2012-11-02 15:20-0400\n"
 "Last-Translator: David Andruczyk <dandruczyk@gmail.com>\n"
 "Language-Team: David Andruczyk \n"
 "Language: \n"
@@ -2734,7 +2734,7 @@ msgstr "_VIEW"
 
 #: ../Gui/main.glade.h:160
 #, fuzzy
-msgid "designed by David J. Andruczyk (c) 2011"
+msgid "designed by David J. Andruczyk (c) 2012"
 msgstr "suunnitellut David J. Andruczyk (c) 2010"
 
 #: ../Gui/main.glade.h:161
