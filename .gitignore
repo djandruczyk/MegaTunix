@@ -5,6 +5,7 @@ MegaTunix.iss
 Output
 WIN_NOTES.txt
 autom4te.cache
+win32.cache
 build-stamp
 stamp-it
 config.h

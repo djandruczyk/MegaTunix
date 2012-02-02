@@ -65,6 +65,8 @@ headers = \
 	watches.h \
 	widgetmgmt.h \
 	winserialio.h \
+	winserialbuffer.h \
+	winserialcommhelper.h \
 	wrappers.h \
 	xmlbase.h \
 	xmlcomm.h 

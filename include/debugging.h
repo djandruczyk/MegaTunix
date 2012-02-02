@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DEBUG_GUI_H__
 #define __DEBUG_GUI_H__
 
@@ -25,12 +29,12 @@
 
 /* When inside a plugin, use the alt dest function name (namespace issues) */
 #ifdef IN_PLUGIN
-#define MTXDBG(level, ...) dbg_func_f(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
-#define QUIET_MTXDBG(level, ...) dbg_func_f(level,NULL,NULL,0, __VA_ARGS__)
+ #define MTXDBG(level, ...) dbg_func_f(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+ #define QUIET_MTXDBG(level, ...) dbg_func_f(level,NULL,NULL,0, __VA_ARGS__)
 #else
-/* When inside mtx core, use the default dest function name */
-#define MTXDBG(level, ...) dbg_func(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
-#define QUIET_MTXDBG(level, ...) dbg_func(level,NULL,NULL,0, __VA_ARGS__)
+ /* When inside mtx core, use the default dest function name */
+ #define MTXDBG(level, ...) dbg_func(level,__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+ #define QUIET_MTXDBG(level, ...) dbg_func(level,NULL,NULL,0, __VA_ARGS__)
 #endif
 
 /* Debugging Enumerations */
@@ -57,7 +61,7 @@ typedef enum
 	CRITICAL	= 1<<30
 }Dbg_Class;
 
-typedef enum guint
+typedef enum 
 {
 	INTERROGATOR_SHIFT	= 0,
 	OPENGL_SHIFT		= 1,
@@ -103,4 +107,8 @@ void dbg_func(Dbg_Class, const gchar *, const gchar *, gint, const gchar *, ...)
 void populate_debugging(GtkWidget *);
 /* Prototypes */
 
+#endif
+
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

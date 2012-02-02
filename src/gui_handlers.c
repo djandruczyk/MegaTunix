@@ -264,8 +264,8 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 
 	/* Free all buffers */
 	mem_dealloc();
-	//MTXDBG(CRITICAL,("After mem_dealloc()\n"));
-	//MTXDBG(CRITICAL,("Before close_debug(), exiting...\n"));
+	//MTXDBG(CRITICAL,_("After mem_dealloc()\n"));
+	//MTXDBG(CRITICAL,_("Before close_debug(), exiting...\n"));
 	close_debug();
 	gtk_main_quit();
 	exit(0);

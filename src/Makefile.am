@@ -64,6 +64,8 @@ megatunix_SOURCES = \
 	watches.c \
 	widgetmgmt.c \
 	winserialio.c \
+	winserialbuffer.cpp \
+	winserialcommhelper.cpp \
 	wrappers.c \
 	xmlcomm.c 
 
