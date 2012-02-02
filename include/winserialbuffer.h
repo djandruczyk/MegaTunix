@@ -18,26 +18,27 @@
   \author David Andruczyk
   */
 
+#ifdef __WIN32__
 #ifndef __winserialbuffer_H__
 #define __winserialbuffer_H__
 
-#ifdef __WIN32__
 #include <gtk/gtk.h>
 #include <string>
 
 /* Prototypes */
 class CSerialBuffer
 {
+private:
 	std::string InternalBuffer;
 	GMutex *lock;
-	gboolean LockAlways;
+	bool lock_always;
 	glong int_cur_pos;
 	glong bytes_unread;
 	void Init();
 	void ClearAndReset(HANDLE &EventToReset);
 public:
-	void LockBuffer();
-	void UnLockBuffer();
+	inline void LockBuffer() { g_mutex_lock(lock); }
+	inline void UnLockBuffer() { g_mutex_unlock(lock); }
 
 	CSerialBuffer();
 	virtual ~CSerialBuffer();
@@ -50,11 +51,11 @@ public:
 	std::string GetData() {return InternalBuffer;}
 	void Flush();
 	glong Read_N(std::string &Data, glong count, HANDLE &EventToReset);
-	gboolean Read_Upto(std::string &Data, gchar chTerm, glong &BytesRead, HANDLE &EventToReset);
-	gboolean Read_Available(std::string &Data, HANDLE &EventToReset);
+	bool Read_Upto(std::string &Data, gchar chTerm, glong &BytesRead, HANDLE &EventToReset);
+	bool Read_Available(std::string &Data, HANDLE &EventToReset);
 	inline glong GetSize() {return InternalBuffer.size();}
-	inline gboolean IsEmpty() {return InternalBuffer.size() == 0;}
-	gboolean Read_Upto_FIX(std::string &Data, gchar chTerm, glong &BytesRead, HANDLE &EventToReset);
+	inline bool IsEmpty() {return InternalBuffer.size() == 0;}
+	bool Read_Upto_FIX(std::string &Data, gchar chTerm, glong &BytesRead, HANDLE &EventToReset);
 };
 #endif
 

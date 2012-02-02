@@ -32,6 +32,7 @@ void CSerialCommHelper::CloseAndCleanHandle(HANDLE& Handle)
 	InvalidateHandle ( Handle );
 }
 
+
 CSerialCommHelper::CSerialCommHelper()
 {
 	InvalidateHandle( ThreadTerm );
@@ -44,6 +45,7 @@ CSerialCommHelper::CSerialCommHelper()
 	state = SS_UnInit;
 
 }
+
 
 CSerialCommHelper::~CSerialCommHelper()
 {
@@ -96,20 +98,19 @@ HRESULT CSerialCommHelper:: Init(std::string PortName, DWORD BaudRate,BYTE byPar
 			return E_FAIL;
 		}
 
-		dcb.BaudRate	= BaudRate;
-		dcb.ByteSize	= byByteSize;
-		dcb.Parity		= byParity;
+		dcb.BaudRate = BaudRate;
+		dcb.ByteSize = byByteSize;
+		dcb.Parity = byParity;
 		if ( byStopBits == 1 )
-			dcb.StopBits	= ONESTOPBIT;
+			dcb.StopBits = ONESTOPBIT;
 		else if (byStopBits == 2 ) 
-			dcb.StopBits	= TWOSTOPBITS;
+			dcb.StopBits = TWOSTOPBITS;
 		else 
-			dcb.StopBits	= ONE5STOPBITS;
+			dcb.StopBits = ONE5STOPBITS;
 
 		dcb.fDsrSensitivity = 0;
-		dcb.fDtrControl = DTR_CONTROL_ENABLE;
+		//		dcb.fDtrControl = DTR_CONTROL_ENABLE;
 		dcb.fOutxDsrFlow = 0;
-
 
 		if (!::SetCommState (CommPort,&dcb))
 		{
@@ -142,13 +143,12 @@ HRESULT CSerialCommHelper:: Init(std::string PortName, DWORD BaudRate,BYTE byPar
 
 		DWORD Wait = WaitForSingleObject ( ThreadStarted , INFINITE );
 
-		g_assert ( Wait ==		WAIT_OBJECT_0 );
+		g_assert ( Wait == WAIT_OBJECT_0 );
 
 		CloseHandle(ThreadStarted);
 
 		InvalidateHandle(ThreadStarted );
 		connected = true;
-
 	}
 	catch(...)
 	{
@@ -160,8 +160,7 @@ HRESULT CSerialCommHelper:: Init(std::string PortName, DWORD BaudRate,BYTE byPar
 		state = SS_Init;
 	}
 	return hr;
-
-}	
+}
 	
  
 HRESULT CSerialCommHelper:: Start()
@@ -170,11 +169,13 @@ HRESULT CSerialCommHelper:: Start()
 	return S_OK;
 }
 
+
 HRESULT CSerialCommHelper:: Stop()
 {
 	state = SS_Stopped;
 	return S_OK;
 }
+
 
 HRESULT CSerialCommHelper:: UnInit()
 {
@@ -248,7 +249,6 @@ unsigned __stdcall CSerialCommHelper::ThreadFn(void*pvParam)
 						}
 
 					}
-
 					//read data here...
 					int accum = 0;
 
@@ -330,6 +330,7 @@ HRESULT  CSerialCommHelper::CanProcess ()
 	return E_FAIL;
 }
 
+
 HRESULT CSerialCommHelper::Write (const char* data,DWORD Size)
 {
 	HRESULT hr = CanProcess();
@@ -356,16 +357,14 @@ HRESULT CSerialCommHelper::Write (const char* data,DWORD Size)
 }
 
 
-
-HRESULT CSerialCommHelper::Read_Upto	(std::string& data,char chTerminator ,long* Count,long TimeOut)
+HRESULT CSerialCommHelper::Read_Upto (std::string& data,char chTerminator ,long* Count,long TimeOut)
 {
 	HRESULT hr = CanProcess();
 	if ( FAILED(hr)) return hr;
 
-	MTXDBG(CRITICAL,_("CSerialCommHelper : CSerialCommHelper: Read_Upto cled "));
+	MTXDBG(CRITICAL,_("CSerialCommHelper : CSerialCommHelper: Read_Upto called "));
 	try
 	{
-
 		std::string Tmp;
 		Tmp.erase ();
 		long BytesRead;
@@ -395,8 +394,6 @@ HRESULT CSerialCommHelper::Read_Upto	(std::string& data,char chTerminator ,long*
 				}
 
 				bool Found =  SerialBuffer.Read_Upto(Tmp ,chTerminator,BytesRead,DataRx );
-
-
 				if ( Found ) 
 				{
 					data = Tmp;
@@ -414,9 +411,10 @@ HRESULT CSerialCommHelper::Read_Upto	(std::string& data,char chTerminator ,long*
 		g_assert ( 0  ) ;
 	}
 	return hr;
-
 }
-HRESULT CSerialCommHelper::Read_N		(std::string& data,long Count,long  TimeOut )
+
+
+HRESULT CSerialCommHelper::Read_N (std::string& data, long Count ,long TimeOut )
 {
 	HRESULT hr = CanProcess();
 
@@ -426,10 +424,9 @@ HRESULT CSerialCommHelper::Read_N		(std::string& data,long Count,long  TimeOut )
 		return hr;
 	}
 
-	MTXDBG(CRITICAL,_("CSerialCommHelper : CSerialCommHelper : Read_N cled for %d bytes"),Count);
+	MTXDBG(CRITICAL,_("CSerialCommHelper : CSerialCommHelper : Read_N called for %d bytes"),Count);
 	try
 	{
-
 		std::string Tmp ;
 		Tmp.erase();
 
@@ -458,18 +455,15 @@ HRESULT CSerialCommHelper::Read_N		(std::string& data,long Count,long  TimeOut )
 					data.erase ();
 					hr = E_FAIL;
 					return hr;
-
 				}
 
 				g_assert ( Wait == WAIT_OBJECT_0 );
 				MTXDBG(CRITICAL,_("CSerialCommHelper : CSerialCommHelper : Read_N (%d) Woke Up from WaitXXX() locking Q"),Count);
 
-
 				iRead =  SerialBuffer.Read_N(Tmp , iRemaining  ,DataRx);
 				iRemaining -= iRead ;
 
 				MTXDBG(CRITICAL,_("CSerialCommHelper : CSerialCommHelper : Read_N (%d) Woke Up from WaitXXX() Unlocking Q"),Count);
-
 
 				if (  iRemaining  == 0) 
 				{
@@ -486,11 +480,12 @@ HRESULT CSerialCommHelper::Read_N		(std::string& data,long Count,long  TimeOut )
 		g_assert ( 0  ) ;
 	}
 	return hr;
-
 }
+
+
 /*-----------------------------------------------------------------------
-	-- Reads l the data that is availle in the loc buffer.. 
-	does NOT make any blocking cls in case the loc buffer is empty
+	-- Reads all the data that is available in the local buffer.. 
+	does NOT make any blocking calls in case the local buffer is empty
 -----------------------------------------------------------------------*/
 HRESULT CSerialCommHelper::ReadAvailable(std::string& data)
 {
@@ -511,6 +506,5 @@ HRESULT CSerialCommHelper::ReadAvailable(std::string& data)
 		hr = E_FAIL;
 	}
 	return hr;
-
 }
 #endif
