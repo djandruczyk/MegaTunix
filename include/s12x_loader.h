@@ -36,5 +36,6 @@ gboolean send_S12(gint, guint);
 void free_s19(guint);
 void reset_proc(gint);
 void output(gchar *, gboolean);
+gboolean readback_block(gint, gint, guchar *, gint);
 
 #endif

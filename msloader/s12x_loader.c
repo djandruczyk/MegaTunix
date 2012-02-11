@@ -90,6 +90,7 @@ static char **fileBuf = NULL;
 static guint count = 0;
 static int debug = 0;
 static gint s19_length = 0;
+static gboolean verify_writes = TRUE;
 /* debug levels
 0 = Quiet
 1 = Some progress
@@ -455,9 +456,54 @@ gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 	return TRUE;
 }
 
-gboolean send_block(gint port_fd, guint a, guchar *b, guint n)
+
+gboolean readback_block(gint port_fd, gint a, guchar *b, gint n)
 {
 	guchar command[4];
+	gint res = 0;
+	gboolean was_a_retry = FALSE;
+	gint errcount = 0;
+	
+	command[0] = C_READ_BLOCK;
+	command[1] = (a & 0xFF00) >> 8;
+	command[2] = (a & 0x00FF);
+	command[3] = n-1;
+
+retry:
+	res = write_wrapper(port_fd, command, 4);
+	if (res != 4)
+		output(g_strdup_printf("readback_block(): SHORT WRITE %i of 4",res),TRUE);
+	res = read_wrapper(port_fd, (gchar *)b, n);
+	if (res != n)
+	{
+		output("readback_block error, retrying\n",FALSE);
+		return FALSE;
+	}
+	if (!check_status(port_fd))
+	{
+		output("readback_block error, retrying\n",FALSE);
+		was_a_retry = TRUE;
+		flush_serial(port_fd,BOTH);
+		errcount++;
+		if (errcount > 5)
+		{
+			output("too many errors, aborting!\n",FALSE);
+			return FALSE;
+		}
+		goto retry;
+	}
+	else if (was_a_retry)
+	{
+		output("Retry was successful!\n",FALSE);
+		was_a_retry = FALSE;
+	}
+	return TRUE;
+}
+
+
+gboolean send_block(gint port_fd, guint a, guchar *b, guint n)
+{
+	guchar command[4] = {0,0,0,0};
 	gint errcount = 0;
 	gint page_err = 0;
 	gboolean was_a_retry = FALSE;
@@ -472,11 +518,6 @@ retry:
 		return TRUE;
 	}
 
-	command[0] = C_WRITE_BLOCK;
-	command[1] = 0;
-	command[2] = 0;
-	command[3] = 0;
-
 	if (!sendPPAGE(port_fd,a, TRUE))
 	{
 		page_err++;
@@ -488,8 +529,9 @@ retry:
 		else goto retry;
 	}
 
-	command[1] = 0xFF & (a >> 8);
-	command[2] = 0xFF & a;
+	command[0] = C_WRITE_BLOCK;
+	command[1] = (a & 0xFF00) >> 8;
+	command[2] = a & 0x00FF;
 	command[3] = n - 1;
 
 	if (debug >= 4) {
@@ -557,6 +599,7 @@ gboolean send_S12(gint port_fd, guint count)
 	guint j = 0;
 	guchar checksum = 0;
 	guchar *thisRec = NULL;
+	guchar *verify = NULL;
 	guchar recsum = 0;
 	guchar difsum = 0;
 	guint size = 0;
@@ -569,8 +612,9 @@ gboolean send_S12(gint port_fd, guint count)
 	for (i = 0; i < count; i++) {
 		switch (fileBuf[i][1]) {
 			case '0':
-				addrSize = 4;
-				break;
+				continue;
+				//addrSize = 4;
+				//break;
 			case '1':
 				addrSize = 4;
 				break;
@@ -596,9 +640,13 @@ gboolean send_S12(gint port_fd, guint count)
 		checksum = cs(addr) + size;
 
 		thisRec = (guchar *)malloc(dataSize + 1);
+		verify = (guchar *)malloc(dataSize + 1);
+		/* Calculate the checksum of the block */
 		checksum = extract_data(fileBuf[i]+4+addrSize, dataSize, checksum, thisRec);
 
+		/* Read the checksum from the .s19 */
 		recsum = extract_number(fileBuf[i]+4+addrSize+dataSize*2, 2);
+		/* Check that they match! */
 		difsum = ~(recsum + checksum);
 
 		if (difsum != 0) {
@@ -622,12 +670,19 @@ gboolean send_S12(gint port_fd, guint count)
 
 			if (!send_block(port_fd,addr, thisRecPtr, nn))
 				return FALSE;
+			if (verify_writes)
+			{
+				readback_block(port_fd,addr, verify, nn);
+				if (memcmp(verify,thisRecPtr,nn) != 0)
+					printf("VERIFY ERROR at  S19 line %i, address %i,  %i bytes!\n",i,addr,nn);
+			}
 			dataSize -= nn;
 			thisRecPtr += nn;
 			addr += nn;
 			if (addr >= 0x8000 && addr <= 0xBFFF) addr += 0x4000;
 		}
 		free(thisRec);
+		free(verify);
 		progress_update ((gfloat)i/(gfloat)(count-2));
 	}
 	return TRUE;
