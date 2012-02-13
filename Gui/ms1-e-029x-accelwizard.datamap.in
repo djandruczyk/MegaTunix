@@ -47,7 +47,7 @@ bind_to_list=ae_tpsdot_controls,ae_normal_controls
 
 [stripchart_container]
 keys=sources,post_functions_with_arg
-sources=mapdot,tpsdot,afr1
+sources=mapdot,tpsdot,afr1,tpsaccel
 post_functions_with_arg=create_stripchart
 
 [topframe]
