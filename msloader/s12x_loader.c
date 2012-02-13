@@ -674,7 +674,7 @@ gboolean send_S12(gint port_fd, guint count)
 			{
 				readback_block(port_fd,addr, verify, nn);
 				if (memcmp(verify,thisRecPtr,nn) != 0)
-					printf("VERIFY ERROR at  S19 line %i, address %i,  %i bytes!\n",i,addr,nn);
+					output(g_strdup_printf("VERIFY ERROR at  S19 line %i, address %i,  %i bytes!\n",i,addr,nn),TRUE);
 			}
 			dataSize -= nn;
 			thisRecPtr += nn;
