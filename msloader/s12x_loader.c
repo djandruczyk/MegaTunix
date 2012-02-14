@@ -88,6 +88,7 @@
 static guint total_bytes = 0;
 static char **fileBuf = NULL;
 static guint count = 0;
+static guint verify_failure_count = 0;
 static int debug = 0;
 static gint s19_length = 0;
 static gboolean verify_writes = TRUE;
@@ -102,6 +103,9 @@ static gboolean verify_writes = TRUE;
 
 gboolean do_ms2_load(gint port_fd, gint file_fd)
 {
+	GTimeVal begin;
+	GTimeVal end;
+
 	total_bytes = 0;
 	flush_serial(port_fd, BOTH);
 	s19_length = lseek(file_fd,0,SEEK_END);
@@ -109,6 +113,7 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	count = read_s19(file_fd);
 	if (count == 0)
 		return FALSE;
+	g_get_current_time(&begin);
 	ms2_enter_boot_mode(port_fd);
 	if (!wakeup_S12(port_fd))
 	{
@@ -131,18 +136,22 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	}
 	free_s19(count);
 	reset_proc(port_fd);
-	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
+	g_get_current_time(&end);
+	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps), with %i errors.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count),TRUE);
 	output("Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
 	return TRUE;
 }
 
 gboolean do_freeems_load(gint port_fd, gint file_fd)
 {
+	GTimeVal begin;
+	GTimeVal end;
 	total_bytes = 0;
 	flush_serial(port_fd, BOTH);
 	count = read_s19(file_fd);
 	if (count == 0)
 		return FALSE;
+	g_get_current_time(&begin);
 	if (!wakeup_S12(port_fd))
 	{
 		output("Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);
@@ -167,7 +176,8 @@ gboolean do_freeems_load(gint port_fd, gint file_fd)
 	/* Make fred happier
 	   reset_proc(port_fd);
 	   */
-	output(g_strdup_printf("Wrote %d bytes\n", total_bytes),TRUE);
+	g_get_current_time(&end);
+	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps), with %i errors.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count),TRUE);
 	output("ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
 	return TRUE;
 }
@@ -613,8 +623,6 @@ gboolean send_S12(gint port_fd, guint count)
 		switch (fileBuf[i][1]) {
 			case '0':
 				continue;
-				//addrSize = 4;
-				//break;
 			case '1':
 				addrSize = 4;
 				break;
@@ -674,7 +682,10 @@ gboolean send_S12(gint port_fd, guint count)
 			{
 				readback_block(port_fd,addr, verify, nn);
 				if (memcmp(verify,thisRecPtr,nn) != 0)
+				{
 					output(g_strdup_printf("VERIFY ERROR at  S19 line %i, address %i,  %i bytes!\n",i,addr,nn),TRUE);
+					verify_failure_count++;
+				}
 			}
 			dataSize -= nn;
 			thisRecPtr += nn;
