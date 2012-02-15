@@ -138,7 +138,11 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	reset_proc(port_fd);
 	g_get_current_time(&end);
 	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps), with %i errors.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count),TRUE);
-	output("Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
+	if (verify_failure_count > 0)
+		output("ERRORS REPORTED! The load had issues, You should retry the load\n",FALSE);
+	else
+		output("ALL DONE! Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
+	verify_failure_count = 0;
 	return TRUE;
 }
 
@@ -178,7 +182,11 @@ gboolean do_freeems_load(gint port_fd, gint file_fd)
 	   */
 	g_get_current_time(&end);
 	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps), with %i errors.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count),TRUE);
-	output("ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
+	if (verify_failure_count > 0)
+		output("ERRORS REPORTED! The load had issues, You should retry the load\n",FALSE);
+	else
+		output("ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
+	verify_failure_count = 0;
 	return TRUE;
 }
 
