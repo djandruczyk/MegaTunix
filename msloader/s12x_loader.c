@@ -83,8 +83,6 @@
 #define S_COLD_RESET     0x08
 #define S_WARM_RESET     0x0C
 
-#define FUDGE 8000 /* Rough fudge factor for S12x loader */
-
 static guint total_bytes = 0;
 static char **fileBuf = NULL;
 static guint count = 0;
@@ -626,7 +624,7 @@ gboolean send_S12(gint port_fd, guint count)
 	guint addrSize = 0;
 	guint nBlocks = 0;
 
-	output(g_strdup_printf("Uploading ECU firmware, eta %i seconds...\n",s19_length/FUDGE),TRUE);
+	output(g_strdup_printf("Uploading ECU firmware...\n"),TRUE);
 	for (i = 0; i < count; i++) {
 		switch (fileBuf[i][1]) {
 			case '0':
