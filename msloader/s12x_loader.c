@@ -613,6 +613,7 @@ gboolean send_S12(gint port_fd, guint count)
 {
 	guint i = 0;
 	guint j = 0;
+	gint errorcount = 0;
 	guchar checksum = 0;
 	guchar *thisRec = NULL;
 	guchar *verify = NULL;
@@ -681,6 +682,7 @@ gboolean send_S12(gint port_fd, guint count)
 			if (addr < 0x8000 && addr+nn > 0x8000) {
 				nn = 0x8000 - addr;
 			}
+send_retry:
 
 			if (!send_block(port_fd,addr, thisRecPtr, nn))
 				return FALSE;
@@ -689,9 +691,18 @@ gboolean send_S12(gint port_fd, guint count)
 				readback_block(port_fd,addr, verify, nn);
 				if (memcmp(verify,thisRecPtr,nn) != 0)
 				{
+					errorcount++;
 					output(g_strdup_printf("VERIFY ERROR at  S19 line %i, address %i,  %i bytes!\n",i,addr,nn),TRUE);
 					verify_failure_count++;
+					if (errorcount > 5)
+						return FALSE;
+					else
+					{
+						output(g_strdup_printf("Retrying write+verify, attempt #%i\n",errorcount),TRUE);
+						goto send_retry;
+					}
 				}
+				errorcount = 0;
 			}
 			dataSize -= nn;
 			thisRecPtr += nn;
