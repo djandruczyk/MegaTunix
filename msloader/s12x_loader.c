@@ -87,6 +87,7 @@ static guint total_bytes = 0;
 static char **fileBuf = NULL;
 static guint count = 0;
 static guint verify_failure_count = 0;
+static guint verify_retry_success_count = 0;
 static int debug = 0;
 static gint s19_length = 0;
 static gboolean verify_writes = TRUE;
@@ -135,12 +136,17 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	free_s19(count);
 	reset_proc(port_fd);
 	g_get_current_time(&end);
-	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps), with %i errors.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count),TRUE);
-	if (verify_failure_count > 0)
-		output("ERRORS REPORTED! The load had issues, You should retry the load\n",FALSE);
+	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps)\nwith %i verify errors, and %i successful recoveries.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count,verify_retry_success_count),TRUE);
+	if ((verify_failure_count > 0) && 
+			(verify_failure_count != verify_retry_success_count))
+		output("ERRORS REPORTED! The load had issues,\nYou should retry the load\n",FALSE);
+	else if ((verify_failure_count > 0) && 
+			(verify_failure_count == verify_retry_success_count))
+		output("ERRORS REPORTED! However recovery WORKED, so its recommended\nthat you retry the load, but it MIGHT work.. YMMV\n",FALSE);
 	else
 		output("ALL DONE! Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
 	verify_failure_count = 0;
+	verify_retry_success_count = 0;
 	return TRUE;
 }
 
@@ -179,12 +185,17 @@ gboolean do_freeems_load(gint port_fd, gint file_fd)
 	   reset_proc(port_fd);
 	   */
 	g_get_current_time(&end);
-	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps), with %i errors.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count),TRUE);
-	if (verify_failure_count > 0)
-		output("ERRORS REPORTED! The load had issues, You should retry the load\n",FALSE);
+	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps)\nwith %i verify errors, and %i successful recoveries.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count,verify_retry_success_count),TRUE);
+	if ((verify_failure_count > 0) && 
+			(verify_failure_count != verify_retry_success_count))
+		output("ERRORS REPORTED! The load had issues,\nYou should retry the load\n",FALSE);
+	else if ((verify_failure_count > 0) && 
+			(verify_failure_count == verify_retry_success_count))
+		output("ERRORS REPORTED! However recovery WORKED,so it is recommended\nthat you retry the load, but it MIGHT work.. YMMV\n",FALSE);
 	else
 		output("ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
 	verify_failure_count = 0;
+	verify_retry_success_count = 0;
 	return TRUE;
 }
 
@@ -613,6 +624,7 @@ gboolean send_S12(gint port_fd, guint count)
 {
 	guint i = 0;
 	guint j = 0;
+	gboolean was_a_retry = FALSE;
 	gint errorcount = 0;
 	guchar checksum = 0;
 	guchar *thisRec = NULL;
@@ -685,23 +697,43 @@ gboolean send_S12(gint port_fd, guint count)
 send_retry:
 
 			if (!send_block(port_fd,addr, thisRecPtr, nn))
+			{
+				output("FAILURE to even send block, write aborted with critical failure!\n",FALSE);
+				free(thisRec);
+				free(verify);
 				return FALSE;
+			}
 			if (verify_writes)
 			{
 				readback_block(port_fd,addr, verify, nn);
 				if (memcmp(verify,thisRecPtr,nn) != 0)
 				{
 					errorcount++;
-					output(g_strdup_printf("VERIFY ERROR at  S19 line %i, address %i,  %i bytes!\n",i,addr,nn),TRUE);
+					output(g_strdup_printf("VERIFY ERROR at S19 line %i, address 0x%X, %i byte block!\n",i,addr,nn),TRUE);
 					verify_failure_count++;
 					if (errorcount > 5)
+					{
+						output(g_strdup_printf("TOO MANY VERIFY ERRORS at S19 line %i, address 0x%X, aborting!\n",i,addr),TRUE);
+						free(thisRec);
+						free(verify);
 						return FALSE;
+					}
 					else
 					{
+						was_a_retry = TRUE;
 						output(g_strdup_printf("Retrying write+verify, attempt #%i\n",errorcount),TRUE);
 						goto send_retry;
 					}
 				}
+				else
+				{
+					if (was_a_retry)
+					{
+						output(g_strdup_printf("Retry was successful after %i attempts\n",errorcount),TRUE);
+						verify_retry_success_count++;
+					}
+				}
+				was_a_retry = FALSE;
 				errorcount = 0;
 			}
 			dataSize -= nn;
