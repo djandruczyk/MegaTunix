@@ -57,7 +57,7 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	tmpbuf = g_strdup_printf(_("MegaTunix %s Tuning Software for Unix-class OS's"),MTX_VER_STRING);
+	tmpbuf = g_strdup_printf(_("MegaTunix %s-%s Tuning Software for Unix-class OS's"),MTX_VER_STRING,MTX_VER_SUFFIX);
 	label = gtk_label_new(tmpbuf);
 	g_free(tmpbuf);
 	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
@@ -93,7 +93,7 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 		gchar *comments = g_strdup_printf("MegaTunix is a Graphical Tuning software designed to make it easy and (hopefully) intuitive to tune your EFI powered vehicle.  Please send suggestions to the author for ways to improve MegaTunix.\nGit Hash: %s",MTX_GIT_HASH);
 		gtk_show_about_dialog(GTK_WINDOW(lookup_widget("main_window")),
 				"name","MegaTunix Tuning Software",
-				"version",MTX_VER_STRING,
+				"version",MTX_VER_STRING"-"MTX_VER_SUFFIX,
 				"copyright","David J. Andruczyk(2012)",
 				"comments",comments,
 				"license","GPL v2",

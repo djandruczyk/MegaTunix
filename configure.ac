@@ -15,17 +15,17 @@ MTX_MICRO_VERSION=24
 AC_ARG_ENABLE([release], AS_HELP_STRING([--enable-release],[Enable Release versioning]))
 if test "x$enable_release" != "xyes"; 
 then
-	RELEASE=1
-else
 	RELEASE=0
+else
+	RELEASE=1
 fi
 
 AC_CONFIG_SUBDIRS(src/main.c)
-if test x"$MTX_VER_SUFFIX" != "x"; then
-	MTX_VER_STRING="$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION-$MTX_VER_SUFFIX"
-else
-	MTX_VER_STRING="$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION"
-fi
+dnl if test x"$MTX_VER_SUFFIX" != "x"; then
+dnl 	MTX_VER_STRING="$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION-$MTX_VER_SUFFIX"
+dnl else
+MTX_VER_STRING="$MTX_MAJOR_VERSION.$MTX_MINOR_VERSION.$MTX_MICRO_VERSION"
+dnl fi
 
 dnl Checks for programs.
 
