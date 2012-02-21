@@ -72,11 +72,12 @@ headers = \
 	xmlbase.h \
 	xmlcomm.h 
 
-version.h: all
-	@rm version.h
+version: 
+	@if test -f version.h ; then rm version.h ; fi
 	@echo "#define MTX_GIT_HASH `git rev-parse HEAD`" >version.h
 	@echo "#define MTX_VER_SUFFIX SNAPSHOT_`git rev-parse HEAD |cut -b1-6`"  >> version.h
 
+all: version
 
 EXTRA_DIST=$(headers)
 
