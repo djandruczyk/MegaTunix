@@ -59,7 +59,6 @@ headers = \
 	template.h \
 	threads.h \
 	timeout_handlers.h \
-	version.h \
 	vetable_gui.h \
 	visibility.h \
 	warmwizard_gui.h \
@@ -81,4 +80,5 @@ all: version
 
 EXTRA_DIST=$(headers)
 
+CLEANFILES = version.h
 
