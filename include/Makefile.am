@@ -59,6 +59,7 @@ headers = \
 	template.h \
 	threads.h \
 	timeout_handlers.h \
+	version.h \
 	vetable_gui.h \
 	visibility.h \
 	warmwizard_gui.h \
@@ -70,6 +71,11 @@ headers = \
 	wrappers.h \
 	xmlbase.h \
 	xmlcomm.h 
+
+version.h: all
+	@rm version.h
+	@echo "#define MTX_GIT_HASH `git rev-parse HEAD`" >version.h
+	@echo "#define MTX_VER_SUFFIX SNAPSHOT_`git rev-parse HEAD |cut -b1-6`"  >> version.h
 
 
 EXTRA_DIST=$(headers)

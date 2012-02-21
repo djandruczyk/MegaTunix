@@ -25,6 +25,9 @@ DISTCLEANFILES = intltool-extract intltool-merge intltool-update po/.intltool-me
 
 EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE ${INTLTOOL_FILES}
 #EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE 
+MTX_GIT_HASH=`if test -d ./.git ; then git show-ref --head HEAD |head -1 |cut -f1 -d\  |tr -d '\n\r' ; fi`
+MTX_VER_SUFFIX=`if test -d ./.git ; then echo "SNAPSHOT_$(echo $MTX_GIT_HASH |cut -b1-6)" ; else echo "Not built from git" ; fi`
+
 doc:
 	@doxygen
 
