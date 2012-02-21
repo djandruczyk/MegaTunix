@@ -24,7 +24,6 @@
 #include <config.h>
 #include <libintl.h>
 #include <math.h>
-#include <version.h>
 
 /* Definitions */
 #define BAUDRATE B9600

@@ -23,6 +23,7 @@
 #include <config.h>
 #include <logo.h>
 #include <widgetmgmt.h>
+#include <version.h>
 
 /*!
   \brief build_about makes the about tab and presents the MegaTunix logo

@@ -74,8 +74,8 @@ headers = \
 
 version: 
 	@if test -f version.h ; then rm version.h ; fi
-	@echo "#define MTX_GIT_HASH `git rev-parse HEAD`" >version.h
-	@echo "#define MTX_VER_SUFFIX SNAPSHOT_`git rev-parse HEAD |cut -b1-6`"  >> version.h
+	@if test -d ../.git ; then echo "#define MTX_GIT_HASH \"`git rev-parse HEAD`"\"  ; else echo "#define MTX_GIT_HASH \"Not a git release\"" ; fi >version.h 
+	@if test -d ../.git ; then echo "#define MTX_VER_SUFFIX \"SNAPSHOT_`git rev-parse HEAD |cut -b1-6`"\" ; else echo "#define MTX_VER_SUFFIX" ; fi  >> version.h
 
 all: version
 
