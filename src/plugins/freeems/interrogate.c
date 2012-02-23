@@ -248,9 +248,12 @@ G_MODULE_EXPORT void request_firmware_version()
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
+	gint seq = atomic_sequence();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+//	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
+	register_packet_queue(SEQUENCE_NUM,queue,seq);
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_VERSION));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
@@ -265,9 +268,12 @@ G_MODULE_EXPORT void request_firmware_build_date()
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
+	gint seq = atomic_sequence();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_BUILD_DATE);
+	//register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_BUILD_DATE);
+	register_packet_queue(SEQUENCE_NUM,queue,seq);
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_BUILD_DATE));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
@@ -285,9 +291,12 @@ G_MODULE_EXPORT void request_firmware_compiler()
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
+	gint seq = atomic_sequence();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_COMPILER_VERSION);
+	//register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_COMPILER_VERSION);
+	register_packet_queue(SEQUENCE_NUM,queue,seq);
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_COMPILER_VERSION));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
@@ -305,9 +314,12 @@ G_MODULE_EXPORT void request_firmware_build_os()
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
+	gint seq = atomic_sequence();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_COMPILER_OS);
+	//register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_COMPILER_OS);
+	register_packet_queue(SEQUENCE_NUM,queue,seq);
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_COMPILER_OS));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
@@ -325,9 +337,12 @@ G_MODULE_EXPORT void request_interface_version()
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
+	gint seq = atomic_sequence();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
-	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+	//register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
+	register_packet_queue(SEQUENCE_NUM,queue,seq);
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_INTERFACE_VERSION));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);

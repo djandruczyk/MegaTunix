@@ -131,6 +131,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	hash = g_hash_table_new(g_direct_hash,g_direct_equal);
 	DATA_SET(global_data,"payload_id_queue_hash",hash);
 	mutex = g_mutex_new();
+	DATA_SET(global_data,"atomic_sequence_mutex",mutex);
+	mutex = g_mutex_new();
 	DATA_SET(global_data,"queue_mutex",mutex);
 	queue = g_async_queue_new();
 	DATA_SET(global_data,"packet_queue",queue);
@@ -232,6 +234,10 @@ G_MODULE_EXPORT void plugin_shutdown()
 	if (mutex)
 		g_mutex_free(mutex);
 	DATA_SET(global_data,"queue_mutex",NULL);
+	mutex = DATA_GET(global_data,"atomic_sequence_mutex");
+	if (mutex)
+		g_mutex_free(mutex);
+	DATA_SET(global_data,"atomic_sequence_mutex",NULL);
 
 	deregister_common_enums();
 	return;

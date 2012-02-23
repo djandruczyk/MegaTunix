@@ -407,11 +407,13 @@ handle_write:
 			queue = DATA_GET(output->data,"queue");
 			if (queue)
 			{
+				printf("Empty payload packet!\n");
 				packet = retrieve_packet(output->data,NULL);
 				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
 				if (packet)
 				{
 					payload_id = packet->payload_id;
+					printf("it's ID is %0x\n",payload_id);
 					switch (payload_id)
 					{
 						case RESPONSE_FIRMWARE_VERSION:

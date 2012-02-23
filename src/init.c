@@ -1400,6 +1400,8 @@ G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 	cleanup(rtt->ctrl_name);
 	cleanup(rtt->label_prefix);
 	cleanup(rtt->label_suffix);
+	if (rtt->thresholds)
+		g_ptr_array_free(rtt->thresholds,TRUE);
 	cleanup(rtt);
 }
 

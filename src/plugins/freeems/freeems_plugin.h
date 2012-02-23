@@ -34,6 +34,7 @@
 #define EXTERN extern
 #endif
 
+
 /* Function Pointers */
 EXTERN void (*error_msg_f)(const gchar *);
 EXTERN gboolean (*get_symbol_f)(const gchar *,void **);
