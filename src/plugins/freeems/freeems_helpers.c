@@ -141,7 +141,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 	static GRand *rand = NULL;
 	OutputData *output = NULL;
 	Command *command = NULL;
-	static gint seq = 2;
+	gint seq = 0;
 	GAsyncQueue *queue = NULL;
 	gint i = 0;
 
@@ -161,8 +161,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 				{
 					if (!firmware->page_params[i]->dl_by_default)
 						continue;
-					seq++;
-					seq = seq < 256? seq:2;
+					seq = atomic_sequence();
 					output = initialize_outputdata_f();
 					DATA_SET(output->data,"canID",GINT_TO_POINTER(firmware->canID));
 					DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
@@ -241,9 +240,12 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 		case GENERIC_READ:
 			packet = retrieve_packet(output->data,NULL);
 			queue = DATA_GET(output->data,"queue");
-			deregister_packet_queue(SEQUENCE_NUM,queue,seq);
-			g_async_queue_unref(queue);
-			DATA_SET(output->data,"queue",NULL);
+			if (queue)
+			{
+				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
+				g_async_queue_unref(queue);
+				DATA_SET(output->data,"queue",NULL);
+			}
 			if (packet)
 			{
 				if (packet->is_nack)
@@ -253,7 +255,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 
 					/*printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
 					  printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
-					 */
+					  */
 					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
 					freeems_backup_current_data(canID,locID);
 
@@ -266,8 +268,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 			{
 				printf("timeout, no packet found in GENERIC_READ queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
-				seq++;
-				seq = seq < 256? seq:2;
+				seq = atomic_sequence();
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
 				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
 				DATA_SET(retry->data,"location_id",DATA_GET(output->data,"location_id"));
@@ -285,9 +286,12 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 		case BENCHTEST_RESPONSE:
 			packet = retrieve_packet(output->data,NULL);
 			queue = DATA_GET(output->data,"queue");
-			deregister_packet_queue(SEQUENCE_NUM,queue,seq);
-			g_async_queue_unref(queue);
-			DATA_SET(output->data,"queue",NULL);
+			if (queue)
+			{
+				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
+				g_async_queue_unref(queue);
+				DATA_SET(output->data,"queue",NULL);
+			}
 			if (packet)
 			{
 				if (packet->is_nack)
@@ -304,7 +308,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					/* If bumping, increase the total time */
 					if (DATA_GET(output->data,"bump"))
 					{
-					        thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock), Total time remaining is now %.2f seconds\n"),clock/1000.0, ((GINT)DATA_GET(global_data,"benchtest_total")+clock)/1000.0),FALSE,FALSE);
+						thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock), Total time remaining is now %.2f seconds\n"),clock/1000.0, ((GINT)DATA_GET(global_data,"benchtest_total")+clock)/1000.0),FALSE,FALSE);
 						DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(((GINT)DATA_GET(global_data,"benchtest_total")+clock)));
 					}
 					else if (DATA_GET(output->data, "start")) /* start */
@@ -314,7 +318,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 						DATA_SET(global_data,"benchtest_clock_id",GINT_TO_POINTER(id));
 					}
 					else if (DATA_GET(output->data, "stop")) /* stop */
-					        thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest stopped by the user...\n")),FALSE,FALSE);
+						thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest stopped by the user...\n")),FALSE,FALSE);
 
 				}
 				freeems_packet_cleanup(packet);
@@ -342,8 +346,7 @@ handle_write:
 			{
 				printf("timeout, no packet found in GENERIC_[RAM|FLASH]_WRITE queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
-				seq++;
-				seq = seq < 256? seq:2;
+				seq = atomic_sequence();
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
 				DATA_SET(retry->data,"page",DATA_GET(output->data,"page"));
 				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
@@ -387,8 +390,7 @@ handle_write:
 			{
 				printf("timeout, no packet found in GENERIC_BURN queue for sequence %i (%.2X), locID %i\n",seq,seq,locID);
 				retry = initialize_outputdata_f();
-				seq++;
-				seq = seq < 256? seq:2;
+				seq = atomic_sequence();
 				DATA_SET(retry->data,"canID",DATA_GET(output->data,"canID"));
 				DATA_SET(retry->data,"page",DATA_GET(output->data,"page"));
 				DATA_SET(retry->data,"sequence_num",GINT_TO_POINTER(seq));
@@ -404,47 +406,47 @@ handle_write:
 			}
 			break;
 		case EMPTY_PAYLOAD:
+			packet = retrieve_packet(output->data,NULL);
 			queue = DATA_GET(output->data,"queue");
 			if (queue)
 			{
-				printf("Empty payload packet!\n");
-				packet = retrieve_packet(output->data,NULL);
 				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
-				if (packet)
-				{
-					payload_id = packet->payload_id;
-					printf("it's ID is %0x\n",payload_id);
-					switch (payload_id)
-					{
-						case RESPONSE_FIRMWARE_VERSION:
-							DATA_SET_FULL(global_data,"fw_version",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
-							update_ecu_info();
-							break;
-						case RESPONSE_INTERFACE_VERSION:
-							DATA_SET_FULL(global_data,"int_version",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
-							update_ecu_info();
-							break;
-						case RESPONSE_FIRMWARE_BUILD_DATE:
-							DATA_SET_FULL(global_data,"build_date",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
-							update_ecu_info();
-							break;
-						case RESPONSE_FIRMWARE_COMPILER_VERSION:
-							DATA_SET_FULL(global_data,"compiler",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
-							update_ecu_info();
-							break;
-						case RESPONSE_FIRMWARE_COMPILER_OS:
-							DATA_SET_FULL(global_data,"build_os",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
-							update_ecu_info();
-							break;
-						default:
-							printf("payload ID not matched, %i!\n",payload_id);
-							break;
-					}
-					freeems_packet_cleanup(packet);
-				}
-				else
-					printf("TIMEOUT!!\n");
+				g_async_queue_unref(queue);
+				DATA_SET(output->data,"queue",NULL);
 			}
+			if (packet)
+			{
+				payload_id = packet->payload_id;
+				switch (payload_id)
+				{
+					case RESPONSE_FIRMWARE_VERSION:
+						DATA_SET_FULL(global_data,"fw_version",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+						update_ecu_info();
+						break;
+					case RESPONSE_INTERFACE_VERSION:
+						DATA_SET_FULL(global_data,"int_version",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+						update_ecu_info();
+						break;
+					case RESPONSE_FIRMWARE_BUILD_DATE:
+						DATA_SET_FULL(global_data,"build_date",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+						update_ecu_info();
+						break;
+					case RESPONSE_FIRMWARE_COMPILER_VERSION:
+						DATA_SET_FULL(global_data,"compiler",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+						update_ecu_info();
+						break;
+					case RESPONSE_FIRMWARE_COMPILER_OS:
+						DATA_SET_FULL(global_data,"build_os",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+						update_ecu_info();
+						break;
+					default:
+						printf("payload ID not matched, %i!\n",payload_id);
+						break;
+				}
+				freeems_packet_cleanup(packet);
+			}
+			else
+				printf("TIMEOUT!!\n");
 			break;
 		default:
 			printf("MegaTunix does NOT know how to handle this packet response type..\n");
@@ -518,7 +520,11 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 	else /* Use "queue" key via DATA_GET */
 		queue = DATA_GET(object,"queue");
 	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
+	/* Set gigantic timeout for valgrind since it runs so slow */
+	if (g_getenv("VALGRIND"))
+		g_time_val_add(&tval,5000000);
+	else
+		g_time_val_add(&tval,500000);
 	packet = g_async_queue_timed_pop(queue,&tval);
 	return packet;
 }

@@ -524,6 +524,7 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 	}
 	queue = DATA_GET(global_data,"rtv_subscriber_queue");
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+	g_async_queue_unref(queue);
 	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
 	DATA_SET(global_data,"realtime_id",NULL);
 	return TRUE;

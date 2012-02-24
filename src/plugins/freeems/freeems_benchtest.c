@@ -45,9 +45,9 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	guint64 clock = 0;
 	guint8 byte = 0;
 	gint i = 0;
-	gint seq = 69;
-	GByteArray *payload;
+	GByteArray *payload = NULL;
 	Bt_Data data;
+	gint seq = atomic_sequence();
 
 	pull_data_from_gui(&data);
 	id = (GINT)DATA_GET(global_data,"benchtest_clock_id");
@@ -114,8 +114,8 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	GTimeVal tval;
 	guint8 byte = 0;
 	gint i = 0;
-	gint seq = 70;
-	GByteArray *payload;
+	GByteArray *payload = NULL;
+	gint seq = atomic_sequence();
 
 	DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(0));
 	id = (GINT)DATA_GET(global_data,"benchtest_clock_id");
