@@ -138,7 +138,6 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 {
 	static Firmware_Details *firmware = NULL;
-	static GRand *rand = NULL;
 	OutputData *output = NULL;
 	Command *command = NULL;
 	gint seq = 0;
@@ -147,8 +146,6 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
-	if (!rand)
-		rand = g_rand_new();
 	g_return_val_if_fail(firmware,FALSE);
 
 	switch (type)

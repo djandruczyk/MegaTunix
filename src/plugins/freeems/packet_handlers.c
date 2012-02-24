@@ -347,14 +347,14 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
 			g_async_queue_ref(queue);
 			list = g_list_append(list,queue);
-			printf("Paylod ID %i list added entry, list length %i\n",data,g_list_length(list));
+			/*printf("Paylod ID %i list added entry, list length %i\n",data,g_list_length(list));*/
 			g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
 			break;
 		case SEQUENCE_NUM:
 			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
 			g_async_queue_ref(queue);
 			list = g_list_append(list,queue);
-			printf("Sequence num %i list added entry, list length %i\n",data,g_list_length(list));
+			/*printf("Sequence num %i list added entry, list length %i\n",data,g_list_length(list));*/
 			g_hash_table_replace(sequences,GINT_TO_POINTER(data),list);
 			break;
 		default:
@@ -396,7 +396,7 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 			if (list)
 			{
 				list = g_list_remove(list,queue);
-				printf("Payload ID %i list REMOVED entry, list length %i\n",data,g_list_length(list));
+				/*printf("Payload ID %i list REMOVED entry, list length %i\n",data,g_list_length(list));*/
 				g_async_queue_unref(queue);
 				if (g_list_length(list) == 0)
 				{
@@ -405,15 +405,17 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 				}
 				g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
 			}
+			/*
 			else
 				printf("No payload list for id %i to remove from...\n",data);
+			*/
 			break;
 		case SEQUENCE_NUM:
 			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
 			if (list)
 			{
 				list = g_list_remove(list,queue);
-				printf("Sequence num %i REMOVED entry, list length %i\n",data,g_list_length(list));
+				/*printf("Sequence num %i REMOVED entry, list length %i\n",data,g_list_length(list));*/
 				g_async_queue_unref(queue);
 				if (g_list_length(list) == 0)
 				{
@@ -422,8 +424,10 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 				}
 				g_hash_table_replace(sequences,GINT_TO_POINTER(data),list);
 			}
+			/*
 			else
 				printf("No sequence number %i list to remove from...\n",data);
+			*/
 			break;
 		default:
 			printf("Need to specific approrpriate criteria to match a packet\n");
