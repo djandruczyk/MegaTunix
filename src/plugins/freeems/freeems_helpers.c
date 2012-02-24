@@ -443,7 +443,7 @@ handle_write:
 				freeems_packet_cleanup(packet);
 			}
 			else
-				printf("TIMEOUT!!\n");
+				printf("EMPTY PAYLOAD PACKET TIMEOUT, retry not implemented for this one yet!!\n");
 			break;
 		default:
 			printf("MegaTunix does NOT know how to handle this packet response type..\n");
@@ -516,6 +516,8 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 		queue = DATA_GET(global_data,queue_name);
 	else /* Use "queue" key via DATA_GET */
 		queue = DATA_GET(object,"queue");
+	if (!queue)
+		return NULL;
 	g_get_current_time(&tval);
 	/* Set gigantic timeout for valgrind since it runs so slow */
 	if (g_getenv("VALGRIND"))

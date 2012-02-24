@@ -74,7 +74,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		/*QUIET_MTXDBG(CRITICAL,_("no pf dispatch queue or leaving or might_be_leaving is set!\n"));*/
 		/* Flush the queue */
 		while (NULL != (message = g_async_queue_try_pop(pf_dispatch_queue)))
-			dealloc_message(message);
+			dealloc_io_message(message);
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
 		g_mutex_unlock(pf_dispatch_mutex);
@@ -101,7 +101,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		/* Message failed at some point, do NOT run post functions
 		 * in this case.
 		 */
-		dealloc_message(message);
+		dealloc_io_message(message);
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
 		g_mutex_unlock(pf_dispatch_mutex);
@@ -138,7 +138,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 
 		}
 	}
-	dealloc_message(message);
+	dealloc_io_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
 
 	/* Causes issues on shit machines
@@ -188,7 +188,7 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	UpdateFunction val = 0;
 	gint count = 0;
 	GtkWidget *widget = NULL;
-	Io_Message *message = NULL;
+	Gui_Message *message = NULL;
 	Text_Message *t_message = NULL;
 	Widget_Update *w_update = NULL;
 	Widget_Range *range = NULL;
@@ -213,7 +213,7 @@ trypop:
 		/*QUIET_MTXDBG(CRITICAL,_("no Gui dispatch queue or leaving or might_be_leaving is set!\n"));*/
 		/* Flush the queue */
 		while (NULL != (message = g_async_queue_try_pop(gui_dispatch_queue)))
-			dealloc_message(message);
+			dealloc_gui_message(message);
 		g_mutex_lock(gui_dispatch_mutex);
 		g_cond_signal(gui_dispatch_cond);
 		g_mutex_unlock(gui_dispatch_mutex);
@@ -361,7 +361,7 @@ trypop:
 		}
 	}
 dealloc:
-	dealloc_message(message);
+	dealloc_gui_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
 	count++;
 	/* try to handle up to 4 messages at a time.  If this is 

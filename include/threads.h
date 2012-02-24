@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 
 typedef struct _Io_Message Io_Message;
+typedef struct _Gui_Message Gui_Message;
 typedef struct _Text_Message Text_Message;
 typedef struct _QFunction QFunction;
 typedef struct _Widget_Range Widget_Range;
@@ -86,6 +87,17 @@ struct _OutputData
 
 
 /*!
+ * \brief _Gui_Message is to passing gui message calls to the gui_dispatcher timeout This was split out of Io_Message due to rampant misuse of that structure
+ */
+
+struct _Gui_Message 
+{
+	GArray *functions;	/*!< for gui_dispatch_queue */
+	void *payload;		/*!< data passed along, arbritrary size.. */
+};
+
+
+/*!
  \brief _Io_Message structure is used for passing data around in threads.c for
  kicking off commands to send data to/from the ECU or run specified handlers.
  messages and postfunctiosn can be bound into this strucutre to do some complex
@@ -94,7 +106,6 @@ struct _OutputData
  */
 struct _Io_Message
 {
-	GArray *functions;	/*!< for gui_dispatch_queue */
 	GArray *sequence;	/*!< for sending data to ECU */
 	void *payload;		/*!< data passed along, arbritrary size.. */
 	void *recv_buf;		/*!< data that comes from ECU */

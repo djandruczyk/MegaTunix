@@ -141,25 +141,25 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
 	{
-		g_get_current_time(&cur);
-		g_time_val_add(&cur,10000); /* 10 ms timeout */
-		message = g_async_queue_timed_pop(io_data_queue,&cur);
 
-//		if (DATA_GET(global_data,"leaving") || 
-//				DATA_GET(global_data,"thread_dispatcher_exit"))
+		//		if (DATA_GET(global_data,"leaving") || 
+		//				DATA_GET(global_data,"thread_dispatcher_exit"))
 		if (DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
 fast_exit:
 			DATA_SET(global_data,"thread_dispatcher_id",NULL);
 			/* drain queue and exit thread */
 			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
-				dealloc_message(message);
+				dealloc_io_message(message);
 
 			g_mutex_lock(io_dispatch_mutex);
 			g_cond_signal(io_dispatch_cond);
 			g_mutex_unlock(io_dispatch_mutex);
 			g_thread_exit(0);
 		}
+		g_get_current_time(&cur);
+		g_time_val_add(&cur,10000); /* 10 ms timeout */
+		message = g_async_queue_timed_pop(io_data_queue,&cur);
 		if (!message) /* NULL message */
 			continue;
 
@@ -207,7 +207,7 @@ fast_exit:
 					/*
 					   if (!result)
 					   message->command->defer_post_functions=TRUE;
-					 */
+					   */
 				}
 				break;
 			case WRITE_CMD:
@@ -238,9 +238,9 @@ fast_exit:
 		/* If set to defer post functions, it means they were passed 
 		   via a function fall, thus dealloc it here., Otherwise
 		   push up the queue to the postfunction dispatcher
-		 */
+		   */
 		if (message->command->defer_post_functions)
-			dealloc_message(message);
+			dealloc_io_message(message);
 		else
 		{
 			g_async_queue_ref(pf_dispatch_queue);
@@ -276,7 +276,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 		gboolean clear)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	Io_Message *message = NULL;
+	Gui_Message *message = NULL;
 	Text_Message *t_message = NULL;
 	gint tmp = 0;
 
@@ -285,7 +285,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
-	message = initialize_io_message();
+	message = initialize_gui_message();
 
 	t_message = g_new0(Text_Message, 1);
 	t_message->view_name = view_name;
@@ -318,13 +318,13 @@ G_MODULE_EXPORT void  thread_update_logbar(
 G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	Io_Message *message = NULL;
+	Gui_Message *message = NULL;
 	QFunction *qfunc = NULL;
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
-	message = initialize_io_message();
+	message = initialize_gui_message();
 
 	qfunc = g_new0(QFunction, 1);
 	qfunc->func_name = name;
@@ -357,7 +357,7 @@ G_MODULE_EXPORT void  thread_update_widget(
 		gchar * msg)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	Io_Message *message = NULL;
+	Gui_Message *message = NULL;
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
@@ -366,7 +366,7 @@ G_MODULE_EXPORT void  thread_update_widget(
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
 	g_return_if_fail(gui_dispatch_queue);
-	message = initialize_io_message();
+	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
 	w_update->widget_name = widget_name;
@@ -394,13 +394,13 @@ G_MODULE_EXPORT void  thread_update_widget(
 G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	Io_Message *message = NULL;
+	Gui_Message *message = NULL;
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
-	message = initialize_io_message();
+	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
 	w_update->widget_name = widget_name;
@@ -428,12 +428,12 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	Io_Message *message = NULL;
+	Gui_Message *message = NULL;
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
-	message = initialize_io_message();
+	message = initialize_gui_message();
 
 	message->payload = (void *)widget;
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
@@ -478,12 +478,12 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
 	gint tmp = 0;
-	Io_Message *message = NULL;
+	Gui_Message *message = NULL;
 	Widget_Range *range = NULL;
 
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
-	message = initialize_io_message();
+	message = initialize_gui_message();
 	range = g_new0(Widget_Range,1);
 
 	range->page = page;
@@ -508,13 +508,13 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	Io_Message *message = NULL;
+	Gui_Message *message = NULL;
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
-	message = initialize_io_message();
+	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
 	w_update->group_name = g_strdup(group);

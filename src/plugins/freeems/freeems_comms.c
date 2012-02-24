@@ -512,6 +512,7 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 {
 	GAsyncQueue *queue = NULL;
 	GThread *thread = NULL;
+	GMutex *mutex = DATA_GET(global_data,"rtv_subscriber_mutex");
 
 	/* This sends packets to the rtv_subscriber queue */
 	thread = DATA_GET(global_data,"rtv_subscriber_thread");
@@ -522,10 +523,12 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 		DATA_SET(global_data,"rtv_subscriber_thread",NULL);
 		DATA_SET(global_data,"rtv_subscriber_thread_exit",NULL);
 	}
+	g_mutex_lock(mutex);
 	queue = DATA_GET(global_data,"rtv_subscriber_queue");
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	g_async_queue_unref(queue);
 	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
+	g_mutex_unlock(mutex);
 	DATA_SET(global_data,"realtime_id",NULL);
 	return TRUE;
 }
@@ -539,15 +542,22 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 {
 	GAsyncQueue *queue = (GAsyncQueue *)data;
+	static GMutex *mutex = NULL;
 	GTimeVal now;
 	FreeEMS_Packet *packet = NULL;
+
+	mutex = DATA_GET(global_data,"rtv_subscriber_mutex");
+	if (!mutex)
+		g_thread_exit(0);
 
 	while (!DATA_GET(global_data,"rtv_subscriber_thread_exit"))
 	{
 		g_get_current_time(&now);
 		/* Wait up to 0.25 seconds for thread to exit */
 		g_time_val_add(&now,250000);
+		g_mutex_lock(mutex);
 		packet = g_async_queue_timed_pop(queue,&now);
+		g_mutex_unlock(mutex);
 		if (packet)
 		{
 			DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER((GINT)DATA_GET(global_data,"rt_goodread_count")+1));

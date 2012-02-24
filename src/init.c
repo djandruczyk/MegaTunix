@@ -963,7 +963,6 @@ void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 }
 
 
-
 /*!
   \brief initialize_io_message() allocates and initializes a pointer
   to a Io_Message datastructure,  used for passing messages 
@@ -976,7 +975,6 @@ G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 	Io_Message *message = NULL;
 
 	message = g_new0(Io_Message, 1);
-	message->functions = NULL;
 	message->command = NULL;
 	message->sequence = NULL;
 	message->payload = NULL;
@@ -984,6 +982,23 @@ G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 	message->status = TRUE;
 
 	/*printf("Allocate message %i\n",count++); */
+	return message;
+}
+
+
+/*!
+  \brief initialize_gui_message() allocates and initializes a pointer
+  to a Gui_Message datastructure,  used for passing messages 
+  across the GAsyncQueue's between the threads and the main context
+  \returns a allocated and initialized pointer to a single structure
+  */
+G_MODULE_EXPORT Gui_Message * initialize_gui_message(void)
+{
+	Gui_Message *message = NULL;
+
+	message = g_new0(Gui_Message, 1);
+	message->functions = NULL;
+	message->payload = NULL;
 	return message;
 }
 
@@ -1005,23 +1020,20 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
 
 
 /*!
-  \brief dealloc_message() deallocates the structure used to pass an I/O
+  \brief dealloc_io_message() deallocates the structure used to pass an I/O
   message from a thread to here..
   \param message (Io_Message *) pointer to message data to be deallocated
   */
-G_MODULE_EXPORT void dealloc_message(Io_Message * message)
+G_MODULE_EXPORT void dealloc_io_message(Io_Message * message)
 {
 	/*static gint count = 0;*/
 	OutputData *payload = NULL;
 	if (!message)
 		return;
-	/*printf("dealloc_message %i\n",count++);*/
+	/*printf("dealloc_io_message %i\n",count++);*/
 	/*printf ("message pointer %p\n",message);
 	printf ("message->functions pointer %p\n",message->functions);
 	*/
-	if (message->functions)
-		dealloc_array(message->functions, FUNCTIONS);
-	message->functions = NULL;
 	/*printf ("message->sequence pointer %p\n",message->sequence);*/
 	if (message->sequence)
 		dealloc_array(message->sequence, SEQUENCE);
@@ -1055,12 +1067,30 @@ G_MODULE_EXPORT void dealloc_message(Io_Message * message)
 			{
 				//DATA_SET(payload->data,"_WILL_NEVER_USE_",NULL);
 				g_dataset_destroy(payload->data);
+				//printf("Payload(%p)->data address is %p\n",payload,payload->data);
 				cleanup(payload->data);
 			}
 			cleanup(payload);
 		}
 	}
         cleanup(message);
+}
+
+
+/*!
+  \brief dealloc_gui_message() deallocates the structure used to pass an I/O
+  message from a thread to here..
+  \param message (Io_Message *) pointer to message data to be deallocated
+  */
+G_MODULE_EXPORT void dealloc_gui_message (Gui_Message *message)
+{
+	if (message->functions)
+		dealloc_array(message->functions, FUNCTIONS);
+	message->functions = NULL;
+	cleanup(message);
+	/* Message->payload is deallocated already for us
+	 * so don't touch message->payload
+	 */
 }
 
 
