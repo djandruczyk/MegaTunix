@@ -227,10 +227,10 @@ read_again:
 			/*printf(_("LOG signature is \"%s\"\n"),log_info->signature);*/
 			if (DATA_GET(global_data,"offline"))
 			{
-				printf("rtv_map->applicable_revisions is \"%s\"\n",rtv_map->applicable_revisions);
-				if (rtv_map->applicable_revisions)
+				printf("rtv_map->applicable_signatures is \"%s\"\n",rtv_map->applicable_signatures);
+				if (rtv_map->applicable_signatures)
 				{
-					if (strstr(rtv_map->applicable_revisions,log_info->signature) != NULL)
+					if (strstr(rtv_map->applicable_signatures,log_info->signature) != NULL)
 						printf(_("Good this firmware is compatible with the firmware we're using\n"));
 					else
 						printf(_("mismatch between datalog and current firmware, playback via full gui will probably not work like you expected\n"));

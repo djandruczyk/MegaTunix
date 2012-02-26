@@ -904,7 +904,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		{
 			if (rtv_map->raw_list)
 				g_strfreev(rtv_map->raw_list);
-			cleanup (rtv_map->applicable_revisions);
+			cleanup (rtv_map->applicable_signatures);
 			for(i=0;i<rtv_map->rtv_list->len;i++)
 			{
 				data = g_ptr_array_index(rtv_map->rtv_list,i);

@@ -29,6 +29,9 @@
 #include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
+#include <glade/glade-xml.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <multi_expr_loader.h>
 #include <getfiles.h>
 #include <keyparser.h>
@@ -38,6 +41,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stringmatch.h>
+#include <xmlbase.h>
+
+extern gconstpointer *global_data;
 
 /*!
   \brief load_realtime_map_pf() loads the realtime map specified in the detected
@@ -46,35 +52,17 @@
   */
 G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 {
-	GtkWidget *dialog = NULL;
-	ConfigFile *cfgfile = NULL;
 	gchar * filename = NULL;
-	gchar *tmpbuf = NULL;
-	gint derived_total = 0;
-	gint num_keys = 0;
-	gchar ** keys = NULL;
-	gchar **vector = NULL;
-	DataType keytype = MTX_INT;
-	gint i = 0;
-	gint j = 0;
-	guint k = 0;
-	gint tmpi = 0;
-	gint major = 0;
-	gint minor = 0;
-	gint offset = 0;
-	gfloat tmpf = 0.0;
-	gfloat *newfloat = NULL;
-	gchar * section = NULL;
-	gconstpointer *object = NULL;
-	GList * list = NULL;
-	GArray *history = NULL;
+	GtkWidget *dialog = NULL;
+	gboolean xml_result = FALSE;
+	xmlDoc *doc = NULL;
+	xmlNode *root_element = NULL;
 	Rtv_Map *rtv_map = NULL;
-	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
-	static void (*load_deps)(gconstpointer *,ConfigFile *,const gchar *, const gchar *) = NULL;
 
 	MTXDBG(RTMLOADER,_("Entered"));
 	firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,FALSE);
 
 	if ((!DATA_GET(global_data,"interrogated")) && 
 			(DATA_GET(global_data,"connected")))
@@ -82,12 +70,12 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Realtime Map...")));
-	filename = get_file(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL),g_strdup("rtv_map"));
+	filename = get_file(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL),g_strdup("xml"));
 	if (!filename)
 	{
-		MTXDBG(RTMLOADER|CRITICAL,_("File \"%s.rtv_map\" not found!!, exiting function\n"),firmware->rtv_map_file);
-		set_title(g_strdup(_("ERROR RT Map file DOES NOT EXIST!!!")));
-		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_("\n<b>MegaTunix</b> Realtime Variable map \"%s.rtv_map\" for this firmware doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i>??\n You should notify the author of this bug\n\n"),firmware->rtv_map_file);
+		MTXDBG(RTMLOADER|CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->rtv_map_file);
+		set_title(g_strdup(_("ERROR RT Map XML file DOES NOT EXIST!!!")));
+		dialog = gtk_message_dialog_new_with_markup(NULL,GTK_DIALOG_MODAL,GTK_MESSAGE_ERROR,GTK_BUTTONS_CLOSE,_("\n<b>MegaTunix</b> Realtime Variable map \"%s.xml\" for this firmware doesn't appear to be installed correctly!\n\nDid you forget to run <i>\"sudo make install\"</i>??\n You should notify the author of this bug\n\n"),firmware->rtv_map_file);
 
 		g_signal_connect(G_OBJECT(dialog),"response", G_CALLBACK(gtk_main_quit), dialog);
 		g_signal_connect(G_OBJECT(dialog),"delete_event", G_CALLBACK(gtk_main_quit), dialog);
@@ -101,101 +89,187 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		}
 		exit(-1);
 	}
-	cfgfile = cfg_open_file(filename);
-	if (!cfgfile)
-	{
-		MTXDBG(RTMLOADER|CRITICAL,_("Can't find realtime vars map file %s\n\n"),filename);
-		g_free(filename);
-		set_title(g_strdup(_("ERROR RT Map file could NOT be opened!!!")));
-		gdk_threads_leave();
-		return FALSE;
-	}
-	get_file_api(cfgfile,&major,&minor);
-	if ((major != RTV_MAP_MAJOR_API) || (minor != RTV_MAP_MINOR_API))
-	{
-		MTXDBG(RTMLOADER|CRITICAL,_("RealTimeMap profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API,filename);
-		g_free(filename);
-		set_title(g_strdup(_("ERROR RT Map API MISMATCH!!!")));
-		gdk_threads_leave();
-		return FALSE;
-	}
-	else
-		MTXDBG(RTMLOADER,_("Loading realtime map from %s\n"),filename);
+	LIBXML_TEST_VERSION
+	doc = xmlReadFile (filename, NULL, 0);
 	g_free(filename);
-
-	/* If file found we continue... */
-	if(!cfg_read_string(cfgfile,"realtime_map","applicable_firmwares",&tmpbuf))
+	if (doc == NULL)
 	{
-		MTXDBG(RTMLOADER|CRITICAL,_("Can't find \"applicable_firmwares\" key, ABORTING!!\n"));
-		cfg_free(cfgfile);
-		set_title(g_strdup(_("ERROR RT Map missing data!!!")));
+		MTXDBG(RTMLOADER|CRITICAL,_("error: could not parse file %s\n"),filename);
 		gdk_threads_leave();
 		return FALSE;
 	}
-	if (strstr(tmpbuf,firmware->name) == NULL)	
-	{
-		MTXDBG(RTMLOADER|CRITICAL,_("Firmware signature \"%s\"\n\tis NOT found in this file:(%s) Potential firmware choices are \"%s\", ABORT!\n\n"),firmware->actual_signature,cfgfile->filename,tmpbuf);
-		cfg_free(cfgfile);
-		g_free(tmpbuf);
-		set_title(g_strdup(_("ERROR RT Map signature MISMATCH!!!")));
-		gdk_threads_leave();
-		return FALSE;
-
-	}
-	g_free(tmpbuf);
-	/* OK, basic checks passed,  start loading data into
-	 * the main mapping structures...
-	 */
-	if(!cfg_read_int(cfgfile,"realtime_map","derived_total",&derived_total))
-	{
-		MTXDBG(RTMLOADER|CRITICAL,_("Can't find \"derived_total\" in the \"[realtime_map]\" section\n"));
-	}
-
-	tmpbuf = NULL;
 	rtv_map = g_new0(Rtv_Map, 1);
 	DATA_SET(global_data,"rtv_map",rtv_map);
-	cfg_read_string(cfgfile,"realtime_map","applicable_revisions",&rtv_map->applicable_revisions);
-	cfg_read_string(cfgfile,"realtime_map","raw_list",&tmpbuf);
-	if (tmpbuf)
-	{
-		rtv_map->raw_list = parse_keys(tmpbuf,&num_keys,",");
-		g_free(tmpbuf);
-	}
 	/* This should free to values with g_list_free, but it causes a fault*/
 	rtv_map->offset_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,NULL);
 	rtv_map->rtv_list = g_ptr_array_new();
 	rtv_map->rtv_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 	rtv_map->rtvars_size = firmware->rtvars_size;
-	rtv_map->derived_total = derived_total;
 	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE, sizeof(GTimeVal),4096);
+	rtv_map->derived_total = 0; /* Will be incremented for each one loaded*/
+	root_element = xmlDocGetRootElement(doc);
+	xml_result = load_rtv_xml_elements(root_element,rtv_map);
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
 
-	/* Load em up.. */
-	for (i=0;i<derived_total;i++)
+	if (xml_result == FALSE)
 	{
-		section = g_strdup_printf("derived_%i",i);
-		/* Get key list and parse */
-		if(!cfg_read_string(cfgfile,section,"keys",&tmpbuf))
+		set_title(g_strdup(_("ERROR RT Map XML Parse Errors!")));
+		MTXDBG(RTMLOADER|CRITICAL,_("Parsing errors with realtiem map XML!\n"));
+	}
+	else
+	{
+		set_title(g_strdup(_("RT Map XML Loaded OK!")));
+		DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
+	}
+	gdk_threads_leave();
+	return TRUE;
+}
+
+
+gboolean load_rtv_xml_elements(xmlNode *a_node, Rtv_Map *map)
+{
+	xmlNode *cur_node = NULL;
+
+	/* Iterate down... */
+	for (cur_node = a_node; cur_node;cur_node = cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			MTXDBG(RTMLOADER|CRITICAL,_("Can't find \"keys\" in the \"[%s]\" section, ABORTING!!!\n"),section);
-			g_free(section);
-			set_title(g_strdup(_("ERROR RT Map missing data problem!!!")));
-			gdk_threads_leave();
+			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
+				if (!xml_api_check(cur_node,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API))
+				{
+					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
+					return FALSE;
+				}
+			if (g_strcasecmp((gchar *)cur_node->name,"realtime_map") == 0)
+				load_rtv_defaults(cur_node,map);
+			if (g_strcasecmp((gchar *)cur_node->name,"derived_var") == 0)
+				load_derived_var(cur_node,map);
+		}
+		if (!load_rtv_xml_elements(cur_node->children,map))
 			return FALSE;
-		}
-		else
+	}
+	return TRUE;
+}
+
+
+void load_rtv_defaults(xmlNode *node, Rtv_Map *map)
+{
+	xmlNode *cur_node = NULL;
+	gchar * tmpbuf = NULL;
+	if (!node->children)
+	{
+		printf(_("ERROR, load_derived_var, xml node is empty!!\n"));
+		return;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			keys = parse_keys(tmpbuf,&num_keys,",");
-			g_free(tmpbuf);
+			if (g_strcasecmp((gchar *)cur_node->name,"applicable_signatures") == 0)
+				generic_xml_gchar_import(cur_node,&map->applicable_signatures);
+			if (g_strcasecmp((gchar *)cur_node->name,"raw_list") == 0)
+			{
+				generic_xml_gchar_import(cur_node,&tmpbuf);
+				map->raw_list = parse_keys(tmpbuf,NULL,",");
+				g_free(tmpbuf);
+			}
 		}
-		if (!cfg_read_int(cfgfile,section,"offset",&offset))
+		cur_node = cur_node->next; /* Iterate, iterate, iterate... */
+	}
+}
+
+
+void load_derived_var(xmlNode *node, Rtv_Map *map)
+{
+	gint i = 0;
+	gchar *tmpbuf = NULL;
+	gconstpointer *object = NULL;
+	GArray *history = NULL;
+	gfloat *newfloat = NULL;
+	GList *list = NULL;
+	gchar **vector = NULL;
+	xmlNode *cur_node = NULL;
+	gint offset = 0;
+	gint precision = 0;
+	gfloat real_lower = 0.0;
+	gfloat real_upper = 0.0;
+	gfloat fromecu_mult = 1.0;
+	gfloat fromecu_add = 0.0;
+	DataSize size = MTX_U08;
+	gint temp_dep = -1;
+	gint log_by_default = -1;
+	gchar * special = NULL;
+	gchar * dlog_field_name = NULL;
+	gchar * dlog_gui_name = NULL;
+	gchar * internal_names = NULL;
+	gchar * tooltip = NULL;
+	gboolean has_deps = FALSE;
+	gboolean complex_expression = FALSE;
+	gboolean multiple_expression = FALSE;
+
+	if (!node->children)
+	{
+		printf(_("ERROR, load_derived_var, xml node is empty!!\n"));
+		return;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			MTXDBG(RTMLOADER|CRITICAL,_("Can't find \"offset\" in the \"[%s]\" section, ABORTING!!!\n\n"),section);
-			g_free(section);
-			g_strfreev(keys);
-			set_title(g_strdup(_("ERROR RT Map offset missing!!!")));
-			gdk_threads_leave();
-			return FALSE;
+			/* Minimum Required Fields */
+			if (g_strcasecmp((gchar *)cur_node->name,"tooltip") == 0)
+				generic_xml_gchar_import(cur_node,&tooltip);
+			if (g_strcasecmp((gchar *)cur_node->name,"dlog_gui_name") == 0)
+				generic_xml_gchar_import(cur_node,&dlog_gui_name);
+			if (g_strcasecmp((gchar *)cur_node->name,"dlog_field_name") == 0)
+				generic_xml_gchar_import(cur_node,&dlog_field_name);
+			if (g_strcasecmp((gchar *)cur_node->name,"internal_names") == 0)
+				generic_xml_gchar_import(cur_node,&internal_names);
+			if (g_strcasecmp((gchar *)cur_node->name,"real_upper") == 0)
+				generic_xml_gfloat_import(cur_node,&real_upper);
+			if (g_strcasecmp((gchar *)cur_node->name,"real_lower") == 0)
+				generic_xml_gfloat_import(cur_node,&real_lower);
+			if (g_strcasecmp((gchar *)cur_node->name,"offset") == 0)
+				generic_xml_gint_import(cur_node,&offset);
+			if (g_strcasecmp((gchar *)cur_node->name,"log_by_default") == 0)
+				generic_xml_gboolean_import(cur_node,&log_by_default);
+			if (g_strcasecmp((gchar *)cur_node->name,"size") == 0)
+			{
+				generic_xml_gchar_import(cur_node,&tmpbuf);
+				size = translate_string(tmpbuf);
+				g_free(tmpbuf);
+			}
+			/* Common, yet Optional Fields */
+			if (g_strcasecmp((gchar *)cur_node->name,"fromecu_mult") == 0)
+				generic_xml_gfloat_import(cur_node,&fromecu_mult);
+			if (g_strcasecmp((gchar *)cur_node->name,"fromecu_add") == 0)
+				generic_xml_gfloat_import(cur_node,&fromecu_add);
+			if (g_strcasecmp((gchar *)cur_node->name,"precision") == 0)
+				generic_xml_gint_import(cur_node,&precision);
+			if (g_strcasecmp((gchar *)cur_node->name,"temp_dep") == 0)
+				generic_xml_gboolean_import(cur_node,&temp_dep);
+			/* Hack for special values (HR clock?) */
+			if (g_strcasecmp((gchar *)cur_node->name,"special") == 0)
+				generic_xml_gchar_import(cur_node,&special);
+			if (g_strcasecmp((gchar *)cur_node->name,"depend_on") == 0)
+				has_deps = TRUE;
+			if (g_strcasecmp((gchar *)cur_node->name,"fromecu_complex") == 0)
+				complex_expression = TRUE;
+			if (g_strcasecmp((gchar *)cur_node->name,"multi_expr_keys") == 0)
+				multiple_expression = TRUE;
 		}
+		cur_node = cur_node->next;
+	}
+	/* Validate minimum needed */
+	if ((internal_names) && (dlog_gui_name) && (dlog_field_name) && \
+			(tooltip) && (offset >= 0) && \
+			(real_lower != G_MINFLOAT) && \
+			(real_upper != G_MINFLOAT))
+	{
 		object = g_new0(gconstpointer, 1);
 		history = NULL;
 		/* Create object to hold all the data. (dynamically)*/
@@ -203,142 +277,71 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		DATA_SET(object,"size",GINT_TO_POINTER(MTX_U08));
 		/* Index */
 		DATA_SET(object,"index",GINT_TO_POINTER(i));
-		/* Object name */
-		DATA_SET_FULL(object,"name",g_strdup(section),g_free);
+//		/* Object name */
+//		DATA_SET_FULL(object,"name",g_strdup(section),g_free);
 		/* History Array */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		/* bind history array to object for future retrieval */
 		DATA_SET(object,"history",(gpointer)history);
 
-		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
-		{
-			if (!load_deps)
-				get_symbol("load_dependancies",(void *)&load_deps);
-			if (load_deps)
-				load_deps(object,cfgfile,section,"depend_on");
-			else
-				MTXDBG(CRITICAL|RTMLOADER,_("Function pointer for \"load_dependancies\" could NOT be found in plugins, BUG!\n"));
-			g_free(tmpbuf);
-		}
-		if (cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
-		{
-			load_multi_expressions(object,cfgfile,section);
-			g_free(tmpbuf);
-		}
-		for (j=0;j<num_keys;j++)
-		{
-			keytype = translate_string(keys[j]);
-			switch((DataType)keytype)
-			{
-				case MTX_INT:
-					if (cfg_read_int(cfgfile,section,keys[j],&tmpi))
-					{
-						MTXDBG(RTMLOADER,_("Binding INT \"%s\",\"%i\" to widget \"%s\"\n"),keys[j],tmpi,section);
-						DATA_SET(object,
-								keys[j],
-								GINT_TO_POINTER(tmpi));
-					}
-					else
-						MTXDBG(RTMLOADER|CRITICAL,_("MTX_INT: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
-					break;
-				case MTX_ENUM:
-					if (cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
-					{
-						tmpi = translate_string(tmpbuf);
-						MTXDBG(RTMLOADER,_("Binding ENUM \"%s\",\"%i\" to widget \"%s\"\n"),keys[j],tmpi,section);
-						DATA_SET(object,
-								keys[j],
-								GINT_TO_POINTER(tmpi));
-						g_free(tmpbuf);
-					}
-					else
-						MTXDBG(RTMLOADER|CRITICAL,_("MTX_ENUM: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
-					break;
-				case MTX_BOOL:
-					if (cfg_read_boolean(cfgfile,section,keys[j],&tmpi))
-					{
-						if (tmpi == 0)
-							tmpi = -1;
-						MTXDBG(RTMLOADER,("Binding BOOL \"%s\",\"%i\" to widget \"%s\"\n"),keys[j],tmpi,section);
-						DATA_SET(object,
-								keys[j],
-								GINT_TO_POINTER(tmpi));
-						if (strstr(keys[j],"fromecu_complex") != NULL)
-							load_complex_params(object,cfgfile,section);
-					}
-					else
-						MTXDBG(RTMLOADER|CRITICAL,_("MTX_BOOL: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
-					break;
-				case MTX_FLOAT:
-					if (cfg_read_float(cfgfile,section,keys[j],&tmpf))
-					{
-						newfloat = NULL;
-						newfloat = g_new0(gfloat, 1);
-						*newfloat = tmpf;
-						DATA_SET_FULL(object,
-								keys[j],
-								(gpointer)newfloat,g_free);
-					}
-					else
-						MTXDBG(RTMLOADER|CRITICAL,_("MTX_FLOAT: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
-					break;
+		DATA_SET(object,"precision",GINT_TO_POINTER(precision));
+		DATA_SET(object,"offset",GINT_TO_POINTER(offset));
+		DATA_SET(object,"size",GINT_TO_POINTER(size));
+		DATA_SET(object,"temp_dep",GINT_TO_POINTER(temp_dep));
+		DATA_SET(object,"log_by_default",GINT_TO_POINTER(log_by_default));
+		DATA_SET_FULL(object,"internal_names",g_strdup(internal_names),g_free);
+		DATA_SET_FULL(object,"dlog_field_name",g_strdup(dlog_gui_name),g_free);
+		/* Translate if needed  */
+		DATA_SET_FULL(object,"dlog_gui_name",g_strdup(_(dlog_gui_name)),g_free);
+		DATA_SET_FULL(object,"tooltip",g_strdup(_(tooltip)),g_free);
+		/* Floats need some special handling to avoid leaks */
+		newfloat = g_new0(gfloat, 1);
+		*newfloat = real_lower;
+		DATA_SET_FULL(object,"real_lower",(gpointer)newfloat,g_free);
+		newfloat = g_new0(gfloat, 1);
+		*newfloat = real_upper;
+		DATA_SET_FULL(object,"real_upper",(gpointer)newfloat,g_free);
+		/* OPTIONAL PARAMETERS */
+		if (special)
+			DATA_SET_FULL(object,"special",g_strdup(special),g_free);
+		newfloat = g_new0(gfloat, 1);
+		*newfloat = fromecu_mult;
+		DATA_SET_FULL(object,"fromecu_mult",(gpointer)newfloat,g_free);
+		newfloat = g_new0(gfloat, 1);
+		*newfloat = fromecu_add;
+		DATA_SET_FULL(object,"fromecu_add",(gpointer)newfloat,g_free);
 
-				case MTX_STRING:
-					if(cfg_read_string(cfgfile,section,keys[j],&tmpbuf))
-					{
-						MTXDBG(RTMLOADER,_("Binding STRING key:\"%s\" value:\"%s\" to widget \"%s\"\n"),keys[j],tmpbuf,section);
-						if ((strstr(keys[j],"dlog_gui_name")) || (strstr(keys[j],"tooltip")))
-						{
-							DATA_SET_FULL(object,
-									keys[j],
-									g_strdup(_(tmpbuf)),
-									g_free);
-						}
-						else
-						{
-							DATA_SET_FULL(object,
-									keys[j],
-									g_strdup(tmpbuf),
-									g_free);
-						}
-						g_free(tmpbuf);
-					}
-					else
-						MTXDBG(RTMLOADER|CRITICAL,_("MTX_STRING: read of key \"%s\" from section \"%s\" failed\n"),keys[j],section);
-					break;
-				case MTX_UNKNOWN:
-					MTXDBG(RTMLOADER|CRITICAL,_("MTX_UNKNWON: key \"%s\" DON'T KNOW HOW TO HANDLE, missing stringmatch association!\n"),keys[j]);
-					break;
-
-				default:
-					break;
-
-			}
-		}
-		if(cfg_read_string(cfgfile,section,"internal_names",&tmpbuf))
+		if (has_deps)
+			printf("This rtv var has dependancies!, not written yet\n");
+		if (complex_expression)
+			printf("This rtv var has complex expressions!, not written yet\n");
+		if (multiple_expression)
+			printf("This rtv var has multiple_expressions!, not written yet\n");
+		if (internal_names)
 		{
-			vector = g_strsplit(tmpbuf,",",-1); 
-			for(k=0;k<g_strv_length(vector);k++) 
-				g_hash_table_insert(rtv_map->rtv_hash,g_strdup(vector[k]),(gpointer)object);
+			vector = g_strsplit(internal_names,",",-1); 
+			for(i=0;i<g_strv_length(vector);i++) 
+				g_hash_table_insert(map->rtv_hash,g_strdup(vector[i]),(gpointer)object);
 			g_strfreev(vector);
 			g_free(tmpbuf);
 		}
-		/*DATA_SET_FULL(object,"keys",g_strdupv(keys),g_strfreev);*/
-		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(offset));
+		list = g_hash_table_lookup(map->offset_hash,GINT_TO_POINTER(offset));
 		list = g_list_prepend(list,(gpointer)object);
-		g_hash_table_replace(rtv_map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
-		g_ptr_array_add(rtv_map->rtv_list,object);
-		g_free(section);
-		g_strfreev(keys);
-		/*g_datalist_foreach(object,dump_datalist,NULL);*/
+		g_hash_table_replace(map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
+		g_ptr_array_add(map->rtv_list,object);
 	}
-	cfg_free(cfgfile);
-	DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
-	set_title(g_strdup(_("RT Map loaded...")));
-	gdk_threads_leave();
-	MTXDBG(RTMLOADER,_("Leaving"));
-	return TRUE;
 }
+
+
+/*
+void shit()
+{
+	static void (*load_deps)(gconstpointer *,ConfigFile *,const gchar *, const gchar *) = NULL;
+
+	get_symbol("load_dependancies",(void *)&load_deps);
+		load_deps(object,cfgfile,section,"depend_on");
+	load_multi_expressions(object,cfgfile,section);
+	*/
 
 
 /*!
