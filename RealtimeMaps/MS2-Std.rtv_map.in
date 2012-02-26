@@ -4,7 +4,6 @@ minor=7
 
 [realtime_map]
 persona=MS-2
-applicable_firmwares=MS2 V2.8x
 applicable_revisions=** V2.88Embedded Code by B&G **,** V2.89Embedded Code by B&G **
 derived_total=70
 raw_list=raw_secl

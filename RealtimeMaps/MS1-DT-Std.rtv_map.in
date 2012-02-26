@@ -4,7 +4,6 @@ minor=7
 
 [realtime_map]
 persona=MS-1
-applicable_firmwares=MS1-DT V1.02,MS1-DT V1.01,MS1-DT V0.90-1.0
 derived_total=39
 
 [derived_0]

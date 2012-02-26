@@ -4,7 +4,6 @@ minor=7
 
 [realtime_map]
 persona=MS-1
-applicable_firmwares=MS1-Extra 029x,MS1-Extra 029yx
 applicable_revisions=MSnS-extra format 029q *********,MS1/Extra format 029y3 *********
 derived_total=56
 raw_list=raw_secl,baroadc,barovolt,barokpa,mapadc,mapvolt,mapkpa,matadc,matvolt,matdeg,cltadc,cltvolt,cltdeg,tpsadc,tpsvolt,tpspercent,battadc,battvolt,o2adc,o2volt1,afr1,egocorr,aircorr,warmcorr,raw_rpm,pw,tpsaccel,barocorr,gammae,vecurr,sparkangle

@@ -4,7 +4,6 @@ minor=7
 
 [realtime_map]
 persona=PIS
-applicable_firmwares=Delco P.I.S V1_00
 applicable_revisions=PIS firmware (C) 2010 Jason Roughley. pis.controller@gmail.com
 derived_total=80
 raw_list=raw_secl

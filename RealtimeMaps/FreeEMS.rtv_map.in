@@ -4,7 +4,7 @@ minor=7
 
 [realtime_map]
 persona=FreeEMS
-applicable_firmwares=FreeEMS 0.0.0
+applicable_signatures=FreeEMS 0.0.0
 derived_total=60
 
 # -----------------------------------------------------------------------------
