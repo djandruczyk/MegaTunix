@@ -329,7 +329,7 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 		}
 		if (real_upper)
 		{
-			DATA_SET_FULL(object,"real_upper",g_strdup(real_lower),g_free);
+			DATA_SET_FULL(object,"real_upper",g_strdup(real_upper),g_free);
 			g_free(real_upper);
 		}
 		/* Floats need some special handling to avoid leaks */
