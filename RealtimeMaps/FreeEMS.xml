@@ -5,21 +5,23 @@
 		<minor>7</minor>
 	</api>
 	<derived>
-		<internal_names>hr_clock</internal_names>
 		<dlog_gui_name>HR Clock</dlog_gui_name>
 		<dlog_field_name>Time</dlog_field_name>
+		<internal_names>hr_clock</internal_names>
 		<offset>0</offset>
 		<real_lower>0</real_lower>
 		<real_upper>2147483648</real_upper>
 		<precision>3</precision>
 		<tooltip>"HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.</tooltip>
 		<log_by_default>TRUE</log_by_default>
+		<special>hr_clock</special>
 	</derived>
 	<derived>
-		<internal_names>IAT</internal_names>
 		<dlog_gui_name>Intake Air Temp.</dlog_gui_name>
 		<dlog_field_name>IAT</dlog_field_name>
+		<internal_names>IAT</internal_names>
 		<offset>0</offset>
+		<size>_U16_</size>
 		<real_lower>253.15</real_lower>
 		<real_upper>313.15</real_upper>
 		<fromecu_mult>0.01</fromecu_mult>
@@ -29,652 +31,730 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Coolant/Head Temp.</dlog_gui_name>
+		<dlog_field_name>CHT</dlog_field_name>
+		<internal_names>CHT</internal_names>
+		<offset>2</offset>
+		<size>_U16_</size>
+		<real_lower>253.15</real_lower>
+		<real_upper>393.15</real_upper>
+		<fromecu_mult>0.01</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>2</precision>
+		<tooltip>"CHT/CLT" is the Cyl head and/or coolant temp in the current MtX units</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Throttle Position</dlog_gui_name>
+		<dlog_field_name>TPS</dlog_field_name>
+		<internal_names>TPS</internal_names>
+		<offset>4</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>102.4</real_upper>
+		<fromecu_mult>0.0015625</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"TPS" is the Throttle position sensor value in %</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Exhaust Gas O2</dlog_gui_name>
+		<dlog_field_name>EGO</dlog_field_name>
+		<internal_names>EGO</internal_names>
+		<offset>6</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>2</real_upper>
+		<fromecu_mult>0.000030518</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"EGO" is the EGO lambda value, 0-2</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Manifold Pressure</dlog_gui_name>
+		<dlog_field_name>MAP</dlog_field_name>
+		<internal_names>MAP</internal_names>
+		<offset>8</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.01</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"MAP" is the Manifold absolute pressure in kPa</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Atmospheric Pressure</dlog_gui_name>
+		<dlog_field_name>AAP</dlog_field_name>
+		<internal_names>AAP</internal_names>
+		<offset>10</offset>
+		<size>_U16_</size>
+		<real_lower>50</real_lower>
+		<real_upper>110</real_upper>
+		<fromecu_mult>0.01</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"AAP" is the Atmospheric pressure in kPa</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Battery Voltage</dlog_gui_name>
+		<dlog_field_name>BRV</dlog_field_name>
+		<internal_names>BRV</internal_names>
+		<offset>12</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>20</real_upper>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"BRV" is the Battery Reference Voltage</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Manifold Air Temp</dlog_gui_name>
+		<dlog_field_name>MAT</dlog_field_name>
+		<internal_names>MAT</internal_names>
+		<offset>14</offset>
+		<size>_U16_</size>
+		<real_lower>253.15</real_lower>
+		<real_upper>313.15</real_upper>
+		<fromecu_mult>0.01</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>2</precision>
+		<tooltip>"MAT" is the Manifold Air Temp in MtX units</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Exhaust Gas O2 (2)</dlog_gui_name>
+		<dlog_field_name>EGO2</dlog_field_name>
+		<internal_names>EGO2</internal_names>
+		<offset>16</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>2</real_upper>
+		<fromecu_mult>0.000030518</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"EGO2" is the secondary EGO sensor lambda reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Intercooler Air Pressure</dlog_gui_name>
+		<dlog_field_name>IAP</dlog_field_name>
+		<internal_names>IAP</internal_names>
+		<offset>18</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.01</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"IAP" is the intercooler absolute pressure in kPa</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Air Flow Mass</dlog_gui_name>
+		<dlog_field_name>MAF</dlog_field_name>
+		<internal_names>MAF</internal_names>
+		<offset>20</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>"MAF" is the MAF sensor output, raw 0-65535</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>1st Deriv MAP</dlog_gui_name>
+		<dlog_field_name>DMAP</dlog_field_name>
+		<internal_names>DMAP</internal_names>
+		<offset>22</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>"DMAP" will be the Delta MAP kPA/second or similar but is currently unused</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>1st Deriv TPS</dlog_gui_name>
+		<dlog_field_name>DTPS</dlog_field_name>
+		<internal_names>DTPS</internal_names>
+		<offset>24</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>"DTPS" will be the Delta TPS %/second or similar but is currently unused</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>RPM</dlog_gui_name>
+		<dlog_field_name>RPM</dlog_field_name>
+		<internal_names>RPM</internal_names>
+		<offset>26</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>8000</real_upper>
+		<fromecu_mult>0.5</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"RPM" is the engine speed in Revlolutions Per Minute</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>1st deriv RPM</dlog_gui_name>
+		<dlog_field_name>DRPM</dlog_field_name>
+		<internal_names>DRPM</internal_names>
+		<offset>28</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>1</precision>
+		<tooltip>"DRPM" will be the Delta Engine RPM in RPM/second or similar but is currently unused</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>2nd deriv RPM</dlog_gui_name>
+		<dlog_field_name>DDRPM</dlog_field_name>
+		<internal_names>DDRPM</internal_names>
+		<offset>30</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>1</precision>
+		<tooltip>"DDRPM" will be the Delta Delta Engine RPM in RPM/second^2 or similar but is currently unused</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>LoadMain</dlog_gui_name>
+		<dlog_field_name>LoadMain</dlog_field_name>
+		<internal_names>LoadMain</internal_names>
+		<offset>32</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.01</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"LoadMain" is the configurable unit of engine load</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>VEMain</dlog_gui_name>
+		<dlog_field_name>VEMain</dlog_field_name>
+		<internal_names>VEMain</internal_names>
+		<offset>34</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>128</real_upper>
+		<fromecu_mult>0.001953125</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"VEMain" is the current VE in %</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Integral Lambda</dlog_gui_name>
+		<dlog_field_name>IntegralLambda</dlog_field_name>
+		<internal_names>IntegralLambda</internal_names>
+		<offset>36</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>2</real_upper>
+		<fromecu_mult>0.000030518</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"Lambda" is the integral tuned lambda that we are both expecting to see and are aiming for, note Lambda Tgt is not an appropriate name</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>AirFlow</dlog_gui_name>
+		<dlog_field_name>AirFlow</dlog_field_name>
+		<internal_names>AirFlow</internal_names>
+		<offset>38</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>"AirFlow" is the Top half of the equation</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>DensityAndFuel</dlog_gui_name>
+		<dlog_field_name>DensityAndFuel</dlog_field_name>
+		<internal_names>DensityAndFuel</internal_names>
+		<offset>40</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>"DensityAndFuel" is the Bottom half of the equation</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Base PW</dlog_gui_name>
+		<dlog_field_name>BasePW</dlog_field_name>
+		<internal_names>BasePW</internal_names>
+		<offset>42</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>52.4288</real_upper>
+		<fromecu_mult>0.0008</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"BasePW" is the raw PW before corrections</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Engine Temp. Enrich</dlog_gui_name>
+		<dlog_field_name>ETE</dlog_field_name>
+		<internal_names>ETE</internal_names>
+		<offset>44</offset>
+		<size>_U16_</size>
+		<real_lower>100</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.00305175781</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ETE" is the percentage correction for ETE (Engine Temperature Enrich) applied to the PW, 100 means no correction</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Transient Fuel Total</dlog_gui_name>
+		<dlog_field_name>TFCTotal</dlog_field_name>
+		<internal_names>TFCTotal</internal_names>
+		<offset>46</offset>
+		<size>_S16_</size>
+		<real_lower>-26.2144</real_lower>
+		<real_upper>26.2144</real_upper>
+		<fromecu_mult>0.0008</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"TFCTotal" is the transient fuel correction in PW</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Effective PW</dlog_gui_name>
+		<dlog_field_name>EffectivePW</dlog_field_name>
+		<internal_names>EffectivePW</internal_names>
+		<offset>48</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>52.4288</real_upper>
+		<fromecu_mult>0.0008</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"EffectivePW" is the actual fuel PW delivered in mS.</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Inj. Dead Time</dlog_gui_name>
+		<dlog_field_name>IDT</dlog_field_name>
+		<internal_names>IDT</internal_names>
+		<offset>50</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>15</real_upper>
+		<fromecu_mult>0.0008</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"IDT" is the minimum PW before fuel flow begins in mS</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Reference PW</dlog_gui_name>
+		<dlog_field_name>RefPW</dlog_field_name>
+		<internal_names>RefPW</internal_names>
+		<offset>52</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>52.4288</real_upper>
+		<fromecu_mult>0.0008</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"RefPW" is the reference electrical PW which is the same as each real electrical PW if no per output trims are used</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Ign. Advance</dlog_gui_name>
+		<dlog_field_name>Advance</dlog_field_name>
+		<internal_names>Advance</internal_names>
+		<offset>54</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>64</real_upper>
+		<fromecu_mult>0.02</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"Advance" is the ignition timing in degrees BTDC, note internal scale is different from table</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Dwell</dlog_gui_name>
+		<dlog_field_name>Dwell</dlog_field_name>
+		<internal_names>Dwell</internal_names>
+		<offset>56</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>10</real_upper>
+		<fromecu_mult>0.0008</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"Dwell" is the time a coil spends on before it fires, in ms</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Clock/Logs Sent</dlog_gui_name>
+		<dlog_field_name>tempClock</dlog_field_name>
+		<internal_names>tempClock</internal_names>
+		<offset>58</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>"tempClock" is a variable that is incremented each time a datalog is sent</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>coreStatusA</dlog_gui_name>
+		<dlog_field_name>coreStatusA</dlog_field_name>
+		<internal_names>coreStatusA</internal_names>
+		<offset>60</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>FreeEMS status bits, right now, not much, just fuel pump prime</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>decoderFlags</dlog_gui_name>
+		<dlog_field_name>decoderFlags</dlog_field_name>
+		<internal_names>decoderFlags</internal_names>
+		<offset>61</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Decoder status bits, sync levels, and other details</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>flaggableFlags</dlog_gui_name>
+		<dlog_field_name>flaggableFlags</dlog_field_name>
+		<internal_names>flaggableFlags</internal_names>
+		<offset>62</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>Counter incremented status bits for various things like comms and decoders etc.</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>currentEvent</dlog_gui_name>
+		<dlog_field_name>currentEvent</dlog_field_name>
+		<internal_names>currentEvent</internal_names>
+		<offset>64</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>The input event which was last to come in</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>syncLostWithThisID</dlog_gui_name>
+		<dlog_field_name>syncLostWithThisID</dlog_field_name>
+		<internal_names>syncLostWithThisID</internal_names>
+		<offset>65</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>A unique identifier for the reason behind a loss of sync</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>syncLostOnThisEvent</dlog_gui_name>
+		<dlog_field_name>syncLostOnThisEvent</dlog_field_name>
+		<internal_names>syncLostOnThisEvent</internal_names>
+		<offset>66</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Where in the input pattern it all went very badly wrong</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>syncCaughtOnThisEvent</dlog_gui_name>
+		<dlog_field_name>syncCaughtOnThisEvent</dlog_field_name>
+		<internal_names>syncCaughtOnThisEvent</internal_names>
+		<offset>67</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Where in the input pattern that things started making sense</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>syncResetCalls</dlog_gui_name>
+		<dlog_field_name>syncResetCalls</dlog_field_name>
+		<internal_names>syncResetCalls</internal_names>
+		<offset>68</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Sum of losses, corrections and state clears</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>primaryTeethSeen</dlog_gui_name>
+		<dlog_field_name>primaryTeethSeen</dlog_field_name>
+		<internal_names>primaryTeethSeen</internal_names>
+		<offset>69</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Free running counters for number of input events, useful at lower RPM</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>secondaryTeethSeen</dlog_gui_name>
+		<dlog_field_name>secondaryTeethSeen</dlog_field_name>
+		<internal_names>secondaryTeethSeen</internal_names>
+		<offset>70</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Free running counters for number of input events, useful at lower RPM</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>serialOverrunErrors</dlog_gui_name>
+		<dlog_field_name>serialOverrunErrors</dlog_field_name>
+		<internal_names>serialOverrunErrors</internal_names>
+		<offset>71</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Incremented when an overrun occurs due to high interrupt load, not a fault, just a fact of life at high RPM</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>serialHardwareErrors</dlog_gui_name>
+		<dlog_field_name>serialHardwareErrors</dlog_field_name>
+		<internal_names>serialHardwareErrors</internal_names>
+		<offset>72</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Sum of noise, parity, and framing errors</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>serialAndCommsCodeErrors</dlog_gui_name>
+		<dlog_field_name>serialAndCommsCodeErrors</dlog_field_name>
+		<internal_names>serialAndCommsCodeErrors</internal_names>
+		<offset>73</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Sum of checksum, escape mismatches, starts inside, and over/under length</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>inputEventTimeTolerance</dlog_gui_name>
+		<dlog_field_name>inputEventTimeTolerance</dlog_field_name>
+		<internal_names>inputEventTimeTolerance</internal_names>
+		<offset>74</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>3000</real_upper>
+		<precision>0</precision>
+		<tooltip>This describes the error in the timing of one input event to the next. 1000 means steady state RPM with decoder functioning perfectly</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>zsp10</dlog_gui_name>
+		<dlog_field_name>zsp10</dlog_field_name>
+		<internal_names>zsp10</internal_names>
+		<offset>76</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>This is a spare unsigned 16 bit integer variable</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>zsp9</dlog_gui_name>
+		<dlog_field_name>zsp9</dlog_field_name>
+		<internal_names>zsp9</internal_names>
+		<offset>78</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>This is a spare unsigned 16 bit integer variable</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>zsp8</dlog_gui_name>
+		<dlog_field_name>zsp8</dlog_field_name>
+		<internal_names>zsp8</internal_names>
+		<offset>80</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>This is a spare unsigned 16 bit integer variable</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>zsp7</dlog_gui_name>
+		<dlog_field_name>zsp7</dlog_field_name>
+		<internal_names>zsp7</internal_names>
+		<offset>82</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>This is a spare unsigned 16 bit integer variable</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>zsp6</dlog_gui_name>
+		<dlog_field_name>zsp6</dlog_field_name>
+		<internal_names>zsp6</internal_names>
+		<offset>84</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>This is a spare unsigned 16 bit integer variable</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>zsp5</dlog_gui_name>
+		<dlog_field_name>zsp5</dlog_field_name>
+		<internal_names>zsp5</internal_names>
+		<offset>86</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>This is a spare unsigned 16 bit integer variable</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>zsp4</dlog_gui_name>
+		<dlog_field_name>zsp4</dlog_field_name>
+		<internal_names>zsp4</internal_names>
+		<offset>88</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>This is a spare unsigned 16 bit integer variable</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>zsp3</dlog_gui_name>
+		<dlog_field_name>zsp3</dlog_field_name>
+		<internal_names>zsp3</internal_names>
+		<offset>90</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>This is a spare unsigned 16 bit integer variable</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>clockInMilliSeconds</dlog_gui_name>
+		<dlog_field_name>clockInMilliSeconds</dlog_field_name>
+		<internal_names>clockInMilliSeconds</internal_names>
+		<offset>92</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<precision>0</precision>
+		<tooltip>Standard internal clock in milli seconds</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>clock8thMSsInMillis</dlog_gui_name>
+		<dlog_field_name>clock8thMSsInMillis</dlog_field_name>
+		<internal_names>clock8thMSsInMillis</internal_names>
+		<offset>94</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<fromecu_mult>0.125</fromecu_mult>
+		<precision>0</precision>
+		<tooltip>High resolution internal clock, in milli seconds, precision is 1/8th of a milli second</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Fuel Duty</dlog_gui_name>
+		<dlog_field_name>FuelDuty</dlog_field_name>
+		<internal_names>FuelDuty</internal_names>
+		<offset>0</offset>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<tooltip>"Fuel Duty" is the duty cycle of the flow period of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<expr_symbols>RawEffPW,RawRPM</expr_symbols>
+		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Elec. Duty</dlog_gui_name>
+		<dlog_field_name>ElecDuty</dlog_field_name>
+		<internal_names>ElecDuty</internal_names>
+		<offset>0</offset>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<tooltip>"Elec. Duty" is the duty cycle of the electrical pulse width (dead time AND fuel flow) of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<expr_symbols>RawRefPW,RawRPM</expr_symbols>
+		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Coil Duty</dlog_gui_name>
+		<dlog_field_name>CoilDuty</dlog_field_name>
+		<internal_names>CoilDuty</internal_names>
+		<offset>0</offset>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<tooltip>"Coil Duty" is the duty cycle of the coils for coil on/near/per plug applications. Note if you're wasted spark, this is out by a factor of two, and even worse for dizzy stuff.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<expr_symbols>RawDwell,RawRPM</expr_symbols>
+		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Boost</dlog_gui_name>
+		<dlog_field_name>PSI</dlog_field_name>
+		<internal_names>PSI</internal_names>
+		<offset>8</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>35</real_upper>
+		<fromecu_mult>0.0014503773773020923</fromecu_mult>
+		<fromecu_add>-14.6959488</fromecu_add>
+		<precision>2</precision>
+		<tooltip>"Boost" is the manifold pressure in PSI above standard atmospheric pressure</tooltip>
+		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
-	</derived>
-	<derived>
-		<internal_names></internal_names>
-		<dlog_gui_name></dlog_gui_name>
-		<dlog_field_name></dlog_field_name>
-		<offset></offset>
-		<real_lower></real_lower>
-		<real_upper></real_upper>
-		<precision></precision>
-		<tooltip></tooltip>
-		<log_by_default></log_by_default>
+		<dlog_gui_name>Vacuum</dlog_gui_name>
+		<dlog_field_name>inHg</dlog_field_name>
+		<internal_names>inHg</internal_names>
+		<offset>8</offset>
+		<size>_U16_</size>
+		<real_lower>-30</real_lower>
+		<real_upper>0</real_upper>
+		<fromecu_mult>0.00295300586467</fromecu_mult>
+		<fromecu_add>-29.92133192</fromecu_add>
+		<precision>2</precision>
+		<tooltip>"Vacuum" is the manifold pressure in inches of mercury below standard atmospheric pressure</tooltip>
+		<log_by_default>FALSE</log_by_default>
 	</derived>
 </rtv_map>

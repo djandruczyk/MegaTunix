@@ -30,6 +30,7 @@
 #include <defines.h>
 #include <firmware.h>
 #include <glade/glade-xml.h>
+#include <init.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <multi_expr_loader.h>
@@ -99,7 +100,6 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		return FALSE;
 	}
 	rtv_map = g_new0(Rtv_Map, 1);
-	DATA_SET(global_data,"rtv_map",rtv_map);
 	/* This should free to values with g_list_free, but it causes a fault*/
 	rtv_map->offset_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,NULL);
 	rtv_map->rtv_list = g_ptr_array_new();
@@ -115,10 +115,11 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	if (xml_result == FALSE)
 	{
 		set_title(g_strdup(_("ERROR RT Map XML Parse Errors!")));
-		MTXDBG(RTMLOADER|CRITICAL,_("Parsing errors with realtiem map XML!\n"));
+		MTXDBG(RTMLOADER|CRITICAL,_("Parsing errors with realtime map XML!\n"));
 	}
 	else
 	{
+		DATA_SET(global_data,"rtv_map",rtv_map);
 		set_title(g_strdup(_("RT Map XML Loaded OK!")));
 		DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
 	}
@@ -144,7 +145,7 @@ gboolean load_rtv_xml_elements(xmlNode *a_node, Rtv_Map *map)
 				}
 			if (g_strcasecmp((gchar *)cur_node->name,"realtime_map") == 0)
 				load_rtv_defaults(cur_node,map);
-			if (g_strcasecmp((gchar *)cur_node->name,"derived_var") == 0)
+			if (g_strcasecmp((gchar *)cur_node->name,"derived") == 0)
 				load_derived_var(cur_node,map);
 		}
 		if (!load_rtv_xml_elements(cur_node->children,map))
@@ -158,9 +159,11 @@ void load_rtv_defaults(xmlNode *node, Rtv_Map *map)
 {
 	xmlNode *cur_node = NULL;
 	gchar * tmpbuf = NULL;
+
+	MTXDBG(RTMLOADER,_("load_rtv_defaults!\n"));
 	if (!node->children)
 	{
-		printf(_("ERROR, load_derived_var, xml node is empty!!\n"));
+		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_derived_var, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -185,22 +188,22 @@ void load_rtv_defaults(xmlNode *node, Rtv_Map *map)
 void load_derived_var(xmlNode *node, Rtv_Map *map)
 {
 	gint i = 0;
-	gchar *tmpbuf = NULL;
 	gconstpointer *object = NULL;
 	GArray *history = NULL;
 	gfloat *newfloat = NULL;
 	GList *list = NULL;
-	gchar **vector = NULL;
 	xmlNode *cur_node = NULL;
 	gint offset = 0;
 	gint precision = 0;
-	gfloat real_lower = 0.0;
-	gfloat real_upper = 0.0;
 	gfloat fromecu_mult = 1.0;
 	gfloat fromecu_add = 0.0;
 	DataSize size = MTX_U08;
-	gint temp_dep = -1;
-	gint log_by_default = -1;
+	gint temp_dep = 0;
+	gint log_by_default = 0;
+	gchar **vector = NULL;
+	gchar * real_lower = NULL;
+	gchar * real_upper = NULL;
+	gchar * tmpbuf = NULL;
 	gchar * special = NULL;
 	gchar * dlog_field_name = NULL;
 	gchar * dlog_gui_name = NULL;
@@ -210,9 +213,10 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 	gboolean complex_expression = FALSE;
 	gboolean multiple_expression = FALSE;
 
+	MTXDBG(RTMLOADER,_("Load derived variable!\n"));
 	if (!node->children)
 	{
-		printf(_("ERROR, load_derived_var, xml node is empty!!\n"));
+		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_derived_var, xml node is empty!!\n"));
 		return;
 	}
 	cur_node = node->children;
@@ -230,9 +234,9 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 			if (g_strcasecmp((gchar *)cur_node->name,"internal_names") == 0)
 				generic_xml_gchar_import(cur_node,&internal_names);
 			if (g_strcasecmp((gchar *)cur_node->name,"real_upper") == 0)
-				generic_xml_gfloat_import(cur_node,&real_upper);
+				generic_xml_gchar_import(cur_node,&real_upper);
 			if (g_strcasecmp((gchar *)cur_node->name,"real_lower") == 0)
-				generic_xml_gfloat_import(cur_node,&real_lower);
+				generic_xml_gchar_import(cur_node,&real_lower);
 			if (g_strcasecmp((gchar *)cur_node->name,"offset") == 0)
 				generic_xml_gint_import(cur_node,&offset);
 			if (g_strcasecmp((gchar *)cur_node->name,"log_by_default") == 0)
@@ -267,18 +271,15 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 	/* Validate minimum needed */
 	if ((internal_names) && (dlog_gui_name) && (dlog_field_name) && \
 			(tooltip) && (offset >= 0) && \
-			(real_lower != G_MINFLOAT) && \
-			(real_upper != G_MINFLOAT))
+			(real_lower) && (real_upper))
+			
 	{
 		object = g_new0(gconstpointer, 1);
 		history = NULL;
 		/* Create object to hold all the data. (dynamically)*/
-		/* Assume default size of 8 bit unsigned */
-		DATA_SET(object,"size",GINT_TO_POINTER(MTX_U08));
 		/* Index */
-		DATA_SET(object,"index",GINT_TO_POINTER(i));
-//		/* Object name */
-//		DATA_SET_FULL(object,"name",g_strdup(section),g_free);
+		DATA_SET(object,"index",GINT_TO_POINTER(map->derived_total));
+		map->derived_total++;
 		/* History Array */
 		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
 		/* bind history array to object for future retrieval */
@@ -289,21 +290,49 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 		DATA_SET(object,"size",GINT_TO_POINTER(size));
 		DATA_SET(object,"temp_dep",GINT_TO_POINTER(temp_dep));
 		DATA_SET(object,"log_by_default",GINT_TO_POINTER(log_by_default));
-		DATA_SET_FULL(object,"internal_names",g_strdup(internal_names),g_free);
-		DATA_SET_FULL(object,"dlog_field_name",g_strdup(dlog_gui_name),g_free);
+		if (internal_names)
+		{
+			DATA_SET_FULL(object,"internal_names",g_strdup(internal_names),g_free);
+			vector = g_strsplit(internal_names,",",-1); 
+			for(i=0;i<g_strv_length(vector);i++) 
+				g_hash_table_insert(map->rtv_hash,g_strdup(vector[i]),(gpointer)object);
+			g_strfreev(vector);
+			g_free(internal_names);
+		}
+		if (dlog_field_name)
+		{
+			DATA_SET_FULL(object,"dlog_field_name",g_strdup(dlog_field_name),g_free);
+			g_free(dlog_field_name);
+		}
 		/* Translate if needed  */
-		DATA_SET_FULL(object,"dlog_gui_name",g_strdup(_(dlog_gui_name)),g_free);
-		DATA_SET_FULL(object,"tooltip",g_strdup(_(tooltip)),g_free);
-		/* Floats need some special handling to avoid leaks */
-		newfloat = g_new0(gfloat, 1);
-		*newfloat = real_lower;
-		DATA_SET_FULL(object,"real_lower",(gpointer)newfloat,g_free);
-		newfloat = g_new0(gfloat, 1);
-		*newfloat = real_upper;
-		DATA_SET_FULL(object,"real_upper",(gpointer)newfloat,g_free);
-		/* OPTIONAL PARAMETERS */
+		if (dlog_gui_name)
+		{
+			DATA_SET_FULL(object,"dlog_gui_name",g_strdup(_(dlog_gui_name)),g_free);
+			g_free(dlog_gui_name);
+		}
+		if (tooltip)
+		{
+			DATA_SET_FULL(object,"tooltip",g_strdup(_(tooltip)),g_free);
+			g_free(tooltip);
+		}
+		/* Oddball one... */
 		if (special)
+		{
 			DATA_SET_FULL(object,"special",g_strdup(special),g_free);
+			g_free(special);
+		}
+		/* OPTIONAL PARAMETERS */
+		if (real_lower)
+		{
+			DATA_SET_FULL(object,"real_lower",g_strdup(real_lower),g_free);
+			g_free(real_lower);
+		}
+		if (real_upper)
+		{
+			DATA_SET_FULL(object,"real_upper",g_strdup(real_lower),g_free);
+			g_free(real_upper);
+		}
+		/* Floats need some special handling to avoid leaks */
 		newfloat = g_new0(gfloat, 1);
 		*newfloat = fromecu_mult;
 		DATA_SET_FULL(object,"fromecu_mult",(gpointer)newfloat,g_free);
@@ -317,19 +346,13 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 			printf("This rtv var has complex expressions!, not written yet\n");
 		if (multiple_expression)
 			printf("This rtv var has multiple_expressions!, not written yet\n");
-		if (internal_names)
-		{
-			vector = g_strsplit(internal_names,",",-1); 
-			for(i=0;i<g_strv_length(vector);i++) 
-				g_hash_table_insert(map->rtv_hash,g_strdup(vector[i]),(gpointer)object);
-			g_strfreev(vector);
-			g_free(tmpbuf);
-		}
 		list = g_hash_table_lookup(map->offset_hash,GINT_TO_POINTER(offset));
 		list = g_list_prepend(list,(gpointer)object);
 		g_hash_table_replace(map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
 		g_ptr_array_add(map->rtv_list,object);
 	}
+	else
+		MTXDBG(RTMLOADER|CRITICAL,_("Derived variable doesn't meet the basic criteria!\n"));
 }
 
 
