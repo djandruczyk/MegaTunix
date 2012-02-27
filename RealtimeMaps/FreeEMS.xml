@@ -700,8 +700,13 @@
 		<tooltip>"Fuel Duty" is the duty cycle of the flow period of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.</tooltip>
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>(RawRPM / (0.0085333333333 * RawEffPW))</fromecu_conv_expr>
 		<expr_symbols>RawEffPW,RawRPM</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<RawEffPW_offset>48</RawEffPW_offset>
+		<RawEffPW_size>_U16_</RawEffPW_size>
+		<RawRPM_offset>26</RawRPM_offset>
+		<RawRPM_size>_U16_</RawRPM_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>Elec. Duty</dlog_gui_name>
@@ -713,8 +718,13 @@
 		<tooltip>"Elec. Duty" is the duty cycle of the electrical pulse width (dead time AND fuel flow) of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.</tooltip>
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>(RawRPM / (0.0085333333333 * RawRefPW))</fromecu_conv_expr>
 		<expr_symbols>RawRefPW,RawRPM</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<RawRefPW_offset>52</RawRefPW_offset>
+		<RawRefPW_size>_U16_</RawRefPW_size>
+		<RawRPM_offset>26</RawRPM_offset>
+		<RawRPM_size>_U16_</RawRPM_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>Coil Duty</dlog_gui_name>
@@ -726,8 +736,13 @@
 		<tooltip>"Coil Duty" is the duty cycle of the coils for coil on/near/per plug applications. Note if you're wasted spark, this is out by a factor of two, and even worse for dizzy stuff.</tooltip>
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>(RawRPM / (0.0085333333333 * RawDwell))</fromecu_conv_expr>
 		<expr_symbols>RawDwell,RawRPM</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<RawDwell_offset>56</RawDwell_offset>
+		<RawDwell_size>_U16_</RawDwell_size>
+		<RawRPM_offset>26</RawRPM_offset>
+		<RawRPM_size>_U16_</RawRPM_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>Boost</dlog_gui_name>

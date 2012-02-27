@@ -342,3 +342,78 @@ gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 	else
 		return TRUE;
 }
+
+
+/*!
+  \brief Searches for an Integer starting from an XML node and 
+  stores in the dest var
+  \param node is the pointer to the XML node
+  \param name is the key to find
+  \param dest is the pointer to the place to store the read value
+  */
+gboolean generic_xml_gint_find(xmlNode *node, const gchar *name, gpointer dest)
+{
+	gint *val = NULL;
+	xmlNode *cur_node = NULL;
+	gboolean found = FALSE;
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+
+	val = (gint *)dest;
+
+	if (!node->children)
+	{
+		printf("ERROR, generic_xml_gint_find!!\n");
+		return FALSE;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			{
+				generic_xml_gint_import(cur_node,&val);
+				found = TRUE;
+			}
+		}
+		cur_node = cur_node->next;
+	}
+	return found;
+}
+
+
+/*!
+  \brief Searches for an Integer starting from an XML node and 
+  stores in the dest var
+  \param node is the pointer to the XML node
+  \param name is the key to find
+  \param dest is the pointer to the place to store the read value
+  */
+gboolean generic_xml_gchar_find(xmlNode *node, const gchar *name, gpointer dest)
+{
+	xmlNode *cur_node = NULL;
+	gboolean found = FALSE;
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+
+	if (!node->children)
+	{
+		printf("ERROR, generic_xml_gchar_find!!\n");
+		return FALSE;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			{
+				generic_xml_gchar_import(cur_node,dest);
+				found = TRUE;
+			}
+		}
+		cur_node = cur_node->next;
+	}
+	return found;
+}

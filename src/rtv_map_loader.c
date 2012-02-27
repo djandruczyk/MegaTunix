@@ -343,7 +343,7 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 		if (has_deps)
 			printf("This rtv var has dependancies!, not written yet\n");
 		if (complex_expression)
-			printf("This rtv var has complex expressions!, not written yet\n");
+			load_rtv_xml_complex_expression(object,node);
 		if (multiple_expression)
 			printf("This rtv var has multiple_expressions!, not written yet\n");
 		list = g_hash_table_lookup(map->offset_hash,GINT_TO_POINTER(offset));
@@ -366,27 +366,22 @@ void shit()
 	load_multi_expressions(object,cfgfile,section);
 	*/
 
-
-/*!
-  \brief load_complex_params() loads the necessary parameters from the config
-  file for a complex conversion
-  \param object is the place where the data loaded is bound to
-  \param cfgfile is the configfile pointer to read from
-  \param section is the section to read from in the config file
-  */
-G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgfile, gchar * section)
+void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 {
+	xmlNode *cur_node = NULL;
 	static void (*common_rtv_loader)(gconstpointer *,ConfigFile *,gchar * section, gchar *, ComplexExprType);
 	static Firmware_Details *firmware = NULL;
 	gchar *tmpbuf = NULL;
+	gchar * name = NULL;
+	gint tmpi;
+	gint i = 0;
+	gchar * fromecu_conv_expr = NULL;
+	gchar * raw_expr_symbols = NULL;
+	gchar * raw_expr_types = NULL;
 	gchar **expr_symbols = NULL;
 	gint *expr_types = NULL;
 	gint total_symbols = 0;
 	gint total_symtypes = 0;
-	gchar * name = NULL;
-	gint tmpi;
-	gint i = 0;
-	extern gconstpointer *global_data;
 
 	if (!firmware)
 		firmware = DATA_GET(global_data,"firmware");
@@ -395,61 +390,64 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 
 	g_return_if_fail(firmware);
 	g_return_if_fail(common_rtv_loader);
-	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))
+
+	if (!node->children)
 	{
-		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Read of \"expr_symbols\" from section \"[%s]\" failed ABORTING!!!\n\n"),section);
-		g_free(tmpbuf);
+		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_rtv_complex_expression, xml node is empty!!\n"));
 		return;
 	}
-	else
+	cur_node = node->children;
+	while (cur_node->next)
 	{
-		expr_symbols = parse_keys(tmpbuf, &total_symbols,",");	
-		g_free(tmpbuf);
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			/* Minimum Required Fields */
+			if (g_strcasecmp((gchar *)cur_node->name,"fromecu_conv_expr") == 0)
+				generic_xml_gchar_import(cur_node,&fromecu_conv_expr);
+			if (g_strcasecmp((gchar *)cur_node->name,"expr_symbols") == 0)
+				generic_xml_gchar_import(cur_node,&raw_expr_symbols);
+			if (g_strcasecmp((gchar *)cur_node->name,"expr_types") == 0)
+				generic_xml_gchar_import(cur_node,&raw_expr_types);
+		}
+		cur_node = cur_node->next;
 	}
-	if (!cfg_read_string(cfgfile,section,"expr_types",&tmpbuf))
-	{
-		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Read of \"expr_types\" from section \"[%s]\" failed, ABORTING!!!\n"),section);
-		g_strfreev(expr_symbols);
-		g_free(tmpbuf);
-		return;
-	}
-	else
-	{
-		expr_types = parse_keytypes(tmpbuf, &total_symtypes,",");	
-		g_free(tmpbuf);
-	}
-	if (total_symbols!=total_symtypes)
+
+	expr_symbols = parse_keys(raw_expr_symbols, &total_symbols,",");	
+	expr_types = parse_keytypes(raw_expr_types, &total_symtypes,",");	
+	if (total_symbols != total_symtypes)
 	{
 		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Number of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n"),total_symbols,total_symtypes);
 		g_free(expr_types);
 		g_strfreev(expr_symbols);
 		return;
 	}
-	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
+	// Store the lists as well so DO NOT DEALLOCATE THEM!!! 
 	DATA_SET_FULL(object,"expr_types",(gpointer)expr_types,g_free);
 	DATA_SET_FULL(object,"expr_symbols",(gpointer)expr_symbols,g_strfreev);
 	DATA_SET(object,"total_symbols",GINT_TO_POINTER(total_symbols));
+
 	for (i=0;i<total_symbols;i++)
 	{
 		switch ((ComplexExprType)expr_types[i])
 		{
 			case ECU_EMB_BIT:
-				common_rtv_loader(object,cfgfile,section,expr_symbols[i],ECU_EMB_BIT);
+				printf("ECU_EMB_BIT loader not written yet\n");
+			//	common_rtv_loader(object,cfgfile,section,expr_symbols[i],ECU_EMB_BIT);
 				break;
 			case ECU_VAR:
-				common_rtv_loader(object,cfgfile,section,expr_symbols[i],ECU_VAR);
+				printf("ECU_EMB_BIT loader not written yet\n");
+				//common_rtv_loader(object,cfgfile,section,expr_symbols[i],ECU_VAR);
 				break;
 			case RAW_VAR:
-				/* RAW variable */
+				// RAW variable 
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				if (!generic_xml_gint_find(node,name,&tmpi))
 					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_VAR, failure looking for:%s\n"),name);
 				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
-				name=NULL;
 				name=g_strdup_printf("%s_size",expr_symbols[i]);
-				if (!cfg_read_string(cfgfile,section,name,&tmpbuf))
+				if (!generic_xml_gchar_find(node,name,&tmpbuf))
 				{
 					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_VAR, failure looking for:%s\n"),name);
 					tmpi = MTX_U08;
@@ -464,16 +462,16 @@ G_MODULE_EXPORT void load_complex_params(gconstpointer *object, ConfigFile *cfgf
 				name=NULL;
 				break;
 			case RAW_EMB_BIT:
-				/* RAW data embedded bitfield 2 params */
+				// RAW data embedded bitfield 2 params 
 				name=NULL;
 				name=g_strdup_printf("%s_offset",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				if (!generic_xml_gint_find(node,name,&tmpi))
 					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("RAW_EMB_BIT, failure looking for:%s\n"),name);
 				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
 				name=NULL;
 				name=g_strdup_printf("%s_bitmask",expr_symbols[i]);
-				if (!cfg_read_int(cfgfile,section,name,&tmpi))
+				if (!generic_xml_gint_find(node,name,&tmpi))
 					MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_(__FILE__": load_compex_params()\n\tRAW_EMB_BIT, failure looking for:%s\n"),name);
 				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);
