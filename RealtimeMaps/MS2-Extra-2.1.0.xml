@@ -297,8 +297,12 @@
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>((egocorr1/10)+(egocorr2/10))/2</fromecu_conv_expr>
-		<expr_symbols>egocorr1,egocorr2</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>egocorr1,egocorr2</expr_symbols>
+		<egocorr1_offset>34</egocorr1_offset>
+		<egocorr1_size>_S16_</egocorr1_size>
+		<egocorr2_offset>36</egocorr2_offset>
+		<egocorr2_size>_S16_</egocorr2_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>EGO Corr 1</dlog_gui_name>
@@ -929,8 +933,14 @@
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(accelEnrich/10) + (step(tpsden - 1) * step(1 - tpsden) * tpsfuelcut + (1 - step(tpsden - 1) * step(1 - tpsden)) * 100)</fromecu_conv_expr>
-		<expr_symbols>accelEnrich,tpsfuelcut,tpsden</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_,_RAW_EMB_BIT_</expr_types>
+		<expr_symbols>accelEnrich,tpsfuelcut,tpsden</expr_symbols>
+		<accelEnrich_offset>42</accelEnrich_offset>
+		<accelEnrich_size>_S16_</accelEnrich_size>
+		<tpsfuelcut_offset>44</tpsfuelcut_offset>
+		<tpsfuelcut_size>_S16_</tpsfuelcut_size>
+		<tpsden_offset>11</tpsden_offset>
+		<tpsden_bitmask>32</tpsden_bitmask>
 	</derived>
 	<derived>
 		<dlog_gui_name>rpm100</dlog_gui_name>
@@ -954,8 +964,24 @@
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>100*(cyls/divider)/(alternate+1)*(raw_pw1*0.000666)/(60000/raw_rpm*(2.0-stroke))</fromecu_conv_expr>
-		<expr_symbols>cyls,divider,alternate,raw_pw1,stroke,raw_rpm</expr_symbols>
 		<expr_types>_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_</expr_types>
+		<expr_symbols>cyls,divider,alternate,raw_pw1,stroke,raw_rpm</expr_symbols>
+		<cyls_page>0</cyls_page>
+		<cyls_offset>0</cyls_offset>
+		<cyls_bitmask>15</cyls_bitmask>
+		<divider_page>0</divider_page>
+		<divider_offset>610</divider_offset>
+		<divider_size>_U08_</divider_size>
+		<alternate_page>0</alternate_page>
+		<alternate_offset>611</alternate_offset>
+		<alternate_bitmask>1</alternate_bitmask>
+		<raw_pw1_offset>2</raw_pw1_offset>
+		<raw_pw1_size>_U16_</raw_pw1_size>
+		<stroke_page>0</stroke_page>
+		<stroke_offset>617</stroke_offset>
+		<stroke_bitmask>1</stroke_bitmask>
+		<raw_rpm_offset>6</raw_rpm_offset>
+		<raw_rpm_size>_U16_</raw_rpm_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>Dutycycle 2</dlog_gui_name>
@@ -969,8 +995,24 @@
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>100*(cyls/divider)/(alternate+1)*(raw_pw2*0.000666)/(60000/raw_rpm*(2.0-stroke))</fromecu_conv_expr>
-		<expr_symbols>cyls,divider,alternate,raw_pw2,stroke,raw_rpm</expr_symbols>
 		<expr_types>_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_</expr_types>
+		<expr_symbols>cyls,divider,alternate,raw_pw2,stroke,raw_rpm</expr_symbols>
+		<cyls_page>0</cyls_page>
+		<cyls_offset>0</cyls_offset>
+		<cyls_bitmask>15</cyls_bitmask>
+		<divider_page>0</divider_page>
+		<divider_offset>610</divider_offset>
+		<divider_size>_U08_</divider_size>
+		<alternate_page>0</alternate_page>
+		<alternate_offset>611</alternate_offset>
+		<alternate_bitmask>1</alternate_bitmask>
+		<raw_pw2_offset>4</raw_pw2_offset>
+		<raw_pw2_size>_U16_</raw_pw2_size>
+		<stroke_page>0</stroke_page>
+		<stroke_offset>617</stroke_offset>
+		<stroke_bitmask>1</stroke_bitmask>
+		<raw_rpm_offset>6</raw_rpm_offset>
+		<raw_rpm_size>_U16_</raw_rpm_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>AFR Error Left</dlog_gui_name>
@@ -984,8 +1026,12 @@
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(afr/10)-(afrtgt/10)</fromecu_conv_expr>
-		<expr_symbols>afr,afrtgt</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>afr,afrtgt</expr_symbols>
+		<afr_offset>28</afr_offset>
+		<afr_size>_S16_</afr_size>
+		<afrtgt_offset>12</afrtgt_offset>
+		<afrtgt_size>_U08_</afrtgt_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>AFR Error right</dlog_gui_name>
@@ -999,7 +1045,11 @@
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(afr/10)-(afrtgt/10)</fromecu_conv_expr>
-		<expr_symbols>afr,afrtgt</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>afr,afrtgt</expr_symbols>
+		<afr_offset>30</afr_offset>
+		<afr_size>_S16_</afr_size>
+		<afrtgt_offset>13</afrtgt_offset>
+		<afrtgt_size>_U08_</afrtgt_size>
 	</derived>
 </rtv_map>

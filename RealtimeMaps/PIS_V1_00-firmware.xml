@@ -916,8 +916,21 @@
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>100.0 * ((pw/66) / (60000 / (rpm * (1+stroke) / (1+skips))))</fromecu_conv_expr>
-		<expr_symbols>stroke,cylinders,skips,rpm,pw</expr_symbols>
 		<expr_types>_ECU_VAR_,_ECU_VAR_,_ECU_VAR_,_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>stroke,cylinders,skips,rpm,pw</expr_symbols>
+		<stroke_page>0</stroke_page>
+		<stroke_offset>4</stroke_offset>
+		<stroke_size>_U16_</stroke_size>
+		<cylinders_page>0</cylinders_page>
+		<cylinders_offset>2</cylinders_offset>
+		<cylinders_size>_U16_</cylinders_size>
+		<skips_page>0</skips_page>
+		<skips_offset>0</skips_offset>
+		<skips_size>_U16_</skips_size>
+		<rpm_offset>24</rpm_offset>
+		<rpm_size>_U16_</rpm_size>
+		<pw_offset>100</pw_offset>
+		<pw_size>_U16_</pw_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>CLT (°)</dlog_gui_name>

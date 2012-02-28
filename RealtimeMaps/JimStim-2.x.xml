@@ -83,7 +83,11 @@
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(((rtcoarse/4.0)*256.0) + (2*rtfine))</fromecu_conv_expr>
-		<expr_symbols>rtcoarse,rtfine</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>rtcoarse,rtfine</expr_symbols>
+		<rtcoarse_offset>6</rtcoarse_offset>
+		<rtcoarse_size>_U08_</rtcoarse_size>
+		<rtfine_offset>7</rtfine_offset>
+		<rtfine_size>_U08_</rtfine_size>
 	</derived>
 </rtv_map>

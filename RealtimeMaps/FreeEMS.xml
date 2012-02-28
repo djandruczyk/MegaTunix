@@ -701,8 +701,8 @@
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(RawRPM / (0.0085333333333 * RawEffPW))</fromecu_conv_expr>
-		<expr_symbols>RawEffPW,RawRPM</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>RawEffPW,RawRPM</expr_symbols>
 		<RawEffPW_offset>48</RawEffPW_offset>
 		<RawEffPW_size>_U16_</RawEffPW_size>
 		<RawRPM_offset>26</RawRPM_offset>
@@ -719,8 +719,8 @@
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(RawRPM / (0.0085333333333 * RawRefPW))</fromecu_conv_expr>
-		<expr_symbols>RawRefPW,RawRPM</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>RawRefPW,RawRPM</expr_symbols>
 		<RawRefPW_offset>52</RawRefPW_offset>
 		<RawRefPW_size>_U16_</RawRefPW_size>
 		<RawRPM_offset>26</RawRPM_offset>
@@ -737,8 +737,8 @@
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(RawRPM / (0.0085333333333 * RawDwell))</fromecu_conv_expr>
-		<expr_symbols>RawDwell,RawRPM</expr_symbols>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>RawDwell,RawRPM</expr_symbols>
 		<RawDwell_offset>56</RawDwell_offset>
 		<RawDwell_size>_U16_</RawDwell_size>
 		<RawRPM_offset>26</RawRPM_offset>

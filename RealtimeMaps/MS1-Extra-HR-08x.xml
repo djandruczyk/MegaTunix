@@ -47,8 +47,18 @@
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(60000000*(2-stroke))/(((iTimeX*65536)+(iTime))*(cyls+1))</fromecu_conv_expr>
-		<expr_symbols>stroke,cyls,iTimeX,iTime</expr_symbols>
 		<expr_types>_ECU_EMB_BIT_,_ECU_EMB_BIT_,_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>stroke,cyls,iTimeX,iTime</expr_symbols>
+		<stroke_page>1</stroke_page>
+		<stroke_offset>182</stroke_offset>
+		<stroke_bitmask>4</stroke_bitmask>
+		<cyls_page>1</cyls_page>
+		<cyls_offset>182</cyls_offset>
+		<cyls_bitmask>240</cyls_bitmask>
+		<iTimeX_offset>39</iTimeX_offset>
+		<iTimeX_size>_U08_</iTimeX_size>
+		<iTime_offset>24</iTime_offset>
+		<iTime_size>_U16_</iTime_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>EngineBits</dlog_gui_name>
@@ -284,6 +294,7 @@
 		<tooltip>"AFR" Is the Air Fuel ratio the engine is running at.  This is calculated from a lookuptable, if this reading seems wrong make sure you've specified the proper lookuptable in the Interrogation Profile and selected the right sensor type in the Enrichments Tab.</tooltip>
 		<log_by_default>FALSE</log_by_default>
 		<depend_on>o2_sensor</depend_on>
+		<o2_sensor>_ECU_EMB_BIT_,_U08_,1,184,2,1,1</o2_sensor>
 		<lookuptable>nbo2_table</lookuptable>
 		<alt_lookuptable>wbo2_table</alt_lookuptable>
 	</derived>
@@ -299,6 +310,7 @@
 		<tooltip>"Lambda" is a representation of AFR (Air Fuel Ratio).  1.0 is stoichiometric combustion (AFR 14.7:1), less than 1 is a "rich" mixture and greater than 1 is a "lean" mixture</tooltip>
 		<log_by_default>FALSE</log_by_default>
 		<depend_on>o2_sensor</depend_on>
+		<o2_sensor>_ECU_EMB_BIT_,_U08_,1,184,2,1,1</o2_sensor>
 		<lookuptable>nbo2_table</lookuptable>
 		<alt_lookuptable>wbo2_table</alt_lookuptable>
 	</derived>
@@ -409,8 +421,24 @@
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>100*((((cyls+1)/divider)/(alternate+1))*(hr_pw_1/1000)/((1200/(stroke+1))/raw_rpm))</fromecu_conv_expr>
-		<expr_symbols>cyls,divider,alternate,hr_pw_1,stroke,raw_rpm</expr_symbols>
 		<expr_types>_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_</expr_types>
+		<expr_symbols>cyls,divider,alternate,hr_pw_1,stroke,raw_rpm</expr_symbols>
+		<cyls_page>1</cyls_page>
+		<cyls_offset>182</cyls_offset>
+		<cyls_bitmask>240</cyls_bitmask>
+		<divider_page>1</divider_page>
+		<divider_offset>149</divider_offset>
+		<divider_size>_U08_</divider_size>
+		<alternate_page>1</alternate_page>
+		<alternate_offset>150</alternate_offset>
+		<alternate_bitmask>1</alternate_bitmask>
+		<hr_pw_1_offset>14</hr_pw_1_offset>
+		<hr_pw_1_size>_U16_</hr_pw_1_size>
+		<stroke_page>1</stroke_page>
+		<stroke_offset>182</stroke_offset>
+		<stroke_bitmask>4</stroke_bitmask>
+		<raw_rpm_offset>13</raw_rpm_offset>
+		<raw_rpm_size>_U08_</raw_rpm_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>Dutycycle 2</dlog_gui_name>
@@ -424,8 +452,24 @@
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>100*((((cyls+1)/divider)/(alternate+1))*(hr_pw_2/1000)/((1200/(stroke+1))/raw_rpm))</fromecu_conv_expr>
-		<expr_symbols>cyls,divider,alternate,hr_pw_2,stroke,raw_rpm</expr_symbols>
 		<expr_types>_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_</expr_types>
+		<expr_symbols>cyls,divider,alternate,hr_pw_2,stroke,raw_rpm</expr_symbols>
+		<cyls_page>2</cyls_page>
+		<cyls_offset>182</cyls_offset>
+		<cyls_bitmask>240</cyls_bitmask>
+		<divider_page>2</divider_page>
+		<divider_offset>149</divider_offset>
+		<divider_size>_U08_</divider_size>
+		<alternate_page>2</alternate_page>
+		<alternate_offset>150</alternate_offset>
+		<alternate_bitmask>1</alternate_bitmask>
+		<hr_pw_2_offset>20</hr_pw_2_offset>
+		<hr_pw_2_size>_U16_</hr_pw_2_size>
+		<stroke_page>2</stroke_page>
+		<stroke_offset>182</stroke_offset>
+		<stroke_bitmask>4</stroke_bitmask>
+		<raw_rpm_offset>13</raw_rpm_offset>
+		<raw_rpm_size>_U08_</raw_rpm_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>PW 2</dlog_gui_name>
@@ -642,8 +686,15 @@
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(step((1-mapProportion)-0.5) * (tpsadc-tpslast)*0.19 )</fromecu_conv_expr>
-		<expr_symbols>mapProportion,tpsadc,tpslast</expr_symbols>
 		<expr_types>_ECU_EMB_BIT_,_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>mapProportion,tpsadc,tpslast</expr_symbols>
+		<mapProportion_page>0</mapProportion_page>
+		<mapProportion_offset>66</mapProportion_offset>
+		<mapProportion_bitmask>128</mapProportion_bitmask>
+		<tpsadc_offset>7</tpsadc_offset>
+		<tpsadc_size>_U08_</tpsadc_size>
+		<tpslast_offset>38</tpslast_offset>
+		<tpslast_size>_U08_</tpslast_size>
 	</derived>
 	<derived>
 		<dlog_gui_name>mapDOT</dlog_gui_name>
@@ -657,7 +708,14 @@
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(step(mapProportion-0.5) * (mapadc-tpslast)*0.1 )</fromecu_conv_expr>
-		<expr_symbols>mapProportion,mapadc,tpslast</expr_symbols>
 		<expr_types>_ECU_EMB_BIT_,_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>mapProportion,mapadc,tpslast</expr_symbols>
+		<mapProportion_page>0</mapProportion_page>
+		<mapProportion_offset>66</mapProportion_offset>
+		<mapProportion_bitmask>128</mapProportion_bitmask>
+		<mapadc_offset>4</mapadc_offset>
+		<mapadc_size>_U08_</mapadc_size>
+		<tpslast_offset>38</tpslast_offset>
+		<tpslast_size>_U08_</tpslast_size>
 	</derived>
 </rtv_map>

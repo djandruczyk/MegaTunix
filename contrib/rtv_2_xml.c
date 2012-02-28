@@ -1,15 +1,28 @@
 /* Compile with
  * gcc `pkg-config --cflags --libs glib-2.0` -L ../mtxcommon/ -l mtxcommon -o rtv_2_xml rtv_2_xml.c
  * */
+#include <glib.h>
 #include <stdio.h>
 #include "../include/configfile.h"
+
+struct {
+	gchar *suffix;
+}potentials[] = { 
+	{"_page"},{"_offset"},{"_bitmask"},{"_size"}
+};
+
+void export_symbols(ConfigFile *,gchar *,gchar **);
 
 int main (int argc, char *argv[])
 {
 	ConfigFile *cfg = NULL;
 	gchar * tmpbuf = NULL;
+	gchar * tmpbuf2 = NULL;
 	gchar *filename = NULL;
 	gchar *section = NULL;
+	gchar **vector = NULL;
+	gint j = 0;
+
 	gint i = 0;
 
 	if (argc != 2)
@@ -111,19 +124,26 @@ int main (int argc, char *argv[])
 				printf("\t\t<fromecu_conv_expr>%s</fromecu_conv_expr>\n",tmpbuf);
 				g_free(tmpbuf);
 			}
-			if (cfg_read_string(cfg,section,"expr_symbols",&tmpbuf))
-			{
-				printf("\t\t<expr_symbols>%s</expr_symbols>\n",tmpbuf);
-				g_free(tmpbuf);
-			}
 			if (cfg_read_string(cfg,section,"expr_types",&tmpbuf))
 			{
 				printf("\t\t<expr_types>%s</expr_types>\n",tmpbuf);
 				g_free(tmpbuf);
 			}
+			if (cfg_read_string(cfg,section,"expr_symbols",&tmpbuf))
+			{
+				printf("\t\t<expr_symbols>%s</expr_symbols>\n",tmpbuf);
+				vector = g_strsplit(tmpbuf,",",-1);
+				g_free(tmpbuf);
+				export_symbols(cfg,section,vector);
+			}
 			if (cfg_read_string(cfg,section,"depend_on",&tmpbuf))
 			{
 				printf("\t\t<depend_on>%s</depend_on>\n",tmpbuf);
+				if (cfg_read_string(cfg,section,tmpbuf,&tmpbuf2))
+				{
+					printf("\t\t<%s>%s</%s>\n",tmpbuf,tmpbuf2,tmpbuf);
+					g_free(tmpbuf2);
+				}
 				g_free(tmpbuf);
 			}
 			if (cfg_read_string(cfg,section,"lookuptable",&tmpbuf))
@@ -176,4 +196,29 @@ int main (int argc, char *argv[])
 	}
 	printf("</rtv_map>\n");
 	cfg_free(cfg);
+}
+
+void export_symbols(ConfigFile *cfg,gchar *section,gchar **vector)
+{
+	gchar *name = NULL;
+	gchar *tmpbuf = NULL;
+
+	gint i = 0;
+	gint j = 0;
+
+	for (i=0;i<g_strv_length(vector);i++)
+	{
+		for (j=0;j<(sizeof (potentials)/sizeof(potentials[0])); j++)
+		{
+			name = g_strdup_printf("%s%s",vector[i],potentials[j].suffix);
+			if (cfg_read_string(cfg,section,name,&tmpbuf))
+			{
+				printf("\t\t<%s>%s</%s>\n",name,tmpbuf,name);
+				g_free(tmpbuf);
+			}
+			g_free(name);
+		}
+
+	}
+
 }
