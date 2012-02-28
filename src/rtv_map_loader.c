@@ -369,7 +369,7 @@ void shit()
 void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
-	static void (*common_rtv_loader)(gconstpointer *,ConfigFile *,gchar * section, gchar *, ComplexExprType);
+	static void (*common_rtv_loader)(gconstpointer *,xmlNode *, gchar *, ComplexExprType);
 	static Firmware_Details *firmware = NULL;
 	gchar *tmpbuf = NULL;
 	gchar * name = NULL;
@@ -393,24 +393,15 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 
 	if (!node->children)
 	{
-		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_rtv_complex_expression, xml node is empty!!\n"));
+		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_derived_var, xml node is empty!!\n"));
 		return;
 	}
-	cur_node = node->children;
-	while (cur_node->next)
-	{
-		if (cur_node->type == XML_ELEMENT_NODE)
-		{
-			/* Minimum Required Fields */
-			if (g_strcasecmp((gchar *)cur_node->name,"fromecu_conv_expr") == 0)
-				generic_xml_gchar_import(cur_node,&fromecu_conv_expr);
-			if (g_strcasecmp((gchar *)cur_node->name,"expr_symbols") == 0)
-				generic_xml_gchar_import(cur_node,&raw_expr_symbols);
-			if (g_strcasecmp((gchar *)cur_node->name,"expr_types") == 0)
-				generic_xml_gchar_import(cur_node,&raw_expr_types);
-		}
-		cur_node = cur_node->next;
-	}
+	if (!generic_xml_gchar_find(node,"fromecu_conv_expr",&fromecu_conv_expr))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing important key \"fromecu_conv_expr\" from rtv XML!\n"));
+	if (!generic_xml_gchar_find(node,"expr_symbols",&raw_expr_symbols))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing important key \"expr_symbols\" from rtv XML!\n"));
+	if (!generic_xml_gchar_find(node,"expr_types",&raw_expr_types))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing important key \"expr_types\" from rtv XML!\n"));
 
 	expr_symbols = parse_keys(raw_expr_symbols, &total_symbols,",");	
 	expr_types = parse_keytypes(raw_expr_types, &total_symtypes,",");	
@@ -432,11 +423,11 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 		{
 			case ECU_EMB_BIT:
 				printf("ECU_EMB_BIT loader not written yet\n");
-			//	common_rtv_loader(object,cfgfile,section,expr_symbols[i],ECU_EMB_BIT);
+				common_rtv_loader(object,node,expr_symbols[i],ECU_EMB_BIT);
 				break;
 			case ECU_VAR:
 				printf("ECU_EMB_BIT loader not written yet\n");
-				//common_rtv_loader(object,cfgfile,section,expr_symbols[i],ECU_VAR);
+				common_rtv_loader(object,node,expr_symbols[i],ECU_VAR);
 				break;
 			case RAW_VAR:
 				// RAW variable 

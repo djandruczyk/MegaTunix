@@ -23,10 +23,12 @@
 
 #include <defines.h>
 #include <gtk/gtk.h>
+#include <libxml/parser.h>
 #include <threads.h>
+#include <xmlbase.h>
 
 /* Prototypes */
-void common_rtv_loader(gconstpointer *, ConfigFile *, gchar *, gchar *, ComplexExprType);
+void common_rtv_loader(gconstpointer *, xmlNode *, gchar *, ComplexExprType);
 void common_rtv_loader_obj(GObject *, ConfigFile *, gchar *, gchar *, ComplexExprType);
 /* Prototypes */
 
