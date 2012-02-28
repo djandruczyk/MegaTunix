@@ -25,6 +25,7 @@
 #include <mscommon_plugin.h>
 #include <debugging.h>
 #include <stdlib.h>
+#include <xmlbase.h>
 
 extern gconstpointer *global_data;
 
@@ -34,12 +35,11 @@ extern gconstpointer *global_data;
  keys/values that will allow megatunix to process a dependancy 
  (or multiple deps) on other variables
  \param object is a pointer to a place to store the retrieved data
- \param cfgfile is the pointer to cfgfile object that contains the data
- \param section is the section to read the data from
+ \param node is the pointer to the XML node that contains the data
  \param source_key is the source key in the above section to read the data from
  \see check_dependancies
  */
-G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfile, gchar * section, gchar * source_key)
+G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, gchar * source_key)
 {
 	gconstpointer *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
@@ -55,9 +55,9 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 
 	firmware = DATA_GET(global_data,"firmware");
 
-	if (!cfg_read_string(cfgfile,section,source_key,&tmpbuf))
+	if (!generic_xml_gchar_find(node,source_key,&tmpbuf))
 	{
-		MTXDBG(CRITICAL,_("Can't find \"%s\" in the \"[%s]\" section, exiting!\n"),source_key,section);
+		MTXDBG(CRITICAL,_("Can't find \"%s\" in the rtv XML, exiting!\n"),source_key);
 		exit (-4);
 	}
 	else
@@ -74,9 +74,9 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 	for (i=0;i<num_deps;i++)
 	{
 		key = g_strdup_printf("%s",deps[i]);
-		if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
+		if (!generic_xml_gchar_find(node,key,&tmpbuf))
 		{
-			MTXDBG(CRITICAL,_("Key \"%s\" NOT FOUND in section \"[%s]\", EXITING!!\n"),key,section);
+			MTXDBG(CRITICAL,_("Key \"%s\" NOT FOUND in RTV XML, EXITING!!\n"),key);
 			exit (-4);
 		}
 		else
@@ -87,7 +87,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			/* 7 args is ECU_EMB_BIT, 4 args is ECU_VAR */
 			if (!((len == 7) || (len == 4)))
 			{
-				MTXDBG(CRITICAL,_("Invalid number of arguments \"%i\" in section \"[%s]\", EXITING!!\n"),g_strv_length(vector),section);
+				MTXDBG(CRITICAL,_("Invalid number of arguments \"%i\" in RTV XML, EXITING!!\n"),g_strv_length(vector));
 				exit (-4);
 			}
 		}
@@ -102,7 +102,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = translate_string_f(vector[DEP_SIZE]);
 			if (!check_size(tmpi))
 			{
-				MTXDBG(CRITICAL,_("Argument 1 (size) \"%s\" in section \"[%s]\" is missing, using U08 as a guess!!\n"),vector[DEP_SIZE],section);
+				MTXDBG(CRITICAL,_("Argument 1 (size) \"%s\" in RTV XML is missing, using U08 as a guess!!\n"),vector[DEP_SIZE]);
 				DATA_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
 			else
@@ -113,7 +113,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = (gint)strtol(vector[DEP_PAGE],NULL,10);
 			if ((tmpi < 0 ) || (tmpi > firmware->total_pages))
 			{
-				MTXDBG(CRITICAL,_("Argument 2 (page) \"%s\" in section \"[%s]\" is invalid, EXITING!!\n"),vector[DEP_PAGE],section);
+				MTXDBG(CRITICAL,_("Argument 2 (page) \"%s\" in RTV XML is invalid, EXITING!!\n"),vector[DEP_PAGE]);
 				exit (-4);
 			}
 			else
@@ -124,7 +124,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = (gint)strtol(vector[DEP_OFFSET],NULL,10);
 			if ((tmpi < 0 ) || (tmpi > firmware->page_params[(gint)strtol(vector[DEP_PAGE],NULL,10)]->length))
 			{
-				MTXDBG(CRITICAL,_("Argument 3 (offset) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n"),vector[DEP_OFFSET],section);
+				MTXDBG(CRITICAL,_("Argument 3 (offset) \"%s\" in RTV XML is out of bounds, EXITING!!\n"),vector[DEP_OFFSET]);
 				exit (-4);
 			}
 			else
@@ -135,7 +135,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = (gint)strtol(vector[DEP_BITMASK],NULL,10);
 			if ((tmpi < 0 ) || (tmpi > 255))
 			{
-				MTXDBG(CRITICAL,("Argument 4 (bitmask) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n"),vector[DEP_BITMASK],section);
+				MTXDBG(CRITICAL,("Argument 4 (bitmask) \"%s\" in RTV XML is out of bounds, EXITING!!\n"),vector[DEP_BITMASK]);
 				exit (-4);
 			}
 			else
@@ -146,7 +146,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = (gint)strtol(vector[DEP_BITSHIFT],NULL,10);
 			if ((tmpi < 0 ) || (tmpi > 8))
 			{
-				MTXDBG(CRITICAL,_("Argument 5 (bitshift) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n"),vector[DEP_BITSHIFT],section);
+				MTXDBG(CRITICAL,_("Argument 5 (bitshift) \"%s\" in RTV XML is out of bounds, EXITING!!\n"),vector[DEP_BITSHIFT]);
 				exit (-4);
 			}
 			else
@@ -157,7 +157,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = (gint)strtol(vector[DEP_BITVAL],NULL,10);
 			if ((tmpi < 0 ) || (tmpi > 255))
 			{
-				MTXDBG(CRITICAL,_("Argument 6 (bitval) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n"),vector[DEP_BITVAL],section);
+				MTXDBG(CRITICAL,_("Argument 6 (bitval) \"%s\" in RTV XML is out of bounds, EXITING!!\n"),vector[DEP_BITVAL]);
 				exit (-4);
 			}
 			else
@@ -171,7 +171,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = translate_string_f(vector[DEP_SIZE]);
 			if (!check_size(tmpi))
 			{
-				MTXDBG(CRITICAL,_("Argument 1 (size) \"%s\" in section \"[%s]\" is missing, using U08 as a guess!!\n"),vector[DEP_SIZE],section);
+				MTXDBG(CRITICAL,_("Argument 1 (size) \"%s\" in RTV XML is missing, using U08 as a guess!!\n"),vector[DEP_SIZE]);
 				DATA_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
 			else
@@ -182,7 +182,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = (gint)strtol(vector[DEP_PAGE],NULL,10);
 			if ((tmpi < 0 ) || (tmpi > firmware->total_pages))
 			{
-				MTXDBG(CRITICAL,_("Argument 2 (page) \"%s\" in section \"[%s]\" is invalid, EXITING!!\n"),vector[DEP_PAGE],section);
+				MTXDBG(CRITICAL,_("Argument 2 (page) \"%s\" in RTV XML is invalid, EXITING!!\n"),vector[DEP_PAGE]);
 				exit (-4);
 			}
 			else
@@ -193,7 +193,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, ConfigFile *cfgfil
 			tmpi = (gint)strtol(vector[DEP_OFFSET],NULL,10);
 			if ((tmpi < 0 ) || (tmpi > firmware->page_params[(gint)strtol(vector[DEP_PAGE],NULL,10)]->length))
 			{
-				MTXDBG(CRITICAL,_("Argument 3 (offset) \"%s\" in section \"[%s]\" is out of bounds, EXITING!!\n"),vector[DEP_OFFSET],section);
+				MTXDBG(CRITICAL,_("Argument 3 (offset) \"%s\" in RTV XML is out of bounds, EXITING!!\n"),vector[DEP_OFFSET]);
 				exit (-4);
 			}
 			else

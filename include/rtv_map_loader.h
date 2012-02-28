@@ -58,6 +58,7 @@ void load_complex_params_obj(GObject *, ConfigFile *, gchar * );
 gboolean load_rtv_xml_elements(xmlNode *, Rtv_Map *);
 void load_rtv_defaults(xmlNode *, Rtv_Map *);
 void load_rtv_xml_complex_expression(gconstpointer *, xmlNode *);
+void load_rtv_xml_dependancies(gconstpointer *, xmlNode *);
 void load_derived_var(xmlNode *, Rtv_Map *);
 /* Prototypes */
 

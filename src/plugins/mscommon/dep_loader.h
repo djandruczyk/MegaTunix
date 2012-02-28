@@ -23,10 +23,11 @@
 
 #include <configfile.h>
 #include <enums.h>
+#include <libxml/parser.h>
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void load_dependancies(gconstpointer *,ConfigFile * ,gchar *, gchar *);
+void load_dependancies(gconstpointer *,xmlNode *, gchar *);
 void load_dependancies_obj(GObject *,ConfigFile * ,gchar *, gchar *);
 gboolean check_size(DataSize );
 /* Prototypes */

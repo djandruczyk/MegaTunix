@@ -201,6 +201,7 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 	gint temp_dep = 0;
 	gint log_by_default = 0;
 	gchar **vector = NULL;
+	gchar * lookuptable = NULL;
 	gchar * real_lower = NULL;
 	gchar * real_upper = NULL;
 	gchar * tmpbuf = NULL;
@@ -256,6 +257,8 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 				generic_xml_gint_import(cur_node,&precision);
 			if (g_strcasecmp((gchar *)cur_node->name,"temp_dep") == 0)
 				generic_xml_gboolean_import(cur_node,&temp_dep);
+			if (g_strcasecmp((gchar *)cur_node->name,"lookuptable") == 0)
+				generic_xml_gchar_import(cur_node,&lookuptable);
 			/* Hack for special values (HR clock?) */
 			if (g_strcasecmp((gchar *)cur_node->name,"special") == 0)
 				generic_xml_gchar_import(cur_node,&special);
@@ -315,6 +318,11 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 			DATA_SET_FULL(object,"tooltip",g_strdup(_(tooltip)),g_free);
 			g_free(tooltip);
 		}
+		if (lookuptable)
+		{
+			DATA_SET_FULL(object,"lookuptable",g_strdup(lookuptable),g_free);
+			g_free(lookuptable);
+		}
 		/* Oddball one... */
 		if (special)
 		{
@@ -341,7 +349,7 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 		DATA_SET_FULL(object,"fromecu_add",(gpointer)newfloat,g_free);
 
 		if (has_deps)
-			printf("This rtv var has dependancies!, not written yet\n");
+			load_rtv_xml_dependancies(object,node);
 		if (complex_expression)
 			load_rtv_xml_complex_expression(object,node);
 		if (multiple_expression)
@@ -355,6 +363,15 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 		MTXDBG(RTMLOADER|CRITICAL,_("Derived variable doesn't meet the basic criteria!\n"));
 }
 
+
+void load_rtv_xml_dependancies(gconstpointer *object, xmlNode *node)
+{
+	static void (*load_deps)(gconstpointer *,ConfigFile *,const gchar *, const gchar *) = NULL;
+	if (!load_deps)
+		get_symbol("load_dependancies",(void *)&load_deps);
+	g_return_if_fail(load_deps);
+	load_deps(object,node,"depend_on");
+}
 
 /*
 void shit()
