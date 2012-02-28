@@ -21,6 +21,7 @@
 #include <firmware.h>
 #include <mscommon_plugin.h>
 #include <debugging.h>
+#include <xmlbase.h>
 
 extern gconstpointer *global_data;
 
@@ -32,7 +33,7 @@ extern gconstpointer *global_data;
   \param symbol is the symbol name within the section
   \param type is an enumeration representing the type of RT var
   */
-G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfile, gchar * section, gchar *symbol, ComplexExprType type)
+G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, xmlNode *node, gchar *symbol, ComplexExprType type)
 {
 	static Firmware_Details *firmware = NULL;
 	gchar * name = NULL;
@@ -48,25 +49,25 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfil
 			/* ECU Embedded bitfield 4 params */
 			name=NULL;
 			name=g_strdup_printf("%s_page",symbol);
-			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+			if (!generic_xml_gint_find(node,name,&tmpi))
 				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("ECU_EMB_BIT, failure looking for:%s\n"),name);
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_offset",symbol);
-			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+			if (!generic_xml_gint_find(node,name,&tmpi))
 				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("ECU_EMB_BIT, failure looking for:%s\n"),name);
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_canID",symbol);
-			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+			if (!generic_xml_gint_find(node,name,&tmpi))
 				tmpi = firmware->canID;
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_bitmask",symbol);
-			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+			if (!generic_xml_gint_find(node,name,&tmpi))
 				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("ECU_EMB_BIT, failure looking for:%s\n"),name);
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
@@ -76,26 +77,26 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, ConfigFile *cfgfil
 			/* ECU std variable, canID/page/offset/size */
 			name=NULL;
 			name=g_strdup_printf("%s_canID",symbol);
-			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+			if (!generic_xml_gint_find(node,name,&tmpi))
 				tmpi = firmware->canID;
 
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_page",symbol);
-			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+			if (!generic_xml_gint_find(node,name,&tmpi))
 				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("ECU_VAR, failure looking for:%s\n"),name);
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_offset",symbol);
-			if (!cfg_read_int(cfgfile,section,name,&tmpi))
+			if (!generic_xml_gint_find(node,name,&tmpi))
 				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("ECU_VAR, failure looking for:%s\n"),name);
 			DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 			g_free(name);
 			name=NULL;
 			name=g_strdup_printf("%s_size",symbol);
-			if (!cfg_read_string(cfgfile,section,name,&tmpbuf))
+			if (!generic_xml_gchar_find(node,name,&tmpbuf))
 				tmpi = MTX_U08;
 			else
 			{
