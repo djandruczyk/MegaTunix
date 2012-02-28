@@ -121,6 +121,56 @@ int main (int argc, char *argv[])
 				printf("\t\t<expr_types>%s</expr_types>\n",tmpbuf);
 				g_free(tmpbuf);
 			}
+			if (cfg_read_string(cfg,section,"depend_on",&tmpbuf))
+			{
+				printf("\t\t<depend_on>%s</depend_on>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"lookuptable",&tmpbuf))
+			{
+				printf("\t\t<lookuptable>%s</lookuptable>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"alt_lookuptable",&tmpbuf))
+			{
+				printf("\t\t<alt_lookuptable>%s</alt_lookuptable>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"upper_limits",&tmpbuf))
+			{
+				printf("\t\t<upper_limits>%s</upper_limits>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"lower_limits",&tmpbuf))
+			{
+				printf("\t\t<lower_limits>%s</lower_limits>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"fromecu_mults",&tmpbuf))
+			{
+				printf("\t\t<fromecu_mults>%s</fromecu_mults>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"fromecu_adds",&tmpbuf))
+			{
+				printf("\t\t<fromecu_adds>%s</fromecu_adds>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"multi_expr_keys",&tmpbuf))
+			{
+				printf("\t\t<multi_expr_keys>%s</multi_expr_keys>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"multi_lookuptables",&tmpbuf))
+			{
+				printf("\t\t<multi_lookuptables>%s</multi_lookuptables>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
+			if (cfg_read_string(cfg,section,"source_key",&tmpbuf))
+			{
+				printf("\t\t<source_key>%s</source_key>\n",tmpbuf);
+				g_free(tmpbuf);
+			}
 			printf("\t</derived>\n");
 		}
 	}
