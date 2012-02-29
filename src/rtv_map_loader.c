@@ -377,6 +377,8 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 
 	expr_symbols = parse_keys(raw_expr_symbols, &total_symbols,",");	
 	expr_types = parse_keytypes(raw_expr_types, &total_symtypes,",");	
+	g_free(raw_expr_symbols);
+	g_free(raw_expr_types);
 	if (total_symbols != total_symtypes)
 	{
 		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Number of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n"),total_symbols,total_symtypes);
@@ -384,8 +386,9 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 		g_strfreev(expr_symbols);
 		return;
 	}
-	// Store the lists as well so DO NOT DEALLOCATE THEM!!! 
 	DATA_SET_FULL(object,"fromecu_conv_expr",g_strdup(fromecu_conv_expr),g_free);
+	g_free(fromecu_conv_expr);
+	// Store the lists as well so DO NOT DEALLOCATE THEM!!! 
 	DATA_SET_FULL(object,"expr_types",(gpointer)expr_types,g_free);
 	DATA_SET_FULL(object,"expr_symbols",(gpointer)expr_symbols,g_strfreev);
 	DATA_SET(object,"total_symbols",GINT_TO_POINTER(total_symbols));
