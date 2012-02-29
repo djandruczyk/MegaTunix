@@ -1,0 +1,963 @@
+<?xml version="1.0"?>
+<rtv_map>
+	<api>
+		<major>1</major>
+		<minor>7</minor>
+	</api>
+	<derived>
+		<dlog_gui_name>HR Clock</dlog_gui_name>
+		<dlog_field_name>Time</dlog_field_name>
+		<internal_names>hr_clock</internal_names>
+		<offset>0</offset>
+		<real_lower>0</real_lower>
+		<real_upper>2147483648</real_upper>
+		<precision>3</precision>
+		<tooltip>"HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<special>hr_clock</special>
+	</derived>
+	<derived>
+		<dlog_gui_name>Seconds</dlog_gui_name>
+		<dlog_field_name>Seconds</dlog_field_name>
+		<internal_names>seconds,raw_secl</internal_names>
+		<offset>0</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<tooltip>"seconds" is the PIS clock returned by the ECU, this runs from 0-65535 and recylcles indefinitely, resolution 1 second.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>irq_ticks</dlog_gui_name>
+		<dlog_field_name>irq_ticks</dlog_field_name>
+		<internal_names>irq_tics</internal_names>
+		<offset>2</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>999</real_upper>
+		<tooltip>"irq_tics" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Flags 1</dlog_gui_name>
+		<dlog_field_name>Flags 1</dlog_field_name>
+		<internal_names>flags1</internal_names>
+		<offset>4</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"flags" is for tracking ECU internal state.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Flags 2</dlog_gui_name>
+		<dlog_field_name>Flags 2</dlog_field_name>
+		<internal_names>flags2</internal_names>
+		<offset>5</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"flags" is for tracking ECU internal state.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Flags 3</dlog_gui_name>
+		<dlog_field_name>Flags 3</dlog_field_name>
+		<internal_names>flags3</internal_names>
+		<offset>6</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"flags" is for tracking ECU internal state.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Flags 4</dlog_gui_name>
+		<dlog_field_name>Flags 4</dlog_field_name>
+		<internal_names>flags4</internal_names>
+		<offset>7</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"flags" is for tracking ECU internal state.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Discrete</dlog_gui_name>
+		<dlog_field_name>Discrete</dlog_field_name>
+		<internal_names>discrete</internal_names>
+		<offset>8</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<tooltip>"Discrete" contains the current state of B10, C7, C8, B9, C9, C15, D11, ACREQ, INJLOOP.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ROC Clock</dlog_gui_name>
+		<dlog_field_name>ROC Clock</dlog_field_name>
+		<internal_names>roc_clk</internal_names>
+		<offset>10</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<tooltip>"roc_clk" counts the number of ms until the next Rate Of Change calculation is to be performed.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IAC Clock</dlog_gui_name>
+		<dlog_field_name>IAC Clock</dlog_field_name>
+		<internal_names>iac_clk</internal_names>
+		<offset>12</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<tooltip>"iac_clk" counts the number of ms until the next Intake Air Control update.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO Clock</dlog_gui_name>
+		<dlog_field_name>EGO Clock</dlog_field_name>
+		<internal_names>ego_clk</internal_names>
+		<offset>14</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<tooltip>"ego_clk" counts the number of ms until the next Exhaust Gas Oxygen calculation is to be performed.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ASC Clock</dlog_gui_name>
+		<dlog_field_name>ASC Clock</dlog_field_name>
+		<internal_names>asc_clk</internal_names>
+		<offset>16</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>1000</real_upper>
+		<tooltip>"asc_clk" counts down the number of After Start Correction injection events remaining.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AE Clock</dlog_gui_name>
+		<dlog_field_name>AE Clock</dlog_field_name>
+		<internal_names>ae_clk</internal_names>
+		<offset>18</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<tooltip>"ae_clk" counts down the number of ms Acceleration Enrichment async pulses to be performed.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>INJ Clock</dlog_gui_name>
+		<dlog_field_name>INJ Clock</dlog_field_name>
+		<internal_names>inj_clk</internal_names>
+		<offset>20</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>6</real_upper>
+		<tooltip>"inj_clk" counts down the number of injection events to skip.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO TRANS</dlog_gui_name>
+		<dlog_field_name>EGO TRANS</dlog_field_name>
+		<internal_names>transient_clk</internal_names>
+		<offset>22</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>5000</real_upper>
+		<tooltip>"transient_clk" counts down the number of ms until closed loop can be entered after a transient fuel event.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>RPM</dlog_gui_name>
+		<dlog_field_name>RPM</dlog_field_name>
+		<internal_names>rpm</internal_names>
+		<offset>24</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16384</real_upper>
+		<tooltip>"rpm" engine speed in revolutions per minute.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Magic</dlog_gui_name>
+		<dlog_field_name>Magic</dlog_field_name>
+		<internal_names>rpm_magic</internal_names>
+		<offset>26</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>500</real_upper>
+		<tooltip>"rpm.magic" internal value based on number of cylinders the duration of reference pulse and alignment of the stars that allows the rpm to be calculated amazingly fast.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>DRPM</dlog_gui_name>
+		<dlog_field_name>DRPM</dlog_field_name>
+		<internal_names>DRPM</internal_names>
+		<offset>28</offset>
+		<size>_S16_</size>
+		<real_lower>-200</real_lower>
+		<real_upper>200</real_upper>
+		<tooltip>"DRPM" the Rate Of Change in RPM during the last ROC Clock period (100ms)</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>RPM Last</dlog_gui_name>
+		<dlog_field_name>RPM Last</dlog_field_name>
+		<internal_names>rpm_last</internal_names>
+		<offset>30</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16384</real_upper>
+		<tooltip>"rpm.last" engine RPM @ the last ROC update.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Limit</dlog_gui_name>
+		<dlog_field_name>Limit</dlog_field_name>
+		<internal_names>rpm_limit</internal_names>
+		<offset>32</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16384</real_upper>
+		<tooltip>"rpm.limit" current hard RPM limit where fuel pulses will be cut!</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>CTS IAR</dlog_gui_name>
+		<dlog_field_name>CTS IAR</dlog_field_name>
+		<internal_names>cts_iar</internal_names>
+		<offset>34</offset>
+		<size>_S16_</size>
+		<real_lower>-32768</real_lower>
+		<real_upper>32767</real_upper>
+		<fromecu_mult>0.351567993</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"cts.iar" ignition +advance/-retard correction based on engine coolant temperature.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>CTS (° K)</dlog_gui_name>
+		<dlog_field_name>CTS (° K)</dlog_field_name>
+		<internal_names>cts_kelvin</internal_names>
+		<offset>36</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>600</real_upper>
+		<tooltip>"cts.kelvin" Coolant Temperate Sender (° K).</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>CTS (%)</dlog_gui_name>
+		<dlog_field_name>CTS (%)</dlog_field_name>
+		<internal_names>cts_correction</internal_names>
+		<offset>38</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.003051758</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"cts.correction" (%) of BPW to add to final PW based on Coolant Temperate Sender (°)</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>CTS PW</dlog_gui_name>
+		<dlog_field_name>CTS PW</dlog_field_name>
+		<internal_names>cts_pw</internal_names>
+		<offset>40</offset>
+		<size>_S16_</size>
+		<real_lower>-5</real_lower>
+		<real_upper>5</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"cts.pw" (cts.correction) (%) of BPW converted to milliseconds</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MAT IAR</dlog_gui_name>
+		<dlog_field_name>MAT IAR</dlog_field_name>
+		<internal_names>mat_iar</internal_names>
+		<offset>42</offset>
+		<size>_S16_</size>
+		<real_lower>-10</real_lower>
+		<real_upper>10</real_upper>
+		<fromecu_mult>0.351567993</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"mat.iar" ignition +advance/-retard correction based on manifold air temperature.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MAT (° K)</dlog_gui_name>
+		<dlog_field_name>MAT (° K)</dlog_field_name>
+		<internal_names>mat_kelvin</internal_names>
+		<offset>44</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>600</real_upper>
+		<tooltip>"mat.kelvin" Manifold Air Temperature (° K).</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MATcorr (%)</dlog_gui_name>
+		<dlog_field_name>MATcorr (%)</dlog_field_name>
+		<internal_names>mat_correction</internal_names>
+		<offset>46</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.003051758</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"mat.correction" (%) of BPW to add to final PW based on Manifold Air Temperature.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MAT PW</dlog_gui_name>
+		<dlog_field_name>MAT PW</dlog_field_name>
+		<internal_names>mat_pw</internal_names>
+		<offset>48</offset>
+		<size>_S16_</size>
+		<real_lower>-5</real_lower>
+		<real_upper>5</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"mat.pw" (mat.correction) (%) of BPW converted to milliseconds</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ASC Base (%)</dlog_gui_name>
+		<dlog_field_name>ASC Base (%)</dlog_field_name>
+		<internal_names>asc_base_correction</internal_names>
+		<offset>50</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.003051758</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"asc.base_correction" After Start Correction, initial (%) of BPW</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ASC Duration</dlog_gui_name>
+		<dlog_field_name>ASC Duration</dlog_field_name>
+		<internal_names>asc_duration</internal_names>
+		<offset>52</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>1000</real_upper>
+		<tooltip>"asc.durtation" Number of injection cycles over which the base (%) will be tappered to nothing.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ASC Applied (%)</dlog_gui_name>
+		<dlog_field_name>ASC Applied (%)</dlog_field_name>
+		<internal_names>asc_applied_correction</internal_names>
+		<offset>54</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.003051758</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"asc.applied_correction" (%) of BPW currently being applied.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ASC PW</dlog_gui_name>
+		<dlog_field_name>ASC PW</dlog_field_name>
+		<internal_names>asc_pw</internal_names>
+		<offset>56</offset>
+		<size>_S16_</size>
+		<real_lower>-10</real_lower>
+		<real_upper>10</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"asc.pw" (asc.applied_correction) (%) of BPW converted to milliseconds</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>TPS (%)</dlog_gui_name>
+		<dlog_field_name>TPS (%)</dlog_field_name>
+		<internal_names>tpspercent</internal_names>
+		<offset>58</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"tpspercent" current throttle position as percentage, taking into account calibration.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>TPS Last (%)</dlog_gui_name>
+		<dlog_field_name>TPS Last (%)</dlog_field_name>
+		<internal_names>tps_last</internal_names>
+		<offset>60</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"tps.last" last Throttle Position Sensor (%) during TPS ROC update (100ms).</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>DTPS (%)</dlog_gui_name>
+		<dlog_field_name>DTPS</dlog_field_name>
+		<internal_names>DTPS</internal_names>
+		<offset>62</offset>
+		<size>_S16_</size>
+		<real_lower>-100</real_lower>
+		<real_upper>100</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"DTPS" the rate of change over the last (50ms)</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IAC Start</dlog_gui_name>
+		<dlog_field_name>IAC Start</dlog_field_name>
+		<internal_names>iac_start</internal_names>
+		<offset>64</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<tooltip>"iac.start" number of steps where idle control first takes over your throttle.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IAC Min</dlog_gui_name>
+		<dlog_field_name>IAC Min</dlog_field_name>
+		<internal_names>iac_minimum</internal_names>
+		<offset>66</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<tooltip>"iac.minimum" the minimum position the IAC can go to, causing the IAC to act as a throttle stop.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IAC Target</dlog_gui_name>
+		<dlog_field_name>IAC Target</dlog_field_name>
+		<internal_names>iac_target</internal_names>
+		<offset>68</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<tooltip>"iac.target" current position that the IAC has been commnaded to go.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IAC Position</dlog_gui_name>
+		<dlog_field_name>IAC Position</dlog_field_name>
+		<internal_names>iac_position</internal_names>
+		<offset>70</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<tooltip>"iac.position" the current position of the IAC.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IAC Idle</dlog_gui_name>
+		<dlog_field_name>IAC Idle</dlog_field_name>
+		<internal_names>iac_idle_rpm</internal_names>
+		<offset>72</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>1200</real_upper>
+		<tooltip>"iac.idle_rpm" this is our engines idling target that the IAC is trying to match.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AIAR</dlog_gui_name>
+		<dlog_field_name>AIAR</dlog_field_name>
+		<internal_names>ign_AIAR</internal_names>
+		<offset>74</offset>
+		<size>_S16_</size>
+		<real_lower>-30</real_lower>
+		<real_upper>255</real_upper>
+		<fromecu_mult>0.351567993</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ign.AIAR" Applied Ignition +Advance/-Retard.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Dwell</dlog_gui_name>
+		<dlog_field_name>Dwell</dlog_field_name>
+		<internal_names>ign_dwell</internal_names>
+		<offset>76</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>10</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ign.dwell" period of time to dwell the ignition module.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MAP</dlog_gui_name>
+		<dlog_field_name>MAP</dlog_field_name>
+		<internal_names>map</internal_names>
+		<offset>78</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>350</real_upper>
+		<tooltip>"map" Manifold Absolute Pressure.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MAP Limit</dlog_gui_name>
+		<dlog_field_name>MAP Limit</dlog_field_name>
+		<internal_names>map_limit</internal_names>
+		<offset>80</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>350</real_upper>
+		<tooltip>"map.limit" Manifold Absolute Pressure where the boost solenoid will be opened.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Lambda Correction (%)</dlog_gui_name>
+		<dlog_field_name>Lambda Correction (%)</dlog_field_name>
+		<internal_names>ego_correction</internal_names>
+		<offset>82</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.003051758</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ego.correction" Exhaust Gas Oxygen correction.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO Target</dlog_gui_name>
+		<dlog_field_name>EGO Target</dlog_field_name>
+		<internal_names>ego_target</internal_names>
+		<offset>84</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"ego.target" this is the actual ADC count we are seeking from the EGO sensor.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO Error</dlog_gui_name>
+		<dlog_field_name>EGO Error</dlog_field_name>
+		<internal_names>ego_error</internal_names>
+		<offset>86</offset>
+		<size>_S16_</size>
+		<real_lower>-255</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"ego.target" the amount of error between where the EGO is reading and where we want it to read.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO Integral</dlog_gui_name>
+		<dlog_field_name>EGO Integral</dlog_field_name>
+		<internal_names>ego_integral</internal_names>
+		<offset>88</offset>
+		<size>_S16_</size>
+		<real_lower>-10000</real_lower>
+		<real_upper>10000</real_upper>
+		<tooltip>"ego.integral"this is the integral accumulative error of the PI controller.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO PW</dlog_gui_name>
+		<dlog_field_name>EGO PW</dlog_field_name>
+		<internal_names>ego_pw</internal_names>
+		<offset>90</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>10</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ego.pw" this is the adjustment that will be applied to the overall fueling due to the EGO.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AE CTS (%)</dlog_gui_name>
+		<dlog_field_name>AE CTS (%)</dlog_field_name>
+		<internal_names>ae_cts_factor</internal_names>
+		<offset>92</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>20</real_upper>
+		<fromecu_mult>0.003051758</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ae.cts_factor" (%) of Acceleration Enrichment that will be used due to the engine's coolant temperature.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AE ROC (%)</dlog_gui_name>
+		<dlog_field_name>AE ROC (%)</dlog_field_name>
+		<internal_names>ae_roc_factor</internal_names>
+		<offset>94</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>200</real_upper>
+		<fromecu_mult>0.003051758</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ae.roc_factor" (%) of Acceleration Enrichment that will be used due to the TPS ROC.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AE BPW</dlog_gui_name>
+		<dlog_field_name>AE BPW</dlog_field_name>
+		<internal_names>ae_BPW</internal_names>
+		<offset>96</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>10</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ae.BPW" This is the AE base pulse width BPW. It is chosen from a table that considers your current RPM vs current TPS. This value is then (%) adjusted depending upon the actual TPS ROC/50ms. The final result is then (%) adjusted according to the CTS.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AE APW</dlog_gui_name>
+		<dlog_field_name>AE APW</dlog_field_name>
+		<internal_names>ae_APW</internal_names>
+		<offset>98</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>10</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"ae.APW" applied PW is the current acceleration injection pulse width and is tapered to nothing over the duration.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>APW</dlog_gui_name>
+		<dlog_field_name>APW</dlog_field_name>
+		<internal_names>APW</internal_names>
+		<offset>100</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>20</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"APW" Applied Pulse Width is the final pulse width that will be seen at the injector(s).</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Open Delay</dlog_gui_name>
+		<dlog_field_name>Open Delay</dlog_field_name>
+		<internal_names>open_delay</internal_names>
+		<offset>102</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>3</real_upper>
+		<fromecu_mult>0.015151515</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"open_delay" time it takes for injector pintle to be fully open vs VOLTS .</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX RPM</dlog_gui_name>
+		<dlog_field_name>IDX RPM</dlog_field_name>
+		<internal_names>idx_rpm</internal_names>
+		<offset>104</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_rpm" rpm bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX MAP</dlog_gui_name>
+		<dlog_field_name>IDX MAP</dlog_field_name>
+		<internal_names>idx_map</internal_names>
+		<offset>105</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_map" map bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX CTS</dlog_gui_name>
+		<dlog_field_name>IDX CTS</dlog_field_name>
+		<internal_names>idx_cts</internal_names>
+		<offset>106</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_cts" cts bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX MAT</dlog_gui_name>
+		<dlog_field_name>IDX MAT</dlog_field_name>
+		<internal_names>idx_mat</internal_names>
+		<offset>107</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_mat" mat bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX TPS</dlog_gui_name>
+		<dlog_field_name>IDX TPS</dlog_field_name>
+		<internal_names>idx_tps</internal_names>
+		<offset>108</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_tps" tps bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX IAC</dlog_gui_name>
+		<dlog_field_name>IDX IAC</dlog_field_name>
+		<internal_names>idx_iac</internal_names>
+		<offset>109</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_iac" iac bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX AE TPS</dlog_gui_name>
+		<dlog_field_name>IDX AE TPS</dlog_field_name>
+		<internal_names>idx_AE_tps</internal_names>
+		<offset>110</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_AE_tps" AE_tps bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX AE RPM</dlog_gui_name>
+		<dlog_field_name>IDX AE RPM</dlog_field_name>
+		<internal_names>idx_AE_rpm</internal_names>
+		<offset>111</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_AE_rpm" AE_rpm bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IDX AE ROC</dlog_gui_name>
+		<dlog_field_name>IDX AE ROC</dlog_field_name>
+		<internal_names>idx_AE_roc</internal_names>
+		<offset>112</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<tooltip>"idx_AE_roc" AE_roc bin index</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC WBO2</dlog_gui_name>
+		<dlog_field_name>ADC WBO2</dlog_field_name>
+		<internal_names>adc_wbo2</internal_names>
+		<offset>113</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.wbo2" WBO2 ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC VOLT</dlog_gui_name>
+		<dlog_field_name>ADC VOLT</dlog_field_name>
+		<internal_names>adc_volt</internal_names>
+		<offset>114</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"adc.volt" VOLT ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC NBO2</dlog_gui_name>
+		<dlog_field_name>ADC NBO2</dlog_field_name>
+		<internal_names>adc_nbo2</internal_names>
+		<offset>115</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.nbo2" NBO2 ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC MAP</dlog_gui_name>
+		<dlog_field_name>ADC MAP</dlog_field_name>
+		<internal_names>adc_map</internal_names>
+		<offset>116</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.map" MAP ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC CTS</dlog_gui_name>
+		<dlog_field_name>ADC CTS</dlog_field_name>
+		<internal_names>adc_cts</internal_names>
+		<offset>117</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.cts" CTS ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC TPS</dlog_gui_name>
+		<dlog_field_name>ADC TPS</dlog_field_name>
+		<internal_names>adc_tps</internal_names>
+		<offset>118</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.tps" TPS ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC PUMPVOLT</dlog_gui_name>
+		<dlog_field_name>ADC PUMPVOLT</dlog_field_name>
+		<internal_names>adc_pumpvolt</internal_names>
+		<offset>119</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc." ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC DIAG</dlog_gui_name>
+		<dlog_field_name>ADC DIAG</dlog_field_name>
+		<internal_names>adc_diag</internal_names>
+		<offset>120</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.diag" DIAG ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC MAT</dlog_gui_name>
+		<dlog_field_name>ADC MAT</dlog_field_name>
+		<internal_names>adc_mat</internal_names>
+		<offset>121</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.mat" MAT ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC ESC</dlog_gui_name>
+		<dlog_field_name>ADC ESC</dlog_field_name>
+		<internal_names>adc_esc</internal_names>
+		<offset>122</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.esc" ESC ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ADC VMAF</dlog_gui_name>
+		<dlog_field_name>ADC VMAF</dlog_field_name>
+		<internal_names>adc_vmaf</internal_names>
+		<offset>123</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"adc.vmaf" VMAF ADC reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Lambda</dlog_gui_name>
+		<dlog_field_name>Lambda</dlog_field_name>
+		<internal_names>lambda</internal_names>
+		<offset>113</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>2</real_upper>
+		<fromecu_mult>0.00390625</fromecu_mult>
+		<fromecu_add>0.5</fromecu_add>
+		<precision>2</precision>
+		<tooltip>current ego lambda reading</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Lambda Target</dlog_gui_name>
+		<dlog_field_name>Lamda Target</dlog_field_name>
+		<internal_names>lambda_target</internal_names>
+		<offset>84</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>2</real_upper>
+		<fromecu_mult>0.00390625</fromecu_mult>
+		<fromecu_add>0.5</fromecu_add>
+		<precision>2</precision>
+		<tooltip>ego closed loop lambda target</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Dutycycle 1</dlog_gui_name>
+		<dlog_field_name>DutyCycle</dlog_field_name>
+		<internal_names>duty_cycle</internal_names>
+		<offset>2</offset>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<precision>2</precision>
+		<tooltip>"Duty Cycle" is the injector Duty cycle.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>100.0 * ((pw/66) / (60000 / (rpm * (1+stroke) / (1+skips))))</fromecu_conv_expr>
+		<expr_types>_ECU_VAR_,_ECU_VAR_,_ECU_VAR_,_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>stroke,cylinders,skips,rpm,pw</expr_symbols>
+		<stroke_page>0</stroke_page>
+		<stroke_offset>4</stroke_offset>
+		<stroke_size>_U16_</stroke_size>
+		<cylinders_page>0</cylinders_page>
+		<cylinders_offset>2</cylinders_offset>
+		<cylinders_size>_U16_</cylinders_size>
+		<skips_page>0</skips_page>
+		<skips_offset>0</skips_offset>
+		<skips_size>_U16_</skips_size>
+		<rpm_offset>24</rpm_offset>
+		<rpm_size>_U16_</rpm_size>
+		<pw_offset>100</pw_offset>
+		<pw_size>_U16_</pw_size>
+	</derived>
+	<derived>
+		<dlog_gui_name>CLT (°)</dlog_gui_name>
+		<dlog_field_name>CLT (°)</dlog_field_name>
+		<internal_names>cts_temp</internal_names>
+		<offset>36</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>1000</real_upper>
+		<fromecu_mult>1.8</fromecu_mult>
+		<fromecu_add>-459.67</fromecu_add>
+		<temp_dep>TRUE</temp_dep>
+		<tooltip>current engine coolant temperature</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MAT (°)</dlog_gui_name>
+		<dlog_field_name>MAT (°)</dlog_field_name>
+		<internal_names>mat_temp</internal_names>
+		<offset>44</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>1000</real_upper>
+		<fromecu_mult>1.8</fromecu_mult>
+		<fromecu_add>-459.67</fromecu_add>
+		<temp_dep>TRUE</temp_dep>
+		<tooltip>current manifold temperature</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+</rtv_map>

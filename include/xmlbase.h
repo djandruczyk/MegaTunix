@@ -35,6 +35,11 @@ void generic_xml_gchar_import(xmlNode *, gpointer);
 void generic_xml_gfloat_import(xmlNode *, gpointer);
 void generic_xml_gboolean_import(xmlNode *, gpointer);
 void generic_xml_color_import(xmlNode *, gpointer);
+gboolean generic_xml_gint_find(xmlNode *, const gchar *, gpointer);
+gboolean generic_xml_gchar_find(xmlNode *, const gchar *, gpointer);
+gboolean generic_xml_gfloat_find(xmlNode *, const gchar *, gpointer);
+gboolean generic_xml_gboolean_find(xmlNode *, const gchar *, gpointer);
+
 
 /* export funcs */
 void generic_xml_gint_export(xmlNode *, gchar *, gint *);

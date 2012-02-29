@@ -23,6 +23,8 @@
 
 #include <gtk/gtk.h>
 #include <configfile.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 
 typedef struct _Rtv_Map Rtv_Map;
@@ -39,7 +41,7 @@ struct _Rtv_Map
 	guint derived_total;	/*!< Number of derived variables */
 	guint rtvars_size;	/*!< total size of rtvars block */
 	gchar **raw_list;	/*!< Char List of raw variables by name */
-	gchar *applicable_revisions;/*!< Firmware revisions that use this map*/
+	gchar *applicable_signatures;/*!< Firmware revisions that use this map*/
 	GHashTable *offset_hash;/*!< Hashtable of rtv dervied values indexed by
 				  it's raw offset in the RTV block */
 	GArray *ts_array;	/*!< Timestamp array */
@@ -53,6 +55,11 @@ struct _Rtv_Map
 gboolean load_realtime_map_pf(void );
 void load_complex_params(gconstpointer *, ConfigFile *, gchar * );
 void load_complex_params_obj(GObject *, ConfigFile *, gchar * );
+gboolean load_rtv_xml_elements(xmlNode *, Rtv_Map *);
+void load_rtv_defaults(xmlNode *, Rtv_Map *);
+void load_rtv_xml_complex_expression(gconstpointer *, xmlNode *);
+void load_rtv_xml_dependancies(gconstpointer *, xmlNode *);
+void load_derived_var(xmlNode *, Rtv_Map *);
 /* Prototypes */
 
 #endif

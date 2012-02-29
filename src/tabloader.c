@@ -1147,7 +1147,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		OBJ_SET(object,"size",GINT_TO_POINTER(size));
 		OBJ_SET(object,"bitmask",GINT_TO_POINTER(bitmask));
 		if (bitvals)
-			OBJ_SET(object,"bitvals",g_strdup(bitvals));
+			OBJ_SET_FULL(object,"bitvals",g_strdup(bitvals),g_free);
 		else
 			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
 		OBJ_SET_FULL(object,"toggle_groups",g_strdup(groups),cleanup);

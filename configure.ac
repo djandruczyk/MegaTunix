@@ -55,12 +55,8 @@ dnl Gettext Goodness
 AC_PROG_INTLTOOL(0.30)
 INTLTOOL_PROF_RULE='%.prof: %.prof.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; sed -e "s/^_//g" $< > [$]@'
 INTLTOOL_DATAMAP_RULE='%.datamap: %.datamap.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; sed -e "s/^_//g" $< > [$]@'
-INTLTOOL_RTVMAP_RULE='%.rtv_map: %.rtv_map.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; sed -e "s/^_//g" $< > [$]@'
-INTLTOOL_STATUS_RULE='%.status_conf: %.status_conf.in $(INTLTOOL_MERGE) $(wildcard $(top_srcdir)/po/*.po) ; sed -e "s/^_//g" $< > [$]@'
 AC_SUBST(INTLTOOL_PROF_RULE)
 AC_SUBST(INTLTOOL_DATAMAP_RULE)
-AC_SUBST(INTLTOOL_RTVMAP_RULE)
-AC_SUBST(INTLTOOL_STATUS_RULE)
 
 GETTEXT_PACKAGE=megatunix
 DATADIRNAME="MegaTunix/locale"

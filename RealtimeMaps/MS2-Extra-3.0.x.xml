@@ -1,0 +1,1183 @@
+<?xml version="1.0"?>
+<rtv_map>
+	<api>
+		<major>1</major>
+		<minor>7</minor>
+	</api>
+	<derived>
+		<dlog_gui_name>HR Clock</dlog_gui_name>
+		<dlog_field_name>Time</dlog_field_name>
+		<internal_names>hr_clock</internal_names>
+		<offset>0</offset>
+		<real_lower>0</real_lower>
+		<real_upper>2147483648</real_upper>
+		<precision>3</precision>
+		<tooltip>"HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<special>hr_clock</special>
+	</derived>
+	<derived>
+		<dlog_gui_name>MS2 Clock</dlog_gui_name>
+		<dlog_field_name>SecL</dlog_field_name>
+		<internal_names>raw_secl</internal_names>
+		<offset>0</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65535</real_upper>
+		<tooltip>"MS-2 Clock" is the MegaSquirt clock returned by the ECU, this runs from 0-255 and recylcles indefinitely, resolution 1 second.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>PW 1 (ms.)</dlog_gui_name>
+		<dlog_field_name>PW</dlog_field_name>
+		<internal_names>pw1</internal_names>
+		<offset>2</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65</real_upper>
+		<fromecu_mult>0.000666</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"PW" is the pulsewidth for injector channel 1. Resolution of 1 us.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>PW 2 (ms.)</dlog_gui_name>
+		<dlog_field_name>PW2</dlog_field_name>
+		<internal_names>pw2</internal_names>
+		<offset>4</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65</real_upper>
+		<fromecu_mult>0.000666</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"PW2" is the pulsewidth for injector channel 2. Resolution of 1 us.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>RPM</dlog_gui_name>
+		<dlog_field_name>RPM</dlog_field_name>
+		<internal_names>rpm</internal_names>
+		<offset>6</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>12000</real_upper>
+		<tooltip>"RPM" is the engine's speed in revolutions per minute.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Spark Adv.</dlog_gui_name>
+		<dlog_field_name>SparkAdv</dlog_field_name>
+		<internal_names>sparkangle</internal_names>
+		<offset>8</offset>
+		<size>_S16_</size>
+		<real_lower>-10</real_lower>
+		<real_upper>90</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"Spark Adv." is the Current spark advance being run.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>SquirtBits</dlog_gui_name>
+		<dlog_field_name>Squirt</dlog_field_name>
+		<internal_names>squirtbit</internal_names>
+		<offset>10</offset>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"Squirt" is a bitfield containing information such as which injectors are firing, which are scheduled to fire, etc.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EngineBits</dlog_gui_name>
+		<dlog_field_name>Engine</dlog_field_name>
+		<internal_names>enginebit</internal_names>
+		<offset>11</offset>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"EngineBits" is a bitfield containing information such as cranking/running, accel enrich, decel mode and warmup enrichment.  It require decoding, use the information in unions.h for the "engine" union.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AfrTarget 1</dlog_gui_name>
+		<dlog_field_name>AFR Target 1</dlog_field_name>
+		<internal_names>afrtgt1</internal_names>
+		<offset>12</offset>
+		<real_lower>8</real_lower>
+		<real_upper>23</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"AfrTarget 1" is The target AFR</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AfrTarget 2</dlog_gui_name>
+		<dlog_field_name>AFR Target 2</dlog_field_name>
+		<internal_names>afrtgt2</internal_names>
+		<offset>13</offset>
+		<real_lower>8</real_lower>
+		<real_upper>23</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"AfrTarget 2" is The target AFR</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>WbO2en 1</dlog_gui_name>
+		<dlog_field_name>wbo2en1</dlog_field_name>
+		<internal_names>wbo2_en1</internal_names>
+		<offset>14</offset>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"WB02ena 1" is a flag indicating whether the wb afr reading is valid.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>WbO2en 2</dlog_gui_name>
+		<dlog_field_name>wbo2en2</dlog_field_name>
+		<internal_names>wbo2_en2</internal_names>
+		<offset>15</offset>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"WB02ena 2" is a flag indicating whether the wb afr reading is valid.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Baro (kPa)</dlog_gui_name>
+		<dlog_field_name>barokpa</dlog_field_name>
+		<internal_names>barokpa</internal_names>
+		<offset>16</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>400</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"Baro (kPa)" is the barometer reading in kPa.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MAP (kPa)</dlog_gui_name>
+		<dlog_field_name>MAP</dlog_field_name>
+		<internal_names>mapkpa</internal_names>
+		<offset>18</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>400</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"MAP (kPa)" is the manifold pressure reading in kPa.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>MAT (°)</dlog_gui_name>
+		<dlog_field_name>MAT</dlog_field_name>
+		<internal_names>matdeg</internal_names>
+		<offset>20</offset>
+		<size>_S16_</size>
+		<real_lower>-40</real_lower>
+		<real_upper>255</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>1</precision>
+		<tooltip>"MAT (°)" is the manifold air temperature reading in degrees.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>CLT (°)</dlog_gui_name>
+		<dlog_field_name>CLT</dlog_field_name>
+		<internal_names>cltdeg</internal_names>
+		<offset>22</offset>
+		<size>_S16_</size>
+		<real_lower>-40</real_lower>
+		<real_upper>255</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>1</precision>
+		<tooltip>"CLT (°)" is the coolant temperature reading in degrees.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>TPS (%)</dlog_gui_name>
+		<dlog_field_name>TP</dlog_field_name>
+		<internal_names>tpspercent</internal_names>
+		<offset>24</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>0</precision>
+		<tooltip>"TPS (%)" is the throttle position reading in percent of full scale.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Batt (v)</dlog_gui_name>
+		<dlog_field_name>Batt V</dlog_field_name>
+		<internal_names>battvolt</internal_names>
+		<offset>26</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>18</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"Batt (v)" is the battery voltage.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AFR 1</dlog_gui_name>
+		<dlog_field_name>AFR</dlog_field_name>
+		<internal_names>afr1</internal_names>
+		<offset>28</offset>
+		<size>_S16_</size>
+		<real_lower>8</real_lower>
+		<real_upper>23</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"AFR 1" is the AFR from O2 sensor 1.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AFR 2</dlog_gui_name>
+		<dlog_field_name>AFR 2</dlog_field_name>
+		<internal_names>afr2</internal_names>
+		<offset>30</offset>
+		<size>_S16_</size>
+		<real_lower>8</real_lower>
+		<real_upper>23</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"AFR 2" is the AFR from O2 sensor 2.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Lambda 1</dlog_gui_name>
+		<dlog_field_name>Lambda</dlog_field_name>
+		<internal_names>lambda</internal_names>
+		<offset>28</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>2</real_upper>
+		<fromecu_mult>0.006802721</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"Lambda 1" is the Lambda reading from O2 sensor 1.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Lambda 2</dlog_gui_name>
+		<dlog_field_name>Lambda 2</dlog_field_name>
+		<internal_names>lambda2</internal_names>
+		<offset>30</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>2</real_upper>
+		<fromecu_mult>0.006802721</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"Lambda 2" is the Lambda reading from O2 sensor 2.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Knock (v)</dlog_gui_name>
+		<dlog_field_name>knockRet</dlog_field_name>
+		<internal_names>knock</internal_names>
+		<offset>32</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>5</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"Knock" is the amount of spark retard due to knocking</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO Corr</dlog_gui_name>
+		<dlog_field_name>Gego</dlog_field_name>
+		<internal_names>egocorr</internal_names>
+		<offset>34</offset>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"EGO Corr" is the AVERAGED EGO correction factor for both injectors/O2 sensors</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>((egocorr1/10)+(egocorr2/10))/2</fromecu_conv_expr>
+		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>egocorr1,egocorr2</expr_symbols>
+		<egocorr1_offset>34</egocorr1_offset>
+		<egocorr1_size>_S16_</egocorr1_size>
+		<egocorr2_offset>36</egocorr2_offset>
+		<egocorr2_size>_S16_</egocorr2_size>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO Corr 1</dlog_gui_name>
+		<dlog_field_name>Gego1</dlog_field_name>
+		<internal_names>egocorr1</internal_names>
+		<offset>34</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"EGO Corr 1" is the EGO correction factor for injector1 and O2 sensor 1</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EGO Corr 2</dlog_gui_name>
+		<dlog_field_name>Gego2</dlog_field_name>
+		<internal_names>egocorr2</internal_names>
+		<offset>36</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"EGO Corr 2" is the EGO correction factor for injector2 and O2 sensor 2</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AIR Corr</dlog_gui_name>
+		<dlog_field_name>Gair</dlog_field_name>
+		<internal_names>aircorr</internal_names>
+		<offset>38</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"AIR Corr" is the AIR temp correction factor for both channels</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Warm Corr</dlog_gui_name>
+		<dlog_field_name>Gwarm</dlog_field_name>
+		<internal_names>warmcorr</internal_names>
+		<offset>40</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"Warm Corr" is the current amount of warmup correction (%).</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Accel Enr.</dlog_gui_name>
+		<dlog_field_name>TPSacc</dlog_field_name>
+		<internal_names>tpsaccel</internal_names>
+		<offset>42</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"Accel Enr." is the current amount of acceleration enrichment (ms).</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Fuel Cut.</dlog_gui_name>
+		<dlog_field_name>tpsfuelcut</dlog_field_name>
+		<internal_names>tpsfuelcut</internal_names>
+		<offset>44</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<tooltip>"Fuel Cut" is the current amount of fuel cut (%).</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Baro Corr.</dlog_gui_name>
+		<dlog_field_name>Gbaro</dlog_field_name>
+		<internal_names>barocorr</internal_names>
+		<offset>46</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"Barr Corr" is the current amount of Baro Correction (%).</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>GammaE</dlog_gui_name>
+		<dlog_field_name>Gammae</dlog_field_name>
+		<internal_names>gammae</internal_names>
+		<offset>48</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"Gammae" is the sum of all enrichments.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>VE 1</dlog_gui_name>
+		<dlog_field_name>Gve</dlog_field_name>
+		<internal_names>vecurr1</internal_names>
+		<offset>50</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"VE 1" is the current VE for injector channel 1.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>VE 2</dlog_gui_name>
+		<dlog_field_name>Gve2</dlog_field_name>
+		<internal_names>vecurr2</internal_names>
+		<offset>52</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"VE 2" is the current VE for injector channel 1.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>IAC Step</dlog_gui_name>
+		<dlog_field_name>IACstep</dlog_field_name>
+		<internal_names>iacstep</internal_names>
+		<offset>54</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<tooltip>"IAC Step" is the current position for the Stepper IAC (steps)</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Idle DC</dlog_gui_name>
+		<dlog_field_name>PWM Idle Duty</dlog_field_name>
+		<internal_names>idledc</internal_names>
+		<offset>54</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<fromecu_mult>0.39063</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"IdleDC" is the current PWM idle dutycycle.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Cold Adv (°)</dlog_gui_name>
+		<dlog_field_name>ColdAdv</dlog_field_name>
+		<internal_names>coldadv</internal_names>
+		<offset>56</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"Cold Adv (°)" is the current Cold spark advance addon.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>tpsDOT (%/s)</dlog_gui_name>
+		<dlog_field_name>tpsDOT</dlog_field_name>
+		<internal_names>tpsdot</internal_names>
+		<offset>58</offset>
+		<size>_S16_</size>
+		<real_lower>-1000</real_lower>
+		<real_upper>1000</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"TPSdot" is the rate of change of the TPS signal.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>mapDOT (kPa/s)</dlog_gui_name>
+		<dlog_field_name>mapDOT</dlog_field_name>
+		<internal_names>mapdot</internal_names>
+		<offset>60</offset>
+		<size>_S16_</size>
+		<real_lower>-1000</real_lower>
+		<real_upper>1000</real_upper>
+		<tooltip>"MAPdot" is the rate of change of the MAP signal.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Dwell</dlog_gui_name>
+		<dlog_field_name>Dwell</dlog_field_name>
+		<internal_names>dwell</internal_names>
+		<offset>62</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<fromecu_mult>0.0666</fromecu_mult>
+		<precision>2</precision>
+		<tooltip>"dwell" is a the amount of time the ignitin coil is energized in ms.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>mafmap</dlog_gui_name>
+		<dlog_field_name>MAFMAP</dlog_field_name>
+		<internal_names>mafmap</internal_names>
+		<offset>64</offset>
+		<size>_S16_</size>
+		<real_lower>-32767</real_lower>
+		<real_upper>32768</real_upper>
+		<precision>0</precision>
+		<tooltip>"mafmap" is an not documented</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>fuelload</dlog_gui_name>
+		<dlog_field_name>Load</dlog_field_name>
+		<internal_names>fuelload</internal_names>
+		<offset>66</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>16</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"fuelload" is an unknown quantitiy</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Fuel Corr.</dlog_gui_name>
+		<dlog_field_name>E85FuelCorr</dlog_field_name>
+		<internal_names>fuelcorr</internal_names>
+		<offset>68</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"Fuel Corr." is correction factor based on how mcuh alcohol is in the fuel.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Port Status</dlog_gui_name>
+		<dlog_field_name>portstatus</dlog_field_name>
+		<internal_names>portstatus</internal_names>
+		<offset>70</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"Port Status" is a bitfield showing the status of ports 0-6</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Knock Ret.</dlog_gui_name>
+		<dlog_field_name>knockRet</dlog_field_name>
+		<internal_names>knockretard</internal_names>
+		<offset>71</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>26</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"Knock Ret." is the current amount of spark retard due to knock.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EAEFuelCorr1</dlog_gui_name>
+		<dlog_field_name>EAE1 %</dlog_field_name>
+		<internal_names>EAEFuelCorr1</internal_names>
+		<offset>72</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"EAEFuelCorr1" is the current Ehnhanced Accel Enrich fuel correction for injector channel 1</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>O<sub>2</sub> Volts 1</dlog_gui_name>
+		<dlog_field_name>egovolt1</dlog_field_name>
+		<internal_names>o2volt1</internal_names>
+		<offset>74</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>5</real_upper>
+		<fromecu_mult>0.01</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"EGO Volts 1" is the current O2 sensor voltage for sensor 1</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>O<sub>2</sub> Volts 2 (ms2)</dlog_gui_name>
+		<dlog_field_name>egovolt2</dlog_field_name>
+		<internal_names>o2volt2</internal_names>
+		<offset>76</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>5</real_upper>
+		<fromecu_mult>0.01</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"EGO Volts 2" is the current O2 sensor voltage for sensor 2</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>status1</dlog_gui_name>
+		<dlog_field_name>status1</dlog_field_name>
+		<internal_names>status1</internal_names>
+		<offset>78</offset>
+		<size>_U08_</size>
+		<tooltip>"status1" is a status register for debug/info purposes</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>status2</dlog_gui_name>
+		<dlog_field_name>status2</dlog_field_name>
+		<internal_names>status2</internal_names>
+		<offset>79</offset>
+		<size>_U08_</size>
+		<tooltip>"status2" is a status register for debug/info purposes</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>status3</dlog_gui_name>
+		<dlog_field_name>status3</dlog_field_name>
+		<internal_names>status3</internal_names>
+		<offset>80</offset>
+		<size>_U08_</size>
+		<tooltip>"status3" is a status register for debug/info purposes</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>status4</dlog_gui_name>
+		<dlog_field_name>status4</dlog_field_name>
+		<internal_names>status4</internal_names>
+		<offset>81</offset>
+		<size>_U08_</size>
+		<tooltip>"status4" is a status register for debug/info purposes</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>looptime</dlog_gui_name>
+		<dlog_field_name>looptime</dlog_field_name>
+		<internal_names>looptime</internal_names>
+		<offset>82</offset>
+		<size>_U16_</size>
+		<real_upper>43693</real_upper>
+		<fromecu_mult>0.6667</fromecu_mult>
+		<tooltip>"looptime" is the total time for the mainloop to process in uSec.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>status5</dlog_gui_name>
+		<dlog_field_name>status5</dlog_field_name>
+		<internal_names>status5</internal_names>
+		<offset>84</offset>
+		<size>_U16_</size>
+		<tooltip>"status5" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>tpsADC</dlog_gui_name>
+		<dlog_field_name>tpsADC</dlog_field_name>
+		<internal_names>tpsADC</internal_names>
+		<offset>86</offset>
+		<size>_U16_</size>
+		<real_upper>1024</real_upper>
+		<tooltip>"tpsADC" is the raw TPS signal ADC value used for the calibrator.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>fuelload2</dlog_gui_name>
+		<dlog_field_name>Secondary Load</dlog_field_name>
+		<internal_names>fuelload2</internal_names>
+		<offset>88</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"fuelload2" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ignload</dlog_gui_name>
+		<dlog_field_name>Ign Load</dlog_field_name>
+		<internal_names>ignload</internal_names>
+		<offset>90</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"ignload" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ignload2</dlog_gui_name>
+		<dlog_field_name>Secondary Ign Load</dlog_field_name>
+		<internal_names>ignload2</internal_names>
+		<offset>92</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"ignload2" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>synccnt</dlog_gui_name>
+		<dlog_field_name>Lost sync count</dlog_field_name>
+		<internal_names>synccnt</internal_names>
+		<offset>94</offset>
+		<size>_U08_</size>
+		<tooltip>"synccnt" is something to due with wheel decode...</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>timing_err</dlog_gui_name>
+		<dlog_field_name>timing err%</dlog_field_name>
+		<internal_names>timing_err</internal_names>
+		<offset>95</offset>
+		<size>_U08_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"timing_err" is the accuracy of the timing predictor</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>deltaT</dlog_gui_name>
+		<dlog_field_name>deltaT</dlog_field_name>
+		<internal_names>deltaT</internal_names>
+		<offset>96</offset>
+		<size>_S32_</size>
+		<tooltip>"deltaT" is the normalized time between trigger pulses</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>wallfuel1</dlog_gui_name>
+		<dlog_field_name>WallFuel1</dlog_field_name>
+		<internal_names>wallfuel1</internal_names>
+		<offset>100</offset>
+		<size>_U32_</size>
+		<tooltip>"wallfuel1" is something for EAE in uSecs.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioadc0</dlog_gui_name>
+		<dlog_field_name>gpioadc0</dlog_field_name>
+		<internal_names>gpioadc0</internal_names>
+		<offset>104</offset>
+		<size>_U16_</size>
+		<tooltip>"gpioadc0" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioadc1</dlog_gui_name>
+		<dlog_field_name>gpioadc1</dlog_field_name>
+		<internal_names>gpioadc1</internal_names>
+		<offset>106</offset>
+		<size>_U16_</size>
+		<tooltip>"gpioadc1" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioadc2</dlog_gui_name>
+		<dlog_field_name>gpioadc2</dlog_field_name>
+		<internal_names>gpioadc2</internal_names>
+		<offset>108</offset>
+		<size>_U16_</size>
+		<tooltip>"gpioadc2" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioadc3</dlog_gui_name>
+		<dlog_field_name>gpioadc3</dlog_field_name>
+		<internal_names>gpioadc3</internal_names>
+		<offset>110</offset>
+		<size>_U16_</size>
+		<tooltip>"gpioadc3" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioadc4</dlog_gui_name>
+		<dlog_field_name>gpioadc4</dlog_field_name>
+		<internal_names>gpioadc4</internal_names>
+		<offset>112</offset>
+		<size>_U16_</size>
+		<tooltip>"gpioadc4" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioadc5</dlog_gui_name>
+		<dlog_field_name>gpioadc5</dlog_field_name>
+		<internal_names>gpioadc5</internal_names>
+		<offset>114</offset>
+		<size>_U16_</size>
+		<tooltip>"gpioadc1" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioadc6</dlog_gui_name>
+		<dlog_field_name>gpioadc6</dlog_field_name>
+		<internal_names>gpioadc6</internal_names>
+		<offset>116</offset>
+		<size>_U16_</size>
+		<tooltip>"gpioadc6" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioadc7</dlog_gui_name>
+		<dlog_field_name>gpioadc7</dlog_field_name>
+		<internal_names>gpioadc7</internal_names>
+		<offset>118</offset>
+		<size>_U16_</size>
+		<tooltip>"gpioadc7" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpiopwmin0</dlog_gui_name>
+		<dlog_field_name>gpiopwmin0</dlog_field_name>
+		<internal_names>gpiopwmin0</internal_names>
+		<offset>120</offset>
+		<size>_U16_</size>
+		<tooltip>"gpiopwmin0" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpiopwmin1</dlog_gui_name>
+		<dlog_field_name>gpiopwmin1</dlog_field_name>
+		<internal_names>gpiopwmin1</internal_names>
+		<offset>122</offset>
+		<size>_U16_</size>
+		<tooltip>"gpiopwmin1" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpiopwmin2</dlog_gui_name>
+		<dlog_field_name>gpiopwmin2</dlog_field_name>
+		<internal_names>gpiopwmin2</internal_names>
+		<offset>124</offset>
+		<size>_U16_</size>
+		<tooltip>"gpiopwmin2" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpiopwmin3</dlog_gui_name>
+		<dlog_field_name>gpiopwmin3</dlog_field_name>
+		<internal_names>gpiopwmin3</internal_names>
+		<offset>126</offset>
+		<size>_U16_</size>
+		<tooltip>"gpiopwmin3" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>adc6</dlog_gui_name>
+		<dlog_field_name>adc6</dlog_field_name>
+		<internal_names>adc6</internal_names>
+		<offset>128</offset>
+		<size>_U16_</size>
+		<tooltip>"adc6" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>adc7</dlog_gui_name>
+		<dlog_field_name>adc7</dlog_field_name>
+		<internal_names>adc7</internal_names>
+		<offset>130</offset>
+		<size>_U16_</size>
+		<tooltip>"adc7" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>wallfuel2</dlog_gui_name>
+		<dlog_field_name>WallFuel2</dlog_field_name>
+		<internal_names>wallfuel2</internal_names>
+		<offset>132</offset>
+		<size>_U32_</size>
+		<tooltip>"wallfuel2" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>EAEFuelCorr2</dlog_gui_name>
+		<dlog_field_name>EAE2 %</dlog_field_name>
+		<internal_names>EAEFuelCorr2</internal_names>
+		<offset>136</offset>
+		<size>_U16_</size>
+		<tooltip>"EAEFuelCorr2" is EAE Fuel correction for inj channel 2 in uSec.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>boostduty</dlog_gui_name>
+		<dlog_field_name>Boost Duty</dlog_field_name>
+		<internal_names>boostduty</internal_names>
+		<offset>138</offset>
+		<size>_U08_</size>
+		<tooltip>"boostduty" is pwm boost output duty cycle.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>syncreason</dlog_gui_name>
+		<dlog_field_name>Lost sync reason</dlog_field_name>
+		<internal_names>syncreason</internal_names>
+		<offset>139</offset>
+		<size>_U08_</size>
+		<tooltip>"syncreason" is undefined.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>user0</dlog_gui_name>
+		<dlog_field_name>user0</dlog_field_name>
+		<internal_names>user0</internal_names>
+		<offset>140</offset>
+		<size>_U08_</size>
+		<tooltip>"user0" is an undefined</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>inj_adv1</dlog_gui_name>
+		<dlog_field_name>inj_adv1</dlog_field_name>
+		<internal_names>inj_adv1</internal_names>
+		<offset>142</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"inj_adv1" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>inj_adv2</dlog_gui_name>
+		<dlog_field_name>inj_adv2</dlog_field_name>
+		<internal_names>inj_adv2</internal_names>
+		<offset>144</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"inj_adv2" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>PW 3 (ms.)</dlog_gui_name>
+		<dlog_field_name>PW3</dlog_field_name>
+		<internal_names>pw3</internal_names>
+		<offset>146</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65</real_upper>
+		<fromecu_mult>0.000666</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"PW3" is the pulsewidth for injector channel 3. Resolution of 1 us.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>PW 4 (ms.)</dlog_gui_name>
+		<dlog_field_name>PW4</dlog_field_name>
+		<internal_names>pw4</internal_names>
+		<offset>148</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>65</real_upper>
+		<fromecu_mult>0.000666</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"PW4" is the pulsewidth for injector channel 4. Resolution of 1 us.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vetrim1curr</dlog_gui_name>
+		<dlog_field_name>vetrim1curr</dlog_field_name>
+		<internal_names>vetrim1curr</internal_names>
+		<offset>150</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.00976562500</fromecu_mult>
+		<tooltip>"vetrim1curr" is the current trim value associated with injector channel 1</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vetrim2curr</dlog_gui_name>
+		<dlog_field_name>vetrim2curr</dlog_field_name>
+		<internal_names>vetrim2curr</internal_names>
+		<offset>152</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.00976562500</fromecu_mult>
+		<tooltip>"vetrim2curr" is the current trim value associated with injector channel 2</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vetrim3curr</dlog_gui_name>
+		<dlog_field_name>vetrim3curr</dlog_field_name>
+		<internal_names>vetrim3curr</internal_names>
+		<offset>154</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.00976562500</fromecu_mult>
+		<tooltip>"vetrim3curr" is the current trim value associated with injector channel 3</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vetrim4curr</dlog_gui_name>
+		<dlog_field_name>vetrim4curr</dlog_field_name>
+		<internal_names>vetrim4curr</internal_names>
+		<offset>156</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.00976562500</fromecu_mult>
+		<tooltip>"vetrim4curr" is the current trim value associated with injector channel 4</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>maf</dlog_gui_name>
+		<dlog_field_name>MAF</dlog_field_name>
+		<internal_names>maf</internal_names>
+		<offset>158</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.01</fromecu_mult>
+		<tooltip>"maf" is the MAF sensor flow rate in grams/sec</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>eaeload</dlog_gui_name>
+		<dlog_field_name>eaeload</dlog_field_name>
+		<internal_names>eaeload</internal_names>
+		<offset>160</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"eaeload" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>afrload</dlog_gui_name>
+		<dlog_field_name>afrload</dlog_field_name>
+		<internal_names>afrload</internal_names>
+		<offset>162</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"afrload" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>rpmdot</dlog_gui_name>
+		<dlog_field_name>rpmdot</dlog_field_name>
+		<internal_names>rpmdot</internal_names>
+		<offset>164</offset>
+		<size>_S16_</size>
+		<fromecu_mult>10</fromecu_mult>
+		<tooltip>"rpmdot" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioport0</dlog_gui_name>
+		<dlog_field_name>gpioport0</dlog_field_name>
+		<internal_names>gpioport0</internal_names>
+		<offset>166</offset>
+		<size>_U08_</size>
+		<tooltip>"gpioport0" is undefined</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioport1</dlog_gui_name>
+		<dlog_field_name>gpioport1</dlog_field_name>
+		<internal_names>gpioport1</internal_names>
+		<offset>167</offset>
+		<size>_U08_</size>
+		<tooltip>"gpioport1" is undefined</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>gpioport2</dlog_gui_name>
+		<dlog_field_name>gpioport2</dlog_field_name>
+		<internal_names>gpioport2</internal_names>
+		<offset>168</offset>
+		<size>_U08_</size>
+		<tooltip>"gpioport2" is undefined</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>AccDecEnrich</dlog_gui_name>
+		<dlog_field_name>TPSacc</dlog_field_name>
+		<internal_names>accdecenrich</internal_names>
+		<offset>42</offset>
+		<size>_S16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"AccDecEnrich" Is the current accel/decel enrichment</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>(accelEnrich/10) + (step(tpsden - 1) * step(1 - tpsden) * tpsfuelcut + (1 - step(tpsden - 1) * step(1 - tpsden)) * 100)</fromecu_conv_expr>
+		<expr_types>_RAW_VAR_,_RAW_VAR_,_RAW_EMB_BIT_</expr_types>
+		<expr_symbols>accelEnrich,tpsfuelcut,tpsden</expr_symbols>
+		<accelEnrich_offset>42</accelEnrich_offset>
+		<accelEnrich_size>_S16_</accelEnrich_size>
+		<tpsfuelcut_offset>44</tpsfuelcut_offset>
+		<tpsfuelcut_size>_S16_</tpsfuelcut_size>
+		<tpsden_offset>11</tpsden_offset>
+		<tpsden_bitmask>32</tpsden_bitmask>
+	</derived>
+	<derived>
+		<dlog_gui_name>rpm100</dlog_gui_name>
+		<dlog_field_name>rpm100</dlog_field_name>
+		<internal_names>rpm100</internal_names>
+		<offset>6</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.01</fromecu_mult>
+		<tooltip>"rpm100" is RPM/100</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Dutycycle 1</dlog_gui_name>
+		<dlog_field_name>DutyCycle1</dlog_field_name>
+		<internal_names>dcycle1</internal_names>
+		<offset>2</offset>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<precision>2</precision>
+		<tooltip>"Dcycle1" is the injector Duty cycle for injector channel 1.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>100*(cyls/divider)/(alternate+1)*(raw_pw1*0.000666)/(60000/raw_rpm*(2.0-stroke))</fromecu_conv_expr>
+		<expr_types>_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_</expr_types>
+		<expr_symbols>cyls,divider,alternate,raw_pw1,stroke,raw_rpm</expr_symbols>
+		<cyls_page>0</cyls_page>
+		<cyls_offset>0</cyls_offset>
+		<cyls_bitmask>15</cyls_bitmask>
+		<divider_page>0</divider_page>
+		<divider_offset>610</divider_offset>
+		<divider_size>_U08_</divider_size>
+		<alternate_page>0</alternate_page>
+		<alternate_offset>611</alternate_offset>
+		<alternate_bitmask>1</alternate_bitmask>
+		<raw_pw1_offset>2</raw_pw1_offset>
+		<raw_pw1_size>_U16_</raw_pw1_size>
+		<stroke_page>0</stroke_page>
+		<stroke_offset>617</stroke_offset>
+		<stroke_bitmask>1</stroke_bitmask>
+		<raw_rpm_offset>6</raw_rpm_offset>
+		<raw_rpm_size>_U16_</raw_rpm_size>
+	</derived>
+	<derived>
+		<dlog_gui_name>Dutycycle 2</dlog_gui_name>
+		<dlog_field_name>DutyCycle2</dlog_field_name>
+		<internal_names>dcycle2</internal_names>
+		<offset>4</offset>
+		<real_lower>0</real_lower>
+		<real_upper>100</real_upper>
+		<precision>2</precision>
+		<tooltip>"Dcycle2" is the injector Duty cycle for injector channel 2.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>100*(cyls/divider)/(alternate+1)*(raw_pw2*0.000666)/(60000/raw_rpm*(2.0-stroke))</fromecu_conv_expr>
+		<expr_types>_ECU_EMB_BIT_,_ECU_VAR_,_ECU_EMB_BIT_,_RAW_VAR_,_ECU_EMB_BIT_,_RAW_VAR_</expr_types>
+		<expr_symbols>cyls,divider,alternate,raw_pw2,stroke,raw_rpm</expr_symbols>
+		<cyls_page>0</cyls_page>
+		<cyls_offset>0</cyls_offset>
+		<cyls_bitmask>15</cyls_bitmask>
+		<divider_page>0</divider_page>
+		<divider_offset>610</divider_offset>
+		<divider_size>_U08_</divider_size>
+		<alternate_page>0</alternate_page>
+		<alternate_offset>611</alternate_offset>
+		<alternate_bitmask>1</alternate_bitmask>
+		<raw_pw2_offset>4</raw_pw2_offset>
+		<raw_pw2_size>_U16_</raw_pw2_size>
+		<stroke_page>0</stroke_page>
+		<stroke_offset>617</stroke_offset>
+		<stroke_bitmask>1</stroke_bitmask>
+		<raw_rpm_offset>6</raw_rpm_offset>
+		<raw_rpm_size>_U16_</raw_rpm_size>
+	</derived>
+	<derived>
+		<dlog_gui_name>AFR Error Left</dlog_gui_name>
+		<dlog_field_name>AfrErrL</dlog_field_name>
+		<internal_names>afr_err_l</internal_names>
+		<offset>12</offset>
+		<real_lower>-25</real_lower>
+		<real_upper>25</real_upper>
+		<precision>1</precision>
+		<tooltip>"AFR Error Left" is the difference between target AFR and actual AFR for the first O2 channel</tooltip>
+		<log_by_default>FALSE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>(afr/10)-(afrtgt/10)</fromecu_conv_expr>
+		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>afr,afrtgt</expr_symbols>
+		<afr_offset>28</afr_offset>
+		<afr_size>_S16_</afr_size>
+		<afrtgt_offset>12</afrtgt_offset>
+		<afrtgt_size>_U08_</afrtgt_size>
+	</derived>
+	<derived>
+		<dlog_gui_name>AFR Error right</dlog_gui_name>
+		<dlog_field_name>AfrErrR</dlog_field_name>
+		<internal_names>afr_err_r</internal_names>
+		<offset>13</offset>
+		<real_lower>-25</real_lower>
+		<real_upper>25</real_upper>
+		<precision>1</precision>
+		<tooltip>"AFR Error Right" is the difference between target AFR and actual AFR for the second O2 channel.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>(afr/10)-(afrtgt/10)</fromecu_conv_expr>
+		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>afr,afrtgt</expr_symbols>
+		<afr_offset>30</afr_offset>
+		<afr_size>_S16_</afr_size>
+		<afrtgt_offset>13</afrtgt_offset>
+		<afrtgt_size>_U08_</afrtgt_size>
+	</derived>
+</rtv_map>

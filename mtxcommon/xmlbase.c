@@ -180,21 +180,13 @@ void generic_xml_gchar_import(xmlNode *node, gpointer dest)
 	val = (gchar **)dest;
 
 	if (!node->children) /* EMPTY node, thus, clear the var on the gauge */
-	{
-		if (*val)
-			g_free(*val);
-		*val = g_strdup("");
 		return;
-	}
 	if (!(node->children->type == XML_TEXT_NODE))
 		return;
 
-	if (*val)
-		g_free(*val);
 	if (node->children->content)
 		*val = g_strdup((gchar *)node->children->content);
-	else
-		*val = g_strdup("");
+	return;
 }
 
 
@@ -341,4 +333,158 @@ gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 		return FALSE;
 	else
 		return TRUE;
+}
+
+
+/*!
+  \brief Searches for an Integer starting from an XML node and 
+  stores in the dest var
+  \param node is the pointer to the XML node
+  \param name is the key to find
+  \param dest is the pointer to the place to store the read value
+  */
+gboolean generic_xml_gint_find(xmlNode *node, const gchar *name, gpointer dest)
+{
+	gint tmpi;
+	gint *val = NULL;
+	xmlNode *cur_node = NULL;
+	gboolean found = FALSE;
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+
+	val = (gint *)dest;
+
+	if (!node->children)
+	{
+		printf("ERROR, generic_xml_gint_find!!\n");
+		return FALSE;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			{
+				generic_xml_gint_import(cur_node,val);
+				found = TRUE;
+			}
+		}
+		cur_node = cur_node->next;
+	}
+	return found;
+}
+
+
+/*!
+  \brief Searches for an gboolean starting from an XML node and 
+  stores in the dest var
+  \param node is the pointer to the XML node
+  \param name is the key to find
+  \param dest is the pointer to the place to store the read value
+  */
+gboolean generic_xml_gboolean_find(xmlNode *node, const gchar *name, gpointer dest)
+{
+	gboolean *val = NULL;
+	xmlNode *cur_node = NULL;
+	gboolean found = FALSE;
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+
+	val = (gboolean *)dest;
+
+	if (!node->children)
+	{
+		printf("ERROR, generic_xml_gboolean_find!!\n");
+		return FALSE;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			{
+				generic_xml_gboolean_import(cur_node,val);
+				found = TRUE;
+			}
+		}
+		cur_node = cur_node->next;
+	}
+	return found;
+}
+
+
+/*!
+  \brief Searches for a gfloat starting from an XML node and 
+  stores in the dest var
+  \param node is the pointer to the XML node
+  \param name is the key to find
+  \param dest is the pointer to the place to store the read value
+  */
+gboolean generic_xml_gfloat_find(xmlNode *node, const gchar *name, gpointer dest)
+{
+	gfloat *val = NULL;
+	xmlNode *cur_node = NULL;
+	gboolean found = FALSE;
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+
+	val = (gfloat *)dest;
+
+	if (!node->children)
+	{
+		printf("ERROR, generic_xml_gfloat_find!!\n");
+		return FALSE;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			{
+				generic_xml_gfloat_import(cur_node,val);
+				found = TRUE;
+			}
+		}
+		cur_node = cur_node->next;
+	}
+	return found;
+}
+
+
+/*!
+  \brief Searches for an Integer starting from an XML node and 
+  stores in the dest var
+  \param node is the pointer to the XML node
+  \param name is the key to find
+  \param dest is the pointer to the place to store the read value
+  */
+gboolean generic_xml_gchar_find(xmlNode *node, const gchar *name, gpointer dest)
+{
+	xmlNode *cur_node = NULL;
+	gboolean found = FALSE;
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+
+	if (!node->children)
+	{
+		printf("ERROR, generic_xml_gchar_find!!\n");
+		return FALSE;
+	}
+	cur_node = node->children;
+	while (cur_node->next)
+	{
+		if (cur_node->type == XML_ELEMENT_NODE)
+		{
+			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			{
+				generic_xml_gchar_import(cur_node,dest);
+				found = TRUE;
+			}
+		}
+		cur_node = cur_node->next;
+	}
+	return found;
 }

@@ -270,6 +270,7 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 	}
 	if ((int_name) && (source))
 		rt_text = create_rtt(int_name,source,TRUE);
+	g_return_if_fail(rt_text);
 	if (thresh_array->len > 0)
 		rt_text->thresholds = thresh_array;
 	else
@@ -307,7 +308,6 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 	gconstpointer *object = NULL;
 
 	rtv_map = DATA_GET(global_data,"rtv_map");
-
 
 	if (!rtv_map)
 	{

@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<rtv_map>
+	<api>
+		<major>1</major>
+		<minor>7</minor>
+	</api>
+	<derived>
+		<dlog_gui_name>HR Clock</dlog_gui_name>
+		<dlog_field_name>Time</dlog_field_name>
+		<internal_names>hr_clock</internal_names>
+		<offset>0</offset>
+		<real_lower>0</real_lower>
+		<real_upper>2147483648</real_upper>
+		<precision>3</precision>
+		<tooltip>"HR Clock" is a High resolution clock recorded to the logfile by this pc when data arrives, resolution of 1 millisecond.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<special>hr_clock</special>
+	</derived>
+	<derived>
+		<dlog_gui_name>JimStim Clock</dlog_gui_name>
+		<dlog_field_name>SecL</dlog_field_name>
+		<internal_names>raw_secl</internal_names>
+		<offset>0</offset>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"JimStim Clock" is the  clock returned by the Stim, this runs from 0-255 and recylcles indefinitely, resolution 1 second.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>RPM</dlog_gui_name>
+		<dlog_field_name>RPM</dlog_field_name>
+		<internal_names>rpm</internal_names>
+		<offset>1</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25500</real_upper>
+		<tooltip>"RPM" is the Engine RPM in more common units (actual RPM, not rpm/100), resolution of 1rpm with this firmware.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Mode</dlog_gui_name>
+		<dlog_field_name>Mode</dlog_field_name>
+		<internal_names>modebit</internal_names>
+		<offset>3</offset>
+		<tooltip>"Mode" is a bitfield designating the active wheel mode</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>Scaling</dlog_gui_name>
+		<dlog_field_name>Scaling</dlog_field_name>
+		<internal_names>rtscale</internal_names>
+		<offset>4</offset>
+		<size>_U16_</size>
+		<tooltip>"Scaling" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>CoarseADC</dlog_gui_name>
+		<dlog_field_name>CoarseADC</dlog_field_name>
+		<internal_names>rtcoarse</internal_names>
+		<offset>6</offset>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"CoarseADC" is the reading from the coarse RPM ADC pot in ADC counts</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>FineADC</dlog_gui_name>
+		<dlog_field_name>FineADC</dlog_field_name>
+		<internal_names>rtfine</internal_names>
+		<offset>7</offset>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<tooltip>"FineADC" is the reading from the fine RPM ADC pot in ADC counts</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>My RPM</dlog_gui_name>
+		<dlog_field_name>CommandedRPM</dlog_field_name>
+		<internal_names>myrpm</internal_names>
+		<offset>6</offset>
+		<tooltip>"My RPM" is the commanded RPM via the coarse/fine pots on the stim</tooltip>
+		<log_by_default>TRUE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>(((rtcoarse/4.0)*256.0) + (2*rtfine))</fromecu_conv_expr>
+		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>rtcoarse,rtfine</expr_symbols>
+		<rtcoarse_offset>6</rtcoarse_offset>
+		<rtcoarse_size>_U08_</rtcoarse_size>
+		<rtfine_offset>7</rtfine_offset>
+		<rtfine_size>_U08_</rtfine_size>
+	</derived>
+</rtv_map>
