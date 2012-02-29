@@ -222,6 +222,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
 	guchar *raw_data = incoming;
+	gchar * expr = NULL;
 	gint total_symbols = 0;
 	gint i = 0;
 	DataSize size = MTX_U08;
@@ -313,7 +314,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		evaluator = (void *)DATA_GET(object,"ul_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(DATA_GET(object,"fromecu_conv_expr"));
+			expr = DATA_GET(object,"fromecu_conv_expr");
+			evaluator = evaluator_create(expr);
 			DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 
 		}
@@ -323,7 +325,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		evaluator = (void *)DATA_GET(object,"dl_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(DATA_GET(object,"toecu_conv_expr"));
+			expr = DATA_GET(object,"toecu_conv_expr");
+			evaluator = evaluator_create(expr);
 			DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}

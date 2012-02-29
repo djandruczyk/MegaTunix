@@ -28,18 +28,18 @@
 #include <keyparser.h>
 #include <stdlib.h>
 #include <string.h>
+#include <xmlbase.h>
 
 /*!
-  \brief multi_expr_loader() is called when a "multi_expr_keys" key is found in
-  a realtimemap, and triggers the loading of al lthe keys/values that
+  \brief load_rtv_xml_multi_expressions() is called when a "multi_expr_keys" key is found in
+  a realtime map, and triggers the loading of al lthe keys/values that
   will allow megatunix to process a special variable that requires handling of
   multiple circumstances
   \param object is the place to store the retrieved data
-  \param cfgfile is the pointer to cfgfile that contains the data
-  \param section is the section to read the data from
+  \param node is the xml node that contains the data
   \see check_dependancies
   */
-G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *cfgfile,gchar * section)
+G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNode *node)
 {
 	gchar *tmpbuf = NULL;
 	gchar ** keys = NULL;
@@ -55,9 +55,9 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 	GHashTable *hash = NULL;
 	MultiExpr *multi = NULL;
 
-	if (!cfg_read_string(cfgfile,section,"multi_expr_keys",&tmpbuf))
+	if (!generic_xml_gchar_find(node,"multi_expr_keys",&tmpbuf))
 	{
-		MTXDBG(CRITICAL,_("Can't find \"multi_expr_keys\" in the \"[%s]\" section, exiting!\n"),section);
+		MTXDBG(CRITICAL,_("Can't find \"multi_expr_keys\" in the xml, exiting!\n"));
 		exit (-4);
 	}
 	else
@@ -66,9 +66,9 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		g_free(tmpbuf);
 	}
 
-	if (!cfg_read_string(cfgfile,section,"lower_limits",&tmpbuf))
+	if (!generic_xml_gchar_find(node,"lower_limits",&tmpbuf))
 	{
-		MTXDBG(CRITICAL,_("Key \"lower_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n"),section);
+		MTXDBG(CRITICAL,_("Key \"lower_limits\" NOT FOUND in xml, EXITING!!\n"));
 		exit (-4);
 	}
 	else
@@ -76,9 +76,9 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		l_limits = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
-	if (!cfg_read_string(cfgfile,section,"upper_limits",&tmpbuf))
+	if (!generic_xml_gchar_find(node,"upper_limits",&tmpbuf))
 	{
-		MTXDBG(CRITICAL,_("Key \"upper_limits\" NOT FOUND in section \"[%s]\", EXITING!!\n"),section);
+		MTXDBG(CRITICAL,_("Key \"upper_limits\" NOT FOUND in xml, EXITING!!\n"));
 		exit (-4);
 	}
 	else
@@ -86,9 +86,9 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		u_limits = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
-	if (!cfg_read_string(cfgfile,section,"multi_lookuptables",&tmpbuf))
+	if (!generic_xml_gchar_find(node,"multi_lookuptables",&tmpbuf))
 	{
-		MTXDBG(CRITICAL,_("Key \"multi_lookuptables\" NOT FOUND in section \"[%s]\", EXITING!!\n"),section);
+		MTXDBG(CRITICAL,_("Key \"multi_lookuptables\" NOT FOUND in xml, EXITING!!\n"));
 		exit (-4);
 	}
 	else
@@ -96,9 +96,9 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		ltables = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
-	if (!cfg_read_string(cfgfile,section,"fromecu_mults",&tmpbuf))
+	if (!generic_xml_gchar_find(node,"fromecu_mults",&tmpbuf))
 	{
-		MTXDBG(CRITICAL,_("Key \"fromecu_mults\" NOT FOUND in section \"[%s]\", EXITING!!\n"),section);
+		MTXDBG(CRITICAL,_("Key \"fromecu_mults\" NOT FOUND in xml, EXITING!!\n"));
 		exit (-4);
 	}
 	else
@@ -106,9 +106,9 @@ G_MODULE_EXPORT void load_multi_expressions(gconstpointer *object, ConfigFile *c
 		ul_mults = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
-	if (!cfg_read_string(cfgfile,section,"fromecu_adds",&tmpbuf))
+	if (!generic_xml_gchar_find(node,"fromecu_adds",&tmpbuf))
 	{
-		MTXDBG(CRITICAL,_("Key \"fromecu_adds\" NOT FOUND in section \"[%s]\", EXITING!!\n"),section);
+		MTXDBG(CRITICAL,_("Key \"fromecu_adds\" NOT FOUND in xml, EXITING!!\n"));
 		exit (-4);
 	}
 	else

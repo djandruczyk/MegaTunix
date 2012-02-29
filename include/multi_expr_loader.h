@@ -23,6 +23,7 @@
 
 #include <configfile.h>
 #include <gtk/gtk.h>
+#include <libxml/parser.h>
 
 
 typedef struct _MultiExpr MultiExpr;
@@ -63,7 +64,7 @@ struct _MultiSource
 
 
 /* Prototypes */
-void load_multi_expressions(gconstpointer *,ConfigFile * ,gchar * );
+void load_rtv_xml_multi_expressions(gconstpointer *, xmlNode *);
 void free_multi_expr(gpointer);
 void free_multi_source(gpointer);
 

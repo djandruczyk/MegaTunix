@@ -192,27 +192,17 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 	GArray *history = NULL;
 	gfloat *newfloat = NULL;
 	GList *list = NULL;
-	xmlNode *cur_node = NULL;
-	gint offset = 0;
-	gint precision = 0;
-	gfloat fromecu_mult = 1.0;
-	gfloat fromecu_add = 0.0;
+	gfloat tmpf = 0.0;
+	gint tmpi = 0;
+	gint offset = -1;
 	DataSize size = MTX_U08;
-	gint temp_dep = 0;
 	gint log_by_default = 0;
 	gchar **vector = NULL;
-	gchar * lookuptable = NULL;
-	gchar * real_lower = NULL;
-	gchar * real_upper = NULL;
 	gchar * tmpbuf = NULL;
-	gchar * special = NULL;
 	gchar * dlog_field_name = NULL;
 	gchar * dlog_gui_name = NULL;
 	gchar * internal_names = NULL;
 	gchar * tooltip = NULL;
-	gboolean has_deps = FALSE;
-	gboolean complex_expression = FALSE;
-	gboolean multiple_expression = FALSE;
 
 	MTXDBG(RTMLOADER,_("Load derived variable!\n"));
 	if (!node->children)
@@ -220,172 +210,137 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_derived_var, xml node is empty!!\n"));
 		return;
 	}
-	cur_node = node->children;
-	while (cur_node->next)
+	if (!generic_xml_gchar_find(node,"tooltip",&tooltip))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing Key value \"tooltip\" from RTV XML\n"));
+	if (!generic_xml_gchar_find(node,"dlog_gui_name",&dlog_gui_name))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing Key value \"dlog_gui_name\" from RTV XML\n"));
+	if (!generic_xml_gchar_find(node,"dlog_field_name",&dlog_field_name))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing Key value \"dlog_field_name\" from RTV XML\n"));
+	if (!generic_xml_gchar_find(node,"internal_names",&internal_names))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing Key value \"internal_names\" from RTV XML\n"));
+	if (!generic_xml_gint_find(node,"offset",&offset))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing Key value \"offset\" from RTV XML\n"));
+	if (!generic_xml_gboolean_find(node,"log_by_default",&log_by_default))
+		MTXDBG(RTMLOADER|CRITICAL,_("Missing Key value \"log_by_default\" from RTV XML\n"));
+	if (generic_xml_gchar_find(node,"size",&tmpbuf))
 	{
-		if (cur_node->type == XML_ELEMENT_NODE)
-		{
-			/* Minimum Required Fields */
-			if (g_strcasecmp((gchar *)cur_node->name,"tooltip") == 0)
-				generic_xml_gchar_import(cur_node,&tooltip);
-			if (g_strcasecmp((gchar *)cur_node->name,"dlog_gui_name") == 0)
-				generic_xml_gchar_import(cur_node,&dlog_gui_name);
-			if (g_strcasecmp((gchar *)cur_node->name,"dlog_field_name") == 0)
-				generic_xml_gchar_import(cur_node,&dlog_field_name);
-			if (g_strcasecmp((gchar *)cur_node->name,"internal_names") == 0)
-				generic_xml_gchar_import(cur_node,&internal_names);
-			if (g_strcasecmp((gchar *)cur_node->name,"real_upper") == 0)
-				generic_xml_gchar_import(cur_node,&real_upper);
-			if (g_strcasecmp((gchar *)cur_node->name,"real_lower") == 0)
-				generic_xml_gchar_import(cur_node,&real_lower);
-			if (g_strcasecmp((gchar *)cur_node->name,"offset") == 0)
-				generic_xml_gint_import(cur_node,&offset);
-			if (g_strcasecmp((gchar *)cur_node->name,"log_by_default") == 0)
-				generic_xml_gboolean_import(cur_node,&log_by_default);
-			if (g_strcasecmp((gchar *)cur_node->name,"size") == 0)
-			{
-				generic_xml_gchar_import(cur_node,&tmpbuf);
-				size = translate_string(tmpbuf);
-				g_free(tmpbuf);
-			}
-			/* Common, yet Optional Fields */
-			if (g_strcasecmp((gchar *)cur_node->name,"fromecu_mult") == 0)
-				generic_xml_gfloat_import(cur_node,&fromecu_mult);
-			if (g_strcasecmp((gchar *)cur_node->name,"fromecu_add") == 0)
-				generic_xml_gfloat_import(cur_node,&fromecu_add);
-			if (g_strcasecmp((gchar *)cur_node->name,"precision") == 0)
-				generic_xml_gint_import(cur_node,&precision);
-			if (g_strcasecmp((gchar *)cur_node->name,"temp_dep") == 0)
-				generic_xml_gboolean_import(cur_node,&temp_dep);
-			if (g_strcasecmp((gchar *)cur_node->name,"lookuptable") == 0)
-				generic_xml_gchar_import(cur_node,&lookuptable);
-			/* Hack for special values (HR clock?) */
-			if (g_strcasecmp((gchar *)cur_node->name,"special") == 0)
-				generic_xml_gchar_import(cur_node,&special);
-			if (g_strcasecmp((gchar *)cur_node->name,"depend_on") == 0)
-				has_deps = TRUE;
-			if (g_strcasecmp((gchar *)cur_node->name,"fromecu_complex") == 0)
-				complex_expression = TRUE;
-			if (g_strcasecmp((gchar *)cur_node->name,"multi_expr_keys") == 0)
-				multiple_expression = TRUE;
-		}
-		cur_node = cur_node->next;
-	}
-	/* Validate minimum needed */
-	if ((internal_names) && (dlog_gui_name) && (dlog_field_name) && \
-			(tooltip) && (offset >= 0) && \
-			(real_lower) && (real_upper))
-			
-	{
-		object = g_new0(gconstpointer, 1);
-		history = NULL;
-		/* Create object to hold all the data. (dynamically)*/
-		/* Index */
-		DATA_SET(object,"index",GINT_TO_POINTER(map->derived_total));
-		map->derived_total++;
-		/* History Array */
-		history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
-		/* bind history array to object for future retrieval */
-		DATA_SET(object,"history",(gpointer)history);
-
-		DATA_SET(object,"precision",GINT_TO_POINTER(precision));
-		DATA_SET(object,"offset",GINT_TO_POINTER(offset));
-		DATA_SET(object,"size",GINT_TO_POINTER(size));
-		DATA_SET(object,"temp_dep",GINT_TO_POINTER(temp_dep));
-		DATA_SET(object,"log_by_default",GINT_TO_POINTER(log_by_default));
-		if (internal_names)
-		{
-			DATA_SET_FULL(object,"internal_names",g_strdup(internal_names),g_free);
-			vector = g_strsplit(internal_names,",",-1); 
-			for(i=0;i<g_strv_length(vector);i++) 
-				g_hash_table_insert(map->rtv_hash,g_strdup(vector[i]),(gpointer)object);
-			g_strfreev(vector);
-			g_free(internal_names);
-		}
-		if (dlog_field_name)
-		{
-			DATA_SET_FULL(object,"dlog_field_name",g_strdup(dlog_field_name),g_free);
-			g_free(dlog_field_name);
-		}
-		/* Translate if needed  */
-		if (dlog_gui_name)
-		{
-			DATA_SET_FULL(object,"dlog_gui_name",g_strdup(_(dlog_gui_name)),g_free);
-			g_free(dlog_gui_name);
-		}
-		if (tooltip)
-		{
-			DATA_SET_FULL(object,"tooltip",g_strdup(_(tooltip)),g_free);
-			g_free(tooltip);
-		}
-		if (lookuptable)
-		{
-			DATA_SET_FULL(object,"lookuptable",g_strdup(lookuptable),g_free);
-			g_free(lookuptable);
-		}
-		/* Oddball one... */
-		if (special)
-		{
-			DATA_SET_FULL(object,"special",g_strdup(special),g_free);
-			g_free(special);
-		}
-		/* OPTIONAL PARAMETERS */
-		if (real_lower)
-		{
-			DATA_SET_FULL(object,"real_lower",g_strdup(real_lower),g_free);
-			g_free(real_lower);
-		}
-		if (real_upper)
-		{
-			DATA_SET_FULL(object,"real_upper",g_strdup(real_upper),g_free);
-			g_free(real_upper);
-		}
-		/* Floats need some special handling to avoid leaks */
-		newfloat = g_new0(gfloat, 1);
-		*newfloat = fromecu_mult;
-		DATA_SET_FULL(object,"fromecu_mult",(gpointer)newfloat,g_free);
-		newfloat = g_new0(gfloat, 1);
-		*newfloat = fromecu_add;
-		DATA_SET_FULL(object,"fromecu_add",(gpointer)newfloat,g_free);
-
-		if (has_deps)
-			load_rtv_xml_dependancies(object,node);
-		if (complex_expression)
-			load_rtv_xml_complex_expression(object,node);
-		if (multiple_expression)
-			printf("This rtv var has multiple_expressions!, not written yet\n");
-		list = g_hash_table_lookup(map->offset_hash,GINT_TO_POINTER(offset));
-		list = g_list_prepend(list,(gpointer)object);
-		g_hash_table_replace(map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
-		g_ptr_array_add(map->rtv_list,object);
+		size = translate_string(tmpbuf);
+		g_free(tmpbuf);
 	}
 	else
-		MTXDBG(RTMLOADER|CRITICAL,_("Derived variable doesn't meet the basic criteria!\n"));
+		size = MTX_U08;
+	if ((!internal_names) || (!dlog_gui_name) || (!dlog_field_name) || \
+			(!tooltip) || (offset < 0))
+	{
+		MTXDBG(RTMLOADER|CRITICAL,_("MINIMUMS for RTV var NOT MET, skipping this one!!\n"));
+		return;
+	}
+	object = g_new0(gconstpointer, 1);
+	history = NULL;
+	/* Create object to hold all the data. (dynamically)*/
+	/* Index */
+	DATA_SET(object,"index",GINT_TO_POINTER(map->derived_total));
+	map->derived_total++;
+	/* History Array */
+	history = g_array_sized_new(FALSE,TRUE,sizeof(gfloat),4096);
+	/* bind history array to object for future retrieval */
+	DATA_SET(object,"history",(gpointer)history);
+
+	DATA_SET_FULL(object,"tooltip",g_strdup(_(tooltip)),g_free);
+	g_free(tooltip);
+	DATA_SET_FULL(object,"dlog_gui_name",g_strdup(_(dlog_gui_name)),g_free);
+	g_free(dlog_gui_name);
+	DATA_SET_FULL(object,"dlog_field_name",g_strdup(dlog_field_name),g_free);
+	g_free(dlog_field_name);
+	DATA_SET_FULL(object,"internal_names",g_strdup(internal_names),g_free);
+	vector = g_strsplit(internal_names,",",-1); 
+	for(i=0;i<g_strv_length(vector);i++) 
+		g_hash_table_insert(map->rtv_hash,g_strdup(vector[i]),(gpointer)object);
+	g_strfreev(vector);
+	g_free(internal_names);
+	DATA_SET(object,"size",GINT_TO_POINTER(size));
+	DATA_SET(object,"offset",GINT_TO_POINTER(offset));
+	DATA_SET(object,"log_by_default",GINT_TO_POINTER(log_by_default));
+
+	if (generic_xml_gint_find(node,"precision",&tmpi))
+		DATA_SET(object,"precision",GINT_TO_POINTER(tmpi));
+	if (generic_xml_gboolean_find(node,"temp_dep",&tmpi))
+		DATA_SET(object,"temp_dep",GINT_TO_POINTER(tmpi));
+	if (generic_xml_gchar_find(node,"real_upper",&tmpbuf))
+	{
+		DATA_SET_FULL(object,"real_upper",g_strdup(tmpbuf),g_free);
+		g_free(tmpbuf);
+	}
+	if (generic_xml_gchar_find(node,"real_lower",&tmpbuf))
+	{
+		DATA_SET_FULL(object,"real_lower",g_strdup(tmpbuf),g_free);
+		g_free(tmpbuf);
+	}
+	if (generic_xml_gfloat_find(node,"fromecu_mult",&tmpf))
+	{
+		newfloat = g_new0(gfloat, 1);
+		*newfloat = tmpf;
+		DATA_SET_FULL(object,"fromecu_mult",(gpointer)newfloat,g_free);
+	}
+	if (generic_xml_gfloat_find(node,"fromecu_add",&tmpf))
+	{
+		newfloat = g_new0(gfloat, 1);
+		*newfloat = tmpf;
+		DATA_SET_FULL(object,"fromecu_add",(gpointer)newfloat,g_free);
+	}
+	if (generic_xml_gchar_find(node,"lookuptable",&tmpbuf))
+	{
+		DATA_SET_FULL(object,"lookuptable",g_strdup(tmpbuf),g_free);
+		g_free(tmpbuf);
+	}
+	if (generic_xml_gchar_find(node,"alt_lookuptable",&tmpbuf))
+	{
+		DATA_SET_FULL(object,"alt_lookuptable",g_strdup(tmpbuf),g_free);
+		g_free(tmpbuf);
+	}
+	if (generic_xml_gchar_find(node,"special",&tmpbuf))
+	{
+		DATA_SET_FULL(object,"special",g_strdup(tmpbuf),g_free);
+		g_free(tmpbuf);
+	}
+	if (generic_xml_gchar_find(node,"depend_on",&tmpbuf))
+	{
+		DATA_SET_FULL(object,"depend_on",g_strdup(tmpbuf),g_free);
+		g_free(tmpbuf);
+		load_rtv_xml_dependancies(object,node);
+	}
+	if (generic_xml_gboolean_find(node,"fromecu_complex",&tmpi))
+	{
+		DATA_SET(object,"fromecu_complex",GINT_TO_POINTER(tmpi));
+		load_rtv_xml_complex_expression(object,node);
+	}
+	if (generic_xml_gchar_find(node,"multi_expr_keys",&tmpbuf))
+	{
+		DATA_SET_FULL(object,"multi_expr_keys",g_strdup(tmpbuf),g_free);
+		g_free(tmpbuf);
+		load_rtv_xml_multi_expressions(object,node);
+	}
+
+	list = g_hash_table_lookup(map->offset_hash,GINT_TO_POINTER(offset));
+	list = g_list_prepend(list,(gpointer)object);
+	g_hash_table_replace(map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
+	g_ptr_array_add(map->rtv_list,object);
+
 }
 
 
 void load_rtv_xml_dependancies(gconstpointer *object, xmlNode *node)
 {
-	static void (*load_deps)(gconstpointer *,ConfigFile *,const gchar *, const gchar *) = NULL;
+	static void (*load_deps)(gconstpointer *,xmlNode *, const gchar *) = NULL;
 	if (!load_deps)
 		get_symbol("load_dependancies",(void *)&load_deps);
 	g_return_if_fail(load_deps);
 	load_deps(object,node,"depend_on");
 }
 
-/*
-void shit()
-{
-	static void (*load_deps)(gconstpointer *,ConfigFile *,const gchar *, const gchar *) = NULL;
-
-	get_symbol("load_dependancies",(void *)&load_deps);
-		load_deps(object,cfgfile,section,"depend_on");
-	load_multi_expressions(object,cfgfile,section);
-	*/
 
 void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 {
-	xmlNode *cur_node = NULL;
 	static void (*common_rtv_loader)(gconstpointer *,xmlNode *, gchar *, ComplexExprType);
 	static Firmware_Details *firmware = NULL;
 	gchar *tmpbuf = NULL;
@@ -430,6 +385,7 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 		return;
 	}
 	// Store the lists as well so DO NOT DEALLOCATE THEM!!! 
+	DATA_SET_FULL(object,"fromecu_conv_expr",g_strdup(fromecu_conv_expr),g_free);
 	DATA_SET_FULL(object,"expr_types",(gpointer)expr_types,g_free);
 	DATA_SET_FULL(object,"expr_symbols",(gpointer)expr_symbols,g_strfreev);
 	DATA_SET(object,"total_symbols",GINT_TO_POINTER(total_symbols));
@@ -439,11 +395,11 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 		switch ((ComplexExprType)expr_types[i])
 		{
 			case ECU_EMB_BIT:
-				printf("ECU_EMB_BIT loader not written yet\n");
+				// ECU generic (non RTV) variable bit(s)
 				common_rtv_loader(object,node,expr_symbols[i],ECU_EMB_BIT);
 				break;
 			case ECU_VAR:
-				printf("ECU_EMB_BIT loader not written yet\n");
+				// ECU generic (non RTV) variable
 				common_rtv_loader(object,node,expr_symbols[i],ECU_VAR);
 				break;
 			case RAW_VAR:
@@ -464,6 +420,7 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 				{
 					tmpi = translate_string(tmpbuf);
 					g_free(tmpbuf);
+					tmpbuf = NULL;
 				}
 				DATA_SET(object,name,GINT_TO_POINTER(tmpi));
 				g_free(name);

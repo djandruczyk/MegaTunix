@@ -401,19 +401,26 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
   */
 G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 {
+	static gboolean (*check_deps)(gconstpointer *);
+	static GHashTable *lookuptable_hash = NULL;
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gchar *table = NULL;
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
-	static gboolean (*check_deps)(gconstpointer *);
 
+	if (!lookuptable_hash)
+		lookuptable_hash = DATA_GET(global_data,"lookuptables");
 	if (!check_deps)
 		get_symbol("check_dependancies",(void *)&check_deps);
 
 	table = (gchar *)DATA_GET(object,"lookuptable");
 	alt_table = (gchar *)DATA_GET(object,"alt_lookuptable");
 	dep_obj = (gconstpointer *)DATA_GET(object,"dep_object");
+
+	g_return_val_if_fail(check_deps,0.0);
+	g_return_val_if_fail(lookuptable_hash,0.0);
+	g_return_val_if_fail(table,0.0);
 
 	/*
 	   if (dep_obj)
@@ -427,17 +434,20 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
+		{
 			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			return 0.0;
+		}
 	}
 	if (state)
 	{
 		/*printf("ALTERNATE\n");*/
-		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptable_hash,alt_table);	
 	}
 	else
 	{
 		/*printf("NORMAL\n");*/
-		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup(lookuptable_hash,table);	
 	}
 
 	if (!lookuptable)
@@ -471,6 +481,7 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
 	dep_obj = (gconstpointer *)OBJ_GET(object,"dep_object");
+
 
 	if (dep_obj) 
 	{
