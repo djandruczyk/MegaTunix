@@ -81,29 +81,28 @@ dandruczyk <at> gmail <dot> com
 
 ### System Requirements
 
-MegaTunix is developed on Ubuntu Linux, 
+MegaTunix is developed on Ubuntu Linux (10.04), 
 the package names may vary if you don't use Ubuntu.  Most RPM and Debian 
 based distros split packages into a runtime and devel package.  Runtime 
 ones are needed to run the program, and devel packages are needed for 
-programs like megatunix to compile against.
+programs like MegaTunix to be compiled.
 
 MegaTunix requires the following libraries (and their dependancies);
-- minimum GTK-2.18  and the corresponding development package
+- minimum GTK-2.18
   - GTK+ depends on pango, fontconfig, freetype2, glib and atk
-- Gtkglext-1.x (and the corresponding development package)
+- Gtkglext-1.x
   - gtkglext depends on opengl, gtk+ and glib
-- Xorg or XFree86 development libraries (xorg-devel or XF86-devel)
-  - libglade-2.x (and dev package)
-  - libglade depends on libxml-2.x and gtk+
+- Libglade-2.x
+  - libglade depends on libxml-2.x and gtk+2.x
 
 ### Optional
 
-The Glade GUI designer can be installed to modify and add new gui tabs to
-megatunix for your own custom firmware needs.  This is ONLY needed if you want
-to modify megatunix or design custom tabs for your firmware.  
-I recommend glade-2.x as 3.x has seneral performance issues.  
+The optional Glade GUI designer can be installed to modify and add new gui 
+tabs to MegaTunix for your own custom firmware needs.  This is ONLY needed 
+if you want to modify MegaTunix or design custom tabs for your firmware.  
+I recommend glade-2.x as 3.x has several performance and UI issues.  
 Unfortunately glade-2.x doesn't appear to be available with the current 
-linux distros (Ubuntu Releases after late 2010 does not have glade-2.x)
+Linux distros (Ubuntu Releases after late 2010 does not have glade-2.x)
 
 
 ### Version Control
