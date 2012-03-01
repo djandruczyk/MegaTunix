@@ -89,16 +89,13 @@ programs like MegaTunix to be compiled.
 
 MegaTunix requires the following libraries (and their dependancies):
 
-- minimum GTK-2.18
-
+- __minimum gtk+-2.18__
   GTK+ depends on pango, fontconfig, freetype2, glib and atk
 
-- Gtkglext-1.x
-
+- __Gtkglext-1.x__
   gtkglext depends on opengl, gtk+ and glib
 
-- Libglade-2.x
-
+- __Libglade-2.x__
   libglade depends on libxml-2.x and gtk+2.x
 
 
