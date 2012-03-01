@@ -88,12 +88,12 @@ ones are needed to run the program, and devel packages are needed for
 programs like megatunix to compile against.
 
 MegaTunix requires the following libraries (and their dependancies);
-- minimum GTK-2.12  and the dev package
-  - GTK+ depends on pango, fontconfig, freetype2, pango, glib and atk
-- Gtkglext-1.x (and the dev package)
-  - gtkglext depends on gtk+ and glib
+- minimum GTK-2.18  and the corresponding development package
+  - GTK+ depends on pango, fontconfig, freetype2, glib and atk
+- Gtkglext-1.x (and the corresponding development package)
+  - gtkglext depends on opengl, gtk+ and glib
 - Xorg or XFree86 development libraries (xorg-devel or XF86-devel)
-  - libglade-2.0 (and dev package)
+  - libglade-2.x (and dev package)
   - libglade depends on libxml-2.x and gtk+
 
 ### Optional
@@ -101,9 +101,10 @@ MegaTunix requires the following libraries (and their dependancies);
 The Glade GUI designer can be installed to modify and add new gui tabs to
 megatunix for your own custom firmware needs.  This is ONLY needed if you want
 to modify megatunix or design custom tabs for your firmware.  
-I recommend glade-2.x as 3.x has a lot of issues.  Unfortunately glade-2.x
-doesn't appear to be available with the very latest linux distros (ubuntu 9.10
-does not have it)
+I recommend glade-2.x as 3.x has seneral performance issues.  
+Unfortunately glade-2.x doesn't appear to be available with the current 
+linux distros (Ubuntu Releases after late 2010 does not have glade-2.x)
+
 
 ### Version Control
 
@@ -130,7 +131,7 @@ in case I, the developer changed the configure.ac or Makefile.am files.
 autogen will take care of creating the files that depend on those so that 
 you don't end up with build problems...
 
-As for the automake/autoconf warnings,  in 99.995% of the cases it's safe
+As for the automake/autoconf warnings, in 99.995% of the cases it's safe
 to ignore those warnings.  You can thank the autofoo tool maintainers for
 those warnings.  Trying to make them go away tends to break other platforms.
 
