@@ -15,6 +15,7 @@
 #define __DASH_RTV_PARSER_H__
 
 #include <defines.h>
+#include <libxml/parser.h>
 #include <gtk/gtk.h>
 
 
@@ -62,7 +63,11 @@ enum
 void retrieve_rt_vars(void);
 void load_rtvars(gchar **, Rtv_Data *);
 gint sort(gconstpointer , gconstpointer );
-			 
+void load_rtv_defaults(xmlNode *, Rtv_Data *, Persona_Info *);
+gboolean parse_rtv_xml_for_dash(xmlNode *, Rtv_Data *);
+void parse_derived_var(xmlNode *, Rtv_Data *, Persona_Info *);
+
+		 
 /* Prototypes */
 
 #endif

@@ -5,6 +5,7 @@
 #include <rtv_parser.h>
 #include <stdio.h>
 #include <strings.h>
+#include <xmlbase.h>
 
 GtkTreeStore *store = NULL;
 
@@ -108,7 +109,7 @@ gboolean parse_rtv_xml_for_dash(xmlNode *node, Rtv_Data *rtv_data)
 			if (g_strcasecmp((gchar *)cur_node->name,"derived") == 0)
 				parse_derived_var(cur_node,rtv_data,info);
 		}
-		if (!parse_rtv_xml_for_dash(cur_node->children,map))
+		if (!parse_rtv_xml_for_dash(cur_node->children,rtv_data))
 			return FALSE;
 	}
 }
@@ -116,6 +117,8 @@ gboolean parse_rtv_xml_for_dash(xmlNode *node, Rtv_Data *rtv_data)
 
 void load_rtv_defaults(xmlNode *node, Rtv_Data *rtv_data, Persona_Info *info)
 {
+	gpointer orig = NULL;
+	gpointer value = NULL;
 	gchar * persona = NULL;
 	if (!generic_xml_gchar_find(node,"persona",&persona))
 	{
@@ -141,41 +144,40 @@ void load_rtv_defaults(xmlNode *node, Rtv_Data *rtv_data, Persona_Info *info)
 
 void parse_derived_var(xmlNode *node, Rtv_Data *rtv_data, Persona_Info *info)
 {
+	gpointer orig = NULL;
+	gpointer value = NULL;
 	gchar *dlog_gui_name = NULL;
 	gchar * tmpbuf = NULL;
+	gchar ** vector = NULL;
+	guint k = 0;
+	gint tmpi = 0;
 
 	generic_xml_gchar_find(node,"dlog_gui_name",&dlog_gui_name);
 	if(generic_xml_gchar_find(node,"internal_names",&tmpbuf))
+	{
+		vector = g_strsplit(tmpbuf,",",-1);
+		g_free(tmpbuf);
+		for (k=0;k<g_strv_length(vector);k++)
 		{
-			vector = g_strsplit(tmpbuf,",",-1);
-			g_free(tmpbuf);
-			for (k=0;k<g_strv_length(vector);k++)
+			/* If we know about it, increase it's ref count */
+			if (g_hash_table_lookup_extended(info->hash,vector[k],&orig,&value))
 			{
-				/* If we know about it, increase it's ref count */
-				if (g_hash_table_lookup_extended(info->hash,vector[k],&orig,&value))
-				{
-					tmpi = (GINT)value + 1;
-					g_hash_table_replace(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(tmpi));
-				}
-				else
-				{
-					/*printf("inserting var %s with value %i\n",vector[k],1);*/
-
-
-					g_hash_table_insert(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
-					g_hash_table_insert(info->int_ext_hash,g_strdup(dlog_name),g_strdup(vector[k]));
-					info->rtv_list = g_list_prepend(info->rtv_list,g_strdup(dlog_name));
-				}
+				tmpi = (GINT)value + 1;
+				g_hash_table_replace(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(tmpi));
 			}
-			g_strfreev(vector);
+			else
+			{
+				/*printf("inserting var %s with value %i\n",vector[k],1);*/
+				g_hash_table_insert(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
+				g_hash_table_insert(info->int_ext_hash,g_strdup(dlog_gui_name),g_strdup(vector[k]));
+				info->rtv_list = g_list_prepend(info->rtv_list,g_strdup(dlog_gui_name));
+			}
 		}
-		g_free(section);
-		g_free(dlog_name);
-		g_free(int_name);
+		g_strfreev(vector);
+		g_free(dlog_gui_name);
+		g_free(tmpbuf);
 	}
 	info->rtv_list = g_list_sort(info->rtv_list,sort);
-	cfg_free(cfgfile);
-	i++;
 }
 
 
