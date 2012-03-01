@@ -87,13 +87,14 @@ based distros split packages into a runtime and devel package.  Runtime
 ones are needed to run the program, and devel packages are needed for 
 programs like MegaTunix to be compiled.
 
-MegaTunix requires the following libraries (and their dependancies);
+MegaTunix requires the following libraries (and their dependancies):
+
 - minimum GTK-2.18
-  - GTK+ depends on pango, fontconfig, freetype2, glib and atk
+  GTK+ depends on pango, fontconfig, freetype2, glib and atk
 - Gtkglext-1.x
-  - gtkglext depends on opengl, gtk+ and glib
+  gtkglext depends on opengl, gtk+ and glib
 - Libglade-2.x
-  - libglade depends on libxml-2.x and gtk+2.x
+  libglade depends on libxml-2.x and gtk+2.x
 
 ### Optional
 

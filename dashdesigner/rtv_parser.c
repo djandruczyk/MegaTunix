@@ -1,10 +1,13 @@
 #include <configfile.h>
 #include <getfiles.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 #include <rtv_parser.h>
 #include <stdio.h>
 #include <strings.h>
 
 GtkTreeStore *store = NULL;
+
 void retrieve_rt_vars(void)
 {
 	gchar **files = NULL;
@@ -14,7 +17,7 @@ void retrieve_rt_vars(void)
 	/*printf("retrieve rt_vars from mtx realtime maps\n");*/
 
 
-	files = get_files(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,NULL),g_strdup("rtv_map"),&classes);
+	files = get_files(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,NULL),g_strdup("xml"),&classes);
 	if (!files)
 		return;
 	while(files[i])
@@ -32,7 +35,9 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 {
 	GtkTreeIter iter;
 	GtkTreeIter parent;
-	ConfigFile *cfgfile;
+	gboolean xml_result = FALSE;
+	xmlDoc *doc = NULL;
+	xmlNode *root_element = NULL;
 	Persona_Info *info = NULL;
 	gint total = 0;
 	gpointer orig = NULL;
@@ -53,67 +58,74 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 	gint rtvcount = 0;
 	gint personas = 0;
 
+        LIBXML_TEST_VERSION
+
 	while (files[i])
 	{
-		cfgfile = cfg_open_file(files[i]);
-		if (cfgfile)
+		doc = xmlReadFile (files[i], NULL, 0);
+		root_element = xmlDocGetRootElement(doc);
+		if (!doc)
 		{
-			cfg_read_string(cfgfile,"realtime_map", "persona",&persona);
-			value = NULL;
-			info = NULL;
-			/* Check if we already know about it */
-
-
-			if (g_hash_table_lookup_extended(rtv_data->persona_hash,persona,&orig,&value))
-				info = (Persona_Info *)value;
-			else /* We just disovered this persona,  CREATE the hashtable for it and store */
-			{
-				info = g_new0(Persona_Info, 1);
-				info->hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
-				info->int_ext_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
-				info->rtv_list = NULL;
-				info->persona = g_strdup(persona);
-				g_hash_table_insert(rtv_data->persona_hash,g_strdup(persona),(gpointer)info);
-				g_array_append_val(rtv_data->persona_array,info);
-			}
-			g_free(persona);
-			cfg_read_int(cfgfile,"realtime_map", "derived_total",&total);
-			for (j=0;j<total;j++)
-			{
-				section = g_strdup_printf("derived_%i",j);
-				cfg_read_string(cfgfile,section,"dlog_gui_name",&dlog_name);
-				if(cfg_read_string(cfgfile,section,"internal_names",&tmpbuf))
-				{
-					vector = g_strsplit(tmpbuf,",",-1);
-					g_free(tmpbuf);
-					for (k=0;k<g_strv_length(vector);k++)
-					{
-						/* If we know about it, increase it's ref count */
-
-
-						if (g_hash_table_lookup_extended(info->hash,vector[k],&orig,&value))
-						{
-							tmpi = (GINT)value + 1;
-							g_hash_table_replace(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(tmpi));
-						}
-						else
-						{
-							/*printf("inserting var %s with value %i\n",vector[k],1);*/
-
-
-							g_hash_table_insert(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
-							g_hash_table_insert(info->int_ext_hash,g_strdup(dlog_name),g_strdup(vector[k]));
-							info->rtv_list = g_list_prepend(info->rtv_list,g_strdup(dlog_name));
-						}
-					}
-					g_strfreev(vector);
-				}
-				g_free(section);
-				g_free(dlog_name);
-				g_free(int_name);
-			}
-			info->rtv_list = g_list_sort(info->rtv_list,sort);
+			printf("XML PARSE FAILURE %s\n",files[i]);
+			continue;
 		}
+		xml_result = parse_rtv_xml_for_dash(root_element,rtv_data);
+
+		cfg_read_string(cfgfile,"realtime_map", "persona",&persona);
+		value = NULL;
+		info = NULL;
+		/* Check if we already know about it */
+
+
+		if (g_hash_table_lookup_extended(rtv_data->persona_hash,persona,&orig,&value))
+			info = (Persona_Info *)value;
+		else /* We just disovered this persona,  CREATE the hashtable for it and store */
+		{
+			info = g_new0(Persona_Info, 1);
+			info->hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+			info->int_ext_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
+			info->rtv_list = NULL;
+			info->persona = g_strdup(persona);
+			g_hash_table_insert(rtv_data->persona_hash,g_strdup(persona),(gpointer)info);
+			g_array_append_val(rtv_data->persona_array,info);
+		}
+		g_free(persona);
+		cfg_read_int(cfgfile,"realtime_map", "derived_total",&total);
+		for (j=0;j<total;j++)
+		{
+			section = g_strdup_printf("derived_%i",j);
+			cfg_read_string(cfgfile,section,"dlog_gui_name",&dlog_name);
+			if(cfg_read_string(cfgfile,section,"internal_names",&tmpbuf))
+			{
+				vector = g_strsplit(tmpbuf,",",-1);
+				g_free(tmpbuf);
+				for (k=0;k<g_strv_length(vector);k++)
+				{
+					/* If we know about it, increase it's ref count */
+
+
+					if (g_hash_table_lookup_extended(info->hash,vector[k],&orig,&value))
+					{
+						tmpi = (GINT)value + 1;
+						g_hash_table_replace(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(tmpi));
+					}
+					else
+					{
+						/*printf("inserting var %s with value %i\n",vector[k],1);*/
+
+
+						g_hash_table_insert(info->hash,g_strdup(vector[k]),GINT_TO_POINTER(1));
+						g_hash_table_insert(info->int_ext_hash,g_strdup(dlog_name),g_strdup(vector[k]));
+						info->rtv_list = g_list_prepend(info->rtv_list,g_strdup(dlog_name));
+					}
+				}
+				g_strfreev(vector);
+			}
+			g_free(section);
+			g_free(dlog_name);
+			g_free(int_name);
+		}
+		info->rtv_list = g_list_sort(info->rtv_list,sort);
 		cfg_free(cfgfile);
 		i++;
 	}
