@@ -4,6 +4,10 @@
 		<major>1</major>
 		<minor>7</minor>
 	</api>
+	<realtime_map>
+		<persona>FreeEMS</persona>
+		<applicable_signatures>FreeEMS 0.0.0</applicable_signatures>
+	</realtime_map>
 	<derived>
 		<dlog_gui_name>HR Clock</dlog_gui_name>
 		<dlog_field_name>Time</dlog_field_name>
@@ -694,7 +698,7 @@
 		<dlog_gui_name>Fuel Duty</dlog_gui_name>
 		<dlog_field_name>FuelDuty</dlog_field_name>
 		<internal_names>FuelDuty</internal_names>
-		<offset>48</offset><!-- NOTE: This value is meaningless, data is NOT pulled from any offset for this field -->
+		<offset>0</offset>
 		<real_lower>0</real_lower>
 		<real_upper>100</real_upper>
 		<tooltip>"Fuel Duty" is the duty cycle of the flow period of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.</tooltip>
@@ -712,7 +716,7 @@
 		<dlog_gui_name>Elec. Duty</dlog_gui_name>
 		<dlog_field_name>ElecDuty</dlog_field_name>
 		<internal_names>ElecDuty</internal_names>
-		<offset>52</offset><!-- NOTE: This value is meaningless, data is NOT pulled from any offset for this field -->
+		<offset>0</offset>
 		<real_lower>0</real_lower>
 		<real_upper>100</real_upper>
 		<tooltip>"Elec. Duty" is the duty cycle of the electrical pulse width (dead time AND fuel flow) of the injectors for a sequential application. Note if you're semi sequential, this is out by a factor of two, and even worse for batch stuff.</tooltip>
@@ -730,7 +734,7 @@
 		<dlog_gui_name>Coil Duty</dlog_gui_name>
 		<dlog_field_name>CoilDuty</dlog_field_name>
 		<internal_names>CoilDuty</internal_names>
-		<offset>56</offset><!-- NOTE: This value is meaningless, data is NOT pulled from any offset for this field -->
+		<offset>0</offset>
 		<real_lower>0</real_lower>
 		<real_upper>100</real_upper>
 		<tooltip>"Coil Duty" is the duty cycle of the coils for coil on/near/per plug applications. Note if you're wasted spark, this is out by a factor of two, and even worse for dizzy stuff.</tooltip>

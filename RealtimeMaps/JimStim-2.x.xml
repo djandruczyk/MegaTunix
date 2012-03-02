@@ -4,6 +4,9 @@
 		<major>1</major>
 		<minor>7</minor>
 	</api>
+	<realtime_map>
+		<persona>JimStim</persona>
+	</realtime_map>
 	<derived>
 		<dlog_gui_name>HR Clock</dlog_gui_name>
 		<dlog_field_name>Time</dlog_field_name>

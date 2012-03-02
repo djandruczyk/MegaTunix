@@ -28,6 +28,7 @@ void retrieve_rt_vars(void)
 	rtv_data->total_files = i;
 	load_rtvars(files,rtv_data);
 	g_array_free(classes,TRUE);
+	g_strfreev(files);
 
 }
 
@@ -70,12 +71,13 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 			continue;
 		}
 		xml_result = parse_rtv_xml_for_dash(root_element,rtv_data);
+		i++;
+		xmlFreeDoc(doc);
 	}
+	xmlCleanupParser();
 
 	store = gtk_tree_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_STRING);
 	/*printf("Total number of uniq vars is %i\n",len);*/
-
-
 
 	for (i=0;i<(gint)rtv_data->persona_array->len;i++)
 	{
@@ -88,7 +90,7 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 			gtk_tree_store_append(store,&iter,&parent);
 			element = g_list_nth_data(info->rtv_list,j);
 			int_name = g_hash_table_lookup(info->int_ext_hash,element);
-			gtk_tree_store_set(store,&iter,VARNAME_COL,g_strdup(element),DATASOURCE_COL,g_strdup(int_name),-1);
+			gtk_tree_store_set(store,&iter,VARNAME_COL,element,DATASOURCE_COL,int_name,-1);
 		}
 	}
 }
@@ -105,18 +107,20 @@ gboolean parse_rtv_xml_for_dash(xmlNode *node, Rtv_Data *rtv_data)
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
 			if (g_strcasecmp((gchar *)cur_node->name,"realtime_map") == 0)
-				load_rtv_defaults(cur_node,rtv_data,info);
+				load_rtv_defaults(cur_node,rtv_data,&info);
 			if (g_strcasecmp((gchar *)cur_node->name,"derived") == 0)
 				parse_derived_var(cur_node,rtv_data,info);
 		}
 		if (!parse_rtv_xml_for_dash(cur_node->children,rtv_data))
 			return FALSE;
 	}
+	return TRUE;
 }
 
 
-void load_rtv_defaults(xmlNode *node, Rtv_Data *rtv_data, Persona_Info *info)
+void load_rtv_defaults(xmlNode *node, Rtv_Data *rtv_data, Persona_Info **persona_info)
 {
+	Persona_Info *info = NULL;
 	gpointer orig = NULL;
 	gpointer value = NULL;
 	gchar * persona = NULL;
@@ -139,6 +143,7 @@ void load_rtv_defaults(xmlNode *node, Rtv_Data *rtv_data, Persona_Info *info)
 		g_array_append_val(rtv_data->persona_array,info);
 	}
 	g_free(persona);
+	*persona_info = info;
 }
 
 
@@ -152,6 +157,7 @@ void parse_derived_var(xmlNode *node, Rtv_Data *rtv_data, Persona_Info *info)
 	guint k = 0;
 	gint tmpi = 0;
 
+	g_return_if_fail(info);
 	generic_xml_gchar_find(node,"dlog_gui_name",&dlog_gui_name);
 	if(generic_xml_gchar_find(node,"internal_names",&tmpbuf))
 	{
@@ -175,7 +181,6 @@ void parse_derived_var(xmlNode *node, Rtv_Data *rtv_data, Persona_Info *info)
 		}
 		g_strfreev(vector);
 		g_free(dlog_gui_name);
-		g_free(tmpbuf);
 	}
 	info->rtv_list = g_list_sort(info->rtv_list,sort);
 }

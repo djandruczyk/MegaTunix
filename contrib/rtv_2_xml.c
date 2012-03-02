@@ -34,10 +34,30 @@ int main (int argc, char *argv[])
 
 	cfg = cfg_open_file(filename);
 	if (!cfg)
-		printf("File %s open failure...\n",filename);
+		return(-1);
 	else
 		printf("<?xml version=\"1.0\"?>\n<rtv_map>\n\t<api>\n\t\t<major>1</major>\n\t\t<minor>7</minor>\n\t</api>\n");
 
+	if (cfg_find_section(cfg,"realtime_map"))
+	{
+		printf("\t<realtime_map>\n");
+		if (cfg_read_string(cfg,"realtime_map","persona",&tmpbuf))
+		{
+			printf("\t\t<persona>%s</persona>\n",tmpbuf);
+			g_free(tmpbuf);
+		}
+		if (cfg_read_string(cfg,"realtime_map","applicable_signatures",&tmpbuf))
+		{
+			printf("\t\t<applicable_signatures>%s</applicable_signatures>\n",tmpbuf);
+			g_free(tmpbuf);
+		}
+		if (cfg_read_string(cfg,"realtime_map","raw_list",&tmpbuf))
+		{
+			printf("\t\t<raw_list>%s</raw_list>\n",tmpbuf);
+			g_free(tmpbuf);
+		}
+		printf("\t</realtime_map>\n");
+	}
 	for (i=0;i<200;i++)
 	{
 		section = g_strdup_printf("derived_%i",i);
