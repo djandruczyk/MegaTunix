@@ -536,8 +536,10 @@ G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventBu
 
 G_MODULE_EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
 {
+	extern GtkTreeStore *store;
 	if (changed)
 		prompt_to_save();
+	g_object_unref(store);
 	gtk_main_quit();
 	return TRUE;
 }
@@ -837,7 +839,6 @@ void raise_fixed_child (GtkWidget * widget)
 void update_properties(GtkWidget * widget, Choice choice)
 {
 	extern GtkTreeStore *store;
-	GtkCellRenderer *renderer;
 	GtkWidget * combo_box = NULL;
 	GtkWidget *vbox = NULL;
 	GtkWidget *table = NULL;

@@ -23,12 +23,15 @@ void retrieve_rt_vars(void)
 	while(files[i])
 		i++;
 	rtv_data = g_new0(Rtv_Data, 1);
-	rtv_data->persona_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+	rtv_data->persona_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,info_free);
 	rtv_data->persona_array = g_array_new(FALSE,TRUE,sizeof(Persona_Info *));
 	rtv_data->total_files = i;
 	load_rtvars(files,rtv_data);
 	g_array_free(classes,TRUE);
 	g_strfreev(files);
+	g_hash_table_destroy(rtv_data->persona_hash);
+	g_array_free(rtv_data->persona_array,TRUE);
+	g_free(rtv_data);
 
 }
 
@@ -84,7 +87,7 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 		info = NULL;
 		info = g_array_index(rtv_data->persona_array,Persona_Info *,i);
 		gtk_tree_store_append(store,&parent,NULL);
-		gtk_tree_store_set(store,&parent,VARNAME_COL,g_strdup(info->persona),-1);
+		gtk_tree_store_set(store,&parent,VARNAME_COL,info->persona,-1);
 		for (j=0;j<(gint)g_list_length(info->rtv_list);j++)
 		{
 			gtk_tree_store_append(store,&iter,&parent);
@@ -192,3 +195,14 @@ gint sort(gconstpointer a, gconstpointer b)
 	return g_strcasecmp((gchar *)a, (gchar *)b);
 }
 
+
+void info_free(gpointer data)
+{
+	Persona_Info *info = (Persona_Info *)data;
+	g_hash_table_destroy(info->hash);
+	g_hash_table_destroy(info->int_ext_hash);
+	g_list_foreach(info->rtv_list, (GFunc)g_free, NULL);
+	g_list_free(info->rtv_list);
+	g_free(info->persona); 
+	g_free(info);
+}

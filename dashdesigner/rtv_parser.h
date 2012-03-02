@@ -66,7 +66,7 @@ gint sort(gconstpointer , gconstpointer );
 void load_rtv_defaults(xmlNode *, Rtv_Data *, Persona_Info **);
 gboolean parse_rtv_xml_for_dash(xmlNode *, Rtv_Data *);
 void parse_derived_var(xmlNode *, Rtv_Data *, Persona_Info *);
-
+void info_free(gpointer);
 		 
 /* Prototypes */
 
