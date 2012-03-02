@@ -27,26 +27,20 @@
   \brief Reads an Integer from an XML node and stores in the dest var
   \param node is the pointer to the XML node
   \param dest is the pointer to the place to store the read value
+  \returns true on found, false otherwise
   */
-void generic_xml_gint_import(xmlNode *node, gpointer dest)
+gboolean generic_xml_gint_import(xmlNode *node, gpointer dest)
 {
 	gint *val = NULL;
 
-	g_return_if_fail(node);
-	g_return_if_fail(dest);
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
+	g_return_val_if_fail((node->children->type == XML_TEXT_NODE),FALSE);
 
 	val = (gint *)dest;
-	if (!node->children)
-	{
-		printf("ERROR, generic_xml_gint_import, xml node is empty!!\n");
-		return;
-	}
-	if (!(node->children->type == XML_TEXT_NODE))
-	{
-		printf("TXT none node\n");
-		return;
-	}
 	*val = (gint)g_ascii_strtod((gchar*)node->children->content,NULL);
+	return TRUE;
 }
 
 
@@ -54,26 +48,23 @@ void generic_xml_gint_import(xmlNode *node, gpointer dest)
   \brief Reads an boolean from an XML node and stores in the dest var
   \param node is the pointer to the XML node
   \param dest is the pointer to the place to store the read value
+  \returns true on found, false otherwise
   */
-void generic_xml_gboolean_import(xmlNode *node, gpointer dest)
+gboolean generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 {
 	gboolean *val = NULL;
 
-	g_return_if_fail(node);
-	g_return_if_fail(dest);
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
+	g_return_val_if_fail((node->children->type == XML_TEXT_NODE),FALSE);
 
 	val = (gboolean *)dest;
-	if (!node->children)
-	{
-		printf("ERROR, generic_xml_gboolean_import, xml node is empty!!\n");
-		return;
-	}
-	if (!(node->children->type == XML_TEXT_NODE))
-		return;
 	if (!g_ascii_strcasecmp((gchar *)node->children->content, "TRUE"))
 		*val = TRUE;
 	else
 		*val = FALSE;
+	return TRUE;
 }
 
 
@@ -123,23 +114,20 @@ void generic_xml_gboolean_export(xmlNode *parent, gchar *element_name, gboolean 
   \brief Reads a Float from an XML node and stores in the dest var
   \param node is the pointer to the XML node
   \param dest is the pointer to the place to store the read value
+  \returns true on found, false otherwise
   */
-void generic_xml_gfloat_import(xmlNode *node, gpointer dest)
+gboolean generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 {
 	gfloat *val = NULL;
 
-	g_return_if_fail(node);
-	g_return_if_fail(dest);
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
+	g_return_val_if_fail((node->children->type == XML_TEXT_NODE),FALSE);
 
 	val = (gfloat *)dest;
-	if (!node->children)
-	{
-		printf("ERROR, generic_xml_gfloat_import, xml node is empty!!\n");
-		return;
-	}
-	if (!(node->children->type == XML_TEXT_NODE))
-		return;
 	*val = g_ascii_strtod((gchar*)g_strdelimit((gchar *)node->children->content,",.",'.'),NULL);
+	return TRUE;
 }
 
 
@@ -169,24 +157,21 @@ void generic_xml_gfloat_export(xmlNode *parent, gchar *element_name, gfloat *val
   \brief Reads a string from an XML node and stores in the dest var
   \param node is the pointer to the XML node
   \param dest is the pointer to the place to store the read value
+  \returns true on found, false otherwise
   */
-void generic_xml_gchar_import(xmlNode *node, gpointer dest)
+gboolean generic_xml_gchar_import(xmlNode *node, gpointer dest)
 {
 	gchar **val = NULL;
 
-	g_return_if_fail(node);
-	g_return_if_fail(dest);
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
+	g_return_val_if_fail((node->children->type == XML_TEXT_NODE),FALSE);
+	g_return_val_if_fail(node->children->content,FALSE);
 
 	val = (gchar **)dest;
-
-	if (!node->children) /* EMPTY node, thus, clear the var on the gauge */
-		return;
-	if (!(node->children->type == XML_TEXT_NODE))
-		return;
-
-	if (node->children->content)
-		*val = g_strdup((gchar *)node->children->content);
-	return;
+	*val = g_strdup((gchar *)node->children->content);
+	return TRUE;
 }
 
 
@@ -214,20 +199,18 @@ void generic_xml_gchar_export(xmlNode *parent, gchar *element_name, gchar **val)
   \brief Reads a GdkColor from an XML node and stores in the dest var
   \param node is the pointer to the XML node
   \param dest is the pointer to the place to store the read value
+  \returns true on found, false otherwise
   */
-void generic_xml_color_import(xmlNode *node, gpointer dest)
+gboolean generic_xml_color_import(xmlNode *node, gpointer dest)
 {
 	xmlNode *cur_node = NULL;
 	GdkColor *color = NULL;
 	gchar **vector = NULL;
 	gint tmp = 0;
 
-	g_return_if_fail(node);
-	if (!node->children)
-	{
-		printf("ERROR, generic_xml_color_import, xml node is empty!!\n");
-		return;
-	}
+	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
 	color = (GdkColor *)dest;
 	cur_node = node->children;
 	if (!cur_node->next)	/* OLD Style color block */
@@ -263,6 +246,7 @@ void generic_xml_color_import(xmlNode *node, gpointer dest)
 			cur_node = cur_node->next;
 		}
 	}
+	return TRUE;
 }
 
 
@@ -309,12 +293,8 @@ gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 	xmlNode *cur_node = NULL;
 
 	g_return_val_if_fail(node,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
 
-	if (!node->children)
-	{
-		printf("ERROR, get_potential_arg_name, xml node is empty!!\n");
-		return FALSE;
-	}
 	cur_node = node->children;
 	while (cur_node->next)
 	{
@@ -351,14 +331,10 @@ gboolean generic_xml_gint_find(xmlNode *node, const gchar *name, gpointer dest)
 	gboolean found = FALSE;
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
 
 	val = (gint *)dest;
 
-	if (!node->children)
-	{
-		printf("ERROR, generic_xml_gint_find!!\n");
-		return FALSE;
-	}
 	cur_node = node->children;
 	while (cur_node->next)
 	{
@@ -390,14 +366,9 @@ gboolean generic_xml_gboolean_find(xmlNode *node, const gchar *name, gpointer de
 	gboolean found = FALSE;
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
 
 	val = (gboolean *)dest;
-
-	if (!node->children)
-	{
-		printf("ERROR, generic_xml_gboolean_find!!\n");
-		return FALSE;
-	}
 	cur_node = node->children;
 	while (cur_node->next)
 	{
@@ -429,14 +400,9 @@ gboolean generic_xml_gfloat_find(xmlNode *node, const gchar *name, gpointer dest
 	gboolean found = FALSE;
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
 
 	val = (gfloat *)dest;
-
-	if (!node->children)
-	{
-		printf("ERROR, generic_xml_gfloat_find!!\n");
-		return FALSE;
-	}
 	cur_node = node->children;
 	while (cur_node->next)
 	{
@@ -467,12 +433,8 @@ gboolean generic_xml_gchar_find(xmlNode *node, const gchar *name, gpointer dest)
 	gboolean found = FALSE;
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
+	g_return_val_if_fail(node->children,FALSE);
 
-	if (!node->children)
-	{
-		printf("ERROR, generic_xml_gchar_find!!\n");
-		return FALSE;
-	}
 	cur_node = node->children;
 	while (cur_node->next)
 	{

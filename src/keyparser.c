@@ -42,7 +42,8 @@ G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gc
 		return NULL;
 	}
 	result = g_strsplit(string,delimiter,0);
-	*count = g_strv_length(result);
+	if (count)
+		*count = g_strv_length(result);
 	return result;
 }
 
@@ -81,7 +82,8 @@ G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const 
 		i++;
 	}
 	g_strfreev(vector);
-	*count = i;	
+	if (count)
+		*count = i;	
 	return keytypes;
 
 }
