@@ -280,7 +280,7 @@
                                                 <property name="has_frame">True</property>
                                                 <property name="invisible_char">&#x25CF;</property>
                                                 <property name="activates_default">False</property>
-                                                <property name="width_chars">6</property>
+                                                <property name="width_chars">7</property>
                                               </widget>
                                               <packing>
                                                 <property name="left_attach">1</property>
@@ -328,7 +328,7 @@
                                                 <property name="has_frame">True</property>
                                                 <property name="invisible_char">&#x25CF;</property>
                                                 <property name="activates_default">False</property>
-                                                <property name="width_chars">6</property>
+                                                <property name="width_chars">7</property>
                                               </widget>
                                               <packing>
                                                 <property name="left_attach">1</property>
@@ -417,7 +417,7 @@
                                                 <property name="has_frame">True</property>
                                                 <property name="invisible_char">&#x25CF;</property>
                                                 <property name="activates_default">False</property>
-                                                <property name="width_chars">6</property>
+                                                <property name="width_chars">7</property>
                                               </widget>
                                               <packing>
                                                 <property name="left_attach">1</property>
@@ -439,7 +439,7 @@
                                                 <property name="has_frame">True</property>
                                                 <property name="invisible_char">&#x25CF;</property>
                                                 <property name="activates_default">False</property>
-                                                <property name="width_chars">6</property>
+                                                <property name="width_chars">7</property>
                                               </widget>
                                               <packing>
                                                 <property name="left_attach">1</property>
