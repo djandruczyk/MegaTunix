@@ -107,7 +107,7 @@ gint main(gint argc, gchar ** argv)
 	 */
 
 	/* This will exit mtx if the locking fails! */
-	//create_mtx_lock();
+	create_mtx_lock();
 
 	/* Allocate memory  */
 	build_string_2_enum_table();
