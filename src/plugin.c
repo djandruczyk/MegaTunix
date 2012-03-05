@@ -49,7 +49,7 @@ G_MODULE_EXPORT void plugins_init()
 	/* MegaTunix itself */
 	module[MAIN] = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (!module[MAIN])
-		MTXDBG(CRITICAL,_("Unable to call g_module_open for MegaTunix itself, error: %s\n"),g_module_error());
+		MTXDBG(CRITICAL,_("Unable to call g_module_open for MegaTunix itself, This usually means you forgot \"sudo make install\", error: %s\n"),g_module_error());
 	DATA_SET_FULL(global_data,"megatunix_module",(gpointer)module[MAIN],g_module_close);
 
 	/* Common Library */
@@ -64,7 +64,7 @@ G_MODULE_EXPORT void plugins_init()
 #endif
 		module[COMMON] = g_module_open(libpath,G_MODULE_BIND_LAZY);
 		if (!module[COMMON])
-			MTXDBG(CRITICAL,_("Opening Common library module error:\n\t%s\n"),g_module_error());
+			MTXDBG(CRITICAL,_("Opening Common library module error, This usually means you forgot \"sudo make install; sudo ldconfig\" :\n\t%s\n"),g_module_error());
 		g_free(libpath);
 		DATA_SET_FULL(global_data,"common_module",(gpointer)module[COMMON],g_module_close);
 	}
@@ -80,7 +80,7 @@ G_MODULE_EXPORT void plugins_init()
 #endif
 		module[ECU] = g_module_open(libpath,G_MODULE_BIND_LAZY);
 		if (!module[ECU])
-			MTXDBG(CRITICAL,_("Opening ECU library module error:\n\t%s\n"),g_module_error());
+			MTXDBG(CRITICAL,_("Opening ECU library module error, This usually means you forgot \"sudo make install; sudo ldconfig\" :\n\t%s\n"),g_module_error());
 		g_free(libpath);
 		DATA_SET_FULL(global_data,"ecu_module",(gpointer)module[ECU],g_module_close);
 	}
@@ -200,10 +200,6 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 			}
 	}
 	if (!found)
-	{
-		MTXDBG(CRITICAL,_("\nCRITICAL ERROR: Failed to find symbol/function\n\"%s\" in MegaTunix core or any plugins, Exiting in 5 seconds!!\n"),name);
-		g_usleep(5000000);
-		exit(-1);
-	}
+		MTXDBG(CRITICAL,_("\nCRITICAL ERROR: Failed to find symbol/function\n\"%s\" in MegaTunix core or any plugins, returning FALSE, expect a crash\n"),name);
 	return found;
 }
