@@ -98,7 +98,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	else
 		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
-	/* MULTI EXPRESSION ONLY! */
+	/* MULTI EXPRESSION ONLY, i.e. different math conversions that depend on a named source_key! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
 		//if ((!OBJ_GET(widget,"mhash")) && (!OBJ_GET(widget,"ahash")))

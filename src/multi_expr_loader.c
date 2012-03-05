@@ -139,7 +139,7 @@ G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNo
 		*multi->fromecu_mult = (gfloat)g_strtod(ul_mults[i],NULL);
 		*multi->fromecu_add = (gfloat)g_strtod(ul_adds[i],NULL);
 
-		g_hash_table_insert(hash,g_strdup(keys[i]),multi);
+		g_hash_table_insert(hash,keys[i],multi);
 	}
 	DATA_SET_FULL(object,"real_lower",g_strdup_printf("%i",lowest),g_free);
 	DATA_SET_FULL(object,"real_upper",g_strdup_printf("%i",highest),g_free);
@@ -160,6 +160,8 @@ G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNo
 G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
 	MultiExpr *multi = (MultiExpr *)data;
+	if (!multi)
+		return;
 	cleanup(multi->fromecu_mult);	
 	cleanup(multi->fromecu_add);	
 	cleanup(multi->lookuptable);	

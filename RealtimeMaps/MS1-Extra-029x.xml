@@ -265,7 +265,7 @@
 		<lookuptable>clt_table</lookuptable>
 	</derived>
 	<derived>
-		<dlog_gui_name>O<sub>2</sub> Volts 1</dlog_gui_name>
+		<dlog_gui_name>O&lt;sub&gt;2&lt;/sub&gt; Volts 1</dlog_gui_name>
 		<dlog_field_name>O2</dlog_field_name>
 		<internal_names>o2volt1</internal_names>
 		<offset>9</offset>
@@ -277,7 +277,7 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>O<sub>2</sub> ADC</dlog_gui_name>
+		<dlog_gui_name>O&l;sub&gt;2&lt;/sub&gt; ADC</dlog_gui_name>
 		<dlog_field_name>O2counts</dlog_field_name>
 		<internal_names>o2adc</internal_names>
 		<offset>9</offset>

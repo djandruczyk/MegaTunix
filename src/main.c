@@ -25,6 +25,7 @@
 #include <dispatcher.h>
 #include <gtk/gtkgl.h>
 #include <locale.h>
+#include <locking.h>
 #include <init.h>
 #include <serialio.h>
 #include <stdio.h>
@@ -67,8 +68,9 @@ gint main(gint argc, gchar ** argv)
 	gdk_gl_init_check(&argc, &argv);
 	gl_ability = gtk_gl_init_check(&argc, &argv);
 
-
 	global_data = g_new0(gconstpointer, 1);
+	/* This will exit mtx if the locking fails! */
+	create_mtx_lock();
 
 	/* Condition variables */
 	cond = g_cond_new();
@@ -106,19 +108,16 @@ gint main(gint argc, gchar ** argv)
 	   printf(_("Hello World!\n"));
 	 */
 
-	/* This will exit mtx if the locking fails! */
-	create_mtx_lock();
-
-	/* Allocate memory  */
+	/* Build table of strings to enum values */
 	build_string_2_enum_table();
 	serial_params = g_malloc0(sizeof(Serial_Params));
 	DATA_SET(global_data,"serial_params",serial_params);
 
 	handle_args(argc,argv);	/* handle CLI arguments */
 	open_debug();		/* Open debug log */
+	/* Allocate memory  */
 	init();			/* Initialize global vars */
-	make_megasquirt_dirs();	/* Create config file dirs if missing */
-	/* Build table of strings to enum values */
+	make_mtx_dirs();	/* Create config file dirs if missing */
 
 	/* Create Message passing queues */
 	queue = g_async_queue_new();

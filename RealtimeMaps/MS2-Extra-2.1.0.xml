@@ -569,7 +569,7 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>O<sub>2</sub> Volts 1</dlog_gui_name>
+		<dlog_gui_name>O&lt;sub&gt;2&lt;/sub&gt; Volts 1</dlog_gui_name>
 		<dlog_field_name>egovolt1</dlog_field_name>
 		<internal_names>o2volt1</internal_names>
 		<offset>74</offset>
@@ -582,7 +582,7 @@
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>O<sub>2</sub> Volts 2 (ms2)</dlog_gui_name>
+		<dlog_gui_name>O&lt;sub&gt;2&lt;/sub&gt; Volts 2 (ms2)</dlog_gui_name>
 		<dlog_field_name>egovolt2</dlog_field_name>
 		<internal_names>o2volt2</internal_names>
 		<offset>76</offset>

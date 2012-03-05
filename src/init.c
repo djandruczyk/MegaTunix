@@ -553,11 +553,11 @@ G_MODULE_EXPORT void save_config(void)
 
 
 /*!
- * make_megasquirt_dirs(void)
+ * make_mtx_dirs(void)
  * \brief Creates the directories for user modified config files in the
  * users home directory under ~/.MegaTunix
  */
-G_MODULE_EXPORT void make_megasquirt_dirs(void)
+G_MODULE_EXPORT void make_mtx_dirs(void)
 {
 	gchar *dirname = NULL;
 	const gchar *subdir = NULL;
@@ -615,7 +615,6 @@ G_MODULE_EXPORT void make_megasquirt_dirs(void)
 	dirname = g_build_path(PSEP,HOME(),mtx,RTSTATUS_DATA_DIR, NULL);
 	g_mkdir(dirname, S_IRWXU);
 	cleanup(dirname);
-
 	return;
 }
 
@@ -939,8 +938,8 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		DATA_SET(global_data,"offline",NULL);
 		DATA_SET(global_data,"interrogated",NULL);
 		/* Free all global data and structures */
-		g_dataset_foreach(global_data,dataset_dealloc,NULL);
-	//g_dataset_destroy(global_data);
+	//	g_dataset_foreach(global_data,dataset_dealloc,NULL);
+		g_dataset_destroy(global_data);
 		cleanup(global_data);
 		/* Dynamic widgets master hash  */
 
@@ -958,7 +957,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
   */
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
-	//printf("removing data for %s\n",g_quark_to_string(key_id));
+	printf("removing data for %s\n",g_quark_to_string(key_id));
 	g_dataset_remove_data(data,g_quark_to_string(key_id));
 }
 
@@ -1296,14 +1295,15 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 {
 	GArray * array = NULL;
-	if (!(object))
+	if (!object)
 		return;
 	array = (GArray *)DATA_GET(object, "history");
 	if (array)
 		g_array_free(DATA_GET(object,"history"),TRUE);
 
+	printf("Deallocing RTV var %s\n",DATA_GET(object,"dlog_gui_name"));
 	g_dataset_foreach(object,dataset_dealloc,NULL);
-//	g_dataset_destroy(object);
+	g_dataset_destroy(object);
 	cleanup(object);
 }
 
@@ -1352,7 +1352,6 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 {
 	LookupTable * table = (LookupTable *)data;
-	/*printf("dealloc_lookuptable\n");*/
 	cleanup(table->array);
 	cleanup(table->filename);
 	cleanup(table);
@@ -1468,6 +1467,7 @@ G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 {
 	Command *cmd = NULL;
 	cmd = (Command *)data;
+	g_return_if_fail(cmd);
 	cleanup(cmd->name);
 	cleanup(cmd->desc);
 	cleanup(cmd->base);
@@ -1487,6 +1487,7 @@ G_MODULE_EXPORT void xml_arg_free(gpointer data)
 {
 	PotentialArg *arg = NULL;
 	arg = (PotentialArg *)data;
+	g_return_if_fail(arg);
 	cleanup(arg->name);
 	cleanup(arg->desc);
 	cleanup(arg->internal_name);

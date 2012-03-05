@@ -204,7 +204,8 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, gch
 		g_strfreev(vector);
 
 	}
-	DATA_SET_FULL(object,"dep_object",(gpointer)dep_obj,dealloc_dep_object);
+	//DATA_SET_FULL(object,"dep_object",(gpointer)dep_obj,dealloc_dep_object);
+	DATA_SET_FULL(object,"dep_object",(gpointer)dep_obj,NULL);
 }
 
 
@@ -381,7 +382,8 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		}
 		g_strfreev(vector);
 	}
-	OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,dealloc_dep_object);
+	//OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,dealloc_dep_object);
+	OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,NULL);
 }
 
 

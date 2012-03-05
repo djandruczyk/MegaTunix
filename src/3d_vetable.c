@@ -304,6 +304,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		ve_view->x_source_key = firmware->table_params[table_num]->x_source_key;
 		ve_view->x_multi_hash = firmware->table_params[table_num]->x_multi_hash;
 		ve_view->x_ignore_algorithm = firmware->table_params[table_num]->x_ignore_algorithm;
+		g_return_val_if_fail(ve_view->x_source_key,FALSE);
+		g_return_val_if_fail(ve_view->x_multi_hash,FALSE);
 	}
 	else
 	{
@@ -320,6 +322,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		ve_view->y_source_key = firmware->table_params[table_num]->y_source_key;
 		ve_view->y_multi_hash = firmware->table_params[table_num]->y_multi_hash;
 		ve_view->y_ignore_algorithm = firmware->table_params[table_num]->y_ignore_algorithm;
+		g_return_val_if_fail(ve_view->y_source_key,FALSE);
+		g_return_val_if_fail(ve_view->y_multi_hash,FALSE);
 	}
 	else
 	{
@@ -336,6 +340,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		ve_view->z_source_key = firmware->table_params[table_num]->z_source_key;
 		ve_view->z_multi_hash = firmware->table_params[table_num]->z_multi_hash;
 		ve_view->z_ignore_algorithm = firmware->table_params[table_num]->z_ignore_algorithm;
+		g_return_val_if_fail(ve_view->z_source_key,FALSE);
+		g_return_val_if_fail(ve_view->z_multi_hash,FALSE);
 	}
 	else
 	{

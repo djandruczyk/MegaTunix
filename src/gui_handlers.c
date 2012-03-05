@@ -1442,13 +1442,11 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 
 	if (OBJ_GET(topframe,"sub-notebook"))
 	{
-/*		printf(" This tab has a sub-notebook\n"); */
 		sub = lookup_widget( (OBJ_GET(topframe,"sub-notebook")));
 		if (GTK_IS_WIDGET(sub))
 		{
 			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
 			widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(sub),sub_page);
-/*			printf("subtable found, searching for active page\n"); */
 #if GTK_MINOR_VERSION >= 18
 			if ((OBJ_GET(widget,"table_num")) && (gtk_widget_get_state(widget) != GTK_STATE_INSENSITIVE))
 #else
@@ -1474,13 +1472,9 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 				}
 
 				active_table = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
-				/*printf("found it,  active table %i\n",active_table);*/
 			}
 			else
-			{
 				active_table = -1;
-/*			 	printf("didn't find table_num key on subtable\n"); */
-			}
 			 
 		}
 	}
@@ -1543,8 +1537,6 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkWidget *page, guin
 			}
 		}
 	}
-	/*printf("active table changed to %i\n",active_table); */
-
 	return;
 }
 

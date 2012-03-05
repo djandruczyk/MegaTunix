@@ -984,7 +984,6 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	static GHashTable *widget_2_tab_hash = NULL;
 	static ConfigFile *last_cfgfile = NULL;
 	static gchar * prefix = NULL;
-	gchar *tmpbuf = NULL;
 	gchar *groups = NULL;
 	gchar *bitvals = NULL;
 	gchar *source_key = NULL;
@@ -1018,19 +1017,13 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	   printf("widget %s has %i children\n",info->name,info->n_children);
 	 */
 	for (i=0;i<info->n_children;i++)
-	{
 		descend_tree(info->children[i].child,cfgfile);
-	}
+
 	if (last_cfgfile != cfgfile)
 	{
 		if (prefix)
 			cleanup(prefix);
-		if(cfg_read_string(cfgfile,"global","id_prefix", &tmpbuf))
-		{
-			prefix = g_strdup(tmpbuf);
-			g_free(tmpbuf);
-		}
-		else
+		if(!cfg_read_string(cfgfile,"global","id_prefix", &prefix))
 			prefix = NULL;
 		last_cfgfile = cfgfile;
 	}
@@ -1085,7 +1078,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		OBJ_SET(object,"size",GINT_TO_POINTER(size));
 		OBJ_SET(object,"bitmask",GINT_TO_POINTER(bitmask));
 		if (bitvals)
-			OBJ_SET(object,"bitvals",g_strdup(bitvals));
+			OBJ_SET_FULL(object,"bitvals",g_strdup(bitvals),cleanup);
 		else
 			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
 		OBJ_SET_FULL(object,"source_key",g_strdup(source_key),cleanup);

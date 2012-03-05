@@ -66,6 +66,7 @@ int main (int argc, char *argv[])
 			printf("\t<derived>\n");
 			if (cfg_read_string(cfg,section,"dlog_gui_name",&tmpbuf))
 			{
+
 				printf("\t\t<dlog_gui_name>%s</dlog_gui_name>\n",tmpbuf);
 				g_free(tmpbuf);
 			}

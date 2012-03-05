@@ -30,7 +30,10 @@ extern gconstpointer *global_data;
 
 
 /*!
-  \brief Draws the VE-Table markers
+  \brief Handles drawing the border around the VEtable cells that are 
+  currently influencing the engine. The more "red" the box is the more 
+  inflential that vertex is,  vertex with the same color are equally 
+  inflential.
   */
 G_MODULE_EXPORT void common_draw_ve_marker(void)
 {

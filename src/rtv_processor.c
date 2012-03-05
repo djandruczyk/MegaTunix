@@ -317,7 +317,6 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 			expr = DATA_GET(object,"fromecu_conv_expr");
 			evaluator = evaluator_create(expr);
 			DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
-
 		}
 	}
 	else if (type == DOWNLOAD)

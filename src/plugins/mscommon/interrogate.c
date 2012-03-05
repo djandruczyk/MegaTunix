@@ -990,7 +990,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->x_multi_source)
 		{
-			firmware->table_params[i]->x_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,free_multi_source_f);
+			firmware->table_params[i]->x_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source_f);
 			expr_keys = g_strsplit(firmware->table_params[i]->x_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->x_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->x_suffixes,",",-1);
@@ -1023,7 +1023,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 					multi->lookuptable = g_strdup(tables[j]);
 				else
 					multi->lookuptable = NULL;
-				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,expr_keys[j],(gpointer)multi);
+				g_hash_table_insert(firmware->table_params[i]->x_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
@@ -1045,7 +1045,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->y_multi_source)
 		{
-			firmware->table_params[i]->y_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,free_multi_source_f);
+			firmware->table_params[i]->y_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source_f);
 			expr_keys = g_strsplit(firmware->table_params[i]->y_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->y_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->y_suffixes,",",-1);
@@ -1078,7 +1078,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 					multi->lookuptable = g_strdup(tables[j]);
 				else
 					multi->lookuptable = NULL;
-				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,expr_keys[j],(gpointer)multi);
+				g_hash_table_insert(firmware->table_params[i]->y_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
@@ -1101,7 +1101,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		/* Check for multi source table handling */
 		if (firmware->table_params[i]->z_multi_source)
 		{
-			firmware->table_params[i]->z_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,free_multi_source_f);
+			firmware->table_params[i]->z_multi_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_source_f);
 			expr_keys = g_strsplit(firmware->table_params[i]->z_multi_expr_keys,",",-1);
 			sources = g_strsplit(firmware->table_params[i]->z_sources,",",-1);
 			suffixes = g_strsplit(firmware->table_params[i]->z_suffixes,",",-1);
@@ -1134,7 +1134,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 					multi->lookuptable = g_strdup(tables[j]);
 				else
 					multi->lookuptable = NULL;
-				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,expr_keys[j],(gpointer)multi);
+				g_hash_table_insert(firmware->table_params[i]->z_multi_hash,g_strdup(expr_keys[j]),(gpointer)multi);
 			}
 			g_strfreev(expr_keys);
 			g_strfreev(sources);
