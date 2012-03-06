@@ -116,6 +116,16 @@ G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNo
 		ul_adds = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
 	}
+	if (!generic_xml_gchar_find(node,"source_key",&tmpbuf))
+	{
+		MTXDBG(CRITICAL,_("Key \"source_key\" NOT FOUND in xml, EXITING!!\n"));
+		exit (-4);
+	}
+	else
+	{
+		DATA_SET_FULL(object,"source_key",g_strdup(tmpbuf),g_free);
+		g_free(tmpbuf);
+	}
 	/* Create hash table to store structures for each one */
 	hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,free_multi_expr);
 	lowest = G_MAXINT32;
@@ -139,7 +149,7 @@ G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNo
 		*multi->fromecu_mult = (gfloat)g_strtod(ul_mults[i],NULL);
 		*multi->fromecu_add = (gfloat)g_strtod(ul_adds[i],NULL);
 
-		g_hash_table_insert(hash,keys[i],multi);
+		g_hash_table_insert(hash,g_strdup(keys[i]),multi);
 	}
 	DATA_SET_FULL(object,"real_lower",g_strdup_printf("%i",lowest),g_free);
 	DATA_SET_FULL(object,"real_upper",g_strdup_printf("%i",highest),g_free);
