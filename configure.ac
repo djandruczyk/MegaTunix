@@ -42,6 +42,7 @@ then
 	exit 1
 fi
 AC_PROG_CC
+AC_PROG_CPP
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
@@ -71,15 +72,17 @@ MTXLOCALEDIR='${prefix}/share/MegaTunix/locale'
 AC_SUBST(MTXLOCALEDIR)
 
 dnl Checks for header files.
-dnl AC_HEADER_STDC
-AC_CHECK_HEADERS(errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
+AC_HEADER_STDC
+AC_CHECK_HEADERS(stdlib.h errno.h fcntl.h math.h stddef.h stdio.h string.h strings.h sys/poll.h sys/stat.h sys/types.h sys/ioctl.h sys/time.h termios.h unistd.h )
+AC_C_CONST
+AC_TYPE_SIZE_T
 AC_CHECK_FUNCS(bzero memset)
 dnl check paths for necessary files
 
-dnl MACRO definition to determine if running GTK>2.12 or not for use of cairo
+dnl MACRO definition to determine if running GTK>2.18 or not for use of cairo
 AC_DEFUN([PKG_CHECK_GTK], 
 [
-	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.12.0 gthread-2.0 gmodule-2.0],,)
+	PKG_CHECK_MODULES(GTK,[gtk+-2.0 >= 2.18.0 gthread-2.0 gmodule-2.0],,)
 dnl for GTK 3.x   	GTK_CFLAGS+="-DGSEAL_ENABLE"
 	AC_SUBST(GTK_CFLAGS)
 	AC_SUBST(GTK_LIBS)
@@ -240,6 +243,7 @@ AC_SUBST(MEGATUNIX_DEFINES)
 AC_CONFIG_FILES([ po/Makefile.in
 Makefile 
 include/Makefile
+mtxyaml/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile

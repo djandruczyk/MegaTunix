@@ -61,6 +61,7 @@ headers = \
 	timeout_handlers.h \
 	vetable_gui.h \
 	visibility.h \
+	yaml.h \
 	warmwizard_gui.h \
 	watches.h \
 	widgetmgmt.h \
