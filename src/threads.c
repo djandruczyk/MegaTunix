@@ -294,7 +294,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	t_message->count = count;
 	t_message->clear = clear;
 
-	message->payload = t_message;
+	message->payload = (void *)t_message;
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
 	tmp = UPD_LOGBAR;
 	g_array_append_val(message->functions,tmp);
@@ -329,7 +329,7 @@ G_MODULE_EXPORT gboolean queue_function(const gchar * name)
 	qfunc = g_new0(QFunction, 1);
 	qfunc->func_name = name;
 
-	message->payload = qfunc;
+	message->payload = (void *)qfunc;
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
 	tmp = UPD_RUN_FUNCTION;
 	g_array_append_val(message->functions,tmp);
@@ -373,7 +373,7 @@ G_MODULE_EXPORT void  thread_update_widget(
 	w_update->type = type;
 	w_update->msg = msg;
 
-	message->payload = w_update;
+	message->payload = (void *)w_update;
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
@@ -408,7 +408,7 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 	w_update->state = state;
 	w_update->msg = NULL;
 
-	message->payload = w_update;
+	message->payload = (void *)w_update;
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
@@ -522,7 +522,7 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	w_update->type = MTX_GROUP_COLOR;
 	w_update->msg = NULL;
 
-	message->payload = w_update;
+	message->payload = (void *)w_update;
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);

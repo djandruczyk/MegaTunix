@@ -57,6 +57,7 @@ gboolean dealloc_rtt_model(GtkTreeModel *, GtkTreePath *, GtkTreeIter *,gpointer
 Io_Message * initialize_io_message(void);
 OutputData * initialize_outputdata(void);
 Text_Message * initialize_text_message(void);
+Gui_Message * initialize_gui_message(void);
 /* Prototypes */
 
 #endif
