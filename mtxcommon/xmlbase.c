@@ -165,11 +165,14 @@ gboolean generic_xml_gchar_import(xmlNode *node, gpointer dest)
 
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
-	g_return_val_if_fail(node->children,FALSE);
+	val = (gchar **)dest;
+	if (!node->children) /* Empty node */
+	{
+		*val = g_strdup("");
+		return TRUE;
+	}
 	g_return_val_if_fail((node->children->type == XML_TEXT_NODE),FALSE);
 	g_return_val_if_fail(node->children->content,FALSE);
-
-	val = (gchar **)dest;
 	*val = g_strdup((gchar *)node->children->content);
 	return TRUE;
 }
