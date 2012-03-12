@@ -1,3 +1,4 @@
+subdirs = yaml-cpp
 
 headers = \
 	3d_vetable.h \

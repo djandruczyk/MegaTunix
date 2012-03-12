@@ -243,6 +243,8 @@ AC_SUBST(MEGATUNIX_DEFINES)
 AC_CONFIG_FILES([ po/Makefile.in
 Makefile 
 include/Makefile
+include/yaml-cpp/Makefile
+yaml-cpp/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
