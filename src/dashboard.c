@@ -76,7 +76,6 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 		return NULL;
 	}
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	register_widget(filename,window);
 	gtk_window_set_title(GTK_WINDOW(window),_("Dash Cluster"));
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 
@@ -394,13 +393,11 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 		if (!(rtv_map->rtv_hash))
 			return;
 		rtv_obj = g_hash_table_lookup(rtv_map->rtv_hash,source);
-		if (!(rtv_obj))
-		{
-			MTXDBG(CRITICAL,_("Bad things man!, object doesn't exist for %s\n"),source);
-			continue ;
-		}
 		d_gauge = g_new0(Dash_Gauge, 1);
-		d_gauge->object = rtv_obj;
+		if (!(rtv_obj))
+			MTXDBG(CRITICAL,_("Bad things man!, object doesn't exist for %s\n"),source);
+		else
+			d_gauge->object = rtv_obj;
 		d_gauge->source = g_strdup(source);
 		d_gauge->gauge = child->widget;
 		d_gauge->dash = dash;
@@ -428,6 +425,9 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
 	
 	gauge = d_gauge->gauge;
+	/* If no RTV object (i.e. not found), silently return */
+	if (!d_gauge->object)
+		return;
 
 	history = (GArray *)DATA_GET(d_gauge->object,"history");
 	if ((GINT)history->len-1 <= 0)
@@ -1185,6 +1185,8 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 			gtk_label_set_text(GTK_LABEL(label),tmpstr);
 			g_free(tmpstr);
 			widget = load_dashboard(g_strdup(args->dashboard),GINT_TO_POINTER(1));
+			register_widget(args->dashboard,widget);
+			OBJ_SET_FULL(lookup_widget("dash1_cbutton"),"filename",g_strdup(args->dashboard),g_free);
 			nodash1 = FALSE;
 		}
 		if ((GTK_IS_WIDGET(widget) && (args->dash_fullscreen)))
@@ -1201,7 +1203,9 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 			tmpstr = g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL);
 			gtk_label_set_text(GTK_LABEL(label),tmpstr);
 			g_free(tmpstr);
-			load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(1));
+			widget = load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(1));
+			register_widget(tmpbuf,widget);
+			OBJ_SET_FULL(lookup_widget("dash1_cbutton"),"filename",g_strdup(tmpbuf),g_free);
 			tmpbuf = NULL;
 			nodash1 = FALSE;
 		}
@@ -1216,7 +1220,9 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 		tmpstr = g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL);
 		gtk_label_set_text(GTK_LABEL(label),tmpstr);
 		g_free(tmpstr);
-		load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(2));
+		widget = load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(2));
+		register_widget(tmpbuf,widget);
+		OBJ_SET_FULL(lookup_widget("dash2_cbutton"),"filename",g_strdup(tmpbuf),g_free);
 		tmpbuf = NULL;
 		nodash2 = FALSE;
 	}
@@ -1240,7 +1246,7 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 
 
 /*!
-  \brief Presents a filechooser to pick hte dash you want
+  \brief Presents a filechooser to pick the dash you want
   \param widget is the pointer to dash choice button
   \param data is unused
   \returns, TRUE if it handles something, or FALSE otherwise
@@ -1316,11 +1322,13 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 		{
 			DATA_SET(global_data,"dash_1_name",NULL);
 			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),FALSE);
+			deregister_widget(OBJ_GET(lookup_widget("dash1_cbutton"),"filename"));
 		}
 		if ((GINT)data == 2)
 		{
 			DATA_SET(global_data,"dash_2_name",NULL);
 			gtk_widget_set_sensitive(lookup_widget("dash2_cbutton"),FALSE);
+			deregister_widget(OBJ_GET(lookup_widget("dash2_cbutton"),"filename"));
 		}
 	}
 	if (dash_hash)
