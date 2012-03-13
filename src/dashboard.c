@@ -1256,6 +1256,7 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
 	GtkWidget *label = NULL;
+	GtkWidget *dash = NULL;
 	GHashTable *dash_hash = DATA_GET(global_data,"dash_hash");
 
 	if (!DATA_GET(global_data,"interrogated"))
@@ -1287,7 +1288,12 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 			if ((GINT)data == 2)
 				gtk_widget_set_sensitive(lookup_widget("dash2_cbutton"),TRUE);
 		}
-		load_dashboard(filename,data);
+		dash = load_dashboard(filename,data);
+		register_widget(filename,dash);
+		if ((GINT)data == 1)
+			OBJ_SET_FULL(lookup_widget("dash1_cbutton"),"filename",g_strdup(filename),g_free);
+		if ((GINT)data == 2)
+			OBJ_SET_FULL(lookup_widget("dash2_cbutton"),"filename",g_strdup(filename),g_free);
 		return TRUE;
 	}
 	else
