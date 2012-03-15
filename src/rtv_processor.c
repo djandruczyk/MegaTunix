@@ -54,7 +54,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 	static Rtv_Map *rtv_map = NULL;
 	static Firmware_Details *firmware = NULL;
 	gint mtx_temp_units;
-	guchar *raw_realtime = incoming;
+	guchar *raw_realtime = (guchar *)incoming;
 	gconstpointer * object = NULL;
 	GList * list= NULL;
 	guint i = 0;

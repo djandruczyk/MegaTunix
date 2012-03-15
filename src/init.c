@@ -1055,19 +1055,14 @@ G_MODULE_EXPORT void dealloc_io_message(Io_Message * message)
 		}
 	}
 	message->command = NULL;
-	/*printf ("message->payload pointer %p\n",message->payload);*/
-        if (message->payload)
+	if (message->payload)
 	{
 		payload = (OutputData *)message->payload;
-		/*printf ("payload pointer %p\n",payload);*/
 		if (payload)
 		{
-			/*printf ("payload->data pointer %p\n",payload->data);*/
 			if (payload->data)
 			{
-				//DATA_SET(payload->data,"_WILL_NEVER_USE_",NULL);
 				g_dataset_destroy(payload->data);
-				//printf("Payload(%p)->data address is %p\n",payload,payload->data);
 				cleanup(payload->data);
 			}
 			cleanup(payload);

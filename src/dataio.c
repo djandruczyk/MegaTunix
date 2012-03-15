@@ -170,7 +170,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	static Serial_Params *serial_params = NULL;
 	static Firmware_Details *firmware = NULL;
 	static gfloat *factor = NULL;
-	OutputData *output = message->payload;
+	OutputData *output = (OutputData *)message->payload;
 	gint res = 0;
 	gchar * err_text = NULL;
 	guint i = 0;
