@@ -55,6 +55,7 @@ headers = \
 	serialio.h \
 	sleep_calib.h \
 	stringmatch.h \
+	tableio.h \
 	tabloader.h \
 	tag_loader.h \
 	template.h \
