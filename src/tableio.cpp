@@ -24,10 +24,13 @@
 #include <fstream>
 #include <string>
 #include <vector>
+extern "C" {
+#include <getfiles.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
-extern "C" {
+#include <notifications.h>
 #include <tableio.h>
+#include <widgetmgmt.h>
 }
 
 extern gconstpointer *global_data;
@@ -113,8 +116,29 @@ void operator >> (const YAML::Node &node, ThreeDTable &tbl) {
 /* This doesn't work yet */
 G_MODULE_EXPORT void import_single_table(gint table_num) {
 	Firmware_Details *firmware = NULL;
+	MtxFileIO *fileio = NULL;
+	ThreeDTable *tbl = NULL;
+	gchar *filename = NULL;
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
+	g_return_if_fail(DATA_GET(global_data,"interrogated"));
+	g_return_if_fail((table_num < 0) || (table_num >= firmware->total_tables));
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->parent = lookup_widget("main_window");
+	fileio->on_top = TRUE;
+	fileio->title = g_strdup("Select your Table backup file to import");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+	filename = choose_file(fileio);
+	if (!filename)
+	{
+		update_logbar("tools_view","warning",_("NO FILE chosen for VEX import\n"),FALSE,FALSE,FALSE);
+		return;
+	}
+
+//	tbl = yaml_3d_import(filename);
 
 	printf("told to import table number %i\n",table_num);
 }
