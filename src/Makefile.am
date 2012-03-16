@@ -70,12 +70,12 @@ megatunix_SOURCES = \
 	wrappers.c \
 	xmlcomm.c 
 
-megatunix_DEPENDENCIES = @WIN32_RESOURCES@  ../widgets/libmtxgauge.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../mtxcommon/libmtxcommon.la ../mtxmatheval/libmtxmatheval.la ../widgets/libmtxcombo_mask.la
+megatunix_DEPENDENCIES = @WIN32_RESOURCES@  ../widgets/libmtxgauge.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../mtxcommon/libmtxcommon.la ../mtxmatheval/libmtxmatheval.la ../widgets/libmtxcombo_mask.la ../yaml-cpp/libmtxyamlcpp.la
 
 resources.o:
 	$(WINDRES) -i resources.rc -o resources.o
 
-megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../widgets/libmtxgauge.la ../widgets/libmtxcombo_mask.la @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
+megatunix_LDADD = @GTK_LIBS@ @GLEXT_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../widgets/libmtxgauge.la ../widgets/libmtxcombo_mask.la ../yaml-cpp/libmtxyamlcpp.la  @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
 
 megatunix_LDFLAGS = $(LTLIBINTL)
 
