@@ -55,6 +55,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <tableio.h>
 #include <tabloader.h>
 #include <threads.h>
 #include <timeout_handlers.h>
@@ -690,8 +691,11 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case IMPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
+				import_single_table((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
+						/*
 				if(get_symbol("select_table_for_import",(void*)&select_for))
 					select_for((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
+					*/
 			break;
 		case RESCALE_TABLE:
 			rescale_table(widget);

@@ -18,50 +18,54 @@
   \author David Andruczyk
   */
 
+#include <defines.h>
 #include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
+#include <firmware.h>
+#include <gtk/gtk.h>
+extern "C" {
 #include <tableio.h>
+}
 
-//extern gconstpointer *global_data;
+extern gconstpointer *global_data;
 
 
 /*!\brief Yaml Table representing a 2D table data block
  */
-struct Table {
+struct ZTable {
 	int rows;
 	int columns;
 	std::string unit;
 	std::string label;
 	std::vector <float> values;
 };
-/*!\brief Yaml Axis representing a 1 AXIS of a 3D table
+/*!\brief Yaml ThreeDAxis representing a 1 AXIS of a 3D table
  */
-struct Axis {
+struct ThreeDAxis {
 	int num_elements;
 	std::string unit;
 	std::string label;
 	std::vector <float> values;
 };
-/*!\brief Yaml Axis representing the combined datastructures of a 
- * single 3D table
+/*!\brief structure representing the YAML for a 3D table
  */
 struct ThreeDTable {
 	std::string title;
 	std::string description;
 	int rows;
 	int cols;
-	Axis X;
-	Axis Y;
-	Table Z;
+	ThreeDAxis X;
+	ThreeDAxis Y;
+	ZTable Z;
 };
 
 /*!brief parses a yaml node represneting a Table structure of a 3D VE/Spark/etc
  * table
  */
-void operator >> (const YAML::Node& node, Table& table) { 
+void operator >> (const YAML::Node& node, ZTable& table) { 
 	int cols = 0;
 	node["unit"] >> table.unit;
 	node["label"] >> table.label;
@@ -82,7 +86,7 @@ void operator >> (const YAML::Node& node, Table& table) {
 /*!brief parses a yaml node represneting an Axis strucutre of a 3D table
  * table
  */
-void operator >> (const YAML::Node& node, Axis &axis) {
+void operator >> (const YAML::Node& node, ThreeDAxis &axis) {
 	node["unit"] >> axis.unit;
 	node["label"] >> axis.label;
 	const YAML::Node& values = node["values"];
@@ -107,3 +111,15 @@ void operator >> (const YAML::Node &node, ThreeDTable &tbl) {
 
 
 /* This doesn't work yet */
+G_MODULE_EXPORT void import_single_table(gint table_num) {
+	Firmware_Details *firmware = NULL;
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	g_return_if_fail(firmware);
+
+	printf("told to import table number %i\n",table_num);
+}
+
+/* This doesn't work yet */
+G_MODULE_EXPORT void export_single_table(gint table_num) {
+	printf("told to import table number %i\n",table_num);
+}

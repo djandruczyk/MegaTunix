@@ -21,9 +21,11 @@
 #ifndef __TABLEIO_H__
 #define __TABLEIO_H__
 
-#include <yaml-cpp/yaml.h>
+#include <gtk/gtk.h>
 
 /* Prototypes */
+void import_single_table(gint);
+void export_single_table(gint);
 /* Prototypes */
 
 #endif
