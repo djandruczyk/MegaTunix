@@ -18,13 +18,13 @@
   \author David Andruczyk
   */
 
-#include <defines.h>
 #include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 extern "C" {
+#include <defines.h>
 #include <getfiles.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
@@ -65,6 +65,7 @@ struct ThreeDTable {
 	ZTable Z;
 };
 
+ThreeDTable * yaml_3d_import(gchar *);
 /*!brief parses a yaml node represneting a Table structure of a 3D VE/Spark/etc
  * table
  */
@@ -123,7 +124,8 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 	g_return_if_fail(DATA_GET(global_data,"interrogated"));
-	g_return_if_fail((table_num < 0) || (table_num >= firmware->total_tables));
+	printf("table_num is %i, total tables %i\n",table_num,firmware->total_tables);
+	g_return_if_fail(((table_num >= 0) && (table_num < firmware->total_tables)));
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup("MTX_VexFiles");
@@ -137,10 +139,22 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 		update_logbar("tools_view","warning",_("NO FILE chosen for VEX import\n"),FALSE,FALSE,FALSE);
 		return;
 	}
+	tbl = yaml_3d_import(filename);
+	/* Need to validate the axis ddimensions and table size */
+}
 
-//	tbl = yaml_3d_import(filename);
-
-	printf("told to import table number %i\n",table_num);
+ThreeDTable * yaml_3d_import(gchar * filename) {
+	ThreeDTable *tbl;
+	std::ifstream input(filename);
+	YAML::Parser parser(input);
+	YAML::Node doc;
+	parser.GetNextDocument(doc);
+	/* BAD code, as this assumes multiple tables, and we only expect one */
+	for (unsigned i=0;i<doc.size();i++) {
+		tbl = new ThreeDTable;
+		doc[i] >> *tbl;
+	}
+	return tbl;
 }
 
 /* This doesn't work yet */
