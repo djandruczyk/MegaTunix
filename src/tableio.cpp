@@ -27,6 +27,7 @@ extern "C" {
 #include <defines.h>
 #include <getfiles.h>
 #include <firmware.h>
+#include <gui_handlers.h>
 #include <gtk/gtk.h>
 #include <notifications.h>
 #include <plugin.h>
@@ -59,8 +60,6 @@ struct ThreeDAxis {
 struct ThreeDTable {
 	std::string title;
 	std::string description;
-	int rows;
-	int cols;
 	ThreeDAxis X;
 	ThreeDAxis Y;
 	ZTable Z;
@@ -157,9 +156,9 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 	y_cur = firmware->table_params[table_num]->y_bincount;
 	z_cur = firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount;
 	/*
-	printf("Import X size %i, Y size %i, Z length %i\n",x_len,y_len,z_len);
-	printf("Firmware table x size is %i, y size is %i, Z length is %i\n",x_cur,y_cur,z_cur);
-	*/
+	   printf("Import X size %i, Y size %i, Z length %i\n",x_len,y_len,z_len);
+	   printf("Firmware table x size is %i, y size is %i, Z length is %i\n",x_cur,y_cur,z_cur);
+	   */
 	if (x_len != x_cur) {
 		printf("X axis lengths (%i != %i) do NOT MATCH!\n",x_len,x_cur);
 		error = TRUE;
@@ -188,7 +187,7 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 		ecu_table_import(table_num,x_elements,y_elements,z_elements);
 	}
 	g_free(filename);
-			
+
 	delete tbl;
 }
 

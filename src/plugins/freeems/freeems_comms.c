@@ -791,6 +791,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
+	freeems_store_new_block(canID,locID,offset,block,num_bytes);
 	output->queue_update = TRUE;
 	io_cmd_f(firmware->write_command,output);
 	/*
@@ -830,6 +831,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
 
+//	printf("update write status\n");
 	if (!output)
 		goto red_or_black;
 	else
@@ -842,6 +844,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		mode = (WriteMode)DATA_GET(output->data,"mode");
 		freeems_find_mtx_page(locID,&page);
 
+//		printf("locID %i, page %i\n",locID,page);
 		if (!message->status) /* Bad write! */
 		{
 			MTXDBG(CRITICAL|SERIAL_WR,_("WRITE failed, rolling back!\n"));
@@ -851,20 +854,27 @@ G_MODULE_EXPORT void update_write_status(void *data)
 
 	if (output->queue_update)
 	{
+//		printf("queu update\n");
 		if ((GINT)DATA_GET(global_data,"mtx_color_scale") == AUTO_COLOR_SCALE)
 		{	
+//			printf("auto-scale\n");
 			for (i=0;i<firmware->total_tables;i++)
 			{
+//				printf("checking table %i\n",i);
 				if (firmware->table_params[i]->z_page == page)
 				{
+//					printf("Found matching table %i at page %i\n",i,page);
 					gdk_threads_enter();
 					recalc_table_limits_f(canID,i);
 					gdk_threads_leave();
 					if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 					{
+//						printf("Table limits for table %i have changed\n",i);
 						tmpbuf = g_strdup_printf("table%i_color_id",i);
 						if (!DATA_GET(global_data,tmpbuf))
 						{
+//							printf("Creating deferred function\n");
+
 							id = gdk_threads_add_timeout(2000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
 							DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
 						}
@@ -873,6 +883,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 				}
 			}
 		}
+//		printf("Refreshing widgets at page %i, offset %i, length %i\n",page,offset,length);
 		thread_refresh_widget_range_f(page,offset,length);
 
 	}

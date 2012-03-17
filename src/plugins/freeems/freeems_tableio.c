@@ -82,7 +82,7 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 	}
 	/* WRITE new X axis values */
 	freeems_chunk_write(0,
-			firmware->table_params[table_num]->x_page,
+			firmware->page_params[firmware->table_params[table_num]->x_page]->phys_ecu_page,
 			firmware->table_params[table_num]->x_base,
 			count*mult,
 			data);
@@ -124,7 +124,7 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 	/* WRITE new Y axis values */
 	g_free(bins);
 	freeems_chunk_write(0,
-			firmware->table_params[table_num]->y_page,
+			firmware->page_params[firmware->table_params[table_num]->y_page]->phys_ecu_page,
 			firmware->table_params[table_num]->y_base,
 			count*mult,
 			data);
@@ -164,7 +164,7 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 	}
 	/* WRITE new Z values */
 	freeems_chunk_write(0,
-			firmware->table_params[table_num]->z_page,
+			firmware->page_params[firmware->table_params[table_num]->z_page]->phys_ecu_page,
 			firmware->table_params[table_num]->z_base,
 			count*mult,
 			data);
