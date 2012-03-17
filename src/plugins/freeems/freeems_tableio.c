@@ -19,6 +19,7 @@
   */
 
 #include <firmware.h>
+#include <freeems_comms.h>
 #include <freeems_plugin.h>
 #include <freeems_tableio.h>
 #include <gtk/gtk.h>
@@ -80,6 +81,11 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 		}
 	}
 	/* WRITE new X axis values */
+	freeems_chunk_write(0,
+			firmware->table_params[table_num]->x_page,
+			firmware->table_params[table_num]->x_base,
+			count*mult,
+			data);
 	g_free(bins);
 
 	/* Y Bins */
@@ -115,8 +121,13 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 				ptr32[i] = GINT_TO_LE(bins[i]);
 		}
 	}
-	/* WRITE new X axis values */
+	/* WRITE new Y axis values */
 	g_free(bins);
+	freeems_chunk_write(0,
+			firmware->table_params[table_num]->y_page,
+			firmware->table_params[table_num]->y_base,
+			count*mult,
+			data);
 
 	/* Z Bins */
 	bins = convert_bins(table_num, z_elements,_Z_);
@@ -151,7 +162,12 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 				ptr32[i] = GINT_TO_LE(bins[i]);
 		}
 	}
-	/* WRITE new X axis values */
+	/* WRITE new Z values */
+	freeems_chunk_write(0,
+			firmware->table_params[table_num]->z_page,
+			firmware->table_params[table_num]->z_base,
+			count*mult,
+			data);
 	g_free(bins);
 }
 
