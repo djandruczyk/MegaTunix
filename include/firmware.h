@@ -29,19 +29,19 @@
 
 typedef enum
 {	/* up to 32 Capability flags.... */
-	/* No capabilities == Standard B&G code with no modifications */
-	MS1		= 1<<0,
-	MS1_STD		= 1<<1,
-	MS1_E		= 1<<2,
-	MS1_DT		= 1<<3,
-	MS2		= 1<<4,
-	MS2_STD		= 1<<5,
-	MS2_E		= 1<<6,
-	MS2_E_COMPMON	= 1<<7,
-	PIS		= 1<<8,
-	SECU_3		= 1<<9,
-	FREEEMS		= 1<<10,
-	JIMSTIM		= 1<<11
+	/* No capabilities =        = Standard B&G code with no modifications */
+	MS1                = 1<<0,
+	MS1_STD            = 1<<1,
+	MS1_E              = 1<<2,
+	MS1_DT             = 1<<3,
+	MS2                = 1<<4,
+	MS2_STD            = 1<<5,
+	MS2_E              = 1<<6,
+	MS2_E_COMPMON      = 1<<7,
+	PIS                = 1<<8,
+	SECU_3             = 1<<9,
+	FREEEMS            = 1<<10,
+	JIMSTIM            = 1<<11
 }Capability;
 
 

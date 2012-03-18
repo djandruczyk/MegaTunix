@@ -1044,7 +1044,6 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->x_size = MTX_U16;
 	firmware->table_params[0]->y_size = MTX_U16;
 	firmware->table_params[0]->z_size = MTX_U16;
-	firmware->table_params[0]->x_source = g_strdup("RPM");
 	firmware->table_params[0]->x_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[0]->y_fromecu_mult = g_new0(gfloat, 1);
 	firmware->table_params[0]->z_fromecu_mult = g_new0(gfloat, 1);
@@ -1053,6 +1052,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	*(firmware->table_params[0]->x_fromecu_mult) = 0.5;
 	*(firmware->table_params[0]->y_fromecu_mult) = 0.01;
 	*(firmware->table_params[0]->z_fromecu_mult) = 0.001953125;
+	firmware->table_params[0]->x_source = g_strdup("RPM");
 	firmware->table_params[0]->y_source = g_strdup("LoadMain");
 	firmware->table_params[0]->z_source = g_strdup("VEMain");
 	firmware->table_params[0]->x_suffix = g_strdup("RPM");

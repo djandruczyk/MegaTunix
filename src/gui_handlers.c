@@ -686,8 +686,11 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case EXPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
+				export_single_table((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
+			/*
 				if(get_symbol("select_table_for_export",(void*)&select_for))
 					select_for((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
+					*/
 			break;
 		case IMPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))

@@ -23,10 +23,13 @@
 
 #include <enums.h>
 #include <gtk/gtk.h>
+#include <tableio.h>
 
 /* Prototypes */
 void ecu_table_import(gint, gfloat *, gfloat *, gfloat *);
-gint * convert_bins(gint, gfloat *, Axis);
+gint * convert_toecu_bins(gint, gfloat *, Axis);
+gfloat * convert_fromecu_bins(gint, Axis);
+TableExport * ecu_table_export(gint);
 /* Prototypes */
 
 #endif

@@ -23,6 +23,25 @@
 
 #include <gtk/gtk.h>
 
+typedef struct _TableExport TableExport;
+
+struct _TableExport 
+{
+	gint x_len;
+	gint y_len;
+	gfloat *x_bins;
+	gfloat *y_bins;
+	gfloat *z_bins;
+	const gchar * x_label;
+	const gchar * y_label;
+	const gchar * z_label;
+	const gchar * x_unit;
+	const gchar * y_unit;
+	const gchar * z_unit;
+	const gchar * title;
+	const gchar * desc;
+};
+
 /* Prototypes */
 void import_single_table(gint);
 void export_single_table(gint);

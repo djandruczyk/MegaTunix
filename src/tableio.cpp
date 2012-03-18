@@ -32,6 +32,7 @@ extern "C" {
 #include <notifications.h>
 #include <plugin.h>
 #include <tableio.h>
+#include <time.h>
 #include <widgetmgmt.h>
 }
 
@@ -51,6 +52,7 @@ struct ZTable {
  */
 struct ThreeDAxis {
 	int num_elements;
+	std::string name;
 	std::string unit;
 	std::string label;
 	std::vector <float> values;
@@ -65,7 +67,7 @@ struct ThreeDTable {
 	ZTable Z;
 };
 
-ThreeDTable * yaml_3d_import(gchar *);
+ThreeDTable *yaml_3d_import(gchar *);
 /*!brief parses a yaml node represneting a Table structure of a 3D VE/Spark/etc
  * table
  */
@@ -205,7 +207,131 @@ ThreeDTable * yaml_3d_import(gchar * filename) {
 	return tbl;
 }
 
+YAML::Emitter & operator << (YAML::Emitter &out, const ThreeDAxis& axis) {
+	out << YAML::BeginMap;
+	out << YAML::Key << "unit";
+	out << YAML::Value << axis.unit;
+	out << YAML::Key << "label";
+	out << YAML::Value << axis.label;
+	out << YAML::Key << "values";
+	out << YAML::Value << YAML::Flow << YAML::BeginSeq;
+	for (unsigned i=0;i< axis.num_elements; i++) {
+		out << axis.values[i];
+	}
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
+	return out;
+}
+
+YAML::Emitter & operator << (YAML::Emitter &out, const ZTable& tbl) {
+	unsigned int count = 0;
+	out << YAML::BeginMap;
+	out << YAML::Key << "unit";
+	out << YAML::Value << tbl.unit;
+	out << YAML::Key << "label";
+	out << YAML::Value << tbl.label;
+	out << YAML::Key << "values";
+	//out << YAML::Value << YAML::Flow << YAML::BeginSeq;
+	out << YAML::Value << YAML::BeginSeq;
+	for (unsigned i=0;i< tbl.rows; i++) {
+		out << YAML::Flow << YAML::BeginSeq;
+		for (unsigned j=0; j<tbl.columns;j++) {
+			out << tbl.values[count];
+			count++;
+		}
+		out << YAML::EndSeq;
+	}
+	out << YAML::EndSeq;
+	out << YAML::EndMap;
+	return out;
+}
+
+YAML::Emitter & operator << (YAML::Emitter &out, const ThreeDTable& table) {
+	out << YAML::BeginDoc;
+	out << YAML::BeginSeq;
+	out << YAML::BeginMap;
+	out << YAML::Key << "3DTable";
+	out << YAML::Value << NULL;
+	out << YAML::Key << "title";
+	out << YAML::Value << table.title;
+	out << YAML::Key << "description";
+	out << YAML::Value << table.description;
+	out << YAML::Key << "X";
+	out << YAML::Value << table.X;
+	out << YAML::Key << "Y";
+	out << YAML::Value << table.Y;
+	out << YAML::Key << "Z";
+	out << YAML::Value << table.Z;
+	out << YAML::EndMap;
+	out << YAML::EndSeq;
+	out << YAML::EndDoc;
+}
+
+
+
 /* This doesn't work yet */
 G_MODULE_EXPORT void export_single_table(gint table_num) {
-	printf("told to import table number %i\n",table_num);
+	Firmware_Details *firmware = NULL;
+	TableExport *table = NULL;
+	gboolean error = FALSE;
+	TableExport * (*ecu_table_export)(gint) = NULL;
+	ThreeDTable yaml_table;
+	struct tm *tm = NULL;
+	time_t *t = NULL;
+	gchar * filename = NULL;
+	MtxFileIO *fileio = NULL;
+	YAML::Emitter out;
+
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	get_symbol("ecu_table_export",(void **)&ecu_table_export);
+	g_return_if_fail(firmware);
+	g_return_if_fail(ecu_table_export);
+	g_return_if_fail(DATA_GET(global_data,"interrogated"));
+	g_return_if_fail(((table_num >= 0) && (table_num < firmware->total_tables)));
+	t = g_new0(time_t,1);
+	time(t);
+	tm = localtime(t);
+	g_free(t);
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->parent = lookup_widget("main_window");
+	fileio->on_top = TRUE;
+	fileio->default_filename= g_strdup("VEX_Backup.vex");
+	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.vex",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
+	fileio->default_extension= g_strdup("yaml");
+	fileio->title = g_strdup("Select your Table backup file to export");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
+	filename = choose_file(fileio);
+	if (!filename)
+	{
+		update_logbar("tools_view","warning",_("NO FILE chosen for Table export\n"),FALSE,FALSE,FALSE);
+		return;
+	}
+	table = ecu_table_export(table_num);
+
+
+	yaml_table.title = table->title;
+	yaml_table.description = table->desc;
+	yaml_table.X.unit = table->x_unit;
+	yaml_table.X.label = table->x_label;
+	yaml_table.Y.unit = table->y_unit;
+	yaml_table.Y.label = table->y_label;
+	yaml_table.Z.unit = table->z_unit;
+	yaml_table.Z.label = table->z_label;
+	yaml_table.Z.rows = table->x_len;
+	yaml_table.Z.columns = table->y_len;
+	yaml_table.X.num_elements = table->x_len;
+	yaml_table.Y.num_elements = table->y_len;
+	for (unsigned i = 0;i<table->x_len;i++)
+		yaml_table.X.values.push_back(table->x_bins[i]);
+	for (unsigned i = 0;i<table->y_len;i++)
+		yaml_table.Y.values.push_back(table->y_bins[i]);
+	for (unsigned i = 0;i<( table->x_len * table->y_len);i++)
+		yaml_table.Z.values.push_back(table->z_bins[i]);
+
+	std::ofstream output(filename);
+	out << yaml_table;
+	output << out.c_str();
+	output.close();
 }
