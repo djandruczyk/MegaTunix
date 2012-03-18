@@ -1253,7 +1253,7 @@ void update_range(GtkWidget *widget, gfloat value)
 	adj = gtk_range_get_adjustment(GTK_RANGE(widget));
 
 	g_signal_handlers_block_by_func(G_OBJECT(widget),
-			G_CALLBACK(common_slider_handler), NULL);
+			(gpointer)G_CALLBACK(common_slider_handler), NULL);
 	if (value > adj->upper)
 		gtk_range_set_value(GTK_RANGE(widget),adj->upper);
 	else if (value < adj->lower)
@@ -1261,7 +1261,7 @@ void update_range(GtkWidget *widget, gfloat value)
 	else
 		gtk_range_set_value(GTK_RANGE(widget),value);
 	g_signal_handlers_unblock_by_func(G_OBJECT(widget),
-			G_CALLBACK(common_slider_handler), NULL);
+			(gpointer)G_CALLBACK(common_slider_handler), NULL);
 }
 
 
