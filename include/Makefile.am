@@ -1,4 +1,4 @@
-subdirs = yaml-cpp
+SUBDIRS = yaml-cpp
 
 headers = \
 	3d_vetable.h \
@@ -61,6 +61,7 @@ headers = \
 	template.h \
 	threads.h \
 	timeout_handlers.h \
+	version.h \
 	vetable_gui.h \
 	visibility.h \
 	warmwizard_gui.h \

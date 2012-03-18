@@ -20,7 +20,7 @@ rtxml_files = 	\
 
 rtmap_DATA = $(rtxml_files)
 
-EXTRA_DIST = $(rtmap_in_files) README
+EXTRA_DIST = $(rtxml_files) README
 
 CLEANFILES = *.rtv_map *.h
 

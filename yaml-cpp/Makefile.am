@@ -3,6 +3,30 @@ INCLUDES = \
 
 lib_LTLIBRARIES = libmtxyamlcpp.la
 
+headers = collectionstack.h \
+				directives.h \
+				emitterstate.h \
+				emitterutils.h \
+				exp.h \
+				indentation.h \
+				iterpriv.h \
+				nodebuilder.h \
+				nodeownership.h \
+				ptr_stack.h \
+				ptr_vector.h \
+				regex.h \
+				regeximpl.h \
+				scanner.h \
+				scanscalar.h \
+				scantag.h \
+				setting.h \
+				singledocparser.h \
+				streamcharsource.h \
+				stream.h \
+				stringsource.h \
+				tag.h \
+				token.h
+
 libmtxyamlcpp_la_SOURCES = aliasmanager.cpp \
 				binary.cpp \
 				conversion.cpp \
@@ -42,6 +66,6 @@ AM_CPPFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused
 
 CLEANFILES = *~ core gmon.out nohup.out 
 
-EXTRA_DIST = 
+EXTRA_DIST =  $(headers)
 
 

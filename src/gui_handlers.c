@@ -660,7 +660,6 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 	void *obj_data = NULL;
 	gint handler = -1;
 	Firmware_Details *firmware = NULL;
-	void (*select_for)(gint) = NULL;
 	void (*revert)(void) = NULL;
 	gboolean (*create_2d_table_editor)(gint,GtkWidget *) = NULL;
 	gboolean (*create_2d_table_editor_group)(GtkWidget *) = NULL;
@@ -687,18 +686,10 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 		case EXPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
 				export_single_table((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
-			/*
-				if(get_symbol("select_table_for_export",(void*)&select_for))
-					select_for((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
-					*/
 			break;
 		case IMPORT_SINGLE_TABLE:
 			if (OBJ_GET(widget,"table_num"))
 				import_single_table((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
-						/*
-				if(get_symbol("select_table_for_import",(void*)&select_for))
-					select_for((GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10));
-					*/
 			break;
 		case RESCALE_TABLE:
 			rescale_table(widget);

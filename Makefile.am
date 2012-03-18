@@ -23,8 +23,7 @@ CLEANFILES = *~ core autom4te.cache gmon.out
 
 DISTCLEANFILES = intltool-extract intltool-merge intltool-update po/.intltool-merge-cache
 
-EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE ${INTLTOOL_FILES}
-#EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS TODO README INSTALL LICENSE 
+EXTRA_DIST = m4/ChangeLog configure CREDITS AUTHORS README.md INSTALL LICENSE ${INTLTOOL_FILES}
 doc:
 	@doxygen
 
@@ -38,18 +37,20 @@ update-po: check-gettext
 	 fi ; \
 	  for dir in $$(echo Gui src dashdesigner gaugedesigner widgets msloader menu); do \
 		find $$dir -name "*.c" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
+		find $$dir -name "*.cpp" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 		find $$dir -name "*.glade" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 		find $$dir -name "*.ui" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 	  	find $$dir -name "*.desktop.in" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 	  done ;\
+	  find include -name "*.h" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 	if diff $(srcdir)/po/POTFILES.in $(srcdir)/po/POTFILES.in.2 >/dev/null 2>&1 ; then \
 		rm -f $(srcdir)/po/POTFILES.in.2 ; \
 	else \
 		mv $(srcdir)/po/POTFILES.in.2 $(srcdir)/po/POTFILES.in ; \
 	fi ;\
 	find $(srcdir)/Gui -name "*.in" -print | sort > $(srcdir)/po/SPECIALS.in.2 ; \
-	find $(srcdir)/RealtimeMaps -name "*map.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
-	find $(srcdir)/RuntimeStatus -name "*conf.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
+	find $(srcdir)/RealtimeMaps -name "*.xml" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
+	find $(srcdir)/RuntimeStatus -name "*.xml" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
 	find $(srcdir)/Interrogator -name "*prof.in" -print | sort >> $(srcdir)/po/SPECIALS.in.2 ; \
 	if diff $(srcdir)/po/SPECIALS.in $(srcdir)/po/SPECIALS.in.2 >/dev/null 2>&1 ; then \
 		rm -f $(srcdir)/po/SPECIALS.in.2 ; \

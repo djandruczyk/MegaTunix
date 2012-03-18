@@ -23,6 +23,7 @@
 #ifndef __winserialcommhelper_H__
 #define __winserialcommhelper_H__
 
+#include <defines.h>
 #include <gtk/gtk.h>
 #include <windows.h>
 #include <winserialbuffer.h>
