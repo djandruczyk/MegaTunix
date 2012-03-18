@@ -12,17 +12,17 @@
  */
 
 /*!
-  \file src/freeems_tableio.c
+  \file src/mscommon_tableio.c
   \ingroup CoreMtx
-  \brief freeems_tableio
+  \brief mscommon_tableio
   \author David Andruczyk
   */
 
 #include <conversions.h>
 #include <firmware.h>
-#include <freeems_comms.h>
-#include <freeems_plugin.h>
-#include <freeems_tableio.h>
+#include <mscommon_comms.h>
+#include <mscommon_plugin.h>
+#include <mscommon_tableio.h>
 #include <gtk/gtk.h>
 
 extern gconstpointer *global_data;
@@ -89,8 +89,8 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 		}
 	}
 	/* WRITE new X axis values */
-	freeems_chunk_write(0,
-			firmware->page_params[firmware->table_params[table_num]->x_page]->phys_ecu_page,
+	ms_chunk_write(0,
+			firmware->table_params[table_num]->x_page,
 			firmware->table_params[table_num]->x_base,
 			count*mult,
 			data);
@@ -131,8 +131,8 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 	}
 	/* WRITE new Y axis values */
 	g_free(bins);
-	freeems_chunk_write(0,
-			firmware->page_params[firmware->table_params[table_num]->y_page]->phys_ecu_page,
+	ms_chunk_write(0,
+			firmware->table_params[table_num]->y_page,
 			firmware->table_params[table_num]->y_base,
 			count*mult,
 			data);
@@ -171,8 +171,8 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 		}
 	}
 	/* WRITE new Z values */
-	freeems_chunk_write(0,
-			firmware->page_params[firmware->table_params[table_num]->z_page]->phys_ecu_page,
+	ms_chunk_write(0,
+			firmware->table_params[table_num]->z_page,
 			firmware->table_params[table_num]->z_base,
 			count*mult,
 			data);
@@ -196,35 +196,35 @@ gint * convert_toecu_bins(gint table_num, gfloat *elements, Axis a)
 	gint *bins = NULL;
 	gint count = 0;
 	gint base = 0;
-	gint page = 0;
 	gint i = 0;
-	GList *** ecu_widgets = NULL;
+	gint page = 0;
+	GList ***ecu_widgets = NULL;
 	GList *list = NULL;
-	GtkWidget * widget = NULL;
-
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	g_return_val_if_fail(ecu_widgets,NULL);
+	GtkWidget * widget;
+	
 	firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,NULL);
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	g_return_val_if_fail(firmware,NULL);
 
 	switch (a)
 	{
 		case _X_:
-			page = firmware->table_params[table_num]->x_page;
-			base = firmware->table_params[table_num]->x_base;
 			mult = get_multiplier_f(firmware->table_params[table_num]->x_size);
+			base = firmware->table_params[table_num]->x_base;
+			page = firmware->table_params[table_num]->x_page;
 			count = firmware->table_params[table_num]->x_bincount;
 			break;
 		case _Y_:
-			page = firmware->table_params[table_num]->y_page;
-			base = firmware->table_params[table_num]->y_base;
 			mult = get_multiplier_f(firmware->table_params[table_num]->y_size);
+			base = firmware->table_params[table_num]->y_base;
+			page = firmware->table_params[table_num]->y_page;
 			count = firmware->table_params[table_num]->y_bincount;
 			break;
 		case _Z_:
-			page = firmware->table_params[table_num]->z_page;
-			base = firmware->table_params[table_num]->z_base;
 			mult = get_multiplier_f(firmware->table_params[table_num]->z_size);
+			base = firmware->table_params[table_num]->z_base;
+			page = firmware->table_params[table_num]->z_page;
 			count = firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount;
 			break;
 	}
@@ -233,7 +233,7 @@ gint * convert_toecu_bins(gint table_num, gfloat *elements, Axis a)
 	for (i=0;i<count;i++)
 	{
 		list = ecu_widgets[page][base+(i*mult)];
-		/* First widget is from the dataame which is what we want */
+		/* First widget will be from the datamap */
 		widget = g_list_nth_data(list,0);
 		bins[i] = convert_before_download(widget,elements[i]);
 	}
@@ -248,40 +248,48 @@ gint * convert_toecu_bins(gint table_num, gfloat *elements, Axis a)
  * */
 gfloat * convert_fromecu_bins(gint table_num, Axis a)
 {
-	Firmware_Details *firmware = NULL;
+	static Firmware_Details *firmware = NULL;
 	gint mult = 0;
+	gint canID = 0;
 	gint page = 0;
 	gint base = 0;
-	gint count = 0;
+	DataSize size = MTX_U08;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
 	gfloat *bins = NULL;
+	gint count = 0;
 	gint i = 0;
-	GList *** ecu_widgets = NULL;
+	gint tmpi = 0;
+	GList ***ecu_widgets = NULL;
 	GList *list = NULL;
-	GtkWidget * widget = NULL;
+	GtkWidget * widget;
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	g_return_val_if_fail(ecu_widgets,NULL);
 	firmware = DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,NULL);
+	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
 	g_return_val_if_fail(firmware,NULL);
 
 	switch (a)
 	{
 		case _X_:
-			page = firmware->table_params[table_num]->x_page;
 			mult = get_multiplier_f(firmware->table_params[table_num]->x_size);
+			page = firmware->table_params[table_num]->x_page;
+			size = firmware->table_params[table_num]->x_size;
 			base = firmware->table_params[table_num]->x_base;
 			count = firmware->table_params[table_num]->x_bincount;
 			break;
 		case _Y_:
-			page = firmware->table_params[table_num]->y_page;
 			mult = get_multiplier_f(firmware->table_params[table_num]->y_size);
+			page = firmware->table_params[table_num]->y_page;
+			size = firmware->table_params[table_num]->y_size;
 			base = firmware->table_params[table_num]->y_base;
 			count = firmware->table_params[table_num]->y_bincount;
 			break;
 		case _Z_:
-			page = firmware->table_params[table_num]->z_page;
-			base = firmware->table_params[table_num]->z_base;
 			mult = get_multiplier_f(firmware->table_params[table_num]->z_size);
+			page = firmware->table_params[table_num]->z_page;
+			size = firmware->table_params[table_num]->z_size;
+			base = firmware->table_params[table_num]->z_base;
 			count = firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount;
 			break;
 	}
@@ -290,7 +298,7 @@ gfloat * convert_fromecu_bins(gint table_num, Axis a)
 	for (i=0;i<count;i++)
 	{
 		list = ecu_widgets[page][base+(i*mult)];
-		/* First widget is from the dataame which is what we want */
+		/* First widget will be from the datamap */
 		widget = g_list_nth_data(list,0);
 		bins[i] = convert_after_upload(widget);
 	}
@@ -313,6 +321,7 @@ G_MODULE_EXPORT TableExport * ecu_table_export(gint table_num)
 	table->x_bins = convert_fromecu_bins(table_num,_X_);
 	table->y_bins = convert_fromecu_bins(table_num,_Y_);
 	table->z_bins = convert_fromecu_bins(table_num,_Z_);
+	/* This breaks to multi expressions! */
 	table->x_label = firmware->table_params[table_num]->x_suffix;
 	table->y_label = firmware->table_params[table_num]->y_suffix;
 	table->z_label = firmware->table_params[table_num]->z_suffix;
