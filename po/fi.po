@@ -14023,10 +14023,6 @@ msgstr ""
 msgid "mtxloader"
 msgstr ""
 
-#: ../include/winserialcommhelper.h:82
-msgid "COM1"
-msgstr ""
-
 #~ msgid "Air Fuel Ratio (Actual AFR)"
 #~ msgstr "Air polttoaineen suhde (todellinen AFR)"
 

@@ -42,7 +42,6 @@ update-po: check-gettext
 		find $$dir -name "*.ui" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 	  	find $$dir -name "*.desktop.in" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 	  done ;\
-	  find include -name "*.h" -print | sort >> $(srcdir)/po/POTFILES.in.2 ; \
 	if diff $(srcdir)/po/POTFILES.in $(srcdir)/po/POTFILES.in.2 >/dev/null 2>&1 ; then \
 		rm -f $(srcdir)/po/POTFILES.in.2 ; \
 	else \

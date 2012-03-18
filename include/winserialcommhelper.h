@@ -23,7 +23,6 @@
 #ifndef __winserialcommhelper_H__
 #define __winserialcommhelper_H__
 
-#include <defines.h>
 #include <gtk/gtk.h>
 #include <windows.h>
 #include <winserialbuffer.h>
@@ -79,7 +78,7 @@ public:
 	HRESULT Read_Upto (std::string& data,char chTerminator ,long	* Count,long TimeOut);
 	HRESULT ReadAvailable(std::string& data);
 	HRESULT Write (const char* data,DWORD Size);
-	HRESULT Init(std::string PortName= _("COM1"), DWORD BaudRate = 9600,BYTE byParity = 0,BYTE byStopBits = 1,BYTE byByteSize  = 8);
+	HRESULT Init(std::string PortName= "COM1", DWORD BaudRate = 9600,BYTE byParity = 0,BYTE byStopBits = 1,BYTE byByteSize  = 8);
 	HRESULT Start();
 	HRESULT Stop();
 	HRESULT UnInit();
