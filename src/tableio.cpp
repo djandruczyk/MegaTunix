@@ -298,7 +298,7 @@ G_MODULE_EXPORT void export_single_table(gint table_num) {
 	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->default_filename= g_strdup("VEX_Backup.yaml");
-	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.yaml",g_strdelimit(firmware->name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
+	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.yaml",g_strdelimit(firmware->table_params[table_num]->table_name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("yaml");
 	fileio->title = g_strdup("Select your Table backup file to export");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;

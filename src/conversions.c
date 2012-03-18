@@ -891,7 +891,8 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
   */
 G_MODULE_EXPORT gdouble c_to_f(gdouble in)
 {
-	return ((in *(9.0/5.0))+32.0)+0.001;
+	/* Why the 0.001 ? return ((in *(9.0/5.0))+32.0)+0.001; */
+	return ((in *(9.0/5.0))+32.0);
 }
 
 
@@ -913,7 +914,8 @@ G_MODULE_EXPORT gdouble c_to_k(gdouble in)
   */
 G_MODULE_EXPORT gdouble f_to_c(gdouble in)
 {
-	return ((in-32.0)*(5.0/9.0))+0.001;
+	/* Why the 0.001 ? return ((in-32.0)*(5.0/9.0))+0.001; */
+	return ((in-32.0)*(5.0/9.0));
 }
 
 
@@ -924,7 +926,8 @@ G_MODULE_EXPORT gdouble f_to_c(gdouble in)
   */
 G_MODULE_EXPORT gdouble f_to_k(gdouble in)
 {
-	return ((in-32.0)*(5.0/9.0))+273.001;
+	/* Why the 0.001 ? return ((in-32.0)*(5.0/9.0))+273.001; */
+	return ((in-32.0)*(5.0/9.0))+273;
 }
 
 
@@ -935,7 +938,8 @@ G_MODULE_EXPORT gdouble f_to_k(gdouble in)
   */
 G_MODULE_EXPORT gdouble k_to_f(gdouble in)
 {
-	return (((in-273) *(9.0/5.0))+32.0)+0.001;
+	/* Why hte 0.001 ? return (((in-273) *(9.0/5.0))+32.0)+0.001; */
+	return (((in-273) *(9.0/5.0))+32.0);
 }
 
 

@@ -190,14 +190,12 @@ G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat 
 gint * convert_toecu_bins(gint table_num, gfloat *elements, Axis a)
 {
 	Firmware_Details *firmware = NULL;
-	gint mult = 0;
-	gfloat *multiplier = NULL;
-	gfloat *adder = NULL;
-	gint *bins = NULL;
-	gint count = 0;
-	gint base = 0;
-	gint i = 0;
 	gint page = 0;
+	gint base = 0;
+	gint mult = 0;
+	gint count = 0;
+	gint i = 0;
+	gint *bins = NULL;
 	GList ***ecu_widgets = NULL;
 	GList *list = NULL;
 	GtkWidget * widget;
@@ -210,21 +208,21 @@ gint * convert_toecu_bins(gint table_num, gfloat *elements, Axis a)
 	switch (a)
 	{
 		case _X_:
-			mult = get_multiplier_f(firmware->table_params[table_num]->x_size);
 			base = firmware->table_params[table_num]->x_base;
 			page = firmware->table_params[table_num]->x_page;
+			mult = get_multiplier_f(firmware->table_params[table_num]->x_size);
 			count = firmware->table_params[table_num]->x_bincount;
 			break;
 		case _Y_:
-			mult = get_multiplier_f(firmware->table_params[table_num]->y_size);
 			base = firmware->table_params[table_num]->y_base;
 			page = firmware->table_params[table_num]->y_page;
+			mult = get_multiplier_f(firmware->table_params[table_num]->y_size);
 			count = firmware->table_params[table_num]->y_bincount;
 			break;
 		case _Z_:
-			mult = get_multiplier_f(firmware->table_params[table_num]->z_size);
 			base = firmware->table_params[table_num]->z_base;
 			page = firmware->table_params[table_num]->z_page;
+			mult = get_multiplier_f(firmware->table_params[table_num]->z_size);
 			count = firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount;
 			break;
 	}
@@ -249,17 +247,12 @@ gint * convert_toecu_bins(gint table_num, gfloat *elements, Axis a)
 gfloat * convert_fromecu_bins(gint table_num, Axis a)
 {
 	static Firmware_Details *firmware = NULL;
-	gint mult = 0;
-	gint canID = 0;
 	gint page = 0;
 	gint base = 0;
-	DataSize size = MTX_U08;
-	gfloat *multiplier = NULL;
-	gfloat *adder = NULL;
-	gfloat *bins = NULL;
+	gint mult = 0;
 	gint count = 0;
 	gint i = 0;
-	gint tmpi = 0;
+	gfloat *bins = NULL;
 	GList ***ecu_widgets = NULL;
 	GList *list = NULL;
 	GtkWidget * widget;
@@ -272,24 +265,21 @@ gfloat * convert_fromecu_bins(gint table_num, Axis a)
 	switch (a)
 	{
 		case _X_:
-			mult = get_multiplier_f(firmware->table_params[table_num]->x_size);
 			page = firmware->table_params[table_num]->x_page;
-			size = firmware->table_params[table_num]->x_size;
 			base = firmware->table_params[table_num]->x_base;
+			mult = get_multiplier_f(firmware->table_params[table_num]->x_size);
 			count = firmware->table_params[table_num]->x_bincount;
 			break;
 		case _Y_:
-			mult = get_multiplier_f(firmware->table_params[table_num]->y_size);
 			page = firmware->table_params[table_num]->y_page;
-			size = firmware->table_params[table_num]->y_size;
 			base = firmware->table_params[table_num]->y_base;
+			mult = get_multiplier_f(firmware->table_params[table_num]->y_size);
 			count = firmware->table_params[table_num]->y_bincount;
 			break;
 		case _Z_:
-			mult = get_multiplier_f(firmware->table_params[table_num]->z_size);
 			page = firmware->table_params[table_num]->z_page;
-			size = firmware->table_params[table_num]->z_size;
 			base = firmware->table_params[table_num]->z_base;
+			mult = get_multiplier_f(firmware->table_params[table_num]->z_size);
 			count = firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount;
 			break;
 	}

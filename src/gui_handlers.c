@@ -871,7 +871,8 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 	handler = (StdHandler)OBJ_GET(widget,"handler");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 
-	tmpi = (int)(value+.001);
+	/* Why is this here? tmpi = (int)(value+.001); */
+	tmpi = (int)(value);
 
 
 	switch ((StdHandler)handler)

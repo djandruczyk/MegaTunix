@@ -1078,8 +1078,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 						GINT_TO_POINTER(offset),
 						d_data);
 
-				dload_val =
-					(GINT)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
+				dload_val = (GINT)(((float)firmware->rf_params[table_num]->num_cyls/(float)firmware->rf_params[table_num]->num_squirts)+0.001);
 
 				firmware->rf_params[table_num]->divider = dload_val;
 				d_data = g_new0(Deferred_Data, 1);
