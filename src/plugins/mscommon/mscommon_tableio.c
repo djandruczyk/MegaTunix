@@ -233,7 +233,7 @@ gint * convert_toecu_bins(gint table_num, gfloat *elements, Axis a)
 		list = ecu_widgets[page][base+(i*mult)];
 		/* First widget will be from the datamap */
 		widget = g_list_nth_data(list,0);
-		bins[i] = convert_before_download(widget,elements[i]);
+		bins[i] = convert_before_download_f(widget,elements[i]);
 	}
 	return bins;
 }
@@ -290,7 +290,7 @@ gfloat * convert_fromecu_bins(gint table_num, Axis a)
 		list = ecu_widgets[page][base+(i*mult)];
 		/* First widget will be from the datamap */
 		widget = g_list_nth_data(list,0);
-		bins[i] = convert_after_upload(widget);
+		bins[i] = convert_after_upload_f(widget);
 	}
 	return bins;
 }
