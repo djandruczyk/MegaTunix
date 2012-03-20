@@ -24,6 +24,7 @@
 #include <firmware.h>
 #include <menu_handlers.h>
 #include <plugin.h>
+#include <tableio.h>
 #include <widgetmgmt.h>
 
 extern gconstpointer *global_data;
@@ -43,8 +44,8 @@ static struct
 	const gchar *item;
 	FioAction action;
 }fio_items[] = {
-	{"import_tables_menuitem",VEX_IMPORT},
-	{"export_tables_menuitem",VEX_EXPORT},
+	{"import_tables_menuitem",ALL_TABLE_IMPORT},
+	{"export_tables_menuitem",ALL_TABLE_EXPORT},
 	{"restore_ecu_menuitem",ECU_RESTORE},
 	{"backup_ecu_menuitem",ECU_BACKUP},
 };
@@ -141,7 +142,7 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 
 /*!
   \brief General purpose handler to take care of menu initiated settings 
-  transfers like VEX import/export and ECU backup/restore
+  transfers like Table import/export and ECU backup/restore
   \param widget is the pointer to widget the user clicket on
   \param data is unused
   \returns TRUE
@@ -152,20 +153,14 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 	action = (FioAction)OBJ_GET(widget,"fio_action");
 	void (*do_backup)(GtkWidget *, gpointer) = NULL;
 	void (*do_restore)(GtkWidget *, gpointer) = NULL;
-	void (*vex_import)(GtkWidget *, gpointer) = NULL;
-	void (*vex_export)(GtkWidget *, gpointer) = NULL;
 
 	switch (action)
 	{
-		case VEX_IMPORT:
-			if (get_symbol("select_vex_for_import",(void*)&vex_import))
-				vex_import(NULL,NULL);
+		case ALL_TABLE_IMPORT:
+			//select_all_tables_for_import();
 			break;
-		case VEX_EXPORT:
+		case ALL_TABLE_EXPORT:
 			select_all_tables_for_export();
-/*			if (get_symbol("select_vex_for_export",(void*)&vex_export))
-				vex_export(NULL,NULL);
-				*/
 			break;
 		case ECU_BACKUP:
 			if (get_symbol("select_file_for_ecu_backup",(void*)&do_backup))
@@ -181,7 +176,7 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 
 /*!
   \brief General purpose handler to take care of menu initiated settings 
-  transfers like VEX import/export and ECU backup/restore
+  transfers like table import/export and ECU backup/restore
   \param target is the enumeration for a TAB to be checked if it exists
   \returns TRUE if tab found, FALSE if not
   */

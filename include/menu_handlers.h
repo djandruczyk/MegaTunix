@@ -28,8 +28,8 @@
 /* Enumerations */
 typedef enum
 {
-	VEX_IMPORT=0x230,
-	VEX_EXPORT,
+	ALL_TABLE_IMPORT=0x230,
+	ALL_TABLE_EXPORT,
 	ECU_BACKUP,
 	ECU_RESTORE
 }FioAction;
