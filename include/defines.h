@@ -35,6 +35,10 @@
 #define M_PI           3.14159265358979323846  /* pi */
 #endif
 
+#define DEFAULT_PROJECT "default"
+#define BACKUP_DATA_DIR "Backups"
+#define DATALOG_DATA_DIR "Datalogs"
+#define TABLE_DATA_DIR "Tables"
 /* Windows specific for exporting symbols for glade... */
 #ifdef __WIN32__
 #define DEFAULT_PORT "COM1"

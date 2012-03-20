@@ -138,8 +138,9 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 	g_return_if_fail(((table_num >= 0) && (table_num < firmware->total_tables)));
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->external_path = g_strdup(TABLE_DATA_DIR);
 	fileio->parent = lookup_widget("main_window");
+	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Select your Table backup file to import");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
@@ -193,6 +194,11 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 	delete tbl;
 }
 
+
+/*!\brief imports the yaml using the extraction templates
+ *\param filename to import
+ *\returns a populated ThreeDTable structure
+ */
 ThreeDTable * yaml_3d_import(gchar * filename) {
 	ThreeDTable *tbl;
 	std::ifstream input(filename);
@@ -200,10 +206,10 @@ ThreeDTable * yaml_3d_import(gchar * filename) {
 	YAML::Node doc;
 	parser.GetNextDocument(doc);
 	/* BAD code, as this assumes multiple tables, and we only expect one */
-	for (unsigned i=0;i<doc.size();i++) {
-		tbl = new ThreeDTable;
-		doc[i] >> *tbl;
-	}
+	if (doc.size() > 1)
+		printf("ERROR, multiple documents within this file %s\n, Only hte FIRST ONE will be imported\n",filename);
+	tbl = new ThreeDTable;
+	doc[0] >> *tbl;
 	return tbl;
 }
 
@@ -268,24 +274,14 @@ YAML::Emitter & operator << (YAML::Emitter &out, const ThreeDTable& table) {
 }
 
 
-
-/* This doesn't work yet */
 G_MODULE_EXPORT void export_single_table(gint table_num) {
 	Firmware_Details *firmware = NULL;
-	TableExport *table = NULL;
-	gboolean error = FALSE;
-	TableExport * (*ecu_table_export)(gint) = NULL;
-	ThreeDTable yaml_table;
 	struct tm *tm = NULL;
 	time_t *t = NULL;
 	gchar * filename = NULL;
 	MtxFileIO *fileio = NULL;
-	YAML::Emitter out;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
-	get_symbol("ecu_table_export",(void **)&ecu_table_export);
-	g_return_if_fail(firmware);
-	g_return_if_fail(ecu_table_export);
 	g_return_if_fail(DATA_GET(global_data,"interrogated"));
 	g_return_if_fail(((table_num >= 0) && (table_num < firmware->total_tables)));
 	t = g_new0(time_t,1);
@@ -294,10 +290,10 @@ G_MODULE_EXPORT void export_single_table(gint table_num) {
 	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->external_path = g_strdup(TABLE_DATA_DIR);
 	fileio->parent = lookup_widget("main_window");
+	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->on_top = TRUE;
-	fileio->default_filename= g_strdup("VEX_Backup.yaml");
 	fileio->default_filename= g_strdup_printf("%s-%.4i%.2i%.2i%.2i%.2i.yaml",g_strdelimit(firmware->table_params[table_num]->table_name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
 	fileio->default_extension= g_strdup("yaml");
 	fileio->title = g_strdup("Select your Table backup file to export");
@@ -308,9 +304,70 @@ G_MODULE_EXPORT void export_single_table(gint table_num) {
 		update_logbar("tools_view","warning",_("NO FILE chosen for Table export\n"),FALSE,FALSE,FALSE);
 		return;
 	}
+	export_table_to_yaml(filename,table_num);
+	g_free(filename);
+}
+
+
+/*\brief backups up ALL tables into the user selected directory using 
+ * the table name+timestamp as the filename
+ */
+G_MODULE_EXPORT void select_all_tables_for_export(void) {
+	Firmware_Details *firmware = NULL;
+	gchar * dirname = NULL;
+	gchar * filename = NULL;
+	MtxFileIO *fileio = NULL;
+	gint i = 0;
+	struct tm *tm = NULL;
+	time_t *t = NULL;
+
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	g_return_if_fail(DATA_GET(global_data,"interrogated"));
+
+	fileio = g_new0(MtxFileIO ,1);
+	fileio->external_path = g_strdup(TABLE_DATA_DIR);
+	fileio->parent = lookup_widget("main_window");
+	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
+	fileio->on_top = TRUE;
+	fileio->default_filename = g_strdup_printf("%s",firmware->name);
+	fileio->title = g_strdup("Select your directory to place your tables into");
+	fileio->action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+	dirname = choose_file(fileio);
+	if (!dirname)
+	{
+		printf("no dirname\n");
+		update_logbar("tools_view","warning",_("NO FILE chosen for Table export\n"),FALSE,FALSE,FALSE);
+		return;
+	}
+	t = g_new0(time_t,1);
+	time(t);
+	tm = localtime(t);
+	g_free(t);
+
+	for (i=0;i<firmware->total_tables;i++)
+	{
+		filename= g_strdup_printf("%s/%s-%.4i%.2i%.2i%.2i%.2i.yaml",dirname,g_strdelimit(firmware->table_params[i]->table_name," ,",'_'),tm->tm_year+1900,tm->tm_mon+1,tm->tm_mday,tm->tm_hour,tm->tm_min);
+		export_table_to_yaml(filename,i);
+		g_free(filename);
+	}
+	g_free(dirname);
+}
+
+
+void export_table_to_yaml(gchar *filename, gint table_num)
+{
+	Firmware_Details *firmware = NULL;
+	TableExport *table = NULL;
+	TableExport * (*ecu_table_export)(gint) = NULL;
+	YAML::Emitter out;
+	ThreeDTable yaml_table;
+
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	get_symbol("ecu_table_export",(void **)&ecu_table_export);
+	g_return_if_fail(firmware);
+	g_return_if_fail(ecu_table_export);
+
 	table = ecu_table_export(table_num);
-
-
 	yaml_table.title = table->title;
 	yaml_table.description = table->desc;
 	yaml_table.X.unit = table->x_unit;

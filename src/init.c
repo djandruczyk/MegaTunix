@@ -160,7 +160,7 @@ G_MODULE_EXPORT void init(void)
  * read_config(void)
  * \brief Reads state of various control variables, like window position
  * size, serial port and parameters and other user defaults from the default
- * config file located at ~/.MegaTunix/config
+ * config file located at ~/mtx/config
  * \see save_config(void)
  */
 G_MODULE_EXPORT gboolean read_config(void)
@@ -172,13 +172,18 @@ G_MODULE_EXPORT gboolean read_config(void)
 	gchar **vector = NULL;
 	ConfigFile *cfgfile;
 	gchar *filename = NULL;
+	const gchar *project = NULL;
 	gboolean *hidden_list;
 	CmdLineArgs *args = NULL;
 	Serial_Params *serial_params = NULL;
 
+	project = (const gchar *)DATA_GET(global_data,"project_name");
+	if (!project)
+		project = DEFAULT_PROJECT;
+
 	serial_params = DATA_GET(global_data,"serial_params");
 
-	filename = g_build_path(PSEP,HOME(), ".MegaTunix","config", NULL);
+	filename = g_build_path(PSEP,HOME(), "mtx",project,"config", NULL);
 	args = DATA_GET(global_data,"args");
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
@@ -344,7 +349,7 @@ G_MODULE_EXPORT gboolean read_config(void)
  * size, serial port and parameters and other user defaults
  * \see read_config(void)
  */
-G_MODULE_EXPORT void save_config(void)
+G_MODULE_EXPORT void save_config()
 {
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	gchar *filename = NULL;
@@ -365,6 +370,7 @@ G_MODULE_EXPORT void save_config(void)
 	ConfigFile *cfgfile = NULL;
 	gboolean * hidden_list;
 	GString *string = NULL;
+	const gchar *project = NULL;
 	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
 
@@ -372,8 +378,11 @@ G_MODULE_EXPORT void save_config(void)
 	firmware = DATA_GET(global_data,"firmware");
 
 	g_static_mutex_lock(&mutex);
+	project = DATA_GET(global_data,"project_name");
+	if (!project)
+		project = DEFAULT_PROJECT;
 
-	filename = g_build_path(PSEP, HOME(), "/.MegaTunix/config", NULL);
+	filename = g_build_path(PSEP, HOME(), "mtx",project,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 		cfgfile = cfg_new();
@@ -555,34 +564,51 @@ G_MODULE_EXPORT void save_config(void)
 /*!
  * make_mtx_dirs(void)
  * \brief Creates the directories for user modified config files in the
- * users home directory under ~/.MegaTunix
+ * users home directory under ~/mtx/
  */
-G_MODULE_EXPORT void make_mtx_dirs(void)
+G_MODULE_EXPORT void make_mtx_dirs(void )
 {
 	gchar *dirname = NULL;
 	const gchar *subdir = NULL;
 	gchar *path = NULL;
 	GDir *dir = NULL;
-	const gchar *mtx = ".MegaTunix";
+	const gchar *mtx = "mtx";
+	const gchar *project = NULL;
+	
+	project = (const gchar *)DATA_GET(global_data,"project_name");
+	if (!project)
+		project = DEFAULT_PROJECT;
+
 
 	dirname = g_build_path(PSEP, HOME(), mtx, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
-	
-	dirname = g_build_path(PSEP, HOME(),mtx,GUI_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP, HOME(), mtx,project, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
-	dirname = g_build_path(PSEP,HOME(),mtx,GAUGES_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP, HOME(),mtx,project,BACKUP_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
-	dirname = g_build_path(PSEP,HOME(),mtx,DASHES_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP, HOME(),mtx,project,TABLE_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
-	dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP, HOME(),mtx,project,DATALOG_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
-	dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP, HOME(),mtx,project,GUI_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,project,GAUGES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,project,DASHES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	cleanup(dirname);
+	dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
 
 #ifdef __WIN32__
@@ -596,24 +622,24 @@ G_MODULE_EXPORT void make_mtx_dirs(void)
 	{
 		while (NULL != (subdir = g_dir_read_name(dir)))
 		{
-			dirname = g_build_path(PSEP,HOME(),mtx,INTERROGATOR_DATA_DIR,"Profiles",subdir, NULL);
-			g_mkdir(dirname, S_IRWXU);
+			dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR,"Profiles",subdir, NULL);
+			g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 			cleanup(dirname);
 		}
 		g_dir_close(dir);
 	}
 
-	dirname = g_build_path(PSEP,HOME(),mtx,LOOKUPTABLES_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP,HOME(),mtx,project,LOOKUPTABLES_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
-	dirname = g_build_path(PSEP,HOME(),mtx,REALTIME_MAPS_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP,HOME(),mtx,project,REALTIME_MAPS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
-	dirname = g_build_path(PSEP,HOME(),mtx,RTSLIDERS_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP,HOME(),mtx,project,RTSLIDERS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
-	dirname = g_build_path(PSEP,HOME(),mtx,RTSTATUS_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU);
+	dirname = g_build_path(PSEP,HOME(),mtx,project,RTSTATUS_DATA_DIR, NULL);
+	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
 	cleanup(dirname);
 	return;
 }

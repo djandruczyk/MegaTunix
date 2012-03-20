@@ -168,8 +168,8 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 }
 
 /*
-  \brief load the RTT threshold details at this XML node, creates the RTTthreshold object
-  and returns it to the caller
+  \brief load the RTT threshold details at this XML node, creates the 
+  RTTthreshold object and returns it to the caller
   \param node is the pointer to XML node
   \returns pointer to a Rtt_Thresold object
   */

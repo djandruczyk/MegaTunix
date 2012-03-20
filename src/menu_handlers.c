@@ -162,8 +162,10 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 				vex_import(NULL,NULL);
 			break;
 		case VEX_EXPORT:
-			if (get_symbol("select_vex_for_export",(void*)&vex_export))
+			select_all_tables_for_export();
+/*			if (get_symbol("select_vex_for_export",(void*)&vex_export))
 				vex_export(NULL,NULL);
+				*/
 			break;
 		case ECU_BACKUP:
 			if (get_symbol("select_file_for_ecu_backup",(void*)&do_backup))

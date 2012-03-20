@@ -45,6 +45,8 @@ struct _TableExport
 /* Prototypes */
 void import_single_table(gint);
 void export_single_table(gint);
+void export_table_to_yaml(gchar *, gint);
+void select_all_tables_for_export(void);
 /* Prototypes */
 
 #endif

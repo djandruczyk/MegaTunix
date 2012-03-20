@@ -741,6 +741,7 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	gchar * old = NULL;
 	gchar * new_name = NULL;
 	gchar ** vector = NULL;
+	const gchar * project = NULL;
 	gboolean restart_tickler = FALSE;
 	gint count = 0;
 	GAsyncQueue *io_data_queue = NULL;
@@ -803,12 +804,15 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 		return FALSE;
 	}
 	g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),update_lt_config,cfgfile);
-	if (g_strrstr(firmware->profile_filename,".MegaTunix"))
+	if (g_strrstr(firmware->profile_filename,"mtx"))
 		cfg_write_file(cfgfile, firmware->profile_filename);
 	else
 	{
+		project = (const gchar *)DATA_GET(global_data,"project_name");
 		vector = g_strsplit(firmware->profile_filename,PSEP,-1);
-		new_name = g_build_filename(HOME(),".MegaTunix",INTERROGATOR_DATA_DIR,"Profiles",vector[g_strv_length(vector)-2],vector[g_strv_length(vector)-1],NULL);
+		if (!project)
+			project = DEFAULT_PROJECT;
+		new_name = g_build_filename(HOME(),"mtx",project,INTERROGATOR_DATA_DIR,"Profiles",vector[g_strv_length(vector)-2],vector[g_strv_length(vector)-1],NULL);
 		g_strfreev(vector);
 		cfg_write_file(cfgfile, new_name);
 		g_free(firmware->profile_filename);

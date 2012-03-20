@@ -53,6 +53,7 @@ struct _CmdLineArgs
 	gchar *persona;		/*!< ECU Persona to default to */
 	gchar *port;		/*!< Serial port override */
 	gchar *dashboard;	/*!< CLI selected dashboard */
+	gchar *project_name;	/*!< CLI selected dashboard */
 	gint network_port;	/*!< Network port */
 	gboolean network_mode;	/*!< Network mode */
 	gboolean listen_mode;	/*!< Listen mode */

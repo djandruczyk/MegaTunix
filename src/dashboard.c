@@ -1637,16 +1637,22 @@ G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
 /*!
   \brief Prints the available dashboard choices to std output
   */
-G_MODULE_EXPORT void print_dash_choices(void)
+G_MODULE_EXPORT void print_dash_choices(gchar *project)
 {
 	GDir * dir = NULL;
 	gchar * path = NULL;
 	const gchar * file = NULL;
 	gchar **vector = NULL;
+	const gchar *proj =  NULL;
 	GError *err = NULL;
 
+	if (project)
+		proj = (const gchar *)project;
+	else
+		proj = DEFAULT_PROJECT;
+
 	/* Personal Path */
-	path = g_build_path(PSEP,get_home(),".MegaTunix","Dashboards",NULL);
+	path = g_build_path(PSEP,get_home(),"mtx",proj,"Dashboards",NULL);
 	dir = g_dir_open(path,0,&err);
 	g_free(path);
 
@@ -1696,11 +1702,15 @@ G_MODULE_EXPORT gchar * validate_dash_choice(gchar * choice, gboolean *result)
 	gchar *path = NULL;
 	gboolean found = FALSE;
 	gchar * filename = NULL;
+	const gchar *project = NULL;
 
 	filename = g_strdup_printf("%s.xml",choice);
 
+	project = (const gchar *)DATA_GET(global_data,"project_name");
+	if (!project)
+		project = DEFAULT_PROJECT;
 	/* Check personal path first */
-	path = g_build_path(PSEP,get_home(),".MegaTunix","Dashboards",filename,NULL);
+	path = g_build_path(PSEP,get_home(),"mtx",project,"Dashboards",filename,NULL);
 	if (g_file_test(path,G_FILE_TEST_IS_REGULAR))
 		found = TRUE;
 	else

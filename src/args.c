@@ -21,6 +21,7 @@
 
 #include <args.h>
 #include <dashboard.h>
+#include <defines.h>
 #include <datalogging_gui.h>
 #include <debugging.h>
 #include <errno.h>
@@ -58,6 +59,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		{"persona",'p',0,G_OPTION_ARG_STRING,&args->persona,"ECU Personality <MS1|MS2|MS3|FreeEMS|Secu3|JimStim|PIS|OBDII>",NULL},
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
 		{"Port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use this serial port ONLY",NULL},
+		{"project",NULL,0,G_OPTION_ARG_STRING,&args->project_name,"Use this project name",NULL},
 		/*{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},*/
 		{"inhibit-tabs",'i',0,G_OPTION_ARG_NONE,&args->inhibit_tabs,"Prevent loading of tabs (debug option)",NULL},
 		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Network connect instead of serial","host[:port]"},
@@ -101,7 +103,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	{
 		if (g_ascii_strcasecmp(dash,"list") == 0)
 		{
-			print_dash_choices();
+			print_dash_choices(DATA_GET(global_data,"project_name"));
 			exit(1);
 		}
 		else
@@ -134,6 +136,9 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		}
 		g_strfreev(vector);
 	}
+	if (args->project_name)
+		DATA_SET(global_data,"project_name",g_strdup(args->project_name));
+
 	if (args->port)
 	{
 		DATA_SET(global_data,"autodetect_port",GINT_TO_POINTER(FALSE));
@@ -202,6 +207,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		printf(_("Global debug filename\"%s\"\n"),args->dbglog);
 		printf(_("Version option \"%i\"\n"),args->version);
 		printf(_("Port option \"%s\"\n"),args->port);
+		printf(_("Project option \"%s\"\n"),args->project_name);
 		printf(_("Persona option \"%s\"\n"),args->persona);
 		printf(_("quiet option \"%i\"\n"),args->be_quiet);
 		printf(_("inhibit tabs \"%i\"\n"),args->inhibit_tabs);

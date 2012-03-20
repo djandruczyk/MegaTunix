@@ -386,6 +386,7 @@ G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	GtkWidget *tmpwidget = NULL;
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
+	const gchar *project = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = DATA_GET(global_data,"firmware");
@@ -414,8 +415,10 @@ G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 		check_req_fuel_limits(reqd_fuel->table_num);
 	}
 
-
-	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
+	project = (const gchar *)DATA_GET(global_data,"project_name");
+	if (!project)
+		project = DEFAULT_PROJECT;
+	filename = g_build_path(PSEP,HOME(),"mtx",project,"config",NULL);
 	tmpbuf = g_strdup_printf("Req_Fuel_for_Table_%i",reqd_fuel->table_num);
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
@@ -727,8 +730,12 @@ G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
 	ConfigFile * cfgfile;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
+	const gchar * project = NULL;
 
-	filename = g_strconcat(HOME(), "/.MegaTunix/config", NULL);
+	project = (const gchar *)DATA_GET(global_data,"project_name");
+	if (!project)
+		project = DEFAULT_PROJECT;
+	filename = g_build_path(PSEP,HOME(),"mtx",project,"config",NULL);
 
 	reqd_fuel = g_new0(Reqd_Fuel, 1);
 	reqd_fuel->table_num = table_num;

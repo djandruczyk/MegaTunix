@@ -43,6 +43,7 @@ struct _MtxFileIO
 	GtkWidget *parent;		/*!< Parent widget for transient windows */
 	gboolean on_top;		/*!< Set it transient? */
 	gchar *filter;			/*!< CSV pairs of File filter string */
+	const gchar *project;			/*!< project folder name */
 	gchar *absolute_path;		/*!< absolute path to set filesel to */
 	gchar *default_path;		/*!< default path to set filesel to */
 	gchar *external_path;		/*!< external path rel to homedir */

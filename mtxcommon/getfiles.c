@@ -371,6 +371,7 @@ gchar * choose_file(MtxFileIO *data)
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
+	gint response = 0;
 	gboolean res = FALSE;
 	guint i = 0;
 
@@ -383,10 +384,14 @@ gchar * choose_file(MtxFileIO *data)
 	   printf("default_path %s\n",data->default_path);
 	   printf("title %s\n",data->title);
 	   */
+	if (!data->project)
+		data->project = DEFAULT_PROJECT;
+
 	if (!data->title)
 		data->title = g_strdup("Open File");
 
-	if (data->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	if ((data->action == GTK_FILE_CHOOSER_ACTION_OPEN) || 
+			(data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
 	{
 		dialog = gtk_file_chooser_dialog_new(data->title,
 				GTK_WINDOW(data->parent),
@@ -412,7 +417,6 @@ gchar * choose_file(MtxFileIO *data)
 	}
 	else if (data->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	{
-
 		dialog = gtk_file_chooser_dialog_new(data->title,
 				GTK_WINDOW(data->parent),
 				data->action,
@@ -470,7 +474,7 @@ gchar * choose_file(MtxFileIO *data)
 #endif
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),path,NULL);
 			g_free(path);
-			path = g_build_path(PSEP,get_home(),".MegaTunix",vector[i],NULL);
+			path = g_build_path(PSEP,get_home(),"mtx",data->project,vector[i],NULL);
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),path,NULL);
 			g_free(path);
 		}
@@ -479,7 +483,7 @@ gchar * choose_file(MtxFileIO *data)
 	/* If default path switch to that place */
 	if ((data->external_path) && (!(data->default_path)))
 	{
-		path = g_build_path(PSEP,get_home(),data->external_path,NULL);
+		path = g_build_path(PSEP,get_home(),"mtx",data->project,data->external_path,NULL);
 		if (!g_file_test(path,G_FILE_TEST_IS_DIR))
 			g_mkdir(path,0755);
 		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
@@ -512,7 +516,8 @@ afterfilter:
 		if (data->default_filename)
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog),data->default_filename);
 
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+	response = gtk_dialog_run (GTK_DIALOG (dialog));
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		tmpbuf = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		if ((data->action == GTK_FILE_CHOOSER_ACTION_SAVE) && (data->default_extension))

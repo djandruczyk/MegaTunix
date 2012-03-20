@@ -62,7 +62,8 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_ecu_snapshots");
+	fileio->external_path = g_strdup(BACKUP_DATA_DIR);
+	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->title = g_strdup("Save your ECU Settings to file");
 	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
@@ -104,7 +105,8 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_ecu_snapshots");
+	fileio->external_path = g_strdup(BACKUP_DATA_DIR);
+	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Restore your ECU Settings from which file");

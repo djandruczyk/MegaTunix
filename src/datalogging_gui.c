@@ -533,7 +533,8 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_Datalogs");
+	fileio->external_path = g_strdup(DATALOG_DATA_DIR);
+	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->title = g_strdup("Choose a filename for datalog export");
 	fileio->parent = lookup_widget("main_window");
 	fileio->on_top =TRUE;
@@ -618,7 +619,8 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_Datalogs");
+	fileio->external_path = g_strdup(DATALOG_DATA_DIR);
+	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->title = g_strdup("Choose a filename for internal datalog export");
 	fileio->parent = lookup_widget("main_window");
 	fileio->on_top =TRUE;
