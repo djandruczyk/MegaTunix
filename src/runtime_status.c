@@ -328,6 +328,8 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 		return;
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
+	g_return_if_fail(GTK_IS_WIDGET(rtv_map));
+	g_return_if_fail(GTK_IS_WIDGET(rtv_map->rtv_hash));
 
 	source = (gchar *)OBJ_GET(widget,"source");
 	if (!source)
