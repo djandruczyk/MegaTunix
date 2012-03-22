@@ -277,7 +277,7 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>O&l;sub&gt;2&lt;/sub&gt; ADC</dlog_gui_name>
+		<dlog_gui_name>O&lt;sub&gt;2&lt;/sub&gt; ADC</dlog_gui_name>
 		<dlog_field_name>O2counts</dlog_field_name>
 		<internal_names>o2adc</internal_names>
 		<offset>9</offset>
