@@ -46,7 +46,7 @@ ConfigFile *cfg_new(void)
 {
 	ConfigFile *cfg;
 
-	cfg = g_malloc0(sizeof (ConfigFile));
+	cfg = (ConfigFile *)g_malloc0(sizeof (ConfigFile));
 
 	return cfg;
 }
@@ -77,7 +77,7 @@ ConfigFile *cfg_open_file(gchar * filename)
 		return NULL;
 	}
 
-	cfg = g_malloc0(sizeof (ConfigFile));
+	cfg = (ConfigFile *)g_malloc0(sizeof (ConfigFile));
 
 	i = 0;
 	while (g_io_channel_read_line(iochannel,&line,NULL,NULL,&error) == G_IO_STATUS_NORMAL)
@@ -316,9 +316,9 @@ void cfg_write_int(ConfigFile * cfg, gchar * section, gchar * key, gint value)
 void cfg_write_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboolean value)
 {
 	if (value)
-		cfg_write_string(cfg, section, key, "TRUE");
+		cfg_write_string(cfg, section, key, (gchar *)"TRUE");
 	else
-		cfg_write_string(cfg, section, key, "FALSE");
+		cfg_write_string(cfg, section, key, (gchar *)"FALSE");
 }
 
 
@@ -426,7 +426,7 @@ static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)
 {
 	ConfigSection *section;
 
-	section = g_malloc0(sizeof (ConfigSection));
+	section = (ConfigSection *)g_malloc0(sizeof (ConfigSection));
 	section->name = g_strdup(name);
 	cfg->sections = g_list_prepend(cfg->sections, section);
 
@@ -446,7 +446,7 @@ static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar
 	ConfigLine *line;
 	gchar * tmpbuf = NULL;
 
-	line = g_malloc0(sizeof (ConfigLine));
+	line = (ConfigLine *)g_malloc0(sizeof (ConfigLine));
 	tmpbuf = g_strdup(key);
 	line->key = g_strdup(g_strstrip(tmpbuf));
 	g_free(tmpbuf);

@@ -320,7 +320,7 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 	g_free(ext);
 
 	filename = g_build_filename(get_home(), ".MegaTunix",file,NULL);
-	if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+	if (g_file_test(filename,(GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 	{
 		g_free(pathstub);
 		g_free(extension);
@@ -340,7 +340,7 @@ gchar * get_file(gchar *pathstub,gchar *extension)
 		g_free(dir);
 		g_free(file);
 
-		if (g_file_test(filename,(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+		if (g_file_test(filename,(GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 		{
 			g_free(pathstub);
 			g_free(extension);
