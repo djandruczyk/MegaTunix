@@ -74,7 +74,7 @@ gboolean generic_xml_gboolean_import(xmlNode *node, gpointer dest)
   \param element_name is the name of the new XML node
   \param val is the value to store at that node
   */
-void generic_xml_gint_export(xmlNode *parent, gchar *element_name, gint *val)
+void generic_xml_gint_export(xmlNode *parent, const gchar *element_name, gint *val)
 {
 	gchar * tmpbuf = NULL;
 
@@ -95,7 +95,7 @@ void generic_xml_gint_export(xmlNode *parent, gchar *element_name, gint *val)
   \param element_name is the name of the new XML node
   \param val is the value to store at that node
   */
-void generic_xml_gboolean_export(xmlNode *parent, gchar *element_name, gboolean *val)
+void generic_xml_gboolean_export(xmlNode *parent, const gchar *element_name, gboolean *val)
 {
 	g_return_if_fail(parent);
 	g_return_if_fail(element_name);
@@ -137,7 +137,7 @@ gboolean generic_xml_gfloat_import(xmlNode *node, gpointer dest)
   \param element_name is the name of the new XML node
   \param val is the value to store at that node
   */
-void generic_xml_gfloat_export(xmlNode *parent, gchar *element_name, gfloat *val)
+void generic_xml_gfloat_export(xmlNode *parent, const gchar *element_name, gfloat *val)
 {
 	gchar tmpbuf[10];
 	gchar * buf = NULL;
@@ -184,7 +184,7 @@ gboolean generic_xml_gchar_import(xmlNode *node, gpointer dest)
   \param element_name is the name of the new XML node
   \param val is the value to store at that node
   */
-void generic_xml_gchar_export(xmlNode *parent, gchar *element_name, gchar **val)
+void generic_xml_gchar_export(xmlNode *parent, const gchar *element_name, gchar **val)
 {
 	g_return_if_fail(parent);
 	g_return_if_fail(element_name);
@@ -259,7 +259,7 @@ gboolean generic_xml_color_import(xmlNode *node, gpointer dest)
   \param element_name is the name of the new XML node
   \param color is the value to store at that node
   */
-void generic_xml_color_export(xmlNode *parent,gchar * element_name, GdkColor *color)
+void generic_xml_color_export(xmlNode *parent, const gchar * element_name, GdkColor *color)
 {
 	gchar * tmpbuf =  NULL;
 	xmlNode *child = NULL;

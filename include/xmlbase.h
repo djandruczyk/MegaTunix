@@ -42,11 +42,11 @@ gboolean generic_xml_gboolean_find(xmlNode *, const gchar *, gpointer);
 
 
 /* export funcs */
-void generic_xml_gint_export(xmlNode *, gchar *, gint *);
-void generic_xml_gchar_export(xmlNode *, gchar *, gchar **);
-void generic_xml_gfloat_export(xmlNode *, gchar *, gfloat *);
-void generic_xml_gboolean_export(xmlNode *, gchar *, gboolean *);
-void generic_xml_color_export(xmlNode *, gchar *, GdkColor *);
+void generic_xml_gint_export(xmlNode *, const gchar *, gint *);
+void generic_xml_gchar_export(xmlNode *, const gchar *, gchar **);
+void generic_xml_gfloat_export(xmlNode *, const gchar *, gfloat *);
+void generic_xml_gboolean_export(xmlNode *, const gchar *, gboolean *);
+void generic_xml_color_export(xmlNode *, const gchar *, GdkColor *);
 
 /* Oddball funcs */
 gboolean xml_api_check(xmlNode *,gint , gint);
