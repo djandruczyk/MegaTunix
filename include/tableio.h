@@ -48,6 +48,10 @@ void import_single_table(gint);
 void export_single_table(gint);
 void export_table_to_yaml(gchar *, gint);
 void select_all_tables_for_export(void);
+void ecu_table_import(gint, gfloat *, gfloat *, gfloat *);
+gint * convert_toecu_bins(gint, gfloat *, Axis);
+gfloat * convert_fromecu_bins(gint, Axis);
+TableExport * ecu_table_export(gint);
 /* Prototypes */
 
 #endif

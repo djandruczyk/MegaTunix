@@ -42,8 +42,6 @@ libmscommon_la_SOURCES = \
 	mscommon_rtv_loader.h \
 	mscommon_rtv_processor.c \
 	mscommon_rtv_processor.h \
-	mscommon_tableio.c \
-	mscommon_tableio.h \
 	mtxsocket.c \
 	mtxsocket.h \
 	req_fuel.c \

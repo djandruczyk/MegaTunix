@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 extern "C" {
+#include <conversions.h>
 #include <defines.h>
 #include <getfiles.h>
 #include <firmware.h>
@@ -119,7 +120,6 @@ void operator >> (const YAML::Node &node, ThreeDTable &tbl) {
 /* This doesn't work yet */
 G_MODULE_EXPORT void import_single_table(gint table_num) {
 	gboolean error = FALSE;
-	void (*ecu_table_import)(gint, gfloat *, gfloat *, gfloat *) = NULL;
 	gfloat *x_elements = NULL;
 	gfloat *y_elements = NULL;
 	gfloat *z_elements = NULL;
@@ -131,9 +131,7 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 	gint x_cur,y_cur,z_cur;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
-	get_symbol("ecu_table_import",(void **)&ecu_table_import);
 	g_return_if_fail(firmware);
-	g_return_if_fail(ecu_table_import);
 	g_return_if_fail(DATA_GET(global_data,"interrogated"));
 	g_return_if_fail(((table_num >= 0) && (table_num < firmware->total_tables)));
 
@@ -358,14 +356,11 @@ void export_table_to_yaml(gchar *filename, gint table_num)
 {
 	Firmware_Details *firmware = NULL;
 	TableExport *table = NULL;
-	TableExport * (*ecu_table_export)(gint) = NULL;
 	YAML::Emitter out;
 	ThreeDTable yaml_table;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
-	get_symbol("ecu_table_export",(void **)&ecu_table_export);
 	g_return_if_fail(firmware);
-	g_return_if_fail(ecu_table_export);
 
 	table = ecu_table_export(table_num);
 	yaml_table.title = table->title;
@@ -391,4 +386,307 @@ void export_table_to_yaml(gchar *filename, gint table_num)
 	out << yaml_table;
 	output << out.c_str();
 	output.close();
+}
+
+
+
+/*!\brief Takes 3 arrays of (2 Axis's and table) converts them the ECU UNITS
+ * and loads them to the ECU. The table ID and X/Y/Z dimensions have 
+ * ALREADY been validated.
+ * \parm table_num, the table number we are updating
+ * \param x_elements, the X axis elements in floating point "USER" units
+ * \param y_elements, the Y axis elements in floating point "USER" units
+ * \param z_elements, the Table elements in floating point "USER" units
+ */
+G_MODULE_EXPORT void ecu_table_import(gint table_num,gfloat *x_elements, gfloat *y_elements, gfloat *z_elements)
+{
+	Firmware_Details *firmware = NULL;
+	guint8 *data = NULL;
+	void* (*ecu_chunk_write_f)(gint,gint,gint,gint,guint8*) = NULL;
+	guchar *ptr = NULL;
+    guint16 *ptr16 = NULL;
+    guint32 *ptr32 = NULL;
+	gint * bins = NULL;
+	gint count = 0;
+	gint mult = 0;
+	gint i = 0;
+
+	get_symbol("ecu_chunk_write",(void **)&ecu_chunk_write_f);
+	g_return_if_fail(ecu_chunk_write_f);
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	g_return_if_fail(firmware);
+
+	/*
+	What needs to happen is to take these values which are all "REAL WORLD"
+	user units and convert them to ECU units and send to the ECU
+	Ideally this would be in a nice burst instead of one write/packet
+	per value.
+	*/
+	/* X values first */
+	bins = convert_toecu_bins(table_num, x_elements,_X_);
+	mult = get_multiplier(firmware->table_params[table_num]->x_size);
+	count = firmware->table_params[table_num]->x_bincount;
+	data = g_new0(guchar, mult * count);
+	if (mult == 1)
+	{
+		ptr = (guchar *)data;
+		for (i=0;i<count;i++)
+			ptr[i] = bins[i];
+	}
+	if (mult == 2)
+	{
+		ptr16 = (guint16 *)data;
+		for (i=0;i<count;i++)
+		{
+			if (firmware->bigendian)
+				ptr16[i] = GINT16_TO_BE(bins[i]);
+			else
+				ptr16[i] = GINT16_TO_LE(bins[i]);
+		}
+	}
+	if (mult == 4)
+	{
+		ptr32 = (guint32 *)data;
+		for (i=0;i<count;i++)
+		{
+			if (firmware->bigendian)
+				ptr32[i] = GINT_TO_BE(bins[i]);
+			else
+				ptr32[i] = GINT_TO_LE(bins[i]);
+		}
+	}
+	/* WRITE new X axis values */
+	ecu_chunk_write_f(0,
+			firmware->page_params[firmware->table_params[table_num]->x_page]->phys_ecu_page,
+			firmware->table_params[table_num]->x_base,
+			count*mult,
+			data);
+	g_free(bins);
+
+	/* Y Bins */
+	bins = convert_toecu_bins(table_num, y_elements,_Y_);
+	mult = get_multiplier(firmware->table_params[table_num]->y_size);
+	count = firmware->table_params[table_num]->y_bincount;
+	data = g_new0(guchar, mult * count);
+	if (mult == 1)
+	{
+		ptr = (guchar *)data;
+		for (i=0;i<count;i++)
+			ptr[i] = bins[i];
+	}
+	if (mult == 2)
+	{
+		ptr16 = (guint16 *)data;
+		for (i=0;i<count;i++)
+		{
+			if (firmware->bigendian)
+				ptr16[i] = GINT16_TO_BE(bins[i]);
+			else
+				ptr16[i] = GINT16_TO_LE(bins[i]);
+		}
+	}
+	if (mult == 4)
+	{
+		ptr32 = (guint32 *)data;
+		for (i=0;i<count;i++)
+		{
+			if (firmware->bigendian)
+				ptr32[i] = GINT_TO_BE(bins[i]);
+			else
+				ptr32[i] = GINT_TO_LE(bins[i]);
+		}
+	}
+	/* WRITE new Y axis values */
+	g_free(bins);
+	ecu_chunk_write_f(0,
+			firmware->page_params[firmware->table_params[table_num]->y_page]->phys_ecu_page,
+			firmware->table_params[table_num]->y_base,
+			count*mult,
+			data);
+
+	/* Z Bins */
+	bins = convert_toecu_bins(table_num, z_elements,_Z_);
+	mult = get_multiplier(firmware->table_params[table_num]->z_size);
+	count = firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount;
+	data = g_new0(guchar, mult * count);
+	if (mult == 1)
+	{
+		ptr = (guchar *)data;
+		for (i=0;i<count;i++)
+			ptr[i] = bins[i];
+	}
+	if (mult == 2)
+	{
+		ptr16 = (guint16 *)data;
+		for (i=0;i<count;i++)
+		{
+			if (firmware->bigendian)
+				ptr16[i] = GINT16_TO_BE(bins[i]);
+			else
+				ptr16[i] = GINT16_TO_LE(bins[i]);
+		}
+	}
+	if (mult == 4)
+	{
+		ptr32 = (guint32 *)data;
+		for (i=0;i<count;i++)
+		{
+			if (firmware->bigendian)
+				ptr32[i] = GINT_TO_BE(bins[i]);
+			else
+				ptr32[i] = GINT_TO_LE(bins[i]);
+		}
+	}
+	/* WRITE new Z values */
+	ecu_chunk_write_f(0,
+			firmware->page_params[firmware->table_params[table_num]->z_page]->phys_ecu_page,
+			firmware->table_params[table_num]->z_base,
+			count*mult,
+			data);
+	g_free(bins);
+}
+
+
+/*!\brief converts the float "user" values to ECU units in prep for sending
+ * to the ecu
+ * \param table_num, the table number identifier
+ * \param elements, array of user floats
+ * \param a, axis enumeration
+ * \returns integer array of converted values;
+ * */
+gint * convert_toecu_bins(gint table_num, gfloat *elements, Axis a)
+{
+	Firmware_Details *firmware = NULL;
+	gint mult = 0;
+	gfloat *multiplier = NULL;
+	gfloat *adder = NULL;
+	gint *bins = NULL;
+	gint count = 0;
+	gint base = 0;
+	gint page = 0;
+	gint i = 0;
+	GList *** ecu_widgets = NULL;
+	GList *list = NULL;
+	GtkWidget * widget = NULL;
+
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	g_return_val_if_fail(ecu_widgets,NULL);
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,NULL);
+
+	switch (a)
+	{
+		case _X_:
+			page = firmware->table_params[table_num]->x_page;
+			base = firmware->table_params[table_num]->x_base;
+			mult = get_multiplier(firmware->table_params[table_num]->x_size);
+			count = firmware->table_params[table_num]->x_bincount;
+			break;
+		case _Y_:
+			page = firmware->table_params[table_num]->y_page;
+			base = firmware->table_params[table_num]->y_base;
+			mult = get_multiplier(firmware->table_params[table_num]->y_size);
+			count = firmware->table_params[table_num]->y_bincount;
+			break;
+		case _Z_:
+			page = firmware->table_params[table_num]->z_page;
+			base = firmware->table_params[table_num]->z_base;
+			mult = get_multiplier(firmware->table_params[table_num]->z_size);
+			count = firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount;
+			break;
+	}
+
+	bins = (gint *)g_new0(gint, count);
+	for (i=0;i<count;i++)
+	{
+		list = ecu_widgets[page][base+(i*mult)];
+		/* First widget is from the dataame which is what we want */
+		widget = (GtkWidget *)g_list_nth_data(list,0);
+		bins[i] = convert_before_download(widget,elements[i]);
+	}
+	return bins;
+}
+
+
+/*!\brief converts the integer ECU units to floating 'USER" units
+ * \param table_num, the table number identifier
+ * \param a, axis enumeration
+ * \returns integer array of converted values;
+ * */
+gfloat * convert_fromecu_bins(gint table_num, Axis a)
+{
+	Firmware_Details *firmware = NULL;
+	gint mult = 0;
+	gint page = 0;
+	gint base = 0;
+	gint count = 0;
+	gfloat *bins = NULL;
+	gint i = 0;
+	GList *** ecu_widgets = NULL;
+	GList *list = NULL;
+	GtkWidget * widget = NULL;
+
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	g_return_val_if_fail(ecu_widgets,NULL);
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,NULL);
+
+	switch (a)
+	{
+		case _X_:
+			page = firmware->table_params[table_num]->x_page;
+			mult = get_multiplier(firmware->table_params[table_num]->x_size);
+			base = firmware->table_params[table_num]->x_base;
+			count = firmware->table_params[table_num]->x_bincount;
+			break;
+		case _Y_:
+			page = firmware->table_params[table_num]->y_page;
+			mult = get_multiplier(firmware->table_params[table_num]->y_size);
+			base = firmware->table_params[table_num]->y_base;
+			count = firmware->table_params[table_num]->y_bincount;
+			break;
+		case _Z_:
+			page = firmware->table_params[table_num]->z_page;
+			base = firmware->table_params[table_num]->z_base;
+			mult = get_multiplier(firmware->table_params[table_num]->z_size);
+			count = firmware->table_params[table_num]->x_bincount * firmware->table_params[table_num]->y_bincount;
+			break;
+	}
+
+	bins = (gfloat *)g_new0(gfloat, count);
+	for (i=0;i<count;i++)
+	{
+		list = ecu_widgets[page][base+(i*mult)];
+		/* First widget is from the dataame which is what we want */
+		widget = (GtkWidget *)g_list_nth_data(list,0);
+		bins[i] = convert_after_upload(widget);
+	}
+	return bins;
+}
+
+
+G_MODULE_EXPORT TableExport * ecu_table_export(gint table_num)
+{
+	TableExport *table = NULL;
+	Firmware_Details *firmware = NULL;
+	if (!firmware)
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,NULL);
+
+	table = g_new0(TableExport, 1);
+
+	table->x_len = firmware->table_params[table_num]->x_bincount;
+	table->y_len = firmware->table_params[table_num]->y_bincount;
+	table->x_bins = convert_fromecu_bins(table_num,_X_);
+	table->y_bins = convert_fromecu_bins(table_num,_Y_);
+	table->z_bins = convert_fromecu_bins(table_num,_Z_);
+	table->x_label = firmware->table_params[table_num]->x_suffix;
+	table->y_label = firmware->table_params[table_num]->y_suffix;
+	table->z_label = firmware->table_params[table_num]->z_suffix;
+	table->x_unit = firmware->table_params[table_num]->x_suffix;
+	table->y_unit = firmware->table_params[table_num]->y_suffix;
+	table->z_unit = firmware->table_params[table_num]->z_suffix;
+	table->title = firmware->table_params[table_num]->table_name;
+	table->desc = firmware->table_params[table_num]->table_name;
+	return table;
 }
