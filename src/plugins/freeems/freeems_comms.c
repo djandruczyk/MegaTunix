@@ -765,6 +765,31 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 
 
 /*!
+ \brief Generic chunk write function that takes the internal mtx_page 
+ and translates it as needed to the ECU specific page
+
+ \param canID is the can identifier (0-14)
+ \param page is the mtxpage where this data should reside
+ \param offset is the offset from the beginning of the page that this data
+ refers to.
+ \param num_bytes is the length of block to sent
+ \param block is the block of data to be sent which better damn well be
+ int ECU byte order if there is an endianness thing..
+ */
+G_MODULE_EXPORT void ecu_chunk_write(gint canID, gint page, gint offset, gint num_bytes,guint8 *block)
+{
+	gint locID = 0;
+	Firmware_Details *firmware = NULL;
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	g_return_if_fail(firmware);
+
+	locID = firmware->page_params[page]->phys_ecu_page;
+
+	freeems_chunk_write(canID,locID,offset,num_bytes,block);
+}
+
+
+/*!
  \brief ECU Specif gets called to send a block of values to the ECU.
  \param canID is the can identifier (0-14)
  \param locID is the locationID in which the value refers to.
