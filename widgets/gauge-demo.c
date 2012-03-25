@@ -86,7 +86,7 @@ gboolean update_gauge(gpointer data)
 	gfloat interval = 0.0;
 	static gboolean rising = TRUE;
 
-	GtkWidget * gauge = data;
+	GtkWidget * gauge = (GtkWidget *)data;
 	interval = (upper-lower)/100.0;
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &lower);
 	mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &upper);

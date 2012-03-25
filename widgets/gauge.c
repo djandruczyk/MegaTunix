@@ -182,15 +182,15 @@ gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge)
  \param new is the new value
  \returns TRUE on success, FALSE otherwise
  */
-gboolean mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new)
+gboolean mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar * new_font)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
-	g_return_val_if_fail (new,FALSE);
+	g_return_val_if_fail (new_font,FALSE);
 	g_object_freeze_notify (G_OBJECT (gauge));
 	if (priv->value_font)
 		g_free(priv->value_font);
-	priv->value_font = g_strdup(new);
+	priv->value_font = g_strdup(new_font);
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
 	if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
@@ -218,7 +218,7 @@ gint mtx_gauge_face_set_warning_range_struct(MtxGaugeFace *gauge, MtxWarningRang
 
 	g_object_freeze_notify (G_OBJECT (gauge));
 	newrange = g_new0(MtxWarningRange, 1);
-	newrange = g_memdup(range,sizeof(MtxWarningRange)); 
+	newrange = (MtxWarningRange *)g_memdup(range,sizeof(MtxWarningRange)); 
 	g_array_append_val(priv->w_ranges,newrange);
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
@@ -248,7 +248,7 @@ gint mtx_gauge_face_set_alert_range_struct(MtxGaugeFace *gauge, MtxAlertRange *r
 
 	g_object_freeze_notify (G_OBJECT (gauge));
 	newrange = g_new0(MtxAlertRange, 1);
-	newrange = g_memdup(range,sizeof(MtxAlertRange)); 
+	newrange = (MtxAlertRange *)g_memdup(range,sizeof(MtxAlertRange)); 
 	g_array_append_val(priv->a_ranges,newrange);
 	g_object_thaw_notify (G_OBJECT (gauge));
 #if GTK_MINOR_VERSION >= 18
@@ -361,7 +361,7 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 {
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	gint size = 0;
-	MtxGenPoly * new = NULL;
+	MtxGenPoly * genpoly = NULL;
 	MtxGenPoly * temp = NULL;
 	MtxPolygon * new_poly = NULL;
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),-1);
@@ -396,9 +396,9 @@ gint mtx_gauge_face_set_polygon_struct(MtxGaugeFace *gauge, MtxPolygon *poly)
 
 	if (poly->type == MTX_GENPOLY)
 	{
-		new = (MtxGenPoly *)new_poly->data;
+		genpoly = (MtxGenPoly *)new_poly->data;
 		temp = (MtxGenPoly *)poly->data;
-		new->points = g_memdup(temp->points,sizeof(MtxPoint)*temp->num_points);
+		genpoly->points = (MtxPoint *)g_memdup(temp->points,sizeof(MtxPoint)*temp->num_points);
 		/*printf("copied over %i MTxPoints (%i bytes) \n",temp->num_points,sizeof(MtxPoint)*temp->num_points);*/
 
 	}
@@ -505,7 +505,7 @@ gboolean mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 			priv->sweep_angle = value;
 			break;
 		case ROTATION:
-			priv->rotation = value;
+			priv->rotation = (MtxRotType)value;
 			break;
 		case LBOUND:
 			priv->lbound = value;
@@ -688,11 +688,11 @@ gboolean mtx_gauge_face_alter_text_block(MtxGaugeFace *gauge, gint index,TbField
 			break;
 		case TB_FONT:
 			g_free(tblock->font);
-			tblock->font = g_strdup(value);
+			tblock->font = g_strdup((gchar *)value);
 			break;
 		case TB_TEXT:
 			g_free(tblock->text);
-			tblock->text = g_strdup(value);
+			tblock->text = g_strdup((gchar *)value);
 			break;
 		case TB_LAYER:
 			tblock->layer = (gint)*(gfloat *)value;
@@ -738,11 +738,11 @@ gboolean mtx_gauge_face_alter_tick_group(MtxGaugeFace *gauge, gint index,TgField
 	{
 		case TG_FONT:
 			g_free(tgroup->font);
-			tgroup->font = g_strdup(value);
+			tgroup->font = g_strdup((gchar *)value);
 			break;
 		case TG_TEXT:
 			g_free(tgroup->text);
-			tgroup->text = g_strdup(value);
+			tgroup->text = g_strdup((gchar *)value);
 			break;
 		case TG_TEXT_COLOR_DAY:
 			tgroup->text_color[MTX_DAY] = *(GdkColor *)value;
@@ -857,10 +857,10 @@ gboolean mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField 
 			poly->filled = (gint)(*(gfloat *)value);
 			break;
 		case POLY_LINESTYLE:
-			poly->line_style = (gint)(*(gfloat *)value);
+			poly->line_style = (GdkLineStyle)(gint)(*(gfloat *)value);
 			break;
 		case POLY_JOINSTYLE:
-			poly->join_style = (gint)(*(gfloat *)value);
+			poly->join_style = (GdkJoinStyle)(gint)(*(gfloat *)value);
 			break;
 		case POLY_LINEWIDTH:
 			poly->line_width = *(gfloat *)value;
@@ -923,7 +923,7 @@ gboolean mtx_gauge_face_alter_polygon(MtxGaugeFace *gauge, gint index,PolyField 
 			{
 				if (((MtxGenPoly *)data)->points)
 					g_free(((MtxGenPoly *)data)->points);
-				((MtxGenPoly *)data)->points = g_memdup(value,((MtxGenPoly *)data)->num_points *sizeof(MtxPoint));
+				((MtxGenPoly *)data)->points = (MtxPoint *)g_memdup(value,((MtxGenPoly *)data)->num_points *sizeof(MtxPoint));
 			}
 			break;
 		case POLY_LAYER:
@@ -1620,7 +1620,7 @@ gboolean mtx_gauge_face_set_daytime_mode(MtxGaugeFace *gauge, gboolean mode)
 		return TRUE;
 	else
 	{
-		priv->daytime_mode = mode;
+		priv->daytime_mode = (MtxDayNite)mode;
 #if GTK_MINOR_VERSION >= 18
 		if (!gtk_widget_is_sensitive(GTK_WIDGET(gauge)))
 			return TRUE;

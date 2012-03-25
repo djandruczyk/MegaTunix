@@ -25,11 +25,14 @@
 #ifndef __GAUGE_XML_H__
 #define  __GAUGE_XML_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <gtk/gtk.h>
 #include <gauge.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-
 
 typedef struct _MtxXMLFuncs             MtxXMLFuncs;
 
@@ -46,7 +49,7 @@ struct _MtxXMLFuncs
 {
         void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer, gboolean);/*!< import function pointer */	
         void (*export_func) (MtxDispatchHelper *);	/*!< export function pointer */
-        gchar * varname;	/*!< Variable name */
+        const gchar * varname;	/*!< Variable name */
         gpointer dest_var;	/*!< Pointer to destination */
 	gboolean api_compat;	/*!< api_compat flag */
 };
@@ -92,7 +95,7 @@ static const struct
 {
 	void (*import_func) (MtxGaugeFace *, xmlNode *, gpointer, gboolean);
 	void (*export_func) (MtxDispatchHelper *);
-	char * varname;
+	const gchar * varname;
 	gboolean api_compat;
 } xml_functions[] = {
 	/* Compat functions for API break, note import ONLY */
@@ -141,4 +144,7 @@ static const struct
 };
 
 
+#ifdef __cplusplus
+}
+#endif
 #endif

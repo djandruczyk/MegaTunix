@@ -118,7 +118,7 @@ void marker_proximity(MtxCurve *curve, gpointer data)
 
 gboolean update_curve_marker(gpointer data)
 {
-	GtkWidget *curve = data;
+	GtkWidget *curve = (GtkWidget *)data;
 	gfloat min = -8.0;
 	gfloat max = 8.0;
 	/*gfloat min = -5000.0;

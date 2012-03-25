@@ -25,6 +25,10 @@
 #ifndef __PIEGAUGE_PRIVATE_H__
 #define __PIEGAUGE_PRIVATE_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <gtk/gtk.h>
 #include <piegauge.h>
 
@@ -78,5 +82,8 @@ void mtx_pie_gauge_redraw (MtxPieGauge *gauge);
 void mtx_pie_gauge_finalize (GObject *gauge);
 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

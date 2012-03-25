@@ -47,7 +47,7 @@ GType mtx_pie_gauge_get_type(void)
 			0,
 			(GInstanceInitFunc) mtx_pie_gauge_init,
 		};
-		mtx_pie_gauge_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxPieGauge", &mtx_pie_gauge_info, 0);
+		mtx_pie_gauge_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxPieGauge", &mtx_pie_gauge_info, (GTypeFlags)0);
 	}
 	return mtx_pie_gauge_type;
 }

@@ -32,15 +32,15 @@ G_DEFINE_TYPE (MtxProgressBar, mtx_progress_bar, GTK_TYPE_PROGRESS_BAR)
  signal handlers for config event, expose event, and button press/release
  \param class is a pointer to a MtxProgressBarClass structure
  */
-void mtx_progress_bar_class_init (MtxProgressBarClass *class)
+void mtx_progress_bar_class_init (MtxProgressBarClass *klass)
 {
 	GObjectClass *obj_class;
 	GtkWidgetClass *widget_class;
 	GtkProgressClass *progress_class;
 
-	obj_class = G_OBJECT_CLASS (class);
-	widget_class = GTK_WIDGET_CLASS (class);
-	progress_class = (GtkProgressClass *) class;
+	obj_class = G_OBJECT_CLASS (klass);
+	widget_class = GTK_WIDGET_CLASS (klass);
+	progress_class = (GtkProgressClass *) klass;
 
 	/* GtkWidget signals */
 
@@ -52,7 +52,7 @@ void mtx_progress_bar_class_init (MtxProgressBarClass *class)
 	progress_class->paint = mtx_progress_bar_paint;
 	obj_class->finalize = mtx_progress_bar_finalize;
 
-	g_type_class_add_private (class, sizeof (MtxProgressBarPrivate)); 
+	g_type_class_add_private (klass, sizeof (MtxProgressBarPrivate)); 
 }
 
 

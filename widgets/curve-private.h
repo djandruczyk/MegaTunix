@@ -24,6 +24,10 @@
 #ifndef __CURVE_PRIVATE_H__
 #define __CURVE_PRIVATE_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <gtk/gtk.h>
 #include <curve.h>
 
@@ -140,4 +144,7 @@ gboolean proximity_test (GtkWidget *, GdkEventMotion *);
 gboolean get_intersection(gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat, gfloat *, gfloat *);
 void mtx_curve_finalize(GObject *);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

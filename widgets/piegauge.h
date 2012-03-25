@@ -23,9 +23,12 @@
 #ifndef MTX_PIE_GAUGE_H
 #define MTX_PIE_GAUGE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <config.h>
 #include <gtk/gtk.h>
-
 
 G_BEGIN_DECLS
 
@@ -79,4 +82,7 @@ float mtx_pie_gauge_get_value (MtxPieGauge *gauge);
 
 G_END_DECLS
 
+#ifdef __cplusplus
+}
+#endif
 #endif

@@ -22,12 +22,14 @@
 #ifndef MTX_GAUGE_FACE_H
 #define MTX_GAUGE_FACE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <config.h>
 #include <gtk/gtk.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-
-
 
 G_BEGIN_DECLS
 
@@ -244,10 +246,10 @@ typedef struct _MtxGenPoly		MtxGenPoly;
   */
 struct _MtxDispatchHelper
 {
-	gchar * element_name;	/*!< Element name for this dispatcher */
-	gpointer src;		/*!< source pointer */
-	xmlNodePtr root_node;	/*!< XML node */
-	MtxGaugeFace * gauge;	/*!< Gauge pointer */
+	const gchar * element_name;	/*!< Element name for this dispatcher */
+	gpointer src;				/*!< source pointer */
+	xmlNodePtr root_node;		/*!< XML node */
+	MtxGaugeFace * gauge;		/*!< Gauge pointer */
 };
 
 
@@ -513,8 +515,8 @@ gboolean mtx_gauge_face_set_color (MtxGaugeFace *gauge, GaugeColorIndex index, G
 GdkColor *mtx_gauge_face_get_color (MtxGaugeFace *gauge, GaugeColorIndex index, GdkColor *color_ref);
 
 /* XML */
-void mtx_gauge_face_import_xml(MtxGaugeFace *, gchar *);
-void mtx_gauge_face_export_xml(MtxGaugeFace *, gchar *);
+void mtx_gauge_face_import_xml(MtxGaugeFace *, const gchar *);
+void mtx_gauge_face_export_xml(MtxGaugeFace *, const gchar *);
 gchar * mtx_gauge_face_get_xml_filename(MtxGaugeFace *gauge);
 
 /* Misc */
@@ -533,4 +535,7 @@ gboolean mtx_gauge_face_get_daytime_mode(MtxGaugeFace *);
 
 G_END_DECLS
 
+#ifdef __cplusplus
+}
+#endif
 #endif

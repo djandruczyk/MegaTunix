@@ -66,7 +66,7 @@ GType mtx_stripchart_get_type(void)
 			0,
 			(GInstanceInitFunc) mtx_stripchart_init,
 		};
-		mtx_stripchart_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxStripChart", &mtx_stripchart_info, 0);
+		mtx_stripchart_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxStripChart", &mtx_stripchart_info, (GTypeFlags)0);
 	}
 	return mtx_stripchart_type;
 }
@@ -131,7 +131,7 @@ void mtx_stripchart_finalize (GObject *chart)
  */
 void mtx_stripchart_cleanup_traces (GArray *traces)
 {
-	gint i=0;
+	guint i=0;
 	MtxStripChartTrace *trace = NULL;
 	for(i=0;i<traces->len;i++)
 	{
@@ -614,7 +614,7 @@ void generate_stripchart_static_traces(MtxStripChart *chart)
 				trace->color.red/65535.0,
 				trace->color.green/65535.0,
 				trace->color.blue/65535.0);
-		points = trace->history->len < priv->w ? trace->history->len-1:priv->w;
+		points = trace->history->len < (guint)priv->w ? trace->history->len-1:priv->w;
 		if (points < 1)
 			continue;
 		start_x = priv->w - points;
@@ -744,7 +744,7 @@ void render_marker(MtxStripChart *chart)
 		for (i=0; i<priv->num_traces;i++)
 		{
 			trace = g_array_index(priv->traces,MtxStripChartTrace *, i);
-			if ((priv->w-(gint)priv->mouse_x) > trace->history->len)
+			if ((guint)(priv->w-(gint)priv->mouse_x) > trace->history->len)
 				val = trace->min;
 			else
 				val = g_array_index(trace->history, gfloat, trace->history->len-(priv->w-(gint)priv->mouse_x));

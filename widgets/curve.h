@@ -20,9 +20,12 @@
 #ifndef MTX_CURVE_H
 #define MTX_CURVE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <config.h>
 #include <gtk/gtk.h>
-
 
 G_BEGIN_DECLS
 
@@ -123,7 +126,7 @@ gboolean mtx_curve_set_y_axis_lock_state(MtxCurve *, gboolean);
 gboolean mtx_curve_get_y_axis_lock_state(MtxCurve *);
 
 /* Title */
-gboolean mtx_curve_set_title (MtxCurve *,gchar *);
+gboolean mtx_curve_set_title (MtxCurve *,const gchar *);
 const gchar * mtx_curve_get_title (MtxCurve *);
 
 /* Colors */
@@ -159,4 +162,8 @@ gint mtx_curve_get_marker_proximity_index (MtxCurve *);
 
 G_END_DECLS
 
+#ifdef __cplusplus
+}
 #endif
+#endif
+

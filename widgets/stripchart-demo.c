@@ -86,7 +86,7 @@ int main (int argc, char **argv)
 
 gboolean update_stripchart(gpointer data)
 {
-	GtkWidget *chart = data;
+	GtkWidget *chart = (GtkWidget *)data;
 	gint min = -1000;
 	gint max = 11000;
 	gint i = 0;

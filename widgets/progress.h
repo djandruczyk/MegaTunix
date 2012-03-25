@@ -23,9 +23,12 @@
 #ifndef MTX_PROGRESS_BAR_H
 #define MTX_PROGRESS_BAR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <config.h>
 #include <gtk/gtk.h>
-
 
 G_BEGIN_DECLS
 
@@ -76,5 +79,8 @@ gint mtx_progress_bar_get_hold_time(MtxProgressBar *);
 
 
 G_END_DECLS
+#ifdef __cplusplus
+}
+#endif
 
 #endif

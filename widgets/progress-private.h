@@ -25,6 +25,10 @@
 #ifndef __PROGRESS_PRIVATE_H__
 #define __PROGRESS_PRIVATE_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <gtk/gtk.h>
 #include <progress.h>
 
@@ -64,5 +68,8 @@ void mtx_progress_bar_paint_continuous (GtkProgressBar *, gint, gint, GtkProgres
 gfloat mtx_progress_get_peak_percentage (GtkProgress *progress);
 void mtx_progress_bar_finalize (GObject *);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

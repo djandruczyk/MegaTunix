@@ -53,7 +53,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
 			/*printf("node type: Element, name: \"%s\"\n", cur_node->name);*/
 
 			xml_funcs = NULL;
-			xml_funcs = g_hash_table_lookup(priv->xmlfunc_hash,cur_node->name);
+			xml_funcs = (MtxXMLFuncs *)g_hash_table_lookup(priv->xmlfunc_hash,cur_node->name);
 			/* If current element name has a set of function 
 			 * handlers, call the handlers passing the child node.
 			 * NOTE in cases where the xml tag has no data the 
@@ -84,7 +84,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
  * get a full path on the system.
  */
 
-void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
+void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, const gchar * filename)
 {
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
@@ -156,7 +156,7 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, gchar * filename)
 	xmlCleanupParser();
 }
 
-void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, gchar * filename)
+void mtx_gauge_face_export_xml(MtxGaugeFace * gauge, const gchar * filename)
 {
 	guint i = 0;
 	xmlDocPtr doc = NULL;       /* document pointer */
@@ -1167,26 +1167,26 @@ void mtx_gauge_polygon_export(MtxDispatchHelper * helper)
 void mtx_gauge_color_export(MtxDispatchHelper * helper)
 {
 	g_return_if_fail(helper);
-	generic_xml_color_export(helper->root_node,helper->element_name,helper->src);
+	generic_xml_color_export(helper->root_node,helper->element_name,(GdkColor *)helper->src);
 }
 
 
 void mtx_gauge_gfloat_export(MtxDispatchHelper * helper)
 {
 	g_return_if_fail(helper);
-	generic_xml_gfloat_export(helper->root_node,helper->element_name,helper->src);
+	generic_xml_gfloat_export(helper->root_node,helper->element_name,(gfloat *)helper->src);
 }
 
 void mtx_gauge_gint_export(MtxDispatchHelper * helper)
 {
 	g_return_if_fail(helper);
-	generic_xml_gint_export(helper->root_node,helper->element_name,helper->src);
+	generic_xml_gint_export(helper->root_node,helper->element_name,(gint *)helper->src);
 }
 
 void mtx_gauge_gchar_export(MtxDispatchHelper * helper)
 {
 	g_return_if_fail(helper);
-	generic_xml_gchar_export(helper->root_node,helper->element_name,helper->src);
+	generic_xml_gchar_export(helper->root_node,helper->element_name,(gchar **)helper->src);
 }
 
 

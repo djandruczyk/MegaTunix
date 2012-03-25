@@ -25,6 +25,10 @@
 #ifndef __STRIPCHART_PRIVATE_H__
 #define __STRIPCHART_PRIVATE_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <gtk/gtk.h>
 #include <stripchart.h>
 
@@ -94,5 +98,9 @@ void mtx_stripchart_init_colors(MtxStripChart *);
 void mtx_stripchart_redraw (MtxStripChart *gauge);
 void mtx_stripchart_finalize (GObject *);
 void mtx_stripchart_cleanup_traces (GArray *);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

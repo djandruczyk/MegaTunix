@@ -26,9 +26,12 @@
 #ifndef __GAUGE_PRIVATE_H__
 #define  __GAUGE_PRIVATE_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <gtk/gtk.h>
 #include <gauge.h>
-
 
 #define MTX_GAUGE_FACE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MTX_TYPE_GAUGE_FACE, MtxGaugeFacePrivate))
 
@@ -129,4 +132,7 @@ void mtx_gauge_face_cleanup_text_blocks(GArray *);
 void mtx_gauge_face_cleanup_polygons(GArray *);
 
 
+#ifdef __cplusplus
+}
+#endif
 #endif

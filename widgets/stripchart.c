@@ -76,7 +76,7 @@ gboolean mtx_stripchart_set_values (MtxStripChart *chart, gfloat* values)
 		val = values[i] > trace->max ? trace->max:values[i];
 		val = val < trace->min ? trace->min:val;
 		trace->history = g_array_append_val(trace->history,val);
-		if (trace->history->len > 2*priv->w)
+		if (trace->history->len > (guint)2*priv->w)
 			trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
 	}
 	priv->newsamples = 1;
@@ -119,7 +119,7 @@ gboolean mtx_stripchart_set_n_values (MtxStripChart *chart, gint count, gfloat**
 			val = values[i][j] > trace->max ? trace->max:values[i][j];
 			val = val < trace->min ? trace->min:val;
 			trace->history = g_array_append_val(trace->history,val);
-			if (trace->history->len > 2*priv->w)
+			if (trace->history->len > (guint)2*priv->w)
 				trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
 		}
 	}
@@ -199,7 +199,7 @@ gint mtx_stripchart_add_trace(MtxStripChart *chart, gfloat min, gfloat max, gint
  */
 gboolean mtx_stripchart_delete_trace(MtxStripChart *chart, gint index)
 {
-	gint i = 0;
+	guint i = 0;
 	gboolean retval = FALSE;
 	MtxStripChartTrace *trace = NULL;
 	MtxStripChartPrivate *priv = MTX_STRIPCHART_GET_PRIVATE(chart);

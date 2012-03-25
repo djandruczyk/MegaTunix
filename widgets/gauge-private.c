@@ -60,7 +60,7 @@ GType mtx_gauge_face_get_type(void)
 			0,
 			(GInstanceInitFunc) mtx_gauge_face_init,
 		};
-		mtx_gauge_face_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxGaugeFace", &mtx_gauge_face_info, 0);
+		mtx_gauge_face_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxGaugeFace", &mtx_gauge_face_info, (GTypeFlags)0);
 	}
 	return mtx_gauge_face_type;
 }
@@ -193,7 +193,7 @@ void mtx_gauge_face_finalize (GObject *gauge)
  */
 void mtx_gauge_face_cleanup_text_blocks(GArray *array)
 {
-	gint i = 0;
+	guint i = 0;
 	MtxTextBlock *tblock = NULL;
 	for (i=0;i<array->len;i++)
 	{
@@ -215,7 +215,7 @@ void mtx_gauge_face_cleanup_text_blocks(GArray *array)
  */
 void mtx_gauge_face_cleanup_tick_groups(GArray *array)
 {
-	gint i = 0;
+	guint i = 0;
 	MtxTickGroup *tgroup = NULL;
 	for (i=0;i<array->len;i++)
 	{
@@ -237,7 +237,7 @@ void mtx_gauge_face_cleanup_tick_groups(GArray *array)
  */
 void mtx_gauge_face_cleanup_warning_ranges(GArray *array)
 {
-	gint i = 0;
+	guint i = 0;
 	MtxWarningRange *range = NULL;
 	for (i=0;i<array->len;i++)
 	{
@@ -255,7 +255,7 @@ void mtx_gauge_face_cleanup_warning_ranges(GArray *array)
  */
 void mtx_gauge_face_cleanup_alert_ranges(GArray *array)
 {
-	gint i = 0;
+	guint i = 0;
 	MtxAlertRange *range = NULL;
 	for (i=0;i<array->len;i++)
 	{
@@ -273,7 +273,7 @@ void mtx_gauge_face_cleanup_alert_ranges(GArray *array)
  */
 void mtx_gauge_face_cleanup_polygons(GArray *array)
 {
-	gint i = 0;
+	guint i = 0;
 	MtxPolygon *poly = NULL;
 	MtxPolyType type;
 	MtxCircle *circle = NULL;
@@ -1342,7 +1342,7 @@ void generate_gauge_background(MtxGaugeFace *gauge)
 					poly->color[priv->daytime_mode].blue/65535.0);
 			lwidth = priv->radius*poly->line_width < 1 ? 1: priv->radius*poly->line_width;
 			cairo_set_line_width (cr, lwidth);
-			cairo_set_line_join(cr,poly->join_style);
+			cairo_set_line_join(cr,(cairo_line_join_t)poly->join_style);
 			switch (poly->line_style)
 			{
 				case GDK_LINE_SOLID:
@@ -1556,7 +1556,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 {
 	GtkWidget *parent = gtk_widget_get_parent(widget);
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(widget);
-	GdkWindowEdge edge = -1;
+	GdkWindowEdge edge = (GdkWindowEdge)-1;
 	/*printf("gauge button event\n");*/
 
 	/* Right side of window */
@@ -1572,7 +1572,7 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 		else if (event->y > (priv->h-10))
 			edge = GDK_WINDOW_EDGE_SOUTH_EAST;
 		else 
-			edge = -1;
+			edge = (GdkWindowEdge)-1;
 	}
 	/* Left Side of window */
 
@@ -1589,10 +1589,10 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 		else if (event->y > (priv->h-10))
 			edge = GDK_WINDOW_EDGE_SOUTH_WEST;
 		else 
-			edge = -1;
+			edge = (GdkWindowEdge)-1;
 	}
 	else
-		edge = -1;
+		edge = (GdkWindowEdge)-1;
 
 
 	if (event->type == GDK_BUTTON_PRESS)

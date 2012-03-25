@@ -61,7 +61,7 @@ gboolean update_pbar(gpointer data)
 	gfloat interval = 0.0;
 	static gboolean rising = TRUE;
 
-	GtkWidget * pbar = data;
+	GtkWidget * pbar = (GtkWidget *)data;
 	interval = (upper-lower)/100.0;
 	cur_val = mtx_progress_bar_get_fraction(MTX_PROGRESS_BAR (pbar));
 	if (cur_val >= upper)

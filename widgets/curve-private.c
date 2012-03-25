@@ -61,7 +61,7 @@ GType mtx_curve_get_type(void)
 			0,
 			(GInstanceInitFunc) mtx_curve_init,
 		};
-		mtx_curve_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxCurve", &mtx_curve_info, 0);
+		mtx_curve_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "MtxCurve", &mtx_curve_info, (GTypeFlags)0);
 	}
 	return mtx_curve_type;
 }
@@ -96,17 +96,17 @@ void mtx_curve_class_init (MtxCurveClass *klass)
 	g_type_class_add_private (klass, sizeof (MtxCurvePrivate)); 
 	mtx_curve_signals[CHANGED_SIGNAL] = 
 		g_signal_new("coords-changed", G_TYPE_FROM_CLASS(klass),
-		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		(GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION),
 		G_STRUCT_OFFSET (MtxCurveClass, coords_changed),
 		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 	mtx_curve_signals[VERTEX_PROXIMITY_SIGNAL] = 
 		g_signal_new("vertex-proximity", G_TYPE_FROM_CLASS(klass),
-		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		(GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION),
 		G_STRUCT_OFFSET (MtxCurveClass, vertex_proximity),
 		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 	mtx_curve_signals[MARKER_PROXIMITY_SIGNAL] = 
 		g_signal_new("marker-proximity", G_TYPE_FROM_CLASS(klass),
-		G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		(GSignalFlags)(G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION),
 		G_STRUCT_OFFSET (MtxCurveClass, marker_proximity),
 		NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 }

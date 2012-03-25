@@ -40,7 +40,7 @@ G_MODULE_EXPORT GtkWidget *mask_entry_new (void)
  */
 G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask (gchar *mask)
 {
-	MaskEntry * widget = g_object_new (TYPE_MASK_ENTRY, NULL);
+	MaskEntry * widget = (MaskEntry *)g_object_new (TYPE_MASK_ENTRY, NULL);
 	widget->mask = g_strdup(mask);
 	return GTK_WIDGET(widget);
 }
@@ -62,7 +62,8 @@ G_MODULE_EXPORT void mask_entry_set_background (MaskEntry *entry)
 		tmpstr = g_utf8_normalize(gtk_entry_get_text (GTK_ENTRY (entry)),-1,G_NORMALIZE_DEFAULT);
 		tmpbuf = g_utf8_casefold(tmpstr,-1);
 		g_free(tmpstr);
-		if (g_regex_match_simple(tmpbuf,entry->mask,0,0))
+		if (g_regex_match_simple(tmpbuf,entry->mask,
+					(GRegexCompileFlags)0,(GRegexMatchFlags)0))
 		{
 			gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
 			g_free(tmpbuf);

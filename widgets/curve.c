@@ -69,7 +69,7 @@ gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *
 	g_object_freeze_notify (G_OBJECT (curve));
 	if (priv->coords)
 		g_free(priv->coords);
-	priv->coords = g_memdup(array,(num_points*sizeof(MtxCurveCoord)));
+	priv->coords = (MtxCurveCoord *)g_memdup(array,(num_points*sizeof(MtxCurveCoord)));
 	priv->num_points = num_points;
 	recalc_extremes(priv);
 	/*
@@ -255,7 +255,7 @@ const gchar * mtx_curve_get_title (MtxCurve *curve)
  \param new_title is the new title to display
  \returns TRUE on success, false otherwise
  */
-gboolean mtx_curve_set_title (MtxCurve *curve, gchar * new_title)
+gboolean mtx_curve_set_title (MtxCurve *curve, const gchar * new_title)
 {
 	MtxCurvePrivate *priv = MTX_CURVE_GET_PRIVATE(curve);
 	g_return_val_if_fail (MTX_IS_CURVE (curve),FALSE);
