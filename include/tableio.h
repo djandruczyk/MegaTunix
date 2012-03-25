@@ -25,7 +25,7 @@
 
 typedef struct _TableExport TableExport;
 
-/* C compatible struct for data export */
+/* C compatible struct for data export  */
 struct _TableExport 
 {
 	gint x_len;

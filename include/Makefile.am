@@ -78,7 +78,8 @@ version:
 	(set -x \
 		GITHASH=`git log | head -1 |cut -f2 -d\  ` \
 		VERHASH=`head -1 version.h |cut -f2 -d\" ` \
-		if [ "$$GITHASH" != "$$VERHASH" ] then \
+		if test "$$GITHASH" != "$$VERHASH" then \
+			echo "Re-creating version.h something change $$GITHASH != $$VERHASH" \
 			rm version.h \
 			if test `grep RELEASE ../config.h |cut -f3 -d\ ` -lt 1 then \
 				if test -d ../.git then \
