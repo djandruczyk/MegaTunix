@@ -43,11 +43,12 @@ static struct
 {
 	const gchar *item;
 	FioAction action;
+	gboolean sensitivity;
 }fio_items[] = {
-	{"import_tables_menuitem",ALL_TABLE_IMPORT},
-	{"export_tables_menuitem",ALL_TABLE_EXPORT},
-	{"restore_ecu_menuitem",ECU_RESTORE},
-	{"backup_ecu_menuitem",ECU_BACKUP},
+	{"import_tables_menuitem",ALL_TABLE_IMPORT,FALSE},
+	{"export_tables_menuitem",ALL_TABLE_EXPORT,FALSE},
+	{"restore_ecu_menuitem",ECU_RESTORE,TRUE},
+	{"backup_ecu_menuitem",ECU_BACKUP,TRUE},
 };
 
 /*!
@@ -95,7 +96,7 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 		{
 			OBJ_SET(item,"fio_action",
 					GINT_TO_POINTER(fio_items[i].action));
-			gtk_widget_set_sensitive(item,TRUE);
+			gtk_widget_set_sensitive(item,fio_items[i].sensitivity);
 		}
 	}
 	gdk_threads_leave();
@@ -160,7 +161,7 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 			//select_all_tables_for_import();
 			break;
 		case ALL_TABLE_EXPORT:
-			select_all_tables_for_export();
+			//select_all_tables_for_export();
 			break;
 		case ECU_BACKUP:
 			if (get_symbol("select_file_for_ecu_backup",(void*)&do_backup))

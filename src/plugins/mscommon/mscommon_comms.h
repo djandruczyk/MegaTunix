@@ -35,6 +35,7 @@ void ms_table_write(gint, gint, guint8 *);
 void ms_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
 void send_to_ecu(gpointer, gint, gboolean);
 void ms_chunk_write(gint, gint, gint, gint, guint8 *);
+void ecu_chunk_write(gint, gint, gint, gint, guint8 *);
 void chunk_write(gpointer, gint, guint8 *);
 void send_to_slaves(void *);
 void slaves_set_color(GuiColor,const gchar *);

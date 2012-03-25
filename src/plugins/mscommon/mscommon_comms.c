@@ -314,6 +314,24 @@ G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
 	ms_chunk_write(canID, page, offset, num_bytes, block);
 }
 
+/*!
+ \brief ecu_chunk_write() is an abstraction wrapper
+ \param canID is the CAN identifier (0-14)
+ \param page is the MTX page in which the value refers to.
+ \param offset is the offset from the beginning of the page that this data
+ refers to.
+ \param num_bytes is the length of block to sent
+ \param block is the the block of data to be sent which better damn well be
+ in ECU byte order if there is an endianness thing..
+ */
+G_MODULE_EXPORT void ecu_chunk_write(gint canID, gint page, gint offset, gint num_bytes, guint8 * block)
+{
+	/* Should check if firmware is chunk capable first though and fallback
+	 * as needed
+	 */
+	ms_chunk_write(canID,page,offset,num_bytes,block);
+}
+
 
 /*!
  \brief ms_chunk_write() gets called to send a block of values to the ECU.

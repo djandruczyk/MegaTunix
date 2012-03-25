@@ -74,15 +74,15 @@
                             <child>
                               <widget class="GtkImageMenuItem" id="export_tables_menuitem">
                                 <property name="label">_Export Table(s)</property>
-                                <property name="visible">True</property>
+								<property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="use_stock">False</property>
-                                <property name="always_show_image">True</property>
+								<property name="always_show_image">True</property>
                                 <signal name="activate" handler="settings_transfer"/>
                                 <child internal-child="image">
                                   <widget class="GtkImage" id="image3">
-                                    <property name="visible">True</property>
+									  <property name="visible">True</property>
                                     <property name="stock">gtk-save-as</property>
                                   </widget>
                                 </child>
