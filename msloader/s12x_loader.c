@@ -116,20 +116,20 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	ms2_enter_boot_mode(port_fd);
 	if (!wakeup_S12(port_fd))
 	{
-		output("Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);
+		output((gchar *)"Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);
 		free_s19(count);
 		return FALSE;
 	}
 	/* Erase the full MS2 even though we do it by page later... */
 	if (!erase_S12(port_fd))
 	{
-		output("Unable to ERASE device!\n",FALSE);
+		output((gchar *)"Unable to ERASE device!\n",FALSE);
 		free_s19(count);
 		return FALSE;
 	}
 	if (!send_S12(port_fd,count))
 	{
-		output("Unable to Send firmware to device!\n",FALSE);
+		output((gchar *)"Unable to Send firmware to device!\n",FALSE);
 		free_s19(count);
 		return FALSE;
 	}
@@ -139,12 +139,12 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps)\nwith %i verify errors, and %i successful recoveries.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count,verify_retry_success_count),TRUE);
 	if ((verify_failure_count > 0) && 
 			(verify_failure_count != verify_retry_success_count))
-		output("ERRORS REPORTED! The load had issues,\nYou should retry the load\n",FALSE);
+		output((gchar *)"ERRORS REPORTED! The load had issues,\nYou should retry the load\n",FALSE);
 	else if ((verify_failure_count > 0) && 
 			(verify_failure_count == verify_retry_success_count))
-		output("ERRORS REPORTED! However recovery WORKED, so its recommended\nthat you retry the load, but it MIGHT work.. YMMV\n",FALSE);
+		output((gchar *)"ERRORS REPORTED! However recovery WORKED, so its recommended\nthat you retry the load, but it MIGHT work.. YMMV\n",FALSE);
 	else
-		output("ALL DONE! Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
+		output((gchar *)"ALL DONE! Remove boot jumper if jumpered and power cycle ECU\n",FALSE);
 	verify_failure_count = 0;
 	verify_retry_success_count = 0;
 	return TRUE;
@@ -162,21 +162,21 @@ gboolean do_freeems_load(gint port_fd, gint file_fd)
 	g_get_current_time(&begin);
 	if (!wakeup_S12(port_fd))
 	{
-		output("Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);
+		output((gchar *)"Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);
 		free_s19(count);
 		return FALSE;
 	}
 	/*
 	if (!erase_S12(port_fd))
 	{
-		output("Unable to ERASE device!\n",FALSE);
+		output((gchar *)"Unable to ERASE device!\n",FALSE);
 		free_s19(count);
 		return FALSE;
 	}
 	*/
 	if (!send_S12(port_fd,count))
 	{
-		output("Unable to Send firmware to device!\n",FALSE);
+		output((gchar *)"Unable to Send firmware to device!\n",FALSE);
 		free_s19(count);
 		return FALSE;
 	}
@@ -188,12 +188,12 @@ gboolean do_freeems_load(gint port_fd, gint file_fd)
 	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps)\nwith %i verify errors, and %i successful recoveries.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count,verify_retry_success_count),TRUE);
 	if ((verify_failure_count > 0) && 
 			(verify_failure_count != verify_retry_success_count))
-		output("ERRORS REPORTED! The load had issues,\nYou should retry the load\n",FALSE);
+		output((gchar *)"ERRORS REPORTED! The load had issues,\nYou should retry the load\n",FALSE);
 	else if ((verify_failure_count > 0) && 
 			(verify_failure_count == verify_retry_success_count))
-		output("ERRORS REPORTED! However recovery WORKED,so it is recommended\nthat you retry the load, but it MIGHT work.. YMMV\n",FALSE);
+		output((gchar *)"ERRORS REPORTED! However recovery WORKED,so it is recommended\nthat you retry the load, but it MIGHT work.. YMMV\n",FALSE);
 	else
-		output("ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
+		output((gchar *)"ALL DONE! Remove boot jumper or reset load/run switch\nand power cycle ECU...\n",FALSE);
 	verify_failure_count = 0;
 	verify_retry_success_count = 0;
 	return TRUE;
@@ -300,7 +300,7 @@ gboolean wakeup_S12(gint port_fd)
 
 	for (i = 0; i < 6; i++) {
 		prompt = 0;
-		output("Attempting Wakeup...\n",FALSE);
+		output((gchar *)"Attempting Wakeup...\n",FALSE);
 		res = write_wrapper(port_fd, &c, 1);
 		if (res != 1)
 			output(g_strdup_printf("wakeup_S12(): SHORT WRITE! %i of 1\n", res),TRUE);
@@ -311,7 +311,7 @@ gboolean wakeup_S12(gint port_fd)
 
 		if (!check_status(port_fd))
 		{
-			output("Serial Read failure, try unplugging\nand replugging your Serial adapter/cable\n",FALSE);
+			output((gchar *)"Serial Read failure, try unplugging\nand replugging your Serial adapter/cable\n",FALSE);
 			return FALSE;
 		}
 		else 
@@ -319,7 +319,7 @@ gboolean wakeup_S12(gint port_fd)
 	}
 
 	if (i > 5) {
-		output("Could not wake up processor, try jumpering\nthe boot jumper and power cycling the ECU...\n",FALSE);
+		output((gchar *)"Could not wake up processor, try jumpering\nthe boot jumper and power cycling the ECU...\n",FALSE);
 		return FALSE;
 	}
 	return TRUE;
@@ -337,7 +337,7 @@ gboolean check_status(gint port_fd)
 	res = read_wrapper(port_fd, buf, 3);
 	if (res == -1)
 	{
-		output("READ FAILURE in check_status!\n",FALSE);
+		output((gchar *)"READ FAILURE in check_status!\n",FALSE);
 		flush_serial(port_fd, BOTH);
 		return FALSE;
 	}
@@ -503,25 +503,25 @@ retry:
 	res = read_wrapper(port_fd, (gchar *)b, n);
 	if (res != n)
 	{
-		output("readback_block error, retrying\n",FALSE);
+		output((gchar *)"readback_block error, retrying\n",FALSE);
 		return FALSE;
 	}
 	if (!check_status(port_fd))
 	{
-		output("readback_block error, retrying\n",FALSE);
+		output((gchar *)"readback_block error, retrying\n",FALSE);
 		was_a_retry = TRUE;
 		flush_serial(port_fd,BOTH);
 		errcount++;
 		if (errcount > 5)
 		{
-			output("too many errors, aborting!\n",FALSE);
+			output((gchar *)"too many errors, aborting!\n",FALSE);
 			return FALSE;
 		}
 		goto retry;
 	}
 	else if (was_a_retry)
 	{
-		output("Retry was successful!\n",FALSE);
+		output((gchar *)"Retry was successful!\n",FALSE);
 		was_a_retry = FALSE;
 	}
 	return TRUE;
@@ -550,7 +550,7 @@ retry:
 		page_err++;
 		if (page_err > 3)
 		{
-			output("send_block(): Failure setting page more than 3x in a row, ABORTING!",FALSE);
+			output((gchar *)"send_block(): Failure setting page more than 3x in a row, ABORTING!",FALSE);
 			return FALSE;
 		}
 		else goto retry;
@@ -569,31 +569,31 @@ retry:
 	if (res != 4)
 		output(g_strdup_printf("send_block(): SHORT WRITE %i of 4",res),TRUE);
 	if (debug >= 4) {
-		output( "TX:",FALSE);
+		output((gchar *)"TX:",FALSE);
 		for (i = 0 ; i < n ; i++) {
 			output(g_strdup_printf(" %02x", b[i] ),TRUE);
 		}
-		output( "\n",FALSE);
+		output((gchar *)"\n",FALSE);
 	}
 	res = write_wrapper(port_fd, b, n);
 	if (res != n)
 		output(g_strdup_printf("send_block(): SHORT WRITE %i of %i",res,n),TRUE);
 	if (!check_status(port_fd))
 	{
-		output("send_block error, retrying\n",FALSE);
+		output((gchar *)"send_block error, retrying\n",FALSE);
 		was_a_retry = TRUE;
 		flush_serial(port_fd,BOTH);
 		errcount++;
 		if (errcount > 5)
 		{
-			output("too many errors, aborting!\n",FALSE);
+			output((gchar *)"too many errors, aborting!\n",FALSE);
 			return FALSE;
 		}
 		goto retry;
 	}
 	else if (was_a_retry)
 	{
-		output("Retry was successful!\n",FALSE);
+		output((gchar *)"Retry was successful!\n",FALSE);
 		was_a_retry = FALSE;
 	}
 	total_bytes += n;
@@ -605,7 +605,7 @@ gboolean erase_S12(gint port_fd)
 	guchar c;
 	gint res = 0;
 
-	output("Attempting to erase main flash!\n",FALSE);
+	output((gchar *)"Attempting to erase main flash!\n",FALSE);
 	c = C_ERASE_ALL;
 	res = write_wrapper(port_fd, &c, 1);
 	if (res != 1)
@@ -615,7 +615,7 @@ gboolean erase_S12(gint port_fd)
 #endif
 	if(!check_status(port_fd))
 		return FALSE;
-	output( "Main Flash Erased...\n",FALSE);
+	output((gchar *)"Main Flash Erased...\n",FALSE);
 	return TRUE;
 }
 
@@ -698,7 +698,7 @@ send_retry:
 
 			if (!send_block(port_fd,addr, thisRecPtr, nn))
 			{
-				output("FAILURE to even send block, write aborted with critical failure!\n",FALSE);
+				output((gchar *)"FAILURE to even send block, write aborted with critical failure!\n",FALSE);
 				free(thisRec);
 				free(verify);
 				return FALSE;
@@ -770,7 +770,7 @@ void reset_proc(gint port_fd)
 	/* Read out response and toss it */
 	res = read_wrapper(port_fd,buf,1);
 	if (res == 1)
-		output("Processor Reset complete\n",FALSE);
+		output((gchar *)"Processor Reset complete\n",FALSE);
 }
 
 

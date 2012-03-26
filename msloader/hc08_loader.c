@@ -56,27 +56,27 @@ gboolean do_ms1_load(gint port_fd, gint file_fd)
 	switch (ecu_state)
 	{
 		case NOT_LISTENING:
-			output("NO response to signature request\n",FALSE);
+			output((gchar *)"NO response to signature request\n",FALSE);
 			break;
 		case IN_BOOTLOADER:
-			output("ECU is in bootloader mode, good!\n",FALSE);
+			output((gchar *)"ECU is in bootloader mode, good!\n",FALSE);
 			break;
 		case LIVE_MODE:
-			output("ECU detected in LIVE! mode, attempting to access bootloader\n",FALSE);
+			output((gchar *)"ECU detected in LIVE! mode, attempting to access bootloader\n",FALSE);
 			result = jump_to_bootloader(port_fd);
 			if (result)
 			{
 				ecu_state = detect_ecu(port_fd);
 				if (ecu_state == IN_BOOTLOADER)
 				{
-					output("ECU is in bootloader mode, good!\n",FALSE);
+					output((gchar *)"ECU is in bootloader mode, good!\n",FALSE);
 					break;
 				}
 				else
-					output("Could NOT attain bootloader mode\n",FALSE);
+					output((gchar *)"Could NOT attain bootloader mode\n",FALSE);
 			}
 			else
-				output("Could NOT attain bootloader mode\n",FALSE);
+				output((gchar *)"Could NOT attain bootloader mode\n",FALSE);
 			break;
 	}
 	if (ecu_state != IN_BOOTLOADER)
@@ -86,23 +86,23 @@ gboolean do_ms1_load(gint port_fd, gint file_fd)
 		ecu_state = detect_ecu(port_fd);
 		if (ecu_state != IN_BOOTLOADER)
 		{
-			output("Unable to get to the bootloader, update FAILED!\n",FALSE);
+			output((gchar *)"Unable to get to the bootloader, update FAILED!\n",FALSE);
 			boot_jumper_prompt();
 		}
 		else
-			output("Got into the bootloader, good!\n",FALSE);
+			output((gchar *)"Got into the bootloader, good!\n",FALSE);
 
 	}
 	result = prepare_for_upload(port_fd);
 	if (!result)
 	{
-		output("Failure getting ECU into a state to accept the new firmware\n",FALSE);
+		output((gchar *)"Failure getting ECU into a state to accept the new firmware\n",FALSE);
 		return FALSE;
 	}
 	upload_firmware(port_fd,file_fd);
-	output("Firmware upload completed...\n",FALSE);
+	output((gchar *)"Firmware upload completed...\n",FALSE);
 	reboot_ecu(port_fd);
-	output("ECU reboot complete\n",FALSE);
+	output((gchar *)"ECU reboot complete\n",FALSE);
 
 	return TRUE;
 }
@@ -133,7 +133,7 @@ EcuState detect_ecu(gint fd)
 	res = write_wrapper (fd,(guchar *)"S",1);
 	flush_serial(fd,OUTBOUND);
 	if (res != 1)
-		output("Failure sending signature request!\n",FALSE);
+		output((gchar *)"Failure sending signature request!\n",FALSE);
 	total_read = read_wrapper(fd,buf,32);
 	flush_serial(fd,BOTH);
 	if (total_read > 0)
@@ -177,7 +177,7 @@ gboolean jump_to_bootloader(gint fd)
 	res = write_wrapper (fd,(guchar *)"!!",2);
 	if (res != 2)
 	{
-		output("Error trying to get \"Boot>\" Prompt,\n",FALSE);
+		output((gchar *)"Error trying to get \"Boot>\" Prompt,\n",FALSE);
 		return FALSE;
 	}
 
@@ -199,7 +199,7 @@ gboolean prepare_for_upload(gint fd)
 	res = write_wrapper(fd,(guchar *)"W",1);
 	if (res != 1)
 	{
-		output("Error trying to initiate ECU wipe\n",FALSE);
+		output((gchar *)"Error trying to initiate ECU wipe\n",FALSE);
 		return FALSE;
 	}
 	flush_serial(fd,OUTBOUND);
@@ -209,11 +209,11 @@ gboolean prepare_for_upload(gint fd)
 	if (g_strrstr_len((gchar *)buf,res,"Complete"))
 	{
 		g_free(message);
-		output("ECU Wipe complete\n",FALSE);
+		output((gchar *)"ECU Wipe complete\n",FALSE);
 		res = write_wrapper(fd,(guchar *)"U",1);
 		if (res != 1)
 		{
-			output("Error trying to initiate ECU upgrade\n",FALSE);
+			output((gchar *)"Error trying to initiate ECU upgrade\n",FALSE);
 			return FALSE;
 		}
 		flush_serial(fd,OUTBOUND);
@@ -221,7 +221,7 @@ gboolean prepare_for_upload(gint fd)
 		res = read(fd,buf,1024);
 		if (g_strrstr_len((gchar *)buf,res,"waiting"))
 		{
-			output("Ready to update ECU firmware\n",FALSE);
+			output((gchar *)"Ready to update ECU firmware\n",FALSE);
 			return TRUE;
 		}
 		else
@@ -229,7 +229,7 @@ gboolean prepare_for_upload(gint fd)
 			message = g_strndup((gchar *)buf,res);
 			output(g_strdup_printf("ECU returned \"%s\"\n",message),TRUE);	
 			g_free(message);
-			output("Error getting \"ready to update\" message from ECU\n",FALSE);
+			output((gchar *)"Error getting \"ready to update\" message from ECU\n",FALSE);
 			return FALSE;
 		}
 	}
@@ -303,12 +303,12 @@ void reboot_ecu(gint fd)
 {
 	gint res = 0;
 
-	output("Sleeping 3 Seconds\n",FALSE);
+	output((gchar *)"Sleeping 3 Seconds\n",FALSE);
 	g_usleep(3000000);
 	res = write_wrapper (fd,(guchar *)"X",1);
 	flush_serial(fd,OUTBOUND);
 	if (res != 1)
-		output("Error trying to Reboot ECU\n",FALSE);
+		output((gchar *)"Error trying to Reboot ECU\n",FALSE);
 
 	return;
 }

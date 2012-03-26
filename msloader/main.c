@@ -56,16 +56,16 @@ gint main(gint argc, gchar ** argv)
 	/* If we got this far, all is good argument wise */
 	if (!lock_port(argv[2]))
 	{
-		output("Could NOT LOCK Serial Port\nCheck for already running serial apps using the port\n",FALSE);
+		output((gchar *)"Could NOT LOCK Serial Port\nCheck for already running serial apps using the port\n",FALSE);
 		exit(-1);
 	}
 
 	port_fd = open_port(argv[2]);
 	if (port_fd > 0)
-		output("Port successfully opened\n",FALSE);
+		output((gchar *)"Port successfully opened\n",FALSE);
 	else
 	{
-		output("Could NOT open Port check permissions\n",FALSE);
+		output((gchar *)"Could NOT open Port check permissions\n",FALSE);
 		unlock_port();
 		exit(-1);
 	}
@@ -75,10 +75,10 @@ gint main(gint argc, gchar ** argv)
 	file_fd = g_open(argv[3],O_RDONLY,S_IRUSR);
 #endif
 	if (file_fd > 0 )
-		output("Firmware file successfully opened\n",FALSE);
+		output((gchar *)"Firmware file successfully opened\n",FALSE);
 	else
 	{
-		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
+		output((gchar *)"Could NOT open firmware file, check permissions/paths\n",FALSE);
 		close_port(port_fd);
 		unlock_port();
 		exit(-1);

@@ -50,8 +50,8 @@
 
 /* Globals */
 #ifndef __WIN32__
-struct termios oldtio;
-struct termios newtio;
+static struct termios oldtio;
+static struct termios newtio;
 #endif
 static gchar * serial_lockfile = NULL;
 
@@ -312,7 +312,7 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 		g_usleep(10000); /* 10ms rest */
 		if (received == -1)
 		{
-			output("Serial I/O Error, read failure\n",FALSE);
+			output((gchar *)"Serial I/O Error, read failure\n",FALSE);
 			return -1;
 		}
 		total += received;
@@ -350,7 +350,7 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 		res = select (fd+1, &readfds,NULL,&errfds, &t);
 		if (res == -1)
 		{
-			output("ERROR, select() failure!\n",FALSE);
+			output((gchar *)"ERROR, select() failure!\n",FALSE);
 			return -1;
 		}
 		if (res == 0) /* Timeout */
@@ -361,7 +361,7 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 		/* OK we have an error condition waiting for us, read it */
 		if (FD_ISSET(fd,&errfds))
 		{
-			output("select() (read) ERROR !\n",FALSE);
+			output((gchar *)"select() (read) ERROR !\n",FALSE);
 			attempts++;
 		}
 		if (attempts > POLL_ATTEMPTS)
@@ -374,7 +374,7 @@ gint read_wrapper(gint fd, gchar *buf, gint requested)
 			received = read(fd, &buf[read_pos], wanted);
 			if (received <= 0)
 			{
-				output("Serial I/O Error, read failure\n",FALSE);
+				output((gchar *)"Serial I/O Error, read failure\n",FALSE);
 				return -1;
 			}
 			total += received;
@@ -414,7 +414,7 @@ gint write_wrapper(gint fd, guchar *buf, gint total)
 		res = select (fd+1, NULL,&writefds,&errfds, &t);
 		if (res == -1)
 		{
-			output("ERROR, select() failure!\n",FALSE);
+			output((gchar *)"ERROR, select() failure!\n",FALSE);
 			return -1;
 		}
 		if (res == 0) /* Timeout */
@@ -425,7 +425,7 @@ gint write_wrapper(gint fd, guchar *buf, gint total)
 		/* Error condition set? */
 		if (FD_ISSET(fd,&errfds))
 		{
-			output("select() (write) ERROR !\n",FALSE);
+			output((gchar *)"select() (write) ERROR !\n",FALSE);
 			attempts++;
 		}
 		if (attempts > POLL_ATTEMPTS)
@@ -438,7 +438,7 @@ gint write_wrapper(gint fd, guchar *buf, gint total)
 			count = write(fd, &buf[write_pos], to_send);
 			if (count <= 0)
 			{
-				output("Serial I/O Error, write failure\n",FALSE);
+				output((gchar *)"Serial I/O Error, write failure\n",FALSE);
 				return -1;
 			}
 			sent += count;

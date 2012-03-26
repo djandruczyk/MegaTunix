@@ -95,7 +95,7 @@ void output (gchar *line, gboolean free_it)
 	GtkAdjustment * adj = NULL;
 	
 	if (!builder)
-		builder = DATA_GET(global_data,"builder");
+		builder = (GtkBuilder *)DATA_GET(global_data,"builder");
 	g_return_if_fail(builder);
 	if (!textview)
 		textview = GTK_WIDGET(gtk_builder_get_object(builder, "textview"));
@@ -123,7 +123,7 @@ G_MODULE_EXPORT gboolean persona_choice (GtkWidget *widget, gpointer data)
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 	{
 		DATA_SET(global_data,"persona",OBJ_GET(widget,"persona"));
-		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),TRUE);
+		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object((GtkBuilder *)DATA_GET(global_data,"builder"),"load_button")),TRUE);
 	}
 	return TRUE;
 }
@@ -138,9 +138,9 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 	gint file_fd = 0;
 	FirmwareType type = MS1;
 
-	widget = GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"), "port_entry"));
+	widget = GTK_WIDGET(gtk_builder_get_object((GtkBuilder *)DATA_GET(global_data,"builder"), "port_entry"));
 	port = (gchar *)gtk_entry_get_text(GTK_ENTRY(widget));
-	widget = GTK_WIDGET(gtk_builder_get_object (DATA_GET(global_data,"builder"), "filechooser_button"));
+	widget = GTK_WIDGET(gtk_builder_get_object ((GtkBuilder *)DATA_GET(global_data,"builder"), "filechooser_button"));
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 
 	if (g_utf8_strlen(port, -1) == 0)
@@ -151,15 +151,15 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 	/* If we got this far, all is good argument wise */
 	if (!lock_port(port))
 	{
-		output("Could NOT LOCK Serial Port,\nYou should check for other programs using the serial port\n",FALSE);
+		output((gchar *)"Could NOT LOCK Serial Port,\nYou should check for other programs using the serial port\n",FALSE);
 		return FALSE;
 	}
 	port_fd = open_port(port);
 	if (port_fd > 0)
-		output("Port successfully opened\n",FALSE);
+		output((gchar *)"Port successfully opened\n",FALSE);
 	else
 	{
-		output("Could NOT open Port, You should check perms\n",FALSE);
+		output((gchar *)"Could NOT open Port, You should check perms\n",FALSE);
 		unlock_port();
 		return FALSE;
 	}
@@ -169,10 +169,10 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 	file_fd = g_open(filename,O_RDONLY,S_IRUSR);
 #endif
 	if (file_fd > 0 )
-		output("Firmware file successfully opened\n",FALSE);
+		output((gchar *)"Firmware file successfully opened\n",FALSE);
 	else
 	{
-		output("Could NOT open firmware file, check permissions/paths\n",FALSE);
+		output((gchar *)"Could NOT open firmware file, check permissions/paths\n",FALSE);
 		close_port(port_fd);
 		unlock_port();
 		return FALSE;
@@ -203,23 +203,23 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
 void lock_buttons()
 {
 	GtkBuilder *builder = NULL;
-	builder = DATA_GET(global_data,"builder");
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_firmware_menuitem")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"persona_table")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"port_entry")),FALSE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"filechooser_button")),FALSE);
+	builder = (GtkBuilder *)DATA_GET(global_data,"builder");
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"load_button")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"load_firmware_menuitem")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"persona_table")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"port_entry")),FALSE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"filechooser_button")),FALSE);
 }
 
 void unlock_buttons()
 {
 	GtkBuilder *builder = NULL;
-	builder = DATA_GET(global_data,"builder");
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_button")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"load_firmware_menuitem")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"persona_table")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"port_entry")),TRUE);
-	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"),"filechooser_button")),TRUE);
+	builder = (GtkBuilder *)DATA_GET(global_data,"builder");
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"load_button")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"load_firmware_menuitem")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"persona_table")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"port_entry")),TRUE);
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(builder,"filechooser_button")),TRUE);
 }
 
 
@@ -240,8 +240,8 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
 	{
-		gchar *authors[] = {"David J. Andruczyk",NULL};
-		gchar *artists[] = {"Alan Barrow",NULL};
+		gchar *authors[] = {(gchar *)"David J. Andruczyk",NULL};
+		gchar *artists[] = {(gchar *)"Alan Barrow",NULL};
 		gtk_show_about_dialog(NULL,
 				"name","MegaTunix Firmware Loading Software",
 				"version",VERSION,
@@ -268,19 +268,19 @@ void load_defaults()
 	GtkFileFilter *filter = NULL;
 	GObject *object = NULL;
 
-	builder = DATA_GET(global_data,"builder");
+	builder = (GtkBuilder *)DATA_GET(global_data,"builder");
 	g_return_if_fail(builder);
 
-	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	filename = g_strconcat(HOME(), PSEP,"mtx",PSEP,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		if(cfg_read_string(cfgfile, "Serial", "override_port", &tmpbuf))
+		if(cfg_read_string(cfgfile, (gchar *)"Serial", (gchar *)"override_port", &tmpbuf))
 		{
 			gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object (builder, "port_entry")),tmpbuf);
 			g_free(tmpbuf);
 		}
-		if(cfg_read_string(cfgfile, "MTXLoader", "last_file", &tmpbuf))
+		if(cfg_read_string(cfgfile, (gchar *)"MTXLoader", (gchar *)"last_file", &tmpbuf))
 		{
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(gtk_builder_get_object (builder, "filechooser_button")),tmpbuf);
 			filter = gtk_file_filter_new();
@@ -310,13 +310,13 @@ void save_defaults()
 	ConfigFile *cfgfile;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
-	filename = g_strconcat(HOME(), PSEP,".MegaTunix",PSEP,"config", NULL);
+	filename = g_strconcat(HOME(), PSEP,"mtx",PSEP,"config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
-		tmpbuf = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(gtk_builder_get_object (DATA_GET(global_data,"builder"), "filechooser_button")));
+		tmpbuf = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(gtk_builder_get_object ((GtkBuilder *)DATA_GET(global_data,"builder"), "filechooser_button")));
 		if (tmpbuf)
-			cfg_write_string(cfgfile, "MTXLoader", "last_file", tmpbuf);
+			cfg_write_string(cfgfile, (gchar *)"MTXLoader", (gchar *)"last_file", tmpbuf);
 		g_free(tmpbuf);
 		cfg_write_file(cfgfile,filename);
 		cfg_free(cfgfile);
@@ -357,7 +357,7 @@ G_MODULE_EXPORT void progress_update(gfloat fraction)
 	gint value = 0;
 
 	if (!pbar)
-		pbar = GTK_WIDGET(gtk_builder_get_object(DATA_GET(global_data,"builder"), "progressbar"));
+		pbar = GTK_WIDGET(gtk_builder_get_object((GtkBuilder *)DATA_GET(global_data,"builder"), "progressbar"));
 	g_return_if_fail(pbar);
 
 	fraction = fraction > 1.0 ? 1.0:fraction;
