@@ -155,7 +155,7 @@ void ms2_crunch_trigtooth_data()
 	ttm_data->sample_time = ((current.tv_sec-last.tv_sec)*1000) + ((current.tv_usec-last.tv_usec)/1000.0);
 	last = current;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
 	for (i=0;i<341;i++)
@@ -256,7 +256,7 @@ void ms2_update_trigtooth_display()
 
 	gtk_widget_get_allocation(ttm_data->darea,&allocation);
 	
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	w=allocation.width;
 	h=allocation.height;

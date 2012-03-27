@@ -33,7 +33,7 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 {
-	gint i = 0;
+	guint i = 0;
 	GtkWidget *parent = NULL;
 	gchar * lower = NULL;
 	gchar * upper = NULL;
@@ -63,7 +63,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_map)
 		return;
@@ -87,14 +87,14 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 			continue;
 		if (DATA_GET(object,"special"))
 			continue;
-		size = (DataSize)DATA_GET(object,"size");
-		multiplier = DATA_GET(object,"fromecu_mult");
-		adder = DATA_GET(object,"fromecu_add");
+		size = (DataSize)(GINT)DATA_GET(object,"size");
+		multiplier = (gfloat *)DATA_GET(object,"fromecu_mult");
+		adder = (gfloat *)DATA_GET(object,"fromecu_add");
 		precision = (GINT) DATA_GET(object,"precision");
 		bitval = (GINT) DATA_GET(object,"offset");
 		if (DATA_GET(object,"real_lower"))
 		{
-			lower = DATA_GET(object,"real_lower");
+			lower = (gchar *)DATA_GET(object,"real_lower");
 			real_lower = g_strtod(lower,NULL);
 			raw_lower = calc_value_f(real_lower,multiplier,adder,TOECU);
 		}
@@ -106,7 +106,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		}
 		if (DATA_GET(object,"real_upper"))
 		{
-			upper = DATA_GET(object,"real_upper");
+			upper = (gchar *)DATA_GET(object,"real_upper");
 			real_upper = g_strtod(upper,NULL);
 			raw_upper = calc_value_f(real_upper,multiplier,adder,TOECU);
 		}

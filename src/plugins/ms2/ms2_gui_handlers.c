@@ -60,14 +60,14 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 	gfloat tmpf = 0.0;
 	const gchar *dest = NULL;
 
-	handler = (MS2StdHandler)OBJ_GET(widget,"handler");
+	handler = (MS2StdHandler)(GINT)OBJ_GET(widget,"handler");
 
 	switch ((MS2StdHandler)handler)
 	{
 		case GET_CURR_TPS:
-			tmpbuf = OBJ_GET(widget,"source");
+			tmpbuf = (gchar *)OBJ_GET(widget,"source");
 			lookup_current_value_f(tmpbuf,&tmpf);
-			dest = OBJ_GET(widget,"dest_widget");
+			dest = (const gchar *)OBJ_GET(widget,"dest_widget");
 			tmpbuf = g_strdup_printf("%.0f",tmpf);
 			gtk_entry_set_text(GTK_ENTRY(lookup_widget_f(dest)),tmpbuf);
 			g_signal_emit_by_name(lookup_widget_f(dest),"activate",NULL);
@@ -101,7 +101,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 
 			case START_TOOTHMON_LOGGER:
 				ttm_data->stop = FALSE;
-				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_toothmon");
+				OBJ_SET(ttm_data->darea,"io_cmd_function",(gpointer)"ms2_e_read_toothmon");
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
@@ -109,7 +109,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 				break;
 			case START_TRIGMON_LOGGER:
 				ttm_data->stop = FALSE;
-				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_trigmon");
+				OBJ_SET(ttm_data->darea,"io_cmd_function",(gpointer)"ms2_e_read_trigmon");
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),FALSE);
 				gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget_f("compositelogger_buttons_table")),FALSE);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
@@ -117,7 +117,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 				break;
 			case START_COMPOSITEMON_LOGGER:
 				ttm_data->stop = FALSE;
-				OBJ_SET(ttm_data->darea,"io_cmd_function","ms2_e_read_compositemon");
+				OBJ_SET(ttm_data->darea,"io_cmd_function",(gpointer)"ms2_e_read_compositemon");
 				alter_widget_state_f(GTK_WIDGET(lookup_widget_f("toothlogger_buttons_table")),NULL);
 				alter_widget_state_f(GTK_WIDGET(lookup_widget_f("triggerlogger_buttons_table")),NULL);
 				bind_ttm_to_page((GINT)OBJ_GET(widget,"page"));
@@ -200,7 +200,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	if (!OBJ_GET(widget,"size"))
 		size = MTX_U08 ;        /* default! */
 	else
-		size = (DataSize)OBJ_GET(widget,"size");
+		size = (DataSize)(GINT)OBJ_GET(widget,"size");
 	bitval = (GINT)OBJ_GET(widget,"bitval");
 	bitmask = (GINT)OBJ_GET(widget,"bitmask");
 	bitshift = get_bitshift_f(bitmask);
@@ -232,7 +232,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			/* Send the "size" of the offset to the ecu */
 			if (OBJ_GET(widget,"size_offset"))
 			{
-				offset = (GINT)strtol(OBJ_GET(widget,"size_offset"),NULL,10);
+				offset = (GINT)strtol((gchar *)OBJ_GET(widget,"size_offset"),NULL,10);
 				ms_send_to_ecu_f(canID, page, offset, MTX_U08, size, TRUE);
 			}
 			else

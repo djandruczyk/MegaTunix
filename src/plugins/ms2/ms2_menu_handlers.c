@@ -41,7 +41,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 	GtkWidget *item = NULL;
 	GtkWidget *image = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	gdk_threads_enter();
 	if (firmware->capabilities & MS2)
@@ -134,7 +134,7 @@ G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	g_return_val_if_fail(firmware,FALSE);
 	g_return_val_if_fail(main_xml,FALSE);
@@ -254,7 +254,7 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 	Firmware_Details *firmware = NULL;
 	gboolean (*populate_afr_calibrator_combo_f)(GtkWidget *) = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
@@ -268,7 +268,7 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 
 		item = glade_xml_get_widget(xml,"ego_sensor_combo");
 		register_widget_f("afr_calibrate_ego_sensor_combo",item);
-		if (get_symbol_f("populate_afr_calibrator_combo",(void *)&populate_afr_calibrator_combo_f))
+		if (get_symbol_f("populate_afr_calibrator_combo",(void **)&populate_afr_calibrator_combo_f))
 			populate_afr_calibrator_combo_f(item);
 		item2 = glade_xml_get_widget(xml,"generic_wideband_frame");
 		OBJ_SET(item,"generic_controls",item2);
@@ -331,10 +331,10 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
 	if (!update_widget_f)
-		get_symbol_f("update_widget",(void *)&update_widget_f);
+		get_symbol_f("update_widget",(void **)&update_widget_f);
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	firmware = DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
@@ -544,10 +544,10 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
 	if (!update_widget_f)
-		get_symbol_f("update_widget",(void *)&update_widget_f);
+		get_symbol_f("update_widget",(void **)&update_widget_f);
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	firmware = DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
@@ -695,11 +695,11 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
 	if (!update_widget_f)
-		get_symbol_f("update_widget",(void *)&update_widget_f);
+		get_symbol_f("update_widget",(void **)&update_widget_f);
 
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	firmware = DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
