@@ -27,8 +27,8 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void load_dependancies(gconstpointer *,xmlNode *, gchar *);
-void load_dependancies_obj(GObject *,ConfigFile * ,gchar *, gchar *);
+void load_dependancies(gconstpointer *,xmlNode *, const gchar *);
+void load_dependancies_obj(GObject *,ConfigFile * , const gchar *, const gchar *);
 gboolean check_size(DataSize);
 void dealloc_dep_object(gpointer);
 /* Prototypes */

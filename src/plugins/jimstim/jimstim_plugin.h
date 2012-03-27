@@ -44,7 +44,7 @@ EXTERN OutputData *(*initialize_outputdata_f)(void);
 EXTERN void *(*dbg_func_f)(int,const gchar *, const gchar *, gint, const gchar *, ...);
 EXTERN void (*start_tickler_f)(gint);
 EXTERN void (*stop_tickler_f)(gint);
-EXTERN GList *(*get_list_f)(gchar *);
+EXTERN GList *(*get_list_f)(const gchar *);
 EXTERN gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
 EXTERN void (*set_widget_sensitive_f)(gpointer, gpointer);
 EXTERN void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, gboolean, gboolean);

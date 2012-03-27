@@ -69,7 +69,7 @@ GArray * validate_and_load_tests(GHashTable **);
 gboolean check_for_match(GHashTable *,gchar *);
 void free_results_array(GArray *);
 void free_tests_array(GArray *);
-void interrogate_error(gchar *, gint);
+void interrogate_error(const gchar *, gint);
 gint translate_capabilities(const gchar *);
 gboolean load_firmware_details(Firmware_Details *, const gchar * );
 void update_interrogation_gui_pf(void);

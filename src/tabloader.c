@@ -488,7 +488,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
   \param lists is the command seperated string list of lists to bind this
   widget into.
   */
-G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
+G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, const gchar * lists)
 {
 	gint bind_num_keys = 0;
 	gchar **tmpvector = NULL;
@@ -526,7 +526,7 @@ G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, gchar * lists)
   \param lists is the comma separated list of list names
   \param data is the pointer to the item to remove from each list
   */
-G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
+G_MODULE_EXPORT void remove_from_lists(const gchar * lists, gpointer data)
 {
 	gint i = 0;
 	gint bind_num_keys = 0;
@@ -545,7 +545,6 @@ G_MODULE_EXPORT void remove_from_lists(gchar * lists, gpointer data)
 		store_list(tmpvector[i],list);
 	}
 	g_strfreev(tmpvector);
-
 }
 
 /*!

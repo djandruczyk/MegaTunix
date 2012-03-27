@@ -24,7 +24,7 @@
 #include <configfile.h>
 #include <gtk/gtk.h>
 
-enum
+typedef enum 
 {
 	CHOICE_COL,
 	BITVAL_COL,

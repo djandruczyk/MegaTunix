@@ -31,10 +31,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name);
-static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value);
+static ConfigSection *cfg_create_section(ConfigFile * cfg, const gchar * name);
+static ConfigLine *cfg_create_string(ConfigSection * section, const gchar * key, const gchar * value);
 
-static ConfigLine *cfg_find_string(ConfigSection * section, gchar * key);
+static ConfigLine *cfg_find_string(ConfigSection * section, const gchar * key);
 
 
 /*!
@@ -58,7 +58,7 @@ ConfigFile *cfg_new(void)
  \param filename: name of file to open and load
  \returns the pointer to a poulated ConfigFile structure
  */
-ConfigFile *cfg_open_file(gchar * filename)
+ConfigFile *cfg_open_file(const gchar * filename)
 {
 	ConfigFile *cfg;
 
@@ -118,7 +118,7 @@ ConfigFile *cfg_open_file(gchar * filename)
  \param filename is the name of filename to save the data to
  \returns TRUE on success, FALSE on failure
  */
-gboolean cfg_write_file(ConfigFile * cfg, gchar * filename)
+gboolean cfg_write_file(ConfigFile * cfg, const gchar * filename)
 {
 	FILE *file;
 	GList *section_list, *line_list;
@@ -159,7 +159,7 @@ gboolean cfg_write_file(ConfigFile * cfg, gchar * filename)
  \param value is the pointer to where to store the value
  \returns TRUE on success, FALSE on no key found
  */
-gboolean cfg_read_string(ConfigFile * cfg, gchar * section, gchar * key, gchar ** value)
+gboolean cfg_read_string(ConfigFile * cfg, const gchar * section, const gchar * key, gchar ** value)
 {
 	ConfigSection *sect;
 	ConfigLine *line;
@@ -181,7 +181,7 @@ gboolean cfg_read_string(ConfigFile * cfg, gchar * section, gchar * key, gchar *
  \param value is the pointer to where to store that value
  \returns TRUE on success, FALSE on no key found
  */
-gboolean cfg_read_int(ConfigFile * cfg, gchar * section, gchar * key, gint * value)
+gboolean cfg_read_int(ConfigFile * cfg, const gchar * section, const gchar * key, gint * value)
 {
 	gchar *str;
 
@@ -202,7 +202,7 @@ gboolean cfg_read_int(ConfigFile * cfg, gchar * section, gchar * key, gint * val
  \param value is the pointer to where to store that value
  \returns TRUE on success, FALSE on no key found
  */
-gboolean cfg_read_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboolean * value)
+gboolean cfg_read_boolean(ConfigFile * cfg, const gchar * section, const gchar * key, gboolean * value)
 {
 	gchar *str;
 
@@ -225,7 +225,7 @@ gboolean cfg_read_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboole
  \param value is the pointer to where to store that value
  \returns TRUE on success, FALSE on no key found
  */
-gboolean cfg_read_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat * value)
+gboolean cfg_read_float(ConfigFile * cfg, const gchar * section, const gchar * key, gfloat * value)
 {
 	gchar *str;
 
@@ -247,7 +247,7 @@ gboolean cfg_read_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat *
  \param value is the pointer to where to store that value
  \returns TRUE on success, FALSE on no key found
  */
-gboolean cfg_read_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble * value)
+gboolean cfg_read_double(ConfigFile * cfg, const gchar * section, const gchar * key, gdouble * value)
 {
 	gchar *str;
 
@@ -268,7 +268,7 @@ gboolean cfg_read_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble
  \param key is the key we want to write the value for
  \param value is the value we want to store
  */
-void cfg_write_string(ConfigFile * cfg, gchar * section, gchar * key, gchar * value)
+void cfg_write_string(ConfigFile * cfg, const gchar * section, const gchar * key, const gchar * value)
 {
 	ConfigSection *sect;
 	ConfigLine *line;
@@ -296,7 +296,7 @@ void cfg_write_string(ConfigFile * cfg, gchar * section, gchar * key, gchar * va
  \param key: key we want to write the value for
  \param value: value to write
  */
-void cfg_write_int(ConfigFile * cfg, gchar * section, gchar * key, gint value)
+void cfg_write_int(ConfigFile * cfg, const gchar * section, const gchar * key, gint value)
 {
 	gchar *strvalue;
 
@@ -313,12 +313,12 @@ void cfg_write_int(ConfigFile * cfg, gchar * section, gchar * key, gint value)
  \param key is the key we want to write the value for
  \param value is the value we want to store
  */
-void cfg_write_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboolean value)
+void cfg_write_boolean(ConfigFile * cfg, const gchar * section, const gchar * key, gboolean value)
 {
 	if (value)
-		cfg_write_string(cfg, section, key, (gchar *)"TRUE");
+		cfg_write_string(cfg, section, key, "TRUE");
 	else
-		cfg_write_string(cfg, section, key, (gchar *)"FALSE");
+		cfg_write_string(cfg, section, key, "FALSE");
 }
 
 
@@ -329,7 +329,7 @@ void cfg_write_boolean(ConfigFile * cfg, gchar * section, gchar * key, gboolean 
  \param key is the key we want to write the value for
  \param value is the value we want to store
  */
-void cfg_write_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat value)
+void cfg_write_float(ConfigFile * cfg, const gchar * section, const gchar * key, gfloat value)
 {
 	gchar *strvalue;
 
@@ -346,7 +346,7 @@ void cfg_write_float(ConfigFile * cfg, gchar * section, gchar * key, gfloat valu
  \param key is the key we want to write the value for
  \param value is the value we want to store
  */
-void cfg_write_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble value)
+void cfg_write_double(ConfigFile * cfg, const gchar * section, const gchar * key, gdouble value)
 {
 	gchar *strvalue;
 
@@ -362,7 +362,7 @@ void cfg_write_double(ConfigFile * cfg, gchar * section, gchar * key, gdouble va
  \param section is the section in the file
  \param key is the key we want to remove
  */
-void cfg_remove_key(ConfigFile * cfg, gchar * section, gchar * key)
+void cfg_remove_key(ConfigFile * cfg, const gchar * section, const gchar * key)
 {
 	ConfigSection *sect;
 	ConfigLine *line;
@@ -422,7 +422,7 @@ void cfg_free(ConfigFile * cfg)
  \param name is the name of section to create
  \returns a pointer to the ConfigSection structure
  */
-static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)
+static ConfigSection *cfg_create_section(ConfigFile * cfg, const gchar * name)
 {
 	ConfigSection *section;
 
@@ -441,7 +441,7 @@ static ConfigSection *cfg_create_section(ConfigFile * cfg, gchar * name)
  \param value is the value to set the key to
  \returns a pointer to the ConfigLine structure
  */
-static ConfigLine *cfg_create_string(ConfigSection * section, gchar * key, gchar * value)
+static ConfigLine *cfg_create_string(ConfigSection * section, const gchar * key, const gchar * value)
 {
 	ConfigLine *line;
 	gchar * tmpbuf = NULL;
@@ -488,7 +488,7 @@ ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name)
  \param key is the key to search for
  \returns the pointer to the ConfigLine structure of the line requested
  */
-static ConfigLine *cfg_find_string(ConfigSection * section, gchar * key)
+static ConfigLine *cfg_find_string(ConfigSection * section, const gchar * key)
 {
 	ConfigLine *line;
 	GList *list;

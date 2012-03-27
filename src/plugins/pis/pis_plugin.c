@@ -59,7 +59,7 @@ void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
-	str_2_enum = DATA_GET (global_data, "str_2_enum");
+	str_2_enum = (GHashTable *)DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
 	}
@@ -75,7 +75,7 @@ void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
-	str_2_enum = DATA_GET (global_data, "str_2_enum");
+	str_2_enum = (GHashTable *)DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
 	}
