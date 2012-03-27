@@ -35,7 +35,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 	GtkWidget *menu = NULL;
 	GtkWidget *image = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	gdk_threads_enter();
 	if (firmware->capabilities & MS1)

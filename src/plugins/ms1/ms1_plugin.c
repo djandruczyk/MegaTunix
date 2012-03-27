@@ -44,33 +44,33 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
 	 */
-	error_msg_f = (void *)DATA_GET(global_data,"error_msg_f");
+	error_msg_f = DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
-	get_symbol_f = (void *)DATA_GET(global_data,"get_symbol_f");
+	get_symbol_f = DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
-	get_symbol_f("alter_widget_state",(void *)&alter_widget_state_f);
-	get_symbol_f("convert_after_upload",(void *)&convert_after_upload_f);
-	get_symbol_f("convert_before_download",(void *)&convert_before_download_f);
-	get_symbol_f("dbg_func",(void *)&dbg_func_f);
-	get_symbol_f("entry_changed_handler",(void *)&entry_changed_handler_f);
-	get_symbol_f("get_colors_from_hue",(void *)&get_colors_from_hue_f);
-	get_symbol_f("get_bitshift",(void *)&get_bitshift_f);
-	get_symbol_f("get_ecu_data",(void *)&get_ecu_data_f);
-	get_symbol_f("get_essentials",(void *)&get_essentials_f);
-	get_symbol_f("get_essential_bits",(void *)&get_essential_bits_f);
-	get_symbol_f("get_extreme_from_size",(void *)&get_extreme_from_size_f);
-	get_symbol_f("initialize_gc",(void *)&initialize_gc_f);
-	get_symbol_f("io_cmd",(void *)&io_cmd_f);
-	get_symbol_f("lookup_current_value",(void *)&lookup_current_value_f);
-	get_symbol_f("lookup_widget",(void *)&lookup_widget_f);
-	get_symbol_f("lookuptables_configurator",(void *)&lookuptables_configurator_f);
-	get_symbol_f("ms_get_ecu_data",(void *)&ms_get_ecu_data_f);
-	get_symbol_f("ms_send_to_ecu",(void *)&ms_send_to_ecu_f);
-	get_symbol_f("recalc_table_limits",(void *)&recalc_table_limits_f);
-	get_symbol_f("signal_read_rtvars",(void *)&signal_read_rtvars_f);
-	get_symbol_f("start_tickler",(void *)&start_tickler_f);
-	get_symbol_f("std_entry_handler",(void *)&std_entry_handler_f);
-	get_symbol_f("stop_tickler",(void *)&stop_tickler_f);
+	get_symbol_f("alter_widget_state",(void **)&alter_widget_state_f);
+	get_symbol_f("convert_after_upload",(void **)&convert_after_upload_f);
+	get_symbol_f("convert_before_download",(void **)&convert_before_download_f);
+	get_symbol_f("dbg_func",(void **)&dbg_func_f);
+	get_symbol_f("entry_changed_handler",(void **)&entry_changed_handler_f);
+	get_symbol_f("get_colors_from_hue",(void **)&get_colors_from_hue_f);
+	get_symbol_f("get_bitshift",(void **)&get_bitshift_f);
+	get_symbol_f("get_ecu_data",(void **)&get_ecu_data_f);
+	get_symbol_f("get_essentials",(void **)&get_essentials_f);
+	get_symbol_f("get_essential_bits",(void **)&get_essential_bits_f);
+	get_symbol_f("get_extreme_from_size",(void **)&get_extreme_from_size_f);
+	get_symbol_f("initialize_gc",(void **)&initialize_gc_f);
+	get_symbol_f("io_cmd",(void **)&io_cmd_f);
+	get_symbol_f("lookup_current_value",(void **)&lookup_current_value_f);
+	get_symbol_f("lookup_widget",(void **)&lookup_widget_f);
+	get_symbol_f("lookuptables_configurator",(void **)&lookuptables_configurator_f);
+	get_symbol_f("ms_get_ecu_data",(void **)&ms_get_ecu_data_f);
+	get_symbol_f("ms_send_to_ecu",(void **)&ms_send_to_ecu_f);
+	get_symbol_f("recalc_table_limits",(void **)&recalc_table_limits_f);
+	get_symbol_f("signal_read_rtvars",(void **)&signal_read_rtvars_f);
+	get_symbol_f("start_tickler",(void **)&start_tickler_f);
+	get_symbol_f("std_entry_handler",(void **)&std_entry_handler_f);
+	get_symbol_f("stop_tickler",(void **)&stop_tickler_f);
 
 	register_ecu_enums();
 }
@@ -94,25 +94,25 @@ G_MODULE_EXPORT void plugin_shutdown()
 void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
-	str_2_enum = DATA_GET(global_data,"str_2_enum");
+	str_2_enum = (GHashTable *)DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
 		/* MSnS-E Tooth/Trigger monitor */
-		g_hash_table_insert(str_2_enum,"_START_TOOTHMON_LOGGER_",
+		g_hash_table_insert(str_2_enum,(gpointer)"_START_TOOTHMON_LOGGER_",
 				GINT_TO_POINTER(START_TOOTHMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_STOP_TOOTHMON_LOGGER_",
+		g_hash_table_insert(str_2_enum,(gpointer)"_STOP_TOOTHMON_LOGGER_",
 				GINT_TO_POINTER(STOP_TOOTHMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_START_TRIGMON_LOGGER_",
+		g_hash_table_insert(str_2_enum,(gpointer)"_START_TRIGMON_LOGGER_",
 				GINT_TO_POINTER(START_TRIGMON_LOGGER));
-		g_hash_table_insert(str_2_enum,"_STOP_TRIGMON_LOGGER_",
+		g_hash_table_insert(str_2_enum,(gpointer)"_STOP_TRIGMON_LOGGER_",
 				GINT_TO_POINTER(STOP_TRIGMON_LOGGER));
 		/* Oddball Trigger angle/oddfire angle special handlers */
-		g_hash_table_insert(str_2_enum,"_TRIGGER_ANGLE_",
+		g_hash_table_insert(str_2_enum,(gpointer)"_TRIGGER_ANGLE_",
 				GINT_TO_POINTER(TRIGGER_ANGLE));
-		g_hash_table_insert(str_2_enum,"_ODDFIRE_ANGLE_",
+		g_hash_table_insert(str_2_enum,(gpointer)"_ODDFIRE_ANGLE_",
 				GINT_TO_POINTER(ODDFIRE_ANGLE));
 		/* Std button handlers */
-		g_hash_table_insert(str_2_enum,"_REBOOT_GETERR_",
+		g_hash_table_insert(str_2_enum,(gpointer)"_REBOOT_GETERR_",
 	                        GINT_TO_POINTER(REBOOT_GETERR));		
 	}
 }
@@ -125,7 +125,7 @@ void register_ecu_enums(void)
 void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
-	str_2_enum = DATA_GET(global_data,"str_2_enum");
+	str_2_enum = (GHashTable *)DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
 		/* MSnS-E Tooth/Trigger monitor */

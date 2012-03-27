@@ -210,7 +210,7 @@ void crunch_trigtooth_data(void)
 	gint id = 0;
 	Firmware_Details *firmware = NULL;
 	extern gconstpointer *global_data;
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	canID = firmware->canID;
 	position = ms_get_ecu_data_f(canID,ttm_data->page,CTR,size);
@@ -635,7 +635,7 @@ gboolean signal_toothtrig_read(EcuPluginTickler type)
 	extern gconstpointer *global_data;
 	Firmware_Details * firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	MTXDBG(IO_MSG,_("Sending message to thread to read ToothTrigger data\n"));
 
 	/* Make the gauges stay up to date,  even if rather slowly 

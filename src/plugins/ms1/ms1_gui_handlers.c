@@ -64,9 +64,9 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	DataSize size = MTX_U08;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
-	handler = (MS1StdHandler)OBJ_GET(widget,"handler");
+	handler = (MS1StdHandler)(GINT)OBJ_GET(widget,"handler");
 
 	get_essentials_f(widget,&canID,&page,&offset,&size,&precision);
 
@@ -203,7 +203,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 	gint dload_val = -1;
 	gint canID = 0;
 	gint page = -1;
-	DataSize size = -1;
+	DataSize size = MTX_U08;
 	gint bitmask = -1;
 	gint bitshift = -1;
 	gint tmpi = 0;
@@ -220,9 +220,9 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
-	handler = (MS1StdHandler)OBJ_GET(widget,"handler");
+	handler = (MS1StdHandler)(GINT)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 
 	get_essential_bits_f(widget,&canID,&page,&offset,NULL,&bitmask,&bitshift);
@@ -425,7 +425,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	gint table_num = -1;
 	gint offset = -1;
 	gint page = -1;
-	DataSize size = -1;
+	DataSize size = MTX_U08;
 	gint canID = 0;
 	gint bitmask = -1;
 	gint bitshift = -1;
@@ -436,13 +436,13 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	Firmware_Details *firmware = NULL;
 	void (*check_limits)(gint);
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	handler = (GINT)OBJ_GET(widget,"handler");
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	if (!OBJ_GET(widget,"size"))
 		size = MTX_U08 ;        /* default! */
 	else
-		size = (DataSize)OBJ_GET(widget,"size");
+		size = (DataSize)(GINT)OBJ_GET(widget,"size");
 
 	get_essential_bits_f(widget,&canID,&page,&offset,&bitval,&bitmask,&bitshift);
 
