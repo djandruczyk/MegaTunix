@@ -56,7 +56,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	JimStimStdHandler handler;
-	handler = (JimStimStdHandler)OBJ_GET(widget,"handler");
+	handler = (JimStimStdHandler)(GINT)OBJ_GET(widget,"handler");
 
 	switch (handler)
 	{
@@ -135,13 +135,13 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	gchar *tmpbuf = NULL;
 	GtkWidget *partner = NULL;
 	gboolean state = FALSE;
-	MSCommonStdHandler handler = 0;
+	MSCommonStdHandler handler;
 
 	get_essential_bits_f(widget, &canID, &page, &offset, &bitval, &bitmask, &bitshift);
 
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
-	handler = (GINT) OBJ_GET(widget,"handler");
-	size = (DataSize)OBJ_GET(widget,"size");
+	handler = (MSCommonStdHandler)(GINT) OBJ_GET(widget,"handler");
+	size = (DataSize)(GINT) OBJ_GET(widget,"size");
 
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
@@ -197,7 +197,7 @@ G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget *widget, gpointer data)
 	JimStimStdHandler handler;
 	GdkColor white = {0,65535,65535,65535};
 
-	handler = (JimStimStdHandler)OBJ_GET(widget,"handler");
+	handler = (JimStimStdHandler)(GINT)OBJ_GET(widget,"handler");
 	if (handler == RPM_MODE)
 	{
 		value = convert_after_upload_f(widget);
@@ -208,11 +208,11 @@ G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget *widget, gpointer data)
 		gtk_tree_model_get_iter_first(GTK_TREE_MODEL(model),&iter);
 		if ((GINT)value == 65535)
 			gtk_tree_model_iter_next (GTK_TREE_MODEL(model), &iter);
-                g_signal_handlers_block_by_func(widget,(gpointer)std_combo_handler_f,NULL);
+                g_signal_handlers_block_by_func(widget,std_combo_handler_f,NULL);
 
 		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(widget),&iter);
 		gtk_widget_modify_base(gtk_bin_get_child(GTK_BIN(widget)),GTK_STATE_NORMAL,&white);
-                g_signal_handlers_unblock_by_func(widget,(gpointer)std_combo_handler_f,NULL);
+                g_signal_handlers_unblock_by_func(widget,std_combo_handler_f,NULL);
 	}
 	return TRUE;
 }
@@ -232,7 +232,7 @@ G_MODULE_EXPORT gboolean jimstim_rpm_value_changed(GtkWidget *widget, gpointer d
 	gint val = 0;
 
 	printf("slider moved!\n");
-	widget_name = OBJ_GET(widget,"special");
+	widget_name = (gchar *)OBJ_GET(widget,"special");
 	g_return_val_if_fail(widget_name,FALSE);
 	entry = lookup_widget_f(widget_name);
 	g_return_val_if_fail(entry,FALSE);

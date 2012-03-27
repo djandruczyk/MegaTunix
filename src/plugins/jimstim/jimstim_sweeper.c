@@ -45,7 +45,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	static JimStim_Data jsdata;
 	gchar *text = NULL;
 	gfloat steps = 0.0;
-	gfloat new = 0.0;
+	gfloat newval = 0.0;
 	gint interval = 0;
 	gboolean fault = FALSE;
 	gfloat lower_f = 0.0;
@@ -104,8 +104,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	g_free(text);
 
 	/* Validate data */
-	lower = (GINT)strtol(OBJ_GET(jsdata.start_e,"raw_lower"),NULL,10);
-	upper = (GINT)strtol(OBJ_GET(jsdata.start_e,"raw_upper"),NULL,10);
+	lower = (GINT)strtol((gchar *)OBJ_GET(jsdata.start_e,"raw_lower"),NULL,10);
+	upper = (GINT)strtol((gchar *)OBJ_GET(jsdata.start_e,"raw_upper"),NULL,10);
 	if ((jsdata.start <= lower) || (jsdata.start >= upper))
 	{
 		fault = TRUE;
@@ -114,8 +114,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.start_e,GTK_STATE_NORMAL,&black);
-	lower = (GINT)strtol(OBJ_GET(jsdata.end_e,"raw_lower"),NULL,10);
-	upper = (GINT)strtol(OBJ_GET(jsdata.end_e,"raw_upper"),NULL,10);
+	lower = (GINT)strtol((gchar *)OBJ_GET(jsdata.end_e,"raw_lower"),NULL,10);
+	upper = (GINT)strtol((gchar *)OBJ_GET(jsdata.end_e,"raw_upper"),NULL,10);
 	if ((jsdata.end <= lower) || (jsdata.end >= upper))
 	{	
 		fault = TRUE;
@@ -138,8 +138,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 		gtk_widget_modify_text(jsdata.end_e,GTK_STATE_NORMAL,&black);
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
 	}
-	lower = (GINT)strtol(OBJ_GET(jsdata.step_e,"raw_lower"),NULL,10);
-	upper = (GINT)strtol(OBJ_GET(jsdata.step_e,"raw_upper"),NULL,10);
+	lower = (GINT)strtol((gchar *)OBJ_GET(jsdata.step_e,"raw_lower"),NULL,10);
+	upper = (GINT)strtol((gchar *)OBJ_GET(jsdata.step_e,"raw_upper"),NULL,10);
 	if ((jsdata.step <= lower) || (jsdata.step >= upper))
 	{
 		fault = TRUE;
@@ -148,8 +148,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	}
 	else if (!fault)
 		gtk_widget_modify_text(jsdata.step_e,GTK_STATE_NORMAL,&black);
-	lower_f = (gfloat)strtod(OBJ_GET(jsdata.sweeptime_e,"raw_lower"),NULL);
-	upper_f = (gfloat)strtod(OBJ_GET(jsdata.sweeptime_e,"raw_upper"),NULL);
+	lower_f = (gfloat)strtod((gchar *)OBJ_GET(jsdata.sweeptime_e,"raw_lower"),NULL);
+	upper_f = (gfloat)strtod((gchar *)OBJ_GET(jsdata.sweeptime_e,"raw_upper"),NULL);
 	if ((jsdata.sweep <= lower_f) || (jsdata.sweep >= upper_f))
 	{	
 		fault = TRUE;
@@ -200,8 +200,8 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	gtk_widget_set_sensitive(jsdata.rpm_e,TRUE);
 	gtk_widget_set_sensitive(jsdata.frame,FALSE);
 	g_list_foreach(get_list_f("js_controls"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
-	new = (((jsdata.end-jsdata.start)/jsdata.step)*interval*2)/1000.0;
-	update_logbar_f("jimstim_view",NULL,g_strdup_printf(_("Sweep Parameters are OK, Enabling sweeper from %i to %i RPM with %i RPM steps for about %.2f seconds per sweep cycle\n"),jsdata.start,jsdata.end,jsdata.step,new),FALSE,FALSE,FALSE);
+	newval = (((jsdata.end-jsdata.start)/jsdata.step)*interval*2)/1000.0;
+	update_logbar_f("jimstim_view",NULL,g_strdup_printf(_("Sweep Parameters are OK, Enabling sweeper from %i to %i RPM with %i RPM steps for about %.2f seconds per sweep cycle\n"),jsdata.start,jsdata.end,jsdata.step,newval),FALSE,FALSE,FALSE);
 	io_cmd_f("jimstim_interactive",NULL);
 	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
@@ -221,7 +221,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *widget, gpointer data)
 	OutputData *output = NULL;
 	JimStim_Data *jsdata = NULL;
 	gchar *tmpbuf = NULL;
-	jsdata = OBJ_GET(widget,"jsdata");
+	jsdata = (JimStim_Data *)OBJ_GET(widget,"jsdata");
 	if (jsdata)
 	{
 		if (jsdata->sweep_id)
@@ -344,7 +344,7 @@ G_MODULE_EXPORT void jimstim_sweeper_init(GtkWidget *widget)
 {
 	CmdLineArgs *args = NULL;
 	extern gconstpointer *global_data;
-	args = DATA_GET(global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
 	/* If a network mode slave, we DO NOT allow sweeping as it
 	   uses a non STD API that doesn't mesh with the socket stuff
