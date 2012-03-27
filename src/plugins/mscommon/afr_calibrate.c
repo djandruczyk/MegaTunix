@@ -186,9 +186,9 @@ G_MODULE_EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 	gtk_tree_model_get(model,&iter,0,&afr_name,1,&afr_enum,-1);
 	
 	if (afr_enum == genericWB)
-		gtk_widget_set_sensitive(OBJ_GET(widget,"generic_controls"),TRUE);
+		gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(widget,"generic_controls"),TRUE);
 	else
-		gtk_widget_set_sensitive(OBJ_GET(widget,"generic_controls"),FALSE);
+		gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(widget,"generic_controls"),FALSE);
 
 	return;
 }
@@ -293,7 +293,7 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 	Firmware_Details *firmware = NULL;
 	extern gconstpointer *global_data;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 #define USE_TABLE(prefix) \
 	Bv = prefix ## Bv; \

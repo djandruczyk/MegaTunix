@@ -71,7 +71,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	if (DATA_GET(global_data,"offline"))
 		return FALSE;
 	/* prevent multiple runs of interrogator simultaneously */
@@ -369,7 +369,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	cfg_read_string(cfgfile,"parameters","SignatureVia",&firmware->SignatureVia);
 	if(cfg_read_string(cfgfile,"parameters","EcuTempUnits",&tmpbuf))
 	{
-		firmware->ecu_temp_units = translate_string_f(tmpbuf);
+		firmware->ecu_temp_units = (TempUnits)translate_string_f(tmpbuf);
 		g_free(tmpbuf);
 	}
 	else
@@ -591,7 +591,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->table_params[i]->bind_to_list);
 		if(cfg_read_string(cfgfile,section,"match_type",&tmpbuf))
 		{
-			firmware->table_params[i]->match_type = translate_string_f(tmpbuf);
+			firmware->table_params[i]->match_type = (MatchType)translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		cfg_read_boolean(cfgfile,section,"is_spark",&firmware->table_params[i]->is_spark);
@@ -610,7 +610,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				firmware->table_params[i]->reqfuel_size = MTX_U08;
 			else
 			{
-				firmware->table_params[i]->reqfuel_size = translate_string_f(tmpbuf);
+				firmware->table_params[i]->reqfuel_size = (DataSize)translate_string_f(tmpbuf);
 				g_free(tmpbuf);
 			}
 			if(!cfg_read_int(cfgfile,section,"stroke_page",&firmware->table_params[i]->stroke_page))
@@ -675,21 +675,21 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"x_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->table_params[i]->x_size = translate_string_f(tmpbuf);
+			firmware->table_params[i]->x_size = (DataSize)translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,section,"y_size",&tmpbuf))
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"y_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->table_params[i]->y_size = translate_string_f(tmpbuf);
+			firmware->table_params[i]->y_size = (DataSize)translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,section,"z_size",&tmpbuf))
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"z_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->table_params[i]->z_size = translate_string_f(tmpbuf);
+			firmware->table_params[i]->z_size = (DataSize)translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_int(cfgfile,section,"z_raw_lower",&firmware->table_params[i]->z_raw_lower))
@@ -853,7 +853,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				MTXDBG(INTERROGATOR|CRITICAL,_("\"z_precision\" variable not found in interrogation profile for table %i, ERROR\n"),i);
 			if(cfg_read_string(cfgfile,section,"z_depend_on",&firmware->table_params[i]->z_depend_on))
 			{
-				firmware->table_params[i]->z_object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+				firmware->table_params[i]->z_object = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 				g_object_ref_sink(GTK_OBJECT(firmware->table_params[i]->z_object));
 				load_dependancies_obj(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
 				if(!cfg_read_string(cfgfile,section,"z_alt_lookuptable",&tmpbuf))
@@ -890,7 +890,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 		cfg_read_string(cfgfile,section,"bind_to_list",&firmware->te_params[i]->bind_to_list);
 		if(cfg_read_string(cfgfile,section,"match_type",&tmpbuf))
 		{
-			firmware->te_params[i]->match_type = translate_string_f(tmpbuf);
+			firmware->te_params[i]->match_type = (MatchType)translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		cfg_read_boolean(cfgfile,section,"gauge_temp_dep",&firmware->te_params[i]->gauge_temp_dep);
@@ -921,14 +921,14 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"x_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->te_params[i]->x_size = translate_string_f(tmpbuf);
+			firmware->te_params[i]->x_size = (DataSize)translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,section,"y_size",&tmpbuf))
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"y_size\" enumeration not found in interrogation profile, ERROR\n"));
 		else
 		{
-			firmware->te_params[i]->y_size = translate_string_f(tmpbuf);
+			firmware->te_params[i]->y_size = (DataSize)translate_string_f(tmpbuf);
 			g_free(tmpbuf);
 		}
 		if(!cfg_read_string(cfgfile,section,"x_source",&firmware->te_params[i]->x_source))
@@ -1331,7 +1331,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	gchar ** match_on = NULL;
 	gint major = 0;
 	gint minor = 0;
-	MatchClass class = 0;
+	MatchClass mclass;
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
@@ -1354,7 +1354,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	{
 		pass = FALSE;
 		/*printf("checking for match on %s\n",match_on[i]);*/
-		test = g_hash_table_lookup(tests_hash,match_on[i]);
+		test = (Detection_Test *)g_hash_table_lookup(tests_hash,match_on[i]);
 		if (!test)
 		{
 			printf(_("ERROR test data not found for test \"%s\"\n"),match_on[i]);
@@ -1378,9 +1378,9 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 		 */
 		if (g_strv_length(vector) != 2)
 			printf(_("ERROR interrogation check_for match vector does NOT have two args it has %i\n"),g_strv_length(vector));
-		class = translate_string_f(vector[0]);
+		mclass = (MatchClass)translate_string_f(vector[0]);
 		/*printf("potential data is %s\n",vector[1]);*/
-		switch (class)
+		switch (mclass)
 		{
 			case COUNT:
 				if (test->num_bytes == atoi(vector[1]))
@@ -1416,7 +1416,10 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 			case REGEX:
 				if (test->result_str)
 				{
-					if (g_regex_match_simple(vector[1],test->result_str,0,0))
+					if (g_regex_match_simple(vector[1],
+								test->result_str,
+								(GRegexCompileFlags)0,
+								(GRegexMatchFlags)0))
 						pass = TRUE;
 				}
 				else
@@ -1482,7 +1485,7 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
   \param text is the text to display
   \param num is the number to display
  */
-G_MODULE_EXPORT void interrogate_error(gchar *text, gint num)
+G_MODULE_EXPORT void interrogate_error(const gchar *text, gint num)
 {
 	MTXDBG(INTERROGATOR|CRITICAL,_("Interrogation error: \"%s\" data: \"%i\"n"),text,num);
 }
@@ -1502,9 +1505,11 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	Firmware_Details *firmware = NULL;
 	extern gconstpointer *global_data;
 
-	serial_params = DATA_GET(global_data,"serial_params");
-	firmware = DATA_GET(global_data,"firmware");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
+	g_return_if_fail(serial_params);
+	g_return_if_fail(firmware);
 	gdk_threads_enter();
 	widget = lookup_widget_f("read_wait_spin");
 	if (GTK_IS_SPIN_BUTTON(widget))
@@ -1558,7 +1563,7 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 {
 	Page_Params *page_params = NULL;
-	page_params = g_malloc0(sizeof(Page_Params));
+	page_params = (Page_Params *)g_malloc0(sizeof(Page_Params));
 	page_params->length = 0;
 	page_params->spconfig_offset = -1;
 	return page_params;
@@ -1574,7 +1579,7 @@ G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 {
 	Table_Params *table_params = NULL;
-	table_params = g_malloc0(sizeof(Table_Params));
+	table_params = (Table_Params *)g_malloc0(sizeof(Table_Params));
 	table_params->table = g_array_sized_new(FALSE,TRUE,sizeof(GtkWidget *),36);
 	table_params->is_fuel = FALSE;
 	table_params->alternate_offset = -1;
@@ -1632,7 +1637,7 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 G_MODULE_EXPORT TE_Params * initialize_te_params(void)
 {
 	TE_Params *te_params = NULL;
-	te_params = g_malloc0(sizeof(TE_Params));
+	te_params = (TE_Params *)g_malloc0(sizeof(TE_Params));
 	te_params->x_lock = FALSE;
 	te_params->y_lock = FALSE;
 	te_params->x_use_color = FALSE;

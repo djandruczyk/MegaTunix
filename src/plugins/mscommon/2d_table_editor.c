@@ -94,8 +94,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gint table_num = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if (!main_xml)
@@ -142,7 +142,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 
 	widget = glade_xml_get_widget(xml,"te_layout_vbox");
 
-	tmpbuf = OBJ_GET(button,"te_tables");
+	tmpbuf = (gchar *)OBJ_GET(button,"te_tables");
 	vector = parse_keys_f(tmpbuf,&num_tabs,",");
 	notebook = gtk_notebook_new();
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook),GTK_POS_LEFT);
@@ -369,14 +369,14 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 				G_CALLBACK(set_axis_locking),curve);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->x_lock);
 		gtk_table_attach(GTK_TABLE(x_table),dummy,
-				0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+				0,1,i,i+1, (GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 		dummy = gtk_toggle_button_new_with_label("Unlocked");
 		OBJ_SET(dummy,"axis",GINT_TO_POINTER(_Y_));
 		g_signal_connect(G_OBJECT(dummy),"toggled",
 				G_CALLBACK(set_axis_locking),curve);
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->y_lock);
 		gtk_table_attach(GTK_TABLE(y_table),dummy,
-				0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+				0,1,i,i+1,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 
 		mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 		mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
@@ -446,8 +446,8 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	gboolean embedded = FALSE;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 
 	if (table_num >= firmware->total_te_tables)
 	{
@@ -724,14 +724,14 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 			G_CALLBACK(set_axis_locking),curve);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->x_lock);
 	gtk_table_attach(GTK_TABLE(x_table),dummy,
-			0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+			0,1,i,i+1,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	dummy = gtk_toggle_button_new_with_label("Unlocked");
 	OBJ_SET(dummy,"axis",GINT_TO_POINTER(_Y_));
 	g_signal_connect(G_OBJECT(dummy),"toggled",
 			G_CALLBACK(set_axis_locking),curve);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(dummy),firmware->te_params[table_num]->y_lock);
 	gtk_table_attach(GTK_TABLE(y_table),dummy,
-			0,1,i,i+1, GTK_EXPAND|GTK_FILL,0,0,0);
+			0,1,i,i+1,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 
 	mtx_curve_set_x_precision(MTX_CURVE(curve),firmware->te_params[table_num]->x_precision);
 	mtx_curve_set_y_precision(MTX_CURVE(curve),firmware->te_params[table_num]->y_precision);
@@ -837,21 +837,21 @@ G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 {
 	GList *list = NULL;
 
-	list = OBJ_GET(widget, "widget_list");
+	list = (GList *)OBJ_GET(widget, "widget_list");
 	if (list)
 	{
 		g_list_foreach(list,remove_widget,NULL);
 		g_list_free(list);
 		list = NULL;
 	}
-	list = OBJ_GET(widget, "curve_list");
+	list = (GList *)OBJ_GET(widget, "curve_list");
 	if (list)
 	{
 		g_list_foreach(list,clean_curve,NULL);
 		g_list_free(list);
 		list = NULL;
 	}
-	list = OBJ_GET(widget, "gauge_list");
+	list = (GList *)OBJ_GET(widget, "gauge_list");
 	if (list)
 	{
 		g_list_foreach(list,gauge_cleanup,NULL);
@@ -874,8 +874,8 @@ G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 	gint page = -1;
 	gint offset = -1;
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	remove_from_lists_f(OBJ_GET(widget_ptr,"bind_to_list"),widget_ptr);
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	remove_from_lists_f((const gchar *)OBJ_GET(widget_ptr,"bind_to_list"),widget_ptr);
 	if (!GTK_IS_ENTRY(widget_ptr))
 		return;
 	page = (GINT)OBJ_GET(widget_ptr,"page");
@@ -916,13 +916,13 @@ G_MODULE_EXPORT void clean_curve(gpointer curve_ptr, gpointer data)
 	CurveData *cdata = NULL;
 	GtkWidget *widget = (GtkWidget *)curve_ptr;
 
-	array = OBJ_GET(widget, "x_entries");
+	array = (GArray *)OBJ_GET(widget, "x_entries");
 	if (array)
 		g_array_free(array,TRUE);
-	array = OBJ_GET(widget, "y_entries");
+	array = (GArray *)OBJ_GET(widget, "y_entries");
 	if (array)
 		g_array_free(array,TRUE);
-	cdata = OBJ_GET(widget, "cdata");
+	cdata = (CurveData *)OBJ_GET(widget, "cdata");
 	if (cdata)
 		g_free(cdata);
 	id = (guint32)(GINT)OBJ_GET(widget, "marker_id");
@@ -949,7 +949,7 @@ G_MODULE_EXPORT gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	gfloat tmpf = 0.0;
 
 	index = (GINT) OBJ_GET(widget,"curve_index");
-	axis = (Axis) OBJ_GET(widget,"curve_axis");
+	axis = (Axis)(GINT)OBJ_GET(widget,"curve_axis");
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpf = (gfloat)strtod(g_strdelimit(text,",.",'.'),NULL);
@@ -985,7 +985,7 @@ G_MODULE_EXPORT void coords_changed(GtkWidget *curve, gpointer data)
 	if(!mtx_curve_get_x_axis_lock_state(MTX_CURVE(curve)))
 	{
 		/* X Coord */
-		array = OBJ_GET(curve,"x_entries");
+		array = (GArray *)OBJ_GET(curve,"x_entries");
 		entry = g_array_index(array,GtkWidget *,index);
 		precision = (GINT)OBJ_GET(entry, "precision");
 		tmpbuf = g_strdup_printf("%1$.*2$f",point.x,precision);
@@ -997,7 +997,7 @@ G_MODULE_EXPORT void coords_changed(GtkWidget *curve, gpointer data)
 	if(!mtx_curve_get_y_axis_lock_state(MTX_CURVE(curve)))
 	{
 		/* Y Coord */
-		array = OBJ_GET(curve,"y_entries");
+		array = (GArray *)OBJ_GET(curve,"y_entries");
 		entry  = g_array_index(array,GtkWidget *,index);
 		precision = (GINT)OBJ_GET(entry, "precision");
 		tmpbuf = g_strdup_printf("%1$.*2$f",point.y,precision);
@@ -1230,7 +1230,7 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
   */
 G_MODULE_EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 {
-	close_2d_editor(OBJ_GET(widget,"window"),NULL);
+	close_2d_editor((GtkWidget *)OBJ_GET(widget,"window"),NULL);
 	return TRUE;
 }
 
@@ -1264,7 +1264,7 @@ G_MODULE_EXPORT void update_curve_marker(RtvWatch *watch)
   */
 G_MODULE_EXPORT gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 {
-	Axis axis = (Axis)OBJ_GET(widget,"axis");
+	Axis axis = (Axis)(GINT)OBJ_GET(widget,"axis");
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	if (state)
 		gtk_button_set_label(GTK_BUTTON(widget)," Locked ");
@@ -1289,7 +1289,7 @@ G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 	gint table_num = 0;
 	g_return_val_if_fail(GTK_IS_WIDGET(widget),FALSE);
 
-	table_num = (gint)g_ascii_strtod(OBJ_GET(widget,"te_table_num"),NULL);
+	table_num = (gint)g_ascii_strtod((gchar *)OBJ_GET(widget,"te_table_num"),NULL);
 	create_2d_table_editor(table_num,widget);
 	return TRUE;
 }

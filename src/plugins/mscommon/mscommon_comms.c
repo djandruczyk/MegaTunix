@@ -43,7 +43,7 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"offline"))
 		return;
@@ -68,7 +68,7 @@ G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"offline"))
 		return;
@@ -101,10 +101,10 @@ G_MODULE_EXPORT gint comms_test(void)
 
 	if (DATA_GET(global_data,"leaving"))
 		return TRUE;
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
-	MTXDBG(SERIAL_RD,_("Entered\n"));
 	g_return_val_if_fail(serial_params, FALSE);
+	MTXDBG(SERIAL_RD,_("Entered\n"));
 
 	if ((GINT)DATA_GET(global_data,"ecu_baud") < 115200)
 	{
@@ -174,7 +174,7 @@ G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_static_mutex_lock(&mutex);
 
 	MTXDBG(SERIAL_WR,_("Sending page %i, num_bytes %i, data %p\n"),page,num_bytes,data);
@@ -213,7 +213,7 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 	guint8 **ecu_data_last = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
 
@@ -348,7 +348,7 @@ G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	MTXDBG(SERIAL_WR,_("Sending canID %i, page %i, offset %i, num_bytes %i, data %p\n"),canID,page,offset,num_bytes,block);
 	output = initialize_outputdata_f();
@@ -398,14 +398,14 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 		canID = (GINT)OBJ_GET(widget,"canID");
 		page = (GINT)OBJ_GET(widget,"page");
 		offset = (GINT)OBJ_GET(widget,"offset");
-		size = (DataSize)OBJ_GET(widget,"size");
+		size = (DataSize)(GINT)OBJ_GET(widget,"size");
 	}
 	else
 	{
 		canID = (GINT)DATA_GET(gptr,"canID");
 		page = (GINT)DATA_GET(gptr,"page");
 		offset = (GINT)DATA_GET(gptr,"offset");
-		size = (DataSize)DATA_GET(gptr,"size");
+		size = (DataSize)(GINT)DATA_GET(gptr,"size");
 	}
 	ms_send_to_ecu(canID,page,offset,size,value,queue_update);
 }
@@ -436,7 +436,7 @@ G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize
 	gint32 s32 = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	MTXDBG(SERIAL_WR,_("Sending canID %i, page %i, offset %i, value %i\n"),canID,page,offset,value);
 
@@ -591,7 +591,7 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 	SlaveMessage *msg = NULL;
 
 	if (!slave_msg_queue)
-		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
+		slave_msg_queue = (GAsyncQueue *)DATA_GET(global_data,"slave_msg_queue");
 	if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 		return;
 	if (!output) /* If no data, don't bother the slaves */
@@ -602,8 +602,8 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 	msg->page = (guint8)(GINT)DATA_GET(output->data,"page");
 	msg->offset = (guint16)(GINT)DATA_GET(output->data,"offset");
 	msg->length = (guint16)(GINT)DATA_GET(output->data,"num_bytes");
-	msg->size = (DataSize)DATA_GET(output->data,"size");
-	msg->mode = (WriteMode)DATA_GET(output->data,"mode");
+	msg->size = (DataSize)(GINT)DATA_GET(output->data,"size");
+	msg->mode = (WriteMode)(GINT)DATA_GET(output->data,"mode");
 	msg->type = MTX_DATA_CHANGED;
 	if (msg->mode == MTX_CHUNK_WRITE)
 		msg->data = g_memdup(DATA_GET(output->data,"data"), msg->length);
@@ -637,7 +637,7 @@ G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
 	SlaveMessage *msg = NULL;
 
 	if (!slave_msg_queue)
-		slave_msg_queue = DATA_GET(global_data,"slave_msg_queue");
+		slave_msg_queue = (GAsyncQueue *)DATA_GET(global_data,"slave_msg_queue");
 	if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
 		return;
 
@@ -680,7 +680,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	gint z = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
 
@@ -692,7 +692,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		page = (GINT)DATA_GET(output->data,"page");
 		offset = (GINT)DATA_GET(output->data,"offset");
 		length = (GINT)DATA_GET(output->data,"num_bytes");
-		mode = (WriteMode)DATA_GET(output->data,"mode");
+		mode = (WriteMode)(GINT)DATA_GET(output->data,"mode");
 
 		if (!message->status) /* Bad write! */
 		{
@@ -801,7 +801,7 @@ G_MODULE_EXPORT void *restore_update(gpointer data)
 	gint last_xferd = 0;
 
 	if (!io_data_queue)
-		io_data_queue = DATA_GET(global_data,"io_data_queue");
+		io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
 
 	max_xfers = g_async_queue_length(io_data_queue);
 	remaining_xfers = max_xfers;
@@ -861,13 +861,13 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	gboolean (*lock_serial_f)(const gchar *) = NULL;
 	void (*setup_serial_params_f)(void) = NULL;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
-	get_symbol_f("setup_serial_params",(void *)&setup_serial_params_f);
-	get_symbol_f("open_serial",(void *)&open_serial_f);
-	get_symbol_f("close_serial",(void *)&close_serial_f);
-	get_symbol_f("lock_serial",(void *)&lock_serial_f);
-	get_symbol_f("unlock_serial",(void *)&unlock_serial_f);
+	get_symbol_f("setup_serial_params",(void **)&setup_serial_params_f);
+	get_symbol_f("open_serial",(void **)&open_serial_f);
+	get_symbol_f("close_serial",(void **)&close_serial_f);
+	get_symbol_f("lock_serial",(void **)&lock_serial_f);
+	get_symbol_f("unlock_serial",(void **)&unlock_serial_f);
 
 	g_return_val_if_fail(setup_serial_params_f,NULL);
 	g_return_val_if_fail(open_serial_f,NULL);
@@ -879,13 +879,13 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 
 	if (DATA_GET(global_data,"offline"))
 	{
-		g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
+		g_timeout_add(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 		MTXDBG(THREADS,_("Thread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
 
 	if (!io_repair_queue)
-		io_repair_queue = DATA_GET(global_data,"io_repair_queue");
+		io_repair_queue = (GAsyncQueue *)DATA_GET(global_data,"io_repair_queue");
 	/* IF serial_is_open is true, then the port was ALREADY opened 
 	 * previously but some error occurred that sent us down here. Thus
 	 * first do a simple comms test, if that succeeds, then just cleanup 
@@ -937,7 +937,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
-				g_timeout_add(300,(GSourceFunc)queue_function_f,"kill_conn_warning");
+				g_timeout_add(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 				MTXDBG(THREADS,_("Thread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
@@ -1015,7 +1015,7 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
 	/* MS2 */
@@ -1136,7 +1136,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 					printf(_("ERROR, MTX_UNDEF, donno what to do!!\n"));
 				sent_data = (guint8 *)DATA_GET(output->data,arg->internal_name);
 				len = (GINT)DATA_GET(output->data,"num_bytes");
-				block->data = g_memdup(sent_data,len);
+				block->data = (guint8 *)g_memdup(sent_data,len);
 				block->len = len;
 				/*
 				   for (j=0;j<len;j++)

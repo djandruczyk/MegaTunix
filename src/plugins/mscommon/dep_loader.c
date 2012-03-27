@@ -39,7 +39,7 @@ extern gconstpointer *global_data;
  \param source_key is the source key in the above section to read the data from
  \see check_dependancies
  */
-G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, gchar * source_key)
+G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, const gchar * source_key)
 {
 	gconstpointer *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
@@ -48,12 +48,13 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, gch
 	gchar ** vector = NULL;
 	gint num_deps = 0;
 	gint tmpi = 0;
+	DataSize size = MTX_U08;
 	gint type = 0;
 	gint i = 0;
 	gint len = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!generic_xml_gchar_find(node,source_key,&tmpbuf))
 	{
@@ -99,14 +100,14 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, gch
 		if (type == ECU_EMB_BIT)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);
-			tmpi = translate_string_f(vector[DEP_SIZE]);
-			if (!check_size(tmpi))
+			size = (DataSize)translate_string_f(vector[DEP_SIZE]);
+			if (!check_size(size))
 			{
 				MTXDBG(CRITICAL,_("Argument 1 (size) \"%s\" in RTV XML is missing, using U08 as a guess!!\n"),vector[DEP_SIZE]);
 				DATA_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
 			else
-				DATA_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(dep_obj,key,GINT_TO_POINTER((GINT)size));
 			g_free(key);
 
 			key = g_strdup_printf("%s_page",deps[i]);
@@ -168,14 +169,14 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, gch
 		if (type == ECU_VAR)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);
-			tmpi = translate_string_f(vector[DEP_SIZE]);
-			if (!check_size(tmpi))
+			size = (DataSize)translate_string_f(vector[DEP_SIZE]);
+			if (!check_size(size))
 			{
 				MTXDBG(CRITICAL,_("Argument 1 (size) \"%s\" in RTV XML is missing, using U08 as a guess!!\n"),vector[DEP_SIZE]);
 				DATA_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
 			else
-				DATA_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(dep_obj,key,GINT_TO_POINTER((GINT)size));
 			g_free(key);
 
 			key = g_strdup_printf("%s_page",deps[i]);
@@ -220,13 +221,14 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, gch
  \param source_key is the source key in section to read the data from
  \see check_dependancies
  */
-G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,gchar * section, gchar * source_key)
+G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,const gchar * section, const gchar * source_key)
 {
 	gconstpointer *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
 	gchar * key = NULL;
 	gchar ** deps = NULL;
 	gchar ** vector = NULL;
+	DataSize size = MTX_U08;
 	gint num_deps = 0;
 	gint tmpi = 0;
 	gint type = 0;
@@ -234,7 +236,7 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 	gint len = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!cfg_read_string(cfgfile,section,source_key,&tmpbuf))
 	{
@@ -279,14 +281,14 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		if (type == ECU_EMB_BIT)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);
-			tmpi = translate_string_f(vector[DEP_SIZE]);
-			if (!check_size(tmpi))
+			size = (DataSize)translate_string_f(vector[DEP_SIZE]);
+			if (!check_size(size))
 			{
 				MTXDBG(CRITICAL,_("Argument 1 (size) \"%s\" in section \"[%s]\" is missing, using U08 as a guess!!\n"),vector[DEP_SIZE],section);
 				DATA_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
 			else
-				DATA_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(dep_obj,key,GINT_TO_POINTER(size));
 			g_free(key);
 
 			key = g_strdup_printf("%s_page",deps[i]);
@@ -348,14 +350,14 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		if (type == ECU_VAR)
 		{
 			key = g_strdup_printf("%s_size",deps[i]);
-			tmpi = translate_string_f(vector[DEP_SIZE]);
-			if (!check_size(tmpi))
+			size = (DataSize)translate_string_f(vector[DEP_SIZE]);
+			if (!check_size(size))
 			{
 				MTXDBG(CRITICAL,_("Argument 1 (size) \"%s\" in section \"[%s]\" is missing, using U08 as a guess!!\n"),vector[DEP_SIZE],section);
 				DATA_SET(dep_obj,key,GINT_TO_POINTER(MTX_U08));
 			}
 			else
-				DATA_SET(dep_obj,key,GINT_TO_POINTER(tmpi));
+				DATA_SET(dep_obj,key,GINT_TO_POINTER(size));
 			g_free(key);
 
 			key = g_strdup_printf("%s_page",deps[i]);

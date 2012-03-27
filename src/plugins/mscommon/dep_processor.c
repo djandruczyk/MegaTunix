@@ -41,7 +41,7 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 	gint bitmask = 0;
 	gint bitshift = 0;
 	gint bitval = 0;
-	DataSize size = 0;
+	DataSize size = MTX_U08;
 	gint canID = 0;
 	gchar ** deps = NULL;
 	gchar * tmpbuf = NULL;
@@ -49,7 +49,7 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 	gint num_deps = 0;
 
 	num_deps = (GINT)DATA_GET(object,"num_deps");
-	deps = DATA_GET(object,"deps");
+	deps = (gchar **)DATA_GET(object,"deps");
 	/*printf("number of deps %i, %i\n",num_deps,g_strv_length(deps));*/
 	for (i=0;i<num_deps;i++)
 	{
@@ -77,7 +77,7 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 				g_free(tmpbuf);
 
 				tmpbuf = g_strdup_printf("%s_size",deps[i]);
-				size = (DataSize)DATA_GET(object,tmpbuf);
+				size = (DataSize)(GINT)DATA_GET(object,tmpbuf);
 				/*printf("size %i\n",size); */
 				g_free(tmpbuf);
 
