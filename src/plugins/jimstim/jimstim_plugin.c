@@ -40,9 +40,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	   we need to pass pointers over and assign them here.
 	 */
 
-	error_msg_f = DATA_GET(global_data,"error_msg_f");
+	*(void **)(&error_msg_f) = DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
-	get_symbol_f = DATA_GET(global_data,"get_symbol_f");
+	*(void**)(&get_symbol_f) = DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
 
 	get_symbol_f("convert_after_upload",(void **)&convert_after_upload_f);
