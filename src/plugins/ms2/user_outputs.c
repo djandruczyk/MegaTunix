@@ -77,7 +77,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	{
 		object = NULL;
 		name = NULL;
-		object = g_ptr_array_index(rtv_map->rtv_list,i);
+		object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list,i);
 		if (!object)
 			continue;
 		name = (gchar *) DATA_GET(object,"dlog_gui_name");

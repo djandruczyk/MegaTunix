@@ -44,7 +44,7 @@ G_MODULE_EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer d
 	GtkWidget *temp_label = lookup_widget_f("temp_label");
 
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) /* Deg C */
-		gtk_label_set_text(GTK_LABEL(temp_label),OBJ_GET(widget,"temp_label"));
+		gtk_label_set_text(GTK_LABEL(temp_label),(const gchar *)OBJ_GET(widget,"temp_label"));
 	return TRUE;
 }
 
@@ -98,11 +98,11 @@ gboolean read_import_file(GIOChannel *chan)
 	gchar **fields = NULL;
 	gint16 *table;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(chan,FALSE);
 	g_return_val_if_fail(firmware,FALSE);
 
-	table = DATA_GET(global_data,"import_file_table");
+	table = (gint16 *)DATA_GET(global_data,"import_file_table");
 	if (table)
 		g_free(table);
 	table = g_new0(gint16, 1024);
@@ -182,7 +182,7 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	FILE *f = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/* OK Button pressed,  we need to validate all input and calculate
 	 * and build the tables and send to the ECU
@@ -290,7 +290,7 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	else
 	{
 		printf("Using data from file\n");
-		table = DATA_GET(global_data,"import_file_table");
+		table = (gint16 *)DATA_GET(global_data,"import_file_table");
 		if (!table)
 			return FALSE;
 	}

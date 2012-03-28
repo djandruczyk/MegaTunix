@@ -37,7 +37,7 @@ G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 {
 	CmdLineArgs *args = NULL;
 
-	args = DATA_GET(global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	if (args->network_mode)
 		return;
 	if ((DATA_GET(global_data,"interrogated")) && (!DATA_GET(global_data,"offline")))
@@ -52,7 +52,7 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 {
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!firmware)
 		return;
 
@@ -78,7 +78,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 	gint last_page = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	last_page = (GINT)DATA_GET(global_data,"last_page");
 
@@ -140,7 +140,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall func)
 	gint i = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	last_page = (GINT)DATA_GET(global_data,"last_page");
 	switch (func)
@@ -325,7 +325,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 	guint16 *ptr16 = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
@@ -362,7 +362,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (count > 0)
 			{
 				firmware->txt_rev_len = count;
-				firmware->text_revision = g_strndup(message->recv_buf,count);
+				firmware->text_revision = g_strndup((const gchar *)message->recv_buf,count);
 				ecu_info_update(firmware);
 			}
 			break;
@@ -373,7 +373,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (count > 0)
 			{
 				firmware->signature_len = count;
-				firmware->actual_signature = g_strndup(message->recv_buf,count);
+				firmware->actual_signature = g_strndup((const gchar *)message->recv_buf,count);
 				ecu_info_update(firmware);
 			}
 			break;
@@ -518,7 +518,7 @@ G_MODULE_EXPORT void post_burn_pf(void)
 	gint i = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/* sync temp buffer with current burned settings */
 	for (i=0;i<firmware->total_pages;i++)
@@ -544,7 +544,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 	Firmware_Details *firmware = NULL;
 	gint page = 0;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	page = (GINT)DATA_GET(output->data,"page");
 
 	/* sync temp buffer with current burned settings */

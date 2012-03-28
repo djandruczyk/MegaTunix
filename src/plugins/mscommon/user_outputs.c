@@ -63,7 +63,7 @@ G_MODULE_EXPORT gboolean force_view_recompute(gpointer data)
 {
 	guint i = 0;
 	for (i=0;i<g_list_length(views);i++)
-		update_model_from_view(g_list_nth_data(views,i));
+		update_model_from_view((GtkWidget *)g_list_nth_data(views,i));
 	return FALSE;
 }
 
@@ -125,7 +125,7 @@ G_MODULE_EXPORT GtkTreeModel * create_model(void)
 	gconstpointer * object = NULL;
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
 
@@ -142,13 +142,13 @@ G_MODULE_EXPORT GtkTreeModel * create_model(void)
 		if (!name)
 			continue;
 		if (DATA_GET(object,"real_lower"))
-			lower = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
+			lower = (gint)strtol((gchar *)DATA_GET(object,"real_lower"),NULL,10);
 		else
-			lower = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),LOWER);
+			lower = get_extreme_from_size_f((DataSize)(GINT)DATA_GET(object,"size"),LOWER);
 		if (DATA_GET(object,"real_upper"))
-			upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
+			upper = (gint)strtol((gchar *)DATA_GET(object,"real_upper"),NULL,10);
 		else
-			upper = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),UPPER);
+			upper = get_extreme_from_size_f((DataSize)(GINT)DATA_GET(object,"size"),UPPER);
 		range = g_strdup_printf("%i-%i",lower,upper);
 		gtk_list_store_append (model, &iter);
 		gtk_list_store_set (model, &iter,
@@ -280,7 +280,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	gboolean temp_dep;
 	gint lower = 0;
 	gint upper = 0;
-	gfloat new = 0;
+	gfloat newval = 0.0;
 	gint column = 0;
 	gconstpointer *object = NULL;
 	gint src_offset = -1;
@@ -298,16 +298,16 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	gint page = 0;
 	gchar *key = NULL;
 	gchar *hash_key = NULL;
-	DataSize size = 0;
+	DataSize size = MTX_U08;
 	MultiExpr *multi = NULL;
 	GHashTable *hash = NULL;
 	GHashTable *sources_hash = NULL;
 
-	sources_hash = DATA_GET(global_data,"sources_hash");
+	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	column = (GINT) OBJ_GET (cell, "column");
 	canID = (GINT) OBJ_GET(model,"canID");
 	page = (GINT) OBJ_GET(model,"page");
-	size = (DataSize) OBJ_GET(model,"size");
+	size = (DataSize)(GINT) OBJ_GET(model,"size");
 	src_offset = (GINT) OBJ_GET(model,"src_offset");
 	lim_offset = (GINT) OBJ_GET(model,"lim_offset");
 	hys_offset = (GINT) OBJ_GET(model,"hys_offset");
@@ -318,10 +318,10 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 
 	rt_offset = (GINT) DATA_GET(object,"offset");
 	precision = (GINT) DATA_GET(object,"precision");
-	new = (gfloat)g_ascii_strtod(g_strdelimit((gchar *)new_text,",.",'.'),NULL);
+	newval = (gfloat)g_ascii_strtod(g_strdelimit((gchar *)new_text,",.",'.'),NULL);
 	if (DATA_GET(object,"multi_expr_hash"))
 	{
-		hash = DATA_GET(object,"multi_expr_hash");
+		hash = (GHashTable *)DATA_GET(object,"multi_expr_hash");
 		key = (gchar *)DATA_GET(object,"source_key");
 		if (key)
 		{
@@ -336,22 +336,22 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			multi = (MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 		if (!multi)
 			return;
-		if (new < multi->lower_limit)
-			new = multi->lower_limit;
-		if (new > multi->upper_limit)
-			new = multi->upper_limit;
+		if (newval < multi->lower_limit)
+			newval = multi->lower_limit;
+		if (newval > multi->upper_limit)
+			newval = multi->upper_limit;
 
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",new,precision), -1);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",newval,precision), -1);
 
 		/* Then evaluate it in reverse.... */
 		multiplier = multi->fromecu_mult;
 		adder = multi->fromecu_add;
 		if ((multiplier) && (adder))
-			tmpf = (new - (*adder))/(*multiplier);
+			tmpf = (newval - (*adder))/(*multiplier);
 		else if (multiplier)
-			tmpf = new/(*multiplier);
+			tmpf = newval/(*multiplier);
 		else
-			tmpf = new;
+			tmpf = newval;
 		/* Then if it used a lookuptable, reverse map it if possible 
 		 * to determine the ADC reading we need to send to ECU
 		 */
@@ -364,29 +364,29 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	{
 
 		if (DATA_GET(object,"real_lower"))
-			lower = (gint)strtol(DATA_GET(object,"real_lower"),NULL,10);
+			lower = (gint)strtol((gchar *)DATA_GET(object,"real_lower"),NULL,10);
 		else
-			lower = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),LOWER);
+			lower = get_extreme_from_size_f((DataSize)(GINT)DATA_GET(object,"size"),LOWER);
 		if (DATA_GET(object,"real_upper"))
-			upper = (gint)strtol(DATA_GET(object,"real_upper"),NULL,10);
+			upper = (gint)strtol((gchar *)DATA_GET(object,"real_upper"),NULL,10);
 		else
-			upper = get_extreme_from_size_f((DataSize)DATA_GET(object,"size"),UPPER);
-		multiplier = DATA_GET(object,"fromecu_mult");
-		adder = DATA_GET(object,"fromecu_add");
+			upper = get_extreme_from_size_f((DataSize)(GINT)DATA_GET(object,"size"),UPPER);
+		multiplier = (gfloat *)DATA_GET(object,"fromecu_mult");
+		adder = (gfloat *)DATA_GET(object,"fromecu_add");
 		temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
 
-		if (new < lower)
-			new = lower;
-		if (new > upper)
-			new = upper;
+		if (newval < lower)
+			newval = lower;
+		if (newval > upper)
+			newval = upper;
 
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",new,precision), -1);
+			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",newval,precision), -1);
 
 		/* First conver to fahrenheit temp scale if temp dependant */
 		if (temp_dep)
-			x = temp_to_ecu_f(new);
+			x = temp_to_ecu_f(newval);
 		else
-			x = new;
+			x = newval;
 		/* Then evaluate it in reverse.... */
 		if ((multiplier) && (adder))
 			tmpf = (x - (*adder))/(*multiplier);
@@ -462,7 +462,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 
 	if (!gtk_tree_model_get_iter_first(model,&iter))
 		return;
-	sources_hash = DATA_GET(global_data,"sources_hash");
+	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 	src_offset = (GINT)OBJ_GET(model,"src_offset");
 	lim_offset = (GINT)OBJ_GET(model,"lim_offset");
@@ -486,7 +486,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 			temp_dep =(GBOOLEAN)DATA_GET(object,"temp_dep");
 			if (DATA_GET(object,"multi_expr_hash"))
 			{
-				hash = DATA_GET(object,"multi_expr_hash");
+				hash = (GHashTable *)DATA_GET(object,"multi_expr_hash");
 				key = (gchar *)DATA_GET(object,"source_key");
 				if (key)
 				{
@@ -521,7 +521,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 					result = temp_to_host_f(tmpf);
 				else
 					result = tmpf;
-				tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
+				tmpbuf = g_strdup_printf("%1$.*2$f",result,precision);
 
 				gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ENTRY,tmpbuf, -1);
 				g_free(tmpbuf);
@@ -545,7 +545,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 					else
 						result = tmpf;
 
-					tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",result,precision);
 					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_HYS,tmpbuf, -1);
 					g_free(tmpbuf);
 
@@ -568,7 +568,7 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 					else
 						result = tmpf;
 
-					tmpbuf =  g_strdup_printf("%1$.*2$f",result,precision);
+					tmpbuf = g_strdup_printf("%1$.*2$f",result,precision);
 					gtk_list_store_set (GTK_LIST_STORE (model), &iter, COL_ULIMIT,tmpbuf, -1);
 					g_free(tmpbuf);
 				}
@@ -582,8 +582,8 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
 				else
 					x = cur_val;
 
-				multiplier = DATA_GET(object,"fromecu_mult");
-				adder = DATA_GET(object,"fromecu_add");
+				multiplier = (gfloat *)DATA_GET(object,"fromecu_mult");
+				adder = (gfloat *)DATA_GET(object,"fromecu_add");
 				if ((multiplier) && (adder))
 					tmpf = (x * (*multiplier)) + (*adder);
 				else if (multiplier)

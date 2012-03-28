@@ -41,7 +41,7 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, xmlNode *node, gch
 	gchar *tmpbuf = NULL;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	switch (type)
 	{
@@ -131,7 +131,7 @@ G_MODULE_EXPORT void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile,
 	gchar *tmpbuf = NULL;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	switch (type)
 	{

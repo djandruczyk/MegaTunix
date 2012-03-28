@@ -32,7 +32,7 @@ no_undefined = -no-undefined
 endif
 
 #AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused -pedantic
-AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wno-unused -pedantic
+AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wno-unused -Wno-strict-aliasing -pedantic
 
 CLEANFILES = *~ core gmon.out nohup.out 
 

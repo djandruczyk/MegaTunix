@@ -312,14 +312,15 @@ G_MODULE_EXPORT void  thread_update_logbar(
   up an AsyncQueue to the gui process which will lookup the function name
   and run it with no arguments (currently inflexible and can only run "void"
   functions (ones that take no params)
-  \param name is the name of function to lookup and run in the main 
+  \param data is the name of function to lookup and run in the main 
   gui context vis the gui dispatcher.
   */
-G_MODULE_EXPORT gboolean queue_function(const gchar * name)
+G_MODULE_EXPORT gboolean queue_function(gpointer data)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Gui_Message *message = NULL;
 	QFunction *qfunc = NULL;
+	const gchar * name  = (const gchar *) data;
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)

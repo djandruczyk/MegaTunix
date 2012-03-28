@@ -40,13 +40,13 @@ G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbo
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
-	gint size = MTX_U08;
+	DataSize size = MTX_U08;
 	gint bitmask = 0;
 	gint bitshift = 0;
 	gchar *tmpbuf = NULL;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	switch (type)
 	{
@@ -81,7 +81,7 @@ G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbo
 			canID = (GINT) DATA_GET(object,tmpbuf);
 			g_free(tmpbuf);
 			tmpbuf = g_strdup_printf("%s_size",symbol);
-			size = (DataSize) DATA_GET(object,tmpbuf);
+			size = (DataSize)(GINT) DATA_GET(object,tmpbuf);
 			g_free(tmpbuf);
 			return (gdouble)ms_get_ecu_data(canID,page,offset,size);
 			break;
@@ -107,13 +107,13 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
-	gint size = MTX_U08;
+	DataSize size = MTX_U08;
 	gint bitmask = 0;
 	gint bitshift = 0;
 	gchar *tmpbuf = NULL;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_val_if_fail(firmware,0.0);
 	g_return_val_if_fail(object,0.0);
@@ -153,7 +153,7 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 			canID = (GINT) OBJ_GET(object,tmpbuf);
 			g_free(tmpbuf);
 			tmpbuf = g_strdup_printf("%s_size",symbol);
-			size = (DataSize) OBJ_GET(object,tmpbuf);
+			size = (DataSize)(GINT) OBJ_GET(object,tmpbuf);
 			g_free(tmpbuf);
 			return (gdouble)ms_get_ecu_data(canID,page,offset,size);
 			break;

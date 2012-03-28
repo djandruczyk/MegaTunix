@@ -105,7 +105,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 	gtk_widget_show_all(menu);
 
-	if (get_symbol_f("ecu_plugin_menu_setup",(void *)&ecu_plugin_menu_setup))
+	if (get_symbol_f("ecu_plugin_menu_setup",(void **)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);
 	return;
 }
@@ -154,8 +154,8 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	firmware = DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
 	xml = glade_get_widget_tree (GTK_WIDGET (widget));
@@ -288,7 +288,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 				list = ecu_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + ((x * firmware->table_params[table]->y_bincount) * mult) + (y * mult)];
 			else
 				list = ecu_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base + ((y * firmware->table_params[table]->y_bincount) * mult) + (x * mult)];
-			widget = g_list_nth_data(list,0);
+			widget = (GtkWidget *)g_list_nth_data(list,0);
 			precision = (GINT)OBJ_GET(widget, "precision");
 			tmpbuf = g_strdup_printf("%1$.*2$f", advance, precision);
 			gtk_entry_set_text(GTK_ENTRY(widget), tmpbuf);
@@ -321,7 +321,7 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 	GtkTreeIter iter;
 	gint t;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
 		return TRUE;
@@ -418,9 +418,9 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	GList ***ecu_widgets = NULL;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 
 	g_return_val_if_fail(firmware,FALSE);

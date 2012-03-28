@@ -40,7 +40,7 @@ extern gconstpointer *global_data;
  */
 static struct
 {
-	gchar *import_tag;		/* string to find.. */
+	const gchar *import_tag;		/* string to find.. */
 	ImportParserFunc function;	/* Function to call... */
 	ImportParserArg parsetag;	/* Enum Tag fed to function... */
 
@@ -73,12 +73,12 @@ G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 	time_t *t = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
-	t = g_malloc(sizeof(time_t));
+	t = (time_t *)g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	g_free(t);
@@ -133,14 +133,14 @@ G_MODULE_EXPORT void select_table_for_export(gint table_num)
 	time_t *t = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
 
 	if ((table_num < 0) || (table_num >= firmware->total_tables))
 		return;
-	t = g_malloc(sizeof(time_t));
+	t = (time_t *)g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	g_free(t);
@@ -238,7 +238,7 @@ G_MODULE_EXPORT void select_table_for_import(gint table_num)
 	GIOChannel *iochannel = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return;
@@ -304,9 +304,9 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
-	DataSize y_size = 0;
-	DataSize z_size = 0;
-	DataSize x_size = 0;
+	DataSize y_size = MTX_U08;
+	DataSize z_size = MTX_U08;
+	DataSize x_size = MTX_U08;
 	gint x_mult = 0;
 	gint y_mult = 0;
 	gint z_mult = 0;
@@ -317,7 +317,7 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 	GString *output = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
 
@@ -342,7 +342,7 @@ G_MODULE_EXPORT gboolean all_table_export(GIOChannel *iochannel)
 		y_bincount = firmware->table_params[table]->y_bincount;
 		x_bincount = firmware->table_params[table]->x_bincount;
 
-		t = g_malloc(sizeof(time_t));
+		t = (time_t *)g_malloc(sizeof(time_t));
 		time(t);
 		tm = localtime(t);
 		g_free(t);
@@ -426,9 +426,9 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 	gint x_base = 0;
 	gint y_base = 0;
 	gint z_base = 0;
-	DataSize x_size = 0;
-	DataSize y_size = 0;
-	DataSize z_size = 0;
+	DataSize x_size = MTX_U08;
+	DataSize y_size = MTX_U08;
+	DataSize z_size = MTX_U08;
 	gint x_mult = 0;
 	gint y_mult = 0;
 	gint z_mult = 0;
@@ -439,7 +439,7 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 	gint canID = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
 
 
@@ -462,7 +462,7 @@ G_MODULE_EXPORT void single_table_export(GIOChannel *iochannel, gint table_num)
 	x_bincount = firmware->table_params[table]->x_bincount;
 	y_bincount = firmware->table_params[table]->y_bincount;
 
-	t = g_malloc(sizeof(time_t));
+	t = (time_t *)g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	g_free(t);
@@ -805,7 +805,7 @@ G_MODULE_EXPORT GIOStatus process_page(Vex_Import *vex, gchar *string)
 	gint page = -1;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!string)
 	{
@@ -851,7 +851,7 @@ G_MODULE_EXPORT GIOStatus process_table(Vex_Import *vex)
 	gchar *tmpbuf = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/* Search for out magic semicolon, if missing AND multi-table/page
 	 * firmware, ABORT */
@@ -1149,7 +1149,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	gchar *tmpbuf = NULL;
 	guint8 **ecu_data = NULL;
 	guint8 **ecu_data_backup = NULL;
-	void *data = NULL;
+	guint8 *data = NULL;
 	gchar * msgbuf = NULL;
 	guchar *ptr = NULL;
 	guint16 *ptr16 = NULL;
@@ -1158,12 +1158,12 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	gint canID = 0;
 	gint page = -1;
 	gint base = 0;
-	DataSize size = 0;
+	DataSize size = MTX_U08;
 	gint mult = 0;
 	gint table = -1;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	ecu_data = firmware->ecu_data;
 	ecu_data_backup = firmware->ecu_data_backup;
@@ -1215,7 +1215,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	if (firmware->chunk_support)
 	{
 		total = vex->total_x_bins;
-		data = g_malloc0(mult*total);;
+		data = (guint8 *)g_malloc0(mult*total);;
 		if (mult == 1)
 		{
 			ptr = (guchar *)data;
@@ -1263,7 +1263,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	if (firmware->chunk_support)
 	{
 		total = vex->total_y_bins;
-		data = g_malloc0(mult*total);
+		data = (guint8 *)g_malloc0(mult*total);
 		if (mult == 1)
 		{
 			ptr = (guchar *)data;
@@ -1311,7 +1311,7 @@ G_MODULE_EXPORT void feed_import_data_to_ecu(Vex_Import *vex)
 	if (firmware->chunk_support)
 	{
 		total = (vex->total_y_bins)*(vex->total_x_bins);
-		data = g_malloc0(mult*total);
+		data = (guint8 *)g_malloc0(mult*total);
 		if (mult == 1)
 		{
 			ptr = (guchar *)data;
@@ -1376,7 +1376,7 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 	/* Called to back out a load of a VEtable from VEX import */
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data_backup = firmware->ecu_data_backup;
 
 	for (page=0;page<firmware->total_pages;page++)
@@ -1409,7 +1409,7 @@ G_MODULE_EXPORT void revert_to_previous_data(void)
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("update_ecu_controls_pf");
 	if (module)
-		g_module_symbol(module,pf->name,(void *)&pf->function);
+		g_module_symbol(module,pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 	g_module_close(module);

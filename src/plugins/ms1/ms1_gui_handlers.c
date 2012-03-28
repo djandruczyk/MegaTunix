@@ -78,13 +78,13 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	{
 		/* Pause signals while we change the value */
 		/*              printf("resetting\n");*/
-		g_signal_handlers_block_by_func (widget,(gpointer)std_entry_handler_f, data);
-		g_signal_handlers_block_by_func (widget,(gpointer)entry_changed_handler_f, data);
+		g_signal_handlers_block_by_func (widget,*(void **)(&std_entry_handler_f), data);
+		g_signal_handlers_block_by_func (widget,*(void **)(&entry_changed_handler_f), data);
 		tmpbuf = g_strdup_printf("%i",tmpi);
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 		g_free(tmpbuf);
-		g_signal_handlers_unblock_by_func (widget,(gpointer)entry_changed_handler_f, data);
-		g_signal_handlers_unblock_by_func (widget,(gpointer)std_entry_handler_f, data);
+		g_signal_handlers_unblock_by_func (widget,*(void **)(&entry_changed_handler_f), data);
+		g_signal_handlers_unblock_by_func (widget,*(void **)(&std_entry_handler_f), data);
 	}
 	switch ((MS1StdHandler)handler)
 	{ 

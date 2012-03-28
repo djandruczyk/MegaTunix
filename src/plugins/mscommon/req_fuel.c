@@ -49,7 +49,7 @@ G_MODULE_EXPORT void reqd_fuel_change(GtkWidget *widget)
 	GdkColor red = { 0, 65535, 0, 0};
 	GdkColor black = { 0, 0, 0, 0};
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (OBJ_GET(widget,"reqd_fuel"))
 		reqd_fuel = (Reqd_Fuel *) OBJ_GET(widget,"reqd_fuel");
@@ -120,10 +120,10 @@ G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 	Reqd_Fuel *reqd_fuel = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (OBJ_GET(widget,"table_num"))
-		table_num = (gint)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+		table_num = (gint)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 	else
 	{
 		printf(_("Serious Error, table_num not defined for reqfuel calc, contact author!\n"));
@@ -389,7 +389,7 @@ G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	const gchar *project = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
 
@@ -506,8 +506,8 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	GHashTable ** interdep_vars;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	interdep_vars = DATA_GET(global_data,"interdep_vars");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	interdep_vars = (GHashTable **)DATA_GET(global_data,"interdep_vars");
 	canID = firmware->canID;
 
 	/* Dualtable required Fuel calc
@@ -801,12 +801,12 @@ G_MODULE_EXPORT gboolean drain_hashtable(gpointer offset, gpointer value, gpoint
   */
 G_MODULE_EXPORT gboolean rf_spin_button_handler(GtkWidget *widget, gpointer data)
 {
-        Reqd_Fuel *reqd_fuel = NULL;
-	RfHandler handler = 0;
+	Reqd_Fuel *reqd_fuel = NULL;
+	RfHandler handler;
 	gfloat value = 0.0;
 
-	reqd_fuel = OBJ_GET(widget,"reqd_fuel");
-	handler = (RfHandler)OBJ_GET(widget,"handler");
+	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
+	handler = (RfHandler)(GINT)OBJ_GET(widget,"handler");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
 
 
@@ -860,13 +860,13 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	gint canID = 0;
 	gint page = 0;
 	gint offset = 0;
-	DataSize size = 0;
+	DataSize size = MTX_U08;
 	GtkWidget *tmpwidget = NULL;
 	GtkWidget *label = NULL;
 	gchar * tmpbuf = NULL;
 	gfloat percentage = 0.0;
 	gint mult = 0;
-	gint i = 0;
+	guint i = 0;
 	guint x = 0;
 	gchar **vector = NULL;
 	guint8 *data = NULL;
@@ -881,8 +881,8 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	firmware = DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 	if (!OBJ_GET(widget,"applicable_tables"))
@@ -946,14 +946,14 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 				canID = (GINT)OBJ_GET(tmpwidget,"canID");
 				page = (GINT)OBJ_GET(tmpwidget,"page");
 				offset = (GINT)OBJ_GET(tmpwidget,"offset");
-				size = (DataSize)OBJ_GET(tmpwidget,"size");
+				size = (DataSize)(GINT)OBJ_GET(tmpwidget,"size");
 				use_color = (GINT)OBJ_GET(tmpwidget,"use_color");
 				if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
-					raw_lower = (gint)strtol(OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
+					raw_lower = (gint)strtol((gchar *)OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
 				else
 					raw_lower = get_extreme_from_size_f(size,LOWER);
 				if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
-					raw_upper = (gint)strtol(OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
+					raw_upper = (gint)strtol((gchar *)OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
 				else
 					raw_upper = get_extreme_from_size_f(size,UPPER);
 				value = ms_get_ecu_data(canID,page,offset,size);
@@ -978,11 +978,11 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 
 				tmpbuf = g_strdup_printf("%i",(gint)real_value);
 				g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
-						(gpointer)entry_changed_handler_f,
+						*(void **)(&entry_changed_handler_f),
 						NULL);
 				gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
 				g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
-						(gpointer)entry_changed_handler_f,
+						*(void **)(&entry_changed_handler_f),
 						NULL);
 				g_free(tmpbuf);
 

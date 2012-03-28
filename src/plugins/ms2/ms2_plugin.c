@@ -42,9 +42,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
 	 */
-	error_msg_f = DATA_GET(global_data,"error_msg_f");
+	*(void **)(&error_msg_f) = DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
-	get_symbol_f = DATA_GET(global_data,"get_symbol_f");
+	*(void **)(&get_symbol_f) = DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
 	get_symbol_f("alter_widget_state",(void **)&alter_widget_state_f);
 	get_symbol_f("bind_to_lists",(void **)&bind_to_lists_f);

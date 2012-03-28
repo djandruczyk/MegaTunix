@@ -93,13 +93,13 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	{
 		/* Pause signals while we change the value 
 		              printf("resetting\n");*/
-		g_signal_handlers_block_by_func (widget,(gpointer)std_entry_handler_f, data);
-		g_signal_handlers_block_by_func (widget,(gpointer)entry_changed_handler_f, data);
+		g_signal_handlers_block_by_func (widget,*(void **)(&std_entry_handler_f), data);
+		g_signal_handlers_block_by_func (widget,*(void **)(&entry_changed_handler_f), data);
 		tmpbuf = g_strdup_printf("%i",tmpi);
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 		g_free(tmpbuf);
-		g_signal_handlers_unblock_by_func (widget,(gpointer)entry_changed_handler_f, data);
-		g_signal_handlers_unblock_by_func (widget,(gpointer)std_entry_handler_f, data);
+		g_signal_handlers_unblock_by_func (widget,*(void **)(&entry_changed_handler_f), data);
+		g_signal_handlers_unblock_by_func (widget,*(void **)(&std_entry_handler_f), data);
 	}
 	switch (handler)
 	{
@@ -122,8 +122,8 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			real_value = convert_after_upload_f(widget);
 			ms_set_ecu_data(canID,page,offset,size,old);
 
-			g_signal_handlers_block_by_func (widget,(gpointer) std_entry_handler_f, data);
-			g_signal_handlers_block_by_func (widget,(gpointer) entry_changed_handler_f, data);
+			g_signal_handlers_block_by_func (widget,*(void **)(& std_entry_handler_f), data);
+			g_signal_handlers_block_by_func (widget,*(void **)(& entry_changed_handler_f), data);
 
 			if (OBJ_GET(widget,"temp_dep"))
 				value = temp_to_host_f(real_value);
@@ -132,8 +132,8 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
-			g_signal_handlers_unblock_by_func (widget,(gpointer) entry_changed_handler_f, data);
-			g_signal_handlers_unblock_by_func (widget,(gpointer) std_entry_handler_f, data);
+			g_signal_handlers_unblock_by_func (widget,*(void **)(& entry_changed_handler_f), data);
+			g_signal_handlers_unblock_by_func (widget,*(void **)(& std_entry_handler_f), data);
 			break;
 		default:
 			/* We need to fall to ECU SPECIFIC entry handler for 
@@ -1215,9 +1215,9 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	
 	if (GTK_IS_ENTRY(widget) || GTK_IS_SPIN_BUTTON(widget))
 	{
-		g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler,NULL);
+		g_signal_handlers_block_by_func(widget,*(void **)(&insert_text_handler),NULL);
 		update_entry(widget);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler,NULL);
+		g_signal_handlers_unblock_by_func(widget,*(void **)(&insert_text_handler),NULL);
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
 		update_combo(widget);
@@ -1252,8 +1252,8 @@ void update_range(GtkWidget *widget, gfloat value)
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	adj = gtk_range_get_adjustment(GTK_RANGE(widget));
 
-	g_signal_handlers_block_by_func(G_OBJECT(widget),
-			(gpointer)G_CALLBACK(common_slider_handler), NULL);
+	g_signal_handlers_block_by_func(widget,*(void **)(&common_slider_handler),(gpointer) NULL);
+			
 	if (value > adj->upper)
 		gtk_range_set_value(GTK_RANGE(widget),adj->upper);
 	else if (value < adj->lower)
@@ -1261,7 +1261,7 @@ void update_range(GtkWidget *widget, gfloat value)
 	else
 		gtk_range_set_value(GTK_RANGE(widget),value);
 	g_signal_handlers_unblock_by_func(G_OBJECT(widget),
-			(gpointer)G_CALLBACK(common_slider_handler), NULL);
+			*(void **)(&common_slider_handler), NULL);
 }
 
 
