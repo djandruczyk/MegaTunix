@@ -75,7 +75,6 @@
 #define ONE_SECOND 	 1	/* one second */
 #define DEFAULT_WIDTH  640
 #define DEFAULT_HEIGHT 480                                                                                  
-static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 extern gconstpointer *global_data;
 
 static gboolean delayed_expose(gpointer);
@@ -83,10 +82,8 @@ static gboolean delayed_reconfigure(gpointer);
 
 /* New Font Stuff */
 #ifdef _WIN32_
-//static const char font_string[] = "Courier bold";
 static const char font_string[] = "Sans";
 #else
-//static const char font_string[] = "Monospace";
 static const char font_string[] = "Sans";
 #endif
 
@@ -278,6 +275,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	GHashTable *ve_view_hash = NULL;
 	extern gboolean gl_ability;
 	Firmware_Details *firmware = NULL;
+	GMutex **ve3d_mutex = NULL;
 	gint table_num =  -1;
 
 	if (!gl_ability)
@@ -285,10 +283,11 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		MTXDBG(CRITICAL,_("GtkGLEXT Library initialization failed, no GL for you :(\n"));
 		return FALSE;
 	}
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (GINT)g_ascii_strtod(tmpbuf,NULL);
-	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
+	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
 
 	g_return_val_if_fail(ve_view_hash,FALSE);
 	g_return_val_if_fail(firmware,FALSE);
@@ -531,7 +530,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	g_signal_connect(G_OBJECT(window), "delete_event",
 			G_CALLBACK(ve3d_shutdown),
-			NULL);
+			GINT_TO_POINTER(table_num));
 	gtk_widget_show(window);
 
 	gl_config = get_gl_config();
@@ -563,7 +562,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	
 
 	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
-//	g_signal_connect(G_OBJECT (drawing_area), "realize",
 			G_CALLBACK (ve3d_realize), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
 			G_CALLBACK (ve3d_configure_event), NULL);
@@ -641,10 +639,11 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	button = gtk_button_new_with_label("Close Window");
 	OBJ_SET(button,"ve_view",ve_view);
+	OBJ_SET(button,"window",window);
 	gtk_box_pack_end(GTK_BOX(vbox2),button,FALSE,FALSE,0);
-	g_signal_connect_swapped(G_OBJECT(button), "clicked",
-			G_CALLBACK(ve3d_shutdown),
-			(gpointer)window);
+	g_signal_connect(G_OBJECT(button), "clicked",
+			G_CALLBACK(call_ve3d_shutdown),
+			GINT_TO_POINTER(table_num));
 
 	/* Focus follows vertex toggle */
 	button = gtk_check_button_new_with_label("Focus Follows Vertex\n with most Weight");
@@ -751,8 +750,21 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	gdk_threads_add_timeout(500,delayed_reconfigure,ve_view);
-	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,ve_view,NULL);
+	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,GINT_TO_POINTER(table_num),NULL);
 	return TRUE;
+}
+
+
+/*!
+  \brief call_ve3d_shutdown is a wrapper to call the correct shutdown function
+  \param widget is the widget containing a pointer to the widget to be destroyed
+  \param data is the table numebr encoded as a pointer
+  \returns FALSE so other handlers run
+  */
+G_MODULE_EXPORT gboolean call_ve3d_shutdown(GtkWidget *widget, gpointer data)
+{
+	GtkWidget *window = OBJ_GET(widget,"window");
+	return ve3d_shutdown(window,data);
 }
 
 
@@ -768,15 +780,17 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
 	GHashTable *ve_view_hash = NULL;
 	GdkWindow *window = NULL;
-	Ve_View_3D *ve_view;
+	Ve_View_3D *ve_view =  NULL;
+	gint table_num = (gint)data;
+	GMutex **ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
 			
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(ve_view_hash,FALSE);
+	g_mutex_lock(ve3d_mutex[table_num]);
 	//printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
-	g_mutex_lock(ve_view->mutex);
 	if (ve_view->render_id > 0)
 		g_source_remove(ve_view->render_id);
 	store_list("burners",g_list_remove(
@@ -797,14 +811,12 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	g_object_unref(ve_view->x_container);
 	g_object_unref(ve_view->y_container);
 	g_object_unref(ve_view->z_container);
-	g_mutex_unlock(ve_view->mutex);
-	g_mutex_free(ve_view->mutex);
 	free(ve_view);/* free up the memory */
 	ve_view = NULL;
 	
 	//printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
 	/* MUST return false otherwise other handlers won't run*/
-
+	g_mutex_unlock(ve3d_mutex[table_num]);
 	return FALSE;  
 }
 
@@ -949,7 +961,6 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
 
-	g_mutex_lock(ve_view->mutex);
 	if (!ve_view->gl_initialized)
 	{
 		//printf( "gl not initted yet, calling gl_init routine!\n");
@@ -1006,7 +1017,6 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	/*** OpenGL END ***/
 	MTXDBG(OPENGL,_("Leaving!\n"));
 	//printf("app expose event left (TRUE)!\n");
-	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 }
 
@@ -1031,7 +1041,6 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 
-	g_mutex_lock(ve_view->mutex);
 	MTXDBG(OPENGL,_("Entered\n"));
 
 	/* Left Button */
@@ -1058,7 +1067,6 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 	gdk_window_invalidate_rect (window,&allocation, FALSE);
 	MTXDBG(OPENGL,_("Leaving\n"));
 
-	g_mutex_unlock(ve_view->mutex);
 	return TRUE;
 }
 
@@ -1080,7 +1088,6 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	MTXDBG(OPENGL,_("Entered\n"));
 
-	g_mutex_lock(ve_view->mutex);
 	gtk_widget_grab_focus (widget);
 
 	if (event->button != 0)
@@ -1091,7 +1098,6 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
 	}
 
 	MTXDBG(OPENGL,_("Leaving\n"));
-	g_mutex_unlock(ve_view->mutex);
 	return retval;
 }
 
@@ -1818,6 +1824,7 @@ G_MODULE_EXPORT void ve3d_draw_text(GtkWidget * widget, char* text, gfloat x, gf
 G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
                                       *event, gpointer data)
 {
+	static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
 	static gint (*get_ecu_data_f)(gpointer) = NULL;
 	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
 	gint offset = 0;
@@ -2259,7 +2266,6 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 
 	MTXDBG(OPENGL,_("Entered\n"));
 	ve_view= g_new0(Ve_View_3D,1) ;
-	ve_view->mutex = g_mutex_new();
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
 	ve_view->z_source = NULL;
@@ -2418,14 +2424,12 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 			if (table_list[i] == TRUE)
 			{
 				ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
-				g_mutex_lock(ve_view->mutex);
 				if ((ve_view) && (ve_view->drawing_area))
 				{
 					window = gtk_widget_get_window(ve_view->drawing_area);
 					if (window)
 						queue_ve3d_update(ve_view);
 				}
-				g_mutex_unlock(ve_view->mutex);
 			}
 		}
 	}
@@ -2463,13 +2467,11 @@ G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
 
 	MTXDBG(OPENGL,_("Entered\n"));
 	g_return_val_if_fail(ve_view,FALSE);
-	g_mutex_lock(ve_view->mutex);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	ve_view->mesh_created = FALSE;
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	DATA_SET(global_data,"ve3d_redraw_queued",GINT_TO_POINTER(FALSE));
-	g_mutex_unlock(ve_view->mutex);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return FALSE;
 }
@@ -2983,7 +2985,7 @@ G_MODULE_EXPORT gboolean set_fps(GtkWidget *widget, gpointer data)
 	ve_view->requested_fps = (GINT)gtk_range_get_value(GTK_RANGE(widget));
 	if (ve_view->render_id > 0)
 		g_source_remove(ve_view->render_id);
-	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,ve_view,NULL);
+	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,GINT_TO_POINTER(ve_view->table_num),NULL);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return TRUE;
 }
@@ -3269,32 +3271,40 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	gint * algorithm;
 	Firmware_Details *firmware = NULL;
 	GHashTable *sources_hash = NULL;
+	GHashTable *ve_view_hash = NULL;
+	GMutex **ve3d_mutex = NULL;
+	gint table_num = (GINT)data;
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	ve_view = (Ve_View_3D *)data;
-	sources_hash = DATA_GET(global_data,"sources_hash");
-	firmware = DATA_GET(global_data,"firmware");
-	algorithm = DATA_GET(global_data,"algorithm");
+	ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
+	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
+	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
+	g_return_val_if_fail(ve_view_hash,TRUE);
 	g_return_val_if_fail(sources_hash,TRUE);
 	g_return_val_if_fail(algorithm,TRUE);
-	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(firmware,FALSE);
-	g_mutex_lock(ve_view->mutex);
 
+	//printf("ve_view_hash %p, table_num %i\n",ve_view_hash,table_num);
+	ve_view = (Ve_View_3D *)g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(table_num));
+	if (!ve_view)
+		return FALSE;
+	g_mutex_lock(ve3d_mutex[table_num]);
 	if (DATA_GET(global_data,"leaving"))
 	{
 		MTXDBG(OPENGL,_("global \"leaving\" set, Leaving...\n"));
-		g_mutex_unlock(ve_view->mutex);
+		g_mutex_unlock(ve3d_mutex[table_num]);
 		return FALSE;
 	}
 
 	if (!GTK_IS_WIDGET(ve_view->drawing_area))
 	{
 		MTXDBG(OPENGL,_("ve_view->drawing_area is NOT a widget, Leaving...\n"));
-		g_mutex_unlock(ve_view->mutex);
+		g_mutex_unlock(ve3d_mutex[table_num]);
 		return FALSE;
 	}
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
@@ -3422,13 +3432,13 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 		goto redraw;
 	MTXDBG(OPENGL,_("Leaving without redraw\n"));
-	g_mutex_unlock(ve_view->mutex);
+	g_mutex_unlock(ve3d_mutex[table_num]);
 	return TRUE;
 
 redraw:
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	MTXDBG(OPENGL,_("Leaving\n"));
-	g_mutex_unlock(ve_view->mutex);
+	g_mutex_unlock(ve3d_mutex[table_num]);
 	return TRUE;
 }
 
