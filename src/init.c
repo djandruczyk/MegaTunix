@@ -574,41 +574,47 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 	GDir *dir = NULL;
 	const gchar *mtx = "mtx";
 	const gchar *project = NULL;
+	gint perms = 0;
 	
 	project = (const gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
 		project = DEFAULT_PROJECT;
 
+#ifdef __WIN32__
+	perms = S_IRWXU;
+#else
+	perms = (S_IRWXU | S_IRGRP | S_IROTH);
+#endif
 
 	dirname = g_build_path(PSEP, HOME(), mtx, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(), mtx,project, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(),mtx,project,BACKUP_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(),mtx,project,TABLE_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(),mtx,project,DATALOG_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(),mtx,project,GUI_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,GAUGES_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,DASHES_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 
 #ifdef __WIN32__
@@ -623,23 +629,23 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 		while (NULL != (subdir = g_dir_read_name(dir)))
 		{
 			dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR,"Profiles",subdir, NULL);
-			g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+			g_mkdir(dirname, perms);
 			cleanup(dirname);
 		}
 		g_dir_close(dir);
 	}
 
 	dirname = g_build_path(PSEP,HOME(),mtx,project,LOOKUPTABLES_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,REALTIME_MAPS_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,RTSLIDERS_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,RTSTATUS_DATA_DIR, NULL);
-	g_mkdir(dirname, S_IRWXU | S_IRGRP | S_IROTH);
+	g_mkdir(dirname, perms);
 	cleanup(dirname);
 	return;
 }

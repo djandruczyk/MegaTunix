@@ -299,7 +299,8 @@ menu/Makefile
 desktop/Makefile
 category/Makefile
 icons/Makefile
-MegaTunix.iss
+MegaTunix32.iss
+MegaTunix64.iss
 Doxyfile
 WIN_NOTES.txt
 ])

@@ -28,6 +28,8 @@ InfoBeforeFile=.\WIN_NOTES.txt
 ChangesEnvironment=yes
 
 [Files]
+Source: "z:\opt\crosstools\i686-w32-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
+Source: "z:\opt\crosstools\i686-w32-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
 Source: "z:\target\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
 Source: "z:\target\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\"; Flags: ignoreversion
 Source: "z:\target\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\2.24\lib\pango\1.6.0\modules"; Flags: ignoreversion

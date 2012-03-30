@@ -465,7 +465,7 @@ static ConfigLine *cfg_create_string(ConfigSection * section, const gchar * key,
  \param name is the section naem to search for
  \returns a pointer to the  ConfigSection structure searched for
  */
-ConfigSection *cfg_find_section(ConfigFile * cfg, gchar * name)
+ConfigSection *cfg_find_section(ConfigFile * cfg, const gchar * name)
 {
 	ConfigSection *section;
 	GList *list;
