@@ -1,7 +1,7 @@
 Makefile
 Makefile.in
 MS2-reqs
-MegaTunix.iss
+MegaTunix*.iss
 Output
 WIN_NOTES.txt
 autom4te.cache
