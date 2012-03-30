@@ -1,15 +1,10 @@
 #!/bin/sh
 
-if [ -h /target ]; then 
-	sudo rm /target && sudo ln -sf /opt/crossroot32 /target 
-else
-	sudo ln -sf /opt/crossroot32 /target
-fi
 . cross32
 
 make distclean
-cross32-configure ./configure --prefix=/target/dest $* && \
-	make -j3  && rm -rf /target/dest/* && make install && \
+cross32-configure ./configure --prefix=/opt/crossroot32/dest $* && \
+	make -j3  && rm -rf /opt/crossroot32/dest/* && make install && \
 	./contrib/builder32 && \
 . uncross 
 # make distclean
