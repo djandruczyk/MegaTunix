@@ -776,7 +776,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
 	g_return_val_if_fail(ve_view_hash,FALSE);
 	//printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
-	if (ve_view->render_id > 0);
+	if (ve_view->render_id > 0)
 		g_source_remove(ve_view->render_id);
 	store_list("burners",g_list_remove(
 				get_list("burners"),(gpointer)ve_view->burn_but));
