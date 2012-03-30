@@ -6,7 +6,7 @@ WinVersionTooLowError=64Bit MegaTunix requires Windows Vista or Windows 7 64bit 
 
 [Setup]
 ArchitecturesAllowed=x64
-ArchitecturesInstalIn64BitMode=x64
+ArchitecturesInstallIn64BitMode=x64
 AppName=MegaTunix
 AppVerName=MegaTunix v. @MTX_VER_STRING@
 DefaultDirName={pf}\MegaTunix
