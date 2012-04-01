@@ -114,7 +114,7 @@ G_MODULE_EXPORT void CalculateFrameRate(GtkWidget *widget)
 	{
 		ve_view->lasttime = currentTime.tv_sec;
 		/* Copy the frames per second into a string to display in the window*/
-		sprintf(ve_view->strfps,_("Current Frames Per Second: %i"), (int)ve_view->fps);
+		sprintf(ve_view->strfps,_("FPS: %i"), (int)ve_view->fps);
 		/* Reset the frames per second*/
 		ve_view->fps = 0;
 	}
