@@ -51,12 +51,12 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 		return FALSE;
 
-	t = g_malloc(sizeof(time_t));
+	t = (time_t *)g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	g_free(t);
@@ -145,7 +145,7 @@ G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(filename);
 	g_return_if_fail(firmware);
 
@@ -213,7 +213,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(filename);
 	g_return_if_fail(firmware);
 	canID = firmware->canID;
@@ -318,13 +318,13 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 		pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 		pf = g_new0(PostFunction,1);
 		pf->name = g_strdup("update_ecu_controls_pf");
-		get_symbol_f(pf->name,(void *)&pf->function);
+		get_symbol_f(pf->name,(void **)&pf->function);
 		pf->w_arg = FALSE;
 		pfuncs = g_array_append_val(pfuncs,pf);
 
 		pf = g_new0(PostFunction,1);
 		pf->name = g_strdup("set_store_black_pf");
-		get_symbol_f(pf->name,(void *)&pf->function);
+		get_symbol_f(pf->name,(void **)&pf->function);
 		pf->w_arg = FALSE;
 		pfuncs = g_array_append_val(pfuncs,pf);
 

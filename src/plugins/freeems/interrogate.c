@@ -47,7 +47,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	GHashTable *tests_hash = NULL;
 	GArray *tests = NULL;
 	Detection_Test *test = NULL;
-	gint i = 0;
+	guint i = 0;
 	gboolean interrogated = FALSE;
 	GList *locations = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -129,7 +129,7 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 	guint8 sum = 0;
 	gint tmit_len = 0;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
 	if (DATA_GET(global_data,"offline"))
@@ -154,7 +154,7 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 	g_free(buf);
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
+	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -193,7 +193,7 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 	guint8 sum = 0;
 	gint tmit_len = 0;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
 	if (DATA_GET(global_data,"offline"))
@@ -218,7 +218,7 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 	g_free(buf);
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
+	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	/*
@@ -282,6 +282,25 @@ G_MODULE_EXPORT void request_firmware_build_date()
 
 
 /*!
+ \brief Issues a packet to the ECU to get its build date
+ */
+G_MODULE_EXPORT void request_firmware_decoder_name()
+{
+	OutputData *output = NULL;
+	GAsyncQueue *queue = NULL;
+	gint seq = atomic_sequence();
+	output = initialize_outputdata_f();
+	queue = g_async_queue_new();
+	register_packet_queue(SEQUENCE_NUM,queue,seq);
+	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
+	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_DECODER_NAME));
+	DATA_SET(output->data,"queue",queue);
+	io_cmd_f("empty_payload_pkt",output);
+	return;
+}
+
+
+/*!
  \brief Issues a packet to the ECU to get its build compiler
  \param length is a pointer to a location to store the length of the data
  received, or NULL
@@ -294,7 +313,6 @@ G_MODULE_EXPORT void request_firmware_compiler()
 	gint seq = atomic_sequence();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
-	//register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_COMPILER_VERSION);
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_COMPILER_VERSION));
@@ -317,7 +335,6 @@ G_MODULE_EXPORT void request_firmware_build_os()
 	gint seq = atomic_sequence();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
-	//register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_COMPILER_OS);
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_COMPILER_OS));
@@ -340,7 +357,6 @@ G_MODULE_EXPORT void request_interface_version()
 	gint seq = atomic_sequence();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
-	//register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
 	DATA_SET(output->data,"sequence_num",GINT_TO_POINTER(seq));
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_INTERFACE_VERSION));
@@ -380,7 +396,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 	guint8 flag = BLOCK_BITS_AND;
 	guint16 bits = 0;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
 	pkt[HEADER_IDX] = 0;
@@ -406,7 +422,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 	g_free(buf);
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
+	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -455,7 +471,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	guint8 sum = 0;
 	gint tmit_len = 0;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
 	pkt[HEADER_IDX] = 0;
@@ -479,7 +495,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	g_free(buf);
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
+	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LOCATION_ID_DETAILS);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -593,7 +609,7 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 			g_free(section);
 			break;
 		}
-		get_symbol_f(test->test_func,(void *)&test->function);
+		get_symbol_f(test->test_func,(void **)&test->function);
 		cfg_read_string(cfgfile,section,"test_desc",
 				&test->test_desc);
 		g_free(section);
@@ -730,7 +746,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	gchar ** match_on = NULL;
 	gint major = 0;
 	gint minor = 0;
-	MatchClass class = 0;
+	MatchClass match_class;
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
@@ -753,7 +769,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	{
 		pass = FALSE;
 		/*printf("checking for match on %s\n",match_on[i]);*/
-		test = g_hash_table_lookup(tests_hash,match_on[i]);
+		test = (Detection_Test *)g_hash_table_lookup(tests_hash,match_on[i]);
 		if (!test)
 		{
 			printf(_("ERROR test data not found for test \"%s\"\n"),match_on[i]);
@@ -777,9 +793,9 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 		 */
 		if (g_strv_length(vector) != 2)
 			printf(_("ERROR interrogation check_for match vector does NOT have two args it has %i\n"),g_strv_length(vector));
-		class = translate_string_f(vector[0]);
+		match_class = (MatchClass)translate_string_f(vector[0]);
 		/*printf("potential data is %s\n",vector[1]);*/
-		switch (class)
+		switch (match_class)
 		{
 			case COUNT:
 				if (test->num_bytes == atoi(vector[1]))
@@ -815,7 +831,9 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 			case REGEX:
 				if (test->result_str)
 				{
-					if (g_regex_match_simple(vector[1],test->result_str,0,0))
+					if (g_regex_match_simple(vector[1],test->result_str,
+								(GRegexCompileFlags)0,
+								(GRegexMatchFlags)0))
 						pass = TRUE;
 				}
 				else
@@ -854,16 +872,18 @@ G_MODULE_EXPORT void update_ecu_info(void)
 	gchar *build_date = NULL;
 	gchar *build_os = NULL;
 	gchar *compiler = NULL;
+	gchar *decoder = NULL;
 	gchar *info = NULL;
 
-	fw_version = DATA_GET(global_data,"fw_version");
-	int_version = DATA_GET(global_data,"int_version");
-	build_date = DATA_GET(global_data,"build_date");
-	build_os = DATA_GET(global_data,"build_os");
-	compiler = DATA_GET(global_data,"compiler");
-	if ((fw_version) && (int_version) && (build_date) && (build_os) && (compiler))
+	fw_version = (gchar *)DATA_GET(global_data,"fw_version");
+	int_version = (gchar *)DATA_GET(global_data,"int_version");
+	build_date = (gchar *)DATA_GET(global_data,"build_date");
+	build_os = (gchar *)DATA_GET(global_data,"build_os");
+	compiler = (gchar *)DATA_GET(global_data,"compiler");
+	decoder = (gchar *)DATA_GET(global_data,"decoder_name");
+	if ((fw_version) && (int_version) && (build_date) && (build_os) && (compiler) && (decoder))
 	{
-		info = g_strdup_printf("<b>Firmware Version:</b> %s\n<b>Interface version:</b> %s\nThis firmware was built on %s using the %s compiler on %s",fw_version,int_version,build_date,compiler,build_os);
+		info = g_strdup_printf("<b>Firmware Version:</b> %s\n<b>Interface version:</b> %s\n<b>Decoder Name:</b>%s\nThis firmware was built on %s using the %s compiler on %s",fw_version,int_version,decoder,build_date,compiler,build_os);
 		thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(info));
 		g_free(info);
 	}
@@ -925,7 +945,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	cfg_read_string(cfgfile,"interrogation_profile","name",&firmware->name);
 	if(cfg_read_string(cfgfile,"parameters","EcuTempUnits",&tmpbuf))
 	{
-		firmware->ecu_temp_units = translate_string_f(tmpbuf);
+		firmware->ecu_temp_units = (TempUnits)translate_string_f(tmpbuf);
 		g_free(tmpbuf);
 	}
 	else
@@ -1184,7 +1204,7 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 {
 	Page_Params *page_params = NULL;
-	page_params = g_malloc0(sizeof(Page_Params));
+	page_params = (Page_Params *)g_malloc0(sizeof(Page_Params));
 	page_params->length = 0;
 	page_params->spconfig_offset = -1;
 	page_params->needs_burn = FALSE;
@@ -1198,7 +1218,7 @@ G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 {
 	Table_Params *table_params = NULL;
-	table_params = g_malloc0(sizeof(Table_Params));
+	table_params = (Table_Params *)g_malloc0(sizeof(Table_Params));
 	table_params->table = g_array_sized_new(FALSE,TRUE,sizeof(GtkWidget *),36);
 	table_params->is_fuel = FALSE;
 	table_params->alternate_offset = -1;

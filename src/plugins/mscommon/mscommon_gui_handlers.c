@@ -1252,7 +1252,7 @@ void update_range(GtkWidget *widget, gfloat value)
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	adj = gtk_range_get_adjustment(GTK_RANGE(widget));
 
-	g_signal_handlers_block_by_func(widget,*(void **)(&common_slider_handler),(gpointer) NULL);
+	g_signal_handlers_block_by_func(widget,(gpointer)common_slider_handler,(gpointer) NULL);
 			
 	if (value > adj->upper)
 		gtk_range_set_value(GTK_RANGE(widget),adj->upper);
@@ -1261,7 +1261,7 @@ void update_range(GtkWidget *widget, gfloat value)
 	else
 		gtk_range_set_value(GTK_RANGE(widget),value);
 	g_signal_handlers_unblock_by_func(G_OBJECT(widget),
-			*(void **)(&common_slider_handler), NULL);
+			(gpointer)common_slider_handler, NULL);
 }
 
 
@@ -1742,7 +1742,7 @@ G_MODULE_EXPORT void common_gui_init(void)
 	/* Assigns additional data to the gui controls mainly so that
 	   functions within plugins can be located
 	   */
-	xml = DATA_GET(global_data,"main_xml");
+	xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	g_return_if_fail(xml);
 	widget = glade_xml_get_widget(xml,"netaccess_table");
 	/* Enable network mode is NOT offline */

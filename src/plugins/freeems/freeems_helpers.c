@@ -120,7 +120,7 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 {
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!firmware)
 		return;
 
@@ -145,7 +145,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 	gint i = 0;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
 	switch (type)
@@ -217,7 +217,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	GTimeVal tval;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
 	g_return_if_fail(firmware);
@@ -236,7 +236,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	{
 		case GENERIC_READ:
 			packet = retrieve_packet(output->data,NULL);
-			queue = DATA_GET(output->data,"queue");
+			queue = (GAsyncQueue *)DATA_GET(output->data,"queue");
 			if (queue)
 			{
 				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -282,7 +282,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 			break;
 		case BENCHTEST_RESPONSE:
 			packet = retrieve_packet(output->data,NULL);
-			queue = DATA_GET(output->data,"queue");
+			queue = (GAsyncQueue *)DATA_GET(output->data,"queue");
 			if (queue)
 			{
 				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -404,7 +404,7 @@ handle_write:
 			break;
 		case EMPTY_PAYLOAD:
 			packet = retrieve_packet(output->data,NULL);
-			queue = DATA_GET(output->data,"queue");
+			queue = (GAsyncQueue *)DATA_GET(output->data,"queue");
 			if (queue)
 			{
 				deregister_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -422,6 +422,10 @@ handle_write:
 						break;
 					case RESPONSE_INTERFACE_VERSION:
 						DATA_SET_FULL(global_data,"int_version",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
+						update_ecu_info();
+						break;
+					case RESPONSE_DECODER_NAME:
+						DATA_SET_FULL(global_data,"decoder_name",g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length),g_free);
 						update_ecu_info();
 						break;
 					case RESPONSE_FIRMWARE_BUILD_DATE:
@@ -468,7 +472,7 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 	gint last_page = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/*printf("burn all helper\n");*/
 	if (!DATA_GET(global_data,"offline"))
@@ -513,9 +517,9 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 	g_return_val_if_fail(object,NULL);
 
 	if (queue_name) 
-		queue = DATA_GET(global_data,queue_name);
+		queue = (GAsyncQueue *)DATA_GET(global_data,queue_name);
 	else /* Use "queue" key via DATA_GET */
-		queue = DATA_GET(object,"queue");
+		queue = (GAsyncQueue *)DATA_GET(object,"queue");
 	if (!queue)
 		return NULL;
 	g_get_current_time(&tval);
@@ -524,7 +528,7 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 		g_time_val_add(&tval,5000000);
 	else
 		g_time_val_add(&tval,500000);
-	packet = g_async_queue_timed_pop(queue,&tval);
+	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
 	return packet;
 }
 

@@ -28,9 +28,9 @@
   \param code is the error code integer
   \returns the Textual representation of the error code
   */
-G_MODULE_EXPORT gchar * lookup_error(gint code)
+G_MODULE_EXPORT gchar * lookup_error(guint code)
 {
-	gint i = 0;
+	guint i = 0;
 	gchar *msg = NULL;
 	for (i=0;i< sizeof(Errors)/sizeof(Errors[0]);i++)
 	{

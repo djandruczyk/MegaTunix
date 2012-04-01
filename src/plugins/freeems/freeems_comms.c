@@ -75,23 +75,23 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	gboolean (*lock_serial_f)(const gchar *) = NULL;
 	void (*setup_serial_params_f)(void) = NULL;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
-	get_symbol_f("setup_serial_params",(void *)&setup_serial_params_f);
-	get_symbol_f("open_serial",(void *)&open_serial_f);
-	get_symbol_f("close_serial",(void *)&close_serial_f);
-	get_symbol_f("lock_serial",(void *)&lock_serial_f);
-	get_symbol_f("unlock_serial",(void *)&unlock_serial_f);
+	get_symbol_f("setup_serial_params",(void **)&setup_serial_params_f);
+	get_symbol_f("open_serial",(void **)&open_serial_f);
+	get_symbol_f("close_serial",(void **)&close_serial_f);
+	get_symbol_f("lock_serial",(void **)&lock_serial_f);
+	get_symbol_f("unlock_serial",(void **)&unlock_serial_f);
 	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
 
 	if (DATA_GET(global_data,"offline"))
 	{
-		g_timeout_add(100,(GSourceFunc)queue_function_f,"kill_conn_warning");
+		g_timeout_add(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 		MTXDBG(THREADS|CRITICAL,_("Thread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
 	if (!io_repair_queue)
-		io_repair_queue = DATA_GET(global_data,"io_repair_queue");
+		io_repair_queue = (GAsyncQueue *)DATA_GET(global_data,"io_repair_queue");
 	/* IF serial_is_open is true, then the port was ALREADY opened 
 	 * previously but some error occurred that sent us down here. Thus
 	 * first do a simple comms test, if that succeeds, then just cleanup 
@@ -132,7 +132,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
-				g_timeout_add(300,(GSourceFunc)queue_function_f,"kill_conn_warning");
+				g_timeout_add(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 				MTXDBG(THREADS|CRITICAL,_("Thread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
@@ -183,12 +183,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 				thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Port %s is open by another application\n"),vector[i]),FALSE,FALSE);
 			}
 		}
-		queue_function_f("conn_warning");
+		queue_function_f((gpointer)"conn_warning");
 	}
 
 	if (serial_is_open)
 	{
-		queue_function_f("kill_conn_warning");
+		queue_function_f((gpointer)"kill_conn_warning");
 		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
 	}
 	if (vector)
@@ -215,12 +215,12 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	gint tmpi = 0;
 
 	DATA_SET(global_data,"serial_abort",GINT_TO_POINTER(TRUE));
-	thread = DATA_GET(global_data,"serial_thread_id");
+	thread = (GThread *)DATA_GET(global_data,"serial_thread_id");
 	g_mutex_lock(mutex);
 	g_get_current_time(&now);
 	/* Wait up to 0.25 seconds for thread to exit */
 	g_time_val_add(&now,250000);
-	cond = DATA_GET(global_data,"serial_reader_cond");
+	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	if ((cond) && (thread))
 	{
 		res = g_cond_timed_wait(cond,mutex,&now);
@@ -248,7 +248,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	GThread *thread = NULL;
 	gint tmpi = 0;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	if ((!serial_params->open) || (!serial_params->fd))
 	{
 		MTXDBG(CRITICAL,_("Serial port is NOT open, or filedescriptor is invalid!\n"));
@@ -291,8 +291,8 @@ G_MODULE_EXPORT gboolean comms_test(void)
 
 	Serial_Params *serial_params = NULL;
 
-	serial_params = DATA_GET(global_data,"serial_params");
-	queue = DATA_GET(global_data,"packet_queue");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	queue = (GAsyncQueue *)DATA_GET(global_data,"packet_queue");
 
 	MTXDBG(SERIAL_RD,_("Entered...\n"));
 	if (!serial_params)
@@ -301,7 +301,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,250000);
-	packet = g_async_queue_timed_pop(queue,&tval);
+	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	if (packet)
 	{
@@ -333,7 +333,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		g_free(buf);
 		g_get_current_time(&tval);
 		g_time_val_add(&tval,250000);
-		packet = g_async_queue_timed_pop(queue,&tval);
+		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		g_async_queue_unref(queue);
 		if (packet)
@@ -367,13 +367,13 @@ void *win32_reader(gpointer data)
 	gchar buf[2048];
 	gchar *ptr = NULL;
 	gsize requested = 2048;
-	gsize received = 0;
+	gssize received = 0;
 	gsize read_pos = 0;
 	GIOStatus status;
 	GError *err = NULL;
 	GCond *cond = NULL;
 
-	cond = DATA_GET(global_data,"serial_reader_cond");
+	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	while (TRUE)
 	{
 		if ((DATA_GET(global_data,"leaving")) || (DATA_GET(global_data,"serial_abort")))
@@ -429,7 +429,7 @@ void *unix_reader(gpointer data)
 	fd_set readfds;
 	struct timeval t;
 
-	cond = DATA_GET(global_data,"serial_reader_cond");
+	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	FD_ZERO(&readfds);
 	while (TRUE)
 	{
@@ -512,10 +512,10 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 {
 	GAsyncQueue *queue = NULL;
 	GThread *thread = NULL;
-	GMutex *mutex = DATA_GET(global_data,"rtv_subscriber_mutex");
+	GMutex *mutex = (GMutex *)DATA_GET(global_data,"rtv_subscriber_mutex");
 
 	/* This sends packets to the rtv_subscriber queue */
-	thread = DATA_GET(global_data,"rtv_subscriber_thread");
+	thread = (GThread *)DATA_GET(global_data,"rtv_subscriber_thread");
 	if (thread)
 	{
 		DATA_SET(global_data,"rtv_subscriber_thread_exit",GINT_TO_POINTER(1));
@@ -524,7 +524,7 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 		DATA_SET(global_data,"rtv_subscriber_thread_exit",NULL);
 	}
 	g_mutex_lock(mutex);
-	queue = DATA_GET(global_data,"rtv_subscriber_queue");
+	queue = (GAsyncQueue *)DATA_GET(global_data,"rtv_subscriber_queue");
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	g_async_queue_unref(queue);
 	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
@@ -546,7 +546,7 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 	GTimeVal now;
 	FreeEMS_Packet *packet = NULL;
 
-	mutex = DATA_GET(global_data,"rtv_subscriber_mutex");
+	mutex = (GMutex *)DATA_GET(global_data,"rtv_subscriber_mutex");
 	if (!mutex)
 		g_thread_exit(0);
 
@@ -556,7 +556,7 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 		/* Wait up to 0.25 seconds for thread to exit */
 		g_time_val_add(&now,250000);
 		g_mutex_lock(mutex);
-		packet = g_async_queue_timed_pop(queue,&now);
+		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&now);
 		g_mutex_unlock(mutex);
 		if (packet)
 		{
@@ -578,7 +578,7 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	OutputData *output = NULL;	
 	Firmware_Details *firmware = NULL;
 
-        firmware = DATA_GET(global_data,"firmware");
+        firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
 	output = initialize_outputdata_f();
@@ -612,7 +612,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 	gconstpointer *gptr = (gconstpointer *)data;
 
 	if (!firmware)
-        	firmware = DATA_GET(global_data,"firmware");
+        	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
 	if (GTK_IS_WIDGET(widget))
@@ -626,7 +626,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 			locID = (GINT)OBJ_GET(widget,"location_id");
 		canID = (GINT)OBJ_GET(widget,"canID");
 		offset = (GINT)OBJ_GET(widget,"offset");
-		size = (DataSize)OBJ_GET(widget,"size");
+		size = (DataSize)(GINT)OBJ_GET(widget,"size");
 	}
 	else
 	{
@@ -639,7 +639,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 			locID = (GINT)DATA_GET(gptr,"location_id");
 		canID = (GINT)DATA_GET(gptr,"canID");
 		offset = (GINT)DATA_GET(gptr,"offset");
-		size = (DataSize)DATA_GET(gptr,"size");
+		size = (DataSize)(GINT)DATA_GET(gptr,"size");
 	}
 	/*printf("locID %i, offset, %i, value %i\n",locID,offset,value);*/
 	freeems_send_to_ecu(canID,locID,offset,size,value,queue_update);
@@ -668,7 +668,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 	gint32 s32 = 0;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(firmware);
 	g_return_if_fail(offset >= 0);
@@ -804,7 +804,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	MTXDBG(SERIAL_WR,_("Sending canID %i, locID %i, offset %i, num_bytes %i, data %p\n"),canID,locID,offset,num_bytes,block);
 	output = initialize_outputdata_f();
@@ -852,7 +852,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	gint z = 0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
 
@@ -866,7 +866,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		offset = (GINT)DATA_GET(output->data,"offset");
 		length = (GINT)DATA_GET(output->data,"data_length");
 		block = (guint8 *)DATA_GET(output->data,"data");
-		mode = (WriteMode)DATA_GET(output->data,"mode");
+		mode = (WriteMode)(GINT)DATA_GET(output->data,"mode");
 		freeems_find_mtx_page(locID,&page);
 
 //		printf("locID %i, page %i\n",locID,page);
@@ -955,7 +955,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 	gint locID = 0;
 	gint page = 0;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	locID = (GINT)DATA_GET(output->data,"location_id");
 	page = (GINT)DATA_GET(output->data,"page");
 

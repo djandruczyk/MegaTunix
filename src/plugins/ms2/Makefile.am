@@ -4,7 +4,7 @@ INCLUDES = \
         -I$(top_srcdir)/include \
         @GTK_CFLAGS@ \
         @LIBXML2_CFLAGS@ \
-	@LIBGLADE_CFLAGS@ \
+		@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 
@@ -31,8 +31,7 @@ if CROSS_COMPILING
 no_undefined = -no-undefined
 endif
 
-#AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wextra -Wno-unused -pedantic
-AM_CFLAGS = $(COMMON_FLAGS) -Wall -Wno-unused -Wno-strict-aliasing -pedantic
+AM_CFLAGS += $(COMMON_FLAGS)
 
 CLEANFILES = *~ core gmon.out nohup.out 
 

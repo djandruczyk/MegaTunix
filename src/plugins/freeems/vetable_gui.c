@@ -64,7 +64,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	gint table = 0;
 	gint locID = 0;
 	gint base = 0;
-	DataSize size = 0;
+	DataSize size = MTX_U08;
 	gint z_bin[4] = {0,0,0,0};
 	gint bin[4] = {0,0,0,0};
 	gint mult = 0;
@@ -93,11 +93,11 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	GtkAllocation allocation;
 
 	if (!sources_hash)
-		sources_hash = DATA_GET(global_data,"sources_hash");
+		sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	if (!ecu_widgets)
-		ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+		ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!colormap)
 		colormap = gdk_colormap_get_system();
 
@@ -152,24 +152,24 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	{
 		hash = firmware->table_params[table]->x_multi_hash;
 		key = firmware->table_params[table]->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 		if (algorithm[table] == SPEED_DENSITY)
 		{
 			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
+				multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		else if (algorithm[table] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
+			multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		else if (algorithm[table] == MAF)
 		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
 			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
+			multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
 			return;
@@ -188,24 +188,24 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	{
 		hash = firmware->table_params[table]->y_multi_hash;
 		key = firmware->table_params[table]->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 		if (algorithm[table] == SPEED_DENSITY)
 		{
 			if (hash_key)
-				multi = g_hash_table_lookup(hash,hash_key);
+				multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		else if (algorithm[table] == ALPHA_N)
-			multi = g_hash_table_lookup(hash,"DEFAULT");
+			multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		else if (algorithm[table] == MAF)
 		{
-			multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+			multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
 			if(!multi)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		else
-			multi = g_hash_table_lookup(hash,"DEFAULT");
+			multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
 			return;
@@ -435,7 +435,7 @@ redraw:
 		 * offset 0 of that list.  (assumptions are bad practice!)
 		 */
 		list = ecu_widgets[firmware->table_params[table]->z_page][firmware->table_params[table]->z_base+(z_bin[i]*z_mult)];
-		widget = g_list_nth_data(list,0);
+		widget = (GtkWidget *)g_list_nth_data(list,0);
 
 		if (!GTK_IS_WIDGET(widget))
 			return;

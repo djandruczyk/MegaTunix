@@ -139,7 +139,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 	gtk_widget_show_all(menu);
 
-	if (get_symbol_f("ecu_plugin_menu_setup",(void *)&ecu_plugin_menu_setup))
+	if (get_symbol_f("ecu_plugin_menu_setup",(void **)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);
 	return;
 }

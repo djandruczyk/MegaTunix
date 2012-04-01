@@ -46,15 +46,15 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
 	if (!_get_sized_data)
-		get_symbol_f("_get_sized_data",(void*)&_get_sized_data);
+		get_symbol_f("_get_sized_data",(void **)&_get_sized_data);
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	widget = (GtkWidget *)data;
 	container = (gconstpointer *)data;
 	if (GTK_IS_WIDGET(widget))
 	{
 		offset = (GINT)OBJ_GET(widget,"offset");
-		size = (DataSize)OBJ_GET(widget,"size");
+		size = (DataSize)(GINT)OBJ_GET(widget,"size");
 		if (OBJ_GET(widget,"location_id"))
 		{
 			locID = (GINT)OBJ_GET(widget,"location_id");
@@ -66,7 +66,7 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 	else
 	{
 		offset = (GINT)DATA_GET(container,"offset");
-		size = (DataSize)DATA_GET(container,"size");
+		size = (DataSize)(GINT)DATA_GET(container,"size");
 		if (DATA_GET(container,"location_id"))
 		{
 			locID = (GINT)DATA_GET(container,"location_id");
@@ -100,10 +100,10 @@ G_MODULE_EXPORT gint freeems_get_ecu_data(gint canID, gint locID, gint offset, D
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
 	gint page = 0;
 	if (!_get_sized_data)
-		get_symbol_f("_get_sized_data",(void*)&_get_sized_data);
+		get_symbol_f("_get_sized_data",(void **)&_get_sized_data);
  
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	/* Sanity checking */
 	g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);
 	g_return_val_if_fail(firmware,0);
@@ -130,10 +130,10 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_last(gint canID, gint locID, gint offs
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
 	if (!_get_sized_data)
-		get_symbol_f("_get_sized_data",(void*)&_get_sized_data);
+		get_symbol_f("_get_sized_data",(void **)&_get_sized_data);
  
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
@@ -158,10 +158,10 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint canID, gint locID, gint of
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
 	if (!_get_sized_data)
-		get_symbol_f("_get_sized_data",(void*)&_get_sized_data);
+		get_symbol_f("_get_sized_data",(void **)&_get_sized_data);
  
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(freeems_find_mtx_page(locID, &page),0);
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
@@ -178,7 +178,7 @@ G_MODULE_EXPORT gint freeems_get_ecu_data_backup(gint canID, gint locID, gint of
   to store the new data.
   \param new is the pointer to the new data to be stored
   */
-G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
+G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *newval)
 {
 	gint canID = 0;
 	gint locID = 0;
@@ -191,9 +191,9 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
 	if (!_set_sized_data)
-		get_symbol_f("_set_sized_data",(void*)&_set_sized_data);
+		get_symbol_f("_set_sized_data",(void **)&_set_sized_data);
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	widget = (GtkWidget *)data;
 	container = (gconstpointer *)data;
 	if (GTK_IS_WIDGET(data))
@@ -207,9 +207,9 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 			page = (GINT)OBJ_GET(widget,"page");
 		canID = (GINT)OBJ_GET(widget,"canID");
 		offset = (GINT)OBJ_GET(widget,"offset");
-		size = (DataSize)OBJ_GET(widget,"size");
-		if (new)
-			value = *new;
+		size = (DataSize)(GINT)OBJ_GET(widget,"size");
+		if (newval)
+			value = *newval;
 		else
 			value = (GINT)OBJ_GET(widget,"value");
 	}
@@ -224,9 +224,9 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
 			page = (GINT)DATA_GET(container,"page");
 		canID = (GINT)DATA_GET(container,"canID");
 		offset = (GINT)DATA_GET(container,"offset");
-		size = (DataSize)DATA_GET(container,"size");
-		if (new)
-			value = *new;
+		size = (DataSize)(GINT)DATA_GET(container,"size");
+		if (newval)
+			value = *newval;
 		else
 			value = (GINT)DATA_GET(container,"value");
 	}
@@ -246,25 +246,25 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new)
   \param locID is the Location ID
   \param offset is the offset in bytes from thebeginning on this location ID
   \param size is the  size representation enumeration
-  \param new is the new value to store
+  \param newval is the new value to store
   */
-G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint locID, gint offset, DataSize size, gint new) 
+G_MODULE_EXPORT void freeems_set_ecu_data(gint canID, gint locID, gint offset, DataSize size, gint newval) 
 {
 	gint page = 0;
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
 	if (!_set_sized_data)
-		get_symbol_f("_set_sized_data",(void*)&_set_sized_data);
+		get_symbol_f("_set_sized_data",(void **)&_set_sized_data);
 
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(freeems_find_mtx_page(locID, &page));
 	g_return_if_fail(firmware);
 	g_return_if_fail(firmware->page_params);
 	g_return_if_fail(firmware->page_params[page]);
 	g_return_if_fail((offset >= 0) && (offset < firmware->page_params[page]->length));
 
-	_set_sized_data(firmware->ecu_data[page],offset,size,new,firmware->bigendian);
+	_set_sized_data(firmware->ecu_data[page],offset,size,newval,firmware->bigendian);
 }
 
 
@@ -287,7 +287,7 @@ G_MODULE_EXPORT void store_new_block(gpointer block)
 	Firmware_Details *firmware = NULL;
 	guint8 ** ecu_data = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 
 	g_return_if_fail(firmware);
@@ -320,7 +320,7 @@ G_MODULE_EXPORT void freeems_store_new_block(gint canID, gint locID, gint offset
 	Firmware_Details *firmware = NULL;
 	guint8 ** ecu_data = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 
 	g_return_if_fail(firmware);
@@ -348,7 +348,7 @@ G_MODULE_EXPORT void freeems_backup_current_data(gint canID,gint locID)
 	guint8 ** ecu_data_last = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
 
@@ -375,7 +375,7 @@ G_MODULE_EXPORT gboolean freeems_find_mtx_page(gint locID, gint *mtx_page)
 	Firmware_Details *firmware = NULL;
 	gint i = 0;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_val_if_fail(firmware,FALSE);
 	g_return_val_if_fail(firmware->page_params,FALSE);

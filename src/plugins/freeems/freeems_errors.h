@@ -35,7 +35,7 @@ typedef struct _FreeEMS_Errors FreeEMS_Errors;
 static struct _FreeEMS_Errors
 {
 	guint code;
-	gchar *message;
+	const gchar *message;
 }Errors[] = {
 	{0x0666,"No Error"},
 	/* Unconfiugred Options */

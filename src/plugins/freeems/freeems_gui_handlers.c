@@ -47,7 +47,7 @@ G_MODULE_EXPORT void common_gui_init(void)
 	   for stuff specific to this firmware family.
 	   */
 	/* If ECU lib has a call run it */
-	if (get_symbol_f("ecu_gui_init",(void *)&ecu_gui_init_f))
+	if (get_symbol_f("ecu_gui_init",(void **)&ecu_gui_init_f))
 		ecu_gui_init_f();
 }
 
@@ -65,14 +65,14 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	FreeEMSCommonToggleHandler handler;
 
-	handler = (FreeEMSCommonToggleHandler)OBJ_GET(widget,"handler");
+	handler = (FreeEMSCommonToggleHandler)(GINT)OBJ_GET(widget,"handler");
 
 	switch (handler)
 	{
 		default:
 			if (!ecu_handler)
 			{
-				if (get_symbol_f("ecu_toggle_button_handler",(void *)&ecu_handler))
+				if (get_symbol_f("ecu_toggle_button_handler",(void **)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_toggle_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
@@ -99,7 +99,7 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	FreeEMSCommonStdHandler handler;
 
-	handler = (FreeEMSCommonStdHandler)OBJ_GET(widget,"handler");
+	handler = (FreeEMSCommonStdHandler)(GINT)OBJ_GET(widget,"handler");
 
 	switch (handler)
 	{
@@ -121,7 +121,7 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 		default:
 			if (!ecu_handler)
 			{
-				if (get_symbol_f("ecu_std_button_handler",(void *)&ecu_handler))
+				if (get_symbol_f("ecu_std_button_handler",(void **)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_std_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
@@ -156,7 +156,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 		default:
 			if (!ecu_handler)
 			{
-				if (get_symbol_f("ecu_bitmask_button_handler",(void *)&ecu_handler))
+				if (get_symbol_f("ecu_bitmask_button_handler",(void **)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
@@ -205,16 +205,16 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gfloat scaler = 0.0;
 	gboolean temp_dep = FALSE;
 	gfloat real_value = 0.0;
-	DataSize size = 0;
+	DataSize size = MTX_U08;
 	gint raw_lower = 0;
 	gint raw_upper = 0;
 	GdkColor color;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
-	handler = (FreeEMSCommonStdHandler)OBJ_GET(widget,"handler");
+	handler = (FreeEMSCommonStdHandler)(GINT)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	precision = (GINT) OBJ_GET(widget,"precision");
 	get_essentials(widget,&locID,&offset,&size,&precision);
@@ -229,15 +229,15 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	if ((tmpf != (gfloat)tmpi) && (precision == 0))
 	{
 		/* Pause signals while we change the value */
-		g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler_f,data);
-		g_signal_handlers_block_by_func(widget,(gpointer)std_entry_handler_f, data);
-		g_signal_handlers_block_by_func(widget,(gpointer)entry_changed_handler_f, data);
+		g_signal_handlers_block_by_func(widget,*(void **)&insert_text_handler_f,data);
+		g_signal_handlers_block_by_func(widget,*(void **)&std_entry_handler_f, data);
+		g_signal_handlers_block_by_func(widget,*(void **)&entry_changed_handler_f, data);
 		tmpbuf = g_strdup_printf("%i",tmpi);
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 		g_free(tmpbuf);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)entry_changed_handler_f, data);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)std_entry_handler_f, data);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler_f,data);
+		g_signal_handlers_unblock_by_func(widget,*(void **)&entry_changed_handler_f, data);
+		g_signal_handlers_unblock_by_func(widget,*(void **)&std_entry_handler_f, data);
+		g_signal_handlers_unblock_by_func(widget,*(void **)&insert_text_handler_f,data);
 	}
 	switch (handler)
 	{
@@ -248,15 +248,15 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			else
 				value = tmpf;
 			dload_val = convert_before_download_f(widget,value);
-			g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler_f,data);
-			g_signal_handlers_block_by_func(widget,(gpointer) std_entry_handler_f, data);
-			g_signal_handlers_block_by_func(widget,(gpointer) entry_changed_handler_f, data);
+			g_signal_handlers_block_by_func(widget,*(void **)&insert_text_handler_f,data);
+			g_signal_handlers_block_by_func(widget,*(void **)& std_entry_handler_f, data);
+			g_signal_handlers_block_by_func(widget,*(void **)& entry_changed_handler_f, data);
 			tmpbuf = g_strdup_printf("%1$.*2$f",(gfloat)dload_val,precision);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
-			g_signal_handlers_unblock_by_func(widget,(gpointer) entry_changed_handler_f, data);
-			g_signal_handlers_unblock_by_func(widget,(gpointer) std_entry_handler_f, data);
-			g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler_f,data);
+			g_signal_handlers_unblock_by_func(widget,*(void **)& entry_changed_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,*(void **)& std_entry_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,*(void **)&insert_text_handler_f,data);
 			break;
 
 		case GENERIC:
@@ -271,9 +271,9 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			 * if the user inputs something in between,  thus 
 			 * we can reset the display to a sane value...
 			 */
-			g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler_f,data);
-			g_signal_handlers_block_by_func(widget,(gpointer)std_entry_handler_f, data);
-			g_signal_handlers_block_by_func(widget,(gpointer)entry_changed_handler_f, data);
+			g_signal_handlers_block_by_func(widget,*(void **)&insert_text_handler_f,data);
+			g_signal_handlers_block_by_func(widget,*(void **)&std_entry_handler_f, data);
+			g_signal_handlers_block_by_func(widget,*(void **)&entry_changed_handler_f, data);
 			old = get_ecu_data(widget);
 			set_ecu_data(widget,&dload_val);
 
@@ -287,16 +287,16 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			tmpbuf = g_strdup_printf("%1$.*2$f",value,precision);
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			g_free(tmpbuf);
-			g_signal_handlers_unblock_by_func(widget,(gpointer)entry_changed_handler_f, data);
-			g_signal_handlers_unblock_by_func(widget,(gpointer)std_entry_handler_f, data);
-			g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler_f,data);
+			g_signal_handlers_unblock_by_func(widget,*(void **)&entry_changed_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,*(void **)&std_entry_handler_f, data);
+			g_signal_handlers_unblock_by_func(widget,*(void **)&insert_text_handler_f,data);
 			break;
 		default:
 			/* We need to fall to ECU SPECIFIC entry handler for 
 			   anything specific there */
 			if (!ecu_handler)
 			{
-				if (get_symbol_f("ecu_entry_handler",(void *)&ecu_handler))
+				if (get_symbol_f("ecu_entry_handler",(void **)&ecu_handler))
 					return ecu_handler(widget,data);
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
@@ -320,7 +320,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		{
 			/*printf("not sent, returning!\n");*/
 			OBJ_SET(widget,"not_sent",NULL);
-			return;
+			return TRUE;
 		}
 	}
 	OBJ_SET(widget,"not_sent",NULL);
@@ -343,9 +343,9 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	gint i = 0;
 
 	if (!ecu_widgets)
-		ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+		ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(firmware);
 	g_return_if_fail(ecu_widgets);
@@ -377,7 +377,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 {
 	static gint upd_count = 0;
 	static void (*insert_text_handler)(GtkEntry *, const gchar *, gint, gint *, gpointer);
-	GtkWidget *widget = object;
+	GtkWidget *widget = (GtkWidget *)object;
 	gint tmpi = 0;
 	gint last = 0;
 	gdouble value = 0.0;
@@ -387,7 +387,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 	if (!GTK_IS_WIDGET(widget))
 		return;
 	if (!insert_text_handler)
-		get_symbol_f("insert_text_handler",(void *)&insert_text_handler);
+		get_symbol_f("insert_text_handler",(void **)&insert_text_handler);
 
 	g_return_if_fail(insert_text_handler);
 	/* If passed widget and user data are identical,  break out as
@@ -428,13 +428,13 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 
 	if (GTK_IS_ENTRY(widget) || GTK_IS_SPIN_BUTTON(widget))
 	{
-		g_signal_handlers_block_by_func(widget,(gpointer)insert_text_handler_f,NULL);
-		g_signal_handlers_block_by_func(widget,(gpointer)std_entry_handler_f,NULL);
-		g_signal_handlers_block_by_func(widget,(gpointer)entry_changed_handler_f,NULL);
+		g_signal_handlers_block_by_func(widget,*(void **)&insert_text_handler_f,NULL);
+		g_signal_handlers_block_by_func(widget,*(void **)&std_entry_handler_f,NULL);
+		g_signal_handlers_block_by_func(widget,*(void **)&entry_changed_handler_f,NULL);
 		update_entry(widget);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)entry_changed_handler_f,NULL);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)std_entry_handler_f,NULL);
-		g_signal_handlers_unblock_by_func(widget,(gpointer)insert_text_handler_f,NULL);
+		g_signal_handlers_unblock_by_func(widget,*(void **)&entry_changed_handler_f,NULL);
+		g_signal_handlers_unblock_by_func(widget,*(void **)&std_entry_handler_f,NULL);
+		g_signal_handlers_unblock_by_func(widget,*(void **)&insert_text_handler_f,NULL);
 	}
 	else if (GTK_IS_COMBO_BOX(widget))
 		update_combo(widget);
@@ -520,7 +520,7 @@ void update_entry(GtkWidget *widget)
 	static Firmware_Details *firmware = NULL;
 	gboolean changed = FALSE;
 	gboolean use_color = FALSE;
-	DataSize size = 0;
+	DataSize size = MTX_U08;
 	gint handler = -1;
 	gchar * widget_text = NULL;
 	gchar * tmpbuf = NULL;
@@ -535,7 +535,7 @@ void update_entry(GtkWidget *widget)
 	GdkColor black = {0,0,0,0};
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
 	value = convert_after_upload_f(widget);
@@ -547,7 +547,7 @@ void update_entry(GtkWidget *widget)
 	{
 		if (!update_handler)
 		{
-			if (get_symbol_f("ecu_update_entry",(void *)&update_handler))
+			if (get_symbol_f("ecu_update_entry",(void **)&update_handler))
 				update_handler(widget);
 			else
 				MTXDBG(CRITICAL,_("Default case, but there is NO ecu_update_entry function available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
@@ -580,7 +580,7 @@ void update_entry(GtkWidget *widget)
 	if (OBJ_GET(widget,"use_color"))
 	{
 		if (OBJ_GET(widget,"table_num"))
-			table_num = (GINT)strtol(OBJ_GET(widget,"table_num"),NULL,10);
+			table_num = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 
 		if (table_num >= 0)
 			update_entry_color_f(widget,table_num,TRUE,FALSE);
@@ -714,9 +714,9 @@ G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *locID, gint *offset
 		if (!OBJ_GET(widget,"size"))
 			*size = MTX_U08 ;        /* default! */
 		else
-			*size = (DataSize)OBJ_GET(widget,"size");
+			*size = (DataSize)(GINT)OBJ_GET(widget,"size");
 	}
 	if (precision)
-		*precision = (DataSize)OBJ_GET(widget,"precision");
+		*precision = (DataSize)(GINT)OBJ_GET(widget,"precision");
 }
 

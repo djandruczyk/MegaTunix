@@ -70,7 +70,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 	gint i = 0;
 	FreeEMS_Packet *packet = NULL;
 	if (!queue)
-		queue = DATA_GET(global_data,"packet_queue");
+		queue = (GAsyncQueue *)DATA_GET(global_data,"packet_queue");
 	log_inbound_data_f(buf,len);
 
 	for (i=0;i<len;i++)
@@ -159,7 +159,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 					sumOfGoodPacketLengths += currentPacketLength;
 					/* Clear the state */
 					packet = g_new0(FreeEMS_Packet, 1);
-					packet->data = g_memdup(packetBuffer,currentPacketLength);
+					packet->data = (guchar *)g_memdup(packetBuffer,currentPacketLength);
 					packet->raw_length = currentPacketLength;
 					mtxlog_packet(packet->data,packet->raw_length,FALSE);
 					if (!packet_decode(packet))
@@ -208,21 +208,21 @@ void *packet_handler(gpointer data)
 {
 	GTimeVal tval;
 	FreeEMS_Packet *packet = NULL;
-	GAsyncQueue *queue = DATA_GET(global_data,"packet_queue");
+	GAsyncQueue *queue = (GAsyncQueue *)DATA_GET(global_data,"packet_queue");
 	GCond *cond = NULL;
 
 	while(TRUE)
 	{
 		if ((DATA_GET(global_data,"leaving") || (DATA_GET(global_data,"packet_handler_thread_exit"))))
 		{
-			cond = DATA_GET(global_data,"packet_handler_cond");
+			cond = (GCond *)DATA_GET(global_data,"packet_handler_cond");
 			if (cond)
 				g_cond_signal(cond);
                         g_thread_exit(0);
 		}
 		g_get_current_time(&tval);
 		g_time_val_add(&tval,250000);
-		packet = g_async_queue_timed_pop(queue,&tval);
+		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
 		if (packet)
 			dispatch_packet_queues(packet);
 	}
@@ -332,11 +332,11 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 	GList *list = NULL;
 
 	if (!mutex)
-		mutex = DATA_GET(global_data,"queue_mutex");
+		mutex = (GMutex *)DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
-		payloads = DATA_GET(global_data,"payload_id_queue_hash");
+		payloads = (GHashTable *)DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
-		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
+		sequences = (GHashTable *)DATA_GET(global_data,"sequence_num_queue_hash");
 	g_return_if_fail(mutex);
 	g_return_if_fail(queue);
 	g_mutex_lock(mutex);
@@ -344,14 +344,14 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 	switch ((FreeEMSArgTypes)type)
 	{
 		case PAYLOAD_ID:
-			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
+			list = (GList *)g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
 			g_async_queue_ref(queue);
 			list = g_list_append(list,queue);
 			/*printf("Paylod ID %i list added entry, list length %i\n",data,g_list_length(list));*/
 			g_hash_table_replace(payloads,GINT_TO_POINTER(data),list);
 			break;
 		case SEQUENCE_NUM:
-			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
+			list = (GList *)g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
 			g_async_queue_ref(queue);
 			list = g_list_append(list,queue);
 			/*printf("Sequence num %i list added entry, list length %i\n",data,g_list_length(list));*/
@@ -380,11 +380,11 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 	GList *list = NULL;
 
 	if (!mutex)
-		mutex = DATA_GET(global_data,"queue_mutex");
+		mutex = (GMutex *)DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
-		payloads = DATA_GET(global_data,"payload_id_queue_hash");
+		payloads = (GHashTable *)DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
-		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
+		sequences = (GHashTable *)DATA_GET(global_data,"sequence_num_queue_hash");
 
 	g_return_if_fail(mutex);
 	g_return_if_fail(queue);
@@ -392,7 +392,7 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 	switch ((FreeEMSArgTypes)type)
 	{
 		case PAYLOAD_ID:
-			list = g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
+			list = (GList *)g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
 			if (list)
 			{
 				list = g_list_remove(list,queue);
@@ -411,7 +411,7 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 			*/
 			break;
 		case SEQUENCE_NUM:
-			list = g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
+			list = (GList *)g_hash_table_lookup(sequences,GINT_TO_POINTER(data));
 			if (list)
 			{
 				list = g_list_remove(list,queue);
@@ -454,27 +454,27 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	static GMutex *mutex = NULL;
 	GAsyncQueue *queue = NULL;
 	guint8 header = packet->data[0];
-	gint i = 0;
+	guint i = 0;
 	GList *list = NULL;
 
 	if (!mutex)
-		mutex = DATA_GET(global_data,"queue_mutex");
+		mutex = (GMutex *)DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
-		payloads = DATA_GET(global_data,"payload_id_queue_hash");
+		payloads = (GHashTable *)DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
-		sequences = DATA_GET(global_data,"sequence_num_queue_hash");
+		sequences = (GHashTable *)DATA_GET(global_data,"sequence_num_queue_hash");
 
 	g_return_if_fail(mutex);
 	g_mutex_lock(mutex);
 	/* If sequence set, look for it and dispatch if found */
 	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
 	{
-		list = g_hash_table_lookup(sequences,GINT_TO_POINTER((GINT)packet->seq_num));
+		list = (GList *)g_hash_table_lookup(sequences,GINT_TO_POINTER((GINT)packet->seq_num));
 		if (list)
 		{
 			for (i=0;i<g_list_length(list);i++)
 			{
-				queue = g_list_nth_data(list,i);
+				queue = (GAsyncQueue *)g_list_nth_data(list,i);
 				if (queue)
 				{
 					g_async_queue_ref(queue);
@@ -487,12 +487,12 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	if (payloads)
 	{
 		/* If payload ID matches, dispatch if found */
-		list = g_hash_table_lookup(payloads,GINT_TO_POINTER((GINT)packet->payload_id));
+		list = (GList *)g_hash_table_lookup(payloads,GINT_TO_POINTER((GINT)packet->payload_id));
 		if (list)
 		{
 			for (i=0;i<g_list_length(list);i++)
 			{
-				queue = g_list_nth_data(list,i);
+				queue = (GAsyncQueue *)g_list_nth_data(list,i);
 				if (queue)
 				{
 					g_async_queue_ref(queue);
@@ -515,12 +515,12 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
   */
 FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
 {
-	FreeEMS_Packet *new = NULL;
+	FreeEMS_Packet *newpkt = NULL;
 	if (!packet)
 		return NULL;
-	new = g_memdup(packet,sizeof(FreeEMS_Packet));
-	new->data = g_memdup(packet->data,packet->raw_length);
-	return new;
+	newpkt = (FreeEMS_Packet *)g_memdup(packet,sizeof(FreeEMS_Packet));
+	newpkt->data = (guchar *)g_memdup(packet->data,packet->raw_length);
+	return newpkt;
 }
 
 
@@ -562,7 +562,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	gint payload_id = -1;
 	gint location_id = -1;
 	gint offset = -1;
-	gint packet_length = 2; /* Header + cksum, rest come in below */
+	guint packet_length = 2; /* Header + cksum, rest come in below */
 	gint payload_length = 0;
 	guint i = 0;
 	gint pos = 0;
@@ -811,7 +811,7 @@ guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
   */
 G_MODULE_EXPORT void mtxlog_packet(const void *buf, size_t len, gboolean toecu)
 {
-	gint i = 0;
+	guint i = 0;
 	guint8 *ptr = (guint8 *)buf;
 
 	if (toecu)
@@ -838,7 +838,7 @@ G_MODULE_EXPORT gint atomic_sequence()
 	static guint8 seq = 0;
 
 	if (!mutex)
-		mutex = DATA_GET(global_data,"atomic_sequence_mutex");
+		mutex = (GMutex *)DATA_GET(global_data,"atomic_sequence_mutex");
 	g_mutex_lock(mutex);
 	if (seq > 254)
 		seq = 0;
