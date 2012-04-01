@@ -1369,7 +1369,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
 	if (DATA_GET(global_data,"offline"))
 	{
-		g_timeout_add(100,queue_function_f,(gpointer)"kill_conn_warning");
+		g_timeout_add(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
 		g_thread_exit(0);
 	}
 	if (!io_repair_queue)
@@ -1403,7 +1403,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 		/* Message queue used to exit immediately */
 		if (g_async_queue_try_pop(io_repair_queue))
 		{
-			g_timeout_add(100,queue_function_f,(gpointer)"kill_conn_warning");
+			g_timeout_add(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
 			g_thread_exit(0);
 		}
 		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");

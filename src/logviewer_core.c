@@ -44,7 +44,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 	GtkWidget *chart = NULL;
 	gchar ** sources = NULL;
 	gchar * tmpbuf = NULL;
-	gint i = 0;
+	guint i = 0;
 	gconstpointer *object = NULL;
 	gint min = 0;
 	gint max = 0;
@@ -53,8 +53,8 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 	DataSize size = MTX_U08;
 	Rtv_Map *rtv_map;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
-	tmpbuf = OBJ_GET(parent,"sources");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
+	tmpbuf = (gchar *)OBJ_GET(parent,"sources");
 	if (tmpbuf);
 		sources = g_strsplit(tmpbuf,",",-1);
 	chart = mtx_stripchart_new();
@@ -64,7 +64,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 	{
 		if (!rtv_map)
 			continue;
-		object = g_hash_table_lookup(rtv_map->rtv_hash,sources[i]);
+		object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,sources[i]);
 		if (!object)
 			continue;
 		if ((gchar *)DATA_GET(object,"dlog_gui_name"))
@@ -72,11 +72,11 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 		else
 			name = g_strdup("undefined!\n");
 		if (DATA_GET(object,"real_lower"))
-			min = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
+			min = (GINT)strtol((gchar *)DATA_GET(object,"real_lower"),NULL,10);
 		else
 			min = get_extreme_from_size(size,LOWER);
 		if (DATA_GET(object,"real_upper"))
-			max = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
+			max = (GINT)strtol((gchar *)DATA_GET(object,"real_upper"),NULL,10);
 		else
 			max = get_extreme_from_size(size,UPPER);
 		if (DATA_GET(object,"precision"))
@@ -114,7 +114,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 	GIOChannel *iochannel = NULL;
 
 	reset_logviewer_state();
-	free_log_info(DATA_GET(global_data,"log_info"));
+	free_log_info((Log_Info *)DATA_GET(global_data,"log_info"));
 
 
 	fileio = g_new0(MtxFileIO ,1);
@@ -181,7 +181,7 @@ G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 G_MODULE_EXPORT Log_Info * initialize_log_info(void)
 {
 	Log_Info *log_info = NULL;
-	log_info = g_malloc0(sizeof(Log_Info));
+	log_info = (Log_Info *)g_malloc0(sizeof(Log_Info));
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
 	log_info->signature = NULL;
@@ -208,7 +208,7 @@ G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	Rtv_Map *rtv_map;
 	extern gconstpointer *global_data;
 	
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 read_again:
 	status = g_io_channel_read_line_string(iochannel,a_line,NULL,NULL); 
@@ -300,7 +300,7 @@ G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 		upper = 0.0;
 		tmpi = 0;
 		len = 0;
-		object = g_ptr_array_index(log_info->log_list, i);
+		object = (gconstpointer *)g_ptr_array_index(log_info->log_list, i);
 		array = (GArray *)DATA_GET(object,"data_array");
 		len = array->len;
 		for (j=0;j<len;j++)
@@ -366,7 +366,7 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 
 		for (i=0;i<(log_info->field_count);i++)
 		{
-			object = g_ptr_array_index(log_info->log_list, i);
+			object = (gconstpointer *)g_ptr_array_index(log_info->log_list, i);
 			tmp_array = (GArray *)DATA_GET(object,"data_array");
 			val = (gfloat)g_ascii_strtod(g_strdelimit(data[i],",.",'.'),NULL);
 			g_array_append_val(tmp_array,val);
@@ -406,7 +406,7 @@ G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 	for (i=0;i<log_info->field_count;i++)
 	{
 		object = NULL;
-		object = g_ptr_array_index(log_info->log_list,i);
+		object = (gconstpointer *)g_ptr_array_index(log_info->log_list,i);
 		if (!object)
 			continue;
 		array = (GArray *)DATA_GET(object,"data_array");

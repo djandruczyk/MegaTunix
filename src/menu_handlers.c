@@ -64,13 +64,13 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!xml) || (DATA_GET(global_data,"leaving")))
 		return;
 
-	if (get_symbol ("common_plugin_menu_setup",(void *)&common_plugin_menu_setup))
+	if (get_symbol ("common_plugin_menu_setup",(void **)&common_plugin_menu_setup))
 		common_plugin_menu_setup(xml);
 
 	gdk_threads_enter();
@@ -112,8 +112,8 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *notebook = NULL;
-	TabIdent target = -1;
-	TabIdent c_tab = 0;
+	TabIdent target;
+	TabIdent c_tab;
 	gint total = 0;
 	GtkWidget * child = NULL;
 	gint i = 0;
@@ -123,14 +123,14 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 		return FALSE;
 	if (!OBJ_GET(widget,"target_tab"))
 		return FALSE;
-	target = (TabIdent)OBJ_GET(widget,"target_tab");
+	target = (TabIdent)(GINT)OBJ_GET(widget,"target_tab");
 	total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 	for (i=0;i<total;i++)
 	{
 		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
 		if (!OBJ_GET(child,"tab_ident"))
 			continue;
-		c_tab = (TabIdent)OBJ_GET(child,"tab_ident");
+		c_tab = (TabIdent)(GINT)OBJ_GET(child,"tab_ident");
 		if (c_tab == target)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),i);
@@ -150,8 +150,8 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 {
-	FioAction action = -1;
-	action = (FioAction)OBJ_GET(widget,"fio_action");
+	FioAction action;
+	action = (FioAction)(GINT)OBJ_GET(widget,"fio_action");
 	void (*do_backup)(GtkWidget *, gpointer) = NULL;
 	void (*do_restore)(GtkWidget *, gpointer) = NULL;
 
@@ -164,11 +164,11 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 			//select_all_tables_for_export();
 			break;
 		case ECU_BACKUP:
-			if (get_symbol("select_file_for_ecu_backup",(void*)&do_backup))
+			if (get_symbol("select_file_for_ecu_backup",(void **)&do_backup))
 				do_backup(NULL,NULL);
 			break;
 		case ECU_RESTORE:
-			if (get_symbol("select_file_for_ecu_restore",(void*)&do_restore))
+			if (get_symbol("select_file_for_ecu_restore",(void **)&do_restore))
 				do_restore(NULL,NULL);
 			break;
 	}
@@ -184,7 +184,7 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 {
 	GtkWidget *notebook = NULL;
-	TabIdent c_tab = 0;
+	TabIdent c_tab;
 	gint total = 0;
 	GtkWidget * child = NULL;
 	gint i = 0;
@@ -198,7 +198,7 @@ G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
 		if (!OBJ_GET(child,"tab_ident"))
 			continue;
-		c_tab = (TabIdent)OBJ_GET(child,"tab_ident");
+		c_tab = (TabIdent)(GINT)OBJ_GET(child,"tab_ident");
 		if (c_tab == target)
 			return TRUE;
 	}

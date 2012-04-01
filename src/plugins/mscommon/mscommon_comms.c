@@ -139,7 +139,7 @@ G_MODULE_EXPORT gint comms_test(void)
 		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 		errcount=0;
 		MTXDBG(SERIAL_RD,_("ECU Comms Test Successful\n"));
-		queue_function_f((gpointer)"kill_conn_warning");
+		queue_function_f("kill_conn_warning");
 		thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
 		thread_update_logbar_f("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
 		return TRUE;
@@ -151,7 +151,7 @@ G_MODULE_EXPORT gint comms_test(void)
 		DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 		errcount++;
 		if (errcount > 5 )
-			queue_function_f((gpointer)"conn_warning");
+			queue_function_f("conn_warning");
 		thread_update_widget_f("titlebar",MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
 		MTXDBG(SERIAL_RD|IO_PROCESS,_("I/O with ECU Timeout\n"));
 		thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("I/O with ECU Timeout\n")),FALSE,FALSE);
@@ -990,12 +990,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 				thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Port %s is open by another application\n"),vector[i]),FALSE,FALSE);
 			}
 		}
-		queue_function_f((gpointer)"conn_warning");
+		queue_function_f("conn_warning");
 		g_strfreev(vector);
 	}
 	if (serial_is_open)
 	{
-		queue_function_f((gpointer)"kill_conn_warning");
+		queue_function_f("kill_conn_warning");
 		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(active));
 		g_free(active);
 	}

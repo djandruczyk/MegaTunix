@@ -69,8 +69,8 @@ struct _Widget_Update
 struct _Widget_Range
 {
 	gint page;		/*!< Page */
-	gint offset;		/*!< Offset */
-	gint len;		/*!< Length */
+	gint offset;	/*!< Offset */
+	guint len;		/*!< Length */
 };
 
 
@@ -131,7 +131,7 @@ struct _Text_Message
 
 
 /* Prototypes */
-void io_cmd(gchar *, gpointer);	/* Send message down the queue */
+void io_cmd(const gchar *, gpointer);	/* Send message down the queue */
 void *thread_dispatcher(gpointer);	/* thread that processes messages */
 void thread_update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean);
 void thread_update_widget(const gchar *, WidgetType, gchar *);
@@ -140,7 +140,7 @@ void thread_refresh_widget_range(gint, gint, gint);
 void thread_refresh_widgets_at_offset(gint, gint);
 void thread_widget_set_sensitive(const gchar * widget_name, gboolean state);
 void thread_set_group_color(GuiColor, const gchar *);
-gboolean queue_function(gpointer );
+gboolean queue_function(const gchar * );
 /* Prototypes */
 
 #endif

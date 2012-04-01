@@ -82,13 +82,13 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 	Firmware_Details *firmware = NULL;
 	static void (*slaves_set_color_f)(gint,const gchar *) = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	/* Only MS firmwares have TCP socket mode for now */
 	if ((firmware->capabilities & MS1 ) ||
 		(firmware->capabilities & MS2))
 	{
 		if (!slaves_set_color_f)
-			get_symbol("slaves_set_color",(void *)&slaves_set_color_f);
+			get_symbol("slaves_set_color",(void **)&slaves_set_color_f);
 	}
 
 	gdk_threads_enter();

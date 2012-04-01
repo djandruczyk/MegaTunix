@@ -56,7 +56,7 @@ struct _Rt_Slider
 	gint count;		/*!< used to making sure things update */
 	gint rate;		/*!< used to making sure things update */
 	gint last_upd;		/*!< used to making sure things update */
-	WidgetType class;	/*!< Slider type... */
+	WidgetType wclass;	/*!< Slider type... */
 };
 
 /* Prototypes */

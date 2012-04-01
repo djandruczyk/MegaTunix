@@ -69,8 +69,8 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	Rtv_Map *rtv_map = NULL;
 	Log_Info *log_info;
 
-	log_info = DATA_GET(global_data,"log_info");
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	log_info = (Log_Info *)DATA_GET(global_data,"log_info");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	darea = lookup_widget("logviewer_trace_darea");
 	lv_data->darea = darea;
 	playback = (GBOOLEAN)DATA_GET(global_data,"playback_mode");
@@ -160,14 +160,14 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 		name = NULL;
 		tooltip = NULL;
 
-		object = g_list_nth_data(list,i);
+		object = (gconstpointer *)g_list_nth_data(list,i);
 
 		if (playback)
-			name = g_strdup(DATA_GET(object,"lview_name"));
+			name = g_strdup((gchar *)DATA_GET(object,"lview_name"));
 		else
 		{
-			name = g_strdup(DATA_GET(object,"dlog_gui_name"));
-			tooltip = g_strdup(DATA_GET(object,"tooltip"));
+			name = g_strdup((gchar *)DATA_GET(object,"dlog_gui_name"));
+			tooltip = g_strdup((gchar *)DATA_GET(object,"tooltip"));
 		}
 
 		button = gtk_check_button_new();
@@ -265,7 +265,7 @@ G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 	GList * defaults = NULL;
 	gconstpointer *object = NULL;
 	gchar *name = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	defaults = get_list("logviewer_defaults");
 	if (defaults)
@@ -278,14 +278,14 @@ G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 	list = get_list("viewables");
 	for (i=0;i<g_list_length(list);i++)
 	{
-		tmpwidget = g_list_nth_data(list,i);
-		object = OBJ_GET(tmpwidget,"object");
+		tmpwidget = (GtkWidget *)g_list_nth_data(list,i);
+		object = (gconstpointer *)OBJ_GET(tmpwidget,"object");
 		if ((GBOOLEAN)DATA_GET(object,"being_viewed"))
 		{
 			if (DATA_GET(global_data,"playback_mode"))
-				name = DATA_GET(object,"lview_name");
+				name = (gchar *)DATA_GET(object,"lview_name");
 			else
-				name = DATA_GET(object,"dlog_gui_name");
+				name = (gchar *)DATA_GET(object,"dlog_gui_name");
 
 			defaults = g_list_append(defaults,g_strdup(name));
 		}
@@ -338,8 +338,8 @@ G_MODULE_EXPORT void populate_viewer(void)
 
 
 	g_static_mutex_lock(&update_mutex);
-	log_info = DATA_GET(global_data,"log_info");
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	log_info = (Log_Info *)DATA_GET(global_data,"log_info");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	/* Checks if hash is created, if not, makes one, allocates data
 	 * for strcutres defining each viewable element., sets those attribute
@@ -368,13 +368,13 @@ G_MODULE_EXPORT void populate_viewer(void)
 		name = NULL;
 		if (DATA_GET(global_data,"playback_mode"))
 		{
-			object = g_ptr_array_index(log_info->log_list,i);
-			name = DATA_GET(object,"lview_name");
+			object = (gconstpointer *)g_ptr_array_index(log_info->log_list,i);
+			name = (gchar *)DATA_GET(object,"lview_name");
 		}
 		else
 		{
-			object = g_ptr_array_index(rtv_map->rtv_list,i); 
-			name = DATA_GET(object,"dlog_gui_name");
+			object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list,i); 
+			name = (gchar *)DATA_GET(object,"dlog_gui_name");
 		}
 		if (!name)
 			MTXDBG(CRITICAL,_("ERROR, name is NULL\n"));
@@ -467,7 +467,7 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 	Rtv_Map *rtv_map = NULL;;
 	Log_Info *log_info;
 
-	log_info = DATA_GET(global_data,"log_info");
+	log_info = (Log_Info *)DATA_GET(global_data,"log_info");
 
 	if (DATA_GET(global_data,"playback_mode"))
 	{
@@ -476,20 +476,20 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 		for (i=0;i<log_info->field_count;i++)
 		{
 			object = NULL;
-			object = g_ptr_array_index(log_info->log_list,i);
+			object = (gconstpointer *)g_ptr_array_index(log_info->log_list,i);
 			if (object)
 				DATA_SET(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
 	}
 	else
 	{
-		rtv_map = DATA_GET(global_data,"rtv_map");
+		rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 		if (!rtv_map)
 			return;
 		for (i=0;i<rtv_map->derived_total;i++)
 		{
 			object = NULL;
-			object = g_ptr_array_index(rtv_map->rtv_list,i);
+			object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list,i);
 			if (object)
 				DATA_SET(object,"being_viewed",GINT_TO_POINTER(FALSE));
 		}
@@ -512,14 +512,14 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 
 	pixmap = lv_data->pixmap;
 
-	v_value = g_malloc(sizeof(Viewable_Value));		
+	v_value = (Viewable_Value *)g_malloc(sizeof(Viewable_Value));		
 
 	/* Set limits of this variable. (it's ranges, used for scaling */
 
 	if (DATA_GET(global_data,"playback_mode"))
 	{
 		/* textual name of the variable we're viewing.. */
-		v_value->vname = g_strdup(DATA_GET(object,"lview_name"));
+		v_value->vname = g_strdup((gchar *)DATA_GET(object,"lview_name"));
 		/* data was already read from file and stored, copy pointer
 		 * over to v_value so it can be drawn...
 		 */
@@ -528,7 +528,7 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 	else
 	{
 		/* textual name of the variable we're viewing.. */
-		v_value->vname = g_strdup(DATA_GET(object,"dlog_gui_name"));
+		v_value->vname = g_strdup((gchar *)DATA_GET(object,"dlog_gui_name"));
 		/* Array to keep history for resize/redraw and export 
 		 * to datalog we use the _sized_ version to give a big 
 		 * enough size to prevent reallocating memory too often. 
@@ -541,8 +541,8 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 	v_value->object = object;
 	/* IS it a floating point value? */
 	v_value->precision = (GINT)DATA_GET(object,"precision");
-	v_value->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
-	v_value->upper = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
+	v_value->lower = (GINT)strtol((gchar *)DATA_GET(object,"real_lower"),NULL,10);
+	v_value->upper = (GINT)strtol((gchar *)DATA_GET(object,"real_upper"),NULL,10);
 	/* Sets last "y" value to -1, needed for initial draw to be correct */
 	v_value->last_y = -1;
 
@@ -867,7 +867,7 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 		val_y = info_ctr + 1;
 
 		last_index = v_value->last_index;
-		array = DATA_GET(v_value->object,v_value->data_source);
+		array = (GArray *)DATA_GET(v_value->object,v_value->data_source);
 		val = g_array_index(array,gfloat,last_index);
 		if (array->len > 1)
 			last_val = g_array_index(array,gfloat,last_index-1);
@@ -1006,7 +1006,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
 			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-			array = DATA_GET(v_value->object,v_value->data_source);
+			array = (GArray *)DATA_GET(v_value->object,v_value->data_source);
 			len = array->len;
 			if (len == 0)	/* If empty */
 			{
@@ -1067,7 +1067,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
 			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-			array = DATA_GET(v_value->object,v_value->data_source);
+			array = (GArray *)DATA_GET(v_value->object,v_value->data_source);
 			last_index = v_value->last_index;
 			if(last_index >= array->len)
 				return;
@@ -1121,7 +1121,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	for (i=0;i<g_list_length(lv_data->tlist);i++)
 	{
 		v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
-		array = DATA_GET(v_value->object,v_value->data_source);
+		array = (GArray *)DATA_GET(v_value->object,v_value->data_source);
 		val = g_array_index(array,gfloat, array->len-1);
 
 		if (val > (v_value->max))
@@ -1286,8 +1286,8 @@ G_MODULE_EXPORT void set_default_lview_choices_state(void)
 	GList *defaults = NULL;
 	GList *list = NULL;
 	GtkWidget * widget = NULL;
-	gint i = 0;
-	gint j = 0;
+	guint i = 0;
+	guint j = 0;
 	gchar * name;
 	gchar * potential;
 	gconstpointer *object;
@@ -1296,15 +1296,15 @@ G_MODULE_EXPORT void set_default_lview_choices_state(void)
 	list = get_list("viewables");
 	for (i=0;i<g_list_length(defaults);i++)
 	{
-		name = g_list_nth_data(defaults,i);
+		name = (gchar *)g_list_nth_data(defaults,i);
 		for (j=0;j<g_list_length(list);j++)
 		{
-			widget = g_list_nth_data(list,j);
-			object = OBJ_GET(widget,"object");
+			widget = (GtkWidget *)g_list_nth_data(list,j);
+			object = (gconstpointer *)OBJ_GET(widget,"object");
 			if (DATA_GET(global_data,"playback_mode"))
-				potential = DATA_GET(object,"lview_name");
+				potential = (gchar *)DATA_GET(object,"lview_name");
 			else
-				potential = DATA_GET(object,"dlog_gui_name");
+				potential = (gchar *)DATA_GET(object,"dlog_gui_name");
 			if (g_strcasecmp(name,potential) == 0)
 
 				set_widget_active(GTK_WIDGET(widget),GINT_TO_POINTER(TRUE));
@@ -1415,7 +1415,7 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 	GtkWidget *widget = NULL;
 
 	reset_logviewer_state();
-	free_log_info(DATA_GET(global_data,"log_info"));
+	free_log_info((Log_Info *)DATA_GET(global_data,"log_info"));
 	if (mode == LV_PLAYBACK)
 	{
 		DATA_SET(global_data,"playback_mode",GINT_TO_POINTER(TRUE));
@@ -1511,7 +1511,7 @@ G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *
 G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 {
 	GList * list = NULL;
-	gint i = 0;
+	guint i = 0;
 	gchar * name = NULL;
 	GString *string = NULL;
 
@@ -1521,7 +1521,7 @@ G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 		string = g_string_new(NULL);
 		for (i=0;i<g_list_length(list);i++)
 		{
-			name = g_list_nth_data(list,i);
+			name = (gchar *)g_list_nth_data(list,i);
 			g_string_append(string,name);
 			if (i < (g_list_length(list)-1))
 				g_string_append(string,",");
@@ -1543,7 +1543,7 @@ G_MODULE_EXPORT void read_logviewer_defaults(ConfigFile *cfgfile)
 	gchar *tmpbuf = NULL;
 	GList *defaults = NULL;
 	gchar **vector = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	cfg_read_string(cfgfile,"Logviewer","defaults",&tmpbuf);
 	if (!tmpbuf)

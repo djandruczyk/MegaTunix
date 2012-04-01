@@ -435,7 +435,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->x_objects = g_new0(GObject *, firmware->table_params[table_num]->x_bincount);
 	for (i=0;i<firmware->table_params[table_num]->x_bincount;i++)
 	{
-		ve_view->x_objects[i] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		ve_view->x_objects[i] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(ve_view->x_objects[i]);
 		OBJ_SET(ve_view->x_objects[i],"page",GINT_TO_POINTER(ve_view->x_page));
 		OBJ_SET(ve_view->x_objects[i],"offset",GINT_TO_POINTER(ve_view->x_base+(ve_view->x_mult * i)));
@@ -456,7 +456,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->y_objects = g_new0(GObject *, firmware->table_params[table_num]->y_bincount);
 	for (i=0;i<firmware->table_params[table_num]->y_bincount;i++)
 	{
-		ve_view->y_objects[i] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		ve_view->y_objects[i] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(ve_view->y_objects[i]);
 		OBJ_SET(ve_view->y_objects[i],"page",GINT_TO_POINTER(ve_view->y_page));
 		OBJ_SET(ve_view->y_objects[i],"offset",GINT_TO_POINTER(ve_view->y_base+(ve_view->y_mult * i)));
@@ -484,7 +484,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		for (j=0;j<firmware->table_params[table_num]->y_bincount;j++)
 		{
 			ve_view->quad_mesh[i][j] = g_new0(Quad, 1);
-			ve_view->z_objects[i][j] = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+			ve_view->z_objects[i][j] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 			g_object_ref_sink(ve_view->z_objects[i][j]);
 			OBJ_SET(ve_view->z_objects[i][j],"page",GINT_TO_POINTER(ve_view->z_page));
 			if (firmware->capabilities & PIS)
@@ -658,12 +658,12 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	table = gtk_table_new(2,2,TRUE);
 	gtk_box_pack_end(GTK_BOX(vbox2),table,FALSE,FALSE,0);
 	label = gtk_label_new(_("Rendering Mode"));
-	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,0,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,(GtkAttachOptions)0,(GtkAttachOptions)0,0,0);
 	/* Wireframe toggle */
 	button = gtk_radio_button_new_with_label(NULL,"Wireframe");
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),ve_view->wireframe);
 	OBJ_SET(button,"ve_view",ve_view);
-	gtk_table_attach(GTK_TABLE(table),button,0,1,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),button,0,1,1,2,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(set_rendering_mode),
 			NULL);
@@ -671,19 +671,19 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	/* Solid toggle */
 	button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(button),"Solid");
 	OBJ_SET(button,"ve_view",ve_view);
-	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 
 
 	/* Table for Scaling mode */
 	table = gtk_table_new(2,2,TRUE);
 	gtk_box_pack_end(GTK_BOX(vbox2),table,FALSE,FALSE,0);
 	label = gtk_label_new("Axis Scale");
-	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,0,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,(GtkAttachOptions)0,(GtkAttachOptions)0,0,0);
 
 	/* Fixed Scale toggle */
 	button = gtk_radio_button_new_with_label(NULL,"Fixed");
 	OBJ_SET(button,"ve_view",ve_view);
-	gtk_table_attach(GTK_TABLE(table),button,0,1,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),button,0,1,1,2,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	g_signal_connect(G_OBJECT(button), "toggled",
 			G_CALLBACK(set_scaling_mode),
 			NULL);
@@ -693,7 +693,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 
 	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),!ve_view->fixed_scale);
 	OBJ_SET(button,"ve_view",ve_view);
-	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	/* Opacity Slider */
 	scale = gtk_hscale_new_with_range(0.1,1.0,0.001);
 	OBJ_SET(scale,"ve_view",ve_view);
@@ -763,7 +763,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean call_ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *window = OBJ_GET(widget,"window");
+	GtkWidget *window = (GtkWidget *)OBJ_GET(widget,"window");
 	return ve3d_shutdown(window,NULL,data);
 }
 
@@ -784,7 +784,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpoin
 	gint table_num = (GINT)data;
 	GMutex **ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
-	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
+	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
 			
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(ve_view_hash,FALSE);
@@ -857,16 +857,16 @@ GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
 	/* Try double-buffered visual */
-	gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
+	gl_config = gdk_gl_config_new_by_mode ((GdkGLConfigMode)(GDK_GL_MODE_RGB |
 			GDK_GL_MODE_DEPTH |
-			GDK_GL_MODE_DOUBLE);
+			GDK_GL_MODE_DOUBLE));
 	if (gl_config == NULL)
 	{
 		MTXDBG(CRITICAL,_("Cannot find the double-buffered visual.  Trying single-buffered visual.\n"));
 
 		/* Try single-buffered visual */
-		gl_config = gdk_gl_config_new_by_mode (GDK_GL_MODE_RGB |
-				GDK_GL_MODE_DEPTH);
+		gl_config = gdk_gl_config_new_by_mode ((GdkGLConfigMode)(GDK_GL_MODE_RGB|GDK_GL_MODE_DEPTH));
+				
 		if (gl_config == NULL)
 		{
 			/* Should make a non-GL basic drawing area version
@@ -1202,7 +1202,7 @@ G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_v
 	gfloat tmpf = 0.0;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	MTXDBG(OPENGL,_("Entered\n"));
 	/*printf("CALC Scaling\n");*/
 
@@ -1272,7 +1272,7 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	Quad * quad = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	MTXDBG(OPENGL,_("Entered\n"));
 
@@ -1373,12 +1373,12 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	w = allocation.width;
 	h = allocation.height;
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	
 	drawOrthoText(ve_view->drawing_area,cur_val->x_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.2 );
 	drawOrthoText(ve_view->drawing_area,cur_val->y_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.233 );
 	drawOrthoText(ve_view->drawing_area,cur_val->z_edit_text, 1.0f, 0.2f, 0.2f, 0.025, 0.266 );
-	drawOrthoText(ve_view->drawing_area,"Edit Position", 1.0f, 0.2f, 0.2f, 0.025, 0.300 );
+	drawOrthoText(ve_view->drawing_area,(gchar *)"Edit Position", 1.0f, 0.2f, 0.2f, 0.025, 0.300 );
 
 	/* Render a red dot at the active VE map position */
 	glPointSize(MIN(w,h)/55.0);
@@ -1488,7 +1488,7 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	Firmware_Details *firmware = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	w = allocation.width;
@@ -1496,14 +1496,14 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 
 	if ((!ve_view->z_source) && (!ve_view->z_multi_source))
 	{
-		MTXDBG(OPENGL|CRITICAL,_("\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"));
+		MTXDBG((Dbg_Class)(OPENGL|CRITICAL),_("\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"));
 		return;
 	}
 
 	drawOrthoText(ve_view->drawing_area,cur_val->x_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.033 );
 	drawOrthoText(ve_view->drawing_area,cur_val->y_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.066 );
 	drawOrthoText(ve_view->drawing_area,cur_val->z_runtime_text, 0.2f, 1.0f, 0.2f, 0.025, 0.100 );
-	drawOrthoText(ve_view->drawing_area,"Runtime Position", 0.2f, 1.0f, 0.2f, 0.025, 0.133 );
+	drawOrthoText(ve_view->drawing_area,(gchar *)"Runtime Position", 0.2f, 1.0f, 0.2f, 0.025, 0.133 );
 
 	bottom = 0.0;
 
@@ -1852,9 +1852,9 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	GObject *y_container = NULL;
 	GObject *z_container = NULL;
 	gint i = 0;
-	DataSize x_size = 0;
-	DataSize y_size = 0;
-	DataSize z_size = 0;
+	DataSize x_size = MTX_U08;
+	DataSize y_size = MTX_U08;
+	DataSize z_size = MTX_U08;
 	gint max = 0;
 	gint dload_val = 0;
 	gint canID = 0;
@@ -1867,12 +1867,12 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	GdkWindow *window = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!get_ecu_data_f)
-		get_symbol("get_ecu_data",(void*)&get_ecu_data_f);
+		get_symbol("get_ecu_data",(void **)&get_ecu_data_f);
 
 	if (!send_to_ecu_f)
-		get_symbol("send_to_ecu",(void*)&send_to_ecu_f);
+		get_symbol("send_to_ecu",(void **)&send_to_ecu_f);
 
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	g_return_val_if_fail(get_ecu_data_f,FALSE);
@@ -2324,11 +2324,11 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 	ve_view->table_name = NULL;
 	ve_view->opacity = 0.85;
 	ve_view->wireframe = TRUE;
-	ve_view->x_container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	ve_view->x_container = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref_sink(ve_view->x_container);
-	ve_view->y_container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	ve_view->y_container = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref_sink(ve_view->y_container);
-	ve_view->z_container = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+	ve_view->z_container = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 	g_object_ref_sink(ve_view->z_container);
 	ve_view->mesh_created = FALSE;
 	ve_view->font_created = FALSE;
@@ -2370,8 +2370,8 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	GdkWindow *window = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	firmware = DATA_GET(global_data,"firmware");
-	ve_view_hash = DATA_GET(global_data,"ve_view_hash");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
 	g_return_if_fail(firmware);
 	g_return_if_fail(ve_view_hash);
 
@@ -2431,7 +2431,7 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 		{
 			if (table_list[i] == TRUE)
 			{
-				ve_view = g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
+				ve_view = (Ve_View_3D *)g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(i));
 				if ((ve_view) && (ve_view->drawing_area))
 				{
 					window = gtk_widget_get_window(ve_view->drawing_area);
@@ -2516,7 +2516,7 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
 	Firmware_Details *firmware = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	w = allocation.width;
@@ -2703,8 +2703,8 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	Firmware_Details *firmware = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	firmware = DATA_GET(global_data,"firmware");
-	sources_hash = DATA_GET(global_data,"sources_hash");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
 	/* X */
@@ -2717,31 +2717,31 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	{
 		hash = ve_view->x_multi_hash;
 		key = ve_view->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 		if (ve_view->x_ignore_algorithm)
-			multi = g_hash_table_lookup(hash,hash_key);
+			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
 		{
 			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 			{
 				if (hash_key)
-					multi = g_hash_table_lookup(hash,hash_key);
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			else if (algorithm[ve_view->table_num] == MAF)
 			{
-				multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
 				if(!multi)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		if (!multi)
-			MTXDBG(CRITICAL|OPENGL,_("BUG! X multi is null!\n"));
+			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! X multi is null!\n"));
 
 		lookup_current_value(multi->source,&cur_val->x_val);
 		cur_val->x_val = multi_lookup_and_compute(multi);
@@ -2766,31 +2766,31 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	{
 		hash = ve_view->y_multi_hash;
 		key = ve_view->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 		if (ve_view->y_ignore_algorithm)
-			multi = g_hash_table_lookup(hash,hash_key);
+			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
 		{
 			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 			{
 				if (hash_key)
-					multi = g_hash_table_lookup(hash,hash_key);
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			else if (algorithm[ve_view->table_num] == MAF)
 			{
-				multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
 				if(!multi)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		if (!multi)
-			MTXDBG(CRITICAL|OPENGL,_("BUG! Y multi is null!\n"));
+			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! Y multi is null!\n"));
 
 		/* Edit value */
 		tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
@@ -2818,31 +2818,31 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	{
 		hash = ve_view->z_multi_hash;
 		key = ve_view->z_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 		if (ve_view->z_ignore_algorithm)
-			multi = g_hash_table_lookup(hash,hash_key);
+			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
 		{
 			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 			{
 				if (hash_key)
-					multi = g_hash_table_lookup(hash,hash_key);
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			else if (algorithm[ve_view->table_num] == MAF)
 			{
-				multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
 				if(!multi)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		if (!multi)
-			MTXDBG(CRITICAL|OPENGL,_("BUG! Z multi is null!\n"));
+			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! Z multi is null!\n"));
 
 		/* Edit value */
 		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
@@ -2880,7 +2880,7 @@ G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 	Ve_View_3D *ve_view = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	ve_view = OBJ_GET(widget,"ve_view");
+	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
 		MTXDBG(OPENGL,_("No ve_view leaving!\n"));
@@ -2909,7 +2909,7 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 	Ve_View_3D *ve_view = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	ve_view = OBJ_GET(widget,"ve_view");
+	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
 		MTXDBG(OPENGL,_("No ve_view leaving!\n"));
@@ -2934,7 +2934,7 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 	Ve_View_3D *ve_view = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	ve_view = OBJ_GET(widget,"ve_view");
+	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
 		MTXDBG(OPENGL,_("No ve_view leaving!\n"));
@@ -2959,7 +2959,7 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 	Ve_View_3D *ve_view = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	ve_view = OBJ_GET(widget,"ve_view");
+	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
 		MTXDBG(OPENGL,_("No ve_view leaving!\n"));
@@ -2984,7 +2984,7 @@ G_MODULE_EXPORT gboolean set_fps(GtkWidget *widget, gpointer data)
 	Ve_View_3D *ve_view = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	ve_view = OBJ_GET(widget,"ve_view");
+	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
 		MTXDBG(OPENGL,_("No ve_view leaving!\n"));
@@ -3094,10 +3094,10 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	Firmware_Details *firmware = NULL;
 
 	if (!get_ecu_data_f)
-		get_symbol("get_ecu_data",(void*)&get_ecu_data_f);
+		get_symbol("get_ecu_data",(void **)&get_ecu_data_f);
 
 	MTXDBG(OPENGL,_("Entered\n"));
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(get_ecu_data_f);
 	g_return_if_fail(firmware);
 
@@ -3322,32 +3322,32 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	{
 		hash = ve_view->x_multi_hash;
 		key = ve_view->x_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 		if (ve_view->x_ignore_algorithm)
-			multi = g_hash_table_lookup(hash,hash_key);
+			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
 		{
 			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 			{
 				if (hash_key)
-					multi = g_hash_table_lookup(hash,hash_key);
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			else if (algorithm[ve_view->table_num] == MAF)
 			{
-				multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
 				if(!multi)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 
 		if (!multi)
-			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
+			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! multi is NULL!\n"));
 
 		lookup_previous_n_values(multi->source,2,x);
 	}
@@ -3363,32 +3363,32 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	{
 		hash = ve_view->y_multi_hash;
 		key = ve_view->y_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 		if (ve_view->y_ignore_algorithm)
-			multi = g_hash_table_lookup(hash,hash_key);
+			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
 		{
 			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 			{
 				if (hash_key)
-					multi = g_hash_table_lookup(hash,hash_key);
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			else if (algorithm[ve_view->table_num] == MAF)
 			{
-				multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
 				if(!multi)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 
 		if (!multi)
-			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
+			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! multi is NULL!\n"));
 
 		lookup_previous_n_values(multi->source,2,y);
 	}
@@ -3404,32 +3404,32 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	{
 		hash = ve_view->z_multi_hash;
 		key = ve_view->z_source_key;
-		hash_key = g_hash_table_lookup(sources_hash,key);
+		hash_key = (gchar *)g_hash_table_lookup(sources_hash,key);
 		if (ve_view->z_ignore_algorithm)
-			multi = g_hash_table_lookup(hash,hash_key);
+			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
 		{
 			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
 			{
 				if (hash_key)
-					multi = g_hash_table_lookup(hash,hash_key);
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 				else
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			else if (algorithm[ve_view->table_num] == MAF)
 			{
-				multi = g_hash_table_lookup(hash,"AFM_VOLTS");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
 				if(!multi)
-					multi = g_hash_table_lookup(hash,"DEFAULT");
+					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 			}
 			else
-				multi = g_hash_table_lookup(hash,"DEFAULT");
+				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 
 		if (!multi)
-			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
+			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! multi is NULL!\n"));
 
 		lookup_previous_n_values(multi->source,2,z);
 	}
@@ -3471,7 +3471,7 @@ void gl_create_font(GtkWidget *widget)
 	MTXDBG(OPENGL,_("Entered\n"));
 	g_return_if_fail(ve_view);
 	if (ve_view->font_created)
-		MTXDBG(OPENGL|CRITICAL,_("Programming error: gl_create_font() was already called; you must call gl_destroy_font() before creating font again...\n"));
+		MTXDBG((Dbg_Class)(OPENGL|CRITICAL),_("Programming error: gl_create_font() was already called; you must call gl_destroy_font() before creating font again...\n"));
 	else
 		ve_view->font_created = TRUE;
 
@@ -3522,7 +3522,7 @@ void gl_destroy_font(GtkWidget *widget)
 
 	MTXDBG(OPENGL,_("Entered\n"));
 	if (!ve_view->font_created)
-		MTXDBG(OPENGL|CRITICAL,_("Programming error: gl_destroy_font() called when font does not exist\n"));
+		MTXDBG((Dbg_Class)(OPENGL|CRITICAL),_("Programming error: gl_destroy_font() called when font does not exist\n"));
 	ve_view->font_ascent = -1;
 	ve_view->font_descent = -1;
 	ve_view->y_offset_bitmap_render_pango_units = -1;
@@ -3568,7 +3568,7 @@ void gl_print_string(GtkWidget *widget, const gchar *s)
 	g_return_if_fail(ve_view);
 
 	if (!ve_view->font_created)
-		MTXDBG(OPENGL|CRITICAL,_("Programming error: gl_print_string() called but font does not exist; you should have called glt_create_font() first\n"));
+		MTXDBG((Dbg_Class)(OPENGL|CRITICAL),_("Programming error: gl_print_string() called but font does not exist; you should have called glt_create_font() first\n"));
 
 	layout = pango_layout_new(ve_view->ft2_context);
 	pango_layout_set_width(layout, -1); // -1 no wrapping.  All text on one line.

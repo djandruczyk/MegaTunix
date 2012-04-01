@@ -95,7 +95,7 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
   \param widget is the Pointer to the widget to be stored by name.
   \see deregister_widget
   */
-G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
+G_MODULE_EXPORT void register_widget(const gchar *name, GtkWidget * widget)
 {
 	GHashTable *dynamic_widgets = NULL;
 
@@ -123,7 +123,7 @@ G_MODULE_EXPORT void register_widget(gchar *name, GtkWidget * widget)
   \returns TRUE on success removing, FALSE on failure removing 
   \see register_widget
   */
-G_MODULE_EXPORT gboolean deregister_widget(gchar *name)
+G_MODULE_EXPORT gboolean deregister_widget(const gchar *name)
 {
 	GHashTable *dynamic_widgets = NULL;
 	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");

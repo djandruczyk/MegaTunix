@@ -183,12 +183,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 				thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Port %s is open by another application\n"),vector[i]),FALSE,FALSE);
 			}
 		}
-		queue_function_f((gpointer)"conn_warning");
+		queue_function_f("conn_warning");
 	}
 
 	if (serial_is_open)
 	{
-		queue_function_f((gpointer)"kill_conn_warning");
+		queue_function_f("kill_conn_warning");
 		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
 	}
 	if (vector)

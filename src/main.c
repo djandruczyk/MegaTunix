@@ -112,7 +112,7 @@ gint main(gint argc, gchar ** argv)
 
 	/* Build table of strings to enum values */
 	build_string_2_enum_table();
-	serial_params = g_malloc0(sizeof(Serial_Params));
+	serial_params = (Serial_Params *)g_malloc0(sizeof(Serial_Params));
 	DATA_SET(global_data,"serial_params",serial_params);
 
 	handle_args(argc,argv);	/* handle CLI arguments */

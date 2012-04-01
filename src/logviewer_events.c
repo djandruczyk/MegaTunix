@@ -133,7 +133,7 @@ G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion
 	gint x = 0;
 	gint y = 0;
 	guint tnum = 0;
-	GdkModifierType state;
+	guint state;
 	extern Logview_Data *lv_data;
 	Viewable_Value *v_value = NULL;
 
@@ -153,7 +153,7 @@ G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion
 	tnum = (guint)ceil(y/lv_data->spread);
 	if (tnum >= g_list_length(lv_data->tlist))
 		return FALSE;
-	v_value = g_list_nth_data(lv_data->tlist,tnum);
+	v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,tnum);
 	if (lv_data->tselect != tnum)
 	{
 		highlight_tinfo(lv_data->tselect,FALSE);
@@ -214,7 +214,7 @@ G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data
 {
 	Lv_Handler handler;
 	GtkWidget *tmpwidget = NULL;
-	handler = (Lv_Handler)OBJ_GET(widget,"handler");
+	handler = (Lv_Handler)(GINT)OBJ_GET(widget,"handler");
 	switch(handler)
 	{
 		case LV_GOTO_START:
@@ -261,7 +261,7 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	gint w = 0;
 	gint h = 0;
 	guint tnum = 0;
-	GdkModifierType state;
+	guint state;
 	extern Logview_Data *lv_data;
 	Viewable_Value *v_value = NULL;
 	GtkAllocation allocation;
@@ -286,7 +286,7 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	tnum = (guint)ceil(y/lv_data->spread);
 	if (tnum >= g_list_length(lv_data->tlist))
 		return TRUE;
-	v_value = g_list_nth_data(lv_data->tlist,tnum);
+	v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,tnum);
 	if (event->state & (GDK_BUTTON3_MASK))
 	{
 		/*printf("right button released... \n");*/

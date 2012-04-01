@@ -70,9 +70,11 @@ G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
   \param widget is the the widget to  change color
   \param color is the enumeration of the color to switch to..
   */
-G_MODULE_EXPORT void set_widget_color(gpointer widget, gpointer color)
+G_MODULE_EXPORT void set_widget_color(gpointer w_ptr, gpointer c_ptr)
 {
-	switch ((GuiColor)color)
+	GtkWidget *widget = (GtkWidget *)w_ptr;
+	GuiColor color = (GuiColor)(GINT)c_ptr;
+	switch (color)
 	{
 		case RED:
 			if (GTK_IS_BUTTON(widget))
@@ -247,7 +249,7 @@ G_MODULE_EXPORT void  update_logbar(
   */
 G_MODULE_EXPORT void conn_warning(void)
 {
-	CmdLineArgs *args = DATA_GET(global_data,"args");
+	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
 	if ((args->be_quiet) || (warning_present))
 		return;
@@ -278,11 +280,11 @@ G_MODULE_EXPORT void kill_conn_warning(void)
   */
 G_MODULE_EXPORT void warn_user(const gchar *message)
 {
-	CmdLineArgs *args = DATA_GET(global_data,"args");
+	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	if ((args->be_quiet))
 		return;
 
-	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
+	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),(GtkDialogFlags)0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 
 	if (!DATA_GET(global_data,"interrogated"))
 		gtk_dialog_add_buttons(GTK_DIALOG(warning_dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Go to Offline mode", GTK_RESPONSE_ACCEPT,NULL);
@@ -314,7 +316,7 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
 {
 	GtkWidget *dialog = NULL;
 	gint result = 0;
-	dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
+	dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),(GtkDialogFlags)0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Ignore at my peril!", GTK_RESPONSE_ACCEPT,NULL);
 
@@ -380,7 +382,7 @@ G_MODULE_EXPORT void set_title(gchar * text)
 	static GtkWidget *info_label = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if ((!lookup_widget("main_window")) || (DATA_GET(global_data,"leaving")))
 		return;

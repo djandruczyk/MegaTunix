@@ -76,11 +76,11 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	guchar *ptr = buf;
 	gboolean ignore_errors = FALSE;
 	Serial_Params *serial_params = NULL;;
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	MTXDBG(IO_PROCESS,_("Entered\n"));
 	if (!serio_mutex)
-		serio_mutex = DATA_GET(global_data,"serio_mutex");
+		serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 
 	g_static_mutex_lock(&mutex);
 
@@ -115,7 +115,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 		/* Increment bad read counter.... */
 		if (!res) /* I/O Error Device disappearance or other */
 		{
-			MTXDBG(IO_PROCESS|CRITICAL,_("I/O ERROR: \"%s\"\n"),(gchar *)g_strerror(errno));
+			MTXDBG((Dbg_Class)(IO_PROCESS|CRITICAL),_("I/O ERROR: \"%s\"\n"),(gchar *)g_strerror(errno));
 			bad_read = TRUE;
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 			break;
@@ -133,7 +133,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_
 	g_mutex_unlock(serio_mutex);
 	if ((bad_read) && (!ignore_errors))
 	{
-		MTXDBG(IO_PROCESS|CRITICAL,_("Error reading from ECU\n"));
+		MTXDBG((Dbg_Class)(IO_PROCESS|CRITICAL),_("Error reading from ECU\n"));
 
 		serial_params->errcount++;
 		if ((reset_on_fail) && (!reset))
@@ -186,17 +186,17 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	static void (*set_ecu_data)(gpointer,gint *) = NULL;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!serial_params)
-		serial_params = DATA_GET(global_data,"serial_params");
+		serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	if (!serio_mutex)
-		serio_mutex = DATA_GET(global_data,"serio_mutex");
+		serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 	if (!factor)
-		factor = DATA_GET(global_data,"sleep_correction");
+		factor = (gfloat *)DATA_GET(global_data,"sleep_correction");
 	if (!set_ecu_data)
-		get_symbol("set_ecu_data",(void*)&set_ecu_data);
+		get_symbol("set_ecu_data",(void **)&set_ecu_data);
 	if (!store_new_block)
-		get_symbol("store_new_block",(void*)&store_new_block);
+		get_symbol("store_new_block",(void **)&store_new_block);
 
 	g_return_val_if_fail(firmware,FALSE);
 	g_return_val_if_fail(serial_params,FALSE);
@@ -209,7 +209,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	g_mutex_lock(serio_mutex);
 
 	if (output)
-		mode = (WriteMode)DATA_GET(output->data,"mode");
+		mode = (WriteMode)(GINT)DATA_GET(output->data,"mode");
 
 	if (DATA_GET(global_data,"offline"))
 	{
@@ -269,7 +269,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);	/* Send write command */
 				if (!res)
 				{
-					MTXDBG(SERIAL_WR|CRITICAL,_("Error writing block offset %i, value %i ERROR \"%s\"!!!\n"),j,block->data[j],err_text);
+					MTXDBG((Dbg_Class)(SERIAL_WR|CRITICAL),_("Error writing block offset %i, value %i ERROR \"%s\"!!!\n"),j,block->data[j],err_text);
 					retval = FALSE;
 				}
 				if (firmware->capabilities & MS2)
@@ -350,7 +350,7 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
 	fd_set rd;
 	struct timeval timeout;
 	Serial_Params *serial_params = NULL;
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
@@ -398,7 +398,7 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 	gint res = 0;
 	GError *error = NULL;
 	Serial_Params *serial_params = NULL;
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	log_outbound_data(buf,count);
 
@@ -407,13 +407,13 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, g
 	{
 		/*              printf("net mode write\n"); */
 #if GTK_MINOR_VERSION >= 18
-		res = g_socket_send(serial_params->socket,buf,(gsize)count,NULL,&error);
+		res = g_socket_send(serial_params->socket,(const gchar *)buf,(gsize)count,NULL,&error);
 #else
 		res = send(fd,buf,count,MSG_NOSIGNAL);
 #endif
 		if (res == -1)
 		{
-			MTXDBG(CRITICAL|SERIAL_WR,_("g_socket_send_error \"%s\"\n\n"),error->message);
+			MTXDBG((Dbg_Class)(CRITICAL|SERIAL_WR),_("g_socket_send_error \"%s\"\n\n"),error->message);
 			g_error_free(error);
 		}
 	}

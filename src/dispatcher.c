@@ -57,11 +57,11 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 
 	MTXDBG(DISPATCHER,_("Entered!\n"));
 	if (!pf_dispatch_cond)
-		pf_dispatch_cond = DATA_GET(global_data,"pf_dispatch_cond");
+		pf_dispatch_cond = (GCond *)DATA_GET(global_data,"pf_dispatch_cond");
 	if (!pf_dispatch_mutex)
-		pf_dispatch_mutex = DATA_GET(global_data,"pf_dispatch_mutex");
+		pf_dispatch_mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
 	if (!pf_dispatch_queue)
-		pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
+		pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
 
 	g_return_val_if_fail(pf_dispatch_cond,FALSE);
 	g_return_val_if_fail(pf_dispatch_mutex,FALSE);
@@ -73,7 +73,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	{
 		/*QUIET_MTXDBG(CRITICAL,_("no pf dispatch queue or leaving or might_be_leaving is set!\n"));*/
 		/* Flush the queue */
-		while (NULL != (message = g_async_queue_try_pop(pf_dispatch_queue)))
+		while (NULL != (message = (Io_Message *)g_async_queue_try_pop(pf_dispatch_queue)))
 			dealloc_io_message(message);
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
@@ -86,7 +86,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	g_time_val_add(&time,50000);
 	message = g_async_queue_timed_pop(pf_dispatch_queue,&time);
 	*/
-	message = g_async_queue_try_pop(pf_dispatch_queue);
+	message = (Io_Message *)g_async_queue_try_pop(pf_dispatch_queue);
 	if (!message)
 	{
 		MTXDBG(DISPATCHER,_("No messages waiting, signalling!\n"));
@@ -182,10 +182,10 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	static GMutex *gui_dispatch_mutex = NULL;
 	static void (*update_widget_f)(gpointer,gpointer) = NULL;
 	static GList ***ecu_widgets = NULL;
-	gint len = 0;
-	gint i = 0;
-	gint j = 0;
-	UpdateFunction val = 0;
+	guint len = 0;
+	guint i = 0;
+	guint j = 0;
+	UpdateFunction val;
 	gint count = 0;
 	GtkWidget *widget = NULL;
 	Gui_Message *message = NULL;
@@ -196,11 +196,11 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	extern gconstpointer *global_data;
 
 	if (!gui_dispatch_cond)
-		gui_dispatch_cond = DATA_GET(global_data,"gui_dispatch_cond");
+		gui_dispatch_cond = (GCond *)DATA_GET(global_data,"gui_dispatch_cond");
 	if (!gui_dispatch_mutex)
-		gui_dispatch_mutex = DATA_GET(global_data,"gui_dispatch_mutex");
+		gui_dispatch_mutex = (GMutex *)DATA_GET(global_data,"gui_dispatch_mutex");
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 
 	g_return_val_if_fail(gui_dispatch_cond,FALSE);
 	g_return_val_if_fail(gui_dispatch_mutex,FALSE);
@@ -212,14 +212,14 @@ trypop:
 	{
 		/*QUIET_MTXDBG(CRITICAL,_("no Gui dispatch queue or leaving or might_be_leaving is set!\n"));*/
 		/* Flush the queue */
-		while (NULL != (message = g_async_queue_try_pop(gui_dispatch_queue)))
+		while (NULL != (message = (Gui_Message *)g_async_queue_try_pop(gui_dispatch_queue)))
 			dealloc_gui_message(message);
 		g_mutex_lock(gui_dispatch_mutex);
 		g_cond_signal(gui_dispatch_cond);
 		g_mutex_unlock(gui_dispatch_mutex);
 		return TRUE;
 	}
-	message = g_async_queue_try_pop(gui_dispatch_queue);
+	message = (Gui_Message *)g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
 	{
 		MTXDBG(DISPATCHER,_("no messages waiting, returning\n"));
@@ -244,7 +244,7 @@ trypop:
 					{
 						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 						if (!update_widget_f)
-							get_symbol("update_widget",(void *)&update_widget_f);
+							get_symbol("update_widget",(void **)&update_widget_f);
 						gdk_threads_enter();
 						update_widget_f(widget,NULL);
 						gdk_threads_leave();
@@ -258,9 +258,9 @@ trypop:
 					if (!range)
 						break;
 					if (!update_widget_f)
-						get_symbol("update_widget",(void *)&update_widget_f);
+						get_symbol("update_widget",(void **)&update_widget_f);
 					if (!ecu_widgets)
-						ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+						ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 					gdk_threads_enter();
 					for (i=range->offset;i<range->offset +range->len;i++)

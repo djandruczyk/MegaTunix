@@ -40,7 +40,7 @@ gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test
   \param cmd_name is the name of the command to look for in the commands_hash
   \param data is the additional data for fringe cases..
   */
-G_MODULE_EXPORT void io_cmd(gchar *cmd_name, void *data)
+G_MODULE_EXPORT void io_cmd(const gchar *cmd_name, void *data)
 {
 	static GAsyncQueue *io_data_queue = NULL;
 	static void (*build_output_message_f)(Io_Message *, Command *, gpointer);
@@ -315,12 +315,11 @@ G_MODULE_EXPORT void  thread_update_logbar(
   \param data is the name of function to lookup and run in the main 
   gui context vis the gui dispatcher.
   */
-G_MODULE_EXPORT gboolean queue_function(gpointer data)
+G_MODULE_EXPORT gboolean queue_function(const gchar *name)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Gui_Message *message = NULL;
 	QFunction *qfunc = NULL;
-	const gchar * name  = (const gchar *) data;
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)

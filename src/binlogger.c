@@ -41,7 +41,7 @@ G_MODULE_EXPORT void open_binary_logs(void)
 
 	g_static_mutex_lock(&imutex);
 	g_static_mutex_lock(&omutex);
-	t = g_malloc(sizeof(time_t));
+	t = (time_t *)g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	g_free(t);
@@ -92,7 +92,7 @@ G_MODULE_EXPORT void close_binary_logs(void)
 	GIOChannel *ochan = NULL;
 
 	g_static_mutex_lock(&imutex);
-	ichan = DATA_GET(global_data,"inbound_raw_logchan");
+	ichan = (GIOChannel *)DATA_GET(global_data,"inbound_raw_logchan");
 	if (ichan)
 	{
 		DATA_SET(global_data,"inbound_raw_logchan",NULL);
@@ -101,7 +101,7 @@ G_MODULE_EXPORT void close_binary_logs(void)
 	}
 	g_static_mutex_unlock(&imutex);
 	g_static_mutex_lock(&omutex);
-	ochan = DATA_GET(global_data,"outbound_raw_logchan");
+	ochan = (GIOChannel *)DATA_GET(global_data,"outbound_raw_logchan");
 	if (ochan)
 	{
 		DATA_SET(global_data,"outbound_raw_logchan",NULL);
@@ -123,13 +123,13 @@ G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 	GIOChannel *ochan = NULL;
 
 	g_static_mutex_lock(&imutex);
-	ichan = DATA_GET(global_data,"inbound_raw_logchan");
+	ichan = (GIOChannel *)DATA_GET(global_data,"inbound_raw_logchan");
 	if (ichan)
 		g_io_channel_flush(ichan,NULL);
 	g_static_mutex_unlock(&imutex);
 
 	g_static_mutex_lock(&omutex);
-	ochan = DATA_GET(global_data,"outbound_raw_logchan");
+	ochan = (GIOChannel *)DATA_GET(global_data,"outbound_raw_logchan");
 	if (ochan)
 		g_io_channel_flush(ochan,NULL);
 	g_static_mutex_unlock(&omutex);
@@ -147,9 +147,9 @@ G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
 	GIOChannel *ochan = NULL;
 
 	g_static_mutex_lock(&omutex);
-	ochan = DATA_GET(global_data,"outbound_raw_logchan");
+	ochan = (GIOChannel *)DATA_GET(global_data,"outbound_raw_logchan");
 	if (ochan)
-		g_io_channel_write_chars(ochan,buf,count,NULL,NULL);
+		g_io_channel_write_chars(ochan,(const gchar *)buf,(gssize)count,NULL,NULL);
 	g_static_mutex_unlock(&omutex);
 }
 
@@ -164,8 +164,8 @@ G_MODULE_EXPORT void log_inbound_data(const void * buf, size_t count)
 	GIOChannel *ichan = NULL;
 
 	g_static_mutex_lock(&imutex);
-	ichan = DATA_GET(global_data,"inbound_raw_logchan");
+	ichan = (GIOChannel *)DATA_GET(global_data,"inbound_raw_logchan");
 	if (ichan)
-		g_io_channel_write_chars(ichan,buf,count,NULL,NULL);
+		g_io_channel_write_chars(ichan,(const gchar *)buf,(gssize)count,NULL,NULL);
 	g_static_mutex_unlock(&imutex);
 }

@@ -85,7 +85,7 @@ G_MODULE_EXPORT void unix_create_mtx_lock(void)
 	gchar * lockfile = NULL;
 	struct flock lock_struct;
 
-	args = DATA_GET(global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	if (args->network_mode)
 		return;
 
@@ -200,7 +200,7 @@ G_MODULE_EXPORT void win32_remove_mtx_lock(void)
 G_MODULE_EXPORT void unlock_serial(void)
 {
 #ifndef __WIN32__
-	gchar *fname = DATA_GET(global_data,"serial_lockfile");
+	gchar *fname = (gchar *)DATA_GET(global_data,"serial_lockfile");
 
 	/*printf("told to unlock serial,  path \"%s\"\n",fname); */
 	if (fname)
@@ -229,7 +229,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 	gchar *contents = NULL;
 	gboolean res = FALSE;
 	GError *err = NULL;
-	gint i = 0;
+	guint i = 0;
 	gint pid = 0;
 
 	/*printf("told to lock serial port %s\n",name); */

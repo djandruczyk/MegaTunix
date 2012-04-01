@@ -88,8 +88,8 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
 	{
-		gchar *authors[] = {"David J. Andruczyk",NULL};
-		gchar *artists[] = {"Dale Anderson\nChristopher Mire\nTrent Stromkins\nWayne (TurboCamaro)\n71jeep",NULL};
+		const gchar *authors[] = {"David J. Andruczyk",NULL};
+		const gchar *artists[] = {"Dale Anderson\nChristopher Mire\nTrent Stromkins\nWayne (TurboCamaro)\n71jeep",NULL};
 		gchar *comments = g_strdup_printf("MegaTunix is a Graphical Tuning software designed to make it easy and (hopefully) intuitive to tune your EFI powered vehicle.  Please send suggestions to the author for ways to improve MegaTunix.\nGit Hash: %s",MTX_GIT_HASH);
 		gtk_show_about_dialog(GTK_WINDOW(lookup_widget("main_window")),
 				"name","MegaTunix Tuning Software",

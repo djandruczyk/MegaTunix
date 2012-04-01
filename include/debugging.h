@@ -40,25 +40,25 @@ extern "C" {
 /* Debugging Enumerations */
 typedef enum
 {
-	NO_DEBUG 	= 0,
+	NO_DEBUG		= 0,
 	INTERROGATOR 	= 1<<0,
-	OPENGL		= 1<<1,
-	CONVERSIONS	= 1<<2,
-	SERIAL_RD	= 1<<3,
-	SERIAL_WR	= 1<<4,
-	IO_MSG		= 1<<5,
-	IO_PROCESS	= 1<<6,
-	THREADS		= 1<<7,
-	REQ_FUEL	= 1<<8,
-	TABLOADER	= 1<<9,
-	KEYPARSER	= 1<<10,
-	RTMLOADER	= 1<<11,
+	OPENGL			= 1<<1,
+	CONVERSIONS		= 1<<2,
+	SERIAL_RD		= 1<<3,
+	SERIAL_WR		= 1<<4,
+	IO_MSG			= 1<<5,
+	IO_PROCESS		= 1<<6,
+	THREADS			= 1<<7,
+	REQ_FUEL		= 1<<8,
+	TABLOADER		= 1<<9,
+	KEYPARSER		= 1<<10,
+	RTMLOADER		= 1<<11,
 	COMPLEX_EXPR	= 1<<12,
-	MTXSOCKET	= 1<<13,
-	PLUGINS		= 1<<14,
-	PACKETS		= 1<<15,
-	DISPATCHER	= 1<<16,
-	CRITICAL	= 1<<30
+	MTXSOCKET		= 1<<13,
+	PLUGINS			= 1<<14,
+	PACKETS			= 1<<15,
+	DISPATCHER		= 1<<16,
+	CRITICAL		= 1<<30
 }Dbg_Class;
 
 typedef enum 
@@ -92,7 +92,7 @@ typedef struct _DebugLevel DebugLevel;
  */
 struct _DebugLevel
 {
-	gchar * name;		/*!< Debugging name */
+	const gchar * name;		/*!< Debugging name */
 	gint	handler;	/*!< Signal handler name */
 	Dbg_Class dclass;	/*!< Bit mask for this level (0-31) */
 	Dbg_Shift dshift;	/*!< Bit shift amount */

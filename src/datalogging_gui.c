@@ -69,7 +69,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 	gchar * tooltip = NULL;
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (DATA_GET(global_data,"leaving"))
 		return;
@@ -126,8 +126,8 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 		tooltip = NULL;
 		dlog_name = NULL;
 		//object = g_ptr_array_index(rtv_map->rtv_list,i);
-		object = g_list_nth_data(list,i);
-		dlog_name = DATA_GET(object,"dlog_gui_name");
+		object = (gconstpointer *)g_list_nth_data(list,i);
+		dlog_name = (gchar *)DATA_GET(object,"dlog_gui_name");
 		button = gtk_check_button_new();
 		label = gtk_label_new("");
 		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
@@ -272,8 +272,8 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 {
 	GList *list = NULL;
 	guint i = 0;
-	gint j = 0;
-	gint total_logables = 0;
+	guint j = 0;
+	guint total_logables = 0;
 	gsize count = 0;
 	GString *output;
 	gconstpointer * object = NULL;
@@ -281,8 +281,8 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	Firmware_Details *firmware = NULL;
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
-	firmware = DATA_GET(global_data,"firmware");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!iochannel)
 	{
 		MTXDBG(CRITICAL,_("IOChannel pointer was undefined, returning NOW...\n"));
@@ -291,7 +291,7 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	/* Count total logable variables */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
-		object = g_ptr_array_index(rtv_map->rtv_list,i);
+		object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list,i);
 		if((override) || ((GBOOLEAN)DATA_GET(object,"being_logged")))
 			list = g_list_prepend(list,object);
 	}
@@ -304,14 +304,14 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	total_logables = g_list_length(list);
 	for (i=0;i<total_logables;i++)
 	{
-		object = g_list_nth_data(list,i);
+		object = (gconstpointer *)g_list_nth_data(list,i);
 		/* If space delimited, QUOTE the header names */
 		string = (gchar *)DATA_GET(object,"dlog_field_name");
 		output = g_string_append(output,string); 
 
 		j++;
 		if (j < total_logables)
-			output = g_string_append(output,DATA_GET(global_data,"delimiter"));
+			output = g_string_append(output,(const gchar *)DATA_GET(global_data,"delimiter"));
 	}
 	output = g_string_append(output,"\r\n");
 	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
@@ -327,12 +327,12 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 G_MODULE_EXPORT gboolean run_datalog(void)
 {
 	guint i = 0;
-	gint j = 0;
-	gint k = 0;
+	guint j = 0;
+	guint k = 0;
 	gint base = 0;
 	gsize count = 0;
 	gint cur_len = 0;
-	gint total_logables = 0;
+	guint total_logables = 0;
 	GString *output;
 	GIOChannel *iochannel = NULL;
 	gconstpointer *object = NULL;
@@ -343,7 +343,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	gchar *tmpbuf = NULL;
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!((DATA_GET(global_data,"connected")) && (DATA_GET(global_data,"interrogated"))))
 		return TRUE;
@@ -362,7 +362,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	{
 		for (i=0;i<rtv_map->derived_total;i++)
 		{
-			object = g_ptr_array_index(rtv_map->rtv_list,i);
+			object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list,i);
 			if((GBOOLEAN)DATA_GET(object,"being_logged"))
 				object_list = g_list_prepend(object_list,object);
 		}
@@ -397,7 +397,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 		k = 0;
 		for(i=0;i<total_logables;i++)
 		{
-			object = g_list_nth_data(object_list,i);
+			object = (gconstpointer *)g_list_nth_data(object_list,i);
 			history = (GArray *)DATA_GET(object,"history");
 			precision = (GINT)DATA_GET(object,"precision");
 			if ((GINT)j <= 0)
@@ -414,7 +414,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 			 * char at the end fo the line 
 			 */
 			if (k < total_logables)
-				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
+				output = g_string_append(output,(const gchar *)DATA_GET(global_data,"delimiter"));
 		}
 		output = g_string_append(output,"\r\n");
 	}
@@ -435,14 +435,14 @@ G_MODULE_EXPORT void dlog_select_all(void)
 	GtkWidget *button = NULL;
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	/* Check all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = NULL;
 		button = NULL;
-		object = g_ptr_array_index(rtv_map->rtv_list, i);
+		object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list, i);
 		button = (GtkWidget *)DATA_GET(object,"dlog_button");
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 	}
@@ -459,14 +459,14 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 	gconstpointer * object = NULL;
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
 	{
 		object = NULL;
 		button = NULL;
-		object = g_ptr_array_index(rtv_map->rtv_list, i);
+		object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list, i);
 		button = (GtkWidget *)DATA_GET(object,"dlog_button");
 		if (GTK_IS_TOGGLE_BUTTON(button))
 			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
@@ -492,7 +492,7 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
 	gboolean state=FALSE;
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
 	for (i=0;i<rtv_map->derived_total;i++)
@@ -500,7 +500,7 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
 		object = NULL;
 		button = NULL;
 		state = FALSE;
-		object = g_ptr_array_index(rtv_map->rtv_list, i);
+		object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list, i);
 		button = (GtkWidget *)DATA_GET(object,"dlog_button");
 		state = (GINT)DATA_GET(object,"log_by_default");
 		if (state == -1)
@@ -525,9 +525,9 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	time_t *t = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
-	t = g_malloc(sizeof(time_t));
+	t = (time_t *)g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	g_free(t);
@@ -611,9 +611,9 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	time_t *t = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
-	t = g_malloc(sizeof(time_t));
+	t = (time_t *)g_malloc(sizeof(time_t));
 	time(t);
 	tm = localtime(t);
 	g_free(t);
@@ -672,7 +672,7 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 	GtkWidget * info_label = NULL;
 	Rtv_Map *rtv_map = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (DATA_GET(global_data,"realtime_id"))
 	{
@@ -692,7 +692,7 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 
 	for(i=0;i<rtv_map->derived_total;i++)
 	{
-		object = g_ptr_array_index(rtv_map->rtv_list,i);
+		object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list,i);
 		histories[i] = (GArray *)DATA_GET(object,"history");
 		precisions[i] = (GINT)DATA_GET(object,"precision");
 	}
@@ -713,7 +713,7 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 			 * char at the end fo the line 
 			 */
 			if (j < rtv_map->derived_total)
-				output = g_string_append(output,DATA_GET(global_data,"delimiter"));
+				output = g_string_append(output,(const gchar *)DATA_GET(global_data,"delimiter"));
 		}
 		output = g_string_append(output,"\r\n");
 		if (notifies && ((x % notif_divisor) == 0))

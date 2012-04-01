@@ -79,7 +79,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gint *algorithm = NULL;
 	GHashTable *sources_hash = NULL;
 
-	sources_hash = DATA_GET(global_data,"sources_hash");
+	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 
 	g_static_mutex_lock(&mutex);
 
@@ -87,14 +87,14 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	if (!OBJ_GET(widget,"size"))
 		printf(__FILE__"%s %s\n",_(": convert_before_download, FATAL ERROR, size undefined for widget %s "),(name == NULL ? "undefined" : name));
 
-	size = (DataSize)OBJ_GET(widget,"size");
+	size = (DataSize)(GINT)OBJ_GET(widget,"size");
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	if (OBJ_GET(widget,"raw_lower"))
-		lower = (gfloat)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+		lower = (gfloat)strtol((gchar *)OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
 		lower = (gfloat)get_extreme_from_size(size,LOWER);
 	if (OBJ_GET(widget,"raw_upper"))
-		upper = (gfloat)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+		upper = (gfloat)strtol((gchar *)OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
@@ -109,10 +109,10 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			mhash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 			ahash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 			lhash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
-			key_list = OBJ_GET(widget,"multi_expr_keys");
-			mult_list = OBJ_GET(widget,"fromecu_mults");
-			add_list = OBJ_GET(widget,"fromecu_addds");
-			table_list = OBJ_GET(widget,"lookuptables");
+			key_list = (gchar *)OBJ_GET(widget,"multi_expr_keys");
+			mult_list = (gchar *)OBJ_GET(widget,"fromecu_mults");
+			add_list = (gchar *)OBJ_GET(widget,"fromecu_addds");
+			table_list = (gchar *)OBJ_GET(widget,"lookuptables");
 			if (table_list)
 				tables = g_strsplit(table_list,",",-1);
 			keys = g_strsplit(key_list,",",-1);
@@ -120,10 +120,10 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			adds = g_strsplit(add_list,",",-1);
 			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(mults));i++)
 			{
-				multiplier = g_new0(gfloat, 1);
+				multiplier = (gfloat *)g_new0(gfloat, 1);
 				*multiplier = (gfloat)g_strtod(mults[i],NULL);
 				g_hash_table_insert(mhash,g_strdup(keys[i]),multiplier);
-				adder = g_new0(gfloat, 1);
+				adder = (gfloat *)g_new0(gfloat, 1);
 				*adder = (gfloat)g_strtod(adds[i],NULL);
 				g_hash_table_insert(ahash,g_strdup(keys[i]),adder);
 				if ((table_list) && (tables[i]))
@@ -139,10 +139,10 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			OBJ_SET_FULL(widget,"ahash",ahash,g_hash_table_destroy);
 			OBJ_SET_FULL(widget,"lhash",lhash,g_hash_table_destroy);
 		}
-		mhash = OBJ_GET(widget,"mhash");
-		ahash = OBJ_GET(widget,"ahash");
-		lhash = OBJ_GET(widget,"lhash");
-		source_key = OBJ_GET(widget,"source_key");
+		mhash = (GHashTable *)OBJ_GET(widget,"mhash");
+		ahash = (GHashTable *)OBJ_GET(widget,"ahash");
+		lhash = (GHashTable *)OBJ_GET(widget,"lhash");
+		source_key = (gchar *)OBJ_GET(widget,"source_key");
 		if (!source_key)
 			printf(_("big problem, source key is undefined!!\n"));
 		hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
@@ -153,15 +153,15 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 		{
 			if (!hash_key)
 			{
-				multiplier = g_hash_table_lookup(mhash,"DEFAULT");
-				adder = g_hash_table_lookup(ahash,"DEFAULT");
-				table = g_hash_table_lookup(lhash,"DEFAULT");
+				multiplier = (gfloat *)g_hash_table_lookup(mhash,"DEFAULT");
+				adder = (gfloat *)g_hash_table_lookup(ahash,"DEFAULT");
+				table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 			}
 			else
 			{
-				multiplier = g_hash_table_lookup(mhash,(gchar *)hash_key);
-				adder = g_hash_table_lookup(ahash,(gchar *)hash_key);
-				table = g_hash_table_lookup(lhash,(gchar *)hash_key);
+				multiplier = (gfloat *)g_hash_table_lookup(mhash,(gchar *)hash_key);
+				adder = (gfloat *)g_hash_table_lookup(ahash,(gchar *)hash_key);
+				table = (gchar *)g_hash_table_lookup(lhash,(gchar *)hash_key);
 			}
 		}
 		else /* This is a 3d table */
@@ -170,45 +170,45 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			{
 				if (!hash_key)
 				{
-					multiplier = g_hash_table_lookup(mhash,"DEFAULT");
-					adder = g_hash_table_lookup(ahash,"DEFAULT");
-					table = g_hash_table_lookup(lhash,"DEFAULT");
+					multiplier = (gfloat *)g_hash_table_lookup(mhash,"DEFAULT");
+					adder = (gfloat *)g_hash_table_lookup(ahash,"DEFAULT");
+					table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 				}
 				else
 				{
-					multiplier = g_hash_table_lookup(mhash,hash_key);
-					adder = g_hash_table_lookup(ahash,hash_key);
-					table = g_hash_table_lookup(lhash,hash_key);
+					multiplier = (gfloat *)g_hash_table_lookup(mhash,hash_key);
+					adder = (gfloat *)g_hash_table_lookup(ahash,hash_key);
+					table = (gchar *)g_hash_table_lookup(lhash,hash_key);
 				}
 			}
 			else
 			{
-				algorithm = DATA_GET(global_data,"algorithm");
+				algorithm = (gint *)DATA_GET(global_data,"algorithm");
 				switch (algorithm[table_num])
 				{
 					case SPEED_DENSITY:
 						if (!hash_key)
 						{
-							multiplier = g_hash_table_lookup(mhash,"DEFAULT");
-							adder = g_hash_table_lookup(ahash,"DEFAULT");
-							table = g_hash_table_lookup(lhash,"DEFAULT");
+							multiplier = (gfloat *)g_hash_table_lookup(mhash,"DEFAULT");
+							adder = (gfloat *)g_hash_table_lookup(ahash,"DEFAULT");
+							table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 						}
 						else
 						{
-							multiplier = g_hash_table_lookup(mhash,hash_key);
-							adder = g_hash_table_lookup(ahash,hash_key);
-							table = g_hash_table_lookup(lhash,hash_key);
+							multiplier = (gfloat *)g_hash_table_lookup(mhash,hash_key);
+							adder = (gfloat *)g_hash_table_lookup(ahash,hash_key);
+							table = (gchar *)g_hash_table_lookup(lhash,hash_key);
 						}
 						break;
 					case ALPHA_N:
-						multiplier = g_hash_table_lookup(mhash,"DEFAULT");
-						adder = g_hash_table_lookup(ahash,"DEFAULT");
-						table = g_hash_table_lookup(lhash,"DEFAULT");
+						multiplier = (gfloat *)g_hash_table_lookup(mhash,"DEFAULT");
+						adder = (gfloat *)g_hash_table_lookup(ahash,"DEFAULT");
+						table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 						break;
 					case MAF:
-						multiplier = g_hash_table_lookup(mhash,"AFM_VOLTS");
-						adder = g_hash_table_lookup(ahash,"AFM_VOLTS");
-						table = g_hash_table_lookup(lhash,"DEFAULT");
+						multiplier = (gfloat *)g_hash_table_lookup(mhash,"AFM_VOLTS");
+						adder = (gfloat *)g_hash_table_lookup(ahash,"AFM_VOLTS");
+						table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 						break;
 				}
 			}
@@ -263,13 +263,13 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	if (return_value > upper)
 	{
 		if (dl_type != IGNORED)
-			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING value clamped at %f (%f <- %f -> %f)!!\n"),upper,lower,value,upper);
+			MTXDBG((Dbg_Class)(CONVERSIONS|CRITICAL),_("WARNING value clamped at %f (%f <- %f -> %f)!!\n"),upper,lower,value,upper);
 		return_value = upper;
 	}
 	if (return_value < lower)
 	{
 		if (dl_type != IGNORED)
-			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING value clamped at %f (%f <- %f -> %f)!!\n"),lower,lower,value,upper);
+			MTXDBG((Dbg_Class)(CONVERSIONS|CRITICAL),_("WARNING value clamped at %f (%f <- %f -> %f)!!\n"),lower,lower,value,upper);
 		return_value = lower;
 	}
 
@@ -296,7 +296,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gchar * conv_expr = NULL;
 	void *evaluator = NULL;
 	gint tmpi = 0;
-	DataSize size = 0;
+	DataSize size = MTX_U08;
 	gfloat lower = 0.0;
 	gfloat upper = 0.0;
 	gboolean fromecu_complex = FALSE;
@@ -326,16 +326,16 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 
 	if (!get_ecu_data_f)
-		get_symbol("get_ecu_data",(void *)&get_ecu_data_f);
+		get_symbol("get_ecu_data",(void **)&get_ecu_data_f);
 	if (!send_to_ecu_f)
-		get_symbol("send_to_ecu",(void *)&send_to_ecu_f);
+		get_symbol("send_to_ecu",(void **)&send_to_ecu_f);
 	g_return_val_if_fail(get_ecu_data_f,0.0);
 	g_return_val_if_fail(send_to_ecu_f,0.0);
 	name = glade_get_widget_name(widget);
 
 	g_static_mutex_lock(&mutex);
 
-	size = (DataSize)OBJ_GET(widget,"size");
+	size = (DataSize)(GINT)OBJ_GET(widget,"size");
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	if (size == 0)
 	{
@@ -344,11 +344,11 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	}
 
 	if (OBJ_GET(widget,"raw_lower"))
-		lower = (gfloat)strtol(OBJ_GET(widget,"raw_lower"),NULL,10);
+		lower = (gfloat)strtol((gchar *)OBJ_GET(widget,"raw_lower"),NULL,10);
 	else
 		lower = (gfloat)get_extreme_from_size(size,LOWER);
 	if (OBJ_GET(widget,"raw_upper"))
-		upper = (gfloat)strtol(OBJ_GET(widget,"raw_upper"),NULL,10);
+		upper = (gfloat)strtol((gchar *)OBJ_GET(widget,"raw_upper"),NULL,10);
 	else
 		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
@@ -368,21 +368,21 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	if (tmpi < lower)
 	{
 		if (dl_type != IGNORED)
-			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),lower,lower,tmpi,upper);
+			MTXDBG((Dbg_Class)(CONVERSIONS|CRITICAL),_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),lower,lower,tmpi,upper);
 		tmpi = lower;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
 	if (tmpi > upper)
 	{
 		if (dl_type != IGNORED)
-			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),lower,lower,tmpi,upper);
+			MTXDBG((Dbg_Class)(CONVERSIONS|CRITICAL),_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),lower,lower,tmpi,upper);
 		tmpi = upper;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
 	/* MULTI EXPRESSION ONLY! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
-		sources_hash = DATA_GET(global_data,"sources_hash");
+		sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 		//if ((!OBJ_GET(widget,"mhash")) && (!OBJ_GET(widget,"ahash")))
 		if ((!OBJ_GET(widget,"mhash")) && 
 				(!OBJ_GET(widget,"ahash")) &&
@@ -391,10 +391,10 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			mhash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 			ahash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
 			lhash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,g_free);
-			key_list = OBJ_GET(widget,"multi_expr_keys");
-			mult_list = OBJ_GET(widget,"fromecu_mults");
-			add_list = OBJ_GET(widget,"fromecu_adds");
-			table_list = OBJ_GET(widget,"lookuptables");
+			key_list = (gchar *)OBJ_GET(widget,"multi_expr_keys");
+			mult_list = (gchar *)OBJ_GET(widget,"fromecu_mults");
+			add_list = (gchar *)OBJ_GET(widget,"fromecu_adds");
+			table_list = (gchar *)OBJ_GET(widget,"lookuptables");
 			if (!mult_list)
 				MTXDBG(CRITICAL,_("BUG, widget %s is multi_expression but doesn't have fromecu_mults defined!\n"),(name == NULL ? "undefined" : name));
 			if (!add_list)
@@ -406,10 +406,10 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 				tables = g_strsplit(table_list,",",-1);
 			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(mults));i++)
 			{
-				multiplier = g_new0(gfloat, 1);
+				multiplier = (gfloat *)g_new0(gfloat, 1);
 				*multiplier = (gfloat)g_strtod(mults[i],NULL);
 				g_hash_table_insert(mhash,g_strdup(keys[i]),multiplier);
-				adder = g_new0(gfloat, 1);
+				adder = (gfloat *)g_new0(gfloat, 1);
 				*adder = (gfloat)g_strtod(adds[i],NULL);
 				g_hash_table_insert(ahash,g_strdup(keys[i]),adder);
 				if ((table_list) && (tables[i]))
@@ -425,10 +425,10 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			OBJ_SET_FULL(widget,"ahash",ahash,g_hash_table_destroy);
 			OBJ_SET_FULL(widget,"lhash",lhash,g_hash_table_destroy);
 		}
-		mhash = OBJ_GET(widget,"mhash");
-		ahash = OBJ_GET(widget,"ahash");
-		lhash = OBJ_GET(widget,"lhash");
-		source_key = OBJ_GET(widget,"source_key");
+		mhash = (GHashTable *)OBJ_GET(widget,"mhash");
+		ahash = (GHashTable *)OBJ_GET(widget,"ahash");
+		lhash = (GHashTable *)OBJ_GET(widget,"lhash");
+		source_key = (gchar *)OBJ_GET(widget,"source_key");
 		if (!source_key)
 			printf(_("big problem, source key is undefined!!\n"));
 		hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
@@ -439,15 +439,15 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		{
 			if (!hash_key)
 			{
-				multiplier = g_hash_table_lookup(mhash,"DEFAULT");
-				adder = g_hash_table_lookup(ahash,"DEFAULT");
-				table = g_hash_table_lookup(lhash,"DEFAULT");
+				multiplier = (gfloat *)g_hash_table_lookup(mhash,"DEFAULT");
+				adder = (gfloat *)g_hash_table_lookup(ahash,"DEFAULT");
+				table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 			}
 			else
 			{
-				multiplier = g_hash_table_lookup(mhash,(gchar *)hash_key);
-				adder = g_hash_table_lookup(ahash,(gchar *)hash_key);
-				table = g_hash_table_lookup(lhash,(gchar *)hash_key);
+				multiplier = (gfloat *)g_hash_table_lookup(mhash,(gchar *)hash_key);
+				adder = (gfloat *)g_hash_table_lookup(ahash,(gchar *)hash_key);
+				table = (gchar *)g_hash_table_lookup(lhash,(gchar *)hash_key);
 			}
 		}
 		else /* This is a 3d table */
@@ -456,45 +456,45 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			{
 				if (!hash_key)
 				{
-					multiplier = g_hash_table_lookup(mhash,"DEFAULT");
-					adder = g_hash_table_lookup(ahash,"DEFAULT");
-					table = g_hash_table_lookup(lhash,"DEFAULT");
+					multiplier = (gfloat *)g_hash_table_lookup(mhash,"DEFAULT");
+					adder = (gfloat *)g_hash_table_lookup(ahash,"DEFAULT");
+					table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 				}
 				else
 				{
-					multiplier = g_hash_table_lookup(mhash,hash_key);
-					adder = g_hash_table_lookup(ahash,hash_key);
-					table = g_hash_table_lookup(lhash,hash_key);
+					multiplier = (gfloat *)g_hash_table_lookup(mhash,hash_key);
+					adder = (gfloat *)g_hash_table_lookup(ahash,hash_key);
+					table = (gchar *)g_hash_table_lookup(lhash,hash_key);
 				}
 			}
 			else
 			{
-				algorithm = DATA_GET(global_data,"algorithm");
+				algorithm = (gint *)DATA_GET(global_data,"algorithm");
 				switch (algorithm[table_num])
 				{
 					case SPEED_DENSITY:
 						if (!hash_key)
 						{
-							multiplier = g_hash_table_lookup(mhash,"DEFAULT");
-							adder = g_hash_table_lookup(ahash,"DEFAULT");
-							table = g_hash_table_lookup(lhash,"DEFAULT");
+							multiplier = (gfloat *)g_hash_table_lookup(mhash,"DEFAULT");
+							adder = (gfloat *)g_hash_table_lookup(ahash,"DEFAULT");
+							table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 						}
 						else
 						{
-							multiplier = g_hash_table_lookup(mhash,hash_key);
-							adder = g_hash_table_lookup(ahash,hash_key);
-							table = g_hash_table_lookup(lhash,hash_key);
+							multiplier = (gfloat *)g_hash_table_lookup(mhash,hash_key);
+							adder = (gfloat *)g_hash_table_lookup(ahash,hash_key);
+							table = (gchar *)g_hash_table_lookup(lhash,hash_key);
 						}
 						break;
 					case ALPHA_N:
-						multiplier = g_hash_table_lookup(mhash,"DEFAULT");
-						adder = g_hash_table_lookup(ahash,"DEFAULT");
-						table = g_hash_table_lookup(lhash,"DEFAULT");
+						multiplier = (gfloat *)g_hash_table_lookup(mhash,"DEFAULT");
+						adder = (gfloat *)g_hash_table_lookup(ahash,"DEFAULT");
+						table = (gchar *)g_hash_table_lookup(lhash,"DEFAULT");
 						break;
 					case MAF:
-						multiplier = g_hash_table_lookup(mhash,"AFM_VOLTS");
-						adder = g_hash_table_lookup(ahash,"AFM_VOLTS");
-						table = g_hash_table_lookup(lhash,"AFM_VOLTS");
+						multiplier = (gfloat *)g_hash_table_lookup(mhash,"AFM_VOLTS");
+						adder = (gfloat *)g_hash_table_lookup(ahash,"AFM_VOLTS");
+						table = (gchar *)g_hash_table_lookup(lhash,"AFM_VOLTS");
 						break;
 				}
 			}
@@ -524,8 +524,8 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		}
 		else
 		{
-			multiplier = OBJ_GET(widget,"fromecu_mult");
-			adder = OBJ_GET(widget,"fromecu_add");
+			multiplier = (gfloat *)OBJ_GET(widget,"fromecu_mult");
+			adder = (gfloat *)OBJ_GET(widget,"fromecu_add");
 			if ((multiplier) && (adder))
 				return_value = (((gfloat)tmpi + (*adder)) * (*multiplier));
 			else if (multiplier)
@@ -571,23 +571,23 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	if ((!widget) || (DATA_GET(global_data,"leaving")))
 		return;
 	if (!check_deps)
-		if (!get_symbol("check_dependancies",(void *)&check_deps))
-			MTXDBG(CRITICAL|CONVERSIONS,_("Can NOT locate \"check_dependancies\" function pointer in plugins, BUG!\n"));
+		if (!get_symbol("check_dependancies",(void **)&check_deps))
+			MTXDBG((Dbg_Class)(CRITICAL|CONVERSIONS),_("Can NOT locate \"check_dependancies\" function pointer in plugins, BUG!\n"));
 	if (!update_widget_f)
-		if(!get_symbol("update_widget",(void *)&update_widget_f))
-			MTXDBG(CRITICAL|CONVERSIONS,_("Can NOT locate \"update_widget\" function pointer in plugins, BUG!\n"));
+		if(!get_symbol("update_widget",(void **)&update_widget_f))
+			MTXDBG((Dbg_Class)(CRITICAL|CONVERSIONS),_("Can NOT locate \"update_widget\" function pointer in plugins, BUG!\n"));
 	dep_obj = (gconstpointer *)OBJ_GET(widget,"dep_object");
 	widget_temp = (GINT)OBJ_GET(widget,"widget_temp");
-	name = glade_get_widget_name(widget);
+	name = glade_get_widget_name((GtkWidget *)widget);
 	if (dep_obj)
 	{
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			MTXDBG(CRITICAL|CONVERSIONS,_("Widget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n"),(name == NULL ? "undefined" : name));
+			MTXDBG((Dbg_Class)(CRITICAL|CONVERSIONS),_("Widget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n"),(name == NULL ? "undefined" : name));
 	}
 
-	switch ((TempUnits)units)
+	switch ((TempUnits)(GINT)units)
 	{
 		case FAHRENHEIT:
 			if (GTK_IS_LABEL(widget))
@@ -815,10 +815,10 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 	static Firmware_Details *firmware = NULL;
 	gdouble res = 0.0;
 
-	TempUnits mtx_temp_units = (TempUnits)DATA_GET(global_data,"mtx_temp_units");
+	TempUnits mtx_temp_units = (TempUnits)(GINT)DATA_GET(global_data,"mtx_temp_units");
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,in);
 	g_return_val_if_fail(DATA_GET(global_data,"mtx_temp_units"),in);
 
@@ -854,10 +854,10 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 {
 	gdouble res = 0.0;
 	static Firmware_Details *firmware = NULL;
-	TempUnits mtx_temp_units = (TempUnits)DATA_GET(global_data,"mtx_temp_units");
+	TempUnits mtx_temp_units = (TempUnits)(GINT)DATA_GET(global_data,"mtx_temp_units");
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,in);
 	g_return_val_if_fail(DATA_GET(global_data,"mtx_temp_units"),in);
 

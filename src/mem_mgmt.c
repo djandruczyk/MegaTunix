@@ -111,10 +111,10 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
   \param data is the array of data to store
   \param offset is the RAW BYTE offset
   \param size is the size to be stored
-  \param new is the data to be stored
+  \param newval is the data to be stored
   \param bigendian is the Flag to flip bytes or not
   */
-G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, gint new, gboolean bigendian)
+G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, gint newval, gboolean bigendian)
 {
 	guint16 u16 = 0;
 	gint16 s16 = 0;
@@ -127,32 +127,32 @@ G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, g
 	{
 		case MTX_CHAR:
 		case MTX_U08:
-			data[offset] = (guint8)new;
+			data[offset] = (guint8)newval;
 			break;
 		case MTX_S08:
-			data[offset] = (gint8)new;
+			data[offset] = (gint8)newval;
 			break;
 		case MTX_U16:
 			if (bigendian)
-				u16 = GUINT16_TO_BE((guint16)new);
+				u16 = GUINT16_TO_BE((guint16)newval);
 			else
-				u16 = GUINT16_TO_LE((guint16)new);
+				u16 = GUINT16_TO_LE((guint16)newval);
 			data[offset] = (guint8)u16;
 			data[offset+1] = (guint8)((guint16)u16 >> 8);
 			break;
 		case MTX_S16:
 			if (bigendian)
-				s16 = GINT16_TO_BE((gint16)new);
+				s16 = GINT16_TO_BE((gint16)newval);
 			else
-				s16 = GINT16_TO_LE((gint16)new);
+				s16 = GINT16_TO_LE((gint16)newval);
 			data[offset] = (guint8)s16;
 			data[offset+1] = (guint8)((gint16)s16 >> 8);
 			break;
 		case MTX_U32:
 			if (bigendian)
-				u32 = GUINT32_TO_BE((guint32)new);
+				u32 = GUINT32_TO_BE((guint32)newval);
 			else
-				u32 = GUINT32_TO_LE((guint32)new);
+				u32 = GUINT32_TO_LE((guint32)newval);
 			data[offset] = (guint8)u32;
 			data[offset+1] = (guint8)((guint32)u32 >> 8);
 			data[offset+2] = (guint8)((guint32)u32 >> 16);
@@ -160,9 +160,9 @@ G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, g
 			break;
 		case MTX_S32:
 			if (bigendian)
-				s32 = GINT32_TO_BE((gint32)new);
+				s32 = GINT32_TO_BE((gint32)newval);
 			else
-				s32 = GINT32_TO_LE((gint32)new);
+				s32 = GINT32_TO_LE((gint32)newval);
 			data[offset] = (guint8)s32;
 			data[offset+1] = (guint8)((gint32)s32 >> 8);
 			data[offset+2] = (guint8)((gint32)s32 >> 16);

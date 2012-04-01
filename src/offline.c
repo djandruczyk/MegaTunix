@@ -53,8 +53,8 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	Firmware_Details *firmware = NULL;
 	void (*load_firmware_details)(void *,const gchar *) = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	io_repair_queue = DATA_GET(global_data,"io_repair_queue");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	io_repair_queue = (GAsyncQueue *)DATA_GET(global_data,"io_repair_queue");
 
 	/* Cause Serial Searcher thread to abort.... */
 	if (io_repair_queue)
@@ -95,7 +95,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		firmware = g_new0(Firmware_Details,1);
 		DATA_SET(global_data,"firmware",firmware);
 	}
-	if (get_symbol("load_firmware_details",(void*)&load_firmware_details))
+	if (get_symbol("load_firmware_details",(void **)&load_firmware_details))
 		load_firmware_details(firmware,filename);
 	else
 		printf("Unable to load firmware details!\n");
@@ -104,79 +104,79 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("update_interrogation_gui_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_realtime_map_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("initialize_dashboards_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_status_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_rt_text_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("load_gui_tabs_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("start_statuscounts_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("disable_burner_buttons_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("offline_ecu_restore_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("setup_menu_handlers_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("enable_3d_buttons_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("ready_msg_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("cleanup_pf");
-	get_symbol(pf->name,(void *)&pf->function_w_arg);
+	get_symbol(pf->name,(void **)&pf->function_w_arg);
 	pf->w_arg = TRUE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
@@ -201,13 +201,13 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("reset_temps_pf");
-	get_symbol(pf->name,(void *)&pf->function);
+	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("cleanup_pf");
-	get_symbol(pf->name,(void *)&pf->function_w_arg);
+	get_symbol(pf->name,(void **)&pf->function_w_arg);
 	pf->w_arg = TRUE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
@@ -275,7 +275,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		}
 		cfg_read_string(cfgfile,"interrogation_profile","name",&tmpbuf);
 		cfg_free(cfgfile);
-		last_file = DATA_GET(global_data,"last_offline_profile");
+		last_file = (gchar *)DATA_GET(global_data,"last_offline_profile");
 
 		if (g_array_index(classes,FileClass,i) == PERSONAL)
 		{
@@ -328,7 +328,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		/* Cycle list for PERSONAL interogation files */
 		for (i=0;i<g_list_length(p_list);i++)
 		{
-			element = g_list_nth_data(p_list,i);
+			element = (ListElement *)g_list_nth_data(p_list,i);
 
 			ebox = gtk_event_box_new();
 			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
@@ -361,7 +361,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	/* Cycle list for System interogation files */
 	for (i=0;i<g_list_length(s_list);i++)
 	{
-		element = g_list_nth_data(s_list,i);
+		element = (ListElement *)g_list_nth_data(s_list,i);
 		ebox = gtk_event_box_new();
 		gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 		hbox = gtk_hbox_new(FALSE,10);
@@ -407,7 +407,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	{
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
-			return DATA_GET(global_data,"offline_firmware_choice");
+			return (gchar *)DATA_GET(global_data,"offline_firmware_choice");
 			break;
 		case GTK_RESPONSE_CANCEL:
 		default:
@@ -428,8 +428,8 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	void (*restore_all_f)(const gchar *);
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	get_symbol("restore_all_ecu_settings",(void *)&restore_all_f);
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	get_symbol("restore_all_ecu_settings",(void **)&restore_all_f);
 
 	g_return_if_fail(firmware);
 	g_return_if_fail(restore_all_f);
@@ -446,7 +446,7 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	fileio->title = g_strdup("You should load an ECU backup from a file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->shortcut_folders = g_strdup("ecu_snapshots,../MTX_ecu_snapshots");
-	fileio->default_filename = g_strdup(DATA_GET(global_data,"last_offline_filename"));
+	fileio->default_filename = g_strdup((gchar *)DATA_GET(global_data,"last_offline_filename"));
 
 	gdk_threads_enter();
 	filename = choose_file(fileio);

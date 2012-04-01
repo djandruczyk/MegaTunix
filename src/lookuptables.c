@@ -59,7 +59,7 @@ G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer use
 	gchar * filename = NULL;
 	gchar ** vector = NULL;
 	
-	vector = g_strsplit(fname,".",2);
+	vector = g_strsplit((gchar *)fname,".",2);
 
 	filename = get_file(g_strconcat(LOOKUPTABLES_DATA_DIR,PSEP,vector[0],NULL),g_strdup(vector[1]));
 	g_strfreev(vector);
@@ -134,16 +134,16 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 
 	vector = g_strsplit(filename,PSEP,-1);
 	lookuptable = g_new0(LookupTable, 1);
-	lookuptable->array = g_memdup(&tmparray,i*sizeof(gint));
+	lookuptable->array = (gint *)g_memdup(&tmparray,i*sizeof(gint));
 	lookuptable->filename = g_strdup(vector[g_strv_length(vector)-1]);
 	g_strfreev(vector);
-	lookuptables = DATA_GET(global_data,"lookuptables");
+	lookuptables = (GHashTable *)DATA_GET(global_data,"lookuptables");
 	if (!lookuptables)
 	{
 		lookuptables = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_lookuptable);
 		DATA_SET_FULL(global_data,"lookuptables",lookuptables,g_hash_table_destroy);
 	}
-	g_hash_table_replace(DATA_GET(global_data,"lookuptables"),g_strdup(table_name),lookuptable);
+	g_hash_table_replace((GHashTable *)DATA_GET(global_data,"lookuptables"),g_strdup(table_name),lookuptable);
 	/*g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),dump_lookuptables,NULL);*/
 
 	return TRUE;
@@ -182,7 +182,7 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 	static gboolean (*check_deps)(gconstpointer *);
 
 	if (!check_deps)
-		get_symbol("check_dependancies",(void *)&check_deps);
+		get_symbol("check_dependancies",(void **)&check_deps);
 	table = (gchar *)DATA_GET(object,"lookuptable");
 	alt_table = (gchar *)DATA_GET(object,"alt_lookuptable");
 	dep_obj = (gconstpointer *)DATA_GET(object,"dep_object");
@@ -194,9 +194,9 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
-		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),alt_table);	
 	else
-		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),table);	
 
 	array = lookuptable->array;
 	len=255;
@@ -271,7 +271,7 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 	static gboolean (*check_deps)(gconstpointer *);
 
 	if (!check_deps)
-		get_symbol("check_dependancies",(void *)&check_deps);
+		get_symbol("check_dependancies",(void **)&check_deps);
 
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
@@ -284,9 +284,9 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
-		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),alt_table);	
 	else
-		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),table);	
 
 	array = lookuptable->array;
 	len=255;
@@ -348,7 +348,7 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 	LookupTable *lookuptable = NULL;
 	gint *array = NULL;
 
-	lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
+	lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),table);	
 	if (!lookuptable)
 		return value;
 	array = lookuptable->array;
@@ -410,9 +410,9 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 	gboolean state = FALSE;
 
 	if (!lookuptable_hash)
-		lookuptable_hash = DATA_GET(global_data,"lookuptables");
+		lookuptable_hash = (GHashTable *)DATA_GET(global_data,"lookuptables");
 	if (!check_deps)
-		get_symbol("check_dependancies",(void *)&check_deps);
+		get_symbol("check_dependancies",(void **)&check_deps);
 
 	table = (gchar *)DATA_GET(object,"lookuptable");
 	alt_table = (gchar *)DATA_GET(object,"alt_lookuptable");
@@ -476,7 +476,7 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 	static gboolean (*check_deps)(gconstpointer *);
 
 	if (!check_deps)
-		get_symbol("check_dependancies",(void *)&check_deps);
+		get_symbol("check_dependancies",(void **)&check_deps);
 
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
@@ -493,12 +493,12 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 	if (state)
 	{
 		/*printf("ALTERNATE\n");*/
-		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),alt_table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),alt_table);	
 	}
 	else
 	{
 		/*printf("NORMAL\n");*/
-		lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
+		lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),table);	
 	}
 
 	if (!lookuptable)
@@ -527,7 +527,7 @@ G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 		assert(table);
 	}
 
-	lookuptable = (LookupTable *)g_hash_table_lookup(DATA_GET(global_data,"lookuptables"),table);	
+	lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),table);	
 	if (!lookuptable)
 	{
 		printf(_("FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n"),table);
@@ -574,7 +574,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 	gchar ** tmpvector = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if ((ltc_created) && (ltc_visible))
 		return TRUE;
@@ -623,13 +623,13 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 			tmpvector = g_strsplit(vector[i],PSEP,-1);
 			if (g_array_index(classes,FileClass,i) == PERSONAL)
 			{
-				element = g_new0(ListElement, 1);
+				element = (ListElement *)g_new0(ListElement, 1);
 				element->name = g_strdup(tmpvector[g_strv_length(tmpvector)-1]);
 				p_list = g_list_append(p_list,element);
 			}
 			if (g_array_index(classes,FileClass,i) == SYSTEM)
 			{
-				element = g_new0(ListElement, 1);
+				element = (ListElement *)g_new0(ListElement, 1);
 				element->name = g_strdup(tmpvector[g_strv_length(tmpvector)-1]);
 				s_list = g_list_append(s_list,element);
 			}
@@ -642,7 +642,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		for (i=0;i<g_list_length(p_list);i++)
 		{
 			gtk_tree_store_append(combostore,&iter,&per_iter);
-			element = g_list_nth_data(p_list,i);
+			element = (ListElement *)g_list_nth_data(p_list,i);
 			gtk_tree_store_set(combostore,&iter,
 					0,element->name,
 					-1);
@@ -650,7 +650,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		for (i=0;i<g_list_length(s_list);i++)
 		{
 			gtk_tree_store_append(combostore,&iter,&sys_iter);
-			element = g_list_nth_data(s_list,i);
+			element = (ListElement *)g_list_nth_data(s_list,i);
 			gtk_tree_store_set(combostore,&iter,
 					0,element->name,
 					-1);
@@ -734,7 +734,7 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 {
 	GtkTreeModel *combostore = NULL;
 	GtkTreeIter iter;
-	GtkTreeModel *model = data;
+	GtkTreeModel *model = (GtkTreeModel *)data;
 	ConfigFile *cfgfile = NULL;
 	gchar * new_text = NULL;
 	gchar * int_name = NULL;
@@ -747,8 +747,8 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	GAsyncQueue *io_data_queue = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	io_data_queue = DATA_GET(global_data,"io_data_queue");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
 
 	/* Get combo box model so we can set the combo to this new value */
 	g_object_get(G_OBJECT(renderer),"model",&combostore,NULL);
@@ -803,7 +803,7 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 		g_free(old);
 		return FALSE;
 	}
-	g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),update_lt_config,cfgfile);
+	g_hash_table_foreach((GHashTable *)DATA_GET(global_data,"lookuptables"),update_lt_config,cfgfile);
 	if (g_strrstr(firmware->profile_filename,"mtx"))
 		cfg_write_file(cfgfile, firmware->profile_filename);
 	else
@@ -836,8 +836,8 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
   */
 G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
-	ConfigFile *cfgfile = data;
-	LookupTable *lookuptable = value;
+	ConfigFile *cfgfile = (ConfigFile *)data;
+	LookupTable *lookuptable = (LookupTable *)value;
 	/*printf("updating %s, %s, %s\n",cfgfile->filename,(gchar *)key, lookuptable->filename);*/
 	cfg_write_string(cfgfile,"lookuptables",(gchar *)key,lookuptable->filename);
 

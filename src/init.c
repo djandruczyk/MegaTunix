@@ -70,10 +70,10 @@ G_MODULE_EXPORT void init(void)
 	GHashTable *widget_group_states = NULL;
 	gint i = 0;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	colormap = gdk_colormap_get_system ();
-	args = DATA_GET(global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	gdk_colormap_alloc_color(colormap,&red,FALSE,TRUE);
 	gdk_colormap_alloc_color(colormap,&green,FALSE,TRUE);
 	gdk_colormap_alloc_color(colormap,&blue,FALSE,TRUE);
@@ -181,10 +181,10 @@ G_MODULE_EXPORT gboolean read_config(void)
 	if (!project)
 		project = DEFAULT_PROJECT;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	filename = g_build_path(PSEP,HOME(), "mtx",project,"config", NULL);
-	args = DATA_GET(global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 	{
@@ -374,11 +374,11 @@ G_MODULE_EXPORT void save_config()
 	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
 
-	serial_params = DATA_GET(global_data,"serial_params");
-	firmware = DATA_GET(global_data,"firmware");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_static_mutex_lock(&mutex);
-	project = DATA_GET(global_data,"project_name");
+	project = (gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
 		project = DEFAULT_PROJECT;
 
@@ -396,7 +396,7 @@ G_MODULE_EXPORT void save_config()
 		
 	cfg_write_int(cfgfile, "Global", "Temp_Units", (GINT)DATA_GET(global_data,"mtx_temp_units"));
 	cfg_write_int(cfgfile, "Global", "Color_Scaling", (GINT)DATA_GET(global_data,"mtx_color_scale"));
-	cfg_write_string(cfgfile, "Global", "Last_ECU_Family",DATA_GET(global_data,"ecu_family"));
+	cfg_write_string(cfgfile, "Global", "Last_ECU_Family",(const gchar *)DATA_GET(global_data,"ecu_family"));
 	if (firmware)
 		if (firmware->actual_signature)
 			cfg_write_string(cfgfile, "Global", "Last_Signature",firmware->actual_signature);
@@ -406,11 +406,11 @@ G_MODULE_EXPORT void save_config()
 	cfg_write_int(cfgfile, "Global", "VE3D_FPS", (GINT)DATA_GET(global_data,"ve3d_fps"));
 	cfg_write_int(cfgfile, "Global", "dbg_lvl", (GINT)DATA_GET(global_data,"dbg_lvl"));
 	if (DATA_GET(global_data,"last_offline_profile"))
-		cfg_write_string(cfgfile, "Global", "last_offline_profile", DATA_GET(global_data,"last_offline_profile"));
+		cfg_write_string(cfgfile, "Global", "last_offline_profile", (const gchar *)DATA_GET(global_data,"last_offline_profile"));
 	if (DATA_GET(global_data,"last_offline_filename"))
-		cfg_write_string(cfgfile, "Global", "last_offline_filename", DATA_GET(global_data,"last_offline_filename"));
+		cfg_write_string(cfgfile, "Global", "last_offline_filename", (const gchar *)DATA_GET(global_data,"last_offline_filename"));
 	cfg_write_int(cfgfile, "Serial", "read_timeout", (GINT)DATA_GET(global_data,"read_timeout"));
-	tmpbuf = DATA_GET(global_data,"dash_1_name");
+	tmpbuf = (gchar *)DATA_GET(global_data,"dash_1_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_1_name", tmpbuf);
@@ -422,7 +422,7 @@ G_MODULE_EXPORT void save_config()
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 				cfg_write_int(cfgfile, "Dashboards", "dash_1_x_origin", x);
 				cfg_write_int(cfgfile, "Dashboards", "dash_1_y_origin", y);
-				dash = OBJ_GET(widget,"dash");
+				dash = (GtkWidget *)OBJ_GET(widget,"dash");
 				orig_width = (GINT) OBJ_GET(dash,"orig_width");
 				orig_height = (GINT) OBJ_GET(dash,"orig_height");
 				if (gtk_widget_get_visible(widget))
@@ -442,7 +442,7 @@ G_MODULE_EXPORT void save_config()
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_y_origin");
 		cfg_remove_key(cfgfile, "Dashboards", "dash_1_size_ratio");
 	}
-	tmpbuf = DATA_GET(global_data,"dash_2_name");
+	tmpbuf = (gchar *)DATA_GET(global_data,"dash_2_name");
 	if ((tmpbuf) && (strlen(tmpbuf) != 0 ))
 	{
 		cfg_write_string(cfgfile, "Dashboards", "dash_2_name", tmpbuf);
@@ -454,7 +454,7 @@ G_MODULE_EXPORT void save_config()
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 				cfg_write_int(cfgfile, "Dashboards", "dash_2_x_origin", x);
 				cfg_write_int(cfgfile, "Dashboards", "dash_2_y_origin", y);
-				dash = OBJ_GET(widget,"dash");
+				dash = (GtkWidget *)OBJ_GET(widget,"dash");
 				orig_width = (GINT) OBJ_GET(dash,"orig_width");
 				orig_height = (GINT) OBJ_GET(dash,"orig_height");
 				if (gtk_widget_get_visible(widget))
@@ -670,7 +670,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	GList ***ecu_widgets = NULL;
 	GList **tab_gauges = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
 	if (!firmware->rt_data)
@@ -794,18 +794,18 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	gchar *tmpbuf = NULL;
 #endif
 
-	args = DATA_GET(global_data,"args");
-	serial_params = DATA_GET(global_data,"serial_params");
-	rtv_map = DATA_GET(global_data,"rtv_map");
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	tab_gauges = DATA_GET(global_data,"tab_gauges");
-	firmware = DATA_GET(global_data,"firmware");
-	serio_mutex = DATA_GET(global_data,"serio_mutex");
-	rtt_mutex = DATA_GET(global_data,"rtt_mutex");
-	dash_mutex = DATA_GET(global_data,"dash_mutex");
-	toggle_group_list = DATA_GET(global_data,"toggle_group_list");
-	source_list = DATA_GET(global_data,"source_list");
-	tabinfos = DATA_GET(global_data,"tabinfos");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	tab_gauges = (GList **)DATA_GET(global_data,"tab_gauges");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
+	rtt_mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
+	dash_mutex = (GMutex *)DATA_GET(global_data,"dash_mutex");
+	toggle_group_list = (GList *)DATA_GET(global_data,"toggle_group_list");
+	source_list = (GList *)DATA_GET(global_data,"source_list");
+	tabinfos = (GPtrArray *)DATA_GET(global_data,"tabinfos");
 	ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 
 	g_mutex_lock(serio_mutex);
@@ -843,7 +843,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 						if (g_list_length(ecu_widgets[i][j]) > 0)
 						{
 							if (args->verbose)
-								printf("Deallocating widgets in array %p ecu_widgets[%i][%i]\n",ecu_widgets[i][j],i,j);
+								printf("Deallocating widgets in array %p ecu_widgets[%i][%i]\n",(void *)ecu_widgets[i][j],i,j);
 #ifdef DEBUG
 							tmpbuf = g_strdup_printf("[%i][%i]",i,j);
 							g_list_foreach(ecu_widgets[i][j],dealloc_widget,(gpointer)tmpbuf);
@@ -921,7 +921,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 				dealloc_te_params(firmware->te_params[i]);
 		}
 		cleanup(firmware->te_params);
-		interdep_vars = DATA_GET(global_data,"interdep_vars");
+		interdep_vars = (GHashTable **)DATA_GET(global_data,"interdep_vars");
 
 		for (i=0;i<firmware->total_tables;i++)
 		{
@@ -949,10 +949,10 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		if (rtv_map->raw_list)
 			g_strfreev(rtv_map->raw_list);
 		cleanup (rtv_map->applicable_signatures);
-		for(i=0;i<rtv_map->rtv_list->len;i++)
+		for(i=0;i<(gint)rtv_map->rtv_list->len;i++)
 		{
 			data = g_ptr_array_index(rtv_map->rtv_list,i);
-			dealloc_rtv_object(data);
+			dealloc_rtv_object((gconstpointer *)data);
 		}
 		g_array_free(rtv_map->ts_array,TRUE);
 		g_ptr_array_free(rtv_map->rtv_list,TRUE);
@@ -964,7 +964,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	}
 	/* Runtime Text*/
 	g_mutex_lock(rtt_mutex);
-	store = DATA_GET(global_data,"rtt_model");
+	store = (GtkListStore *)DATA_GET(global_data,"rtt_model");
 	if (store)
 	{
 		gtk_tree_model_foreach(GTK_TREE_MODEL(store),dealloc_rtt_model,NULL);
@@ -988,7 +988,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	cleanup(global_data);
 	/* Dynamic widgets master hash  */
 
-	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
+	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
 	if (dynamic_widgets)
 		g_hash_table_destroy(dynamic_widgets);
 }
@@ -1340,7 +1340,7 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 		return;
 	array = (GArray *)DATA_GET(object, "history");
 	if (array)
-		g_array_free(DATA_GET(object,"history"),TRUE);
+		g_array_free((GArray *)DATA_GET(object,"history"),TRUE);
 
 //	printf("Deallocing RTV var %s\n",DATA_GET(object,"dlog_gui_name"));
 //	g_dataset_foreach(object,dataset_dealloc,NULL);
@@ -1424,11 +1424,11 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 	const gchar * name = NULL;
 	GtkWidget * widget = (GtkWidget *) data;
 	if (!args)
-		args = DATA_GET(global_data,"args");
+		args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	name = glade_get_widget_name(widget);
 	if (args->verbose)
 	{
-		printf("widget name %s pointer %p\n",(name == NULL ? "undefined": name),widget);
+		printf("widget name %s pointer %p\n",(name == NULL ? "undefined": name),(void *)widget);
 #ifdef DEBUG
 		printf("Dealloc widget at ecu memory coords %s\n",(gchar *)user_data);
 #endif

@@ -69,7 +69,7 @@ G_MODULE_EXPORT void open_debug(void)
 	GError *error = NULL;
 
 	g_static_mutex_lock(&dbg_mutex);
-	args = DATA_GET(global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
 	if(!dbg_channel)
 	{
@@ -81,7 +81,7 @@ G_MODULE_EXPORT void open_debug(void)
 		g_io_channel_set_encoding(dbg_channel,NULL,&error);
 		if (dbg_channel)
 		{
-			t = g_malloc(sizeof(time_t));
+			t = (time_t *)g_malloc(sizeof(time_t));
 			time(t);
 			tm = localtime(t);
 			g_free(t);

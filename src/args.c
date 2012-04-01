@@ -103,7 +103,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	{
 		if (g_ascii_strcasecmp(dash,"list") == 0)
 		{
-			print_dash_choices(DATA_GET(global_data,"project_name"));
+			print_dash_choices((gchar *)DATA_GET(global_data,"project_name"));
 			exit(1);
 		}
 		else
@@ -159,12 +159,12 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 			{
 				result = g_mkdir_with_parents(args->autolog_dump_dir, 755);
 				if (!result)
-					MTXDBG(IO_PROCESS|CRITICAL,_("Autolog dump dir creation ERROR: \"%s\"\n"),g_strerror(errno));
+					MTXDBG((Dbg_Class)(IO_PROCESS|CRITICAL),_("Autolog dump dir creation ERROR: \"%s\"\n"),g_strerror(errno));
 			}
 		}
 		if (!args->autolog_basename)
 		{
-			t = g_malloc(sizeof(time_t));
+			t = (time_t *)g_malloc(sizeof(time_t));
 			time(t);
 			tm = localtime(t);
 			g_free(t);

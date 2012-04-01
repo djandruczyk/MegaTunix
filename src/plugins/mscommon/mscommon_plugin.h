@@ -50,7 +50,7 @@ EXTERN void (*update_logbar_f)(const gchar *, const gchar *, gchar *, gboolean, 
 EXTERN void (*update_current_notebook_page_f)(void);
 EXTERN void (*process_rt_vars_f)(void *, gint );
 EXTERN void (*thread_update_widget_f)(const gchar *, WidgetType, gchar *);
-EXTERN gboolean (*queue_function_f)(gpointer);
+EXTERN gboolean (*queue_function_f)(const gchar *);
 EXTERN gboolean (*lookup_precision_f)(const gchar *, gint *);
 EXTERN gboolean (*lookup_current_value_f)(const gchar *, gfloat *);
 EXTERN gfloat (*direct_lookup_data_f)(gchar *, gint );

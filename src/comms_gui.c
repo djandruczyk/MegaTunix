@@ -39,7 +39,7 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
 	Serial_Params *serial_params = NULL;
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(0));
 	DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER(0));
@@ -65,15 +65,15 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 	GtkWidget * widget = NULL;
 	Serial_Params *serial_params = NULL;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	if (!pf_dispatch_queue)
-		pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
+		pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	if (!statuscounts_cond)
-		statuscounts_cond = DATA_GET(global_data,"statuscounts_cond");
+		statuscounts_cond = (GCond *)DATA_GET(global_data,"statuscounts_cond");
 	if (!statuscounts_mutex)
-		statuscounts_mutex = DATA_GET(global_data,"statuscounts_mutex");
+		statuscounts_mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
 
 	g_return_val_if_fail(pf_dispatch_queue,FALSE);
 	g_return_val_if_fail(gui_dispatch_queue,FALSE);
@@ -177,7 +177,7 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 {
 #ifndef __WIN32__
-	gint i = 0;
+	guint i = 0;
 	gint result = 0;
 	GDir *a_dir = NULL;
 	GDir *b_dir = NULL;
@@ -256,7 +256,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 		gtk_box_pack_start(GTK_BOX(parent),label,FALSE,TRUE,0);
 		for (i=0;i<g_list_length(found);i++)
 		{
-			check = gtk_check_button_new_with_label(g_list_nth_data(found,i));
+			check = gtk_check_button_new_with_label((const gchar *)g_list_nth_data(found,i));
 			gtk_box_pack_start(GTK_BOX(parent),check,TRUE,TRUE,0);
 			buttons = g_list_append(buttons,check);
 		}
@@ -269,7 +269,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 			ports = (gchar *)DATA_GET(global_data,"potential_ports");
 			for (i=0;i<g_list_length(found);i++)
 			{
-				check = g_list_nth_data(buttons,i);
+				check = (GtkWidget *)g_list_nth_data(buttons,i);
 				if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check)))
 					tmpbuf = g_strdup_printf("/dev/%s,%s",(gchar *)g_list_nth_data(found,i),ports);
 			}

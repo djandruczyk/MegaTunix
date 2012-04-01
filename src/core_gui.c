@@ -70,7 +70,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 	CmdLineArgs *args =  NULL;
 
 
-	args = DATA_GET(global_data,"args");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	g_return_val_if_fail(args,FALSE);
 	fname = g_build_filename(GUI_DATA_DIR,"main.glade",NULL);
 	filename = get_file(g_strdup(fname),NULL);
@@ -182,7 +182,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	gint mtx_color_scale;
 	Serial_Params *serial_params = NULL;
 
-	serial_params = DATA_GET(global_data,"serial_params");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 	mtx_color_scale = (GINT)DATA_GET(global_data,"mtx_color_scale");
 
@@ -387,7 +387,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* Fill in comm port entry if in manual mode */
 	if (!(GBOOLEAN)DATA_GET(global_data,"autodetect_port"))
-		gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget(xml,"active_port_entry")),DATA_GET(global_data,"override_port"));
+		gtk_entry_set_text(GTK_ENTRY(glade_xml_get_widget(xml,"active_port_entry")),(const gchar *)DATA_GET(global_data,"override_port"));
 
 	/* COMMS Tab Read delay subtable */
 	ebox = glade_xml_get_widget(xml,"rates_ebox");
@@ -513,9 +513,9 @@ void set_connected_icons_state(gboolean state)
 	static GtkWidget * disconn = NULL;
 	
 	if (!conn)
-		conn = DATA_GET(global_data,"connected_icon");
+		conn = (GtkWidget *)DATA_GET(global_data,"connected_icon");
 	if (!disconn)
-		disconn = DATA_GET(global_data,"disconnected_icon");
+		disconn = (GtkWidget *)DATA_GET(global_data,"disconnected_icon");
 
 	g_return_if_fail(conn);
 	g_return_if_fail(disconn);
