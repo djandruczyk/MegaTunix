@@ -67,7 +67,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, con
 		g_free(tmpbuf);
 	}
 	/* Store list of deps.... */
-	dep_obj = g_new0(gconstpointer, 1);
+	dep_obj = (gconstpointer *)g_new0(gconstpointer, 1);
 
 	DATA_SET_FULL(dep_obj,"deps",deps,g_strfreev);
 	DATA_SET(dep_obj,"num_deps",GINT_TO_POINTER(num_deps));
@@ -205,8 +205,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, con
 		g_strfreev(vector);
 
 	}
-	DATA_SET_FULL(object,"dep_object",(gpointer)dep_obj,dealloc_dep_object);
-	//DATA_SET_FULL(object,"dep_object",(gpointer)dep_obj,NULL);
+	DATA_SET_FULL(object,"dep_object",(gpointer)dep_obj,g_dataset_destroy);
 }
 
 
@@ -384,16 +383,7 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		}
 		g_strfreev(vector);
 	}
-	OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,dealloc_dep_object);
-	//OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,NULL);
-}
-
-
-G_MODULE_EXPORT void dealloc_dep_object(gpointer data)
-{
-	gconstpointer *dep_obj = (gconstpointer *)data;
-	g_dataset_destroy(dep_obj);
-//	g_free(dep_obj);
+	OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,g_dataset_destroy);
 }
 
 

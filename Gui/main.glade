@@ -431,7 +431,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkFrame" id="frame4">
+                                      <widget class="GtkFrame" id="binary_logging_frame">
                                         <property name="visible">True</property>
                                         <property name="label_xalign">0</property>
                                         <child>
@@ -1093,6 +1093,7 @@
                                         <child>
                                           <widget class="GtkTable" id="netaccess_table">
                                             <property name="visible">True</property>
+                                            <property name="sensitive">False</property>
                                             <property name="n_columns">3</property>
                                             <child>
                                               <widget class="GtkCheckButton" id="allow_net_checkbutton">

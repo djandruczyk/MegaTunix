@@ -23,6 +23,7 @@
 
 #include <configfile.h>
 #include <gui_handlers.h>
+#include <glade/glade.h>
 #include <gtk/gtk.h>
 
 typedef enum

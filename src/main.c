@@ -73,8 +73,6 @@ gint main(gint argc, gchar ** argv)
 	gl_ability = gtk_gl_init_check(&argc, &argv);
 
 	global_data = g_new0(gconstpointer, 1);
-	/* This will exit mtx if the locking fails! */
-	create_mtx_lock();
 
 	/* Condition variables */
 	cond = g_cond_new();
@@ -118,6 +116,9 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"serial_params",serial_params);
 
 	handle_args(argc,argv);	/* handle CLI arguments */
+
+	/* This will exit mtx if the locking fails! */
+	create_mtx_lock();
 	open_debug();		/* Open debug log */
 	/* Allocate memory  */
 	init();			/* Initialize global vars */

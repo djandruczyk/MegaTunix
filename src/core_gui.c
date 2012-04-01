@@ -173,6 +173,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	GtkWidget *cbutton = NULL;
 	GtkWidget *ebox = NULL;
 	GtkWidget *label = NULL;
+	GtkWidget *frame = NULL;
 	GtkWidget *widget = NULL;
 	GtkWidget *image = NULL;
 	GdkPixbuf *pixbuf = NULL;
@@ -308,6 +309,8 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 			G_CALLBACK(present_dash_filechooser),
 			GINT_TO_POINTER(2));
 
+	frame = glade_xml_get_widget(xml,"binary_logging_frame");
+	register_widget("binary_logging_frame",frame);
 	/* General Tab, Debugging frame */
 	ebox = glade_xml_get_widget(xml,"debugging_ebox");
 	gtk_widget_set_tooltip_text(ebox,_("This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will be written to MTXlog.txt file in your homedir, or in C:\\program files\\megatunix on Win32 platforms..."));

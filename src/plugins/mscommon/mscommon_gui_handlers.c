@@ -1735,11 +1735,19 @@ G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *canID, gint *page, 
   */
 G_MODULE_EXPORT void common_gui_init(void)
 {
+	GladeXML *xml = NULL;
 	void (*ecu_gui_init)(void) = NULL;
+	GtkWidget *widget = NULL;
 
 	/* Assigns additional data to the gui controls mainly so that
 	   functions within plugins can be located
 	   */
+	xml = DATA_GET(global_data,"main_xml");
+	g_return_if_fail(xml);
+	widget = glade_xml_get_widget(xml,"netaccess_table");
+	/* Enable network mode is NOT offline */
+	if ((!DATA_GET(global_data,"offline") && (GTK_IS_WIDGET(widget))))
+		gtk_widget_set_sensitive(widget,TRUE);
 
 	if (get_symbol_f("ecu_gui_init",(void **)&ecu_gui_init))
 		ecu_gui_init();

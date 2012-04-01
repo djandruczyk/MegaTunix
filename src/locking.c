@@ -19,6 +19,7 @@
   \author David Andruczyk
   */
 
+#include <args.h>
 #include <errno.h>
 #include <init.h>
 #include <locking.h>
@@ -77,11 +78,17 @@ G_MODULE_EXPORT void create_mtx_lock(void)
 G_MODULE_EXPORT void unix_create_mtx_lock(void)
 {
 #ifndef __WIN32__
+	CmdLineArgs *args = NULL;
 	GtkWidget *dialog = NULL;
 	gint lock = 0;
 	gint tmpfd = 0;
 	gchar * lockfile = NULL;
 	struct flock lock_struct;
+
+	args = DATA_GET(global_data,"args");
+	if (args->network_mode)
+		return;
+
 	lockfile = g_build_filename(g_get_tmp_dir(), ".MTXlock",NULL);
 	tmpfd = g_open(lockfile,O_RDWR|O_CREAT|O_TRUNC,S_IRWXU);
 	cleanup(lockfile);

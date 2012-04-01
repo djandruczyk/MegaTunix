@@ -564,10 +564,10 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
 			G_CALLBACK (ve3d_realize), NULL);
 	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
-			G_CALLBACK (ve3d_configure_event), NULL);
+			G_CALLBACK (ve3d_configure_event), GINT_TO_POINTER(table_num));
 	/* Connect signal handlers to the drawing area */
 	g_signal_connect(G_OBJECT (drawing_area), "expose_event",
-			G_CALLBACK (ve3d_expose_event), NULL);
+			G_CALLBACK (ve3d_expose_event), GINT_TO_POINTER(table_num));
 
 	g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
 			G_CALLBACK (ve3d_motion_notify_event), NULL);
@@ -946,20 +946,27 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
   */
 G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
+	static GMutex ** ve3d_mutex = NULL;
 	GdkGLContext *glcontext = NULL;
 	GdkGLDrawable *gldrawable = NULL;
 	Ve_View_3D *ve_view = NULL;
 	Cur_Vals *cur_vals = NULL;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
+	gint table_num = (GINT)data;
 
+	if (!ve3d_mutex)
+		ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	//printf("app expose event entered!\n");
 	glcontext = gtk_widget_get_gl_context(widget);
 	gldrawable = gtk_widget_get_gl_drawable(widget);
 
 	MTXDBG(OPENGL,_("Entered\n"));
+	g_return_val_if_fail(ve3d_mutex,FALSE);
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(glcontext,FALSE);
 	g_return_val_if_fail(gldrawable,FALSE);
+
+	g_mutex_lock(ve3d_mutex[table_num]);
 
 	if (!ve_view->gl_initialized)
 	{
@@ -1017,6 +1024,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	/*** OpenGL END ***/
 	MTXDBG(OPENGL,_("Leaving!\n"));
 	//printf("app expose event left (TRUE)!\n");
+	g_mutex_unlock(ve3d_mutex[table_num]);
 	return TRUE;
 }
 
@@ -3227,7 +3235,7 @@ gboolean delayed_expose(gpointer data)
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
-	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
+//	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return FALSE;
 }
@@ -3245,9 +3253,9 @@ gboolean delayed_reconfigure(gpointer data)
 	GdkWindow *window = gtk_widget_get_window(ve_view->drawing_area);
 	MTXDBG(OPENGL,_("Entered\n"));
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
-	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
+	ve3d_configure_event(ve_view->drawing_area, NULL,GINT_TO_POINTER(ve_view->table_num));
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
-	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
+	ve3d_expose_event(ve_view->drawing_area,NULL,GINT_TO_POINTER(ve_view->table_num));
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return FALSE;
 }

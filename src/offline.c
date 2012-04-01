@@ -22,6 +22,7 @@
 #include <api-versions.h>
 #include <debugging.h>
 #include <getfiles.h>
+#include <glade/glade.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
 #include <notifications.h>
@@ -185,6 +186,9 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	   io_cmd(firmware->get_all_command,NULL);
 	 */
 
+	widget = lookup_widget("binary_logging_frame");
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	widget = lookup_widget("interrogate_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
