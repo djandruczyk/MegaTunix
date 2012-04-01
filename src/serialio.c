@@ -70,6 +70,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	serial_params = DATA_GET(global_data,"serial_params");
 	serio_mutex = DATA_GET(global_data,"serio_mutex");
 
+//	printf("open serial\n");
 	g_mutex_lock(serio_mutex);
 	/*printf("Opening serial port %s\n",port_name);*/
 	/* Open Read/Write and NOT as the controlling TTY */
@@ -78,15 +79,17 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	{
 #ifdef __WIN32__
 		fd = open(port_name, O_RDWR | O_BINARY);
-//		serial_params->comm_handle = CreateFile(port_name,
-//				GENERIC_READ|GENERIC_WRITE, /* Access */
-//				0, /* not shared */
-//				0, /* No security */
-//				OPEN_EXISTING, /* Don't create a file */
-//				FILE_FLAG_OVERLAPPED, /* Overlapped IO */
-//				0 /* No templates... */
-//				);
-//		fd = _open_osfhandle(serial_params->comm_handle, 0);
+		/*
+		serial_params->comm_handle = CreateFile(port_name,
+				GENERIC_READ|GENERIC_WRITE, // Access 
+				0, // not shared 
+				0, // No security 
+				OPEN_EXISTING, // Don't create a file 
+				FILE_FLAG_OVERLAPPED, // Overlapped IO 
+				0 // No templates... 
+				);
+		fd = _open_osfhandle(serial_params->comm_handle, 0);
+		*/
 #else
 		fd = open(port_name, O_RDWR | O_NOCTTY | O_NDELAY);
 #endif
@@ -216,7 +219,9 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	win32_setup_serial_params(serial_params->fd,baudrate,bits,parity,stop);
 #else
 	/* Save serial port status */
-	tcgetattr(serial_params->fd,&serial_params->oldtio);
+	memset(&serial_params->oldtio, 0, sizeof(serial_params->newtio)); 
+	if(tcgetattr(serial_params->fd,&serial_params->oldtio) != 0)
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL, _("Error getting serial line information error %s\n"),strerror(errno));
 
 	g_mutex_unlock(serio_mutex);
 
@@ -267,8 +272,10 @@ G_MODULE_EXPORT void setup_serial_params(void)
 			baud = B9600;
 	}
 
-	cfsetispeed(&serial_params->newtio, baud);
-	cfsetospeed(&serial_params->newtio, baud);
+	if(cfsetispeed(&serial_params->newtio, baud) != 0)
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL, _("Error setting serial line input baud speed %s\n"),strerror(errno));
+	if(cfsetospeed(&serial_params->newtio, baud) != 0)
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL, _("Error setting serial line output baud speed %s\n"),strerror(errno));
 
 	/* Mask and set to 8N1 mode... */
 	/* Mask out HW flow control */
@@ -381,7 +388,8 @@ G_MODULE_EXPORT void setup_serial_params(void)
 		}
 	}
 	*/
-	tcsetattr(serial_params->fd, TCSANOW, &serial_params->newtio);
+	if(tcsetattr(serial_params->fd, TCSANOW, &serial_params->newtio) != 0)
+		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL, _("Error setting serial parameters %s\n"),strerror(errno));
 #endif
 	g_mutex_unlock(serio_mutex);
 	flush_serial(serial_params->fd,BOTH);
@@ -404,6 +412,7 @@ G_MODULE_EXPORT void close_serial(void)
 	if (serial_params->open == FALSE)
 		return;
 
+//	printf("close_serial\n");
 	g_mutex_lock(serio_mutex);
 
 	/*printf("Closing serial port\n");*/
