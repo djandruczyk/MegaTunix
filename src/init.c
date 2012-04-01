@@ -1342,7 +1342,7 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 	if (array)
 		g_array_free(DATA_GET(object,"history"),TRUE);
 
-	printf("Deallocing RTV var %s\n",DATA_GET(object,"dlog_gui_name"));
+//	printf("Deallocing RTV var %s\n",DATA_GET(object,"dlog_gui_name"));
 //	g_dataset_foreach(object,dataset_dealloc,NULL);
 	g_dataset_destroy(object);
 	cleanup(object);
