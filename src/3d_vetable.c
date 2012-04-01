@@ -764,7 +764,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean call_ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *window = OBJ_GET(widget,"window");
-	return ve3d_shutdown(window,data);
+	return ve3d_shutdown(window,NULL,data);
 }
 
 
@@ -776,12 +776,12 @@ G_MODULE_EXPORT gboolean call_ve3d_shutdown(GtkWidget *widget, gpointer data)
   \param data is the unused
   \returns FALSE so other handlers run
   */
-G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	GHashTable *ve_view_hash = NULL;
 	GdkWindow *window = NULL;
 	Ve_View_3D *ve_view =  NULL;
-	gint table_num = (gint)data;
+	gint table_num = (GINT)data;
 	GMutex **ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 	ve_view_hash = DATA_GET(global_data,"ve_view_hash");

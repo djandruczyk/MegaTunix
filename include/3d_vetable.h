@@ -220,7 +220,7 @@ struct _Cur_Vals
 RGB3f rgb_from_hue(gfloat, gfloat, gfloat);
 gboolean create_ve3d_view(GtkWidget *, gpointer );
 gboolean call_ve3d_shutdown(GtkWidget *, gpointer);
-gboolean ve3d_shutdown(GtkWidget *, gpointer);
+gboolean ve3d_shutdown(GtkWidget *, GdkEvent *,  gpointer);
 GdkGLConfig* get_gl_config(void);
 gint ve3d_realize (GtkWidget *, gpointer );
 gboolean ve3d_configure_event(GtkWidget *, GdkEventConfigure *,gpointer);
