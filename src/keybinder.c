@@ -59,7 +59,7 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 							GINT_TO_POINTER(tmpi));	
 				}
 				else
-					MTXDBG((Dbg_Class)(KEYPARSER|CRITICAL),_("MTX_INT: read of key \"%s\" from section \"%s\"  of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
+					MTXDBG(KEYPARSER|CRITICAL,_("MTX_INT: read of key \"%s\" from section \"%s\"  of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
 				break;
 			case MTX_ENUM:
 				if (cfg_read_string(cfgfile,section,keys[i],&tmpbuf))
@@ -72,7 +72,7 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 					g_free(tmpbuf);
 				}
 				else
-					MTXDBG((Dbg_Class)(KEYPARSER|CRITICAL),_("MTX_ENUM: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
+					MTXDBG(KEYPARSER|CRITICAL,_("MTX_ENUM: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
 				break;
 			case MTX_BOOL:
 				if (cfg_read_boolean(cfgfile,section,keys[i],&tmpi))
@@ -88,7 +88,7 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 					}
 				}
 				else
-					MTXDBG((Dbg_Class)(KEYPARSER|CRITICAL),_("MTX_BOOL: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
+					MTXDBG(KEYPARSER|CRITICAL,_("MTX_BOOL: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
 				break;
 			case MTX_FLOAT:
 				if (cfg_read_float(cfgfile,section,keys[i],&tmpf))
@@ -101,7 +101,7 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 							(gpointer)newfloat,g_free);
 				}
 				else
-					MTXDBG((Dbg_Class)(KEYPARSER|CRITICAL),_("MTX_FLOAT: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
+					MTXDBG(KEYPARSER|CRITICAL,_("MTX_FLOAT: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
 				break;
 
 			case MTX_STRING:
@@ -126,7 +126,7 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 					g_free(tmpbuf);
 				}
 				else
-					MTXDBG((Dbg_Class)(KEYPARSER|CRITICAL),_("MTX_STRING: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
+					MTXDBG(KEYPARSER|CRITICAL,_("MTX_STRING: read of key \"%s\" from section \"%s\" of file \"%s\" failed\n"),keys[i],section,cfgfile->filename);
 				break;
 			default:
 				break;

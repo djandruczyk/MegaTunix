@@ -52,12 +52,12 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	GladeXML *main_xml = NULL;
 	GladeXML *xml = NULL;
 	gboolean xml_result = FALSE;
-	CmdLineArgs *args = DATA_GET(global_data,"args");
+	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!(DATA_GET(global_data,"interrogated")))
 		return;
@@ -307,21 +307,21 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_map)
 	{
 		MTXDBG(CRITICAL,_("Bad things man, rtv_map is null!!\n"));
 		return NULL;
 	}
-	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
 		MTXDBG(CRITICAL,_("Bad things man, object doesn't exist for %s\n"),source);
 		return NULL;
 	}
 
-	rtt = g_malloc0(sizeof(Rt_Text));
+	rtt = (Rt_Text *)g_malloc0(sizeof(Rt_Text));
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
@@ -348,8 +348,8 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	gchar * source = NULL;
 	gboolean show_prefix = FALSE;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
-	source = OBJ_GET(parent,"source");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
+	source = (gchar *)OBJ_GET(parent,"source");
 	show_prefix = (GBOOLEAN)OBJ_GET(parent,"show_prefix");
 
 	g_return_val_if_fail(rtv_map,NULL);
@@ -357,7 +357,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	g_return_val_if_fail(ctrl_name,NULL);
 	g_return_val_if_fail(source,NULL);
 
-	rtt = g_malloc0(sizeof(Rt_Text));
+	rtt = (Rt_Text *)g_malloc0(sizeof(Rt_Text));
 
 	if (!rtv_map)
 	{
@@ -365,7 +365,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 		return NULL;
 	}
 
-	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
 		MTXDBG(CRITICAL,_("Bad things man, object doesn't exist for %s\n"),source);
@@ -376,8 +376,8 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
 	rtt->markup = (GBOOLEAN)OBJ_GET(parent,"markup");
-	rtt->label_prefix = g_strdup(OBJ_GET(parent,"label_prefix"));
-	rtt->label_suffix = g_strdup(OBJ_GET(parent,"label_suffix"));
+	rtt->label_prefix = g_strdup((gchar *)OBJ_GET(parent,"label_prefix"));
+	rtt->label_suffix = g_strdup((gchar *)OBJ_GET(parent,"label_suffix"));
 	rtt->object = object;
 	
 	hbox = gtk_hbox_new(FALSE,2);
@@ -424,8 +424,8 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 	gchar * ctrl_name = NULL;
 	Rt_Text *rt_text = NULL;
 
-	rtt_hash = DATA_GET(global_data,"rtt_hash");
-	ctrl_name = OBJ_GET(widget,"ctrl_name");
+	rtt_hash = (GHashTable *)DATA_GET(global_data,"rtt_hash");
+	ctrl_name = (gchar *)OBJ_GET(widget,"ctrl_name");
 
 	if (!rtt_hash)
 	{
@@ -476,7 +476,7 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 	if (!rand)
 		rand = g_rand_new();
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 
 	count = rtt->count;
 	last_upd = rtt->last_upd;
@@ -576,7 +576,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	gint count = 0;
 	gboolean in_thresh = FALSE;
 	gint last_upd = 0;
-	gint i = 0;
+	guint i = 0;
 	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
@@ -584,7 +584,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	gchar * tmpbuf = NULL;
 
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 
 	gtk_tree_model_get (model, iter,
 			COL_RTT_OBJECT, &rtt,
@@ -612,7 +612,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 			/* Need to check for a proper match */
 			for (i=0;i<rtt->thresholds->len;i++)
 			{
-				thresh = g_ptr_array_index(rtt->thresholds,i);
+				thresh = (Rtt_Threshold *)g_ptr_array_index(rtt->thresholds,i);
 				if ((current >thresh->low) && (current <= thresh->high))
 				{
 					in_thresh = TRUE;
@@ -665,11 +665,11 @@ G_MODULE_EXPORT gboolean update_rttext(gpointer data)
                 return FALSE;
 
         if (!rtt_mutex)
-                rtt_mutex = DATA_GET(global_data,"rtt_mutex");
+                rtt_mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
         if (!rtt_model)
-                rtt_model = DATA_GET(global_data,"rtt_model");
+                rtt_model = (GtkTreeModel *)DATA_GET(global_data,"rtt_model");
         if (!rtt_hash)
-                rtt_hash = DATA_GET(global_data,"rtt_hash");
+                rtt_hash = (GHashTable *)DATA_GET(global_data,"rtt_hash");
 	
         g_mutex_lock(rtt_mutex);
 	/* Silently return if not yet ready */

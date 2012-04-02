@@ -61,8 +61,8 @@ G_MODULE_EXPORT void load_status_pf(void)
 	Firmware_Details *firmware = NULL;
 	CmdLineArgs *args =  NULL;
 	
-	args = DATA_GET(global_data,"args");
-	firmware = DATA_GET(global_data,"firmware");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(firmware);
 	g_return_if_fail(args);
@@ -313,7 +313,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	static gconstpointer *object = NULL;
 	static GArray * history = NULL;
 	static gchar * source = NULL;
-	static gchar * last_source = "";
+	static const gchar * last_source = "";
 	GtkWidget *widget = (GtkWidget *) key;
 	gint bitval = 0;
 	gint bitmask = 0;
@@ -322,7 +322,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	gfloat tmpf = 0.0;
 	gint previous_value = 0;
 	Rtv_Map *rtv_map = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (DATA_GET(global_data,"leaving"))
 		return;

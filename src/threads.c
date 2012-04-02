@@ -27,7 +27,6 @@
 #include <serialio.h>
 
 extern gconstpointer *global_data;
-gchar *handler_types[]={"Realtime Vars","VE-Block","Raw Memory Dump","Comms Test","Get ECU Error", "NULL Handler"};
 
 /*!
   \brief io_cmd() is called from all over the gui to kick off a threaded I/O
@@ -49,11 +48,11 @@ G_MODULE_EXPORT void io_cmd(const gchar *cmd_name, void *data)
 	Command *command = NULL;
 
 	if (!commands_hash)
-		commands_hash = DATA_GET(global_data,"commands_hash");
+		commands_hash = (GHashTable *)DATA_GET(global_data,"commands_hash");
 	if (!io_data_queue)
-		io_data_queue = DATA_GET(global_data,"io_data_queue");
+		io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
 	if (!build_output_message_f)
-		get_symbol("build_output_message",(void *)&build_output_message_f);
+		get_symbol("build_output_message",(void **)&build_output_message_f);
 
 	g_return_if_fail(build_output_message_f);
 	g_return_if_fail(commands_hash);
@@ -75,7 +74,7 @@ G_MODULE_EXPORT void io_cmd(const gchar *cmd_name, void *data)
 	/* Std io_message passed by string name */
 	else
 	{
-		command = g_hash_table_lookup(commands_hash,cmd_name);
+		command = (Command *)g_hash_table_lookup(commands_hash,cmd_name);
 		if (!command)
 		{
 			printf(_("Command %s is INVALID, aborting call\n"),cmd_name);
@@ -121,15 +120,15 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 
 	MTXDBG(THREADS,_("Thread created!\n"));
 
-	io_data_queue = DATA_GET(global_data,"io_data_queue");
-	io_dispatch_cond = DATA_GET(global_data,"io_dispatch_cond");
-	io_dispatch_mutex = DATA_GET(global_data,"io_dispatch_mutex");
-	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
-	serial_params = DATA_GET(global_data,"serial_params");
-	get_symbol("serial_repair_thread",(void*)&serial_repair_thread);
-	args = DATA_GET(global_data,"args");
+	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
+	io_dispatch_cond = (GCond *)DATA_GET(global_data,"io_dispatch_cond");
+	io_dispatch_mutex = (GMutex *)DATA_GET(global_data,"io_dispatch_mutex");
+	pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	get_symbol("serial_repair_thread",(void **)&serial_repair_thread);
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	if (args->network_mode)
-		get_symbol("network_repair_thread",(void*)&network_repair_thread);
+		get_symbol("network_repair_thread",(void **)&network_repair_thread);
 
 	g_return_val_if_fail(args,NULL);
 	g_return_val_if_fail(io_data_queue,NULL);
@@ -149,7 +148,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 fast_exit:
 			DATA_SET(global_data,"thread_dispatcher_id",NULL);
 			/* drain queue and exit thread */
-			while ((message = g_async_queue_try_pop(io_data_queue)) != NULL)
+			while ((message = (Io_Message *)g_async_queue_try_pop(io_data_queue)) != NULL)
 				dealloc_io_message(message);
 
 			g_mutex_lock(io_dispatch_mutex);
@@ -159,7 +158,7 @@ fast_exit:
 		}
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,10000); /* 10 ms timeout */
-		message = g_async_queue_timed_pop(io_data_queue,&cur);
+		message = (Io_Message *)g_async_queue_timed_pop(io_data_queue,&cur);
 		if (!message) /* NULL message */
 			continue;
 
@@ -284,7 +283,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	g_return_if_fail(msg);
 
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	t_message = g_new0(Text_Message, 1);
@@ -323,7 +322,7 @@ G_MODULE_EXPORT gboolean queue_function(const gchar *name)
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	qfunc = g_new0(QFunction, 1);
@@ -364,7 +363,7 @@ G_MODULE_EXPORT void  thread_update_widget(
 	g_return_if_fail(widget_name);
 
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	g_return_if_fail(gui_dispatch_queue);
 	message = initialize_gui_message();
 
@@ -399,7 +398,7 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -432,7 +431,7 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	message->payload = (void *)widget;
@@ -458,12 +457,12 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	for (i=0;i<g_list_length(ecu_widgets[page][offset]);i++)
-		thread_refresh_widget(g_list_nth_data(ecu_widgets[page][offset],i));
+		thread_refresh_widget((GtkWidget *)g_list_nth_data(ecu_widgets[page][offset],i));
 	update_ve3d_if_necessary(page,offset);
 }
 
@@ -482,7 +481,7 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	Widget_Range *range = NULL;
 
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 	range = g_new0(Widget_Range,1);
 
@@ -513,7 +512,7 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	gint tmp = 0;
 
 	if (!gui_dispatch_queue)
-		gui_dispatch_queue = DATA_GET(global_data,"gui_dispatch_queue");
+		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);

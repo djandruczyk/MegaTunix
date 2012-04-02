@@ -159,7 +159,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 			{
 				result = g_mkdir_with_parents(args->autolog_dump_dir, 755);
 				if (!result)
-					MTXDBG((Dbg_Class)(IO_PROCESS|CRITICAL),_("Autolog dump dir creation ERROR: \"%s\"\n"),g_strerror(errno));
+					MTXDBG(IO_PROCESS|CRITICAL,_("Autolog dump dir creation ERROR: \"%s\"\n"),g_strerror(errno));
 			}
 		}
 		if (!args->autolog_basename)

@@ -1496,7 +1496,7 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 
 	if ((!ve_view->z_source) && (!ve_view->z_multi_source))
 	{
-		MTXDBG((Dbg_Class)(OPENGL|CRITICAL),_("\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"));
+		MTXDBG(OPENGL|CRITICAL,_("\"z_source\" is NOT defined, check the .datamap file for\n\tmissing \"z_source\" key for [3d_view_button]\n"));
 		return;
 	}
 
@@ -2741,7 +2741,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		if (!multi)
-			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! X multi is null!\n"));
+			MTXDBG(CRITICAL|OPENGL,_("BUG! X multi is null!\n"));
 
 		lookup_current_value(multi->source,&cur_val->x_val);
 		cur_val->x_val = multi_lookup_and_compute(multi);
@@ -2790,7 +2790,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		if (!multi)
-			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! Y multi is null!\n"));
+			MTXDBG(CRITICAL|OPENGL,_("BUG! Y multi is null!\n"));
 
 		/* Edit value */
 		tmp = (cur_val->y_edit_value/ve_view->y_scale)+ve_view->y_trans;
@@ -2842,7 +2842,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 		}
 		if (!multi)
-			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! Z multi is null!\n"));
+			MTXDBG(CRITICAL|OPENGL,_("BUG! Z multi is null!\n"));
 
 		/* Edit value */
 		tmp = (cur_val->z_edit_value/ve_view->z_scale)+ve_view->z_trans;
@@ -3347,7 +3347,7 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 		}
 
 		if (!multi)
-			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! multi is NULL!\n"));
+			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
 
 		lookup_previous_n_values(multi->source,2,x);
 	}
@@ -3388,7 +3388,7 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 		}
 
 		if (!multi)
-			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! multi is NULL!\n"));
+			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
 
 		lookup_previous_n_values(multi->source,2,y);
 	}
@@ -3429,7 +3429,7 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 		}
 
 		if (!multi)
-			MTXDBG((Dbg_Class)(CRITICAL|OPENGL),_("BUG! multi is NULL!\n"));
+			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
 
 		lookup_previous_n_values(multi->source,2,z);
 	}
@@ -3471,7 +3471,7 @@ void gl_create_font(GtkWidget *widget)
 	MTXDBG(OPENGL,_("Entered\n"));
 	g_return_if_fail(ve_view);
 	if (ve_view->font_created)
-		MTXDBG((Dbg_Class)(OPENGL|CRITICAL),_("Programming error: gl_create_font() was already called; you must call gl_destroy_font() before creating font again...\n"));
+		MTXDBG(OPENGL|CRITICAL,_("Programming error: gl_create_font() was already called; you must call gl_destroy_font() before creating font again...\n"));
 	else
 		ve_view->font_created = TRUE;
 
@@ -3522,7 +3522,7 @@ void gl_destroy_font(GtkWidget *widget)
 
 	MTXDBG(OPENGL,_("Entered\n"));
 	if (!ve_view->font_created)
-		MTXDBG((Dbg_Class)(OPENGL|CRITICAL),_("Programming error: gl_destroy_font() called when font does not exist\n"));
+		MTXDBG(OPENGL|CRITICAL,_("Programming error: gl_destroy_font() called when font does not exist\n"));
 	ve_view->font_ascent = -1;
 	ve_view->font_descent = -1;
 	ve_view->y_offset_bitmap_render_pango_units = -1;
@@ -3568,7 +3568,7 @@ void gl_print_string(GtkWidget *widget, const gchar *s)
 	g_return_if_fail(ve_view);
 
 	if (!ve_view->font_created)
-		MTXDBG((Dbg_Class)(OPENGL|CRITICAL),_("Programming error: gl_print_string() called but font does not exist; you should have called glt_create_font() first\n"));
+		MTXDBG(OPENGL|CRITICAL,_("Programming error: gl_print_string() called but font does not exist; you should have called glt_create_font() first\n"));
 
 	layout = pango_layout_new(ve_view->ft2_context);
 	pango_layout_set_width(layout, -1); // -1 no wrapping.  All text on one line.

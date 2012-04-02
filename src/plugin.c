@@ -94,15 +94,15 @@ G_MODULE_EXPORT void plugins_init()
 
 	/* Common module init */
 	if (module[COMMON])
-		if (g_module_symbol(module[COMMON],"plugin_init",(void *)&plugin_init))
+		if (g_module_symbol(module[COMMON],"plugin_init",(void **)&plugin_init))
 			plugin_init(global_data);
 	/* ECU Specific module init */
 	if (module[ECU])
 
-		if (g_module_symbol(module[ECU],"plugin_init",(void *)&plugin_init))
+		if (g_module_symbol(module[ECU],"plugin_init",(void **)&plugin_init))
 			plugin_init(global_data);
 
-	if (get_symbol("common_gui_init",(void *)&common_gui_init))
+	if (get_symbol("common_gui_init",(void **)&common_gui_init))
 		common_gui_init();
 
 	/* Startup dispatcher thread */
@@ -128,14 +128,14 @@ G_MODULE_EXPORT void plugins_shutdown()
 	GThread *id = NULL;
 	void (*plugin_shutdown)(void);
 
-	mutex = DATA_GET(global_data,"io_dispatch_mutex");
-	cond = DATA_GET(global_data,"io_dispatch_cond");
+	mutex = (GMutex *)DATA_GET(global_data,"io_dispatch_mutex");
+	cond = (GCond *)DATA_GET(global_data,"io_dispatch_cond");
 
 	/* Get mutex, lock it, check thread ID, if valid, toggle variable 
 	   and wait for condition to be detected and signaled
 	   */
 	g_mutex_lock(mutex);
-	id = DATA_GET(global_data,"thread_dispatcher_id");
+	id = (GThread *)DATA_GET(global_data,"thread_dispatcher_id");
 	if (!id)	/* Thread already died, don't deadlock waiting for it*/
 		g_mutex_unlock(mutex);
 	else
@@ -148,18 +148,18 @@ G_MODULE_EXPORT void plugins_shutdown()
 		g_mutex_unlock(mutex);
 	}
 	/* Shutdown ECU module */
-	module = DATA_GET(global_data,"ecu_module");
+	module = (GModule *)DATA_GET(global_data,"ecu_module");
 	if (module)
 	{
-		if (g_module_symbol(module,"plugin_shutdown",(void *)&plugin_shutdown))
+		if (g_module_symbol(module,"plugin_shutdown",(void **)&plugin_shutdown))
 			plugin_shutdown();
 		DATA_SET(global_data,"ecu_module",NULL);
 	}
 	/* Shutdown Common module */
-	module = DATA_GET(global_data,"common_module");
+	module = (GModule *)DATA_GET(global_data,"common_module");
 	if (module)
 	{
-		if (g_module_symbol(module,"plugin_shutdown",(void *)&plugin_shutdown))
+		if (g_module_symbol(module,"plugin_shutdown",(void **)&plugin_shutdown))
 			plugin_shutdown();
 		DATA_SET(global_data,"common_module",NULL);
 	}
@@ -177,16 +177,16 @@ G_MODULE_EXPORT void plugins_shutdown()
 G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 {
 	GModule *module[NUM_MODULES] = {NULL,NULL,NULL};
-	ModIndex i = MAIN;
+	gint i = (gint)MAIN;
 	gboolean found = FALSE;
 	extern gconstpointer *global_data;
 
 	/* Megatunix itself */
-	module[MAIN] = DATA_GET(global_data,"megatunix_module");
+	module[MAIN] = (GModule *)DATA_GET(global_data,"megatunix_module");
 	/* Common library */
-	module[COMMON] = DATA_GET(global_data,"common_module");
+	module[COMMON] = (GModule *)DATA_GET(global_data,"common_module");
 	/* ECU Specific library */
-	module[ECU] = DATA_GET(global_data,"ecu_module");
+	module[ECU] = (GModule *)DATA_GET(global_data,"ecu_module");
 
 	for (i=MAIN;i<NUM_MODULES;i++)
 	{

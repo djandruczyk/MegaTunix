@@ -78,11 +78,11 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 	gint seconds = 0;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!rtv_map)
-		rtv_map = DATA_GET(global_data,"rtv_map");
+		rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 
 	g_return_if_fail(rtv_mutex);
 	g_return_if_fail(rtv_map);
@@ -114,7 +114,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 	for (i=0;i<rtv_map->rtvars_size;i++)
 	{
 		/* Get list of derived vars for raw offset "i" */
-		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(i));
+		list = (GList *)g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(i));
 		if (list == NULL) /* no derived vars for this variable */
 		{
 			continue;
@@ -151,7 +151,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 				goto store_it;
 			}
 			offset = (GINT)DATA_GET(object,"offset");
-			size = (DataSize)DATA_GET(object,"size");
+			size = (DataSize)(GINT)DATA_GET(object,"size");
 			if (DATA_GET(object,"fromecu_complex"))
 			{
 				tmpf = handle_complex_expr(object,incoming,UPLOAD);
@@ -172,8 +172,8 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 			/* MS Simple math without the complex math... */
 			multiplier = NULL;
 			adder = NULL;
-			multiplier = DATA_GET(object,"fromecu_mult");
-			adder = DATA_GET(object,"fromecu_add");
+			multiplier = (gfloat *)DATA_GET(object,"fromecu_mult");
+			adder = (gfloat *)DATA_GET(object,"fromecu_add");
 			if ((multiplier) && (adder))
 				tmpf = (x + (*adder)) * (*multiplier);
 			else if (multiplier)
@@ -221,7 +221,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	static Firmware_Details *firmware = NULL;
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
-	guchar *raw_data = incoming;
+	guchar *raw_data = (guchar *)incoming;
 	gchar * expr = NULL;
 	gint total_symbols = 0;
 	gint i = 0;
@@ -239,9 +239,9 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	gdouble result = 0.0;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!common_rtv_processor)
-		get_symbol("common_rtv_processor",(void *)&common_rtv_processor);
+		get_symbol("common_rtv_processor",(void **)&common_rtv_processor);
 	g_return_val_if_fail(firmware,0.0);
 	g_return_val_if_fail(common_rtv_processor,0.0);
 
@@ -249,17 +249,17 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	expr_types = (gint *)DATA_GET(object,"expr_types");
 	total_symbols = (GINT)DATA_GET(object,"total_symbols");
 	if (DATA_GET(object,"real_lower"))
-		lower_limit = strtod(DATA_GET(object,"real_lower"),NULL);
+		lower_limit = strtod((gchar *)DATA_GET(object,"real_lower"),NULL);
 	else
 		lower_limit = -G_MAXDOUBLE;
 	if (DATA_GET(object,"real_upper"))
-		upper_limit = strtod(DATA_GET(object,"real_upper"),NULL);
+		upper_limit = strtod((gchar *)DATA_GET(object,"real_upper"),NULL);
 	else
 		upper_limit = G_MAXDOUBLE;
 
 	names = g_new0(gchar *, total_symbols);
 	values = g_new0(gdouble, total_symbols);
-	name = DATA_GET(object,"name");
+	name = (gchar *)DATA_GET(object,"name");
 
 	for (i=0;i<total_symbols;i++)
 	{
@@ -284,7 +284,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 				offset = (GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
-				size = (DataSize) DATA_GET(object,tmpbuf);
+				size = (DataSize)(GINT) DATA_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)_get_sized_data(raw_data,offset,size,firmware->bigendian);
@@ -314,7 +314,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		evaluator = (void *)DATA_GET(object,"ul_evaluator");
 		if (!evaluator)
 		{
-			expr = DATA_GET(object,"fromecu_conv_expr");
+			expr = (gchar *)DATA_GET(object,"fromecu_conv_expr");
 			evaluator = evaluator_create(expr);
 			DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 		}
@@ -324,7 +324,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		evaluator = (void *)DATA_GET(object,"dl_evaluator");
 		if (!evaluator)
 		{
-			expr = DATA_GET(object,"toecu_conv_expr");
+			expr = (gchar *)DATA_GET(object,"toecu_conv_expr");
 			evaluator = evaluator_create(expr);
 			DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
@@ -377,7 +377,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	static Firmware_Details *firmware = NULL;
 	gchar **symbols = NULL;
 	gint *expr_types = NULL;
-	guchar *raw_data = incoming;
+	guchar *raw_data = (guchar *)incoming;
 	gint total_symbols = 0;
 	gint i = 0;
 	DataSize size = MTX_U08;
@@ -394,9 +394,9 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	gdouble result = 0.0;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!common_rtv_processor_obj)
-		get_symbol("common_rtv_processor_obj",(void *)&common_rtv_processor_obj);
+		get_symbol("common_rtv_processor_obj",(void **)&common_rtv_processor_obj);
 	g_return_val_if_fail(firmware,0.0);
 	g_return_val_if_fail(common_rtv_processor_obj,0.0);
 
@@ -404,11 +404,11 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	expr_types = (gint *)OBJ_GET(object,"expr_types");
 	total_symbols = (GINT)OBJ_GET(object,"total_symbols");
 	if (OBJ_GET(object,"real_lower"))
-		lower_limit = strtod(OBJ_GET(object,"real_lower"),NULL);
+		lower_limit = strtod((gchar *)OBJ_GET(object,"real_lower"),NULL);
 	else
 		lower_limit = -G_MAXDOUBLE;
 	if (OBJ_GET(object,"real_upper"))
-		upper_limit = strtod(OBJ_GET(object,"real_upper"),NULL);
+		upper_limit = strtod((gchar *)OBJ_GET(object,"real_upper"),NULL);
 	else
 		upper_limit = G_MAXDOUBLE;
 
@@ -439,7 +439,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 				offset = (GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = g_strdup_printf("%s_size",symbols[i]);
-				size = (DataSize) OBJ_GET(object,tmpbuf);
+				size = (DataSize)(GINT) OBJ_GET(object,tmpbuf);
 				g_free(tmpbuf);
 				names[i]=g_strdup(symbols[i]);
 				values[i]=(gdouble)_get_sized_data(raw_data,offset,size,firmware->bigendian);
@@ -469,7 +469,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		evaluator = (void *)OBJ_GET(object,"ul_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(OBJ_GET(object,"fromecu_conv_expr"));
+			evaluator = evaluator_create((gchar *)OBJ_GET(object,"fromecu_conv_expr"));
 			OBJ_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 		}
 	}
@@ -478,7 +478,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		evaluator = (void *)OBJ_GET(object,"dl_evaluator");
 		if (!evaluator)
 		{
-			evaluator = evaluator_create(OBJ_GET(object,"toecu_conv_expr"));
+			evaluator = evaluator_create((gchar *)OBJ_GET(object,"toecu_conv_expr"));
 			OBJ_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}
@@ -529,7 +529,7 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 	gchar *hash_key = NULL;
 	GHashTable *sources_hash = NULL;
 
-	sources_hash = DATA_GET(global_data,"sources_hash");
+	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	if (!(object))
 	{
 		MTXDBG(COMPLEX_EXPR,_("ERROR: multi_expression object is NULL!\n"));
@@ -631,15 +631,15 @@ G_MODULE_EXPORT gboolean lookup_current_index(const gchar *internal_name, gint *
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	*value = 0;
 	if (!internal_name)
 		return FALSE;
 
-	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
 
@@ -665,15 +665,15 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
 		return FALSE;
 
-	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
 
@@ -704,15 +704,15 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
 	gconstpointer * object = NULL;
 	GArray * history = NULL;
 	Rtv_Map *rtv_map = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
 		return FALSE;
 
-	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
 
@@ -746,15 +746,15 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
 	GArray * history = NULL;
 	gint index = 0;
 	Rtv_Map *rtv_map = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
 		return FALSE;
 
-	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
 
@@ -792,17 +792,17 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 	gint index = 0;
 	gint i = 0;
 	Rtv_Map *rtv_map = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	/* Set default in case of failure */
 	for (i=0;i<n;i++)
 		values[i] = 0.0;
 	if (!internal_name)
 		return FALSE;
 
-	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
 
@@ -844,16 +844,16 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 	gint index = 0;
 	gint i = 0;
 	Rtv_Map *rtv_map = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	for (i=0;i<n;i++)
 		values[i] = 0.0;
 	if (!internal_name)
 		return FALSE;
 
-	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 		return FALSE;
 
@@ -890,14 +890,14 @@ G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *prec
 {
 	gconstpointer * object = NULL;
 	Rtv_Map *rtv_map = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!internal_name)
 	{
 		*precision = 0;
 		return FALSE;
 	}
-	object = g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 	{
 		*precision = 0;
@@ -921,8 +921,8 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 	gconstpointer * object = NULL;
 	GList *list = NULL;
 	Rtv_Map *rtv_map = NULL;
-	rtv_map = DATA_GET(global_data,"rtv_map");
-	rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
+	rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 
 	/* Flush and recreate the timestamp array */
 	g_array_free(rtv_map->ts_array,TRUE);
@@ -931,7 +931,7 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 	for (i=0;i<rtv_map->rtvars_size;i++)
 	{
 		/* Get list of derived vars for raw offset "i" */
-		list = g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(i));
+		list = (GList *)g_hash_table_lookup(rtv_map->offset_hash,GINT_TO_POINTER(i));
 		if (list == NULL) /* no derived vars for this variable */
 			continue;
 		list = g_list_first(list);

@@ -124,7 +124,7 @@ static struct _FreeEMS_Errors
 };
 
 /* Prototypes */
-gchar * lookup_error(gint);
+const gchar * lookup_error(guint);
 /* Prototypes */
 
 #endif

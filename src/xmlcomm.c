@@ -198,21 +198,21 @@ G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"size") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
-				arg->size = translate_string(tmpbuf);
+				arg->size = (DataSize)translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"type") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
-				arg->type = translate_string(tmpbuf);
+				arg->type = (ArgType)translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"action") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
-				arg->action = translate_string(tmpbuf);
+				arg->action = (Action)translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
@@ -263,14 +263,14 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"type") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
-				cmd->type = translate_string(tmpbuf);
+				cmd->type = (CmdType)translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"func_call_name") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->func_call_name);
-				if (!get_symbol(cmd->func_call_name,(void *)&cmd->function))
+				if (!get_symbol(cmd->func_call_name,(void **)&cmd->function))
 					printf(_("Unable to locate Function Call %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"func_call_arg") == 0)
@@ -289,7 +289,7 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"helper_func") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->helper_func_name);
-				if (!get_symbol(cmd->helper_func_name,(void *)&cmd->helper_function))
+				if (!get_symbol(cmd->helper_func_name,(void **)&cmd->helper_function))
 					printf(_("Unable to locate Helper Function %s within MegaTunix or active plugins\n"),cmd->helper_func_name);
 			}
 			if (g_strcasecmp((gchar *)cur_node->name,"helper_func_arg") == 0)
@@ -335,7 +335,7 @@ G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 			if (g_strcasecmp((gchar *)cur_node->name,"arg") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
-				arg = g_hash_table_lookup(DATA_GET(global_data,"potential_arguments"),tmpbuf);
+				arg = (PotentialArg *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"potential_arguments"),tmpbuf);
 				cmd->args = g_array_append_val(cmd->args,arg);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
@@ -371,7 +371,7 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 			{
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
-				if (!get_symbol(pf->name,(void *)&pf->function))
+				if (!get_symbol(pf->name,(void **)&pf->function))
 					printf(_("Unable to locate Post Function %s within MegaTunix or active plugins\n"),pf->name);
 				else
 				{
@@ -383,7 +383,7 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 			{
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
-				if (!get_symbol(pf->name,(void *)&pf->function_w_arg))
+				if (!get_symbol(pf->name,(void **)&pf->function_w_arg))
 					printf(_("Unable to locate Post Function with argument %s within MegaTunix or active plugins\n"),pf->name);
 				else
 				{
@@ -435,15 +435,15 @@ G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointe
 		{
 			pf = g_array_index(cmd->post_functions,PostFunction *,i);
 			if (pf->w_arg)
-				printf("  %s: %p\n",pf->name,pf->function_w_arg);
+				printf("  %s: %p\n",pf->name,(void *)pf->function_w_arg);
 			else
-				printf("  %s: %p\n",pf->name,pf->function);
+				printf("  %s: %p\n",pf->name,(void *)pf->function);
 		}
 	}
 	if (cmd->type == FUNC_CALL)
 	{
 
-		printf(_("Function call %s (%p)\n"),cmd->func_call_name,cmd->function);
+		printf(_("Function call %s (%p)\n"),cmd->func_call_name,(void *)cmd->function);
 	}
 	printf("\n\n");
 }

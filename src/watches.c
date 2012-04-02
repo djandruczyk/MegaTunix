@@ -65,7 +65,7 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname,
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	get_symbol(watch->function,(void *)&watch->func);
+	get_symbol(watch->function,(void **)&watch->func);
 	if (!rtv_watch_hash)
 		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -97,7 +97,7 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	get_symbol(watch->function,(void *)&watch->func);
+	get_symbol(watch->function,(void **)&watch->func);
 	if (!rtv_watch_hash)
 		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -125,7 +125,7 @@ G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gbo
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	get_symbol(watch->function,(void *)&watch->func);
+	get_symbol(watch->function,(void **)&watch->func);
 	if (!rtv_watch_hash)
 		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -156,7 +156,7 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	get_symbol(watch->function,(void *)&watch->func);
+	get_symbol(watch->function,(void **)&watch->func);
 	if (!rtv_watch_hash)
 		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -188,7 +188,7 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varname
 	watch->user_data = user_data;
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
-	get_symbol(watch->function,(void *)&watch->func);
+	get_symbol(watch->function,(void **)&watch->func);
 	if (!rtv_watch_hash)
 		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
@@ -249,7 +249,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 	guint8 tmpi = 0;
 	guint8 tmpi2 = 0;
 	gint index = 0;
-	gint new = 0;
+	gint newval = 0;
 	gint i = 0;
 	/*printf("process watches running\n");*/
 	switch (watch->style)
@@ -345,14 +345,14 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 		case MULTI_VALUE_HISTORY:
 			/*printf("multi value historical watch\n");*/
 			lookup_current_index(watch->varnames[0],&index);
-			new = index - watch->last_index;
+			newval = index - watch->last_index;
 			watch->last_index = index;
-			watch->count = new;
+			watch->count = newval;
 			for (i=0;i<watch->num_vars;i++)
 			{
-				watch->hist_vals[i] = g_renew(gfloat,watch->hist_vals[i],new);
+				watch->hist_vals[i] = g_renew(gfloat,watch->hist_vals[i],newval);
 				if (watch->varnames[i])
-					lookup_previous_n_values(watch->varnames[i], new, watch->hist_vals[i]);
+					lookup_previous_n_values(watch->varnames[i], newval, watch->hist_vals[i]);
 				else
 					*watch->hist_vals[i]=0.0;
 			}

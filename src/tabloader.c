@@ -79,8 +79,8 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	Firmware_Details *firmware = NULL;
 	CmdLineArgs *args = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	args = DATA_GET(global_data,"args");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
 	if (DATA_GET(global_data,"tabs_loaded"))
 		return FALSE;
@@ -234,8 +234,8 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	placeholder =  gtk_notebook_get_nth_page(notebook,page);
 	label = gtk_notebook_get_tab_label(notebook,placeholder);
 
-	glade_file = OBJ_GET(label,"glade_file");
-	map_file = OBJ_GET(label,"datamap_file");
+	glade_file = (gchar *)OBJ_GET(label,"glade_file");
+	map_file = (gchar *)OBJ_GET(label,"datamap_file");
 	xml = glade_xml_new(glade_file,"topframe",NULL);
 	g_return_val_if_fail(xml,FALSE);
 	thread_update_logbar("interr_view",NULL,g_strdup(_("Load of tab: ")),FALSE,FALSE);
@@ -316,13 +316,13 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
   */
 G_MODULE_EXPORT void group_free(gpointer value)
 {
-	Group *group = value;
+	Group *group = (Group *)value;
 	gint i = 0;
 	DataType keytype = MTX_INT;
 
 	for (i=0;i<group->num_keys;i++)
 	{
-		keytype = translate_string(group->keys[i]);
+		keytype = (DataType)translate_string(group->keys[i]);
 		OBJ_SET(group->object,group->keys[i],NULL);
 	}
 	g_object_unref(group->object);
@@ -384,7 +384,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 			continue;
 		}
 
-		group->object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		group->object = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(group->object);
 
 		/* If this widget has a "depend_on" tag we need to 
@@ -393,7 +393,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
+			if (get_symbol("load_dependancies_obj",(void **)&load_dep_obj))
 				load_dep_obj(group->object,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
@@ -431,14 +431,14 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
   be bound to the widget
   \returns the page of the group
   */
-G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, gchar *groupname)
+G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTable *groups, const gchar *groupname)
 {
 	gint i = 0;
 	gint tmpi = 0;
 	Group *group = NULL;
 	DataType keytype = MTX_STRING;
 
-	group = g_hash_table_lookup(groups,groupname);
+	group = (Group *)g_hash_table_lookup(groups,groupname);
 	if (!group)
 	{
 		MTXDBG(TABLOADER|CRITICAL,_("Group \"%s\" not found in file %s\n"),groupname,cfg->filename);
@@ -451,7 +451,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 
 	for (i=0;i<group->num_keys;i++)
 	{
-		keytype = translate_string(group->keys[i]);
+		keytype = (DataType)translate_string(group->keys[i]);
 		switch((DataType)keytype)
 		{
 			case MTX_INT:
@@ -468,11 +468,11 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 				OBJ_SET_FULL(object,group->keys[i],g_memdup(OBJ_GET(group->object,group->keys[i]),sizeof(gfloat)),g_free);
 				break;
 			case MTX_STRING:
-				OBJ_SET_FULL(object,group->keys[i],g_strdup(OBJ_GET(group->object,group->keys[i])),g_free);
+				OBJ_SET_FULL(object,group->keys[i],(gchar *)g_strdup((gchar *)OBJ_GET(group->object,group->keys[i])),g_free);
 				if (OBJ_GET(object,"tooltip") != NULL)
-					gtk_widget_set_tooltip_text(OBJ_GET(object,"self"),(gchar *)OBJ_GET(object,"tooltip"));
+					gtk_widget_set_tooltip_text((GtkWidget *)OBJ_GET(object,"self"),(gchar *)OBJ_GET(object,"tooltip"));
 				if (OBJ_GET(group->object, "bind_to_list"))
-					bind_to_lists(OBJ_GET(object,"self"),(gchar *)OBJ_GET(group->object, "bind_to_list"));
+					bind_to_lists((GtkWidget *)OBJ_GET(object,"self"),(gchar *)OBJ_GET(group->object, "bind_to_list"));
 				break;
 			default:
 				break;
@@ -558,7 +558,7 @@ G_MODULE_EXPORT void remove_from_lists(const gchar * lists, gpointer data)
   */
 G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 {
-	BindGroup *bindgroup = user_data;
+	BindGroup *bindgroup = (BindGroup *)user_data;
 	ConfigFile *cfgfile = bindgroup->cfgfile;
 	GHashTable *groups = bindgroup->groups;
 	gchar * tmpbuf = NULL;
@@ -580,7 +580,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gchar **vector = NULL;
 	gchar **vec2 = NULL;
 	gint fps = 0;
-	gint i = 0;
+	guint i = 0;
 	void (*func)(void) = NULL;
 	GList *list = NULL;
 	GList *list2 = NULL;
@@ -591,8 +591,8 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	void (*load_dep_obj)(GObject *, ConfigFile *,const gchar *,const gchar *) = NULL;
 
 	MTXDBG(TABLOADER,_("Entered"));
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	firmware = DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(ecu_widgets);
 	g_return_if_fail(firmware);
@@ -686,7 +686,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		if (get_symbol("load_dependancies_obj",(void*)&load_dep_obj))
+		if (get_symbol("load_dependancies_obj",(void **)&load_dep_obj))
 			load_dep_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
@@ -745,10 +745,10 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 				continue;
 			}
 			fps = (GINT)g_strtod(vec2[1],NULL);
-			get_symbol(vec2[0],(void *)&func);
+			get_symbol(vec2[0],(void **)&func);
 			if (func)
 			{
-				list = g_list_prepend(list,func);
+				list = g_list_prepend(list,(gpointer)func);
 				list2 = g_list_prepend(list2,GINT_TO_POINTER(fps));
 			}
 			g_strfreev(vec2);
@@ -793,14 +793,14 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		/*printf("indexed widget %s\n",name); */
 		if (cfg_read_string(cfgfile, section, "size", &size))
 		{
-			offset += index * get_multiplier (translate_string (size));
+			offset += index * get_multiplier ((DataSize)translate_string (size));
 			g_free(size);
 		}
 		else
 		{
 			if(OBJ_GET(widget, "size"))
 			{
-				offset += index * get_multiplier ((GINT) OBJ_GET(widget, "size"));
+				offset += index * get_multiplier ((DataSize)(GINT)OBJ_GET(widget, "size"));
 			}
 			else
 			{
@@ -869,7 +869,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	g_free(section);
 	if (GTK_IS_ENTRY(widget))
 	{
-		if (NULL != (tmpbuf = OBJ_GET(widget,"table_num")))
+		if (NULL != (tmpbuf = (gchar *)OBJ_GET(widget,"table_num")))
 		{
 			table_num = (GINT)strtol(tmpbuf,NULL,10);
 			page = (GINT)OBJ_GET(widget,"page");
@@ -915,14 +915,14 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 		/* If widget defined, pass to post function */
 		if (widget)
 		{
-			if (get_symbol(vector[i],(void *)&post_func_w_arg))
+			if (get_symbol(vector[i],(void **)&post_func_w_arg))
 				post_func_w_arg(widget);
 			else
 				MTXDBG(TABLOADER|CRITICAL,_("Error finding symbol \"%s\", error:\n\t%s\n"),vector[i],g_module_error());
 		}
 		else /* If no widget find funct with no args.. */
 		{
-			if (get_symbol(vector[i],(void *)&post_func))
+			if (get_symbol(vector[i],(void **)&post_func))
 				post_func();
 			else
 				MTXDBG(TABLOADER|CRITICAL,_("Error finding symbol \"%s\", error:\n\t%s\n"),vector[i],g_module_error());
@@ -945,15 +945,15 @@ gboolean preload_deps(gpointer data)
 	GladeInterface *iface = NULL;
 	GladeWidgetInfo *info = NULL;
 	ConfigFile *cfgfile = NULL;
-	gint i = 0;	
-	gint j = 0;	
+	guint i = 0;	
+	guint j = 0;	
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
 	for (i=0;i<array->len;i++)
 	{
-		tabinfo = g_ptr_array_index(array,i);
+		tabinfo = (TabInfo *)g_ptr_array_index(array,i);
 		iface = glade_parser_parse_file(tabinfo->glade_file,NULL);
 		cfgfile = cfg_open_file(tabinfo->datamap_file);
 		if ((!cfgfile) || (!iface))
@@ -995,11 +995,11 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	DataSize size = MTX_U08;
 	GObject *object = NULL;
 	GList *list = NULL;
-	gint i = 0;
+	guint i = 0;
 
 	if (!widget_2_tab_hash)
 	{
-		widget_2_tab_hash = DATA_GET(global_data,"widget_2_tab_hash");
+		widget_2_tab_hash = (GHashTable *)DATA_GET(global_data,"widget_2_tab_hash");
 		g_return_val_if_fail(widget_2_tab_hash,FALSE);
 	}
 	/*
@@ -1068,7 +1068,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			}
 		}
 		gdk_threads_enter();
-		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		object = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(object);
 		gdk_threads_leave();
 		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
@@ -1082,7 +1082,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
 		OBJ_SET_FULL(object,"source_key",g_strdup(source_key),cleanup);
 		OBJ_SET_FULL(object,"source_values",g_strdup(source_values),cleanup);
-		list = DATA_GET(global_data,"source_list");
+		list = (GList *)DATA_GET(global_data,"source_list");
 		list = g_list_prepend(list,object);
 		DATA_SET(global_data,"source_list",(gpointer)list);
 		cleanup(groups);
@@ -1130,7 +1130,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		   }
 		 */
 		gdk_threads_enter();
-		object = g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		object = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(object);
 		gdk_threads_leave();
 		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
@@ -1143,7 +1143,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		else
 			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
 		OBJ_SET_FULL(object,"toggle_groups",g_strdup(groups),cleanup);
-		list = DATA_GET(global_data,"toggle_group_list");
+		list = (GList *)DATA_GET(global_data,"toggle_group_list");
 		list = g_list_prepend(list,object);
 		DATA_SET(global_data,"toggle_group_list",(gpointer)list);
 		cleanup(groups);
@@ -1163,26 +1163,26 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 G_MODULE_EXPORT gboolean handle_dependant_tab_load(gchar * datamap)
 {
 	GPtrArray *tabinfos = NULL;
-	gint i = 0;
+	guint i = 0;
 	TabInfo *tabinfo = NULL;
 
 	g_return_val_if_fail(datamap,FALSE);
-	tabinfos = DATA_GET(global_data,"tabinfos");
+	tabinfos = (GPtrArray *)DATA_GET(global_data,"tabinfos");
 	g_return_val_if_fail(tabinfos,FALSE);
 	for (i=0;i<tabinfos->len;i++)
 	{
-		tabinfo = g_ptr_array_index(tabinfos,i);
+		tabinfo = (TabInfo *)g_ptr_array_index(tabinfos,i);
 		if (!tabinfo)
 			continue;
 		if (g_ascii_strcasecmp(tabinfo->datamap_file,datamap) == 0)
 		{
 			g_signal_handlers_block_by_func (G_OBJECT (tabinfo->notebook),
-					G_CALLBACK (notebook_page_changed),
+					(gpointer)notebook_page_changed,
 					NULL);
 			set_title(g_strdup(_("Rendering Tab...")));
 			load_actual_tab(tabinfo->notebook,tabinfo->page_num);
 			g_signal_handlers_unblock_by_func (G_OBJECT (tabinfo->notebook),
-					G_CALLBACK (notebook_page_changed),
+					(gpointer)notebook_page_changed,
 					NULL);
 			set_title(g_strdup(_("Tab Loaded")));
 			return TRUE;

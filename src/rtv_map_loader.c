@@ -62,7 +62,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	Firmware_Details *firmware = NULL;
 
 	MTXDBG(RTMLOADER,_("Entered"));
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
 	if ((!DATA_GET(global_data,"interrogated")) && 
@@ -187,7 +187,7 @@ void load_rtv_defaults(xmlNode *node, Rtv_Map *map)
 
 void load_derived_var(xmlNode *node, Rtv_Map *map)
 {
-	gint i = 0;
+	guint i = 0;
 	gconstpointer *object = NULL;
 	GArray *history = NULL;
 	gfloat *newfloat = NULL;
@@ -224,7 +224,7 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 		MTXDBG(RTMLOADER|CRITICAL,_("Missing Key value \"log_by_default\" from RTV XML\n"));
 	if (generic_xml_gchar_find(node,"size",&tmpbuf))
 	{
-		size = translate_string(tmpbuf);
+		size = (DataSize)translate_string(tmpbuf);
 		g_free(tmpbuf);
 	}
 	else
@@ -321,7 +321,7 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 		load_rtv_xml_multi_expressions(object,node);
 	}
 
-	list = g_hash_table_lookup(map->offset_hash,GINT_TO_POINTER(offset));
+	list = (GList *)g_hash_table_lookup(map->offset_hash,GINT_TO_POINTER(offset));
 	list = g_list_prepend(list,(gpointer)object);
 	g_hash_table_replace(map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
 	g_ptr_array_add(map->rtv_list,object);
@@ -333,7 +333,7 @@ void load_rtv_xml_dependancies(gconstpointer *object, xmlNode *node)
 {
 	static void (*load_deps)(gconstpointer *,xmlNode *, const gchar *) = NULL;
 	if (!load_deps)
-		get_symbol("load_dependancies",(void *)&load_deps);
+		get_symbol("load_dependancies",(void **)&load_deps);
 	g_return_if_fail(load_deps);
 	load_deps(object,node,"depend_on");
 }
@@ -356,9 +356,9 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 	gint total_symtypes = 0;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!common_rtv_loader)
-		get_symbol("common_rtv_loader",(void *)&common_rtv_loader);
+		get_symbol("common_rtv_loader",(void **)&common_rtv_loader);
 
 	g_return_if_fail(firmware);
 	g_return_if_fail(common_rtv_loader);
@@ -475,9 +475,9 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 	extern gconstpointer *global_data;
 
 	if (!firmware)
-		firmware = DATA_GET(global_data,"firmware");
+		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!common_rtv_loader_obj)
-		get_symbol("common_rtv_loader_obj",(void *)&common_rtv_loader_obj);
+		get_symbol("common_rtv_loader_obj",(void **)&common_rtv_loader_obj);
 
 
 	if (!cfg_read_string(cfgfile,section,"expr_symbols",&tmpbuf))

@@ -79,7 +79,7 @@ gboolean load_gui_tabs_pf(void);
 void group_free(gpointer );
 GHashTable * load_groups(ConfigFile *);
 void bind_data(GtkWidget *, gpointer);
-gint bind_group_data(ConfigFile *,GObject *, GHashTable *, gchar *);
+gint bind_group_data(ConfigFile *,GObject *, GHashTable *, const gchar *);
 void bind_to_lists(GtkWidget * , const gchar * );
 void run_post_functions_with_arg(const gchar *, GtkWidget *);
 void run_post_functions(const gchar * );

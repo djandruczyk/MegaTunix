@@ -57,8 +57,8 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
 
-	ecu_widgets = DATA_GET(global_data,"ecu_widgets");
-	firmware = DATA_GET(global_data,"firmware");
+	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	tmpbuf = (gchar *) OBJ_GET(widget,"data");
 	vector = g_strsplit(tmpbuf,",",-1);
@@ -80,7 +80,7 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(scaler),0,-1);
 	factor = (gfloat)g_ascii_strtod(g_strdelimit(tmpbuf,",.",'.'),NULL);
 	g_free(tmpbuf);
-	scaleop = gtk_combo_box_get_active(GTK_COMBO_BOX(math_combo));
+	scaleop = (ScaleOp)gtk_combo_box_get_active(GTK_COMBO_BOX(math_combo));
 
 	for (i=z_base;i<(z_base+(x_bins*y_bins));i++)
 	{
@@ -157,7 +157,7 @@ G_MODULE_EXPORT gboolean draw_ve_marker(void)
 	static void (*common_draw_ve_marker)(void) = NULL;
 
 	if (!common_draw_ve_marker)
-		get_symbol("common_draw_ve_marker",(void *)&common_draw_ve_marker);
+		get_symbol("common_draw_ve_marker",(void **)&common_draw_ve_marker);
 	g_return_val_if_fail(common_draw_ve_marker,FALSE);
 	common_draw_ve_marker();
 	return TRUE;

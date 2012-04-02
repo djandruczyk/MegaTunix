@@ -57,7 +57,7 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 	gboolean res = FALSE;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
@@ -76,7 +76,7 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Sliders...")));
-	rt_sliders = DATA_GET(global_data,"rt_sliders");
+	rt_sliders = (GHashTable *)DATA_GET(global_data,"rt_sliders");
 	if (!rt_sliders)
 	{
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
@@ -118,7 +118,7 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 	gboolean res = FALSE;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
@@ -137,7 +137,7 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Sliders...")));
-	ww_sliders = DATA_GET(global_data,"ww_sliders");
+	ww_sliders = (GHashTable *)DATA_GET(global_data,"ww_sliders");
 	if (!ww_sliders)
 	{
 		ww_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
@@ -264,7 +264,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	GHashTable **ve3d_sliders;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
 			(!(DATA_GET(global_data,"tabs_loaded"))))
@@ -273,7 +273,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 		return;
 	}
 
-	ve3d_sliders = DATA_GET(global_data,"ve3d_sliders");
+	ve3d_sliders = (GHashTable **)DATA_GET(global_data,"ve3d_sliders");
 	if (!ve3d_sliders)
 		ve3d_sliders = g_new0(GHashTable *,firmware->total_tables);
 	DATA_SET(global_data,"ve3d_sliders",ve3d_sliders);
@@ -326,8 +326,8 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
-	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
 		MTXDBG(CRITICAL,_("Request to create slider for non-existant datasource \"%s\"\n"),source);
@@ -354,21 +354,21 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	}
 	g_free(name);
 
-	slider = g_malloc0(sizeof(Rt_Slider));
+	slider = (Rt_Slider *)g_malloc0(sizeof(Rt_Slider));
 	slider->ctrl_name = g_strdup(ctrl_name);
 	slider->tbl = tbl;
 	slider->table_num = table_num;
 	slider->row = row;
 	slider->last = 0.0;
-	slider->class = MTX_PROGRESS;
+	slider->type = MTX_PROGRESS;
 	slider->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
 	slider->temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
 	if ((gchar *)DATA_GET(object,"real_lower"))
-		slider->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
+		slider->lower = (GINT)strtol((gchar *)DATA_GET(object,"real_lower"),NULL,10);
 	else
 		MTXDBG(CRITICAL,_("No \"real_lower\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
 	if ((gchar *)DATA_GET(object,"real_upper"))
-		slider->upper = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
+		slider->upper = (GINT)strtol((gchar *)DATA_GET(object,"real_upper"),NULL,10);
 	else
 		MTXDBG(CRITICAL,_("No \"real_upper\" value defined for control name %s, datasource %s\n"),ctrl_name,source);
 	slider->history = (GArray *) DATA_GET(object,"history");
@@ -442,22 +442,22 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	GHashTable *enr_sliders = NULL;
 	gchar * source = NULL;
 	const gchar *name = NULL;
-	TabIdent ident = 0;
-	Rt_Slider *slider = g_malloc0(sizeof(Rt_Slider));
+	TabIdent ident;
+	Rt_Slider *slider = (Rt_Slider *)g_malloc0(sizeof(Rt_Slider));
 
-	rtv_map = DATA_GET(global_data,"rtv_map");
+	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	source = (gchar *)OBJ_GET(widget,"source");
-	ident = (TabIdent)OBJ_GET(widget,"tab_ident");
+	ident = (TabIdent)(GINT)OBJ_GET(widget,"tab_ident");
 	name = glade_get_widget_name(widget);
 		
 	if (!rtv_map)
 		return;
-	object = g_hash_table_lookup(rtv_map->rtv_hash,source);
+	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 
-	rt_sliders = DATA_GET(global_data,"rt_sliders");
-	aw_sliders = DATA_GET(global_data,"aw_sliders");
-	ww_sliders = DATA_GET(global_data,"ww_sliders");
-	enr_sliders = DATA_GET(global_data,"enr_sliders");
+	rt_sliders = (GHashTable *)DATA_GET(global_data,"rt_sliders");
+	aw_sliders = (GHashTable *)DATA_GET(global_data,"aw_sliders");
+	ww_sliders = (GHashTable *)DATA_GET(global_data,"ww_sliders");
+	enr_sliders = (GHashTable *)DATA_GET(global_data,"enr_sliders");
 	if (!rt_sliders)
 	{
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
@@ -492,18 +492,18 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	slider->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
 	slider->temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
 	if ((gchar *)DATA_GET(object,"real_lower"))
-		slider->lower = (GINT)strtol(DATA_GET(object,"real_lower"),NULL,10);
+		slider->lower = (GINT)strtol((gchar *)DATA_GET(object,"real_lower"),NULL,10);
 	else
 		printf(_("No \"real_lower\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
 	if ((gchar *)DATA_GET(object,"real_upper"))
-		slider->upper = (GINT)strtol(DATA_GET(object,"real_upper"),NULL,10);
+		slider->upper = (GINT)strtol((gchar *)DATA_GET(object,"real_upper"),NULL,10);
 	else
 		printf(_("No \"real_upper\" value defined for control name %s, datasource %s\n"),slider->ctrl_name,source);
 	slider->object = object;
 	slider->textval = NULL;
 	if (GTK_IS_SCALE(widget))
 	{
-		slider->class = MTX_RANGE;
+		slider->type = MTX_RANGE;
 		slider->pbar = widget;
 	}
 	/* generic container (Table/box HOLDING a mtx pbar */
@@ -513,12 +513,12 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 		 * stick in my custom version instead.  Get the orientation
 		 * first...
 		 */
-		orient = (GtkProgressBarOrientation)OBJ_GET(widget,"orientation");
+		orient = (GtkProgressBarOrientation)(GINT)OBJ_GET(widget,"orientation");
 		slider->pbar = mtx_progress_bar_new();
 		mtx_progress_bar_set_hold_time(MTX_PROGRESS_BAR(slider->pbar),(GINT)DATA_GET(global_data,"pbar_hold_time"));
 		gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(slider->pbar),orient);
 		gtk_container_add(GTK_CONTAINER(widget),slider->pbar);
-		slider->class = MTX_PROGRESS;
+		slider->type = MTX_PROGRESS;
 	}
 
 	switch (ident)
@@ -555,7 +555,7 @@ G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 	gchar * widget = NULL;
 	GHashTable **tables = NULL;
 
-	tables = DATA_GET(global_data,"ve3d_sliders");
+	tables = (GHashTable **)DATA_GET(global_data,"ve3d_sliders");
 	g_hash_table_destroy(tables[table_num]);
 	tables[table_num] = NULL;
 
@@ -620,7 +620,7 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
 	else
 		mapae_ctrl_state = TRUE;
 
-	widget_group_states = DATA_GET(global_data,"widget_group_states");
+	widget_group_states = (GHashTable *)DATA_GET(global_data,"widget_group_states");
 	g_hash_table_insert(widget_group_states,g_strdup("tps_ae_ctrls"),GINT_TO_POINTER(tpsae_ctrl_state));
 	g_hash_table_insert(widget_group_states,g_strdup("map_ae_ctrls"),GINT_TO_POINTER(mapae_ctrl_state));
 	g_list_foreach(get_list("tps_ae_ctrls"),alter_widget_state,NULL);
@@ -645,26 +645,26 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 	TabIdent active_page;
 	Firmware_Details *firmware = NULL;
 
-	firmware = DATA_GET(global_data,"firmware");
-	ve3d_sliders = DATA_GET(global_data,"ve3d_sliders");
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	ve3d_sliders = (GHashTable **)DATA_GET(global_data,"ve3d_sliders");
 
 	if (DATA_GET(global_data,"leaving"))
 		return FALSE;
 
-	active_page = (TabIdent)DATA_GET(global_data,"active_page");
+	active_page = (TabIdent)(GINT)DATA_GET(global_data,"active_page");
 	/* Update all the dynamic RT Sliders */
 	if (active_page == RUNTIME_TAB) /* Runtime display is visible */
-		if ((hash = DATA_GET(global_data,"rt_sliders")))
+		if ((hash = (GHashTable *)DATA_GET(global_data,"rt_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == ENRICHMENTS_TAB)     /* Enrichments display is up */
-		if ((hash = DATA_GET(global_data,"enr_sliders")))
+		if ((hash = (GHashTable *)DATA_GET(global_data,"enr_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == ACCEL_WIZ_TAB)       /* Enrichments display is up */
-		if ((hash = DATA_GET(global_data,"aw_sliders")))
+		if ((hash = (GHashTable *)DATA_GET(global_data,"aw_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 	if (active_page == WARMUP_WIZ_TAB)      /* Warmup wizard is visible */
 	{
-		if ((hash = DATA_GET(global_data,"ww_sliders")))
+		if ((hash = (GHashTable *)DATA_GET(global_data,"ww_sliders")))
 			g_hash_table_foreach(hash,rt_update_values,NULL);
 
 		if (!lookup_current_value("cltdeg",&coolant))
@@ -715,7 +715,7 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 		return;
 
 	if (!rtv_mutex)
-		rtv_mutex = DATA_GET(global_data,"rtv_mutex");
+		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	if (!rand)
 		rand = g_rand_new();
 	history = (GArray *)DATA_GET(slider->object,"history");
@@ -750,7 +750,7 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 		percentage = (current-lower)/(upper-lower);
 		tmpf = percentage <= 1.0 ? percentage : 1.0;
 		tmpf = tmpf >= 0.0 ? tmpf : 0.0;
-		switch (slider->class)
+		switch (slider->type)
 		{
 			case MTX_PROGRESS:
 				mtx_progress_bar_set_fraction(MTX_PROGRESS_BAR

@@ -69,7 +69,7 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 		g_free(prefix);
 		return;
 	}
-	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
+	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
 	if(!dynamic_widgets)
 	{
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -99,7 +99,7 @@ G_MODULE_EXPORT void register_widget(const gchar *name, GtkWidget * widget)
 {
 	GHashTable *dynamic_widgets = NULL;
 
-	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
+	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
 	if(!dynamic_widgets)
 	{
 		dynamic_widgets = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
@@ -126,7 +126,7 @@ G_MODULE_EXPORT void register_widget(const gchar *name, GtkWidget * widget)
 G_MODULE_EXPORT gboolean deregister_widget(const gchar *name)
 {
 	GHashTable *dynamic_widgets = NULL;
-	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
+	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
 	return (g_hash_table_remove(dynamic_widgets,name));
 }
 
@@ -142,8 +142,8 @@ G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
 	GHashTable *widget_2_tab_hash = NULL;
 	GtkWidget *widget = NULL;
 	gchar *datamap = NULL;
-	dynamic_widgets = DATA_GET(global_data,"dynamic_widgets");
-	widget_2_tab_hash = DATA_GET(global_data,"widget_2_tab_hash");
+	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
+	widget_2_tab_hash = (GHashTable *)DATA_GET(global_data,"widget_2_tab_hash");
 
 	g_return_val_if_fail(name,NULL);
 	g_return_val_if_fail(dynamic_widgets,NULL);
@@ -202,7 +202,7 @@ G_MODULE_EXPORT gboolean get_state(gchar *string, gint index)
   */
 G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 {
-	GtkWidget * widget = key;
+	GtkWidget * widget = (GtkWidget *)key;
 	gchar * tmpbuf = NULL;
 	//const gchar * name = NULL;
 	gchar ** groups = NULL;
@@ -227,9 +227,9 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	else
 	        tmpbuf = (gchar *)OBJ_GET(widget,"bind_to_list");
 
-	widget_group_states = DATA_GET(global_data,"widget_group_states");
+	widget_group_states = (GHashTable *)DATA_GET(global_data,"widget_group_states");
 	if (OBJ_GET(widget,"match_type"))
-		type = (MatchType)OBJ_GET(widget,"match_type");
+		type = (MatchType)(GINT)OBJ_GET(widget,"match_type");
 	groups = parse_keys(tmpbuf,&num_groups,",");
 	state = TRUE;
 	/*printf("setting state for %s in groups \"%s\" to:",(gchar *) OBJ_GET(widget,"name"),tmpbuf);*/

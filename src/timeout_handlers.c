@@ -109,8 +109,8 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
 	GCond *rtv_thread_cond = NULL;
 	GMutex *rtv_thread_mutex = NULL;
-	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
-	rtv_thread_mutex = DATA_GET(global_data,"rtv_thread_mutex");
+	rtv_thread_cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
+	rtv_thread_mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
 	g_return_if_fail(rtv_thread_mutex);
 
 	switch (type)
@@ -178,13 +178,13 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	gint delay = 0;
 
 	g_mutex_lock(mutex);
-	serial_params = DATA_GET(global_data,"serial_params");
-	io_data_queue = DATA_GET(global_data,"io_data_queue");
-	pf_dispatch_queue = DATA_GET(global_data,"pf_dispatch_queue");
-	rtv_thread_cond = DATA_GET(global_data,"rtv_thread_cond");
-	rtv_thread_mutex = DATA_GET(global_data,"rtv_thread_mutex");
-	get_symbol("signal_read_rtvars",(void *)&signal_read_rtvars);
-	get_symbol("setup_rtv",(void *)&setup_rtv);
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
+	pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
+	rtv_thread_cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
+	rtv_thread_mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
+	get_symbol("signal_read_rtvars",(void **)&signal_read_rtvars);
+	get_symbol("setup_rtv",(void **)&setup_rtv);
 
 	g_return_val_if_fail(serial_params,NULL);
 	g_return_val_if_fail(signal_read_rtvars,NULL);

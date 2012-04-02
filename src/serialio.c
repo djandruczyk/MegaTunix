@@ -67,8 +67,8 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	Serial_Params *serial_params = NULL;
 	gint fd = -1;
 	gchar * err_text = NULL;
-	serial_params = DATA_GET(global_data,"serial_params");
-	serio_mutex = DATA_GET(global_data,"serio_mutex");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 
 //	printf("open serial\n");
 	g_mutex_lock(serio_mutex);
@@ -150,8 +150,8 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 {
 	GMutex *serio_mutex = NULL;
 	Serial_Params *serial_params = NULL;
-	serial_params = DATA_GET(global_data,"serial_params");
-	serio_mutex = DATA_GET(global_data,"serio_mutex");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 	if (serial_params->net_mode)
 		return;
 
@@ -197,9 +197,9 @@ G_MODULE_EXPORT void setup_serial_params(void)
 #ifndef __WIN32__
 	speed_t baud;
 #endif
-	serial_params = DATA_GET(global_data,"serial_params");
-	serio_mutex = DATA_GET(global_data,"serio_mutex");
-	baud_str = DATA_GET(global_data,"ecu_baud_str");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
+	baud_str = (gchar *)DATA_GET(global_data,"ecu_baud_str");
 
 	if (!parse_baud_str(baud_str,&baudrate,&bits,&parity,&stop))
 		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL,_("ERROR! couldn't parse ecu_baud string %s\n"),baud_str);
@@ -405,8 +405,8 @@ G_MODULE_EXPORT void close_serial(void)
 {
 	GMutex *serio_mutex = NULL;
 	Serial_Params *serial_params = NULL;
-	serial_params = DATA_GET(global_data,"serial_params");
-	serio_mutex = DATA_GET(global_data,"serio_mutex");
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 	if (!serial_params)
 		return;
 	if (serial_params->open == FALSE)

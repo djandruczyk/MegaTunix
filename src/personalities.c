@@ -156,7 +156,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		/* Cycle list for PERSONAL profile files */
 		for (i=0;i<g_list_length(p_list);i++)
 		{
-			element = g_list_nth_data(p_list,i);
+			element = (PersonaElement *)g_list_nth_data(p_list,i);
 
 			ebox = gtk_event_box_new();
 			gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
@@ -194,7 +194,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	/* Cycle list for System interogation files */
 	for (i=0;i<g_list_length(s_list);i++)
 	{
-		element = g_list_nth_data(s_list,i);
+		element = (PersonaElement *)g_list_nth_data(s_list,i);
 		ebox = gtk_event_box_new();
 		gtk_box_pack_start(GTK_BOX(vbox),ebox,TRUE,TRUE,0);
 		hbox = gtk_hbox_new(FALSE,10);

@@ -37,7 +37,7 @@ G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gc
 	assert(string);
 	if (!string)
 	{
-		MTXDBG((Dbg_Class)(KEYPARSER|CRITICAL),_("String passed was NULL\n"));
+		MTXDBG(KEYPARSER|CRITICAL,_("String passed was NULL\n"));
 		*count = 0;
 		return NULL;
 	}
@@ -65,7 +65,7 @@ G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const 
 	assert(string);
 	if (!string)
 	{
-		MTXDBG((Dbg_Class)(KEYPARSER|CRITICAL),_("String passed was NULL\n"));
+		MTXDBG(KEYPARSER|CRITICAL,_("String passed was NULL\n"));
 		*count = 0;
 		return 0;
 	}
