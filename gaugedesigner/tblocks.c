@@ -107,7 +107,7 @@ void update_onscreen_tblocks()
 		gtk_widget_destroy(table);
 
 	table = gtk_table_new(2,1,FALSE);
-	gtk_table_attach(GTK_TABLE(toptable),table,0,1,1,2,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(toptable),table,0,1,1,2,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	OBJ_SET((toptable),"layout_table",table);
 	/* Repopulate the table with the current tblocks... */
 	y=1;
@@ -115,7 +115,7 @@ void update_onscreen_tblocks()
 	{
 		tblock = g_array_index(array,MtxTextBlock *, i);
 		subtable = build_tblock(tblock,i);
-		gtk_table_attach(GTK_TABLE(table),subtable,0,1,y,y+1,GTK_EXPAND|GTK_FILL,GTK_SHRINK,0,0);
+		gtk_table_attach(GTK_TABLE(table),subtable,0,1,y,y+1,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),GTK_SHRINK,0,0);
 		gtk_widget_show_all(subtable);
 		y+=1;
 	}
@@ -142,7 +142,7 @@ void reset_onscreen_tblocks()
 		return;
 	}
 
-	widget = OBJ_GET((toptable),"layout_table");
+	widget = (GtkWidget *)OBJ_GET((toptable),"layout_table");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_destroy(widget);
 
@@ -156,7 +156,7 @@ gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	gchar * tmpbuf = NULL;
 	GdkColor color;
-	TbField field = (TbField)OBJ_GET(widget,"handler");
+	TbField field = (TbField)(GINT)OBJ_GET(widget,"handler");
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
@@ -231,10 +231,10 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_container_add(GTK_CONTAINER(widget),img);
 	OBJ_SET((widget),"tblock_index",GINT_TO_POINTER(index));
 	g_signal_connect(G_OBJECT(widget),"clicked", G_CALLBACK(remove_tblock),NULL);
-	gtk_table_attach(GTK_TABLE(table),widget,0,1,0,4,0,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),widget,0,1,0,4,(GtkAttachOptions)0,(GtkAttachOptions)0,0,0);
 
 	notebook = gtk_notebook_new();
-	gtk_table_attach(GTK_TABLE(table),notebook,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),notebook,1,2,0,1,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	/* text, color buttons */
 	subtable = gtk_table_new(1,4,FALSE);
 	gtk_table_set_col_spacings(GTK_TABLE(subtable),5);
@@ -242,7 +242,7 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook),subtable,label);
 	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
 	widget = gtk_label_new("Text:");
-	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 
 	widget = gtk_entry_new();
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_TEXT));
@@ -250,18 +250,18 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_entry_set_width_chars(GTK_ENTRY(widget),12);
 	gtk_entry_set_text(GTK_ENTRY(widget),tblock->text);
 	g_signal_connect(G_OBJECT(widget),"changed",G_CALLBACK(alter_tblock_data),NULL);
-	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	widget = gtk_color_button_new_with_color(&tblock->color[MTX_DAY]);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_COLOR_DAY));
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 	g_signal_connect(G_OBJECT(widget),"color_set",G_CALLBACK(alter_tblock_data),NULL);
-	gtk_table_attach(GTK_TABLE(subtable),widget,2,3,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,2,3,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 
 	widget = gtk_color_button_new_with_color(&tblock->color[MTX_NITE]);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_COLOR_NITE));
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 	g_signal_connect(G_OBJECT(widget),"color_set",G_CALLBACK(alter_tblock_data),NULL);
-	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 
 	/* font, font scale spinner */
 	subtable = gtk_table_new(1,4,FALSE);
@@ -271,7 +271,7 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
 
 	widget = gtk_label_new("Font:");
-	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 
 	widget = gtk_font_button_new();
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_FONT));
@@ -283,17 +283,17 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_font_button_set_use_font(GTK_FONT_BUTTON(widget),FALSE);
 	g_free(tmpbuf);
 	g_signal_connect(G_OBJECT(widget),"font_set",G_CALLBACK(alter_tblock_data),NULL);
-	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 
 	widget = gtk_label_new("Font\nScale");
-	gtk_table_attach(GTK_TABLE(subtable),widget,2,3,0,1,0,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,2,3,0,1,(GtkAttachOptions)0,(GtkAttachOptions)0,0,0);
 
 	widget = gtk_spin_button_new_with_range(0.001,1.0,0.001);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_FONT_SCALE));
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 	g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", tblock->font_scale, NULL);
 	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
-	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,0,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,3,4,0,1,(GtkAttachOptions)0,(GtkAttachOptions)0,0,0);
 
 	/* Location Tab: Edit button, X/Y position spinners */
 	subtable = gtk_table_new(1,4,FALSE);
@@ -303,32 +303,32 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
 
 	widget = gtk_label_new("Position:");
-	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 
 	/* X position minilayout table */
 	minitable = gtk_table_new(1,2,FALSE);
-	gtk_table_attach(GTK_TABLE(subtable),minitable,2,3,0,1,GTK_EXPAND,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),minitable,2,3,0,1,GTK_EXPAND,(GtkAttachOptions)0,0,0);
 	widget = gtk_label_new("X:");
-	gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 	widget = gtk_spin_button_new_with_range(-1.0,1.0,0.001);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_X_POS));
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 	g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", tblock->x_pos, NULL);
 	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
-	gtk_table_attach(GTK_TABLE(minitable),widget,1,2,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(minitable),widget,1,2,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 	x_spin = widget;
 
 	/* Y position minilayout table */
 	minitable = gtk_table_new(1,2,FALSE);
-	gtk_table_attach(GTK_TABLE(subtable),minitable,3,4,0,1,GTK_FILL|GTK_EXPAND,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),minitable,3,4,0,1,(GtkAttachOptions)(GTK_FILL|GTK_EXPAND),(GtkAttachOptions)0,0,0);
 	widget = gtk_label_new("Y:");
-	gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(minitable),widget,0,1,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 	widget = gtk_spin_button_new_with_range(-1.0,1.0,0.001);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_Y_POS));
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 	g_object_set(G_OBJECT(widget),"climb-rate", 0.001, "digits", 3, "numeric", TRUE, "value", tblock->y_pos, NULL);
 	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
-	gtk_table_attach(GTK_TABLE(minitable),widget,1,2,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(minitable),widget,1,2,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 	y_spin = widget;
 
 	widget = gtk_button_new();
@@ -341,7 +341,7 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	label = gtk_label_new("Edit");
 	gtk_box_pack_start(GTK_BOX(hbox),label,TRUE,TRUE,0);
 	g_signal_connect(G_OBJECT(widget),"clicked",G_CALLBACK(grab_coords_event),NULL);
-	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_EXPAND|GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
   
 	/* Layer Tab: Layer */
 	subtable = gtk_table_new(1,4,FALSE);
@@ -351,16 +351,16 @@ GtkWidget * build_tblock(MtxTextBlock *tblock, gint index)
 	gtk_notebook_set_tab_label_packing(GTK_NOTEBOOK(notebook),subtable,TRUE,TRUE,GTK_PACK_START);
 
 	widget = gtk_label_new("Layer:");
-	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,0,1,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 	widget = gtk_spin_button_new_with_range(0.0,10.0,1.0);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(TB_LAYER));
 	OBJ_SET(widget,"index",GINT_TO_POINTER(index));
 	g_object_set(G_OBJECT(widget),"climb-rate", 1.0, "digits", 0, "numeric", TRUE, NULL);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),(gfloat)tblock->layer);
 	g_signal_connect(G_OBJECT(widget),"value-changed",G_CALLBACK(alter_tblock_data),NULL);
-	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(subtable),widget,1,2,0,1,GTK_FILL,(GtkAttachOptions)0,0,0);
 
 	widget = gtk_hseparator_new();
-	gtk_table_attach(GTK_TABLE(table),widget,0,2,1,2,GTK_FILL,0,0,0);
+	gtk_table_attach(GTK_TABLE(table),widget,0,2,1,2,GTK_FILL,(GtkAttachOptions)0,0,0);
 	return table;
 }

@@ -115,7 +115,7 @@ void update_onscreen_w_ranges()
 
 	if ((!toplevel) || (!GTK_IS_WIDGET(gauge)))
 		return;
-	array = mtx_gauge_face_get_warning_ranges(MTX_GAUGE_FACE(gauge));
+	array = (GArray *)mtx_gauge_face_get_warning_ranges(MTX_GAUGE_FACE(gauge));
 	container = GTK_WIDGET (gtk_builder_get_object(toplevel,"warning_range_viewport"));
 	if (!GTK_IS_WIDGET(container))
 	{
@@ -153,7 +153,7 @@ void update_onscreen_w_ranges()
 		gtk_container_add(GTK_CONTAINER(button),img);
 		OBJ_SET((button),"range_index",GINT_TO_POINTER(i));
 		g_signal_connect(G_OBJECT(button),"clicked", G_CALLBACK(remove_w_range),NULL);
-		gtk_table_attach(GTK_TABLE(table),button,0,1,y,y+1,0,0,0,0);
+		gtk_table_attach(GTK_TABLE(table),button,0,1,y,y+1,(GtkAttachOptions)0,(GtkAttachOptions)0,0,0);
 		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), LBOUND, &low);
 		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge), UBOUND, &high);
 		dummy = gtk_spin_button_new_with_range(low,high,(high-low)/100);
@@ -242,7 +242,7 @@ gboolean alter_w_range_data(GtkWidget *widget, gpointer data)
 	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
 	GdkColor color;
-	WrField field = (WrField)data;
+	WrField field = (WrField)(GINT)data;
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
