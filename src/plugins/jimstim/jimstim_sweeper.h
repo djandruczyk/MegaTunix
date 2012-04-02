@@ -17,6 +17,10 @@
   \brief JimStim sweeper code
   \author David Andruczyk
   */
+ 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef __JIMSTIM_SWEEPER_H__
 #define __JIMSTIM_SWEEPER_H__
@@ -62,4 +66,7 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *);
 G_MODULE_EXPORT void jimstim_sweeper_init(GtkWidget *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

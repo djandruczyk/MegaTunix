@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __COMBO_MASK_H__
 #define __COMBO_MASK_H__
 
@@ -62,4 +66,7 @@ void mask_entry_finalize(GObject *);
 
 G_END_DECLS
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

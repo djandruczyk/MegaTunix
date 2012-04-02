@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_MENU_HANDLERS_H__
 #define __FREEEMS_MENU_HANDLERS_H__
 
@@ -30,4 +34,7 @@
 void common_plugin_menu_setup(GladeXML *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -22,6 +22,10 @@
  * to real world numbers. From Bruce Bowlings PCC tuning wsoftware.
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __LOOKUPTABLES_H__
 #define __LOOKUPTABLES_H__
 
@@ -57,4 +61,7 @@ void update_lt_config(gpointer , gpointer , gpointer );
 void dump_lookuptables(gpointer , gpointer , gpointer);
 
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

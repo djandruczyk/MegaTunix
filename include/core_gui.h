@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __CORE_GUI_H__
 #define __CORE_GUI_H__
 
@@ -32,4 +36,7 @@ void set_connected_icons_state(gboolean);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MENU_HANDLERS_H__
 #define __MENU_HANDLERS_H__
 
@@ -41,4 +45,7 @@ gboolean settings_transfer(GtkWidget *, gpointer );
 gboolean check_tab_existance(TabIdent );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

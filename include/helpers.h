@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __HELPERS_H__
 #define __HELPERS_H__
 
@@ -38,4 +42,7 @@ void startup_default_timeouts_pf(void);
 void cleanup_pf(Io_Message *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

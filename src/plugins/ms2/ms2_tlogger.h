@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MS2_TLOGGER_H__
 #define __MS2_TLOGGER_H__
 
@@ -76,4 +80,7 @@ void reset_ttm_buttons(void);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

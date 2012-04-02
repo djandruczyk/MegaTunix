@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __BINLOGGER_H__
 #define __BINLOGGER_H__
 
@@ -32,4 +36,7 @@ void log_inbound_data(const void *, size_t);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

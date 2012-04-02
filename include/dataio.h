@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DATAIO_H__
 #define __DATAIO_H__
 
@@ -33,4 +37,7 @@ gboolean write_data(Io_Message *);
 gboolean write_wrapper(gint, const void *, size_t, gint *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

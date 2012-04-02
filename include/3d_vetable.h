@@ -26,6 +26,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __3D_VETABLE_H__
 #define __3D_VETABLE_H__
 
@@ -260,4 +264,7 @@ gfloat multi_lookup_and_compute(MultiSource *);
 void multi_lookup_and_compute_n(MultiSource *, gint, gint, gfloat *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DATALOGGING_GUI_H__
 #define __DATALOGGING_GUI_H__
 
@@ -43,4 +47,7 @@ void dump_log_to_disk(GIOChannel *);
 gboolean autolog_dump(gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

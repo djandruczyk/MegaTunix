@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MS1_HELPERS_H__
 #define __MS1_HELPERS_H__
 
@@ -28,4 +32,7 @@
 void enable_reboot_button_pf(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

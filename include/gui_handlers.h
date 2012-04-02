@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __GUI_HANDLERS_H__
 #define __GUI_HANDLERS_H__
 
@@ -154,4 +158,7 @@ void update_entry_color_wrapper(gpointer, gpointer);
 gboolean table_color_refresh(gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

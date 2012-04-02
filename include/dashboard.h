@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DASHBOARD_H__
 #define __DASHBOARD_H__
 
@@ -88,4 +92,7 @@ gchar * validate_dash_choice(gchar *, gboolean *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

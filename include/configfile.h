@@ -20,6 +20,10 @@
 
 /* Configfile structs. (derived from an older version of XMMS) */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __CONFIGFILE_H__
 #define __CONFIGFILE_H__
 
@@ -96,3 +100,6 @@ void cfg_remove_key(ConfigFile * cfg, const gchar * section, const gchar * key);
 #endif
 
 
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
+#endif

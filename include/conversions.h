@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __CONVERSIONS_H__
 #define __CONVERSIONS_H__
 
@@ -42,4 +46,7 @@ gdouble temp_to_ecu(gdouble);
 gdouble temp_to_host(gdouble);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

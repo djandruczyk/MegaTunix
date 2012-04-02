@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __S12X_LOADER_H__
 #define __S12X_LOADER_H__
 
@@ -38,4 +42,7 @@ void reset_proc(gint);
 void output(gchar *, gboolean);
 gboolean readback_block(gint, gint, guchar *, gint);
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

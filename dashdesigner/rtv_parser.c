@@ -91,8 +91,8 @@ void load_rtvars(gchar **files, Rtv_Data *rtv_data)
 		for (j=0;j<(gint)g_list_length(info->rtv_list);j++)
 		{
 			gtk_tree_store_append(store,&iter,&parent);
-			element = g_list_nth_data(info->rtv_list,j);
-			int_name = g_hash_table_lookup(info->int_ext_hash,element);
+			element = (gchar *)g_list_nth_data(info->rtv_list,j);
+			int_name = (gchar *)g_hash_table_lookup(info->int_ext_hash,element);
 			gtk_tree_store_set(store,&iter,VARNAME_COL,element,DATASOURCE_COL,int_name,-1);
 		}
 	}

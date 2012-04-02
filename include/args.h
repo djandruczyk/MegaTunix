@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __ARGS_H__
 #define __ARGS_H__
 
@@ -65,4 +69,7 @@ void handle_args(gint, gchar ** );
 void args_free(gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

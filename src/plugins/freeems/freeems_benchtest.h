@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_BENCHTEST_H__
 #define __FREEEMS_BENCHTEST_H__
 
@@ -42,4 +46,7 @@ gboolean pull_data_from_gui(Bt_Data *);
 gboolean benchtest_clock_update(gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

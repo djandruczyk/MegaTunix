@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __WARMWIZARD_GUI_H__
 #define __WARMWIZARD_GUI_H__
 
@@ -27,4 +31,7 @@
 void warmwizard_update_status(gfloat );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

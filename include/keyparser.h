@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __KEYPARSER_H__
 #define __KEYPARSER_H__
 
@@ -29,4 +33,7 @@ gint * parse_keytypes(const gchar *, gint *, const gchar * );
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

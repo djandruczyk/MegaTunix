@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MS1_T_LOGGER_H__
 #define __MS1_T_LOGGER_H__
 
@@ -80,4 +84,7 @@ void stop(EcuPluginTickler);
 gboolean signal_toothtrig_read(EcuPluginTickler);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

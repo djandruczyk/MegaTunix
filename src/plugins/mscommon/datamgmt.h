@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DATAMGMT_H__
 #define __DATAMGMT_H__
 
@@ -39,4 +43,7 @@ gint get_ecu_data(gpointer);
 void store_new_block(gconstpointer *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

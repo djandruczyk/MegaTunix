@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __STRINGMATCH_H__
 #define __STRINGMATCH_H__
 
@@ -32,4 +36,7 @@ gint translate_string(const gchar *);
 void dump_hash(gpointer,gpointer,gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

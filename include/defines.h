@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DEFINES_H__
 #define __DEFINES_H__
 
@@ -95,4 +99,8 @@
 
 #define C_TO_K 273
 
+#endif
+
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

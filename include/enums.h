@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __ENUMS_H__
 #define __ENUMS_H__
 
@@ -309,4 +313,7 @@ typedef enum
 	AUTO_COLOR_SCALE
 }ColorScale;
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

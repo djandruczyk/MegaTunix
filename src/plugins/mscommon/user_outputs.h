@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __USER_OUTPUTS_H__
 #define __USER_OUTPUTS_H__
 
@@ -33,4 +37,7 @@ gboolean force_view_recompute(gpointer);
 gboolean deferred_model_update(GtkWidget * );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

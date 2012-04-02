@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_HELPERS_H__
 #define __FREEEMS_HELPERS_H__
 
@@ -54,4 +58,7 @@ FreeEMS_Packet * retrieve_packet(gconstpointer *, const gchar *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

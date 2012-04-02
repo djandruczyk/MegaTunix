@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __LOGVIEWER_CORE_H__
 #define __LOGVIEWER_CORE_H__
 
@@ -82,4 +86,7 @@ void free_log_info(Log_Info *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

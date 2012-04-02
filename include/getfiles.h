@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __GETFILES_H__
 #define __GETFILES_H__
 
@@ -72,4 +76,7 @@ gboolean check_for_files(const gchar *, const gchar *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

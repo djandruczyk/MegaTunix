@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MS2_MENU_HANDLERS_H__
 #define __MS2_MENU_HANDLERS_H__
 
@@ -39,4 +43,7 @@ gboolean ms2_reboot(GtkWidget *, gpointer);
 gboolean therm_set_state(gpointer, GtkWidget *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

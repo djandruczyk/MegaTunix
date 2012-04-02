@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __SERIALIO_H__
 #define __SERIALIO_H__
 
@@ -100,4 +104,7 @@ void *serial_repair_thread(gpointer );
 gboolean parse_baud_str(gchar *, gint *, gint *, Parity *, gint *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

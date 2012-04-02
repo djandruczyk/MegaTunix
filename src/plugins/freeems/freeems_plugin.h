@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_PLUGIN_H__
 #define __FREEEMS_PLUGIN_H__
 
@@ -132,4 +136,7 @@ void register_common_enums(void);
 void deregister_common_enums(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

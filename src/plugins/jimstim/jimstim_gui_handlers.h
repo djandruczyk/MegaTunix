@@ -17,6 +17,10 @@
   \brief JimStim gui handlers
   \author David Andruczyk
   */
+ 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef __JIMSTIM_GUI_HANDLERS_H__
 #define __JIMSTIM_GUI_HANDLERS_H__
@@ -45,3 +49,6 @@ gboolean jimstim_rpm_value_changed(GtkWidget *, gpointer);
 /* Prototypes */
 #endif
 
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
+#endif

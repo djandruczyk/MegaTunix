@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __LISTMGMT_H__
 #define __LISTMGMT_H__
 
@@ -46,4 +50,7 @@ gint list_object_sort(gconstpointer, gconstpointer, gpointer);
 void free_element(gpointer, gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

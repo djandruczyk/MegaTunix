@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __COMMS_GUI_H__
 #define __COMMS_GUI_H__
 
@@ -30,4 +34,7 @@ gboolean check_potential_ports(const gchar *);
 gboolean enumerate_dev(GtkWidget *, gpointer);	/* Help find usb/serial adapter */
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

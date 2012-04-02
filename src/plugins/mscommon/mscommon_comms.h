@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MSCOMMON_COMMS_H__
 #define __MSCOMMON_COMMS_H__
 
@@ -49,4 +53,7 @@ gboolean setup_rtv(void);
 gboolean teardown_rtv(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

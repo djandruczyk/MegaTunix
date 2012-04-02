@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __AFR_CALIBRATE_H__
 #define __AFR_CALIBRATE_H__
 
@@ -30,4 +34,7 @@
  void afr_combo_changed(GtkWidget *, gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

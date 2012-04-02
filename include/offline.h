@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __OFFLINE_H__
 #define __OFFLINE_H__
 
@@ -31,4 +35,7 @@ gint ptr_sort(gconstpointer , gconstpointer );
 void offline_ecu_restore_pf(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

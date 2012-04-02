@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __XMLBASE_H__
 #define __XMLBASE_H__
 
@@ -51,4 +55,8 @@ void generic_xml_color_export(xmlNode *, const gchar *, GdkColor *);
 /* Oddball funcs */
 gboolean xml_api_check(xmlNode *,gint , gint);
 
+#endif
+
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DEP_PROCESSOR_H__
 #define __DEP_PROCESSOR_H__
 
@@ -27,4 +31,7 @@
 gboolean check_dependancies(gconstpointer *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

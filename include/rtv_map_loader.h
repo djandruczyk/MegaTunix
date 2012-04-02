@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __RTV_MAP_LOADER_H__
 #define __RTV_MAP_LOADER_H__
 
@@ -62,4 +66,7 @@ void load_rtv_xml_dependancies(gconstpointer *, xmlNode *);
 void load_derived_var(xmlNode *, Rtv_Map *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

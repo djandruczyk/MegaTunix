@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MS1_GUI_HANDLERS_H__
 #define __MS1_GUI_HANDLERS_H__
 
@@ -54,3 +58,6 @@ void ecu_gui_init(void);
 
 #endif
 
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
+#endif

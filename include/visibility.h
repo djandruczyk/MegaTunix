@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __VISIBILITY_H__
 #define __VISIBILITY_H__
 
@@ -30,4 +34,7 @@ gboolean show_tab_visibility_window(GtkWidget *, gpointer);
 gboolean hide_tab(GtkWidget *, gpointer );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

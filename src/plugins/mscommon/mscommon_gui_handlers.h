@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MSCOMMON_GUI_HANDLERS_H__
 #define __MSCOMMON_GUI_HANDLERS_H__
 
@@ -87,4 +91,7 @@ void common_gui_init(void);
 
 
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

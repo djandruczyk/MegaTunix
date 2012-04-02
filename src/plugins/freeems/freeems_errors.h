@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_ERRORS_H__
 #define __FREEEMS_ERRORS_H__
 
@@ -127,4 +131,7 @@ static struct _FreeEMS_Errors
 const gchar * lookup_error(guint);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

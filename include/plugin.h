@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __PLUGIN_H__
 #define __PLUGIN_H__
 
@@ -38,4 +42,7 @@ void plugins_shutdown(void);
 gboolean get_symbol(const gchar *, void **);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

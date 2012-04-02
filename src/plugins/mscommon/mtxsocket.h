@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MTXSOCKET_H__
 #define __MTXSOCKET_H__
 
@@ -196,4 +200,7 @@ guint8 * build_status_update(guint8,SlaveMessage *,gint *);
 gint net_send(GSocket *, guint8 *, gint);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __PERSONALITIES_H__
 #define __PERSONALITIES_H__
 
@@ -49,4 +53,7 @@ void free_persona_element(gpointer, gpointer);
 gint persona_seq_sort(gconstpointer a, gconstpointer b);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

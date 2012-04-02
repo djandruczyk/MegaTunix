@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __LOGVIEWER_EVENTS_H__
 #define __LOGVIEWER_EVENTS_H__
 
@@ -33,4 +37,7 @@ void highlight_tinfo(gint, gboolean );
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

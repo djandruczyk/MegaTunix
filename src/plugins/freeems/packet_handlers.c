@@ -244,7 +244,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	guint8 *ptr = packet->data;
 	gint i = 0;
 	gint error = 0;
-	gchar * errmsg = NULL;
+	const gchar * errmsg = NULL;
 	gint tmpi = 3; /* header and payload Are ALWAYS present */
 
 	packet->header_bits = ptr[0];
@@ -296,7 +296,6 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 		error = ((guint8)packet->data[tmpi] << 8) + (guint8)packet->data[tmpi+1];
 		errmsg = lookup_error(error);
 		printf("Packet ERROR Code 0x%.4X, \"%s\"\n",error,errmsg);
-		g_free(errmsg);
 	}
 	if (packet->header_bits & HAS_LENGTH_MASK)
 	{

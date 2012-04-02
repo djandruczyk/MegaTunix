@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __VETABLE_GUI_H__
 #define __VETABLE_GUI_H__
 
@@ -30,4 +34,7 @@ void common_draw_ve_marker(void );
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

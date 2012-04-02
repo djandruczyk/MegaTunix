@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __NOTIFICATIONS_H__
 #define __NOTIFICATIONS_H__
 
@@ -43,4 +47,7 @@ gint dialog_response(GtkWidget *, gpointer );
 gboolean set_warning_flag(gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __XMLCOMM_H__
 #define __XMLCOMM_H__
 
@@ -112,4 +116,7 @@ void xmlcomm_dump_commands(gpointer, gpointer, gpointer);
 void parse_hex_string(gchar *, gchar *, gint *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __API_VERSIONS_H__
 #define __API_VERSIONS_H__
 
@@ -49,4 +53,7 @@
 #define MTXSOCKET_MAJOR_API 0
 #define MTXSOCKET_MINOR_API 1
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

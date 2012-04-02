@@ -2368,6 +2368,7 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	Firmware_Details *firmware = NULL;
 	GHashTable *ve_view_hash = NULL;
 	GdkWindow *window = NULL;
+	gboolean *table_list = NULL;
 
 	MTXDBG(OPENGL,_("Entered\n"));
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -2376,7 +2377,7 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	g_return_if_fail(ve_view_hash);
 
 	total_tables = firmware->total_tables;
-	gboolean table_list[total_tables];
+	table_list = (gboolean *)g_new0(gboolean, total_tables);
 
 	for (i=0;i<total_tables;i++)
 	{
@@ -2441,6 +2442,7 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 			}
 		}
 	}
+	g_free(table_list);
 	MTXDBG(OPENGL,_("Leaving\n"));
 }
 

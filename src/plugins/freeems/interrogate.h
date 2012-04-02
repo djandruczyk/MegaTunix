@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __INTERROGATE_H__
 #define __INTERROGATE_H__
 
@@ -107,4 +111,7 @@ Table_Params * initialize_table_params(void);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

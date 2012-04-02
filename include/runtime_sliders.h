@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __RUNTIME_SLIDERS_H__
 #define __RUNTIME_SLIDERS_H__
 
@@ -74,4 +78,7 @@ gboolean update_rtsliders(gpointer);
 void rt_update_values(gpointer,gpointer,gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

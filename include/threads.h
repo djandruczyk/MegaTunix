@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __THREADS_H__
 #define __THREADS_H__
 
@@ -143,4 +147,7 @@ void thread_set_group_color(GuiColor, const gchar *);
 gboolean queue_function(const gchar * );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

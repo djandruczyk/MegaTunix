@@ -19,6 +19,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FIRMWARE_H__
 #define __FIRMWARE_H__
 
@@ -406,4 +410,7 @@ void load_firmware_file(Io_File *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

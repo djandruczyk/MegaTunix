@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __WINSERIALIO_H__
 #define __WINSERIALIO_H__
 
@@ -31,4 +35,7 @@ void win32_toggle_serial_control_lines(void);
 void win32_flush_serial(int, FlushDirection);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

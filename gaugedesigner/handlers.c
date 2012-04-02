@@ -341,8 +341,8 @@ G_MODULE_EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
 	{
-		gchar *authors[] = {"David Andruczyk",NULL};
-		gchar *artists[] = {"Dale Anderson",NULL};
+		const gchar *authors[] = {"David Andruczyk",NULL};
+		const gchar *artists[] = {"Dale Anderson",NULL};
 		gtk_show_about_dialog(GTK_WINDOW(main_window),
 				"name","MegaTunix Gauge Designer",
 				"version",VERSION,
@@ -391,7 +391,7 @@ G_MODULE_EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer
 	if (hold_handlers)
 		return TRUE;
 	changed = TRUE;
-	mtx_gauge_face_set_attribute(g,handler,tmpf);
+	mtx_gauge_face_set_attribute(g,(MtxGenAttr)handler,tmpf);
 	if ((handler == UBOUND) || (handler == LBOUND))
 		update_attributes();
 	return TRUE;
@@ -427,8 +427,8 @@ G_MODULE_EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data
 	switch (handler)
 	{
 		case ADJ_LOW_UNIT_PARTNER:
-			lowpartner = OBJ_GET((widget),"lowpartner");
-			highpartner = OBJ_GET((widget),"highpartner");
+			lowpartner = (GtkWidget *)OBJ_GET((widget),"lowpartner");
+			highpartner = (GtkWidget *)OBJ_GET((widget),"highpartner");
 			if ((!GTK_IS_WIDGET(lowpartner)) || 
 					(!GTK_IS_WIDGET(highpartner)))
 				break;
@@ -445,7 +445,7 @@ G_MODULE_EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
 			break;
 		case ADJ_HIGH_UNIT_PARTNER:
-			highpartner = OBJ_GET((widget),"highpartner");
+			highpartner = (GtkWidget *)OBJ_GET((widget),"highpartner");
 			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(OBJ_GET((widget),"low_angle")));
 			if (!GTK_IS_WIDGET(highpartner))
 				break;
@@ -458,7 +458,7 @@ G_MODULE_EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(highpartner),newval);
 			break;
 		case ADJ_START_ANGLE_PARTNER:
-			lowpartner = OBJ_GET((widget),"lowpartner");
+			lowpartner = (GtkWidget *)OBJ_GET((widget),"lowpartner");
 			if (!GTK_IS_WIDGET(lowpartner))
 				break;
 			mtx_gauge_face_get_attribute(g,LBOUND,&lbound);
@@ -470,7 +470,7 @@ G_MODULE_EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(lowpartner),newval);
 			break;
 		case ADJ_SWEEP_ANGLE_PARTNER:
-			highpartner = OBJ_GET((widget),"highpartner");
+			highpartner = (GtkWidget *)OBJ_GET((widget),"highpartner");
 			if (!GTK_IS_WIDGET(highpartner))
 				break;
 			tmp3 = gtk_spin_button_get_value(GTK_SPIN_BUTTON(OBJ_GET((widget),"start_angle")));
@@ -522,7 +522,7 @@ G_MODULE_EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
 
 	changed = TRUE;
 	if (state)
-		mtx_gauge_face_set_attribute(g,handler, value);
+		mtx_gauge_face_set_attribute(g,(MtxGenAttr)handler, value);
 
 	return TRUE;
 }
@@ -542,7 +542,7 @@ G_MODULE_EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
 		return TRUE;
 
 	changed = TRUE;
-	mtx_gauge_face_set_attribute(g,handler, state);
+	mtx_gauge_face_set_attribute(g,(MtxGenAttr)handler, state);
 
 	return TRUE;
 }

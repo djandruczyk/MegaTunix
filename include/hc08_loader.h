@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __HC08_LOADER_H__
 #define __HC08_LOADER_H__
 
@@ -40,4 +44,7 @@ void upload_firmware(gint, gint);
 void reboot_ecu(gint);
 void output(gchar *, gboolean);
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FILEIO_H__
 #define __FILEIO_H__
 
@@ -31,4 +35,7 @@ void backup_all_ecu_settings(gchar  *);
 void restore_all_ecu_settings(gchar  *);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

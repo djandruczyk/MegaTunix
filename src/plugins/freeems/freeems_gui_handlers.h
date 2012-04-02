@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_GUI_HANDLERS_H__
 #define __FREEEMS_GUI_HANDLERS_H__
 
@@ -65,4 +69,7 @@ void get_essentials(GtkWidget *, gint *, gint *, DataSize *, gint *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

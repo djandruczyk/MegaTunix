@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __PACKET_HANDLERS_H__
 #define __PACKET_HANDLERS_H__
 
@@ -226,4 +230,7 @@ void mtxlog_packet(const void *, size_t, gboolean);
 gint atomic_sequence();
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,10 +18,17 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __PLUGINDEFINES_H__
 #define __PLUGINDEFINES_H__
 
 
 #define IN_PLUGIN 1
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

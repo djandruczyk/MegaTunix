@@ -213,7 +213,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	gint size = 0;
 	gint page = 0;
 	gint errorcode = 0;
-	gchar * errmsg = NULL;
+	const gchar * errmsg = NULL;
 	GTimeVal tval;
 
 	if (!firmware)
@@ -296,7 +296,6 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					errorcode = ((guint8)packet->data[packet->payload_base_offset] << 8) + (guint8)packet->data[packet->payload_base_offset+1];
 					errmsg = lookup_error(errorcode);
 					thread_update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Benchtest Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE);
-					g_free(errmsg);
 				}
 				else
 				{

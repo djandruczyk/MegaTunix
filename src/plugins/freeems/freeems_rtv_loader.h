@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_RTV_LOADER_H__
 #define __FREEEMS_RTV_LOADER_H__
 
@@ -32,4 +36,7 @@ void common_rtv_loader(gconstpointer *, xmlNode *, gchar *, ComplexExprType);
 void common_rtv_loader_obj(GObject *, ConfigFile *, gchar *, gchar *, ComplexExprType);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

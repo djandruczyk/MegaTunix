@@ -7,6 +7,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 static const guint8 Logo[] = 
 { ""
   /* Pixbuf magic (0x47646b50) */
@@ -15730,3 +15734,6 @@ static const guint8 Logo[] =
   "\0\3\213\0\0\0\2\211\0\0\0\1\377\0\0\0\0\227\0\0\0\0"};
 
 
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
+#endif

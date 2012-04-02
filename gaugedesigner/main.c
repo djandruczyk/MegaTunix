@@ -45,11 +45,11 @@ int main (int argc, char ** argv )
 	menu_setup(toplevel);
 	main_window = GTK_WIDGET (gtk_builder_get_object(toplevel,"main_window"));
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_gauge_menuitem"),FALSE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_gauge_menuitem"),FALSE);
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_as_menuitem"),FALSE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_as_menuitem"),FALSE);
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_gauge_menuitem"),FALSE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"close_gauge_menuitem"),FALSE);
 
 	init_text_attributes(toplevel);
 	init_general_attributes(toplevel);

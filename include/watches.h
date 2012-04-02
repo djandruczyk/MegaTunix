@@ -20,6 +20,10 @@
 
 /* Runtime Gui Structures */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __WATCHES_H__
 #define __WATCHES_H__
 
@@ -88,4 +92,7 @@ void process_rtv_watches(gpointer, gpointer, gpointer);
 gboolean rtv_watch_active(guint32 );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

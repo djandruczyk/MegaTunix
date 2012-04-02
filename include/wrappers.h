@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __WRAPPERS_H__
 #define __WRAPPERS_H__
 
@@ -29,4 +33,7 @@ void evaluator_destroy_w( void *);
 double evaluator_evaluate_x_w(void *, gdouble);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __USER_OUTPUTS_H__
 #define __USER_OUTPUTS_H__
 
@@ -44,4 +48,7 @@ void update_ms2_user_outputs(GtkWidget *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

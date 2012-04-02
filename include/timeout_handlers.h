@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __TIMEOUT_HANDLERS_H__
 #define __TIMEOUT_HANDLERS_H__
 
@@ -33,4 +37,7 @@ gboolean personality_choice(void);
 gboolean check_for_first_time(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __REQ_FUEL_H__
 #define __REQ_FUEL_H__
 
@@ -72,4 +76,7 @@ void reqfuel_rescale_table(GtkWidget *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

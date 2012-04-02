@@ -49,10 +49,10 @@ G_MODULE_EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 		import_dash_xml(filename);
 		g_free (filename);
 		changed = FALSE;
-	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
-	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);
-	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
-	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"load_dash_menuitem"),FALSE);
+	        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_dash_menuitem"),TRUE);
+	        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_dash_as_menuitem"),TRUE);
+	        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
+	        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"load_dash_menuitem"),FALSE);
 	}
 	free_mtxfileio(fileio);
 	return TRUE;
@@ -80,7 +80,7 @@ G_MODULE_EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 
-	filename = OBJ_GET((dash),"dash_xml_filename");
+	filename = (gchar *)OBJ_GET((dash),"dash_xml_filename");
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->default_path = g_strdup("Dashboards");
@@ -98,10 +98,10 @@ G_MODULE_EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
 		export_dash_xml(filename);
 		g_free (filename);
 		changed = FALSE;
-	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),FALSE);
-	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),FALSE);
-	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
-	        gtk_widget_set_sensitive(OBJ_GET(toplevel,"load_dash_menuitem"),TRUE);
+	        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_dash_menuitem"),FALSE);
+	        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_dash_as_menuitem"),FALSE);
+	        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"close_dash_menuitem"),TRUE);
+	        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"load_dash_menuitem"),TRUE);
 	}
 	free_mtxfileio(fileio);
 	return TRUE;
@@ -134,7 +134,7 @@ gboolean check_datasources_set(GtkWidget *dash)
 
 	for (i=0;i<g_list_length(GTK_FIXED(dash)->children);i++)
 	{
-		child = g_list_nth_data(GTK_FIXED(dash)->children,i);
+		child = (GtkFixedChild *)g_list_nth_data(GTK_FIXED(dash)->children,i);
 		state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(OBJ_GET((child->widget),"combo")),&iter);
 		if (!state)
 		{

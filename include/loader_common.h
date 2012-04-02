@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __LOADER_COMMON_H__
 #define __LOADER_COMMON_H__
 
@@ -46,4 +50,7 @@ gint read_wrapper(gint, gchar *, gint);
 gint write_wrapper(gint, guchar *, gint);
 
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

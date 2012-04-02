@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MULTI_EXPR_LOADER_H__
 #define __MULTI_EXPR_LOADER_H__
 
@@ -70,4 +74,7 @@ void free_multi_source(gpointer);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

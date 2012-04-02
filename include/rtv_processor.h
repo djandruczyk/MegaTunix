@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __RTV_PROCESSOR_H__
 #define __RTV_PROCESSOR_H__
 
@@ -41,4 +45,7 @@ gfloat handle_multi_expression(gconstpointer *, guchar *, GHashTable *);
 void flush_rt_arrays(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

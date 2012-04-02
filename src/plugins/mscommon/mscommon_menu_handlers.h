@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MSCOMMON_MENU_HANDLERS_H__
 #define __MSCOMMON_MENU_HANDLERS_H__
 
@@ -34,4 +38,7 @@ gboolean create_ignition_map(GtkWidget *, gpointer);
 gdouble linear_interpolate(gdouble, gdouble, gdouble, gdouble, gdouble);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

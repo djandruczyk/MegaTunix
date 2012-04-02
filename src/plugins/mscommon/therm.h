@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __THERM_H__
 #define __THERM_H__
 
@@ -29,4 +33,7 @@
  gboolean table_gen_process_and_dl(GtkWidget *, gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

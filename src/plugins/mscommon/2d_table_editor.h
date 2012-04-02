@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __2D_TABLE_EDITOR_H__
 #define __2D_TABLE_EDITOR_H__
 
@@ -45,4 +49,7 @@ void gauge_cleanup(gpointer , gpointer );
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

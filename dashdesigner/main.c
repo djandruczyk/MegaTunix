@@ -41,9 +41,9 @@ int main (int argc, char ** argv )
 	main_window = GTK_WIDGET (gtk_builder_get_object(toplevel,"main_window"));
 	menu_setup(toplevel);
 	gtk_window_set_resizable(GTK_WINDOW(main_window),TRUE);
-        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_menuitem"),FALSE);
-        gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_dash_as_menuitem"),FALSE);
-        gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_dash_menuitem"),FALSE);
+        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_dash_menuitem"),FALSE);
+        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_dash_as_menuitem"),FALSE);
+        gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"close_dash_menuitem"),FALSE);
 
 	retrieve_rt_vars();
 	gtk_widget_show_all(main_window);

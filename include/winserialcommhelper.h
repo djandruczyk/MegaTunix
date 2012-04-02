@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+
 #ifdef __WIN32__
 
 #ifndef __winserialcommhelper_H__

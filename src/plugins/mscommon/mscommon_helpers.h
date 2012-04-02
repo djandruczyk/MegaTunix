@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MSCOMMON_HELPERS_H__
 #define __MSCOMMON_HELPERS_H__
 
@@ -63,4 +67,7 @@ void ecu_info_update(Firmware_Details *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

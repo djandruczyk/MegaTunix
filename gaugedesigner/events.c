@@ -40,15 +40,15 @@ G_MODULE_EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"tab_notebook")),TRUE);
 	gtk_widget_set_sensitive(GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_frame")),TRUE);
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"new_gauge_menuitem"),FALSE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"new_gauge_menuitem"),FALSE);
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_gauge_menuitem"),TRUE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"close_gauge_menuitem"),TRUE);
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"load_gauge_menuitem"),FALSE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"load_gauge_menuitem"),FALSE);
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_gauge_menuitem"),TRUE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_gauge_menuitem"),TRUE);
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_as_menuitem"),TRUE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_as_menuitem"),TRUE);
 
 	update_attributes();
 	return (TRUE);
@@ -74,11 +74,11 @@ G_MODULE_EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
 	tmp = GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_frame"));
 	gtk_widget_set_sensitive(tmp,FALSE);
 
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"new_gauge_menuitem"),TRUE);
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"load_gauge_menuitem"),TRUE);
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"close_gauge_menuitem"),FALSE);
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_gauge_menuitem"),FALSE);
-	gtk_widget_set_sensitive(OBJ_GET(toplevel,"save_as_menuitem"),FALSE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"new_gauge_menuitem"),TRUE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"load_gauge_menuitem"),TRUE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"close_gauge_menuitem"),FALSE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_gauge_menuitem"),FALSE);
+	gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(toplevel,"save_as_menuitem"),FALSE);
 
 	tmp = GTK_WIDGET (gtk_builder_get_object(toplevel,"animate_button"));
 	gtk_widget_set_sensitive(tmp,TRUE);
@@ -159,7 +159,7 @@ G_MODULE_EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data
 
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(widget),&color);
 	changed = TRUE;
-	mtx_gauge_face_set_color(MTX_GAUGE_FACE(gauge),handler,color);
+	mtx_gauge_face_set_color(MTX_GAUGE_FACE(gauge),(GaugeColorIndex)handler,color);
 
 	return TRUE;
 }
@@ -169,7 +169,7 @@ G_MODULE_EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 {
 	GtkAdjustment *adj = NULL;
 	GtkWidget *upper_spin = NULL;
-	GtkBuilder * builder = OBJ_GET(widget,"builder");
+	GtkBuilder * builder = (GtkBuilder *)OBJ_GET(widget,"builder");
 	if (builder)
 	{
 
@@ -262,10 +262,10 @@ G_MODULE_EXPORT gboolean grab_coords_event(GtkWidget *widget, gpointer data)
 	gdouble x = 0.0;
 	gdouble y = 0.0;
 	GtkWidget *tmp = NULL;
-	tmp = OBJ_GET(widget,"x_spin");
+	tmp = (GtkWidget *)OBJ_GET(widget,"x_spin");
 	if (GTK_IS_WIDGET(tmp))
 		gtk_widget_set_sensitive(tmp,FALSE);
-	tmp = OBJ_GET(widget,"y_spin");
+	tmp = (GtkWidget *)OBJ_GET(widget,"y_spin");
 	if (GTK_IS_WIDGET(tmp))
 		gtk_widget_set_sensitive(tmp,FALSE);
 	gtk_widget_set_sensitive(widget,FALSE);
@@ -318,13 +318,13 @@ gboolean gauge_button(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	GtkWidget * tmp = NULL;
 
-	tmp = OBJ_GET(gauge,"x_spin");
+	tmp = (GtkWidget *)OBJ_GET(gauge,"x_spin");
 	if (GTK_IS_WIDGET(tmp))
 		gtk_widget_set_sensitive(tmp,TRUE);
-	tmp = OBJ_GET(gauge,"y_spin");
+	tmp = (GtkWidget *)OBJ_GET(gauge,"y_spin");
 	if (GTK_IS_WIDGET(tmp))
 		gtk_widget_set_sensitive(tmp,TRUE);
-	tmp = OBJ_GET(gauge,"edit_but");
+	tmp = (GtkWidget *)OBJ_GET(gauge,"edit_but");
 	if (GTK_IS_WIDGET(tmp))
 		gtk_widget_set_sensitive(tmp,TRUE);
 	OBJ_SET(gauge,"x_spin",NULL);

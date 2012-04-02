@@ -39,8 +39,8 @@ struct termios newtio;
 #endif
 #define POLL_ATTEMPTS 15
 
-void boot_jumper_prompt(void);
-
+static void boot_jumper_prompt(void);
+		
 /*!
   \brief Load the firmware to the MS-1 Device. Implementation is a simple
   state machine.
@@ -312,3 +312,11 @@ void reboot_ecu(gint fd)
 
 	return;
 }
+
+void boot_jumper_prompt(void)
+{
+	printf("Please close the boot jumper on the ECU and power cycle it\n");
+	printf("Press any key when done..\n");
+	getc(stdin);
+}
+

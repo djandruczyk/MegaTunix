@@ -195,7 +195,7 @@ void clear_dashboard(GtkWidget *widget)
 
 	for (i=0;i<len;i++)
 	{
-		child = g_list_nth_data(children,i);
+		child = (GtkFixedChild *)g_list_nth_data(children,i);
 		update_properties(child->widget,GAUGE_REMOVE);
 		gtk_widget_destroy(child->widget);
 	}
@@ -252,7 +252,7 @@ void export_dash_xml(gchar * filename)
 	children = GTK_FIXED(dash)->children;
 	for(i=0;i<g_list_length(GTK_FIXED(dash)->children);i++)
 	{
-		child = g_list_nth_data(GTK_FIXED(dash)->children,i);
+		child = (GtkFixedChild *)g_list_nth_data(GTK_FIXED(dash)->children,i);
 		node = xmlNewChild(root_node,NULL,BAD_CAST "gauge", NULL);
 		gtk_widget_get_allocation(child->widget, &allocation);
 

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __COMBO_LOADER_H__
 #define __COMBO_LOADER_H__
 
@@ -36,4 +40,7 @@ void combo_setup(GObject *, ConfigFile *, gchar * );
 gboolean combo_match_selected(GtkEntryCompletion *, GtkTreeModel *, GtkTreeIter *, gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

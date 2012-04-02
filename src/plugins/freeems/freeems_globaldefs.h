@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_GLOBALDEFS_H__
 #define __FREEEMS_GLOBALDEFS_H__
 
@@ -77,4 +81,7 @@
 #define NBIT14_16       0xBFFF  /* 15th bit     = 16384 */
 #define NBIT15_16       0x7FFF  /* 16th bit     = 32768 */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

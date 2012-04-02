@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __KEYBINDER_H__
 #define __KEYBINDER_H__
 
@@ -29,4 +33,7 @@ void bind_keys(GObject *, ConfigFile *, gchar *, gchar **, gint);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

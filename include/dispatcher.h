@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DISPATCHER_H__
 #define __DISPATCHER_H__
 
@@ -29,4 +33,7 @@ gboolean gui_dispatcher(gpointer);
 void *clock_watcher(gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

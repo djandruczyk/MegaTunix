@@ -35,7 +35,7 @@ G_MODULE_EXPORT const gchar * lookup_error(guint code)
 	for (i=0;i< sizeof(Errors)/sizeof(Errors[0]);i++)
 	{
 		if (Errors[i].code == code)
-			return g_strdup(Errors[i].message);
+			return Errors[i].message;
 	}
-	return g_strdup_printf("Couldn't find error code %i",code);
+	return ("Couldn't find error code");
 }

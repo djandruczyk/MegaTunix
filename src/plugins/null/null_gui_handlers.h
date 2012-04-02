@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __NULL_GUI_HANDLERS_H__
 #define __NULL_GUI_HANDLERS_H__
 
@@ -37,4 +41,7 @@ gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

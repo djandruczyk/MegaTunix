@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MS1_PLUGIN_H__
 #define __MS1_PLUGIN_H__
 
@@ -68,4 +72,7 @@ void register_ecu_enums(void);
 void deregister_ecu_enums(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

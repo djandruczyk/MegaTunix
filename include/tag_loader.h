@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __TAG_LOADER_H__
 #define __TAG_LOADER_H__
 
@@ -28,4 +32,7 @@
 void load_tags(GObject *, ConfigFile *, gchar * );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

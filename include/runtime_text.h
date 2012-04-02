@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __RUNTIME_TEXT_H__
 #define __RUNTIME_TEXT_H__
 
@@ -89,4 +93,7 @@ gboolean update_rttext(gpointer);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

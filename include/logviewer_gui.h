@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __LOGVIEWER_GUI_H__
 #define __LOGVIEWER_GUI_H__
 
@@ -83,4 +87,7 @@ void read_logviewer_defaults(ConfigFile *);
 void enable_playback_controls(gboolean );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

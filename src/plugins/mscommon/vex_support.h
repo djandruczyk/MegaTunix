@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __VEX_SUPPORT_H__
 #define __VEX_SUPPORT_H__
 
@@ -101,4 +105,7 @@ void revert_to_previous_data(void);
 gint vex_comment_parse(GtkWidget *, gpointer);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

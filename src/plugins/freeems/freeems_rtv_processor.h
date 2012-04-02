@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_RTV_PROCESSOR_H__
 #define __FREEEMS_RTV_PROCESSOR_H__
 
@@ -30,4 +34,7 @@ gdouble common_rtv_processor(gconstpointer *, gchar *, ComplexExprType);
 gdouble common_rtv_processor_obj(GObject *, gchar *, ComplexExprType);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

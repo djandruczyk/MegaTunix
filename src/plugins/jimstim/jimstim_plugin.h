@@ -17,6 +17,10 @@
   \brief JimStim plugin init/shutdown code
   \author David Andruczyk
   */
+ 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef __JIMSTIM_PLUGIN_H__
 #define __JIMSTIM_PLUGIN_H__
@@ -59,4 +63,7 @@ void register_ecu_enums(void);
 void deregister_ecu_enums(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __ABOUT_H__
 #define __ABOUT_H__
 
@@ -29,4 +33,7 @@ void build_about(GtkWidget *);
  gboolean about_popup(GtkWidget *, gpointer );
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

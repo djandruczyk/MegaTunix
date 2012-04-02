@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __DEP_LOADER_H__
 #define __DEP_LOADER_H__
 
@@ -32,4 +36,7 @@ void load_dependancies_obj(GObject *,ConfigFile * , const gchar *, const gchar *
 gboolean check_size(DataSize);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

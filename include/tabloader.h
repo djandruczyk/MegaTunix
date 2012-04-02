@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __TABLOADER_H__
 #define __TABLOADER_H__
 
@@ -90,4 +94,7 @@ gboolean handle_dependant_tab_load(gchar *);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

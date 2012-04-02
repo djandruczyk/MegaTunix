@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MEM_MGMT_H__
 #define __MEM_MGMT_H__
 
@@ -29,4 +33,7 @@ gint _get_sized_data(guint8 *, gint, DataSize, gboolean);
 void _set_sized_data(guint8 *, gint, DataSize, gint, gboolean);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

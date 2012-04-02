@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __FREEEMS_COMMS_H__
 #define __FREEEMS_COMMS_H__
 
@@ -47,4 +51,7 @@ void post_single_burn_pf(void *);
 void send_to_ecu(gpointer, gint, gboolean);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

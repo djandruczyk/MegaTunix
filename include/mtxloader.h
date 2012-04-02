@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __MTXLOADER_H__
 #define __MTXLOADER_H__
 
@@ -33,10 +37,12 @@ void load_defaults(void);
 void save_defaults(void);
 void init_controls(void);
 void output(gchar *, gboolean);
-void boot_jumper_prompt(void);
 void lock_buttons(void);
 void unlock_buttons(void);
 void gui_progress_update(gfloat);
 
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

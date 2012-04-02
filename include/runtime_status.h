@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __RUNTIME_STATUS_H__
 #define __RUNTIME_STATUS_H__
 
@@ -45,4 +49,7 @@ gboolean update_rtstatus(void);
 
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif

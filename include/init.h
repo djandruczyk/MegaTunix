@@ -18,6 +18,10 @@
   \author David Andruczyk
   */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef __INIT_H__
 #define __INIT_H__
 
@@ -60,4 +64,7 @@ Text_Message * initialize_text_message(void);
 Gui_Message * initialize_gui_message(void);
 /* Prototypes */
 
+#endif
+#ifdef __cplusplus
+} /* closing brace for extern "C" */
 #endif
