@@ -193,4 +193,40 @@
 		<bitval>1</bitval>
 		<bitmask>8192</bitmask>
 	</status>
+	<status>
+		<label>Ignition Cut over RPM</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>ignitionCuts</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>Ignition Cut over Boost</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>ignitionCuts</source>
+		<bitval>1</bitval>
+		<bitmask>2</bitmask>
+	</status>
+	<status>
+		<label>Injection Cut over RPM</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>injectionCuts</source>
+		<bitval>1</bitval>
+		<bitmask>1</bitmask>
+	</status>
+	<status>
+		<label>Injection Cut over Boost</label>
+		<active_fg>red</active_fg>
+		<inactive_fg>dim grey</inactive_fg>
+		<bind_to_list>runtime_status</bind_to_list>
+		<source>injectionCuts</source>
+		<bitval>1</bitval>
+		<bitmask>2</bitmask>
+	</status>
 </runtimestatus>

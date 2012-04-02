@@ -695,6 +695,30 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
+		<dlog_gui_name>ignitionCuts</dlog_gui_name>
+		<dlog_field_name>ignitionCuts</dlog_field_name>
+		<internal_names>ignitionCuts</internal_names>
+		<offset>96</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Up to 8 reasons to not schedule ignition</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>injectionCuts</dlog_gui_name>
+		<dlog_field_name>injectionCuts</dlog_field_name>
+		<internal_names>injectionCuts</internal_names>
+		<offset>97</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>255</real_upper>
+		<precision>0</precision>
+		<tooltip>Up to 8 reasons to not schedule injection</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
 		<dlog_gui_name>Fuel Duty</dlog_gui_name>
 		<dlog_field_name>FuelDuty</dlog_field_name>
 		<internal_names>FuelDuty</internal_names>
