@@ -18,9 +18,6 @@
   \author David Andruczyk
   */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #ifdef __WIN32__
 #ifndef __winserialbuffer_H__
@@ -65,7 +62,4 @@ public:
 
 /* Prototypes */
 
-#endif
-#ifdef __cplusplus
-} /* closing brace for extern "C" */
 #endif
