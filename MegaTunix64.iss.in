@@ -32,21 +32,21 @@ ChangesEnvironment=yes
 [Files]
 Source: "z:\opt\crosstools\x86_64-w64-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
 Source: "z:\opt\crosstools\x86_64-w64-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
-Source: "z:\target\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
-Source: "z:\target\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\"; Flags: ignoreversion
-Source: "z:\target\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\2.24\lib\pango\1.6.0\modules"; Flags: ignoreversion
-Source: "z:\target\etc\pango\pango.modules"; DestDir: "{app}\2.24\etc\pango\"; Flags: ignoreversion
-Source: "z:\target\bin\*.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
-Source: "z:\target\etc\*.*"; DestDir: "{app}\2.24\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\lib\gtk-2.0\2.10.0\*.*"; DestDir: "{app}\2.24"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\themes\*.*"; DestDir: "{app}\2.24\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\locale\de\*.*"; DestDir: "{app}\2.24\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\locale\es\*.*"; DestDir: "{app}\2.24\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\locale\fi\*.*"; DestDir: "{app}\2.24\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\share\locale\fr\*.*"; DestDir: "{app}\2.24\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\target\dest\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\crossroot64\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
+Source: "z:\opt\crossroot64\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\"; Flags: ignoreversion
+Source: "z:\opt\crossroot64\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\2.24\lib\pango\1.6.0\modules"; Flags: ignoreversion
+Source: "z:\opt\crossroot64\etc\pango\pango.modules"; DestDir: "{app}\2.24\etc\pango\"; Flags: ignoreversion
+Source: "z:\opt\crossroot64\bin\*.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
+Source: "z:\opt\crossroot64\etc\*.*"; DestDir: "{app}\2.24\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64\lib\gtk-2.0\2.10.0\*.*"; DestDir: "{app}\2.24"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64\share\themes\*.*"; DestDir: "{app}\2.24\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64\share\locale\de\*.*"; DestDir: "{app}\2.24\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64\share\locale\es\*.*"; DestDir: "{app}\2.24\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64\share\locale\fi\*.*"; DestDir: "{app}\2.24\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64\share\locale\fr\*.*"; DestDir: "{app}\2.24\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64\dest\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\git\MegaTunix\widgets\.libs\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
-Source: "z:\target\dest\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
+Source: "z:\opt\crossroot64\dest\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]
 Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"

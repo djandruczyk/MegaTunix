@@ -301,6 +301,8 @@ category/Makefile
 icons/Makefile
 MegaTunix32.iss
 MegaTunix64.iss
+MegaTunix32_dbg.iss
+MegaTunix64_dbg.iss
 Doxyfile
 WIN_NOTES.txt
 ])
