@@ -1012,6 +1012,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
+				multi->table_num = i;
 				multi->source = g_strdup(sources[j]);
 				multi->multiplier = g_new0(gfloat, 1);
 				multi->adder = g_new0(gfloat, 1);
@@ -1067,6 +1068,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
+				multi->table_num = i;
 				multi->source = g_strdup(sources[j]);
 				multi->multiplier = g_new0(gfloat, 1);
 				multi->adder = g_new0(gfloat, 1);
@@ -1123,6 +1125,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			for (j=0;j<len1;j++)
 			{
 				multi = g_new0(MultiSource,1);
+				multi->table_num = i;
 				multi->source = g_strdup(sources[j]);
 				multi->multiplier = g_new0(gfloat, 1);
 				multi->adder = g_new0(gfloat, 1);

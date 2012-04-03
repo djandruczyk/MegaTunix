@@ -141,8 +141,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	while (TRUE)
 	{
 
-		//		if (DATA_GET(global_data,"leaving") || 
-		//				DATA_GET(global_data,"thread_dispatcher_exit"))
 		if (DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
 fast_exit:

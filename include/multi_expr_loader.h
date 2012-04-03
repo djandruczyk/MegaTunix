@@ -56,6 +56,7 @@ struct _MultiExpr
  */
 struct _MultiSource
 {
+	gint table_num;		/*!< Table number associated with this */
 	gchar *source;		/*!< name of rtvars datasource */
 	gfloat *multiplier;	/*!< conversion multipler ms units to real */
 	gfloat *adder;		/*!< conversion adder ms units to real */

@@ -33,6 +33,7 @@
 #include <listmgmt.h>
 #include <logviewer_gui.h>
 #include <lookuptables.h>
+#include <multi_expr_loader.h>
 #include <mtxmatheval.h>
 #include <rtv_map_loader.h>
 #include <runtime_sliders.h>
