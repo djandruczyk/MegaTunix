@@ -1297,11 +1297,20 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 	cleanup(table_params->z_toecu_conv_expr);
 	cleanup(table_params->z_depend_on);
 	if (table_params->x_multi_hash)
+	{
+		g_hash_table_foreach(table_params->x_multi_hash,free_multi_source,NULL);
 		g_hash_table_destroy(table_params->x_multi_hash);
+	}
 	if (table_params->y_multi_hash)
+	{
+		g_hash_table_foreach(table_params->y_multi_hash,free_multi_source,NULL);
 		g_hash_table_destroy(table_params->y_multi_hash);
+	}
 	if (table_params->z_multi_hash)
+	{
+		g_hash_table_foreach(table_params->z_multi_hash,free_multi_source,NULL);
 		g_hash_table_destroy(table_params->z_multi_hash);
+	}
 	if (table_params->x_ul_eval)
 		evaluator_destroy(table_params->x_ul_eval);
 	if (table_params->y_ul_eval)

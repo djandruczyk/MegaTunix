@@ -183,10 +183,10 @@ G_MODULE_EXPORT void free_multi_expr(gpointer data)
   \brief frees up the resource for a MultiSource structure
   \param data is the pointer to MultiSource structure to deallocate
   */
-G_MODULE_EXPORT void free_multi_source(gpointer data)
+G_MODULE_EXPORT void free_multi_source(gpointer key. gpointer value, gpointer user_data)
 {
 	printf("free multi_source\n");
-	MultiSource *multi = (MultiSource *)data;
+	MultiSource *multi = (MultiSource *)value;
 	if (!multi)
 		return;
 	cleanup(multi->source);	

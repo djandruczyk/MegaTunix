@@ -83,7 +83,6 @@ EXTERN void (*evaluator_destroy_f)( void *);
 EXTERN double (*evaluator_evaluate_x_f)(void *, double);
 EXTERN void (*thread_widget_set_sensitive_f)(const gchar *, gboolean);
 EXTERN void (*get_table_f)(gpointer, gpointer, gpointer);
-EXTERN void (*free_multi_source_f)(gpointer);
 EXTERN void (*_set_sized_data_f)(guint8 *, gint, DataSize, gint, gboolean);
 EXTERN gint (*_get_sized_data_f)(guint8 *, gint, DataSize, gboolean);
 EXTERN gboolean (*search_model_f)(GtkTreeModel *, GtkWidget *, GtkTreeIter *);

@@ -70,7 +70,6 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("evaluator_destroy_w",(void **)&evaluator_destroy_f);
 	get_symbol_f("evaluator_evaluate_x_w",(void **)&evaluator_evaluate_x_f);
 	get_symbol_f("f_to_k",(void **)&f_to_k_f);
-	get_symbol_f("free_multi_source",(void **)&free_multi_source_f);
 	get_symbol_f("flush_serial",(void **)&flush_serial_f);
 	get_symbol_f("focus_out_handler",(void **)&focus_out_handler_f);
 	get_symbol_f("get_bitshift",(void **)&get_bitshift_f);
