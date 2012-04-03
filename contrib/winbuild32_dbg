@@ -1,0 +1,12 @@
+#!/bin/sh
+
+export INSTALL_DBG=1
+. cross32
+
+make distclean
+cross32-configure ./configure --enable-debug --prefix=/opt/crossroot32_dbg/dest $* && \
+	make -j3  && rm -rf /opt/crossroot32_dbg/dest/* && make install && \
+	./contrib/builder32_dbg && \
+. uncross 
+export INSTALL_DBG=0
+# make distclean

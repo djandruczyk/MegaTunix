@@ -1,0 +1,12 @@
+#!/bin/sh
+
+export INSTALL_DBG=1
+. cross64
+
+make distclean
+cross64-configure ./configure --enable-debug --prefix=/opt/crossroot64_dbg/dest $* && \
+	make -j3  && rm -rf /opt/crossroot64_dbg/dest/* && make install && \
+	./contrib/builder64_dbg && \
+. uncross 
+export INSTALL_DBG=
+# make distclean
