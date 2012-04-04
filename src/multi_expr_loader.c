@@ -185,7 +185,6 @@ G_MODULE_EXPORT void free_multi_expr(gpointer data)
   */
 G_MODULE_EXPORT void free_multi_source(gpointer key, gpointer value, gpointer user_data)
 {
-	printf("free multi_source\n");
 	MultiSource *multi = (MultiSource *)value;
 	gchar * initial_key = (gchar *)key;
 	if (!multi)
