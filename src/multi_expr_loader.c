@@ -187,8 +187,10 @@ G_MODULE_EXPORT void free_multi_source(gpointer key, gpointer value, gpointer us
 {
 	printf("free multi_source\n");
 	MultiSource *multi = (MultiSource *)value;
+	gchar * initial_key = (gchar *)key;
 	if (!multi)
 		return;
+	cleanup(initial_key);
 	cleanup(multi->source);	
 	cleanup(multi->multiplier);	
 	cleanup(multi->adder);	

@@ -51,7 +51,7 @@ GdkColor black = { 0, 0, 0, 0};
 GdkColor white = { 0, 65535, 65535, 65535};
 extern gconstpointer *global_data;
 
-/*static void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);*/
+static void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data);
 
 /*!
  * init(void)
@@ -1001,12 +1001,11 @@ G_MODULE_EXPORT void mem_dealloc(void)
   \param data is unused
   \param user_data is unused
   */
-/*void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
+void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
-	printf("removing data for %s\n",g_quark_to_string(key_id));
+//	printf("removing data for %s\n",g_quark_to_string(key_id));
 	g_dataset_remove_data(data,g_quark_to_string(key_id));
 }
-*/
 
 
 /*!
@@ -1353,8 +1352,8 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 		g_array_free((GArray *)DATA_GET(object,"history"),TRUE);
 
 //	printf("Deallocing RTV var %s\n",DATA_GET(object,"dlog_gui_name"));
-//	g_dataset_foreach(object,dataset_dealloc,NULL);
-	g_dataset_destroy(object);
+	g_dataset_foreach(object,dataset_dealloc,NULL);
+	//g_dataset_destroy(object);
 	cleanup(object);
 }
 
