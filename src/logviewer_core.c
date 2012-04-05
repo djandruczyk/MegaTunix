@@ -204,7 +204,6 @@ G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	gint num_fields = 0;
 	GArray *array = NULL;
 	gconstpointer *object = NULL;
-	gint i = 0;
 	Rtv_Map *rtv_map;
 	extern gconstpointer *global_data;
 	
@@ -255,7 +254,7 @@ read_again:
 
 		log_info->field_count = num_fields;
 		/* Create objects, arrays and storage points... */
-		for (i=0;i<num_fields;i++)
+		for (gint i=0;i<num_fields;i++)
 		{
 			array = NULL;
 			object = g_new0(gconstpointer, 1);

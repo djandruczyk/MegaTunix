@@ -122,7 +122,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 		else    /* Auto mode */
 			potential_ports = (gchar *)DATA_GET(global_data,"potential_ports");
 		vector = g_strsplit(potential_ports,",",-1);
-		for (i=0;i<g_strv_length(vector);i++)
+		for (guint i=0;i<g_strv_length(vector);i++)
 		{
 			if (DATA_GET(global_data,"leaving"))
 			{
@@ -285,9 +285,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	guint8 *buf = NULL;
 	/* Raw packet */
 	guint8 pkt[INTERFACE_VERSION_REQ_PKT_LEN];
-	guint8 sum = 0;
 	gint tmit_len = 0;
-	gint i = 0;
 
 	Serial_Params *serial_params = NULL;
 
@@ -313,12 +311,13 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	}
 	else
 	{ /* Assume ECU is in non-streaming mode, try and probe it */
+		gint sum = 0;
 		MTXDBG(SERIAL_RD,_("Requesting FreeEMS Interface Version\n"));
 		register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		pkt[HEADER_IDX] = 0;
 		pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
 		pkt[L_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0x00ff );
-		for (i=0;i<INTERFACE_VERSION_REQ_PKT_LEN-1;i++)
+		for (gint i=0;i<INTERFACE_VERSION_REQ_PKT_LEN-1;i++)
 			sum += pkt[i];
 		pkt[INTERFACE_VERSION_REQ_PKT_LEN-1] = sum;
 		buf = finalize_packet((guint8 *)&pkt,INTERFACE_VERSION_REQ_PKT_LEN,&tmit_len);
@@ -840,10 +839,8 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	guint8 **ecu_data = NULL;
 	guint8 **ecu_data_last = NULL;
 	gint i = 0;
-	gint id = 0;
 	gint canID = 0;
 	gint page = 0;
-	gint locID = 0;
 	gint offset = 0;
 	gint length = 0;
 	gchar * tmpbuf = NULL;
@@ -861,6 +858,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		goto red_or_black;
 	else
 	{
+		gint locID = 0;
 		canID = (GINT)DATA_GET(output->data,"canID");
 		locID = (GINT)DATA_GET(output->data,"location_id");
 		offset = (GINT)DATA_GET(output->data,"offset");
@@ -883,7 +881,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		if ((GINT)DATA_GET(global_data,"mtx_color_scale") == AUTO_COLOR_SCALE)
 		{	
 //			printf("auto-scale\n");
-			for (i=0;i<firmware->total_tables;i++)
+			for (gint i=0;i<firmware->total_tables;i++)
 			{
 //				printf("checking table %i\n",i);
 				if (firmware->table_params[i]->z_page == page)
@@ -900,7 +898,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 						{
 //							printf("Creating deferred function\n");
 
-							id = gdk_threads_add_timeout(2000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
+							guint id = gdk_threads_add_timeout(2000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
 							DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
 						}
 						g_free(tmpbuf);
@@ -920,7 +918,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	if (DATA_GET(global_data,"offline"))
 		return;
 red_or_black:
-	for (i=0;i<firmware->total_pages;i++)
+	for (gint i=0;i<firmware->total_pages;i++)
 	{
 		if (firmware->page_params[i]->read_only)
 			continue;

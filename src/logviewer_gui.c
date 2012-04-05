@@ -966,12 +966,8 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	gfloat percent = 0.0;
 	gfloat last_percent = 0.0;
 	gint len = 0;
-	gint lo_width;
-	gint total = 0;
 	guint last_index = 0;
 	guint i = 0;
-	gint j = 0;
-	gint x = 0;
 	gfloat log_pos = 0.0;
 	gfloat newpos = 0.0;
 	GArray *array = NULL;
@@ -1002,9 +998,10 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	/* Full screen redraw, only with configure events (usually) */
 	if ((GBOOLEAN)redraw_all)
 	{
-		lo_width = allocation.width-lv_data->info_width;
+		gint lo_width = allocation.width-lv_data->info_width;
 		for (i=0;i<g_list_length(lv_data->tlist);i++)
 		{
+			gint total = 0;
 			v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,i);
 			array = (GArray *)DATA_GET(v_value->object,v_value->data_source);
 			len = array->len;
@@ -1025,7 +1022,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			/* Draw is reverse order, from right to left, 
 			 * easier to think out in my head... :) 
 			 */
-			for (x=0;x<total;x++)
+			for (gint x=0;x<total;x++)
 			{
 				val = g_array_index(array,gfloat,len-1-x);
 				percent = 1.0-(val/(float)(v_value->upper-v_value->lower));
@@ -1038,6 +1035,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 					total);
 			if (v_value->highlight)
 			{
+				gint j = 0;
 				for (j=0;j<total;j++)	
 					pts[j].y -= 1;
 				gdk_draw_lines(pixmap,
@@ -1511,7 +1509,6 @@ G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *
 G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 {
 	GList * list = NULL;
-	guint i = 0;
 	gchar * name = NULL;
 	GString *string = NULL;
 
@@ -1519,7 +1516,7 @@ G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 	if (list)
 	{
 		string = g_string_new(NULL);
-		for (i=0;i<g_list_length(list);i++)
+		for (guint i=0;i<g_list_length(list);i++)
 		{
 			name = (gchar *)g_list_nth_data(list,i);
 			g_string_append(string,name);

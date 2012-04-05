@@ -358,13 +358,10 @@ G_MODULE_EXPORT void save_config()
 	GtkWidget *main_window = NULL;
 	gint x = 0;
 	gint y = 0;
-	gint i = 0;
-	gint count = 0;
 	gint tmp_width = 0;
 	gint tmp_height = 0;
 	gint orig_width = 0;
 	gint orig_height = 0;
-	gint total = 0;
 	gfloat ratio = 0.0;
 	GtkWidget *dash = NULL;
 	ConfigFile *cfgfile = NULL;
@@ -478,6 +475,8 @@ G_MODULE_EXPORT void save_config()
 
 	if (DATA_GET(global_data,"ready"))
 	{
+		gint count = 0;
+		gint total = 0;
 		main_window = lookup_widget("main_window");
 		if (gtk_widget_get_visible(main_window))
 		{
@@ -522,7 +521,7 @@ G_MODULE_EXPORT void save_config()
 		total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget));
 		hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
 		string = g_string_new(NULL);
-		for (i=0;i<total;i++)
+		for (guint i=0;i<total;i++)
 		{
 			if (hidden_list[i] == FALSE)
 				continue;
@@ -771,8 +770,6 @@ G_MODULE_EXPORT void mem_alloc(void)
 G_MODULE_EXPORT void mem_dealloc(void)
 {
 	gint i = 0;
-	gint j = 0;
-	gpointer data;
 	GtkListStore *store = NULL;
 	GList *defaults = NULL;
 	Firmware_Details *firmware = NULL;
@@ -838,7 +835,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 			{
 				if (ecu_widgets[i])
 				{
-					for (j=0;j<firmware->page_params[i]->length;j++)
+					for (guint j=0;j<firmware->page_params[i]->length;j++)
 					{
 						if (g_list_length(ecu_widgets[i][j]) > 0)
 						{
@@ -951,6 +948,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup (rtv_map->applicable_signatures);
 		for(i=0;i<(gint)rtv_map->rtv_list->len;i++)
 		{
+			gpointer data;
 			data = g_ptr_array_index(rtv_map->rtv_list,i);
 			dealloc_rtv_object((gconstpointer *)data);
 		}

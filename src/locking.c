@@ -230,7 +230,6 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 	gboolean res = FALSE;
 	GError *err = NULL;
 	guint i = 0;
-	gint pid = 0;
 
 	/*printf("told to lock serial port %s\n",name); */
 	/* If no /proc (i.e. os-X), just fake it and return */
@@ -252,6 +251,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 //		printf("found existing lock!\n");
 		if(g_file_get_contents(lock,&contents,NULL,&err))
 		{
+			gint pid = 0;
 //			printf("read existing lock\n");
 			vector = g_strsplit(g_strchug(contents)," ", -1);
 //			printf("lock had %i fields\n",g_strv_length(vector));

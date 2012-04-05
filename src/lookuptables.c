@@ -568,7 +568,6 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 	GArray *classes = NULL;
 	GList *p_list = NULL;
 	GList *s_list = NULL;
-	guint i = 0;
 	gchar * tmpbuf = NULL;
 	gchar ** vector = NULL;
 	gchar ** tmpvector = NULL;
@@ -618,7 +617,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		gtk_tree_store_set(combostore,&sys_iter,
 				0,"System", -1);
 		vector = get_files(g_strdup(LOOKUPTABLES_DATA_DIR),g_strdup("inc"),&classes);
-		for (i=0;i<g_strv_length(vector);i++)
+		for (guint i=0;i<g_strv_length(vector);i++)
 		{
 			tmpvector = g_strsplit(vector[i],PSEP,-1);
 			if (g_array_index(classes,FileClass,i) == PERSONAL)
@@ -639,7 +638,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		g_array_free(classes,TRUE);
 		p_list = g_list_sort(p_list,list_sort);
 		s_list = g_list_sort(s_list,list_sort);
-		for (i=0;i<g_list_length(p_list);i++)
+		for (guint i=0;i<g_list_length(p_list);i++)
 		{
 			gtk_tree_store_append(combostore,&iter,&per_iter);
 			element = (ListElement *)g_list_nth_data(p_list,i);
@@ -647,7 +646,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 					0,element->name,
 					-1);
 		}
-		for (i=0;i<g_list_length(s_list);i++)
+		for (guint i=0;i<g_list_length(s_list);i++)
 		{
 			gtk_tree_store_append(combostore,&iter,&sys_iter);
 			element = (ListElement *)g_list_nth_data(s_list,i);
@@ -666,7 +665,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		cfg_read_string(cfgfile,"lookuptables","tables",&tmpbuf);
 		vector = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
-		for (i=0;i<g_strv_length(vector);i++)
+		for (guint i=0;i<g_strv_length(vector);i++)
 		{
 			cfg_read_string(cfgfile,"lookuptables",vector[i],&tmpbuf);
 			gtk_list_store_append(store,&iter);
@@ -743,7 +742,6 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	gchar ** vector = NULL;
 	const gchar * project = NULL;
 	gboolean restart_tickler = FALSE;
-	gint count = 0;
 	GAsyncQueue *io_data_queue = NULL;
 	Firmware_Details *firmware = NULL;
 
@@ -779,9 +777,9 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	}
 	if (DATA_GET(global_data,"realtime_id"))
 	{
+		gint count = 0;
 		restart_tickler = TRUE;
 		stop_tickler(RTV_TICKLER);
-		count = 0;
 		while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
 		{
 			MTXDBG(CRITICAL,_("Draining I/O Queue, current length %i\n"),g_async_queue_length(io_data_queue));

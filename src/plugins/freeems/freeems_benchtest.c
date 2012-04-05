@@ -297,7 +297,6 @@ gboolean benchtest_clock_update(gpointer data)
 	gint min = 0;
 	gint sec = 0;
 	gint msec = 0;
-	gint diff = 0;
 	gint total = 0;
 
 	if (!label)
@@ -320,7 +319,7 @@ gboolean benchtest_clock_update(gpointer data)
 	}
 	else
 	{
-		diff = ((cur.tv_sec-last.tv_sec) * 1000000) + (cur.tv_usec-last.tv_usec); 
+		gint diff = ((cur.tv_sec-last.tv_sec) * 1000000) + (cur.tv_usec-last.tv_usec); 
 		total -= (diff/1000);
 		if (total <= 0 )
 			total = 0;
