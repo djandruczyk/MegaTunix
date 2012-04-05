@@ -242,8 +242,6 @@ void *packet_handler(gpointer data)
 gboolean packet_decode(FreeEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
-	gint i = 0;
-	gint error = 0;
 	const gchar * errmsg = NULL;
 	gint tmpi = 3; /* header and payload Are ALWAYS present */
 
@@ -287,13 +285,13 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 			printf("Payload length %i\n",packet->payload_length);
 		printf("Payload base offset: %i\n",packet->payload_base_offset);
 		printf("RAW PACKET: ->> ");
-		for (i=0;i<packet->raw_length;i++)
+		for (gint i=0;i<packet->raw_length;i++)
 			printf("%.2X ",(guint8)(packet->data)[i]);
 		printf("\n");
 	}
 	if (packet->is_nack)
 	{
-		error = ((guint8)packet->data[tmpi] << 8) + (guint8)packet->data[tmpi+1];
+		guint error = ((guint8)packet->data[tmpi] << 8) + (guint8)packet->data[tmpi+1];
 		errmsg = lookup_error(error);
 		printf("Packet ERROR Code 0x%.4X, \"%s\"\n",error,errmsg);
 	}

@@ -1501,8 +1501,6 @@ G_MODULE_EXPORT void interrogate_error(const gchar *text, gint num)
 G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 {
 	GtkWidget *widget = NULL;
-	gfloat min = 0.0;
-	gfloat val = 0.0;
 	GtkAdjustment *adj = NULL;
 	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
@@ -1517,6 +1515,8 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	widget = lookup_widget_f("read_wait_spin");
 	if (GTK_IS_SPIN_BUTTON(widget))
 	{
+		gfloat min = 0.0;
+		gfloat val = 0.0;
 		adj = gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(widget));
 		val = gtk_adjustment_get_value(adj);
 		if (firmware->capabilities & MS1)

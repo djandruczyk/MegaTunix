@@ -674,10 +674,8 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	gint page = 0;
 	gint offset = 0;
 	gint length = 0;
-	gint id = 0;
 	gchar * tmpbuf = NULL;
 	WriteMode mode = MTX_CMD_WRITE;
-	gint z = 0;
 	Firmware_Details *firmware = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -717,7 +715,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 						tmpbuf = g_strdup_printf("table%i_color_id",i);
 						if (!DATA_GET(global_data,tmpbuf))
 						{
-							id = gdk_threads_add_timeout(2000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
+							guint id = gdk_threads_add_timeout(2000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
 							DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
 						}
 						g_free(tmpbuf);
@@ -730,7 +728,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 			thread_refresh_widget_range_f(page,offset,length);
 		else
 		{
-			for (z=offset;z<offset+length;z++)
+			for (gint z=offset;z<offset+length;z++)
 			{
 				/*printf("refreshing widgets at page %i, offset %i\n",page,z);*/
 				thread_refresh_widgets_at_offset_f(page,z);

@@ -1174,14 +1174,8 @@ G_MODULE_EXPORT void socket_get_rtv_list(GSocket *socket)
   */
 G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
-	gint canID = 0;
-	gint page = 0;
-	gint offset = 0;
-	gint res = 0;
-	gint tmpi = 0;
 	gchar ** vars = NULL;
 	gchar * tmpbuf = NULL;
-	gint len = 0;
 	Firmware_Details *firmware = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -1198,14 +1192,14 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 	}
 	else
 	{
-		canID = atoi(vars[0]);
-		page = atoi(vars[1]);
-		offset = atoi(vars[2]);
-		tmpi = ms_get_ecu_data(canID,page,offset,size);
+		gint canID = atoi(vars[0]);
+		gint page = atoi(vars[1]);
+		gint offset = atoi(vars[2]);
+		gint tmpi = ms_get_ecu_data(canID,page,offset,size);
 		_set_sized_data_f(client->ecu_data[page],offset,size,tmpi,firmware->bigendian);
 		tmpbuf = g_strdup_printf("%i\r\n",tmpi);
-		len = strlen(tmpbuf);
-		res = net_send(client->socket,(guint8 *)tmpbuf,len);
+		gint len = strlen(tmpbuf);
+		gint res = net_send(client->socket,(guint8 *)tmpbuf,len);
 		if (len != res)
 			printf(_("SHORT WRITE!\n"));
 		g_free(tmpbuf);
@@ -1223,13 +1217,8 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
   */
 G_MODULE_EXPORT void socket_get_ecu_page(MtxSocketClient *client, gchar *arg2)
 {
-	gint canID = 0;
-	gint page = 0;
-	gint tmpi = 0;
 	gchar ** vars = NULL;
 	GString * output = NULL;
-	gint i = 0;
-	gint len = 0;
 	Firmware_Details *firmware = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -1246,11 +1235,12 @@ G_MODULE_EXPORT void socket_get_ecu_page(MtxSocketClient *client, gchar *arg2)
 	}
 	else
 	{
-		canID = atoi(vars[0]);
-		page = atoi(vars[1]);
-		len = firmware->page_params[page]->length;
+		gint canID = atoi(vars[0]);
+		gint page = atoi(vars[1]);
+		gint len = firmware->page_params[page]->length;
+		gint tmpi = 0;
 		output = g_string_sized_new(8);
-		for (i=0;i<len;i++)
+		for (gint i=0;i<len;i++)
 		{
 			tmpi = ms_get_ecu_data(canID,page,i,MTX_U08);
 			_set_sized_data_f(client->ecu_data[page],i,MTX_U08,tmpi,firmware->bigendian);
@@ -1277,10 +1267,6 @@ G_MODULE_EXPORT void socket_get_ecu_page(MtxSocketClient *client, gchar *arg2)
   */
 G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, DataSize size)
 {
-	gint canID = 0;
-	gint page = 0;
-	gint offset = 0;
-	gint data = 0;
 	gchar ** vars = NULL;
 	Firmware_Details *firmware = NULL;
 
@@ -1298,10 +1284,10 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 	}
 	else
 	{
-		canID = atoi(vars[0]);
-		page = atoi(vars[1]);
-		offset = atoi(vars[2]);
-		data = atoi(vars[3]);
+		gint canID = atoi(vars[0]);
+		gint page = atoi(vars[1]);
+		gint offset = atoi(vars[2]);
+		gint data = atoi(vars[3]);
 		_set_sized_data_f(client->ecu_data[page],offset,size,data,firmware->bigendian);
 		ms_send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
@@ -1359,7 +1345,6 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	gint port = 0;
 	gchar ** vector = NULL;
 	CmdLineArgs *args = NULL;
-	gint i = 0;
 
 	get_symbol_f("setup_serial_params",(void **)&setup_serial_params_f);
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
@@ -1382,7 +1367,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	if (network_is_open == TRUE)
 	{
 		MTXDBG(SERIAL_RD|SERIAL_WR,_("Port considered open, but throwing errors\n"));
-		i = 0;
+		gint i = 0;
 		while (i <= 5)
 		{
 			MTXDBG(SERIAL_RD|SERIAL_WR,_("Calling comms_test, attempt %i\n"),i);
@@ -1603,7 +1588,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 		/*printf("There are %i clients in the slave pointer array\n",slave_list->len);
 		 */
 		to_be_closed = g_new0(gboolean, slave_list->len);
-		for (i=0;i<slave_list->len;i++)
+		for (gint i=0;i<slave_list->len;i++)
 		{
 			cli_data = (MtxSocketClient *)g_ptr_array_index(slave_list,i);
 			if ((!cli_data) || (!cli_data->ecu_data[0]))
@@ -2078,7 +2063,6 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
    */
 G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 {
-	gint i = 0;
 	Firmware_Details *firmware = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -2089,7 +2073,7 @@ G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 
 		if (client->ecu_data)
 		{
-			for (i=0;i<firmware->total_pages;i++)
+			for (gint i=0;i<firmware->total_pages;i++)
 				cleanup_f (client->ecu_data[i]);
 			cleanup_f(client->ecu_data);
 		}

@@ -663,7 +663,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 			MTXDBG(CRITICAL,_("Problem with set_widget_labels, counts don't match up\n"));
 			goto combo_download;
 		}
-		for (i=0;i<(g_strv_length(vector)/(total+1));i++)
+		for (guint i=0;i<(g_strv_length(vector)/(total+1));i++)
 		{
 			tmpbuf = g_strconcat(vector[i*(total+1)],",",vector[(i*(total+1))+1+tmpi],NULL);
 			set_widget_labels_f(tmpbuf);
@@ -1333,9 +1333,7 @@ void update_entry(GtkWidget *widget)
 	gdouble value = 0.0;
 	gint raw_lower = 0;
 	gint raw_upper = 0;
-	gint table_num = -1;
 	gint precision = 0;
-	gfloat spin_value = 0.0;
 	GdkColor black = {0,0,0,0};
 
 	if (!firmware)
@@ -1364,7 +1362,7 @@ void update_entry(GtkWidget *widget)
 		value = temp_to_host_f(value);
 	if (GTK_IS_SPIN_BUTTON(widget))
 	{
-		spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+		gfloat spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 		if (value != spin_value)
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 	}
@@ -1388,6 +1386,7 @@ void update_entry(GtkWidget *widget)
 
 	if (OBJ_GET(widget,"use_color"))
 	{
+		gint table_num = -1;
 		if (OBJ_GET(widget,"table_num"))
 			table_num = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 
@@ -1531,8 +1530,6 @@ void combo_handle_algorithms(GtkWidget *widget)
 {
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
-	gint algo = 0;
-	gint i = 0;
 	gint *algorithm = NULL;
 
 	if (!algorithm)
@@ -1541,6 +1538,8 @@ void combo_handle_algorithms(GtkWidget *widget)
 	tmpbuf = (gchar *)OBJ_GET(widget,"algorithms");
 	if (tmpbuf)
 	{
+		gint i = 0;
+		gint algo = 0;
 		vector = g_strsplit(tmpbuf,",",-1);
 		if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
 		{
@@ -1579,7 +1578,6 @@ void handle_algorithm(GtkWidget *widget)
 {
 	static gint * algorithm = NULL;
 	gint algo = 0;
-	gint i = 0;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
 
@@ -1589,6 +1587,7 @@ void handle_algorithm(GtkWidget *widget)
 	algo = (Algorithm)(GINT)OBJ_GET(widget,"algorithm");
 	if (algo > 0)
 	{
+		gint i = 0;
 		tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
 		if (!tmpbuf)
 		{
@@ -1597,7 +1596,6 @@ void handle_algorithm(GtkWidget *widget)
 		}
 
 		vector = g_strsplit(tmpbuf,",",-1);
-		i = 0;
 		while (vector[i])
 		{
 			algorithm[(GINT)strtol((gchar *)vector[i],NULL,10)]=(Algorithm)algo;

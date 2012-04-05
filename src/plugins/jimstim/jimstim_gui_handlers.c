@@ -191,7 +191,6 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget *widget, gpointer data)
 {
-	gfloat value = 0.0;
 	GtkTreeModel *model = NULL;
 	GtkTreeIter iter;
 	JimStimStdHandler handler;
@@ -200,7 +199,7 @@ G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget *widget, gpointer data)
 	handler = (JimStimStdHandler)(GINT)OBJ_GET(widget,"handler");
 	if (handler == RPM_MODE)
 	{
-		value = convert_after_upload_f(widget);
+		gfloat value = convert_after_upload_f(widget);
 		model = gtk_combo_box_get_model(GTK_COMBO_BOX(widget));
 
 		/* If set to 65535, pick second choice, otherwise first one..

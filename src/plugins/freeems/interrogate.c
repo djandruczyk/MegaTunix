@@ -388,9 +388,6 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 	gint resp = RESPONSE_LIST_OF_LOCATION_IDS;
 	gint res = 0;
 	gint i = 0;
-	gint h = 0;
-	gint l = 0;
-	gint tmpi = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
 	guint8 flag = BLOCK_BITS_AND;
@@ -427,6 +424,9 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 	g_async_queue_unref(queue);
 	if (packet)
 	{
+		gint h = 0;
+		gint l = 0;
+		gint tmpi = 0;
 		for (i=0;i<packet->payload_length;i++)
 		{
 			tmpi = 0;
@@ -465,9 +465,6 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	guint8 pkt[LOCATION_ID_DETAILS_REQ_PKT_LEN];
 	gint res = 0;
 	gint i = 0;
-	gint h = 0;
-	gint l = 0;
-	gint tmpi = 0;
 	guint8 sum = 0;
 	gint tmit_len = 0;
 
@@ -500,11 +497,13 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	g_async_queue_unref(queue);
 	if (packet)
 	{
+		gint tmpi = 0;
+		gint h = 0;
+		gint l = 0;
 		/*printf("packet payload length %i\n",packet->payload_length);*/
 		if (packet->payload_length != 12)
 			printf("ERROR in locationID details response!\n");
 		details = g_new0(Location_Details, 1);
-		tmpi = 0;
 		h = packet->data[packet->payload_base_offset];
 		l = packet->data[packet->payload_base_offset+1];
 		details->flags = (h << 8) + l;
@@ -924,7 +923,6 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	gchar *tmpbuf = NULL;
 	gchar *section = NULL;
 	gchar ** list = NULL;
-	gint i = 0;
 	gint major = 0;
 	gint minor = 0;
 
@@ -1032,7 +1030,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		firmware->total_pages = g_list_length(locations);
 
 		firmware->page_params = g_new0(Page_Params *, firmware->total_pages);
-		for (i=0;i<firmware->total_pages;i++)
+		for (gint i=0;i<firmware->total_pages;i++)
 		{
 			firmware->page_params[i] = initialize_page_params();
 			firmware->page_params[i]->phys_ecu_page = (GINT)g_list_nth_data(locations,i);

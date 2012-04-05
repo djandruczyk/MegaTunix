@@ -194,8 +194,6 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	gchar * msgbuf = NULL;
 	gint canID = 0;
 	DataSize size = MTX_U08;
-	gint page = 0;
-	gint offset = 0;
 	gint tmpi = 0;
 	gint major = 0;
 	gint minor = 0;
@@ -204,7 +202,6 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	guint8 *data = NULL;
 	gchar **keys = NULL;
 	gint num_keys = 0;
-	gint dload_val = 0;
 	PostFunction *pf = NULL;
 	GArray *pfuncs = NULL;
 	extern gconstpointer *global_data;
@@ -251,7 +248,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 			stop_tickler_f(RTV_TICKLER);
 			restart = TRUE;
 		}
-		for (page=0;page<firmware->total_pages;page++)
+		for (gint page=0;page<firmware->total_pages;page++)
 		{
 			if (!(firmware->page_params[page]->dl_by_default))
 				continue;
@@ -265,6 +262,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 				}
 			if (cfg_read_string(cfgfile,section,"data",&tmpbuf))
 			{
+				gint offset = 0;
 				keys = parse_keys_f(tmpbuf,&num_keys,",");
 				if (num_keys != firmware->page_params[page]->length)
 				{
@@ -283,6 +281,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 				}
 				else
 				{
+					gint dload_val = 0;
 					if (DATA_GET(global_data,"offline"))
 					{
 						for (offset=0;offset<num_keys;offset++)

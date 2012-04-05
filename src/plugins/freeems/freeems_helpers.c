@@ -467,7 +467,6 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 {
 	OutputData *output = NULL;
 	Command *command = NULL;
-	gint i = 0;
 	gint last_page = 0;
 	Firmware_Details *firmware = NULL;
 
@@ -477,7 +476,7 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 	if (!DATA_GET(global_data,"offline"))
 	{
 		/* FreeEMS allows all pages to be in ram at will*/
-		for (i=0;i<firmware->total_pages;i++)
+		for (gint i=0;i<firmware->total_pages;i++)
 		{
 			if (firmware->page_params[i]->read_only)
 				continue;

@@ -528,9 +528,7 @@ void update_entry(GtkWidget *widget)
 	gdouble value = 0.0;
 	gint raw_lower = 0;
 	gint raw_upper = 0;
-	gint table_num = -1;
 	gint precision = 0;
-	gfloat spin_value = 0.0;
 	GdkColor color;
 	GdkColor black = {0,0,0,0};
 
@@ -560,7 +558,7 @@ void update_entry(GtkWidget *widget)
 		value = temp_to_host_f(value);
 	if (GTK_IS_SPIN_BUTTON(widget))
 	{
-		spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
+		gfloat spin_value = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 		if (value != spin_value)
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),value);
 	}
@@ -579,6 +577,7 @@ void update_entry(GtkWidget *widget)
 
 	if (OBJ_GET(widget,"use_color"))
 	{
+		gint table_num = -1;
 		if (OBJ_GET(widget,"table_num"))
 			table_num = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 

@@ -893,11 +893,10 @@ G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
   */
 G_MODULE_EXPORT void gauge_cleanup(gpointer gauge_ptr, gpointer data)
 {
-	gint id = 0;
 	GtkWidget *widget = (GtkWidget *)gauge_ptr;
 	if (OBJ_GET(widget, "gauge_id"))
 	{
-		id = (GINT)OBJ_GET(widget, "gauge_id");
+		guint id = (GINT)OBJ_GET(widget, "gauge_id");
 		remove_rtv_watch_f(id);
 	}
 }

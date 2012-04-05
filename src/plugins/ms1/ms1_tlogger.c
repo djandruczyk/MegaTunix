@@ -97,8 +97,6 @@ G_MODULE_EXPORT void setup_logger_display(GtkWidget * src_widget)
 G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
 	cairo_t *cr = NULL;
-	gint w = 0;
-	gint h = 0;
 	GdkWindow *window = gtk_widget_get_window(widget);
 	GtkAllocation allocation;
 
@@ -106,8 +104,8 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 
 	if(window)
 	{
-		w=allocation.width;
-		h=allocation.height;
+		gint w = allocation.width;
+		gint h = allocation.height;
 		if (ttm_data->layout)
 			g_object_unref(ttm_data->layout);
 
@@ -198,16 +196,10 @@ void crunch_trigtooth_data(void)
 	gint tmp = 0;
 	gint min = -1;
 	gint max = -1;
-	gint cap_idx = 0;
 	gfloat ratio = 0.0;
-	gfloat suggested_sample_time= 0.0;
-	gint min_sampling_time = 0;
-	gint lower = 0;
-	gint upper = 0;
 	gushort total = 0;
 	gint position = 0;
 	gint index = 0;
-	gint id = 0;
 	Firmware_Details *firmware = NULL;
 	extern gconstpointer *global_data;
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -281,6 +273,11 @@ void crunch_trigtooth_data(void)
 	/*printf("Current RPM %f\n",ttm_data->rpm);*/
 	if (ttm_data->page == 9) /* TOOTH logger, we should search for min/max's */
 	{
+		gint lower = 0;
+		gint upper = 0;
+		gfloat suggested_sample_time= 0.0;
+		gint min_sampling_time = 0;
+		gint cap_idx = 0;
 		/* ttm_data->current is the array containing the entire
 		 * sample of data organized so the beginning of the array
 		 * corresponds to the wrap point in the ECU.  Thus we should
@@ -313,7 +310,7 @@ void crunch_trigtooth_data(void)
 		   printf("read %i trigger times followed by %i missing, thus %i-%i wheel\n",ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing,ttm_data->missing+ttm_data->captures[i]-ttm_data->captures[i-1],ttm_data->missing);
 		   for (i=0;i<cap_idx;i++)
 		   printf("Missing teeth at index %i\n",ttm_data->captures[i]);
-		 */
+		   */
 
 		/*printf("max/min is %f\n ceil %f. floor %f",ratio,ceil(ratio),floor(ratio) );*/
 		/*printf("wheel is a missing %i style\n",ttm_data->missing);*/
@@ -321,7 +318,7 @@ void crunch_trigtooth_data(void)
 		/*
 		   printf("Minimum tooth time: %i, max tooth time %i\n",min,max);
 		   printf ("Teeth per second is %f\n",1.0/(((float)min*ttm_data->units)/1000000.0));
-		 */
+		   */
 		/*printf("min %i, units %i\n",min,ttm_data->units);*/
 		suggested_sample_time = 186000.0/((1.0/(((float)min*ttm_data->units)/1000000.0)));
 		/*printf("suggested  sample time %f\n",suggested_sample_time);*/
@@ -335,12 +332,12 @@ void crunch_trigtooth_data(void)
 		/*
 		   printf("Suggested Sampling time is %f ms.\n",suggested_sample_time);
 		   printf("Sampling time set to %i ms.\n",ttm_data->sample_time);
-		 */
+		   */
 
 		if (DATA_GET(global_data,"toothmon_id"))
 		{
 			g_source_remove((GINT)DATA_GET(global_data,"toothmon_id"));
-			id = g_timeout_add(ttm_data->sample_time,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+			guint id = g_timeout_add(ttm_data->sample_time,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			DATA_SET(global_data,"toothmon_id",GINT_TO_POINTER(id));
 		}
 
