@@ -48,8 +48,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	static GAsyncQueue *pf_dispatch_queue = NULL;
 	static GCond *pf_dispatch_cond = NULL;
 	static GMutex *pf_dispatch_mutex = NULL;
- 	gint len=0;
-	gint i=0;
 	PostFunction *pf=NULL;
 	Io_Message *message = NULL;
 	/*GTimeVal time;*/
@@ -110,8 +108,8 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 
 	if (message->command->post_functions != NULL)
 	{
-		len = message->command->post_functions->len;
-		for (i=0;i<len;i++)
+		gint len = message->command->post_functions->len;
+		for (int i=0;i<len;i++)
 		{
 			pf = g_array_index(message->command->post_functions,PostFunction *, i);
 			if (!pf)
@@ -182,10 +180,6 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	static GMutex *gui_dispatch_mutex = NULL;
 	static void (*update_widget_f)(gpointer,gpointer) = NULL;
 	static GList ***ecu_widgets = NULL;
-	guint len = 0;
-	guint i = 0;
-	guint j = 0;
-	UpdateFunction val;
 	gint count = 0;
 	GtkWidget *widget = NULL;
 	Gui_Message *message = NULL;
@@ -231,10 +225,10 @@ trypop:
 
 	if (message->functions != NULL)
 	{
-		len = message->functions->len;
-		for (i=0;i<len;i++)
+		gint len = message->functions->len;
+		for (gint i=0;i<len;i++)
 		{
-			val = g_array_index(message->functions,UpdateFunction, i);
+			UpdateFunction val = g_array_index(message->functions,UpdateFunction, i);
 			switch ((UpdateFunction)val)
 			{
 				case UPD_REFRESH:
@@ -265,7 +259,7 @@ trypop:
 					gdk_threads_enter();
 					for (i=range->offset;i<range->offset +range->len;i++)
 					{
-						for (j=0;j<g_list_length(ecu_widgets[range->page][i]);j++)
+						for (gint j=0;j<g_list_length(ecu_widgets[range->page][i]);j++)
 							update_widget_f(g_list_nth_data(ecu_widgets[range->page][i],j),NULL);
 					}
 					gdk_threads_leave();

@@ -146,9 +146,9 @@ AC_ARG_ENABLE(debug,
 
 if test "$enable_debug" = yes ; then
 DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
-AM_CFLAGS="-O0 -Wall -Wno-long-long -Wno-unused -Wno-strict-aliasing -pedantic -Wno-variadic-macros"
+AM_CFLAGS="-O0 -std=gnu99 -Wall -Wno-long-long -Wno-unused -Wno-strict-aliasing -pedantic -Wno-variadic-macros"
 else
-AM_CFLAGS="-O2 -Wall -Wno-long-long -Wno-unused -Wno-strict-aliasing -pedantic -Wno-variadic-macros"
+AM_CFLAGS="-O2 -std=gnu99 -Wall -Wno-long-long -Wno-unused -Wno-strict-aliasing -pedantic -Wno-variadic-macros"
 fi
 AC_SUBST(DEBUG_FLAGS)
 AC_SUBST(AM_CFLAGS)

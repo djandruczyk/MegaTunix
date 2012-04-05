@@ -178,7 +178,6 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 {
 #ifndef __WIN32__
 	guint i = 0;
-	gint result = 0;
 	GDir *a_dir = NULL;
 	GDir *b_dir = NULL;
 	GList *found = NULL;
@@ -263,7 +262,7 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 		label = gtk_label_new(_("Please select the ports that you wish\nto be used to locate your ECU\n"));
 		gtk_box_pack_start(GTK_BOX(parent),label,TRUE,TRUE,0);
 		gtk_widget_show_all(parent);
-		result = gtk_dialog_run (GTK_DIALOG (dialog));
+		gint result = gtk_dialog_run (GTK_DIALOG (dialog));
 		if (result == GTK_RESPONSE_APPLY)
 		{
 			ports = (gchar *)DATA_GET(global_data,"potential_ports");

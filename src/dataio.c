@@ -309,7 +309,6 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 {
 	guchar *p = NULL;
 	gchar * tmpbuf = NULL;
-	gint j = 0;
 	gint dbg_lvl = 0;
 	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 
@@ -325,7 +324,7 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 			g_free(tmpbuf);
 			QUIET_MTXDBG(SERIAL_RD,_("Data is in HEX!!\n"));
 		}
-		for (j=0;j<total_read;j++)
+		for (int j=0;j<total_read;j++)
 		{
 			QUIET_MTXDBG(SERIAL_RD,_("%.2X "), p[j]);
 			if (!((j+1)%16))

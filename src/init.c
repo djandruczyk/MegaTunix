@@ -167,7 +167,6 @@ G_MODULE_EXPORT void init(void)
 G_MODULE_EXPORT gboolean read_config(void)
 {
 	gint tmpi = 0;
-	guint i = 0;
 	gfloat tmpf = 0.0;
 	gchar * tmpbuf = NULL;
 	gchar **vector = NULL;
@@ -294,7 +293,7 @@ G_MODULE_EXPORT gboolean read_config(void)
 		{
 			hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
 			vector = g_strsplit(tmpbuf,",",-1);
-			for (i=0;i<g_strv_length(vector);i++)
+			for (guint i=0;i<g_strv_length(vector);i++)
 				hidden_list[atoi(vector[i])] = TRUE;
 			g_strfreev(vector);
 			cleanup(tmpbuf);

@@ -1369,7 +1369,6 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 	static void (*update_widget_f)(gpointer, gpointer);
 	static gint last_notebook_page = -1;
 	gint tab_ident = 0;
-	gint sub_page = 0;
 	gint active_table = -1;
 	GList *tab_widgets = NULL;
 	GList *func_list = NULL;
@@ -1442,7 +1441,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 		sub = lookup_widget((const gchar *)OBJ_GET(topframe,"sub-notebook"));
 		if (GTK_IS_WIDGET(sub))
 		{
-			sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
+			gint sub_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(sub));
 			widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(sub),sub_page);
 #if GTK_MINOR_VERSION >= 18
 			if ((OBJ_GET(widget,"table_num")) && (gtk_widget_get_state(widget) != GTK_STATE_INSENSITIVE))
@@ -1494,18 +1493,14 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
   */
 G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkWidget *page, guint page_no, gpointer data)
 {
-	gint active_table = -1;
-	gint id = 0;
 	GtkWidget *widget = gtk_notebook_get_nth_page(notebook,page_no);
 	GtkWidget *parent = lookup_widget("toplevel_notebook");
 	GList *func_list = NULL;
 	GList *func_fps_list = NULL;
-	guint i = 0;
-	GSourceFunc func = NULL;
-	gint fps = 0;
 
 	if (OBJ_GET(widget,"table_num"))
 	{
+		gint active_table = -1;
 		active_table = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 		DATA_SET(global_data,"active_table",GINT_TO_POINTER(active_table));
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
@@ -1521,7 +1516,10 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkWidget *page, guin
 		func_fps_list = (GList *)OBJ_GET(widget,"func_fps_list");
 		if (func_list)
 		{
-			for (i=0;i<g_list_length(func_list);i++)
+			GSourceFunc func = NULL;
+			gint fps = 0;
+			guint id = 0;
+			for (guint i=0;i<g_list_length(func_list);i++)
 			{
 				*(void **)(&func) = g_list_nth_data(func_list,i);
 				fps = (GINT)g_list_nth_data(func_fps_list,i);
@@ -1551,8 +1549,6 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkWidget *page, guin
 G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 {
 	gint algo = 0; 
-	gint tmpi = 0;
-	gint i = 0;
 	gint *algorithm = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
@@ -1576,7 +1572,8 @@ G_MODULE_EXPORT gboolean set_algorithm(GtkWidget *widget, gpointer data)
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget))) 
 	{	/* It's pressed (or checked) */
-		i = 0;
+		gint tmpi = 0;
+		gint i = 0;
 		while (vector[i])
 		{
 			tmpi = (GINT)strtol(vector[i],NULL,10);
@@ -2321,7 +2318,6 @@ G_MODULE_EXPORT void update_sources_pf()
 void process_group(gpointer data, gpointer nothing)
 {
 	GObject *object = (GObject *)data;
-	guint i = 0;
 	gint bitval = 0;
 	gint bitmask = 0;
 	gint bitshift = 0;
@@ -2345,7 +2341,7 @@ void process_group(gpointer data, gpointer nothing)
 	{
 		bitvals = (gchar *)OBJ_GET(object,"bitvals");
 		vector = g_strsplit(bitvals,",",-1);
-		for (i=0;i<g_strv_length(vector);i++)
+		for (guint i=0;i<g_strv_length(vector);i++)
 		{
 			bitval = strtol(vector[i],NULL,10);
 			/*printf("bitval str %s, bitval %i, rawvalue %i, bitmask %i, bitshift %i\n",vector[i],bitval,value,bitmask,bitshift);*/
@@ -2457,11 +2453,7 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 	static Firmware_Details *firmware = NULL;
 	gfloat scaler = 0.0;
 	GdkColor color;
-	gint raw_lower = 0;
-	gint raw_upper = 0;
 	DataSize size = MTX_U08;
-	gint low = 0;
-	gint color_scale;
 
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -2472,6 +2464,8 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 
 	if (in_table)
 	{
+		gint low = 0;
+		gint color_scale;
 		color_scale = (GINT)DATA_GET(global_data,"mtx_color_scale");
 		if (color_scale == FIXED_COLOR_SCALE)
 		{
@@ -2491,6 +2485,8 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 	}
 	else 
 	{
+		gint raw_lower = 0;
+		gint raw_upper = 0;
 		if (OBJ_GET(widget,"raw_lower"))
 			raw_lower = (GINT)strtol((gchar *)OBJ_GET(widget,"raw_lower"),NULL,10);
 		else

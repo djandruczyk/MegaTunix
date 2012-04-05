@@ -619,8 +619,6 @@ G_MODULE_EXPORT gboolean dash_key_event(GtkWidget *widget, GdkEventKey *event, g
   */
 G_MODULE_EXPORT void toggle_status_visible(void)
 {
-	gint x = 0;
-	gint y = 0;
 	GtkWidget *tmpwidget = lookup_widget("status_window");
 	if (!GTK_IS_WIDGET(tmpwidget))
 		return;
@@ -631,8 +629,8 @@ G_MODULE_EXPORT void toggle_status_visible(void)
 	}
 	else
 	{
-		x = (GINT)DATA_GET(global_data,"status_x_origin");
-		y = (GINT)DATA_GET(global_data,"status_y_origin");
+		gint x = (GINT)DATA_GET(global_data,"status_x_origin");
+		gint y = (GINT)DATA_GET(global_data,"status_y_origin");
 		gtk_widget_show_all(tmpwidget);
 		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
 		DATA_SET(global_data,"status_visible",GINT_TO_POINTER(TRUE));
@@ -645,8 +643,6 @@ G_MODULE_EXPORT void toggle_status_visible(void)
   */
 G_MODULE_EXPORT void toggle_rtt_visible(void)
 {
-	gint x = 0;
-	gint y = 0;
 	GtkWidget *tmpwidget = lookup_widget("rtt_window");
 	if (!GTK_IS_WIDGET(tmpwidget))
 		return;
@@ -657,8 +653,8 @@ G_MODULE_EXPORT void toggle_rtt_visible(void)
 	}
 	else
 	{
-		x = (GINT)DATA_GET(global_data,"rtt_x_origin");
-		y = (GINT)DATA_GET(global_data,"rtt_y_origin");
+		gint x = (GINT)DATA_GET(global_data,"rtt_x_origin");
+		gint y = (GINT)DATA_GET(global_data,"rtt_y_origin");
 		gtk_widget_show_all(tmpwidget);
 		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
 		DATA_SET(global_data,"rtt_visible",GINT_TO_POINTER(TRUE));
@@ -671,8 +667,6 @@ G_MODULE_EXPORT void toggle_rtt_visible(void)
   */
 G_MODULE_EXPORT void toggle_main_visible(void)
 {
-	gint x = 0;
-	gint y = 0;
 	GtkWidget *tmpwidget = lookup_widget("main_window");
 	if (!GTK_IS_WIDGET(tmpwidget))
 		return;
@@ -684,8 +678,8 @@ G_MODULE_EXPORT void toggle_main_visible(void)
 	else
 	{
 		gtk_widget_show(tmpwidget);
-		x = (GINT)DATA_GET(global_data,"main_x_origin");
-		y = (GINT)DATA_GET(global_data,"main_y_origin");
+		gint x = (GINT)DATA_GET(global_data,"main_x_origin");
+		gint y = (GINT)DATA_GET(global_data,"main_y_origin");
 		gtk_widget_show_all(tmpwidget);
 		gtk_window_move(GTK_WINDOW(tmpwidget),x,y);
 		DATA_SET(global_data,"main_visible",GINT_TO_POINTER(TRUE));
@@ -1075,7 +1069,6 @@ G_MODULE_EXPORT gboolean toggle_dash_antialias(GtkWidget *menuitem, gpointer dat
   */
 G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
-	gint edge = -1;
 	GtkAllocation allocation;
 
 	gtk_widget_get_allocation(widget,&allocation);
@@ -1099,6 +1092,7 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 	}
 	if ((event->type == GDK_BUTTON_PRESS) && (event->button == 1))
 	{
+		gint edge = -1;
 		/*printf("dash button event\n"); */
 		if (event->x > (allocation.width-16))
 		{
@@ -1353,7 +1347,6 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpointer user_data)
 {
-	gint id = 0;
 	gchar *tmpbuf = NULL;
 	Dash_Gauge *d_gauge = NULL;
 
@@ -1366,7 +1359,7 @@ G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpoint
 		g_free(d_gauge->source);
 		if (GTK_IS_WIDGET(d_gauge->dash))
 		{
-			id = (GINT)OBJ_GET(d_gauge->dash,"timer_id");
+			guint id = (GINT)OBJ_GET(d_gauge->dash,"timer_id");
 			if (id)
 			{
 				g_source_remove(id);
@@ -1514,7 +1507,6 @@ G_MODULE_EXPORT gboolean hide_dash_resizers(gpointer data)
 G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *event, gpointer data)
 {
 	GtkWidget *dash = gtk_bin_get_child(GTK_BIN(widget));
-	guint id = 0;
 
 	if (event->state & GDK_BUTTON1_MASK)
 		return TRUE;
@@ -1523,7 +1515,7 @@ G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *
 	/* If "leaving" the window, set timeout to hide the resizers */
 	if ((!OBJ_GET(dash,"timer_active")) && (OBJ_GET(dash,"resizers_visible")))
 	{
-		id = gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
+		guint id = gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
 		OBJ_SET(dash,"timer_active",GINT_TO_POINTER(TRUE));
 		OBJ_SET(dash,"timer_id",GINT_TO_POINTER(id));
 	}

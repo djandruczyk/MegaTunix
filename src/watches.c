@@ -202,7 +202,6 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varname
   */
 G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
 {
-	gint i = 0;
 	RtvWatch *watch = (RtvWatch *)data;
 	/*printf("destroying watch %ui\n",watch->id);*/
 	if (watch->varname)
@@ -211,7 +210,7 @@ G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
 		g_free(watch->vals);
 	if (watch->hist_vals)
 	{
-		for(i=0;i<watch->num_vars;i++)
+		for(int i=0;i<watch->num_vars;i++)
 			g_free(watch->hist_vals[i]);
 		g_free(watch->hist_vals);
 	}

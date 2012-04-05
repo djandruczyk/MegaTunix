@@ -59,7 +59,6 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gfloat *multiplier = NULL;
 	gfloat *adder = NULL;
 	gchar *table = NULL;
-	guint i = 0;
 	GHashTable *mhash = NULL;
 	GHashTable *ahash = NULL;
 	GHashTable *lhash = NULL;
@@ -118,7 +117,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 			keys = g_strsplit(key_list,",",-1);
 			mults = g_strsplit(mult_list,",",-1);
 			adds = g_strsplit(add_list,",",-1);
-			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(mults));i++)
+			for (int i=0;i<MIN(g_strv_length(keys),g_strv_length(mults));i++)
 			{
 				multiplier = (gfloat *)g_new0(gfloat, 1);
 				*multiplier = (gfloat)g_strtod(mults[i],NULL);
@@ -300,7 +299,6 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gfloat lower = 0.0;
 	gfloat upper = 0.0;
 	gboolean fromecu_complex = FALSE;
-	guint i = 0;
 	gint table_num = -1;
 	GHashTable *mhash = NULL;
 	GHashTable *ahash = NULL;
@@ -404,7 +402,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 			adds = g_strsplit(add_list,",",-1);
 			if (table_list)
 				tables = g_strsplit(table_list,",",-1);
-			for (i=0;i<MIN(g_strv_length(keys),g_strv_length(mults));i++)
+			for (int i=0;i<MIN(g_strv_length(keys),g_strv_length(mults));i++)
 			{
 				multiplier = (gfloat *)g_new0(gfloat, 1);
 				*multiplier = (gfloat)g_strtod(mults[i],NULL);
