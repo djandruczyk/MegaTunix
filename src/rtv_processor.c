@@ -71,11 +71,6 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 	GArray *history = NULL;
 	gchar *special = NULL;
 	GHashTable *hash = NULL;
-	GTimeVal curr;
-	GTimeVal begin;
-	gint hours = 0;
-	gint minutes = 0;
-	gint seconds = 0;
 
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -99,6 +94,11 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 	g_array_append_val(rtv_map->ts_array,timeval);
 	if (rtv_map->ts_array->len%250 == 0)
 	{
+		GTimeVal curr;
+		GTimeVal begin;
+		gint hours = 0;
+		gint minutes = 0;
+		gint seconds = 0;
 		curr = g_array_index(rtv_map->ts_array,GTimeVal, rtv_map->ts_array->len-1);
 		begin = g_array_index(rtv_map->ts_array,GTimeVal,0);
 		tmpf = curr.tv_sec-begin.tv_sec-((curr.tv_usec-begin.tv_usec)/1000000);

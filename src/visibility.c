@@ -47,8 +47,6 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 	GtkWidget *label = NULL;
 	GtkWidget *button = NULL;
 	gboolean *hidden_list = NULL;
-	gint rows = 0;
-	gint i = 0;
 
 	if (!(GTK_IS_WIDGET(vis_window)))
 	{
@@ -74,12 +72,12 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 		else
 			printf(_("ERROR, glade element not found!\n"));
 
-		rows = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
+		gint rows = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 		DATA_SET(global_data,"notebook_rows",GINT_TO_POINTER(rows));
 		table = glade_xml_get_widget(xml,"tab_visibility_table");
 		gtk_table_resize(GTK_TABLE(table),rows,2);
 
-		for (i=0;i<rows;i++)
+		for (gint i=0;i<rows;i++)
 		{
 			child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
 			button = gtk_check_button_new();

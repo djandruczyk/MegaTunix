@@ -477,12 +477,9 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	gfloat tmp = 0.0;
 	gfloat rf_per_squirt = 0.0;
 	gboolean lim_flag = FALSE;
-	gint dload_val = 0;
-	gint offset = 0;
 	gint canID = 0;
 	gint page = -1;
 	DataSize size = MTX_U08;
-	gint rpmk_offset = 0;
 	gint num_squirts = 0;
 	gint num_cyls = 0;
 	gint num_inj = 0;
@@ -493,7 +490,6 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	gint last_num_inj = -1;
 	gint last_divider= -1;
 	gint last_alternate = -1;
-	guint8 tmpi = 0;
 	guint8 mask = 0;
 	guint8 shift = 0;
 	gint limit = 0;
@@ -654,6 +650,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	}
 	else
 	{
+		gint offset = 0;
 		thread_set_group_color_f(BLACK,g_name);
 		slaves_set_color(BLACK,g_name);
 		/* Required Fuel per SQUIRT */
@@ -690,10 +687,11 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 		{
 			/* Send rpmk value as it's needed for rpm calc on 
 			 * spark firmwares... */
-			tmpi = ms_get_ecu_data(canID,firmware->table_params[table_num]->stroke_page,firmware->table_params[table_num]->stroke_offset,size);
+			gint dload_val = 0;
+			guint8 tmpi = ms_get_ecu_data(canID,firmware->table_params[table_num]->stroke_page,firmware->table_params[table_num]->stroke_offset,size);
 			mask = firmware->table_params[table_num]->stroke_mask;
 			shift = get_bitshift_f(firmware->table_params[table_num]->stroke_mask);
-			rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
+			gint rpmk_offset = firmware->table_params[table_num]->rpmk_offset;
 			/* Top is two stroke, botton is four stroke.. */
 			if ((tmpi & mask) >> shift)
 				dload_val = (int)(6000.0/((double)num_cyls));

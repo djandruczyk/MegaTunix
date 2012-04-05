@@ -277,9 +277,6 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	GtkTreeView *view = (GtkTreeView *)OBJ_GET(model,"view");
 	GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
 	GtkTreeIter iter;
-	gboolean temp_dep;
-	gint lower = 0;
-	gint upper = 0;
 	gfloat newval = 0.0;
 	gint column = 0;
 	gconstpointer *object = NULL;
@@ -289,7 +286,6 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	gint hys_offset = -1;
 	gint ulimit_offset = -1;
 	gint precision = 0;
-	gfloat x = 0.0;
 	gfloat tmpf = 0.0;
 	gfloat *multiplier = NULL;
 	gfloat *adder = NULL;
@@ -362,6 +358,9 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	}
 	else
 	{
+		gfloat x = 0.0;
+		gint lower = 0;
+		gint upper = 0;
 
 		if (DATA_GET(object,"real_lower"))
 			lower = (gint)strtol((gchar *)DATA_GET(object,"real_lower"),NULL,10);
@@ -373,7 +372,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			upper = get_extreme_from_size_f((DataSize)(GINT)DATA_GET(object,"size"),UPPER);
 		multiplier = (gfloat *)DATA_GET(object,"fromecu_mult");
 		adder = (gfloat *)DATA_GET(object,"fromecu_add");
-		temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
+		gboolean temp_dep = (GBOOLEAN)DATA_GET(object,"temp_dep");
 
 		if (newval < lower)
 			newval = lower;

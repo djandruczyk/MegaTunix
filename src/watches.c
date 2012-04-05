@@ -210,7 +210,7 @@ G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
 		g_free(watch->vals);
 	if (watch->hist_vals)
 	{
-		for(int i=0;i<watch->num_vars;i++)
+		for(gint i=0;i<watch->num_vars;i++)
 			g_free(watch->hist_vals[i]);
 		g_free(watch->hist_vals);
 	}

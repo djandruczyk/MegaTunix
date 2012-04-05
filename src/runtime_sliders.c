@@ -435,7 +435,6 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 {
 	gconstpointer *object = NULL;
 	Rtv_Map *rtv_map = NULL;
-	GtkProgressBarOrientation orient;
 	GHashTable *rt_sliders = NULL;
 	GHashTable *aw_sliders = NULL;
 	GHashTable *ww_sliders = NULL;
@@ -512,6 +511,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	/* generic container (Table/box HOLDING a mtx pbar */
 	else if (GTK_IS_CONTAINER(widget))
 	{
+		GtkProgressBarOrientation orient;
 		/* We don't like GTK+'s progress bar, so rip it out and 
 		 * stick in my custom version instead.  Get the orientation
 		 * first...
@@ -642,7 +642,6 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 {
 	gfloat coolant = 0.0;
 	static gfloat last_coolant = 0.0;
-	gint i = 0;
 	GHashTable **ve3d_sliders;
 	GHashTable *hash;
 	TabIdent active_page;
@@ -679,7 +678,7 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 	}
 	if (ve3d_sliders)       
 	{                       
-		for (i=0;i<firmware->total_tables;i++)
+		for (gint i=0;i<firmware->total_tables;i++)
 		{               
 			if (ve3d_sliders[i])
 				g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
@@ -704,13 +703,11 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	Rt_Slider *slider = (Rt_Slider *)value;
 	gint count = slider->count;
 	gint last_upd = slider->last_upd;
-	gfloat tmpf = 0.0;
 	gfloat upper = 0.0;
 	gfloat lower = 0.0;
 	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
-	gfloat percentage = 0.0;
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
 
@@ -750,8 +747,8 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	if ((current != previous) || 
 			(DATA_GET(global_data,"rt_forced_update")))
 	{
-		percentage = (current-lower)/(upper-lower);
-		tmpf = percentage <= 1.0 ? percentage : 1.0;
+		gfloat percentage = (current-lower)/(upper-lower);
+		gfloat tmpf = percentage <= 1.0 ? percentage : 1.0;
 		tmpf = tmpf >= 0.0 ? tmpf : 0.0;
 		switch (slider->type)
 		{

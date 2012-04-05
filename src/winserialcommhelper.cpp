@@ -335,14 +335,13 @@ HRESULT CSerialCommHelper::Write (const char* data,DWORD Size)
 {
 	HRESULT hr = CanProcess();
 	if ( FAILED(hr)) return hr;
-	int res = 0 ;
 	OVERLAPPED ov;
 	memset(&ov,0,sizeof(ov));
 	ov.hEvent = CreateEvent( 0,true,0,0);
 	DWORD BytesWritten = 0;
 	//do
 	{
-		res = WriteFile (CommPort,data,Size,&BytesWritten  ,&ov);
+		int res = WriteFile (CommPort,data,Size,&BytesWritten  ,&ov);
 		if ( res == 0 )
 		{
 			WaitForSingleObject(ov.hEvent ,INFINITE);

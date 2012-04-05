@@ -564,23 +564,18 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gchar * tmpbuf = NULL;
 	gchar * section = NULL;
 	gchar ** keys = NULL;
-	gint table_num = 0;
 	gint num_keys = 0;
 	gint offset = 0;
 	gint page = 0;
-	gint widget_type = 0;
+	gint index = 0;
 	gchar * initializer = NULL;
 	GdkColor color;
 	gchar *size = NULL;
-	gint index = 0;
 	gint count = 0;
-	gint result = 0;
 	gint tmpi = 0;
 	gchar *ptr = NULL;
 	gchar **vector = NULL;
 	gchar **vec2 = NULL;
-	gint fps = 0;
-	guint i = 0;
 	void (*func)(void) = NULL;
 	GList *list = NULL;
 	GList *list2 = NULL;
@@ -614,9 +609,10 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		tmpbuf = g_strdelimit(g_strdup(ptr),"_",' ');
 		section = g_strndup(name,ptr-name);
 		/*printf("(indexed) section is %s\n",section);*/
-		result = sscanf(tmpbuf,"%d of %d",&index,&count);
-		/*printf("sscanf result %i\n",result);
-		  printf("Found indexed value for \"%s\", index %i, count %i\n",tmpbuf,index,count); */
+		gint result = sscanf(tmpbuf,"%d of %d",&index,&count);
+		/*printf("sscanf result %i\n",result);*
+		* printf("Found indexed value for \"%s\", index %i, count %i\n",tmpbuf,index,count);
+		*/
 		g_free(tmpbuf);
 	}
 	else
@@ -735,7 +731,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	{
 		vector = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
-		for (i=0;i<g_strv_length(vector);i++)
+		for (guint i=0;i<g_strv_length(vector);i++)
 		{
 			vec2 = g_strsplit(vector[i],":",2);
 			if (g_strv_length(vec2) != 2)
@@ -744,7 +740,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 				g_strfreev(vec2);
 				continue;
 			}
-			fps = (GINT)g_strtod(vec2[1],NULL);
+			gint fps = (GINT)g_strtod(vec2[1],NULL);
 			get_symbol(vec2[0],(void **)&func);
 			if (func)
 			{
@@ -763,6 +759,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"initializer",&initializer))
 	{
+		gint widget_type = 0;
 		if (!cfg_read_string(cfgfile,section,"widget_type",&tmpbuf))
 			MTXDBG(TABLOADER|CRITICAL,_("Object %s has initializer, but no widget_type!!!!\n"),section);
 		else
@@ -871,6 +868,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	{
 		if (NULL != (tmpbuf = (gchar *)OBJ_GET(widget,"table_num")))
 		{
+			gint table_num = 0;
 			table_num = (GINT)strtol(tmpbuf,NULL,10);
 			page = (GINT)OBJ_GET(widget,"page");
 			offset = (GINT)OBJ_GET(widget,"offset");

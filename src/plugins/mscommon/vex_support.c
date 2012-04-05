@@ -663,12 +663,11 @@ G_MODULE_EXPORT GIOStatus process_vex_line(Vex_Import * vex, GIOChannel *iochann
 {
 	GString *a_line = g_string_new("\0");
 	GIOStatus status = g_io_channel_read_line_string(iochannel, a_line, NULL, NULL);
-	gint i = 0;
 	gint num_tests = sizeof(import_handlers)/sizeof(import_handlers[0]);
 
 	if (status == G_IO_STATUS_NORMAL) 
 	{
-		for (i=0;i<num_tests;i++)
+		for (gint i=0;i<num_tests;i++)
 		{
 			if (g_strrstr(a_line->str,import_handlers[i].import_tag) != NULL)
 			{

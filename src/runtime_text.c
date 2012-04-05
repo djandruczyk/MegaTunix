@@ -575,8 +575,6 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	Rtt_Threshold *thresh = NULL;
 	gint count = 0;
 	gboolean in_thresh = FALSE;
-	gint last_upd = 0;
-	guint i = 0;
 	gint precision = 0;
 	gfloat current = 0.0;
 	gfloat previous = 0.0;
@@ -610,7 +608,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 		if (rtt->thresholds)
 		{
 			/* Need to check for a proper match */
-			for (i=0;i<rtt->thresholds->len;i++)
+			for (guint i=0;i<rtt->thresholds->len;i++)
 			{
 				thresh = (Rtt_Threshold *)g_ptr_array_index(rtt->thresholds,i);
 				if ((current >thresh->low) && (current <= thresh->high))
@@ -643,7 +641,6 @@ not_in_thresh:
 		}
 
 		g_free(tmpbuf);
-		last_upd = count;
 	}
 	return FALSE;
 }

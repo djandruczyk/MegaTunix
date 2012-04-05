@@ -162,21 +162,8 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	gboolean fahrenheit = FALSE;
 	gboolean kelvin = FALSE;
 	gdouble t[3];
-	gdouble c11,c12,c13;
-	gdouble c21,c22,c23;
-	gdouble c31,c32,c33;
-	gdouble temp1,temp2,temp3;
-	gdouble A,B,C;
-	gdouble res1,res2,res3;
-	gdouble bias;
 	guint8 tabletype = 0;
 	gint16 *table = NULL;
-	gint i = 0;
-	gint adcCount = 0;
-	gdouble res = 0;
-	gdouble temp = 0;
-	gshort tt = 0;
-	gint bins;
 	gchar * filename = NULL;
 	time_t tim;
 	FILE *f = NULL;
@@ -193,6 +180,12 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	/* If using the parameters... */
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lookup_widget_f("use_params_rbutton"))))
 	{
+		gint bins = 0;
+		gdouble temp1,temp2,temp3;
+		gdouble c11,c12,c13;
+		gdouble c21,c22,c23;
+		gdouble c31,c32,c33;
+		gdouble bias;
 		table = g_new0(gint16, 1024);
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(lookup_widget_f("thermister_celsius_rbutton"))))
 			celsius = TRUE;
@@ -205,11 +198,11 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 		t[0] = temp1 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("temp1_entry"))),NULL);
 		t[1] = temp2 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("temp2_entry"))),NULL);
 		t[2] = temp3 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("temp3_entry"))),NULL);
-		res1 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance1_entry"))),NULL);
-		res2 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance2_entry"))),NULL);
-		res3 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance3_entry"))),NULL);
+		gdouble res1 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance1_entry"))),NULL);
+		gdouble res2 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance2_entry"))),NULL);
+		gdouble res3 = g_ascii_strtod(gtk_entry_get_text(GTK_ENTRY(lookup_widget_f("resistance3_entry"))),NULL);
 		/* If Not kelvin, convert to kelvin */
-		for (i = 0; i < 3; i++) {
+		for (gint i = 0; i < 3; i++) {
 			if (fahrenheit) 
 				t[i] = f_to_k_f(t[i]);
 			else if (celsius)
@@ -220,9 +213,9 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 		c21 = log(res2); c22 = pow(c21, 3.0); c23 = 1.0 / t[1];
 		c31 = log(res3); c32 = pow(c31, 3.0); c33 = 1.0 / t[2];
 
-		C = ((c23-c13) - (c33-c13)*(c21-c11)/(c31-c11)) / ((c22-c12) - (c32-c12)*(c21-c11)/(c31-c11));
-		B = (c33-c13 - C*(c32-c12)) / (c31-c11);
-		A = c13 - B*c11 - C*c12;
+		gdouble C = ((c23-c13) - (c33-c13)*(c21-c11)/(c31-c11)) / ((c22-c12) - (c32-c12)*(c21-c11)/(c31-c11));
+		gdouble B = (c33-c13 - C*(c32-c12)) / (c31-c11);
+		gdouble A = c13 - B*c11 - C*c12;
 
 #define k2f(t)	((t*9.0/5.0) - 459.67)
 #define Tk(R)  (1.0/(A+B*log(R)+C*pow(log(R), 3)))
@@ -263,16 +256,16 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 		fprintf(f, "const int %sfactor_table[%i] EEPROM_ATTR  = {\n", tabletype==CTS?"clt":"mat",bins);
 		fprintf(f, "          //  ADC    Volts    Temp       Ohms\n");
 
-		for (adcCount = 0; adcCount < bins; adcCount++) 
+		for (gint adcCount = 0; adcCount < bins; adcCount++) 
 		{
-			res  = bias / ((bins-1)/(double)(adcCount==0?0.01:adcCount) - 1.0);
-			temp = Tf(res);
+			gdouble res = bias / ((bins-1)/(double)(adcCount==0?0.01:adcCount) - 1.0);
+			gdouble temp = Tf(res);
 			if (!(firmware->capabilities & PIS))
 			{
 				if      (temp <  -40.0) temp = tabletype == CTS ? 180.0 : 70.0;
 				else if (temp >  350.0) temp = tabletype == CTS ? 180.0 : 70.0;
 			}
-			tt = (gushort)(temp*10);
+			gushort tt = (gushort)(temp*10);
 			fprintf(f, "   %5d%c // %4d %7.2f  %7.1f  %9.1f\n", tt, adcCount<bins-1?',':' ', adcCount, 5.0*adcCount/(bins-1), Tu(tt/10.0, celsius), res);
 			if (firmware->bigendian)
 				table[adcCount] = GINT16_TO_BE((gint16)tt);
