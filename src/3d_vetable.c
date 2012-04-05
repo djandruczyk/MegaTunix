@@ -2425,7 +2425,10 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 		}
 	}
 	if (!need_update)
+	{
+		g_free(table_list);
 		return;
+	}
 	else
 	{
 		for (i=0;i<total_tables;i++)

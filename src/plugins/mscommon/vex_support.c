@@ -911,6 +911,7 @@ G_MODULE_EXPORT GIOStatus read_number_from_line(gint *dest, GIOChannel *iochanne
 		result = g_strdup(str_array[1]);	
 		g_strfreev(str_array);
 		*dest = atoi(result);
+		g_free(result);
 	}
 	else
 		status = G_IO_STATUS_ERROR;
@@ -1033,17 +1034,21 @@ G_MODULE_EXPORT GIOStatus process_vex_table(Vex_Import *vex, gchar * string, GIO
 	str_array = g_strsplit(string, "[", 3);
 	result = g_strdup(str_array[1]);	
 	str_array2 = g_strsplit(result, "]", 2);
+	g_free(result);
 	result = g_strdup(str_array2[0]);	
 	g_strfreev(str_array2);
 	x_bins = atoi(result);
+	g_free(result);
 
 	/* Get first number of [  x][  y] in the string line */
 	result = g_strdup(str_array[2]);
 	g_strfreev(str_array);
 	str_array2 = g_strsplit(result, "]", 2);
+	g_free(result);
 	result = g_strdup(str_array2[0]);
 	g_strfreev(str_array2);
 	y_bins = atoi(result);	
+	g_free(result);
 
 	vex->total_tbl_bins = x_bins*y_bins;
 	vex->tbl_bins = g_new0(gint,(x_bins * y_bins));

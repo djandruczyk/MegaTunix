@@ -186,6 +186,9 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 		for (unsigned i=0;i<tbl->Z.values.size();i++)
 			z_elements[i] = tbl->Z.values[i];
 		ecu_table_import(table_num,x_elements,y_elements,z_elements);
+		g_free(x_elements);
+		g_free(y_elements);
+		g_free(z_elements);
 	}
 	g_free(filename);
 

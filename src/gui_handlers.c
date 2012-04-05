@@ -1892,7 +1892,10 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 			break;
 	}
 	if (return_now)
+	{
+		g_free(prefix);
 		return;
+	}
 	tmpbuf = g_strdup_printf("%s_%i_of_%i",prefix,col+(row*firmware->table_params[table_num]->x_bincount),count);
 
 	widget_2_focus = lookup_widget(tmpbuf);
@@ -1900,6 +1903,8 @@ G_MODULE_EXPORT void refocus_cell(GtkWidget *widget, Direction dir)
 		gtk_widget_grab_focus(widget_2_focus);
 
 	g_free(tmpbuf);
+	g_free(prefix);
+	return;
 }
 
 

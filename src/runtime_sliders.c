@@ -443,15 +443,18 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	gchar * source = NULL;
 	const gchar *name = NULL;
 	TabIdent ident;
-	Rt_Slider *slider = (Rt_Slider *)g_malloc0(sizeof(Rt_Slider));
+	Rt_Slider *slider = NULL;
 
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	source = (gchar *)OBJ_GET(widget,"source");
 	ident = (TabIdent)(GINT)OBJ_GET(widget,"tab_ident");
 	name = glade_get_widget_name(widget);
 		
-	if (!rtv_map)
-		return;
+	g_return_val_if_fail(rtv_map,NULL);
+	g_return_val_if_fail(source,NULL);
+
+	slider = (Rt_Slider *)g_malloc0(sizeof(Rt_Slider));
+
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 
 	rt_sliders = (GHashTable *)DATA_GET(global_data,"rt_sliders");
