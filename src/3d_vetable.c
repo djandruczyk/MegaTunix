@@ -3559,7 +3559,6 @@ void gl_print_string(GtkWidget *widget, const gchar *s)
 	unsigned char *begin_bitmap_buffer;
 	GLfloat color[4];
 	GLint previous_unpack_alignment;
-	GLboolean previous_blend_enabled;
 	GLint previous_blend_func_src;
 	GLint previous_blend_func_dst;
 	GLfloat previous_red_bias;
@@ -3580,7 +3579,9 @@ void gl_print_string(GtkWidget *widget, const gchar *s)
 	pango_layout_set_text(layout, s, -1); // -1 null-terminated string.
 	pango_layout_get_extents(layout, NULL, &log_rect);
 
-	if (log_rect.width > 0 && log_rect.height > 0) {
+	if (log_rect.width > 0 && log_rect.height > 0) 
+	{
+		GLboolean previous_blend_enabled;
 		bitmap.rows = ve_view->font_ascent + ve_view->font_descent;
 		bitmap.width = PANGO_PIXELS_CEIL(log_rect.width);
 		bitmap.pitch = -bitmap.width; // Rendering it "upside down" for OpenGL.

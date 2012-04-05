@@ -74,7 +74,6 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 {
 	OutputData *output = NULL;
 	Command *command = NULL;
-	gint i = 0;
 	gint last_page = 0;
 	Firmware_Details *firmware = NULL;
 
@@ -107,7 +106,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 		else if ((firmware->capabilities & MS2) && (!(firmware->capabilities & MS2_E)))
 		{
 			/* MS2 std allows all pages to be in ram at will*/
-			for (i=0;i<firmware->total_pages;i++)
+			for (gint i=0;i<firmware->total_pages;i++)
 			{
 				if (!firmware->page_params[i]->dl_by_default)
 					continue;

@@ -91,8 +91,6 @@ G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, GdkEventConfigure *event , gpointer data)
 {
 	cairo_t *cr = NULL;
-	gint w = 0;
-	gint h = 0;
 	GtkAllocation allocation;
 	GdkWindow *window = gtk_widget_get_window(widget);
 	gtk_widget_get_allocation(widget,&allocation);
@@ -101,8 +99,8 @@ G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, Gdk
 		return FALSE;
 	if(window)
 	{
-		w=allocation.width;
-		h=allocation.height;
+		gint w = allocation.width;
+		gint h = allocation.height;
 		if (ttm_data->layout)
 			g_object_unref(ttm_data->layout);
 		if (ttm_data->pixmap)

@@ -49,7 +49,6 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 	gint num_choices = 0;
 	gint num_bitvals = 0;
 	gint i = 0;
-	gint width = 0;
 	gchar *tmpstr = NULL;
 	gchar *regex = NULL;
 	const gchar *name = NULL;
@@ -100,6 +99,7 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 	gtk_combo_box_set_model(GTK_COMBO_BOX(object),GTK_TREE_MODEL(store));
 	if (GTK_IS_COMBO_BOX_ENTRY(object))
 	{
+		gint width = 0;
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
 		entry = mask_entry_new_with_mask(regex);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */

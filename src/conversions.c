@@ -70,7 +70,6 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gchar **mults = NULL;
 	gchar **adds = NULL;
 	gchar **tables = NULL;
-	gint table_num = 0;
 	gchar *tmpbuf = NULL;
 	const gchar *name = NULL;
 	gchar * source_key = NULL;
@@ -100,6 +99,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	/* MULTI EXPRESSION ONLY, i.e. different math conversions that depend on a named source_key! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
+		gint table_num = 0;
 		//if ((!OBJ_GET(widget,"mhash")) && (!OBJ_GET(widget,"ahash")))
 		if ((!OBJ_GET(widget,"mhash")) && 
 				(!OBJ_GET(widget,"ahash")) &&
@@ -299,7 +299,6 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	gfloat lower = 0.0;
 	gfloat upper = 0.0;
 	gboolean fromecu_complex = FALSE;
-	gint table_num = -1;
 	GHashTable *mhash = NULL;
 	GHashTable *ahash = NULL;
 	GHashTable *lhash = NULL;
@@ -380,6 +379,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	/* MULTI EXPRESSION ONLY! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
+		gint table_num = -1;
 		sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 		//if ((!OBJ_GET(widget,"mhash")) && (!OBJ_GET(widget,"ahash")))
 		if ((!OBJ_GET(widget,"mhash")) && 

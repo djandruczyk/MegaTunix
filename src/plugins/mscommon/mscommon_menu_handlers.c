@@ -319,7 +319,6 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 	Firmware_Details *firmware;
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
-	gint t;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
@@ -334,7 +333,7 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 		glade_xml_signal_autoconnect(xml);
 		store = gtk_list_store_new(2,G_TYPE_STRING,G_TYPE_INT);
 
-		for (t=0;t<firmware->total_tables;t++)
+		for (gint t=0;t<firmware->total_tables;t++)
 		{
 			if (firmware->table_params[t]->is_spark)
 			{
@@ -376,7 +375,6 @@ G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdo
 {
 	gdouble slope1, slope2, result;
 	gdouble ratio;
-	gint negative = 0;
 
 	/* prevent extrapolation */
 	if (offset <= slope1_a) return slope2_a;
@@ -386,11 +384,9 @@ G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdo
 	slope1 = slope1_b - slope1_a;
 
 	if (slope2_a > slope2_b)
-	{
 		slope2 = slope2_a - slope2_b;
-		negative = 1;
-	}
-	else slope2 = slope2_b - slope2_a;
+	else 
+		slope2 = slope2_b - slope2_a;
 
 	ratio = (gdouble) offset / slope1;
 	result = ((gdouble)slope2_a * (1-ratio) + (gdouble)slope2_b * ratio);
@@ -409,8 +405,6 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 {
 	static GtkWidget *window = NULL;
 	static Firmware_Details *firmware = NULL;
-	gint page = 0;
-	gint offset = 0;
 	GtkWidget *item = NULL;
 	GtkWidget *partner = NULL;
 	GladeXML *main_xml = NULL;
@@ -432,6 +426,8 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 
 	if (!GTK_IS_WIDGET(window))
 	{
+		gint page = 0;
+		gint offset = 0;
 		xml = glade_xml_new(main_xml->filename,"trigger_offset_window",NULL);
 		window = glade_xml_get_widget(xml,"trigger_offset_window");
 		glade_xml_signal_autoconnect(xml);

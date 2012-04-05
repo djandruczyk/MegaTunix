@@ -39,8 +39,6 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 {
 	GdkPixmap *pixmap = NULL;
 	GdkPixmap *pmap = NULL;
-	gint w = 0;
-	gint h = 0;
 	GtkAllocation allocation;
 	GdkWindow *window = gtk_widget_get_window(widget);
 
@@ -62,8 +60,8 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 		if (pmap)
 			g_object_unref(pmap);
 
-		w=allocation.width;
-		h=allocation.height;
+		gint w = allocation.width;
+		gint h = allocation.height;
 		pixmap=gdk_pixmap_new(window,
 				w,h,
 				gtk_widget_get_visual(widget)->depth);
