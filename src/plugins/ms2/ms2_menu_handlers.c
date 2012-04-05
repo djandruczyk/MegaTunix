@@ -478,7 +478,6 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		OBJ_SET(item,"page",GINT_TO_POINTER(0));
 		OBJ_SET(item,"offset",GINT_TO_POINTER(536));
 		OBJ_SET(item,"size",GINT_TO_POINTER(MTX_S16));
-		tmpf = g_new0(gfloat, 1);
 		ecu_widgets[0][536] = g_list_prepend(
 				ecu_widgets[0][536],
 				(gpointer)item);

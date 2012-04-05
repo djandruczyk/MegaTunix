@@ -357,21 +357,15 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	g_return_val_if_fail(ctrl_name,NULL);
 	g_return_val_if_fail(source,NULL);
 
-	rtt = (Rt_Text *)g_malloc0(sizeof(Rt_Text));
-
-	if (!rtv_map)
-	{
-		MTXDBG(CRITICAL,_("Bad things man, rtv_map is null!!\n"));
-		return NULL;
-	}
 
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
-		MTXDBG(CRITICAL,_("Bad things man, object doesn't exist for %s\n"),source);
+		MTXDBG(CRITICAL,_("ERROR, Object doesn't exist for datasource: %s\n"),source);
 		return NULL;
 	}
 
+	rtt = (Rt_Text *)g_malloc0(sizeof(Rt_Text));
 	rtt->show_prefix = show_prefix;
 	rtt->ctrl_name = g_strdup(ctrl_name);
 	rtt->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");

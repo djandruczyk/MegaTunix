@@ -950,9 +950,11 @@ G_MODULE_EXPORT GIOStatus process_vex_range(Vex_Import *vex, ImportParserArg arg
 	result = g_strdup(str_array[1]);	
 	g_strfreev(str_array);
 	str_array = g_strsplit(result, "]", 2);
+	g_free(result);
 	result = g_strdup(str_array[0]);	
 
 	num_bins = atoi(result);
+	g_free(result);
 	/* Allocate memory for array of values... :) */
 	switch(arg)
 	{

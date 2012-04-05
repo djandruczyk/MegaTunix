@@ -449,10 +449,9 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	ident = (TabIdent)(GINT)OBJ_GET(widget,"tab_ident");
 	name = glade_get_widget_name(widget);
 		
-	g_return_val_if_fail(rtv_map,NULL);
-	g_return_val_if_fail(source,NULL);
+	g_return_if_fail(rtv_map);
+	g_return_if_fail(source);
 
-	slider = (Rt_Slider *)g_malloc0(sizeof(Rt_Slider));
 
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 
@@ -486,6 +485,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 		MTXDBG(CRITICAL,_("ERROR! There is no datasource named \"%s\", Check config of widget %s\n"),source,(name == NULL ? "undefined":name));
 		return;
 	}
+	slider = (Rt_Slider *)g_malloc0(sizeof(Rt_Slider));
 	slider->ctrl_name = g_strdup((name == NULL ? "undefined":name));
 	slider->tbl = -1;
 	slider->table_num = -1;
