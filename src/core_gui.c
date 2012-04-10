@@ -113,8 +113,8 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 
 	x = (GINT)DATA_GET(global_data,"main_x_origin");
 	y = (GINT)DATA_GET(global_data,"main_y_origin");
-	w = (GINT)DATA_GET(global_data,"width");
-	h = (GINT)DATA_GET(global_data,"height");
+	w = (GINT)DATA_GET(global_data,"main_width");
+	h = (GINT)DATA_GET(global_data,"main_height");
 	tips_in_use = (GBOOLEAN)DATA_GET(global_data,"tips_in_use");
 	if (gtk_minor_version >= 14)
 	{
@@ -123,14 +123,14 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 		else
 			g_object_set(settings,"gtk-enable-tooltips",FALSE,NULL);
 	}
-	gtk_window_move((GtkWindow *)window, x, y);
 	gtk_widget_set_size_request(window,def_width,def_height);
-	gtk_window_resize(GTK_WINDOW(window),w,h);
 	gtk_window_set_title(GTK_WINDOW(window),"MegaTunix "MTX_VER_STRING"-"MTX_VER_SUFFIX);
 	finalize_core_gui(xml);
 
 	if (!args->hide_maingui)
 		gtk_widget_show_all(window);
+	gtk_window_move((GtkWindow *)window, x, y);
+	gtk_window_resize(GTK_WINDOW(window),w,h);
 
 	/* Tabs that should be hidden.... */
 	notebook = glade_xml_get_widget(xml,"toplevel_notebook");

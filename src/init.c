@@ -91,8 +91,8 @@ G_MODULE_EXPORT void init(void)
 	DATA_SET(global_data,"read_timeout",GINT_TO_POINTER(250));/* 250 ms */
 	DATA_SET(global_data,"status_width",GINT_TO_POINTER(130));
 	DATA_SET(global_data,"status_height",GINT_TO_POINTER(386));
-	DATA_SET(global_data,"width",GINT_TO_POINTER(800));
-	DATA_SET(global_data,"height",GINT_TO_POINTER(600));
+	DATA_SET(global_data,"main_width",GINT_TO_POINTER(800));
+	DATA_SET(global_data,"main_height",GINT_TO_POINTER(600));
 	DATA_SET(global_data,"main_x_origin",GINT_TO_POINTER(160));
 	DATA_SET(global_data,"main_y_origin",GINT_TO_POINTER(120));
 	DATA_SET(global_data,"rtslider_fps",GINT_TO_POINTER(25));
@@ -281,10 +281,10 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"rtt_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "rtt_y_origin", &tmpi))
 			DATA_SET(global_data,"rtt_y_origin",GINT_TO_POINTER(tmpi));
-		if (cfg_read_int(cfgfile, "Window", "width", &tmpi))
-			DATA_SET(global_data,"width",GINT_TO_POINTER(tmpi));
-		if (cfg_read_int(cfgfile, "Window", "height", &tmpi))
-			DATA_SET(global_data,"height",GINT_TO_POINTER(tmpi));
+		if (cfg_read_int(cfgfile, "Window", "main_width", &tmpi))
+			DATA_SET(global_data,"main_width",GINT_TO_POINTER(tmpi));
+		if (cfg_read_int(cfgfile, "Window", "main_height", &tmpi))
+			DATA_SET(global_data,"main_height",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "main_x_origin", &tmpi))
 			DATA_SET(global_data,"main_x_origin",GINT_TO_POINTER(tmpi));
 		if (cfg_read_int(cfgfile, "Window", "main_y_origin", &tmpi))
@@ -481,13 +481,11 @@ G_MODULE_EXPORT void save_config()
 		if (gtk_widget_get_visible(main_window))
 		{
 			gdk_drawable_get_size(gtk_widget_get_window(main_window), &tmp_width,&tmp_height);
-			cfg_write_int(cfgfile, "Window", "width", tmp_width);
-			cfg_write_int(cfgfile, "Window", "height", tmp_height);
+			cfg_write_int(cfgfile, "Window", "main_width", tmp_width);
+			cfg_write_int(cfgfile, "Window", "main_height", tmp_height);
 			gtk_window_get_position(GTK_WINDOW(main_window),&x,&y);
-			if (x > 0)
-				cfg_write_int(cfgfile, "Window", "main_x_origin", x);
-			if (y > 0)
-				cfg_write_int(cfgfile, "Window", "main_y_origin", y);
+			cfg_write_int(cfgfile, "Window", "main_x_origin", x);
+			cfg_write_int(cfgfile, "Window", "main_y_origin", y);
 		}
 		widget = lookup_widget("status_window");
 		if (widget)
@@ -499,10 +497,8 @@ G_MODULE_EXPORT void save_config()
 				cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
 				cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
-				if (x > 0)
-					cfg_write_int(cfgfile, "Window", "status_x_origin", x);
-				if (y > 0)
-					cfg_write_int(cfgfile, "Window", "status_y_origin", y);
+				cfg_write_int(cfgfile, "Window", "status_x_origin", x);
+				cfg_write_int(cfgfile, "Window", "status_y_origin", y);
 			}
 		}
 		widget = lookup_widget("rtt_window");
@@ -511,10 +507,8 @@ G_MODULE_EXPORT void save_config()
 			if ((GTK_IS_WIDGET(widget)) && (gtk_widget_get_visible(widget)))
 			{
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
-				if (x > 0)
-					cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
-				if (y > 0)
-					cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
+				cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
+				cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);
 			}
 		}
 		widget = lookup_widget("toplevel_notebook");
