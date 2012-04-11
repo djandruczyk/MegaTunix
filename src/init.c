@@ -380,6 +380,8 @@ G_MODULE_EXPORT void save_config()
 		project = DEFAULT_PROJECT;
 
 	filename = g_build_path(PSEP, HOME(), "mtx",project,"config", NULL);
+printf("Filename to save to is %s\n",filename);
+sleep(10);
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 		cfgfile = cfg_new();
@@ -568,6 +570,7 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 	const gchar *mtx = "mtx";
 	const gchar *project = NULL;
 	gint perms = 0;
+	gint res = 0;
 
 	project = (const gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
@@ -579,35 +582,57 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 	perms = (S_IRWXU | S_IRGRP | S_IROTH);
 #endif
 
+	printf("make_mtx_dirs!\n");
 	dirname = g_build_path(PSEP, HOME(), mtx, NULL);
-	g_mkdir(dirname, perms);
+	printf("making %s\n",dirname);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(), mtx,project, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(),mtx,project,BACKUP_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(),mtx,project,TABLE_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(),mtx,project,DATALOG_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(),mtx,project,GUI_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,GAUGES_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,DASHES_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR,PSEP,"Profiles", NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 
 #ifdef __WIN32__
@@ -622,23 +647,33 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 		while (NULL != (subdir = g_dir_read_name(dir)))
 		{
 			dirname = g_build_path(PSEP,HOME(),mtx,project,INTERROGATOR_DATA_DIR,"Profiles",subdir, NULL);
-			g_mkdir(dirname, perms);
+			res = g_mkdir_with_parents(dirname, perms);
+			if (res != 0)
+				MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 			cleanup(dirname);
 		}
 		g_dir_close(dir);
 	}
 
 	dirname = g_build_path(PSEP,HOME(),mtx,project,LOOKUPTABLES_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,REALTIME_MAPS_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,RTSLIDERS_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	dirname = g_build_path(PSEP,HOME(),mtx,project,RTSTATUS_DATA_DIR, NULL);
-	g_mkdir(dirname, perms);
+	res = g_mkdir_with_parents(dirname, perms);
+	if (res != 0)
+		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 	return;
 }

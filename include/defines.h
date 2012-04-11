@@ -44,10 +44,11 @@ extern "C" {
 #define DATALOG_DATA_DIR "Datalogs"
 #define TABLE_DATA_DIR "Tables"
 /* Windows specific for exporting symbols for glade... */
-#ifdef __WIN32__
+#ifdef __WIN32__ 
 #define DEFAULT_PORT "COM1"
 #define PSEP "\\"
-#define HOME g_get_current_dir
+//#define HOME g_get_current_dir
+#define HOME g_get_home_dir
 #else
 #define DEFAULT_PORT "/dev/ttyS0"
 #define PSEP "/"
