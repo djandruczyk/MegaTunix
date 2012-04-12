@@ -19,11 +19,14 @@ G_MODULE_EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer da
 	gchar * filename = NULL;
 	gint result = 0;
 	GError *error = NULL;
+	gchar *pathstub = NULL;
 
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tblock.ui",NULL),NULL);
+	pathstub = g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tblock.ui",NULL);
+	filename = get_file(NULL,pathstub,NULL);
+	g_free(pathstub);
 	if (filename)
 	{
 		tblocks = gtk_builder_new();

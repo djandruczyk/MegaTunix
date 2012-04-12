@@ -556,8 +556,11 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 	gint minor = 0;
 	gint i = 0;
 	gint j = 0;
+	gchar *pathstub = NULL;
 
-	filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"tests.cfg",NULL),NULL);
+	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"tests.cfg",NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
+	g_free(pathstub);
 	if (!filename)
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s not found!\n"),filename),FALSE,FALSE,TRUE);
@@ -653,6 +656,7 @@ G_MODULE_EXPORT void test_cleanup(gpointer data)
   */
 G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 {
+	extern gconstpointer *global_data;
 	gboolean retval = TRUE;
 	gint i = 0;
 	Detection_Test *test = NULL;
@@ -662,9 +666,11 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 	gchar ** filenames = NULL;
 	GArray *classes = NULL;
 	Firmware_Details *firmware = NULL;
-	extern gconstpointer *global_data;
+	gchar *pathstub = NULL;
 
-	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
+	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL);
+	filenames = get_files((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"prof",&classes);
+	g_free(pathstub);
 	if (!filenames)
 	{
 		MTXDBG(INTERROGATOR|CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));

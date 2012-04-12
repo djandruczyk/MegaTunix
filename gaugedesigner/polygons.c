@@ -27,11 +27,14 @@ G_MODULE_EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer data)
 	GHashTable *hash = NULL;
 	GError * error = NULL;
 	gint result = 0;
+	gchar *pathstub = NULL;
 
 	if ((!GTK_IS_WIDGET(gauge)) || poly_event_active)
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"polygon.ui",NULL),NULL);
+	pathstub = g_build_filename(GAUGEDESIGNER_GLADE_DIR,"polygon.ui",NULL);
+	filename = get_file(NULL,pathstub,NULL);
+	g_free(pathstub);
 	if (filename)
 	{
 		polygons = gtk_builder_new();

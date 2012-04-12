@@ -24,6 +24,7 @@ G_MODULE_EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer da
 	gint result = 0;
 	MtxGaugeFace *g = NULL;
 	GError *error = NULL;
+	gchar *pathstub = NULL;
 
 	if (GTK_IS_WIDGET(gauge))
 		g = MTX_GAUGE_FACE(gauge);
@@ -31,7 +32,9 @@ G_MODULE_EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer da
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tgroup.ui",NULL),NULL);
+	pathstub = g_build_filename(GAUGEDESIGNER_GLADE_DIR,"tgroup.ui",NULL);
+	filename = get_file(NULL,pathstub,NULL);
+	g_free(pathstub);
 	if (filename)
 	{
 		tgroups = gtk_builder_new();

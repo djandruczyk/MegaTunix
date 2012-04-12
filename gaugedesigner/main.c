@@ -22,10 +22,13 @@ int main (int argc, char ** argv )
 	gchar * tmpbuf = NULL;
 	gchar * dirname = NULL;
 	GError * error = NULL;
+	gchar *pathstub = NULL;
 
 	gtk_init (&argc, &argv);
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"main.ui",NULL),NULL);
+	pathstub = g_build_filename(GAUGEDESIGNER_GLADE_DIR,"main.ui",NULL);
+	filename = get_file(NULL,pathstub,NULL);
+	g_free(pathstub);
 	if (filename)
 	{
 		toplevel = gtk_builder_new();

@@ -78,6 +78,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	gboolean * hidden_list = NULL;
 	Firmware_Details *firmware = NULL;
 	CmdLineArgs *args = NULL;
+	gchar * pathstub = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
@@ -101,8 +102,13 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 	while (firmware->tab_list[i])
 	{
-		glade_file = get_file(g_build_path(PSEP,GUI_DATA_DIR,firmware->tab_list[i],NULL),g_strdup("glade"));
-		map_file = get_file(g_build_path(PSEP,GUI_DATA_DIR,firmware->tab_confs[i],NULL),g_strdup("datamap"));
+
+		pathstub = g_build_filename(GUI_DATA_DIR,firmware->tab_list[i],NULL);
+		glade_file = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"glade");
+		g_free(pathstub);
+		pathstub = g_build_filename(GUI_DATA_DIR,firmware->tab_confs[i],NULL);
+		map_file = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"datamap");
+		g_free(pathstub);
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("GLADE FILE: \"%s.glade\" NOT FOUND\n"),firmware->tab_list[i]);

@@ -80,8 +80,7 @@ load_elements(MtxGaugeFace *gauge, xmlNode * a_node)
  * Simple example to parse a file called "file.xml", 
  * walk down the DOM, and print the name of the 
  * xml elements nodes.
- * FILENAME passed is a SHORTname,  this function will use get_file to
- * get a full path on the system.
+ * FILENAME passed is the path to the file to load
  */
 
 void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, const gchar * filename)

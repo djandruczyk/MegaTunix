@@ -24,12 +24,15 @@ G_MODULE_EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer 
 	gchar * filename = NULL;
 	gint result = 0;
 	GError *error = NULL;
+	gchar *pathstub = NULL;
 
 
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
 
-	filename = get_file(g_build_filename(GAUGEDESIGNER_GLADE_DIR,"w_range.ui",NULL),NULL);
+	pathstub = g_build_filename(GAUGEDESIGNER_GLADE_DIR,"w_range.ui",NULL);
+	filename = get_file(NULL,pathstub,NULL);
+	g_free(pathstub);
 	if (filename)
 	{
 		warnings = gtk_builder_new();

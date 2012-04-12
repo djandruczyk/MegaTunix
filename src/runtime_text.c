@@ -56,6 +56,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	Firmware_Details *firmware = NULL;
+	gchar *pathstub = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -79,7 +80,9 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Text...")));
 
-	filename = get_file(g_build_path(PSEP,RTTEXT_DATA_DIR,firmware->rtt_map_file,NULL),g_strdup("xml"));
+	pathstub = g_build_filename(RTTEXT_DATA_DIR,firmware->rtt_map_file,NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"xml");
+	g_free(pathstub);
 	if (!filename)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->rtt_map_file);

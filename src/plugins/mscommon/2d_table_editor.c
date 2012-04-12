@@ -93,6 +93,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	gint rows = 0;
 	gint table_num = 0;
 	Firmware_Details *firmware = NULL;
+	gchar *pathstub = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
@@ -201,7 +202,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 			}
 			else
 				tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
-			filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
+			pathstub = g_build_filename(GAUGES_DATA_DIR,tmpbuf,NULL);
+			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
+			g_free(pathstub);
 			mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 			lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
 			mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);
@@ -445,6 +448,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	gint rows = 0;
 	gboolean embedded = FALSE;
 	Firmware_Details *firmware = NULL;
+	gchar *pathstub = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
@@ -546,7 +550,9 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		}
 		else
 			tmpbuf = g_strdelimit(firmware->te_params[table_num]->gauge,"\\",'/');
-		filename = get_file(g_strconcat(GAUGES_DATA_DIR,PSEP,tmpbuf,NULL),NULL);
+		pathstub = g_build_filename(GAUGES_DATA_DIR,tmpbuf,NULL);
+		filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
+		g_free(pathstub);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		lookup_current_value_f(firmware->te_params[table_num]->gauge_datasource, &tmpf);
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),tmpf);

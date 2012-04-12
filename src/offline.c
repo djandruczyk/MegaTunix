@@ -246,10 +246,11 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	guint i = 0;
 	gint result = 0;
 	extern gconstpointer *global_data;
+	gchar * pathstub = NULL;
 
-
-
-	filenames = get_files(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL),g_strdup("prof"),&classes);
+	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL);
+	filenames = get_files((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"prof",&classes);
+	g_free(pathstub);
 	if (!filenames)
 	{
 		MTXDBG(CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n"));

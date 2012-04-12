@@ -58,10 +58,13 @@ G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer use
 	gboolean status = FALSE;
 	gchar * filename = NULL;
 	gchar ** vector = NULL;
+	gchar *pathstub = NULL;
 	
 	vector = g_strsplit((gchar *)fname,".",2);
 
-	filename = get_file(g_strconcat(LOOKUPTABLES_DATA_DIR,PSEP,vector[0],NULL),g_strdup(vector[1]));
+	pathstub = g_build_filename(LOOKUPTABLES_DATA_DIR,vector[0],NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,vector[1]);
+	g_free(pathstub);
 	g_strfreev(vector);
 
 	if (filename)
@@ -616,7 +619,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 				0,"Personal", -1);
 		gtk_tree_store_set(combostore,&sys_iter,
 				0,"System", -1);
-		vector = get_files(g_strdup(LOOKUPTABLES_DATA_DIR),g_strdup("inc"),&classes);
+		vector = get_files((const gchar *)DATA_GET(global_data,"project_name"),LOOKUPTABLES_DATA_DIR,"inc",&classes);
 		for (guint i=0;i<g_strv_length(vector);i++)
 		{
 			tmpvector = g_strsplit(vector[i],PSEP,-1);

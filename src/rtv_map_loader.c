@@ -59,6 +59,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 	Rtv_Map *rtv_map = NULL;
+	gchar *pathstub = NULL;
 	Firmware_Details *firmware = NULL;
 
 	MTXDBG(RTMLOADER,_("Entered"));
@@ -71,7 +72,9 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Realtime Map...")));
-	filename = get_file(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL),g_strdup("xml"));
+	pathstub = g_build_filename(REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"xml");
+	g_free(pathstub);
 	if (!filename)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->rtv_map_file);

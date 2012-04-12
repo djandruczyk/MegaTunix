@@ -58,9 +58,11 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	ConfigFile *cfgfile = NULL;
 	guint i = 0;
 	gint result = 0;
+	gchar * pathstub = NULL;
 	extern gconstpointer *global_data;
 
-	dirs = get_dirs(g_build_path(PSEP,INTERROGATOR_DATA_DIR,"Profiles",NULL),&classes);
+	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",NULL);
+	dirs = get_dirs((const gchar *)DATA_GET(global_data,"project_name"),pathstub,&classes);
 	if (!dirs)
 	{
 		MTXDBG(CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n"));
@@ -69,10 +71,11 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	i = 0;
 	while (dirs[i])
 	{
-		tmpbuf = g_strdup_printf("%s%s%s",dirs[i],PSEP,"details.cfg");
+		tmpbuf = g_build_filename(dirs[i],"details.cfg",NULL);
 		cfgfile = cfg_open_file(tmpbuf);
 		if (!cfgfile)
 		{
+			printf("unable to open file %s\n",tmpbuf);
 			/*MTXDBG(CRITICAL,_("\"%s\" file missing!, was MegaTunix installed properly?\n"),tmpbuf);*/
 			i++;
 			g_free(tmpbuf);
@@ -239,7 +242,9 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		case GTK_RESPONSE_OK: /* Normal mode */
 jumpahead:
 			plugins_init();
-			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
+			pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL);
+			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
+			g_free(pathstub);
 			load_comm_xml(filename);
 			g_free(filename);
 			io_cmd("interrogation",NULL);
@@ -247,7 +252,9 @@ jumpahead:
 		default: /* Offline */
 jumpahead_offline:
 			plugins_init();
-			filename = get_file(g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL),NULL);
+			pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL);
+			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
+			g_free(pathstub);
 			load_comm_xml(filename);
 			g_free(filename);
 			g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);

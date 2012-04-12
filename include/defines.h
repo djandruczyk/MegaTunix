@@ -45,15 +45,15 @@ extern "C" {
 #define TABLE_DATA_DIR "Tables"
 /* Windows specific for exporting symbols for glade... */
 #ifdef __WIN32__ 
+#define MTXSYSDATA "c:\\program files\\megatunix\\dist"
 #define DEFAULT_PORT "COM1"
 #define PSEP "\\"
-//#define HOME g_get_current_dir
-#define HOME g_get_home_dir
 #else
+#define MTXSYSDATA DATA_DIR
 #define DEFAULT_PORT "/dev/ttyS0"
 #define PSEP "/"
-#define HOME g_get_home_dir
 #endif
+#define HOME g_get_home_dir
 
 #ifdef __64BIT__
 #define GINT gint)(gint64

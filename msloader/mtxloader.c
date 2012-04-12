@@ -48,7 +48,7 @@ int main (int argc, char *argv[])
         global_data = g_new0(gconstpointer, 1);
 
 	fname = g_build_filename(GUI_DATA_DIR,"mtxloader.glade",NULL);
-	filename = get_file(g_strdup(fname),NULL);
+	filename = get_file(NULL,fname,NULL);
 	if (!filename)
 	{
 		printf("ERROR! Could NOT locate %s\n",fname);

@@ -109,7 +109,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	GList *s_list = NULL;
 	guint i = 0;
 	GError *error = NULL;
-
+	gchar *file = NULL;
 	if (created)
 	{
 		window = GTK_WIDGET(gtk_builder_get_object(previews,"preview_window"));
@@ -118,7 +118,9 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-		filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"preview.ui",NULL),NULL);
+		file = g_build_filename(DASHDESIGNER_GLADE_DIR,"preview.ui",NULL);
+		filename = get_file(NULL,file,NULL);
+		g_free(file);
 		if (filename)
 		{
 			previews = gtk_builder_new();
@@ -139,7 +141,9 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 	}
 	else
 	{
-		filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"propeditor.ui",NULL),NULL);
+		file =  g_build_filename(DASHDESIGNER_GLADE_DIR,"propeditor.ui",NULL);
+		filename = get_file(NULL,file,NULL);
+		g_free(file);
 		if (filename)
 		{
 			properties = gtk_builder_new();
@@ -170,7 +174,7 @@ G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
 #else
 	path = g_build_path(PSEP,DATA_DIR,GAUGES_DATA_DIR,NULL);
 #endif
-	files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,NULL),g_strdup("xml"),&classes);
+	files = get_files(NULL,GAUGES_DATA_DIR,"xml",&classes);
 	i = 0;
 	if (files)
 	{
@@ -338,6 +342,7 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 	gchar *tmpbuf = NULL;
 	GList *p_list = NULL;
 	GList *s_list = NULL;
+	gchar *pathstub = NULL;
 
 
 	d_name = (gchar *)data;
@@ -345,7 +350,9 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 
 	g_return_if_fail(d_name);
 	g_return_if_fail(notebook);
-	files = get_files(g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,PSEP,NULL),g_strdup("xml"),&classes);
+	pathstub = g_strconcat(GAUGES_DATA_DIR,PSEP,d_name,NULL);
+	files = get_files(NULL,pathstub,"xml",&classes);
+	g_free(pathstub);
 	if (files)
 	{
 		i = 0;

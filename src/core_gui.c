@@ -73,7 +73,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	g_return_val_if_fail(args,FALSE);
 	fname = g_build_filename(GUI_DATA_DIR,"main.glade",NULL);
-	filename = get_file(g_strdup(fname),NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),fname,NULL);
 	if (!filename)
 	{
 		printf(_("ERROR! Could NOT locate file %s.\n - Did you forget to run \"sudo make install\" ?\n"),fname);

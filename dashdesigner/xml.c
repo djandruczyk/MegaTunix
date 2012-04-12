@@ -136,6 +136,7 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 	gint y_offset = 0;
 	gchar *xml_name = NULL;
 	gchar *datasource = NULL;
+	gchar *pathstub = NULL;
 	if (!node->children)
 	{
 		printf("ERROR, load_gauge, xml node is empty!!\n");
@@ -165,7 +166,9 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,x_offset,y_offset);
 		xml_name = g_strdelimit(xml_name,"\\",'/');
-		filename = get_file(g_build_filename(PSEP,GAUGES_DATA_DIR,xml_name,NULL),NULL);
+		pathstub = g_build_filename(GAUGES_DATA_DIR,xml_name,NULL);
+		filename = get_file(NULL,pathstub,NULL);
+		g_free(pathstub);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_set_usize(gauge,width,height);
 		g_free(filename);

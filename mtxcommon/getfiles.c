@@ -28,7 +28,7 @@
 
 /*!
  \brief get_files() returns a list of files located at the pathstub passed
- this function will first search starting from ~/.MegaTunix+pathstub and
+ this function will first search starting from ~/mtx/<PROJECT>/+pathstub and
  then in the system path of $PREFIX/share/MegaTunix/+pathstub, it'll return
  the list as a vector char array. (free with g_strfreev)
  \param input is the partial path to search for files
@@ -37,9 +37,8 @@
  search so we know which paths are system wide and which are personal
  \returns vector char array of filenames or NULL if none found
  */
-gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
+gchar ** get_files(const gchar *prj, const gchar *pathstub, const gchar * extension, GArray **classes)
 {
-	gchar *pathstub = NULL;
 	gchar *path = NULL;
 	gchar *parent = NULL;
 	gchar *list = NULL;
@@ -48,16 +47,15 @@ gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
 	gchar * tmpbuf = NULL;
 	FileClass tmp = PERSONAL;
 	GDir *dir = NULL;
+	const gchar *project = NULL;
 
-
-	if (!g_str_has_suffix(input, PSEP))
-		pathstub = g_strconcat(input,PSEP,NULL);
+	if (prj)
+		project = prj;
 	else
-		pathstub = g_strdup(input);
-	g_free(input);
-
-	/* Personal files first */
-	path = g_build_filename(get_home(), ".MegaTunix",pathstub,NULL);
+		project = DEFAULT_PROJECT;
+	
+	path = g_build_filename(HOME(),"mtx",project,pathstub,NULL);
+	printf("get_files, personal path is %s\n",path);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -75,10 +73,10 @@ gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
 
 		/* Create name of file and store temporarily */
 		if (!list)
-			list = g_strdup_printf("%s%s",path,filename);
+			list = g_build_filename(path,filename,NULL);
 		else
 		{
-			tmpbuf = g_strconcat(list,",",path,filename,NULL);
+			tmpbuf = g_strconcat(list,",",path,PSEP,filename,NULL);
 			g_free(list);
 			list = tmpbuf;
 		}
@@ -99,13 +97,10 @@ gchar ** get_files(gchar *input, gchar * extension, GArray **classes)
 	g_dir_close(dir);
 
 syspath:
-#ifdef __WIN32__
-	parent = g_build_path(PSEP,get_home(),"dist",NULL);
-#else
-	parent = g_strdup(DATA_DIR);
-#endif
+	parent = g_strdup(MTXSYSDATA);
 	path = g_build_filename(parent,pathstub,NULL);
 	g_free(parent);
+	printf("get_files, syspath is %s\n",path);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -123,10 +118,10 @@ syspath:
 
 		/* Create name of file and store temporarily */
 		if (!list)
-			list = g_strdup_printf("%s%s",path,filename);
+			list = g_build_filename(path,filename,NULL);
 		else
 		{
-			tmpbuf = g_strconcat(list,",",path,filename,NULL);
+			tmpbuf = g_strconcat(list,",",path,PSEP,filename,NULL);
 			g_free(list);
 			list = tmpbuf;
 		}
@@ -146,8 +141,6 @@ syspath:
 	g_dir_close(dir);
 
 finish:
-	g_free(pathstub);
-	g_free(extension);
 	if (!list)
 	{
 		/*dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);*/
@@ -161,7 +154,7 @@ finish:
 
 /*!
  \brief get_dirs() returns a list of dirs located at the pathstub passed
- this function will first search starting from ~/.MegaTunix+pathstub and
+ this function will first search starting from ~/mtx/<PROJECT>+pathstub and
  then in the system path of $PREFIX/share/MegaTunix/+pathstub, it'll return
  the list as a vector char array. (free with g_strfreev)
  \param input is the partial path to search for files
@@ -169,9 +162,8 @@ finish:
  search so we know which paths are system wide and which are personal
  \returns vector char array of dir names or NULL if none found
  */
-gchar ** get_dirs(gchar *input, GArray **classes)
+gchar ** get_dirs(const gchar *prj, const gchar *pathstub, GArray **classes)
 {
-	gchar *pathstub = NULL;
 	gchar *path = NULL;
 	gchar *dirpath = NULL;
 	gchar *parent = NULL;
@@ -181,16 +173,15 @@ gchar ** get_dirs(gchar *input, GArray **classes)
 	gchar * tmpbuf = NULL;
 	FileClass tmp = PERSONAL;
 	GDir *dir = NULL;
+	const gchar *project = NULL;
 
-
-	if (!g_str_has_suffix(input, PSEP))
-		pathstub = g_strconcat(input,PSEP,NULL);
+	if (prj)
+		project = prj;
 	else
-		pathstub = g_strdup(input);
-	g_free(input);
-
+		project = DEFAULT_PROJECT;
 	/* Personal files first */
-	path = g_build_filename(get_home(), ".MegaTunix",pathstub,NULL);
+	path = g_build_filename(HOME(),"mtx",project,pathstub,NULL);
+	printf("get_dirs, personal path is %s\n",path);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -207,17 +198,17 @@ gchar ** get_dirs(gchar *input, GArray **classes)
 			g_free(dirpath);
 			continue;
 		}
-		g_free(dirpath);
 
 		/* Create name of file and store temporarily */
 		if (!list)
-			list = g_strdup_printf("%s%s",path,filename);
+			list = g_strdup(dirpath);
 		else
 		{
-			tmpbuf = g_strconcat(list,",",path,filename,NULL);
+			tmpbuf = g_strconcat(list,",",dirpath,NULL);
 			g_free(list);
 			list = tmpbuf;
 		}
+		g_free(dirpath);
 		tmp = PERSONAL;
 		if (!*classes)
 		{
@@ -227,7 +218,6 @@ gchar ** get_dirs(gchar *input, GArray **classes)
 		else
 			g_array_append_val(*classes,tmp);
 
-
 		filename = (gchar *)g_dir_read_name(dir);
 
 	}
@@ -235,40 +225,40 @@ gchar ** get_dirs(gchar *input, GArray **classes)
 	g_dir_close(dir);
 
 syspath:
-#ifdef __WIN32__
-	parent = g_build_path(PSEP,get_home(),"dist",NULL);
-#else
-	parent = g_strdup(DATA_DIR);
-#endif
+	parent = g_strdup(MTXSYSDATA);
 	path = g_build_filename(parent,pathstub,NULL);
+	printf("get_dirs, system path is %s\n",path);
 	g_free(parent);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
+		printf("unable to open path %s\n",path);
 		g_free(path);
 		goto finish;
 	}
 	filename = (gchar *)g_dir_read_name(dir);
 	while (filename != NULL)
 	{
+		printf("Checking dir %s\n",filename);
 		dirpath = g_build_filename(path,filename,NULL);
 		if (!g_file_test(dirpath,G_FILE_TEST_IS_DIR))
 		{
+			printf("Not a dir...\n");
 			filename = (gchar *)g_dir_read_name(dir);
 			g_free(dirpath);
 			continue;
 		}
-		g_free(dirpath);
 
 		/* Create name of file and store temporarily */
 		if (!list)
-			list = g_strdup_printf("%s%s",path,filename);
+			list = g_strdup(dirpath);
 		else
 		{
-			tmpbuf = g_strconcat(list,",",path,filename,NULL);
+			tmpbuf = g_strconcat(list,",",dirpath,NULL);
 			g_free(list);
 			list = tmpbuf;
 		}
+		g_free(dirpath);
 		tmp = SYSTEM;
 		if (!*classes)
 		{
@@ -285,13 +275,14 @@ syspath:
 	g_dir_close(dir);
 
 finish:
-	g_free(pathstub);
 	if (!list)
 	{
 		/*dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);*/
+		printf("List was EMPTY!\n");
 		return NULL;
 	}
 	vector = g_strsplit(list,",",0);
+	printf("Returning list of %i dirs\n",g_strv_length(vector));
 	g_free(list);
 	return (vector);
 }
@@ -299,58 +290,46 @@ finish:
 
 /*!
  \brief get_file() gets a single file defnied by pathstub, first searching in
- ~/.MegaTunix+pathstub, and then in $PREFIX/share/MegaTunix/+pathstub,
+ ~/mtx/<PROJECT>+pathstub, and then in $PREFIX/share/MegaTunix/+pathstub,
  \param pathstub is the partial path to filename
  \param extension is the extension wanted..
  \returns filename if found or NULL if not found
  */
-gchar * get_file(gchar *pathstub,gchar *extension)
+gchar * get_file(const gchar *prj, const gchar *pathstub, const gchar *extension)
 {
 	gchar *filename = NULL;
-	gchar *dir = NULL;
-	gchar *ext = NULL;
 	gchar *file = NULL;
+	const gchar *project = NULL;
 	if (extension)
-		ext = g_strconcat(".",extension,NULL);
+		file = g_strconcat(pathstub,".",extension,NULL);
 	else
-		ext = g_strdup("");
+		file = g_strdup(pathstub);
 
-	file = g_strconcat(pathstub,ext,NULL);
+	if (prj)
+		project = prj;
+	else
+		project = DEFAULT_PROJECT;
 
-	g_free(ext);
-
-	filename = g_build_filename(get_home(), ".MegaTunix",file,NULL);
+	filename = g_build_filename(HOME(),"mtx",project,file,NULL);
+	printf("get_file, personal filename is %s\n",filename);
 	if (g_file_test(filename,(GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 	{
-		g_free(pathstub);
-		g_free(extension);
 		g_free(file);
 		return filename;
 	}
 	else 
 	{
 		g_free(filename);
-#ifdef __WIN32__
-		dir = g_build_path(PSEP,get_home(),"dist",NULL);
-#else
-		dir = g_strdup(DATA_DIR);
-#endif
-		filename = g_build_filename(dir,file,NULL);
+		filename = g_build_filename(MTXSYSDATA,file,NULL);
+		printf("get_file, system filename is %s\n",filename);
 
-		g_free(dir);
 		g_free(file);
 
 		if (g_file_test(filename,(GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
-		{
-			g_free(pathstub);
-			g_free(extension);
 			return filename;
-		}
 		else
 			g_free(filename);
 	}
-	g_free(pathstub);
-	g_free(extension);
 	return NULL;
 }
 
@@ -406,11 +385,7 @@ gchar * choose_file(MtxFileIO *data)
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),data->absolute_path);
 		else if (data->default_path)
 		{
-#ifdef __WIN32__	/* Disallows modifying distributed files */
-			path = g_build_path(PSEP,get_home(),"dist",data->default_path,NULL);
-#else
-			path = g_build_path(PSEP,DATA_DIR,data->default_path,NULL);
-#endif
+			path = g_build_filename(MTXSYSDATA,data->default_path,NULL);
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
 			g_free(path);
 		}
@@ -427,7 +402,7 @@ gchar * choose_file(MtxFileIO *data)
 		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
 
-		defdir = g_build_path(PSEP,get_home(), ".MegaTunix",data->default_path, NULL);
+		defdir = g_build_filename(HOME(),"mtx",data->project,data->default_path, NULL);
 		if (!g_file_test(defdir,G_FILE_TEST_IS_DIR))
 			g_mkdir(defdir,0755);
 		/* If filename passed check/adj path */
@@ -466,15 +441,10 @@ gchar * choose_file(MtxFileIO *data)
 		vector = g_strsplit(data->shortcut_folders,",",-1);
 		for (i=0;i<g_strv_length(vector);i++)
 		{
-			/* For differences in system path between win32/unix */
-#ifdef __WIN32__
-			path = g_build_path(PSEP,get_home(),"dist",vector[i],NULL);
-#else
-			path = g_build_path(PSEP,DATA_DIR,vector[i],NULL);
-#endif
+			path = g_build_filename(MTXSYSDATA,vector[i],NULL);
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),path,NULL);
 			g_free(path);
-			path = g_build_path(PSEP,get_home(),"mtx",data->project,vector[i],NULL);
+			path = g_build_filename(HOME(),"mtx",data->project,vector[i],NULL);
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),path,NULL);
 			g_free(path);
 		}
@@ -483,7 +453,7 @@ gchar * choose_file(MtxFileIO *data)
 	/* If default path switch to that place */
 	if ((data->external_path) && (!(data->default_path)))
 	{
-		path = g_build_path(PSEP,get_home(),"mtx",data->project,data->external_path,NULL);
+		path = g_build_filename(HOME(),"mtx",data->project,data->external_path,NULL);
 		if (!g_file_test(path,G_FILE_TEST_IS_DIR))
 			g_mkdir(path,0755);
 		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
@@ -646,30 +616,6 @@ void getfiles_errmsg(const gchar * text)
 			text);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
-}
-
-
-/*!
-  \brief gets the path of the home directory
-  \returns the path to the home directory
-  */
-gchar * get_home()
-{
-#ifdef __WIN32__
-	gchar *fullpath = NULL;
-	gchar *dir = NULL;
-	fullpath = g_find_program_in_path("megatunix.exe");
-	if (fullpath)
-	{
-		dir = g_path_get_dirname(fullpath);
-		g_free(fullpath);
-		return(dir);
-	}
-	else
-		return (g_get_current_dir());
-#else
-	return((gchar *)g_get_home_dir());
-#endif
 }
 
 

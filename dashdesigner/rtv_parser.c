@@ -17,7 +17,7 @@ void retrieve_rt_vars(void)
 	gint i = 0;
 	/*printf("retrieve rt_vars from mtx realtime maps\n");*/
 
-	files = get_files(g_build_path(PSEP,REALTIME_MAPS_DATA_DIR,NULL),g_strdup("xml"),&classes);
+	files = get_files(NULL,REALTIME_MAPS_DATA_DIR,"xml",&classes);
 	if (!files)
 		return;
 	while(files[i])

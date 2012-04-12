@@ -380,8 +380,6 @@ G_MODULE_EXPORT void save_config()
 		project = DEFAULT_PROJECT;
 
 	filename = g_build_path(PSEP, HOME(), "mtx",project,"config", NULL);
-printf("Filename to save to is %s\n",filename);
-sleep(10);
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
 		cfgfile = cfg_new();
@@ -582,9 +580,7 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 	perms = (S_IRWXU | S_IRGRP | S_IROTH);
 #endif
 
-	printf("make_mtx_dirs!\n");
 	dirname = g_build_path(PSEP, HOME(), mtx, NULL);
-	printf("making %s\n",dirname);
 	res = g_mkdir_with_parents(dirname, perms);
 	if (res != 0)
 		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
@@ -635,11 +631,7 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
 
-#ifdef __WIN32__
-	path = g_build_path(PSEP,(gchar *)get_home(),"dist",INTERROGATOR_DATA_DIR,"Profiles",NULL);
-#else
-	path = g_build_path(PSEP,DATA_DIR,INTERROGATOR_DATA_DIR,"Profiles",NULL);
-#endif
+	path = g_build_filename(MTXSYSDATA,INTERROGATOR_DATA_DIR,"Profiles",NULL);
 	dir = g_dir_open(path,0,NULL);
 	g_free(path);
 	if (dir)

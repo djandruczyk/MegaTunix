@@ -304,6 +304,8 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 	gint y_offset = 0;
 	gchar *xml_name = NULL;
 	gchar *datasource = NULL;
+	gchar *pathstub = NULL;
+
 	if (!node->children)
 	{
 		printf(_("ERROR, load_gauge, xml node is empty!!\n"));
@@ -333,7 +335,9 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,x_offset,y_offset);
 		xml_name = g_strdelimit(xml_name,"\\",'/');
-		filename = get_file(g_build_path(PSEP,GAUGES_DATA_DIR,xml_name,NULL),NULL);
+		pathstub = g_build_filename(GAUGES_DATA_DIR,xml_name,NULL);
+		filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
+		g_free(pathstub);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
 		gtk_widget_set_size_request(gauge,width,height);
 		g_free(filename);
@@ -1399,13 +1403,18 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *parent)
 	gchar * tmpbuf = NULL;
 	gint table_num = -1;
 	GList **tab_gauges = NULL;
+	gchar *pathstub = NULL;
 
 	tab_gauges = (GList **)DATA_GET(global_data,"tab_gauges");
 	gauge = mtx_gauge_face_new();
 	gtk_container_add(GTK_CONTAINER(parent),gauge);
 	xml_name = (gchar *)OBJ_GET(parent,"gaugexml");
 	if (xml_name)
-		filename = get_file(g_build_path(PSEP,GAUGES_DATA_DIR,xml_name,NULL),NULL);
+	{
+		pathstub = g_build_filename(GAUGES_DATA_DIR,xml_name,NULL);
+		filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
+		g_free(pathstub);
+	}
 	if (filename)
 	{
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),filename);
@@ -1644,7 +1653,7 @@ G_MODULE_EXPORT void print_dash_choices(gchar *project)
 		proj = DEFAULT_PROJECT;
 
 	/* Personal Path */
-	path = g_build_path(PSEP,get_home(),"mtx",proj,"Dashboards",NULL);
+	path = g_build_filename(HOME(),"mtx",proj,"Dashboards",NULL);
 	dir = g_dir_open(path,0,&err);
 	g_free(path);
 
@@ -1661,11 +1670,7 @@ G_MODULE_EXPORT void print_dash_choices(gchar *project)
 	g_dir_close(dir);
 
 	/* System Path */
-#ifdef __WIN32__
-	path = g_build_path(PSEP,get_home(),"dist","Dashboards",NULL);
-#else
-	path = g_build_path(PSEP,DATA_DIR,"Dashboards",NULL);
-#endif
+	path = g_build_filename(MTXSYSDATA,"Dashboards",NULL);
 	dir = g_dir_open(path,0,&err);
 	g_free(path);
 
@@ -1702,18 +1707,11 @@ G_MODULE_EXPORT gchar * validate_dash_choice(gchar * choice, gboolean *result)
 	if (!project)
 		project = DEFAULT_PROJECT;
 	/* Check personal path first */
-	path = g_build_path(PSEP,get_home(),"mtx",project,"Dashboards",filename,NULL);
+	path = g_build_filename(HOME(),"mtx",project,"Dashboards",filename,NULL);
 	if (g_file_test(path,G_FILE_TEST_IS_REGULAR))
 		found = TRUE;
 	else
-	{
-
-#ifdef __WIN32__
-		path = g_build_path(PSEP,get_home(),"dist","Dashboards",filename,NULL);
-#else
-		path = g_build_path(PSEP,DATA_DIR,"Dashboards",filename,NULL);
-#endif
-	}
+		path = g_build_filename(MTXSYSDATA,"Dashboards",filename,NULL);
 	if (g_file_test(path,G_FILE_TEST_IS_REGULAR))
 		found = TRUE;
 	g_free(filename);

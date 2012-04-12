@@ -55,6 +55,7 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 	xmlDoc * doc = NULL;
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
+	gchar *pathstub = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -82,7 +83,9 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 		rt_sliders = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 		DATA_SET_FULL(global_data,"rt_sliders",rt_sliders,g_hash_table_destroy);
 	}
-	filename = get_file(g_build_path(PSEP,RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL),g_strdup("xml"));
+	pathstub = g_build_filename(RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"xml");
+	g_free(pathstub);
 	LIBXML_TEST_VERSION
 		doc = xmlReadFile(filename, NULL, 0);
 	g_free(filename);
@@ -116,6 +119,7 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 	xmlDoc * doc = NULL;
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
+	gchar *pathstub = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -144,7 +148,9 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 		DATA_SET_FULL(global_data,"ww_sliders",ww_sliders,g_hash_table_destroy);
 	}
 
-	filename = get_file(g_build_path(PSEP,RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL),g_strdup("xml"));
+	pathstub = g_build_filename(RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"xml");
+	g_free(pathstub);
 	LIBXML_TEST_VERSION
 		doc = xmlReadFile(filename, NULL, 0);
 	g_free(filename);
@@ -262,6 +268,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	xmlNode *root_element = NULL;
 	gboolean res = FALSE;
 	GHashTable **ve3d_sliders;
+	gchar *pathstub = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -281,7 +288,9 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	if (!ve3d_sliders[table_num])
 		ve3d_sliders[table_num] = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,dealloc_slider);
 
-	filename = get_file(g_build_path(PSEP,RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL),g_strdup("xml"));
+	pathstub = g_build_filename(RTSLIDERS_DATA_DIR,firmware->sliders_map_file,NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"xml");
+	g_free(pathstub);
 	LIBXML_TEST_VERSION
 		doc = xmlReadFile(filename, NULL, 0);
 	g_free(filename);

@@ -16,10 +16,12 @@ int main (int argc, char ** argv )
 	gchar *tmpbuf = NULL;
 	gchar *dirname = NULL;
 	GError *error = NULL;
+	gchar *file = g_build_filename(DASHDESIGNER_GLADE_DIR,"main.ui",NULL);
 
 	gtk_init (&argc, &argv);
 
-	filename = get_file(g_build_filename(DASHDESIGNER_GLADE_DIR,"main.ui",NULL),NULL);
+	filename = get_file(NULL,file,NULL);
+	g_free(file);
 	if (filename)
 	{
 		toplevel = gtk_builder_new();

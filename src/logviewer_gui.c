@@ -1362,7 +1362,7 @@ G_MODULE_EXPORT void enable_playback_controls(gboolean state)
 		if (!GTK_IS_WIDGET(playback_controls_window))
 		{
 			fname = g_build_filename(GUI_DATA_DIR,"logviewer.glade",NULL);
-			filename = get_file(g_strdup(fname),NULL);
+			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),fname,NULL);
 			if (filename)
 			{
 				xml = glade_xml_new(filename, "logviewer_controls_window",NULL);

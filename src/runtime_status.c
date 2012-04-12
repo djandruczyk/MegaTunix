@@ -59,6 +59,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 	xmlNode *root_element = NULL;
 	GladeXML *main_xml;
 	Firmware_Details *firmware = NULL;
+	gchar *pathstub = NULL;
 	CmdLineArgs *args =  NULL;
 	
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
@@ -77,7 +78,9 @@ G_MODULE_EXPORT void load_status_pf(void)
 
 	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Status...")));
-	filename = get_file(g_build_path(PSEP,RTSTATUS_DATA_DIR,firmware->status_map_file,NULL),g_strdup("xml"));
+	pathstub = g_build_filename(RTSTATUS_DATA_DIR,firmware->status_map_file,NULL);
+	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"xml");
+	g_free(pathstub);
 	if (!filename)
 	{
 		MTXDBG(CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->status_map_file);

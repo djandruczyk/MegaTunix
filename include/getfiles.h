@@ -65,10 +65,9 @@ GtkFileChooserConfirmation confirm_overwrite_callback (GtkFileChooser *, gpointe
 #endif
 
 /* Prototypes */
-gchar * get_home(void);
-gchar ** get_dirs(gchar *, GArray **);
-gchar ** get_files(gchar *, gchar *, GArray **);
-gchar * get_file(gchar *, gchar *);
+gchar ** get_dirs(const gchar *, const gchar *, GArray **);
+gchar ** get_files(const gchar *, const gchar *, const gchar *, GArray **);
+gchar * get_file(const gchar *, const gchar *, const gchar *);
 gchar * choose_file(MtxFileIO *);
 void free_mtxfileio(MtxFileIO *);
 void getfiles_errmsg(const gchar * );
