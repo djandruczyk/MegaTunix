@@ -25,6 +25,7 @@
 #include <args.h>
 #include <config.h>
 #include <debugging.h>
+#include <errno.h>
 #include <glade/glade.h>
 #include <glib/gstdio.h>
 #include <getfiles.h>

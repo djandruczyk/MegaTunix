@@ -2726,25 +2726,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		if (ve_view->x_ignore_algorithm)
 			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
-		{
-			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-			{
-				if (hash_key)
-					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
-				else
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			else if (algorithm[ve_view->table_num] == MAF)
-			{
-				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
-				if(!multi)
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-		}
+		    multi = get_multi(ve_view->table_num,hash,hash_key);
 		if (!multi)
 			MTXDBG(CRITICAL|OPENGL,_("BUG! X multi is null!\n"));
 
@@ -2775,25 +2757,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		if (ve_view->y_ignore_algorithm)
 			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
-		{
-			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-			{
-				if (hash_key)
-					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
-				else
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			else if (algorithm[ve_view->table_num] == MAF)
-			{
-				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
-				if(!multi)
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-		}
+		    multi = get_multi(ve_view->table_num,hash,hash_key);
 		if (!multi)
 			MTXDBG(CRITICAL|OPENGL,_("BUG! Y multi is null!\n"));
 
@@ -2827,25 +2791,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		if (ve_view->z_ignore_algorithm)
 			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
-		{
-			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-			{
-				if (hash_key)
-					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
-				else
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			else if (algorithm[ve_view->table_num] == MAF)
-			{
-				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
-				if(!multi)
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-		}
+		    multi = get_multi(ve_view->table_num,hash,hash_key);
 		if (!multi)
 			MTXDBG(CRITICAL|OPENGL,_("BUG! Z multi is null!\n"));
 
@@ -3331,26 +3277,7 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 		if (ve_view->x_ignore_algorithm)
 			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
-		{
-			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-			{
-				if (hash_key)
-					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
-				else
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			else if (algorithm[ve_view->table_num] == MAF)
-			{
-				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
-				if(!multi)
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-		}
-
+			multi = get_multi(ve_view->table_num,hash,hash_key);
 		if (!multi)
 			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
 
@@ -3372,26 +3299,7 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 		if (ve_view->y_ignore_algorithm)
 			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
-		{
-			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-			{
-				if (hash_key)
-					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
-				else
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			else if (algorithm[ve_view->table_num] == MAF)
-			{
-				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
-				if(!multi)
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-		}
-
+			multi = get_multi(ve_view->table_num,hash,hash_key);
 		if (!multi)
 			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
 
@@ -3413,26 +3321,7 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 		if (ve_view->z_ignore_algorithm)
 			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
 		else
-		{
-			if (algorithm[ve_view->table_num] == SPEED_DENSITY)
-			{
-				if (hash_key)
-					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
-				else
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else if (algorithm[ve_view->table_num] == ALPHA_N)
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			else if (algorithm[ve_view->table_num] == MAF)
-			{
-				multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
-				if(!multi)
-					multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-			}
-			else
-				multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-		}
-
+			multi = get_multi(ve_view->table_num,hash,hash_key);
 		if (!multi)
 			MTXDBG(CRITICAL|OPENGL,_("BUG! multi is NULL!\n"));
 

@@ -24,26 +24,6 @@
 
 #include <gtk/gtk.h>
 
-typedef struct _TableExport TableExport;
-
-/* C compatible struct for data export  */
-struct _TableExport 
-{
-	gint x_len;
-	gint y_len;
-	gfloat *x_bins;
-	gfloat *y_bins;
-	gfloat *z_bins;
-	const gchar * x_label;
-	const gchar * y_label;
-	const gchar * z_label;
-	const gchar * x_unit;
-	const gchar * y_unit;
-	const gchar * z_unit;
-	const gchar * title;
-	const gchar * desc;
-};
-
 /* Prototypes */
 void import_single_table(gint);
 void export_single_table(gint);
@@ -52,7 +32,7 @@ void select_all_tables_for_export(void);
 void ecu_table_import(gint, gfloat *, gfloat *, gfloat *);
 gint * convert_toecu_bins(gint, gfloat *, Axis);
 gfloat * convert_fromecu_bins(gint, Axis);
-TableExport * ecu_table_export(gint);
+const gchar * get_table_suffix(gint, Axis);
 /* Prototypes */
 
 #endif

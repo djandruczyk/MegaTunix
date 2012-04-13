@@ -201,3 +201,41 @@ G_MODULE_EXPORT void free_multi_source(gpointer key, gpointer value, gpointer us
 		evaluator_destroy(multi->ul_eval);
 	cleanup(multi);
 }
+
+
+/*!
+  \brief Retrieves the multi object based on the table_nume, hash and 
+  hash key passed
+  \param table_num is the index for the algorithm array
+  \param hash  is hte hash table containing the multisource objects
+  \param hash_key is hte corresponding non-algorithmic key
+  \returns a pointer to the multi-source object
+  */
+MultiSource * get_multi(gint table_num,GHashTable *hash,const gchar *hash_key)
+{
+	extern gconstpointer *global_data;
+	gint * algorithm = NULL;
+	MultiSource *multi = NULL;
+	algorithm = (gint *)DATA_GET(global_data,"algorithm");
+	if (algorithm[table_num] == SPEED_DENSITY)
+	{
+		if (hash_key)
+			multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
+		else
+			multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
+	}
+	else if (algorithm[table_num] == ALPHA_N)
+		multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
+	else if (algorithm[table_num] == MAF)
+	{
+		multi = (MultiSource *)g_hash_table_lookup(hash,"AFM_VOLTS");
+		if(!multi)
+			multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
+	}
+	else
+		multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
+	if (!multi)
+		return NULL;
+	else
+		return multi;
+}

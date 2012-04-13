@@ -25,11 +25,13 @@
 #include <vector>
 extern "C" {
 #include <conversions.h>
+#include <debugging.h>
 #include <defines.h>
 #include <getfiles.h>
 #include <firmware.h>
 #include <gui_handlers.h>
 #include <gtk/gtk.h>
+#include <multi_expr_loader.h>
 #include <notifications.h>
 #include <plugin.h>
 #include <tableio.h>
@@ -358,32 +360,41 @@ G_MODULE_EXPORT void select_all_tables_for_export(void) {
 void export_table_to_yaml(gchar *filename, gint table_num)
 {
 	Firmware_Details *firmware = NULL;
-	TableExport *table = NULL;
+	gfloat *bins = NULL;
 	YAML::Emitter out;
 	ThreeDTable yaml_table;
+	const gchar *suffix = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
-	table = ecu_table_export(table_num);
-	yaml_table.title = table->title;
-	yaml_table.description = table->desc;
-	yaml_table.X.unit = table->x_unit;
-	yaml_table.X.label = table->x_label;
-	yaml_table.Y.unit = table->y_unit;
-	yaml_table.Y.label = table->y_label;
-	yaml_table.Z.unit = table->z_unit;
-	yaml_table.Z.label = table->z_label;
-	yaml_table.Z.rows = table->x_len;
-	yaml_table.Z.columns = table->y_len;
-	yaml_table.X.num_elements = table->x_len;
-	yaml_table.Y.num_elements = table->y_len;
-	for (unsigned i = 0;i<table->x_len;i++)
-		yaml_table.X.values.push_back(table->x_bins[i]);
-	for (unsigned i = 0;i<table->y_len;i++)
-		yaml_table.Y.values.push_back(table->y_bins[i]);
-	for (unsigned i = 0;i<( table->x_len * table->y_len);i++)
-		yaml_table.Z.values.push_back(table->z_bins[i]);
+	suffix = get_table_suffix(table_num,_X_);
+	yaml_table.X.label.assign(suffix);
+	yaml_table.X.unit.assign(suffix);
+	suffix = get_table_suffix(table_num,_Y_);
+	yaml_table.Y.label.assign(suffix);
+	yaml_table.Y.unit.assign(suffix);
+	suffix = get_table_suffix(table_num,_Z_);
+	yaml_table.Z.label.assign(suffix);
+	yaml_table.Z.unit.assign(suffix);
+	yaml_table.title.assign(firmware->table_params[table_num]->table_name);
+	yaml_table.description.assign(firmware->table_params[table_num]->table_name);
+	yaml_table.Z.rows = firmware->table_params[table_num]->x_bincount;
+	yaml_table.Z.columns = firmware->table_params[table_num]->y_bincount;
+	yaml_table.X.num_elements = firmware->table_params[table_num]->x_bincount;
+	yaml_table.Y.num_elements = firmware->table_params[table_num]->y_bincount;
+	bins = convert_fromecu_bins(table_num,_X_);
+	for (unsigned i = 0;i<yaml_table.X.num_elements;i++)
+		yaml_table.X.values.push_back(bins[i]);
+	g_free(bins);
+	bins = convert_fromecu_bins(table_num,_Y_);
+	for (unsigned i = 0;i<yaml_table.Y.num_elements;i++)
+		yaml_table.Y.values.push_back(bins[i]);
+	g_free(bins);
+	bins = convert_fromecu_bins(table_num,_Z_);
+	for (unsigned i = 0;i<(yaml_table.X.num_elements * yaml_table.Y.num_elements);i++)
+		yaml_table.Z.values.push_back(bins[i]);
+	g_free(bins);
 
 	std::ofstream output(filename);
 	out << yaml_table;
@@ -668,28 +679,75 @@ gfloat * convert_fromecu_bins(gint table_num, Axis a)
 }
 
 
-G_MODULE_EXPORT TableExport * ecu_table_export(gint table_num)
+const gchar *get_table_suffix(gint table_num, Axis a)
 {
-	TableExport *table = NULL;
 	Firmware_Details *firmware = NULL;
-	if (!firmware)
-		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
-	g_return_val_if_fail(firmware,NULL);
+	MultiSource *multi = NULL;
+	GHashTable * sources_hash = NULL;
+	GHashTable * hash = NULL;
+	const gchar * source_key = NULL;
+	const gchar * hash_key = NULL;
 
-	table = g_new0(TableExport, 1);
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+	g_return_val_if_fail(firmware,"");
+	g_return_val_if_fail(DATA_GET(global_data,"interrogated"),"");
+	g_return_val_if_fail(((table_num >= 0) && (table_num < firmware->total_tables)),"");
 
-	table->x_len = firmware->table_params[table_num]->x_bincount;
-	table->y_len = firmware->table_params[table_num]->y_bincount;
-	table->x_bins = convert_fromecu_bins(table_num,_X_);
-	table->y_bins = convert_fromecu_bins(table_num,_Y_);
-	table->z_bins = convert_fromecu_bins(table_num,_Z_);
-	table->x_label = firmware->table_params[table_num]->x_suffix;
-	table->y_label = firmware->table_params[table_num]->y_suffix;
-	table->z_label = firmware->table_params[table_num]->z_suffix;
-	table->x_unit = firmware->table_params[table_num]->x_suffix;
-	table->y_unit = firmware->table_params[table_num]->y_suffix;
-	table->z_unit = firmware->table_params[table_num]->z_suffix;
-	table->title = firmware->table_params[table_num]->table_name;
-	table->desc = firmware->table_params[table_num]->table_name;
-	return table;
+	sources_hash = (GHashTable *) DATA_GET(global_data,"sources_hash");
+	switch (a)
+	{
+		case _X_:
+			if (firmware->table_params[table_num]->x_multi_source)
+			{
+				source_key = firmware->table_params[table_num]->x_source_key;
+				hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
+				hash = firmware->table_params[table_num]->x_multi_hash;
+				if (firmware->table_params[table_num]->x_ignore_algorithm)
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
+				else
+					multi = get_multi(table_num,hash,hash_key);
+				if (!multi)
+					MTXDBG(CRITICAL,_("BUG! X multi is null!\n"));
+				return multi->suffix;
+			}
+			else 
+				return firmware->table_params[table_num]->x_suffix;
+			break;
+		case _Y_:
+			if (firmware->table_params[table_num]->y_multi_source)
+			{
+				source_key = firmware->table_params[table_num]->y_source_key;
+				hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
+				hash = firmware->table_params[table_num]->y_multi_hash;
+				if (firmware->table_params[table_num]->y_ignore_algorithm)
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
+				else
+					multi = get_multi(table_num,hash,hash_key);
+				if (!multi)
+					MTXDBG(CRITICAL,_("BUG! Y multi is null!\n"));
+				return multi->suffix;
+			}
+			else 
+				return firmware->table_params[table_num]->y_suffix;
+			break;
+		case _Z_:
+			if (firmware->table_params[table_num]->z_multi_source)
+			{
+				source_key = firmware->table_params[table_num]->z_source_key;
+				hash_key = (gchar *)g_hash_table_lookup(sources_hash,source_key);
+				hash = firmware->table_params[table_num]->z_multi_hash;
+				multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
+				if (firmware->table_params[table_num]->z_ignore_algorithm)
+					multi = (MultiSource *)g_hash_table_lookup(hash,hash_key);
+				else
+					multi = get_multi(table_num,hash,hash_key);
+				if (!multi)
+					MTXDBG(CRITICAL,_("BUG! Z multi is null!\n"));
+				return multi->suffix;
+			}
+			else 
+				return firmware->table_params[table_num]->z_suffix;
+			break;
+	}
 }
+
