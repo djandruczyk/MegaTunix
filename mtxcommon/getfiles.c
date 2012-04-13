@@ -55,7 +55,7 @@ gchar ** get_files(const gchar *prj, const gchar *pathstub, const gchar * extens
 		project = DEFAULT_PROJECT;
 	
 	path = g_build_filename(HOME(),"mtx",project,pathstub,NULL);
-	printf("get_files, personal path is %s\n",path);
+	/*printf("get_files, personal path is %s\n",path);*/
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -100,7 +100,7 @@ syspath:
 	parent = g_strdup(MTXSYSDATA);
 	path = g_build_filename(parent,pathstub,NULL);
 	g_free(parent);
-	printf("get_files, syspath is %s\n",path);
+	/*printf("get_files, syspath is %s\n",path);*/
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -181,7 +181,7 @@ gchar ** get_dirs(const gchar *prj, const gchar *pathstub, GArray **classes)
 		project = DEFAULT_PROJECT;
 	/* Personal files first */
 	path = g_build_filename(HOME(),"mtx",project,pathstub,NULL);
-	printf("get_dirs, personal path is %s\n",path);
+	/*printf("get_dirs, personal path is %s\n",path);*/
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
@@ -227,23 +227,23 @@ gchar ** get_dirs(const gchar *prj, const gchar *pathstub, GArray **classes)
 syspath:
 	parent = g_strdup(MTXSYSDATA);
 	path = g_build_filename(parent,pathstub,NULL);
-	printf("get_dirs, system path is %s\n",path);
+	/*printf("get_dirs, system path is %s\n",path);*/
 	g_free(parent);
 	dir = g_dir_open(path,0,NULL);
 	if (!dir)
 	{
-		printf("unable to open path %s\n",path);
+		/*printf("unable to open path %s\n",path);*/
 		g_free(path);
 		goto finish;
 	}
 	filename = (gchar *)g_dir_read_name(dir);
 	while (filename != NULL)
 	{
-		printf("Checking dir %s\n",filename);
+		/*printf("Checking dir %s\n",filename);*/
 		dirpath = g_build_filename(path,filename,NULL);
 		if (!g_file_test(dirpath,G_FILE_TEST_IS_DIR))
 		{
-			printf("Not a dir...\n");
+			/*printf("Not a dir...\n");*/
 			filename = (gchar *)g_dir_read_name(dir);
 			g_free(dirpath);
 			continue;
@@ -278,11 +278,11 @@ finish:
 	if (!list)
 	{
 		/*dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);*/
-		printf("List was EMPTY!\n");
+		/*printf("List was EMPTY!\n");*/
 		return NULL;
 	}
 	vector = g_strsplit(list,",",0);
-	printf("Returning list of %i dirs\n",g_strv_length(vector));
+	/*printf("Returning list of %i dirs\n",g_strv_length(vector));*/
 	g_free(list);
 	return (vector);
 }
@@ -311,7 +311,7 @@ gchar * get_file(const gchar *prj, const gchar *pathstub, const gchar *extension
 		project = DEFAULT_PROJECT;
 
 	filename = g_build_filename(HOME(),"mtx",project,file,NULL);
-	printf("get_file, personal filename is %s\n",filename);
+	/*printf("get_file, personal filename is %s\n",filename);*/
 	if (g_file_test(filename,(GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 	{
 		g_free(file);
@@ -321,7 +321,7 @@ gchar * get_file(const gchar *prj, const gchar *pathstub, const gchar *extension
 	{
 		g_free(filename);
 		filename = g_build_filename(MTXSYSDATA,file,NULL);
-		printf("get_file, system filename is %s\n",filename);
+		/*printf("get_file, system filename is %s\n",filename);*/
 
 		g_free(file);
 
