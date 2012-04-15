@@ -75,7 +75,6 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		cfgfile = cfg_open_file(tmpbuf);
 		if (!cfgfile)
 		{
-			printf("unable to open file %s\n",tmpbuf);
 			/*MTXDBG(CRITICAL,_("\"%s\" file missing!, was MegaTunix installed properly?\n"),tmpbuf);*/
 			i++;
 			g_free(tmpbuf);

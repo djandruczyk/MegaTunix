@@ -88,6 +88,10 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 
+	widget = lookup_widget("netaccess_table");
+	if (GTK_IS_WIDGET(widget))
+		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+
 	queue_function("kill_conn_warning");
 
 	if (!firmware)

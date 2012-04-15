@@ -428,6 +428,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_NETMODE));
 
 	widget = glade_xml_get_widget(xml,"netaccess_table");
+	register_widget("netaccess_table",widget);
 	if (DATA_GET(global_data,"network_mode"))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 
