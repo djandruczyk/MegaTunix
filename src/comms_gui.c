@@ -85,7 +85,7 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 		g_mutex_lock(statuscounts_mutex);
 		g_cond_signal(statuscounts_cond);
 		g_mutex_unlock(statuscounts_mutex);
-		return TRUE;
+		return FALSE;
 	}
 
 	gdk_threads_enter();

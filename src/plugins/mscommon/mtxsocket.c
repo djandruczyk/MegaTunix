@@ -88,7 +88,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(global_data,"ascii_socket",mtxsock,g_free);
+		DATA_SET(global_data,"ascii_socket",mtxsock);
 		fail1 = FALSE;
 	}
 	else
@@ -108,7 +108,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(global_data,"binary_socket",mtxsock,g_free);
+		DATA_SET(global_data,"binary_socket",mtxsock);
 		fail2 = FALSE;
 	}
 	else
@@ -128,7 +128,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
-		DATA_SET_FULL(global_data,"control_socket",mtxsock,g_free);
+		DATA_SET(global_data,"control_socket",mtxsock);
 		fail3 = FALSE;
 	}
 	else
@@ -143,6 +143,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 				NULL,/* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
+		DATA_SET(global_data,"notify_slaves_id",GINT_TO_POINTER(notify_slaves_id));
 }
 
 
@@ -1572,16 +1573,26 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 		g_time_val_add(&cur,1000000); /* 1000 ms timeout */
 		msg = (SlaveMessage *)g_async_queue_timed_pop(slave_msg_queue,&cur);
 
-		if (!slave_list) /* List not created yet.. */
-			continue;
-
 		if ((DATA_GET(global_data,"leaving")) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
 		{
 			/* drain queue and exit thread */
 			while (g_async_queue_try_pop(slave_msg_queue) != NULL)
 			{}
+			/* Deallocate and exit! */
+			if (slave_list)
+			{
+				for (gint i=0;i<slave_list->len;i++)
+				{
+					cli_data = (MtxSocketClient *)g_ptr_array_index(slave_list,i);
+					g_socket_close(cli_data->control_socket,NULL);
+					g_ptr_array_remove(slave_list,cli_data);
+					dealloc_client_data(cli_data);
+				}
+			}
 			g_thread_exit(0);
 		}
+		if (!slave_list) /* List not created yet.. */
+			continue;
 		if (!msg) /* Null message)*/
 			continue;
 

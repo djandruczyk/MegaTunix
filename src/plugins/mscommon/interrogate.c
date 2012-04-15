@@ -1198,7 +1198,6 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"tests.cfg",NULL);
 	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
 	g_free(pathstub);
-	printf("Ecu tests file is %s\n",filename);
 	if (!filename)
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s not found!\n"),filename),FALSE,FALSE,TRUE);
