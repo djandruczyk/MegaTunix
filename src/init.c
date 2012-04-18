@@ -581,6 +581,9 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 	perms = (S_IRWXU | S_IRGRP | S_IROTH);
 #endif
 
+	dirname = g_build_path(PSEP, HOME(), ".local/share", NULL);
+	g_mkdir_with_parents(dirname, perms);
+	cleanup(dirname);
 	dirname = g_build_path(PSEP, HOME(), mtx, NULL);
 	res = g_mkdir_with_parents(dirname, perms);
 	if (res != 0)
