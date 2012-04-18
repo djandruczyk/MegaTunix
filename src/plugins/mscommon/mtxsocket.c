@@ -66,8 +66,10 @@ GThread *notify_slaves_id = NULL;
 extern gconstpointer *global_data;
 
 /*!
- *\brief open_tcpip_sockets opens up the TCP sockets once ECU is
- interrogated.
+ *\brief open_tcpip_sockets opens up the TCP sockets to handle the connection
+ of slave isntances, Opens 3 ports, one for ASCII, one for binary, and the
+ third is the callback socket that clients connect to to get the changes
+ fed back made by the master or other slave instances.
  */
 G_MODULE_EXPORT void open_tcpip_sockets(void)
 {
@@ -851,7 +853,6 @@ close_binary2:
 			default:
 				printf("case not handled in state machine, BUG!\n");
 				continue;
-
 		}
 	}
 	return NULL;
@@ -1423,7 +1424,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 				network_is_open = TRUE;
 				thread_update_logbar_f("comms_view","info",g_strdup_printf(_("Comms Test Success!, Opening Control Socket\n")),FALSE,FALSE);
 				open_control_socket(host,MTX_SOCKET_CONTROL_PORT);
-				cleanup_f(vector);
+				g_free(vector);
 				break;
 			}
 			else
@@ -1431,7 +1432,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 				thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Comms Test failed, closing port\n")),FALSE,FALSE);
 				close_network();
 				close_control_socket();
-				cleanup_f(vector);
+				g_free(vector);
 				g_usleep(200000); /* Sleep 200ms */
 				continue;
 			}
@@ -1569,10 +1570,6 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
 	while(TRUE) /* endless loop */
 	{
-		g_get_current_time(&cur);
-		g_time_val_add(&cur,1000000); /* 1000 ms timeout */
-		msg = (SlaveMessage *)g_async_queue_timed_pop(slave_msg_queue,&cur);
-
 		if ((DATA_GET(global_data,"leaving")) || (!(GBOOLEAN)DATA_GET(global_data,"network_access")))
 		{
 			/* drain queue and exit thread */
@@ -1591,6 +1588,9 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 			}
 			g_thread_exit(0);
 		}
+		g_get_current_time(&cur);
+		g_time_val_add(&cur,100000); /* 100 ms timeout */
+		msg = (SlaveMessage *)g_async_queue_timed_pop(slave_msg_queue,&cur);
 		if (!slave_list) /* List not created yet.. */
 			continue;
 		if (!msg) /* Null message)*/
@@ -2080,15 +2080,15 @@ G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 	/*printf("dealloc_client_data\n");*/
 	if (client)
 	{
-		cleanup_f (client->ip);
+		g_free(client->ip);
 
 		if (client->ecu_data)
 		{
 			for (gint i=0;i<firmware->total_pages;i++)
-				cleanup_f (client->ecu_data[i]);
-			cleanup_f(client->ecu_data);
+				g_free (client->ecu_data[i]);
+			g_free(client->ecu_data);
 		}
-		cleanup_f(client);
+		g_free(client);
 	}
 }
 
