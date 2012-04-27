@@ -349,6 +349,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 			watch->count = newval;
 			for (i=0;i<watch->num_vars;i++)
 			{
+				//printf("newval is %i, index %i, last_index %i\n",newval,index,watch->last_index);
 				watch->hist_vals[i] = g_renew(gfloat,watch->hist_vals[i],newval);
 				if (watch->varnames[i])
 					lookup_previous_n_values(watch->varnames[i], newval, watch->hist_vals[i]);

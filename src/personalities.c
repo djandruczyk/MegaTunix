@@ -63,6 +63,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 
 	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",NULL);
 	dirs = get_dirs((const gchar *)DATA_GET(global_data,"project_name"),pathstub,&classes);
+	g_free(pathstub);
 	if (!dirs)
 	{
 		MTXDBG(CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n"));

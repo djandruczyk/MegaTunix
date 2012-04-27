@@ -808,10 +808,11 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GList *source_list = NULL;
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
-	GMutex *dash_mutex = NULL;
+	GMutex *mutex = NULL;
 	GMutex **ve3d_mutex = NULL;
 	CmdLineArgs *args = NULL;
 	GPtrArray *tabinfos = NULL;
+	GCond *cond = NULL;
 #ifdef DEBUG
 	gchar *tmpbuf = NULL;
 #endif
@@ -824,7 +825,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 	rtt_mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
-	dash_mutex = (GMutex *)DATA_GET(global_data,"dash_mutex");
 	toggle_group_list = (GList *)DATA_GET(global_data,"toggle_group_list");
 	source_list = (GList *)DATA_GET(global_data,"source_list");
 	tabinfos = (GPtrArray *)DATA_GET(global_data,"tabinfos");
@@ -995,8 +995,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		DATA_SET(global_data,"rtt_model",NULL);
 	}
 	g_mutex_unlock(rtt_mutex);
-	g_mutex_free(rtt_mutex);
-	g_mutex_free(dash_mutex);
 
 	/* Logviewer settings */
 	defaults = get_list("logviewer_defaults");
@@ -1005,15 +1003,104 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 	DATA_SET(global_data,"offline",NULL);
 	DATA_SET(global_data,"interrogated",NULL);
-	/* Free all global data and structures */
-	//	g_dataset_foreach(global_data,dataset_dealloc,NULL);
-	g_dataset_destroy(global_data);
-	cleanup(global_data);
-	/* Dynamic widgets master hash  */
 
+	/* Dynamic widgets master hash  */
 	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
 	if (dynamic_widgets)
 		g_hash_table_destroy(dynamic_widgets);
+
+	/* Condition variables */
+	cond = (GCond *)DATA_GET(global_data,"statuscounts_cond");
+	if (cond)
+	{
+		g_cond_free(cond);
+		DATA_SET(global_data,"statuscounts_cond", NULL);
+	}
+	cond = (GCond *)DATA_GET(global_data,"io_dispatch_cond");
+	if (cond)
+	{
+		g_cond_free(cond);
+		DATA_SET(global_data,"io_dispatch_cond", NULL);
+	}
+	cond = (GCond *)DATA_GET(global_data,"gui_dispatch_cond");
+	if (cond)
+	{
+		g_cond_free(cond);
+		DATA_SET(global_data,"gui_dispatch_cond", NULL);
+	}
+	cond = (GCond *)DATA_GET(global_data,"pf_dispatch_cond");
+	if (cond)
+	{
+		g_cond_free(cond);
+		DATA_SET(global_data,"pf_dispatch_cond", NULL);
+	}
+	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
+	if (cond)
+	{
+		g_cond_free(cond);
+		DATA_SET(global_data,"rtv_thread_cond", NULL);
+	}
+	/* Mutexes */
+	mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"serio_mutex", NULL);
+	}
+	mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"rtt_mutex", NULL);
+	}
+	mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"rtv_mutex", NULL);
+	}
+	mutex = (GMutex *)DATA_GET(global_data,"dash_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"dash_mutex", NULL);
+	}
+	mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"statuscounts_mutex", NULL);
+	}
+	mutex = (GMutex *)DATA_GET(global_data,"io_dispatch_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"io_dispatch_mutex", NULL);
+	}
+	mutex = (GMutex *)DATA_GET(global_data,"gui_dispatch_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"gui_dispatch_mutex", NULL);
+	}
+	mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"pf_dispatch_mutex", NULL);
+	}
+	mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
+	if (mutex)
+	{
+		g_mutex_free(mutex);
+		DATA_SET(global_data,"rtv_thread_mutex", NULL);
+	}
+
+	/* Free all global data and structures */
+	printf("Deallocing GLOBAL DATA\n");
+		g_dataset_foreach(global_data,dataset_dealloc,NULL);
+	//g_dataset_destroy(global_data);
+	cleanup(global_data);
 }
 
 
