@@ -1097,7 +1097,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	}
 
 	/* Free all global data and structures */
-	printf("Deallocing GLOBAL DATA\n");
+	/*printf("Deallocing GLOBAL DATA\n");*/
 		g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	//g_dataset_destroy(global_data);
 	cleanup(global_data);
