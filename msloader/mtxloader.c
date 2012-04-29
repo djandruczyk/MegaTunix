@@ -273,7 +273,7 @@ void load_defaults()
 	builder = (GtkBuilder *)DATA_GET(global_data,"builder");
 	g_return_if_fail(builder);
 
-	filename = g_strconcat(HOME(), PSEP,"mtx",PSEP,"config", NULL);
+	filename = g_build_filename(HOME(),"mtx","default","config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
@@ -312,7 +312,7 @@ void save_defaults()
 	ConfigFile *cfgfile;
 	gchar * filename = NULL;
 	gchar * tmpbuf = NULL;
-	filename = g_strconcat(HOME(), PSEP,"mtx",PSEP,"config", NULL);
+	filename = g_build_filename(HOME(),"mtx","default","config", NULL);
 	cfgfile = cfg_open_file(filename);
 	if (cfgfile)
 	{
