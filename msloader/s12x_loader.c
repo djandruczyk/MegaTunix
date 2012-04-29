@@ -105,6 +105,7 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	GTimeVal begin;
 	GTimeVal end;
 
+//	verify_writes = FALSE;  /* causes issues with FF80-FFFF */
 	total_bytes = 0;
 	flush_serial(port_fd, BOTH);
 	s19_length = lseek(file_fd,0,SEEK_END);
@@ -444,7 +445,7 @@ gboolean check_status(gint port_fd)
 gboolean sendPPAGE(gint port_fd, guint a, gboolean erasing)
 {
 	guchar c;
-	static guchar page = 0;
+	static guint page = 0;
 	guchar command [4];
 	gint res = 0;
 
@@ -670,21 +671,17 @@ gboolean send_S12(gint port_fd, guint count)
 		verify = (guchar *)malloc(dataSize + 1);
 		/* Calculate the checksum of the block */
 		checksum = extract_data(fileBuf[i]+4+addrSize, dataSize, checksum, thisRec);
-
 		/* Read the checksum from the .s19 */
 		recsum = extract_number(fileBuf[i]+4+addrSize+dataSize*2, 2);
 		/* Check that they match! */
 		difsum = ~(recsum + checksum);
 
-		if (difsum != 0) {
+		if (difsum != 0)
 			output(g_strdup_printf("Invalid checksum, found 0x%02x, expected %#04x\n", recsum,(guchar)~checksum),TRUE);
 
-		}
-
-		if (debug >= 3) {
+		if (debug >= 3)
 			if ((i%10) == 0)
 				output(g_strdup_printf("Sending record %d:%6x\n", i, addr),TRUE);
-		}
 		if (addr >= 0x8000 && addr <= 0xBFFF) addr -= 0x4000;
 
 		nBlocks = (dataSize - 1) / MAX_BLOCK + 1;
@@ -695,7 +692,7 @@ gboolean send_S12(gint port_fd, guint count)
 				nn = 0x8000 - addr;
 			}
 send_retry:
-
+		//	printf("Should send %i bytes to address 0x%.4x\n",nn,addr);
 			if (!send_block(port_fd,addr, thisRecPtr, nn))
 			{
 				output((gchar *)"FAILURE to even send block, write aborted with critical failure!\n",FALSE);
@@ -703,7 +700,7 @@ send_retry:
 				free(verify);
 				return FALSE;
 			}
-			if (verify_writes)
+			if ((verify_writes) && (!(addr >= 0xFF80) && (addr <= 0xFFFF))) 
 			{
 				readback_block(port_fd,addr, verify, nn);
 				if (memcmp(verify,thisRecPtr,nn) != 0)
