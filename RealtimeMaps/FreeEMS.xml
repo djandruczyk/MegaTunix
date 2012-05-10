@@ -309,7 +309,7 @@
 		<offset>44</offset>
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
-		<real_upper>200</real_upper>
+		<real_upper>400</real_upper>
 		<fromecu_mult>0.006103516</fromecu_mult>
 		<precision>2</precision>
 		<tooltip>"ETE" is the percentage correction for ETE (Engine Temperature Enrich) applied to the PW, 100 means no correction</tooltip>
