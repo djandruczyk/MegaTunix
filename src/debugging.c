@@ -67,16 +67,20 @@ G_MODULE_EXPORT void open_debug(void)
 	time_t *t = NULL;
 	gsize count = 0;
 	GError *error = NULL;
+	const gchar *project = NULL;
 
 	g_static_mutex_lock(&dbg_mutex);
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
+	project = (const gchar *)DATA_GET(global_data,"project_name");
+	if (!project)
+		project = DEFAULT_PROJECT;
 
 	if(!dbg_channel)
 	{
 		if (!args->dbglog)
-			filename = g_build_filename(HOME(), "MTXlog.txt",NULL);
+			filename = g_build_filename(HOME(), "mtx",project,"debug.log",NULL);
 		else
-			filename = g_build_filename(HOME(),args->dbglog,NULL);
+			filename = g_build_filename(HOME(),"mts",args->dbglog,NULL);
 		dbg_channel = g_io_channel_new_file(filename,"w",&error);
 		g_io_channel_set_encoding(dbg_channel,NULL,&error);
 		if (dbg_channel)
