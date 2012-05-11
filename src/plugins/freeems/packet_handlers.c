@@ -150,7 +150,8 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 				if(checksum != lastChar)
 				{
 					badChecksums++;
-					printf("Packet number %u ending of length %u at char number %u failed checksum! Received %u Calculated %u\n", packets, currentPacketLength, processed, lastChar, checksum);
+					MTXDBG(PACKETS,_("Packet number %u ending of length %u at char number %u failed checksum! Received %u Calculated %u\n"), packets, currentPacketLength, processed, lastChar, checksum);
+					mtxlog_packet(packetBuffer,currentPacketLength,FALSE);
 				}
 				else
 				{

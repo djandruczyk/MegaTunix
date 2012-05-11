@@ -226,6 +226,14 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	g_mutex_unlock(serio_mutex);
 
 	flush_serial(serial_params->fd, BOTH);
+	/* Hack to see if this gets around oddness in some USB->serial adapters
+	 * giving us old data from their hardware buffers
+	 */
+	g_usleep(1000);
+	flush_serial(serial_params->fd, BOTH);
+	g_usleep(1000);
+	flush_serial(serial_params->fd, BOTH);
+
 	g_mutex_lock(serio_mutex);
 
 	/* Sets up serial port for the modes we want to use. 
@@ -393,6 +401,13 @@ G_MODULE_EXPORT void setup_serial_params(void)
 #endif
 	g_mutex_unlock(serio_mutex);
 	flush_serial(serial_params->fd,BOTH);
+	/* Hack to see if this gets around oddness in some USB->serial adapters
+	 * giving us old data from their hardware buffers
+	 */
+	g_usleep(1000);
+	flush_serial(serial_params->fd, BOTH);
+	g_usleep(1000);
+	flush_serial(serial_params->fd, BOTH);
 	return;
 }
 
@@ -412,10 +427,12 @@ G_MODULE_EXPORT void close_serial(void)
 	if (serial_params->open == FALSE)
 		return;
 
-//	printf("close_serial\n");
-	g_mutex_lock(serio_mutex);
-
 	/*printf("Closing serial port\n");*/
+	flush_serial(serial_params->fd, BOTH);
+	g_usleep(1000);
+	flush_serial(serial_params->fd, BOTH);
+
+	g_mutex_lock(serio_mutex);
 #ifndef __WIN32__
 	/* OLD PIS stuff disabled
 	if (ioctl(serial_params->fd, TIOCSSERIAL, &serial_params->oldctl) != 0)
