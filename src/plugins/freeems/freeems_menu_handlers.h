@@ -32,6 +32,7 @@ extern "C" {
 
 /* Prototypes */
 void common_plugin_menu_setup(GladeXML *);
+void ecu_plugin_menu_setup(GladeXML *);
 /* Prototypes */
 
 #endif

@@ -40,35 +40,35 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 
 	/* View->Tabs Menu */
 	/*
-	menu = glade_xml_get_widget (xml, "goto_tab1_menu");
-	item = gtk_menu_item_new_with_mnemonic("_Boost Tables");
-	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
-	OBJ_SET(item,"target_tab",GINT_TO_POINTER(BOOSTTABLES_TAB));
-	if (!check_tab_existance_f(BOOSTTABLES_TAB))
-		gtk_widget_set_sensitive(item,FALSE);
-	else
-		gtk_widget_set_sensitive(item,TRUE);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+	   menu = glade_xml_get_widget (xml, "goto_tab1_menu");
+	   item = gtk_menu_item_new_with_mnemonic("_Boost Tables");
+	   g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
+	   OBJ_SET(item,"target_tab",GINT_TO_POINTER(BOOSTTABLES_TAB));
+	   if (!check_tab_existance_f(BOOSTTABLES_TAB))
+	   gtk_widget_set_sensitive(item,FALSE);
+	   else
+	   gtk_widget_set_sensitive(item,TRUE);
+	   gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
-	item = gtk_menu_item_new_with_mnemonic("_Staging Tables");
-	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
-	OBJ_SET(item,"target_tab",GINT_TO_POINTER(STAGING_TAB));
-	if (!check_tab_existance_f(STAGING_TAB))
-		gtk_widget_set_sensitive(item,FALSE);
-	else
-		gtk_widget_set_sensitive(item,TRUE);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+	   item = gtk_menu_item_new_with_mnemonic("_Staging Tables");
+	   g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
+	   OBJ_SET(item,"target_tab",GINT_TO_POINTER(STAGING_TAB));
+	   if (!check_tab_existance_f(STAGING_TAB))
+	   gtk_widget_set_sensitive(item,FALSE);
+	   else
+	   gtk_widget_set_sensitive(item,TRUE);
+	   gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 
-	item = gtk_menu_item_new_with_mnemonic("_Rotary Tables");
-	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
-	OBJ_SET(item,"target_tab",GINT_TO_POINTER(ROTARYTABLES_TAB));
-	if (!check_tab_existance_f(ROTARYTABLES_TAB))
-		gtk_widget_set_sensitive(item,FALSE);
-	else
-		gtk_widget_set_sensitive(item,TRUE);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show_all(menu);
-	*/
+	   item = gtk_menu_item_new_with_mnemonic("_Rotary Tables");
+	   g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(jump_to_tab_f),NULL);
+	   OBJ_SET(item,"target_tab",GINT_TO_POINTER(ROTARYTABLES_TAB));
+	   if (!check_tab_existance_f(ROTARYTABLES_TAB))
+	   gtk_widget_set_sensitive(item,FALSE);
+	   else
+	   gtk_widget_set_sensitive(item,TRUE);
+	   gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+	   gtk_widget_show_all(menu);
+	   */
 
 	/* View Menu */
 	menu = glade_xml_get_widget (xml, "view_menu_menu");
@@ -88,12 +88,12 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 
 	/* Tuning Menu */
 	/*
-	menu = glade_xml_get_widget (xml, "generate1_menu");
-	item = gtk_menu_item_new_with_mnemonic("_Ignition Map");
-	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_create_ignition_map_window),NULL);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show_all(menu);
-	*/
+	   menu = glade_xml_get_widget (xml, "generate1_menu");
+	   item = gtk_menu_item_new_with_mnemonic("_Ignition Map");
+	   g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_create_ignition_map_window),NULL);
+	   gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
+	   gtk_widget_show_all(menu);
+	   */
 
 	/* Tools Menu */
 	menu = glade_xml_get_widget (xml, "tools_menu_menu");
@@ -144,3 +144,11 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	return;
 }
 
+/*!
+ *\brief Handler to setup any ecu specific menu objects on the core Gui
+ *\param xml is a pointer to the core Gui xml
+ */
+G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
+{
+	/* Don't need to do anything yet */
+}
