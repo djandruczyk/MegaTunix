@@ -91,7 +91,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		g_mutex_lock(pf_dispatch_mutex);
 		g_cond_signal(pf_dispatch_cond);
 		g_mutex_unlock(pf_dispatch_mutex);
-		MTXDBG(DISPATCHER,_("Leaving!\n"));
+		MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
 		return TRUE;
 	}
 	if (!message->status)
@@ -158,9 +158,13 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 fast_exit:
 	gdk_threads_leave();
 	*/
+	gdk_threads_enter();
+	gdk_flush();
+	gdk_threads_leave();
 	g_mutex_lock(pf_dispatch_mutex);
 	g_cond_signal(pf_dispatch_cond);
 	g_mutex_unlock(pf_dispatch_mutex);
+	MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
 	return TRUE;
 }
 
@@ -216,7 +220,7 @@ trypop:
 	message = (Gui_Message *)g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
 	{
-		MTXDBG(DISPATCHER,_("no messages waiting, returning\n"));
+		MTXDBG(DISPATCHER,_("no messages waiting, signalling\n"));
 		g_mutex_lock(gui_dispatch_mutex);
 		g_cond_signal(gui_dispatch_cond);
 		g_mutex_unlock(gui_dispatch_mutex);
@@ -367,10 +371,13 @@ dealloc:
 		MTXDBG(DISPATCHER,_("trying to handle another message\n"));
 		goto trypop;
 	}
+	gdk_threads_enter();
+	gdk_flush();
+	gdk_threads_leave();
 	g_mutex_lock(gui_dispatch_mutex);
 	g_cond_signal(gui_dispatch_cond);
 	g_mutex_unlock(gui_dispatch_mutex);
-	MTXDBG(DISPATCHER,_("Leaving\n"));
+	MTXDBG(DISPATCHER,_("Leaving Gui Dispatcher\n"));
 	return TRUE;
 }
 
