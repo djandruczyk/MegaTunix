@@ -345,11 +345,12 @@ gchar * choose_file(MtxFileIO *data)
 {
 	GtkWidget *dialog = NULL;
 	GtkFileFilter *filter = NULL;
-	gchar * path = NULL;
-	gchar * defdir = NULL;
+	gchar *path = NULL;
+	gchar *defdir = NULL;
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
+	gchar *project = NULL;
 	gint response = 0;
 	gboolean res = FALSE;
 	guint i = 0;
@@ -363,8 +364,10 @@ gchar * choose_file(MtxFileIO *data)
 	   printf("default_path %s\n",data->default_path);
 	   printf("title %s\n",data->title);
 	   */
-	if (!data->project)
-		data->project = DEFAULT_PROJECT;
+	if (data->project)
+		project = data->project;
+	else
+		project = DEFAULT_PROJECT;
 
 	if (!data->title)
 		data->title = g_strdup("Open File");
