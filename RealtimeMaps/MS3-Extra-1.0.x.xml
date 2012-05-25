@@ -486,8 +486,8 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>fuelload</dlog_gui_name>
-		<dlog_field_name>Load</dlog_field_name>
-		<internal_names>fuelload</internal_names>
+		<dlog_field_name>FuelLoad</dlog_field_name>
+		<internal_names>fuelload,fuelload1</internal_names>
 		<offset>66</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -648,7 +648,7 @@
 	<derived>
 		<dlog_gui_name>ignload</dlog_gui_name>
 		<dlog_field_name>Ign Load</dlog_field_name>
-		<internal_names>ignload</internal_names>
+		<internal_names>ignload,ignload1</internal_names>
 		<offset>90</offset>
 		<size>_U16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
@@ -1871,7 +1871,7 @@
 		<tooltip>"AccDecEnrich" Is the current accel/decel enrichment</tooltip>
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
-		<fromecu_conv_expr>(accelEnrich/10) + (step(tpsden - 1) * tpsfuelcut) + ((1 - step(tpsden - 1) * 100)</fromecu_conv_expr>
+		<fromecu_conv_expr>(accelEnrich/10) + (step(tpsden - 1) * tpsfuelcut) + ((1 - step(tpsden - 1)) * 100)</fromecu_conv_expr>
 		<expr_types>_RAW_VAR_,_RAW_VAR_,_RAW_EMB_BIT_</expr_types>
 		<expr_symbols>accelEnrich,tpsfuelcut,tpsden</expr_symbols>
 		<accelEnrich_offset>42</accelEnrich_offset>
@@ -2138,14 +2138,14 @@
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>pwm_opt_load_a</dlog_gui_name>
-		<dlog_field_name>pwm_opt_load_aLambda8</dlog_field_name>
-		<internal_names>pwm_opt_load_alambda8</internal_names>
+		<dlog_gui_name>pwma_load</dlog_gui_name>
+		<dlog_field_name>pwma_load</dlog_field_name>
+		<internal_names>pwma_load</internal_names>
 		<offset>0</offset>
 		<size>_S16_</size>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>((map/10) * step(pwm_opt_load_a-1)) + (((map*10)/(barometer/10)) * step(pwm_opt_load_a-2)) + ((tps/10) * step(pwm_opt_load_a-3)) + ((mafmap/10) * step(pwm_opt_load_a-4)) + ((coolant/10) * step(pwm_opt_load_a-5)) + ((mat/10) *step(pwm_opt_load_a-7))</fromecu_conv_expr>
-		<expr_types>_RAW_VAR_,_RAW_VAR,_RAW_VAR,_RAW_VAR,_RAW_VAR_,_ECU_EMB_BIT</expr_types>
+		<expr_types>_RAW_VAR_,_RAW_VAR_,_RAW_VAR_,_RAW_VAR_,_RAW_VAR_,_ECU_EMB_BIT_</expr_types>
 		<expr_symbols>map,barometer,mafmap,coolant,mat,pwm_opt_load_a</expr_symbols>
 		<map_offset>18</map_offset>
 		<map_size>_S16_</map_size>
