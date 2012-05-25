@@ -136,3 +136,6 @@ As for the automake/autoconf warnings, in 99.995% of the cases it's safe
 to ignore those warnings.  You can thank the autofoo tool maintainers for
 those warnings.  Trying to make them go away tends to break other platforms.
 
+After installing via "make install" you need to run "sudo ldconfig" so the
+system linker can pickup the new shared libraries that megatunix installed
+
