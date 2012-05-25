@@ -8,6 +8,7 @@ rtslider_files = 	README \
 			MS1-Std.xml \
 			MS2-Extra.xml \
 			MS2-Std.xml \
+			MS3-Extra.xml \
 			PIS_V1_00.xml
 
 rtslider_DATA = $(rtslider_files)

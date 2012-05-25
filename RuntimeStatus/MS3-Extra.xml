@@ -5,7 +5,7 @@
 		<minor>0</minor>
 	</api>
 	<info>
-		<description>Runtime Text definitions for MS-2 Extra 3.2.1.</description>
+		<description>Runtime Text definitions for MS-3 Extra.</description>
 	</info>
 	<status>
 		<label>CONNECTED</label>
@@ -228,14 +228,5 @@
 		<source>status3</source>
 		<bitval>1</bitval>
 		<bitmask>2</bitmask>
-	</status>
-	<status>
-		<label>MAPSAmple</label>
-		<active_fg>red</active_fg>
-		<inactive_fg>dim grey</inactive_fg>
-		<bind_to_list>runtime_status</bind_to_list>
-		<source>status3</source>
-		<bitval>1</bitval>
-		<bitmask>4</bitmask>
 	</status>
 </runtimestatus>

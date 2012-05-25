@@ -1718,9 +1718,10 @@ y_raw_lower=0
 y_raw_upper=1000
 y_precision=1
 
+# Dummy page definition to allow mtx pags and TS internal pages to align
 [page_0]
 dl_by_default=FALSE
-phys_ecu_page=0
+phys_ecu_page=99
 length=0
 
 [page_1]
