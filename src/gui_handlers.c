@@ -2243,6 +2243,7 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 
 	container = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
         g_object_ref_sink(container);
+	g_return_if_fail(container);
 
 	/* Limit check */
 	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))

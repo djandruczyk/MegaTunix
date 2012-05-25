@@ -208,7 +208,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>100</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
-		<precision>0</precision>
+		<precision>1</precision>
 		<tooltip>"TPS (%)" is the throttle position reading in percent of full scale.</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
@@ -383,6 +383,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
 		<tooltip>"VE 1" is the current VE for injector channel 1.</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
@@ -395,6 +396,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
 		<tooltip>"VE 2" is the current VE for injector channel 1.</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
@@ -923,7 +925,7 @@
 		<dlog_field_name>user0</dlog_field_name>
 		<internal_names>user0</internal_names>
 		<offset>144</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<tooltip>"user0" is an undefined</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -932,7 +934,7 @@
 		<dlog_field_name>pwseq1</dlog_field_name>
 		<internal_names>pwseq1</internal_names>
 		<offset>146</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq1" is an undefined</tooltip>
@@ -943,7 +945,7 @@
 		<dlog_field_name>pwseq2</dlog_field_name>
 		<internal_names>pwseq2</internal_names>
 		<offset>148</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq2" is an undefined</tooltip>
@@ -954,7 +956,7 @@
 		<dlog_field_name>pwseq3</dlog_field_name>
 		<internal_names>pwseq3</internal_names>
 		<offset>150</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq3" is an undefined</tooltip>
@@ -965,7 +967,7 @@
 		<dlog_field_name>pwseq4</dlog_field_name>
 		<internal_names>pwseq4</internal_names>
 		<offset>152</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq4" is an undefined</tooltip>
@@ -976,7 +978,7 @@
 		<dlog_field_name>pwseq5</dlog_field_name>
 		<internal_names>pwseq5</internal_names>
 		<offset>154</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq5" is an undefined</tooltip>
@@ -987,7 +989,7 @@
 		<dlog_field_name>pwseq6</dlog_field_name>
 		<internal_names>pwseq6</internal_names>
 		<offset>156</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq6" is an undefined</tooltip>
@@ -998,7 +1000,7 @@
 		<dlog_field_name>pwseq7</dlog_field_name>
 		<internal_names>pwseq7</internal_names>
 		<offset>158</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq7" is an undefined</tooltip>
@@ -1009,7 +1011,7 @@
 		<dlog_field_name>pwseq8</dlog_field_name>
 		<internal_names>pwseq8</internal_names>
 		<offset>160</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq8" is an undefined</tooltip>
@@ -1020,7 +1022,7 @@
 		<dlog_field_name>pwseq9</dlog_field_name>
 		<internal_names>pwseq9</internal_names>
 		<offset>162</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq9" is an undefined</tooltip>
@@ -1031,7 +1033,7 @@
 		<dlog_field_name>pwseq10</dlog_field_name>
 		<internal_names>pwseq10</internal_names>
 		<offset>164</offset>
-		<size>_U16</size>
+		<size>_U16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"pwseq10" is an undefined</tooltip>
@@ -1568,6 +1570,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
 		<tooltip>"afr1" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
@@ -1909,17 +1912,17 @@
 		<expr_symbols>cyls,divider,alternate,raw_pw1,stroke,raw_rpm</expr_symbols>
 		<cyls_page>0</cyls_page>
 		<cyls_offset>0</cyls_offset>
-		<cyls_bitmask>15</cyls_bitmask>
+		<cyls_bitmask>31</cyls_bitmask>
 		<divider_page>0</divider_page>
-		<divider_offset>610</divider_offset>
+		<divider_offset>114</divider_offset>
 		<divider_size>_U08_</divider_size>
 		<alternate_page>0</alternate_page>
-		<alternate_offset>611</alternate_offset>
+		<alternate_offset>115</alternate_offset>
 		<alternate_bitmask>1</alternate_bitmask>
 		<raw_pw1_offset>2</raw_pw1_offset>
 		<raw_pw1_size>_U16_</raw_pw1_size>
 		<stroke_page>0</stroke_page>
-		<stroke_offset>617</stroke_offset>
+		<stroke_offset>119</stroke_offset>
 		<stroke_bitmask>1</stroke_bitmask>
 		<raw_rpm_offset>6</raw_rpm_offset>
 		<raw_rpm_size>_U16_</raw_rpm_size>
@@ -1940,17 +1943,17 @@
 		<expr_symbols>cyls,divider,alternate,raw_pw2,stroke,raw_rpm</expr_symbols>
 		<cyls_page>0</cyls_page>
 		<cyls_offset>0</cyls_offset>
-		<cyls_bitmask>15</cyls_bitmask>
+		<cyls_bitmask>31</cyls_bitmask>
 		<divider_page>0</divider_page>
-		<divider_offset>610</divider_offset>
+		<divider_offset>114</divider_offset>
 		<divider_size>_U08_</divider_size>
 		<alternate_page>0</alternate_page>
-		<alternate_offset>611</alternate_offset>
+		<alternate_offset>115</alternate_offset>
 		<alternate_bitmask>1</alternate_bitmask>
 		<raw_pw2_offset>4</raw_pw2_offset>
 		<raw_pw2_size>_U16_</raw_pw2_size>
 		<stroke_page>0</stroke_page>
-		<stroke_offset>617</stroke_offset>
+		<stroke_offset>119</stroke_offset>
 		<stroke_bitmask>1</stroke_bitmask>
 		<raw_rpm_offset>6</raw_rpm_offset>
 		<raw_rpm_size>_U16_</raw_rpm_size>

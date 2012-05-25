@@ -24,16 +24,16 @@
 		<datasource>tpspercent</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>fuelload</internal_name>
-		<datasource>fuelload</datasource>
+		<internal_name>fuelload1</internal_name>
+		<datasource>fuelload1</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>afrload</internal_name>
-		<datasource>afrload</datasource>
+		<internal_name>afrload1</internal_name>
+		<datasource>afrload1</datasource>
 	</rtt>
 	<rtt>
-		<internal_name>ignload</internal_name>
-		<datasource>ignload</datasource>
+		<internal_name>ignload1</internal_name>
+		<datasource>ignload1</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>cltdeg</internal_name>

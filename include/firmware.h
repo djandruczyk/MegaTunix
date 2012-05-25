@@ -42,10 +42,11 @@ typedef enum
 	MS2_STD            = 1<<5,
 	MS2_E              = 1<<6,
 	MS2_E_COMPMON      = 1<<7,
-	PIS                = 1<<8,
-	SECU_3             = 1<<9,
-	FREEEMS            = 1<<10,
-	JIMSTIM            = 1<<11
+	MS3			       = 1<<8,
+	PIS                = 1<<9,
+	SECU_3             = 1<<10,
+	FREEEMS            = 1<<11,
+	JIMSTIM            = 1<<12
 }Capability;
 
 

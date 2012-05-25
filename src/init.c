@@ -376,7 +376,7 @@ G_MODULE_EXPORT void save_config()
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_static_mutex_lock(&mutex);
-	project = (gchar *)DATA_GET(global_data,"project_name");
+	project = (const gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
 		project = DEFAULT_PROJECT;
 

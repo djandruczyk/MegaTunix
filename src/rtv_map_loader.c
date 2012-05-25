@@ -450,7 +450,7 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 				break;
 
 			default:
-				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("expr_type %i is UNDEFINED, this will cause a crash!!\n"),expr_types[i]);
+				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("expr_type %i (%s) is UNDEFINED, this will cause a crash!!\n"),expr_types[i],expr_symbols[i]);
 		}
 	}
 }

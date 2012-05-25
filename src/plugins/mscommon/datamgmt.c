@@ -53,8 +53,6 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 	g_return_val_if_fail(data,0);
 	g_return_val_if_fail(firmware,0);
 	g_return_val_if_fail(firmware->page_params,0);
-	g_return_val_if_fail(firmware->page_params[page],0);
-	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 
 	widget = (GtkWidget *)data;
 	container = (gconstpointer *)data;
@@ -72,6 +70,8 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 		offset = (GINT)DATA_GET(container,"offset");
 		size = (DataSize)(GINT)DATA_GET(container,"size");
 	}
+	g_return_val_if_fail(firmware->page_params[page],0);
+	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 
 	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
@@ -215,6 +215,7 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new_data)
 		else
 			value = (GINT)DATA_GET(container,"value");
 	}
+	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 
 	_set_sized_data(firmware->ecu_data[page],offset,size,value,firmware->bigendian);
 }
@@ -233,12 +234,12 @@ G_MODULE_EXPORT void ms_set_ecu_data(gint canID, gint page, gint offset, DataSiz
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
+	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!_set_sized_data)
 		get_symbol_f("_set_sized_data",(void **)&_set_sized_data);
 	g_return_if_fail(_set_sized_data);
+	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 
-
-	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	_set_sized_data(firmware->ecu_data[page],offset,size,new_data,firmware->bigendian);
 }
 
@@ -264,8 +265,6 @@ G_MODULE_EXPORT void store_new_block(gconstpointer *block)
 
 	g_return_if_fail(firmware);
 	g_return_if_fail(firmware->ecu_data);
-	g_return_if_fail(page <= firmware->total_pages);
-	g_return_if_fail(firmware->ecu_data[page]);
 
 	ecu_data = firmware->ecu_data;
 
@@ -275,6 +274,9 @@ G_MODULE_EXPORT void store_new_block(gconstpointer *block)
 	num_bytes = (GINT)DATA_GET(block,"num_bytes");
 	data = (guint8 *)DATA_GET(block,"data");
 
+	g_return_if_fail(page <= firmware->total_pages);
+	g_return_if_fail(firmware->ecu_data[page]);
+	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 	memcpy (ecu_data[page]+offset,data,num_bytes);
 }
 

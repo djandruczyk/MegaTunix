@@ -316,7 +316,9 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		{
 			expr = (gchar *)DATA_GET(object,"fromecu_conv_expr");
 			evaluator = evaluator_create(expr);
-			DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
+			// Memory leak
+			DATA_SET(object,"ul_evaluator",evaluator);
+			//DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 		}
 	}
 	else if (type == DOWNLOAD)
@@ -326,7 +328,9 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		{
 			expr = (gchar *)DATA_GET(object,"toecu_conv_expr");
 			evaluator = evaluator_create(expr);
-			DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
+			// Memory leak
+			DATA_SET(object,"dl_evaluator",evaluator);
+			//DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}
 	else
@@ -335,7 +339,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	}
 	if (!evaluator)
 	{
-		MTXDBG(COMPLEX_EXPR|CRITICAL,_("Evaluator missing for %s\n"),(name == NULL ? "undefined":name));
+		MTXDBG(COMPLEX_EXPR|CRITICAL,_("No Evaluator for %s, sym %s\n"),(name == NULL ? "undefined":name),symbols[0]);
 		exit (-1);
 	}
 
