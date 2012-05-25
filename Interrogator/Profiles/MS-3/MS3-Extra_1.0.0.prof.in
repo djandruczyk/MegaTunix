@@ -11,7 +11,7 @@ InterCharDelay=1
 SignatureVia=get_signature
 TextVerVia=ms2_get_textrev
 RT_Command=ms1_std_rtvars
-RT_total_bytes=169
+RT_total_bytes=296
 MS2_RT_Page=6
 Get_All_Command=ms2_read_all
 Read_Command=ms2_veconst
@@ -20,60 +20,62 @@ Burn_All_Command=ms2_burn_all
 Write_Command=ms2_generic_write
 Chunk_Write_Command=ms2_generic_write
 Table_Write_Command=ms2_table_reflash
-Capabilities=_MS2_,_MS2_E_,_MS2_E_COMPMON_
+Capabilities=_MS2_,_MS2_E_,_MS2_E_COMPMON_,_MS3_
 BigEndian=TRUE
 MultiPage=TRUE
 ChunkWriteSupport=TRUE
-CLT_Table_Page=6
-MAT_Table_Page=7
-EGO_Table_Page=8
-MAF_Table_Page=9
+CLT_Table_Page=15
+MAT_Table_Page=16
+EGO_Table_Page=17
+MAF_Table_Page=18
 TotalTables=22
 TotalTETables=29
-TotalPages=13
-ToothmonPage=10
-TrigmonPage=11
-CompositemonPage=12
+TotalPages=19
+ToothmonPage=10 # < likely to be incorrect
+TrigmonPage=11 # < likely to be incorrect
+CompositemonPage=12 # < likely to be incorrect
 
 [table_0]
-_table_name=VE-Table 1, MS2-Extra 12x12
+_table_name=VE-Table 1, MS3-Extra 16x16
 is_fuel=TRUE
-reqfuel_page=0
-reqfuel_offset=608
+reqfuel_page=1
+reqfuel_offset=112
 reqfuel_size=_U16_
-divider_page=0
-divider_offset=610
-alternate_page=0
-alternate_offset=611
-num_inj_page=0
-num_inj_offset=619
-num_inj_mask=15
-num_cyl_page=0
+divider_page=1
+divider_offset=114
+alternate_page=1
+alternate_offset=115
+num_inj_page=1
+num_inj_offset=121
+num_inj_mask=31
+num_cyl_page=1
 num_cyl_offset=0
-num_cyl_mask=15
-stroke_page=0
-stroke_offset=617
-stroke_mask=0
-x_page=4
-x_base_offset=768
-x_bincount=12
+num_cyl_mask=31
+stroke_page=1
+stroke_offset=119
+stroke_mask=1
+x_page=10
+x_base_offset=0
+x_bincount=16
 x_size=_U16_
 x_source=rpm
 _x_suffix=RPM
 x_precision=0
-y_page=4
-y_base_offset=864
-y_bincount=12
+y_page=10
+y_base_offset=96
+y_bincount=16
 y_size=_S16_
 y_source=fuelload
 _y_suffix=KPa
 y_fromecu_mult=0.1
 y_precision=1
-z_page=4
+z_page=7
 z_base_offset=0
-z_size=_U08_
+z_size=_U16_
 z_source=vecurr1
 z_suffix=VE %
+z_fromecu_mult=0.1
+z_precision=1
 z_precision=0
 
 [table_1]
@@ -1717,18 +1719,18 @@ y_raw_upper=1000
 y_precision=1
 
 [page_0]
+dl_by_default=FALSE
+phys_ecu_page=0
+length=0
+
+[page_1]
 dl_by_default=TRUE
 phys_ecu_page=4
 length=1024
 
-[page_1]
-dl_by_default=TRUE
-phys_ecu_page=5
-length=1024
-
 [page_2]
 dl_by_default=TRUE
-phys_ecu_page=10
+phys_ecu_page=5
 length=1024
 
 [page_3]
@@ -1743,42 +1745,72 @@ length=1024
 
 [page_5]
 dl_by_default=TRUE
-phys_ecu_page=11
+phys_ecu_page=10
 length=1024
 
 [page_6]
-dl_by_default=FALSE
-phys_ecu_page=0
-length=2048
+dl_by_default=TRUE
+phys_ecu_page=11
+length=1024
 
 [page_7]
-dl_by_default=FALSE
-phys_ecu_page=1
-length=2048
+dl_by_default=TRUE
+phys_ecu_page=12
+length=1024
 
 [page_8]
+dl_by_default=TRUE
+phys_ecu_page=13
+length=1024
+
+[page_9]
+dl_by_default=TRUE
+phys_ecu_page=18
+length=1024
+
+[page_10]
+dl_by_default=TRUE
+phys_ecu_page=19
+length=1024
+
+[page_11]
+dl_by_default=TRUE
+phys_ecu_page=21
+length=1024
+
+[page_12]
+dl_by_default=TRUE
+phys_ecu_page=22
+length=1024
+
+[page_13]
+dl_by_default=TRUE
+phys_ecu_page=23
+length=1024
+
+[page_14]
+dl_by_default=TRUE
+phys_ecu_page=24
+length=1024
+
+[page_15] # Sensor table on phys ecu page 0
+dl_by_default=FALSE
+phys_ecu_page=0
+length=1024
+
+[page_16] # Sensor table on phys ecu page 1
+dl_by_default=FALSE
+phys_ecu_page=1
+length=1024
+
+[page_17] # Sensor table on phys ecu page 2
 dl_by_default=FALSE
 phys_ecu_page=2
 length=1024
 
-[page_9]
+[page_18] # Sensor table on phys ecu page 3
 dl_by_default=FALSE
 phys_ecu_page=3
-length=2048
-
-[page_10]
-dl_by_default=FALSE
-phys_ecu_page=240
-length=1024
-
-[page_11]
-dl_by_default=FALSE
-phys_ecu_page=241
-length=1024
-
-[page_12]
-dl_by_default=FALSE
-phys_ecu_page=242
 length=1024
 
 [interrogation]

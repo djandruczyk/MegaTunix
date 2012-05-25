@@ -15,6 +15,7 @@ rtxml_files = 	\
 		MS2-Extra-3.0.3y.xml \
 		MS2-Extra-3.1.1_17.xml \
 		MS2-Extra-3.2.1.xml \
+		MS3-Extra-1.0.x.xml \
 		PIS_V1_00-firmware.xml 
 
 
