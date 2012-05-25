@@ -316,9 +316,10 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		{
 			expr = (gchar *)DATA_GET(object,"fromecu_conv_expr");
 			evaluator = evaluator_create(expr);
-			// Memory leak
-			DATA_SET(object,"ul_evaluator",evaluator);
-			//DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
+			if (!evaluator)
+				MTXDBG(COMPLEX_EXPR|CRITICAL,_("Unable to create evaluator for expression \"%s\", expect a crash\n"),expr);
+
+			DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 		}
 	}
 	else if (type == DOWNLOAD)
@@ -328,9 +329,9 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 		{
 			expr = (gchar *)DATA_GET(object,"toecu_conv_expr");
 			evaluator = evaluator_create(expr);
-			// Memory leak
-			DATA_SET(object,"dl_evaluator",evaluator);
-			//DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
+			if (!evaluator)
+				MTXDBG(COMPLEX_EXPR|CRITICAL,_("Unable to create evaluator for expression \"%s\", expect a crash\n"),expr);
+			DATA_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}
 	else
@@ -474,6 +475,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		if (!evaluator)
 		{
 			evaluator = evaluator_create((gchar *)OBJ_GET(object,"fromecu_conv_expr"));
+			if (!evaluator)
+				MTXDBG(COMPLEX_EXPR|CRITICAL,_("Unable to create evaluator for expression \"%s\", expect a crash\n"),(gchar *)OBJ_GET(object,"fromecu_conv_expr"));
 			OBJ_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
 		}
 	}
@@ -483,6 +486,8 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 		if (!evaluator)
 		{
 			evaluator = evaluator_create((gchar *)OBJ_GET(object,"toecu_conv_expr"));
+			if (!evaluator)
+				MTXDBG(COMPLEX_EXPR|CRITICAL,_("Unable to create evaluator for expression \"%s\", expect a crash\n"),(gchar *)OBJ_GET(object,"toecu_conv_expr"));
 			OBJ_SET_FULL(object,"dl_evaluator",evaluator,evaluator_destroy);
 		}
 	}
