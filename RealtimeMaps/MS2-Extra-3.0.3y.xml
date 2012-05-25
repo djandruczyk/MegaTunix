@@ -1086,7 +1086,7 @@
 		<tooltip>"AccDecEnrich" Is the current accel/decel enrichment</tooltip>
 		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
-		<fromecu_conv_expr>(accelEnrich/10) + (step(tpsden - 1) * step(1 - tpsden) * tpsfuelcut + (1 - step(tpsden - 1) * step(1 - tpsden)) * 100)</fromecu_conv_expr>
+		<fromecu_conv_expr>(accelEnrich/10) + (step(tpsden - 1) * tpsfuelcut) + ((1 - step(tpsden - 1)) * 100)</fromecu_conv_expr>
 		<expr_types>_RAW_VAR_,_RAW_VAR_,_RAW_EMB_BIT_</expr_types>
 		<expr_symbols>accelEnrich,tpsfuelcut,tpsden</expr_symbols>
 		<accelEnrich_offset>42</accelEnrich_offset>
