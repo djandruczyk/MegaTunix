@@ -3,7 +3,7 @@ major=1
 minor=10
 
 [interrogation_profile]
-name=MS3-Extra V1.0.x series
+name=MS3-Extra V1.0.0 series
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_
