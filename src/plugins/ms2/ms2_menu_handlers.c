@@ -112,7 +112,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 			g_object_set(item,"always-show-image",TRUE,NULL);
 		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(ms2_reboot),NULL);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-		gtk_widget_show_all(menu);
+		gtk_widget_show(menu);
 	}
 	gdk_threads_leave();
 	return;
@@ -220,7 +220,7 @@ G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget
 		OBJ_SET_FULL(item,"temp_label",g_strdup("Temperature(\302\260 K)"),g_free);
 		register_widget_f("thermister_kelvin_rbutton",item);
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
-		gtk_widget_show_all(GTK_WIDGET(window));
+		gtk_widget_show(GTK_WIDGET(window));
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >= 18
@@ -228,11 +228,11 @@ G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget
 #else
 		if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-			gtk_widget_hide_all(GTK_WIDGET(window));
+			gtk_widget_hide(GTK_WIDGET(window));
 		else
 		{
 			gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(chooser));
-			gtk_widget_show_all(GTK_WIDGET(window));
+			gtk_widget_show(GTK_WIDGET(window));
 		}
 	return TRUE;
 }
@@ -298,7 +298,7 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET(item,"precision",GINT_TO_POINTER(1));
 
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
-		gtk_widget_show_all(GTK_WIDGET(window));
+		gtk_widget_show(GTK_WIDGET(window));
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >= 18
@@ -306,9 +306,9 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 #else
 	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-		gtk_widget_hide_all(GTK_WIDGET(window));
+		gtk_widget_hide(GTK_WIDGET(window));
 	else
-		gtk_widget_show_all(GTK_WIDGET(window));
+		gtk_widget_show(GTK_WIDGET(window));
 	return TRUE;
 }
 
@@ -508,7 +508,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		bind_to_lists_f(item,"burners");
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		glade_xml_signal_autoconnect(xml);
-		gtk_widget_show_all(GTK_WIDGET(window));
+		gtk_widget_show(GTK_WIDGET(window));
 
 		return TRUE;
 	}
@@ -517,9 +517,9 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 #else
 		if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-			gtk_widget_hide_all(GTK_WIDGET(window));
+			gtk_widget_hide(GTK_WIDGET(window));
 		else
-			gtk_widget_show_all(GTK_WIDGET(window));
+			gtk_widget_show(GTK_WIDGET(window));
 	return TRUE;
 }
 
@@ -601,7 +601,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		OBJ_SET_FULL(item,"bind_to_list",g_strdup("burners"),g_free);
 		bind_to_lists_f(item,"burners");
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
-		gtk_widget_show_all(GTK_WIDGET(window));
+		gtk_widget_show(GTK_WIDGET(window));
 
 		return TRUE;
 	}
@@ -610,9 +610,9 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 #else
 		if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-			gtk_widget_hide_all(GTK_WIDGET(window));
+			gtk_widget_hide(GTK_WIDGET(window));
 		else
-			gtk_widget_show_all(GTK_WIDGET(window));
+			gtk_widget_show(GTK_WIDGET(window));
 	return TRUE;
 }
 
@@ -645,7 +645,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widget, gpointe
 
 	g_free(text);
 	gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
-	gtk_widget_show_all(window);
+	gtk_widget_show(window);
 
 
 	return TRUE;
@@ -793,7 +793,7 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 			OBJ_SET_FULL(item,"source",g_strdup("tpsADC"),g_free);
 		OBJ_SET_FULL(item,"dest_widget",g_strdup("tpsMax_entry"),g_free);
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
-		gtk_widget_show_all(GTK_WIDGET(window));
+		gtk_widget_show(GTK_WIDGET(window));
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >=18
@@ -801,9 +801,9 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 #else
 		if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-			gtk_widget_hide_all(GTK_WIDGET(window));
+			gtk_widget_hide(GTK_WIDGET(window));
 		else
-			gtk_widget_show_all(GTK_WIDGET(window));
+			gtk_widget_show(GTK_WIDGET(window));
 	return TRUE;
 }
 

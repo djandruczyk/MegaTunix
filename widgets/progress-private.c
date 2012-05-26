@@ -115,7 +115,6 @@ void mtx_progress_bar_real_update (GtkProgress *progress)
 
 	pbar = GTK_PROGRESS_BAR (progress);
 
-//	pbar->dirty = TRUE;
 	gtk_widget_queue_draw (GTK_WIDGET (progress));
 }
 
@@ -182,7 +181,6 @@ void mtx_progress_bar_paint (GtkProgress *progress)
 			mtx_progress_get_peak_percentage (GTK_PROGRESS (pbar));
 
 		mtx_progress_bar_paint_continuous (pbar, current, peak, orientation);
-//		pbar->dirty = FALSE;
 	}
 }
 
@@ -301,10 +299,8 @@ gboolean mtx_progress_bar_expose (GtkWidget *widget, GdkEventExpose *event)
 		{
 
 #if GTK_MINOR_VERSION >= 18
-//			if (gtk_widget_is_drawable (widget) && pbar->dirty)
 			if (gtk_widget_is_drawable (widget))
 #else
-//				if (GTK_WIDGET_DRAWABLE (widget) && pbar->dirty)
 				if (GTK_WIDGET_DRAWABLE (widget))
 #endif
 					mtx_progress_bar_paint (GTK_PROGRESS (pbar));

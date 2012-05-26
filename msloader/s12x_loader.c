@@ -105,7 +105,9 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	GTimeVal begin;
 	GTimeVal end;
 
-//	verify_writes = FALSE;  /* causes issues with FF80-FFFF */
+	/* causes issues with FF80-FFFF 
+	* verify_writes = FALSE;
+	*/
 	total_bytes = 0;
 	flush_serial(port_fd, BOTH);
 	s19_length = lseek(file_fd,0,SEEK_END);
@@ -692,7 +694,7 @@ gboolean send_S12(gint port_fd, guint count)
 				nn = 0x8000 - addr;
 			}
 send_retry:
-		//	printf("Should send %i bytes to address 0x%.4x\n",nn,addr);
+		/*	printf("Should send %i bytes to address 0x%.4x\n",nn,addr);*/
 			if (!send_block(port_fd,addr, thisRecPtr, nn))
 			{
 				output((gchar *)"FAILURE to even send block, write aborted with critical failure!\n",FALSE);

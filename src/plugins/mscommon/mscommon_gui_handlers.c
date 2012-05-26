@@ -1651,7 +1651,11 @@ G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTr
 {
 	gchar *choice = NULL;
 	gboolean valid = TRUE;
-	gchar * cur_text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(box));
+#if GTK_MINOR_VERSION < 24
+	const gchar * cur_text = gtk_combo_box_get_active_text(GTK_COMBO_BOX(box));
+#else
+	const gchar * cur_text = gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (box))));
+#endif
 	valid = gtk_tree_model_get_iter_first(model,iter);
 	while (valid)
 	{

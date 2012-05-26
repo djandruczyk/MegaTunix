@@ -129,7 +129,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	if (!xml_result)
 		gtk_widget_destroy(window);
 	else if (args->hide_rttext)
-		gtk_widget_hide_all(window);
+		gtk_widget_hide(window);
 	else
 		gtk_widget_show_all(window);
 

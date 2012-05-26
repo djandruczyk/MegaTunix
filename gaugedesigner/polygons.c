@@ -472,7 +472,6 @@ gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
 	num_points = (GINT)gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 
 	g_object_set(table,"n-rows",&rows,NULL);
-	//rows = ((GtkTable *)table)->nrows;
 
 	if (num_points == 0)
 		return TRUE;

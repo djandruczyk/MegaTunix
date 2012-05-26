@@ -162,7 +162,11 @@ G_MODULE_EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
 		gtk_list_store_set(store,&iter,COL_NAME,AFR_Tables[i].name,COL_SYMBOL,AFR_Tables[i].symbol,-1);
 	}
 	gtk_combo_box_set_model(GTK_COMBO_BOX(combo),GTK_TREE_MODEL(store));
+#if GTK_MINOR_VERSION < 24
 	gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(combo),0);
+#else
+	gtk_combo_box_set_entry_text_column(GTK_COMBO_BOX(combo),0);
+#endif
 
 	return TRUE;
 }

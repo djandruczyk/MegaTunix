@@ -1342,7 +1342,8 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 				gdk_cairo_set_source_color(cr,&white);
 		}
 		cairo_set_line_width(cr,2);
-		gdk_drawable_get_size(GDK_DRAWABLE(window),&w,&h);
+		w = gdk_window_get_width(window);
+		h = gdk_window_get_height(window);
 		cairo_rectangle(cr,1,1,w-2,h-2);
 		cairo_stroke(cr);
 		cairo_destroy(cr);

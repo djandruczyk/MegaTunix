@@ -69,7 +69,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	else
 		gtk_widget_set_sensitive(item,TRUE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show_all(menu);
+	gtk_widget_show(menu);
 
 	/* View Menu */
 	menu = glade_xml_get_widget (xml, "view_menu_menu");
@@ -85,14 +85,14 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	else
 		gtk_widget_set_sensitive(item,TRUE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show_all(menu);
+	gtk_widget_show(menu);
 
 	/* Tuning Menu */
 	menu = glade_xml_get_widget (xml, "generate1_menu");
 	item = gtk_menu_item_new_with_mnemonic("_Ignition Map");
 	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_create_ignition_map_window),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show_all(menu);
+	gtk_widget_show(menu);
 
 	/* Tools Menu */
 	menu = glade_xml_get_widget (xml, "tools_menu_menu");
@@ -103,7 +103,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 		g_object_set(item,"always-show-image",TRUE,NULL);
 	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_trigger_offset_window),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show_all(menu);
+	gtk_widget_show(menu);
 
 	if (get_symbol_f("ecu_plugin_menu_setup",(void **)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);
@@ -342,7 +342,11 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 			}
 		}
 		gtk_combo_box_set_model(GTK_COMBO_BOX(item),GTK_TREE_MODEL(store));
+#if GTK_MINOR_VERSION < 24
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(item),0);
+#else
+		gtk_combo_box_set_entry_text_column(GTK_COMBO_BOX(item),0);
+#endif
 
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
@@ -354,7 +358,7 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 #else
 	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-		gtk_widget_hide_all(GTK_WIDGET(window));
+		gtk_widget_hide(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
 	return TRUE;
@@ -498,7 +502,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 #else
 	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window)))
 #endif
-		gtk_widget_hide_all(GTK_WIDGET(window));
+		gtk_widget_hide(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
 

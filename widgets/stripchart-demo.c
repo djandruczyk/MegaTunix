@@ -112,7 +112,6 @@ gboolean update_stripchart(gpointer data)
 	hist_vals[2][0]+=2.125;
 	hist_vals[2][1]+=2.125;
 	hist_vals[2][2]+=2.125;
-	//mtx_stripchart_set_values(MTX_STRIPCHART(chart),vals);
 	mtx_stripchart_set_n_values(MTX_STRIPCHART(chart),3,hist_vals);
 /*	printf("This should scroll stripchart \n"); */
 
