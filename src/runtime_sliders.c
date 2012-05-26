@@ -190,13 +190,13 @@ G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *pre
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"api") == 0)
 				if (!xml_api_check(cur_node,RT_SLIDERS_MAJOR_API,RT_SLIDERS_MINOR_API))
 				{
 					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
 					return FALSE;
 				}
-			if (g_strcasecmp((gchar *)cur_node->name,prefix) == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,prefix) == 0)
 				load_rts(cur_node,hash,table_num,tab_id);
 		}
 		if (!load_rts_xml_elements(cur_node->children,prefix,hash,table_num,tab_id))
@@ -233,13 +233,13 @@ G_MODULE_EXPORT void load_rts(xmlNode *node, GHashTable *hash, gint table_num, T
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"slider_name") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"slider_name") == 0)
 				generic_xml_gchar_import(cur_node,&slider_name);
-			if (g_strcasecmp((gchar *)cur_node->name,"source") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"source") == 0)
 				generic_xml_gchar_import(cur_node,&source);
-			if (g_strcasecmp((gchar *)cur_node->name,"row") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"row") == 0)
 				generic_xml_gint_import(cur_node,&row);
-			if (g_strcasecmp((gchar *)cur_node->name,"table") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"table") == 0)
 				generic_xml_gint_import(cur_node,&table);
 		}
 		cur_node = cur_node->next;

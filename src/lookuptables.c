@@ -759,20 +759,20 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	gtk_tree_model_get_iter_from_string(model,&iter,path);
 	gtk_tree_model_get(model,&iter,INTERNAL_NAME_COL,&int_name,FILENAME_COL,&old,-1);
 	//printf("New text is %s, int name associated %s, filename %s\n",new_text,int_name,old);
-	if (g_strcasecmp(old,new_text) == 0) /* If no change, return */
+	if (g_ascii_strcasecmp(old,new_text) == 0) /* If no change, return */
 	{
 		g_free(int_name);
 		g_free(old);
 		return TRUE;
 	}
 
-	if (g_strcasecmp(new_text,"Personal") == 0)
+	if (g_ascii_strcasecmp(new_text,"Personal") == 0)
 	{
 		g_free(int_name);
 		g_free(old);
 		return TRUE;
 	}
-	if (g_strcasecmp(new_text,"System") == 0)
+	if (g_ascii_strcasecmp(new_text,"System") == 0)
 	{
 		g_free(int_name);
 		g_free(old);

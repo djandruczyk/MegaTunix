@@ -948,7 +948,7 @@ void set_combo_to_source(GtkWidget *combo, gchar * source)
 			gtk_tree_model_get(model,&iter,DATASOURCE_COL,&potential,-1);
 			if (!potential)
 				goto again;
-			//if (g_strcasecmp(potential,source) == 0)
+			//if (g_ascii_strcasecmp(potential,source) == 0)
 			if (g_strcmp0(potential,source) == 0)
 			{
 				gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo),&iter);

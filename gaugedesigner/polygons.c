@@ -116,22 +116,22 @@ gboolean new_poly_response(GtkDialog *dialog, gint response, gpointer user_data)
 			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(gtk_builder_get_object(polygons,"line_style_combobox")));
 			if (!tmpbuf)
 				poly->line_style = GDK_LINE_SOLID;
-			else if (g_strcasecmp(tmpbuf,"Solid") == 0)
+			else if (g_ascii_strcasecmp(tmpbuf,"Solid") == 0)
 				poly->line_style = GDK_LINE_SOLID;
-			else if (g_strcasecmp(tmpbuf,"On Off Dash") == 0)
+			else if (g_ascii_strcasecmp(tmpbuf,"On Off Dash") == 0)
 				poly->line_style = GDK_LINE_ON_OFF_DASH;
-			else if (g_strcasecmp(tmpbuf,"Double Dash") == 0)
+			else if (g_ascii_strcasecmp(tmpbuf,"Double Dash") == 0)
 				poly->line_style = GDK_LINE_DOUBLE_DASH;
 			if(tmpbuf)
 				g_free(tmpbuf);
 			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(gtk_builder_get_object(polygons,"join_style_combobox")));
 			if (!tmpbuf)
 				poly->line_style = (GdkLineStyle)GDK_JOIN_MITER;
-			else if (g_strcasecmp(tmpbuf,"Miter") == 0)
+			else if (g_ascii_strcasecmp(tmpbuf,"Miter") == 0)
 				poly->line_style = (GdkLineStyle)GDK_JOIN_MITER;
-			else if (g_strcasecmp(tmpbuf,"Round") == 0)
+			else if (g_ascii_strcasecmp(tmpbuf,"Round") == 0)
 				poly->line_style = (GdkLineStyle)GDK_JOIN_ROUND;
-			else if (g_strcasecmp(tmpbuf,"Bevel") == 0)
+			else if (g_ascii_strcasecmp(tmpbuf,"Bevel") == 0)
 				poly->line_style = (GdkLineStyle)GDK_JOIN_BEVEL;
 			if(tmpbuf)
 				g_free(tmpbuf);
@@ -139,7 +139,7 @@ gboolean new_poly_response(GtkDialog *dialog, gint response, gpointer user_data)
 			tmpbuf = gtk_combo_box_get_active_text(GTK_COMBO_BOX(gtk_builder_get_object(polygons,"poly_combobox")));
 			if (!tmpbuf)
 				tmpbuf = g_strdup("CIRCLE");
-			if (g_strcasecmp(tmpbuf,"CIRCLE") == 0)
+			if (g_ascii_strcasecmp(tmpbuf,"CIRCLE") == 0)
 			{
 				poly->type = MTX_CIRCLE;
 				data = g_new0(MtxCircle, 1);
@@ -148,7 +148,7 @@ gboolean new_poly_response(GtkDialog *dialog, gint response, gpointer user_data)
 				((MtxCircle *)data)->y = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(polygons,"circle_y_center_spin")));
 				((MtxCircle *)data)->radius = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(polygons,"circle_radius_spin")));
 			}
-			if (g_strcasecmp(tmpbuf,"ARC") == 0)
+			if (g_ascii_strcasecmp(tmpbuf,"ARC") == 0)
 			{
 				poly->type = MTX_ARC;
 				data = g_new0(MtxArc, 1);
@@ -160,7 +160,7 @@ gboolean new_poly_response(GtkDialog *dialog, gint response, gpointer user_data)
 				((MtxArc *)data)->start_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(polygons,"arc_start_spin")));
 				((MtxArc *)data)->sweep_angle = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(polygons,"arc_sweep_spin")));
 			}
-			if (g_strcasecmp(tmpbuf,"RECTANGLE") == 0)
+			if (g_ascii_strcasecmp(tmpbuf,"RECTANGLE") == 0)
 			{
 				poly->type = MTX_RECTANGLE;
 				data = g_new0(MtxRectangle, 1);
@@ -170,7 +170,7 @@ gboolean new_poly_response(GtkDialog *dialog, gint response, gpointer user_data)
 				((MtxRectangle *)data)->width = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(polygons,"rect_width_spin")));
 				((MtxRectangle *)data)->height = gtk_spin_button_get_value(GTK_SPIN_BUTTON(gtk_builder_get_object(polygons,"rect_height_spin")));
 			}
-			if (g_strcasecmp(tmpbuf,"GENERIC") == 0)
+			if (g_ascii_strcasecmp(tmpbuf,"GENERIC") == 0)
 			{
 				poly->type = MTX_GENPOLY;
 				data = g_new0(MtxGenPoly, 1);
@@ -420,22 +420,22 @@ gboolean polygon_type_changed_event(GtkWidget *widget, gpointer data)
 	gtk_widget_hide_all(circle_ctrls);
 	gtk_widget_hide_all(rect_ctrls);
 	gtk_widget_hide_all(generic_ctrls);
-	if (g_strcasecmp(up,"CIRCLE") == 0 )
+	if (g_ascii_strcasecmp(up,"CIRCLE") == 0 )
 	{
 		type = MTX_CIRCLE;
 		gtk_widget_show_all(circle_ctrls);
 	}
-	if (g_strcasecmp(up,"ARC") == 0 )
+	if (g_ascii_strcasecmp(up,"ARC") == 0 )
 	{
 		type = MTX_ARC;
 		gtk_widget_show_all(arc_ctrls);
 	}
-	if (g_strcasecmp(up,"RECTANGLE") == 0 )
+	if (g_ascii_strcasecmp(up,"RECTANGLE") == 0 )
 	{
 		type = MTX_RECTANGLE;
 		gtk_widget_show_all(rect_ctrls);
 	}
-	if (g_strcasecmp(up,"GENERIC") == 0 )
+	if (g_ascii_strcasecmp(up,"GENERIC") == 0 )
 	{
 		type = MTX_GENPOLY;
 		gtk_widget_show_all(generic_ctrls);

@@ -772,6 +772,7 @@ G_MODULE_EXPORT void draw_infotext(void)
 	gint height = 0;
 	gint max = 0;
 	Viewable_Value *v_value = NULL;
+	cairo_t *cr = NULL;
 	PangoLayout *layout;
 	GdkPixmap *pixmap = lv_data->pixmap;
 	GtkAllocation allocation;
@@ -780,11 +781,11 @@ G_MODULE_EXPORT void draw_infotext(void)
 
 	h = allocation.height;
 
-	gdk_draw_rectangle(pixmap,
-			gtk_widget_get_style(lv_data->darea)->black_gc,
-			TRUE, 0,0,
-			lv_data->info_width,h);
-
+	cr = gdk_cairo_create(pixmap);
+	cairo_set_source_rgb(cr,0.0,0.0,0.0);
+	cairo_rectangle(cr,0,0,lv_data->info_width,h);
+	cairo_fill(cr);
+	cairo_destroy(cr);
 
 	if (!lv_data->font_desc)
 	{
@@ -1303,7 +1304,7 @@ G_MODULE_EXPORT void set_default_lview_choices_state(void)
 				potential = (gchar *)DATA_GET(object,"lview_name");
 			else
 				potential = (gchar *)DATA_GET(object,"dlog_gui_name");
-			if (g_strcasecmp(name,potential) == 0)
+			if (g_ascii_strcasecmp(name,potential) == 0)
 
 				set_widget_active(GTK_WIDGET(widget),GINT_TO_POINTER(TRUE));
 		}

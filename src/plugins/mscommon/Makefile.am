@@ -5,6 +5,7 @@ INCLUDES = \
         -I$(top_srcdir)/widgets \
 	-I$(top_srcdir)/mtxmatheval \
         @GTK_CFLAGS@ \
+        @DEPRECATED_CFLAGS@ \
         @LIBXML2_CFLAGS@ \
 	@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@

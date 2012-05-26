@@ -18,6 +18,11 @@
   \author David Andruczyk
   */
 
+#ifdef GTK_DISABLE_SINGLE_INCLUDES
+#undef GTK_DISABLE_SINGLE_INCLUDES
+#endif
+
+
 #include <args.h>
 #include <binlogger.h>
 #include <core_gui.h>

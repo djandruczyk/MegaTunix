@@ -383,7 +383,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"serial_autodetect_cbutton");
 	register_widget("serial_autodetect_cbutton",widget);
 	OBJ_SET(widget,"handler",GINT_TO_POINTER(COMM_AUTODETECT));
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)DATA_GET(global_data,"autodetect_port"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)DATA_GET(global_data,"autodetect_port"));
 
 	/* Fill in comm port entry if in manual mode */
 	if (!(GBOOLEAN)DATA_GET(global_data,"autodetect_port"))
@@ -424,7 +424,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	button = glade_xml_get_widget(xml,"allow_net_checkbutton");
 	register_widget("allow_net_checkbutton",button);
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(global_data,"network_access"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),(GBOOLEAN)DATA_GET(global_data,"network_access"));
 	OBJ_SET(button,"handler",GINT_TO_POINTER(TOGGLE_NETMODE));
 
 	widget = glade_xml_get_widget(xml,"netaccess_table");

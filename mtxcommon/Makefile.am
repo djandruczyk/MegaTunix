@@ -1,6 +1,7 @@
 INCLUDES = \
         -I$(top_srcdir)/include \
         @GTK_CFLAGS@ \
+        @DEPRECATED_CFLAGS@ \
 	@LIBGLADE_CFLAGS@ \
 	@LIBXML2_CFLAGS@ \
         @MEGATUNIX_DEFINES@

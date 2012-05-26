@@ -39,6 +39,10 @@
   \author Ben Pierre
   */
 
+#ifdef GTK_DISABLE_SINGLE_INCLUDES
+#undef GTK_DISABLE_SINGLE_INCLUDES
+#endif
+
 #include <3d_vetable.h>
 #include <conversions.h>
 #include <dashboard.h>
@@ -661,7 +665,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_table_attach(GTK_TABLE(table),label,0,2,0,1,(GtkAttachOptions)0,(GtkAttachOptions)0,0,0);
 	/* Wireframe toggle */
 	button = gtk_radio_button_new_with_label(NULL,"Wireframe");
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),ve_view->wireframe);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),ve_view->wireframe);
 	OBJ_SET(button,"ve_view",ve_view);
 	gtk_table_attach(GTK_TABLE(table),button,0,1,1,2,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	g_signal_connect(G_OBJECT(button), "toggled",
@@ -691,7 +695,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	/* Prop Scale toggle */
 	button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(button),"Proportional");
 
-	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),!ve_view->fixed_scale);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),!ve_view->fixed_scale);
 	OBJ_SET(button,"ve_view",ve_view);
 	gtk_table_attach(GTK_TABLE(table),button,1,2,1,2,(GtkAttachOptions)(GTK_EXPAND|GTK_FILL),(GtkAttachOptions)0,0,0);
 	/* Opacity Slider */
@@ -1173,7 +1177,7 @@ G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 	pmap=gdk_pixmap_new(window,
 			allocation.width,
 			allocation.height,
-			gtk_widget_get_visual(widget)->depth);
+			-1);
 	cr = gdk_cairo_create (pmap);
 	cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
 	cairo_rectangle (cr,
@@ -3370,7 +3374,8 @@ void gl_create_font(GtkWidget *widget)
 		ve_view->font_created = TRUE;
 
 	// This call is deprecated so we'll have to fix it sometime.
-	ve_view->ft2_context = pango_ft2_get_context(72, 72);
+	//ve_view->ft2_context = pango_ft2_get_context(72, 72);
+	ve_view->ft2_context = gtk_widget_get_pango_context(widget);
 
 	gtk_widget_get_allocation(widget,&allocation);
 	min = MIN(allocation.width,allocation.height);

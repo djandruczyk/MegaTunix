@@ -598,7 +598,7 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 	static GTimeVal last;
 	static gfloat cumu = 0.0;
 
-	if (g_strcasecmp(handler_name,"hr_clock")==0)
+	if (g_ascii_strcasecmp(handler_name,"hr_clock")==0)
 	{
 		if (DATA_GET(global_data,"begin"))
 		{       

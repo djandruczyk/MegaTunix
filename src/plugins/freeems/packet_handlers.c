@@ -221,9 +221,13 @@ void *packet_handler(gpointer data)
 				g_cond_signal(cond);
                         g_thread_exit(0);
 		}
+#if GLIB_MINOR_VERSION < 31
 		g_get_current_time(&tval);
 		g_time_val_add(&tval,250000);
 		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
+#else
+		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+#endif
 		if (packet)
 			dispatch_packet_queues(packet);
 	}

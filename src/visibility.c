@@ -81,7 +81,7 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 		{
 			child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
 			button = gtk_check_button_new();
-			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),hidden_list[i]);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),hidden_list[i]);
 			g_signal_connect(G_OBJECT(button),"toggled",
 					G_CALLBACK(hide_tab),
 					GINT_TO_POINTER(i));

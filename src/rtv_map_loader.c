@@ -140,15 +140,15 @@ gboolean load_rtv_xml_elements(xmlNode *a_node, Rtv_Map *map)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"api") == 0)
 				if (!xml_api_check(cur_node,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API))
 				{
 					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
 					return FALSE;
 				}
-			if (g_strcasecmp((gchar *)cur_node->name,"realtime_map") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"realtime_map") == 0)
 				load_rtv_defaults(cur_node,map);
-			if (g_strcasecmp((gchar *)cur_node->name,"derived") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"derived") == 0)
 				load_derived_var(cur_node,map);
 		}
 		if (!load_rtv_xml_elements(cur_node->children,map))
@@ -174,9 +174,9 @@ void load_rtv_defaults(xmlNode *node, Rtv_Map *map)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"applicable_signatures") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"applicable_signatures") == 0)
 				generic_xml_gchar_import(cur_node,&map->applicable_signatures);
-			if (g_strcasecmp((gchar *)cur_node->name,"raw_list") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"raw_list") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				map->raw_list = parse_keys(tmpbuf,NULL,",");

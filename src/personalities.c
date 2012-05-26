@@ -93,14 +93,14 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			MTXDBG(CRITICAL,_("\"details.cfg\" baud string undefined!, was MegaTunix installed properly?\n"));
 		element->dirname = g_strdup(dirs[i]);
 		element->filename = g_path_get_basename(dirs[i]);
-		if (g_strcasecmp(element->filename,(gchar *)DATA_GET(global_data,"last_ecu_family")) == 0)
+		if (g_ascii_strcasecmp(element->filename,(gchar *)DATA_GET(global_data,"last_ecu_family")) == 0)
 			element->def = TRUE;
 		if ((DATA_GET(global_data,"cli_persona")) && (element->persona))
 		{
-			if (g_strcasecmp(element->persona, (gchar *)DATA_GET(global_data,"cli_persona")) == 0)
+			if (g_ascii_strcasecmp(element->persona, (gchar *)DATA_GET(global_data,"cli_persona")) == 0)
 			{
 				button = gtk_toggle_button_new();
-				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 				persona_selection(button,(gpointer)element);
 				g_object_ref_sink(button);
 				g_object_unref(button);
@@ -184,7 +184,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
 			if (element->def)
 			{
-				gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+				gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 				gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
 			}
 		}
@@ -221,7 +221,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		gtk_box_pack_end(GTK_BOX(hbox),button,FALSE,TRUE,0);
 		if (element->def)
 		{
-			gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 			gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
 		}
 	}

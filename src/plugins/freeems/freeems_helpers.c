@@ -520,6 +520,7 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 		queue = (GAsyncQueue *)DATA_GET(object,"queue");
 	if (!queue)
 		return NULL;
+#if GLIB_MINOR_VERSION < 31
 	g_get_current_time(&tval);
 	/* Set gigantic timeout for valgrind since it runs so slow */
 	if (g_getenv("VALGRIND"))
@@ -527,6 +528,9 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 	else
 		g_time_val_add(&tval,500000);
 	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
+#else
+	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,5000000);
+#endif
 	return packet;
 }
 

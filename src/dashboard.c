@@ -110,7 +110,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 			G_CALLBACK (dash_key_event), NULL);
 
 	dash = gtk_fixed_new();
-	gtk_fixed_set_has_window(GTK_FIXED(dash),TRUE);
+	gtk_widget_set_has_window(dash,TRUE);
 	gtk_widget_modify_bg(GTK_WIDGET(dash),GTK_STATE_NORMAL,&black);
 	OBJ_SET(window,"dash",dash);
 	OBJ_SET(ebox,"dash",dash);
@@ -173,7 +173,6 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	gfloat x_ratio = 0.0;
 	gfloat y_ratio = 0.0;
 	gboolean w_constricted = FALSE;
-	GtkFixedChild *child = NULL;
 	GtkWidget *gauge = NULL;
 	GList *children = NULL;
 	guint i = 0;
@@ -202,11 +201,10 @@ G_MODULE_EXPORT gboolean dash_configure_event(GtkWidget *widget, GdkEventConfigu
 	w_constricted = x_ratio > y_ratio ? FALSE:TRUE;
 
 	g_signal_handlers_block_by_func(G_OBJECT(widget),(gpointer)dash_configure_event,NULL);
-	children = GTK_FIXED(dash)->children;
+	children = (GList *)OBJ_GET(dash,"children");
 	for (i=0;i<g_list_length(children);i++)
 	{
-		child = (GtkFixedChild *)g_list_nth_data(children,i);
-		gauge = child->widget;
+		gauge = (GtkWidget *)g_list_nth_data(children,i);
 		child_x = (GINT)OBJ_GET(gauge,"orig_x_offset");
 		child_y = (GINT)OBJ_GET(gauge,"orig_y_offset");
 		child_w = (GINT)OBJ_GET(gauge,"orig_width");
@@ -238,9 +236,9 @@ G_MODULE_EXPORT void load_elements(GtkWidget *dash, xmlNode *a_node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"dash_geometry") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"dash_geometry") == 0)
 				load_geometry(dash,cur_node);
-			if (g_strcasecmp((gchar *)cur_node->name,"gauge") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"gauge") == 0)
 				load_gauge(dash,cur_node);
 		}
 		load_elements(dash,cur_node->children);
@@ -269,9 +267,9 @@ G_MODULE_EXPORT void load_geometry(GtkWidget *dash, xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"width") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"width") == 0)
 				generic_xml_gint_import(cur_node,&width);
-			if (g_strcasecmp((gchar *)cur_node->name,"height") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"height") == 0)
 				generic_xml_gint_import(cur_node,&height);
 		}
 		cur_node = cur_node->next;
@@ -297,6 +295,7 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 {
 	xmlNode *cur_node = NULL;
 	GtkWidget *gauge = NULL;
+	GList *children = NULL;
 	gchar * filename = NULL;
 	gint width = 0;
 	gint height = 0;
@@ -314,17 +313,17 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 	cur_node = node->children;
 	while (cur_node->next) { if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"width") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"width") == 0)
 				generic_xml_gint_import(cur_node,&width);
-			if (g_strcasecmp((gchar *)cur_node->name,"height") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"height") == 0)
 				generic_xml_gint_import(cur_node,&height);
-			if (g_strcasecmp((gchar *)cur_node->name,"x_offset") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"x_offset") == 0)
 				generic_xml_gint_import(cur_node,&x_offset);
-			if (g_strcasecmp((gchar *)cur_node->name,"y_offset") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"y_offset") == 0)
 				generic_xml_gint_import(cur_node,&y_offset);
-			if (g_strcasecmp((gchar *)cur_node->name,"gauge_xml_name") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"gauge_xml_name") == 0)
 				generic_xml_gchar_import(cur_node,&xml_name);
-			if (g_strcasecmp((gchar *)cur_node->name,"datasource") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"datasource") == 0)
 				generic_xml_gchar_import(cur_node,&datasource);
 		}
 		cur_node = cur_node->next;
@@ -334,6 +333,9 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 	{
 		gauge = mtx_gauge_face_new();
 		gtk_fixed_put(GTK_FIXED(dash),gauge,x_offset,y_offset);
+		children = OBJ_GET(dash,"children");
+		children = g_list_prepend(children,gauge);
+		OBJ_SET(dash,"children",children);
 		xml_name = g_strdelimit(xml_name,"\\",'/');
 		pathstub = g_build_filename(GAUGES_DATA_DIR,xml_name,NULL);
 		filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
@@ -362,8 +364,8 @@ G_MODULE_EXPORT void load_gauge(GtkWidget *dash, xmlNode *node)
 G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 {
 	Dash_Gauge *d_gauge = NULL;
-	GtkFixedChild *child = NULL;
 	GList *children = NULL;
+	GtkWidget *cwidget = NULL;
 	gint len = 0;
 	gint i = 0;
 	GData * rtv_obj = NULL;
@@ -382,13 +384,13 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 		DATA_SET_FULL(global_data,"dash_hash",dash_hash,(GDestroyNotify)g_hash_table_destroy);
 	}
 
-	children = GTK_FIXED(dash)->children;
+	children = (GList *)OBJ_GET(dash,"children");
 	len = g_list_length(children);
 
 	for (i=0;i<len;i++)
 	{
-		child = (GtkFixedChild *)g_list_nth_data(children,i);
-		source = (gchar *)OBJ_GET(child->widget,"datasource");
+		cwidget = (GtkWidget *)g_list_nth_data(children,i);
+		source = (gchar *)OBJ_GET(cwidget,"datasource");
 		if (!source)
 			continue;
 
@@ -403,7 +405,7 @@ G_MODULE_EXPORT void link_dash_datasources(GtkWidget *dash,gpointer data)
 		else
 			d_gauge->object = rtv_obj;
 		d_gauge->source = g_strdup(source);
-		d_gauge->gauge = child->widget;
+		d_gauge->gauge = cwidget;
 		d_gauge->dash = dash;
 		g_hash_table_insert(dash_hash,g_strdup_printf("dash_%i_gauge_%i",(GINT)data,i),(gpointer)d_gauge);
 	}
@@ -461,7 +463,7 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
   */
 G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 {
-	GtkFixedChild *child = NULL;
+	GtkWidget *cwidget = NULL;
 	cairo_t *cr = NULL;
 	gint x = 0;
 	gint y = 0;
@@ -474,6 +476,7 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	GList *children = NULL;
 	GdkBitmap *bitmap = NULL;
 	GtkRequisition req;
+	GtkAllocation alloc;
 	gint width = 0;
 	gint height = 0;
 	GMutex *dash_mutex = (GMutex *)DATA_GET(global_data,"dash_mutex");
@@ -509,13 +512,14 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
 	if ((GBOOLEAN)DATA_GET(global_data,"dash_fullscreen"))
 		cairo_rectangle(cr,0,0,width,height);
 
-	children = GTK_FIXED(dash)->children;
+	children = (GList *)OBJ_GET(dash,"children");
 	for (i=0;i<g_list_length(children);i++)
 	{
-		child = (GtkFixedChild *)g_list_nth_data(children,i);
-		x = child->x;
-		y = child->y;
-		gtk_widget_size_request(child->widget,&req);
+		cwidget = (GtkWidget *)g_list_nth_data(children,i);
+		gtk_widget_get_allocation(cwidget,&alloc);
+		x = alloc.x;
+		y = alloc.y;
+		gtk_widget_size_request(cwidget,&req);
 		w = req.width;
 		h = req.height;
 		radius = MIN(w,h)/2;
@@ -628,7 +632,7 @@ G_MODULE_EXPORT void toggle_status_visible(void)
 		return;
 	if (gtk_widget_get_visible(tmpwidget))
 	{
-		gtk_widget_hide_all (tmpwidget);
+		gtk_widget_hide(tmpwidget);
 		DATA_SET(global_data,"status_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
@@ -652,7 +656,7 @@ G_MODULE_EXPORT void toggle_rtt_visible(void)
 		return;
 	if (gtk_widget_get_visible(tmpwidget))
 	{
-		gtk_widget_hide_all (tmpwidget);
+		gtk_widget_hide(tmpwidget);
 		DATA_SET(global_data,"rtt_visible",GINT_TO_POINTER(FALSE));
 	}
 	else
@@ -701,7 +705,6 @@ G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 	GList *children = NULL;
 	guint i = 0;
 	gboolean state = FALSE;
-	GtkFixedChild *child = NULL;
 	GtkWidget * dash  = NULL;
 	GtkWidget * gauge  = NULL;
 	gchar * text_attr = NULL;
@@ -713,7 +716,7 @@ G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 		printf(_("dashboard widget is null cannot set attribute(s)!\n"));
 		return;
 	}
-	children = GTK_FIXED(dash)->children;
+	children = (GList *)OBJ_GET(dash,"children");
 	if ((GBOOLEAN)OBJ_GET(dash,text_attr))
 		state = FALSE;
 	else
@@ -722,11 +725,9 @@ G_MODULE_EXPORT void dash_toggle_attribute(GtkWidget *widget,MtxGenAttr attr)
 	g_free(text_attr);
 	for (i=0;i<g_list_length(children);i++)
 	{
-		child = (GtkFixedChild *)g_list_nth_data(children,i);
-		gauge = child->widget;
+		gauge = (GtkWidget *)g_list_nth_data(children,i);
 		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),attr,(gfloat)state);
 	}
-
 }
 
 
@@ -740,7 +741,6 @@ G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr att
 	gchar * text_attr = NULL;
 	GtkWidget * dash  = NULL;
 	GList *children = NULL;
-	GtkFixedChild *child = NULL;
 	GtkWidget * gauge  = NULL;
 	gfloat tmpf = 0.0;
 	guint i = 0;
@@ -750,11 +750,10 @@ G_MODULE_EXPORT gboolean dash_lookup_attribute(GtkWidget *widget, MtxGenAttr att
 	text_attr = g_strdup_printf("%i",attr);
 	dash = (GtkWidget *)OBJ_GET(widget,"dash");
 	g_free(text_attr);
-	children = GTK_FIXED(dash)->children;
+	children = (GList *)OBJ_GET(dash,"children");
 	for (i=0;i<g_list_length(children);i++)
 	{
-		child = (GtkFixedChild *)g_list_nth_data(children,i);
-		gauge = child->widget;
+		gauge = (GtkWidget *)g_list_nth_data(children,i);
 		mtx_gauge_face_get_attribute(MTX_GAUGE_FACE(gauge),attr,&tmpf);
 		if ((GBOOLEAN)tmpf)
 			t_count++;
@@ -968,18 +967,16 @@ G_MODULE_EXPORT gboolean get_dash_daytime_mode(GtkWidget *widget)
 {
 	GtkWidget * dash  = NULL;
 	GList *children = NULL;
-	GtkFixedChild *child = NULL;
 	GtkWidget * gauge  = NULL;
 	guint i = 0;
 	gint t_count = 0;
 	gint f_count = 0;
 
 	dash = (GtkWidget *)OBJ_GET(widget,"dash");
-	children = GTK_FIXED(dash)->children;
+	children = (GList *)OBJ_GET(dash,"children");
 	for (i=0;i<g_list_length(children);i++)
 	{
-		child = (GtkFixedChild *)g_list_nth_data(children,i);
-		gauge = child->widget;
+		gauge = (GtkWidget *)g_list_nth_data(children,i);
 		if(mtx_gauge_face_get_daytime_mode(MTX_GAUGE_FACE(gauge)))
 			t_count++;
 		else
@@ -1001,16 +998,14 @@ G_MODULE_EXPORT void set_dash_daytime_mode(GtkWidget *widget, gboolean state)
 {
 	GtkWidget * dash  = NULL;
 	GList *children = NULL;
-	GtkFixedChild *child = NULL;
 	GtkWidget * gauge  = NULL;
 	guint i = 0;
 
 	dash = (GtkWidget *)OBJ_GET(widget,"dash");
-	children = GTK_FIXED(dash)->children;
+	children = (GList *)OBJ_GET(dash, "children");
 	for (i=0;i<g_list_length(children);i++)
 	{
-		child = (GtkFixedChild *)g_list_nth_data(children,i);
-		gauge = child->widget;
+		gauge = (GtkWidget *)g_list_nth_data(children,i);
 		mtx_gauge_face_set_daytime_mode(MTX_GAUGE_FACE(gauge),state);
 	}
 }
@@ -1026,7 +1021,6 @@ G_MODULE_EXPORT gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer da
 {
 	GList *children = NULL;
 	guint i = 0;
-	GtkFixedChild *child = NULL;
 	GtkWidget * widget  = NULL;
 	GtkWidget * dash  = NULL;
 	GtkWidget * gauge  = NULL;
@@ -1038,11 +1032,10 @@ G_MODULE_EXPORT gboolean reset_dash_tattletales(GtkWidget *menuitem, gpointer da
 		printf(_("dashboard widget is null cannot reset tattletale!\n"));
 		return FALSE;
 	}
-	children = GTK_FIXED(dash)->children;
+	children = (GList *)OBJ_GET(dash,"children");
 	for (i=0;i<g_list_length(children);i++)
 	{
-		child = (GtkFixedChild *)g_list_nth_data(children,i);
-		gauge = child->widget;
+		gauge = (GtkWidget *)g_list_nth_data(children,i);
 		mtx_gauge_face_clear_peak(MTX_GAUGE_FACE(gauge));
 	}
 	return TRUE;

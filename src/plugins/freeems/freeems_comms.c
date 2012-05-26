@@ -297,9 +297,13 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		return FALSE;
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
+#if GLIB_MINOR_VERSION < 31
 	g_get_current_time(&tval);
 	g_time_val_add(&tval,250000);
 	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
+#else
+	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+#endif
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	if (packet)
 	{
@@ -330,9 +334,13 @@ G_MODULE_EXPORT gboolean comms_test(void)
 			return FALSE;
 		}
 		g_free(buf);
+#if GLIB_MINOR_VERSION < 31
 		g_get_current_time(&tval);
 		g_time_val_add(&tval,250000);
 		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
+#else
+		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+#endif
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		g_async_queue_unref(queue);
 		if (packet)
@@ -553,9 +561,13 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 	{
 		g_get_current_time(&now);
 		/* Wait up to 0.25 seconds for thread to exit */
+#if GLIB_MINOR_VERSION < 31
 		g_time_val_add(&now,250000);
 		g_mutex_lock(mutex);
 		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&now);
+#else
+		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+#endif
 		g_mutex_unlock(mutex);
 		if (packet)
 		{

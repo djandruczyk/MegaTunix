@@ -286,7 +286,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		{
 			element = g_new0(ListElement, 1);
 			element->filename = g_strdup(filenames[i]);
-			if (g_strcasecmp(element->filename,last_file) == 0)
+			if (g_ascii_strcasecmp(element->filename,last_file) == 0)
 				element->def = TRUE;
 
 			element->name = g_strdup(tmpbuf);
@@ -296,7 +296,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 		{
 			element = g_new0(ListElement, 1);
 			element->filename = g_strdup(filenames[i]);
-			if (g_strcasecmp(element->filename,last_file) == 0)
+			if (g_ascii_strcasecmp(element->filename,last_file) == 0)
 				element->def = TRUE;
 			element->name = g_strdup(tmpbuf);
 			s_list = g_list_append(s_list,(gpointer)element);

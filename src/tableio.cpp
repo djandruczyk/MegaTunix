@@ -23,7 +23,6 @@
 #include <fstream>
 #include <string>
 #include <vector>
-extern "C" {
 #include <conversions.h>
 #include <debugging.h>
 #include <defines.h>
@@ -37,7 +36,6 @@ extern "C" {
 #include <tableio.h>
 #include <time.h>
 #include <widgetmgmt.h>
-}
 
 extern gconstpointer *global_data;
 
@@ -260,7 +258,7 @@ YAML::Emitter & operator << (YAML::Emitter &out, const ThreeDTable& table) {
 	out << YAML::BeginSeq;
 	out << YAML::BeginMap;
 	out << YAML::Key << "3DTable";
-	out << YAML::Value << NULL;
+	out << YAML::Value << "";
 	out << YAML::Key << "title";
 	out << YAML::Value << table.title;
 	out << YAML::Key << "description";
@@ -301,7 +299,9 @@ G_MODULE_EXPORT void export_single_table(gint table_num) {
 	fileio->default_extension= g_strdup("yaml");
 	fileio->title = g_strdup("Select your Table backup file to export");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_SAVE;
+printf ("before choose_file\n");
 	filename = choose_file(fileio);
+printf("After choose_file\n");
 	if (!filename)
 	{
 		update_logbar("tools_view","warning",_("NO FILE chosen for Table export\n"),FALSE,FALSE,FALSE);

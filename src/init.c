@@ -425,7 +425,8 @@ G_MODULE_EXPORT void save_config()
 				orig_height = (GINT) OBJ_GET(dash,"orig_height");
 				if (gtk_widget_get_visible(widget))
 				{
-					gdk_drawable_get_size(gtk_widget_get_window(gtk_widget_get_toplevel(widget)), &tmp_width,&tmp_height);
+					tmp_width = gdk_window_get_width(gtk_widget_get_window(gtk_widget_get_toplevel(widget)));
+					tmp_height = gdk_window_get_height(gtk_widget_get_window(gtk_widget_get_toplevel(widget)));
 					ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
 					cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
 				}
@@ -457,7 +458,8 @@ G_MODULE_EXPORT void save_config()
 				orig_height = (GINT) OBJ_GET(dash,"orig_height");
 				if (gtk_widget_get_visible(widget))
 				{
-					gdk_drawable_get_size(gtk_widget_get_window(gtk_widget_get_toplevel(widget)), &tmp_width,&tmp_height);
+					tmp_width = gdk_window_get_width(gtk_widget_get_window(gtk_widget_get_toplevel(widget)));
+					tmp_height = gdk_window_get_height(gtk_widget_get_window(gtk_widget_get_toplevel(widget)));
 					ratio = (((gfloat)tmp_height/(gfloat)orig_height)+((gfloat)tmp_width/(gfloat)orig_width))/2.0;
 					cfg_write_float(cfgfile, "Dashboards", "dash_2_size_ratio", ratio);
 				}
@@ -481,7 +483,8 @@ G_MODULE_EXPORT void save_config()
 		main_window = lookup_widget("main_window");
 		if (gtk_widget_get_visible(main_window))
 		{
-			gdk_drawable_get_size(gtk_widget_get_window(main_window), &tmp_width,&tmp_height);
+			tmp_width = gdk_window_get_width(gtk_widget_get_window(main_window));
+			tmp_height = gdk_window_get_height(gtk_widget_get_window(main_window));
 			cfg_write_int(cfgfile, "Window", "main_width", tmp_width);
 			cfg_write_int(cfgfile, "Window", "main_height", tmp_height);
 			gtk_window_get_position(GTK_WINDOW(main_window),&x,&y);
@@ -493,7 +496,8 @@ G_MODULE_EXPORT void save_config()
 		{
 			if ((GTK_IS_WIDGET(widget)) && (gtk_widget_get_visible(widget)))
 			{
-				gdk_drawable_get_size(gtk_widget_get_window(widget), &tmp_width,&tmp_height);
+				tmp_width = gdk_window_get_width(gtk_widget_get_window(widget));
+				tmp_height = gdk_window_get_height(gtk_widget_get_window(widget));
 
 				cfg_write_int(cfgfile, "Window", "status_width", tmp_width);
 				cfg_write_int(cfgfile, "Window", "status_height", tmp_height);
@@ -507,6 +511,11 @@ G_MODULE_EXPORT void save_config()
 		{
 			if ((GTK_IS_WIDGET(widget)) && (gtk_widget_get_visible(widget)))
 			{
+				tmp_width = gdk_window_get_width(gtk_widget_get_window(widget));
+				tmp_height = gdk_window_get_height(gtk_widget_get_window(widget));
+
+				cfg_write_int(cfgfile, "Window", "rtt_width", tmp_width);
+				cfg_write_int(cfgfile, "Window", "rtt_height", tmp_height);
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 				cfg_write_int(cfgfile, "Window", "rtt_x_origin", x);
 				cfg_write_int(cfgfile, "Window", "rtt_y_origin", y);

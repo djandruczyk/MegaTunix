@@ -38,7 +38,7 @@ extern "C" {
 #include <multi_expr_loader.h>
 
 /* GL includes */
-#include <gtk/gtkwidget.h>
+#include <gtk/gtk.h>
 #include <gtk/gtkgl.h>
 #ifdef __WIN32__
  #include <gdk/gdkglglext.h>

@@ -39,6 +39,7 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 {
 	GdkPixmap *pixmap = NULL;
 	GdkPixmap *pmap = NULL;
+	cairo_t *cr = NULL;
 	GtkAllocation allocation;
 	GdkWindow *window = gtk_widget_get_window(widget);
 
@@ -64,19 +65,20 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 		gint h = allocation.height;
 		pixmap=gdk_pixmap_new(window,
 				w,h,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(pixmap,
-				gtk_widget_get_style(widget)->black_gc,
-				TRUE, 0,0,
-				w,h);
+				-1);
+		gdk_window_set_back_pixmap(window,pixmap,0);
+		cr = gdk_cairo_create(pixmap);
+		cairo_set_operator(cr, CAIRO_OPERATOR_DEST_OUT);
+		cairo_paint(cr);
+		cairo_destroy(cr);
+
 		pmap=gdk_pixmap_new(window,
 				w,h,
-				gtk_widget_get_visual(widget)->depth);
-		gdk_draw_rectangle(pmap,
-				gtk_widget_get_style(widget)->black_gc,
-				TRUE, 0,0,
-				w,h);
-		gdk_window_set_back_pixmap(window,pixmap,0);
+				-1);
+		cr = gdk_cairo_create(pmap);
+		cairo_set_operator(cr, CAIRO_OPERATOR_DEST_OUT);
+		cairo_paint(cr);
+		cairo_destroy(cr);
 		lv_data->pixmap = pixmap;
 		lv_data->pmap = pmap;
 
@@ -104,14 +106,13 @@ G_MODULE_EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *even
 {
 	GdkPixmap *pixmap = NULL;
 	pixmap = lv_data->pixmap;
+	cairo_t *cr = NULL;
 
 	/* Expose event handler... */
-	gdk_draw_drawable(gtk_widget_get_window(widget),
-                        gtk_widget_get_style(widget)->fg_gc[gtk_widget_get_state (widget)],
-                        pixmap,
-                        event->area.x, event->area.y,
-                        event->area.x, event->area.y,
-                        event->area.width, event->area.height);
+	cr = gdk_cairo_create(gtk_widget_get_window(widget));
+	gdk_cairo_set_source_pixmap(cr,pixmap,0,0);
+        cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+        cairo_fill(cr);
 
 	return TRUE;
 }
@@ -175,22 +176,21 @@ G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 	GdkRectangle rect;
 	extern Logview_Data *lv_data;
 	GdkWindow *window = gtk_widget_get_window(lv_data->darea);
+	cairo_t *cr = NULL;
 
 	rect.x = 0;
 	rect.y = lv_data->spread*tnum;
 	rect.width =  lv_data->info_width-1;
 	rect.height = lv_data->spread;
 
+	cr = gdk_cairo_create(lv_data->pixmap);
 	if (state)
-		gdk_draw_rectangle(lv_data->pixmap,
-				lv_data->highlight_gc,
-				FALSE, rect.x,rect.y,
-				rect.width,rect.height);
+		cairo_set_source_rgba(cr,1.0,0.0,0.0,1.0);
 	else
-		gdk_draw_rectangle(lv_data->pixmap,
-				gtk_widget_get_style(lv_data->darea)->white_gc,
-				FALSE, rect.x,rect.y,
-				rect.width,rect.height);
+		cairo_set_source_rgba(cr,1.0,1.0,1.0,1.0);
+        cairo_rectangle(cr,rect.x,rect.y,rect.width,rect.height);
+	cairo_stroke(cr);
+	cairo_destroy(cr);
 
 	rect.width+=1;
 	rect.height+=1;
@@ -261,6 +261,7 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	guint tnum = 0;
 	guint state;
 	extern Logview_Data *lv_data;
+	cairo_t *cr = NULL;
 	Viewable_Value *v_value = NULL;
 	GtkAllocation allocation;
 
@@ -285,30 +286,25 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	if (tnum >= g_list_length(lv_data->tlist))
 		return TRUE;
 	v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,tnum);
+	cr = gdk_cairo_create(lv_data->pixmap);
 	if (event->state & (GDK_BUTTON3_MASK))
 	{
 		/*printf("right button released... \n");*/
 		v_value->highlight = FALSE;
-		gdk_draw_rectangle(lv_data->pixmap,
-				gtk_widget_get_style(widget)->black_gc,
-				TRUE, lv_data->info_width,0,
-				w-lv_data->info_width,h);
-		trace_update(TRUE);
-		highlight_tinfo(tnum,TRUE);
-		return TRUE;
-
 	}
+
 	else if (event->button == 3) /* right mouse button */
 	{
 		/*printf("right button pushed... \n");*/
 		v_value->highlight = TRUE;
-		gdk_draw_rectangle(lv_data->pixmap,
-				gtk_widget_get_style(widget)->black_gc,
-				TRUE, lv_data->info_width,0,
-				w-lv_data->info_width,h);
-		trace_update(TRUE);
-		highlight_tinfo(tnum,TRUE);
-		return TRUE;
 	}
+
+	cairo_set_source_rgb(cr,0.0,0.0,0.0);
+	cairo_rectangle(cr,lv_data->info_width,0,w-lv_data->info_width,h);
+	cairo_fill(cr);
+	cairo_destroy(cr);
+	trace_update(TRUE);
+	highlight_tinfo(tnum,TRUE);
+
 	return TRUE;
 }

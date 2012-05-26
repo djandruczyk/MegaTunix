@@ -155,13 +155,13 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"api") == 0)
 				if (!xml_api_check(cur_node,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API))
 				{
 					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
 					return FALSE;
 				}
-			if (g_strcasecmp((gchar *)cur_node->name,"rtt") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"rtt") == 0)
 				load_rtt(cur_node,store,parent);
 		}
 		if (!load_rtt_xml_elements(cur_node->children,store,parent))
@@ -193,16 +193,16 @@ G_MODULE_EXPORT Rtt_Threshold *load_rtt_threshold(xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"low") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"low") == 0)
 				generic_xml_gfloat_import(cur_node,&thresh->low);
-			if (g_strcasecmp((gchar *)cur_node->name,"high") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"high") == 0)
 				generic_xml_gfloat_import(cur_node,&thresh->high);
-			if (g_strcasecmp((gchar *)cur_node->name,"fg_color") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"fg_color") == 0)
 			{
 				generic_xml_color_import(cur_node,&color);
 				thresh->fg = gdk_color_to_string(&color);
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"bg_color") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"bg_color") == 0)
 			{
 				generic_xml_color_import(cur_node,&color);
 				thresh->bg = gdk_color_to_string(&color);
@@ -257,11 +257,11 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"internal_name") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"internal_name") == 0)
 				generic_xml_gchar_import(cur_node,&int_name);
-			if (g_strcasecmp((gchar *)cur_node->name,"datasource") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"datasource") == 0)
 				generic_xml_gchar_import(cur_node,&source);
-			if (g_strcasecmp((gchar *)cur_node->name,"threshold") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"threshold") == 0)
 			{
 				thresh = load_rtt_threshold(cur_node);
 				if (thresh)

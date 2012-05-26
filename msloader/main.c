@@ -114,11 +114,11 @@ void verify_args(gint argc, gchar **argv)
 		usage_and_exit(g_strdup("Invalid number of arguments!"));
 
 	
-	if (g_strcasecmp(argv[1],"MS1") == 0)
+	if (g_ascii_strcasecmp(argv[1],"MS1") == 0)
 		type = MS1;
-	else if (g_strcasecmp(argv[1],"MS2") == 0)
+	else if (g_ascii_strcasecmp(argv[1],"MS2") == 0)
 		type = MS2;
-	else if (g_strcasecmp(argv[1],"FREEEMS") == 0)
+	else if (g_ascii_strcasecmp(argv[1],"FREEEMS") == 0)
 		type = FREEEMS;
 	else
 		usage_and_exit(g_strdup_printf("Device type \"%s\" not recognized",argv[1]));

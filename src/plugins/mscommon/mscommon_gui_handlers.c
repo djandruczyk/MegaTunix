@@ -1248,16 +1248,20 @@ void update_range(GtkWidget *widget, gfloat value)
 {
 	gint dl_type = 0;
 	GtkAdjustment *adj = NULL;
+	gdouble upper = 0.0;
+	gdouble lower = 0.0;
 
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	adj = gtk_range_get_adjustment(GTK_RANGE(widget));
+	upper = gtk_adjustment_get_upper(adj);
+	lower = gtk_adjustment_get_lower(adj);
 
 	g_signal_handlers_block_by_func(widget,(gpointer)common_slider_handler,(gpointer) NULL);
 			
-	if (value > adj->upper)
-		gtk_range_set_value(GTK_RANGE(widget),adj->upper);
-	else if (value < adj->lower)
-		gtk_range_set_value(GTK_RANGE(widget),adj->lower);
+	if (value > upper)
+		gtk_range_set_value(GTK_RANGE(widget),upper);
+	else if (value < lower)
+		gtk_range_set_value(GTK_RANGE(widget),lower);
 	else
 		gtk_range_set_value(GTK_RANGE(widget),value);
 	g_signal_handlers_unblock_by_func(G_OBJECT(widget),

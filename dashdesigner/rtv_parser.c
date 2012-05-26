@@ -109,9 +109,9 @@ gboolean parse_rtv_xml_for_dash(xmlNode *node, Rtv_Data *rtv_data)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"realtime_map") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"realtime_map") == 0)
 				load_rtv_defaults(cur_node,rtv_data,&info);
-			if (g_strcasecmp((gchar *)cur_node->name,"derived") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"derived") == 0)
 				parse_derived_var(cur_node,rtv_data,info);
 		}
 		if (!parse_rtv_xml_for_dash(cur_node->children,rtv_data))
@@ -192,7 +192,7 @@ void parse_derived_var(xmlNode *node, Rtv_Data *rtv_data, Persona_Info *info)
 
 gint sort(gconstpointer a, gconstpointer b)
 {
-	return g_strcasecmp((gchar *)a, (gchar *)b);
+	return g_ascii_strcasecmp((gchar *)a, (gchar *)b);
 }
 
 

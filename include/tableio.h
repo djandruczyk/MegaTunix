@@ -18,9 +18,12 @@
   \author David Andruczyk
   */
 
-
 #ifndef __TABLEIO_H__
 #define __TABLEIO_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <gtk/gtk.h>
 
@@ -35,4 +38,8 @@ gfloat * convert_fromecu_bins(gint, Axis);
 const gchar * get_table_suffix(gint, Axis);
 /* Prototypes */
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

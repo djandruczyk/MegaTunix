@@ -101,7 +101,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 	h = (GINT)DATA_GET(global_data,"status_height");
 	gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 	/*
-	if (g_strcasecmp(firmware->actual_signature,DATA_GET(global_data,"last_signature")) == 0)
+	if (g_ascii_strcasecmp(firmware->actual_signature,DATA_GET(global_data,"last_signature")) == 0)
 		gtk_window_set_default_size(GTK_WINDOW(window),w,h);
 	else
 		gtk_window_set_default_size(GTK_WINDOW(window),-1,-1);
@@ -156,13 +156,13 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"api") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"api") == 0)
 				if (!xml_api_check(cur_node,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API))
 				{
 					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
 					return FALSE;
 				}
-			if (g_strcasecmp((gchar *)cur_node->name,"status") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"status") == 0)
 				load_status(cur_node,parent);
 		}
 		if (!load_status_xml_elements(cur_node->children,parent))
@@ -201,19 +201,19 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"label") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"label") == 0)
 				generic_xml_gchar_import(cur_node,&txt);
-			if (g_strcasecmp((gchar *)cur_node->name,"active_fg") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"active_fg") == 0)
 				generic_xml_gchar_import(cur_node,&active_fg);
-			if (g_strcasecmp((gchar *)cur_node->name,"inactive_fg") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"inactive_fg") == 0)
 				generic_xml_gchar_import(cur_node,&inactive_fg);
-			if (g_strcasecmp((gchar *)cur_node->name,"source") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"source") == 0)
 				generic_xml_gchar_import(cur_node,&source);
-			if (g_strcasecmp((gchar *)cur_node->name,"bind_to_list") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"bind_to_list") == 0)
 				generic_xml_gchar_import(cur_node,&bind_to_list);
-			if (g_strcasecmp((gchar *)cur_node->name,"bitval") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"bitval") == 0)
 				generic_xml_gint_import(cur_node,&bitval);
-			if (g_strcasecmp((gchar *)cur_node->name,"bitmask") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"bitmask") == 0)
 				generic_xml_gint_import(cur_node,&bitmask);
 		}
 		cur_node = cur_node->next;
@@ -337,7 +337,7 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	source = (gchar *)OBJ_GET(widget,"source");
 	if (!source)
 		return;
-	if ((g_strcasecmp(source,last_source) != 0))
+	if ((g_ascii_strcasecmp(source,last_source) != 0))
 	{
 		object = NULL;
 		object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);

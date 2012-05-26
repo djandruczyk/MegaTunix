@@ -113,7 +113,7 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 			g_object_unref(ttm_data->pixmap);
 		ttm_data->pixmap=gdk_pixmap_new(window,
 				w,h,
-				gtk_widget_get_visual(widget)->depth);
+				-1);
 		cr = gdk_cairo_create(ttm_data->pixmap);
 		cairo_set_source_rgb(cr,1.0,1.0,1.0);
 		cairo_paint(cr);

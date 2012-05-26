@@ -240,7 +240,7 @@ gboolean lock_port(gchar * name)
 	vector = g_strsplit(name,PSEP,-1);
 	for (i=0;i<g_strv_length(vector);i++)
 	{
-		if ((g_strcasecmp(vector[i],"") == 0) || (g_strcasecmp(vector[i],"dev") == 0))
+		if ((g_ascii_strcasecmp(vector[i],"") == 0) || (g_ascii_strcasecmp(vector[i],"dev") == 0))
 			continue;
 		lock = g_strconcat(lock,vector[i],NULL);
 	}

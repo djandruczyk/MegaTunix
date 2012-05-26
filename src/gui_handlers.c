@@ -27,6 +27,10 @@
   \author David Andruczyk
   */
 
+#ifdef GTK_DISABLE_SINGLE_INCLUDES
+#undef GTK_DISABLE_SINGLE_INCLUDES
+#endif
+
 #define _ISOC99_SOURCE
 #include <3d_vetable.h>
 #include <args.h>
@@ -336,7 +340,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case COMM_AUTODETECT:
 				DATA_SET(global_data,"autodetect_port", GINT_TO_POINTER(TRUE));
-				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),FALSE);
+				gtk_editable_set_editable(GTK_EDITABLE(lookup_widget("active_port_entry")),FALSE);
 				break;
 			case OFFLINE_FIRMWARE_CHOICE:
 				DATA_SET_FULL(global_data,"offline_firmware_choice",g_strdup((gchar *)OBJ_GET(widget,"filename")),g_free);
@@ -418,7 +422,7 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 				break;
 			case COMM_AUTODETECT:
 				DATA_SET(global_data,"autodetect_port", GINT_TO_POINTER(FALSE));
-				gtk_entry_set_editable(GTK_ENTRY(lookup_widget("active_port_entry")),TRUE);
+				gtk_editable_set_editable(GTK_EDITABLE(lookup_widget("active_port_entry")),TRUE);
 				gtk_entry_set_text(GTK_ENTRY(lookup_widget("active_port_entry")),(const gchar *)DATA_GET(global_data,"override_port"));
 				break;
 			case TRACKING_FOCUS:

@@ -87,9 +87,9 @@ void load_elements(GtkWidget *dash, xmlNode *a_node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			 if (g_strcasecmp((gchar *)cur_node->name,"dash_geometry") == 0)
+			 if (g_ascii_strcasecmp((gchar *)cur_node->name,"dash_geometry") == 0)
 				 load_geometry(dash,cur_node);
-			 if (g_strcasecmp((gchar *)cur_node->name,"gauge") == 0)
+			 if (g_ascii_strcasecmp((gchar *)cur_node->name,"gauge") == 0)
 				 load_gauge(dash,cur_node);
 		}
 		load_elements(dash,cur_node->children);
@@ -113,9 +113,9 @@ void load_geometry(GtkWidget *dash, xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"width") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"width") == 0)
 				generic_xml_gint_import(cur_node,&width);
-			if (g_strcasecmp((gchar *)cur_node->name,"height") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"height") == 0)
 				generic_xml_gint_import(cur_node,&height);
 		}
 		cur_node = cur_node->next;
@@ -145,17 +145,17 @@ void load_gauge(GtkWidget *dash, xmlNode *node)
 	cur_node = node->children;
 	while (cur_node->next) { if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"width") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"width") == 0)
 				generic_xml_gint_import(cur_node,&width);
-			if (g_strcasecmp((gchar *)cur_node->name,"height") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"height") == 0)
 				generic_xml_gint_import(cur_node,&height);
-			if (g_strcasecmp((gchar *)cur_node->name,"x_offset") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"x_offset") == 0)
 				generic_xml_gint_import(cur_node,&x_offset);
-			if (g_strcasecmp((gchar *)cur_node->name,"y_offset") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"y_offset") == 0)
 				generic_xml_gint_import(cur_node,&y_offset);
-			if (g_strcasecmp((gchar *)cur_node->name,"gauge_xml_name") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"gauge_xml_name") == 0)
 				generic_xml_gchar_import(cur_node,&xml_name);
-			if (g_strcasecmp((gchar *)cur_node->name,"datasource") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"datasource") == 0)
 				generic_xml_gchar_import(cur_node,&datasource);
 		}
 		cur_node = cur_node->next;

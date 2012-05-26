@@ -1588,9 +1588,14 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 			}
 			g_thread_exit(0);
 		}
+#if GLIB_MINOR_VERSION < 31
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,100000); /* 100 ms timeout */
 		msg = (SlaveMessage *)g_async_queue_timed_pop(slave_msg_queue,&cur);
+#else
+		msg = (SlaveMessage *)g_async_queue_timeout_pop(slave_msg_queue,100000);
+#endif
+
 		if (!slave_list) /* List not created yet.. */
 			continue;
 		if (!msg) /* Null message)*/

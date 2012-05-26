@@ -86,9 +86,9 @@ G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"potential_args") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"potential_args") == 0)
 				load_potential_args(arguments,cur_node);
-			if (g_strcasecmp((gchar *)cur_node->name,"commands") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"commands") == 0)
 				load_commands(commands,cur_node);
 		}
 		load_xmlcomm_elements(cur_node->children);
@@ -118,7 +118,7 @@ G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"arg") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"arg") == 0)
 			{
 				arg = g_new0(PotentialArg, 1);
 				load_arg_details(arg, cur_node);
@@ -153,7 +153,7 @@ G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"cmd") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"cmd") == 0)
 			{
 				cmd = g_new0(Command, 1);
 				cmd->dynamic = FALSE;
@@ -189,41 +189,41 @@ G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"name") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"name") == 0)
 				generic_xml_gchar_import(cur_node,&arg->name);
-			if (g_strcasecmp((gchar *)cur_node->name,"desc") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"desc") == 0)
 				generic_xml_gchar_import(cur_node,&arg->desc);
-			if (g_strcasecmp((gchar *)cur_node->name,"internal_name") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"internal_name") == 0)
 				generic_xml_gchar_import(cur_node,&arg->internal_name);
-			if (g_strcasecmp((gchar *)cur_node->name,"size") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"size") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				arg->size = (DataSize)translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"type") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"type") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				arg->type = (ArgType)translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"action") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"action") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				arg->action = (Action)translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"action_arg") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"action_arg") == 0)
 				generic_xml_gint_import(cur_node,&arg->action_arg);
-			if (g_strcasecmp((gchar *)cur_node->name,"string") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"string") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&arg->static_string);
 				arg->string_len = strlen(arg->static_string);
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"hex_string") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"hex_string") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				parse_hex_string(tmpbuf, arg->static_string, &arg->string_len);
@@ -256,54 +256,54 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"name") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"name") == 0)
 				generic_xml_gchar_import(cur_node,&cmd->name);
-			if (g_strcasecmp((gchar *)cur_node->name,"desc") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"desc") == 0)
 				generic_xml_gchar_import(cur_node,&cmd->desc);
-			if (g_strcasecmp((gchar *)cur_node->name,"type") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"type") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				cmd->type = (CmdType)translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"func_call_name") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"func_call_name") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->func_call_name);
 				if (!get_symbol(cmd->func_call_name,(void **)&cmd->function))
 					printf(_("Unable to locate Function Call %s within MegaTunix or active plugins\n"),cmd->func_call_name);
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"func_call_arg") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"func_call_arg") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				cmd->func_call_arg = translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"defer_post_functions") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"defer_post_functions") == 0)
 				generic_xml_gboolean_import(cur_node,&cmd->defer_post_functions);
 
-			if (g_strcasecmp((gchar *)cur_node->name,"base") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"base") == 0)
 				generic_xml_gchar_import(cur_node,&cmd->base);
 
-			if (g_strcasecmp((gchar *)cur_node->name,"helper_func") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"helper_func") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&cmd->helper_func_name);
 				if (!get_symbol(cmd->helper_func_name,(void **)&cmd->helper_function))
 					printf(_("Unable to locate Helper Function %s within MegaTunix or active plugins\n"),cmd->helper_func_name);
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"helper_func_arg") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"helper_func_arg") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				cmd->helper_func_arg = translate_string(tmpbuf);
 				g_free(tmpbuf);
 				tmpbuf = NULL;
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"post_functions") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"post_functions") == 0)
 			{
 				load_cmd_post_functions(cmd,cur_node);
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"args") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"args") == 0)
 				load_cmd_args(cmd,cur_node);
 		}
 		cur_node = cur_node->next;
@@ -332,7 +332,7 @@ G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"arg") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"arg") == 0)
 			{
 				generic_xml_gchar_import(cur_node,&tmpbuf);
 				arg = (PotentialArg *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"potential_arguments"),tmpbuf);
@@ -367,7 +367,7 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"function") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"function") == 0)
 			{
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);
@@ -379,7 +379,7 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 					g_array_append_val(cmd->post_functions,pf);
 				}
 			}
-			if (g_strcasecmp((gchar *)cur_node->name,"function_w_arg") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"function_w_arg") == 0)
 			{
 				pf = g_new0(PostFunction, 1);
 				generic_xml_gchar_import(cur_node,&pf->name);

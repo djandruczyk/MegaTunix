@@ -841,7 +841,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 			g_object_unref(priv->pixmap);
 		priv->pixmap=gdk_pixmap_new(window,
 				priv->w,priv->h,
-				gtk_widget_get_visual(widget)->depth);
+				-1);
 		cr = gdk_cairo_create(priv->pixmap);
 		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(cr);
@@ -852,7 +852,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 			g_object_unref(priv->bg_pixmap);
 		priv->bg_pixmap=gdk_pixmap_new(window,
 				priv->w,priv->h,
-				gtk_widget_get_visual(widget)->depth);
+				-1);
 		cr = gdk_cairo_create(priv->pixmap);
 		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(cr);
@@ -863,7 +863,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 			g_object_unref(priv->tmp_pixmap);
 		priv->tmp_pixmap=gdk_pixmap_new(window,
 				priv->w,priv->h,
-				gtk_widget_get_visual(widget)->depth);
+				-1);
 		cr = gdk_cairo_create(priv->pixmap);
 		cairo_set_operator(cr,CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(cr);

@@ -405,7 +405,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		}
 
 		/* Adds on "default" options to any other groups */
-		if (g_strcasecmp(section,"defaults") != 0)
+		if (g_ascii_strcasecmp(section,"defaults") != 0)
 			group->page = bind_group_data(cfgfile, group->object, groups, "defaults");
 
 		if (cfg_read_int(cfgfile,section,"page",&tmpi))

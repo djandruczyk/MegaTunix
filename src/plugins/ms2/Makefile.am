@@ -3,8 +3,9 @@ plugindir = $(datadir)/MegaTunix/plugins
 INCLUDES = \
         -I$(top_srcdir)/include \
         @GTK_CFLAGS@ \
+        @DEPRECATED_CFLAGS@ \
         @LIBXML2_CFLAGS@ \
-		@LIBGLADE_CFLAGS@ \
+	@LIBGLADE_CFLAGS@ \
         @MEGATUNIX_DEFINES@
 
 

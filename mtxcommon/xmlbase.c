@@ -230,17 +230,17 @@ gboolean generic_xml_color_import(xmlNode *node, gpointer dest)
 		{
 			if (cur_node->type == XML_ELEMENT_NODE)
 			{
-				if (g_strcasecmp((gchar *)cur_node->name,"red") == 0)
+				if (g_ascii_strcasecmp((gchar *)cur_node->name,"red") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
 					color->red=(guint16)tmp;
 				}
-				if (g_strcasecmp((gchar *)cur_node->name,"green") == 0)
+				if (g_ascii_strcasecmp((gchar *)cur_node->name,"green") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
 					color->green=(guint16)tmp;
 				}
-				if (g_strcasecmp((gchar *)cur_node->name,"blue") == 0)
+				if (g_ascii_strcasecmp((gchar *)cur_node->name,"blue") == 0)
 				{
 					generic_xml_gint_import(cur_node,&tmp);
 					color->blue=(guint16)tmp;
@@ -303,9 +303,9 @@ gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,"major") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"major") == 0)
 				generic_xml_gint_import(cur_node,&maj);
-			if (g_strcasecmp((gchar *)cur_node->name,"minor") == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,"minor") == 0)
 				generic_xml_gint_import(cur_node,&min);
 
 		}
@@ -343,7 +343,7 @@ gboolean generic_xml_gint_find(xmlNode *node, const gchar *name, gpointer dest)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,name) == 0)
 			{
 				generic_xml_gint_import(cur_node,val);
 				found = TRUE;
@@ -377,7 +377,7 @@ gboolean generic_xml_gboolean_find(xmlNode *node, const gchar *name, gpointer de
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,name) == 0)
 			{
 				generic_xml_gboolean_import(cur_node,val);
 				found = TRUE;
@@ -411,7 +411,7 @@ gboolean generic_xml_gfloat_find(xmlNode *node, const gchar *name, gpointer dest
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,name) == 0)
 			{
 				generic_xml_gfloat_import(cur_node,val);
 				found = TRUE;
@@ -443,7 +443,7 @@ gboolean generic_xml_gchar_find(xmlNode *node, const gchar *name, gpointer dest)
 	{
 		if (cur_node->type == XML_ELEMENT_NODE)
 		{
-			if (g_strcasecmp((gchar *)cur_node->name,name) == 0)
+			if (g_ascii_strcasecmp((gchar *)cur_node->name,name) == 0)
 			{
 				generic_xml_gchar_import(cur_node,dest);
 				found = TRUE;

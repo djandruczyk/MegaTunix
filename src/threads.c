@@ -17,6 +17,9 @@
   \brief Thread functions mainly revolving around I/O or message passing
   \author David Andruczyk
   */
+#ifdef GTK_DISABLE_SINGLE_INCLUDES
+#undef GTK_DISABLE_SINGLE_INCLUDES
+#endif
 
 #include <args.h>
 #include <3d_vetable.h>
@@ -154,9 +157,13 @@ fast_exit:
 			g_mutex_unlock(io_dispatch_mutex);
 			g_thread_exit(0);
 		}
+#if GLIB_MINOR_VERSION < 31
 		g_get_current_time(&cur);
 		g_time_val_add(&cur,10000); /* 10 ms timeout */
 		message = (Io_Message *)g_async_queue_timed_pop(io_data_queue,&cur);
+#else
+		message = (Io_Message *)g_async_queue_timeout_pop(io_data_queue,10000);
+#endif
 		if (!message) /* NULL message */
 			continue;
 
