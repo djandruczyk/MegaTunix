@@ -425,7 +425,7 @@ G_MODULE_EXPORT void save_config()
 				orig_height = (GINT) OBJ_GET(dash,"orig_height");
 				if (gtk_widget_get_visible(widget))
 				{
-#if GDK_MINOR_VERSION < 24
+#if GTK_MINOR_VERSION < 24
 					gdk_drawable_get_size(gtk_widget_get_window(gtk_widget_get_toplevel(widget)), &tmp_width,&tmp_height);
 #else
 					tmp_width = gdk_window_get_width(gtk_widget_get_window(gtk_widget_get_toplevel(widget)));
@@ -462,7 +462,7 @@ G_MODULE_EXPORT void save_config()
 				orig_height = (GINT) OBJ_GET(dash,"orig_height");
 				if (gtk_widget_get_visible(widget))
 				{
-#if GDK_MINOR_VERSION < 24
+#if GTK_MINOR_VERSION < 24
 					gdk_drawable_get_size(gtk_widget_get_window(gtk_widget_get_toplevel(widget)), &tmp_width,&tmp_height);
 #else
 					tmp_width = gdk_window_get_width(gtk_widget_get_window(gtk_widget_get_toplevel(widget)));
@@ -491,7 +491,7 @@ G_MODULE_EXPORT void save_config()
 		main_window = lookup_widget("main_window");
 		if (gtk_widget_get_visible(main_window))
 		{
-#if GDK_MINOR_VERSION < 24
+#if GTK_MINOR_VERSION < 24
 			gdk_drawable_get_size(gtk_widget_get_window(main_window), &tmp_width,&tmp_height);
 #else
 			tmp_width = gdk_window_get_width(gtk_widget_get_window(main_window));
@@ -508,7 +508,7 @@ G_MODULE_EXPORT void save_config()
 		{
 			if ((GTK_IS_WIDGET(widget)) && (gtk_widget_get_visible(widget)))
 			{
-#if GDK_MINOR_VERSION < 24
+#if GTK_MINOR_VERSION < 24
 				gdk_drawable_get_size(gtk_widget_get_window(widget), &tmp_width,&tmp_height);
 #else
 				tmp_width = gdk_window_get_width(gtk_widget_get_window(widget));
@@ -527,7 +527,7 @@ G_MODULE_EXPORT void save_config()
 		{
 			if ((GTK_IS_WIDGET(widget)) && (gtk_widget_get_visible(widget)))
 			{
-#if GDK_MINOR_VERSION < 24
+#if GTK_MINOR_VERSION < 24
 				gdk_drawable_get_size(gtk_widget_get_window(widget), &tmp_width,&tmp_height);
 #else
 				tmp_width = gdk_window_get_width(gtk_widget_get_window(widget));
