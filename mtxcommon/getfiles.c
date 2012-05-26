@@ -350,20 +350,26 @@ gchar * choose_file(MtxFileIO *data)
 	gchar *filename = NULL;
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
-	gchar *project = NULL;
+	const gchar *project = NULL;
 	gint response = 0;
 	gboolean res = FALSE;
 	guint i = 0;
 
 	if (!GTK_IS_WINDOW(data->parent))
 		data->parent = NULL;
-	   printf("choose_file\n");
-	   printf("filter %s\n",data->filter);
-	   printf("filename %s\n",data->filename);
-	   printf("default_path %s\n",data->default_path);
-	   printf("external_path %s\n",data->external_path);
-	   printf("project %s\n",data->project);
-	   printf("title %s\n",data->title);
+	printf("choose_file\n");
+	printf("parent %p\n",(void *)data->parent);
+	printf("on_top %s\n",data->on_top? "TRUE":"FALSE");
+	printf("filter %s\n",data->filter);
+	printf("filename %s\n",data->filename);
+	printf("default_filename %s\n",data->default_filename);
+	printf("default_extension %s\n",data->default_extension);
+	printf("absolute_path %s\n",data->absolute_path);
+	printf("default_path %s\n",data->default_path);
+	printf("external_path %s\n",data->external_path);
+	printf("shortcut_folders %s\n",data->shortcut_folders);
+	printf("project %s\n",data->project);
+	printf("title %s\n",data->title);
 	if (data->project)
 		project = data->project;
 	else
@@ -375,12 +381,14 @@ gchar * choose_file(MtxFileIO *data)
 	if ((data->action == GTK_FILE_CHOOSER_ACTION_OPEN) || 
 			(data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
 	{
+		printf("ACTION_OPEN before gtk_file_chooser_dialog_new\n");
 		dialog = gtk_file_chooser_dialog_new(data->title,
 				GTK_WINDOW(data->parent),
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				NULL);
+		printf("after gtk_file_chooser_dialog_new\n");
 		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
 
@@ -395,37 +403,40 @@ gchar * choose_file(MtxFileIO *data)
 	}
 	else if (data->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	{
+		printf("calling gtk_file_chooser_dialog_new\n");
 		dialog = gtk_file_chooser_dialog_new(data->title,
 				GTK_WINDOW(data->parent),
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 				NULL);	
+		printf("dialog created\n");
 
 		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
 
-		defdir = g_build_filename(HOME(),"mtx",data->project,data->default_path, NULL);
-		if (!g_file_test(defdir,G_FILE_TEST_IS_DIR))
-			g_mkdir(defdir,0755);
+		if (data->default_path)
+		{
+			defdir = g_build_filename(HOME(),"mtx",data->project,data->default_path, NULL);
+			if (!g_file_test(defdir,G_FILE_TEST_IS_DIR))
+				g_mkdir(defdir,0755);
+		}
+		else
+			defdir = g_build_filename(HOME(),"mtx",data->project, NULL);
 		/* If filename passed check/adj path */
 		if (data->filename)
 		{
-#ifdef __WIN32__	/* Disallows modifying distributed files */
-			if (g_strrstr(data->filename,"dist") != NULL)
-#else
-				if (g_strrstr(data->filename,DATA_DIR) != NULL)
-#endif
-				{
-					vector = g_strsplit(data->filename,PSEP,-1);
-					tmpbuf = g_strconcat(defdir,PSEP,vector[g_strv_length(vector)-1],NULL);
-					gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
-					gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
-					g_strfreev(vector);
-					g_free(tmpbuf);
-				}
-				else
-					gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),data->filename);
+			if (g_strrstr(data->filename,DATA_DIR) != NULL)
+			{
+				vector = g_strsplit(data->filename,PSEP,-1);
+				tmpbuf = g_strconcat(defdir,PSEP,vector[g_strv_length(vector)-1],NULL);
+				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),defdir);
+				gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),vector[g_strv_length(vector)-1]);
+				g_strfreev(vector);
+				g_free(tmpbuf);
+			}
+			else
+				gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog),data->filename);
 		}
 		else
 		{
@@ -440,7 +451,6 @@ gchar * choose_file(MtxFileIO *data)
 	/* Add shortcut folders... */
 	if (data->shortcut_folders)
 	{
-
 		vector = g_strsplit(data->shortcut_folders,",",-1);
 		for (i=0;i<g_strv_length(vector);i++)
 		{
@@ -489,7 +499,9 @@ afterfilter:
 		if (data->default_filename)
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog),data->default_filename);
 
+	printf("initiating dialog to run\n");
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
+	printf("it returned \n");
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		tmpbuf = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
