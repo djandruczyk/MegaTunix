@@ -138,6 +138,8 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	}
 	if (args->project_name)
 		DATA_SET(global_data,"project_name",g_strdup(args->project_name));
+	else
+		DATA_SET(global_data,"project_name",g_strdup("default"));
 
 	if (args->port)
 	{

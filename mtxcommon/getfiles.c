@@ -357,13 +357,13 @@ gchar * choose_file(MtxFileIO *data)
 
 	if (!GTK_IS_WINDOW(data->parent))
 		data->parent = NULL;
-	/*
 	   printf("choose_file\n");
 	   printf("filter %s\n",data->filter);
 	   printf("filename %s\n",data->filename);
 	   printf("default_path %s\n",data->default_path);
+	   printf("external_path %s\n",data->external_path);
+	   printf("project %s\n",data->project);
 	   printf("title %s\n",data->title);
-	   */
 	if (data->project)
 		project = data->project;
 	else

@@ -292,6 +292,7 @@ G_MODULE_EXPORT void export_single_table(gint table_num) {
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->external_path = g_strdup(TABLE_DATA_DIR);
+	fileio->default_path = g_strdup(TABLE_DATA_DIR);
 	fileio->parent = lookup_widget("main_window");
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->on_top = TRUE;
