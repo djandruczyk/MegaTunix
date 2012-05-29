@@ -726,6 +726,10 @@ G_MODULE_EXPORT void mem_alloc(void)
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
+	if (g_mem_gc_friendly)
+		printf("gc-friendly is set\n");
+	else
+		printf("gc-friendly is NOT set\n");
 	if (!firmware->rt_data)
 		firmware->rt_data = g_new0(guint8, firmware->rtvars_size);
 	if (!firmware->rt_data_last)
@@ -830,7 +834,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	Serial_Params *serial_params = NULL;
 	GHashTable **interdep_vars = NULL;
 	GHashTable *dynamic_widgets = NULL;
-	Rtv_Map *rtv_map = NULL;
 	GList ***ecu_widgets = NULL;
 	GList **tab_gauges = NULL;
 	GList *toggle_group_list = NULL;
@@ -840,7 +843,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GMutex *mutex = NULL;
 	GMutex **ve3d_mutex = NULL;
 	CmdLineArgs *args = NULL;
-	GPtrArray *tabinfos = NULL;
 	GCond *cond = NULL;
 #ifdef DEBUG
 	gchar *tmpbuf = NULL;
@@ -848,7 +850,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
-	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	tab_gauges = (GList **)DATA_GET(global_data,"tab_gauges");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -856,7 +857,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	rtt_mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
 	toggle_group_list = (GList *)DATA_GET(global_data,"toggle_group_list");
 	source_list = (GList *)DATA_GET(global_data,"source_list");
-	tabinfos = (GPtrArray *)DATA_GET(global_data,"tabinfos");
 	ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 
 	g_mutex_lock(serio_mutex);
@@ -864,20 +864,17 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	cleanup(serial_params);
 	g_mutex_unlock(serio_mutex);
 
-	if (tabinfos)
-	{
-		g_ptr_array_foreach(tabinfos,(GFunc)dealloc_tabinfo,NULL);
-		g_ptr_array_free(tabinfos,TRUE);
-	}
 	if (toggle_group_list)
 	{
 		g_list_foreach(toggle_group_list,(GFunc)g_object_unref,NULL);
 		g_list_free(toggle_group_list);
+		DATA_SET(global_data,"toggle_group_list",NULL);
 	}
 	if (source_list)
 	{
 		g_list_foreach(source_list,(GFunc)g_object_unref,NULL);
 		g_list_free(source_list);
+		DATA_SET(global_data,"source_list",NULL);
 	}
 
 	/* Firmware datastructure.... */
@@ -995,25 +992,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		cleanup(firmware);
 		DATA_SET(global_data,"firmware",NULL);
 	}
-	if (rtv_map)
-	{
-		if (rtv_map->raw_list)
-			g_strfreev(rtv_map->raw_list);
-		cleanup (rtv_map->applicable_signatures);
-		for(i=0;i<(gint)rtv_map->rtv_list->len;i++)
-		{
-			gpointer data;
-			data = g_ptr_array_index(rtv_map->rtv_list,i);
-			dealloc_rtv_object((gconstpointer *)data);
-		}
-		g_array_free(rtv_map->ts_array,TRUE);
-		g_ptr_array_free(rtv_map->rtv_list,TRUE);
-		g_hash_table_destroy(rtv_map->rtv_hash);
-		g_hash_table_foreach(rtv_map->offset_hash,dealloc_list,NULL);
-		g_hash_table_destroy(rtv_map->offset_hash);
-		cleanup(rtv_map);
-		DATA_SET(global_data,"rtv_map",NULL);
-	}
 	/* Runtime Text*/
 	g_mutex_lock(rtt_mutex);
 	store = (GtkListStore *)DATA_GET(global_data,"rtt_model");
@@ -1032,11 +1010,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 
 	DATA_SET(global_data,"offline",NULL);
 	DATA_SET(global_data,"interrogated",NULL);
-
-	/* Dynamic widgets master hash  */
-	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
-	if (dynamic_widgets)
-		g_hash_table_destroy(dynamic_widgets);
 
 	/* Condition variables */
 	cond = (GCond *)DATA_GET(global_data,"statuscounts_cond");
@@ -1126,9 +1099,9 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	}
 
 	/* Free all global data and structures */
-	/*printf("Deallocing GLOBAL DATA\n");*/
-		g_dataset_foreach(global_data,dataset_dealloc,NULL);
-	//g_dataset_destroy(global_data);
+	printf("Deallocing GLOBAL DATA\n");
+	g_dataset_foreach(global_data,dataset_dealloc,NULL);
+	g_dataset_destroy(global_data);
 	cleanup(global_data);
 }
 
@@ -1141,7 +1114,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
   */
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
-//	printf("removing data for %s\n",g_quark_to_string(key_id));
+	printf("removing data for %s\n",g_quark_to_string(key_id));
 	g_dataset_remove_data(data,g_quark_to_string(key_id));
 }
 
@@ -1489,9 +1462,9 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 	if (array)
 		g_array_free((GArray *)DATA_GET(object,"history"),TRUE);
 
-//	printf("Deallocing RTV var %s\n",DATA_GET(object,"dlog_gui_name"));
-	g_dataset_foreach(object,dataset_dealloc,NULL);
-	//g_dataset_destroy(object);
+	printf("Deallocing RTV var %s\n",(gchar *)DATA_GET(object,"dlog_gui_name"));
+//	g_dataset_foreach(object,dataset_dealloc,NULL);
+	g_dataset_destroy(object);
 	cleanup(object);
 }
 
@@ -1721,6 +1694,19 @@ G_MODULE_EXPORT void cleanup(void *data)
 
 
 /*!
+  \brief deallocs the pointer array of TabInfo structures
+  \param data is the pointer to the data structure to be freed
+  \param user_data is unused
+  */
+G_MODULE_EXPORT void dealloc_tabinfos(gpointer data)
+{
+	g_ptr_array_foreach((GPtrArray *)data,(GFunc)dealloc_tabinfo,NULL);
+	g_ptr_array_free((GPtrArray *)data,TRUE);
+	DATA_SET(global_data,"tabinfos",NULL);
+}
+
+
+/*!
   \brief deallocs a TabInfo structure
   \param data is the pointer to the data structure to be freed
   \param user_data is unused
@@ -1731,4 +1717,34 @@ G_MODULE_EXPORT void dealloc_tabinfo(gpointer data, gpointer user_data)
 	cleanup(tabinfo->glade_file);
 	cleanup(tabinfo->datamap_file);
 	cleanup(tabinfo);
+}
+
+
+/*!
+  \brief deallocs the rtv_map structure
+  \param data is the pointer to the data structure to be freed
+  \param user_data is unused
+  */
+G_MODULE_EXPORT void dealloc_rtv_map(gpointer data)
+{
+	Rtv_Map *rtv_map = (Rtv_Map *)data;
+	if (rtv_map)
+	{
+		if (rtv_map->raw_list)
+			g_strfreev(rtv_map->raw_list);
+		cleanup (rtv_map->applicable_signatures);
+		for(int i=0;i<(gint)rtv_map->rtv_list->len;i++)
+		{
+			gconstpointer* data;
+			data = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list,i);
+			dealloc_rtv_object(data);
+		}
+		g_array_free(rtv_map->ts_array,TRUE);
+		g_ptr_array_free(rtv_map->rtv_list,TRUE);
+		g_hash_table_destroy(rtv_map->rtv_hash);
+		g_hash_table_foreach(rtv_map->offset_hash,dealloc_list,NULL);
+		g_hash_table_destroy(rtv_map->offset_hash);
+		cleanup(rtv_map);
+		DATA_SET(global_data,"rtv_map",NULL);
+	}
 }

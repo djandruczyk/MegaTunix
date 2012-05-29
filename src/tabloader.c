@@ -205,7 +205,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		}
 	}
 	g_timeout_add(500,(GSourceFunc)preload_deps,tabinfos);
-	DATA_SET(global_data,"tabinfos",tabinfos);
+	DATA_SET_FULL(global_data,"tabinfos",tabinfos,dealloc_tabinfos);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	MTXDBG(TABLOADER,_("All is well, leaving...\n\n"));
 	set_title(g_strdup(_("Gui Tabs Loaded...")));

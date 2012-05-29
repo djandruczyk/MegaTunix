@@ -36,6 +36,7 @@
 #include <multi_expr_loader.h>
 #include <getfiles.h>
 #include <keyparser.h>
+#include <mtxmatheval.h>
 #include <notifications.h>
 #include <plugin.h>
 #include <rtv_map_loader.h>
@@ -122,7 +123,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	}
 	else
 	{
-		DATA_SET(global_data,"rtv_map",rtv_map);
+		DATA_SET_FULL(global_data,"rtv_map",rtv_map,dealloc_rtv_map);
 		set_title(g_strdup(_("RT Map XML Loaded OK!")));
 		DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
 	}
@@ -346,6 +347,7 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 {
 	static void (*common_rtv_loader)(gconstpointer *,xmlNode *, gchar *, ComplexExprType);
 	static Firmware_Details *firmware = NULL;
+	void *evaluator = NULL;
 	gchar *tmpbuf = NULL;
 	gchar * name = NULL;
 	gint tmpi;
@@ -390,6 +392,13 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 		return;
 	}
 	DATA_SET_FULL(object,"fromecu_conv_expr",g_strdup(fromecu_conv_expr),g_free);
+	evaluator = evaluator_create(fromecu_conv_expr);
+	if (!evaluator)
+		MTXDBG(COMPLEX_EXPR|CRITICAL,_("Unable to create evaluator for expression \"%s\", expect a crash\n"),fromecu_conv_expr);
+	else
+		DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
+
+
 	g_free(fromecu_conv_expr);
 	// Store the lists as well so DO NOT DEALLOCATE THEM!!! 
 	DATA_SET_FULL(object,"expr_types",(gpointer)expr_types,g_free);
