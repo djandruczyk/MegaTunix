@@ -56,6 +56,7 @@ gint main(gint argc, gchar ** argv)
 	GAsyncQueue *queue = NULL;
 	GCond *cond = NULL;
 	GMutex *mutex = NULL;
+	GMutex *pf_dispatch_mutex = NULL;
 	gint id = 0;
 	setlocale(LC_ALL,"");
 #ifdef __WIN32__
@@ -84,11 +85,7 @@ gint main(gint argc, gchar ** argv)
 	cond = g_cond_new();
 	DATA_SET(global_data,"statuscounts_cond",cond);
 	cond = g_cond_new();
-	DATA_SET(global_data,"io_dispatch_cond",cond);
-	cond = g_cond_new();
 	DATA_SET(global_data,"gui_dispatch_cond",cond);
-	cond = g_cond_new();
-	DATA_SET(global_data,"pf_dispatch_cond",cond);
 	cond = g_cond_new();
 	DATA_SET(global_data,"rtv_thread_cond",cond);
 
@@ -104,11 +101,9 @@ gint main(gint argc, gchar ** argv)
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"statuscounts_mutex",mutex);
 	mutex = g_mutex_new();
-	DATA_SET(global_data,"io_dispatch_mutex",mutex);
-	mutex = g_mutex_new();
 	DATA_SET(global_data,"gui_dispatch_mutex",mutex);
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"pf_dispatch_mutex",mutex);
+	pf_dispatch_mutex = g_mutex_new();
+	DATA_SET(global_data,"pf_dispatch_mutex",pf_dispatch_mutex);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"rtv_thread_mutex",mutex);
 
@@ -147,7 +142,7 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
 
-	id = g_timeout_add_full(-50,16,(GSourceFunc)pf_dispatcher,NULL,NULL);
+	id = g_timeout_add_full(-50,16,(GSourceFunc)pf_dispatcher,pf_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
 	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,NULL,NULL);
 	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));

@@ -46,37 +46,24 @@
 G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 {
 	static GAsyncQueue *pf_dispatch_queue = NULL;
-	static GCond *pf_dispatch_cond = NULL;
-	static GMutex *pf_dispatch_mutex = NULL;
 	PostFunction *pf=NULL;
 	Io_Message *message = NULL;
 	/*GTimeVal time;*/
 	extern gconstpointer *global_data;
 
 	MTXDBG(DISPATCHER,_("Entered!\n"));
-	if (!pf_dispatch_cond)
-		pf_dispatch_cond = (GCond *)DATA_GET(global_data,"pf_dispatch_cond");
-	if (!pf_dispatch_mutex)
-		pf_dispatch_mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
 	if (!pf_dispatch_queue)
 		pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
 
-	g_return_val_if_fail(pf_dispatch_cond,FALSE);
-	g_return_val_if_fail(pf_dispatch_mutex,FALSE);
 	g_return_val_if_fail(global_data,FALSE);
+	g_async_queue_ref(pf_dispatch_queue);
 
-	if ((!pf_dispatch_queue) || 
-			(DATA_GET(global_data,"leaving")) || 
-			(DATA_GET(global_data,"might_be_leaving")))
+	if (DATA_GET(global_data,"pf_dispatcher_exit"))
 	{
-		/*QUIET_MTXDBG(CRITICAL,_("no pf dispatch queue or leaving or might_be_leaving is set!\n"));*/
-		/* Flush the queue */
 		while (NULL != (message = (Io_Message *)g_async_queue_try_pop(pf_dispatch_queue)))
 			dealloc_io_message(message);
-		g_mutex_lock(pf_dispatch_mutex);
-		g_cond_signal(pf_dispatch_cond);
-		g_mutex_unlock(pf_dispatch_mutex);
-		return TRUE;
+		g_async_queue_unref(pf_dispatch_queue);
+		return FALSE;
 	}
 
 	/*
@@ -88,9 +75,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	if (!message)
 	{
 		MTXDBG(DISPATCHER,_("No messages waiting, signalling!\n"));
-		g_mutex_lock(pf_dispatch_mutex);
-		g_cond_signal(pf_dispatch_cond);
-		g_mutex_unlock(pf_dispatch_mutex);
 		MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
 		return TRUE;
 	}
@@ -100,9 +84,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		 * in this case.
 		 */
 		dealloc_io_message(message);
-		g_mutex_lock(pf_dispatch_mutex);
-		g_cond_signal(pf_dispatch_cond);
-		g_mutex_unlock(pf_dispatch_mutex);
 		return TRUE;
 	}
 
@@ -161,11 +142,23 @@ fast_exit:
 	gdk_threads_enter();
 	gdk_flush();
 	gdk_threads_leave();
-	g_mutex_lock(pf_dispatch_mutex);
-	g_cond_signal(pf_dispatch_cond);
-	g_mutex_unlock(pf_dispatch_mutex);
+	g_async_queue_unref(pf_dispatch_queue);
 	MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
 	return TRUE;
+}
+
+
+
+/*!
+  \brief timeout_done() is a GDestroyNotify called when gtk_timeout 
+  exits, its purpose is to unlock the mutex that was locked during the exit
+  sequence so things are deallocated nicely.
+  */
+void timeout_done(gpointer data)
+{
+	GMutex *mutex = (GMutex *)data;
+	if (mutex)
+		g_mutex_unlock(mutex);
 }
 
 

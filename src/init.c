@@ -1018,12 +1018,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		g_cond_free(cond);
 		DATA_SET(global_data,"statuscounts_cond", NULL);
 	}
-	cond = (GCond *)DATA_GET(global_data,"io_dispatch_cond");
-	if (cond)
-	{
-		g_cond_free(cond);
-		DATA_SET(global_data,"io_dispatch_cond", NULL);
-	}
 	cond = (GCond *)DATA_GET(global_data,"gui_dispatch_cond");
 	if (cond)
 	{
@@ -1072,12 +1066,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	{
 		g_mutex_free(mutex);
 		DATA_SET(global_data,"statuscounts_mutex", NULL);
-	}
-	mutex = (GMutex *)DATA_GET(global_data,"io_dispatch_mutex");
-	if (mutex)
-	{
-		g_mutex_free(mutex);
-		DATA_SET(global_data,"io_dispatch_mutex", NULL);
 	}
 	mutex = (GMutex *)DATA_GET(global_data,"gui_dispatch_mutex");
 	if (mutex)

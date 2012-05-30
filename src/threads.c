@@ -114,8 +114,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	Io_Message *message = NULL;	
 	GAsyncQueue *io_data_queue = NULL;
 	GAsyncQueue *pf_dispatch_queue = NULL;
-	GCond * io_dispatch_cond = NULL;
-	GMutex * io_dispatch_mutex = NULL;
 	CmdLineArgs *args  = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
@@ -124,8 +122,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	MTXDBG(THREADS,_("Thread created!\n"));
 
 	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
-	io_dispatch_cond = (GCond *)DATA_GET(global_data,"io_dispatch_cond");
-	io_dispatch_mutex = (GMutex *)DATA_GET(global_data,"io_dispatch_mutex");
 	pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	get_symbol("serial_repair_thread",(void **)&serial_repair_thread);
@@ -135,26 +131,22 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 
 	g_return_val_if_fail(args,NULL);
 	g_return_val_if_fail(io_data_queue,NULL);
-	g_return_val_if_fail(io_dispatch_cond,NULL);
-	g_return_val_if_fail(io_dispatch_mutex,NULL);
 	g_return_val_if_fail(pf_dispatch_queue,NULL);
 	g_return_val_if_fail(serial_params,NULL);
+	g_async_queue_ref(io_data_queue);
 	/*	clock = g_timer_new();*/
 	/* Endless Loop, wait for message, processs and repeat... */
 	while (TRUE)
 	{
-
 		if (DATA_GET(global_data,"thread_dispatcher_exit"))
 		{
 fast_exit:
-			DATA_SET(global_data,"thread_dispatcher_id",NULL);
 			/* drain queue and exit thread */
 			while ((message = (Io_Message *)g_async_queue_try_pop(io_data_queue)) != NULL)
 				dealloc_io_message(message);
+			g_async_queue_unref(io_data_queue);
 
-			g_mutex_lock(io_dispatch_mutex);
-			g_cond_signal(io_dispatch_cond);
-			g_mutex_unlock(io_dispatch_mutex);
+			MTXDBG(THREADS,_("Thread exiting!!\n"));
 			g_thread_exit(0);
 		}
 #if GLIB_MINOR_VERSION < 31
@@ -202,8 +194,6 @@ fast_exit:
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
-					if (DATA_GET(global_data,"leaving"))
-						goto fast_exit;
 					gdk_threads_enter();
 					message->status = message->command->function(message->command,message->command->func_call_arg);
 					gdk_threads_leave();
@@ -221,12 +211,17 @@ fast_exit:
 					DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 
 				/*printf("Write command elapsed time %f\n",g_timer_elapsed(clock,NULL));*/
-				if (message->command->helper_function)
+				if (message)
 				{
-					if (DATA_GET(global_data,"leaving"))
-						goto fast_exit;
-					message->command->helper_function(message, message->command->helper_func_arg);
+					if (message->command)
+					{
+						if (message->command->helper_function)
+						{
+							message->command->helper_function(message, message->command->helper_func_arg);
+						}
+					}
 				}
+
 				/*printf("Write command with post function time %f\n",g_timer_elapsed(clock,NULL));*/
 				break;
 			case NULL_CMD:
@@ -252,9 +247,6 @@ fast_exit:
 			g_async_queue_unref(pf_dispatch_queue);
 		}
 	}
-	MTXDBG(THREADS,_("Thread exiting!!\n"));
-	DATA_SET(global_data,"thread_dispatcher_id",NULL);
-	g_thread_exit(0);
 }
 
 

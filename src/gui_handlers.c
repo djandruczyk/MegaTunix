@@ -102,12 +102,12 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	GCond *pf_dispatch_cond = NULL;
 	GCond *gui_dispatch_cond = NULL;
-	GCond *io_dispatch_cond = NULL;
 	GCond *statuscounts_cond = NULL;
 	GMutex *pf_dispatch_mutex = NULL;
 	GMutex *gui_dispatch_mutex = NULL;
-	GMutex *io_dispatch_mutex = NULL;
 	GMutex *statuscounts_mutex = NULL;
+	GTimer *timer = NULL;
+	GThread *thread = NULL;
 	Firmware_Details *firmware = NULL;
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -157,21 +157,30 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	if (io_repair_queue)
 		g_async_queue_push(io_repair_queue,&tmp);
 
-
 	//QUIET_MTXDBG(CRITICAL,_("Configuration saved\n"));
 
-	/* Tell plugins to shutdown */
-	plugins_shutdown();
-
 	/* IO dispatch queue */
-	g_get_current_time(&now);
-	g_time_val_add(&now,250000);
-	io_dispatch_cond = (GCond *)DATA_GET(global_data,"io_dispatch_cond");
-	io_dispatch_mutex = (GMutex *)DATA_GET(global_data,"io_dispatch_mutex");
-	g_mutex_lock(io_dispatch_mutex);
-	res = g_cond_timed_wait(io_dispatch_cond,io_dispatch_mutex,&now);
-	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for io_dispatch_condition is %i\n"),res);*/
-	g_mutex_unlock(io_dispatch_mutex);
+	thread = (GThread *)DATA_GET(global_data,"thread_dispatcher_id");
+	DATA_SET(global_data,"thread_dispatcher_exit",GINT_TO_POINTER(1));
+	g_thread_join(thread);
+	DATA_SET(global_data,"thread_dispatcher_id",NULL);
+
+	/* PF dispatch queue */
+	pf_dispatch_mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
+	/* Lock it */
+	g_mutex_lock(pf_dispatch_mutex);
+	DATA_SET(global_data,"pf_dispatcher_exit",GINT_TO_POINTER(1));
+	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
+	if (id)
+		g_source_remove(id);
+	DATA_SET(global_data,"pf_dispatcher_id",NULL);
+	/* Try to lock again, this WILL BLOCK until the timeout DestroyNotify
+	 * fires which purpose is to unlock the mutex which will let this 
+	 * return, thus we wait properly for the timeout to end cleanly
+	 */
+	g_mutex_lock(pf_dispatch_mutex);
+	/* When the above returns, the timeout is done */
+	g_mutex_unlock(pf_dispatch_mutex);
 
 	/* Binary Log flusher */
 	id = (GINT)DATA_GET(global_data,"binlog_flush_id");
@@ -179,19 +188,22 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		g_source_remove(id);
 	DATA_SET(global_data,"binlog_flush_id",NULL);
 
-	/* PF dispatch queue */
-	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
-	if (id)
-		g_source_remove(id);
-	DATA_SET(global_data,"pf_dispatcher_id",NULL);
-	g_get_current_time(&now);
-	g_time_val_add(&now,250000);
-	pf_dispatch_cond = (GCond *)DATA_GET(global_data,"pf_dispatch_cond");
-	pf_dispatch_mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
-	g_mutex_lock(pf_dispatch_mutex);
-	res = g_cond_timed_wait(pf_dispatch_cond,pf_dispatch_mutex,&now);
-	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for pf_dispatch_condition is %i\n"),res);*/
-	g_mutex_unlock(pf_dispatch_mutex);
+	/* Tell plugins to shutdown */
+	plugins_shutdown();
+
+//	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
+//	if (id)
+//		g_source_remove(id);
+//	DATA_SET(global_data,"pf_dispatcher_id",NULL);
+//
+//	g_get_current_time(&now);
+//	g_time_val_add(&now,250000);
+//	pf_dispatch_cond = (GCond *)DATA_GET(global_data,"pf_dispatch_cond");
+//	pf_dispatch_mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
+//	g_mutex_lock(pf_dispatch_mutex);
+//	res = g_cond_timed_wait(pf_dispatch_cond,pf_dispatch_mutex,&now);
+//	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for pf_dispatch_condition is %i\n"),res);*/
+//	g_mutex_unlock(pf_dispatch_mutex);
 
 	/* Statuscounts timeout */
 	id = (GINT)DATA_GET(global_data,"statuscounts_id");

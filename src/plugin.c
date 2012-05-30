@@ -123,30 +123,8 @@ G_MODULE_EXPORT void plugins_init()
 G_MODULE_EXPORT void plugins_shutdown()
 {
 	GModule *module = NULL;
-	GMutex *mutex = NULL;
-	GCond *cond = NULL;
-	GThread *id = NULL;
 	void (*plugin_shutdown)(void);
 
-	mutex = (GMutex *)DATA_GET(global_data,"io_dispatch_mutex");
-	cond = (GCond *)DATA_GET(global_data,"io_dispatch_cond");
-
-	/* Get mutex, lock it, check thread ID, if valid, toggle variable 
-	   and wait for condition to be detected and signaled
-	   */
-	g_mutex_lock(mutex);
-	id = (GThread *)DATA_GET(global_data,"thread_dispatcher_id");
-	if (!id)	/* Thread already died, don't deadlock waiting for it*/
-		g_mutex_unlock(mutex);
-	else
-	{
-		/* Mutex ALREADY locked, toggle flag, wait on condition 
-		   until signalled
-		   */
-		DATA_SET(global_data,"thread_dispatcher_exit",GINT_TO_POINTER(TRUE));
-		g_cond_wait(cond,mutex);
-		g_mutex_unlock(mutex);
-	}
 	/* Shutdown ECU module */
 	module = (GModule *)DATA_GET(global_data,"ecu_module");
 	if (module)
