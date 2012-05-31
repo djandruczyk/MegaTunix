@@ -148,20 +148,6 @@ fast_exit:
 }
 
 
-
-/*!
-  \brief timeout_done() is a GDestroyNotify called when gtk_timeout 
-  exits, its purpose is to unlock the mutex that was locked during the exit
-  sequence so things are deallocated nicely.
-  */
-void timeout_done(gpointer data)
-{
-	GMutex *mutex = (GMutex *)data;
-	if (mutex)
-		g_mutex_unlock(mutex);
-}
-
-
 /*!
   \brief gui_dispatcher() is a GTK+ timeout that runs 30 tiems per second 
   checking for message on the dispatch queue which handles gui operations 

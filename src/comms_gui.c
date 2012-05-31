@@ -58,7 +58,6 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 	static gboolean pf_red = FALSE;
 	static GAsyncQueue *pf_dispatch_queue = NULL;
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	static GCond *statuscounts_cond = NULL;
 	static GMutex *statuscounts_mutex = NULL;
 	gchar *tmpbuf = NULL;
 	gint tmp = 0;
@@ -70,23 +69,12 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 		pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
-	if (!statuscounts_cond)
-		statuscounts_cond = (GCond *)DATA_GET(global_data,"statuscounts_cond");
 	if (!statuscounts_mutex)
 		statuscounts_mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
 
 	g_return_val_if_fail(pf_dispatch_queue,FALSE);
 	g_return_val_if_fail(gui_dispatch_queue,FALSE);
-	g_return_val_if_fail(statuscounts_cond,FALSE);
 	g_return_val_if_fail(statuscounts_mutex,FALSE);
-
-	if (DATA_GET(global_data,"leaving"))
-	{
-		g_mutex_lock(statuscounts_mutex);
-		g_cond_signal(statuscounts_cond);
-		g_mutex_unlock(statuscounts_mutex);
-		return FALSE;
-	}
 
 	gdk_threads_enter();
 	tmpbuf = g_strdup_printf("%i",(GINT)DATA_GET(global_data,"ve_goodread_count"));
@@ -160,9 +148,6 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 	g_free(tmpbuf);
 	gdk_threads_leave();
 
-	g_mutex_lock(statuscounts_mutex);
-	g_cond_signal(statuscounts_cond);
-	g_mutex_unlock(statuscounts_mutex);
 	return TRUE;
 }
 

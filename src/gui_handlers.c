@@ -100,12 +100,9 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GtkWidget *main_window = NULL;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
-	GCond *pf_dispatch_cond = NULL;
 	GCond *gui_dispatch_cond = NULL;
-	GCond *statuscounts_cond = NULL;
-	GMutex *pf_dispatch_mutex = NULL;
+	GMutex *mutex = NULL;
 	GMutex *gui_dispatch_mutex = NULL;
-	GMutex *statuscounts_mutex = NULL;
 	GTimer *timer = NULL;
 	GThread *thread = NULL;
 	Firmware_Details *firmware = NULL;
@@ -165,22 +162,28 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_thread_join(thread);
 	DATA_SET(global_data,"thread_dispatcher_id",NULL);
 
+	/* NOTE: Timeouts are not threads and they behave differently
+	 * So we use a litle spicy magic. The timeout has a function that 
+	 * it will call which it is destroyed. The function will unlock the
+	 * mutex associated with that timeout.  So in order to syncronize with
+	 * the timeout's deletion, we wil lock it first, then set the global
+	 * variable the timeout will be looking for (if it's running), as well
+	 * as tell glib to remove it's ID, so the destroy notify gets called.
+	 * Meanwhile we try to lock the mutex again and will block until the 
+	 * destroynotify runs which unlocks the mutex and unblocks us here,
+	 * so we have a folproof way to know the timeout has shutdown.
+	 */
 	/* PF dispatch queue */
-	pf_dispatch_mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
-	/* Lock it */
-	g_mutex_lock(pf_dispatch_mutex);
+	mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
+	g_mutex_lock(mutex);
 	DATA_SET(global_data,"pf_dispatcher_exit",GINT_TO_POINTER(1));
 	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
 	if (id)
 		g_source_remove(id);
 	DATA_SET(global_data,"pf_dispatcher_id",NULL);
-	/* Try to lock again, this WILL BLOCK until the timeout DestroyNotify
-	 * fires which purpose is to unlock the mutex which will let this 
-	 * return, thus we wait properly for the timeout to end cleanly
-	 */
-	g_mutex_lock(pf_dispatch_mutex);
+	g_mutex_lock(mutex);
 	/* When the above returns, the timeout is done */
-	g_mutex_unlock(pf_dispatch_mutex);
+	g_mutex_unlock(mutex);
 
 	/* Binary Log flusher */
 	id = (GINT)DATA_GET(global_data,"binlog_flush_id");
@@ -191,33 +194,16 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	/* Tell plugins to shutdown */
 	plugins_shutdown();
 
-//	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
-//	if (id)
-//		g_source_remove(id);
-//	DATA_SET(global_data,"pf_dispatcher_id",NULL);
-//
-//	g_get_current_time(&now);
-//	g_time_val_add(&now,250000);
-//	pf_dispatch_cond = (GCond *)DATA_GET(global_data,"pf_dispatch_cond");
-//	pf_dispatch_mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
-//	g_mutex_lock(pf_dispatch_mutex);
-//	res = g_cond_timed_wait(pf_dispatch_cond,pf_dispatch_mutex,&now);
-//	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for pf_dispatch_condition is %i\n"),res);*/
-//	g_mutex_unlock(pf_dispatch_mutex);
-
 	/* Statuscounts timeout */
+	mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
+	g_mutex_lock(mutex);
 	id = (GINT)DATA_GET(global_data,"statuscounts_id");
 	if (id)
 		g_source_remove(id);
 	DATA_SET(global_data,"statuscounts_id",NULL);
-	g_get_current_time(&now);
-	g_time_val_add(&now,250000);
-	statuscounts_cond = (GCond *)DATA_GET(global_data,"statuscounts_cond");
-	statuscounts_mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
-	g_mutex_lock(statuscounts_mutex);
-	res = g_cond_timed_wait(statuscounts_cond,statuscounts_mutex,&now);
-	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for statuscounts_condition is %i\n"),res);*/
-	g_mutex_unlock(statuscounts_mutex);
+	g_mutex_lock(mutex);
+	/* When the above returns, the timeout is done */
+	g_mutex_unlock(mutex);
 
 	/* GUI Dispatch timeout */
 	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");

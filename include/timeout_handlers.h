@@ -32,6 +32,7 @@ extern "C" {
 void start_tickler(TicklerType);
 void stop_tickler(TicklerType);
 void *signal_read_rtvars_thread(gpointer);
+void timeout_done(gpointer);
 gboolean early_interrogation(void);
 gboolean personality_choice(void);
 gboolean check_for_first_time(void);

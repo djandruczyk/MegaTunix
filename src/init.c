@@ -1012,23 +1012,11 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	DATA_SET(global_data,"interrogated",NULL);
 
 	/* Condition variables */
-	cond = (GCond *)DATA_GET(global_data,"statuscounts_cond");
-	if (cond)
-	{
-		g_cond_free(cond);
-		DATA_SET(global_data,"statuscounts_cond", NULL);
-	}
 	cond = (GCond *)DATA_GET(global_data,"gui_dispatch_cond");
 	if (cond)
 	{
 		g_cond_free(cond);
 		DATA_SET(global_data,"gui_dispatch_cond", NULL);
-	}
-	cond = (GCond *)DATA_GET(global_data,"pf_dispatch_cond");
-	if (cond)
-	{
-		g_cond_free(cond);
-		DATA_SET(global_data,"pf_dispatch_cond", NULL);
 	}
 	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
 	if (cond)

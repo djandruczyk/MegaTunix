@@ -29,7 +29,6 @@ extern "C" {
 
 /* Prototypes */
 gboolean pf_dispatcher(gpointer);
-void timeout_done(gpointer);
 gboolean gui_dispatcher(gpointer);
 void *clock_watcher(gpointer);
 /* Prototypes */

@@ -83,8 +83,6 @@ gint main(gint argc, gchar ** argv)
 
 	/* Condition variables */
 	cond = g_cond_new();
-	DATA_SET(global_data,"statuscounts_cond",cond);
-	cond = g_cond_new();
 	DATA_SET(global_data,"gui_dispatch_cond",cond);
 	cond = g_cond_new();
 	DATA_SET(global_data,"rtv_thread_cond",cond);

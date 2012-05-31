@@ -42,6 +42,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
 	gint id = 0;
 	GThread *realtime_id = NULL;
+	GMutex *mutex = NULL;
 	switch (type)
 	{
 		case RTV_TICKLER:
@@ -85,7 +86,8 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 				break;
 			if (!DATA_GET(global_data,"statuscounts_id"))
 			{
-				id = g_timeout_add(100,(GSourceFunc)update_errcounts,NULL);
+				mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
+				id = g_timeout_add_full(500,100,(GSourceFunc)update_errcounts,mutex,timeout_done);
 				DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(id));
 			}
 			else
@@ -268,3 +270,18 @@ G_MODULE_EXPORT gboolean check_for_first_time(void)
 	return FALSE;
 
 }
+
+
+/*!
+  \brief timeout_done() is a GDestroyNotify called when gtk_timeout 
+  exits, its purpose is to unlock the mutex that was locked during the exit
+  sequence so things are deallocated nicely.
+  */
+void timeout_done(gpointer data)
+{
+	GMutex *mutex = (GMutex *)data;
+	if (mutex)
+		g_mutex_unlock(mutex);
+}
+
+
