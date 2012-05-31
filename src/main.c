@@ -57,6 +57,7 @@ gint main(gint argc, gchar ** argv)
 	GCond *cond = NULL;
 	GMutex *mutex = NULL;
 	GMutex *pf_dispatch_mutex = NULL;
+	GMutex *gui_dispatch_mutex = NULL;
 	gint id = 0;
 	setlocale(LC_ALL,"");
 #ifdef __WIN32__
@@ -83,8 +84,6 @@ gint main(gint argc, gchar ** argv)
 
 	/* Condition variables */
 	cond = g_cond_new();
-	DATA_SET(global_data,"gui_dispatch_cond",cond);
-	cond = g_cond_new();
 	DATA_SET(global_data,"rtv_thread_cond",cond);
 
 	/* Mutexes */
@@ -98,8 +97,8 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"dash_mutex",mutex);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"statuscounts_mutex",mutex);
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"gui_dispatch_mutex",mutex);
+	gui_dispatch_mutex = g_mutex_new();
+	DATA_SET(global_data,"gui_dispatch_mutex",gui_dispatch_mutex);
 	pf_dispatch_mutex = g_mutex_new();
 	DATA_SET(global_data,"pf_dispatch_mutex",pf_dispatch_mutex);
 	mutex = g_mutex_new();
@@ -142,7 +141,7 @@ gint main(gint argc, gchar ** argv)
 
 	id = g_timeout_add_full(-50,16,(GSourceFunc)pf_dispatcher,pf_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
-	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,NULL,NULL);
+	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
 	id = g_timeout_add(1000,(GSourceFunc)flush_binary_logs,NULL);
         DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
