@@ -1011,19 +1011,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	DATA_SET(global_data,"offline",NULL);
 	DATA_SET(global_data,"interrogated",NULL);
 
-	/* Condition variables */
-	cond = (GCond *)DATA_GET(global_data,"gui_dispatch_cond");
-	if (cond)
-	{
-		g_cond_free(cond);
-		DATA_SET(global_data,"gui_dispatch_cond", NULL);
-	}
-	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
-	if (cond)
-	{
-		g_cond_free(cond);
-		DATA_SET(global_data,"rtv_thread_cond", NULL);
-	}
 	/* Mutexes */
 	mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 	if (mutex)
@@ -1066,12 +1053,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	{
 		g_mutex_free(mutex);
 		DATA_SET(global_data,"pf_dispatch_mutex", NULL);
-	}
-	mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
-	if (mutex)
-	{
-		g_mutex_free(mutex);
-		DATA_SET(global_data,"rtv_thread_mutex", NULL);
 	}
 
 	/* Free all global data and structures */

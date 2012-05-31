@@ -54,7 +54,6 @@ gint main(gint argc, gchar ** argv)
 {
 	Serial_Params *serial_params = NULL;
 	GAsyncQueue *queue = NULL;
-	GCond *cond = NULL;
 	GMutex *mutex = NULL;
 	GMutex *pf_dispatch_mutex = NULL;
 	GMutex *gui_dispatch_mutex = NULL;
@@ -82,10 +81,6 @@ gint main(gint argc, gchar ** argv)
 
 	global_data = g_new0(gconstpointer, 1);
 
-	/* Condition variables */
-	cond = g_cond_new();
-	DATA_SET(global_data,"rtv_thread_cond",cond);
-
 	/* Mutexes */
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"serio_mutex",mutex);
@@ -101,8 +96,6 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"gui_dispatch_mutex",gui_dispatch_mutex);
 	pf_dispatch_mutex = g_mutex_new();
 	DATA_SET(global_data,"pf_dispatch_mutex",pf_dispatch_mutex);
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"rtv_thread_mutex",mutex);
 
 	/* For testing if gettext works
 	   printf(_("Hello World!\n"));
