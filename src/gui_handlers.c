@@ -194,16 +194,19 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	/* Tell plugins to shutdown */
 	plugins_shutdown();
 
-	/* Statuscounts timeout */
-	mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
-	g_mutex_lock(mutex);
-	id = (GINT)DATA_GET(global_data,"statuscounts_id");
-	if (id)
-		g_source_remove(id);
-	DATA_SET(global_data,"statuscounts_id",NULL);
-	g_mutex_lock(mutex);
-	/* When the above returns, the timeout is done */
-	g_mutex_unlock(mutex);
+	if (!DATA_GET(global_data,"offline"))
+	{
+		/* Statuscounts timeout */
+		mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
+		g_mutex_lock(mutex);
+		id = (GINT)DATA_GET(global_data,"statuscounts_id");
+		if (id)
+			g_source_remove(id);
+		DATA_SET(global_data,"statuscounts_id",NULL);
+		g_mutex_lock(mutex);
+		/* When the above returns, the timeout is done */
+		g_mutex_unlock(mutex);
+	}
 
 	/* Gui dispatcher */
 	mutex = (GMutex *)DATA_GET(global_data,"gui_dispatch_mutex");
@@ -216,20 +219,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_mutex_lock(mutex);
 	/* When the above returns, the timeout is done */
 	g_mutex_unlock(mutex);
-
-	/* GUI Dispatch timeout */
-//	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");
-//	if (id)
-//		g_source_remove(id);
-//	DATA_SET(global_data,"gui_dispatcher_id",NULL);
-//	g_get_current_time(&now);
-//	g_time_val_add(&now,250000);
-//	gui_dispatch_cond = (GCond *)DATA_GET(global_data,"gui_dispatch_cond");
-//	gui_dispatch_mutex = (GMutex *)DATA_GET(global_data,"gui_dispatch_mutex");
-//	g_mutex_lock(gui_dispatch_mutex);
-//	res = g_cond_timed_wait(gui_dispatch_cond,gui_dispatch_mutex,&now);
-//	/*QUIET_MTXDBG(CRITICAL,_("Result of waiting for gui dispatch_cond is %i\n"),res);*/
-//	g_mutex_unlock(gui_dispatch_mutex);
 
 	save_config();
 
