@@ -257,7 +257,6 @@ src/plugins/ms3/Makefile
 src/plugins/mscommon/Makefile
 src/plugins/null/Makefile
 src/plugins/pis/Makefile
-src/plugins/secu3/Makefile
 msloader/Makefile
 msloader/resources.rc
 gaugedesigner/resources.rc
