@@ -1313,21 +1313,6 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 	gint h = 0;
 	GdkWindow *window = NULL;
 	GdkColor white = {0,65535,65535,65535};
-#ifdef __WIN32__
-	if ((GTK_WIDGET_VISIBLE(widget)) && (GTK_WIDGET_SENSITIVE(widget)))
-	{
-		if (!color) 
-		{
-			if (OBJ_GET(widget,"use_color")) 	/* Color reset */
-				update_widget((GObject *)widget,NULL);
-			else
-				gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
-		}
-		else
-			gtk_widget_modify_base(widget,GTK_STATE_NORMAL,color);
-	}
-	return;
-#else /* cairo impl for newer Gtk+ */
 	window = gtk_entry_get_text_window(GTK_ENTRY(widget));
 	if (GDK_IS_DRAWABLE(window))
 	{
@@ -1348,5 +1333,4 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 		cairo_stroke(cr);
 		cairo_destroy(cr);
 	}
-#endif
 }
