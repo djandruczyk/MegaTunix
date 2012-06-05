@@ -194,16 +194,19 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	/* Tell plugins to shutdown */
 	plugins_shutdown();
 
-	/* Statuscounts timeout */
-	mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
-	g_mutex_lock(mutex);
-	id = (GINT)DATA_GET(global_data,"statuscounts_id");
-	if (id)
-		g_source_remove(id);
-	DATA_SET(global_data,"statuscounts_id",NULL);
-	g_mutex_lock(mutex);
-	/* When the above returns, the timeout is done */
-	g_mutex_unlock(mutex);
+	/* Statuscounts timeout, only if online */
+	if (!DATA_GET(global_data,"offline"))
+	{
+		mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
+		g_mutex_lock(mutex);
+		id = (GINT)DATA_GET(global_data,"statuscounts_id");
+		if (id)
+			g_source_remove(id);
+		DATA_SET(global_data,"statuscounts_id",NULL);
+		g_mutex_lock(mutex);
+		/* When the above returns, the timeout is done */
+		g_mutex_unlock(mutex);
+	}
 
 	/* GUI Dispatch timeout */
 	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");
