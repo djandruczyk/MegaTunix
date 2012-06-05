@@ -210,13 +210,15 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 			g_get_current_time(&time);
 			delay = MAX(io_queue_len,pf_queue_len);
 
-			g_usleep(10000*delay);
 			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
 			if (DATA_GET(global_data,"read_rtvars_exit"))
 				goto breakout;
+			g_usleep(10000*delay);
+			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
 		}
 		//printf("serial_params->read_wait is %i\n",serial_params->read_wait);
 		g_usleep(serial_params->read_wait*1000);
+		if (DATA_GET(global_data,"read_rtvars_exit"))
 			goto breakout;
 	}
 breakout:
