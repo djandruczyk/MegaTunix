@@ -25,6 +25,10 @@
   \author David Andruczyk
   */
 
+#ifdef GTK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+#endif
+
 #include <assert.h>
 #include <combo_loader.h>
 #include <combo_mask.h>
@@ -97,17 +101,20 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 	g_strfreev(choices);
 
 	gtk_combo_box_set_model(GTK_COMBO_BOX(object),GTK_TREE_MODEL(store));
-#if GTK_MINOR_VERSION < 24
+/*#if GTK_MINOR_VERSION < 24 */
 	if (GTK_IS_COMBO_BOX_ENTRY(object))
 	{
 		gint width = 0;
 		gtk_combo_box_entry_set_text_column(GTK_COMBO_BOX_ENTRY(object),CHOICE_COL);
+/*
 #else
 	if (GTK_IS_COMBO_BOX(object))
 	{
 		gint width = 0;
+		g_object_set(object,"entry-text-column",CHOICE_COL,NULL);
 		gtk_combo_box_set_entry_text_column(GTK_COMBO_BOX(object),CHOICE_COL);
 #endif
+*/
 		entry = mask_entry_new_with_mask(regex);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
 		if ((width = (GINT)OBJ_GET((GtkWidget *)object,"max_chars")) > 0)
