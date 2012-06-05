@@ -257,7 +257,6 @@ src/plugins/ms3/Makefile
 src/plugins/mscommon/Makefile
 src/plugins/null/Makefile
 src/plugins/pis/Makefile
-src/plugins/secu3/Makefile
 msloader/Makefile
 msloader/resources.rc
 gaugedesigner/resources.rc
@@ -292,7 +291,6 @@ Interrogator/Profiles/MS-2/Makefile
 Interrogator/Profiles/MS-3/Makefile
 Interrogator/Profiles/FreeEMS/Makefile
 Interrogator/Profiles/PIS/Makefile
-Interrogator/Profiles/SECU-3/Makefile
 Interrogator/Profiles/JimStim/Makefile
 Gui/Makefile
 menu/Makefile
