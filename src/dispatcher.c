@@ -159,8 +159,6 @@ fast_exit:
 G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	static GCond *gui_dispatch_cond = NULL;
-	static GMutex *gui_dispatch_mutex = NULL;
 	static void (*update_widget_f)(gpointer,gpointer) = NULL;
 	static GList ***ecu_widgets = NULL;
 	gint count = 0;
@@ -172,37 +170,23 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
 
-	if (!gui_dispatch_cond)
-		gui_dispatch_cond = (GCond *)DATA_GET(global_data,"gui_dispatch_cond");
-	if (!gui_dispatch_mutex)
-		gui_dispatch_mutex = (GMutex *)DATA_GET(global_data,"gui_dispatch_mutex");
 	if (!gui_dispatch_queue)
 		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 
-	g_return_val_if_fail(gui_dispatch_cond,FALSE);
-	g_return_val_if_fail(gui_dispatch_mutex,FALSE);
 	g_return_val_if_fail(global_data,FALSE);
+	g_async_queue_ref(gui_dispatch_queue);
 trypop:
-	if ((!gui_dispatch_queue) || 
-			(DATA_GET(global_data,"leaving")) ||
-			(DATA_GET(global_data,"might_be_leaving")))
+	if (DATA_GET(global_data,"gui_dispatcher_exit"))
 	{
-		/*QUIET_MTXDBG(CRITICAL,_("no Gui dispatch queue or leaving or might_be_leaving is set!\n"));*/
-		/* Flush the queue */
 		while (NULL != (message = (Gui_Message *)g_async_queue_try_pop(gui_dispatch_queue)))
 			dealloc_gui_message(message);
-		g_mutex_lock(gui_dispatch_mutex);
-		g_cond_signal(gui_dispatch_cond);
-		g_mutex_unlock(gui_dispatch_mutex);
-		return TRUE;
+		g_async_queue_unref(gui_dispatch_queue);
+		return FALSE;
 	}
 	message = (Gui_Message *)g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
 	{
 		MTXDBG(DISPATCHER,_("no messages waiting, signalling\n"));
-		g_mutex_lock(gui_dispatch_mutex);
-		g_cond_signal(gui_dispatch_cond);
-		g_mutex_unlock(gui_dispatch_mutex);
 		return TRUE;
 	}
 
@@ -333,7 +317,6 @@ trypop:
 				}
 				gtk_main_iteration();
 			}
-			//gdk_flush();
 			gdk_threads_leave();
 		}
 	}
@@ -345,7 +328,7 @@ dealloc:
 	 * set too high, we can cause the timeout to hog the gui if it's
 	 * too low, things can fall behind. (GL redraw ;( )
 	 * */
-	if ((count < 3) && (!DATA_GET(global_data,"leaving")))
+	if (count < 3)
 	{
 		MTXDBG(DISPATCHER,_("trying to handle another message\n"));
 		goto trypop;
@@ -353,10 +336,6 @@ dealloc:
 	gdk_threads_enter();
 	gdk_flush();
 	gdk_threads_leave();
-	g_mutex_lock(gui_dispatch_mutex);
-	g_cond_signal(gui_dispatch_cond);
-	g_mutex_unlock(gui_dispatch_mutex);
 	MTXDBG(DISPATCHER,_("Leaving Gui Dispatcher\n"));
 	return TRUE;
 }
-
