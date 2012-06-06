@@ -106,6 +106,7 @@ G_MODULE_EXPORT void init(void)
 	DATA_SET(global_data,"active_page",GINT_TO_POINTER(-1));
 	DATA_SET(global_data,"active_table",GINT_TO_POINTER(-1));
 	DATA_SET(global_data,"pbar_hold_time",GINT_TO_POINTER(1100));
+	DATA_SET(global_data,"ellipsize_tabs",GINT_TO_POINTER(1));
 	DATA_SET_FULL(global_data,"last_ecu_family",g_strdup("MS-2"),cleanup);
 	DATA_SET_FULL(global_data,"last_signature",g_strdup(""),cleanup);
 	DATA_SET_FULL(global_data,"ecu_family",g_strdup("MS-2"),cleanup);
@@ -196,6 +197,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 	{
 		if(cfg_read_boolean(cfgfile, "Global", "Tooltips", &tmpi))
 			DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(tmpi));
+		if(cfg_read_boolean(cfgfile, "Global", "Ellipsize_Tabs", &tmpi))
+			DATA_SET(global_data,"ellipsize_tabs",GINT_TO_POINTER(tmpi));
 		if(cfg_read_boolean(cfgfile, "Global", "LogRawDatastream", &tmpi))
 			DATA_SET(global_data,"log_raw_datastream",GINT_TO_POINTER(tmpi));
 //		if(cfg_read_boolean(cfgfile, "Global", "NetworkAccess", &tmpi))
@@ -389,6 +392,7 @@ G_MODULE_EXPORT void save_config()
 	cfg_write_int(cfgfile, "Global", "minor_ver", MTX_MINOR);
 	cfg_write_int(cfgfile, "Global", "micro_ver", MTX_MICRO);
 	cfg_write_boolean(cfgfile, "Global", "Tooltips",(GBOOLEAN)DATA_GET(global_data,"tips_in_use"));
+	cfg_write_boolean(cfgfile, "Global", "Ellipsize_Tabs",(GBOOLEAN)DATA_GET(global_data,"ellipsize_tabs"));
 	cfg_write_boolean(cfgfile, "Global", "LogRawDatastream",(GBOOLEAN)DATA_GET(global_data,"log_raw_datastream"));
 	cfg_write_boolean(cfgfile, "Global", "NetworkAccess",(GBOOLEAN)DATA_GET(global_data,"network_access"));
 		

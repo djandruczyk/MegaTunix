@@ -139,10 +139,13 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			label = gtk_label_new(NULL);
 			tabinfo->tab_label = label;
 			gtk_label_set_markup_with_mnemonic(GTK_LABEL(label),tab_name);
-			if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
+			if (DATA_GET(global_data,"ellipsize_tabs"))
 			{
-				if (tmpi)
-					gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_END);
+				if (cfg_read_boolean(cfgfile,"global","ellipsize",&tmpi))
+				{
+					if (tmpi)
+						gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_END);
+				}
 			}
 			if (cfg_read_string(cfgfile,"global","bind_to_list",&tmpbuf))
 			{
@@ -663,10 +666,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		bind_to_lists(widget, tmpbuf);
 		g_free(tmpbuf);
 	}
-	if (cfg_read_boolean(cfgfile,section,"ellipsize",&tmpi))
+	if (DATA_GET(global_data,"ellipsize_tabs"))
 	{
-		if ((GTK_IS_LABEL(widget)) && (tmpi))
-			gtk_label_set_ellipsize(GTK_LABEL(widget),PANGO_ELLIPSIZE_END);
+		if (cfg_read_boolean(cfgfile,section,"ellipsize",&tmpi))
+		{
+			if ((GTK_IS_LABEL(widget)) && (tmpi))
+				gtk_label_set_ellipsize(GTK_LABEL(widget),PANGO_ELLIPSIZE_END);
+		}
 	}
 
 	/* Color selections */
