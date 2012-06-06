@@ -120,25 +120,6 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	dealloc_io_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
 
-	/* Causes issues on shit machines
-	gdk_threads_enter();
-	while (gtk_events_pending())
-	{
-		loops++;
-		if (DATA_GET(global_data,"leaving"))
-			goto fast_exit;
-		gtk_main_iteration();
-		printf("loopcount %i\n",loops);
-		if (loops > 100)
-		{
-			goto fast_exit;
-		}
-		printf("pf_dispatcher, main iteration!\n");
-	}
-	//gdk_flush();
-fast_exit:
-	gdk_threads_leave();
-	*/
 	gdk_threads_enter();
 	gdk_flush();
 	gdk_threads_leave();
@@ -310,14 +291,7 @@ trypop:
 
 			gdk_threads_enter();
 			while (gtk_events_pending())
-			{
-				if (DATA_GET(global_data,"leaving"))
-				{
-					/*QUIET_MTXDBG(CRITICAL,_("events_pending_loop, Gui handler, \"leaving\" flag was set, aborting\n"));*/
-					goto dealloc;
-				}
 				gtk_main_iteration();
-			}
 			gdk_threads_leave();
 		}
 	}

@@ -175,16 +175,18 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	 */
 	/* PF dispatch queue */
 	mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
-	g_mutex_lock(mutex);
-	DATA_SET(global_data,"pf_dispatcher_exit",GINT_TO_POINTER(1));
 	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
 	if (id)
+	{
+		g_mutex_lock(mutex);
+		DATA_SET(global_data,"pf_dispatcher_exit",GINT_TO_POINTER(1));
 		g_source_remove(id);
-	DATA_SET(global_data,"pf_dispatcher_id",NULL);
-	g_mutex_lock(mutex);
-	/* When the above returns, the timeout is done */
-	g_mutex_unlock(mutex);
-	DATA_SET(global_data,"pf_dispatcher_exit",NULL);
+		DATA_SET(global_data,"pf_dispatcher_id",NULL);
+		g_mutex_lock(mutex);
+		/* When the above returns, the timeout is done */
+		g_mutex_unlock(mutex);
+		DATA_SET(global_data,"pf_dispatcher_exit",NULL);
+	}
 
 	/* Binary Log flusher */
 	id = (GINT)DATA_GET(global_data,"binlog_flush_id");
@@ -199,28 +201,32 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	if (!DATA_GET(global_data,"offline"))
 	{
 		mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
-		g_mutex_lock(mutex);
 		id = (GINT)DATA_GET(global_data,"statuscounts_id");
 		if (id)
+		{
+			g_mutex_lock(mutex);
 			g_source_remove(id);
-		DATA_SET(global_data,"statuscounts_id",NULL);
-		g_mutex_lock(mutex);
-		/* When the above returns, the timeout is done */
-		g_mutex_unlock(mutex);
+			DATA_SET(global_data,"statuscounts_id",NULL);
+			g_mutex_lock(mutex);
+			/* When the above returns, the timeout is done */
+			g_mutex_unlock(mutex);
+		}
 	}
 
 	/* Gui dispatcher */
 	mutex = (GMutex *)DATA_GET(global_data,"gui_dispatch_mutex");
-	g_mutex_lock(mutex);
-	DATA_SET(global_data,"gui_dispatcher_exit",GINT_TO_POINTER(1));
 	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");
 	if (id)
+	{
+		g_mutex_lock(mutex);
+		DATA_SET(global_data,"gui_dispatcher_exit",GINT_TO_POINTER(1));
 		g_source_remove(id);
-	DATA_SET(global_data,"gui_dispatcher_id",NULL);
-	g_mutex_lock(mutex);
-	/* When the above returns, the timeout is done */
-	g_mutex_unlock(mutex);
-	DATA_SET(global_data,"gui_dispatcher_exit",NULL);
+		DATA_SET(global_data,"gui_dispatcher_id",NULL);
+		g_mutex_lock(mutex);
+		/* When the above returns, the timeout is done */
+		g_mutex_unlock(mutex);
+		DATA_SET(global_data,"gui_dispatcher_exit",NULL);
+	}
 
 	save_config();
 
