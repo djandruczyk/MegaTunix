@@ -109,19 +109,26 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
   */
 G_MODULE_EXPORT void stop_tickler(TicklerType type)
 {
+	GCond *cond = NULL;
+	GMutex *mutex = NULL;
 	GThread *realtime_id = NULL;
 
+	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
+	mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
+	g_return_if_fail(cond);
+	g_return_if_fail(mutex);
 	switch (type)
 	{
 		case RTV_TICKLER:
 			realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
 			if (realtime_id)
 			{
-				DATA_SET(global_data,"read_rtvars_exit",GINT_TO_POINTER(1));
+				g_mutex_lock(mutex);
+				g_cond_signal(cond);
+				g_mutex_unlock(mutex);
 				g_thread_join(realtime_id);
 				DATA_SET(global_data,"realtime_id",NULL);
 				update_logbar("comms_view",NULL,_("Realtime Reader stopped\n"),FALSE,FALSE,FALSE);
-				DATA_SET(global_data,"read_rtvars_exit",NULL);
 			}
 			else
 				update_logbar("comms_view",NULL,_("Realtime Reader ALREADY stopped\n"),FALSE,FALSE,FALSE);
@@ -167,18 +174,24 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	GTimeVal time;
 	GAsyncQueue *io_data_queue = NULL;
 	GAsyncQueue *pf_dispatch_queue = NULL;
+	GCond *cond = NULL;
+	GMutex *rtv_thread_mutex = NULL;
 	gint count = 0;
 	gint io_queue_len = 0;
 	gint pf_queue_len = 0;
 	gint delay = 0;
 
 	g_mutex_lock(mutex);
+	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
+	rtv_thread_mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
 	pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
 	get_symbol("signal_read_rtvars",(void **)&signal_read_rtvars);
 	get_symbol("setup_rtv",(void **)&setup_rtv);
 
+	g_return_val_if_fail(cond,NULL);
+	g_return_val_if_fail(rtv_thread_mutex,NULL);
 	g_return_val_if_fail(serial_params,NULL);
 	g_return_val_if_fail(signal_read_rtvars,NULL);
 	g_return_val_if_fail(io_data_queue,NULL);
@@ -193,6 +206,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	}
 	g_async_queue_ref(io_data_queue);
 	g_async_queue_ref(pf_dispatch_queue);
+	g_mutex_lock(rtv_thread_mutex);
 	while (TRUE)
 	{
 		MTXDBG(IO_MSG|THREADS,_("Sending message to thread to read RT vars\n"));
@@ -211,21 +225,22 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 			delay = MAX(io_queue_len,pf_queue_len);
 
 			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
-			if (DATA_GET(global_data,"read_rtvars_exit"))
+			g_time_val_add(&time,10000*(delay));
+			if (g_cond_timed_wait(cond,rtv_thread_mutex,&time))
 				goto breakout;
-			g_usleep(10000*delay);
-			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
 		}
 		//printf("serial_params->read_wait is %i\n",serial_params->read_wait);
-		if (DATA_GET(global_data,"read_rtvars_exit"))
+		g_get_current_time(&time);
+		g_time_val_add(&time,serial_params->read_wait*1000);
+		if (g_cond_timed_wait(cond,rtv_thread_mutex,&time))
 			goto breakout;
-		g_usleep(serial_params->read_wait*1000);
 	}
 breakout:
 	g_async_queue_unref(io_data_queue);
 	g_async_queue_unref(pf_dispatch_queue);
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
+	g_mutex_unlock(rtv_thread_mutex);
 	g_thread_exit(0);
 	return NULL;
 }

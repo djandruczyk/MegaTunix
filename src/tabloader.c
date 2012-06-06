@@ -1087,11 +1087,11 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		OBJ_SET(object,"size",GINT_TO_POINTER(size));
 		OBJ_SET(object,"bitmask",GINT_TO_POINTER(bitmask));
 		if (bitvals)
-			OBJ_SET_FULL(object,"bitvals",g_strdup(bitvals),cleanup);
+			OBJ_SET_FULL(object,"bitvals",g_strdup(bitvals),g_free);
 		else
 			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
-		OBJ_SET_FULL(object,"source_key",g_strdup(source_key),cleanup);
-		OBJ_SET_FULL(object,"source_values",g_strdup(source_values),cleanup);
+		OBJ_SET_FULL(object,"source_key",g_strdup(source_key),g_free);
+		OBJ_SET_FULL(object,"source_values",g_strdup(source_values),g_free);
 		list = (GList *)DATA_GET(global_data,"source_list");
 		list = g_list_prepend(list,object);
 		DATA_SET(global_data,"source_list",(gpointer)list);
@@ -1152,7 +1152,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			OBJ_SET_FULL(object,"bitvals",g_strdup(bitvals),g_free);
 		else
 			OBJ_SET(object,"bitval",GINT_TO_POINTER(bitval));
-		OBJ_SET_FULL(object,"toggle_groups",g_strdup(groups),cleanup);
+		OBJ_SET_FULL(object,"toggle_groups",g_strdup(groups),g_free);
 		list = (GList *)DATA_GET(global_data,"toggle_group_list");
 		list = g_list_prepend(list,object);
 		DATA_SET(global_data,"toggle_group_list",(gpointer)list);

@@ -129,7 +129,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 		object = (gconstpointer *)g_list_nth_data(list,i);
 		dlog_name = (gchar *)DATA_GET(object,"dlog_gui_name");
 		button = gtk_check_button_new();
-		label = gtk_label_new("");
+		label = gtk_label_new(NULL);
 		gtk_label_set_markup(GTK_LABEL(label),dlog_name);
 		gtk_container_add(GTK_CONTAINER(button),label);
 		tooltip = (gchar *)(DATA_GET(object,"tooltip"));

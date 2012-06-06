@@ -340,6 +340,10 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	{	/* It's pressed (or checked) */
 		switch ((ToggleHandler)handler)
 		{
+			case ELLIPSIZE_TAB_LABELS:
+				printf("Should Expand all tab labels (remove ellipsize\n");
+				DATA_SET(global_data,"ellipsize_tabs", GINT_TO_POINTER(0));
+				break;
 			case TOGGLE_NETMODE:
 				DATA_SET(global_data,"network_access",GINT_TO_POINTER(TRUE));
 				get_symbol("open_tcpip_sockets",(void **)&function);
@@ -424,6 +428,10 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 	{	/* not pressed */
 		switch ((ToggleHandler)handler)
 		{
+			case ELLIPSIZE_TAB_LABELS:
+				printf("Should CONTRACT all tab labels (add ellipsize\n");
+				DATA_SET(global_data,"ellipsize_tabs", GINT_TO_POINTER(1));
+				break;
 			case TOGGLE_NETMODE:
 				DATA_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));
 				break;

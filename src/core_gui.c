@@ -252,6 +252,14 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	if (mtx_temp_units == KELVIN)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
 
+	/* Ellipsize Tab labels */
+	button = glade_xml_get_widget(xml,"ellipsize_tab_labels_cbutton");
+	OBJ_SET(button,"handler",GINT_TO_POINTER(ELLIPSIZE_TAB_LABELS));
+	if (DATA_GET(global_data,"ellipsize_tabs"))
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),FALSE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),TRUE);
+
 	/* General Tab, Dashboard Ebox */
 	ebox = glade_xml_get_widget(xml,"dash_ebox");
 	gtk_widget_set_tooltip_text(ebox,_("This box provides your choice for the active dashboard to be used"));
