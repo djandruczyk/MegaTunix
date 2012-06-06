@@ -30,7 +30,7 @@ G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,G_IMPLEMENT_INTER
  */
 G_MODULE_EXPORT GtkWidget *mask_entry_new (void)
 {
-        return GTK_WIDGET (g_object_new (TYPE_MASK_ENTRY, NULL));
+	return GTK_WIDGET (g_object_new (TYPE_MASK_ENTRY, NULL));
 }
 
 
@@ -63,7 +63,7 @@ G_MODULE_EXPORT void mask_entry_set_background (MaskEntry *entry)
 		tmpbuf = g_utf8_casefold(tmpstr,-1);
 		g_free(tmpstr);
 		if (g_regex_match_simple(tmpbuf,entry->mask,
-					(GRegexCompileFlags)0,(GRegexMatchFlags)0))
+					(GRegexCompileFlags)G_REGEX_CASELESS,(GRegexMatchFlags)0))
 		{
 			gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
 			g_free(tmpbuf);
@@ -103,9 +103,9 @@ void mask_entry_init (MaskEntry *entry)
  */
 void mask_entry_class_init (MaskEntryClass *klass)
 { 
-        GObjectClass *obj_class = NULL;
-        obj_class = G_OBJECT_CLASS (klass);
-        obj_class->finalize = mask_entry_finalize;
+	GObjectClass *obj_class = NULL;
+	obj_class = G_OBJECT_CLASS (klass);
+	obj_class->finalize = mask_entry_finalize;
 }
 
 

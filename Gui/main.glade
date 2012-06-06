@@ -1571,7 +1571,7 @@
                                               <widget class="GtkLabel" id="label26">
                                                 <property name="visible">True</property>
                                                 <property name="xalign">0</property>
-                                                <property name="label" translatable="yes">VE/Constants Reads</property>
+                                                <property name="label" translatable="yes">ECU Table Reads</property>
                                               </widget>
                                               <packing>
                                                 <property name="y_options"></property>
@@ -1581,7 +1581,7 @@
                                               <widget class="GtkLabel" id="label27">
                                                 <property name="visible">True</property>
                                                 <property name="xalign">0</property>
-                                                <property name="label" translatable="yes">Runtime Reads</property>
+                                                <property name="label" translatable="yes">Live Data Reads</property>
                                               </widget>
                                               <packing>
                                                 <property name="top_attach">1</property>
@@ -3884,7 +3884,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
     <property name="width_request">0</property>
     <property name="height_request">0</property>
     <property name="visible">True</property>
-    <property name="title" translatable="yes">Runtime Vars</property>
+    <property name="title" translatable="yes">Live Data Variasbles</property>
     <signal name="destroy_event" handler="gtk_widget_hide" object="rtt_window"/>
     <signal name="delete_event" handler="gtk_widget_hide" object="rtt_window"/>
     <child>
@@ -3909,7 +3909,7 @@ timing light reading. (BTDC)&lt;/b&gt;</property>
             <child>
               <widget class="GtkLabel" id="label68">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Runtime Data</property>
+                <property name="label" translatable="yes">Live Data</property>
                 <property name="use_markup">True</property>
               </widget>
               <packing>

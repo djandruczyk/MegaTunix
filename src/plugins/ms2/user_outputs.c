@@ -52,6 +52,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gconstpointer * object = NULL;
 	gint raw_lower = 0;
 	gint raw_upper = 0;
+	gboolean freelower = FALSE;
+	gboolean freeupper = FALSE;
 	gchar *raw_lower_str = NULL;
 	gchar *raw_upper_str = NULL;
 	gfloat real_lower = 0.0;
@@ -59,6 +61,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gfloat tmpf = 0.0;
 	gchar * name = NULL;
 	gchar *regex = NULL;
+	gchar *internal_names = NULL;
 	GString *string = NULL;
 	GtkWidget *entry = NULL;
 	GtkEntryCompletion *completion = NULL;
@@ -79,6 +82,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{
+		freelower = FALSE;
+		freeupper = FALSE;
 		object = NULL;
 		name = NULL;
 		object = (gconstpointer *)g_ptr_array_index(rtv_map->rtv_list,i);
@@ -91,6 +96,10 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 			continue;
 		if (DATA_GET(object,"special"))
 			continue;
+		internal_names = (gchar *) DATA_GET(object,"internal_names");
+		if (!find_in_list(rtv_map->raw_list,internal_names))
+			continue;
+
 		size = (DataSize)(GINT)DATA_GET(object,"size");
 		multiplier = (gfloat *)DATA_GET(object,"fromecu_mult");
 		adder = (gfloat *)DATA_GET(object,"fromecu_add");
@@ -107,6 +116,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 			raw_lower = get_extreme_from_size_f(size,LOWER);
 			tmpf = calc_value_f(raw_lower,multiplier,adder,FROMECU);
 			lower = g_strdup_printf("%i",(gint)tmpf);
+			freelower = TRUE;
 		}
 		if (DATA_GET(object,"real_upper"))
 		{
@@ -118,9 +128,14 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		{
 			raw_upper = get_extreme_from_size_f(size,UPPER);
 			tmpf = calc_value_f(raw_upper,multiplier,adder,FROMECU);
-			lower = g_strdup_printf("%i",(gint)tmpf);
+			upper = g_strdup_printf("%i",(gint)tmpf);
+			freeupper = TRUE;
 		}
 		range = g_strdup_printf("Valid Range: %s <-> %s",lower,upper);
+		if (freelower)
+			g_free(lower);
+		if (freeupper)
+			g_free(upper);
 		if ((multiplier) && (adder))
 		{
 			raw_lower = (GINT)((real_lower - (*adder))/(*multiplier));
@@ -140,7 +155,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		raw_upper_str = g_strdup_printf("%i",raw_upper);
 
 		string = g_string_append(string,name);
-		if (rtv_map->raw_list[i])
+		if (i<rtv_map->rtv_list->len)
 			string = g_string_append(string,"|");
 
 		gtk_list_store_append(store,&iter);
@@ -171,6 +186,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 #endif
 */
 		gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
+		g_object_unref(store);
 		entry = mask_entry_new_with_mask_f(string->str);
 		g_string_free(string,TRUE);
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
@@ -193,6 +209,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		gtk_entry_completion_set_popup_single_match(completion,FALSE);
 		OBJ_SET(widget,"arrow-size",GINT_TO_POINTER(1));
 	}
+	g_object_unref(store);
 	g_free(regex);
 }
 
@@ -283,8 +300,32 @@ G_MODULE_EXPORT void update_ms2_user_outputs(GtkWidget *widget)
 				update_widget_f(tmpwidget,NULL);
 			}
 			g_free(range);
+			g_free(lower);
+			g_free(upper);
 		}
 		valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
 		i++;
 	}
 }
+
+/*!
+ * \brief finds searching elements of vector for a match from the list 
+ * of potentials.
+ * \param vectore,  vector of strings to check against
+ * \param names, command separatend list of strings tosearch for in vector
+ *\reutns true if match made, false  otherwise
+ * */
+gboolean find_in_list(gchar **vector, gchar *names)
+{
+	gboolean retval = FALSE;
+	gchar ** potentials = g_strsplit(names,",",-1);
+	for (int i=0;i<g_strv_length(potentials);i++)
+	{
+		for (int j=0;j<g_strv_length(vector);j++)
+			if (0 == g_ascii_strcasecmp(potentials[i],vector[j]))
+				retval = TRUE;
+	}
+	g_strfreev(potentials);
+	return retval;
+}
+

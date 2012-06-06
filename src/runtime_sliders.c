@@ -39,8 +39,6 @@
 #include <widgetmgmt.h>
 #include <xmlbase.h>
 
-static GtkSizeGroup *size_group_left = NULL;
-static GtkSizeGroup *size_group_right = NULL;
 extern gconstpointer *global_data;
 
 /*!
@@ -95,8 +93,6 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 		return;
 	}
 	root_element = xmlDocGetRootElement(doc);
-	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"rt_rts",rt_sliders,0,RUNTIME_TAB);
 	if (!res)
 		MTXDBG(CRITICAL,_("Runtime Sliders XML parse/load failure\n"));
@@ -159,8 +155,6 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 		printf(_("error: could not parse file %s\n"),filename);
 		return;
 	}
-	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"ww_rts",ww_sliders,0,WARMUP_WIZ_TAB);
 	if (!res)
 		MTXDBG(CRITICAL,_("Warmup Wizard Sliders XML parse/load failure\n"));
@@ -300,8 +294,6 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 		return;
 	}
 	root_element = xmlDocGetRootElement(doc);
-	size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 	res = load_rts_xml_elements(root_element,"ve3d_rts",ve3d_sliders[table_num],table_num,VE3D_VIEWER_TAB);
 	if (!res)
 		MTXDBG(CRITICAL,_("Runtime Sliders XML parse/load failure\n"));
@@ -326,6 +318,8 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
   */
 G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_num, gint row, gchar *source, TabIdent ident)
 {
+	GtkSizeGroup *size_group_left = NULL;
+	GtkSizeGroup *size_group_right = NULL;
 	Rt_Slider *slider = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *pbar = NULL;
@@ -335,6 +329,18 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
 
+	size_group_left = DATA_GET(global_data,"size_group_left");
+	if (!size_group_left)
+	{
+		size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+		DATA_SET(global_data,"size_group_left",size_group_left);
+	}
+	size_group_right = DATA_GET(global_data,"size_group_right");
+	if (!size_group_right)
+	{
+		size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+		DATA_SET(global_data,"size_group_right",size_group_right);
+	}
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))

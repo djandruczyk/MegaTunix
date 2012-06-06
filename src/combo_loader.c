@@ -96,11 +96,12 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 		gtk_list_store_set(store,&iter,CHOICE_COL,choices[i],BITVAL_COL,(guchar)g_ascii_strtoull(vector[i],NULL,10),-1);
 
 	}
-	OBJ_SET_FULL(object,"model",store,gtk_list_store_clear);
+//	OBJ_SET_FULL(object,"model",store,gtk_list_store_clear);
 	g_strfreev(vector);
 	g_strfreev(choices);
 
 	gtk_combo_box_set_model(GTK_COMBO_BOX(object),GTK_TREE_MODEL(store));
+	g_object_unref(store);
 /*#if GTK_MINOR_VERSION < 24 */
 	if (GTK_IS_COMBO_BOX_ENTRY(object))
 	{

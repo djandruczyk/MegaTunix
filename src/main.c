@@ -142,7 +142,7 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
 	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
-	id = g_timeout_add(1000,(GSourceFunc)flush_binary_logs,NULL);
+	id = g_timeout_add(2000,(GSourceFunc)flush_binary_logs,NULL);
         DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
 
 	sleep_calib();
