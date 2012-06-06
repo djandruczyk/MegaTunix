@@ -1725,3 +1725,10 @@ G_MODULE_EXPORT void dealloc_rtv_map(gpointer data)
 		DATA_SET(global_data,"rtv_map",NULL);
 	}
 }
+
+
+void free_test (gpointer data, gpointer user_data)
+{
+	GObject *object = (GObject *)data;
+	g_object_unref(object);
+}
