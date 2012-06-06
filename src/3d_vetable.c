@@ -3377,7 +3377,6 @@ void gl_create_font(GtkWidget *widget)
 	ve_view->ft2_context = pango_ft2_get_context(72, 72);
 	//ve_view->ft2_context = gtk_widget_get_pango_context(widget);
 
-
 	gtk_widget_get_allocation(widget,&allocation);
 	min = MIN(allocation.width,allocation.height);
 	font_desc = pango_font_description_from_string(font_string);

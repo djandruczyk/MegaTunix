@@ -174,6 +174,7 @@ G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 
 	g_return_val_if_fail(gui_dispatch_queue,FALSE);
+	g_return_val_if_fail(global_data,FALSE);
 	g_async_queue_ref(gui_dispatch_queue);
 trypop:
 	if (DATA_GET(global_data,"gui_dispatcher_exit"))
