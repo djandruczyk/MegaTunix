@@ -157,6 +157,7 @@ void update_current_notebook_page(void);
 void update_entry_color(GtkWidget *, gint, gboolean, gboolean);
 void update_entry_color_wrapper(gpointer, gpointer);
 gboolean table_color_refresh(gpointer);
+void set_main_notebook_ellipsis_state(gboolean);
 /* Prototypes */
 
 #endif

@@ -341,8 +341,8 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 		switch ((ToggleHandler)handler)
 		{
 			case ELLIPSIZE_TAB_LABELS:
-				printf("Should Expand all tab labels (remove ellipsize\n");
 				DATA_SET(global_data,"ellipsize_tabs", GINT_TO_POINTER(0));
+				set_main_notebook_ellipsis_state(FALSE);
 				break;
 			case TOGGLE_NETMODE:
 				DATA_SET(global_data,"network_access",GINT_TO_POINTER(TRUE));
@@ -429,8 +429,8 @@ G_MODULE_EXPORT gboolean toggle_button_handler(GtkWidget *widget, gpointer data)
 		switch ((ToggleHandler)handler)
 		{
 			case ELLIPSIZE_TAB_LABELS:
-				printf("Should CONTRACT all tab labels (add ellipsize\n");
 				DATA_SET(global_data,"ellipsize_tabs", GINT_TO_POINTER(1));
+				set_main_notebook_ellipsis_state(TRUE);
 				break;
 			case TOGGLE_NETMODE:
 				DATA_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));
@@ -2569,4 +2569,32 @@ void update_entry_color_wrapper(gpointer object, gpointer data)
 	GtkWidget *widget = (GtkWidget *)object;
 	gint table_num = (GINT)data;
 	update_entry_color(widget,table_num,TRUE,FALSE);
+}
+
+
+/*
+ * \brief Sets the ellipsize mode for the main notebook
+ * \param state if true, sets PANGO_ELLIPSIZE_END on the tba labels, otherwise
+ * it turns it off altogether
+ */
+void set_main_notebook_ellipsis_state(gboolean state)
+{
+	gint i = 0;
+	GtkWidget * notebook = lookup_widget("toplevel_notebook");
+	GtkWidget *child = NULL;
+	GtkWidget *label = NULL;
+	PangoEllipsizeMode mode = PANGO_ELLIPSIZE_NONE;
+
+	g_return_if_fail(notebook);
+
+	if (state)
+		mode = PANGO_ELLIPSIZE_END;
+	for (i=0;i<gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));i++)
+	{
+		child = gtk_notebook_get_nth_page(GTK_NOTEBOOK(notebook),i);
+		label = gtk_notebook_get_tab_label(GTK_NOTEBOOK(notebook),child);
+		/* Only change it if it came with it */
+		if (OBJ_GET(label,"ellipsize_preferred"))
+			gtk_label_set_ellipsize(GTK_LABEL(label),mode);
+	}
 }
