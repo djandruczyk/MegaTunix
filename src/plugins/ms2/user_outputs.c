@@ -60,9 +60,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gfloat real_upper = 0.0;
 	gfloat tmpf = 0.0;
 	gchar * name = NULL;
-	gchar *regex = NULL;
 	gchar *internal_names = NULL;
-	GString *string = NULL;
 	GtkWidget *entry = NULL;
 	GtkEntryCompletion *completion = NULL;
 	GtkListStore *store = NULL;
@@ -77,9 +75,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	/* Create the store for the combo, with severla hidden values
 	 */
 	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_POINTER,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR);
-	/* Iterate across valid variables */
-	string = g_string_sized_new(32);
 
+	/* Iterate across valid variables */
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{
 		freelower = FALSE;
@@ -154,10 +151,6 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		raw_lower_str = g_strdup_printf("%i",raw_lower);
 		raw_upper_str = g_strdup_printf("%i",raw_upper);
 
-		string = g_string_append(string,name);
-		if (i<rtv_map->rtv_list->len)
-			string = g_string_append(string,"|");
-
 		gtk_list_store_append(store,&iter);
 		gtk_list_store_set(store,&iter,
 				UO_CHOICE_COL,name,
@@ -187,8 +180,7 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 */
 		gtk_combo_box_set_model(GTK_COMBO_BOX(widget),GTK_TREE_MODEL(store));
 		g_object_unref(store);
-		entry = mask_entry_new_with_mask_f(string->str);
-		g_string_free(string,TRUE);
+		entry = gtk_bin_get_child(GTK_BIN(widget));
 		/* Nasty hack, but otherwise the entry is an obnoxious size.. */
 		if ((width = (GINT)OBJ_GET((GtkWidget *)widget,"max_chars")) > 0)
 			gtk_entry_set_width_chars(GTK_ENTRY(entry),width);
@@ -197,11 +189,12 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 
 		gtk_widget_set_size_request(GTK_WIDGET(widget),-1,(3*(GINT)DATA_GET(global_data,"font_size")));
 
-		gtk_container_remove (GTK_CONTAINER (widget), gtk_bin_get_child(GTK_BIN(widget)));
-		gtk_container_add (GTK_CONTAINER (widget), entry);
+//		gtk_container_remove (GTK_CONTAINER (widget), gtk_bin_get_child(GTK_BIN(widget)));
+//		gtk_container_add (GTK_CONTAINER (widget), entry);
 
 		completion = gtk_entry_completion_new();
 		gtk_entry_set_completion(GTK_ENTRY(entry),completion);
+		g_object_unref(completion);
 		gtk_entry_completion_set_model(completion,GTK_TREE_MODEL(store));
 		gtk_entry_completion_set_text_column(completion,UO_CHOICE_COL);
 		gtk_entry_completion_set_inline_completion(completion,TRUE);
@@ -210,7 +203,6 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		OBJ_SET(widget,"arrow-size",GINT_TO_POINTER(1));
 	}
 	g_object_unref(store);
-	g_free(regex);
 }
 
 

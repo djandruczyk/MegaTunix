@@ -1,5 +1,7 @@
 #!/bin/bash
 
 
+export _UNDER_VALGRIND=1
 #MALLOC_CHECK_=1 G_SLICE=always-malloc G_DEBUG=gc-friendly,resident-modules valgrind --show-reachable=yes --tool=memcheck --num-callers=45 -v --leak-check=full --suppressions=${HOME}/git/MegaTunix/contrib/mtx.supp --log-file=/tmp/log ./$*
 MALLOC_CHECK_=1 G_SLICE=always-malloc G_DEBUG=gc-friendly,resident-modules valgrind -v --tool=memcheck --num-callers=45 --leak-check=full --leak-resolution=high --suppressions=${HOME}/git/MegaTunix/contrib/mtx.supp --log-file=/tmp/log ./$*
+export _UNDER_VALGRIND=

@@ -123,6 +123,8 @@ void mtx_gauge_face_import_xml(MtxGaugeFace *gauge, const gchar * filename)
 		mtx_gauge_face_remove_all_warning_ranges(gauge);
 		mtx_gauge_face_remove_all_tick_groups(gauge);
 		mtx_gauge_face_remove_all_polygons(gauge);
+		if (priv->value_font)
+			g_free(priv->value_font);
 		load_elements(gauge, root_element);
 		/* Fix for api break, default to CW gauges */
 

@@ -23,6 +23,7 @@
 
 gboolean update_gauge(gpointer );
 gboolean close_demo(GtkWidget *, gpointer );
+gboolean button_event(GtkWidget *, GdkEventButton *, gpointer);
 
 int main (int argc, char **argv)
 {
@@ -69,6 +70,8 @@ int main (int argc, char **argv)
 	gtk_window_set_decorated(GTK_WINDOW(window),FALSE);
 	mtx_gauge_face_set_show_drag_border (MTX_GAUGE_FACE (gauge), TRUE);
 
+	g_signal_connect (window, "button_press_event",
+			G_CALLBACK (button_event), GINT_TO_POINTER(timeout));
 	g_signal_connect (window, "delete_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 	g_signal_connect (window, "destroy_event",
@@ -117,5 +120,12 @@ gboolean close_demo(GtkWidget *widget, gpointer data)
 	g_source_remove((guint)data);
 	gtk_widget_destroy(widget);
 	gtk_main_quit();
+	return TRUE;
+}
+
+gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	if (event->button == 3)
+		close_demo(widget,data);
 	return TRUE;
 }

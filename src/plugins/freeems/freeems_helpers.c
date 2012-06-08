@@ -523,7 +523,7 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 #if GLIB_MINOR_VERSION < 31
 	g_get_current_time(&tval);
 	/* Set gigantic timeout for valgrind since it runs so slow */
-	if (g_getenv("VALGRIND"))
+	if (g_getenv("_UNDER_VALGRIND"))
 		g_time_val_add(&tval,5000000);
 	else
 		g_time_val_add(&tval,500000);

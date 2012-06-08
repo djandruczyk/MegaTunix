@@ -465,7 +465,7 @@ void mtx_gauge_face_init_xml_hash(MtxGaugeFace *gauge)
 	{
 		funcs = g_new0(MtxXMLFuncs, 1);
 		funcs->import_func = xml_functions[i].import_func;
-		funcs->export_func = xml_functions[i].export_func;;
+		funcs->export_func = xml_functions[i].export_func;
 		funcs->varname = xml_functions[i].varname;
 		funcs->dest_var = (gpointer)g_object_get_data(G_OBJECT(gauge),xml_functions[i].varname);
 		funcs->api_compat = xml_functions[i].api_compat;
@@ -1634,11 +1634,12 @@ gboolean mtx_gauge_face_button_press (GtkWidget *widget,GdkEventButton *event)
 					
 				break;
 			case 3: /* right button */
-
 				if (GTK_IS_WINDOW(parent))
 				{
+					/*
 					gtk_widget_destroy(widget);
 					gtk_main_quit();
+					*/
 				}
 				/* Added api call to do this*/
 
@@ -1725,10 +1726,12 @@ gboolean mtx_gauge_face_key_event (GtkWidget *gauge,GdkEventKey *event)
 		case GDK_r:
 			priv->peak = priv->lbound;
 			break;
+			/*
 		case GDK_Q:
 		case GDK_q:
 			gtk_main_quit();
 			break;
+			*/
 		default:
 			break;
 

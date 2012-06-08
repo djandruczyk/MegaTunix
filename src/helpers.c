@@ -66,7 +66,10 @@ G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
 
 	if (just_starting)
 	{
-//		start_tickler(RTV_TICKLER);
+		if(g_getenv("_UNDER_VALGRIND"))
+			printf("Under valgrind, not starting RTV_TICKLER\n");
+		else
+			start_tickler(RTV_TICKLER);
 		just_starting = FALSE;
 	}
 }
