@@ -202,7 +202,6 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		gtk_entry_completion_set_popup_single_match(completion,FALSE);
 		OBJ_SET(widget,"arrow-size",GINT_TO_POINTER(1));
 	}
-	g_object_unref(store);
 }
 
 
