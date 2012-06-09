@@ -321,7 +321,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("binary_logging_frame",frame);
 	/* General Tab, Debugging frame */
 	ebox = glade_xml_get_widget(xml,"debugging_ebox");
-	gtk_widget_set_tooltip_text(ebox,_("This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will be written to MTXlog.txt file in your homedir, or in C:\\program files\\megatunix on Win32 platforms..."));
+	gtk_widget_set_tooltip_text(ebox,_("This box gives you the debugging choices.  Each one is independantly selectable.  Logging output will be written to ~/mtx/<PROJECT>/debug.log file in on Mac/Linux, or in C:\\users\\<USERNAME>\\mtx\\<PROJECTS> on Windows 7 or C:\\Documents and Settings\\<USERNAME>\\mtx\\<PROJECT>\\debug.log on Windows XP.."));
 	widget = glade_xml_get_widget(xml,"debugging_frame");
 	populate_debugging(widget);
 
