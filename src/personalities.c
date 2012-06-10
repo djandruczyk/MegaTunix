@@ -285,22 +285,31 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 			DATA_SET_FULL(global_data,"ecu_baud_str", g_strdup(element->baud_str),g_free);
 		else
 			DATA_SET(global_data,"ecu_baud_str", NULL);
+
 		if (element->ecu_lib)
 			DATA_SET_FULL(global_data,"ecu_lib", g_strdup(element->ecu_lib),g_free);
 		else
 			DATA_SET(global_data,"ecu_lib", NULL);
+
 		if (element->common_lib)
 			DATA_SET_FULL(global_data,"common_lib", g_strdup(element->common_lib),g_free);
 		else
 			DATA_SET(global_data,"common_lib", NULL);
+	
 		if (element->dirname)
 			DATA_SET_FULL(global_data,"ecu_dirname", g_strdup(element->dirname),g_free);
 		else
 			DATA_SET(global_data,"ecu_dirname", NULL);
+
 		if (element->filename)
 			DATA_SET_FULL(global_data,"ecu_family", g_strdup(element->filename),g_free);
 		else
 			DATA_SET(global_data,"ecu_family", NULL);
+
+		if (element->persona)
+			DATA_SET_FULL(global_data,"ecu_persona", g_strdup(element->persona),g_free);
+		else
+			DATA_SET(global_data,"ecu_persona", NULL);
 	}
 	return TRUE;
 }

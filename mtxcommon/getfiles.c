@@ -499,9 +499,9 @@ afterfilter:
 		if (data->default_filename)
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog),data->default_filename);
 
-	printf("initiating dialog to run\n");
+//	printf("initiating dialog to run\n");
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
-	printf("it returned \n");
+//	printf("it returned \n");
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		tmpbuf = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));

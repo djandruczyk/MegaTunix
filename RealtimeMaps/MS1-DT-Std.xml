@@ -5,7 +5,7 @@
 		<minor>7</minor>
 	</api>
 	<realtime_map>
-		<persona>MS-1</persona>
+		<persona>MS1</persona>
 	</realtime_map>
 	<derived>
 		<dlog_gui_name>HR Clock</dlog_gui_name>

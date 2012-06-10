@@ -61,7 +61,7 @@ extern gconstpointer *global_data;
   \param reset_on_fail is a hacky flag that should be removed, (win32ism)
   \returns TRUE on success, FALSE on failure 
   */
-G_MODULE_EXPORT gint read_data(gint total_wanted, void **buffer, gboolean reset_on_fail)
+G_MODULE_EXPORT gint read_data(gint total_wanted, guint8 **buffer, gboolean reset_on_fail)
 {
 	static GMutex *serio_mutex = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
@@ -176,6 +176,8 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	guint i = 0;
 	gint j = 0;
 	gint len = 0;
+	guint8 * buffer = NULL;
+	gint burst_len = 0;
 	gboolean notifies = FALSE;
 	gint notif_divisor = 32;
 	WriteMode mode = MTX_CMD_WRITE;
@@ -235,42 +237,68 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		return FALSE;		/* can't write anything if disconnected */
 	}
 
-	for (i=0;i<message->sequence->len;i++)
+	/* For MS3 1.1 which uses a CRC32 wrapped serial stream, we can't easily
+	 * do the old way as it had a bunch of fugly worarounds for ECU editions 
+	 * that couldn't handle bursts and needed to be artificially throttled.
+	 */
+	if(DATA_GET(message->data,"burst_write"))
 	{
-		block = g_array_index(message->sequence,DBlock *,i);
-		/*	printf("Block pulled\n");*/
-		if (block->type == ACTION)
+		buffer = (guint8 *)DATA_GET(message->data,"burst_buffer");
+		if (!buffer)
 		{
-			/*		printf("Block type of ACTION!\n");*/
-			if (block->action == SLEEP)
-			{
-				/*			printf("Sleeping for %i usec\n", block->arg);*/
-				MTXDBG(SERIAL_WR,_("Sleeping for %i microseconds \n"),block->arg);
-				g_usleep((*factor)*block->arg);
-			}
+			MTXDBG(CRITICAL|SERIAL_WR,_("MS3 CRC32 burst blob is not stored in the OutputData->data structure, ABORTING\n"));
+			return FALSE;
 		}
-		else if (block->type == DATA)
+		burst_len = (GINT)DATA_GET(message->data,"burst_len");
+		QUIET_MTXDBG(SERIAL_WR,_("Writing MS3 burst write %i bytes\n"),burst_len);
+		res = write_wrapper(serial_params->fd,buffer,burst_len, &len);
+		/* Send write command */
+		if (!res)
 		{
-			/*		printf("Block type of DATA!\n");*/
-			if (block->len > 100)
-				notifies = TRUE;
-			/* ICK bad form man, writing one byte at a time,  due to ECU's that can't take full wire speed without
-			   dropping chars due to uber tiny buffers */
-			for (j=0;j<block->len;j++)
+			MTXDBG((Dbg_Class)(SERIAL_WR|CRITICAL),_("Error writing MS3 burst block ERROR \"%s\"!!!\n"),err_text);
+			retval = FALSE;
+		}
+	}
+
+	else
+	{
+		for (i=0;i<message->sequence->len;i++)
+		{
+			block = g_array_index(message->sequence,DBlock *,i);
+			/*	printf("Block pulled\n");*/
+			if (block->type == ACTION)
 			{
-				/*printf("comms.c data[%i] is %i, block len is %i\n",j,block->data[j],block->len);*/
-				if ((notifies) && ((j % notif_divisor) == 0))
-					thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<b>Sending %i of %i bytes</b>"),j,block->len));
-				QUIET_MTXDBG(SERIAL_WR,_("Writing argument %i byte %i of %i, \"%.2X\"\n"),i,j+1,block->len,block->data[j]);
-				res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);
-				/* Send write command */
-				if (!res)
+				/*		printf("Block type of ACTION!\n");*/
+				if (block->action == SLEEP)
 				{
-					MTXDBG((Dbg_Class)(SERIAL_WR|CRITICAL),_("Error writing block offset %i, value \"%.2X\" ERROR \"%s\"!!!\n"),j,block->data[j],err_text);
-					retval = FALSE;
+					/*			printf("Sleeping for %i usec\n", block->arg);*/
+					MTXDBG(SERIAL_WR,_("Sleeping for %i microseconds \n"),block->arg);
+					g_usleep((*factor)*block->arg);
 				}
-				if (firmware->capabilities & MS2)
-					g_usleep((*factor)*firmware->interchardelay*1000);
+			}
+			else if (block->type == DATA)
+			{
+				/*		printf("Block type of DATA!\n");*/
+				if (block->len > 100)
+					notifies = TRUE;
+				/* ICK bad form man, writing one byte at a time,  due to ECU's that can't take full wire speed without
+				   dropping chars due to uber tiny buffers */
+				for (j=0;j<block->len;j++)
+				{
+					/*printf("comms.c data[%i] is %i, block len is %i\n",j,block->data[j],block->len);*/
+					if ((notifies) && ((j % notif_divisor) == 0))
+						thread_update_widget("info_label",MTX_LABEL,g_strdup_printf(_("<b>Sending %i of %i bytes</b>"),j,block->len));
+					QUIET_MTXDBG(SERIAL_WR,_("Writing argument %i byte %i of %i, \"%.2X\"\n"),i,j+1,block->len,block->data[j]);
+					res = write_wrapper(serial_params->fd,&(block->data[j]),1, &len);
+					/* Send write command */
+					if (!res)
+					{
+						MTXDBG((Dbg_Class)(SERIAL_WR|CRITICAL),_("Error writing block offset %i, value \"%.2X\" ERROR \"%s\"!!!\n"),j,block->data[j],err_text);
+						retval = FALSE;
+					}
+					if (firmware->capabilities & MS2)
+						g_usleep((*factor)*firmware->interchardelay*1000);
+				}
 			}
 		}
 	}
@@ -340,7 +368,7 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
   \param len is the pointer to length read
   \returns TRUE on success, FALSE otherwise
   */
-G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *len)
+G_MODULE_EXPORT gboolean read_wrapper(gint fd, guint8 * buf, size_t count, gint *len)
 {
 	gint res = 0;
 	fd_set rd;
@@ -389,7 +417,7 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, void * buf, size_t count, gint *l
   \param len is the pointer to length to write
   \returns TRUE on success, FALSE otherwise
   */
-G_MODULE_EXPORT gboolean write_wrapper(gint fd, const void *buf, size_t count, gint *len)
+G_MODULE_EXPORT gboolean write_wrapper(gint fd, const guint8 *buf, size_t count, gint *len)
 {
 	gint res = 0;
 	GError *error = NULL;

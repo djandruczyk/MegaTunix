@@ -58,12 +58,13 @@ struct _Detection_Test
 	gchar *test_name;	/*!< Friendly test name, like "MS-II_RTvars" */
 	gchar *test_desc;	/*!< Gui displayed test description */
 	gchar *actual_test;	/*!< machine parsable test string */
-	gchar **test_vector;	/*!< Vector split of test (csv split) */
-	GArray *test_arg_types;	/*!< Array of enums describing test arguments */
-	gint test_arg_count;	/*!< number of args in the test */
-	guint32 result_type;	/*!< DATA or TEXT */
+	guint8 *send_buf;	/*!< Actual test stream to send to ECU */
+	guint8 *recv_buf;	/*!< Actual test stream read back from ECU */
+	guint32 result_type;/*!< DATA or TEXT */
 	gchar *result_str;	/*!< Result of test stored for matching */
-	gint num_bytes;		/*!< Number of bytes returned for this test */
+	gint send_len;		/*!< number of bytes to send for this test */
+	gint recv_len;		/*!< number of bytes we received as a response */
+	gboolean ms3_crc32;	/*!< Flag if we are using MS3 CRC32 wrappers */
 
 };
 /* Prototypes */

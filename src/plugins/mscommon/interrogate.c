@@ -25,6 +25,7 @@
 #include <getfiles.h>
 #include <interrogate.h>
 #include <libgen.h>
+#include <mscommon_comms.h>
 #include <mscommon_plugin.h>
 #include <debugging.h>
 #include <multi_expr_loader.h>
@@ -65,6 +66,11 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	gint total_read = 0;
 	gint total_wanted = 0;
 	gint zerocount = 0;
+	gint adder = 0;
+	gint base_offset = 0;
+	unsigned long crc32 = 0;
+	gint crc_pass = 0;
+	gint crc_fail = 0;
 	gchar *string = NULL;
 	guchar buf[BUFSIZE];
 	guchar *ptr = NULL;
@@ -113,50 +119,12 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 
 		ptr = buf;
 
-		for (j=0;j<test->test_arg_count;j++)
-		{
-			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_CHAR)
-			{
-				string = g_strdup(test->test_vector[j]);
-				res = write_wrapper_f(serial_params->fd,string,1,&len);
-				if (!res)
-					interrogate_error("String Write error",j);
-				MTXDBG(INTERROGATOR,_("Sent command \"%s\"\n"),string);
-				g_free(string);
-			}
-			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_U08)
-			{
-				uint8 = (guint8)atoi(test->test_vector[j]);
-				res = write_wrapper_f(serial_params->fd,&uint8,1,&len);
-				if (!res)
-					interrogate_error("U08 Write error",j);
-				MTXDBG(INTERROGATOR,_("Sent command \"%i\"\n"),uint8);
-			}
-			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_U16)
-			{
-				uint16 = (guint16)atoi(test->test_vector[j]);
-				res = write_wrapper_f(serial_params->fd,&uint16,2,&len);
-				if (!res)
-					interrogate_error("U16 Write error",j);
-				MTXDBG(INTERROGATOR,_("Sent command \"%i\"\n"),uint8);
-			}
-			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_S08)
-			{
-				sint8 = (gint8)atoi(test->test_vector[j]);
-				res = write_wrapper_f(serial_params->fd,&sint8,1,&len);
-				if (!res)
-					interrogate_error("S08 Write error",j);
-				MTXDBG(INTERROGATOR,_("Sent command \"%i\"\n"),sint8);
-			}
-			if (g_array_index(test->test_arg_types,DataSize,j) == MTX_S16)
-			{
-				sint16 = (gint16)atoi(test->test_vector[j]);
-				res = write_wrapper_f(serial_params->fd,&sint16,2,&len);
-				if (!res)
-					interrogate_error("S16 Write error",j);
-				MTXDBG(INTERROGATOR,_("Sent command \"%i\"\n"),sint8);
-			}
-		}
+		string = g_strdup(test->actual_test);
+		res = write_wrapper_f(serial_params->fd,test->send_buf,test->send_len,&len);
+		if (!res)
+			MTXDBG(INTERROGATOR|CRITICAL,_("Interrogation error: Unable to send data: \"%s\"n"),(gchar *)g_strndup((const gchar *)test->send_buf,test->send_len));
+		MTXDBG(INTERROGATOR,_("Sent command \"%s\"\n"),string);
+		g_free(string);
 
 		total_read = 0;
 		total_wanted = BUFSIZE;
@@ -180,18 +148,44 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		}
 		MTXDBG(INTERROGATOR,_("Received %i bytes\n"),total_read);
 		ptr = buf;
-
+		test->recv_len = total_read;
 		/* copy data from tmp buffer to struct pointer */
-		test->num_bytes = total_read;
-		if (total_read <= 0)
+		if (test->ms3_crc32)
+		{
+			adder = 7;
+			base_offset = 3;
+			len = buf[0]*256 + buf[1];
+			if ((len == 0 ) || (len > 2054))
+				printf("packet length INVALID\n");
+			if ((len + 6) != test->recv_len)
+				printf("data length received DOES NOT MATCH packet length header\n");
+			crc32 = crc32_computebuf(0,&buf[2],len);
+			if ( (((crc32 >> 24) & 0xff) != buf[2 + len])
+					|| (((crc32 >> 16) & 0xff) != buf[3 + len])
+					|| (((crc32 >> 8) & 0xff) != buf[4 + len])
+					|| ((crc32 & 0xff) != buf[5 + len])) {
+				printf("CRC32 validation FAILED\n");
+				crc_fail++;
+			}
+			else
+			{
+				printf("CRC32 validation SUCCEEDED\n");
+				crc_pass++;
+			}
+			if (buf[2] & 0x80)
+				printf("Packet contains error code 0x%x\n",buf[2] & 0xff);
+			else
+				printf("Packet contains status code 0x%x\n",buf[2] & 0xff);
+		}
+		if (total_read <= (0 + adder))
 			test->result_str = g_strdup("");
 		else
-			test->result_str = g_strndup((gchar *)ptr, total_read);
+			test->result_str = g_strndup((gchar *)ptr+base_offset, total_read-adder);
 
-		if (total_read > 0)
+		if (total_read > (0 + adder))
 		{
 			if (test->result_type == RESULT_TEXT)
-				update_logbar_f("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes (%s)\n"),test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE,TRUE);
+				update_logbar_f("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes \"%s\"\n"),test->actual_test, test->test_desc,total_read,test->result_str),FALSE,FALSE,TRUE);
 			else if (test->result_type == RESULT_DATA)
 				update_logbar_f("interr_view",NULL,g_strdup_printf(_("Command \"%s\" (%s), returned %i bytes\n"),test->actual_test, test->test_desc,total_read),FALSE,FALSE,TRUE);
 			ptr = buf;
@@ -281,16 +275,16 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	{
 		test = g_array_index(tests,Detection_Test *,i);
 		if (test->result_type == RESULT_TEXT)
-			MTXDBG(INTERROGATOR,_("Command \"%s\" (%s), returned %i bytes (%s)\n"),
+			MTXDBG(INTERROGATOR,_("Command \"%s\" (%s), returned %i bytes \"%s\"\n"),
 						test->actual_test,
 						test->test_desc,
-						test->num_bytes,
+						test->recv_len,
 						test->result_str);
 		else if (test->result_type == RESULT_DATA)
 			MTXDBG(INTERROGATOR,_("Command \"%s\" (%s), returned %i bytes\n"),
 						test->actual_test,
 						test->test_desc,
-						test->num_bytes);
+						test->recv_len);
 	}
 	if (match == FALSE) /* (we DID NOT find one) */
 	{
@@ -1186,11 +1180,13 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 	gchar * filename = NULL;
 	gchar *section = NULL;
 	gchar * tmpbuf = NULL;
-	gchar ** vector = NULL;
 	gint total_tests = 0;
+	gint len = 0;
+	unsigned long crc32 = 0;
 	gint result = 0;
 	gint major = 0;
 	gint minor = 0;
+	gint tmpi = 0;
 	gint i = 0;
 	gint j = 0;
 	gchar *pathstub = NULL;
@@ -1222,12 +1218,11 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 	MTXDBG(INTERROGATOR,_("File %s, opened successfully\n"),filename);
 	tests = g_array_new(FALSE,TRUE,sizeof(Detection_Test *));
 
-	cfg_read_boolean(cfgfile,"interrogation_tests","ms3_crc32",&tmpi);
-	DATA_SET(global_data,"ms3_crc32",GINT_TO_POINTER(TRUE));
 	cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
 	for (i=0;i<total_tests;i++)
 	{
 		test = g_new0(Detection_Test, 1);
+		cfg_read_boolean(cfgfile,"interrogation_tests","ms3_crc32",&test->ms3_crc32);
 		section = g_strdup_printf("test_%.2i",i);
 		if (!cfg_read_string(cfgfile,section,"test_name",&test->test_name))
 		{
@@ -1252,27 +1247,30 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 			g_free(section);
 			break;
 		}
-		if (!cfg_read_string(cfgfile,section,"test_arg_types",&tmpbuf))
+		else
+			len = strlen(test->actual_test);
+
+		if (test->ms3_crc32)
 		{
-			MTXDBG(INTERROGATOR|CRITICAL,_("test_arg_types for %s is NULL\n"),section);
-			g_free(section);
-			break;
+			test->send_buf = g_new0(guint8, len + 6); /*length + CRC32 */
+			test->send_buf[0] = (len >> 8 ) & 0xff;
+			test->send_buf[1] = len & 0xff;
+			g_memmove(&test->send_buf[2],test->actual_test,len);
+			crc32 = crc32_computebuf(0,&test->send_buf[2],len);
+			test->send_buf[2 + len + 0] = (crc32 >> 24) & 0xff;
+			test->send_buf[2 + len + 1] = (crc32 >> 16) & 0xff;
+			test->send_buf[2 + len + 2] = (crc32 >> 8) & 0xff;
+			test->send_buf[2 + len + 3] = crc32 & 0xff;
+			test->send_len = len + 6;
+		}
+		else  /* NON CRC edition */
+		{
+			test->send_buf = (guint8 *)g_memdup(test->actual_test,len);
+			test->send_len = len;
 		}
 
 		cfg_read_string(cfgfile,section,"test_desc",
 				&test->test_desc);
-
-		test->test_vector = g_strsplit(test->actual_test,",",-1);
-		test->test_arg_count = g_strv_length(test->test_vector);
-		test->test_arg_types = g_array_new(FALSE,TRUE,sizeof(DataSize));
-		vector = g_strsplit(tmpbuf,",",-1);
-		g_free(tmpbuf);
-		for (j=0;j<test->test_arg_count;j++)
-		{
-			result = translate_string_f(vector[j]);
-			g_array_insert_val(test->test_arg_types,j,result);
-		}
-		g_strfreev(vector);
 
 		g_free(section);
 		g_array_append_val(tests,test);
@@ -1393,7 +1391,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 		switch (mclass)
 		{
 			case COUNT:
-				if (test->num_bytes == atoi(vector[1]))
+				if (test->recv_len == atoi(vector[1]))
 					pass = TRUE;
 				break;
 			case NUMMATCH:
@@ -1477,10 +1475,6 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
 			g_free(test->actual_test);
 		if (test->result_str)
 			g_free(test->result_str);
-		if (test->test_vector)
-			g_strfreev(test->test_vector);
-		if (test->test_arg_types)
-			g_array_free(test->test_arg_types,TRUE);
 		g_free(test);
 		test = NULL;
 	}
@@ -1497,7 +1491,6 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
  */
 G_MODULE_EXPORT void interrogate_error(const gchar *text, gint num)
 {
-	MTXDBG(INTERROGATOR|CRITICAL,_("Interrogation error: \"%s\" data: \"%i\"n"),text,num);
 }
 
 

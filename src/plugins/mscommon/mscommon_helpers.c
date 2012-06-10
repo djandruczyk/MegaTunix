@@ -319,6 +319,9 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 	gint page = -1;
 	gint canID = -1;
 	gint tmpi = 0;
+	gint adder = 0;
+	gboolean check_header = FALSE;
+	gint base_offset = 0;
 	guint16 curcount = 0;
 	guint8 *ptr8 = NULL;
 	guint16 *ptr16 = NULL;
@@ -328,6 +331,12 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
+	if (firmware->capabilities & MS3_NEWSERIAL)
+	{
+		check_header = TRUE;
+		adder = 7;
+		base_offset = 3;
+	}
 
 	switch (func)
 	{
@@ -347,10 +356,10 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (DATA_GET(global_data,"offline"))
 				break;
 			count = read_data_f(-1,&message->recv_buf,FALSE);
-			if (count > 0)
+			if (count > adder)
 			{
 				ptr8 = (guchar *)message->recv_buf;
-				firmware->ecu_revision=(gint)ptr8[0];
+				firmware->ecu_revision=(gint)ptr8[0+base_offset];
 				ecu_info_update(firmware);
 			}
 			break;
@@ -358,10 +367,15 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (DATA_GET(global_data,"offline"))
 				break;
 			count = read_data_f(-1,&message->recv_buf,FALSE);
-			if (count > 0)
+			if (count > adder)
 			{
-				firmware->txt_rev_len = count;
-				firmware->text_revision = g_strndup((const gchar *)message->recv_buf,count);
+				if (check_header)
+				{
+					if (message->recv_buf[2] & 0x80)
+						MTXDBG(CRITICAL,_("TextRev read error: specifically 0X%x\n"),message->recv_buf[2]);
+				}
+				firmware->txt_rev_len = count-adder;
+				firmware->text_revision = g_strndup((const gchar *)message->recv_buf+base_offset,count-adder);
 				ecu_info_update(firmware);
 			}
 			break;
@@ -369,10 +383,15 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (DATA_GET(global_data,"offline"))
 				break;
 			count = read_data_f(-1,&message->recv_buf,FALSE);
-			if (count > 0)
+			if (count > adder)
 			{
-				firmware->signature_len = count;
-				firmware->actual_signature = g_strndup((const gchar *)message->recv_buf,count);
+				if (check_header)
+				{
+					if (message->recv_buf[2] & 0x80)
+						MTXDBG(CRITICAL,_("Signature read error: specifically 0X%x\n"),message->recv_buf[2]);
+				}
+				firmware->signature_len = count-adder;
+				firmware->actual_signature = g_strndup((const gchar *)message->recv_buf+base_offset,count-adder);
 				ecu_info_update(firmware);
 			}
 			break;
@@ -380,21 +399,31 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 		case MS2_VECONST:
 			page = (GINT)DATA_GET(output->data,"page");
 			canID = (GINT)DATA_GET(output->data,"canID");
-			count = read_data_f(firmware->page_params[page]->length,&message->recv_buf,TRUE);
-			if (count != firmware->page_params[page]->length)
+			count = read_data_f(firmware->page_params[page]->length+adder,&message->recv_buf,TRUE);
+			if ((count-adder) != firmware->page_params[page]->length)
 				break;
+			if (check_header)
+			{
+				if (message->recv_buf[2] & 0x80)
+					MTXDBG(CRITICAL,_("MS1/2_VECONST read error: specifically 0X%x\n"),message->recv_buf[2]);
+			}
 			ms_store_new_block(canID,page,0,
-					message->recv_buf,
+					((guint8 *)message->recv_buf)+base_offset,
 					firmware->page_params[page]->length);
 			ms_backup_current_data(canID,page);
 			tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 			DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 			break;
 		case MS1_RT_VARS:
-			count = read_data_f(firmware->rtvars_size,&message->recv_buf,TRUE);
-			if (count != firmware->rtvars_size)
+			count = read_data_f(firmware->rtvars_size+adder,&message->recv_buf,TRUE);
+			if ((count-adder) != firmware->rtvars_size)
 				break;
-			ptr8 = (guchar *)message->recv_buf;
+			if (check_header)
+			{
+				if (message->recv_buf[2] & 0x80)
+					MTXDBG(CRITICAL,_("MS1_RT_VARS read error: specifically 0X%x\n"),message->recv_buf[2]);
+			}
+			ptr8 = (guchar *)message->recv_buf+base_offset;
 			/* Test for MS reset */
 			if (just_starting)
 			{
@@ -423,19 +452,24 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
-			process_rt_vars_f((void *)message->recv_buf,firmware->rtvars_size);
+			process_rt_vars_f(((guint8 *)message->recv_buf)+base_offset,firmware->rtvars_size);
 			break;
 		case MS2_RT_VARS:
 			page = (GINT)DATA_GET(output->data,"page");
 			canID = (GINT)DATA_GET(output->data,"canID");
-			count = read_data_f(firmware->rtvars_size,&message->recv_buf,TRUE);
-			if (count != firmware->rtvars_size)
+			count = read_data_f(firmware->rtvars_size+adder,&message->recv_buf,TRUE);
+			if ((count-adder) != firmware->rtvars_size)
 				break;
+			if (check_header)
+			{
+				if (message->recv_buf[2] & 0x80)
+					MTXDBG(CRITICAL,_("MS2_RT_VARS read error: specifically 0X%x\n"),message->recv_buf[2]);
+			}
 			ms_store_new_block(canID,page,0,
-					message->recv_buf,
+					((guint8 *)message->recv_buf)+base_offset,
 					firmware->page_params[page]->length);
 			ms_backup_current_data(canID,page);
-			ptr16 = (guint16 *)message->recv_buf;
+			ptr16 = (guint16 *)message->recv_buf+base_offset;
 			/* Test for MS reset */
 			if (just_starting)
 			{
@@ -480,7 +514,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			 * as a void * and pass it a pointer to the new
 			 * area for the parsed data...
 			 */
-			process_rt_vars_f((void *)message->recv_buf,firmware->rtvars_size);
+			process_rt_vars_f(((guint8 *)message->recv_buf)+base_offset,firmware->rtvars_size);
 			break;
 		case MS2_BOOTLOADER:
 			printf(_("MS2_BOOTLOADER not written yet\n"));

@@ -1811,7 +1811,7 @@ length=1024
 [interrogation]
 match_on=MS_VerNum,MS_Signature
 MS_VerNum=_REGEX_,MS3 Format 0095
-MS_Signature=_REGEX_,MS3 release 1.0.5
+MS_Signature=_REGEX_,MS3 1.0.5 release
 
 [gui]
 RealtimeMapFile=MS3-Extra-1.0.x

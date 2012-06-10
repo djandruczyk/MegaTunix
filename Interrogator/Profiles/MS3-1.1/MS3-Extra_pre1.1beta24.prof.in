@@ -11,7 +11,7 @@ InterCharDelay=1
 SignatureVia=get_signature
 TextVerVia=ms2_get_textrev
 RT_Command=ms1_std_rtvars
-RT_total_bytes=296
+RT_total_bytes=408
 MS2_RT_Page=6
 Get_All_Command=ms2_read_all
 Read_Command=ms2_veconst
@@ -1810,11 +1810,11 @@ length=1024
 
 [interrogation]
 match_on=MS_VerNum,MS_Signature
-MS_VerNum=_REGEX_,MS3 Format 0095
-MS_Signature=_REGEX_,MS3 release 1.0.0
+MS_VerNum=_REGEX_,MS3 Format 0238
+MS_Signature=_REGEX_,MS3 pre-1.1 beta  24
 
 [gui]
-RealtimeMapFile=MS3-Extra-1.0.x
+RealtimeMapFile=MS3-Extra-pre-1.1_beta_24
 SliderMapFile=MS3-Extra
 RuntimeTextMapFile=MS3-Extra
 StatusMapFile=MS3-Extra

@@ -51,6 +51,7 @@ void signal_read_rtvars(void);
 void build_output_message(Io_Message *, Command *, gpointer);
 gboolean setup_rtv(void);
 gboolean teardown_rtv(void);
+unsigned long crc32_computebuf(unsigned long, const void *, size_t);
 /* Prototypes */
 
 #endif

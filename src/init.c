@@ -1110,6 +1110,8 @@ G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 	message->payload = NULL;
 	message->recv_buf = NULL;
 	message->status = TRUE;
+	message->data = g_new0(gconstpointer, 1);
+	DATA_SET(message->data,"_WILL_NEVER_USE_",GINT_TO_POINTER(1));
 
 	/*printf("Allocate message %i\n",count++); */
 	return message;
@@ -1198,7 +1200,9 @@ G_MODULE_EXPORT void dealloc_io_message(Io_Message * message)
 			cleanup(payload);
 		}
 	}
-        cleanup(message);
+	g_dataset_destroy(message->data);
+	cleanup(message->data);
+    cleanup(message);
 }
 
 

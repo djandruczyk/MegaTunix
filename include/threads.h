@@ -110,9 +110,10 @@ struct _Gui_Message
  */
 struct _Io_Message
 {
+	gconstpointer *data;/*!< Opaque object for data storage */
 	GArray *sequence;	/*!< for sending data to ECU */
 	void *payload;		/*!< data passed along, arbritrary size.. */
-	void *recv_buf;		/*!< data that comes from ECU */
+	guint8 *recv_buf;	/*!< data that comes from ECU */
 	Command *command;	/*!< Command struct */
 	gboolean status;	/*!< True == success, false == failure */
 };

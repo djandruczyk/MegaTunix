@@ -5,7 +5,7 @@
 		<minor>7</minor>
 	</api>
 	<realtime_map>
-		<persona>MS-2</persona>
+		<persona>MS2</persona>
 		<raw_list>raw_secl,adc6,adc7,afr1,afr1,afrtgt1,afrtgt2,aircorr,barocorr,barokpa,battvolt,boostduty,cltdeg,coldadv,deltaT,dwell,EAEFuelCorr1,EAEFuelCorr2,egocorr1,egocorr2,enginebit,fuelcorr,fuelload,fuelload2,gammae,gpioadc0,gpioadc1,gpioadc2,gpioadc3,gpioadc4,gpioadc5,gpioadc6,gpioadc7,gpioport0,gpioport1,gpioport2,gpiopwmin0,gpiopwmin1,gpiopwmin2,gpiopwmin3,hr_clock,iacstep,idledc,ignload,ignload2,knock,knockretard,lambda,lambda2,looptime,maf,mapdot,mapkpa,matdeg,o2volt1,o2volt2,portstatus,pw1,pw2,rpm,sparkangle,squirtbit,status1,status2,status3,status4,status5,synccnt,syncreason,timing_err,tpsaccel,tpsADC,tpsdot,tpsfuelcut,tpspercent,user0,vecurr1,vecurr2,wallfuel1,wallfuel2,warmcorr,wbo2_en1,wbo2_en2</raw_list>
 	</realtime_map>
 	<derived>

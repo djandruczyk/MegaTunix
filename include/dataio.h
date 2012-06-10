@@ -31,10 +31,10 @@ extern "C" {
 
 /* Prototypes */
 void dump_output(gint, guchar *);
-gint read_data(gint , void **, gboolean);
-gboolean read_wrapper(gint, void *, size_t, gint *);
+gint read_data(gint , guint8 **, gboolean);
+gboolean read_wrapper(gint, guint8 *, size_t, gint *);
 gboolean write_data(Io_Message *);
-gboolean write_wrapper(gint, const void *, size_t, gint *);
+gboolean write_wrapper(gint, const guint8 *, size_t, gint *);
 /* Prototypes */
 
 #endif

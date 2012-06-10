@@ -288,8 +288,8 @@ Interrogator/Makefile
 Interrogator/Profiles/Makefile
 Interrogator/Profiles/MS1/Makefile
 Interrogator/Profiles/MS2/Makefile
-Interrogator/Profiles/MS3-legacy/Makefile
-Interrogator/Profiles/MS3-newserial/Makefile
+Interrogator/Profiles/MS3-1.0/Makefile
+Interrogator/Profiles/MS3-1.1/Makefile
 Interrogator/Profiles/FreeEMS/Makefile
 Interrogator/Profiles/PIS/Makefile
 Interrogator/Profiles/JimStim/Makefile
