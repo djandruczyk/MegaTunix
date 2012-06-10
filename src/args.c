@@ -56,10 +56,10 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 		{"DEBUG Log",'L',0,G_OPTION_ARG_FILENAME,&args->dbglog,"Debug logfile name (referenced from homedir)",NULL},
 		{"Version",'V',0,G_OPTION_ARG_NONE,&args->version,"Print MegaTunix's Version number",NULL},
 		{"quiet",'q',0,G_OPTION_ARG_NONE,&args->be_quiet,"Suppress all GUI error notifications",NULL},
-		{"persona",'p',0,G_OPTION_ARG_STRING,&args->persona,"ECU Personality <MS1|MS2|MS3|FreeEMS|Secu3|JimStim|PIS|OBDII>",NULL},
+		{"persona",'p',0,G_OPTION_ARG_STRING,&args->persona,"ECU Personality <MS1|MS2|MS3-legacy|MS3-newserial|FreeEMS|JimStim|PIS>",NULL},
 		{"offline",'o',0,G_OPTION_ARG_NONE,&args->offline,"Offline mode",NULL},
 		{"Port",'P',0,G_OPTION_ARG_STRING,&args->port,"Use this serial port ONLY",NULL},
-		{"project",NULL,0,G_OPTION_ARG_STRING,&args->project_name,"Use this project name",NULL},
+		{"project",0,0,G_OPTION_ARG_STRING,&args->project_name,"Use this project name",NULL},
 		/*{"Listen",'L',0,G_OPTION_ARG_NONE,&args->listen_mode,"Startup MegaTunix in Listen mode, awaiting external call-home connection.",NULL},*/
 		{"inhibit-tabs",'i',0,G_OPTION_ARG_NONE,&args->inhibit_tabs,"Prevent loading of tabs (debug option)",NULL},
 		{"network",'n',0,G_OPTION_ARG_STRING,&netinfo,"Network connect instead of serial","host[:port]"},

@@ -1,6 +1,6 @@
 [API]
 major=1
-minor=10
+minor=11
 
 [interrogation_profile]
 name=MS3-Extra V1.0.0 series
@@ -1811,7 +1811,7 @@ length=1024
 [interrogation]
 match_on=MS_VerNum,MS_Signature
 MS_VerNum=_REGEX_,MS3 Format 0095
-MS_Signature=_REGEX_,MS3 release 1.0.0
+MS_Signature=_REGEX_,MS3 release 1.0.5
 
 [gui]
 RealtimeMapFile=MS3-Extra-1.0.x

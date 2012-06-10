@@ -216,6 +216,8 @@ void register_common_enums(void)
 				GINT_TO_POINTER (MS2_E_COMPMON));
 		g_hash_table_insert (str_2_enum, (gpointer)"_MS3_",
 				GINT_TO_POINTER (MS3));
+		g_hash_table_insert (str_2_enum, (gpointer)"_MS3_NEWSERIAL_",
+				GINT_TO_POINTER (MS3_NEWSERIAL));
 		g_hash_table_insert (str_2_enum, (gpointer)"_JIMSTIM_",
 				GINT_TO_POINTER (JIMSTIM));
 		g_hash_table_insert (str_2_enum, (gpointer)"_COUNT_", 
