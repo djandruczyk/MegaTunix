@@ -1221,6 +1221,9 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 
 	MTXDBG(INTERROGATOR,_("File %s, opened successfully\n"),filename);
 	tests = g_array_new(FALSE,TRUE,sizeof(Detection_Test *));
+
+	cfg_read_boolean(cfgfile,"interrogation_tests","ms3_crc32",&tmpi);
+	DATA_SET(global_data,"ms3_crc32",GINT_TO_POINTER(TRUE));
 	cfg_read_int(cfgfile,"interrogation_tests","total_tests",&total_tests);
 	for (i=0;i<total_tests;i++)
 	{
