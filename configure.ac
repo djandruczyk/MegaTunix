@@ -286,9 +286,10 @@ RuntimeStatus/Makefile
 RuntimeText/Makefile
 Interrogator/Makefile
 Interrogator/Profiles/Makefile
-Interrogator/Profiles/MS-1/Makefile
-Interrogator/Profiles/MS-2/Makefile
-Interrogator/Profiles/MS-3/Makefile
+Interrogator/Profiles/MS1/Makefile
+Interrogator/Profiles/MS2/Makefile
+Interrogator/Profiles/MS3-legacy/Makefile
+Interrogator/Profiles/MS3-newserial/Makefile
 Interrogator/Profiles/FreeEMS/Makefile
 Interrogator/Profiles/PIS/Makefile
 Interrogator/Profiles/JimStim/Makefile

@@ -1,4 +1,4 @@
-SUBDIRS = MS-1 MS-2 MS-3 PIS FreeEMS JimStim
+SUBDIRS = MS1 MS2 MS3-legacy MS3-newserial PIS FreeEMS JimStim
 
 EXTRA_DIST = README
 

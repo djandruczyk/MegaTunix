@@ -1,4 +1,4 @@
-profilesdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)/Profiles/MS-3
+profilesdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)/Profiles/MS3-legacy
 
 profiles_in = \
 	MS3-Extra_1.0.0.prof.in 
