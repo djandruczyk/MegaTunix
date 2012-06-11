@@ -26,6 +26,7 @@
 #include <mscommon_plugin.h>
 #include <debugging.h>
 #include <mtxsocket.h>
+#include <serialio.h>
 #include <stdio.h>
 
 extern gconstpointer *global_data;
@@ -326,8 +327,13 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 	guint8 *ptr8 = NULL;
 	guint16 *ptr16 = NULL;
 	Firmware_Details *firmware = NULL;
+	Serial_Params *serial_params = NULL;
 
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
+
+	g_return_if_fail(serial_params);
+	g_return_if_fail(firmware);
 
 	message = (Io_Message *)data;
 	output = (OutputData *)message->payload;
@@ -372,7 +378,11 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 				if (check_header)
 				{
 					if (message->recv_buf[2] & 0x80)
+					{
 						MTXDBG(CRITICAL,_("TextRev read error: specifically 0X%x\n"),message->recv_buf[2]);
+						flush_serial_f(serial_params->fd,BOTH);
+						break;
+					}
 				}
 				firmware->txt_rev_len = count-adder;
 				firmware->text_revision = g_strndup((const gchar *)message->recv_buf+base_offset,count-adder);
@@ -388,7 +398,11 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 				if (check_header)
 				{
 					if (message->recv_buf[2] & 0x80)
+					{
 						MTXDBG(CRITICAL,_("Signature read error: specifically 0X%x\n"),message->recv_buf[2]);
+						flush_serial_f(serial_params->fd,BOTH);
+						break;
+					}
 				}
 				firmware->signature_len = count-adder;
 				firmware->actual_signature = g_strndup((const gchar *)message->recv_buf+base_offset,count-adder);
@@ -405,7 +419,11 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (check_header)
 			{
 				if (message->recv_buf[2] & 0x80)
+				{
 					MTXDBG(CRITICAL,_("MS1/2_VECONST read error: specifically 0X%x\n"),message->recv_buf[2]);
+					flush_serial_f(serial_params->fd,BOTH);
+					break;
+				}
 			}
 			ms_store_new_block(canID,page,0,
 					((guint8 *)message->recv_buf)+base_offset,
@@ -421,7 +439,11 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (check_header)
 			{
 				if (message->recv_buf[2] & 0x80)
+				{
 					MTXDBG(CRITICAL,_("MS1_RT_VARS read error: specifically 0X%x\n"),message->recv_buf[2]);
+					flush_serial_f(serial_params->fd,BOTH);
+					break;
+				}
 			}
 			ptr8 = (guchar *)message->recv_buf+base_offset;
 			/* Test for MS reset */
@@ -439,7 +461,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			{
 				tmpi = (GINT)DATA_GET(global_data,"reset_count");
 				DATA_SET(global_data,"reset_count",GINT_TO_POINTER(++tmpi));
-				printf(_("MS1 Reset detected!, lastcount %i, current %i\n"),lastcount,ptr8[0]);
+				printf(_("ECU Reset detected!, lastcount %i, current %i\n"),lastcount,ptr8[0]);
 				gdk_beep();
 			}
 			else
@@ -463,7 +485,11 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 			if (check_header)
 			{
 				if (message->recv_buf[2] & 0x80)
+				{
 					MTXDBG(CRITICAL,_("MS2_RT_VARS read error: specifically 0X%x\n"),message->recv_buf[2]);
+					flush_serial_f(serial_params->fd,BOTH);
+					break;
+				}
 			}
 			ms_store_new_block(canID,page,0,
 					((guint8 *)message->recv_buf)+base_offset,
