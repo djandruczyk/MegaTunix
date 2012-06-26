@@ -1,4 +1,4 @@
-snapshotsdir = $(datadir)/MegaTunix/$(SNAPSHOTS_DATA_DIR)
+snapshotsdir = $(datadir)/MegaTunix/$(BACKUP_DATA_DIR)
 
 snapshots_files = 	\
 			MS1-DT-Std.ecu \

@@ -40,7 +40,7 @@ extern "C" {
 #endif
 
 #define DEFAULT_PROJECT "default"
-#define BACKUP_DATA_DIR "Backups"
+#define BACKUP_DATA_DIR "ECU_Backups"
 #define DATALOG_DATA_DIR "Datalogs"
 #define TABLE_DATA_DIR "Tables"
 /* Windows specific for exporting symbols for glade... */

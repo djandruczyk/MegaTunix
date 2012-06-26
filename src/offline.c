@@ -443,14 +443,15 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 		return;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup(BACKUP_DATA_DIR);
+//	fileio->external_path = g_strdup(BACKUP_DATA_DIR);
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
-	fileio->default_path = g_strdup("ecu_snapshots");
+	fileio->default_path = g_strdup(BACKUP_DATA_DIR);
 	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("You should load an ECU backup from a file");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
-	fileio->shortcut_folders = g_strdup("ecu_snapshots,../MTX_ecu_snapshots");
+	fileio->shortcut_folders = g_strdup(BACKUP_DATA_DIR);
+	if (DATA_GET(global_data,"last_offline_filename"))
 	fileio->default_filename = g_strdup((gchar *)DATA_GET(global_data,"last_offline_filename"));
 
 	gdk_threads_enter();

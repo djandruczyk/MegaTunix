@@ -396,7 +396,9 @@ gchar * choose_file(MtxFileIO *data)
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),data->absolute_path);
 		else if (data->default_path)
 		{
+			printf("should be using system path + %s\n",data->default_path);
 			path = g_build_filename(MTXSYSDATA,data->default_path,NULL);
+			printf("System path is %s\n",path);
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
 			g_free(path);
 		}
@@ -466,6 +468,7 @@ gchar * choose_file(MtxFileIO *data)
 	/* If default path switch to that place */
 	if ((data->external_path) && (!(data->default_path)))
 	{
+		printf("external path with no default path\n");
 		path = g_build_filename(HOME(),"mtx",data->project,data->external_path,NULL);
 		if (!g_file_test(path,G_FILE_TEST_IS_DIR))
 			g_mkdir(path,0755);
@@ -496,8 +499,13 @@ afterfilter:
 	g_signal_connect(G_OBJECT(dialog),"confirm-overwrite",
 			G_CALLBACK (confirm_overwrite_callback), NULL);
 	if (data->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
 		if (data->default_filename)
+		{
+			printf("data->default_filename is set to \"%s\"\n",data->default_filename);
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog),data->default_filename);
+		}
+	}
 
 //	printf("initiating dialog to run\n");
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
