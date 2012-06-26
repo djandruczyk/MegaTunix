@@ -262,6 +262,10 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 
 	else
 	{
+		g_return_val_if_fail(message,FALSE);
+		g_return_val_if_fail(message->sequence,FALSE);
+		g_return_val_if_fail(message->sequence->len > 0,FALSE);
+		
 		for (i=0;i<message->sequence->len;i++)
 		{
 			block = g_array_index(message->sequence,DBlock *,i);
