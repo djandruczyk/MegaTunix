@@ -308,7 +308,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 			g_free(section);
 		}
 		/*queue_burn_ecu_flash(page);
-		start_restore_monitor();
+		start_restore_monitor_f();
 		*/
 		cfg_free(cfgfile);
 	}

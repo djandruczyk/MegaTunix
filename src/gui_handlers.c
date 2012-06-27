@@ -2598,3 +2598,62 @@ void set_main_notebook_ellipsis_state(gboolean state)
 			gtk_label_set_ellipsize(GTK_LABEL(label),mode);
 	}
 }
+
+
+/*!
+ \brief start_restore_monitor kicks off a thread to update the tools view
+ during an ECU restore to provide user feedback since this is a time
+ consuming operation.  if uses message passing over asyncqueues to send the 
+ gui update messages.
+ */
+G_MODULE_EXPORT void start_restore_monitor(void)
+{
+	GThread * restore_update_thread = NULL;
+	printf("start_restore_monitor!\n");
+	restore_update_thread = g_thread_create(restore_update,
+			NULL, /* Thread args */
+			TRUE, /* Joinable */
+			NULL); /*GError Pointer */
+}
+
+
+/*!
+  \brief the thread which monitors the io_data_queue and updates the GUI with
+  feedback, for very long running operrations (restores)
+  \param data is unused
+  */
+G_MODULE_EXPORT void *restore_update(gpointer data)
+{
+	static GAsyncQueue *io_data_queue = NULL;
+	gint max_xfers = 0;
+	gint remaining_xfers = 0;
+	gint last_xferd = 0;
+
+	printf("start_restore_monitor is running!\n");
+	if (!io_data_queue)
+		io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
+	g_return_val_if_fail(io_data_queue,NULL);
+
+	max_xfers = g_async_queue_length(io_data_queue);
+	remaining_xfers = max_xfers;
+	last_xferd = max_xfers;
+
+	MTXDBG(THREADS,_("restore update thread created!\n"));
+	thread_update_logbar("tools_view","warning",g_strdup_printf(_("There are %i pending I/O transactions waiting to get to the ECU, please be patient.\n"),max_xfers),FALSE,FALSE);
+	while (remaining_xfers > 5)
+	{
+		remaining_xfers = g_async_queue_length(io_data_queue);
+		g_usleep(10000);
+		if (remaining_xfers <= (last_xferd-50))
+		{
+			thread_update_logbar("tools_view",NULL,g_strdup_printf(_("Approximately %i Transactions remaining, please wait\n"),remaining_xfers),FALSE,FALSE);
+			last_xferd = remaining_xfers;
+		}
+	}
+	thread_update_logbar("tools_view","info",g_strdup_printf(_("All Transactions complete\n")),FALSE,FALSE);
+
+	MTXDBG(THREADS,_("restore update thread exiting!\n"));
+	printf("start_restore_monitor is exiting!\n");
+	g_thread_exit(NULL);
+	return NULL;
+}

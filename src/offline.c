@@ -103,6 +103,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		load_firmware_details(firmware,filename);
 	else
 		printf("Unable to load firmware details!\n");
+	gdk_threads_leave();
 
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
@@ -190,6 +191,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	   io_cmd(firmware->get_all_command,NULL);
 	 */
 
+	gdk_threads_enter();
 	widget = lookup_widget("binary_logging_frame");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
@@ -200,6 +202,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+	gdk_threads_leave();
 
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
@@ -214,9 +217,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	get_symbol(pf->name,(void **)&pf->function_w_arg);
 	pf->w_arg = TRUE;
 	pfuncs = g_array_append_val(pfuncs,pf);
-
 	io_cmd(NULL,pfuncs);
-	gdk_threads_leave();
 	return FALSE;
 }
 

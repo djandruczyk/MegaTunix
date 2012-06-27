@@ -44,8 +44,6 @@ void chunk_write(gpointer, gint, guint8 *);
 void send_to_slaves(void *);
 void slaves_set_color(GuiColor,const gchar *);
 void update_write_status(void *);
-void *restore_update(gpointer);
-void start_restore_monitor(void);
 void *serial_repair_thread(gpointer);
 void signal_read_rtvars(void);
 void build_output_message(Io_Message *, Command *, gpointer);

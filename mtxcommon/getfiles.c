@@ -405,14 +405,14 @@ gchar * choose_file(MtxFileIO *data)
 	}
 	else if (data->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	{
-		printf("calling gtk_file_chooser_dialog_new\n");
+		printf("ACTION_SAVE calling gtk_file_chooser_dialog_new\n");
 		dialog = gtk_file_chooser_dialog_new(data->title,
 				GTK_WINDOW(data->parent),
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 				NULL);	
-		printf("dialog created\n");
+		printf("after gtk_file_chooser_dialog_new\n");
 
 		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
@@ -507,9 +507,9 @@ afterfilter:
 		}
 	}
 
-//	printf("initiating dialog to run\n");
+	printf("initiating dialog to run\n");
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
-//	printf("it returned \n");
+	printf("it returned \n");
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		tmpbuf = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
@@ -524,9 +524,7 @@ afterfilter:
 			filename = g_strdup(tmpbuf);
 		g_free(tmpbuf);
 	}
-	gtk_widget_hide(dialog);
-//	gtk_widget_destroy (dialog);
-
+	gtk_widget_destroy (dialog);
 	return (filename);
 }
 

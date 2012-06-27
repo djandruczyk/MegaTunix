@@ -309,7 +309,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 			}
 			g_free(section);
 		}
-		start_restore_monitor();
+		//start_restore_monitor_f();
 		cfg_free(cfgfile);
 	}
 	if (DATA_GET(global_data,"offline"))

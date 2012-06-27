@@ -69,6 +69,7 @@ EXTERN GtkWidget *(*spin_button_handler_f)(GtkWidget *, gpointer);
 EXTERN gboolean (*set_file_api_f)(ConfigFile *, gint, gint );
 EXTERN gboolean (*get_file_api_f)(ConfigFile *, gint *, gint * );
 EXTERN void (*stop_tickler_f)(gint);
+EXTERN void (*start_restore_monitor_f)(void);
 EXTERN void (*start_tickler_f)(gint);
 EXTERN gchar **(*parse_keys_f)(const gchar *, gint *, const gchar * );
 EXTERN gint (*get_multiplier_f)(DataSize );

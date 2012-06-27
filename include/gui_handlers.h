@@ -158,6 +158,8 @@ void update_entry_color(GtkWidget *, gint, gboolean, gboolean);
 void update_entry_color_wrapper(gpointer, gpointer);
 gboolean table_color_refresh(gpointer);
 void set_main_notebook_ellipsis_state(gboolean);
+void *restore_update(gpointer);
+void start_restore_monitor(void);
 /* Prototypes */
 
 #endif

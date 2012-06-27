@@ -108,6 +108,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("set_widget_labels",(void **)&set_widget_labels_f);
 	get_symbol_f("set_widget_sensitive",(void **)&set_widget_sensitive_f);
 	get_symbol_f("spin_button_handler",(void **)&spin_button_handler_f);
+	get_symbol_f("start_restore_monitor",(void **)&start_restore_monitor_f);
 	get_symbol_f("start_tickler",(void **)&start_tickler_f);
 	get_symbol_f("std_entry_handler",(void **)&std_entry_handler_f);
 	get_symbol_f("stop_tickler",(void **)&stop_tickler_f);
