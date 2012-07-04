@@ -2331,7 +2331,7 @@ Multiplier (%)</property>
         <child>
           <widget class="GtkLabel" id="main_frame_title">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">MegaSquirt Enrichments</property>
+            <property name="label" translatable="yes">ECU Enrichments</property>
             <property name="use_underline">False</property>
             <property name="use_markup">False</property>
             <property name="justify">GTK_JUSTIFY_LEFT</property>

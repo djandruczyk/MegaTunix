@@ -2708,7 +2708,7 @@ Related Advance</property>
         <child>
           <widget class="GtkLabel" id="main_frame_title">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">MegaSquirtnSpark-Extra  Enrichments</property>
+            <property name="label" translatable="yes">ECU Enrichments</property>
           </widget>
           <packing>
             <property name="type">label_item</property>

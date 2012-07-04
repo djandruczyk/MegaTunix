@@ -1640,7 +1640,7 @@ Methodology</property>
         <child>
           <widget class="GtkLabel" id="topframe_title">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">MegaSquirt Dualtable Parameters</property>
+            <property name="label" translatable="yes">Dualtable Parameters</property>
             <property name="use_underline">False</property>
             <property name="use_markup">False</property>
             <property name="justify">GTK_JUSTIFY_LEFT</property>

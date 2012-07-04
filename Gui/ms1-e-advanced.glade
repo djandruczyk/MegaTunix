@@ -1493,7 +1493,7 @@ threshold?</property>
         <child>
           <widget class="GtkLabel" id="topframe_title">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">MegaSquirtnSpark  Extra Advanced Parameters</property>
+            <property name="label" translatable="yes">ECU Advanced Parameters</property>
           </widget>
           <packing>
             <property name="type">label_item</property>

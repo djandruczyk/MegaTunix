@@ -520,7 +520,7 @@
                             <child>
                               <widget class="GtkLabel" id="runtime_iostatus_frame_title">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">MegaSquirt I/O status</property>
+                                <property name="label" translatable="yes">ECU I/O status</property>
                               </widget>
                               <packing>
                                 <property name="type">label_item</property>
@@ -696,7 +696,7 @@
         <child>
           <widget class="GtkLabel" id="topframe_title">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">MegaSquirt Runtime Display</property>
+            <property name="label" translatable="yes">ECU Runtime Display</property>
           </widget>
           <packing>
             <property name="type">label_item</property>
