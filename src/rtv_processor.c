@@ -594,30 +594,18 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
   */
 G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 {
-	static GTimeVal now;
-	static GTimeVal last;
-	static gfloat cumu = 0.0;
+	static GTimer *timer = NULL;
 
 	if (g_ascii_strcasecmp(handler_name,"hr_clock")==0)
 	{
-		if (DATA_GET(global_data,"begin"))
-		{       
-			g_get_current_time(&now);
-			last.tv_sec = now.tv_sec;
-			last.tv_usec = now.tv_usec;
-			DATA_SET(global_data,"begin",GINT_TO_POINTER(FALSE));
+		if (!timer)
+			timer = DATA_GET(global_data,"mtx_uptime_timer");
+		if (!timer)
+		{
+			MTXDBG(COMPLEX_EXPR|CRITICAL,_("\"mtx_uptime_timer\" pointer not found, unable to set high res clock for datalog!\n"));
 			return 0.0;
 		}
-		else
-		{
-			g_get_current_time(&now);
-			cumu += (now.tv_sec-last.tv_sec)+
-				((double)(now.tv_usec-last.tv_usec)/1000000.0);
-			last.tv_sec = now.tv_sec;
-			last.tv_usec = now.tv_usec;
-			return cumu;
-		}
-
+		return g_timer_elapsed(timer,NULL);
 	}
 	else
 	{

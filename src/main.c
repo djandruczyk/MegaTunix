@@ -58,6 +58,7 @@ gint main(gint argc, gchar ** argv)
 	GMutex *mutex = NULL;
 	GMutex *pf_dispatch_mutex = NULL;
 	GMutex *gui_dispatch_mutex = NULL;
+	GTimer *timer = NULL;
 	gint id = 0;
 	setlocale(LC_ALL,"");
 #ifdef __WIN32__
@@ -149,6 +150,8 @@ gint main(gint argc, gchar ** argv)
 	/* Check for first_time flag, if so, run first tiem wizard, otherwise
 	   load personality choice
 	   */
+	timer = g_timer_new();
+	DATA_SET_FULL(global_data,"mtx_uptime_timer",timer,g_timer_destroy);
 	gdk_threads_add_timeout(500,(GSourceFunc)check_for_first_time,NULL);
 	
 

@@ -118,7 +118,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup(DATALOG_DATA_DIR);
+	fileio->default_path = g_strdup(DATALOG_DATA_DIR);
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;

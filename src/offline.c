@@ -444,7 +444,6 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 		return;
 
 	fileio = g_new0(MtxFileIO ,1);
-//	fileio->external_path = g_strdup(BACKUP_DATA_DIR);
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->default_path = g_strdup(BACKUP_DATA_DIR);
 	fileio->parent = lookup_widget("main_window");

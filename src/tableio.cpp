@@ -136,7 +136,7 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 	g_return_if_fail(((table_num >= 0) && (table_num < firmware->total_tables)));
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup(TABLE_DATA_DIR);
+	fileio->default_path = g_strdup(TABLE_DATA_DIR);
 	fileio->parent = lookup_widget("main_window");
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->on_top = TRUE;
@@ -291,7 +291,6 @@ G_MODULE_EXPORT void export_single_table(gint table_num) {
 	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup(TABLE_DATA_DIR);
 	fileio->default_path = g_strdup(TABLE_DATA_DIR);
 	fileio->parent = lookup_widget("main_window");
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
@@ -329,7 +328,7 @@ G_MODULE_EXPORT void select_all_tables_for_export(void) {
 	g_return_if_fail(DATA_GET(global_data,"interrogated"));
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup(TABLE_DATA_DIR);
+	fileio->default_path = g_strdup(TABLE_DATA_DIR);
 	fileio->parent = lookup_widget("main_window");
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->on_top = TRUE;

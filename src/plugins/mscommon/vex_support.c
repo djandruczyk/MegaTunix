@@ -85,7 +85,7 @@ G_MODULE_EXPORT gboolean select_vex_for_export(GtkWidget *widget, gpointer data)
 
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->default_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
 	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
@@ -146,7 +146,7 @@ G_MODULE_EXPORT void select_table_for_export(gint table_num)
 	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->default_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Save your VEX file");
 	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
@@ -196,7 +196,7 @@ G_MODULE_EXPORT gboolean select_vex_for_import(GtkWidget *widget, gpointer data)
 		return FALSE;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->default_path = g_strdup("MTX_VexFiles");
 	fileio->title = g_strdup("Select your VEX file to import");
 	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
@@ -247,7 +247,7 @@ G_MODULE_EXPORT void select_table_for_import(gint table_num)
 		return;
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup("MTX_VexFiles");
+	fileio->default_path = g_strdup("MTX_VexFiles");
 	fileio->parent = lookup_widget_f("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Select your VEX file to import");

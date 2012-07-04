@@ -43,8 +43,6 @@
 extern gconstpointer *global_data;
 
 /* Static vars to all functions in this file... */
-static gboolean logging_active = FALSE;
-static gboolean header_needed = FALSE;
 static GList *object_list = NULL;
 static gint last_len = 0;
 
@@ -173,7 +171,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
   */
 G_MODULE_EXPORT void start_datalogging(void)
 {
-	if (logging_active)
+	if (DATA_GET(global_data,"logging_active"))
 		return;   /* Logging already running ... */
 	if (DATA_GET(global_data,"offline"))
 		return;
@@ -184,8 +182,8 @@ G_MODULE_EXPORT void start_datalogging(void)
 	if (lookup_widget("dlog_select_log_button"))
 		gtk_widget_set_sensitive(lookup_widget("dlog_select_log_button"),FALSE);
 
-	header_needed = TRUE;
-	logging_active = TRUE;
+	DATA_SET(global_data,"datalogging_header_needed",GINT_TO_POINTER(TRUE));
+	DATA_SET(global_data,"logging_active",GINT_TO_POINTER(TRUE));
 	update_logbar("dlog_view",NULL,_("DataLogging Started...\n"),FALSE,FALSE,FALSE);
 
 	if (!DATA_GET(global_data,"offline"))
@@ -202,12 +200,12 @@ G_MODULE_EXPORT void start_datalogging(void)
 G_MODULE_EXPORT void stop_datalogging(void)
 {
 	GIOChannel *iochannel = NULL;
-	if (!logging_active)
+	if (!DATA_GET(global_data,"logging_active"))
 		return;
 
 	if (DATA_GET(global_data,"offline"))
 		return;
-	logging_active = FALSE;
+	DATA_SET(global_data,"logging_active",NULL);
 
 	if (lookup_widget("dlog_logable_vars_vbox1"))
 		gtk_widget_set_sensitive(lookup_widget("dlog_logable_vars_vbox1"),TRUE);
@@ -348,7 +346,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	if (!((DATA_GET(global_data,"connected")) && (DATA_GET(global_data,"interrogated"))))
 		return TRUE;
 
-	if (!logging_active) /* Logging isn't enabled.... */
+	if (!DATA_GET(global_data,"logging_active")) /* Logging isn't enabled.... */
 		return TRUE;
 
 	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
@@ -369,12 +367,12 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 		object_list = g_list_reverse(object_list);
 	}
 
-	output = g_string_sized_new(128); /* 128 char initial size */
+	output = g_string_sized_new(1024); /* 1024 char initial size */
 
-	if (header_needed)
+	if (DATA_GET(global_data,"datalogging_header_needed"))
 	{
 		write_log_header(iochannel, FALSE);
-		header_needed = FALSE;
+		DATA_SET(global_data,"datalogging_header_needed",NULL);
 		DATA_SET(global_data,"begin",GINT_TO_POINTER(TRUE));
 	}
 	
@@ -392,7 +390,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 		count = cur_len;
 	}
 	total_logables = g_list_length(object_list);
-	for(j=base;j<count;j++)
+	for(j=base;j<base+count;j++)
 	{
 		k = 0;
 		for(i=0;i<total_logables;i++)
@@ -533,7 +531,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup(DATALOG_DATA_DIR);
+	fileio->default_path = g_strdup(DATALOG_DATA_DIR);
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->title = g_strdup("Choose a filename for datalog export");
 	fileio->parent = lookup_widget("main_window");
@@ -619,7 +617,7 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	g_free(t);
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->external_path = g_strdup(DATALOG_DATA_DIR);
+	fileio->default_path = g_strdup(DATALOG_DATA_DIR);
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->title = g_strdup("Choose a filename for internal datalog export");
 	fileio->parent = lookup_widget("main_window");
