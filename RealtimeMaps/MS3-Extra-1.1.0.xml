@@ -5,13 +5,13 @@
 		<minor>7</minor>
 	</api>
 	<realtime_map>
-		<persona>MS3-1.1</persona>
+		<persona>MS3-1.1.0</persona>
 		<raw_list>adc6,adc7,afr1,afr1,afrtgt1,afrtgt2,aircorr,barocorr,barokpa,battvolt,boostduty,cltdeg,coldadv,deltaT,dwell,EAEFuelCorr1,EAEFuelCorr2,egocorr1,egocorr2,enginebit,fuelcorr,fuelload,fuelload2,gammae,gpioadc0,gpioadc1,gpioadc2,gpioadc3,gpioadc4,gpioadc5,gpioadc6,gpioadc7,gpioport0,gpioport1,gpioport2,gpiopwmin0,gpiopwmin1,gpiopwmin2,gpiopwmin3,hr_clock,iacstep,idledc,ignload,ignload2,knock,knockretard,lambda,lambda2,looptime,maf,mafmap,mapdot,mapkpa,matdeg,o2volt1,o2volt2,portstatus,pw1,pw2,rpm,sparkangle,squirtbit,status1,status2,status3,status4,status5,synccnt,syncreason,timing_err,tpsaccel,tpsADC,tpsdot,tpsfuelcut,tpspercent,user0,vecurr1,vecurr2,wallfuel1,wallfuel2,warmcorr,wbo2_en1,wbo2_en2</raw_list>
 	</realtime_map>
 	<derived>
 		<dlog_gui_name>HR Clock</dlog_gui_name>
 		<dlog_field_name>Time</dlog_field_name>
-		<internal_names>hr_clock</internal_names>
+		<internal_names>hr_clock,time</internal_names>
 		<offset>0</offset>
 		<real_lower>0</real_lower>
 		<real_upper>2147483648</real_upper>
@@ -34,12 +34,12 @@
 	<derived>
 		<dlog_gui_name>PW 1 (ms.)</dlog_gui_name>
 		<dlog_field_name>PW</dlog_field_name>
-		<internal_names>pw1</internal_names>
+		<internal_names>pw1,pulseWidth1</internal_names>
 		<offset>2</offset>
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>65</real_upper>
-		<fromecu_mult>0.000666</fromecu_mult>
+		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"PW" is the pulsewidth for injector channel 1. Resolution of 1 us.</tooltip>
 		<log_by_default>TRUE</log_by_default>
@@ -47,12 +47,12 @@
 	<derived>
 		<dlog_gui_name>PW 2 (ms.)</dlog_gui_name>
 		<dlog_field_name>PW2</dlog_field_name>
-		<internal_names>pw2</internal_names>
+		<internal_names>pw2,pulseWidth2</internal_names>
 		<offset>4</offset>
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>65</real_upper>
-		<fromecu_mult>0.000666</fromecu_mult>
+		<fromecu_mult>0.001</fromecu_mult>
 		<precision>3</precision>
 		<tooltip>"PW2" is the pulsewidth for injector channel 2. Resolution of 1 us.</tooltip>
 		<log_by_default>TRUE</log_by_default>
@@ -71,7 +71,7 @@
 	<derived>
 		<dlog_gui_name>Spark Adv.</dlog_gui_name>
 		<dlog_field_name>SparkAdv</dlog_field_name>
-		<internal_names>sparkangle</internal_names>
+		<internal_names>sparkangle,advance</internal_names>
 		<offset>8</offset>
 		<size>_S16_</size>
 		<real_lower>-10</real_lower>
@@ -94,7 +94,7 @@
 	<derived>
 		<dlog_gui_name>EngineBits</dlog_gui_name>
 		<dlog_field_name>Engine</dlog_field_name>
-		<internal_names>enginebit</internal_names>
+		<internal_names>enginebit,engine</internal_names>
 		<offset>11</offset>
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
@@ -103,7 +103,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>AfrTarget 1</dlog_gui_name>
-		<dlog_field_name>AFR Target 1</dlog_field_name>
+		<dlog_field_name>AFR 1 Target</dlog_field_name>
 		<internal_names>afrtgt1</internal_names>
 		<offset>12</offset>
 		<real_lower>8</real_lower>
@@ -115,7 +115,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>AfrTarget 2</dlog_gui_name>
-		<dlog_field_name>AFR Target 2</dlog_field_name>
+		<dlog_field_name>AFR 2 Target</dlog_field_name>
 		<internal_names>afrtgt2</internal_names>
 		<offset>13</offset>
 		<real_lower>8</real_lower>
@@ -147,8 +147,8 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>Baro (kPa)</dlog_gui_name>
-		<dlog_field_name>barokpa</dlog_field_name>
-		<internal_names>barokpa</internal_names>
+		<dlog_field_name>Barometer</dlog_field_name>
+		<internal_names>barometer</internal_names>
 		<offset>16</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -178,7 +178,7 @@
 		<offset>20</offset>
 		<size>_S16_</size>
 		<real_lower>-40</real_lower>
-		<real_upper>255</real_upper>
+		<real_upper>400</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
@@ -192,7 +192,7 @@
 		<offset>22</offset>
 		<size>_S16_</size>
 		<real_lower>-40</real_lower>
-		<real_upper>255</real_upper>
+		<real_upper>400</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
@@ -202,7 +202,7 @@
 	<derived>
 		<dlog_gui_name>TPS (%)</dlog_gui_name>
 		<dlog_field_name>TP</dlog_field_name>
-		<internal_names>tpspercent</internal_names>
+		<internal_names>tpspercent,throttle</internal_names>
 		<offset>24</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -213,9 +213,9 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>Batt (v)</dlog_gui_name>
+		<dlog_gui_name>Batt (V)</dlog_gui_name>
 		<dlog_field_name>Batt V</dlog_field_name>
-		<internal_names>battvolt</internal_names>
+		<internal_names>battvolt,batteryVoltage</internal_names>
 		<offset>26</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -261,7 +261,7 @@
 		<real_upper>5</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
 		<precision>1</precision>
-		<tooltip>"Knock" is the amount of spark retard due to knocking</tooltip>
+		<tooltip>"Knock" is the amount of knocking</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
@@ -309,18 +309,19 @@
 	<derived>
 		<dlog_gui_name>AIR Corr</dlog_gui_name>
 		<dlog_field_name>Gair</dlog_field_name>
-		<internal_names>aircorr</internal_names>
+		<internal_names>aircorr,airCorrection</internal_names>
 		<offset>38</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"AIR Corr" is the AIR temp correction factor for both channels</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Warm Corr</dlog_gui_name>
 		<dlog_field_name>Gwarm</dlog_field_name>
-		<internal_names>warmcorr</internal_names>
+		<internal_names>warmcorr,warmupEnrich</internal_names>
 		<offset>40</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -355,18 +356,19 @@
 	<derived>
 		<dlog_gui_name>Baro Corr.</dlog_gui_name>
 		<dlog_field_name>Gbaro</dlog_field_name>
-		<internal_names>barocorr</internal_names>
+		<internal_names>barocorr,baroCorrection</internal_names>
 		<offset>46</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"Barr Corr" is the current amount of Baro Correction (%).</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>GammaE</dlog_gui_name>
 		<dlog_field_name>Gammae</dlog_field_name>
-		<internal_names>gammae</internal_names>
+		<internal_names>gammae,gammaEnrich</internal_names>
 		<offset>48</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -377,7 +379,7 @@
 	<derived>
 		<dlog_gui_name>VE 1</dlog_gui_name>
 		<dlog_field_name>Gve</dlog_field_name>
-		<internal_names>vecurr1</internal_names>
+		<internal_names>vecurr,vecurr1,veCurr1</internal_names>
 		<offset>50</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -414,7 +416,7 @@
 	<derived>
 		<dlog_gui_name>Idle DC</dlog_gui_name>
 		<dlog_field_name>PWM Idle Duty</dlog_field_name>
-		<internal_names>idledc</internal_names>
+		<internal_names>idleDC</internal_names>
 		<offset>54</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -427,7 +429,7 @@
 	<derived>
 		<dlog_gui_name>Cold Adv (°)</dlog_gui_name>
 		<dlog_field_name>ColdAdv</dlog_field_name>
-		<internal_names>coldadv</internal_names>
+		<internal_names>coldAdvDeg</internal_names>
 		<offset>56</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -468,8 +470,8 @@
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>16</real_upper>
-		<fromecu_mult>0.0666</fromecu_mult>
-		<precision>2</precision>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
 		<tooltip>"dwell" is a the amount of time the ignitin coil is energized in ms.</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
@@ -488,7 +490,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>fuelload</dlog_gui_name>
-		<dlog_field_name>FuelLoad</dlog_field_name>
+		<dlog_field_name>Load</dlog_field_name>
 		<internal_names>fuelload,fuelload1</internal_names>
 		<offset>66</offset>
 		<size>_S16_</size>
@@ -515,7 +517,7 @@
 		<dlog_field_name>portstatus</dlog_field_name>
 		<internal_names>portstatus</internal_names>
 		<offset>70</offset>
-		<size>_S16_</size>
+		<size>_U08_</size>
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<tooltip>"Port Status" is a bitfield showing the status of ports 0-6</tooltip>
@@ -539,7 +541,7 @@
 		<dlog_field_name>EAE1 %</dlog_field_name>
 		<internal_names>EAEFuelCorr1</internal_names>
 		<offset>72</offset>
-		<size>_S16_</size>
+		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<tooltip>"EAEFuelCorr1" is the current Ehnhanced Accel Enrich fuel correction for injector channel 1</tooltip>
@@ -554,7 +556,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>5</real_upper>
 		<fromecu_mult>0.01</fromecu_mult>
-		<precision>3</precision>
+		<precision>2</precision>
 		<tooltip>"EGO Volts 1" is the current O2 sensor voltage for sensor 1</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -567,7 +569,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>5</real_upper>
 		<fromecu_mult>0.01</fromecu_mult>
-		<precision>3</precision>
+		<precision>2</precision>
 		<tooltip>"EGO Volts 2" is the current O2 sensor voltage for sensor 2</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -613,8 +615,7 @@
 		<internal_names>looptime</internal_names>
 		<offset>82</offset>
 		<size>_U16_</size>
-		<real_upper>43693</real_upper>
-		<fromecu_mult>0.6667</fromecu_mult>
+		<real_upper>65535</real_upper>
 		<tooltip>"looptime" is the total time for the mainloop to process in uSec.</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -624,7 +625,7 @@
 		<internal_names>status5</internal_names>
 		<offset>84</offset>
 		<size>_U16_</size>
-		<tooltip>"status5" is unknown</tooltip>
+		<tooltip>"status5" is a status register for debug/info purposes</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
@@ -652,7 +653,7 @@
 		<dlog_field_name>Ign Load</dlog_field_name>
 		<internal_names>ignload,ignload1</internal_names>
 		<offset>90</offset>
-		<size>_U16_</size>
+		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<precision>1</precision>
 		<tooltip>"ignload" is unknown</tooltip>
@@ -663,7 +664,7 @@
 		<dlog_field_name>Secondary Ign Load</dlog_field_name>
 		<internal_names>ignload2</internal_names>
 		<offset>92</offset>
-		<size>_U16_</size>
+		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<precision>1</precision>
 		<tooltip>"ignload2" is unknown</tooltip>
@@ -688,22 +689,22 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>deltaT</dlog_gui_name>
-		<dlog_field_name>deltaT</dlog_field_name>
-		<internal_names>deltaT</internal_names>
-		<offset>96</offset>
-		<size>_S32_</size>
-		<tooltip>"deltaT" is the normalized time between trigger pulses</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
 		<dlog_gui_name>wallfuel1</dlog_gui_name>
 		<dlog_field_name>WallFuel1</dlog_field_name>
 		<internal_names>wallfuel1</internal_names>
-		<offset>100</offset>
+		<offset>96</offset>
 		<size>_U32_</size>
 		<fromecu_mult>0.01</fromecu_mult>
 		<tooltip>"wallfuel1" is something for EAE in uSecs.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>wallfuel2</dlog_gui_name>
+		<dlog_field_name>WallFuel2</dlog_field_name>
+		<internal_names>wallfuel2</internal_names>
+		<offset>100</offset>
+		<size>_U32_</size>
+		<tooltip>"wallfuel2" is something for EAE in uSecs.</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
@@ -795,46 +796,82 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>canpwmin0</dlog_gui_name>
-		<dlog_field_name>canpwmin0</dlog_field_name>
-		<internal_names>canpwmin0</internal_names>
+		<dlog_gui_name>sensor09</dlog_gui_name>
+		<dlog_field_name>sensor09</dlog_field_name>
+		<internal_names>sensor09</internal_names>
 		<offset>120</offset>
-		<size>_U16_</size>
-		<tooltip>"canpwmin0" is unknown</tooltip>
+		<size>_S16_</size>
+		<tooltip>"sensor09" is unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>canpwmin1</dlog_gui_name>
-		<dlog_field_name>canpwmin1</dlog_field_name>
-		<internal_names>canpwmin1</internal_names>
+		<dlog_gui_name>sensor10</dlog_gui_name>
+		<dlog_field_name>sensor10</dlog_field_name>
+		<internal_names>sensor10</internal_names>
 		<offset>122</offset>
-		<size>_U16_</size>
-		<tooltip>"canpwmin1" is unknown</tooltip>
+		<size>_S16_</size>
+		<tooltip>"sensor10" is unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>canpwmin2</dlog_gui_name>
-		<dlog_field_name>canpwmin2</dlog_field_name>
-		<internal_names>canpwmin2</internal_names>
+		<dlog_gui_name>sensor11</dlog_gui_name>
+		<dlog_field_name>sensor11</dlog_field_name>
+		<internal_names>sensor11</internal_names>
 		<offset>124</offset>
-		<size>_U16_</size>
-		<tooltip>"canpwmin2" is unknown</tooltip>
+		<size>_S16_</size>
+		<tooltip>"sensor11" is unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>canpwmin3</dlog_gui_name>
-		<dlog_field_name>canpwmin3</dlog_field_name>
-		<internal_names>canpwmin3</internal_names>
+		<dlog_gui_name>sensor12</dlog_gui_name>
+		<dlog_field_name>sensor12</dlog_field_name>
+		<internal_names>sensor12</internal_names>
 		<offset>126</offset>
-		<size>_U16_</size>
-		<tooltip>"canpwmin3" is unknown</tooltip>
+		<size>_S16_</size>
+		<tooltip>"sensor12" is unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>sensor13</dlog_gui_name>
+		<dlog_field_name>sensor13</dlog_field_name>
+		<internal_names>sensor13</internal_names>
+		<offset>128</offset>
+		<size>_S16_</size>
+		<tooltip>"sensor13" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>sensor14</dlog_gui_name>
+		<dlog_field_name>sensor14</dlog_field_name>
+		<internal_names>sensor14</internal_names>
+		<offset>130</offset>
+		<size>_S16_</size>
+		<tooltip>"sensor14" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>sensor15</dlog_gui_name>
+		<dlog_field_name>sensor15</dlog_field_name>
+		<internal_names>sensor15</internal_names>
+		<offset>132</offset>
+		<size>_S16_</size>
+		<tooltip>"sensor15" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>sensor16</dlog_gui_name>
+		<dlog_field_name>sensor16</dlog_field_name>
+		<internal_names>sensor16</internal_names>
+		<offset>134</offset>
+		<size>_S16_</size>
+		<tooltip>"sensor16" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>canin1_8</dlog_gui_name>
 		<dlog_field_name>canin1_8</dlog_field_name>
 		<internal_names>canin1_8</internal_names>
-		<offset>128</offset>
+		<offset>136</offset>
 		<size>_U08_</size>
 		<tooltip>"canin1_8" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
@@ -843,7 +880,7 @@
 		<dlog_gui_name>canout1_8</dlog_gui_name>
 		<dlog_field_name>canout1_8</dlog_field_name>
 		<internal_names>canout1_8</internal_names>
-		<offset>129</offset>
+		<offset>137</offset>
 		<size>_U08_</size>
 		<tooltip>"canout1_8" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
@@ -852,238 +889,25 @@
 		<dlog_gui_name>canout9_16</dlog_gui_name>
 		<dlog_field_name>canout9_16</dlog_field_name>
 		<internal_names>canout9_16</internal_names>
-		<offset>130</offset>
+		<offset>138</offset>
 		<size>_U08_</size>
 		<tooltip>"canout9_16" is unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>adc6</dlog_gui_name>
-		<dlog_field_name>adc6</dlog_field_name>
-		<internal_names>adc6</internal_names>
-		<offset>131</offset>
-		<size>_U16_</size>
-		<tooltip>"adc6" is unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>adc7</dlog_gui_name>
-		<dlog_field_name>adc7</dlog_field_name>
-		<internal_names>adc7</internal_names>
-		<offset>133</offset>
-		<size>_U16_</size>
-		<tooltip>"adc7" is unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>wallfuel2</dlog_gui_name>
-		<dlog_field_name>WallFuel2</dlog_field_name>
-		<internal_names>wallfuel2</internal_names>
-		<offset>135</offset>
-		<size>_U32_</size>
-		<tooltip>"wallfuel2" is unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>EAEFuelCorr2</dlog_gui_name>
-		<dlog_field_name>EAE2 %</dlog_field_name>
-		<internal_names>EAEFuelCorr2</internal_names>
-		<offset>139</offset>
-		<size>_U16_</size>
-		<tooltip>"EAEFuelCorr2" is EAE Fuel correction for inj channel 2 in uSec.</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>boostduty</dlog_gui_name>
 		<dlog_field_name>Boost Duty</dlog_field_name>
 		<internal_names>boostduty</internal_names>
-		<offset>141</offset>
+		<offset>139</offset>
 		<size>_U08_</size>
 		<tooltip>"boostduty" is pwm boost output duty cycle.</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>syncreason</dlog_gui_name>
-		<dlog_field_name>Lost sync reason</dlog_field_name>
-		<internal_names>syncreason</internal_names>
-		<offset>142</offset>
-		<size>_U08_</size>
-		<tooltip>"syncreason" is undefined.</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>sdstatus</dlog_gui_name>
-		<dlog_field_name>sdstatus</dlog_field_name>
-		<internal_names>sdstatus</internal_names>
-		<offset>143</offset>
-		<size>_U08_</size>
-		<tooltip>"sdsatus" is undefined.</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>user0</dlog_gui_name>
-		<dlog_field_name>user0</dlog_field_name>
-		<internal_names>user0</internal_names>
-		<offset>144</offset>
-		<size>_U16_</size>
-		<tooltip>"user0" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq1</dlog_gui_name>
-		<dlog_field_name>pwseq1</dlog_field_name>
-		<internal_names>pwseq1</internal_names>
-		<offset>146</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq1" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq2</dlog_gui_name>
-		<dlog_field_name>pwseq2</dlog_field_name>
-		<internal_names>pwseq2</internal_names>
-		<offset>148</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq2" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq3</dlog_gui_name>
-		<dlog_field_name>pwseq3</dlog_field_name>
-		<internal_names>pwseq3</internal_names>
-		<offset>150</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq3" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq4</dlog_gui_name>
-		<dlog_field_name>pwseq4</dlog_field_name>
-		<internal_names>pwseq4</internal_names>
-		<offset>152</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq4" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq5</dlog_gui_name>
-		<dlog_field_name>pwseq5</dlog_field_name>
-		<internal_names>pwseq5</internal_names>
-		<offset>154</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq5" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq6</dlog_gui_name>
-		<dlog_field_name>pwseq6</dlog_field_name>
-		<internal_names>pwseq6</internal_names>
-		<offset>156</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq6" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq7</dlog_gui_name>
-		<dlog_field_name>pwseq7</dlog_field_name>
-		<internal_names>pwseq7</internal_names>
-		<offset>158</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq7" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq8</dlog_gui_name>
-		<dlog_field_name>pwseq8</dlog_field_name>
-		<internal_names>pwseq8</internal_names>
-		<offset>160</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq8" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq9</dlog_gui_name>
-		<dlog_field_name>pwseq9</dlog_field_name>
-		<internal_names>pwseq9</internal_names>
-		<offset>162</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq9" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>pwseq10</dlog_gui_name>
-		<dlog_field_name>pwseq10</dlog_field_name>
-		<internal_names>pwseq10</internal_names>
-		<offset>164</offset>
-		<size>_U16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
-		<precision>3</precision>
-		<tooltip>"pwseq10" is an undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>vss1</dlog_gui_name>
-		<dlog_field_name>vss1</dlog_field_name>
-		<internal_names>vss1</internal_names>
-		<offset>166</offset>
-		<size>_S16_</size>
-		<fromecu_mult>0.22369</fromecu_mult>
-		<tooltip>"vss1" is the output from vehicle speed sensor one in mph</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>vss2</dlog_gui_name>
-		<dlog_field_name>vss2</dlog_field_name>
-		<internal_names>vss2</internal_names>
-		<offset>168</offset>
-		<size>_S16_</size>
-		<fromecu_mult>0.22369</fromecu_mult>
-		<tooltip>"vss2" is the output from vehicle speed sensor one in mph</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>ss1</dlog_gui_name>
-		<dlog_field_name>ss1</dlog_field_name>
-		<internal_names>ss1</internal_names>
-		<offset>170</offset>
-		<size>_S16_</size>
-		<fromecu_mult>0.22369</fromecu_mult>
-		<tooltip>"ss1" is the unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>ss2</dlog_gui_name>
-		<dlog_field_name>ss2</dlog_field_name>
-		<internal_names>ss2</internal_names>
-		<offset>172</offset>
-		<size>_S16_</size>
-		<fromecu_mult>0.22369</fromecu_mult>
-		<tooltip>"ss2" is the unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
 		<dlog_gui_name>n2o_addfuel</dlog_gui_name>
-		<dlog_field_name>n2o_addfuel</dlog_field_name>
+		<dlog_field_name>Nitrous added fuel</dlog_field_name>
 		<internal_names>n2o_addfuel</internal_names>
-		<offset>174</offset>
+		<offset>140</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.001</fromecu_mult>
 		<tooltip>"n2o_addfuel" is the unknown</tooltip>
@@ -1091,216 +915,403 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>n2o_retard</dlog_gui_name>
-		<dlog_field_name>n2o_retard</dlog_field_name>
+		<dlog_field_name>Nitrous timing retarded by</dlog_field_name>
 		<internal_names>n2o_retard</internal_names>
-		<offset>176</offset>
+		<offset>142</offset>
 		<size>_S16_</size>
-		<fromecu_mult>0.001</fromecu_mult>
+		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"n2o_retard" is the unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
+		<dlog_gui_name>pwseq1</dlog_gui_name>
+		<dlog_field_name>Seq PW1</dlog_field_name>
+		<internal_names>pwseq1</internal_names>
+		<offset>144</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq1" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq2</dlog_gui_name>
+		<dlog_field_name>Seq PW2</dlog_field_name>
+		<internal_names>pwseq2</internal_names>
+		<offset>146</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq2" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq3</dlog_gui_name>
+		<dlog_field_name>Seq PW3</dlog_field_name>
+		<internal_names>pwseq3</internal_names>
+		<offset>148</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq3" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq4</dlog_gui_name>
+		<dlog_field_name>Seq PW4</dlog_field_name>
+		<internal_names>pwseq4</internal_names>
+		<offset>150</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq4" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq5</dlog_gui_name>
+		<dlog_field_name>Seq PW5</dlog_field_name>
+		<internal_names>pwseq5</internal_names>
+		<offset>152</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq5" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq6</dlog_gui_name>
+		<dlog_field_name>Seq PW6</dlog_field_name>
+		<internal_names>pwseq6</internal_names>
+		<offset>154</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq6" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq7</dlog_gui_name>
+		<dlog_field_name>Seq PW7</dlog_field_name>
+		<internal_names>pwseq7</internal_names>
+		<offset>156</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq7" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq8</dlog_gui_name>
+		<dlog_field_name>Seq PW8</dlog_field_name>
+		<internal_names>pwseq8</internal_names>
+		<offset>158</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq8" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq9</dlog_gui_name>
+		<dlog_field_name>Seq PW9</dlog_field_name>
+		<internal_names>pwseq9</internal_names>
+		<offset>160</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq9" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq10</dlog_gui_name>
+		<dlog_field_name>Seq PW10</dlog_field_name>
+		<internal_names>pwseq10</internal_names>
+		<offset>162</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq10" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq11</dlog_gui_name>
+		<dlog_field_name>Seq PW11</dlog_field_name>
+		<internal_names>pwseq11</internal_names>
+		<offset>164</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq11" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq12</dlog_gui_name>
+		<dlog_field_name>Seq PW12</dlog_field_name>
+		<internal_names>pwseq12</internal_names>
+		<offset>166</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq12" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq13</dlog_gui_name>
+		<dlog_field_name>Seq PW13</dlog_field_name>
+		<internal_names>pwseq13</internal_names>
+		<offset>168</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq13" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq14</dlog_gui_name>
+		<dlog_field_name>?Seq PW14</dlog_field_name>
+		<internal_names>pwseq14</internal_names>
+		<offset>170</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq14" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq15</dlog_gui_name>
+		<dlog_field_name>Seq PW15</dlog_field_name>
+		<internal_names>pwseq15</internal_names>
+		<offset>172</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq15" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>pwseq16</dlog_gui_name>
+		<dlog_field_name>Seq PW16</dlog_field_name>
+		<internal_names>pwseq16</internal_names>
+		<offset>174</offset>
+		<size>_U16_</size>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"pwseq16" is an undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
 		<dlog_gui_name>nitrous1_duty</dlog_gui_name>
-		<dlog_field_name>nitrous1_duty</dlog_field_name>
+		<dlog_field_name>Nitrous 1 duty</dlog_field_name>
 		<internal_names>nitrous1_duty</internal_names>
-		<offset>178</offset>
+		<offset>176</offset>
 		<size>_U08_</size>
 		<tooltip>"nitrous1_duty" is the unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>nitrous2_duty</dlog_gui_name>
-		<dlog_field_name>nitrous2_duty</dlog_field_name>
+		<dlog_field_name>Nitrous 2 duty</dlog_field_name>
 		<internal_names>nitrous2_duty</internal_names>
-		<offset>179</offset>
+		<offset>177</offset>
 		<size>_U08_</size>
 		<tooltip>"nitrous2_duty" is the unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>nitrous_timer</dlog_gui_name>
-		<dlog_field_name>nitrous_timer</dlog_field_name>
-		<internal_names>nitrous_timer</internal_names>
-		<offset>180</offset>
-		<size>_U16_</size>
-		<tooltip>"nitrous_timer" is the unknown</tooltip>
-		<fromecu_mult>0.001</fromecu_mult>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>sd_filenum</dlog_gui_name>
-		<dlog_field_name>sd_filenum</dlog_field_name>
-		<internal_names>sd_filenum</internal_names>
-		<offset>182</offset>
-		<size>_S16_</size>
-		<tooltip>"sd_filenum" is undefined</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>sd_error</dlog_gui_name>
-		<dlog_field_name>sd_error</dlog_field_name>
-		<internal_names>sd_error</internal_names>
-		<offset>184</offset>
-		<size>_U08_</size>
-		<tooltip>"sd_error" is undefined</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>sd_phase</dlog_gui_name>
-		<dlog_field_name>sd_phase</dlog_field_name>
-		<internal_names>sd_phase</internal_names>
-		<offset>185</offset>
-		<size>_U08_</size>
-		<tooltip>"sd_phase" is undefined</tooltip>
-		<log_by_default>TRUE</log_by_default>
-	</derived>
-	<derived>
 		<dlog_gui_name>egt1</dlog_gui_name>
-		<dlog_field_name>egt1</dlog_field_name>
+		<dlog_field_name>EGT 1 temp</dlog_field_name>
 		<internal_names>egt1</internal_names>
-		<offset>186</offset>
+		<offset>178</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt1" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt2</dlog_gui_name>
-		<dlog_field_name>egt2</dlog_field_name>
+		<dlog_field_name>EGT 2 temp</dlog_field_name>
 		<internal_names>egt2</internal_names>
-		<offset>188</offset>
+		<offset>180</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt2" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt3</dlog_gui_name>
-		<dlog_field_name>egt3</dlog_field_name>
+		<dlog_field_name>EGT 3 temp</dlog_field_name>
 		<internal_names>egt3</internal_names>
-		<offset>190</offset>
+		<offset>182</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt3" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt4</dlog_gui_name>
-		<dlog_field_name>egt4</dlog_field_name>
+		<dlog_field_name>EGT 4 temp</dlog_field_name>
 		<internal_names>egt4</internal_names>
-		<offset>192</offset>
+		<offset>184</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt4" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt5</dlog_gui_name>
-		<dlog_field_name>egt5</dlog_field_name>
+		<dlog_field_name>EGT 5 temp</dlog_field_name>
 		<internal_names>egt5</internal_names>
-		<offset>194</offset>
+		<offset>186</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt5" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt6</dlog_gui_name>
-		<dlog_field_name>egt6</dlog_field_name>
+		<dlog_field_name>EGT 6 temp</dlog_field_name>
 		<internal_names>egt6</internal_names>
-		<offset>196</offset>
+		<offset>188</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt6" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt7</dlog_gui_name>
-		<dlog_field_name>egt7</dlog_field_name>
+		<dlog_field_name>EGT 7 temp</dlog_field_name>
 		<internal_names>egt7</internal_names>
-		<offset>198</offset>
+		<offset>190</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt7" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt8</dlog_gui_name>
-		<dlog_field_name>egt8</dlog_field_name>
+		<dlog_field_name>EGT 8 temp</dlog_field_name>
 		<internal_names>egt8</internal_names>
-		<offset>200</offset>
+		<offset>192</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt8" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt9</dlog_gui_name>
-		<dlog_field_name>egt9</dlog_field_name>
+		<dlog_field_name>EGT 9 temp</dlog_field_name>
 		<internal_names>egt9</internal_names>
-		<offset>202</offset>
+		<offset>194</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt9" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt10</dlog_gui_name>
-		<dlog_field_name>egt10</dlog_field_name>
+		<dlog_field_name>EGT 10 temp</dlog_field_name>
 		<internal_names>egt10</internal_names>
-		<offset>204</offset>
+		<offset>196</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt10" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt11</dlog_gui_name>
-		<dlog_field_name>egt11</dlog_field_name>
+		<dlog_field_name>EGT 11 temp</dlog_field_name>
 		<internal_names>egt11</internal_names>
-		<offset>206</offset>
+		<offset>198</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt11" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>egt12</dlog_gui_name>
-		<dlog_field_name>egt12</dlog_field_name>
+		<dlog_field_name>EGT 12 temp</dlog_field_name>
 		<internal_names>egt12</internal_names>
-		<offset>208</offset>
+		<offset>200</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<temp_dep>TRUE</temp_dep>
 		<precision>1</precision>
 		<tooltip>"egt12" is undefined</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egt13</dlog_gui_name>
+		<dlog_field_name>EGT 13 temp</dlog_field_name>
+		<internal_names>egt13</internal_names>
+		<offset>202</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>1</precision>
+		<tooltip>"egt13" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egt14</dlog_gui_name>
+		<dlog_field_name>EGT 14 temp</dlog_field_name>
+		<internal_names>egt14</internal_names>
+		<offset>204</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>1</precision>
+		<tooltip>"egt14" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egt15</dlog_gui_name>
+		<dlog_field_name>EGT 15 temp</dlog_field_name>
+		<internal_names>egt15</internal_names>
+		<offset>206</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>1</precision>
+		<tooltip>"egt15" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egt16</dlog_gui_name>
+		<dlog_field_name>EGT 16 temp</dlog_field_name>
+		<internal_names>egt16</internal_names>
+		<offset>208</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>1</precision>
+		<tooltip>"egt16" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>maf</dlog_gui_name>
-		<dlog_field_name>maf</dlog_field_name>
+		<dlog_field_name>MAF</dlog_field_name>
 		<internal_names>maf</internal_names>
 		<offset>210</offset>
 		<size>_U16_</size>
@@ -1310,96 +1321,89 @@
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>sensor09</dlog_gui_name>
-		<dlog_field_name>sensor09</dlog_field_name>
-		<internal_names>sensor09</internal_names>
+		<dlog_gui_name>canpwmin0</dlog_gui_name>
+		<dlog_field_name>canpwmin0</dlog_field_name>
+		<internal_names>canpwmin0</internal_names>
 		<offset>212</offset>
-		<size>_S16_</size>
-		<tooltip>"sensor09" is unknown</tooltip>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<size>_U16_</size>
+		<tooltip>"canpwmin0" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>sensor10</dlog_gui_name>
-		<dlog_field_name>sensor10</dlog_field_name>
-		<internal_names>sensor10</internal_names>
+		<dlog_gui_name>canpwmin1</dlog_gui_name>
+		<dlog_field_name>canpwmin1</dlog_field_name>
+		<internal_names>canpwmin1</internal_names>
 		<offset>214</offset>
-		<size>_S16_</size>
-		<tooltip>"sensor10" is unknown</tooltip>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<size>_U16_</size>
+		<tooltip>"canpwmin1" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>sensor11</dlog_gui_name>
-		<dlog_field_name>sensor11</dlog_field_name>
-		<internal_names>sensor11</internal_names>
+		<dlog_gui_name>canpwmin2</dlog_gui_name>
+		<dlog_field_name>canpwmin2</dlog_field_name>
+		<internal_names>canpwmin2</internal_names>
 		<offset>216</offset>
-		<size>_S16_</size>
-		<tooltip>"sensor11" is unknown</tooltip>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<size>_U16_</size>
+		<tooltip>"canpwmin2" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>sensor12</dlog_gui_name>
-		<dlog_field_name>sensor12</dlog_field_name>
-		<internal_names>sensor12</internal_names>
+		<dlog_gui_name>canpwmin3</dlog_gui_name>
+		<dlog_field_name>canpwmin3</dlog_field_name>
+		<internal_names>canpwmin3</internal_names>
 		<offset>218</offset>
-		<size>_S16_</size>
-		<tooltip>"sensor12" is unknown</tooltip>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<size>_U16_</size>
+		<tooltip>"canpwmin3" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>sensor13</dlog_gui_name>
-		<dlog_field_name>sensor13</dlog_field_name>
-		<internal_names>sensor13</internal_names>
+		<dlog_gui_name>fuelflow</dlog_gui_name>
+		<dlog_field_name>Fuel flow cc/min</dlog_field_name>
+		<internal_names>fuelflow</internal_names>
 		<offset>220</offset>
-		<size>_S16_</size>
-		<tooltip>"sensor13" is unknown</tooltip>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<size>_U16_</size>
+		<tooltip>"fuelflow" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>sensor14</dlog_gui_name>
-		<dlog_field_name>sensor14</dlog_field_name>
-		<internal_names>sensor14</internal_names>
+		<dlog_gui_name>fuelcons</dlog_gui_name>
+		<dlog_field_name>Fuel cons. l/km</dlog_field_name>
+		<internal_names>fuelcons</internal_names>
 		<offset>222</offset>
-		<size>_S16_</size>
-		<tooltip>"sensor14" is unknown</tooltip>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<size>_U16_</size>
+		<tooltip>"fuelcons" is Fuel consumption in liters/km</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>sensor15</dlog_gui_name>
-		<dlog_field_name>sensor15</dlog_field_name>
-		<internal_names>sensor15</internal_names>
+		<dlog_gui_name>EAEFuelCorr2</dlog_gui_name>
+		<dlog_field_name>EAE2 %</dlog_field_name>
+		<internal_names>EAEFuelCorr2</internal_names>
 		<offset>224</offset>
-		<size>_S16_</size>
-		<tooltip>"sensor15" is unknown</tooltip>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<size>_U16_</size>
+		<tooltip>"EAEFuelCorr2" is EAE Fuel correction for inj channel 2 in uSec.</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>sensor16</dlog_gui_name>
-		<dlog_field_name>sensor16</dlog_field_name>
-		<internal_names>sensor16</internal_names>
+		<dlog_gui_name>syncreason</dlog_gui_name>
+		<dlog_field_name>Lost sync reason</dlog_field_name>
+		<internal_names>syncreason</internal_names>
 		<offset>226</offset>
-		<size>_S16_</size>
-		<tooltip>"sensor16" is unknown</tooltip>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<size>_U08_</size>
+		<tooltip>"syncreason" is undefined.</tooltip>
 		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>sdstatus</dlog_gui_name>
+		<dlog_field_name>SDcard status</dlog_field_name>
+		<internal_names>sd_status</internal_names>
+		<offset>227</offset>
+		<size>_U08_</size>
+		<tooltip>"sdsatus" is undefined.</tooltip>
+		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>eaeload1</dlog_gui_name>
-		<dlog_field_name>eaeload1</dlog_field_name>
+		<dlog_field_name>EAE Load</dlog_field_name>
 		<internal_names>eaeload1</internal_names>
 		<offset>228</offset>
 		<size>_S16_</size>
@@ -1411,7 +1415,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afrload1</dlog_gui_name>
-		<dlog_field_name>afrload1</dlog_field_name>
+		<dlog_field_name>AFR Load</dlog_field_name>
 		<internal_names>afrload1</internal_names>
 		<offset>230</offset>
 		<size>_S16_</size>
@@ -1423,9 +1427,9 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>gear</dlog_gui_name>
-		<dlog_field_name>gear</dlog_field_name>
+		<dlog_field_name>Gear</dlog_field_name>
 		<internal_names>gear</internal_names>
-		<offset>231</offset>
+		<offset>232</offset>
 		<size>_U08_</size>
 		<real_lower>0</real_lower>
 		<real_upper>8</real_upper>
@@ -1479,7 +1483,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>accelx</dlog_gui_name>
-		<dlog_field_name>accelx</dlog_field_name>
+		<dlog_field_name>accel X</dlog_field_name>
 		<internal_names>accelx</internal_names>
 		<offset>240</offset>
 		<size>_S16_</size>
@@ -1489,7 +1493,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>accely</dlog_gui_name>
-		<dlog_field_name>accely</dlog_field_name>
+		<dlog_field_name>accel Y</dlog_field_name>
 		<internal_names>accely</internal_names>
 		<offset>242</offset>
 		<size>_S16_</size>
@@ -1499,7 +1503,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>accelz</dlog_gui_name>
-		<dlog_field_name>accelz</dlog_field_name>
+		<dlog_field_name>accel Z</dlog_field_name>
 		<internal_names>accelz</internal_names>
 		<offset>244</offset>
 		<size>_S16_</size>
@@ -1509,7 +1513,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>duty_pwm_a</dlog_gui_name>
-		<dlog_field_name>duty_pwm_a</dlog_field_name>
+		<dlog_field_name>Generic PWM A duty</dlog_field_name>
 		<internal_names>duty_pwm_a</internal_names>
 		<offset>246</offset>
 		<size>_U08_</size>
@@ -1518,7 +1522,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>duty_pwm_b</dlog_gui_name>
-		<dlog_field_name>duty_pwm_b</dlog_field_name>
+		<dlog_field_name>Generic PWM B duty</dlog_field_name>
 		<internal_names>duty_pwm_b</internal_names>
 		<offset>247</offset>
 		<size>_U08_</size>
@@ -1527,7 +1531,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>duty_pwm_c</dlog_gui_name>
-		<dlog_field_name>duty_pwm_c</dlog_field_name>
+		<dlog_field_name>Generic PWM C duty</dlog_field_name>
 		<internal_names>duty_pwm_c</internal_names>
 		<offset>248</offset>
 		<size>_U08_</size>
@@ -1536,7 +1540,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>duty_pwm_d</dlog_gui_name>
-		<dlog_field_name>duty_pwm_d</dlog_field_name>
+		<dlog_field_name>Generic PWM D duty</dlog_field_name>
 		<internal_names>duty_pwm_d</internal_names>
 		<offset>249</offset>
 		<size>_U08_</size>
@@ -1545,7 +1549,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>duty_pwm_e</dlog_gui_name>
-		<dlog_field_name>duty_pwm_e</dlog_field_name>
+		<dlog_field_name>Generic PWM E duty</dlog_field_name>
 		<internal_names>duty_pwm_e</internal_names>
 		<offset>250</offset>
 		<size>_U08_</size>
@@ -1563,7 +1567,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afr1</dlog_gui_name>
-		<dlog_field_name>afr1</dlog_field_name>
+		<dlog_field_name>AFR</dlog_field_name>
 		<internal_names>afr1</internal_names>
 		<offset>252</offset>
 		<size>_U08_</size>
@@ -1576,7 +1580,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afr2</dlog_gui_name>
-		<dlog_field_name>afr2</dlog_field_name>
+		<dlog_field_name>AFR2</dlog_field_name>
 		<internal_names>afr2</internal_names>
 		<offset>253</offset>
 		<size>_U08_</size>
@@ -1588,7 +1592,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afr3</dlog_gui_name>
-		<dlog_field_name>afr3</dlog_field_name>
+		<dlog_field_name>AFR3</dlog_field_name>
 		<internal_names>afr3</internal_names>
 		<offset>254</offset>
 		<size>_U08_</size>
@@ -1600,7 +1604,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afr4</dlog_gui_name>
-		<dlog_field_name>afr4</dlog_field_name>
+		<dlog_field_name>AFR4</dlog_field_name>
 		<internal_names>afr4</internal_names>
 		<offset>255</offset>
 		<size>_U08_</size>
@@ -1612,7 +1616,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afr5</dlog_gui_name>
-		<dlog_field_name>afr5</dlog_field_name>
+		<dlog_field_name>AFR5</dlog_field_name>
 		<internal_names>afr5</internal_names>
 		<offset>256</offset>
 		<size>_U08_</size>
@@ -1624,7 +1628,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afr6</dlog_gui_name>
-		<dlog_field_name>afr6</dlog_field_name>
+		<dlog_field_name>AFR6</dlog_field_name>
 		<internal_names>afr6</internal_names>
 		<offset>257</offset>
 		<size>_U08_</size>
@@ -1636,7 +1640,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afr7</dlog_gui_name>
-		<dlog_field_name>afr7</dlog_field_name>
+		<dlog_field_name>AFR7</dlog_field_name>
 		<internal_names>afr7</internal_names>
 		<offset>258</offset>
 		<size>_U08_</size>
@@ -1648,7 +1652,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>afr8</dlog_gui_name>
-		<dlog_field_name>afr8</dlog_field_name>
+		<dlog_field_name>AFR8</dlog_field_name>
 		<internal_names>afr8</internal_names>
 		<offset>259</offset>
 		<size>_U08_</size>
@@ -1659,106 +1663,315 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>egov1</dlog_gui_name>
-		<dlog_field_name>egov1</dlog_field_name>
-		<internal_names>egov1</internal_names>
+		<dlog_gui_name>afr9</dlog_gui_name>
+		<dlog_field_name>AFR9</dlog_field_name>
+		<internal_names>afr9</internal_names>
 		<offset>260</offset>
-		<size>_U16_</size>
+		<size>_U08_</size>
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
-		<fromecu_mult>0.00489</fromecu_mult>
-		<tooltip>"egov1" is unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<tooltip>"afr9" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>egov2</dlog_gui_name>
-		<dlog_field_name>egov2</dlog_field_name>
-		<internal_names>egov2</internal_names>
+		<dlog_gui_name>afr10</dlog_gui_name>
+		<dlog_field_name>AFR10</dlog_field_name>
+		<internal_names>afr10</internal_names>
+		<offset>261</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"afr10" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>afr11</dlog_gui_name>
+		<dlog_field_name>AFR11</dlog_field_name>
+		<internal_names>afr11</internal_names>
 		<offset>262</offset>
-		<size>_U16_</size>
+		<size>_U08_</size>
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
-		<fromecu_mult>0.00489</fromecu_mult>
-		<tooltip>"egov2" is unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"afr11" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>egov3</dlog_gui_name>
-		<dlog_field_name>egov3</dlog_field_name>
-		<internal_names>egov3</internal_names>
+		<dlog_gui_name>afr12</dlog_gui_name>
+		<dlog_field_name>AFR12</dlog_field_name>
+		<internal_names>afr12</internal_names>
+		<offset>263</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"afr12" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>afr13</dlog_gui_name>
+		<dlog_field_name>AFR13</dlog_field_name>
+		<internal_names>afr13</internal_names>
 		<offset>264</offset>
-		<size>_U16_</size>
+		<size>_U08_</size>
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
-		<fromecu_mult>0.00489</fromecu_mult>
-		<tooltip>"egov3" is unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"afr13" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>egov4</dlog_gui_name>
-		<dlog_field_name>egov4</dlog_field_name>
-		<internal_names>egov4</internal_names>
+		<dlog_gui_name>afr14</dlog_gui_name>
+		<dlog_field_name>AFR14</dlog_field_name>
+		<internal_names>afr14</internal_names>
+		<offset>265</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"afr14" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>afr15</dlog_gui_name>
+		<dlog_field_name>AFR15</dlog_field_name>
+		<internal_names>afr15</internal_names>
 		<offset>266</offset>
-		<size>_U16_</size>
+		<size>_U08_</size>
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
-		<fromecu_mult>0.00489</fromecu_mult>
-		<tooltip>"egov4" is unknown</tooltip>
-		<log_by_default>TRUE</log_by_default>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"afr15" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>egov5</dlog_gui_name>
-		<dlog_field_name>egov5</dlog_field_name>
-		<internal_names>egov5</internal_names>
+		<dlog_gui_name>afr16</dlog_gui_name>
+		<dlog_field_name>AF16</dlog_field_name>
+		<internal_names>afr16</internal_names>
+		<offset>267</offset>
+		<size>_U08_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"afr8" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov1</dlog_gui_name>
+		<dlog_field_name>O2</dlog_field_name>
+		<internal_names>egov1</internal_names>
 		<offset>268</offset>
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
 		<fromecu_mult>0.00489</fromecu_mult>
-		<tooltip>"egov5" is unknown</tooltip>
+		<precision>3</precision>
+		<tooltip>"egov1" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>egov6</dlog_gui_name>
-		<dlog_field_name>egov6</dlog_field_name>
-		<internal_names>egov6</internal_names>
+		<dlog_gui_name>egov2</dlog_gui_name>
+		<dlog_field_name>O2 #2</dlog_field_name>
+		<internal_names>egov2</internal_names>
 		<offset>270</offset>
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
 		<fromecu_mult>0.00489</fromecu_mult>
-		<tooltip>"egov6" is unknown</tooltip>
+		<precision>3</precision>
+		<tooltip>"egov2" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>egov7</dlog_gui_name>
-		<dlog_field_name>egov7</dlog_field_name>
-		<internal_names>egov7</internal_names>
+		<dlog_gui_name>egov3</dlog_gui_name>
+		<dlog_field_name>O2 #3</dlog_field_name>
+		<internal_names>egov3</internal_names>
 		<offset>272</offset>
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
 		<fromecu_mult>0.00489</fromecu_mult>
-		<tooltip>"egov7" is unknown</tooltip>
+		<precision>3</precision>
+		<tooltip>"egov3" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>egov8</dlog_gui_name>
-		<dlog_field_name>egov8</dlog_field_name>
-		<internal_names>egov8</internal_names>
+		<dlog_gui_name>egov4</dlog_gui_name>
+		<dlog_field_name>O2 #4</dlog_field_name>
+		<internal_names>egov4</internal_names>
 		<offset>274</offset>
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>25.5</real_upper>
 		<fromecu_mult>0.00489</fromecu_mult>
+		<tooltip>"egov4" is unknown</tooltip>
+		<precision>3</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov5</dlog_gui_name>
+		<dlog_field_name>O2 #5</dlog_field_name>
+		<internal_names>egov5</internal_names>
+		<offset>276</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov5" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov6</dlog_gui_name>
+		<dlog_field_name>O2 #6</dlog_field_name>
+		<internal_names>egov6</internal_names>
+		<offset>278</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov6" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov7</dlog_gui_name>
+		<dlog_field_name>O2 #7</dlog_field_name>
+		<internal_names>egov7</internal_names>
+		<offset>280</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov7" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov8</dlog_gui_name>
+		<dlog_field_name>O2 #8</dlog_field_name>
+		<internal_names>egov8</internal_names>
+		<offset>282</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
 		<tooltip>"egov8" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
+		<dlog_gui_name>egov9</dlog_gui_name>
+		<dlog_field_name>O2 #9</dlog_field_name>
+		<internal_names>egov9</internal_names>
+		<offset>284</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov9" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov10</dlog_gui_name>
+		<dlog_field_name>O2 #10</dlog_field_name>
+		<internal_names>egov10</internal_names>
+		<offset>286</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov10" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov11</dlog_gui_name>
+		<dlog_field_name>O2 #11</dlog_field_name>
+		<internal_names>egov11</internal_names>
+		<offset>288</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov11" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov12</dlog_gui_name>
+		<dlog_field_name>O2 #12</dlog_field_name>
+		<internal_names>egov12</internal_names>
+		<offset>290</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov12" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov13</dlog_gui_name>
+		<dlog_field_name>O2 #13</dlog_field_name>
+		<internal_names>egov13</internal_names>
+		<offset>292</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov13" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov14</dlog_gui_name>
+		<dlog_field_name>O2 #14</dlog_field_name>
+		<internal_names>egov14</internal_names>
+		<offset>294</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov14" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov15</dlog_gui_name>
+		<dlog_field_name>O2 #15</dlog_field_name>
+		<internal_names>egov15</internal_names>
+		<offset>296</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov15" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egov16</dlog_gui_name>
+		<dlog_field_name>O2 #16</dlog_field_name>
+		<internal_names>egov16</internal_names>
+		<offset>298</offset>
+		<size>_U16_</size>
+		<real_lower>0</real_lower>
+		<real_upper>25.5</real_upper>
+		<fromecu_mult>0.00489</fromecu_mult>
+		<precision>3</precision>
+		<tooltip>"egov16" is unknown</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
 		<dlog_gui_name>egocor1</dlog_gui_name>
-		<dlog_field_name>egocor1</dlog_field_name>
+		<dlog_field_name>egocor_Gego1</dlog_field_name>
 		<internal_names>egocor1</internal_names>
-		<offset>276</offset>
+		<offset>300</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"egocor1" is unknown</tooltip>
@@ -1766,9 +1979,9 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>egocor2</dlog_gui_name>
-		<dlog_field_name>egocor2</dlog_field_name>
+		<dlog_field_name>egocor_Gego2</dlog_field_name>
 		<internal_names>egocor2</internal_names>
-		<offset>278</offset>
+		<offset>302</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"egocor2" is unknown</tooltip>
@@ -1776,9 +1989,9 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>egocor3</dlog_gui_name>
-		<dlog_field_name>egocor3</dlog_field_name>
+		<dlog_field_name>egocor_Gego3</dlog_field_name>
 		<internal_names>egocor3</internal_names>
-		<offset>280</offset>
+		<offset>304</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"egocor3" is unknown</tooltip>
@@ -1786,9 +1999,9 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>egocor4</dlog_gui_name>
-		<dlog_field_name>egocor4</dlog_field_name>
+		<dlog_field_name>egocor_Gego4</dlog_field_name>
 		<internal_names>egocor4</internal_names>
-		<offset>282</offset>
+		<offset>306</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"egocor4" is unknown</tooltip>
@@ -1796,9 +2009,9 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>egocor5</dlog_gui_name>
-		<dlog_field_name>egocor5</dlog_field_name>
+		<dlog_field_name>egocor_Gego5</dlog_field_name>
 		<internal_names>egocor5</internal_names>
-		<offset>284</offset>
+		<offset>308</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"egocor5" is unknown</tooltip>
@@ -1806,9 +2019,9 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>egocor6</dlog_gui_name>
-		<dlog_field_name>egocor6</dlog_field_name>
+		<dlog_field_name>egocor_Gego6</dlog_field_name>
 		<internal_names>egocor6</internal_names>
-		<offset>286</offset>
+		<offset>310</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"egocor6" is unknown</tooltip>
@@ -1816,9 +2029,9 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>egocor7</dlog_gui_name>
-		<dlog_field_name>egocor7</dlog_field_name>
+		<dlog_field_name>egocor_Gego7</dlog_field_name>
 		<internal_names>egocor7</internal_names>
-		<offset>288</offset>
+		<offset>312</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"egocor7" is unknown</tooltip>
@@ -1826,19 +2039,99 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>egocor8</dlog_gui_name>
-		<dlog_field_name>egocor8</dlog_field_name>
+		<dlog_field_name>egocor_Gego8</dlog_field_name>
 		<internal_names>egocor8</internal_names>
-		<offset>290</offset>
+		<offset>314</offset>
 		<size>_S16_</size>
 		<fromecu_mult>0.1</fromecu_mult>
 		<tooltip>"egocor8" is unknown</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
+		<dlog_gui_name>egocor9</dlog_gui_name>
+		<dlog_field_name>egocor9</dlog_field_name>
+		<internal_names>egocor9</internal_names>
+		<offset>316</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"egocor9" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egocor10</dlog_gui_name>
+		<dlog_field_name>egocor10</dlog_field_name>
+		<internal_names>egocor10</internal_names>
+		<offset>318</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"egocor10" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egocor11</dlog_gui_name>
+		<dlog_field_name>egocor11</dlog_field_name>
+		<internal_names>egocor11</internal_names>
+		<offset>320</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"egocor11" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egocor12</dlog_gui_name>
+		<dlog_field_name>egocor12</dlog_field_name>
+		<internal_names>egocor12</internal_names>
+		<offset>322</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"egocor12" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egocor13</dlog_gui_name>
+		<dlog_field_name>egocor13</dlog_field_name>
+		<internal_names>egocor13</internal_names>
+		<offset>324</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"egocor13" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egocor14</dlog_gui_name>
+		<dlog_field_name>egocor14</dlog_field_name>
+		<internal_names>egocor14</internal_names>
+		<offset>326</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"egocor14" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egocor15</dlog_gui_name>
+		<dlog_field_name>egocor15</dlog_field_name>
+		<internal_names>egocor15</internal_names>
+		<offset>328</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"egocor15" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>egocor16</dlog_gui_name>
+		<dlog_field_name>egocor16</dlog_field_name>
+		<internal_names>egocor16</internal_names>
+		<offset>330</offset>
+		<size>_S16_</size>
+		<fromecu_mult>0.1</fromecu_mult>
+		<tooltip>"egocor16" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
 		<dlog_gui_name>stream_level</dlog_gui_name>
 		<dlog_field_name>stream_level</dlog_field_name>
 		<internal_names>stream_level</internal_names>
-		<offset>292</offset>
+		<offset>332</offset>
 		<size>_U08_</size>
 		<tooltip>"stream_level" is unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
@@ -1847,7 +2140,7 @@
 		<dlog_gui_name>water_duty</dlog_gui_name>
 		<dlog_field_name>water_duty</dlog_field_name>
 		<internal_names>water_duty</internal_names>
-		<offset>293</offset>
+		<offset>333</offset>
 		<size>_U08_</size>
 		<tooltip>"water_duty" is unknown</tooltip>
 		<log_by_default>FALSE</log_by_default>
@@ -1856,7 +2149,7 @@
 		<dlog_gui_name>dwell_trl</dlog_gui_name>
 		<dlog_field_name>dwell_trl</dlog_field_name>
 		<internal_names>dwell_trl</internal_names>
-		<offset>294</offset>
+		<offset>334</offset>
 		<size>_U16_</size>
 		<tooltip>"dwell_trl" is unknown</tooltip>
 		<fromecu_mult>0.1</fromecu_mult>
@@ -1864,9 +2157,517 @@
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
+		<dlog_gui_name>vss1_real</dlog_gui_name>
+		<dlog_field_name>vss1_real</dlog_field_name>
+		<internal_names>vss1_real</internal_names>
+		<offset>336</offset>
+		<size>_U16_</size>
+		<tooltip>"vss1_real" is the output from vehicle speed sensor 1</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vss2_real</dlog_gui_name>
+		<dlog_field_name>vss2_real</dlog_field_name>
+		<internal_names>vss2_real</internal_names>
+		<offset>338</offset>
+		<size>_U16_</size>
+		<tooltip>"vss2_real" is the output from vehicle speed sensor 2</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ss1</dlog_gui_name>
+		<dlog_field_name>Shaft rpm 1</dlog_field_name>
+		<internal_names>ss1</internal_names>
+		<offset>340</offset>
+		<size>_U16_</size>
+		<tooltip>"ss1" is the unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>ss2</dlog_gui_name>
+		<dlog_field_name>Shaft rpm 2</dlog_field_name>
+		<internal_names>ss2</internal_names>
+		<offset>342</offset>
+		<size>_U16_</size>
+		<tooltip>"ss2" is the unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>nitrous_timer</dlog_gui_name>
+		<dlog_field_name>Nitrous Timer</dlog_field_name>
+		<internal_names>nitrous_timer</internal_names>
+		<offset>344</offset>
+		<size>_U16_</size>
+		<tooltip>"nitrous_timer" is the unknown</tooltip>
+		<fromecu_mult>0.001</fromecu_mult>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>sd_filenum</dlog_gui_name>
+		<dlog_field_name>SDcard file number</dlog_field_name>
+		<internal_names>sd_filenum</internal_names>
+		<offset>346</offset>
+		<size>_U16_</size>
+		<tooltip>"sd_filenum" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>sd_error</dlog_gui_name>
+		<dlog_field_name>SDcard error</dlog_field_name>
+		<internal_names>sd_error</internal_names>
+		<offset>348</offset>
+		<size>_U08_</size>
+		<tooltip>"sd_error" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>sd_phase</dlog_gui_name>
+		<dlog_field_name>SDcard phase</dlog_field_name>
+		<internal_names>sd_phase</internal_names>
+		<offset>349</offset>
+		<size>_U08_</size>
+		<tooltip>"sd_phase" is undefined</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>boostduty2</dlog_gui_name>
+		<dlog_field_name>Boost Duty2</dlog_field_name>
+		<internal_names>boostduty2</internal_names>
+		<offset>350</offset>
+		<size>_U08_</size>
+		<tooltip>"boostduty2" is pwm boost output duty cycle.</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>status7</dlog_gui_name>
+		<dlog_field_name>status7</dlog_field_name>
+		<internal_names>status7</internal_names>
+		<offset>351</offset>
+		<size>_U16_</size>
+		<tooltip>"status7" is an undefined</tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_ang1</dlog_gui_name>
+		<dlog_field_name>VVT angle 1</dlog_field_name>
+		<internal_names>vvt_ang1</internal_names>
+		<offset>352</offset>
+		<size>_S16_</size>
+		<tooltip>"vvt_ang1" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_ang2</dlog_gui_name>
+		<dlog_field_name>VVT angle 2</dlog_field_name>
+		<internal_names>vvt_ang2</internal_names>
+		<offset>354</offset>
+		<size>_S16_</size>
+		<tooltip>"vvt_ang2" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_ang3</dlog_gui_name>
+		<dlog_field_name>VVT angle 3</dlog_field_name>
+		<internal_names>vvt_ang3</internal_names>
+		<offset>356</offset>
+		<size>_S16_</size>
+		<tooltip>"vvt_ang3" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_ang4</dlog_gui_name>
+		<dlog_field_name>VVT angle 4</dlog_field_name>
+		<internal_names>vvt_ang4</internal_names>
+		<offset>358</offset>
+		<size>_S16_</size>
+		<tooltip>"vvt_ang4" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>inj_timing_pri</dlog_gui_name>
+		<dlog_field_name>Injector Timing (pri)</dlog_field_name>
+		<internal_names>inj_timing_pri</internal_names>
+		<offset>360</offset>
+		<size>_S16_</size>
+		<tooltip>"inj_timing_pri" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>inj_timing_sec</dlog_gui_name>
+		<dlog_field_name>Injector Timing (sec)</dlog_field_name>
+		<internal_names>inj_timing_sec</internal_names>
+		<offset>362</offset>
+		<size>_S16_</size>
+		<tooltip>"inj_timing_sec" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_target1</dlog_gui_name>
+		<dlog_field_name>VVT Target 1</dlog_field_name>
+		<internal_names>vvt_target1</internal_names>
+		<offset>364</offset>
+		<size>_S16_</size>
+		<tooltip>"vvt_target1" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_target2</dlog_gui_name>
+		<dlog_field_name>VVT Target 2</dlog_field_name>
+		<internal_names>vvt_target2</internal_names>
+		<offset>366</offset>
+		<size>_S16_</size>
+		<tooltip>"vvt_target2" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_target3</dlog_gui_name>
+		<dlog_field_name>VVT Target 3</dlog_field_name>
+		<internal_names>vvt_target3</internal_names>
+		<offset>368</offset>
+		<size>_S16_</size>
+		<tooltip>"vvt_target3" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_target4</dlog_gui_name>
+		<dlog_field_name>VVT Target 4</dlog_field_name>
+		<internal_names>vvt_target4</internal_names>
+		<offset>370</offset>
+		<size>_S16_</size>
+		<tooltip>"vvt_target4" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_duty1</dlog_gui_name>
+		<dlog_field_name>VVT duty 1</dlog_field_name>
+		<internal_names>vvt_duty1</internal_names>
+		<offset>372</offset>
+		<size>_U08_</size>
+		<tooltip>"vvt_duty1" is unknown</tooltip>
+		<fromecu_mult>0.39063</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_duty2</dlog_gui_name>
+		<dlog_field_name>VVT duty 2</dlog_field_name>
+		<internal_names>vvt_duty2</internal_names>
+		<offset>373</offset>
+		<size>_U08_</size>
+		<tooltip>"vvt_duty2" is unknown</tooltip>
+		<fromecu_mult>0.39063</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_duty3</dlog_gui_name>
+		<dlog_field_name>VVT Duty 3</dlog_field_name>
+		<internal_names>vvt_duty3</internal_names>
+		<offset>374</offset>
+		<size>_U08_</size>
+		<tooltip>"vvt_duty3" is unknown</tooltip>
+		<fromecu_mult>0.39063</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>vvt_duty4</dlog_gui_name>
+		<dlog_field_name>VVT Duty 4</dlog_field_name>
+		<internal_names>vvt_duty4</internal_names>
+		<offset>375</offset>
+		<size>_U08_</size>
+		<tooltip>"vvt_duty4" is unknown</tooltip>
+		<fromecu_mult>0.39063</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>fuel_pct</dlog_gui_name>
+		<dlog_field_name>fuel_pct</dlog_field_name>
+		<internal_names>fuel_pct</internal_names>
+		<offset>376</offset>
+		<size>_S16_</size>
+		<tooltip>"fuel_pct" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>fuel_temp</dlog_gui_name>
+		<dlog_field_name>fuel_temp</dlog_field_name>
+		<internal_names>fuel_temp</internal_names>
+		<offset>378</offset>
+		<size>_S16_</size>
+		<tooltip>"fuel_temp" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<temp_dep>TRUE</temp_dep>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>cl_idle_targ_rpm</dlog_gui_name>
+		<dlog_field_name>cl_idle_targ_rpm</dlog_field_name>
+		<internal_names>cl_idle_targ_rpm</internal_names>
+		<offset>380</offset>
+		<size>_U16_</size>
+		<tooltip>"cl_idle_targ_rpm" is unknown</tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>tps_accel</dlog_gui_name>
+		<dlog_field_name>TPS accel</dlog_field_name>
+		<internal_names>tps_accel</internal_names>
+		<offset>382</offset>
+		<size>_S16_</size>
+		<tooltip>"tps_accel" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>map_accel</dlog_gui_name>
+		<dlog_field_name>MAP accel</dlog_field_name>
+		<internal_names>map_accel</internal_names>
+		<offset>384</offset>
+		<size>_S16_</size>
+		<tooltip>"map_accel" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>total_accel</dlog_gui_name>
+		<dlog_field_name>Total accel</dlog_field_name>
+		<internal_names>total_accel</internal_names>
+		<offset>386</offset>
+		<size>_S16_</size>
+		<tooltip>"total_accel" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl01</dlog_gui_name>
+		<dlog_field_name>knock cyl #1</dlog_field_name>
+		<internal_names>knock_cyl01</internal_names>
+		<offset>388</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl01" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl02</dlog_gui_name>
+		<dlog_field_name>knock cyl #2</dlog_field_name>
+		<internal_names>knock_cyl02</internal_names>
+		<offset>389</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl02" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl03</dlog_gui_name>
+		<dlog_field_name>knock cyl #3</dlog_field_name>
+		<internal_names>knock_cyl03</internal_names>
+		<offset>390</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl03" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl04</dlog_gui_name>
+		<dlog_field_name>knock cyl #4</dlog_field_name>
+		<internal_names>knock_cyl04</internal_names>
+		<offset>391</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl04" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl05</dlog_gui_name>
+		<dlog_field_name>knock cyl #5</dlog_field_name>
+		<internal_names>knock_cyl05</internal_names>
+		<offset>392</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl05" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl06</dlog_gui_name>
+		<dlog_field_name>knock cyl #6</dlog_field_name>
+		<internal_names>knock_cyl06</internal_names>
+		<offset>393</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl06" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl07</dlog_gui_name>
+		<dlog_field_name>knock cyl #7</dlog_field_name>
+		<internal_names>knock_cyl07</internal_names>
+		<offset>394</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl07" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl08</dlog_gui_name>
+		<dlog_field_name>knock cyl #8</dlog_field_name>
+		<internal_names>knock_cyl08</internal_names>
+		<offset>395</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl08" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl09</dlog_gui_name>
+		<dlog_field_name>knock cyl #9</dlog_field_name>
+		<internal_names>knock_cyl09</internal_names>
+		<offset>396</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl09" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl10</dlog_gui_name>
+		<dlog_field_name>knock cyl #10</dlog_field_name>
+		<internal_names>knock_cyl10</internal_names>
+		<offset>397</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl10" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl11</dlog_gui_name>
+		<dlog_field_name>knock cyl #11</dlog_field_name>
+		<internal_names>knock_cyl11</internal_names>
+		<offset>398</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl11" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl12</dlog_gui_name>
+		<dlog_field_name>knock cyl #12</dlog_field_name>
+		<internal_names>knock_cyl12</internal_names>
+		<offset>399</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl12" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl13</dlog_gui_name>
+		<dlog_field_name>knock cyl #13</dlog_field_name>
+		<internal_names>knock_cyl13</internal_names>
+		<offset>400</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl13" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl14</dlog_gui_name>
+		<dlog_field_name>knock cyl #14</dlog_field_name>
+		<internal_names>knock_cyl14</internal_names>
+		<offset>401</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl14" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl15</dlog_gui_name>
+		<dlog_field_name>knock cyl #15</dlog_field_name>
+		<internal_names>knock_cyl15</internal_names>
+		<offset>402</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl15" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>knock_cyl16</dlog_gui_name>
+		<dlog_field_name>knock cyl #16</dlog_field_name>
+		<internal_names>knock_cyl16</internal_names>
+		<offset>403</offset>
+		<size>_U08_</size>
+		<tooltip>"knock_cyl16" is unknown</tooltip>
+		<fromecu_mult>0.4</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>launch_timer</dlog_gui_name>
+		<dlog_field_name>Launch retard timer</dlog_field_name>
+		<internal_names>launch_timer</internal_names>
+		<offset>404</offset>
+		<size>_U16_</size>
+		<tooltip>"launch_timer" is unknown</tooltip>
+		<fromecu_mult>0.001</fromecu_mult>
+		<precision>3</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>launch_retard</dlog_gui_name>
+		<dlog_field_name>Lauch timerd retard</dlog_field_name>
+		<internal_names>launch_retard</internal_names>
+		<offset>406</offset>
+		<size>_S16_</size>
+		<tooltip>"launch_retard" is unknown</tooltip>
+		<fromecu_mult>0.1</fromecu_mult>
+		<precision>1</precision>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
 		<dlog_gui_name>AccDecEnrich</dlog_gui_name>
 		<dlog_field_name>TPSacc</dlog_field_name>
-		<internal_names>accdecenrich</internal_names>
+		<internal_names>accDecEnrich</internal_names>
 		<offset>42</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
@@ -1894,12 +2695,12 @@
 		<real_upper>655</real_upper>
 		<fromecu_mult>0.01</fromecu_mult>
 		<tooltip>"rpm100" is RPM/100</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Dutycycle 1</dlog_gui_name>
 		<dlog_field_name>DutyCycle1</dlog_field_name>
-		<internal_names>dcycle1</internal_names>
+		<internal_names>dcycle1,dutycycle1</internal_names>
 		<offset>2</offset>
 		<real_lower>0</real_lower>
 		<real_upper>100</real_upper>
@@ -1930,7 +2731,7 @@
 	<derived>
 		<dlog_gui_name>Dutycycle 2</dlog_gui_name>
 		<dlog_field_name>DutyCycle2</dlog_field_name>
-		<internal_names>dcycle2</internal_names>
+		<internal_names>dcycle2,dutycycle2</internal_names>
 		<offset>4</offset>
 		<real_lower>0</real_lower>
 		<real_upper>100</real_upper>
@@ -1967,7 +2768,7 @@
 		<real_upper>25</real_upper>
 		<precision>1</precision>
 		<tooltip>"AFR Error 1" is the difference between target AFR and actual AFR for the first O2 channel</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(afr/10)-(afrtgt/10)</fromecu_conv_expr>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
@@ -1986,7 +2787,7 @@
 		<real_upper>25</real_upper>
 		<precision>1</precision>
 		<tooltip>"AFR Error 2" is the difference between target AFR and actual AFR for the second O2 channel.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(afr/10)-(afrtgt/10)</fromecu_conv_expr>
 		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
@@ -1998,7 +2799,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>Lambda 1</dlog_gui_name>
-		<dlog_field_name>Lambda1</dlog_field_name>
+		<dlog_field_name>Lambda</dlog_field_name>
 		<internal_names>lambda1</internal_names>
 		<offset>252</offset>
 		<size>_U08_</size>
@@ -2012,7 +2813,7 @@
 		<afr1_size>_U08_</afr1_size>
 		<precision>3</precision>
 		<tooltip>"Lambda 1" is the Lambda reading from O2 sensor 1.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Lambda 2</dlog_gui_name>
@@ -2030,7 +2831,7 @@
 		<afr2_size>_U08_</afr2_size>
 		<precision>3</precision>
 		<tooltip>"Lambda 2" is the Lambda reading from O2 sensor 2.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Lambda 3</dlog_gui_name>
@@ -2048,7 +2849,7 @@
 		<afr3_size>_U08_</afr3_size>
 		<precision>3</precision>
 		<tooltip>"Lambda 3" is the Lambda reading from O2 sensor 3.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Lambda 4</dlog_gui_name>
@@ -2066,7 +2867,7 @@
 		<afr4_size>_U08_</afr4_size>
 		<precision>3</precision>
 		<tooltip>"Lambda 4" is the Lambda reading from O2 sensor 4.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Lambda 5</dlog_gui_name>
@@ -2084,7 +2885,7 @@
 		<afr5_size>_U08_</afr5_size>
 		<precision>3</precision>
 		<tooltip>"Lambda 5" is the Lambda reading from O2 sensor 5.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Lambda 6</dlog_gui_name>
@@ -2102,7 +2903,7 @@
 		<afr6_size>_U08_</afr6_size>
 		<precision>3</precision>
 		<tooltip>"Lambda 6" is the Lambda reading from O2 sensor 6.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Lambda 7</dlog_gui_name>
@@ -2120,7 +2921,7 @@
 		<afr7_size>_U08_</afr7_size>
 		<precision>3</precision>
 		<tooltip>"Lambda 7" is the Lambda reading from O2 sensor 7.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Lambda 8</dlog_gui_name>
@@ -2138,7 +2939,7 @@
 		<afr8_size>_U08_</afr8_size>
 		<precision>3</precision>
 		<tooltip>"Lambda 8" is the Lambda reading from O2 sensor 8.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>pwma_load</dlog_gui_name>
@@ -2165,7 +2966,7 @@
 		<pwm_opt_load_a_bitmask>224</pwm_opt_load_a_bitmask>
 		<precision>1</precision>
 		<tooltip>"pwma_load" is unknown</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Boost in BAR</dlog_gui_name>
@@ -2188,12 +2989,12 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>Boost in Psig</dlog_gui_name>
-		<dlog_field_name>BoostPsig</dlog_field_name>
+		<dlog_field_name>Boost psi</dlog_field_name>
 		<internal_names>boostpsig</internal_names>
 		<offset>18</offset>
 		<real_lower>-15</real_lower>
 		<real_upper>60</real_upper>
-		<precision>2</precision>
+		<precision>1</precision>
 		<tooltip>"BoostPSIg" is the difference between the MAP and BARO inputs and scaled to Gauge pressue</tooltip>
 		<log_by_default>FALSE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>

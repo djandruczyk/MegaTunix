@@ -128,7 +128,7 @@
 		<slider_name>idledc</slider_name>
 		<table>3</table>
 		<row>3</row>
-		<source>idledc</source>
+		<source>idleDC</source>
 	</rt_rts>
 	<rt_rts>
 		<slider_name>sparkangle</slider_name>

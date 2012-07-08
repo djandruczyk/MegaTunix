@@ -93,7 +93,7 @@
 	</rtt>
 	<rtt>
 		<internal_name>accdecenrich</internal_name>
-		<datasource>accdecenrich</datasource>
+		<datasource>accDecEnrich</datasource>
 	</rtt>
 	<rtt>
 		<internal_name>tpsdot</internal_name>
