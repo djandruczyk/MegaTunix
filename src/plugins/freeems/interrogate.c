@@ -1091,7 +1091,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->z_raw_upper = 65535;
 	*(firmware->table_params[0]->x_fromecu_mult) = 0.5;
 	*(firmware->table_params[0]->y_fromecu_mult) = 0.01;
-	*(firmware->table_params[0]->z_fromecu_mult) = 0.001953125;
+	*(firmware->table_params[0]->z_fromecu_mult) = 1.0/512;
 	firmware->table_params[0]->x_source = g_strdup("RPM");
 	firmware->table_params[0]->y_source = g_strdup("LoadMain");
 	firmware->table_params[0]->z_source = g_strdup("VEMain");
@@ -1123,7 +1123,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[1]->z_raw_upper = 44565;
 	*(firmware->table_params[1]->x_fromecu_mult) = 0.5;
 	*(firmware->table_params[1]->y_fromecu_mult) = 0.01;
-	*(firmware->table_params[1]->z_fromecu_mult) = 0.000030518;
+	*(firmware->table_params[1]->z_fromecu_mult) = 1.0/32768;
 	firmware->table_params[1]->x_source = g_strdup("RPM");
 	firmware->table_params[1]->y_source = g_strdup("LoadMain");
 	firmware->table_params[1]->z_source = g_strdup("Lambda");
@@ -1155,7 +1155,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[2]->z_raw_upper = 65535;
 	*(firmware->table_params[2]->x_fromecu_mult) = 0.5;
 	*(firmware->table_params[2]->y_fromecu_mult) = 0.01;
-	*(firmware->table_params[2]->z_fromecu_mult) = 0.000976563;
+	*(firmware->table_params[2]->z_fromecu_mult) = 1.0/1024;
 	firmware->table_params[2]->x_source = g_strdup("RPM");
 	firmware->table_params[2]->y_source = g_strdup("LoadMain");
 	firmware->table_params[2]->z_source = g_strdup("Degrees");
