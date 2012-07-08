@@ -3,7 +3,7 @@ major=1
 minor=11
 
 [interrogation_profile]
-name=MS3-Extra pre1.1beta24
+name=MS3-Extra 1.1.0
 
 [parameters]
 EcuTempUnits=_FAHRENHEIT_
@@ -1810,11 +1810,11 @@ length=1024
 
 [interrogation]
 match_on=MS_VerNum,MS_Signature
-MS_VerNum=_REGEX_,MS3 Format 0238
-MS_Signature=_REGEX_,MS3 pre-1.1 beta  24
+MS_VerNum=_REGEX_,MS3 Format 0238.002
+MS_Signature=_REGEX_,MS3 release 1.1.0
 
 [gui]
-RealtimeMapFile=MS3-Extra-pre-1.1_beta_24
+RealtimeMapFile=MS3-Extra-1.1.0
 SliderMapFile=MS3-Extra
 RuntimeTextMapFile=MS3-Extra
 StatusMapFile=MS3-Extra
