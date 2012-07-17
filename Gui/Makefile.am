@@ -233,6 +233,7 @@ gui_in_files = 	\
 		ms2-generic-vetable_12x12x3.datamap.in \
 		ms2-generic-vetable_16x16x3.datamap.in \
 		ms2-globals.datamap.in \
+		ms2-2.905-globals.datamap.in \
 		ms2-idle_ego_rev.datamap.in \
 		ms2-ignition.datamap.in \
 		ms2-knock_dwell.datamap.in \
