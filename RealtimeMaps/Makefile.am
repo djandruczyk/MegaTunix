@@ -9,6 +9,7 @@ rtxml_files = 	\
 		MS1-Extra-HR-011d.xml \
 		MS1-Extra-029x.xml \
 		MS2-Std.xml \
+		MS2-2.905-Std.xml \
 		MS2-Extra-2.1.0.xml \
 		MS2-Extra-3.0.x.xml \
 		MS2-Extra-3.0.3w.xml \

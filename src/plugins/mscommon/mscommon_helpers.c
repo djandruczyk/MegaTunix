@@ -385,7 +385,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 					}
 				}
 				firmware->txt_rev_len = count-adder;
-				firmware->text_revision = g_strndup((const gchar *)message->recv_buf+base_offset,count-adder);
+				firmware->text_revision = g_markup_escape_text((const gchar *)message->recv_buf+base_offset,count-adder);
 				ecu_info_update(firmware);
 			}
 			break;
@@ -405,7 +405,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 					}
 				}
 				firmware->signature_len = count-adder;
-				firmware->actual_signature = g_strndup((const gchar *)message->recv_buf+base_offset,count-adder);
+				firmware->actual_signature = g_markup_escape_text((const gchar *)message->recv_buf+base_offset,count-adder);
 				ecu_info_update(firmware);
 			}
 			break;
