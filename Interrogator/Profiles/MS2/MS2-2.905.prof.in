@@ -827,7 +827,7 @@ match_on=MS_Signature
 MS_Signature=_SUBMATCH_,V2.90Embedded Code by B&G
 
 [gui]
-RealtimeMapFile=MS2-Std
+RealtimeMapFile=MS2-2.905-Std
 SliderMapFile=MS2-Std
 RuntimeTextMapFile=MS2-Std
 StatusMapFile=MS2-Std
