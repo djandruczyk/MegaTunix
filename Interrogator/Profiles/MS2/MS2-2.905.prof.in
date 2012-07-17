@@ -11,7 +11,7 @@ InterCharDelay=1
 SignatureVia=get_signature
 TextVerVia=ms2_get_textrev
 RT_Command=ms2_std_rtvars
-RT_total_bytes=112
+RT_total_bytes=130
 MS2_RT_Page=6
 Get_All_Command=ms2_read_all
 Read_Command=ms2_veconst
@@ -820,7 +820,7 @@ length=2048
 [page_6]
 dl_by_default=FALSE
 phys_ecu_page=6
-length=112
+length=130
 
 [interrogation]
 match_on=MS_Signature
@@ -832,8 +832,8 @@ SliderMapFile=MS2-Std
 RuntimeTextMapFile=MS2-Std
 StatusMapFile=MS2-Std
 
-LoadTabs=runtime,datalogging,logviewer,tools,ms2-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-accel,ms2-misc-fuel,ms2-alpha-n_6x6x1,generic-vetable_12x12x2,generic-sparktable_12x12x1,generic-afrtable_12x12x2,ms2-user_outputs
-TabConfs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-accel,ms2-misc-fuel,ms2-alpha-n_6x6x1,ms2-generic-vetable_12x12x2,ms2-generic-sparktable_12x12x1,ms2-generic-afrtable_12x12x2,ms2-user_outputs
+LoadTabs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-accel,ms2-2.905-misc-fuel,ms2-alpha-n_6x6x1,generic-vetable_12x12x2,generic-sparktable_12x12x1,generic-afrtable_12x12x2,ms2-user_outputs
+TabConfs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-2.905-accel,ms2-2.905-misc-fuel,ms2-alpha-n_6x6x1,ms2-generic-vetable_12x12x2,ms2-generic-sparktable_12x12x1,ms2-generic-afrtable_12x12x2,ms2-user_outputs
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

@@ -111,7 +111,7 @@
 		<fromecu_mult>0.1</fromecu_mult>
 		<precision>1</precision>
 		<tooltip>"AfrTarget 1" is The target AFR</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>AfrTarget 2</dlog_gui_name>
@@ -202,7 +202,7 @@
 	<derived>
 		<dlog_gui_name>TPS (%)</dlog_gui_name>
 		<dlog_field_name>TP</dlog_field_name>
-		<internal_names>tpspercent</internal_names>
+		<internal_names>tpspercent,throttle</internal_names>
 		<offset>24</offset>
 		<size>_S16_</size>
 		<real_lower>-5</real_lower>
@@ -279,14 +279,14 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>Knock (v)</dlog_gui_name>
-		<dlog_field_name>knockRet</dlog_field_name>
+		<dlog_field_name>knck-V</dlog_field_name>
 		<internal_names>knock</internal_names>
 		<offset>32</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>5</real_upper>
-		<fromecu_mult>0.1</fromecu_mult>
-		<precision>1</precision>
+		<fromecu_mult>0.01</fromecu_mult>
+		<precision>2</precision>
 		<tooltip>"Knock" is the knock sensor voltage reading.</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -475,15 +475,15 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>calcMAP</dlog_gui_name>
-		<dlog_field_name>calcMAP</dlog_field_name>
-		<internal_names>calcMAP</internal_names>
+		<dlog_gui_name>kpa</dlog_gui_name>
+		<dlog_field_name>kpa</dlog_field_name>
+		<internal_names>kpa</internal_names>
 		<offset>66</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>100</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
-		<tooltip>"calcMAP" is a blend of TPS and MAP, depending upon active algorithm.</tooltip>
+		<tooltip>"calcMAP" is a blend of MAP, MAFMAP and TPS, depending upon active algorithm.</tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
@@ -510,7 +510,7 @@
 	</derived>
 	<derived>
 		<dlog_gui_name>Knock Ret.</dlog_gui_name>
-		<dlog_field_name>knockretard</dlog_field_name>
+		<dlog_field_name>knockRet</dlog_field_name>
 		<internal_names>knockretard</internal_names>
 		<offset>71</offset>
 		<size>_U08_</size>
@@ -519,7 +519,7 @@
 		<fromecu_mult>0.1</fromecu_mult>
 		<precision>1</precision>
 		<tooltip>"Knock Ret." is the current amount of spark retard due to knock.</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>X-tau corr1</dlog_gui_name>
@@ -530,11 +530,11 @@
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<tooltip>"X-tau corr1" is the current X-Tau fuel correction for channel 1</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>O&lt;sub&gt;2&lt;/sub&gt; Volts 1</dlog_gui_name>
-		<dlog_field_name>egovolt1</dlog_field_name>
+		<dlog_field_name>O2</dlog_field_name>
 		<internal_names>o2volt1</internal_names>
 		<offset>74</offset>
 		<size>_S16_</size>
@@ -543,11 +543,11 @@
 		<fromecu_mult>0.01</fromecu_mult>
 		<precision>2</precision>
 		<tooltip>"EGO Volts 1" is the current O2 sensor voltage for sensor 1</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>O&lt;sub&gt;2&lt;/sub&gt; Volts 2 (ms2)</dlog_gui_name>
-		<dlog_field_name>egovolt2</dlog_field_name>
+		<dlog_field_name>O2 2</dlog_field_name>
 		<internal_names>o2volt2</internal_names>
 		<offset>76</offset>
 		<size>_S16_</size>
@@ -570,15 +570,16 @@
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>MAP/baro</dlog_gui_name>
-		<dlog_field_name>MAP/baro</dlog_field_name>
+		<dlog_gui_name>Tbl Indx</dlog_gui_name>
+		<dlog_field_name>Tbl Indx</dlog_field_name>
 		<internal_names>kpaix</internal_names>
 		<offset>80</offset>
 		<size>_S16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>400</real_upper>
 		<fromecu_mult>0.1</fromecu_mult>
-		<tooltip>"kpaix" is MAP/baro</tooltip>
+		<precision>1</precision>
+		<tooltip>"kpaix" is formerly MAP/baro now referred to as Tbl Indx</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
@@ -590,27 +591,41 @@
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<tooltip>"X-tau corr2" is the current X-Tau fuel correction for channel 2</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>Spare1</dlog_gui_name>
-		<dlog_field_name>Spare1</dlog_field_name>
-		<internal_names>spare1</internal_names>
+		<dlog_gui_name>Sync Stat</dlog_gui_name>
+		<dlog_field_name>Sync Stat</dlog_field_name>
+		<internal_names>synch</internal_names>
 		<offset>84</offset>
-		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
+		<size>_U08_</size>
+		<tooltip></tooltip>
+		<log_by_default>TRUE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>cspare</dlog_gui_name>
+		<dlog_field_name>cspare</dlog_field_name>
+		<internal_names>cspare</internal_names>
+		<offset>85</offset>
+		<size>_U08_</size>
 		<tooltip></tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>Spare2</dlog_gui_name>
-		<dlog_field_name>Spare2</dlog_field_name>
-		<internal_names>spare2</internal_names>
+		<dlog_gui_name>spare1</dlog_gui_name>
+		<dlog_field_name>spare1</dlog_field_name>
+		<internal_names>spare1</internal_names>
 		<offset>86</offset>
 		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
+		<tooltip></tooltip>
+		<log_by_default>FALSE</log_by_default>
+	</derived>
+	<derived>
+		<dlog_gui_name>spare2</dlog_gui_name>
+		<dlog_field_name>spare2</dlog_field_name>
+		<internal_names>spare2</internal_names>
+		<offset>88</offset>
+		<size>_S16_</size>
 		<tooltip></tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -618,21 +633,17 @@
 		<dlog_gui_name>trig_fix</dlog_gui_name>
 		<dlog_field_name>Triggers±</dlog_field_name>
 		<internal_names>trig_fix</internal_names>
-		<offset>88</offset>
+		<offset>90</offset>
 		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
 		<tooltip></tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>spare4</dlog_gui_name>
 		<dlog_field_name>spare4</dlog_field_name>
 		<internal_names>spare4</internal_names>
-		<offset>90</offset>
+		<offset>92</offset>
 		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
 		<tooltip></tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -640,10 +651,8 @@
 		<dlog_gui_name>spare5</dlog_gui_name>
 		<dlog_field_name>spare5</dlog_field_name>
 		<internal_names>spare5</internal_names>
-		<offset>92</offset>
+		<offset>94</offset>
 		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
 		<tooltip></tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -651,10 +660,8 @@
 		<dlog_gui_name>spare6</dlog_gui_name>
 		<dlog_field_name>spare6</dlog_field_name>
 		<internal_names>spare6</internal_names>
-		<offset>94</offset>
+		<offset>96</offset>
 		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
 		<tooltip></tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -662,10 +669,8 @@
 		<dlog_gui_name>spare7</dlog_gui_name>
 		<dlog_field_name>spare7</dlog_field_name>
 		<internal_names>spare7</internal_names>
-		<offset>96</offset>
+		<offset>98</offset>
 		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
 		<tooltip></tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -673,10 +678,8 @@
 		<dlog_gui_name>spare8</dlog_gui_name>
 		<dlog_field_name>spare8</dlog_field_name>
 		<internal_names>spare8</internal_names>
-		<offset>98</offset>
+		<offset>100</offset>
 		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
 		<tooltip></tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -684,21 +687,8 @@
 		<dlog_gui_name>spare9</dlog_gui_name>
 		<dlog_field_name>spare9</dlog_field_name>
 		<internal_names>spare9</internal_names>
-		<offset>100</offset>
-		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
-		<tooltip></tooltip>
-		<log_by_default>FALSE</log_by_default>
-	</derived>
-	<derived>
-		<dlog_gui_name>spare10</dlog_gui_name>
-		<dlog_field_name>spare10</dlog_field_name>
-		<internal_names>spare10</internal_names>
 		<offset>102</offset>
 		<size>_S16_</size>
-		<real_lower>0</real_lower>
-		<real_upper>100</real_upper>
 		<tooltip></tooltip>
 		<log_by_default>FALSE</log_by_default>
 	</derived>
@@ -711,7 +701,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>65535</real_upper>
 		<tooltip></tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>ospare</dlog_gui_name>
@@ -744,7 +734,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>4294967295</real_upper>
 		<tooltip>"deltaT" is the normallized time between trigger pulses (uSec)</tooltip>
-		<log_by_default>FALSE</log_by_default>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>Dutycycle 1</dlog_gui_name>
@@ -816,7 +806,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<tooltip>"Fuel Comp." is composition factor based on how much ethanol is in the fuel.</tooltip>
-		<log_by_default>TRUE</log_by_default>
+		<log_by_default>FALSE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>AccDecEnrich</dlog_gui_name>
@@ -827,7 +817,6 @@
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<tooltip>"AccDecEnrich" Is the current accel/decel enrichment</tooltip>
-		<log_by_default>TRUE</log_by_default>
 		<fromecu_complex>TRUE</fromecu_complex>
 		<fromecu_conv_expr>(((accelEnrich/10) + ((tpsfuelcut/100*(pulseWidth1/1000))-(pulseWidth1/1000)))/(pulseWidth1/10)) + 100</fromecu_conv_expr>
 		<expr_types>_RAW_VAR_,_RAW_VAR_,_RAW_VAR_</expr_types>
@@ -838,6 +827,7 @@
 		<tpsfuelcut_size>_S16_</tpsfuelcut_size>
 		<pulseWidth1_offset>2</pulseWidth1_offset>
 		<pulseWidth1_size>_U16_</pulseWidth1_size>
+		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
 		<dlog_gui_name>AFR Error Left</dlog_gui_name>

@@ -88,6 +88,7 @@ gui_glade_files = 	\
 		ms2-ignition.glade \
 		ms2-knock_dwell.glade \
 		ms2-misc-fuel.glade \
+		ms2-2.905-misc-fuel.glade \
 		ms2-e-rotary-split.glade \
 		ms2-runtime.glade \
 		ms2-user_outputs.glade \
@@ -240,6 +241,7 @@ gui_in_files = 	\
 		ms2-ignition.datamap.in \
 		ms2-knock_dwell.datamap.in \
 		ms2-misc-fuel.datamap.in \
+		ms2-2.905-misc-fuel.datamap.in \
 		ms2-runtime.datamap.in \
 		ms2-user_outputs.datamap.in \
 		ms2-warmup.datamap.in \
