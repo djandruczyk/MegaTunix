@@ -174,6 +174,7 @@ gui_in_files = 	\
 		ms1-e-hr_011d-wheeldecode.datamap.in \
 		ms1-generic-vetable_8x8x1.datamap.in \
 		ms2-accel.datamap.in \
+		ms2-2.905-accel.datamap.in \
 		ms2-alpha-n_6x6x1.datamap.in \
 		ms2-e-3.0.3v-ego_rev.datamap.in \
 		ms2-e-3.0.3v-ignition.datamap.in \

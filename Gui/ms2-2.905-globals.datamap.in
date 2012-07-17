@@ -318,6 +318,16 @@ offset=988
 size=_U16_
 _tooltip=This is the engine displacement in Cubic Inches.  It is used mainly only for MAF support to make things scale correctly.
 
+[frate_entry]
+keys=offset,page,fromecu_mult,raw_upper,precision,size,tooltip
+offset=768
+page=1
+size=_U16_
+fromecu_mult=0.001
+raw_upper=60000
+precision=3
+_tooltip=This is the injector steady-state flow rate in grams/second.
+
 [inj_delay_entry]
 keys=offset,tooltip
 offset=752
