@@ -83,6 +83,7 @@ gui_glade_files = 	\
 		ms2-e-toothtrigger.glade \
 		ms2-e-vetrim_16x16x4.glade \
 		ms2-globals.glade \
+		ms2-2.905-globals.glade \
 		ms2-idle_ego_rev.glade \
 		ms2-ignition.glade \
 		ms2-knock_dwell.glade \

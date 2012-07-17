@@ -95,12 +95,20 @@ _tooltip=Sets ECU fuel mode to Single Table or Dual Table
 
 [fuel_algo_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-choices=Speed Density,Blend Sd/Alpha-N,Pure Alpha-N
+choices=Speed Density,Blend Sd/Alpha-N (PW\=--f(tps)xVE(tps,rpm)),Blend SD/Alpha-N (PW\=--VE(tps,rpm)
 bitvals=0,1,2
 offset=630
 bitmask=3
 toggle_groups=sd_ctrls,an_ctrls,an_ctrls
-_tooltip=Sets ECU fuel algorithm to pure Speed Density, Blended SD/Alpha-N or Pure Alpha-N
+_tooltip=Sets ECU fuel algorithm to pure Speed Density, Or one of two different Blended strategies
+
+[alphadir_combo]
+keys=offset,choices,bitvals,bitmask,tooltip
+choices=Use Above,Invert Above
+bitvals=0,1
+offset=630
+bitmask=16
+_tooltip=Inverts the above fuel mode algorithm
 
 [barocorr_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
@@ -194,12 +202,12 @@ _tooltip=Sets what pin the MAF sensor is connected to
 
 [fuel_algo_combo2]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-choices=Speed Density,Blend Sd/Alpha-N,Pure Alpha-N
+choices=Speed Density,Blend Sd/Alpha-N (PW\=--f(tps)xVE(tps,rpm)),Blend SD/Alpha-N (PW\=--VE(tps,rpm)
 bitvals=0,1,2
 offset=630
 bitmask=3
 toggle_groups=sd_ctrls,an_ctrls,an_ctrls
-_tooltip=Sets ECU fuel algorithm to pure Speed Density, Blended SD/Alpha-N or Pure Alpha-N
+_tooltip=Sets ECU fuel algorithm to pure Speed Density, Or one of two different Blended strategies
 
 [alternate_combo]
 keys=handler,dl_type,offset,table_num,choices,bitvals,bitmask,tooltip
