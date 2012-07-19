@@ -120,9 +120,9 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 	switch (type)
 	{
 		case RTV_TICKLER:
-			realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
-			if (realtime_id)
+			if (!DATA_GET(global_data,"realtime_id"))
 			{
+				realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
 				g_mutex_lock(mutex);
 				g_cond_signal(cond);
 				g_mutex_unlock(mutex);
