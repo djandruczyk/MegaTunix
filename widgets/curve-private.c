@@ -352,17 +352,17 @@ void update_curve (MtxCurve *curve)
 			priv->colors[CURVE_COL_MARKER].blue/65535.0);
 	if (priv->show_x_marker)
 	{
-		cairo_move_to (cr,0 ,priv->h-(((priv->y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+		cairo_move_to (cr,priv->x_border ,priv->h-(((priv->y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
 		cairo_line_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h - (((priv->y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
-		cairo_line_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h);
+		cairo_line_to (cr, ((priv->x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h-priv->y_border);
 		cairo_stroke(cr);
 		if (priv->x_draw_peak)
 		{
 			cairo_save(cr);
 			cairo_set_dash(cr,dashes,2,0);
-			cairo_move_to (cr,0 ,priv->h-(((priv->peak_y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+			cairo_move_to (cr,priv->x_border ,priv->h-(((priv->peak_y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
 			cairo_line_to (cr, ((priv->peak_x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h - (((priv->peak_y_at_x_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
-			cairo_line_to (cr, ((priv->peak_x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h);
+			cairo_line_to (cr, ((priv->peak_x_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h-priv->y_border);
 			cairo_stroke(cr);
 			cairo_restore(cr);
 		}
@@ -370,17 +370,17 @@ void update_curve (MtxCurve *curve)
 	}
 	if (priv->show_y_marker)
 	{
-		cairo_move_to (cr, 0,priv->h-(((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+		cairo_move_to (cr, priv->x_border,priv->h-(((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
 		cairo_line_to (cr, ((priv->x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h - (((priv->y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
-		cairo_line_to (cr, ((priv->x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h);
+		cairo_line_to (cr, ((priv->x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h-priv->y_border);
 		cairo_stroke(cr);
 		if (priv->y_draw_peak)
 		{
 			cairo_save(cr);
 			cairo_set_dash(cr,dashes,2,0);
-			cairo_move_to (cr, 0,priv->h-(((priv->peak_y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
+			cairo_move_to (cr, priv->x_border,priv->h-(((priv->peak_y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
 			cairo_line_to (cr, ((priv->peak_x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h - (((priv->peak_y_marker-priv->lowest_y)*priv->y_scale) + priv->y_border));
-			cairo_line_to (cr, ((priv->peak_x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h);
+			cairo_line_to (cr, ((priv->peak_x_at_y_marker-priv->lowest_x)*priv->x_scale) + priv->x_border,priv->h-priv->y_border);
 			cairo_stroke(cr);
 			cairo_restore(cr);
 		}
