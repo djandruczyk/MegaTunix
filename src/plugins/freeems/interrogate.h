@@ -107,6 +107,7 @@ gboolean load_firmware_details(Firmware_Details *, gchar *);
 gint translate_capabilities(const gchar *);
 Page_Params * initialize_page_params(void);
 Table_Params * initialize_table_params(void);
+gboolean get_dimensions(gint, gint, gint,gint *, gint *);
 
 
 /* Prototypes */

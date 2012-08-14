@@ -3,7 +3,7 @@
 	<potential_args>
 		<arg>	
 			<name>PAYLOAD_DATA</name>
-			<desc>Data to transfer to ECU, length is variable, packet int oa g_byte_array structure, length is part of the structure.</desc>
+			<desc>Data to transfer to ECU, length is variable, packed into a g_byte_array structure, length is part of the structure.</desc>
 			<type>_PAYLOAD_DATA_</type>
 			<internal_name>payload_data_array</internal_name>
 			<size>_UNDEF_</size>
@@ -15,6 +15,7 @@
 			<internal_name>data</internal_name>
 			<size>_UNDEF_</size>
 		</arg>
+		<!--
 		<arg>	
 			<name>BYTE</name>
 			<desc>single byte.</desc>
@@ -22,6 +23,7 @@
 			<internal_name>byte</internal_name>
 			<size>_U08_</size>
 		</arg>
+		-->
 		<arg>
 			<name>PAUSE_100MS</name>
 			<desc>Pause for 100ms.</desc>
@@ -65,10 +67,10 @@
 			<size>_U16_</size>
 		</arg>
 		<arg>
-			<name>DATA_LENGTH</name>
+			<name>LENGTH</name>
 			<desc>Length of the block requested or sent</desc>
-			<type>_DATA_LENGTH_</type>
-			<internal_name>data_length</internal_name>
+			<type>_LENGTH_</type>
+			<internal_name>length</internal_name>
 			<size>_U16_</size>
 		</arg>
 	</potential_args>
@@ -83,7 +85,7 @@
 				<arg>PAYLOAD_DATA</arg>
 			</args>
 			<helper_func>handle_transaction_hf</helper_func>
-                        <helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
+            <helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>empty_payload_pkt</name>
@@ -94,7 +96,7 @@
 				<arg>PAYLOAD_ID</arg>
 			</args>
 			<helper_func>handle_transaction_hf</helper_func>
-                        <helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
+            <helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>benchtest_pkt</name>
@@ -106,7 +108,7 @@
 				<arg>PAYLOAD_DATA</arg>
 			</args>
 			<helper_func>handle_transaction_hf</helper_func>
-                        <helper_func_arg>_BENCHTEST_RESPONSE_</helper_func_arg>
+            <helper_func_arg>_BENCHTEST_RESPONSE_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>basic_datalog</name>
@@ -127,25 +129,25 @@
 			</post_functions>
 		</cmd>
 		<cmd>
-                        <name>burn_all</name>
-                        <desc>Calls a function to burn ALL applicable pages to flash</desc>
-                        <type>_FUNC_CALL_</type>
-                        <func_call_name>freeems_burn_all</func_call_name>
-                </cmd>
+            <name>burn_all</name>
+            <desc>Calls a function to burn ALL applicable pages to flash</desc>
+            <type>_FUNC_CALL_</type>
+            <func_call_name>freeems_burn_all</func_call_name>
+        </cmd>
 		<cmd>
-                        <name>burn</name>
-                        <desc>burns the RAM to flash</desc>
-                        <type>_WRITE_CMD_</type>
-                        <args>
+            <name>burn</name>
+            <desc>burns the RAM to flash</desc>
+            <type>_WRITE_CMD_</type>
+            <args>
 				<arg>SEQUENCE_NUM</arg> 
 				<arg>PAYLOAD_ID</arg>
 				<arg>LOCATION_ID</arg>
 				<arg>OFFSET</arg>
-				<arg>DATA_LENGTH</arg>
-                        </args>
+				<arg>LENGTH</arg>
+            </args>
 			<helper_func>handle_transaction_hf</helper_func>
-                        <helper_func_arg>_GENERIC_BURN_</helper_func_arg>
-                </cmd>
+            <helper_func_arg>_GENERIC_BURN_</helper_func_arg>
+        </cmd>
 		<cmd>
 			<name>generic_RAM_write</name>
 			<desc>Generic RAM write function</desc>
@@ -155,11 +157,11 @@
 				<arg>PAYLOAD_ID</arg>
 				<arg>LOCATION_ID</arg>
 				<arg>OFFSET</arg>
-				<arg>DATA_LENGTH</arg>
+				<arg>LENGTH</arg>
 				<arg>DATACHUNK</arg>
 			</args>
 			<helper_func>handle_transaction_hf</helper_func>
-                        <helper_func_arg>_GENERIC_RAM_WRITE_</helper_func_arg>
+            <helper_func_arg>_GENERIC_RAM_WRITE_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>generic_FLASH_write</name>
@@ -170,11 +172,11 @@
 				<arg>PAYLOAD_ID</arg>
 				<arg>LOCATION_ID</arg>
 				<arg>OFFSET</arg>
-				<arg>DATA_LENGTH</arg>
+				<arg>LENGTH</arg>
 				<arg>DATACHUNK</arg>
 			</args>
 			<helper_func>handle_transaction_hf</helper_func>
-                        <helper_func_arg>_GENERIC_FLASH_WRITE_</helper_func_arg>
+            <helper_func_arg>_GENERIC_FLASH_WRITE_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>generic_read</name>
@@ -185,10 +187,10 @@
 				<arg>PAYLOAD_ID</arg>
 				<arg>LOCATION_ID</arg>
 				<arg>OFFSET</arg>
-				<arg>DATA_LENGTH</arg>
+				<arg>LENGTH</arg>
 			</args>
 			<helper_func>handle_transaction_hf</helper_func>
-                        <helper_func_arg>_GENERIC_READ_</helper_func_arg>
+            <helper_func_arg>_GENERIC_READ_</helper_func_arg>
 		</cmd>
 		<cmd>
 			<name>freeems_read_all</name>

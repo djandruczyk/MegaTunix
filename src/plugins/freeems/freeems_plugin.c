@@ -292,10 +292,12 @@ void register_common_enums(void)
 				GINT_TO_POINTER(LOCATION_ID));
 		g_hash_table_insert (str_2_enum,(gpointer) "_OFFSET_",
 				GINT_TO_POINTER(OFFSET));
-		g_hash_table_insert (str_2_enum,(gpointer) "_DATA_LENGTH_",
-				GINT_TO_POINTER(DATA_LENGTH));
+		g_hash_table_insert (str_2_enum,(gpointer) "_LENGTH_",
+				GINT_TO_POINTER(LENGTH));
+		/* NOT USED
 		g_hash_table_insert (str_2_enum,(gpointer) "_DATABYTE_",
 				GINT_TO_POINTER(DATABYTE));
+				*/
 		g_hash_table_insert (str_2_enum,(gpointer) "_PAYLOAD_DATA_",
 				GINT_TO_POINTER(PAYLOAD_DATA));
 		g_hash_table_insert (str_2_enum,(gpointer) "_FREEEMS_ALL_",
@@ -363,8 +365,10 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_PAYLOAD_ID_");
 		g_hash_table_remove (str_2_enum, "_LOCATION_ID_");
 		g_hash_table_remove (str_2_enum, "_OFFSET_");
-		g_hash_table_remove (str_2_enum, "_DATA_LENGTH_");
+		g_hash_table_remove (str_2_enum, "_LENGTH_");
+		/* NOT USED
 		g_hash_table_remove (str_2_enum, "_DATABYTE_");
+		*/
 		g_hash_table_remove (str_2_enum, "_CALLBACK_");
 		g_hash_table_remove (str_2_enum, "_EMPTY_PAYLOAD_");
 		g_hash_table_remove (str_2_enum, "_FREEEMS_ALL_");

@@ -207,7 +207,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	gint id = 0;
 	gint tmpi = 0;
 	gint canID = 0;
-	gint data_length = 0;
+	gint length = 0;
 	gint locID = 0;
 	gint offset = 0;
 	gint size = 0;
@@ -230,7 +230,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	locID = (GINT)DATA_GET(output->data,"location_id");
 	offset = (GINT)DATA_GET(output->data,"offset");
 	size = (GINT)DATA_GET(output->data,"num_wanted");
-	data_length = (GINT)DATA_GET(output->data,"data_length");
+	length = (GINT)DATA_GET(output->data,"length");
 
 	switch (type)
 	{
@@ -351,7 +351,7 @@ handle_write:
 				DATA_SET(retry->data,"offset",DATA_GET(output->data,"offset"));
 				DATA_SET(retry->data,"size",DATA_GET(output->data,"size"));
 				DATA_SET(retry->data,"value",DATA_GET(output->data,"value"));
-				DATA_SET(retry->data,"data_length",DATA_GET(output->data,"data_length"));
+				DATA_SET(retry->data,"length",DATA_GET(output->data,"length"));
 				DATA_SET(retry->data,"data",DATA_GET(output->data,"data"));
 				DATA_SET(retry->data,"mode",DATA_GET(output->data,"mode"));
 				queue = g_async_queue_new();
@@ -393,7 +393,7 @@ handle_write:
 				DATA_SET(retry->data,"location_id",DATA_GET(output->data,"location_id"));
 				DATA_SET(retry->data,"payload_id",DATA_GET(output->data,"payload_id"));
 				DATA_SET(retry->data,"offset",DATA_GET(output->data,"offset"));
-				DATA_SET(retry->data,"data_length",DATA_GET(output->data,"data_length"));
+				DATA_SET(retry->data,"length",DATA_GET(output->data,"length"));
 				DATA_SET(retry->data,"mode",DATA_GET(output->data,"mode"));
 				queue = g_async_queue_new();
 				register_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -489,7 +489,7 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 				DATA_SET(output->data,"location_id",GINT_TO_POINTER(firmware->page_params[i]->phys_ecu_page));
 				DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_BURN_BLOCK_FROM_RAM_TO_FLASH));
 				DATA_SET(output->data,"offset",GINT_TO_POINTER(0));
-				DATA_SET(output->data,"data_length",GINT_TO_POINTER(firmware->page_params[i]->length));
+				DATA_SET(output->data,"length",GINT_TO_POINTER(firmware->page_params[i]->length));
 				DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 				io_cmd_f(firmware->burn_command,output);
 			}

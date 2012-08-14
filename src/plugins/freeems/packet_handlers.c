@@ -579,7 +579,6 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 
 	message->sequence = g_array_new(FALSE,TRUE,sizeof(DBlock *));
 
-	payload_length = 0;
 	/* Arguments */
 	for (i=0;i<command->args->len;i++)
 	{
@@ -616,7 +615,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				have_offset = TRUE;
 				payload_length += 2;
 				break;
-			case DATA_LENGTH:
+			case LENGTH:
 				length = (GINT)DATA_GET(output->data,arg->internal_name);
 				packet_length += 2;
 				break;
@@ -624,6 +623,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				have_payload_data = TRUE;
 				payload_data = (guint8 *)DATA_GET(output->data,arg->internal_name);
 				break;
+				/* To bhe migrated to for all  DATA stuff */
 			case PAYLOAD_DATA:
 				have_payload_data = TRUE;
 				array = (GByteArray *)DATA_GET(output->data,arg->internal_name);
@@ -709,7 +709,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 		if (payload_data_length > 0)
 		{
 			if ((!payload_data) && (payload_data_length > 0))
-				printf("MAJOR ISSUE, payload_data is null, but layload data length is %i\n",payload_data_length);
+				printf("MAJOR ISSUE, payload_data is null, but payload data length is %i\n",payload_data_length);
 			/*printf("position before appending blob is %i, len %i\n",pos, payload_data_length); */
 			g_memmove(buf+pos,payload_data,payload_data_length);
 			pos += payload_data_length;
@@ -743,10 +743,10 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 /*!
   \brief This handles escaping and wrapping the packet with the START/STOP
   markers. 
-  \param raw is the raw unescape unmarker'd packet (checksummed already)
+  \param raw is the raw unescaped packet (checksummed already)
   \param raw_length is the length of the raw packet in bytes
   \param final_length is a pointer to where to store the packets final length
-  \returns a pointer to the finalized packet
+  \returns a pointer to the finalized packet, free this when done with it
   */
 guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
 {
@@ -798,7 +798,8 @@ guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
 			*/
 	if (len -1 != pos)
 		printf("packet finalize problem, length mismatch\n");
-	*final_length = len;
+	if (final_length)
+		*final_length = len;
 	return buf;
 }
 
@@ -848,3 +849,181 @@ G_MODULE_EXPORT gint atomic_sequence()
 	g_mutex_unlock(mutex);
 	return seq;
 }
+
+
+/*!
+ * \brief returns a packet when given suitable parameters, accepts enum/value pairs
+ * terminated wiht a -1, failing to terminate the list or provide pairs is an ERROR
+ * \returns a checksummed and escaped raw packet
+ */
+G_MODULE_EXPORT guint8 * make_me_a_packet(gint *final_length, ...)
+{
+	gint i = 0;
+	gint count = 0;
+	gboolean have_payload_id = FALSE;
+	gboolean have_location_id = FALSE;
+	gboolean have_sequence_num = FALSE;
+	gboolean have_offset = FALSE;
+	gboolean have_length = FALSE;
+	gboolean have_payload_data = FALSE;
+	int argtype = 0;
+	gint payload_id = 0;
+	gint location_id = 0;
+	gint sequence_num = 0;
+	gint packet_length = 2; /* Header byte + checksum byte */
+	gint payload_length = 0; /* Only for packes whos location ID has a payload! */
+	gint offset = 0;
+	gint length = 0;
+	gint pos = 0;
+	gint sum = 0;
+	guint8 *pkt = NULL;
+	guint8 *buf = NULL;
+	guint8 *payload_data = NULL;
+	va_list argp;
+	va_start(argp,final_length);
+	while (i != -1)
+	{
+		i = va_arg(argp,int);
+		count++;
+	}
+	va_end(argp);
+	if ((count%2) != 1)
+		printf("Need a valid number of arguments terminated by -1\n");
+	va_start(argp,final_length);
+	for (i=0;i<count/2;i++)
+	{
+		argtype = va_arg(argp,int);
+		switch (argtype) {
+			case SEQUENCE_NUM:
+				have_sequence_num = TRUE;
+				sequence_num = va_arg(argp,int);
+				packet_length += 1;
+				break;
+			case PAYLOAD_ID:
+				have_payload_id = TRUE;
+				payload_id = va_arg(argp,int);
+				packet_length += 2;
+				break;
+			case LOCATION_ID:
+				have_location_id = TRUE;
+				location_id = va_arg(argp,int);
+				packet_length += 4;
+				payload_length += 2;
+				break;
+			case OFFSET:
+				have_offset = TRUE;
+				offset = va_arg(argp,int);
+				packet_length += 2;
+				payload_length += 2;
+				break;
+			case LENGTH: /* For reads this is how much we want, for WRITES this is how large
+							the DATA field is
+							*/
+				have_length = TRUE;
+				length = va_arg(argp,int);
+				packet_length += 2;
+				payload_length += 2;
+				break;
+			case DATA:
+				have_payload_data = TRUE;
+				payload_data = va_arg(argp,guint8 *);
+				break;
+		}
+	}
+	va_end(argp);
+
+	if (g_getenv("PKT_DEBUG2"))
+	{
+		printf("build_output_message(): \n");
+		printf("Sequence number %i (0x%0X)\n",sequence_num,sequence_num);
+		printf("Payload ID number 0x%0X\n",payload_id);
+		printf("Location ID number %i\n",location_id);
+		printf("Offset %i\n",offset);
+		printf("Length (request (R) or payload(W)) %i\n",length);
+	}
+	if (have_payload_data)
+	{
+		packet_length += length; /* Total packet is bigger */
+		payload_length += length; /* The payload part of the packet */
+	}
+	pos = 1; /* Header */
+	/* Raw Packet */
+	buf = g_new0(guint8, packet_length);
+
+	/* Payload ID */
+	buf[H_PAYLOAD_IDX] = (guint8)((payload_id & 0xff00) >> 8);
+	buf[L_PAYLOAD_IDX] = (guint8)(payload_id & 0x00ff);
+	pos += 2; /* 3, header+payload_id*/
+
+	/* Sequence number if present */
+	if (have_sequence_num)
+	{
+		buf[HEADER_IDX] |= HAS_SEQUENCE_MASK;
+		buf[SEQ_IDX] = (guint8)sequence_num;
+		pos += 1; /* 4, header+payload_id+seq */
+	}
+
+	/* Payload Length if present */
+	if (have_location_id)
+	{
+		buf[HEADER_IDX] |= HAS_LENGTH_MASK;
+		if (have_sequence_num)
+		{
+			buf[H_LEN_IDX] = (guint8)((payload_length & 0xff00) >> 8); 
+			buf[L_LEN_IDX] = (guint8)(payload_length & 0x00ff); 
+		}
+		else
+		{
+			buf[H_LEN_IDX - 1] = (guint8)((payload_length & 0xff00) >> 8);
+			buf[L_LEN_IDX - 1] = (guint8)(payload_length & 0x00ff); 
+		}
+		pos += 2; /* 5 or 6, header+payload_id+seq+payload_len */
+
+		/* Location ID */
+		buf[pos++] = (guint8)((location_id & 0xff00) >> 8); 
+		buf[pos++] = (guint8)(location_id & 0x00ff); 
+
+		/* Offset */
+		if (have_offset)
+		{
+			buf[pos++] = (guint8)((offset & 0xff00) >> 8); 
+			buf[pos++] = (guint8)(offset & 0x00ff); 
+		}
+		/* Sub Length */
+		if (have_length)
+		{
+			buf[pos++] = (guint8)((length & 0xff00) >> 8); 
+			buf[pos++] = (guint8)(length & 0x00ff); 
+		}
+		/* pos = 11 or 12 depending on if seq or not */
+
+		if (have_payload_data)
+		{
+			if ((!payload_data) && (length > 0))
+				printf("MAJOR ISSUE, payload_data is null, but payload length is %i\n",length);
+			/*printf("position before appending blob is %i, len %i\n",pos, payload_data_length); */
+			g_memmove(buf+pos,payload_data,length);
+			pos += length;
+		}
+	}
+
+	/* Checksum it */
+	for (i=0;i<packet_length-1;i++)
+		sum += buf[i];
+	buf[pos] = sum;
+	mtxlog_packet(buf,packet_length,TRUE);
+	pos++;
+
+	if (g_getenv("PKT_DEBUG2"))
+	{
+		printf("RAW PACKET -> ");
+		for (i=0;i<packet_length;i++)
+			printf("%.2X ",buf[i]);
+		printf("\n\n");
+	}
+	/* Escape + start/stop it */
+	pkt = finalize_packet(buf,packet_length,final_length);
+	g_free(buf);
+	return pkt;
+}
+

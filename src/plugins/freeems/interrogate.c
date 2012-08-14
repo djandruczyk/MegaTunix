@@ -947,6 +947,11 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	gchar ** list = NULL;
 	gint major = 0;
 	gint minor = 0;
+	gint size = 0;
+	guint8 *packet = NULL;
+	gboolean res = FALSE;
+	gint x_bins = 0;
+	gint y_bins = 0;
 
 
 	cfgfile = cfg_open_file((gchar *)filename);
@@ -1076,8 +1081,16 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->x_page = 0;
 	firmware->table_params[0]->y_page = 0;
 	firmware->table_params[0]->z_page = 0;
-	firmware->table_params[0]->x_bincount = 16;
-	firmware->table_params[0]->y_bincount = 16;
+	/* Hard coding this is bad,  but since Fred Doesn't provide any way to 
+	 * get metadata from the ECU, there is no real clean way!
+	 * */
+	res = get_dimensions(0,0,4, &x_bins,&y_bins);
+	if (!res)
+		printf("unable to get table dimensions for location ID 0\n");
+	else
+		printf("locID 0 X bins %i, y bins %i\n",x_bins,y_bins);
+	firmware->table_params[0]->x_bincount = x_bins;
+	firmware->table_params[0]->y_bincount = y_bins;
 	firmware->table_params[0]->x_base = 4;
 	firmware->table_params[0]->y_base = 58;
 	firmware->table_params[0]->z_base = 100;
@@ -1108,8 +1121,13 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[1]->y_page = 6;
 	/* Assumes location ID's from 0-6 are contiguous */
 	firmware->table_params[1]->z_page = 6;
-	firmware->table_params[1]->x_bincount = 16;
-	firmware->table_params[1]->y_bincount = 16;
+	res = get_dimensions(6,0,4, &x_bins,&y_bins);
+	if (!res)
+		printf("unable to get table dimensions for location ID 1\n");
+	else
+		printf("locID 6 X bins %i, y bins %i\n",x_bins,y_bins);
+	firmware->table_params[1]->x_bincount = x_bins;
+	firmware->table_params[1]->y_bincount = y_bins;
 	firmware->table_params[1]->x_base = 4;
 	firmware->table_params[1]->y_base = 58;
 	firmware->table_params[1]->z_base = 100;
@@ -1140,8 +1158,13 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[2]->y_page = 8;
 	/* Assumes location ID's from 0-8 are contiguous */
 	firmware->table_params[2]->z_page = 8;
-	firmware->table_params[2]->x_bincount = 16;
-	firmware->table_params[2]->y_bincount = 16;
+	res = get_dimensions(8,0,4, &x_bins,&y_bins);
+	if (!res)
+		printf("unable to get table dimensions for location ID 0\n");
+	else
+		printf("locID 8 X bins %i, y bins %i\n",x_bins,y_bins);
+	firmware->table_params[2]->x_bincount = x_bins;
+	firmware->table_params[2]->y_bincount = y_bins;
 	firmware->table_params[2]->x_base = 4;
 	firmware->table_params[2]->y_base = 58;
 	firmware->table_params[2]->z_base = 100;
@@ -1286,3 +1309,58 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 	return table_params;
 }
 
+
+/*!
+ \brief Gets the X/Y sizes for the table requested at the specified location ID/offset and length,  typically offset and length are 0 and 4 respectively (reads the first 4 bytes of the table)
+ \returns TRU on success, false otherwise
+ */
+gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, gint *y_bins)
+{
+	guint8 *buf = NULL;
+	FreeEMS_Packet *packet = NULL;
+	gint size = 0;
+	GAsyncQueue *queue = NULL;
+	guint16 *ptr = NULL;
+	gint resp = RESPONSE_RETRIEVE_BLOCK_FROM_RAM;
+	Serial_Params *serial_params = NULL;
+
+	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+	g_return_val_if_fail(serial_params,FALSE);
+	g_return_val_if_fail(x_bins,FALSE);
+	g_return_val_if_fail(y_bins,FALSE);
+	g_return_val_if_fail(length > 0,FALSE);
+
+	buf = make_me_a_packet(&size,PAYLOAD_ID,REQUEST_RETRIEVE_BLOCK_FROM_RAM,\
+			LOCATION_ID,location_id,\
+			OFFSET,offset,\
+			LENGTH,length,\
+			-1);
+
+	queue = g_async_queue_new();
+	register_packet_queue(PAYLOAD_ID,queue,resp);
+	if (!write_wrapper_f(serial_params->fd,buf, size, NULL))
+	{
+		deregister_packet_queue(PAYLOAD_ID,queue,resp);
+		g_free(buf);
+		g_async_queue_unref(queue);
+		return FALSE;
+	}
+	g_free(buf);
+#if GLIB_MINOR_VERSION < 31
+	g_get_current_time(&tval);
+	g_time_val_add(&tval,500000);
+	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
+#else
+	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
+#endif
+	deregister_packet_queue(PAYLOAD_ID,queue,resp);
+	g_async_queue_unref(queue);
+	if (packet)
+	{
+		*x_bins = (packet->data[packet->payload_base_offset] << 8 ) + packet->data[packet->payload_base_offset +1];
+		*y_bins = (packet->data[packet->payload_base_offset+2] << 8 ) + packet->data[packet->payload_base_offset +3];
+		freeems_packet_cleanup(packet);
+		return TRUE;
+	}
+	return FALSE;
+}

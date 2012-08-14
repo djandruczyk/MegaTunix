@@ -38,8 +38,8 @@ typedef enum
 	PAYLOAD_ID,
 	LOCATION_ID,
 	OFFSET,
-	DATA_LENGTH,
-	DATABYTE,
+	LENGTH,
+	/*DATABYTE, NOT USED*/
 	PAYLOAD_DATA
 }FreeEMSArgTypes;
 
@@ -228,6 +228,7 @@ guint8 *finalize_packet(guint8 *, gint, gint *);
 void build_output_message(Io_Message *, Command *, gpointer);
 void mtxlog_packet(const void *, size_t, gboolean);
 gint atomic_sequence();
+guint8 * make_me_a_packet(gint *, ...);
 /* Prototypes */
 
 #endif
