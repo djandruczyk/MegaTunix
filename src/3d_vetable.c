@@ -271,8 +271,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gfloat tmpf = 0.0;
 	GdkGLConfig *gl_config;
 	gchar * tmpbuf = NULL;
-	gint i = 0;
-	gint j = 0;
+	gint x = 0;
+	gint y = 0;
 	gint smallstep = 0;
 	gint bigstep = 0;
 	Ve_View_3D *ve_view;
@@ -409,6 +409,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->x_size = firmware->table_params[table_num]->x_size;
 	ve_view->x_mult = get_multiplier(ve_view->x_size);
 	ve_view->x_bincount = firmware->table_params[table_num]->x_bincount;
+	printf("x_bincount is %i\n",ve_view->x_bincount);
 	OBJ_SET(ve_view->x_container,"page",GINT_TO_POINTER(ve_view->x_page));
 	OBJ_SET(ve_view->x_container,"size",GINT_TO_POINTER(ve_view->x_size));
 	OBJ_SET(ve_view->x_container,"canID",GINT_TO_POINTER(firmware->canID));
@@ -418,6 +419,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->y_size = firmware->table_params[table_num]->y_size;
 	ve_view->y_mult = get_multiplier(ve_view->y_size);
 	ve_view->y_bincount = firmware->table_params[table_num]->y_bincount;
+	printf("y_bincount is %i\n",ve_view->y_bincount);
 	OBJ_SET(ve_view->y_container,"page",GINT_TO_POINTER(ve_view->y_page));
 	OBJ_SET(ve_view->y_container,"size",GINT_TO_POINTER(ve_view->y_size));
 	OBJ_SET(ve_view->y_container,"canID",GINT_TO_POINTER(firmware->canID));
@@ -437,82 +439,83 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->table_num = table_num;
 
 	ve_view->x_objects = g_new0(GObject *, firmware->table_params[table_num]->x_bincount);
-	for (i=0;i<firmware->table_params[table_num]->x_bincount;i++)
+	for (x=0;x<firmware->table_params[table_num]->x_bincount;x++)
 	{
-		ve_view->x_objects[i] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref_sink(ve_view->x_objects[i]);
-		OBJ_SET(ve_view->x_objects[i],"page",GINT_TO_POINTER(ve_view->x_page));
-		OBJ_SET(ve_view->x_objects[i],"offset",GINT_TO_POINTER(ve_view->x_base+(ve_view->x_mult * i)));
-		OBJ_SET(ve_view->x_objects[i],"size",GINT_TO_POINTER(ve_view->x_size));
-		OBJ_SET(ve_view->x_objects[i],"fromecu_mult",firmware->table_params[table_num]->x_fromecu_mult);
-		OBJ_SET(ve_view->x_objects[i],"fromecu_add",firmware->table_params[table_num]->x_fromecu_add);
-		OBJ_SET_FULL(ve_view->x_objects[i],"table_num",g_strdup_printf("%i",table_num),g_free);
+		ve_view->x_objects[x] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		g_object_ref_sink(ve_view->x_objects[x]);
+		OBJ_SET(ve_view->x_objects[x],"page",GINT_TO_POINTER(ve_view->x_page));
+		OBJ_SET(ve_view->x_objects[x],"offset",GINT_TO_POINTER(ve_view->x_base+(ve_view->x_mult * x)));
+		OBJ_SET(ve_view->x_objects[x],"size",GINT_TO_POINTER(ve_view->x_size));
+		OBJ_SET(ve_view->x_objects[x],"fromecu_mult",firmware->table_params[table_num]->x_fromecu_mult);
+		OBJ_SET(ve_view->x_objects[x],"fromecu_add",firmware->table_params[table_num]->x_fromecu_add);
+		OBJ_SET_FULL(ve_view->x_objects[x],"table_num",g_strdup_printf("%i",table_num),g_free);
 		if (firmware->table_params[table_num]->x_multi_source)
 		{
-			OBJ_SET_FULL(ve_view->x_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->x_source_key),g_free);
-			OBJ_SET_FULL(ve_view->x_objects[i],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->x_multi_expr_keys),g_free);
-			OBJ_SET_FULL(ve_view->x_objects[i],"fromecu_mults",g_strdup(firmware->table_params[table_num]->x_fromecu_mults),g_free);
-			OBJ_SET_FULL(ve_view->x_objects[i],"fromecu_adds",g_strdup(firmware->table_params[table_num]->x_fromecu_adds),g_free);
-			OBJ_SET_FULL(ve_view->x_objects[i],"lookuptables",g_strdup(firmware->table_params[table_num]->x_lookuptables),g_free);
-			OBJ_SET(ve_view->x_objects[i],"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->x_ignore_algorithm));
+			OBJ_SET_FULL(ve_view->x_objects[x],"source_key",g_strdup(firmware->table_params[table_num]->x_source_key),g_free);
+			OBJ_SET_FULL(ve_view->x_objects[x],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->x_multi_expr_keys),g_free);
+			OBJ_SET_FULL(ve_view->x_objects[x],"fromecu_mults",g_strdup(firmware->table_params[table_num]->x_fromecu_mults),g_free);
+			OBJ_SET_FULL(ve_view->x_objects[x],"fromecu_adds",g_strdup(firmware->table_params[table_num]->x_fromecu_adds),g_free);
+			OBJ_SET_FULL(ve_view->x_objects[x],"lookuptables",g_strdup(firmware->table_params[table_num]->x_lookuptables),g_free);
+			OBJ_SET(ve_view->x_objects[x],"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->x_ignore_algorithm));
 		}
 	}
 	ve_view->y_objects = g_new0(GObject *, firmware->table_params[table_num]->y_bincount);
-	for (i=0;i<firmware->table_params[table_num]->y_bincount;i++)
+	for (y=0;y<firmware->table_params[table_num]->y_bincount;y++)
 	{
-		ve_view->y_objects[i] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
-		g_object_ref_sink(ve_view->y_objects[i]);
-		OBJ_SET(ve_view->y_objects[i],"page",GINT_TO_POINTER(ve_view->y_page));
-		OBJ_SET(ve_view->y_objects[i],"offset",GINT_TO_POINTER(ve_view->y_base+(ve_view->y_mult * i)));
-		OBJ_SET(ve_view->y_objects[i],"size",GINT_TO_POINTER(ve_view->y_size));
-		OBJ_SET(ve_view->y_objects[i],"fromecu_mult",firmware->table_params[table_num]->y_fromecu_mult);
-		OBJ_SET(ve_view->y_objects[i],"fromecu_add",firmware->table_params[table_num]->y_fromecu_add);
-		OBJ_SET_FULL(ve_view->y_objects[i],"table_num",g_strdup_printf("%i",table_num),g_free);
+		ve_view->y_objects[y] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
+		g_object_ref_sink(ve_view->y_objects[y]);
+		OBJ_SET(ve_view->y_objects[y],"page",GINT_TO_POINTER(ve_view->y_page));
+		OBJ_SET(ve_view->y_objects[y],"offset",GINT_TO_POINTER(ve_view->y_base+(ve_view->y_mult * y)));
+		OBJ_SET(ve_view->y_objects[y],"size",GINT_TO_POINTER(ve_view->y_size));
+		OBJ_SET(ve_view->y_objects[y],"fromecu_mult",firmware->table_params[table_num]->y_fromecu_mult);
+		OBJ_SET(ve_view->y_objects[y],"fromecu_add",firmware->table_params[table_num]->y_fromecu_add);
+		OBJ_SET_FULL(ve_view->y_objects[y],"table_num",g_strdup_printf("%i",table_num),g_free);
 		if (firmware->table_params[table_num]->y_multi_source)
 		{
-			OBJ_SET_FULL(ve_view->y_objects[i],"source_key",g_strdup(firmware->table_params[table_num]->y_source_key),g_free);
-			OBJ_SET_FULL(ve_view->y_objects[i],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->y_multi_expr_keys),g_free);
-			OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_mults",g_strdup(firmware->table_params[table_num]->y_fromecu_mults),g_free);
-			OBJ_SET_FULL(ve_view->y_objects[i],"fromecu_adds",g_strdup(firmware->table_params[table_num]->y_fromecu_adds),g_free);
-			OBJ_SET_FULL(ve_view->y_objects[i],"lookuptables",g_strdup(firmware->table_params[table_num]->y_lookuptables),g_free);
-			OBJ_SET(ve_view->y_objects[i],"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->y_ignore_algorithm));
+			OBJ_SET_FULL(ve_view->y_objects[y],"source_key",g_strdup(firmware->table_params[table_num]->y_source_key),g_free);
+			OBJ_SET_FULL(ve_view->y_objects[y],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->y_multi_expr_keys),g_free);
+			OBJ_SET_FULL(ve_view->y_objects[y],"fromecu_mults",g_strdup(firmware->table_params[table_num]->y_fromecu_mults),g_free);
+			OBJ_SET_FULL(ve_view->y_objects[y],"fromecu_adds",g_strdup(firmware->table_params[table_num]->y_fromecu_adds),g_free);
+			OBJ_SET_FULL(ve_view->y_objects[y],"lookuptables",g_strdup(firmware->table_params[table_num]->y_lookuptables),g_free);
+			OBJ_SET(ve_view->y_objects[y],"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->y_ignore_algorithm));
 		}
 	}
 
 	ve_view->z_objects = g_new0(GObject **, firmware->table_params[table_num]->x_bincount);
 	ve_view->quad_mesh = g_new0(Quad **, firmware->table_params[table_num]->x_bincount);
-	for (i=0;i<firmware->table_params[table_num]->x_bincount;i++)
+	for (x=0;x<firmware->table_params[table_num]->x_bincount;x++)
 	{
-		ve_view->quad_mesh[i] = g_new0(Quad *,firmware->table_params[table_num]->y_bincount);
-		ve_view->z_objects[i] = g_new0(GObject *,firmware->table_params[table_num]->y_bincount);
-		for (j=0;j<firmware->table_params[table_num]->y_bincount;j++)
+		ve_view->quad_mesh[x] = g_new0(Quad *,firmware->table_params[table_num]->y_bincount);
+		ve_view->z_objects[x] = g_new0(GObject *,firmware->table_params[table_num]->y_bincount);
+		for (y=0;y<firmware->table_params[table_num]->y_bincount;y++)
 		{
-			ve_view->quad_mesh[i][j] = g_new0(Quad, 1);
-			ve_view->z_objects[i][j] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
-			g_object_ref_sink(ve_view->z_objects[i][j]);
-			OBJ_SET(ve_view->z_objects[i][j],"page",GINT_TO_POINTER(ve_view->z_page));
-			if (firmware->capabilities & PIS)
-				OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((i*ve_view->y_bincount)+j))));
-			else
-				OBJ_SET(ve_view->z_objects[i][j],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((j*ve_view->y_bincount)+i))));
-			OBJ_SET(ve_view->z_objects[i][j],"size",GINT_TO_POINTER(ve_view->z_size));
-			OBJ_SET(ve_view->z_objects[i][j],"fromecu_mult",firmware->table_params[table_num]->z_fromecu_mult);
-			OBJ_SET(ve_view->z_objects[i][j],"fromecu_add",firmware->table_params[table_num]->z_fromecu_add);
-			OBJ_SET_FULL(ve_view->z_objects[i][j],"table_num",g_strdup_printf("%i",table_num),g_free);
+			ve_view->quad_mesh[x][y] = g_new0(Quad, 1);
+			ve_view->z_objects[x][y] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
+			g_object_ref_sink(ve_view->z_objects[x][y]);
+			OBJ_SET(ve_view->z_objects[x][y],"page",GINT_TO_POINTER(ve_view->z_page));
+//			if (firmware->capabilities & PIS)
+//				OBJ_SET(ve_view->z_objects[x][y],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((x*ve_view->x_bincount)+y))));
+//			else
+				OBJ_SET(ve_view->z_objects[x][y],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((y*ve_view->x_bincount)+x))));
+				printf("Offset for z_objects[%i][%i] is %i\n",x,y,ve_view->z_base+(ve_view->z_mult * ((y*ve_view->x_bincount)+x)));
+			OBJ_SET(ve_view->z_objects[x][y],"size",GINT_TO_POINTER(ve_view->z_size));
+			OBJ_SET(ve_view->z_objects[x][y],"fromecu_mult",firmware->table_params[table_num]->z_fromecu_mult);
+			OBJ_SET(ve_view->z_objects[x][y],"fromecu_add",firmware->table_params[table_num]->z_fromecu_add);
+			OBJ_SET_FULL(ve_view->z_objects[x][y],"table_num",g_strdup_printf("%i",table_num),g_free);
 			if (firmware->table_params[table_num]->z_multi_source)
 			{
-				OBJ_SET_FULL(ve_view->z_objects[i][j],"source_key",g_strdup(firmware->table_params[table_num]->z_source_key),g_free);
-				OBJ_SET_FULL(ve_view->z_objects[i][j],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->z_multi_expr_keys),g_free);
-				OBJ_SET_FULL(ve_view->z_objects[i][j],"fromecu_mults",g_strdup(firmware->table_params[table_num]->z_fromecu_mults),g_free);
-				OBJ_SET_FULL(ve_view->z_objects[i][j],"fromecu_adds",g_strdup(firmware->table_params[table_num]->z_fromecu_adds),g_free);
-				OBJ_SET_FULL(ve_view->z_objects[i][j],"lookuptables",g_strdup(firmware->table_params[table_num]->z_lookuptables),g_free);
-				OBJ_SET(ve_view->z_objects[i][j],"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->z_ignore_algorithm));
+				OBJ_SET_FULL(ve_view->z_objects[x][y],"source_key",g_strdup(firmware->table_params[table_num]->z_source_key),g_free);
+				OBJ_SET_FULL(ve_view->z_objects[x][y],"multi_expr_keys",g_strdup(firmware->table_params[table_num]->z_multi_expr_keys),g_free);
+				OBJ_SET_FULL(ve_view->z_objects[x][y],"fromecu_mults",g_strdup(firmware->table_params[table_num]->z_fromecu_mults),g_free);
+				OBJ_SET_FULL(ve_view->z_objects[x][y],"fromecu_adds",g_strdup(firmware->table_params[table_num]->z_fromecu_adds),g_free);
+				OBJ_SET_FULL(ve_view->z_objects[x][y],"lookuptables",g_strdup(firmware->table_params[table_num]->z_lookuptables),g_free);
+				OBJ_SET(ve_view->z_objects[x][y],"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->z_ignore_algorithm));
 			}
 			if (firmware->table_params[table_num]->z_depend_on)
 			{
-				OBJ_SET(ve_view->z_objects[i][j],"lookuptable",OBJ_GET(firmware->table_params[table_num]->z_object,"lookuptable"));
-				OBJ_SET(ve_view->z_objects[i][j],"alt_lookuptable",OBJ_GET(firmware->table_params[table_num]->z_object,"alt_lookuptable"));
-				OBJ_SET(ve_view->z_objects[i][j],"dep_object",OBJ_GET(firmware->table_params[table_num]->z_object,"dep_object"));
+				OBJ_SET(ve_view->z_objects[x][y],"lookuptable",OBJ_GET(firmware->table_params[table_num]->z_object,"lookuptable"));
+				OBJ_SET(ve_view->z_objects[x][y],"alt_lookuptable",OBJ_GET(firmware->table_params[table_num]->z_object,"alt_lookuptable"));
+				OBJ_SET(ve_view->z_objects[x][y],"dep_object",OBJ_GET(firmware->table_params[table_num]->z_object,"dep_object"));
 			}
 		}
 	}
@@ -3099,6 +3102,12 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	}
 	else
 		MTXDBG(CRITICAL,_("mtx_color_scale value is undefined (%i)\n"),color_scale);
+	/* Rendering
+	 * Quad point 0 is lower left (base offset + counter)
+	 * Wuad point 1 is lower right (base offset + counter + 1)
+	 * Quad point 2 is upper right (base_offset + counter + x_bincount +1
+	 * Quad point 3 is upper left (base_offset +counter + x_bincount)
+	 * */
 	for(y=0;y<ve_view->y_bincount-1;++y)
 	{
 		for(x=0;x<ve_view->x_bincount-1;++x)
@@ -3110,28 +3119,32 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[0] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
-				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x)*z_mult)));
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->x_bincount)+x)*z_mult)));
+//				printf("x[0] %i, y[0] %i, offset %i\n",x,y,(z_base+(((y*ve_view->x_bincount)+x)*z_mult)));
 				//quad->color[0] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[0] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[1] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
-				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x+1)*z_mult)));
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->x_bincount)+x+1)*z_mult)));
+				printf("x[1] %i, y[1] %i, offset %i\n",x,y,(z_base+(((y*ve_view->x_bincount)+x+1)*z_mult)));
 				//quad->color[1] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[1] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((gfloat)x+1.0)/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[2] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult)));
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->x_bincount)+x+1)*z_mult)));
+//				printf("x[2] %i, y[2] %i, offset %i\n",x,y,(z_base+((((y+1)*ve_view->x_bincount)+x+1)*z_mult)));
 				//quad->color[2] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[2] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = (gfloat)x/((gfloat)ve_view->x_bincount-1.0);
 				quad->y[3] = ((gfloat)y+1.0)/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult)));
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->x_bincount)+x)*z_mult)));
+//				printf("x[3] %i, y[3] %i, offset %i\n",x,y,(z_base+((((y+1)*ve_view->x_bincount)+x)*z_mult)));
 				//quad->color[3] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[3] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 			}
@@ -3141,28 +3154,28 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->x[0] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[0] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[0] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y]))-ve_view->z_trans)*ve_view->z_scale);
-				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x)*z_mult)));
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->x_bincount)+x)*z_mult)));
 				//quad->color[0] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[0] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,0y) */
 				quad->x[1] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[1] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
-				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->y_bincount)+x+1)*z_mult)));
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->x_bincount)+x+1)*z_mult)));
 				//quad->color[1] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[1] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,1y) */
 				quad->x[2] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x+1])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[2] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[2] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x+1)*z_mult)));
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->x_bincount)+x+1)*z_mult)));
 				//quad->color[2] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[2] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (0x,1y) */
 				quad->x[3] = ((convert_after_upload((GtkWidget *)ve_view->x_objects[x])-ve_view->x_trans)*ve_view->x_scale);
 				quad->y[3] = ((convert_after_upload((GtkWidget *)ve_view->y_objects[y+1])-ve_view->y_trans)*ve_view->y_scale);
 				quad->z[3] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x][y+1]))-ve_view->z_trans)*ve_view->z_scale);
-				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->y_bincount)+x)*z_mult)));
+				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+((((y+1)*ve_view->x_bincount)+x)*z_mult)));
 				//quad->color[3] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[3] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 			}
