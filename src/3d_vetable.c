@@ -493,11 +493,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			ve_view->z_objects[x][y] = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 			g_object_ref_sink(ve_view->z_objects[x][y]);
 			OBJ_SET(ve_view->z_objects[x][y],"page",GINT_TO_POINTER(ve_view->z_page));
-//			if (firmware->capabilities & PIS)
-//				OBJ_SET(ve_view->z_objects[x][y],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((x*ve_view->x_bincount)+y))));
-//			else
+			/*
+			if (firmware->capabilities & PIS)
+				OBJ_SET(ve_view->z_objects[x][y],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((x*ve_view->y_bincount)+y))));
+			else
+			*/
 				OBJ_SET(ve_view->z_objects[x][y],"offset",GINT_TO_POINTER(ve_view->z_base+(ve_view->z_mult * ((y*ve_view->x_bincount)+x))));
-				printf("Offset for z_objects[%i][%i] is %i\n",x,y,ve_view->z_base+(ve_view->z_mult * ((y*ve_view->x_bincount)+x)));
+//				printf("Offset for z_objects[%i][%i] is %i\n",x,y,ve_view->z_base+(ve_view->z_mult * ((y*ve_view->x_bincount)+x)));
 			OBJ_SET(ve_view->z_objects[x][y],"size",GINT_TO_POINTER(ve_view->z_size));
 			OBJ_SET(ve_view->z_objects[x][y],"fromecu_mult",firmware->table_params[table_num]->z_fromecu_mult);
 			OBJ_SET(ve_view->z_objects[x][y],"fromecu_add",firmware->table_params[table_num]->z_fromecu_add);
@@ -2070,7 +2072,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			else
 			{
-				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
+				offset = z_base+(((ve_view->active_y*x_bincount)+ve_view->active_x)*z_mult);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(z_container);
 				if (cur <= max)
@@ -2094,7 +2096,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				/*printf("Ctrl-q/+/=, increase ROW!\n");*/
 				for (i=0;i<x_bincount;i++)
 				{
-					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
+					offset = z_base+(((ve_view->active_y*x_bincount)+i)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
 					if (cur <= max)
@@ -2125,7 +2127,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			else
 			{
-				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
+				offset = z_base+(((ve_view->active_y*x_bincount)+ve_view->active_x)*z_mult);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(z_container);
 				if (cur < max)
@@ -2144,7 +2146,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				/*printf("Ctrl-PgDn, big decrease ROW!\n");*/
 				for (i=0;i<x_bincount;i++)
 				{
-					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
+					offset = z_base+(((ve_view->active_y*x_bincount)+i)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
 					if (cur >= ve_view->z_bigstep)
@@ -2161,7 +2163,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				/*printf("Alt-PgDn, big decrease COL!\n");*/
 				for (i=0;i<y_bincount;i++)
 				{
-					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
+					offset = z_base+(((i*x_bincount)+ve_view->active_x)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
 					if (cur >= ve_view->z_bigstep)
@@ -2175,7 +2177,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			else
 			{
-				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
+				offset = z_base+(((ve_view->active_y*x_bincount)+ve_view->active_x)*z_mult);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(z_container);
 				if (cur >= ve_view->z_bigstep)
@@ -2197,7 +2199,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				/*printf("Ctrl-w/-, decrease ROW!\n");*/
 				for (i=0;i<x_bincount;i++)
 				{
-					offset = z_base+(((ve_view->active_y*y_bincount)+i)*z_mult);
+					offset = z_base+(((ve_view->active_y*x_bincount)+i)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
 					if (cur > ve_view->z_smallstep)
@@ -2214,7 +2216,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				/*printf("ALT-w/-, decrease COL!\n");*/
 				for (i=0;i<y_bincount;i++)
 				{
-					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
+					offset = z_base+(((i*x_bincount)+ve_view->active_x)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
 					if (cur > ve_view->z_smallstep)
@@ -2229,7 +2231,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 			}
 			else
 			{
-				offset = z_base+(((ve_view->active_y*y_bincount)+ve_view->active_x)*z_mult);
+				offset = z_base+(((ve_view->active_y*x_bincount)+ve_view->active_x)*z_mult);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 				cur = get_ecu_data_f(z_container);
 				if (cur > ve_view->z_smallstep)
@@ -3128,7 +3130,7 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 				quad->y[1] = (gfloat)y/((gfloat)ve_view->y_bincount-1.0);
 				quad->z[1] = (((convert_after_upload((GtkWidget *)ve_view->z_objects[x+1][y]))-ve_view->z_trans)*ve_view->z_scale);
 				OBJ_SET(z_container,"offset",GINT_TO_POINTER(z_base+(((y*ve_view->x_bincount)+x+1)*z_mult)));
-				printf("x[1] %i, y[1] %i, offset %i\n",x,y,(z_base+(((y*ve_view->x_bincount)+x+1)*z_mult)));
+//				printf("x[1] %i, y[1] %i, offset %i\n",x,y,(z_base+(((y*ve_view->x_bincount)+x+1)*z_mult)));
 				//quad->color[1] = rgb_from_hue(270*((gfloat)get_ecu_data_f(z_container)-ve_view->z_raw_lower)/scaler,0.75, 1.0);
 				quad->color[1] = rgb_from_hue(-(220*((get_ecu_data_f(z_container)-low)/scaler)+135),0.75, 1.0);
 				/* (1x,1y) */
