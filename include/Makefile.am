@@ -56,6 +56,7 @@ headers = \
 	sleep_calib.h \
 	stringmatch.h \
 	tableio.h \
+	table_builder.h \
 	tabloader.h \
 	tag_loader.h \
 	template.h \

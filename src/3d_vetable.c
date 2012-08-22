@@ -409,7 +409,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->x_size = firmware->table_params[table_num]->x_size;
 	ve_view->x_mult = get_multiplier(ve_view->x_size);
 	ve_view->x_bincount = firmware->table_params[table_num]->x_bincount;
-	printf("x_bincount is %i\n",ve_view->x_bincount);
 	OBJ_SET(ve_view->x_container,"page",GINT_TO_POINTER(ve_view->x_page));
 	OBJ_SET(ve_view->x_container,"size",GINT_TO_POINTER(ve_view->x_size));
 	OBJ_SET(ve_view->x_container,"canID",GINT_TO_POINTER(firmware->canID));
@@ -419,7 +418,6 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	ve_view->y_size = firmware->table_params[table_num]->y_size;
 	ve_view->y_mult = get_multiplier(ve_view->y_size);
 	ve_view->y_bincount = firmware->table_params[table_num]->y_bincount;
-	printf("y_bincount is %i\n",ve_view->y_bincount);
 	OBJ_SET(ve_view->y_container,"page",GINT_TO_POINTER(ve_view->y_page));
 	OBJ_SET(ve_view->y_container,"size",GINT_TO_POINTER(ve_view->y_size));
 	OBJ_SET(ve_view->y_container,"canID",GINT_TO_POINTER(firmware->canID));
@@ -2057,7 +2055,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				/*printf("Alt-PgUp, big increase COL!\n");*/
 				for (i=0;i<y_bincount;i++)
 				{
-					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
+					offset = z_base+(((i*x_bincount)+ve_view->active_x)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
 					if (cur <= max)
@@ -2113,7 +2111,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 				/*printf("Alt-q/+/=, increase COL!\n");*/
 				for (i=0;i<y_bincount;i++)
 				{
-					offset = z_base+(((i*y_bincount)+ve_view->active_x)*z_mult);
+					offset = z_base+(((i*x_bincount)+ve_view->active_x)*z_mult);
 					OBJ_SET(z_container,"offset",GINT_TO_POINTER(offset));
 					cur = get_ecu_data_f(z_container);
 					if (cur <= max)

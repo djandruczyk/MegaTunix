@@ -327,8 +327,6 @@ void register_common_enums(void)
 				GINT_TO_POINTER(BENCHTEST_STOP));
 		g_hash_table_insert (str_2_enum,(gpointer) "_BENCHTEST_BUMP_",
 				GINT_TO_POINTER(BENCHTEST_BUMP));
-		g_hash_table_insert (str_2_enum,(gpointer) "_GENERIC_",
-				GINT_TO_POINTER(GENERIC));
 		g_hash_table_insert (str_2_enum,(gpointer) "_NOOP_",
 				GINT_TO_POINTER(NOOP));
 	}
@@ -384,7 +382,6 @@ void deregister_common_enums(void)
 		g_hash_table_remove (str_2_enum, "_BENCHTEST_START_");
 		g_hash_table_remove (str_2_enum, "_BENCHTEST_STOP_");
 		g_hash_table_remove (str_2_enum, "_BENCHTEST_BUMP_");
-		g_hash_table_remove (str_2_enum, "_GENERIC_");
 		g_hash_table_remove (str_2_enum, "_NOOP_");
 	}
 	else

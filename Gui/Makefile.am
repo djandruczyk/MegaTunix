@@ -14,13 +14,9 @@ gui_glade_files = 	\
 		PIS-ego_16x16.glade \
 		PIS-runtime.glade \
        	PIS-settings.glade \
-		generictable_XxYxZ.glade \
-		generic-afrtable_8x8x2.glade \
-		generic-afrtable_12x12x2.glade \
-		generic-boost_6x6x3.glade \
-		generic-lambdatable_16x16x1.glade \
 		datalogging.glade \
 		dt-params.glade \
+		dynamic-table_x1.glade \
 		enrichments.glade \
 		error_status.glade \
 		freeems-benchtest.glade \
@@ -30,6 +26,10 @@ gui_glade_files = 	\
 		freeems-runtime.glade \
 		freeems-tools.glade \
 		freeems-vetable_16x16x1.glade \
+		generic-afrtable_8x8x2.glade \
+		generic-afrtable_12x12x2.glade \
+		generic-boost_6x6x3.glade \
+		generic-lambdatable_16x16x1.glade \
 		generic-sparktable_12x12x1.glade \
 		generic-sparktable_12x12x2.glade \
 		generic-sparktable_12x12x3.glade \
@@ -40,6 +40,7 @@ gui_glade_files = 	\
 		generic-vetable_16x16x1.glade \
 		generic-vetable_16x16x3.glade \
 		generic-vetable_8x8x1.glade \
+		generictable_XxYxZ.glade \
 		inj_timing_6x6x3.glade \
 		jimstim-runtime.glade \
 		logviewer.glade \
@@ -141,6 +142,7 @@ gui_in_files = 	\
 		enrichments_BnG.datamap.in \
 		error_status.datamap.in \
 		freeems-debug.datamap.in \
+		freeems-dynamic-vetable_x1.datamap.in \
 		freeems-runtime.datamap.in \
 		freeems-benchtest.datamap.in \
 		freeems-lambdatable_16x16x1.datamap.in \

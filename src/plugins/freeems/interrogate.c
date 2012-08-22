@@ -1087,8 +1087,6 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	res = get_dimensions(0,0,4, &x_bins,&y_bins);
 	if (!res)
 		printf("unable to get table dimensions for location ID 0\n");
-	else
-		printf("locID 0 X bins %i, y bins %i\n",x_bins,y_bins);
 	firmware->table_params[0]->x_bincount = x_bins;
 	firmware->table_params[0]->y_bincount = y_bins;
 	firmware->table_params[0]->x_base = 4;
@@ -1114,6 +1112,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->x_precision = 0;
 	firmware->table_params[0]->y_precision = 1;
 	firmware->table_params[0]->z_precision = 1;
+	firmware->table_params[0]->x_use_color = FALSE;
+	firmware->table_params[0]->y_use_color = FALSE;
+	firmware->table_params[0]->z_use_color = TRUE;
 	firmware->table_params[0]->table_name = g_strdup("FreeEMS very alpha fuel table");;
 	/* Lambda Table */
 	firmware->table_params[1] = initialize_table_params();
@@ -1124,8 +1125,6 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	res = get_dimensions(6,0,4, &x_bins,&y_bins);
 	if (!res)
 		printf("unable to get table dimensions for location ID 1\n");
-	else
-		printf("locID 6 X bins %i, y bins %i\n",x_bins,y_bins);
 	firmware->table_params[1]->x_bincount = x_bins;
 	firmware->table_params[1]->y_bincount = y_bins;
 	firmware->table_params[1]->x_base = 4;
@@ -1151,6 +1150,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[1]->x_precision = 0;
 	firmware->table_params[1]->y_precision = 1;
 	firmware->table_params[1]->z_precision = 2;
+	firmware->table_params[1]->x_use_color = FALSE;
+	firmware->table_params[1]->y_use_color = FALSE;
+	firmware->table_params[1]->z_use_color = TRUE;
 	firmware->table_params[1]->table_name = g_strdup("FreeEMS very alpha lambda table");;
 
 	firmware->table_params[2] = initialize_table_params();
@@ -1161,8 +1163,6 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	res = get_dimensions(8,0,4, &x_bins,&y_bins);
 	if (!res)
 		printf("unable to get table dimensions for location ID 0\n");
-	else
-		printf("locID 8 X bins %i, y bins %i\n",x_bins,y_bins);
 	firmware->table_params[2]->x_bincount = x_bins;
 	firmware->table_params[2]->y_bincount = y_bins;
 	firmware->table_params[2]->x_base = 4;
@@ -1188,6 +1188,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[2]->x_precision = 0;
 	firmware->table_params[2]->y_precision = 1;
 	firmware->table_params[2]->z_precision = 1;
+	firmware->table_params[2]->x_use_color = FALSE;
+	firmware->table_params[2]->y_use_color = FALSE;
+	firmware->table_params[2]->z_use_color = TRUE;
 	firmware->table_params[2]->table_name = g_strdup("FreeEMS very alpha spark table");;
 
 	if (mem_alloc_f)

@@ -272,7 +272,10 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		bindgroup->cfgfile = cfgfile;
 		bindgroup->groups = groups;
 		bindgroup->map_file = g_strdup(map_file);
-		bindgroup->widget_list = NULL;
+/*		tab_widgets = g_list_prepend(tab_widgets,topframe);
+		OBJ_SET(topframe,"tab_widgets",tab_widgets);
+		*/
+		bindgroup->topframe = topframe;
 		bind_data(topframe,(gpointer)bindgroup);
 		g_free(bindgroup->map_file);
 		if (groups)
@@ -292,6 +295,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		gtk_box_pack_start(GTK_BOX(placeholder),topframe,TRUE,TRUE,0);
 		OBJ_SET(placeholder,"topframe",topframe);
 		glade_xml_signal_autoconnect(xml);
+		g_free(bindgroup);
 		if (cfg_read_string(cfgfile,"global","post_functions",&tmpbuf))
 		{
 			run_post_functions(tmpbuf);
@@ -299,10 +303,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		}
 		cfg_free(cfgfile);
 		gtk_widget_show_all(topframe);
-		tab_widgets = g_list_copy(bindgroup->widget_list);
-		OBJ_SET_FULL(topframe,"tab_widgets",(gpointer)tab_widgets,g_list_free);
-		g_list_free(bindgroup->widget_list);
-		g_free(bindgroup);
+		/*printf("Current length of tab_widgets is %i\n",g_list_length(OBJ_GET(topframe,"tab_widgets")));*/
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
 	}
 	update_groups_pf();
@@ -593,6 +594,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gboolean indexed = FALSE;
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
+	GList *tab_widgets = NULL;
 	void (*load_dep_obj)(GObject *, ConfigFile *,const gchar *,const gchar *) = NULL;
 
 	MTXDBG(TABLOADER,_("Entered"));
@@ -842,7 +844,10 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 			else
 			{
 
-				bindgroup->widget_list = g_list_prepend(bindgroup->widget_list, widget);
+				tab_widgets = OBJ_GET(bindgroup->topframe,"tab_widgets");
+				tab_widgets = g_list_prepend(tab_widgets, widget);
+				printf("Current length of tab_widgets is %i\n",g_list_length(tab_widgets));
+				OBJ_SET(bindgroup->topframe,"tab_widgets",tab_widgets);
 				ecu_widgets[page][offset] = g_list_prepend(
 						ecu_widgets[page][offset],
 						(gpointer)widget);

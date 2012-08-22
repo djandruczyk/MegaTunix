@@ -95,6 +95,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 
 
 	/* Signal handler mapping */
+	g_hash_table_insert(str_2_enum,(gpointer)"_GENERIC_",
+			GINT_TO_POINTER(GENERIC));
 	g_hash_table_insert(str_2_enum,(gpointer)"_RESCALE_TABLE_",
 			GINT_TO_POINTER(RESCALE_TABLE));
 	g_hash_table_insert(str_2_enum,(gpointer)"_EXPORT_SINGLE_TABLE_",
@@ -236,6 +238,13 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(STATIC_STRING));
 	g_hash_table_insert(str_2_enum,(gpointer)"_SLEEP_",
 			GINT_TO_POINTER(SLEEP));
+	/* Axis's */
+	g_hash_table_insert(str_2_enum,(gpointer)"_X_",
+			GINT_TO_POINTER(_X_));
+	g_hash_table_insert(str_2_enum,(gpointer)"_Y_",
+			GINT_TO_POINTER(_Y_));
+	g_hash_table_insert(str_2_enum,(gpointer)"_Z_",
+			GINT_TO_POINTER(_Z_));
 	/* Tab datamap processing */
 	g_hash_table_insert(str_2_enum,(gpointer)"active_fg",
 			GINT_TO_POINTER(MTX_STRING));
@@ -255,6 +264,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,(gpointer)"applicable_tables",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,(gpointer)"axis",
+			GINT_TO_POINTER(MTX_ENUM));
 	g_hash_table_insert(str_2_enum,(gpointer)"bind_to_list",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,(gpointer)"bitmask",

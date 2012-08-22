@@ -37,7 +37,6 @@ typedef enum
 	BENCHTEST_START,
 	BENCHTEST_STOP,
 	BENCHTEST_BUMP,
-        GENERIC,
 	NOOP
 }FreeEMSCommonStdHandler;
 

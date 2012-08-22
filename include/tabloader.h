@@ -61,6 +61,7 @@ struct _BindGroup
 	GHashTable *groups;	/*!< where the groups table goes */
 	gchar * map_file;	/*!< Tab datamap file */
 	GList *widget_list;	/*!< List of widgets in this tab */
+	GtkWidget *topframe;	/*!< Pointer to top frame for this tab */
 };
 
 

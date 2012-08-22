@@ -303,6 +303,9 @@ struct _Table_Params
 	gboolean color_update;	/*!< Flag to issue color reset.. */
 	gint z_minval;		/*!< Minimum value for color scaling */
 	gint z_maxval;		/*!< Maximum value for color scaling */
+	gboolean x_use_color;	/*!< Does Xaxis use color */
+	gboolean y_use_color;	/*!< Does Yaxis use color */
+	gboolean z_use_color;	/*!< Does Zaxis use color */
 };
 
 

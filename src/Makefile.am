@@ -56,6 +56,7 @@ megatunix_SOURCES = \
 	sleep_calib.c \
 	stringmatch.c \
 	tableio.cpp \
+	table_builder.c \
 	tabloader.c \
 	tag_loader.c \
 	threads.c \
