@@ -364,6 +364,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,(gpointer)"precision",
 			GINT_TO_POINTER(MTX_INT));
+	g_hash_table_insert(str_2_enum,(gpointer)"prefix",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,(gpointer)"real_lower",
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,(gpointer)"real_upper",

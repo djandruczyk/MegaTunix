@@ -41,6 +41,7 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 	gint mult = 0;
 	gint rows = 0;
 	gint cols = 0;
+	gint max = 0;
 	gint lower = 0;
 	gint upper = 0;
 	gint page = 0;
@@ -68,6 +69,7 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 
 	rows = firmware->table_params[table_num]->x_bincount;
 	cols = firmware->table_params[table_num]->y_bincount;
+	max = rows*cols;
 
 	if (axis == _Z_)
 	{
@@ -86,8 +88,11 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 			{
 				offset = (((y*rows)+x)*mult)+base;
 				entry = gtk_entry_new();
+				tmpbuf = g_strdup_printf("Table%i_entry_%i_of_%i",table_num,((y*rows)+x),max);
+				OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
+				register_widget(tmpbuf,entry);
 				g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,"text","0",NULL);
-				gtk_widget_add_events(entry,GDK_BUTTON_PRESS|GDK_KEY_PRESS|GDK_KEY_RELEASE|GDK_FOCUS_CHANGE);
+				gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
 				g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
 				g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
 				g_signal_connect(G_OBJECT(entry),"insert_text",G_CALLBACK(insert_text_handler),NULL);
@@ -97,15 +102,35 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 				g_signal_connect(G_OBJECT(entry),"key_release_event",G_CALLBACK(key_event),NULL);
 				OBJ_SET(entry,"offset",GINT_TO_POINTER(offset));
 				OBJ_SET(entry,"page",GINT_TO_POINTER(page));
+				OBJ_SET(entry,"canID",GINT_TO_POINTER(firmware->canID));
 				OBJ_SET(entry,"dl_type",GINT_TO_POINTER(dl_type));
 				OBJ_SET(entry,"handler",GINT_TO_POINTER(handler));
 				OBJ_SET(entry,"size",GINT_TO_POINTER(size));
 				OBJ_SET(entry,"precision",GINT_TO_POINTER(precision));
 				OBJ_SET(entry,"use_color",GINT_TO_POINTER(use_color));
-				OBJ_SET_FULL(entry,"fromecu_mult",g_memdup( firmware->table_params[table_num]->z_fromecu_mult,sizeof(gfloat)),g_free);
+				OBJ_SET(entry,"fromecu_mult",firmware->table_params[table_num]->z_fromecu_mult);
+				OBJ_SET(entry,"fromecu_add",firmware->table_params[table_num]->z_fromecu_add);
 				OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",lower),g_free);
 				OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",upper),g_free);
 				OBJ_SET_FULL(entry,"table_num",g_strdup_printf("%i",table_num),g_free);
+				if (firmware->table_params[table_num]->z_multi_source)
+				{
+					OBJ_SET(entry,"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->z_ignore_algorithm));
+					OBJ_SET(entry,"multi_source",GINT_TO_POINTER(firmware->table_params[table_num]->z_multi_source));
+					OBJ_SET_FULL(entry,"source_key",g_strdup(firmware->table_params[table_num]->z_source_key),g_free);
+					OBJ_SET_FULL(entry,"multi_expr_keys",g_strdup(firmware->table_params[table_num]->z_multi_expr_keys),g_free);
+					OBJ_SET_FULL(entry,"sources",g_strdup(firmware->table_params[table_num]->z_sources),g_free);
+					OBJ_SET_FULL(entry,"suffixes",g_strdup(firmware->table_params[table_num]->z_suffixes),g_free);
+					OBJ_SET_FULL(entry,"fromecu_mults",g_strdup(firmware->table_params[table_num]->z_fromecu_mults),g_free);
+					OBJ_SET_FULL(entry,"fromecu_adds",g_strdup(firmware->table_params[table_num]->z_fromecu_adds),g_free);
+					OBJ_SET_FULL(entry,"lookuptables",g_strdup(firmware->table_params[table_num]->z_lookuptables),g_free);
+				}
+				if (firmware->table_params[table_num]->z_depend_on)
+				{
+					OBJ_SET(entry,"lookuptable",OBJ_GET(firmware->table_params[table_num]->z_object,"lookuptable"));
+					OBJ_SET(entry,"alt_lookuptable",OBJ_GET(firmware->table_params[table_num]->z_object,"alt_lookuptable"));
+					OBJ_SET(entry,"dep_object",OBJ_GET(firmware->table_params[table_num]->z_object,"dep_object"));
+				}
 				gtk_table_attach(GTK_TABLE(parent),entry,x,x+1,cols-y-1,cols-y,(GtkAttachOptions)GTK_EXPAND|GTK_FILL|GTK_SHRINK,(GtkAttachOptions)0,0,0);
 				tab_widgets = g_list_prepend(tab_widgets,entry);
 				ecu_widgets[page][offset]= g_list_prepend(                     
