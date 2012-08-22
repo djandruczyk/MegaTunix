@@ -67,10 +67,156 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 	tab_widgets = (GList *)OBJ_GET(top,"tab_widgets");
 	//g_return_if_fail(tab_widgets);
 
-	rows = firmware->table_params[table_num]->x_bincount;
-	cols = firmware->table_params[table_num]->y_bincount;
+	rows = firmware->table_params[table_num]->y_bincount;
+	cols = firmware->table_params[table_num]->x_bincount;
 	max = rows*cols;
 
+	if (axis == _X_)
+	{
+		mult = get_multiplier(firmware->table_params[table_num]->x_size);
+		base = firmware->table_params[table_num]->x_base;
+		page = firmware->table_params[table_num]->x_page;
+		size = firmware->table_params[table_num]->x_size;
+		lower = firmware->table_params[table_num]->x_raw_lower;
+		upper = firmware->table_params[table_num]->x_raw_upper;
+		if (lower == upper)
+		{
+			lower = get_extreme_from_size(size,LOWER);
+			upper = get_extreme_from_size(size,UPPER);
+		}
+		precision = firmware->table_params[table_num]->x_precision;
+		use_color = firmware->table_params[table_num]->x_use_color;
+		gtk_table_resize(GTK_TABLE(parent),1,cols);
+		for (x=0;x<cols;x++)
+		{
+			offset = (x*mult)+base;
+			entry = gtk_entry_new();
+			tmpbuf = g_strdup_printf("XTable%i_entry_%i_of_%i",table_num,x,cols);
+			OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
+			register_widget(tmpbuf,entry);
+			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,"text","0",NULL);
+			gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
+			g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
+			g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
+			g_signal_connect(G_OBJECT(entry),"insert_text",G_CALLBACK(insert_text_handler),NULL);
+			g_signal_connect(G_OBJECT(entry),"changed",G_CALLBACK(entry_changed_handler),NULL);
+			g_signal_connect(G_OBJECT(entry),"button_press_event",G_CALLBACK(widget_grab),NULL);
+			g_signal_connect(G_OBJECT(entry),"key_press_event",G_CALLBACK(key_event),NULL);
+			g_signal_connect(G_OBJECT(entry),"key_release_event",G_CALLBACK(key_event),NULL);
+			OBJ_SET(entry,"offset",GINT_TO_POINTER(offset));
+			OBJ_SET(entry,"page",GINT_TO_POINTER(page));
+			OBJ_SET(entry,"canID",GINT_TO_POINTER(firmware->canID));
+			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(dl_type));
+			OBJ_SET(entry,"handler",GINT_TO_POINTER(handler));
+			OBJ_SET(entry,"size",GINT_TO_POINTER(size));
+			OBJ_SET(entry,"precision",GINT_TO_POINTER(precision));
+			OBJ_SET(entry,"use_color",GINT_TO_POINTER(use_color));
+			OBJ_SET(entry,"fromecu_mult",firmware->table_params[table_num]->x_fromecu_mult);
+			OBJ_SET(entry,"fromecu_add",firmware->table_params[table_num]->x_fromecu_add);
+			OBJ_SET_FULL(entry,"source",g_strdup(firmware->table_params[table_num]->x_source),g_free);
+			OBJ_SET_FULL(entry,"suffix",g_strdup(firmware->table_params[table_num]->x_suffix),g_free);
+			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",lower),g_free);
+			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",upper),g_free);
+			OBJ_SET_FULL(entry,"table_num",g_strdup_printf("%i",table_num),g_free);
+			if (firmware->table_params[table_num]->x_multi_source)
+			{
+				OBJ_SET(entry,"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->x_ignore_algorithm));
+				OBJ_SET(entry,"multi_source",GINT_TO_POINTER(firmware->table_params[table_num]->x_multi_source));
+				OBJ_SET_FULL(entry,"source_key",g_strdup(firmware->table_params[table_num]->x_source_key),g_free);
+				OBJ_SET_FULL(entry,"multi_expr_keys",g_strdup(firmware->table_params[table_num]->x_multi_expr_keys),g_free);
+				OBJ_SET_FULL(entry,"sources",g_strdup(firmware->table_params[table_num]->x_sources),g_free);
+				OBJ_SET_FULL(entry,"suffixes",g_strdup(firmware->table_params[table_num]->x_suffixes),g_free);
+				OBJ_SET_FULL(entry,"fromecu_mults",g_strdup(firmware->table_params[table_num]->x_fromecu_mults),g_free);
+				OBJ_SET_FULL(entry,"fromecu_adds",g_strdup(firmware->table_params[table_num]->x_fromecu_adds),g_free);
+				OBJ_SET_FULL(entry,"lookuptables",g_strdup(firmware->table_params[table_num]->x_lookuptables),g_free);
+			}
+			/*
+			   if (firmware->table_params[table_num]->x_depend_on)
+			   {
+			   OBJ_SET(entry,"lookuptable",OBJ_GET(firmware->table_params[table_num]->x_object,"lookuptable"));
+			   OBJ_SET(entry,"alt_lookuptable",OBJ_GET(firmware->table_params[table_num]->x_object,"alt_lookuptable"));
+			   OBJ_SET(entry,"dep_object",OBJ_GET(firmware->table_params[table_num]->x_object,"dep_object"));
+			   }*/
+			gtk_table_attach(GTK_TABLE(parent),entry,x,x+1,0,1,(GtkAttachOptions)GTK_EXPAND|GTK_FILL|GTK_SHRINK,(GtkAttachOptions)0,0,0);
+			tab_widgets = g_list_prepend(tab_widgets,entry);
+			ecu_widgets[page][offset]= g_list_prepend(                     
+					ecu_widgets[page][offset],
+					(gpointer)entry);
+		}
+	}
+	if (axis == _Y_)
+	{
+		mult = get_multiplier(firmware->table_params[table_num]->y_size);
+		base = firmware->table_params[table_num]->y_base;
+		page = firmware->table_params[table_num]->y_page;
+		size = firmware->table_params[table_num]->y_size;
+		lower = firmware->table_params[table_num]->y_raw_lower;
+		upper = firmware->table_params[table_num]->y_raw_upper;
+		if (lower == upper)
+		{
+			lower = get_extreme_from_size(size,LOWER);
+			upper = get_extreme_from_size(size,UPPER);
+		}
+		precision = firmware->table_params[table_num]->y_precision;
+		use_color = firmware->table_params[table_num]->y_use_color;
+		gtk_table_resize(GTK_TABLE(parent),1,cols);
+		for (y=0;y<rows;y++)
+		{
+			offset = (y*mult)+base;
+			entry = gtk_entry_new();
+			tmpbuf = g_strdup_printf("YTable%i_entry_%i_of_%i",table_num,y,cols);
+			OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
+			register_widget(tmpbuf,entry);
+			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,"text","0",NULL);
+			gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
+			g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
+			g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
+			g_signal_connect(G_OBJECT(entry),"insert_text",G_CALLBACK(insert_text_handler),NULL);
+			g_signal_connect(G_OBJECT(entry),"changed",G_CALLBACK(entry_changed_handler),NULL);
+			g_signal_connect(G_OBJECT(entry),"button_press_event",G_CALLBACK(widget_grab),NULL);
+			g_signal_connect(G_OBJECT(entry),"key_press_event",G_CALLBACK(key_event),NULL);
+			g_signal_connect(G_OBJECT(entry),"key_release_event",G_CALLBACK(key_event),NULL);
+			OBJ_SET(entry,"offset",GINT_TO_POINTER(offset));
+			OBJ_SET(entry,"page",GINT_TO_POINTER(page));
+			OBJ_SET(entry,"canID",GINT_TO_POINTER(firmware->canID));
+			OBJ_SET(entry,"dl_type",GINT_TO_POINTER(dl_type));
+			OBJ_SET(entry,"handler",GINT_TO_POINTER(handler));
+			OBJ_SET(entry,"size",GINT_TO_POINTER(size));
+			OBJ_SET(entry,"precision",GINT_TO_POINTER(precision));
+			OBJ_SET(entry,"use_color",GINT_TO_POINTER(use_color));
+			OBJ_SET(entry,"fromecu_mult",firmware->table_params[table_num]->y_fromecu_mult);
+			OBJ_SET(entry,"fromecu_add",firmware->table_params[table_num]->y_fromecu_add);
+			OBJ_SET_FULL(entry,"source",g_strdup(firmware->table_params[table_num]->y_source),g_free);
+			OBJ_SET_FULL(entry,"suffix",g_strdup(firmware->table_params[table_num]->y_suffix),g_free);
+			OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",lower),g_free);
+			OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",upper),g_free);
+			OBJ_SET_FULL(entry,"table_num",g_strdup_printf("%i",table_num),g_free);
+			if (firmware->table_params[table_num]->y_multi_source)
+			{
+				OBJ_SET(entry,"ignore_algorithm",GINT_TO_POINTER(firmware->table_params[table_num]->y_ignore_algorithm));
+				OBJ_SET(entry,"multi_source",GINT_TO_POINTER(firmware->table_params[table_num]->y_multi_source));
+				OBJ_SET_FULL(entry,"source_key",g_strdup(firmware->table_params[table_num]->y_source_key),g_free);
+				OBJ_SET_FULL(entry,"multi_expr_keys",g_strdup(firmware->table_params[table_num]->y_multi_expr_keys),g_free);
+				OBJ_SET_FULL(entry,"sources",g_strdup(firmware->table_params[table_num]->y_sources),g_free);
+				OBJ_SET_FULL(entry,"suffixes",g_strdup(firmware->table_params[table_num]->y_suffixes),g_free);
+				OBJ_SET_FULL(entry,"fromecu_mults",g_strdup(firmware->table_params[table_num]->y_fromecu_mults),g_free);
+				OBJ_SET_FULL(entry,"fromecu_adds",g_strdup(firmware->table_params[table_num]->y_fromecu_adds),g_free);
+				OBJ_SET_FULL(entry,"lookuptables",g_strdup(firmware->table_params[table_num]->y_lookuptables),g_free);
+			}
+			/*
+			   if (firmware->table_params[table_num]->y_depend_on)
+			   {
+			   OBJ_SET(entry,"lookuptable",OBJ_GET(firmware->table_params[table_num]->y_object,"lookuptable"));
+			   OBJ_SET(entry,"alt_lookuptable",OBJ_GET(firmware->table_params[table_num]->y_object,"alt_lookuptable"));
+			   OBJ_SET(entry,"dep_object",OBJ_GET(firmware->table_params[table_num]->y_object,"dep_object"));
+			   }*/
+			gtk_table_attach(GTK_TABLE(parent),entry,0,1,rows-y-1,rows-y,(GtkAttachOptions)GTK_EXPAND|GTK_FILL|GTK_SHRINK,(GtkAttachOptions)0,0,0);
+			tab_widgets = g_list_prepend(tab_widgets,entry);
+			ecu_widgets[page][offset]= g_list_prepend(                     
+					ecu_widgets[page][offset],
+					(gpointer)entry);
+		}
+	}
 	if (axis == _Z_)
 	{
 		mult = get_multiplier(firmware->table_params[table_num]->z_size);
@@ -79,16 +225,21 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 		size = firmware->table_params[table_num]->z_size;
 		lower = firmware->table_params[table_num]->z_raw_lower;
 		upper = firmware->table_params[table_num]->z_raw_upper;
+		if (lower == upper)
+		{
+			lower = get_extreme_from_size(size,LOWER);
+			upper = get_extreme_from_size(size,UPPER);
+		}
 		precision = firmware->table_params[table_num]->z_precision;
 		use_color = firmware->table_params[table_num]->z_use_color;
 		gtk_table_resize(GTK_TABLE(parent),rows,cols);
-		for(y=0;y<cols;y++)
+		for(y=0;y<rows;y++)
 		{
-			for (x=0;x<rows;x++)
+			for (x=0;x<cols;x++)
 			{
-				offset = (((y*rows)+x)*mult)+base;
+				offset = (((y*cols)+x)*mult)+base;
 				entry = gtk_entry_new();
-				tmpbuf = g_strdup_printf("Table%i_entry_%i_of_%i",table_num,((y*rows)+x),max);
+				tmpbuf = g_strdup_printf("Table%i_entry_%i_of_%i",table_num,((y*cols)+x),max);
 				OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
 				register_widget(tmpbuf,entry);
 				g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,"text","0",NULL);
@@ -110,6 +261,8 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 				OBJ_SET(entry,"use_color",GINT_TO_POINTER(use_color));
 				OBJ_SET(entry,"fromecu_mult",firmware->table_params[table_num]->z_fromecu_mult);
 				OBJ_SET(entry,"fromecu_add",firmware->table_params[table_num]->z_fromecu_add);
+				OBJ_SET_FULL(entry,"source",g_strdup(firmware->table_params[table_num]->z_source),g_free);
+				OBJ_SET_FULL(entry,"suffix",g_strdup(firmware->table_params[table_num]->z_suffix),g_free);
 				OBJ_SET_FULL(entry,"raw_lower",g_strdup_printf("%i",lower),g_free);
 				OBJ_SET_FULL(entry,"raw_upper",g_strdup_printf("%i",upper),g_free);
 				OBJ_SET_FULL(entry,"table_num",g_strdup_printf("%i",table_num),g_free);
@@ -131,7 +284,7 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 					OBJ_SET(entry,"alt_lookuptable",OBJ_GET(firmware->table_params[table_num]->z_object,"alt_lookuptable"));
 					OBJ_SET(entry,"dep_object",OBJ_GET(firmware->table_params[table_num]->z_object,"dep_object"));
 				}
-				gtk_table_attach(GTK_TABLE(parent),entry,x,x+1,cols-y-1,cols-y,(GtkAttachOptions)GTK_EXPAND|GTK_FILL|GTK_SHRINK,(GtkAttachOptions)0,0,0);
+				gtk_table_attach(GTK_TABLE(parent),entry,x,x+1,rows-y-1,rows-y,(GtkAttachOptions)GTK_EXPAND|GTK_FILL|GTK_SHRINK,(GtkAttachOptions)0,0,0);
 				tab_widgets = g_list_prepend(tab_widgets,entry);
 				ecu_widgets[page][offset]= g_list_prepend(                     
 						ecu_widgets[page][offset],
