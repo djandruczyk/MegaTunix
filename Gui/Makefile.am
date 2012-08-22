@@ -142,6 +142,8 @@ gui_in_files = 	\
 		enrichments_BnG.datamap.in \
 		error_status.datamap.in \
 		freeems-debug.datamap.in \
+		freeems-dynamic-ignitiontable_x1.datamap.in \
+		freeems-dynamic-lambdatable_x1.datamap.in \
 		freeems-dynamic-vetable_x1.datamap.in \
 		freeems-runtime.datamap.in \
 		freeems-benchtest.datamap.in \
