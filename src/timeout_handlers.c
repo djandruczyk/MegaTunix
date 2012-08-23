@@ -41,7 +41,7 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT void start_tickler(TicklerType type)
 {
 	gint id = 0;
-	GThread *realtime_id = NULL;
+	GThread *realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
 	GMutex *mutex = NULL;
 	switch (type)
 	{
@@ -55,7 +55,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 				update_logbar("comms_view",NULL,_("TTM is active, Realtime Reader suspended\n"),FALSE,FALSE,FALSE);
 				break;
 			}
-			if (!DATA_GET(global_data,"realtime_id"))
+			if (!realtime_id)
 			{
 				flush_rt_arrays();
 
@@ -63,7 +63,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 						NULL, /* Thread args */
 						TRUE, /* Joinable */
 						NULL); /*GError Pointer */
-				DATA_SET(global_data,"realtime_id",realtime_id);
+				DATA_SET(global_data,"realtime_id",(gpointer)realtime_id);
 				update_logbar("comms_view",NULL,_("Realtime Reader started\n"),FALSE,FALSE,FALSE);
 			}
 			else
@@ -120,9 +120,9 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 	switch (type)
 	{
 		case RTV_TICKLER:
-			if (!DATA_GET(global_data,"realtime_id"))
+			realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
+			if (realtime_id)
 			{
-				realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
 				g_mutex_lock(mutex);
 				g_cond_signal(cond);
 				g_mutex_unlock(mutex);

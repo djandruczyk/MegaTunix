@@ -170,7 +170,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	 * as tell glib to remove it's ID, so the destroy notify gets called.
 	 * Meanwhile we try to lock the mutex again and will block until the 
 	 * destroynotify runs which unlocks the mutex and unblocks us here,
-	 * so we have a folproof way to know the timeout has shutdown.
+	 * so we have a foolproof way to know the timeout has shutdown.
 	 */
 	/* PF dispatch queue */
 	mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
