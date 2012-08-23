@@ -413,18 +413,18 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 	 */
 	value = convert_after_upload_f(widget);
 	tmpi = value*1000;
-        last = (GINT)OBJ_GET(widget,"last_value");
-        /*printf("Old %i, new %i\n",last, tmpi);*/
-        if ((tmpi == last) && (!DATA_GET(global_data,"force_update")))
-        {
-                /*printf("new and old match, exiting early....\n");*/
-                return;
-        }
-        else
-        {
-                /*printf("Values changed, updating..\n");*/
-                OBJ_SET(widget,"last_value",GINT_TO_POINTER(tmpi));
-        }
+	last = (GINT)OBJ_GET(widget,"last_value");
+	/*printf("Old %i, new %i\n",last, tmpi);*/
+	if ((tmpi == last) && (!DATA_GET(global_data,"force_update")))
+	{
+		/*printf("new and old match, exiting early....\n");*/
+		return;
+	}
+	else
+	{
+		/*printf("Values changed, updating..\n");*/
+		OBJ_SET(widget,"last_value",GINT_TO_POINTER(tmpi));
+	}
 
 	if (GTK_IS_ENTRY(widget) || GTK_IS_SPIN_BUTTON(widget))
 	{
@@ -450,7 +450,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 		 * depends on ECU variables, we call a handler here
 		 * passing in a pointer to the treeview(the scrolled
 		 * window's child widget)
-		update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
+		 update_model_from_view(gtk_bin_get_child(GTK_BIN(widget)));
 		 */
 	}
 	/* IF control has groups linked to it's state, adjust */
@@ -572,6 +572,8 @@ void update_entry(GtkWidget *widget)
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			changed = TRUE;
 		}
+		else
+			printf("Text hasn't changed here\n");
 		g_free(tmpbuf);
 	}
 

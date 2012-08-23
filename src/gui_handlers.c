@@ -2265,7 +2265,7 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	g_return_if_fail(container);
 
 	/* Limit check */
-	if ((table_num < 0 ) || (table_num > firmware->total_tables-1))
+	if ((table_num < 0 ) || (table_num >= firmware->total_tables))
 		return;
 	firmware->table_params[table_num]->last_z_maxval = firmware->table_params[table_num]->z_maxval;
 	firmware->table_params[table_num]->last_z_minval = firmware->table_params[table_num]->z_minval;
@@ -2494,7 +2494,6 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 		}
 		else if (color_scale == AUTO_COLOR_SCALE)
 		{
-			scaler = (firmware->table_params[table_num]->z_maxval-firmware->table_params[table_num]->z_minval)+0.1;
 			scaler = (firmware->table_params[table_num]->z_maxval - firmware->table_params[table_num]->z_minval)+0.1;
 			low = firmware->table_params[table_num]->z_minval;
 		}

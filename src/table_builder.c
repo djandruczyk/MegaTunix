@@ -94,7 +94,9 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 			tmpbuf = g_strdup_printf("XTable%i_entry_%i_of_%i",table_num,x,cols);
 			OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
 			register_widget(tmpbuf,entry);
-			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,"text","0",NULL);
+			OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
+
+			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,NULL);
 			gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
 			g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
 			g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
@@ -167,7 +169,8 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 			tmpbuf = g_strdup_printf("YTable%i_entry_%i_of_%i",table_num,y,cols);
 			OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
 			register_widget(tmpbuf,entry);
-			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,"text","0",NULL);
+			OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
+			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,NULL);
 			gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
 			g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
 			g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
@@ -242,7 +245,8 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 				tmpbuf = g_strdup_printf("Table%i_entry_%i_of_%i",table_num,((y*cols)+x),max);
 				OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
 				register_widget(tmpbuf,entry);
-				g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,"text","0",NULL);
+				OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
+				g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,NULL);
 				gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
 				g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
 				g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
