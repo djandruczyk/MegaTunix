@@ -100,7 +100,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GtkWidget *main_window = NULL;
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
-	GCond *gui_dispatch_cond = NULL;
 	GMutex *mutex = NULL;
 	GMutex *gui_dispatch_mutex = NULL;
 	GTimer *timer = NULL;

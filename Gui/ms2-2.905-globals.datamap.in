@@ -95,7 +95,7 @@ _tooltip=Sets ECU fuel mode to Single Table or Dual Table
 
 [fuel_algo_combo]
 keys=offset,choices,bitvals,bitmask,toggle_groups,tooltip
-choices=Speed Density,Blend Sd/Alpha-N (PW\=--f(tps)xVE(tps,rpm)),Blend SD/Alpha-N (PW\=--VE(tps,rpm)
+choices=Speed Density,Blend Sd/Alpha-N (PW equals --f(tps)xVE(tps:rpm)),Blend SD/Alpha-N (PW equals --VE(tps:rpm)
 bitvals=0,1,2
 offset=630
 bitmask=3

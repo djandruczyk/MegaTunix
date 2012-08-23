@@ -846,7 +846,6 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 
 				tab_widgets = OBJ_GET(bindgroup->topframe,"tab_widgets");
 				tab_widgets = g_list_prepend(tab_widgets, widget);
-				printf("Current length of tab_widgets is %i\n",g_list_length(tab_widgets));
 				OBJ_SET(bindgroup->topframe,"tab_widgets",tab_widgets);
 				ecu_widgets[page][offset] = g_list_prepend(
 						ecu_widgets[page][offset],
