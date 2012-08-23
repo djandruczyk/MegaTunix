@@ -624,7 +624,7 @@ G_MODULE_EXPORT void ecu_info_update(Firmware_Details *firmware)
 {
 	gchar *tmpbuf = NULL;
 	g_return_if_fail(firmware);
-	tmpbuf = g_strdup_printf("<b>Firmware version:</b> %s\n<b>Firmware Signature:</b> %s\n<b>Numeric Version:</b> %.1f",firmware->text_revision,firmware->actual_signature,firmware->ecu_revision/10.0);
+	tmpbuf = g_strdup_printf("<b>Firmware Version:</b> %s\n<b>Firmware Signature:</b> %s\n<b>Numeric Version:</b> %.1f",firmware->text_revision,firmware->actual_signature,firmware->ecu_revision/10.0);
 	thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(tmpbuf));
 	g_free(tmpbuf);
 

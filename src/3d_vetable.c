@@ -1541,11 +1541,11 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
 
 	/*
-	glPointSize(MIN(w,h)/90.0);
-	glBegin(GL_POINTS);
-	glVertex3f(tmpf4,tmpf5,tmpf6);
-	glEnd();
-	*/
+	   glPointSize(MIN(w,h)/90.0);
+	   glBegin(GL_POINTS);
+	   glVertex3f(tmpf4,tmpf5,tmpf6);
+	   glEnd();
+	   */
 
 	/* Tail, second last val. */
 	glColor3f(0.0,0.0,0.50);
@@ -1573,11 +1573,11 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	tmpf3 = tmpf3 < 0.0 ? 0.0:tmpf3;
 
 	/*
-	glPointSize(MIN(w,h)/75.0);
-	glBegin(GL_POINTS);
-	glVertex3f(tmpf4,tmpf5,tmpf6);
-	glEnd();
-	*/
+	   glPointSize(MIN(w,h)/75.0);
+	   glBegin(GL_POINTS);
+	   glVertex3f(tmpf4,tmpf5,tmpf6);
+	   glEnd();
+	   */
 
 	glBegin(GL_LINE_STRIP);
 	/* If anything out of bounds change color and clamp! */
@@ -1616,11 +1616,11 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	tmpf6 = tmpf6 < 0.0 ? 0.0:tmpf6;
 
 	/*
-	glPointSize(MIN(w,h)/65.0);
-	glBegin(GL_POINTS);
-	glVertex3f(tmpf1,tmpf2,tmpf3);
-	glEnd();
-	*/
+	   glPointSize(MIN(w,h)/65.0);
+	   glBegin(GL_POINTS);
+	   glVertex3f(tmpf1,tmpf2,tmpf3);
+	   glEnd();
+	   */
 
 	glBegin(GL_LINE_STRIP);
 	/* If anything out of bounds change color and clamp! */
@@ -3553,16 +3553,17 @@ void multi_lookup_and_compute_n(MultiSource *multi, gint count, gint skip, gfloa
 	lookup_previous_n_skip_x_values(multi->source,count,skip,dest);
 	for (i=0;i<count;i++)
 	{
-
 		if (multi->lookuptable)
 			tmpf = direct_lookup_data(multi->lookuptable,(gint)dest[i]);
 		else
 			tmpf = dest[i];
+		/*
 		if (multi->multiplier && multi->adder)
 			out = (((gfloat)tmpf + (*multi->adder)) * (*multi->multiplier));
 		else if (multi->multiplier)
 			out = (gfloat)tmpf * (*multi->multiplier);
 		else
+		*/
 			out = (gfloat)tmpf;
 		dest[i] = out;
 	}
@@ -3584,11 +3585,13 @@ gfloat multi_lookup_and_compute(MultiSource *multi)
 		tmpf = direct_lookup_data(multi->lookuptable,cur);
 	else
 		tmpf = cur;
+	/*
 	if (multi->multiplier && multi->adder)
 		out = ((tmpf + (*multi->adder)) * (*multi->multiplier));
 	else if (multi->multiplier)
 		out = tmpf * (*multi->multiplier);
 	else
+	*/
 		out = tmpf;
 	return out;
 }
