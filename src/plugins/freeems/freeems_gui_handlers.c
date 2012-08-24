@@ -572,8 +572,6 @@ void update_entry(GtkWidget *widget)
 			gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 			changed = TRUE;
 		}
-		else
-			printf("Text hasn't changed here\n");
 		g_free(tmpbuf);
 	}
 

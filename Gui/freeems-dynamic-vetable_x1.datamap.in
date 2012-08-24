@@ -20,28 +20,26 @@ handler=_GENERIC_
 
 #----- Containers -------------------------------------------------------------
 
-[x_parent_table]
-keys=data,post_functions_with_arg,table_num,axis,tooltip
-data=VE1_topframe
+[x_parent_table_1]
+keys=post_functions_with_arg,table_num,axis,tooltip
 post_functions_with_arg=table_builder
 table_num=0
 axis=_X_
 _tooltip=The RPM bins in combination with the LOAD bins on the left side of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between points on the VEmap. The 3D view shows this graphically.  NOTE: the ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
-[y_parent_table]
-keys=data,post_functions_with_arg,table_num,axis,tooltip
-data=VE1_topframe
+[y_parent_table_1]
+keys=post_functions_with_arg,table_num,axis,tooltip
 post_functions_with_arg=table_builder
 table_num=0
 axis=_Y_
 _tooltip=The LOAD bins in combination with the RPM bins on the bottom of the VEtable define the vertexes (points on the VE map).  The ECU will interpolate between vertexes providing a smooth transition between vertexes on the Map.  The 3D view shows this graphically.  NOTE: The ECU does NOT extrapolate beyond the edge of the table. The values are clamped at the borders.  Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
-[z_parent_table]
-keys=data,post_functions_with_arg,table_num,axis,tooltip
-data=VE1_topframe
+[z_parent_table_1]
+keys=rescaler_frame,post_functions_with_arg,table_num,axis,tooltip
 post_functions_with_arg=table_builder
 table_num=0
 axis=_Z_
+rescaler_frame=VE1_rescale_frame_1
 _tooltip=VE stands for Volumetric Efficiency and, with IAT, tells FreeEMS how much air entered the engine. Using that, the integral lambda value and other physical engine constants the base PW is calculated. Corrections and enrichments are applied to that base PW  to produce a final PW. Editing is accomplished by either +/-, PgUp/PgDn, or by typing in a value over the existing value.  The value will turn red during an edit and WILL NOT BE SENT until you hit enter.  Hitting escape will cancel an edit and return to the previous value.
 
 #----- Labels ----------------------------------------------------------------
@@ -56,19 +54,19 @@ visible_functions=draw_ve_marker:13,update_tab_gauges:16
 keys=set_label
 set_label=FreeEMS VE Table
 
-[x_axis_frame_label]
+[x_axis_frame_label_1]
 keys=set_label
 set_label=RPM Bins
 
-[y_axis_frame_label]
+[y_axis_frame_label_1]
 keys=set_label
 set_label=Load
 
-[z_axis_frame_label]
+[z_axis_frame_label_1]
 keys=set_label
 set_label=Volumetric Efficiency (%)
 
-[y_axis_units_label]
+[y_axis_units_label_1]
 keys=set_label
 set_label=(%)
 
@@ -86,31 +84,31 @@ handler=_BURN_FLASH_
 bind_to_list=burners
 _tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
 
-[tracking_checkbutton]
+[tracking_checkbutton_1]
 keys=handler,table_num
 handler=_TRACKING_FOCUS_
 table_num=0
 
-[export_button]
+[export_button_1]
 keys=handler,table_num
 handler=_EXPORT_SINGLE_TABLE_
 table_num=0
 
-[import_button]
+[import_button_1]
 keys=handler,table_num
 handler=_IMPORT_SINGLE_TABLE_
 table_num=0
 
-[3d_view_button]
+[3d_view_button_1]
 keys=table_num,tooltip,bind_to_list
 table_num=0
 bind_to_list=3d_buttons
 _tooltip=This pops up a 3 dimensional view of the current VE-Table.  Editing of the table in the 3D view is supported with the +/- and PgUp/PgDn keys (fine/coarse edit) and the arrows navigate. A Red dot shows the current edit position as does the indicators on the right side of the window beneath the buttons.  A left mouse button holddown and drag of the mouse in the 3D view will rotate the display.  Using the middle mouse button will strafe (slide) and the right mouse button will zoom.
 
-[rescale_button]
+[rescale_button_1]
 keys=handler,data
 handler=_RESCALE_TABLE_
-data=VE1_rescale_entry,VE1_rescale_combo
+data=VE1_rescale_entry_1,VE1_rescale_combo_1
 
 #----- Spinners -------------------------------------------------------------
 
@@ -122,35 +120,35 @@ table_num=0
 
 #----- Gauges --------------------------------------------------------------
 
-[gaugeframe1]
+[gaugeframe1_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
 gaugexml=FreeEMS_AM_SportComp/Tacho_8k_RPM.xml
 datasource=RPM
 
-[gaugeframe2]
+[gaugeframe2_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
 gaugexml=FreeEMS_AM_SportComp/Load_Percent_260.xml
 datasource=LoadMain
 
-[gaugeframe3]
+[gaugeframe3_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
 gaugexml=FreeEMS_AM_SportComp/Volumetric_Efficiency.xml
 datasource=VEMain
 
-[gaugeframe4]
+[gaugeframe4_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
 gaugexml=FreeEMS_AM_SportComp/Lambda_Exhaust.xml
 datasource=EGO
 
-[gaugeframe5]
+[gaugeframe5_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=0
 post_functions_with_arg=create_gauge
@@ -159,19 +157,14 @@ datasource=TPS
 
 #----- Rescale Entries ------------------------------------------------------
 
-[rescale_entry]
+[rescale_entry_1]
 keys=table_num
 table_num=0
 
 #----- Rescale Combos ------------------------------------------------------
 
-[rescale_combo]
+[rescale_combo_1]
 keys=table_num,post_functions_with_arg
 table_num=0
 post_functions_with_arg=lock_entry
 
-#----- MAIN VETable Container ---------------------------------------------
-
-[main_vetable]
-keys=rescaler_frame
-rescaler_frame=VE1_rescale_frame

@@ -55,7 +55,7 @@
 		      <property name="spacing">5</property>
 
 		      <child>
-			<widget class="GtkTable" id="basetable">
+			<widget class="GtkTable" id="basetable_1">
 			  <property name="visible">True</property>
 			  <property name="n_rows">2</property>
 			  <property name="n_columns">2</property>
@@ -64,7 +64,7 @@
 			  <property name="column_spacing">5</property>
 
 			  <child>
-			    <widget class="GtkButton" id="3d_view_button">
+			    <widget class="GtkButton" id="3d_view_button_1">
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="can_focus">True</property>
@@ -87,14 +87,14 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="rpm_frame">
+			    <widget class="GtkFrame" id="x_axis_frame_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkTable" id="x_parent_table">
+				<widget class="GtkTable" id="x_parent_table_1">
 				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="n_rows">1</property>
@@ -106,7 +106,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="x_axis_frame_label">
+				<widget class="GtkLabel" id="x_axis_frame_label_1">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">X Axis</property>
 				  <property name="use_underline">False</property>
@@ -139,14 +139,14 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="load_frame">
+			    <widget class="GtkFrame" id="y_axis_frame_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkTable" id="load_layout_table">
+				<widget class="GtkTable" id="y_axis_layout_table_1">
 				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="n_rows">2</property>
@@ -156,7 +156,7 @@
 				  <property name="column_spacing">0</property>
 
 				  <child>
-				    <widget class="GtkLabel" id="y_axis_units_label">
+				    <widget class="GtkLabel" id="y_axis_units_label_1">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Units Label</property>
 				      <property name="use_underline">False</property>
@@ -184,7 +184,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkTable" id="y_parent_table">
+				    <widget class="GtkTable" id="y_parent_table_1">
 				      <property name="visible">True</property>
 				      <property name="n_rows">1</property>
 				      <property name="n_columns">1</property>
@@ -203,7 +203,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="y_axis_frame_label">
+				<widget class="GtkLabel" id="y_axis_frame_label_1">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Y Axis</property>
 				  <property name="use_underline">False</property>
@@ -235,14 +235,14 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="xytable_frame">
+			    <widget class="GtkFrame" id="z_table_frame_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkTable" id="z_layout_table">
+				<widget class="GtkTable" id="z_layout_table_1">
 				  <property name="visible">True</property>
 				  <property name="n_rows">2</property>
 				  <property name="n_columns">1</property>
@@ -251,7 +251,7 @@
 				  <property name="column_spacing">0</property>
 
 				  <child>
-				    <widget class="GtkTable" id="z_parent_table">
+				    <widget class="GtkTable" id="z_parent_table_1">
 				      <property name="border_width">5</property>
 				      <property name="visible">True</property>
 				      <property name="n_rows">1</property>
@@ -269,7 +269,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="z_axis_table_title_label">
+				    <widget class="GtkLabel" id="z_axis_table_title_label_1">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes"></property>
 				      <property name="use_underline">False</property>
@@ -299,7 +299,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="z_axis_frame_label">
+				<widget class="GtkLabel" id="z_axis_frame_label_1">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Insert Title Here</property>
 				  <property name="use_underline">False</property>
@@ -345,7 +345,7 @@
 			  <property name="spacing">5</property>
 
 			  <child>
-			    <widget class="GtkFrame" id="rescale_frame">
+			    <widget class="GtkFrame" id="rescale_frame_1">
 			      <property name="visible">True</property>
 			      <property name="sensitive">False</property>
 			      <property name="label_xalign">0</property>
@@ -353,7 +353,7 @@
 			      <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 			      <child>
-				<widget class="GtkTable" id="table4">
+				<widget class="GtkTable" id="rescale_table_1">
 				  <property name="border_width">5</property>
 				  <property name="visible">True</property>
 				  <property name="n_rows">2</property>
@@ -363,7 +363,7 @@
 				  <property name="column_spacing">5</property>
 
 				  <child>
-				    <widget class="GtkEntry" id="rescale_entry">
+				    <widget class="GtkEntry" id="rescale_entry_1">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="events">GDK_BUTTON_PRESS_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_FOCUS_CHANGE_MASK</property>
@@ -387,7 +387,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="label29">
+				    <widget class="GtkLabel" id="rescale_factor_1">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">&lt;b&gt;X&lt;/b&gt;</property>
 				      <property name="use_underline">False</property>
@@ -415,7 +415,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkButton" id="rescale_button">
+				    <widget class="GtkButton" id="rescale_button_1">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Recalculate</property>
@@ -434,7 +434,7 @@
 				  </child>
 
 				  <child>
-				    <widget class="GtkComboBoxEntry" id="rescale_combo">
+				    <widget class="GtkComboBoxEntry" id="rescale_combo_1">
 				      <property name="width_request">60</property>
 				      <property name="visible">True</property>
 				      <property name="items" translatable="yes">  +
@@ -459,7 +459,7 @@
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="rescale_frame_title">
+				<widget class="GtkLabel" id="rescale_frame_title_1">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Rescale Subset of Table</property>
 				  <property name="use_underline">False</property>
@@ -489,7 +489,7 @@
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="frame3">
+			    <widget class="GtkFrame" id="tracking_frame_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
@@ -502,7 +502,7 @@
 				  <property name="spacing">0</property>
 
 				  <child>
-				    <widget class="GtkCheckButton" id="tracking_checkbutton">
+				    <widget class="GtkCheckButton" id="tracking_checkbutton_1">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Focus follows
@@ -526,9 +526,9 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="label14">
+				<widget class="GtkLabel" id="tracking_option_label_1">
 				  <property name="visible">True</property>
-				  <property name="label" translatable="yes">Tracking  option</property>
+				  <property name="label" translatable="yes">Tracking option</property>
 				  <property name="use_underline">False</property>
 				  <property name="use_markup">True</property>
 				  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -560,7 +560,7 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkFrame" id="frame6">
+			    <widget class="GtkFrame" id="import_export_frame_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
@@ -574,7 +574,7 @@ most &quot;Weight&quot;</property>
 				  <property name="spacing">5</property>
 
 				  <child>
-				    <widget class="GtkButton" id="export_button">
+				    <widget class="GtkButton" id="export_button_1">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Export Table</property>
@@ -591,7 +591,7 @@ most &quot;Weight&quot;</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkButton" id="import_button">
+				    <widget class="GtkButton" id="import_button_1">
 				      <property name="visible">True</property>
 				      <property name="can_focus">True</property>
 				      <property name="label" translatable="yes">Import Table</property>
@@ -610,7 +610,7 @@ most &quot;Weight&quot;</property>
 			      </child>
 
 			      <child>
-				<widget class="GtkLabel" id="label26">
+				<widget class="GtkLabel" id="import_export_frame_label_1">
 				  <property name="visible">True</property>
 				  <property name="label" translatable="yes">Import/Export</property>
 				  <property name="use_underline">False</property>
@@ -647,13 +647,13 @@ most &quot;Weight&quot;</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkHBox" id="hbox1">
+			<widget class="GtkHBox" id="gauge_hbox_1">
 			  <property name="visible">True</property>
 			  <property name="homogeneous">False</property>
 			  <property name="spacing">0</property>
 
 			  <child>
-			    <widget class="GtkAspectFrame" id="gaugeframe1">
+			    <widget class="GtkAspectFrame" id="gaugeframe1_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
@@ -675,7 +675,7 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkAspectFrame" id="gaugeframe2">
+			    <widget class="GtkAspectFrame" id="gaugeframe2_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
@@ -697,7 +697,7 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkAspectFrame" id="gaugeframe3">
+			    <widget class="GtkAspectFrame" id="gaugeframe3_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
@@ -719,7 +719,7 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkAspectFrame" id="gaugeframe4">
+			    <widget class="GtkAspectFrame" id="gaugeframe4_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
@@ -741,7 +741,7 @@ most &quot;Weight&quot;</property>
 			  </child>
 
 			  <child>
-			    <widget class="GtkAspectFrame" id="gaugeframe5">
+			    <widget class="GtkAspectFrame" id="gaugeframe5_1">
 			      <property name="visible">True</property>
 			      <property name="label_xalign">0</property>
 			      <property name="label_yalign">0.5</property>
