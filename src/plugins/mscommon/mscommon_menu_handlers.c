@@ -41,6 +41,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	GtkWidget *item = NULL;
 	GtkWidget *image = NULL;
 
+	gdk_threads_enter();
 	/* View->Tabs Menu */
 	menu = glade_xml_get_widget (xml, "goto_tab1_menu");
 	item = gtk_menu_item_new_with_mnemonic("_Boost Tables");
@@ -69,7 +70,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	else
 		gtk_widget_set_sensitive(item,TRUE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show(menu);
+	gtk_widget_show_all(menu);
 
 	/* View Menu */
 	menu = glade_xml_get_widget (xml, "view_menu_menu");
@@ -85,14 +86,14 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	else
 		gtk_widget_set_sensitive(item,TRUE);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show(menu);
+	gtk_widget_show_all(menu);
 
 	/* Tuning Menu */
 	menu = glade_xml_get_widget (xml, "generate1_menu");
 	item = gtk_menu_item_new_with_mnemonic("_Ignition Map");
 	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_create_ignition_map_window),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show(menu);
+	gtk_widget_show_all(menu);
 
 	/* Tools Menu */
 	menu = glade_xml_get_widget (xml, "tools_menu_menu");
@@ -103,7 +104,8 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 		g_object_set(item,"always-show-image",TRUE,NULL);
 	g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(show_trigger_offset_window),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-	gtk_widget_show(menu);
+	gtk_widget_show_all(menu);
+	gdk_threads_leave();
 
 	if (get_symbol_f("ecu_plugin_menu_setup",(void **)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);

@@ -112,7 +112,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 			g_object_set(item,"always-show-image",TRUE,NULL);
 		g_signal_connect(G_OBJECT(item),"activate",G_CALLBACK(ms2_reboot),NULL);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
-		gtk_widget_show(menu);
+		gtk_widget_show_all(menu);
 	}
 	gdk_threads_leave();
 	return;
