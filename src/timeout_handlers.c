@@ -121,6 +121,8 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 	{
 		case RTV_TICKLER:
 			realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
+			if ((gint)realtime_id == 1)
+				break;
 			if (realtime_id)
 			{
 				g_mutex_lock(mutex);
