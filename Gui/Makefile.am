@@ -17,6 +17,7 @@ gui_glade_files = 	\
 		datalogging.glade \
 		dt-params.glade \
 		dynamic-table_x1.glade \
+		dynamic-table_x2.glade \
 		enrichments.glade \
 		error_status.glade \
 		freeems-benchtest.glade \
@@ -181,6 +182,7 @@ gui_in_files = 	\
 		ms2-accel.datamap.in \
 		ms2-2.905-accel.datamap.in \
 		ms2-alpha-n_6x6x1.datamap.in \
+		ms2-dynamic-vetable-x2.datamap.in \
 		ms2-e-3.0.3v-ego_rev.datamap.in \
 		ms2-e-3.0.3v-ignition.datamap.in \
 		ms2-e-3.0.3v-inj_timing_6x6x3.datamap.in \

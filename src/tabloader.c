@@ -723,6 +723,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"set_label",&tmpbuf))
 	{
+/*		printf("setting label on %s to \"%s\"\n",glade_get_widget_name(widget),tmpbuf);*/
 		gtk_label_set_text(GTK_LABEL(widget),tmpbuf);
 		g_free(tmpbuf);
 	}

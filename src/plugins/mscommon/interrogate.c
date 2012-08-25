@@ -868,6 +868,9 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 				}
 			}
 		}
+		cfg_read_boolean(cfgfile,section,"x_use_color",&firmware->table_params[i]->x_use_color);
+		cfg_read_boolean(cfgfile,section,"y_use_color",&firmware->table_params[i]->y_use_color);
+		cfg_read_boolean(cfgfile,section,"z_use_color",&firmware->table_params[i]->z_use_color);
 		if(!cfg_read_string(cfgfile,section,"table_name",&firmware->table_params[i]->table_name))
 			MTXDBG(INTERROGATOR|CRITICAL,_("\"table_name\" variable not found in interrogation profile, ERROR\n"));
 		g_free(section);

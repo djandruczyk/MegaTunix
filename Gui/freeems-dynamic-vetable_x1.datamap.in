@@ -114,7 +114,7 @@ data=VE1_rescale_entry_1,VE1_rescale_combo_1
 
 #----- Widgets --------------------------------------------------------------
 
-[vbox1]
+[top_vbox_1]
 keys=table_num
 table_num=0
 

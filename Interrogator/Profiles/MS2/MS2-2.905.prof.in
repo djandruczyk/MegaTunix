@@ -77,6 +77,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_1]
 _table_name=VE-Table 1, MS2 V2.9x
@@ -125,6 +126,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_2]
 _table_name=Spark Advance Table 1, MS2 STD
@@ -160,6 +162,7 @@ z_fromecu_mult=0.1
 z_raw_lower=-100
 z_raw_upper=900
 z_precision=1
+z_use_color=TRUE
 
 [table_3]
 _table_name=AFR Table 1
@@ -192,6 +195,7 @@ z_source=afr1
 z_suffix=AFR
 z_fromecu_mult=0.1
 z_precision=1
+z_use_color=TRUE
 
 [table_4]
 _table_name=AFR Table 2
@@ -224,6 +228,7 @@ z_source=afr2
 z_suffix=AFR
 z_fromecu_mult=0.1
 z_precision=1
+z_use_color=TRUE
 
 [table_5]
 _table_name=Alpha-N MAP Translation Table
@@ -832,8 +837,10 @@ SliderMapFile=MS2-Std
 RuntimeTextMapFile=MS2-2.905-Std
 StatusMapFile=MS2-Std
 
-LoadTabs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-accel,ms2-2.905-misc-fuel,ms2-alpha-n_6x6x1,generic-vetable_12x12x2,generic-sparktable_12x12x1,generic-afrtable_12x12x2,ms2-user_outputs
-TabConfs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-2.905-accel,ms2-2.905-misc-fuel,ms2-alpha-n_6x6x1,ms2-generic-vetable_12x12x2,ms2-generic-sparktable_12x12x1,ms2-generic-afrtable_12x12x2,ms2-user_outputs
+LoadTabs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-accel,ms2-2.905-misc-fuel,ms2-alpha-n_6x6x1,dynamic-table_x2,generic-sparktable_12x12x1,generic-afrtable_12x12x2,ms2-user_outputs
+;LoadTabs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-accel,ms2-2.905-misc-fuel,ms2-alpha-n_6x6x1,generic-vetable_12x12x2,generic-sparktable_12x12x1,generic-afrtable_12x12x2,ms2-user_outputs
+TabConfs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-2.905-accel,ms2-2.905-misc-fuel,ms2-alpha-n_6x6x1,ms2-dynamic-vetable-x2,ms2-generic-sparktable_12x12x1,ms2-generic-afrtable_12x12x2,ms2-user_outputs
+;TabConfs=runtime,datalogging,logviewer,tools,ms2-2.905-globals,ms2-ignition,ms2-knock_dwell,ms2-idle_ego_rev,ms2-warmup,ms2-2.905-accel,ms2-2.905-misc-fuel,ms2-alpha-n_6x6x1,ms2-generic-vetable_12x12x2,ms2-generic-sparktable_12x12x1,ms2-generic-afrtable_12x12x2,ms2-user_outputs
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map
