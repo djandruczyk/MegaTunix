@@ -398,7 +398,12 @@ gchar * choose_file(MtxFileIO *data)
 		{
 			printf("should be using system path + %s\n",data->default_path);
 			path = g_build_filename(MTXSYSDATA,data->default_path,NULL);
-			printf("System path is %s\n",path);
+			if (!g_file_test(path,G_FILE_TEST_IS_DIR))
+			{
+				g_free(path);
+				path = g_build_filename(HOME(),"mtx",data->project,data->default_path, NULL);
+				printf("System path is not found, falling back to user path %s\n",path);
+			}
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
 			g_free(path);
 		}

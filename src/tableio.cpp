@@ -141,7 +141,9 @@ G_MODULE_EXPORT void import_single_table(gint table_num) {
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("Select your Table backup file to import");
+	fileio->default_extension = g_strdup("yaml");
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
+
 	filename = choose_file(fileio);
 	if (!filename)
 	{
