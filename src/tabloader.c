@@ -174,7 +174,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			OBJ_SET(label,"not_rendered",GINT_TO_POINTER(TRUE));
 			gtk_notebook_append_page(GTK_NOTEBOOK(notebook),container,label);
 			gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(notebook),container,TRUE);
-			gtk_widget_show_all(container);
+			gtk_widget_show(container);
 			cur = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook))-1;
 			tabinfo->page_num = cur;
 			tabinfo->notebook = GTK_NOTEBOOK(notebook);
@@ -302,7 +302,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 			g_free(tmpbuf);
 		}
 		cfg_free(cfgfile);
-		gtk_widget_show_all(topframe);
+		gtk_widget_show(topframe);
 		/*printf("Current length of tab_widgets is %i\n",g_list_length(OBJ_GET(topframe,"tab_widgets")));*/
 		thread_update_logbar("interr_view",NULL,g_strdup(_(" completed.\n")),FALSE,FALSE);
 	}
@@ -882,7 +882,13 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		run_post_functions(tmpbuf);
 		g_free(tmpbuf);
 	}
-	g_free(section);
+	if (cfg_read_boolean(cfgfile,section,"show_widget",&tmpi))
+	{
+		if (tmpi)
+			gtk_widget_show(widget);
+		else
+			gtk_widget_hide(widget);
+	}
 	if (GTK_IS_ENTRY(widget))
 	{
 		if (NULL != (tmpbuf = (gchar *)OBJ_GET(widget,"table_num")))
@@ -895,6 +901,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 				g_array_append_val(firmware->table_params[table_num]->table,widget);
 		}
 	}
+	g_free(section);
 	MTXDBG(TABLOADER,_("Leaving"));
 }
 

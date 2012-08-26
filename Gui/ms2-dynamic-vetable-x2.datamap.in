@@ -271,6 +271,14 @@ register_as=new_reqfuel_entry_1
 keys=register_as
 register_as=new_reqfuel_entry_2
 
+[reqfuel_rescale_frame_1]
+keys=show_widget
+show_widget=TRUE
+
+[reqfuel_rescale_frame_2]
+keys=show_widget
+show_widget=TRUE
+
 #----- Gauges --------------------------------------------------------------
 
 [gaugeframe1_1]

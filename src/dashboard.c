@@ -1417,6 +1417,7 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *parent)
 	tmpbuf = (gchar *)OBJ_GET(parent,"table_num");
 	table_num = (GINT)g_ascii_strtod(tmpbuf,NULL);
 	tab_gauges[table_num] = g_list_prepend(tab_gauges[table_num],gauge);
+	gtk_widget_show(gauge);
 }
 
 
