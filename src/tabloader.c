@@ -889,6 +889,24 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		else
 			gtk_widget_hide(widget);
 	}
+	if (cfg_read_string(cfgfile,section,"set_tab_labels",&tmpbuf))
+	{
+		if (GTK_IS_NOTEBOOK(widget))
+		{
+			vector=g_strsplit(tmpbuf,",",-1);
+			if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(widget)) == g_strv_length(vector))
+			{
+				for (int i=0;i<g_strv_length(vector);i++)
+				{
+					gtk_notebook_set_tab_label_text(GTK_NOTEBOOK(widget),
+							gtk_notebook_get_nth_page(GTK_NOTEBOOK(widget),i),
+							vector[i]);
+				}
+			}
+			g_strfreev(vector);
+		}
+		g_free(tmpbuf);
+	}
 	if (GTK_IS_ENTRY(widget))
 	{
 		if (NULL != (tmpbuf = (gchar *)OBJ_GET(widget,"table_num")))

@@ -388,6 +388,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,(gpointer)"set_widgets_label",
 			GINT_TO_POINTER(MTX_STRING));
+	g_hash_table_insert(str_2_enum,(gpointer)"set_tab_labels",
+			GINT_TO_POINTER(MTX_STRING));
 	g_hash_table_insert(str_2_enum,(gpointer)"show_prefix",
 			GINT_TO_POINTER(MTX_BOOL));
 	g_hash_table_insert(str_2_enum,(gpointer)"show_widget",

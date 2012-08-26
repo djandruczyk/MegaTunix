@@ -252,6 +252,10 @@ tab_ident=_VETABLES_TAB_
 sub-notebook=VE_table_notebook
 bind_to_list=valid_ecu_ctrls
 
+[table_notebook]
+keys=set_tab_labels
+set_tab_labels=VE Table 1, VE Table 2(DT)
+
 [top_vbox_1]
 keys=table_num,visible_functions
 table_num=0
