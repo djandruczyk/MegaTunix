@@ -1265,7 +1265,6 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 {
 	Table_Params *table_params = NULL;
 	table_params = (Table_Params *)g_malloc0(sizeof(Table_Params));
-	table_params->table = g_array_sized_new(FALSE,TRUE,sizeof(GtkWidget *),36);
 	table_params->is_fuel = FALSE;
 	table_params->alternate_offset = -1;
 	table_params->divider_offset = -1;

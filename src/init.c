@@ -1419,7 +1419,6 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 		g_object_unref(table_params->y_object);
 	if (table_params->z_object)
 		g_object_unref(table_params->z_object);
-	g_array_free(table_params->table,TRUE);
 
 	cleanup(table_params);
 	return;

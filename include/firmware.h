@@ -179,7 +179,6 @@ struct _Firmware_Details
  */
 struct _Table_Params
 {
-	GArray *table;		/*!< Array to hold widget ptr's for rescaler */
 	gboolean is_spark;	/*!< Ignition map generator can write */
 	gboolean is_fuel;	/*!< If true next 7 params must exist */
 	gint dtmode_page;	/*!< DT mode page (msns-e ONLY) */

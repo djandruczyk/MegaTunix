@@ -167,7 +167,7 @@ data=VE_rescale_entry_1,VE_rescale_combo_1
 [reqfuel_rescale_button_1]
 keys=handler,data,table_num,applicable_tables
 table_num=0
-applicable_tables=0,2
+applicable_tables=0
 handler=_REQFUEL_RESCALE_TABLE_
 data=VE_new_reqfuel_entry_1
 
