@@ -193,7 +193,7 @@ data=VE_rescale_entry_2,VE_rescale_combo_2
 #----- Spinners -------------------------------------------------------------
 
 [curr_reqfuel_entry_1]
-keys=size,offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,precision,register_as
+keys=size,offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,precision
 size=_U16_
 offset=608
 precision=3
@@ -216,10 +216,9 @@ divider_1_offset=610
 alternate_page=0
 alternate_offset=611
 alternate_bitmask=1
-register_as=curr_reqfuel_entry_1
 
 [curr_reqfuel_entry_2]
-keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,precision,register_as
+keys=offset,table_num,dl_type,handler,bind_to_list,fromecu_complex,fromecu_conv_expr,precision
 size=_U16_
 offset=608
 table_num=1
@@ -242,7 +241,6 @@ divider_1_offset=610
 alternate_page=0
 alternate_offset=611
 alternate_bitmask=1
-register_as=curr_reqfuel_entry_2
 
 #----- Widgets --------------------------------------------------------------
 
@@ -266,14 +264,6 @@ keys=bind_to_list,table_num,visible_functions
 bind_to_list=dt_controls
 table_num=1
 visible_functions=draw_ve_marker:13,update_tab_gauges:16
-
-[new_reqfuel_entry_1]
-keys=register_as
-register_as=new_reqfuel_entry_1
-
-[new_reqfuel_entry_2]
-keys=register_as
-register_as=new_reqfuel_entry_2
 
 [reqfuel_rescale_frame_1]
 keys=show_widget

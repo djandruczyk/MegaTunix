@@ -848,15 +848,13 @@ G_MODULE_EXPORT gboolean rf_spin_button_handler(GtkWidget *widget, gpointer data
  */
 G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 {
-	DataSize z_size = MTX_U08;
-	gint z_base = -1;
-	gint z_page = -1;
+	gint base = -1;
+	gint page = -1;
 	gint x_bins = -1;
 	gint y_bins = -1;
 	gint table_num = -1;
 	gint old = 0;
 	gint canID = 0;
-	gint page = 0;
 	gint offset = 0;
 	DataSize size = MTX_U08;
 	GtkWidget *tmpwidget = NULL;
@@ -922,95 +920,89 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 		gtk_main_iteration();
 	}
 
-
 	for (x=0;x<g_strv_length(vector);x++)
 	{
 		table_num = (gint)strtol(vector[x],NULL,10);
 
-		z_size = firmware->table_params[table_num]->z_size;
-		mult = get_multiplier_f(z_size);
-		z_base = firmware->table_params[table_num]->z_base;
+		size = firmware->table_params[table_num]->z_size;
+		mult = get_multiplier_f(size);
+		base = firmware->table_params[table_num]->z_base;
 		x_bins = firmware->table_params[table_num]->x_bincount;
 		y_bins = firmware->table_params[table_num]->y_bincount;
-		z_page = firmware->table_params[table_num]->z_page;
+		page = firmware->table_params[table_num]->z_page;
+		use_color = firmware->table_params[table_num]->z_use_color;
+		raw_lower = firmware->table_params[table_num]->z_raw_lower;
+		raw_upper = firmware->table_params[table_num]->z_raw_upper;
 		canID = firmware->canID;
 		data = g_new0(guint8, x_bins*y_bins*mult);
 
-		for (i=0;i<firmware->table_params[table_num]->table->len;i++)
+		for (i=0;i<(x_bins*y_bins);i++)
 		{
-			tmpwidget = g_array_index(firmware->table_params[table_num]->table,GtkWidget *, i);
-			if (GTK_IS_ENTRY(tmpwidget))
+			offset = i*mult;
+			value = ms_get_ecu_data(canID,page,offset,size);
+			value *= percentage;
+			if (value < raw_lower)
+				value = raw_lower;
+			if (value > raw_upper)
+				value = raw_upper;
+
+			/* What we are doing is doing the 
+			 * forware/reverse conversion which
+			 * will give us an exact value if the 
+			 * user inputs something in
+			 * between,  thus we can reset the 
+			 * display to a sane value...
+			 */
+			old = ms_get_ecu_data(canID,page,offset,size);
+			ms_set_ecu_data(canID,page,offset,size,value);
+
+			for(int j=0;j<g_list_length(ecu_widgets[page][offset]);i++)
 			{
-				canID = (GINT)OBJ_GET(tmpwidget,"canID");
-				page = (GINT)OBJ_GET(tmpwidget,"page");
-				offset = (GINT)OBJ_GET(tmpwidget,"offset");
-				size = (DataSize)(GINT)OBJ_GET(tmpwidget,"size");
-				use_color = (GINT)OBJ_GET(tmpwidget,"use_color");
-				if (OBJ_GET(tmpwidget,"raw_lower") != NULL)
-					raw_lower = (gint)strtol((gchar *)OBJ_GET(tmpwidget,"raw_lower"),NULL,10);
-				else
-					raw_lower = get_extreme_from_size_f(size,LOWER);
-				if (OBJ_GET(tmpwidget,"raw_upper") != NULL)
-					raw_upper = (gint)strtol((gchar *)OBJ_GET(tmpwidget,"raw_upper"),NULL,10);
-				else
-					raw_upper = get_extreme_from_size_f(size,UPPER);
-				value = ms_get_ecu_data(canID,page,offset,size);
-				value *= percentage;
-				if (value < raw_lower)
-					value = raw_lower;
-				if (value > raw_upper)
-					value = raw_upper;
-
-				/* What we are doing is doing the 
-				 * forware/reverse conversion which
-				 * will give us an exact value if the 
-				 * user inputs something in
-				 * between,  thus we can reset the 
-				 * display to a sane value...
-				 */
-				old = ms_get_ecu_data(canID,page,offset,size);
-				ms_set_ecu_data(canID,page,offset,size,value);
-
-				real_value = convert_after_upload_f(tmpwidget);
-				ms_set_ecu_data(canID,page,offset,size,old);
-
-				tmpbuf = g_strdup_printf("%i",(gint)real_value);
-				g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
-						*(void **)(&entry_changed_handler_f),
-						NULL);
-				gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
-				g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
-						*(void **)(&entry_changed_handler_f),
-						NULL);
-				g_free(tmpbuf);
-
-				if (!firmware->chunk_support)
-					ms_send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
-				if (mult == 1)
-					data[offset] = (guint8)value;
-				else if (mult == 2)
+				if (GTK_IS_ENTRY(g_list_nth_data(ecu_widgets[page][offset],j)))
 				{
-					data[offset*2] = ((gint32)value & 0x00ff);
-					data[(offset*2)+1] = ((gint32)value & 0xff00) >> 8;
+					tmpwidget = g_list_nth_data(ecu_widgets[page][offset],j);
+					real_value = convert_after_upload_f(tmpwidget);
+					break;
 				}
-				else if (mult == 4)
-				{
-					data[offset*4] = ((gint32)value & 0x00ff);
-					data[(offset*4)+1] = ((gint32)value & 0xff00) >> 8;
-					data[(offset*4)+2] = ((gint32)value & 0xff0000) >> 16;
-					data[(offset*4)+3] = ((gint32)value & 0xff000000) >> 24;
-				}
+			}
+			ms_set_ecu_data(canID,page,offset,size,old);
 
-				gtk_widget_modify_text(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&black);
-				if (use_color)
-				{
-					color = get_colors_from_hue_f(((gfloat)value/raw_upper)*360.0,0.33, 1.0);
-					gtk_widget_modify_base(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&color);
-				}
+			tmpbuf = g_strdup_printf("%i",(gint)real_value);
+			g_signal_handlers_block_by_func (G_OBJECT(tmpwidget),
+					*(void **)(&entry_changed_handler_f),
+					NULL);
+			gtk_entry_set_text(GTK_ENTRY(tmpwidget),tmpbuf);
+			g_signal_handlers_unblock_by_func (G_OBJECT(tmpwidget),
+					*(void **)(&entry_changed_handler_f),
+					NULL);
+			g_free(tmpbuf);
+
+			if (!firmware->chunk_support)
+				ms_send_to_ecu(canID, page, offset, size, (gint)value, TRUE);
+			if (mult == 1)
+				data[offset] = (guint8)value;
+			else if (mult == 2)
+			{
+				data[offset] = ((gint32)value & 0x00ff);
+				data[(offset)+1] = ((gint32)value & 0xff00) >> 8;
+			}
+			else if (mult == 4)
+			{
+				data[offset] = ((gint32)value & 0x00ff);
+				data[(offset)+1] = ((gint32)value & 0xff00) >> 8;
+				data[(offset)+2] = ((gint32)value & 0xff0000) >> 16;
+				data[(offset)+3] = ((gint32)value & 0xff000000) >> 24;
+			}
+
+			gtk_widget_modify_text(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&black);
+			if (use_color)
+			{
+				color = get_colors_from_hue_f(((gfloat)value/raw_upper)*360.0,0.33, 1.0);
+				gtk_widget_modify_base(GTK_WIDGET(tmpwidget),GTK_STATE_NORMAL,&color);
 			}
 		}
 		if (firmware->chunk_support)
-			ms_chunk_write(canID,z_page,z_base,x_bins*y_bins*mult,data);
+			ms_chunk_write(canID,page,base,x_bins*y_bins*mult,data);
 	}
 	g_strfreev(vector);
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
