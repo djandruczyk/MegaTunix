@@ -21,6 +21,7 @@
   */
 
 #include <api-versions.h>
+#include <datamgmt.h>
 #include <getfiles.h>
 #include <interrogate.h>
 #include <freeems_plugin.h>
@@ -945,6 +946,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	gchar *tmpbuf = NULL;
 	gchar *section = NULL;
 	gchar ** list = NULL;
+	gint tmpi = 0;
 	gint major = 0;
 	gint minor = 0;
 	gint size = 0;
@@ -1061,6 +1063,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 		{
 			firmware->page_params[i] = initialize_page_params();
 			firmware->page_params[i]->phys_ecu_page = (GINT)g_list_nth_data(locations,i);
+			/*printf("mtx page %i  corresponds to ecu physicaly location id %i\n",i,firmware->page_params[i]->phys_ecu_page);*/
 			details = request_location_id_details((GINT)g_list_nth_data(locations,i));
 			if (details)
 			{
@@ -1078,9 +1081,18 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
 	/* Fuel Table */
 	firmware->table_params[0] = initialize_table_params();
-	firmware->table_params[0]->x_page = 0;
-	firmware->table_params[0]->y_page = 0;
-	firmware->table_params[0]->z_page = 0;
+	res = freeems_find_mtx_page(0,&tmpi);
+	if (res)
+	{
+		firmware->table_params[0]->x_page = tmpi;
+		firmware->table_params[0]->y_page = tmpi;
+		firmware->table_params[0]->z_page = tmpi;
+	}
+	else
+	{
+		MTXDBG(INTERROGATOR|CRITICAL,_("CRITICAL FAULT, unable to determine mtx page for location ID %i\n"),0);
+		exit(-1);
+	}
 	/* Hard coding this is bad,  but since Fred Doesn't provide any way to 
 	 * get metadata from the ECU, there is no real clean way!
 	 * */
@@ -1118,10 +1130,18 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->table_name = g_strdup("FreeEMS very alpha fuel table");;
 	/* Lambda Table */
 	firmware->table_params[1] = initialize_table_params();
-	firmware->table_params[1]->x_page = 6;
-	firmware->table_params[1]->y_page = 6;
-	/* Assumes location ID's from 0-6 are contiguous */
-	firmware->table_params[1]->z_page = 6;
+	res = freeems_find_mtx_page(6,&tmpi);
+	if (res)
+	{
+		firmware->table_params[1]->x_page = tmpi;
+		firmware->table_params[1]->y_page = tmpi;
+		firmware->table_params[1]->z_page = tmpi;
+	}
+	else
+	{
+		MTXDBG(INTERROGATOR|CRITICAL,_("CRITICAL FAULT, unable to determine mtx page for location ID %i\n"),0);
+		exit(-1);
+	}
 	res = get_dimensions(6,0,4, &x_bins,&y_bins);
 	if (!res)
 		printf("unable to get table dimensions for location ID 1\n");
@@ -1156,10 +1176,18 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[1]->table_name = g_strdup("FreeEMS very alpha lambda table");;
 
 	firmware->table_params[2] = initialize_table_params();
-	firmware->table_params[2]->x_page = 8;
-	firmware->table_params[2]->y_page = 8;
-	/* Assumes location ID's from 0-8 are contiguous */
-	firmware->table_params[2]->z_page = 8;
+	res = freeems_find_mtx_page(8,&tmpi);
+	if (res)
+	{
+		firmware->table_params[2]->x_page = tmpi;
+		firmware->table_params[2]->y_page = tmpi;
+		firmware->table_params[2]->z_page = tmpi;
+	}
+	else
+	{
+		MTXDBG(INTERROGATOR|CRITICAL,_("CRITICAL FAULT, unable to determine mtx page for location ID %i\n"),0);
+		exit(-1);
+	}
 	res = get_dimensions(8,0,4, &x_bins,&y_bins);
 	if (!res)
 		printf("unable to get table dimensions for location ID 0\n");

@@ -2280,6 +2280,7 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	min = get_extreme_from_size(z_size,UPPER);
 	max = get_extreme_from_size(z_size,LOWER);
 
+	/*printf("x_count %i, y_count %i, table_num %i, z_base %i z_page %i, length of page %i\n",x_count,y_count,table_num,z_base,z_page, firmware->page_params[z_page]->length);*/
 	for (i=0;i<x_count*y_count;i++)
 	{
 		OBJ_SET(container,"offset",GINT_TO_POINTER(z_base+(i*z_mult)));
