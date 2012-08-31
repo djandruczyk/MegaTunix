@@ -18,6 +18,8 @@ gui_glade_files = 	\
 		dt-params.glade \
 		dynamic-table_x1.glade \
 		dynamic-table_x2.glade \
+		dynamic-table_x3.glade \
+		dynamic-table_x4.glade \
 		enrichments.glade \
 		error_status.glade \
 		freeems-benchtest.glade \
