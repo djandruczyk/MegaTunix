@@ -75,6 +75,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_1]
 _table_name=VE-Table 2, MS2-Extra 12x12
@@ -116,6 +117,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_2]
 _table_name=VE-Table 3, MS2-Extra 12x12
@@ -157,6 +159,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_3]
 _table_name=VE-Table 1, MS2-Extra 16x16
@@ -198,6 +201,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_4]
 _table_name=VE-Table 2, MS2-Extra 16x16
@@ -239,6 +243,7 @@ z_size=_U08_
 z_source=vecurr2
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_5]
 _table_name=VE-Table 3, MS2-Extra 16x16
@@ -280,6 +285,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_6]
 _table_name=Spark Advance Table 1, MS2-Extra 12x12
@@ -309,6 +315,7 @@ z_fromecu_mult=0.1
 z_raw_lower=-100
 z_raw_upper=900
 z_precision=1
+z_use_color=TRUE
 
 [table_7]
 _table_name=Spark Advance Table 2, MS2-Extra 12x12
@@ -338,6 +345,7 @@ z_fromecu_mult=0.1
 z_raw_lower=-100
 z_raw_upper=900
 z_precision=1
+z_use_color=TRUE
 
 [table_8]
 _table_name=Spark Advance Table 3, MS2-Extra 12x12
@@ -367,6 +375,7 @@ z_fromecu_mult=0.1
 z_raw_lower=-100
 z_raw_upper=900
 z_precision=1
+z_use_color=TRUE
 
 [table_9]
 _table_name=AFR Table 1, MS2-Extra 12x12
@@ -393,6 +402,7 @@ z_source=afr1
 z_suffix=AFR
 z_fromecu_mult=0.1
 z_precision=1
+z_use_color=TRUE
 
 [table_10]
 _table_name=AFR Table 2, MS2-Extra 12x12
@@ -419,6 +429,7 @@ z_source=afr2
 z_suffix=AFR
 z_fromecu_mult=0.1
 z_precision=1
+z_use_color=TRUE
 
 [table_11]
 _table_name=Rotary Split Table
@@ -447,6 +458,7 @@ z_fromecu_mult=0.1
 z_raw_lower=-200
 z_raw_upper=200
 z_precision=1
+z_use_color=TRUE
 
 [table_12]
 _table_name=Boost Duty Table (Open Loop)
@@ -474,6 +486,7 @@ z_suffix=(%)
 z_raw_lower=0
 z_raw_upper=100
 z_precision=0
+z_use_color=TRUE
 
 [table_13]
 _table_name=Boost Target (kPA, Closed Loop)
@@ -502,6 +515,7 @@ z_fromecu_mult=0.1
 z_raw_lower=0
 z_raw_upper=4000
 z_precision=1
+z_use_color=TRUE
 
 [te_table_0]
 _title=EAE Adhere-to-walls Constant
@@ -1415,8 +1429,8 @@ SliderMapFile=MS2-Extra
 RuntimeTextMapFile=MS2-Extra
 StatusMapFile=MS2-Extra
 
-LoadTabs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-globals,ms2-e-accel,ms2-e-crank_idle_warmup,ms2-e-ignition,ms2-e-noise_lag,ms2-e-boost_knock_launch,ms2-e-ego_rev,ms2-e-nitrous_staging_orfc,ms2-e-corrections_misc,generic-vetable_12x12x3,generic-vetable_16x16x3,generic-sparktable_12x12x3,generic-afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger,ms2-user_outputs,ms2-e-debugging
-TabConfs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-globals,ms2-e-accel,ms2-e-crank_idle_warmup,ms2-e-ignition,ms2-e-noise_lag,ms2-e-boost_knock_launch,ms2-e-ego_rev,ms2-e-nitrous_staging_orfc,ms2-e-corrections_misc,ms2-generic-vetable_12x12x3,ms2-generic-vetable_16x16x3,ms2-generic-sparktable_12x12x3,ms2-e-generic-afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger-2.1.x,ms2-user_outputs,ms2-e-debugging
+LoadTabs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-globals,ms2-e-accel,ms2-e-crank_idle_warmup,ms2-e-ignition,ms2-e-noise_lag,ms2-e-boost_knock_launch,ms2-e-ego_rev,ms2-e-nitrous_staging_orfc,ms2-e-corrections_misc,dynamic-table_x3,generic-vetable_16x16x3,generic-sparktable_12x12x3,generic-afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger,ms2-user_outputs,ms2-e-debugging
+TabConfs=ms2-e-runtime,datalogging,logviewer,tools,ms2-e-globals,ms2-e-accel,ms2-e-crank_idle_warmup,ms2-e-ignition,ms2-e-noise_lag,ms2-e-boost_knock_launch,ms2-e-ego_rev,ms2-e-nitrous_staging_orfc,ms2-e-corrections_misc,ms2-dynamic-vetable_12x12x3,ms2-generic-vetable_16x16x3,ms2-generic-sparktable_12x12x3,ms2-e-generic-afrtable_12x12x2,ms2-e-boost_8x8x2,ms2-e-rotary-split,ms2-e-toothtrigger-2.1.x,ms2-user_outputs,ms2-e-debugging
 #LoadTabs=runtime,ms2-user_outputs,ms2-e-debugging
 #TabConfs=runtime,ms2-user_outputs,ms2-e-debugging
 

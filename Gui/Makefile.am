@@ -184,7 +184,8 @@ gui_in_files = 	\
 		ms2-accel.datamap.in \
 		ms2-2.905-accel.datamap.in \
 		ms2-alpha-n_6x6x1.datamap.in \
-		ms2-dynamic-vetable-x2.datamap.in \
+		ms2-dynamic-vetable_x2.datamap.in \
+		ms2-dynamic-vetable_12x12x3.datamap.in \
 		ms2-e-3.0.3v-ego_rev.datamap.in \
 		ms2-e-3.0.3v-ignition.datamap.in \
 		ms2-e-3.0.3v-inj_timing_6x6x3.datamap.in \

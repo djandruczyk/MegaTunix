@@ -1868,7 +1868,7 @@ maintain same PW</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkTable" id="table4">
+					<widget class="GtkTable" id="reqfuel_rescale_layout_table_2">
 					  <property name="visible">True</property>
 					  <property name="n_rows">2</property>
 					  <property name="n_columns">2</property>
@@ -2028,7 +2028,7 @@ maintain same PW</property>
 				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				  <child>
-				    <widget class="GtkTable" id="table6">
+				    <widget class="GtkTable" id="timing_controls_layout_table_2">
 				      <property name="visible">True</property>
 				      <property name="n_rows">2</property>
 				      <property name="n_columns">3</property>
@@ -3048,7 +3048,7 @@ most &quot;Weight&quot;</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkLabel" id="label6">
+					<widget class="GtkLabel" id="label17">
 					  <property name="visible">True</property>
 					  <property name="label" translatable="yes">Rescale table to
 maintain same PW</property>
@@ -3077,7 +3077,7 @@ maintain same PW</property>
 				      </child>
 
 				      <child>
-					<widget class="GtkTable" id="table4">
+					<widget class="GtkTable" id="reqfuel_rescale_layout_table_3">
 					  <property name="visible">True</property>
 					  <property name="n_rows">2</property>
 					  <property name="n_columns">2</property>
@@ -3086,7 +3086,7 @@ maintain same PW</property>
 					  <property name="column_spacing">0</property>
 
 					  <child>
-					    <widget class="GtkLabel" id="label7">
+					    <widget class="GtkLabel" id="label13">
 					      <property name="visible">True</property>
 					      <property name="label" translatable="yes">ReqFuel</property>
 					      <property name="use_underline">False</property>
@@ -3114,7 +3114,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkLabel" id="label8">
+					    <widget class="GtkLabel" id="label12">
 					      <property name="visible">True</property>
 					      <property name="label" translatable="yes">New</property>
 					      <property name="use_underline">False</property>
@@ -3142,7 +3142,7 @@ maintain same PW</property>
 					  </child>
 
 					  <child>
-					    <widget class="GtkLabel" id="label9">
+					    <widget class="GtkLabel" id="label11">
 					      <property name="visible">True</property>
 					      <property name="label" translatable="yes">Cur.</property>
 					      <property name="use_underline">False</property>
@@ -3201,7 +3201,7 @@ maintain same PW</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="label10">
+				    <widget class="GtkLabel" id="label16">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Alter Reqfuel and Rescale table</property>
 				      <property name="use_underline">False</property>
@@ -3237,7 +3237,7 @@ maintain same PW</property>
 				  <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
 
 				  <child>
-				    <widget class="GtkTable" id="table6">
+				    <widget class="GtkTable" id="timing_controls_layout_table_3">
 				      <property name="visible">True</property>
 				      <property name="n_rows">2</property>
 				      <property name="n_columns">3</property>
@@ -3417,7 +3417,7 @@ Angle</property>
 				  </child>
 
 				  <child>
-				    <widget class="GtkLabel" id="label18">
+				    <widget class="GtkLabel" id="label15">
 				      <property name="visible">True</property>
 				      <property name="label" translatable="yes">Timing Offset Controls</property>
 				      <property name="use_underline">False</property>
