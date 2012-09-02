@@ -141,6 +141,8 @@ void mtx_curve_finalize (GObject *object)
 		g_free(priv->x_axis_label);
 	if (priv->y_axis_label)
 		g_free(priv->y_axis_label);
+	if (priv->auto_rescale_id)
+		g_source_remove(priv->auto_rescale_id);
 }
 
 

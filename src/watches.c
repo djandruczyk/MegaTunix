@@ -24,8 +24,8 @@
 #include <stdio.h>
 #include <watches.h>
 
-static GHashTable *rtv_watch_hash;
-//static GHashTable *ecu_watch_hash;
+extern gconstpointer *global_data;
+static GList *removal_list = NULL;
 
 /*!
   \brief fire_off_rtv_watches_pf() Trolls through the watch list and if
@@ -33,8 +33,22 @@ static GHashTable *rtv_watch_hash;
   */
 G_MODULE_EXPORT gboolean fire_off_rtv_watches(void)
 {
-	if (rtv_watch_hash)
-		g_hash_table_foreach(rtv_watch_hash,process_rtv_watches,NULL);
+	static GHashTable *rtv_watch_hash;
+	
+	if (!rtv_watch_hash)
+		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
+	g_return_val_if_fail(rtv_watch_hash,FALSE);
+
+	g_hash_table_foreach(rtv_watch_hash,process_rtv_watches,NULL);
+	/* Purge one-shot's and "cancelled" watches so they don't run on next iteration */
+	if (removal_list)
+	{
+		for (int i = 0; i<g_list_length(removal_list);i++)
+
+			g_hash_table_remove(rtv_watch_hash,g_list_nth_data(removal_list,i));
+		g_list_free(removal_list);
+		removal_list = NULL;
+	}
 	return TRUE;
 }
 
@@ -55,6 +69,11 @@ G_MODULE_EXPORT gboolean fire_off_rtv_watches(void)
 G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname, gint bit, gboolean state, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	RtvWatch *watch = NULL;
+	GHashTable *rtv_watch_hash = NULL;
+
+	if (!rtv_watch_hash)
+		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
+	g_return_val_if_fail(rtv_watch_hash,-1);
 
 	watch = g_new0(RtvWatch,1);
 	watch->style = SINGLE_BIT_STATE;
@@ -66,8 +85,6 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname,
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
-	if (!rtv_watch_hash)
-		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
@@ -88,6 +105,12 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname,
 G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname, gint bit,gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	RtvWatch *watch = NULL;
+	GHashTable *rtv_watch_hash = NULL;
+
+	if (!rtv_watch_hash)
+		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
+	g_return_val_if_fail(rtv_watch_hash,-1);
+
 
 	watch = g_new0(RtvWatch,1);
 	watch->style = SINGLE_BIT_CHANGE;
@@ -98,8 +121,6 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
-	if (!rtv_watch_hash)
-		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
@@ -117,6 +138,11 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname
 G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	RtvWatch *watch = NULL;
+	GHashTable *rtv_watch_hash = NULL;
+
+	if (!rtv_watch_hash)
+		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
+	g_return_val_if_fail(rtv_watch_hash,-1);
 
 	watch = g_new0(RtvWatch,1);
 	watch->style = VALUE_CHANGE;
@@ -126,8 +152,6 @@ G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gbo
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
-	if (!rtv_watch_hash)
-		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
@@ -146,6 +170,11 @@ G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gbo
 G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	RtvWatch *watch = NULL;
+	GHashTable *rtv_watch_hash = NULL;
+
+	if (!rtv_watch_hash)
+		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
+	g_return_val_if_fail(rtv_watch_hash,-1);
 
 	watch = g_new0(RtvWatch,1);
 	watch->style = MULTI_VALUE;
@@ -157,8 +186,6 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
-	if (!rtv_watch_hash)
-		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
@@ -177,6 +204,11 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean
 G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varnames, gboolean one_shot,const gchar *fname, gpointer user_data)
 {
 	RtvWatch *watch = NULL;
+	GHashTable *rtv_watch_hash = NULL;
+
+	if (!rtv_watch_hash)
+		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
+	g_return_val_if_fail(rtv_watch_hash,-1);
 
 	watch = g_new0(RtvWatch,1);
 	watch->style = MULTI_VALUE_HISTORY;
@@ -189,8 +221,6 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varname
 	watch->id = g_random_int();
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
-	if (!rtv_watch_hash)
-		rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
 	return watch->id;
 }
@@ -229,7 +259,7 @@ G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
   */
 G_MODULE_EXPORT void remove_rtv_watch(guint32 watch_id)
 {
-	g_hash_table_remove(rtv_watch_hash,GINT_TO_POINTER(watch_id));
+	removal_list = g_list_prepend(removal_list,GINT_TO_POINTER(watch_id));
 }
 
 
@@ -250,16 +280,17 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 	gint index = 0;
 	gint newval = 0;
 	gint i = 0;
-	/*printf("process watches running\n");*/
+	/*printf("process_rtv_watches running\n");*/
+	/*printf("process_rtv_watches is going to run \"%s\" real soon\n",watch->function);*/
 	switch (watch->style)
 	{
 		case SINGLE_BIT_STATE:
 			/*! 
-			   When bit becomes this state, fire watch function. 
-			   This will fire each time new vars come in unless 
-			   watch is set to run only once, thus it will 
-			   evaporate after 1 run 
-			 */
+			  When bit becomes this state, fire watch function. 
+			  This will fire each time new vars come in unless 
+			  watch is set to run only once, thus it will 
+			  evaporate after 1 run 
+			  */
 			/*printf("single bit state\n");*/
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
@@ -279,7 +310,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 			  When bit CHANGES from previous state, i.e. only 
 			  fire when it changes, but if it's stable, 
 			  don't fire repeatedly 
-			 */
+			  */
 			/*printf("single bit change\n");*/
 			lookup_current_value(watch->varname, &tmpf);
 			tmpi = (guint8)tmpf;
@@ -300,7 +331,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 			/*!
 			  If value changes at ALL from previous value, then
 			  fire watch. (useful for gauges/dash/warmup 2d stuff)
-			 */
+			  */
 			/*printf("value change\n");*/
 			lookup_current_value(watch->varname, &(watch->val));
 			/* If it's a one-shot, fire it no matter what... */
@@ -378,6 +409,11 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
   */
 G_MODULE_EXPORT gboolean rtv_watch_active(guint32 id)
 {
+	GHashTable *rtv_watch_hash = NULL;
+
+	if (!rtv_watch_hash)
+		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
+	g_return_val_if_fail(rtv_watch_hash,FALSE);
 	/*printf("watch_active call for watch %ui\n",id);*/
 	if (g_hash_table_lookup(rtv_watch_hash,GINT_TO_POINTER(id)))
 		return TRUE;

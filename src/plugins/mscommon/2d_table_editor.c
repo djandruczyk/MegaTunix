@@ -1241,7 +1241,7 @@ G_MODULE_EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 
 
 /*!
-  \brief This is hte watch triggered function to update the curve markers
+  \brief This is the watch triggered function to update the curve markers
   when their source value changes
   \param watch is a pointer to the DateWatch structure
   \see RtvWatch

@@ -43,6 +43,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <tabloader.h>
+#include <watches.h>
 #include <widgetmgmt.h>
 
 GdkColor red = { 0, 65535, 0, 0};
@@ -70,6 +71,7 @@ G_MODULE_EXPORT void init(void)
 	CmdLineArgs *args = NULL;
 	Serial_Params *serial_params = NULL;
 	GHashTable *widget_group_states = NULL;
+	GHashTable *rtv_watch_hash = NULL;
 	gint i = 0;
 
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
@@ -84,6 +86,8 @@ G_MODULE_EXPORT void init(void)
 	hidden_list = g_new0(gboolean, 100); /*static, 100 max tabs... */
 	for (i=0;i<100;i++)
 		hidden_list[i]=FALSE;
+	 rtv_watch_hash = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,rtv_watch_destroy);
+	DATA_SET_FULL(global_data,"rtv_watch_hash",rtv_watch_hash,g_hash_table_destroy);
 
 	DATA_SET(global_data,"network_access",GINT_TO_POINTER(FALSE));	/* Disallow network connections by default */
 	DATA_SET(global_data,"tips_in_use",GINT_TO_POINTER(TRUE));	/* Use tooltips by default */
