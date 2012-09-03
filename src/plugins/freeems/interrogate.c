@@ -1353,6 +1353,7 @@ gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, g
 	guint16 *ptr = NULL;
 	gint resp = RESPONSE_RETRIEVE_BLOCK_FROM_RAM;
 	Serial_Params *serial_params = NULL;
+    GTimeVal tval;                                                              
 
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,FALSE);
