@@ -1,7 +1,7 @@
 profilesdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)/Profiles/MS3-1_1
 
 profiles_in = \
-	MS3-Extra_1.1.0.prof.in
+	MS3-Extra_1.1.3.prof.in
 
 profiles_DATA = details.cfg \
 		tests.cfg \
