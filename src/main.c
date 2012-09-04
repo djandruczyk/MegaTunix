@@ -116,7 +116,9 @@ gint main(gint argc, gchar ** argv)
 	handle_args(argc,argv);	/* handle CLI arguments */
 
 	/* This will exit mtx if the locking fails! */
-	create_mtx_lock();
+	/* Prevents multiple instances  but stops esoteric usess too 
+	 * create_mtx_lock();
+	 * */
 	open_debug();		/* Open debug log */
 	/* Allocate memory  */
 	init();			/* Initialize global vars */
