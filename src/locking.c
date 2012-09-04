@@ -272,7 +272,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 		}
 		
 	}
-	contents = g_strdup_printf("     %i",getpid());
+	contents = g_strdup_printf("%10i\n",getpid());
 	res = g_file_set_contents(lock,contents,-1,&err);
 	cleanup(contents);
 	if (res)
