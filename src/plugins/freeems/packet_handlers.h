@@ -43,6 +43,12 @@ typedef enum
 	PAYLOAD_DATA
 }FreeEMSArgTypes;
 
+typedef enum
+{
+	BENCH_TEST_STOP = 0,
+	BENCH_TEST_INIT,
+	BENCH_TEST_BUMP
+}FreeEMSBenchTest;
 /* For raw packet generation in interrogator */
 #define DECODER_NAME_REQ_PKT_LEN 4
 #define FIRMWARE_COMPILER_VER_REQ_PKT_LEN 4

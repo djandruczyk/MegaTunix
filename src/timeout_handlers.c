@@ -284,6 +284,7 @@ G_MODULE_EXPORT gboolean check_for_first_time(void)
 void timeout_done(gpointer data)
 {
 	GMutex *mutex = (GMutex *)data;
+/*	printf("timeout_done, mutex pointer is %p\n",(gpointer)mutex);*/
 	if (mutex)
 		g_mutex_unlock(mutex);
 }

@@ -63,7 +63,7 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	clock /= 1250;
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x01 */
-	byte = 1;
+	byte = BENCH_TEST_INIT;
 	g_byte_array_append(payload,&byte,1);
 	/* Events per Cycle (8 bit) */
 	g_byte_array_append(payload,&data.events_per_cycle,1);
@@ -134,7 +134,7 @@ G_MODULE_EXPORT void benchtest_stop(void)
 
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x00 to stop */
-	byte = 0;
+	byte = BENCH_TEST_STOP;
 	g_byte_array_append(payload,&byte,1);
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"stop",GINT_TO_POINTER(TRUE));
@@ -177,7 +177,7 @@ G_MODULE_EXPORT void benchtest_bump(void)
 
 	payload = g_byte_array_new();
 	/* Mode currently fixed at 0x02 to bump */
-	byte = 2;
+	byte = BENCH_TEST_BUMP;
 	g_byte_array_append(payload,&byte,1);
 	/* Add the amount of time to bump by */
 	g_byte_array_append(payload,&bump,1);
