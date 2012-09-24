@@ -163,6 +163,7 @@ gui_in_files = 	\
 		ms1-e-029x-advanced.datamap.in \
 		ms1-e-029x-boost-knock.datamap.in \
 		ms1-e-029x-crank-ase.datamap.in \
+		ms1-e-029x-dynamic-vetable_12x12x3.datamap.in \
 		ms1-e-029x-ego.datamap.in \
 		ms1-e-029x-features.datamap.in \
 		ms1-e-029x-fuelconstants.datamap.in \

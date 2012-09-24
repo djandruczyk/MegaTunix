@@ -82,6 +82,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_1]
 _table_name=Fuel VE-Table 2, MS1-Extra
@@ -133,6 +134,7 @@ z_size=_U08_
 z_source=vecurr2
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_2]
 _table_name=Fuel VE-Table 3, MS1-Extra
@@ -162,6 +164,7 @@ z_size=_U08_
 z_source=vecurr1
 z_suffix=VE %
 z_precision=0
+z_use_color=TRUE
 
 [table_3]
 _table_name=Spark Table 1, MS1-Extra
@@ -195,6 +198,7 @@ z_suffix=Deg
 z_fromecu_mult=0.352
 z_fromecu_add=-10
 z_precision=1
+z_use_color=TRUE
 
 [table_4]
 _table_name=Spark Table 2, MS1-Extra
@@ -228,6 +232,7 @@ z_suffix=Deg
 z_fromecu_mult=0.352
 z_fromecu_add=-10
 z_precision=1
+z_use_color=TRUE
 
 [table_5]
 _table_name=AFR Table 1, MS1-Extra
@@ -265,6 +270,7 @@ _z_suffixes=NB AFR,NB Lambda,WB AFR,WB Lambda,Volts
 z_fromecu_mults=0.1,0.0068027211,0.1,0.0068027211,0.0196
 z_fromecu_adds=0,0,0,0,0
 z_precisions=1,2,1,2,2
+z_use_color=TRUE
 
 [table_6]
 _table_name=AFR Table 2, MS1-Extra
@@ -302,6 +308,7 @@ _z_suffixes=NB AFR,NB Lambda,WB AFR,WB Lambda,Volts
 z_fromecu_mults=0.1,0.0068027211,0.1,0.0068027211,0.0196
 z_fromecu_adds=0,0,0,0,0
 z_precisions=1,2,1,2,2
+z_use_color=TRUE
 
 [table_7]
 _table_name=Boost Table 1, KPA target: RPM vs TPS, MS1-Extra
@@ -333,6 +340,7 @@ z_suffixes=KPa,KPa,KPa,KPa
 z_fromecu_mults=1,1,1.213675,1.6197783
 z_fromecu_adds=0,0,1.53,2.147
 z_precisions=0,0,0,0
+z_use_color=TRUE
 
 [table_8]
 _table_name=Boost Table 2, DC Target: RPM vs TPS, MS1-Extra
@@ -360,6 +368,7 @@ z_source=bcDC
 z_suffix=Duty %
 z_fromecu_mult=0.392156863
 z_precision=1
+z_use_color=TRUE
 
 [table_9]
 _table_name=Boost Table 3, switched on demand, MS1-Extra
@@ -391,6 +400,7 @@ z_suffixes=KPa,KPa,KPa,KPa
 z_fromecu_mults=1,1,1.213675,1.6197783
 z_fromecu_adds=0,0,1.53,2.147
 z_precisions=0,0,0,0
+z_use_color=TRUE
 
 [table_10]
 _table_name=Rotary Trailing, MS1-Extra
@@ -423,6 +433,7 @@ z_suffix=Degrees
 z_fromecu_mult=0.352
 z_fromecu_add=-10
 z_precision=1
+z_use_color=TRUE
 
 [te_table_0]
 _title=CLT/IAT Corrected Air Density
@@ -533,9 +544,9 @@ SliderMapFile=MS1-Extra
 RuntimeTextMapFile=MS1-Extra
 StatusMapFile=MS1-Extra
 
-LoadTabs=runtime,datalogging,logviewer,tools,ms1-e-features,ms1-e-fuelconstants,ms1-e-idle,ms1-e-ego,ms1-e-boost-knock,ms1-e-water-nos-launch,ms1-e-crank-ase,ms1-e-hr_011x-output-pins,ms1-e-outputs-sel,ms1-e-traction,ms1-e-hr_011d-wheeldecode,ms1-e-advanced,ms1-e-accelwizard,generic-vetable_12x12x3,generic-sparktable_12x12x2,generic-afrtable_8x8x2,generic-boost_6x6x3,rotary-trail,ms1-e-toothtrigger,error_status
+LoadTabs=runtime,datalogging,logviewer,tools,ms1-e-features,ms1-e-fuelconstants,ms1-e-idle,ms1-e-ego,ms1-e-boost-knock,ms1-e-water-nos-launch,ms1-e-crank-ase,ms1-e-hr_011x-output-pins,ms1-e-outputs-sel,ms1-e-traction,ms1-e-hr_011d-wheeldecode,ms1-e-advanced,ms1-e-accelwizard,dynamic-table_x3,generic-sparktable_12x12x2,generic-afrtable_8x8x2,generic-boost_6x6x3,rotary-trail,ms1-e-toothtrigger,error_status
 
-TabConfs=runtime,datalogging,logviewer,tools,ms1-e-029x-features,ms1-e-hr-fuelconstants,ms1-e-hr-idle,ms1-e-029x-ego,ms1-e-029x-boost-knock,ms1-e-029x-water-nos-launch,ms1-e-029x-crank-ase,ms1-e-hr_011x-output-pins,ms1-e-029x-outputs-sel,ms1-e-029x-traction,ms1-e-hr_011d-wheeldecode,ms1-e-029x-advanced,ms1-e-029x-accelwizard,ms1-e-029x-vetable_12x12x3,ms1-e-029x-sparktable_12x12x2,ms1-e-029x-afrtable_8x8x2,ms1-e-029x-boost_6x6x3,ms1-e-029x-rotary-trail,ms1-e-029x-toothtrigger,error_status
+TabConfs=runtime,datalogging,logviewer,tools,ms1-e-029x-features,ms1-e-hr-fuelconstants,ms1-e-hr-idle,ms1-e-029x-ego,ms1-e-029x-boost-knock,ms1-e-029x-water-nos-launch,ms1-e-029x-crank-ase,ms1-e-hr_011x-output-pins,ms1-e-029x-outputs-sel,ms1-e-029x-traction,ms1-e-hr_011d-wheeldecode,ms1-e-029x-advanced,ms1-e-029x-accelwizard,ms1-e-029x-dynamic-vetable_12x12x3,ms1-e-029x-sparktable_12x12x2,ms1-e-029x-afrtable_8x8x2,ms1-e-029x-boost_6x6x3,ms1-e-029x-rotary-trail,ms1-e-029x-toothtrigger,error_status
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

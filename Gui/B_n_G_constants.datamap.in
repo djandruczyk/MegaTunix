@@ -67,7 +67,7 @@ bitmask=4
 choices=Speed Density,Alpha-N
 algorithms=_SPEED_DENSITY_,_ALPHA_N_
 applicable_tables=0
-swap_labels=VE1_load_tbl_lab,VE1_load_tbl_units
+swap_labels=VE1_y_axis_frame_label_1,VE1_y_axis_units_label_1
 _tooltip=Sets the Algorithm used to calculate the fuel to be injected.
 
 [inj_style_combo]

@@ -213,7 +213,7 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 			   OBJ_SET(entry,"alt_lookuptable",OBJ_GET(firmware->table_params[table_num]->y_object,"alt_lookuptable"));
 			   OBJ_SET(entry,"dep_object",OBJ_GET(firmware->table_params[table_num]->y_object,"dep_object"));
 			   }*/
-			gtk_table_attach(GTK_TABLE(parent),entry,0,1,rows-y-1,rows-y,(GtkAttachOptions)GTK_EXPAND|GTK_FILL|GTK_SHRINK,(GtkAttachOptions)0,0,0);
+			gtk_table_attach(GTK_TABLE(parent),entry,0,1,rows-y-1,rows-y,(GtkAttachOptions)GTK_EXPAND|GTK_SHRINK,(GtkAttachOptions)0,0,0);
 			tab_widgets = g_list_prepend(tab_widgets,entry);
 			ecu_widgets[page][offset]= g_list_prepend(                     
 					ecu_widgets[page][offset],

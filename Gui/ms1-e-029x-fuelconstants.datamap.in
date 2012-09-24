@@ -124,7 +124,7 @@ choices=Speed Density,Alpha-N
 toggle_groups=,alpha-n_controls
 algorithms=_SPEED_DENSITY_,_ALPHA_N_
 applicable_tables=0,2,3,4,10
-swap_labels=VE_VE1_load_tbl_lab,VE_VE1_load_tbl_units,VE_VE3_load_tbl_lab,VE_VE3_load_tbl_units,SP_SP1_load_tbl_lab,SP_SP1_load_tbl_units,SP_SP2_load_tbl_lab,SP_SP2_load_tbl_units,Rot_load_tbl_lab,Rot_load_tbl_units
+swap_labels=VE_y_axis_frame_label_1,VE_y_axis_frame_label_3,VE_y_axis_units_label_1,VE_y_axis_units_label_3,SP_y_axis_frame_label_1,SP_y_axis_units_label_1,SP_y_axis_frame_label_2,SP_y_axis_units_label_2,Rot_y_axis_frame_label_1,Rot_y_axis_units_label_1
 _tooltip=Sets the Fueling mode to be either Speed Density (primary inputs are RPM, manifold pressure and intake air temp) or Alpha-N (primary inputs are RPM and Throttle position.)
 
 [fuel_strat2_combo]
@@ -137,7 +137,7 @@ choices=Speed Density,Alpha-N
 bind_to_list=dt_controls
 algorithms=_SPEED_DENSITY_,_ALPHA_N_
 applicable_tables=1
-swap_labels=VE_VE2_load_tbl_lab,VE_VE2_load_tbl_units
+swap_labels=VE_y_axis_units_label_2,VE_y_axis_frame_label_2
 _tooltip=Sets the Fueling mode to be either Speed Density (primary inputs are RPM, manifold pressure and intake air temp) or Alpha-N (primary inputs are RPM and Throttle position.)
 
 [alt_simul_combo]
