@@ -146,7 +146,7 @@ typedef enum
 	RESPONSE_UNIT_TEST_OVER_SERIAL,
 
 	/* Bench Test Decoder */
-	REQUEST_SET_BENCH_TEST_DATA = 0x7777,
+	REQUEST_SET_BENCH_TEST_DATA = 0x8888,
 	RESPONSE_SET_BENCH_TEST_DATA,
 
 	/* Interrogation related commands */
