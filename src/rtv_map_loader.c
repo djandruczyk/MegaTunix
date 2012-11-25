@@ -71,7 +71,6 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 			(DATA_GET(global_data,"connected")))
 		return FALSE;
 
-	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Realtime Map...")));
 	pathstub = g_build_filename(REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL);
 	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"xml");
@@ -100,7 +99,6 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	if (doc == NULL)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("error: could not parse file %s\n"),filename);
-		gdk_threads_leave();
 		return FALSE;
 	}
 	rtv_map = g_new0(Rtv_Map, 1);
@@ -127,7 +125,6 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		set_title(g_strdup(_("RT Map XML Loaded OK!")));
 		DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
 	}
-	gdk_threads_leave();
 	return TRUE;
 }
 

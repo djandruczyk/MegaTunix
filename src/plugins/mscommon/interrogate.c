@@ -1513,7 +1513,6 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 
 	g_return_if_fail(serial_params);
 	g_return_if_fail(firmware);
-	gdk_threads_enter();
 	widget = lookup_widget_f("read_wait_spin");
 	if (GTK_IS_SPIN_BUTTON(widget))
 	{
@@ -1549,7 +1548,6 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 		gtk_adjustment_set_value(adj,val);
 		gtk_spin_button_set_adjustment(GTK_SPIN_BUTTON(widget),adj);
 	}
-	gdk_threads_leave();
 	if (firmware->TextVerVia)
 		io_cmd_f(firmware->TextVerVia,NULL);
 	if (firmware->NumVerVia)

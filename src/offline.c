@@ -60,7 +60,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	if (io_repair_queue)
 		g_async_queue_push(io_repair_queue,&tmp);
 
-	gdk_threads_enter();
 	filename = present_firmware_choices();
 	if (!filename)
 	{
@@ -72,7 +71,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		widget = lookup_widget("offline_button");
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
-		gdk_threads_leave();
 		plugins_shutdown();
 		gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
 
@@ -103,7 +101,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		load_firmware_details(firmware,filename);
 	else
 		printf("Unable to load firmware details!\n");
-	gdk_threads_leave();
 
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
@@ -191,7 +188,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	   io_cmd(firmware->get_all_command,NULL);
 	 */
 
-	gdk_threads_enter();
 	widget = lookup_widget("binary_logging_frame");
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
@@ -202,7 +198,6 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-	gdk_threads_leave();
 
 	pfuncs = g_array_new(FALSE,TRUE,sizeof(PostFunction *));
 
@@ -454,7 +449,6 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	if (DATA_GET(global_data,"last_offline_filename"))
 	fileio->default_filename = g_strdup((gchar *)DATA_GET(global_data,"last_offline_filename"));
 
-	gdk_threads_enter();
 	filename = choose_file(fileio);
 	free_mtxfileio(fileio);
 	if (filename)
@@ -467,6 +461,5 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	else
 		io_cmd(firmware->get_all_command,NULL);
 
-	gdk_threads_leave();
 	return;
 }

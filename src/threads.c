@@ -194,10 +194,7 @@ fast_exit:
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
-					gdk_threads_enter();
 					message->status = message->command->function(message->command,message->command->func_call_arg);
-					gdk_threads_leave();
-
 					/*
 					   if (!result)
 					   message->command->defer_post_functions=TRUE;

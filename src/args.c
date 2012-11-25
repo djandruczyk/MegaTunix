@@ -172,7 +172,7 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 			g_free(t);
 			args->autolog_basename = g_strdup_printf("datalog_%.2i-%.2i-%i",1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year));
 		}
-		g_timeout_add(args->autolog_minutes*60000,(GSourceFunc)autolog_dump,NULL);
+		gdk_threads_add_timeout(args->autolog_minutes*60000,(GSourceFunc)autolog_dump,NULL);
 	}
 	if (args->offline)
 	{

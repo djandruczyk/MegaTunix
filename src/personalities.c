@@ -257,7 +257,7 @@ jumpahead_offline:
 			g_free(pathstub);
 			load_comm_xml(filename);
 			g_free(filename);
-			g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
+			gdk_threads_add_timeout(100,(GSourceFunc)set_offline_mode,NULL);
 			return FALSE;
 	}
 	return FALSE;

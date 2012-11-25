@@ -72,7 +72,6 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 	g_return_val_if_fail(pf_dispatch_queue,FALSE);
 	g_return_val_if_fail(gui_dispatch_queue,FALSE);
 
-	gdk_threads_enter();
 	tmpbuf = g_strdup_printf("%i",(GINT)DATA_GET(global_data,"ve_goodread_count"));
 	widget = lookup_widget("runtime_good_ve_entry");
 	if (GTK_IS_ENTRY(widget))
@@ -142,7 +141,6 @@ G_MODULE_EXPORT gboolean update_errcounts(void)
 	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
-	gdk_threads_leave();
 
 	return TRUE;
 }

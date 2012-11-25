@@ -347,7 +347,7 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		set_title(g_strdup(_("Offline Mode...")));
-		g_timeout_add(100,(GSourceFunc)set_offline_mode,NULL);
+		gdk_threads_add_timeout(100,(GSourceFunc)set_offline_mode,NULL);
 	}
 	if (response == GTK_RESPONSE_CLOSE)
 		leave(NULL,NULL);

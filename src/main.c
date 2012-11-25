@@ -74,7 +74,6 @@ gint main(gint argc, gchar ** argv)
 	if(!g_thread_supported())
 		g_thread_init(NULL);
 	gdk_threads_init();
-	gdk_threads_enter();
 	gtk_init(&argc, &argv);
 	glade_init();
 
@@ -141,15 +140,15 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
 
-	id = g_timeout_add_full(-50,16,(GSourceFunc)pf_dispatcher,pf_dispatch_mutex,timeout_done);
+	id = gdk_threads_add_timeout_full(-50,16,(GSourceFunc)pf_dispatcher,pf_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
-	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
+	id = gdk_threads_add_timeout_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
-	id = g_timeout_add(2000,(GSourceFunc)flush_binary_logs,NULL);
+	id = gdk_threads_add_timeout(2000,(GSourceFunc)flush_binary_logs,NULL);
         DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
 
 	sleep_calib();
-	/* Check for first_time flag, if so, run first tiem wizard, otherwise
+	/* Check for first_time flag, if so, run first time wizard, otherwise
 	   load personality choice
 	   */
 	timer = g_timer_new();
@@ -158,6 +157,7 @@ gint main(gint argc, gchar ** argv)
 	
 
 	DATA_SET(global_data,"ready",GINT_TO_POINTER(TRUE));
+	gdk_threads_enter();
 	gtk_main();
 	gdk_threads_leave();
 	return (0) ;

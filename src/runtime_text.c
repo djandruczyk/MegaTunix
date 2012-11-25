@@ -77,7 +77,6 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n"));
 		return;
 	}
-	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Text...")));
 
 	pathstub = g_build_filename(RTTEXT_DATA_DIR,firmware->rtt_map_file,NULL);
@@ -87,7 +86,6 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->rtt_map_file);
 		set_title(g_strdup(_("ERROR RunTimeText Map XML file DOES NOT EXIST!!!")));
-		gdk_threads_leave();
 		return; 
 	}
 
@@ -110,7 +108,6 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
-		gdk_threads_leave();
 		return;
 	}
 
@@ -134,7 +131,6 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 		gtk_widget_show_all(window);
 
 	set_title(g_strdup(_("RT Text Loaded...")));
-	gdk_threads_leave();
 	return;
 }
 
@@ -498,7 +494,6 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 			|| (rtt->textval && ((abs(count-last_upd)%g_rand_int_range(rand,25,50)) == 0)))
 	{
 		tmpbuf = g_strdup_printf("%1$.*2$f",current,precision);
-		gdk_threads_enter();
 		if (rtt->markup)
 		{
 			tmpbuf2 = g_strconcat(rtt->label_prefix,tmpbuf,rtt->label_suffix,NULL);
@@ -507,7 +502,6 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 		}
 		else
 			gtk_label_set_text(GTK_LABEL(rtt->textval),tmpbuf);
-		gdk_threads_leave();
 		g_free(tmpbuf);
 		last_upd = count;
 	}
@@ -611,13 +605,11 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 				if ((current >thresh->low) && (current <= thresh->high))
 				{
 					in_thresh = TRUE;
-					gdk_threads_enter();
 					gtk_list_store_set(GTK_LIST_STORE(model), iter,
 							COL_RTT_DATA, tmpbuf,
 							COL_RTT_BGCOLOR, thresh->bg,
 							COL_RTT_FGCOLOR, thresh->fg,
 							COL_RTT_LAST, current,	-1);
-					gdk_threads_leave();
 					break;
 				}
 			}
@@ -628,13 +620,11 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 		else
 		{
 not_in_thresh:
-			gdk_threads_enter();
 			gtk_list_store_set(GTK_LIST_STORE(model), iter,
 					COL_RTT_DATA, tmpbuf,
 					COL_RTT_BGCOLOR, NULL,
 					COL_RTT_FGCOLOR, NULL,
 					COL_RTT_LAST, current,	-1);
-			gdk_threads_leave();
 		}
 
 		g_free(tmpbuf);

@@ -350,18 +350,14 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	g_return_if_fail(firmware);
 	g_return_if_fail(ecu_widgets);
 
-	gdk_threads_enter();
-        set_title_f(g_strdup(_("Updating Controls...")));
-        gdk_threads_leave();
+	set_title_f(g_strdup(_("Updating Controls...")));
 
 	for (i=0;i<firmware->total_tables;i++)
 		recalc_table_limits_f(0,i);
 
 	thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Ready...</b>")));
-	gdk_threads_enter();
-        update_current_notebook_page_f();
+    update_current_notebook_page_f();
 	set_title_f(g_strdup(_("Ready...")));
-	gdk_threads_leave();
 	return;
 }
 

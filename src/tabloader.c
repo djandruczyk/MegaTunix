@@ -94,7 +94,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	if (args->inhibit_tabs)
 		return FALSE;
 
-	gdk_threads_enter();
 	set_title(g_strdup(_("Loading Gui Tabs...")));
 	notebook = lookup_widget("toplevel_notebook");
 	hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
@@ -202,18 +201,16 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		{
 			if (DATA_GET(global_data,"leaving"))
 			{
-				gdk_threads_leave();
 				return FALSE;
 			}
 			gtk_main_iteration();
 		}
 	}
-	g_timeout_add(500,(GSourceFunc)preload_deps,tabinfos);
+	gdk_threads_add_timeout(500,(GSourceFunc)preload_deps,tabinfos);
 	DATA_SET_FULL(global_data,"tabinfos",tabinfos,dealloc_tabinfos);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	MTXDBG(TABLOADER,_("All is well, leaving...\n\n"));
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
-	gdk_threads_leave();
 	return TRUE;
 }
 
@@ -1097,10 +1094,8 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 				return TRUE;
 			}
 		}
-		gdk_threads_enter();
 		object = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(object);
-		gdk_threads_leave();
 		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
 		OBJ_SET(object,"page",GINT_TO_POINTER(page));
 		OBJ_SET(object,"offset",GINT_TO_POINTER(offset));
@@ -1159,10 +1154,8 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		   }
 		   }
 		 */
-		gdk_threads_enter();
 		object = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 		g_object_ref_sink(object);
-		gdk_threads_leave();
 		/*OBJ_SET(object,"canID",GINT_TO_POINTER(canID));*/
 		OBJ_SET(object,"page",GINT_TO_POINTER(page));
 		OBJ_SET(object,"offset",GINT_TO_POINTER(offset));

@@ -756,8 +756,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_widget_show_all(window);
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	gdk_threads_add_timeout(500,delayed_reconfigure,ve_view);
-	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,GINT_TO_POINTER(table_num),NULL);
+	gdk_threads_add_timeout(500,(GSourceFunc)delayed_reconfigure,ve_view);
+	ve_view->render_id = gdk_threads_add_timeout_full(150,1000.0/(float)ve_view->requested_fps,(GSourceFunc)update_ve3d,GINT_TO_POINTER(table_num),NULL);
 	return TRUE;
 }
 
@@ -2951,7 +2951,7 @@ G_MODULE_EXPORT gboolean set_fps(GtkWidget *widget, gpointer data)
 	ve_view->requested_fps = (GINT)gtk_range_get_value(GTK_RANGE(widget));
 	if (ve_view->render_id > 0)
 		g_source_remove(ve_view->render_id);
-	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,GINT_TO_POINTER(ve_view->table_num),NULL);
+	ve_view->render_id = gdk_threads_add_timeout_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,GINT_TO_POINTER(ve_view->table_num),NULL);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return TRUE;
 }

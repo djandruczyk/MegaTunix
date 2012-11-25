@@ -442,7 +442,6 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 	current = g_array_index(history, gfloat, history->len-1);
 	g_mutex_unlock(rtv_mutex);
 
-	gdk_threads_enter();
 	mtx_gauge_face_get_value(MTX_GAUGE_FACE(gauge),&previous);
 	if ((current != previous) || 
 			(DATA_GET(global_data,"forced_update")))
@@ -451,7 +450,6 @@ G_MODULE_EXPORT void update_dash_gauge(gpointer key, gpointer value, gpointer us
 		/*printf("updating gauge %s\n",mtx_gauge_face_get_xml_filename(MTX_GAUGE_FACE(gauge)));*/
 		mtx_gauge_face_set_value(MTX_GAUGE_FACE(gauge),current);
 	}
-	gdk_threads_leave();
 
 }
 
@@ -1165,7 +1163,6 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 	gboolean nodash2 = TRUE;
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
-	gdk_threads_enter();
 	if (args->dashboard)
 	{
 		label = lookup_widget("dash_1_label");
@@ -1231,7 +1228,6 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 			g_signal_emit_by_name(lookup_widget("main_window"),"destroy_event");
 		}
 	}
-	gdk_threads_leave();
 	return;
 }
 

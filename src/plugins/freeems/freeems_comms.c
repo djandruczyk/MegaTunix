@@ -86,7 +86,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 
 	if (DATA_GET(global_data,"offline"))
 	{
-		g_timeout_add(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
+		gdk_threads_add_timeout(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 		MTXDBG(THREADS|CRITICAL,_("Thread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
@@ -132,7 +132,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
-				g_timeout_add(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
+				gdk_threads_add_timeout(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 				MTXDBG(THREADS|CRITICAL,_("Thread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
@@ -899,9 +899,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 				if (firmware->table_params[i]->z_page == page)
 				{
 //					printf("Found matching table %i at page %i\n",i,page);
-					gdk_threads_enter();
 					recalc_table_limits_f(canID,i);
-					gdk_threads_leave();
 					if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 					{
 //						printf("Table limits for table %i have changed\n",i);

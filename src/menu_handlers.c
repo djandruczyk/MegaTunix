@@ -73,8 +73,6 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 	if (get_symbol ("common_plugin_menu_setup",(void **)&common_plugin_menu_setup))
 		common_plugin_menu_setup(xml);
 
-	gdk_threads_enter();
-
 	item = glade_xml_get_widget(xml,"show_tab_visibility_menuitem");
 	gtk_widget_set_sensitive(item,TRUE);
 	
@@ -99,7 +97,6 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 			gtk_widget_set_sensitive(item,fio_items[i].sensitivity);
 		}
 	}
-	gdk_threads_leave();
 	return;
 }
 

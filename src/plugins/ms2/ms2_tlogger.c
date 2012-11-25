@@ -382,9 +382,7 @@ G_MODULE_EXPORT void ms2_ttm_update(RtvWatch *watch)
   */
 G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
 {
-	gdk_threads_enter();
 	ms2_crunch_trigtooth_data();
-	gdk_threads_leave();
 }
 
 

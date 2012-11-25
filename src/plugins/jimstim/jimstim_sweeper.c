@@ -203,7 +203,7 @@ G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *widget, gpointer data)
 	newval = (((jsdata.end-jsdata.start)/jsdata.step)*interval*2)/1000.0;
 	update_logbar_f("jimstim_view",NULL,g_strdup_printf(_("Sweep Parameters are OK, Enabling sweeper from %i to %i RPM with %i RPM steps for about %.2f seconds per sweep cycle\n"),jsdata.start,jsdata.end,jsdata.step,newval),FALSE,FALSE,FALSE);
 	io_cmd_f("jimstim_interactive",NULL);
-	jsdata.sweep_id = g_timeout_add(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
+	jsdata.sweep_id = gdk_threads_add_timeout(interval,(GSourceFunc)jimstim_rpm_sweep,(gpointer)&jsdata);
 
 	return TRUE;
 }
@@ -326,9 +326,7 @@ G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *jsdata)
 	DATA_SET(output->data,"value",GINT_TO_POINTER((jsdata->current &0x00ff)));
 	io_cmd_f("jimstim_interactive_write",output);
 	tmpbuf = g_strdup_printf("%i",jsdata->current);
-	gdk_threads_enter();
 	gtk_entry_set_text(GTK_ENTRY(jsdata->rpm_e),tmpbuf);
-	gdk_threads_leave();
 	g_free(tmpbuf);
 
 	return TRUE;

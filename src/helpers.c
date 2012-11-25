@@ -51,9 +51,7 @@ G_MODULE_EXPORT void start_statuscounts_pf(void)
   */
 G_MODULE_EXPORT void enable_get_data_buttons_pf(void)
 {
-	gdk_threads_enter();
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
-	gdk_threads_leave();
 }
 
 
@@ -93,13 +91,11 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 			get_symbol("slaves_set_color",(void **)&slaves_set_color_f);
 	}
 
-	gdk_threads_enter();
 	set_group_color(BLACK,"burners");
 	if (slaves_set_color_f)
 		slaves_set_color_f(BLACK,"burners");
 	for (j=0;j<firmware->total_tables;j++)
 		set_reqfuel_color(BLACK,j);
-	gdk_threads_leave();
 }
 
 
@@ -117,9 +113,7 @@ G_MODULE_EXPORT void enable_3d_buttons_pf(void)
  */
 G_MODULE_EXPORT void disable_burner_buttons_pf(void)
 {
-	gdk_threads_enter();
 	g_list_foreach(get_list("burners"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
-	gdk_threads_leave();
 }
 
 
@@ -129,10 +123,8 @@ G_MODULE_EXPORT void disable_burner_buttons_pf(void)
  */
 G_MODULE_EXPORT void reset_temps_pf(void)
 {
-	gdk_threads_enter();
 	set_title(g_strdup(_("Adjusting for local Temp units...")));
 	reset_temps(DATA_GET(global_data,"mtx_temp_units"));
-	gdk_threads_leave();
 }
 
 
@@ -141,9 +133,7 @@ G_MODULE_EXPORT void reset_temps_pf(void)
   */
 G_MODULE_EXPORT void ready_msg_pf(void)
 {
-	gdk_threads_enter();
 	set_title(g_strdup(_("Ready...")));
-	gdk_threads_leave();
 	return;
 }
 
@@ -169,32 +159,28 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	gint source = 0;
 	gint rate = 0;
 
-	gdk_threads_enter();
 	set_title(g_strdup(_("Starting up data renderers...")));
-	gdk_threads_leave();
 	rate = (GINT)DATA_GET(global_data,"rtslider_fps");
-	source = g_timeout_add_full(175,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rtsliders,NULL,NULL);
+	source = gdk_threads_add_timeout_full(175,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rtsliders,NULL,NULL);
 	DATA_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"rttext_fps");
-	source = g_timeout_add_full(180,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL,NULL);
+	source = gdk_threads_add_timeout_full(180,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL,NULL);
 	DATA_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"rttext_fps");
-	source = g_timeout_add_full(220,(GINT)(2000.0/(gfloat)rate),(GSourceFunc)update_rtstatus,NULL,NULL);
+	source = gdk_threads_add_timeout_full(220,(GINT)(2000.0/(gfloat)rate),(GSourceFunc)update_rtstatus,NULL,NULL);
 	DATA_SET(global_data,"rtstatus_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"dashboard_fps");
-	source = g_timeout_add_full(135,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL,NULL);
+	source = gdk_threads_add_timeout_full(135,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL,NULL);
 	DATA_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
 
-	source = g_timeout_add_full(500,1000,(GSourceFunc)run_datalog,NULL,NULL);
+	source = gdk_threads_add_timeout_full(500,1000,(GSourceFunc)run_datalog,NULL,NULL);
 	DATA_SET(global_data,"datalog_id", GINT_TO_POINTER(source));
 
-	source = g_timeout_add_full(210,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)fire_off_rtv_watches,NULL,NULL);
+	source = gdk_threads_add_timeout_full(210,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)fire_off_rtv_watches,NULL,NULL);
 
-	gdk_threads_enter();
 	set_title(g_strdup(_("Data renderers running...")));
-	gdk_threads_leave();
 }
 

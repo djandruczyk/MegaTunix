@@ -76,7 +76,6 @@ G_MODULE_EXPORT void load_status_pf(void)
 		return;
 	}
 
-	gdk_threads_enter();
 	set_title(g_strdup(_("Loading RT Status...")));
 	pathstub = g_build_filename(RTSTATUS_DATA_DIR,firmware->status_map_file,NULL);
 	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"xml");
@@ -85,7 +84,6 @@ G_MODULE_EXPORT void load_status_pf(void)
 	{
 		MTXDBG(CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->status_map_file);
 		set_title(g_strdup(_("ERROR RT Statusfile DOES NOT EXIST!!!")));
-		gdk_threads_leave();
 		return;
 	}
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
@@ -118,7 +116,6 @@ G_MODULE_EXPORT void load_status_pf(void)
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
-		gdk_threads_leave();
 		return;
 	}
 
@@ -135,7 +132,6 @@ G_MODULE_EXPORT void load_status_pf(void)
 		gtk_widget_show_all(window);
 
 	set_title(g_strdup(_("RT Status Loaded...")));
-	gdk_threads_leave();
 	return;
 }
 
@@ -271,18 +267,14 @@ G_MODULE_EXPORT gboolean update_rtstatus(void)
 	count++;
 	if (conn_status != curr_conn_status)
 	{
-		gdk_threads_enter();
 		g_list_foreach(get_list("connected_widgets"),set_widget_sensitive,GINT_TO_POINTER(curr_conn_status));
 		set_connected_icons_state(curr_conn_status);
-		gdk_threads_leave();
 		conn_status = curr_conn_status;
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	}
 
-	gdk_threads_enter();
 	g_list_foreach(get_list("runtime_status"),rt_update_status,NULL);
 	g_list_foreach(get_list("ww_status"),rt_update_status,NULL);
-	gdk_threads_leave();
 
 	if (count > 60 )
 		count = 0;

@@ -57,9 +57,7 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 	if (!firmware)
 		return;
 
-	gdk_threads_enter();
 	set_title_f(g_strdup(_("Queuing read of all ECU data...")));
-	gdk_threads_leave();
 	io_cmd_f(firmware->get_all_command,NULL);
 }
 

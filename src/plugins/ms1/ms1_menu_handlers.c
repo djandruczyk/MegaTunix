@@ -37,7 +37,6 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
-	gdk_threads_enter();
 	if (firmware->capabilities & MS1)
 	{
 		menu = glade_xml_get_widget (xml, "tools_menu_menu");
@@ -50,6 +49,5 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 		gtk_widget_show_all(menu);
 	}
-	gdk_threads_leave();
 	return;
 }

@@ -124,9 +124,7 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 	if (!firmware)
 		return;
 
-	gdk_threads_enter();
 	set_title_f(g_strdup(_("Queuing read of all ECU data...")));
-	gdk_threads_leave();
 	io_cmd_f(firmware->get_all_command,NULL);
 }
 
@@ -310,7 +308,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					else if (DATA_GET(output->data, "start")) /* start */
 					{
 						thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Initiating FreeEMS Benchtest: Run time should be about %.1f seconds...\n"),clock/1000.0),FALSE,FALSE);
-						id = g_timeout_add(500,benchtest_clock_update,GINT_TO_POINTER(clock));
+						id = gdk_threads_add_timeout(500,benchtest_clock_update,GINT_TO_POINTER(clock));
 						DATA_SET(global_data,"benchtest_clock_id",GINT_TO_POINTER(id));
 					}
 					else if (DATA_GET(output->data, "stop")) /* stop */

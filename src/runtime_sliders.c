@@ -758,7 +758,6 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	}
 
 	
-	gdk_threads_enter();
 	if ((current != previous) || 
 			(DATA_GET(global_data,"rt_forced_update")))
 	{
@@ -805,7 +804,6 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 		last_upd = count;
 	}
 
-	gdk_threads_leave();
 	if (last_upd > 5000)
 		last_upd = 0;
 	count++;

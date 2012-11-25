@@ -784,9 +784,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	if (DATA_GET(global_data,"leaving"))
 		return;
 
-	gdk_threads_enter();
 	set_title_f(g_strdup(_("Updating Controls...")));
-	gdk_threads_leave();
 	DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 
 	/* DualTable Fuel Calculations
@@ -931,17 +929,13 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 			firmware->rf_params[i]->num_squirts = 1;
 		firmware->rf_params[i]->last_num_squirts = firmware->rf_params[i]->num_squirts;
 
-		gdk_threads_enter();
 		set_reqfuel_color_f(BLACK,i);
-		gdk_threads_leave();
 	}
 
 	DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 	thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Ready...</b>")));
-	gdk_threads_enter();
 	update_current_notebook_page_f();
 	set_title_f(g_strdup(_("Ready...")));
-	gdk_threads_leave();
 	return;
 }
 

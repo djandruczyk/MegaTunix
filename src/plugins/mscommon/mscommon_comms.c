@@ -719,9 +719,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 				// This at least only recalcs the limits on one... 
 				if (firmware->table_params[i]->z_page == page)
 				{
-					gdk_threads_enter();
 					recalc_table_limits_f(canID,i);
-					gdk_threads_leave();
 					if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 					{
 						tmpbuf = g_strdup_printf("table%i_color_id",i);
@@ -764,19 +762,15 @@ red_or_black:
 		if(memcmp(ecu_data_last[i],ecu_data[i],firmware->page_params[i]->length) != 0)
 		{
 			firmware->page_params[i]->needs_burn = TRUE;
-			gdk_threads_enter();
 			thread_set_group_color_f(RED,"burners");
 			slaves_set_color(RED,"burners");
-			gdk_threads_leave();
 			return;
 		}
 		else
 			firmware->page_params[i]->needs_burn = FALSE;
 	}
-	gdk_threads_enter();
 	thread_set_group_color_f(BLACK,"burners");
 	slaves_set_color(BLACK,"burners");
-	gdk_threads_leave();
 	return;
 }
 
@@ -832,7 +826,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 
 	if (DATA_GET(global_data,"offline"))
 	{
-		g_timeout_add(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
+		gdk_threads_add_timeout(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 		MTXDBG(THREADS,_("Thread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
@@ -890,7 +884,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
-				g_timeout_add(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
+				gdk_threads_add_timeout(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 				MTXDBG(THREADS,_("Thread exiting, told to!\n"));
 				g_thread_exit(0);
 			}

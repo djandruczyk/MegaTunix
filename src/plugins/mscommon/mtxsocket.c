@@ -1356,7 +1356,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
 	if (DATA_GET(global_data,"offline"))
 	{
-		g_timeout_add(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
+		gdk_threads_add_timeout(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
 		g_thread_exit(0);
 	}
 	if (!io_repair_queue)
@@ -1390,7 +1390,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 		/* Message queue used to exit immediately */
 		if (g_async_queue_try_pop(io_repair_queue))
 		{
-			g_timeout_add(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
+			gdk_threads_add_timeout(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
 			g_thread_exit(0);
 		}
 		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
@@ -1880,9 +1880,7 @@ close_control:
 							// This at least only recalcs the limits on one... 
 							if (firmware->table_params[i]->z_page == page)
 							{                       
-								gdk_threads_enter();
 								recalc_table_limits_f(canID,i);
-								gdk_threads_leave();
 								if ((firmware->table_params[i]->last_z_maxval != firmware->table_params[i]->z_maxval) || (firmware->table_params[i]->last_z_minval != firmware->table_params[i]->z_minval))
 								{                       
 									tmpbuf = g_strdup_printf("table%i_color_id",i);

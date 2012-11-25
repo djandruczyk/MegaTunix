@@ -120,9 +120,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	dealloc_io_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
 
-	gdk_threads_enter();
 	gdk_flush();
-	gdk_threads_leave();
 	g_async_queue_unref(pf_dispatch_queue);
 	MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
 	return TRUE;
@@ -188,9 +186,7 @@ trypop:
 						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
 						if (!update_widget_f)
 							get_symbol("update_widget",(void **)&update_widget_f);
-						gdk_threads_enter();
 						update_widget_f(widget,NULL);
-						gdk_threads_leave();
 						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 						message->payload = NULL;
 					}
@@ -205,13 +201,11 @@ trypop:
 					if (!ecu_widgets)
 						ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
-					gdk_threads_enter();
 					for (i=range->offset;i<range->offset +range->len;i++)
 					{
 						for (gint j=0;j<g_list_length(ecu_widgets[range->page][i]);j++)
 							update_widget_f(g_list_nth_data(ecu_widgets[range->page][i],j),NULL);
 					}
-					gdk_threads_leave();
 					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
 					cleanup(range);
 					message->payload = NULL;
@@ -219,18 +213,14 @@ trypop:
 				case UPD_LOGBAR:
 					MTXDBG(DISPATCHER,_("Logbar update\n"));
 					t_message = (Text_Message *)message->payload;
-					gdk_threads_enter();
 					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear,FALSE);
-					gdk_threads_leave();
 					dealloc_textmessage(t_message);
 					message->payload = NULL;
 					break;
 				case UPD_RUN_FUNCTION:
 					MTXDBG(DISPATCHER,_("Run function\n"));
 					qfunc = (QFunction *)message->payload;
-					gdk_threads_enter();
 					run_post_functions(qfunc->func_name);
-					gdk_threads_leave();
 					dealloc_qfunction(qfunc);
 					message->payload = NULL;
 					break;
@@ -243,40 +233,30 @@ trypop:
 					{
 						case MTX_GROUP_COLOR:
 							QUIET_MTXDBG(DISPATCHER,_("group color\n"));
-							gdk_threads_enter();
 							set_group_color(w_update->color,w_update->group_name);
-							gdk_threads_leave();
 							break;
 
 						case MTX_ENTRY:
 							QUIET_MTXDBG(DISPATCHER,_("entry\n"));
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
-							gdk_threads_enter();
 							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
-							gdk_threads_leave();
 							break;
 						case MTX_LABEL:
 							QUIET_MTXDBG(DISPATCHER,_("label\n"));
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
-							gdk_threads_enter();
 							gtk_label_set_markup(GTK_LABEL(widget),w_update->msg);
-							gdk_threads_leave();
 							break;
 						case MTX_TITLE:
 							QUIET_MTXDBG(DISPATCHER,_("title\n"));
-							gdk_threads_enter();
 							set_title(g_strdup(w_update->msg));
-							gdk_threads_leave();
 							break;
 						case MTX_SENSITIVE:
 							QUIET_MTXDBG(DISPATCHER,_("sensitivity change\n"));
 							if (NULL == (widget = lookup_widget(w_update->widget_name)))
 								break;
-							gdk_threads_enter();
 							gtk_widget_set_sensitive(GTK_WIDGET(widget),w_update->state);
-							gdk_threads_leave();
 							break;
 						default:
 							break;
@@ -284,15 +264,11 @@ trypop:
 					dealloc_w_update(w_update);
 					message->payload = NULL;
 					break;
-					gdk_threads_enter();
 					reset_temps(DATA_GET(global_data,"mtx_temp_units"));
-					gdk_threads_leave();
 			}
 
-			gdk_threads_enter();
 			while (gtk_events_pending())
 				gtk_main_iteration();
-			gdk_threads_leave();
 		}
 	}
 dealloc:
@@ -308,9 +284,7 @@ dealloc:
 		MTXDBG(DISPATCHER,_("trying to handle another message\n"));
 		goto trypop;
 	}
-	gdk_threads_enter();
 	gdk_flush();
-	gdk_threads_leave();
 	MTXDBG(DISPATCHER,_("Leaving Gui Dispatcher\n"));
 	return TRUE;
 }

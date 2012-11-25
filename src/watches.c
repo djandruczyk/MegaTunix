@@ -298,9 +298,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 			{
 				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
 				watch->val = tmpi;
-				gdk_threads_enter();
 				watch->func(watch);
-				gdk_threads_leave();
 				if (watch->one_shot)
 					remove_rtv_watch(watch->id);
 			}
@@ -320,9 +318,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 			{
 				tmpi = ((tmpi & (1 << watch->bit)) >> watch->bit);
 				watch->val = (gfloat)tmpi;
-				gdk_threads_enter();
 				watch->func(watch);
-				gdk_threads_leave();
 				if (watch->one_shot)
 					remove_rtv_watch(watch->id);
 			}
@@ -337,9 +333,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 			/* If it's a one-shot, fire it no matter what... */
 			if (watch->one_shot)
 			{
-				gdk_threads_enter();
 				watch->func(watch);
-				gdk_threads_leave();
 				remove_rtv_watch(watch->id);
 				break;
 			}
@@ -347,9 +341,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 			if (watch->val != watch->last_val)
 			{
 				watch->last_val = watch->val;
-				gdk_threads_enter();
 				watch->func(watch);
-				gdk_threads_leave();
 			}
 			else
 				watch->last_val = watch->val;
@@ -363,9 +355,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 				else
 					watch->vals[i]=0.0;
 			}
-			gdk_threads_enter();
 			watch->func(watch);
-			gdk_threads_leave();
 			if (watch->one_shot)
 			{
 				remove_rtv_watch(watch->id);
@@ -387,9 +377,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 				else
 					*watch->hist_vals[i]=0.0;
 			}
-			gdk_threads_enter();
 			watch->func(watch);
-			gdk_threads_leave();
 			if (watch->one_shot)
 			{
 				remove_rtv_watch(watch->id);

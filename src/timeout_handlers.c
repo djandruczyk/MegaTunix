@@ -87,7 +87,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 			if (!DATA_GET(global_data,"statuscounts_id"))
 			{
 				mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
-				id = g_timeout_add_full(500,100,(GSourceFunc)update_errcounts,mutex,timeout_done);
+				id = gdk_threads_add_timeout_full(500,100,(GSourceFunc)update_errcounts,mutex,timeout_done);
 				DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(id));
 			}
 			else
@@ -270,7 +270,7 @@ G_MODULE_EXPORT gboolean check_for_first_time(void)
 {
 	if (DATA_GET(global_data,"first_time"))
 		printf("should run first_time_wizard\n");
-        gdk_threads_add_timeout(100,(GSourceFunc)personality_choice,NULL);
+    gdk_threads_add_timeout(100,(GSourceFunc)personality_choice,NULL);
 	return FALSE;
 
 }

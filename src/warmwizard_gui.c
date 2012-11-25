@@ -48,7 +48,6 @@ G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 	else
 		range = C_temps;
 
-	gdk_threads_enter();
 	for (i=0;i<10;i++)
 	{
 		if (skipnext == FALSE)
@@ -73,6 +72,4 @@ G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 			g_free(name);
 		}
 	}
-	gdk_threads_leave();
-
 }

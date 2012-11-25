@@ -1223,7 +1223,6 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 	 */
 #ifdef __WIN32__
 	/* Scroll the screen to the left... */
-	gdk_threads_enter();
 	gdk_draw_drawable(pmap,
 			gtk_widget_get_style(widget)->black_gc,
 			pixmap,
@@ -1256,7 +1255,6 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 			lv_zoom,h);
 
 	gdk_window_clear(window);
-	gdk_threads_leave();
 }
 
 
