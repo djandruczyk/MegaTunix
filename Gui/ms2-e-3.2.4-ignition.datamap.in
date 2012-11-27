@@ -370,12 +370,13 @@ bind_to_list=oddfire
 _tooltip=For oddfire engines, this is the smaller of the two angles between ignition events
 
 [spark_latency_entry]
-keys=offset,raw_upper,fromecu_mult,bind_to_list,tooltip
+keys=offset,size,raw_upper,fromecu_mult,bind_to_list,tooltip
 offset=730
-raw_upper=170
+size=_U16_
+raw_upper=500
 fromecu_mult=0.66667
 bind_to_list=ign
-_tooltip=This is only to be used to compensat for spark retarding with increasing RPM, otherwise leave at zero.
+_tooltip=This is only to be used to compensate for spark retarding with increasing RPM, otherwise leave at zero.
 
 [fixed_timing_entry]
 keys=offset,size,precision,raw_lower,raw_upper,fromecu_mult,bind_to_list,tooltip

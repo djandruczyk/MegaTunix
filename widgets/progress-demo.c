@@ -29,6 +29,8 @@ int main (int argc, char **argv)
 	GtkWidget *pbar = NULL;
 	gint timeout = 0;
 
+	g_thread_init(NULL);
+	gdk_threads_init();
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -42,14 +44,16 @@ int main (int argc, char **argv)
 
 	gtk_widget_show_all (window);
 
-	timeout = g_timeout_add(30,(GSourceFunc)update_pbar,(gpointer)pbar);
+	timeout = gdk_threads_add_timeout(30,(GSourceFunc)update_pbar,(gpointer)pbar);
 
 	g_signal_connect (window, "delete_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 	g_signal_connect (window, "destroy_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
+	gdk_threads_enter();
 	gtk_main ();
+	gdk_threads_leave();
 	return 0;
 }
 

@@ -38,6 +38,8 @@ int main (int argc, char **argv)
 	gfloat data[3] = {0.1,1.1,2.2};
 	gint timeout = 0;
 
+	g_thread_init(NULL);
+	gdk_threads_init();
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -63,24 +65,21 @@ int main (int argc, char **argv)
 	mtx_stripchart_get_latest_values(MTX_STRIPCHART(chart),data);
 /*	printf("latest values are %f, %f, %f\n",data[0],data[1],data[2]);*/
 
-
 	/*mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);*/
 
-	
-
-	timeout = g_timeout_add(40,(GSourceFunc)update_stripchart,(gpointer)chart);
+	timeout = gdk_threads_add_timeout(40,(GSourceFunc)update_stripchart,(gpointer)chart);
 /*	g_timeout_add(4000,(GSourceFunc)remove_trace,GINT_TO_POINTER(trace2));*/
 
-
 	gtk_widget_show_all (window);
-
 
 	g_signal_connect (window, "delete_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 	g_signal_connect (window, "destroy_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
+	gdk_threads_enter();
 	gtk_main ();
+	gdk_threads_leave();
 	return 0;
 }
 

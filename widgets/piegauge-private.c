@@ -28,7 +28,7 @@
   \brief returns the GType associated with a MtxPieGauge, registering it if 
   needed
   \returns the GType for a MtxPieGauge
-  */
+ */
 GType mtx_pie_gauge_get_type(void)
 {
 	static GType mtx_pie_gauge_type = 0;

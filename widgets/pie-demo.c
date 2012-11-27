@@ -29,6 +29,8 @@ int main (int argc, char **argv)
 	GtkWidget *gauge = NULL;
 	gint timeout = 0;
 
+	g_thread_init(NULL);
+	gdk_threads_init();
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -45,14 +47,16 @@ int main (int argc, char **argv)
 
 	/*mtx_gauge_face_set_attribute(MTX_PIE_GAUGE(gauge),UBOUND, 8000.0);*/
 
-	timeout = g_timeout_add(20,(GSourceFunc)update_gauge,(gpointer)gauge);
+	timeout = gdk_threads_add_timeout(20,(GSourceFunc)update_gauge,(gpointer)gauge);
 
 	g_signal_connect (window, "delete_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 	g_signal_connect (window, "destroy_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
+	gdk_threads_enter();
 	gtk_main ();
+	gdk_threads_leave();
 	return 0;
 }
 

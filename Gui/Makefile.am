@@ -218,6 +218,7 @@ gui_in_files = 	\
 		ms2-e-3.x-ego_rev.datamap.in \
 		ms2-e-3.x-globals.datamap.in \
 		ms2-e-3.x-ignition.datamap.in \
+		ms2-e-3.2.4-ignition.datamap.in \
 		ms2-e-3.x-inj_timing_6x6x3.datamap.in \
 		ms2-e-3.x-local_outputs.datamap.in \
 		ms2-e-3.x.als-local_outputs.datamap.in \

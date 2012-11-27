@@ -219,13 +219,12 @@ dont_backup=TRUE
 _tooltip=Set this to 12345 and hit enter, then Burn. This enables output test mode.  Set to 0 and hit burn to return to normal. (or power cycle ECU)
 
 [output_interval_entry]
-keys=page,offset,size,raw_upper,fromecu_mult,precision,dont_backup,tooltip
+keys=page,offset,size,raw_upper,fromecu_mult,precision,tooltip
 page=3
 offset=4
 size=_U16_
 fromecu_mult=0.128
 raw_upper=65535
-dont_backup=TRUE
 precision=1
 _tooltip=Sets output interval in ms. (i.e. how often it runs the test, i.e. 1000 means once per second, 10 means 100x per second)
 
@@ -239,13 +238,12 @@ precision=1
 _tooltip=Sets output dwell in ms.
 
 [inj_test_pw_entry]
-keys=page,offset,size,raw_upper,fromecu_mult,precision,dont_backup,tooltip
+keys=page,offset,size,raw_upper,fromecu_mult,precision,tooltip
 page=3
 offset=7
 size=_U16_
 fromecu_mult=0.000666
 raw_upper=65535
-dont_backup=TRUE
 precision=3
 _tooltip=Sets output PW in ms.
 

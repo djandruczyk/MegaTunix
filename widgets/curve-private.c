@@ -1034,7 +1034,7 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 		priv->vertex_selected = FALSE;
 
 		if (priv->auto_rescale_id == 0)
-			priv->auto_rescale_id = g_timeout_add(500,(GSourceFunc)auto_rescale,priv);
+			priv->auto_rescale_id = gdk_threads_add_timeout(500,(GSourceFunc)auto_rescale,priv);
 		if (priv->coord_changed)
 			g_signal_emit_by_name((gpointer)curve, "coords-changed");
 		return TRUE;
@@ -1201,7 +1201,7 @@ gboolean mtx_curve_focus_event (GtkWidget *curve, GdkEventCrossing *event)
 		mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 	}
 	if ((event->type == GDK_LEAVE_NOTIFY) && (priv->auto_hide))
-		priv->vertex_id = g_timeout_add(2000,delay_turnoff_vertexes,curve);
+		priv->vertex_id = gdk_threads_add_timeout(2000,delay_turnoff_vertexes,curve);
 	return FALSE;
 }
 

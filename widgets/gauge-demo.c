@@ -31,6 +31,8 @@ int main (int argc, char **argv)
 	GtkWidget *gauge = NULL;
 	gint timeout = 0;
 
+	g_thread_init(NULL);
+	gdk_threads_init();
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -62,7 +64,7 @@ int main (int argc, char **argv)
 		printf("Attempting to load user specified \"%s\"\n",argv[1]);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),argv[1]);
 	}
-	timeout = g_timeout_add(20,(GSourceFunc)update_gauge,(gpointer)gauge);
+	timeout = gdk_threads_add_timeout(20,(GSourceFunc)update_gauge,(gpointer)gauge);
 
 	mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),"output2.xml");
 
@@ -77,7 +79,9 @@ int main (int argc, char **argv)
 	g_signal_connect (window, "destroy_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
+	gdk_threads_enter();
 	gtk_main ();
+	gdk_threads_leave();
 	return 0;
 }
 

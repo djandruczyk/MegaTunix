@@ -38,6 +38,8 @@ int main (int argc, char **argv)
 	gint timeout = 0;
 	gint i = 0;
 
+	g_thread_init(NULL);
+	gdk_threads_init();
 	gtk_init (&argc, &argv);
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -78,7 +80,7 @@ int main (int argc, char **argv)
 	g_signal_connect(G_OBJECT(curve), "marker-proximity",
 			G_CALLBACK(marker_proximity),NULL);
 
-	timeout = g_timeout_add(40,(GSourceFunc)update_curve_marker,(gpointer)curve);
+	timeout = gdk_threads_add_timeout(40,(GSourceFunc)update_curve_marker,(gpointer)curve);
 
 	gtk_widget_show_all (window);
 
@@ -88,7 +90,9 @@ int main (int argc, char **argv)
 	g_signal_connect (window, "destroy_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
 
+	gdk_threads_enter();
 	gtk_main ();
+	gdk_threads_leave();
 	return 0;
 }
 
