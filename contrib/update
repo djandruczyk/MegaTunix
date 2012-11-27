@@ -3,3 +3,4 @@
 git pull && ./autogen.sh && make clean && make -j2 
 
 sudo make install
+sudo ldconfig
