@@ -4,7 +4,7 @@
 
 make distclean
 cross32-configure ./configure --prefix=/opt/crossroot32/dest $* && \
-	make -j3  && rm -rf /opt/crossroot32/dest/* && make install && \
+	make -j5  && rm -rf /opt/crossroot32/dest/* && make install && \
 	./contrib/builder32 && \
 . uncross 
 # make distclean

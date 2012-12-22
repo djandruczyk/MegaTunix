@@ -239,6 +239,7 @@ G_MODULE_EXPORT void  update_logbar(
 		g_free(tmpbuf);
 	if (free)
 		g_free(message);
+	gdk_flush();
 	return;	
 }
 
@@ -411,6 +412,7 @@ G_MODULE_EXPORT void set_title(gchar * text)
 		}
 	}
 	g_free(text);
+	gdk_flush();
 }
 
 
