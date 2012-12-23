@@ -1479,6 +1479,17 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 
 
 /*!
+  \brief wrapper to call the real function via g_idle_add
+  \param data is the pointer to dashboard widget
+  \returns FALSE
+  */
+G_MODULE_EXPORT gboolean hide_dash_resizers_wrapper(gpointer data)
+{
+	g_idle_add(hide_dash_resizers,data);
+	return FALSE;
+}
+
+/*!
   \brief Hides dashboard resizers
   \param data is the pointer to dashboard widget
   \returns FALSE
@@ -1514,7 +1525,7 @@ G_MODULE_EXPORT gboolean enter_leave_event(GtkWidget *widget, GdkEventCrossing *
 	/* If "leaving" the window, set timeout to hide the resizers */
 	if ((!OBJ_GET(dash,"timer_active")) && (OBJ_GET(dash,"resizers_visible")))
 	{
-		guint id = gdk_threads_add_timeout(5000,hide_dash_resizers,dash);
+		guint id = g_timeout_add(5000,hide_dash_resizers_wrapper,dash);
 		OBJ_SET(dash,"timer_active",GINT_TO_POINTER(TRUE));
 		OBJ_SET(dash,"timer_id",GINT_TO_POINTER(id));
 	}
