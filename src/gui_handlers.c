@@ -898,7 +898,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (source)
 			{
 				g_source_remove(source);
-				id = gdk_threads_add_timeout_full(175,(GINT)(1000/(float)tmpi),(GSourceFunc)update_rtsliders,NULL,NULL);
+				id = g_timeout_add_full(175,(GINT)(1000/(float)tmpi),(GSourceFunc)run_function, (gpointer )&update_rtsliders,NULL);
 				DATA_SET(global_data,"rtslider_id",GINT_TO_POINTER(id));
 			}
 			break;
@@ -908,14 +908,14 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (source)
 			{
 				g_source_remove(source);
-				id = gdk_threads_add_timeout_full(180,(GINT)(1000.0/(float)tmpi),(GSourceFunc)update_rttext,NULL,NULL);
+				id = g_timeout_add_full(180,(GINT)(1000.0/(float)tmpi),(GSourceFunc)run_function, (gpointer)&update_rttext,NULL);
 				DATA_SET(global_data,"rttext_id",GINT_TO_POINTER(id));
 			}
 			source = (GINT)DATA_GET(global_data,"rtstatus_id");
 			if (source)
 			{
 				g_source_remove(source);
-				id = gdk_threads_add_timeout_full(220,(GINT)(2000.0/(float)tmpi),(GSourceFunc)update_rtstatus,NULL,NULL);
+				id = g_timeout_add_full(220,(GINT)(2000.0/(float)tmpi),(GSourceFunc)run_function, (gpointer)&update_rtstatus,NULL);
 				DATA_SET(global_data,"rtstatus_id",GINT_TO_POINTER(id));
 			}
 			break;
@@ -925,7 +925,7 @@ G_MODULE_EXPORT gboolean spin_button_handler(GtkWidget *widget, gpointer data)
 			if (source)
 			{
 				g_source_remove(source);
-				id = gdk_threads_add_timeout_full(135,(GINT)(1000.0/(float)tmpi),(GSourceFunc)update_dashboards,NULL,NULL);
+				id = g_timeout_add_full(135,(GINT)(1000.0/(float)tmpi),(GSourceFunc)run_function, (gpointer)&update_dashboards,NULL);
 				DATA_SET(global_data,"dashboard_id",GINT_TO_POINTER(id));
 			}
 			break;
@@ -1444,7 +1444,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 			{
 				*(void **)(&func) = g_list_nth_data(func_list,i);
 				fps = (GINT)g_list_nth_data(func_fps_list,i);
-				id = gdk_threads_add_timeout_full(110,1000.0/fps,func,NULL,NULL);
+				id = g_timeout_add_full(110,1000.0/fps,(GSourceFunc)run_function, &func,NULL);
 				g_signal_connect(G_OBJECT(notebook), "switch_page",
 						G_CALLBACK(cancel_visible_function),
 						GINT_TO_POINTER(id));
@@ -1475,7 +1475,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 					{
 						*(void **)(&func) = g_list_nth_data(func_list,i);
 						fps = (GINT)g_list_nth_data(func_fps_list,i);
-						id = gdk_threads_add_timeout_full(110,1000.0/fps,func,NULL,NULL);
+						id = g_timeout_add_full(110,1000.0/fps,(GSourceFunc)run_function, (gpointer)&func,NULL);
 						g_signal_connect(G_OBJECT(notebook), "switch_page",
 								G_CALLBACK(cancel_visible_function),
 								GINT_TO_POINTER(id));
@@ -1541,7 +1541,7 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkWidget *page, guin
 			{
 				*(void **)(&func) = g_list_nth_data(func_list,i);
 				fps = (GINT)g_list_nth_data(func_fps_list,i);
-				id = gdk_threads_add_timeout_full(110,1000.0/fps,func,NULL,NULL);
+				id = g_timeout_add_full(110,1000.0/fps,(GSourceFunc)run_function,(gpointer)&func,NULL);
 				g_signal_connect(G_OBJECT(notebook), "switch_page",
 						G_CALLBACK(cancel_visible_function),
 						GINT_TO_POINTER(id));
