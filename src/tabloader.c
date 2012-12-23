@@ -206,7 +206,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			gtk_main_iteration();
 		}
 	}
-	gdk_threads_add_timeout(500,(GSourceFunc)preload_deps,tabinfos);
+	g_idle_add((GSourceFunc)preload_deps,tabinfos);
 	DATA_SET_FULL(global_data,"tabinfos",tabinfos,dealloc_tabinfos);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	MTXDBG(TABLOADER,_("All is well, leaving...\n\n"));
