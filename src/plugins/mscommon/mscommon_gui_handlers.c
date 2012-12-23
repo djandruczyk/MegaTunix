@@ -223,7 +223,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 			{
 				/*              printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),(gchar *)OBJ_GET(widget,"source_value"));*/
 				g_hash_table_replace(sources_hash,(gpointer)g_strdup((gchar *)OBJ_GET(widget,"source_key")),(gpointer)g_strdup((gchar *)OBJ_GET(widget,"source_value")));
-				gdk_threads_add_timeout(2000,update_multi_expression,NULL);
+				g_timeout_add(2000,update_multi_expression_wrapper,NULL);
 			}
 			/* FAll Through */
 		case GENERIC:
@@ -311,7 +311,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	 * dispatch queue to let it run in the correct "state"....
 	 */
 	if (OBJ_GET(widget,"table_2_update"))
-		gdk_threads_add_timeout(2000,force_update_table,OBJ_GET(widget,"table_2_update"));
+		g_timeout_add(2000,force_update_table_wrapper,OBJ_GET(widget,"table_2_update"));
 
 	if (OBJ_GET(widget,"algorithm"))
 		handle_algorithm(widget);
@@ -319,8 +319,8 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	 * In this case, MAP sensor related ctrls */
 	if (OBJ_GET(widget,"group_2_update"))
 	{
-		gdk_threads_add_timeout(2000,force_view_recompute,NULL);
-		gdk_threads_add_timeout(2000,trigger_group_update,OBJ_GET(widget,"group_2_update"));
+		g_timeout_add(2000,force_view_recompute_wrapper,NULL);
+		g_timeout_add(2000,trigger_group_update_wrapper,OBJ_GET(widget,"group_2_update"));
 	}
 
 	if (dl_type == IMMEDIATE)
@@ -568,7 +568,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 				}
 				/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
 				g_hash_table_replace(sources_hash,g_strdup((gchar *)OBJ_GET(widget,"source_key")),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
-				gdk_threads_add_timeout(2000,update_multi_expression,NULL);
+				g_timeout_add(2000,update_multi_expression_wrapper,NULL);
 			}
 			/* Fall through to generic */
 		case GENERIC:
@@ -652,7 +652,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	if (OBJ_GET(widget,"swap_labels"))
 		swap_labels_f(widget,bitval);
 	if (OBJ_GET(widget,"table_2_update"))
-		gdk_threads_add_timeout(2000,force_update_table,OBJ_GET(widget,"table_2_update"));
+		g_timeout_add(2000,force_update_table_wrapper,OBJ_GET(widget,"table_2_update"));
 	if (set_labels)
 	{
 		total = get_choice_count_f(model);
@@ -681,6 +681,15 @@ combo_download:
 	return TRUE;
 }
 
+
+/*
+ * \brief wrapper for force_update_table()
+ */
+G_MODULE_EXPORT gboolean force_update_table_wrapper(gpointer data)
+{
+	g_idle_add(force_update_table,data);
+	return FALSE;
+}
 
 
 /*!
@@ -739,6 +748,17 @@ G_MODULE_EXPORT gboolean trigger_group_update(gpointer data)
 
 	g_list_foreach(get_list_f((gchar *)data),update_widget,NULL);
 	return FALSE;/* Make it cancel and not run again till called */
+}
+
+
+/*!
+  \brief wrapper for update_multi_expression
+  \returns FALSE to cancel the timeout
+  */
+G_MODULE_EXPORT gboolean update_multi_expression_wrapper(gpointer data)
+{
+	g_idle_add(update_multi_expression,data);
+	return FALSE;
 }
 
 
@@ -1627,8 +1647,8 @@ void handle_group_2_update(GtkWidget *widget)
 
 	g_hash_table_replace(sources_hash,g_strdup(source_key),g_strdup(source_value));
 
-	gdk_threads_add_timeout(2000,force_view_recompute,NULL);
-	gdk_threads_add_timeout(2000,trigger_group_update,OBJ_GET(widget,"group_2_update"));
+	g_timeout_add(2000,force_view_recompute_wrapper,NULL);
+	g_timeout_add(2000,trigger_group_update_wrapper,OBJ_GET(widget,"group_2_update"));
 
 }
 

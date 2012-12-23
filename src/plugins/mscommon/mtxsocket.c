@@ -1356,7 +1356,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
 	if (DATA_GET(global_data,"offline"))
 	{
-		gdk_threads_add_timeout(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
+		g_timeout_add(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
 		g_thread_exit(0);
 	}
 	if (!io_repair_queue)
@@ -1390,7 +1390,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 		/* Message queue used to exit immediately */
 		if (g_async_queue_try_pop(io_repair_queue))
 		{
-			gdk_threads_add_timeout(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
+			g_timeout_add(100,(gboolean (*)(void*))queue_function_f,(gpointer)"kill_conn_warning");
 			g_thread_exit(0);
 		}
 		autodetect = (GBOOLEAN) DATA_GET(global_data,"autodetect_port");
@@ -1886,7 +1886,7 @@ close_control:
 									tmpbuf = g_strdup_printf("table%i_color_id",i);
 									if (!DATA_GET(global_data,tmpbuf))
 									{                       
-										id = gdk_threads_add_timeout(2000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
+										id = g_timeout_add(2000,(GSourceFunc)table_color_refresh_wrapper_f,GINT_TO_POINTER(i));
 										DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
 									}               
 									g_free(tmpbuf); 

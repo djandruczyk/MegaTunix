@@ -54,6 +54,16 @@ static GList *views = NULL;
 extern gconstpointer *global_data;
 
 
+/*
+ * \brief wrapper for force_view_recompute()
+ */
+G_MODULE_EXPORT gboolean force_view_recompute_wrapper(gpointer data)
+{
+	g_idle_add(force_view_recompute,data);
+	return FALSE;
+}
+
+
 /*!
   \brief Forces the model based on the view
   \param data is unused
@@ -415,7 +425,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			ms_send_to_ecu(canID, page, lim_offset, MTX_U08, result, TRUE);
 			break;
 	}
-	gdk_threads_add_timeout(500,(GSourceFunc)deferred_model_update,(GtkWidget *)view);
+	g_timeout_add(500,(GSourceFunc)deferred_model_update,(GtkWidget *)view);
 	return;
 
 }
@@ -427,7 +437,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
  \see cell_edited
  \param widget is the pointer to the TreeView widget.
  */
-G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
+void update_model_from_view(GtkWidget * widget)
 {
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW(widget));
 	GtkTreeIter    iter;
@@ -675,6 +685,6 @@ G_MODULE_EXPORT void update_model_from_view(GtkWidget * widget)
   */
 G_MODULE_EXPORT gboolean deferred_model_update(GtkWidget * widget)
 {
-	update_model_from_view(widget);
+	g_idle_add((GSourceFunc)update_model_from_view,widget);
 	return FALSE;
 }
