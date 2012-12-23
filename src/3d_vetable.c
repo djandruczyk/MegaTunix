@@ -81,8 +81,6 @@
 #define DEFAULT_HEIGHT 480                                                                                  
 extern gconstpointer *global_data;
 
-static gboolean delayed_expose(gpointer);
-static gboolean delayed_reconfigure(gpointer);
 
 /* New Font Stuff */
 #ifdef _WIN32_
@@ -756,8 +754,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gtk_widget_show_all(window);
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	gdk_threads_add_timeout(500,(GSourceFunc)delayed_reconfigure,ve_view);
-	ve_view->render_id = gdk_threads_add_timeout_full(150,1000.0/(float)ve_view->requested_fps,(GSourceFunc)update_ve3d,GINT_TO_POINTER(table_num),NULL);
+	g_timeout_add(500,(GSourceFunc)delayed_reconfigure_wrapper,ve_view);
+	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,(GSourceFunc)update_ve3d_wrapper,GINT_TO_POINTER(table_num),NULL);
 	return TRUE;
 }
 
@@ -852,7 +850,7 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	ve_view->mesh_created = FALSE;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
-	gdk_threads_add_timeout(500,delayed_expose,ve_view);
+	g_timeout_add(500,delayed_expose_wrapper,ve_view);
 }
 
 
@@ -2467,10 +2465,22 @@ G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 	if (!DATA_GET(global_data,"ve3d_redraw_queued"))
 	{
 		DATA_SET(global_data,"ve3d_redraw_queued",GINT_TO_POINTER(TRUE));
-		gdk_threads_add_timeout(300,sleep_and_redraw,ve_view);
+		g_timeout_add(300,sleep_and_redraw_wrapper,ve_view);
 	}
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return;
+}
+
+
+/*!
+  \brief wrapper for sleep_and_redraw
+  \param data is the pointer to view
+  \returns FALSE to cause timeout to expire
+  */
+G_MODULE_EXPORT gboolean sleep_and_redraw_wrapper(gpointer data)
+{
+	g_idle_add(sleep_and_redraw,data);
+	return FALSE;
 }
 
 
@@ -2875,7 +2885,7 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 	}
 	ve_view->fixed_scale = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	ve_view->mesh_created=FALSE;
-	gdk_threads_add_timeout(500,delayed_expose,ve_view);
+	g_timeout_add(500,delayed_expose_wrapper,ve_view);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return TRUE;
 }
@@ -2900,7 +2910,7 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 	}
 	ve_view->wireframe = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	gdk_threads_add_timeout(500,delayed_expose,ve_view);
+	g_timeout_add(500,delayed_expose_wrapper,ve_view);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return TRUE;
 }
@@ -2925,7 +2935,7 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 	}
 	ve_view->opacity = gtk_range_get_value(GTK_RANGE(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	gdk_threads_add_timeout(500,delayed_expose,ve_view);
+	g_timeout_add(500,delayed_expose_wrapper,ve_view);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return TRUE;
 }
@@ -2951,7 +2961,7 @@ G_MODULE_EXPORT gboolean set_fps(GtkWidget *widget, gpointer data)
 	ve_view->requested_fps = (GINT)gtk_range_get_value(GTK_RANGE(widget));
 	if (ve_view->render_id > 0)
 		g_source_remove(ve_view->render_id);
-	ve_view->render_id = gdk_threads_add_timeout_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d,GINT_TO_POINTER(ve_view->table_num),NULL);
+	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d_wrapper,GINT_TO_POINTER(ve_view->table_num),NULL);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	return TRUE;
 }
@@ -3187,10 +3197,23 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 
 
 /*!
+  \brief wrapper to call delayed_expose via g_idle_ad
+  \param data is the pointer to the ve_view structure
+  \returns FALSE to disable timeout
+  */
+gboolean delayed_expose_wrapper(gpointer data)
+{
+	g_idle_add(delayed_expose,data);
+	return FALSE;
+}
+
+
+/*!
   \brief triggers an expose event
   \param data is the pointer to the ve_view structure
   \returns FALSE to disable timeout
   */
+
 gboolean delayed_expose(gpointer data)
 {
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
@@ -3205,6 +3228,19 @@ gboolean delayed_expose(gpointer data)
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
 //	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
 	MTXDBG(OPENGL,_("Leaving\n"));
+	return FALSE;
+}
+
+
+/*!
+  \brief wrapper to run this by g_idle_add
+  \param data is the pointer to the ve_view structure
+  \returns FALSE to disable timeout
+  */
+gboolean delayed_reconfigure_wrapper(gpointer data)
+{
+	g_idle_add(delayed_reconfigure,data);
+
 	return FALSE;
 }
 
@@ -3225,6 +3261,18 @@ gboolean delayed_reconfigure(gpointer data)
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	ve3d_expose_event(ve_view->drawing_area,NULL,GINT_TO_POINTER(ve_view->table_num));
 	MTXDBG(OPENGL,_("Leaving\n"));
+	return FALSE;
+}
+
+
+/*!
+  \brief wrapper for update_ve3d
+  \param data is the pointer to the Ve_View_3D structure
+  \returns TRUE
+  */
+G_MODULE_EXPORT gboolean update_ve3d_wrapper(gpointer data)
+{
+	g_idle_add(update_ve3d,data);
 	return FALSE;
 }
 

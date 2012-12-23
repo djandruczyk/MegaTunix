@@ -242,6 +242,7 @@ void ve3d_draw_text(GtkWidget *, gchar * text, gfloat x, gfloat y, gfloat z);
 void reset_3d_view(GtkWidget *);
 Ve_View_3D * initialize_ve3d_view(void);
 void update_ve3d_if_necessary(int , int );
+gboolean update_ve3d_wrapper(gpointer);
 gboolean update_ve3d(gpointer);
 Cur_Vals * get_current_values(Ve_View_3D *);
 void free_current_values(Cur_Vals *);
@@ -256,12 +257,17 @@ void drawOrthoText(GtkWidget *, char *, GLclampf, GLclampf, GLclampf, GLfloat, G
 void generate_quad_mesh(Ve_View_3D *, Cur_Vals *);
 void queue_ve3d_update(Ve_View_3D *);
 gboolean sleep_and_redraw(gpointer);
+gboolean sleep_and_redraw_wrapper(gpointer);
 void ve3d_grey_window(Ve_View_3D *);
 void gl_print_string(GtkWidget *, const gchar *);
 void gl_destroy_font(GtkWidget *);
 void gl_create_font(GtkWidget *);
 gfloat multi_lookup_and_compute(MultiSource *);
 void multi_lookup_and_compute_n(MultiSource *, gint, gint, gfloat *);
+gboolean delayed_expose(gpointer);
+gboolean delayed_expose_wrapper(gpointer);
+gboolean delayed_reconfigure(gpointer);
+gboolean delayed_reconfigure_wrapper(gpointer);
 /* Prototypes */
 
 #endif
