@@ -36,6 +36,7 @@ void timeout_done(gpointer);
 gboolean early_interrogation(void);
 gboolean personality_choice(void);
 gboolean check_for_first_time(void);
+gboolean run_function(gboolean(*)(gpointer));
 /* Prototypes */
 
 #endif
