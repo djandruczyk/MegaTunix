@@ -139,59 +139,6 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 
 
 /*!
-  \brief gui_dispatcher() is a GTK+ timeout that runs 30 tiems per second 
-  checking for message on the dispatch queue which handles gui operations 
-  after a thread function runs, This will attempt to handle multiple 
-  messages at a time if the queue has multiple message queued up.
-  \param data is unused
-  \returns TRUE 
-  */
-G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
-{
-	static GAsyncQueue *gui_dispatch_queue = NULL;
-	Gui_Message *message = NULL;
-	gint count = 0;
-	extern gconstpointer *global_data;
-
-	if (!gui_dispatch_queue)
-		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
-
-	g_return_val_if_fail(gui_dispatch_queue,FALSE);
-	g_return_val_if_fail(global_data,FALSE);
-	g_async_queue_ref(gui_dispatch_queue);
-trypop:
-	if (DATA_GET(global_data,"gui_dispatcher_exit"))
-	{
-		while (NULL != (message = (Gui_Message *)g_async_queue_try_pop(gui_dispatch_queue)))
-			dealloc_gui_message(message);
-		g_async_queue_unref(gui_dispatch_queue);
-		return FALSE;
-	}
-	message = (Gui_Message *)g_async_queue_try_pop(gui_dispatch_queue);
-	if (!message)
-	{
-		MTXDBG(DISPATCHER,_("no GUI messages waiting, returning\n"));
-		return TRUE;
-	}
-
-	if (message->functions != NULL)
-		g_idle_add(process_gui_message,message);
-	count++;
-	/* try to handle up to 4 messages at a time.  If this is 
-	 * set too high, we can cause the timeout to hog the gui if it's
-	 * too low, things can fall behind. (GL redraw ;( )
-	 * */
-	if (count < 3)
-	{
-		MTXDBG(DISPATCHER,_("trying to handle another message\n"));
-		goto trypop;
-	}
-	MTXDBG(DISPATCHER,_("Leaving Gui Dispatcher\n"));
-	return TRUE;
-}
-
-
-/*!
  * \brief process_gui_message runs asa g_idle (main gtk context) to run
  * gui operatins that are queued off from threads
  * */

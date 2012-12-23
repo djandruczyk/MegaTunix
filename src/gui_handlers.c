@@ -101,7 +101,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	GMutex *mutex = NULL;
-	GMutex *gui_dispatch_mutex = NULL;
 	GTimer *timer = NULL;
 	GThread *thread = NULL;
 	Firmware_Details *firmware = NULL;
@@ -210,21 +209,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 			/* When the above returns, the timeout is done */
 			g_mutex_unlock(mutex);
 		}
-	}
-
-	/* Gui dispatcher */
-	mutex = (GMutex *)DATA_GET(global_data,"gui_dispatch_mutex");
-	id = (GINT)DATA_GET(global_data,"gui_dispatcher_id");
-	if (id)
-	{
-		g_mutex_lock(mutex);
-		DATA_SET(global_data,"gui_dispatcher_exit",GINT_TO_POINTER(1));
-		g_source_remove(id);
-		DATA_SET(global_data,"gui_dispatcher_id",NULL);
-		g_mutex_lock(mutex);
-		/* When the above returns, the timeout is done */
-		g_mutex_unlock(mutex);
-		DATA_SET(global_data,"gui_dispatcher_exit",NULL);
 	}
 
 	save_config();
