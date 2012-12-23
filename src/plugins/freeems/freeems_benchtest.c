@@ -287,6 +287,13 @@ gboolean pull_data_from_gui(Bt_Data *data)
 }
 
 
+gboolean benchtest_clock_update_wrapper(gpointer data)
+{
+	g_idle_add(benchtest_clock_update,data);
+	return FALSE;
+}
+
+
 gboolean benchtest_clock_update(gpointer data)
 {
 	static GTimeVal cur;

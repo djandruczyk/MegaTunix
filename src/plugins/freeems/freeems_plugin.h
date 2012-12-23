@@ -126,7 +126,7 @@ EXTERN void (*combo_toggle_labels_linked_f)(GtkWidget *,gint);
 EXTERN void (*combo_set_labels_f)(GtkWidget *, GtkTreeModel *);
 EXTERN void (*recalc_table_limits_f)(gint, gint);
 EXTERN void (*update_entry_color_f)(GtkWidget *, gint, gboolean, gboolean);
-EXTERN gboolean (*table_color_refresh_f)(gpointer);
+EXTERN gboolean (*table_color_refresh_wrapper_f)(gpointer);
 /* Function Pointers */
 
 /* Prototypes */

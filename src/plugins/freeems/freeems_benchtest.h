@@ -43,6 +43,7 @@ void benchtest_validate_and_run(void);
 void benchtest_stop(void);
 void benchtest_bump(void);
 gboolean pull_data_from_gui(Bt_Data *);
+gboolean benchtest_clock_update_wrapper(gpointer);
 gboolean benchtest_clock_update(gpointer);
 /* Prototypes */
 

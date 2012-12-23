@@ -86,7 +86,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 
 	if (DATA_GET(global_data,"offline"))
 	{
-		gdk_threads_add_timeout(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
+		g_timeout_add(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 		MTXDBG(THREADS|CRITICAL,_("Thread exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
@@ -132,7 +132,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			/* Message queue used to exit immediately */
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
-				gdk_threads_add_timeout(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
+				g_timeout_add(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
 				MTXDBG(THREADS|CRITICAL,_("Thread exiting, told to!\n"));
 				g_thread_exit(0);
 			}
@@ -908,7 +908,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 						{
 //							printf("Creating deferred function\n");
 
-							guint id = gdk_threads_add_timeout(2000,(GSourceFunc)table_color_refresh_f,GINT_TO_POINTER(i));
+							guint id = g_timeout_add(2000,(GSourceFunc)table_color_refresh_wrapper_f,GINT_TO_POINTER(i));
 							DATA_SET(global_data,tmpbuf,GINT_TO_POINTER(id));
 						}
 						g_free(tmpbuf);
