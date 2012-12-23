@@ -30,13 +30,13 @@ ChangesEnvironment=yes
 [Files]
 Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
 Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
+Source: "z:\opt\crossroot32\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\2.24\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot32_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
 Source: "z:\opt\crossroot32_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\"; Flags: ignoreversion
 Source: "z:\opt\crossroot32_dbg\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\2.24\lib\pango\1.6.0\modules"; Flags: ignoreversion
 Source: "z:\opt\crossroot32_dbg\etc\pango\pango.modules"; DestDir: "{app}\2.24\etc\pango\"; Flags: ignoreversion
 Source: "z:\opt\crossroot32_dbg\bin\*.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
 Source: "z:\opt\crossroot32_dbg\etc\*.*"; DestDir: "{app}\2.24\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32_dbg\lib\gtk-2.0\2.10.0\*.*"; DestDir: "{app}\2.24"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot32_dbg\share\themes\*.*"; DestDir: "{app}\2.24\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot32_dbg\share\locale\de\*.*"; DestDir: "{app}\2.24\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot32_dbg\share\locale\es\*.*"; DestDir: "{app}\2.24\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
