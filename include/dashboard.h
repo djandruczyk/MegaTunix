@@ -62,6 +62,7 @@ gboolean present_dash_filechooser(GtkWidget *, gpointer );
 gboolean remove_dashcluster(gpointer, gpointer , gpointer );
 gboolean dummy(GtkWidget *,gpointer );
  void create_gauge(GtkWidget *);
+gboolean hide_dash_resizers_wrapper(gpointer );
 gboolean hide_dash_resizers(gpointer );
 void update_tab_gauges(void);
 gboolean dash_configure_event(GtkWidget * , GdkEventConfigure * );
