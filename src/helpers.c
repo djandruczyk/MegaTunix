@@ -161,25 +161,25 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 
 	set_title(g_strdup(_("Starting up data renderers...")));
 	rate = (GINT)DATA_GET(global_data,"rtslider_fps");
-	source = gdk_threads_add_timeout_full(175,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rtsliders,NULL,NULL);
+	source = g_timeout_add_full(175,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)run_function,(gpointer)&update_rtsliders,NULL);
 	DATA_SET(global_data,"rtslider_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"rttext_fps");
-	source = gdk_threads_add_timeout_full(180,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_rttext,NULL,NULL);
+	source = g_timeout_add_full(180,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)run_function, (gpointer)&update_rttext,NULL);
 	DATA_SET(global_data,"rttext_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"rttext_fps");
-	source = gdk_threads_add_timeout_full(220,(GINT)(2000.0/(gfloat)rate),(GSourceFunc)update_rtstatus,NULL,NULL);
+	source = g_timeout_add_full(220,(GINT)(2000.0/(gfloat)rate),(GSourceFunc)run_function, (gpointer)&update_rtstatus,NULL);
 	DATA_SET(global_data,"rtstatus_id", GINT_TO_POINTER(source));
 
 	rate = (GINT)DATA_GET(global_data,"dashboard_fps");
-	source = gdk_threads_add_timeout_full(135,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)update_dashboards,NULL,NULL);
+	source = g_timeout_add_full(135,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)run_function, (gpointer)&update_dashboards,NULL);
 	DATA_SET(global_data,"dashboard_id", GINT_TO_POINTER(source));
 
-	source = gdk_threads_add_timeout_full(500,1000,(GSourceFunc)run_datalog,NULL,NULL);
+	source = g_timeout_add_full(500,1000,(GSourceFunc)run_function, (gpointer)&run_datalog,NULL);
 	DATA_SET(global_data,"datalog_id", GINT_TO_POINTER(source));
 
-	source = gdk_threads_add_timeout_full(210,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)fire_off_rtv_watches,NULL,NULL);
+	source = g_timeout_add_full(210,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)run_function, (gpointer)&fire_off_rtv_watches,NULL);
 
 	set_title(g_strdup(_("Data renderers running...")));
 }
