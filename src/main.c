@@ -145,7 +145,7 @@ gint main(gint argc, gchar ** argv)
 	id = gdk_threads_add_timeout_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
 	id = gdk_threads_add_timeout(2000,(GSourceFunc)flush_binary_logs,NULL);
-        DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
+    DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
 
 	sleep_calib();
 	/* Check for first_time flag, if so, run first time wizard, otherwise
@@ -153,7 +153,7 @@ gint main(gint argc, gchar ** argv)
 	   */
 	timer = g_timer_new();
 	DATA_SET_FULL(global_data,"mtx_uptime_timer",timer,g_timer_destroy);
-	gdk_threads_add_timeout(500,(GSourceFunc)check_for_first_time,NULL);
+	g_idle_add((GSourceFunc)check_for_first_time,NULL);
 	
 
 	DATA_SET(global_data,"ready",GINT_TO_POINTER(TRUE));

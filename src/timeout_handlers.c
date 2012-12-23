@@ -270,7 +270,7 @@ G_MODULE_EXPORT gboolean check_for_first_time(void)
 {
 	if (DATA_GET(global_data,"first_time"))
 		printf("should run first_time_wizard\n");
-    gdk_threads_add_timeout(100,(GSourceFunc)personality_choice,NULL);
+    g_idle_add((GSourceFunc)personality_choice,NULL);
 	return FALSE;
 
 }
