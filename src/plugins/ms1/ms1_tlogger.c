@@ -128,7 +128,7 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 
 	crunch_trigtooth_data();
 	if (ttm_data->peak > 0)
-		update_trigtooth_display();
+		update_trigtooth_display(NULL);
 	return TRUE;
 }
 
@@ -382,18 +382,17 @@ void crunch_trigtooth_data(void)
 
 /*!
   \brief wrapper function to update the display from a post function 
-  thread context, hence hte gdk_threads* wrappers
   */
 G_MODULE_EXPORT void update_trigtooth_display_pf(void)
 {
-	update_trigtooth_display();
+	g_idle_add(update_trigtooth_display,NULL);
 }
 
 
 /*!
   \brief Redraws the new trigtooth display based on the data in ttm_data
   */
-G_MODULE_EXPORT void update_trigtooth_display()
+G_MODULE_EXPORT gboolean update_trigtooth_display(gpointer data)
 {
 	gint w = 0;
 	gint h = 0;
@@ -522,9 +521,9 @@ G_MODULE_EXPORT void update_trigtooth_display()
 
 	/* Trigger redraw to main screen */
 	if (!window) 
-		return;
+		return FALSE;
 	gdk_window_clear(window);
-
+	return FALSE;
 }
 
 

@@ -76,7 +76,7 @@ gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean ms1_tlogger_button_handler(GtkWidget *, gpointer);
 void crunch_trigtooth_data(void);
 void crunch_trigtooth_data_pf(void);
-void update_trigtooth_display(void);
+gboolean update_trigtooth_display(gpointer);
 void update_trigtooth_display_pf(void);
 void bind_ttm_to_page(gint page);
 void start(EcuPluginTickler);
