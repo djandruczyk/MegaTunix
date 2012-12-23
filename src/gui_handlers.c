@@ -2521,6 +2521,13 @@ G_MODULE_EXPORT void update_entry_color(GtkWidget *widget, gint table_num, gbool
 }
 
 
+G_MODULE_EXPORT gboolean table_color_refresh_wrapper(gpointer data)
+{
+	g_idle_add(table_color_refresh,data);
+	return FALSE;
+}
+
+
 G_MODULE_EXPORT gboolean table_color_refresh(gpointer data)
 {
 	static Firmware_Details *firmware = NULL;
