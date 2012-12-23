@@ -32,7 +32,7 @@
 extern gconstpointer *global_data;
 
 /*!
-  \brief personality_choice() is called from a one shot timeout from main
+  \brief personality_choice() is called from an idle from main
   in order to open the window to ask the user what ECU family to deal with
   running.
   */
@@ -251,13 +251,14 @@ jumpahead:
 			break;
 		default: /* Offline */
 jumpahead_offline:
+			printf("Offline mode?\n");
 			plugins_init();
 			pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL);
 			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
 			g_free(pathstub);
 			load_comm_xml(filename);
 			g_free(filename);
-			gdk_threads_add_timeout(100,(GSourceFunc)set_offline_mode,NULL);
+			g_idle_add((GSourceFunc)set_offline_mode,NULL);
 			return FALSE;
 	}
 	return FALSE;

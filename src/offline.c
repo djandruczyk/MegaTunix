@@ -72,7 +72,8 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		if (GTK_IS_WIDGET(widget))
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 		plugins_shutdown();
-		gdk_threads_add_timeout(500,(GSourceFunc)personality_choice,NULL);
+		/* Does this need a delay? */
+		g_idle_add((GSourceFunc)personality_choice,NULL);
 
 		return FALSE;
 	}
