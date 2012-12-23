@@ -359,6 +359,15 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 
 
 /*!
+  \brief wrapper for reset_infolabel()  to run via g_idle_add
+  */
+G_MODULE_EXPORT gboolean reset_inforlabel_wrapper(gpointer data)
+{
+	g_idle_add(reset_infolabel,data);
+	return FALSE;
+}
+
+/*!
   \brief reset_infolabel() resets infolabel text to "Ready"
   \param data is unused
   \returns FALSE

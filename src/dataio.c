@@ -309,7 +309,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	if (notifies)
 	{
 		thread_update_widget("info_label",MTX_LABEL,g_strdup("<b>Transfer Completed</b>"));
-		gdk_threads_add_timeout(2000,(GSourceFunc)reset_infolabel,NULL);
+		g_timeout_add(2000,(GSourceFunc)reset_infolabel_wrapper,NULL);
 	}
 	/* If sucessfull update ecu_data as well, this way, current 
 	 * and pending match, in the case of a failed write, the 
