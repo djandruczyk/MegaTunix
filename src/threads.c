@@ -25,6 +25,7 @@
 #include <3d_vetable.h>
 #include <dataio.h>
 #include <debugging.h>
+#include <dispatcher.h>
 #include <init.h>
 #include <plugin.h>
 #include <serialio.h>
@@ -151,13 +152,18 @@ fast_exit:
 		}
 #if GLIB_MINOR_VERSION < 31
 		g_get_current_time(&cur);
-		g_time_val_add(&cur,10000); /* 10 ms timeout */
+		g_time_val_add(&cur,1000000); /* 10 ms timeout */
 		message = (Io_Message *)g_async_queue_timed_pop(io_data_queue,&cur);
 #else
-		message = (Io_Message *)g_async_queue_timeout_pop(io_data_queue,10000);
+		message = (Io_Message *)g_async_queue_timeout_pop(io_data_queue,1000000);
 #endif
 		if (!message) /* NULL message */
+		{
+			printf("No message\n");
 			continue;
+		}
+		else
+			printf ("MESSAGE ARRIVED on IO queue\n");
 
 		if ((!DATA_GET(global_data,"offline")) && 
 				(((!DATA_GET(global_data,"connected")) && 
@@ -185,7 +191,6 @@ fast_exit:
 			message->status = FALSE;
 			continue;
 		}
-
 		switch ((CmdType)message->command->type)
 		{
 			case FUNC_CALL:
@@ -268,7 +273,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 		gboolean count,
 		gboolean clear)
 {
-	static GAsyncQueue *gui_dispatch_queue = NULL;
+//	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Gui_Message *message = NULL;
 	Text_Message *t_message = NULL;
 	gint tmp = 0;
@@ -276,8 +281,8 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	g_return_if_fail(view_name);
 	g_return_if_fail(msg);
 
-	if (!gui_dispatch_queue)
-		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
+//	if (!gui_dispatch_queue)
+//		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	t_message = g_new0(Text_Message, 1);
@@ -291,10 +296,12 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
 	tmp = UPD_LOGBAR;
 	g_array_append_val(message->functions,tmp);
-
-	g_async_queue_ref(gui_dispatch_queue);
-	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
-	g_async_queue_unref(gui_dispatch_queue);
+	printf("thread_update_logbar() about to send message\n");
+	g_idle_add(process_gui_message,message);
+	printf("sent message!\n");
+//	g_async_queue_ref(gui_dispatch_queue);
+//	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+//	g_async_queue_unref(gui_dispatch_queue);
 	return;
 }
 
@@ -310,13 +317,13 @@ G_MODULE_EXPORT void  thread_update_logbar(
   */
 G_MODULE_EXPORT gboolean queue_function(const gchar *name)
 {
-	static GAsyncQueue *gui_dispatch_queue = NULL;
+//	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Gui_Message *message = NULL;
 	QFunction *qfunc = NULL;
 	gint tmp = 0;
 
-	if (!gui_dispatch_queue)
-		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
+//	if (!gui_dispatch_queue)
+//		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	qfunc = g_new0(QFunction, 1);
@@ -327,9 +334,12 @@ G_MODULE_EXPORT gboolean queue_function(const gchar *name)
 	tmp = UPD_RUN_FUNCTION;
 	g_array_append_val(message->functions,tmp);
 
-	g_async_queue_ref(gui_dispatch_queue);
-	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
-	g_async_queue_unref(gui_dispatch_queue);
+	printf("queue_functions() about to send message\n");
+	g_idle_add(process_gui_message,message);
+	printf("sent message!\n");
+	//g_async_queue_ref(gui_dispatch_queue);
+	//g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	//g_async_queue_unref(gui_dispatch_queue);
 	return FALSE;
 }
 
@@ -349,16 +359,16 @@ G_MODULE_EXPORT void  thread_update_widget(
 		WidgetType type,
 		gchar * msg)
 {
-	static GAsyncQueue *gui_dispatch_queue = NULL;
+//	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Gui_Message *message = NULL;
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
 	g_return_if_fail(widget_name);
 
-	if (!gui_dispatch_queue)
-		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
-	g_return_if_fail(gui_dispatch_queue);
+//	if (!gui_dispatch_queue)
+//		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
+//	g_return_if_fail(gui_dispatch_queue);
 	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -371,9 +381,12 @@ G_MODULE_EXPORT void  thread_update_widget(
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	g_async_queue_ref(gui_dispatch_queue);
-	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
-	g_async_queue_unref(gui_dispatch_queue);
+	printf("thread_update_widget() about to send message\n");
+	g_idle_add(process_gui_message,message);
+	printf("sent message!\n");
+	//g_async_queue_ref(gui_dispatch_queue);
+	//g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	//g_async_queue_unref(gui_dispatch_queue);
 	return;
 }
 
@@ -386,13 +399,13 @@ G_MODULE_EXPORT void  thread_update_widget(
   */
 G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboolean state)
 {
-	static GAsyncQueue *gui_dispatch_queue = NULL;
+//	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Gui_Message *message = NULL;
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
-	if (!gui_dispatch_queue)
-		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
+//	if (!gui_dispatch_queue)
+//		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -406,9 +419,12 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	g_async_queue_ref(gui_dispatch_queue);
-	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
-	g_async_queue_unref(gui_dispatch_queue);
+	printf("thread_widget_set_sensitive() about to send message\n");
+	g_idle_add(process_gui_message,message);
+	printf("sent message!\n");
+	//g_async_queue_ref(gui_dispatch_queue);
+	//g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	//g_async_queue_unref(gui_dispatch_queue);
 	return;
 }
 
@@ -420,12 +436,12 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
   */
 G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 {
-	static GAsyncQueue *gui_dispatch_queue = NULL;
+//	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Gui_Message *message = NULL;
 	gint tmp = 0;
 
-	if (!gui_dispatch_queue)
-		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
+//	if (!gui_dispatch_queue)
+//		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	message->payload = (void *)widget;
@@ -433,9 +449,12 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 	tmp = UPD_REFRESH;
 	g_array_append_val(message->functions,tmp);
 
-	g_async_queue_ref(gui_dispatch_queue);
-	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
-	g_async_queue_unref(gui_dispatch_queue);
+	printf("thread_refresh_widget() about to send message\n");
+	g_idle_add(process_gui_message,message);
+	printf("sent message!\n");
+	//g_async_queue_ref(gui_dispatch_queue);
+	//g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	//g_async_queue_unref(gui_dispatch_queue);
 	return;
 }
 
@@ -469,13 +488,13 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
   */
 G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint len)
 {
-	static GAsyncQueue *gui_dispatch_queue = NULL;
+//	static GAsyncQueue *gui_dispatch_queue = NULL;
 	gint tmp = 0;
 	Gui_Message *message = NULL;
 	Widget_Range *range = NULL;
 
-	if (!gui_dispatch_queue)
-		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
+//	if (!gui_dispatch_queue)
+//		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 	range = g_new0(Widget_Range,1);
 
@@ -487,9 +506,13 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	tmp = UPD_REFRESH_RANGE;
 	g_array_append_val(message->functions,tmp);
 
-	g_async_queue_ref(gui_dispatch_queue);
-	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
-	g_async_queue_unref(gui_dispatch_queue);
+	printf("thread_refresh_widget_range() about to send message\n");
+	g_idle_add(process_gui_message,message);
+	printf("sent message!\n");
+	//g_async_queue_ref(gui_dispatch_queue);
+	//g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	//g_async_queue_unref(gui_dispatch_queue);
+	printf("This will probably crash or DEADLOCK here\n");
 	update_ve3d_if_necessary(page,offset);
 	return;
 }
@@ -500,13 +523,13 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
   */
 G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 {
-	static GAsyncQueue *gui_dispatch_queue = NULL;
+//	static GAsyncQueue *gui_dispatch_queue = NULL;
 	Gui_Message *message = NULL;
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
-	if (!gui_dispatch_queue)
-		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
+//	if (!gui_dispatch_queue)
+//		gui_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"gui_dispatch_queue");
 	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -520,8 +543,11 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	g_async_queue_ref(gui_dispatch_queue);
-	g_async_queue_push(gui_dispatch_queue,(gpointer)message);
-	g_async_queue_unref(gui_dispatch_queue);
+	printf("thread_set_grop_color() about to send message\n");
+	g_idle_add(process_gui_message,message);
+	printf("sent message!\n");
+	//g_async_queue_ref(gui_dispatch_queue);
+	//g_async_queue_push(gui_dispatch_queue,(gpointer)message);
+	//g_async_queue_unref(gui_dispatch_queue);
 	return;
 }

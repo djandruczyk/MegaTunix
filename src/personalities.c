@@ -148,7 +148,6 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			NULL);
 	vbox = gtk_vbox_new(TRUE,2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
-	//gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),vbox,TRUE,TRUE,0);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),vbox,TRUE,TRUE,0);
 	if (g_list_length(p_list) > 0)
 	{
@@ -253,11 +252,14 @@ jumpahead:
 jumpahead_offline:
 			printf("Offline mode?\n");
 			plugins_init();
+			printf("plugins are initted\n");
 			pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL);
 			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
 			g_free(pathstub);
 			load_comm_xml(filename);
+			printf("comm xml is loaded\n");
 			g_free(filename);
+			printf("about to call the set_offline_mode function\n");
 			g_idle_add((GSourceFunc)set_offline_mode,NULL);
 			return FALSE;
 	}

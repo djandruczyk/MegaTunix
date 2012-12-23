@@ -808,6 +808,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	gboolean (*lock_serial_f)(const gchar *) = NULL;
 	void (*setup_serial_params_f)(void) = NULL;
 
+	printf("Serial repair thread!\n");
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	get_symbol_f("setup_serial_params",(void **)&setup_serial_params_f);

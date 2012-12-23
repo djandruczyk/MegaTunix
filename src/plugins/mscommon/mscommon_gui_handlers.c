@@ -735,6 +735,16 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 
 
 /*!
+ * \brief wrapper for trigger_group_update,data()
+ */
+G_MODULE_EXPORT gboolean trigger_group_update_wrapper(gpointer data)
+{
+	g_idle_add(trigger_group_update,data);
+	return FALSE;
+}
+
+
+/*!
  \brief trigger_group_update() updates a subset of widgets (any widgets in
  the group name passed. This runs as a timeout delayed asynchronously from
  when the ctrl is modified, to prevent a deadlock.

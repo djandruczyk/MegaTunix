@@ -57,7 +57,7 @@ gint main(gint argc, gchar ** argv)
 	GCond *cond = NULL;
 	GMutex *mutex = NULL;
 	GMutex *pf_dispatch_mutex = NULL;
-	GMutex *gui_dispatch_mutex = NULL;
+//	GMutex *gui_dispatch_mutex = NULL;
 	GTimer *timer = NULL;
 	gint id = 0;
 	setlocale(LC_ALL,"");
@@ -98,8 +98,8 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"rtv_thread_mutex",mutex);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"statuscounts_mutex",mutex);
-	gui_dispatch_mutex = g_mutex_new();
-	DATA_SET(global_data,"gui_dispatch_mutex",gui_dispatch_mutex);
+//	gui_dispatch_mutex = g_mutex_new();
+//	DATA_SET(global_data,"gui_dispatch_mutex",gui_dispatch_mutex);
 	pf_dispatch_mutex = g_mutex_new();
 	DATA_SET(global_data,"pf_dispatch_mutex",pf_dispatch_mutex);
 
@@ -130,8 +130,8 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET_FULL(global_data,"slave_msg_queue",queue,g_async_queue_unref);
 	queue = g_async_queue_new();
 	DATA_SET_FULL(global_data,"pf_dispatch_queue",queue,g_async_queue_unref);
-	queue = g_async_queue_new();
-	DATA_SET_FULL(global_data,"gui_dispatch_queue",queue,g_async_queue_unref);
+//	queue = g_async_queue_new();
+//	DATA_SET_FULL(global_data,"gui_dispatch_queue",queue,g_async_queue_unref);
 	queue = g_async_queue_new();
 	DATA_SET_FULL(global_data,"io_repair_queue",queue,g_async_queue_unref);
 
@@ -142,8 +142,8 @@ gint main(gint argc, gchar ** argv)
 
 	id = g_timeout_add_full(-50,16,(GSourceFunc)pf_dispatcher,pf_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
-	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
-	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
+//	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
+//	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
 	/* This doesn't do any GUI stuff so can run as is... */
 	id = g_timeout_add(2000,(GSourceFunc)flush_binary_logs,NULL);
     DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
@@ -156,8 +156,8 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET_FULL(global_data,"mtx_uptime_timer",timer,g_timer_destroy);
 	g_idle_add((GSourceFunc)check_for_first_time,NULL);
 	
-
 	DATA_SET(global_data,"ready",GINT_TO_POINTER(TRUE));
+
 	gdk_threads_enter();
 	gtk_main();
 	gdk_threads_leave();

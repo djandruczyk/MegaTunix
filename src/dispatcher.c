@@ -134,7 +134,6 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 	}
 	dealloc_io_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
-	gdk_flush();
 	return FALSE;
 }
 
@@ -187,7 +186,6 @@ trypop:
 		MTXDBG(DISPATCHER,_("trying to handle another message\n"));
 		goto trypop;
 	}
-	gdk_flush();
 	MTXDBG(DISPATCHER,_("Leaving Gui Dispatcher\n"));
 	return TRUE;
 }
@@ -209,6 +207,7 @@ G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
 
+	printf("Processing a gui message in hopefuly main thread context!\n");
 	gint len = message->functions->len;
 	for (gint i=0;i<len;i++)
 	{
@@ -304,8 +303,8 @@ G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
 				reset_temps(DATA_GET(global_data,"mtx_temp_units"));
 		}
 
-		while (gtk_events_pending())
-			gtk_main_iteration();
+//		while (gtk_events_pending())
+//			gtk_main_iteration();
 	}
 	dealloc_gui_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
