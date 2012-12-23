@@ -29,6 +29,7 @@
 
 #include <conversions.h>
 #include <debugging.h>
+#include <dispatcher.h>
 #include <init.h>
 #include <notifications.h>
 #include <plugin.h>
@@ -46,9 +47,7 @@
 G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 {
 	static GAsyncQueue *pf_dispatch_queue = NULL;
-	PostFunction *pf=NULL;
 	Io_Message *message = NULL;
-	/*GTimeVal time;*/
 	extern gconstpointer *global_data;
 
 	MTXDBG(DISPATCHER,_("Entered!\n"));
@@ -78,13 +77,29 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
 		return TRUE;
 	}
+	g_idle_add(process_pf_message,message);
+
+	g_async_queue_unref(pf_dispatch_queue);
+	MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
+	return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
+{
+	PostFunction *pf=NULL;
+	Io_Message *message = (Io_Message *)data;
+	extern gconstpointer *global_data;
+
+	g_return_val_if_fail(message,FALSE);
+
 	if (!message->status)
 	{
 		/* Message failed at some point, do NOT run post functions
 		 * in this case.
 		 */
 		dealloc_io_message(message);
-		return TRUE;
+		return FALSE;
 	}
 
 	if (message->command->post_functions != NULL)
@@ -119,11 +134,8 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 	}
 	dealloc_io_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
-
 	gdk_flush();
-	g_async_queue_unref(pf_dispatch_queue);
-	MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
-	return TRUE;
+	return FALSE;
 }
 
 
@@ -138,15 +150,8 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 G_MODULE_EXPORT gboolean gui_dispatcher(gpointer data)
 {
 	static GAsyncQueue *gui_dispatch_queue = NULL;
-	static void (*update_widget_f)(gpointer,gpointer) = NULL;
-	static GList ***ecu_widgets = NULL;
-	gint count = 0;
-	GtkWidget *widget = NULL;
 	Gui_Message *message = NULL;
-	Text_Message *t_message = NULL;
-	Widget_Update *w_update = NULL;
-	Widget_Range *range = NULL;
-	QFunction *qfunc = NULL;
+	gint count = 0;
 	extern gconstpointer *global_data;
 
 	if (!gui_dispatch_queue)
@@ -166,114 +171,12 @@ trypop:
 	message = (Gui_Message *)g_async_queue_try_pop(gui_dispatch_queue);
 	if (!message)
 	{
-		MTXDBG(DISPATCHER,_("no messages waiting, signalling\n"));
+		MTXDBG(DISPATCHER,_("no GUI messages waiting, returning\n"));
 		return TRUE;
 	}
 
 	if (message->functions != NULL)
-	{
-		gint len = message->functions->len;
-		for (gint i=0;i<len;i++)
-		{
-			UpdateFunction val = g_array_index(message->functions,UpdateFunction, i);
-			switch ((UpdateFunction)val)
-			{
-				case UPD_REFRESH:
-					MTXDBG(DISPATCHER,_("Single widget update\n"));
-					widget = (GtkWidget *)message->payload;
-					if (GTK_IS_WIDGET(widget))
-					{
-						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
-						if (!update_widget_f)
-							get_symbol("update_widget",(void **)&update_widget_f);
-						update_widget_f(widget,NULL);
-						DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
-						message->payload = NULL;
-					}
-					break;
-				case UPD_REFRESH_RANGE:
-					MTXDBG(DISPATCHER,_("Widget range update\n"));
-					range = (Widget_Range *)message->payload;
-					if (!range)
-						break;
-					if (!update_widget_f)
-						get_symbol("update_widget",(void **)&update_widget_f);
-					if (!ecu_widgets)
-						ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
-					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
-					for (i=range->offset;i<range->offset +range->len;i++)
-					{
-						for (gint j=0;j<g_list_length(ecu_widgets[range->page][i]);j++)
-							update_widget_f(g_list_nth_data(ecu_widgets[range->page][i],j),NULL);
-					}
-					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
-					cleanup(range);
-					message->payload = NULL;
-					break;
-				case UPD_LOGBAR:
-					MTXDBG(DISPATCHER,_("Logbar update\n"));
-					t_message = (Text_Message *)message->payload;
-					update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear,FALSE);
-					dealloc_textmessage(t_message);
-					message->payload = NULL;
-					break;
-				case UPD_RUN_FUNCTION:
-					MTXDBG(DISPATCHER,_("Run function\n"));
-					qfunc = (QFunction *)message->payload;
-					run_post_functions(qfunc->func_name);
-					dealloc_qfunction(qfunc);
-					message->payload = NULL;
-					break;
-
-				case UPD_WIDGET:
-					MTXDBG(DISPATCHER,_("Widget update\n"));
-					widget = NULL;
-					w_update = (Widget_Update *)message->payload;
-					switch (w_update->type)
-					{
-						case MTX_GROUP_COLOR:
-							QUIET_MTXDBG(DISPATCHER,_("group color\n"));
-							set_group_color(w_update->color,w_update->group_name);
-							break;
-
-						case MTX_ENTRY:
-							QUIET_MTXDBG(DISPATCHER,_("entry\n"));
-							if (NULL == (widget = lookup_widget(w_update->widget_name)))
-								break;
-							gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
-							break;
-						case MTX_LABEL:
-							QUIET_MTXDBG(DISPATCHER,_("label\n"));
-							if (NULL == (widget = lookup_widget(w_update->widget_name)))
-								break;
-							gtk_label_set_markup(GTK_LABEL(widget),w_update->msg);
-							break;
-						case MTX_TITLE:
-							QUIET_MTXDBG(DISPATCHER,_("title\n"));
-							set_title(g_strdup(w_update->msg));
-							break;
-						case MTX_SENSITIVE:
-							QUIET_MTXDBG(DISPATCHER,_("sensitivity change\n"));
-							if (NULL == (widget = lookup_widget(w_update->widget_name)))
-								break;
-							gtk_widget_set_sensitive(GTK_WIDGET(widget),w_update->state);
-							break;
-						default:
-							break;
-					}
-					dealloc_w_update(w_update);
-					message->payload = NULL;
-					break;
-					reset_temps(DATA_GET(global_data,"mtx_temp_units"));
-			}
-
-			while (gtk_events_pending())
-				gtk_main_iteration();
-		}
-	}
-dealloc:
-	dealloc_gui_message(message);
-	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
+		g_idle_add(process_gui_message,message);
 	count++;
 	/* try to handle up to 4 messages at a time.  If this is 
 	 * set too high, we can cause the timeout to hog the gui if it's
@@ -288,3 +191,124 @@ dealloc:
 	MTXDBG(DISPATCHER,_("Leaving Gui Dispatcher\n"));
 	return TRUE;
 }
+
+
+/*!
+ * \brief process_gui_message runs asa g_idle (main gtk context) to run
+ * gui operatins that are queued off from threads
+ * */
+G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
+{
+	static void (*update_widget_f)(gpointer,gpointer) = NULL;
+	static GList ***ecu_widgets = NULL;
+	GtkWidget *widget = NULL;
+	Gui_Message *message = (Gui_Message *)data;
+	Text_Message *t_message = NULL;
+	Widget_Update *w_update = NULL;
+	Widget_Range *range = NULL;
+	QFunction *qfunc = NULL;
+	extern gconstpointer *global_data;
+
+	gint len = message->functions->len;
+	for (gint i=0;i<len;i++)
+	{
+		UpdateFunction val = g_array_index(message->functions,UpdateFunction, i);
+		switch ((UpdateFunction)val)
+		{
+			case UPD_REFRESH:
+				MTXDBG(DISPATCHER,_("Single widget update\n"));
+				widget = (GtkWidget *)message->payload;
+				if (GTK_IS_WIDGET(widget))
+				{
+					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
+					if (!update_widget_f)
+						get_symbol("update_widget",(void **)&update_widget_f);
+					update_widget_f(widget,NULL);
+					DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
+					message->payload = NULL;
+				}
+				break;
+			case UPD_REFRESH_RANGE:
+				MTXDBG(DISPATCHER,_("Widget range update\n"));
+				range = (Widget_Range *)message->payload;
+				if (!range)
+					break;
+				if (!update_widget_f)
+					get_symbol("update_widget",(void **)&update_widget_f);
+				if (!ecu_widgets)
+					ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
+				DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
+				for (i=range->offset;i<range->offset +range->len;i++)
+				{
+					for (gint j=0;j<g_list_length(ecu_widgets[range->page][i]);j++)
+						update_widget_f(g_list_nth_data(ecu_widgets[range->page][i],j),NULL);
+				}
+				DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
+				cleanup(range);
+				message->payload = NULL;
+				break;
+			case UPD_LOGBAR:
+				MTXDBG(DISPATCHER,_("Logbar update\n"));
+				t_message = (Text_Message *)message->payload;
+				update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear,FALSE);
+				dealloc_textmessage(t_message);
+				message->payload = NULL;
+				break;
+			case UPD_RUN_FUNCTION:
+				MTXDBG(DISPATCHER,_("Run function\n"));
+				qfunc = (QFunction *)message->payload;
+				run_post_functions(qfunc->func_name);
+				dealloc_qfunction(qfunc);
+				message->payload = NULL;
+				break;
+
+			case UPD_WIDGET:
+				MTXDBG(DISPATCHER,_("Widget update\n"));
+				widget = NULL;
+				w_update = (Widget_Update *)message->payload;
+				switch (w_update->type)
+				{
+					case MTX_GROUP_COLOR:
+						QUIET_MTXDBG(DISPATCHER,_("group color\n"));
+						set_group_color(w_update->color,w_update->group_name);
+						break;
+
+					case MTX_ENTRY:
+						QUIET_MTXDBG(DISPATCHER,_("entry\n"));
+						if (NULL == (widget = lookup_widget(w_update->widget_name)))
+							break;
+						gtk_entry_set_text(GTK_ENTRY(widget),w_update->msg);
+						break;
+					case MTX_LABEL:
+						QUIET_MTXDBG(DISPATCHER,_("label\n"));
+						if (NULL == (widget = lookup_widget(w_update->widget_name)))
+							break;
+						gtk_label_set_markup(GTK_LABEL(widget),w_update->msg);
+						break;
+					case MTX_TITLE:
+						QUIET_MTXDBG(DISPATCHER,_("title\n"));
+						set_title(g_strdup(w_update->msg));
+						break;
+					case MTX_SENSITIVE:
+						QUIET_MTXDBG(DISPATCHER,_("sensitivity change\n"));
+						if (NULL == (widget = lookup_widget(w_update->widget_name)))
+							break;
+						gtk_widget_set_sensitive(GTK_WIDGET(widget),w_update->state);
+						break;
+					default:
+						break;
+				}
+				dealloc_w_update(w_update);
+				message->payload = NULL;
+				break;
+				reset_temps(DATA_GET(global_data,"mtx_temp_units"));
+		}
+
+		while (gtk_events_pending())
+			gtk_main_iteration();
+	}
+	dealloc_gui_message(message);
+	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
+	return FALSE;
+}
+

@@ -140,11 +140,12 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
 
-	id = gdk_threads_add_timeout_full(-50,16,(GSourceFunc)pf_dispatcher,pf_dispatch_mutex,timeout_done);
+	id = g_timeout_add_full(-50,16,(GSourceFunc)pf_dispatcher,pf_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
-	id = gdk_threads_add_timeout_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
+	id = g_timeout_add_full(-35,35,(GSourceFunc)gui_dispatcher,gui_dispatch_mutex,timeout_done);
 	DATA_SET(global_data,"gui_dispatcher_id",GINT_TO_POINTER(id));
-	id = gdk_threads_add_timeout(2000,(GSourceFunc)flush_binary_logs,NULL);
+	/* This doesn't do any GUI stuff so can run as is... */
+	id = g_timeout_add(2000,(GSourceFunc)flush_binary_logs,NULL);
     DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
 
 	sleep_calib();
