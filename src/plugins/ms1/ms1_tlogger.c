@@ -335,7 +335,7 @@ void crunch_trigtooth_data(void)
 		if (DATA_GET(global_data,"toothmon_id"))
 		{
 			g_source_remove((GINT)DATA_GET(global_data,"toothmon_id"));
-			guint id = gdk_threads_add_timeout(ttm_data->sample_time,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+			guint id = g_timeout_add(ttm_data->sample_time,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 			DATA_SET(global_data,"toothmon_id",GINT_TO_POINTER(id));
 		}
 
@@ -550,7 +550,7 @@ void start(EcuPluginTickler type)
 			if (!DATA_GET(global_data,"toothmon_id"))
 			{
 				signal_toothtrig_read(TOOTHMON_TICKLER);
-				tmpi = gdk_threads_add_timeout(3000,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
+				tmpi = g_timeout_add(3000,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TOOTHMON_TICKLER));
 				DATA_SET(global_data,"toothmon_id",GINT_TO_POINTER(tmpi));
 			}
 			else
@@ -567,7 +567,7 @@ void start(EcuPluginTickler type)
 			if (!DATA_GET(global_data,"trigmon_id"))
 			{
 				signal_toothtrig_read(TRIGMON_TICKLER);
-				tmpi = gdk_threads_add_timeout(750,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
+				tmpi = g_timeout_add(750,(GSourceFunc)signal_toothtrig_read,GINT_TO_POINTER(TRIGMON_TICKLER));
 				DATA_SET(global_data,"trigmon_id",GINT_TO_POINTER(tmpi));
 			}
 			else
