@@ -72,7 +72,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 		case LV_PLAYBACK_TICKLER:
 			if (!DATA_GET(global_data,"playback_id"))
 			{
-				id = gdk_threads_add_timeout((GINT)DATA_GET(global_data,"lv_scroll_delay"),(GSourceFunc)pb_update_logview_traces,GINT_TO_POINTER(FALSE));
+				id = g_timeout_add((GINT)DATA_GET(global_data,"lv_scroll_delay"),(GSourceFunc)pb_update_logview_traces_wrapper,GINT_TO_POINTER(FALSE));
 				DATA_SET(global_data,"playback_id",GINT_TO_POINTER(id));
 			}
 			else
@@ -87,7 +87,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 			if (!DATA_GET(global_data,"statuscounts_id"))
 			{
 				mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
-				id = gdk_threads_add_timeout_full(500,100,(GSourceFunc)update_errcounts,mutex,timeout_done);
+				id = g_timeout_add_full(500,100,(GSourceFunc)update_errcounts_wrapper,mutex,timeout_done);
 				DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(id));
 			}
 			else

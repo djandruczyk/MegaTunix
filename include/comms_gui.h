@@ -28,7 +28,8 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean update_errcounts(void);
+gboolean update_errcounts_wrapper(gpointer);
+gboolean update_errcounts(gpointer);
 gboolean reset_errcounts(GtkWidget *);
 gboolean check_potential_ports(const gchar *);
 gboolean enumerate_dev(GtkWidget *, gpointer);	/* Help find usb/serial adapter */

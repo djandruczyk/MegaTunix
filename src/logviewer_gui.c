@@ -928,6 +928,16 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 }
 
 
+/* 
+ * \brief wrapper for pb_update_logview_traces
+ * */
+G_MODULE_EXPORT gboolean pb_update_logview_traces_wrapper(gpointer data)
+{
+	g_idle_add(pb_update_logview_traces,data);
+	return FALSE;
+}
+
+
 /*!
   \brief pb_update_logview_traces() updates each trace in turn and then scrolls 
   the display
@@ -935,8 +945,9 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
   just the new data...
   \returns TRUE
   */
-G_MODULE_EXPORT gboolean pb_update_logview_traces(gboolean force_redraw)
+G_MODULE_EXPORT gboolean pb_update_logview_traces(gpointer data)
 {
+	gboolean force_redraw = (GBOOLEAN)data;
 
 	if (!DATA_GET(global_data,"playback_mode"))
 		return TRUE;

@@ -48,12 +48,21 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 }
 
 
+/*
+ * \brief wrapper for update_errcounts
+ * */
+G_MODULE_EXPORT gboolean update_errcounts_wrapper(gpointer data)
+{
+	g_idle_add(update_errcounts,data);
+	return FALSE;
+}
+
 /*!
   \brief update_errcounts() updates the text entries on the gui with the 
   current status, error and I/O counters
   \returns TRUE
   */
-G_MODULE_EXPORT gboolean update_errcounts(void)
+G_MODULE_EXPORT gboolean update_errcounts(gpointer data)
 {
 	static gboolean pf_red = FALSE;
 	static GAsyncQueue *pf_dispatch_queue = NULL;
