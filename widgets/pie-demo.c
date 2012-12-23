@@ -20,6 +20,7 @@
 
 #include <piegauge.h>
 
+gboolean update_gauge_wrapper(gpointer );
 gboolean update_gauge(gpointer );
 gboolean close_demo(GtkWidget *, gpointer );
 
@@ -47,7 +48,7 @@ int main (int argc, char **argv)
 
 	/*mtx_gauge_face_set_attribute(MTX_PIE_GAUGE(gauge),UBOUND, 8000.0);*/
 
-	timeout = gdk_threads_add_timeout(20,(GSourceFunc)update_gauge,(gpointer)gauge);
+	timeout = g_timeout_add(20,(GSourceFunc)update_gauge_wrapper,(gpointer)gauge);
 
 	g_signal_connect (window, "delete_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
@@ -59,6 +60,13 @@ int main (int argc, char **argv)
 	gdk_threads_leave();
 	return 0;
 }
+
+gboolean update_gauge_wrapper(gpointer data)
+{
+	g_idle_add(update_gauge,data);
+	return TRUE;
+}
+
 
 gboolean update_gauge(gpointer data)
 {
@@ -86,8 +94,7 @@ gboolean update_gauge(gpointer data)
 		cur_val-=interval;
 
 	mtx_pie_gauge_set_value (MTX_PIE_GAUGE (gauge),cur_val);
-	return TRUE;
-
+	return FALSE;
 }
 
 gboolean close_demo(GtkWidget *widget, gpointer data)

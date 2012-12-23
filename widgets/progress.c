@@ -26,6 +26,7 @@
 
 /* Prototypes */
 
+gboolean mtx_progress_bar_peak_reset_wrapper(gpointer data);
 gboolean mtx_progress_bar_peak_reset(gpointer data);
 
 /*!
@@ -65,7 +66,7 @@ void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 	else
 	{
 		if (priv->hold_id == 0)
-			priv->hold_id = gdk_threads_add_timeout(priv->hold_time,mtx_progress_bar_peak_reset,pbar);
+			priv->hold_id = g_timeout_add(priv->hold_time,mtx_progress_bar_peak_reset_wrapper,pbar);
 	}
 
 
@@ -73,6 +74,15 @@ void mtx_progress_bar_set_fraction (MtxProgressBar *pbar, gfloat fraction)
 	return;
 }
 
+
+/*!
+ * \brief,  wrapper for mtx_progress_bar_peak_reset_wrapper
+ * */
+gboolean mtx_progress_bar_peak_reset_wrapper(gpointer data)
+{
+	g_idle_add(mtx_progress_bar_peak_reset,data);
+	return FALSE;
+}
 
 /*!
  \brief Resets the peak/hold of the progressbar

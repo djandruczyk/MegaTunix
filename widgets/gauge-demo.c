@@ -21,6 +21,7 @@
 #include <gauge.h>
 #include <stdio.h>
 
+gboolean update_gauge_wrapper(gpointer );
 gboolean update_gauge(gpointer );
 gboolean close_demo(GtkWidget *, gpointer );
 gboolean button_event(GtkWidget *, GdkEventButton *, gpointer);
@@ -64,7 +65,7 @@ int main (int argc, char **argv)
 		printf("Attempting to load user specified \"%s\"\n",argv[1]);
 		mtx_gauge_face_import_xml(MTX_GAUGE_FACE(gauge),argv[1]);
 	}
-	timeout = gdk_threads_add_timeout(20,(GSourceFunc)update_gauge,(gpointer)gauge);
+	timeout = g_timeout_add(20,(GSourceFunc)update_gauge_wrapper,(gpointer)gauge);
 
 	mtx_gauge_face_export_xml(MTX_GAUGE_FACE(gauge),"output2.xml");
 
@@ -83,6 +84,12 @@ int main (int argc, char **argv)
 	gtk_main ();
 	gdk_threads_leave();
 	return 0;
+}
+
+gboolean update_gauge_wrapper(gpointer data)
+{
+	g_idle_add(update_gauge,data);
+	return TRUE;
 }
 
 gboolean update_gauge(gpointer data)
@@ -109,7 +116,7 @@ gboolean update_gauge(gpointer data)
 		cur_val-=interval;
 
 	mtx_gauge_face_set_value (MTX_GAUGE_FACE (gauge),cur_val);
-	return TRUE;
+	return FALSE;
 
 }
 

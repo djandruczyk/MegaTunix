@@ -21,6 +21,7 @@
 #include <stripchart.h>
 #include <stdio.h>
 
+gboolean update_stripchart_wrapper(gpointer data);
 gboolean update_stripchart(gpointer data);
 gboolean remove_trace(gpointer data);
 gboolean close_demo(GtkWidget *, gpointer);
@@ -67,7 +68,7 @@ int main (int argc, char **argv)
 
 	/*mtx_stripchart_delete_trace(MTX_STRIPCHART(chart),trace2);*/
 
-	timeout = gdk_threads_add_timeout(40,(GSourceFunc)update_stripchart,(gpointer)chart);
+	timeout = g_timeout_add(40,(GSourceFunc)update_stripchart_wrapper,(gpointer)chart);
 /*	g_timeout_add(4000,(GSourceFunc)remove_trace,GINT_TO_POINTER(trace2));*/
 
 	gtk_widget_show_all (window);
@@ -81,6 +82,12 @@ int main (int argc, char **argv)
 	gtk_main ();
 	gdk_threads_leave();
 	return 0;
+}
+
+gboolean update_stripchart_wrapper(gpointer data)
+{
+	g_idle_add(update_stripchart,data);
+	return TRUE;
 }
 
 gboolean update_stripchart(gpointer data)
@@ -114,7 +121,7 @@ gboolean update_stripchart(gpointer data)
 	mtx_stripchart_set_n_values(MTX_STRIPCHART(chart),3,hist_vals);
 /*	printf("This should scroll stripchart \n"); */
 
-	return TRUE;
+	return FALSE;
 }
 
 gboolean remove_trace(gpointer data)

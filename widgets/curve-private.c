@@ -990,6 +990,16 @@ gboolean mtx_curve_motion_event (GtkWidget *curve,GdkEventMotion *event)
 					       
 
 /*!
+  \brief wrapper for auto_rescale
+  */
+gboolean auto_rescale_wrapper(gpointer data)
+{
+	g_idle_add(auto_rescale,data);
+	return FALSE;
+}
+
+
+/*!
   \brief timeout function which auto-rescales and redraws the screen
   \param data is a pointer to the MtxCurvePrivate datastructure
   \returns FALSE to cancel the timeout
@@ -1001,6 +1011,7 @@ gboolean auto_rescale(gpointer data)
 	recalc_extremes(priv);
 	mtx_curve_redraw(MTX_CURVE(priv->self),TRUE);
 	priv->auto_rescale_id = 0;
+	gdk_flush();
 	return FALSE;
 }
 
@@ -1034,7 +1045,7 @@ gboolean mtx_curve_button_event (GtkWidget *curve,GdkEventButton *event)
 		priv->vertex_selected = FALSE;
 
 		if (priv->auto_rescale_id == 0)
-			priv->auto_rescale_id = gdk_threads_add_timeout(500,(GSourceFunc)auto_rescale,priv);
+			priv->auto_rescale_id = g_timeout_add(500,(GSourceFunc)auto_rescale_wrapper,priv);
 		if (priv->coord_changed)
 			g_signal_emit_by_name((gpointer)curve, "coords-changed");
 		return TRUE;
@@ -1201,7 +1212,17 @@ gboolean mtx_curve_focus_event (GtkWidget *curve, GdkEventCrossing *event)
 		mtx_curve_redraw(MTX_CURVE(curve),FALSE);
 	}
 	if ((event->type == GDK_LEAVE_NOTIFY) && (priv->auto_hide))
-		priv->vertex_id = gdk_threads_add_timeout(2000,delay_turnoff_vertexes,curve);
+		priv->vertex_id = g_timeout_add(2000,delay_turnoff_vertexes_wrapper,curve);
+	return FALSE;
+}
+
+
+/*!
+ * \brief wrapper function for delay_turnoff_vertexes()
+ * */
+gboolean delay_turnoff_vertexes_wrapper(gpointer data)
+{
+	g_idle_add(delay_turnoff_vertexes,data);
 	return FALSE;
 }
 
@@ -1216,6 +1237,7 @@ gboolean delay_turnoff_vertexes(gpointer data)
 	priv = MTX_CURVE_GET_PRIVATE(curve);
 	priv->show_vertexes = FALSE;
 	mtx_curve_redraw(MTX_CURVE(curve),FALSE);
+	gdk_flush();
 	return FALSE;
 }
 
@@ -1299,6 +1321,19 @@ gboolean get_intersection(
 } 
 
 
+/*
+ * \brief wrapper for cancel_peak
+ * */
+gboolean cancel_peak_wrapper(gpointer data)
+{
+	g_idle_add(cancel_peak,data);
+	return FALSE;
+}
+
+
+/*
+ * \brief cancels the peak and rerenders the curve
+ * */
 gboolean cancel_peak(gpointer data)
 {
 	MtxCurve *curve = NULL;
@@ -1329,5 +1364,6 @@ gboolean cancel_peak(gpointer data)
 			break;
 	}
 	mtx_curve_redraw(MTX_CURVE(curve),FALSE);
+	gdk_flush();
 	return FALSE;
 }

@@ -20,6 +20,7 @@
 
 #include <progress.h>
 
+gboolean update_pbar_wrapper(gpointer );
 gboolean update_pbar(gpointer );
 gboolean close_demo(GtkWidget *,gpointer );
 
@@ -44,7 +45,7 @@ int main (int argc, char **argv)
 
 	gtk_widget_show_all (window);
 
-	timeout = gdk_threads_add_timeout(30,(GSourceFunc)update_pbar,(gpointer)pbar);
+	timeout = g_timeout_add(30,(GSourceFunc)update_pbar_wrapper,(gpointer)pbar);
 
 	g_signal_connect (window, "delete_event",
 			G_CALLBACK (close_demo), GINT_TO_POINTER(timeout));
@@ -55,6 +56,12 @@ int main (int argc, char **argv)
 	gtk_main ();
 	gdk_threads_leave();
 	return 0;
+}
+
+gboolean update_pbar_wrapper(gpointer data)
+{
+	g_idle_add(update_pbar,data);
+	return TRUE;
 }
 
 gboolean update_pbar(gpointer data)
@@ -86,7 +93,7 @@ gboolean update_pbar(gpointer data)
 			cur_val = lower;
 	}
 	mtx_progress_bar_set_fraction (MTX_PROGRESS_BAR (pbar),cur_val);
-	return TRUE;
+	return FALSE;
 
 }
 

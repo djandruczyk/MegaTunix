@@ -86,7 +86,7 @@ gboolean mtx_curve_set_coords (MtxCurve *curve, gint num_points, MtxCurveCoord *
 		return TRUE;
 #endif
 	if (priv->auto_rescale_id == 0)
-		priv->auto_rescale_id = gdk_threads_add_timeout(1000,(GSourceFunc)auto_rescale,priv);
+		priv->auto_rescale_id = g_timeout_add(1000,(GSourceFunc)auto_rescale_wrapper,priv);
 	return TRUE;
 }
 
@@ -126,7 +126,7 @@ gboolean mtx_curve_set_empty_array (MtxCurve *curve, gint num_points)
 		return TRUE;
 #endif
 	if (priv->auto_rescale_id == 0)
-		priv->auto_rescale_id = gdk_threads_add_timeout(1000,(GSourceFunc)auto_rescale,priv);
+		priv->auto_rescale_id = g_timeout_add(1000,(GSourceFunc)auto_rescale_wrapper,priv);
 	return TRUE;
 }
 
@@ -159,7 +159,7 @@ gboolean mtx_curve_set_coords_at_index (MtxCurve *curve, gint index, MtxCurveCoo
 		return TRUE;
 #endif
 	if (priv->auto_rescale_id == 0)
-		priv->auto_rescale_id = gdk_threads_add_timeout(1000,(GSourceFunc)auto_rescale,priv);
+		priv->auto_rescale_id = g_timeout_add(1000,(GSourceFunc)auto_rescale_wrapper,priv);
 	return TRUE;
 }
 
@@ -522,7 +522,7 @@ void mtx_curve_set_x_marker_value (MtxCurve *curve, gfloat value)
 		priv->x_draw_peak = TRUE;
 		g_object_set_data(G_OBJECT(curve),"axis",GINT_TO_POINTER(_X_));
 		if (priv->x_peak_timeout <= 0)
-			priv->x_peak_timeout = gdk_threads_add_timeout(5000,(GSourceFunc)cancel_peak,(gpointer)curve);
+			priv->x_peak_timeout = g_timeout_add(5000,(GSourceFunc)cancel_peak_wrapper,(gpointer)curve);
 	}
 	for (i = 0;i<priv->num_points - 1;i++)
 	{
@@ -651,7 +651,7 @@ void mtx_curve_set_y_marker_value (MtxCurve *curve, gfloat value)
 		priv->y_draw_peak = TRUE;
 		g_object_set_data(G_OBJECT(curve),"axis",GINT_TO_POINTER(_Y_));
 		if (priv->y_peak_timeout <= 0)
-			priv->y_peak_timeout = gdk_threads_add_timeout(5000,(GSourceFunc)cancel_peak,(gpointer)curve);
+			priv->y_peak_timeout = g_timeout_add(5000,(GSourceFunc)cancel_peak_wrapper,(gpointer)curve);
 	}
 	for (i = 0;i<priv->num_points - 1;i++)
 	{

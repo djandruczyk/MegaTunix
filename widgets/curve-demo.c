@@ -27,6 +27,7 @@
 void coords_changed(MtxCurve *, gpointer);
 void vertex_proximity(MtxCurve *, gpointer);
 void marker_proximity(MtxCurve *, gpointer);
+gboolean update_curve_marker_wrapper(gpointer );
 gboolean update_curve_marker(gpointer );
 gboolean close_demo(GtkWidget *, gpointer);
 
@@ -80,7 +81,7 @@ int main (int argc, char **argv)
 	g_signal_connect(G_OBJECT(curve), "marker-proximity",
 			G_CALLBACK(marker_proximity),NULL);
 
-	timeout = gdk_threads_add_timeout(40,(GSourceFunc)update_curve_marker,(gpointer)curve);
+	timeout = g_timeout_add(40,(GSourceFunc)update_curve_marker_wrapper,(gpointer)curve);
 
 	gtk_widget_show_all (window);
 
@@ -120,6 +121,12 @@ void marker_proximity(MtxCurve *curve, gpointer data)
 
 }
 
+gboolean update_curve_marker_wrapper(gpointer data)
+{
+	g_idle_add(update_curve_marker,data);
+	return TRUE;
+}
+
 gboolean update_curve_marker(gpointer data)
 {
 	GtkWidget *curve = (GtkWidget *)data;
@@ -148,8 +155,9 @@ gboolean update_curve_marker(gpointer data)
 /*	mtx_curve_set_y_marker_value(MTX_CURVE(curve),(gfloat)value); */
 
 	mtx_curve_set_x_marker_value(MTX_CURVE(curve),(gfloat)value);
-	return TRUE;
+	return FALSE;
 }
+
 
 gboolean close_demo(GtkWidget *widget, gpointer data)
 {
