@@ -121,7 +121,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 	{
 		case RTV_TICKLER:
 			realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
-			if ((gint)realtime_id == 1)
+			if (realtime_id == NULL )
 				break;
 			if (realtime_id)
 			{
@@ -290,3 +290,11 @@ void timeout_done(gpointer data)
 }
 
 
+/* \brief run_function() Gets passed a function address, runs it and 
+ * return's it's return value to the caller
+ */
+gboolean run_function(gboolean(*func)(gpointer))
+{
+	g_idle_add(func, NULL);
+	return FALSE;
+}
