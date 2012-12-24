@@ -1478,6 +1478,8 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
 			g_free(test->actual_test);
 		if (test->result_str)
 			g_free(test->result_str);
+		if (test->send_buf)
+			g_free(test->send_buf);
 		g_free(test);
 		test = NULL;
 	}
