@@ -1632,7 +1632,7 @@ G_MODULE_EXPORT gboolean update_dashboards(gpointer data)
 	if (DATA_GET(global_data,"dash_hash"))
 		g_hash_table_foreach((GHashTable *)DATA_GET(global_data,"dash_hash"),update_dash_gauge,NULL);
 	g_mutex_unlock(dash_mutex);
-	return TRUE;
+	return FALSE;
 }
 
 

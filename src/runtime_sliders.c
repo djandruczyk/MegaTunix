@@ -699,7 +699,7 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 				g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
 		}               
 	}
-	return TRUE;            
+	return FALSE;            
 }
 
 
