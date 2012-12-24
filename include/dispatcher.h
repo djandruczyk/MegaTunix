@@ -28,8 +28,6 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean pf_dispatcher(gpointer);
-gboolean gui_dispatcher(gpointer);
 gboolean process_pf_message(gpointer);
 gboolean process_gui_message(gpointer);
 void *clock_watcher(gpointer);
