@@ -128,7 +128,7 @@ struct _Io_Message
 struct _Text_Message
 {
 	const gchar *view_name;	/*!< Textview name */
-	const gchar *tagname;	/*!< Texttag to use */
+	const gchar *tag_name;	/*!< Texttag to use */
 	gchar *msg;		/*!< message to display */
 	gboolean count;		/*!< display a counter */
 	gboolean clear;		/*!< Clear the window? */

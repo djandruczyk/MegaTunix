@@ -46,7 +46,7 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 {
 	gchar *tmpbuf = NULL;
 	gchar *key = NULL;
-	gchar ** tagnames = NULL;
+	gchar ** tag_names = NULL;
 	gchar ** attrs = NULL;
 	gint num_attrs = 0;
 	gint num_tags = 0;
@@ -55,14 +55,14 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 	GtkTextTag * tag = NULL;
 
 	cfg_read_string(cfgfile,section,"create_tags",&tmpbuf);
-	tagnames = parse_keys(tmpbuf,&num_tags,",");
+	tag_names = parse_keys(tmpbuf,&num_tags,",");
 	g_free(tmpbuf);
 
 	textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(object));
 
 	for (i=0;i<num_tags;i++)
 	{
-		key = g_strdup_printf("%s",tagnames[i]);
+		key = g_strdup_printf("%s",tag_names[i]);
 		if (!cfg_read_string(cfgfile,section,key,&tmpbuf))
 		{
 			MTXDBG(CRITICAL,_("Key \"%s\" NOT FOUND in section \"[%s]\", EXITING!!\n"),key,section);
@@ -101,7 +101,7 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 		g_free(key);
 
 	}
-	g_strfreev(tagnames);
+	g_strfreev(tag_names);
 	return;
 }
 

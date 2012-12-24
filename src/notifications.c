@@ -155,7 +155,7 @@ G_MODULE_EXPORT void set_widget_color(gpointer w_ptr, gpointer c_ptr)
   \brief update_logbar() updates the logbar passed with the text passed to it
   \param view_name is the textual name of the textview the text is supposed 
   to go to. (required)
-  \param tagname is the textual tagname to be used to set attributes on the
+  \param tag_name is the textual tag name to be used to set attributes on the
   text (optional, can be NULL)
   \param message is the message to display (required)
   \param count is the flag to show a running count or not
@@ -164,7 +164,7 @@ G_MODULE_EXPORT void set_widget_color(gpointer w_ptr, gpointer c_ptr)
   */
 G_MODULE_EXPORT void  update_logbar(
 		const gchar * view_name, 
-		const gchar * tagname, 
+		const gchar * tag_name, 
 		gchar * message,
 		gboolean count,
 		gboolean clear,
@@ -209,7 +209,7 @@ G_MODULE_EXPORT void  update_logbar(
 		OBJ_SET(widget,"counter",GINT_TO_POINTER(counter));	
 	}
 
-	if (tagname == NULL)
+	if (tag_name == NULL)
 	{
 		if (count) /* if TRUE, display counter, else don't */
 			gtk_text_buffer_insert(textbuffer,&iter,tmpbuf,-1);
@@ -219,10 +219,10 @@ G_MODULE_EXPORT void  update_logbar(
 	{
 		if (count) /* if TRUE, display counter, else don't */
 			gtk_text_buffer_insert_with_tags_by_name(textbuffer,
-					&iter,tmpbuf,-1,tagname,NULL);
+					&iter,tmpbuf,-1,tag_name,NULL);
 
 		gtk_text_buffer_insert_with_tags_by_name(textbuffer,&iter,
-				(const gchar *)message,-1,tagname,NULL);
+				(const gchar *)message,-1,tag_name,NULL);
 	}
 
 	/* Get it's parent (the scrolled window) and slide it to the

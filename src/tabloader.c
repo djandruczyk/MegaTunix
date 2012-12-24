@@ -111,18 +111,18 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 		if (!g_file_test(glade_file,G_FILE_TEST_EXISTS))
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("GLADE FILE: \"%s.glade\" NOT FOUND\n"),firmware->tab_list[i]);
-			thread_update_logbar("interr_view","warning",g_strdup(_("Glade File: ")),FALSE,FALSE);
-			thread_update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE);
-			thread_update_logbar("interr_view","warning",g_strdup(_("  is MISSING!\n")),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup(_("Glade File: ")),FALSE,FALSE,TRUE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s.glade\"",firmware->tab_list[i]),FALSE,FALSE,TRUE);
+			update_logbar("interr_view","warning",g_strdup(_("  is MISSING!\n")),FALSE,FALSE,TRUE);
 			i++;
 			continue;
 		}
 		if (!g_file_test(map_file,G_FILE_TEST_EXISTS))
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("DATAMAP: \"%s.datamap\" NOT FOUND\n"),firmware->tab_confs[i]);
-			thread_update_logbar("interr_view","warning",g_strdup(_("Datamap File: ")),FALSE,FALSE);
-			thread_update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]),FALSE,FALSE);
-			thread_update_logbar("interr_view","warning",g_strdup(_("  is MISSING!\n")),FALSE,FALSE);
+			update_logbar("interr_view","warning",g_strdup(_("Datamap File: ")),FALSE,FALSE,TRUE);
+			update_logbar("interr_view","info",g_strdup_printf("\"%s.datamap\"",firmware->tab_confs[i]),FALSE,FALSE,TRUE);
+			update_logbar("interr_view","warning",g_strdup(_("  is MISSING!\n")),FALSE,FALSE,TRUE);
 			i++;
 			continue;
 		}
@@ -197,6 +197,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			break;
 
 		/* Allow gui to update as it should.... */
+		/*
 		while (gtk_events_pending())
 		{
 			if (DATA_GET(global_data,"leaving"))
@@ -205,12 +206,14 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 			}
 			gtk_main_iteration();
 		}
+		*/
 	}
-	g_idle_add((GSourceFunc)preload_deps,tabinfos);
+	preload_deps(tabinfos);
 	DATA_SET_FULL(global_data,"tabinfos",tabinfos,dealloc_tabinfos);
 	DATA_SET(global_data,"tabs_loaded",GINT_TO_POINTER(TRUE));
 	MTXDBG(TABLOADER,_("All is well, leaving...\n\n"));
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
+	gdk_flush();
 	return TRUE;
 }
 

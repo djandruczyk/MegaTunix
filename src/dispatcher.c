@@ -77,6 +77,7 @@ G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
 		MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
 		return TRUE;
 	}
+	printf("Dispatching postfunction message to main context\n");
 	g_idle_add(process_pf_message,message);
 
 	g_async_queue_unref(pf_dispatch_queue);
@@ -114,7 +115,10 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 				continue;
 			}
 			if (pf->name)
+			{
+				printf(_("dispatching post function %s\n"),pf->name);
 				MTXDBG(DISPATCHER,_("dispatching post function %s\n"),pf->name);
+			}
 			if (pf->w_arg)
 			{
 				if (!pf->function_w_arg)
@@ -196,7 +200,7 @@ G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
 			case UPD_LOGBAR:
 				MTXDBG(DISPATCHER,_("Logbar update\n"));
 				t_message = (Text_Message *)message->payload;
-				update_logbar(t_message->view_name,t_message->tagname,t_message->msg,t_message->count,t_message->clear,FALSE);
+				update_logbar(t_message->view_name,t_message->tag_name,t_message->msg,t_message->count,t_message->clear,FALSE);
 				dealloc_textmessage(t_message);
 				message->payload = NULL;
 				break;

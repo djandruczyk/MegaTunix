@@ -260,7 +260,7 @@ fast_exit:
   take care of the message. Since the functions that call this ALWAYS send
   dynamically allocated test in the msg field we DEALLOCATE it HERE...
   \param view_name is the textual name fothe textview to update (required)
-  \param tagname is the textual name ofthe tag to be applied to the text 
+  \param tag_name is the textual name ofthe tag to be applied to the text 
   sent.  This can be NULL is no tag is desired
   \param msg is the message to be sent (required)
   \param count is the Flag to display a counter
@@ -268,7 +268,7 @@ fast_exit:
   */
 G_MODULE_EXPORT void  thread_update_logbar(
 		const gchar * view_name, 
-		const gchar * tagname, 
+		const gchar * tag_name, 
 		gchar * msg,
 		gboolean count,
 		gboolean clear)
@@ -284,7 +284,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 
 	t_message = g_new0(Text_Message, 1);
 	t_message->view_name = view_name;
-	t_message->tagname = tagname;
+	t_message->tag_name = tag_name;
 	t_message->msg = msg;
 	t_message->count = count;
 	t_message->clear = clear;
@@ -293,7 +293,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
 	tmp = UPD_LOGBAR;
 	g_array_append_val(message->functions,tmp);
-	printf("thread_update_logbar() about to send message\n");
+	printf("thread_update_logbar(view %s, tag %s, msg \"%s\") about to send message\n",view_name,tag_name,msg);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
 	return;
@@ -325,7 +325,7 @@ G_MODULE_EXPORT gboolean queue_function(const gchar *name)
 	tmp = UPD_RUN_FUNCTION;
 	g_array_append_val(message->functions,tmp);
 
-	printf("queue_functions() about to send message\n");
+	printf("queue_functions(function name %s) about to send message\n",name);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
 	return FALSE;
@@ -365,7 +365,7 @@ G_MODULE_EXPORT void  thread_update_widget(
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_update_widget() about to send message\n");
+	printf("thread_update_widget(widget %s, messages \"%s\") about to send message\n",widget_name,msg);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
 	return;
@@ -397,7 +397,7 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_widget_set_sensitive() about to send message\n");
+	printf("thread_widget_set_sensitive(%s), about to send message\n",widget_name);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
 	return;
@@ -421,7 +421,7 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 	tmp = UPD_REFRESH;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_refresh_widget() about to send message\n");
+	printf("thread_refresh_widget(widget pointer %p) about to send message\n",(gpointer)widget);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
 	return;
@@ -472,7 +472,7 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	tmp = UPD_REFRESH_RANGE;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_refresh_widget_range() about to send message\n");
+	printf("thread_refresh_widget_range( page %i, offset %i, len %i) about to send message\n",page,offset,len);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
 	printf("This will probably crash or DEADLOCK here\n");
@@ -503,7 +503,7 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_set_grop_color() about to send message\n");
+	printf("thread_set_grop_color(group %s) about to send message\n",group);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
 	return;
