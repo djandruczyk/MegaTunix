@@ -50,7 +50,8 @@ static DebugLevel dbglevels[] =
 	{ "Plugins", DEBUG_LEVEL, PLUGINS, PLUGINS_SHIFT, FALSE},
 	{ "Packets", DEBUG_LEVEL, PACKETS, PACKETS_SHIFT, FALSE},
 	{ "Dispatcher", DEBUG_LEVEL, DISPATCHER, DISPATCHER_SHIFT, FALSE},
-	{ "Critical Errors", DEBUG_LEVEL, CRITICAL, CRITICAL_SHIFT, FALSE},
+	{ "Function Entry/Exit", DEBUG_LEVEL, FUNC, FUNC_SHIFT, FALSE},
+	{ "Critical Errors", DEBUG_LEVEL, CRITICAL, CRITICAL_SHIFT, TRUE},
 };
 
 /*!

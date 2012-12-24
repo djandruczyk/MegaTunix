@@ -233,7 +233,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 		if(cfg_read_int(cfgfile, "Global", "dbg_lvl", &tmpi))
 		{
 			tmpi |= CRITICAL;
-			tmpi |= FUNC;
+			if(g_getenv("MTX_FUNC_DEBUG"))
+				tmpi |= FUNC;
 			DATA_SET(global_data,"dbg_lvl",GINT_TO_POINTER(tmpi));
 		}
 		else
