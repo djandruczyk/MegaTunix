@@ -100,6 +100,8 @@ G_MODULE_EXPORT void CalculateFrameRate(GtkWidget *widget)
 	GTimeVal  currentTime;
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 
+	ENTER();
+
 	g_return_if_fail(ve_view);
 
 	/* struct for the time value*/
@@ -123,6 +125,8 @@ G_MODULE_EXPORT void CalculateFrameRate(GtkWidget *widget)
 
 	/* draw frame rate on screen */
 	drawOrthoText(widget, ve_view->strfps, 1.0f, 1.0f, 1.0f, 0.025, 0.965 );
+	EXIT();
+	return;
 }
 
 /*!
@@ -137,6 +141,8 @@ G_MODULE_EXPORT void CalculateFrameRate(GtkWidget *widget)
 G_MODULE_EXPORT void drawOrthoText(GtkWidget *widget, char *str, GLclampf r, GLclampf g, GLclampf b, GLfloat x, GLfloat y)
 {
 	GLint matrixMode;
+
+	ENTER();
 	if (!str)
 		return;
 
@@ -158,6 +164,8 @@ G_MODULE_EXPORT void drawOrthoText(GtkWidget *widget, char *str, GLclampf r, GLc
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(matrixMode);
+	EXIT();
+	return;
 }
 
 
@@ -185,6 +193,8 @@ G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 	gfloat b = 0.0;
 	static GdkColormap *colormap = NULL;
 
+
+	ENTER();
 	if (!colormap)
 		colormap = gdk_colormap_get_system();
 
@@ -240,6 +250,7 @@ G_MODULE_EXPORT RGB3f rgb_from_hue(gfloat hue, gfloat sat, gfloat val)
 	color.green = g;
 	color.blue = b;
 
+	EXIT();
 	return (color);
 }
 
@@ -280,6 +291,8 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	GMutex **ve3d_mutex = NULL;
 	gint table_num =  -1;
 
+
+	ENTER();
 	if (!gl_ability)
 	{
 		MTXDBG(CRITICAL,_("GtkGLEXT Library initialization failed, no GL for you :(\n"));
@@ -756,6 +769,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	g_timeout_add(500,(GSourceFunc)delayed_reconfigure_wrapper,ve_view);
 	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,(GSourceFunc)update_ve3d_wrapper,GINT_TO_POINTER(table_num),NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -769,7 +783,12 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean call_ve3d_shutdown(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *window = (GtkWidget *)OBJ_GET(widget,"window");
-	return ve3d_shutdown(window,NULL,data);
+	gboolean retval = FALSE;
+
+	ENTER();
+	retval = ve3d_shutdown(window,NULL,data);
+	EXIT();
+	return retval;
 }
 
 
@@ -790,6 +809,8 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpoin
 	GMutex **ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
+
+	ENTER();
 			
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(ve_view_hash,FALSE);
@@ -822,6 +843,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpoin
 	//printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
 	/* MUST return false otherwise other handlers won't run*/
 	g_mutex_unlock(ve3d_mutex[table_num]);
+	EXIT();
 	return FALSE;  
 }
 
@@ -836,6 +858,8 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpoin
 G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 {
 	Ve_View_3D *ve_view;
+
+	ENTER();
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	ve_view->active_y = 0;
 	ve_view->active_x = 0;
@@ -851,6 +875,8 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 	ve_view->mesh_created = FALSE;
 	ve3d_configure_event(ve_view->drawing_area, NULL,NULL);
 	g_timeout_add(500,delayed_expose_wrapper,ve_view);
+	EXIT();
+	return;
 }
 
 
@@ -861,6 +887,8 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
 GdkGLConfig* get_gl_config(void)
 {
 	GdkGLConfig* gl_config;
+
+	ENTER();
 	/* Try double-buffered visual */
 	gl_config = gdk_gl_config_new_by_mode ((GdkGLConfigMode)(GDK_GL_MODE_RGB |
 			GDK_GL_MODE_DEPTH |
@@ -881,6 +909,7 @@ GdkGLConfig* get_gl_config(void)
 			exit (-1);
 		}
 	}
+	EXIT();
 	return gl_config;
 }
 
@@ -902,13 +931,14 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	GLfloat w;
 	GLfloat h;
 
+	ENTER();
+
 	//printf("app configure event entered!\n");
 
 	gtk_widget_get_allocation(widget,&allocation);
 	w = allocation.width;
 	h = allocation.height;
 
-	MTXDBG(OPENGL,_("Entered\n"));
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (ve_view->font_created)
 		gl_destroy_font(widget);
@@ -935,7 +965,7 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	gl_create_font(widget);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
-	MTXDBG(OPENGL,_("Leaving!\n"));
+	EXIT();
 	return TRUE;
 }
 
@@ -959,13 +989,14 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	gint table_num = (GINT)data;
 
+	ENTER();
+
 	if (!ve3d_mutex)
 		ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	//printf("app expose event entered!\n");
 	glcontext = gtk_widget_get_gl_context(widget);
 	gldrawable = gtk_widget_get_gl_drawable(widget);
 
-	MTXDBG(OPENGL,_("Entered\n"));
 	g_return_val_if_fail(ve3d_mutex,FALSE);
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(glcontext,FALSE);
@@ -1027,9 +1058,9 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
-	MTXDBG(OPENGL,_("Leaving!\n"));
 	//printf("app expose event left (TRUE)!\n");
 	g_mutex_unlock(ve3d_mutex[table_num]);
+	EXIT();
 	return TRUE;
 }
 
@@ -1050,11 +1081,12 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
+	ENTER();
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 
-	MTXDBG(OPENGL,_("Entered\n"));
 
 	/* Left Button */
 	if (event->state & GDK_BUTTON1_MASK)
@@ -1078,8 +1110,8 @@ G_MODULE_EXPORT gboolean ve3d_motion_notify_event(GtkWidget *widget, GdkEventMot
 	ve_view->beginY = event->y;
 
 	gdk_window_invalidate_rect (window,&allocation, FALSE);
-	MTXDBG(OPENGL,_("Leaving\n"));
 
+	EXIT();
 	return TRUE;
 }
 
@@ -1099,7 +1131,8 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
 	gboolean retval = FALSE;
 	Ve_View_3D *ve_view;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
-	MTXDBG(OPENGL,_("Entered\n"));
+
+	ENTER();
 
 	gtk_widget_grab_focus (widget);
 
@@ -1110,7 +1143,7 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
 		retval = TRUE;
 	}
 
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return retval;
 }
 
@@ -1124,9 +1157,10 @@ G_MODULE_EXPORT gboolean ve3d_button_press_event(GtkWidget *widget, GdkEventButt
 G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 {
 	GdkWindow *window = gtk_widget_get_window(widget);
-	MTXDBG(OPENGL,_("Entered\n"));
+
+	ENTER();
 	gdk_window_ensure_native(window);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return TRUE;
 }
 
@@ -1136,10 +1170,11 @@ void gl_init(GtkWidget *widget)
 	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
 	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 
+	ENTER();
+
 	g_return_if_fail(glcontext);
 	g_return_if_fail(gldrawable);
 
-	MTXDBG(OPENGL,_("Entered\n"));
 	/*! Stuff we used to do in the realize handler... */
 	/*** OpenGL BEGIN ***/
 	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
@@ -1155,7 +1190,8 @@ void gl_init(GtkWidget *widget)
 	glMatrixMode(GL_MODELVIEW);
 	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -1171,7 +1207,8 @@ G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 	GdkWindow *window = gtk_widget_get_window(widget);
 	GtkAllocation allocation;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 
 	/* Not sure how to "grey" the window to make it appear insensitve */
@@ -1188,7 +1225,8 @@ G_MODULE_EXPORT void ve3d_grey_window(Ve_View_3D *ve_view)
 	cairo_fill(cr);
 	cairo_destroy(cr);
 	g_object_unref(pmap);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -1207,8 +1245,9 @@ G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_v
 	gfloat tmpf = 0.0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
-	MTXDBG(OPENGL,_("Entered\n"));
 	/*printf("CALC Scaling\n");*/
 
 	min = 65535;
@@ -1261,7 +1300,8 @@ G_MODULE_EXPORT void ve3d_calculate_scaling(Ve_View_3D *ve_view, Cur_Vals *cur_v
 	ve_view->z_max = max;
 	ve_view->z_scale = 1.0/((max-min)/0.75);
 	ve_view->z_offset = 0.0;
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 /*!
@@ -1277,9 +1317,10 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	Quad * quad = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
-	MTXDBG(OPENGL,_("Entered\n"));
 
 	/*printf("draw grid\n");*/
 
@@ -1355,7 +1396,8 @@ G_MODULE_EXPORT void ve3d_draw_ve_grid(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 			glEnd();
 		}
 	}
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -1374,7 +1416,8 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
 	GtkAllocation allocation;
 	Firmware_Details *firmware = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	w = allocation.width;
 	h = allocation.height;
@@ -1466,7 +1509,8 @@ G_MODULE_EXPORT void ve3d_draw_edit_indicator(Ve_View_3D *ve_view, Cur_Vals *cur
 				bottom);
 	}
 	glEnd();
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -1492,7 +1536,8 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 	GtkAllocation allocation;
 	Firmware_Details *firmware = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
@@ -1707,7 +1752,8 @@ G_MODULE_EXPORT void ve3d_draw_runtime_indicator(Ve_View_3D *ve_view, Cur_Vals *
 
 	ve3d_draw_text(ve_view->drawing_area,label,-0.05,tmpf2,-0.05);
 	g_free(label);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -1726,7 +1772,8 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	gfloat tmpf2 = 0.0;
 	gchar *label;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	/*printf("draw axis \n");*/
 
 	/* Set line thickness and color */
@@ -1798,8 +1845,8 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		ve3d_draw_text(ve_view->drawing_area,label,-0.1,1,((float)i/100.0)-0.03);
 		g_free(label);
 	}
+	EXIT();
 	return;
-	MTXDBG(OPENGL,_("Leaving\n"));
 }
 
 
@@ -1813,14 +1860,16 @@ G_MODULE_EXPORT void ve3d_draw_axis(Ve_View_3D *ve_view, Cur_Vals *cur_val)
   */
 G_MODULE_EXPORT void ve3d_draw_text(GtkWidget * widget, char* text, gfloat x, gfloat y, gfloat z)
 {
+
+	ENTER();
 	/* Experiment*/
 	glColor3f(0.2,0.8,0.8);
-	MTXDBG(OPENGL,_("Entered\n"));
 	/* Set rendering postition */
 	glRasterPos3f (x, y, z);
 	/* Render each letter of text as stored in the display list */
 	gl_print_string(widget, text);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -1871,7 +1920,8 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!get_ecu_data_f)
 		get_symbol("get_ecu_data",(void **)&get_ecu_data_f);
@@ -2262,7 +2312,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	}
 
 	g_static_mutex_unlock(&key_mutex);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return TRUE;
 }
 
@@ -2277,7 +2327,8 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 {
 	Ve_View_3D *ve_view = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	ve_view= g_new0(Ve_View_3D,1) ;
 	ve_view->x_source = NULL;
 	ve_view->y_source = NULL;
@@ -2345,7 +2396,7 @@ G_MODULE_EXPORT Ve_View_3D * initialize_ve3d_view(void)
 	ve_view->requested_fps = (GINT)DATA_GET(global_data,"ve3d_fps");
 	ve_view->render_id = 0;
 
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return ve_view;
 }
 
@@ -2375,7 +2426,8 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 	GdkWindow *window = NULL;
 	gboolean *table_list = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
 	g_return_if_fail(firmware);
@@ -2451,7 +2503,7 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
 		}
 	}
 	g_free(table_list);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 }
 
 
@@ -2461,13 +2513,14 @@ G_MODULE_EXPORT void update_ve3d_if_necessary(int page, int offset)
   */
 G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
 {
-	MTXDBG(OPENGL,_("Entered\n"));
+
+	ENTER();
 	if (!DATA_GET(global_data,"ve3d_redraw_queued"))
 	{
 		DATA_SET(global_data,"ve3d_redraw_queued",GINT_TO_POINTER(TRUE));
 		g_timeout_add(300,sleep_and_redraw_wrapper,ve_view);
 	}
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return;
 }
 
@@ -2479,7 +2532,10 @@ G_MODULE_EXPORT void queue_ve3d_update(Ve_View_3D *ve_view)
   */
 G_MODULE_EXPORT gboolean sleep_and_redraw_wrapper(gpointer data)
 {
+
+	ENTER();
 	g_idle_add(sleep_and_redraw,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -2495,14 +2551,15 @@ G_MODULE_EXPORT gboolean sleep_and_redraw(gpointer data)
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	g_return_val_if_fail(ve_view,FALSE);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	ve_view->mesh_created = FALSE;
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	DATA_SET(global_data,"ve3d_redraw_queued",GINT_TO_POINTER(FALSE));
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return FALSE;
 }
 
@@ -2537,7 +2594,8 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
 	GLfloat h = 0.0;
 	Firmware_Details *firmware = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
@@ -2698,7 +2756,8 @@ G_MODULE_EXPORT void ve3d_draw_active_vertexes_marker(Ve_View_3D *ve_view,Cur_Va
 	}
 
 	glEnd();
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -2724,7 +2783,8 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 	cur_val = g_new0(Cur_Vals, 1);
 	Firmware_Details *firmware = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	algorithm = (gint *)DATA_GET(global_data,"algorithm");
@@ -2831,7 +2891,7 @@ G_MODULE_EXPORT Cur_Vals * get_current_values(Ve_View_3D *ve_view)
 		cur_val->z_precision = ve_view->z_precision;
 	}
 
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return cur_val;
 }
 
@@ -2847,7 +2907,8 @@ G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
@@ -2861,7 +2922,7 @@ G_MODULE_EXPORT gboolean set_tracking_focus(GtkWidget *widget, gpointer data)
 		ve_view->active_y = 0;
 	}
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return TRUE;
 }
 
@@ -2876,7 +2937,8 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
@@ -2886,7 +2948,7 @@ G_MODULE_EXPORT gboolean set_scaling_mode(GtkWidget *widget, gpointer data)
 	ve_view->fixed_scale = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	ve_view->mesh_created=FALSE;
 	g_timeout_add(500,delayed_expose_wrapper,ve_view);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return TRUE;
 }
 
@@ -2901,7 +2963,8 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
@@ -2911,7 +2974,7 @@ G_MODULE_EXPORT gboolean set_rendering_mode(GtkWidget *widget, gpointer data)
 	ve_view->wireframe = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	g_timeout_add(500,delayed_expose_wrapper,ve_view);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return TRUE;
 }
 
@@ -2926,7 +2989,8 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
@@ -2936,7 +3000,7 @@ G_MODULE_EXPORT gboolean set_opacity(GtkWidget *widget, gpointer data)
 	ve_view->opacity = gtk_range_get_value(GTK_RANGE(widget));
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	g_timeout_add(500,delayed_expose_wrapper,ve_view);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return TRUE;
 }
 
@@ -2951,7 +3015,8 @@ G_MODULE_EXPORT gboolean set_fps(GtkWidget *widget, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (!ve_view)
 	{
@@ -2962,7 +3027,7 @@ G_MODULE_EXPORT gboolean set_fps(GtkWidget *widget, gpointer data)
 	if (ve_view->render_id > 0)
 		g_source_remove(ve_view->render_id);
 	ve_view->render_id = g_timeout_add_full(150,1000.0/(float)ve_view->requested_fps,update_ve3d_wrapper,GINT_TO_POINTER(ve_view->table_num),NULL);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return TRUE;
 }
 
@@ -2973,7 +3038,8 @@ G_MODULE_EXPORT gboolean set_fps(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT void free_current_values(Cur_Vals *cur_val)
 {
-	MTXDBG(OPENGL,_("Entered\n"));
+
+	ENTER();
 	if (cur_val->x_edit_text)
 		g_free(cur_val->x_edit_text);
 	if (cur_val->y_edit_text)
@@ -2987,7 +3053,8 @@ G_MODULE_EXPORT void free_current_values(Cur_Vals *cur_val)
 	if (cur_val->z_runtime_text)
 		g_free(cur_val->z_runtime_text);
 	g_free(cur_val);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -3007,7 +3074,8 @@ G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 	gint count = 0;
 	GObject **widgets = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	switch (axis)
 	{
 		case _X_:
@@ -3031,7 +3099,7 @@ G_MODULE_EXPORT gfloat get_fixed_pos(Ve_View_3D *ve_view,gfloat value,Axis axis)
 			break;
 	}
 	tmp3 = ((gfloat)i/((gfloat)count-1))+(((value-tmp1)/(tmp2-tmp1))/10.0);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return tmp3;
 }
 
@@ -3061,10 +3129,11 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 	GObject *z_container = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
+
 	if (!get_ecu_data_f)
 		get_symbol("get_ecu_data",(void **)&get_ecu_data_f);
 
-	MTXDBG(OPENGL,_("Entered\n"));
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(get_ecu_data_f);
 	g_return_if_fail(firmware);
@@ -3192,7 +3261,8 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
 		}
 	}
 	ve_view->mesh_created = TRUE;
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -3203,7 +3273,10 @@ G_MODULE_EXPORT void generate_quad_mesh(Ve_View_3D *ve_view, Cur_Vals *cur_val)
   */
 gboolean delayed_expose_wrapper(gpointer data)
 {
+
+	ENTER();
 	g_idle_add(delayed_expose,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -3220,14 +3293,15 @@ gboolean delayed_expose(gpointer data)
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	g_return_val_if_fail(ve_view,FALSE);
 	window = gtk_widget_get_window(ve_view->drawing_area);
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
 //	ve3d_expose_event(ve_view->drawing_area,NULL,NULL);
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return FALSE;
 }
 
@@ -3239,8 +3313,10 @@ gboolean delayed_expose(gpointer data)
   */
 gboolean delayed_reconfigure_wrapper(gpointer data)
 {
-	g_idle_add(delayed_reconfigure,data);
 
+	ENTER();
+	g_idle_add(delayed_reconfigure,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -3255,12 +3331,13 @@ gboolean delayed_reconfigure(gpointer data)
 	Ve_View_3D *ve_view = (Ve_View_3D *)data;
 	GtkAllocation allocation;
 	GdkWindow *window = gtk_widget_get_window(ve_view->drawing_area);
-	MTXDBG(OPENGL,_("Entered\n"));
+
+	ENTER();
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
 	ve3d_configure_event(ve_view->drawing_area, NULL,GINT_TO_POINTER(ve_view->table_num));
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	ve3d_expose_event(ve_view->drawing_area,NULL,GINT_TO_POINTER(ve_view->table_num));
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
 	return FALSE;
 }
 
@@ -3272,7 +3349,10 @@ gboolean delayed_reconfigure(gpointer data)
   */
 G_MODULE_EXPORT gboolean update_ve3d_wrapper(gpointer data)
 {
+
+	ENTER();
 	g_idle_add(update_ve3d,data);
+	EXIT();
 	return TRUE;
 }
 
@@ -3301,7 +3381,8 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
 	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
@@ -3404,8 +3485,8 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 
 redraw:
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
-	MTXDBG(OPENGL,_("Leaving\n"));
 	g_mutex_unlock(ve3d_mutex[table_num]);
+	EXIT();
 	return FALSE;
 }
 
@@ -3427,7 +3508,8 @@ void gl_create_font(GtkWidget *widget)
 	Ve_View_3D *ve_view = NULL;
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	g_return_if_fail(ve_view);
 	if (ve_view->font_created)
 		MTXDBG(OPENGL|CRITICAL,_("Programming error: gl_create_font() was already called; you must call gl_destroy_font() before creating font again...\n"));
@@ -3465,7 +3547,8 @@ void gl_create_font(GtkWidget *widget)
 	ve_view->font_ascent = PANGO_PIXELS_CEIL(font_ascent_pango_units);
 	ve_view->font_descent = PANGO_PIXELS_CEIL(font_descent_pango_units);
 	ve_view->y_offset_bitmap_render_pango_units = (ve_view->font_ascent * PANGO_SCALE) - font_ascent_pango_units;
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -3480,7 +3563,8 @@ void gl_destroy_font(GtkWidget *widget)
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 	g_return_if_fail(ve_view);
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	if (!ve_view->font_created)
 		MTXDBG(OPENGL|CRITICAL,_("Programming error: gl_destroy_font() called when font does not exist\n"));
 	ve_view->font_ascent = -1;
@@ -3488,7 +3572,8 @@ void gl_destroy_font(GtkWidget *widget)
 	ve_view->y_offset_bitmap_render_pango_units = -1;
 	g_object_unref(G_OBJECT(ve_view->ft2_context));
 	ve_view->font_created = FALSE;
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -3523,7 +3608,8 @@ void gl_print_string(GtkWidget *widget, const gchar *s)
 	Ve_View_3D *ve_view = NULL;
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 
-	MTXDBG(OPENGL,_("Entered\n"));
+	ENTER();
+
 	g_return_if_fail(ve_view);
 
 	if (!ve_view->font_created)
@@ -3582,7 +3668,8 @@ void gl_print_string(GtkWidget *widget, const gchar *s)
 		glPixelStorei(GL_UNPACK_ALIGNMENT, previous_unpack_alignment);
 	}
 	g_object_unref(G_OBJECT(layout));
-	MTXDBG(OPENGL,_("Leaving\n"));
+	EXIT();
+	return;
 }
 
 
@@ -3597,6 +3684,8 @@ void multi_lookup_and_compute_n(MultiSource *multi, gint count, gint skip, gfloa
 	gfloat tmpf = 0.0;
 	gfloat out = 0.0;
 	gint i = 0;
+
+	ENTER();
 
 	lookup_previous_n_skip_x_values(multi->source,count,skip,dest);
 	for (i=0;i<count;i++)
@@ -3615,6 +3704,8 @@ void multi_lookup_and_compute_n(MultiSource *multi, gint count, gint skip, gfloa
 			out = (gfloat)tmpf;
 		dest[i] = out;
 	}
+	EXIT();
+	return;
 }
 /*!
  \brief Computes the value based on the based "MultiSource" structure in combination
@@ -3628,6 +3719,8 @@ gfloat multi_lookup_and_compute(MultiSource *multi)
 	gfloat out = 0.0;
 	gfloat cur = 0.0;
 
+	ENTER();
+
 	lookup_current_value(multi->source,&cur);
 	if (multi->lookuptable)
 		tmpf = direct_lookup_data(multi->lookuptable,cur);
@@ -3640,6 +3733,7 @@ gfloat multi_lookup_and_compute(MultiSource *multi)
 		out = tmpf * (*multi->multiplier);
 	else
 	*/
-		out = tmpf;
+	out = tmpf;
+	EXIT();
 	return out;
 }
