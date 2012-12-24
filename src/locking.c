@@ -273,15 +273,18 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 		
 	}
 	contents = g_strdup_printf("%10i\n",getpid());
-	res = g_file_set_contents(lock,contents,-1,&err);
+	res = g_file_set_contents(lock,contents,11,&err);
 	cleanup(contents);
 	if (res)
 	{
-		DATA_SET_FULL(global_data,"serial_lockfile",(gpointer)lock,cleanup);
+		DATA_SET_FULL(global_data,"serial_lockfile",(gpointer)lock,g_free);
 		return TRUE;
 	}
 	else
+	{
 		printf(_("Error setting serial lock %s\n"),(gchar *)strerror(errno));
+		DATA_SET(global_data,"serial_lockfile",NULL);
+	}
 #endif
 	return TRUE;
 }
