@@ -65,17 +65,12 @@ G_MODULE_EXPORT gboolean update_errcounts_wrapper(gpointer data)
 G_MODULE_EXPORT gboolean update_errcounts(gpointer data)
 {
 	static gboolean pf_red = FALSE;
-	static GAsyncQueue *pf_dispatch_queue = NULL;
 	gchar *tmpbuf = NULL;
 	gint tmp = 0;
 	GtkWidget * widget = NULL;
 	Serial_Params *serial_params = NULL;
 
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
-	if (!pf_dispatch_queue)
-		pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
-
-	g_return_val_if_fail(pf_dispatch_queue,FALSE);
 
 	tmpbuf = g_strdup_printf("%i",(GINT)DATA_GET(global_data,"ve_goodread_count"));
 	widget = lookup_widget("runtime_good_ve_entry");
@@ -111,31 +106,6 @@ G_MODULE_EXPORT gboolean update_errcounts(gpointer data)
 	widget = lookup_widget("runtime_sioerr_entry");
 	if (GTK_IS_ENTRY(widget))
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	g_free(tmpbuf);
-	tmp = g_async_queue_length(pf_dispatch_queue);
-	tmpbuf = g_strdup_printf("%i",tmp);
-	widget = lookup_widget("comms_pf_queue_entry");
-	if (GTK_IS_ENTRY(widget))
-	{
-		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-		if ((!pf_red) && (tmp > 10))
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
-		if ((pf_red) && ( tmp <3))
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-	}
-	widget = lookup_widget("runtime_pf_queue_entry");
-	if (GTK_IS_ENTRY(widget))
-	{
-		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-		if ((!pf_red) && (tmp > 10))
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
-		if ((pf_red) && ( tmp <3))
-			gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
-	}
-	if (tmp > 10)
-		pf_red = TRUE;
-	if (tmp < 3)
-		pf_red = FALSE;
 	g_free(tmpbuf);
 
 	return FALSE;

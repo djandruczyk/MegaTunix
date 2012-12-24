@@ -114,7 +114,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	GTimeVal cur;
 	Io_Message *message = NULL;	
 	GAsyncQueue *io_data_queue = NULL;
-	GAsyncQueue *pf_dispatch_queue = NULL;
 	CmdLineArgs *args  = NULL;
 	void *(*network_repair_thread)(gpointer data) = NULL;
 	void *(*serial_repair_thread)(gpointer data) = NULL;
@@ -123,7 +122,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	MTXDBG(THREADS,_("Thread created!\n"));
 
 	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
-	pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	get_symbol("serial_repair_thread",(void **)&serial_repair_thread);
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
@@ -132,7 +130,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 
 	g_return_val_if_fail(args,NULL);
 	g_return_val_if_fail(io_data_queue,NULL);
-	g_return_val_if_fail(pf_dispatch_queue,NULL);
 	g_return_val_if_fail(serial_params,NULL);
 	g_async_queue_ref(io_data_queue);
 	/*	clock = g_timer_new();*/
@@ -243,11 +240,7 @@ fast_exit:
 		if (message->command->defer_post_functions)
 			dealloc_io_message(message);
 		else
-		{
-			g_async_queue_ref(pf_dispatch_queue);
-			g_async_queue_push(pf_dispatch_queue,(gpointer)message);
-			g_async_queue_unref(pf_dispatch_queue);
-		}
+			g_idle_add(process_pf_message,message);
 	}
 }
 

@@ -36,55 +36,6 @@
 #include <tabloader.h>
 #include <widgetmgmt.h>
 
-/*!
-  \brief pf_dispatcher() is a GTK+ timeout that runs 10 times per second 
-  checking for message on the dispatch queue which handles gui operations
-  after a thread function runs, This will attempt to handle multiple 
-  messages at a time if the queue has multiple message queued up.
-  \param data is unused
-  \returns TRUE 
-  */
-G_MODULE_EXPORT gboolean pf_dispatcher(gpointer data)
-{
-	static GAsyncQueue *pf_dispatch_queue = NULL;
-	Io_Message *message = NULL;
-	extern gconstpointer *global_data;
-
-	MTXDBG(DISPATCHER,_("Entered!\n"));
-	if (!pf_dispatch_queue)
-		pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
-
-	g_return_val_if_fail(global_data,FALSE);
-	g_async_queue_ref(pf_dispatch_queue);
-
-	if (DATA_GET(global_data,"pf_dispatcher_exit"))
-	{
-		while (NULL != (message = (Io_Message *)g_async_queue_try_pop(pf_dispatch_queue)))
-			dealloc_io_message(message);
-		g_async_queue_unref(pf_dispatch_queue);
-		return FALSE;
-	}
-
-	/*
-	g_get_current_time(&time);
-	g_time_val_add(&time,50000);
-	message = g_async_queue_timed_pop(pf_dispatch_queue,&time);
-	*/
-	message = (Io_Message *)g_async_queue_try_pop(pf_dispatch_queue);
-	if (!message)
-	{
-		MTXDBG(DISPATCHER,_("No messages waiting, signalling!\n"));
-		MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
-		return TRUE;
-	}
-	printf("Dispatching postfunction message to main context\n");
-	g_idle_add(process_pf_message,message);
-
-	g_async_queue_unref(pf_dispatch_queue);
-	MTXDBG(DISPATCHER,_("Leaving PF Dispatcher\n"));
-	return TRUE;
-}
-
 
 G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 {

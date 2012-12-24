@@ -56,7 +56,6 @@ gint main(gint argc, gchar ** argv)
 	GAsyncQueue *queue = NULL;
 	GCond *cond = NULL;
 	GMutex *mutex = NULL;
-	GMutex *pf_dispatch_mutex = NULL;
 	GTimer *timer = NULL;
 	gint id = 0;
 	setlocale(LC_ALL,"");
@@ -95,8 +94,6 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"dash_mutex",mutex);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"rtv_thread_mutex",mutex);
-	pf_dispatch_mutex = g_mutex_new();
-	DATA_SET(global_data,"pf_dispatch_mutex",pf_dispatch_mutex);
 
 	/* For testing if gettext works
 	   printf(_("Hello World!\n"));
@@ -114,6 +111,8 @@ gint main(gint argc, gchar ** argv)
 	 * create_mtx_lock();
 	 * */
 	open_debug();		/* Open debug log */
+
+	ENTER();
 	/* Allocate memory  */
 	init();			/* Initialize global vars */
 	make_mtx_dirs();	/* Create config file dirs if missing */
@@ -124,8 +123,6 @@ gint main(gint argc, gchar ** argv)
 	queue = g_async_queue_new();
 	DATA_SET_FULL(global_data,"slave_msg_queue",queue,g_async_queue_unref);
 	queue = g_async_queue_new();
-	DATA_SET_FULL(global_data,"pf_dispatch_queue",queue,g_async_queue_unref);
-	queue = g_async_queue_new();
 	DATA_SET_FULL(global_data,"io_repair_queue",queue,g_async_queue_unref);
 
 	read_config();
@@ -133,8 +130,6 @@ gint main(gint argc, gchar ** argv)
 
 	gtk_rc_parse_string("style \"override\"\n{\n\tGtkTreeView::horizontal-separator = 0\n\tGtkTreeView::vertical-separator = 0\n}\nwidget_class \"*\" style \"override\"");
 
-	id = g_timeout_add_full(-50,16,(GSourceFunc)pf_dispatcher,pf_dispatch_mutex,timeout_done);
-	DATA_SET(global_data,"pf_dispatcher_id",GINT_TO_POINTER(id));
 	/* This doesn't do any GUI stuff so can run as is... */
 	id = g_timeout_add(2000,(GSourceFunc)flush_binary_logs,NULL);
     DATA_SET(global_data,"binlog_flush_id",GINT_TO_POINTER(id));
@@ -152,5 +147,6 @@ gint main(gint argc, gchar ** argv)
 	gdk_threads_enter();
 	gtk_main();
 	gdk_threads_leave();
+	EXIT();
 	return (0) ;
 }

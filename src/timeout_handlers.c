@@ -174,7 +174,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	GMutex * mutex = g_mutex_new();
 	GTimeVal time;
 	GAsyncQueue *io_data_queue = NULL;
-	GAsyncQueue *pf_dispatch_queue = NULL;
 	GCond *cond = NULL;
 	GMutex *rtv_thread_mutex = NULL;
 	gint count = 0;
@@ -187,7 +186,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	rtv_thread_mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
-	pf_dispatch_queue = (GAsyncQueue *)DATA_GET(global_data,"pf_dispatch_queue");
 	get_symbol("signal_read_rtvars",(void **)&signal_read_rtvars);
 	get_symbol("setup_rtv",(void **)&setup_rtv);
 
@@ -196,7 +194,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	g_return_val_if_fail(serial_params,NULL);
 	g_return_val_if_fail(signal_read_rtvars,NULL);
 	g_return_val_if_fail(io_data_queue,NULL);
-	g_return_val_if_fail(pf_dispatch_queue,NULL);
 	g_return_val_if_fail(setup_rtv,NULL);
 
 	if (!setup_rtv())
@@ -206,7 +203,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		g_thread_exit(NULL);
 	}
 	g_async_queue_ref(io_data_queue);
-	g_async_queue_ref(pf_dispatch_queue);
 	g_mutex_lock(rtv_thread_mutex);
 	while (TRUE)
 	{
@@ -215,21 +211,21 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		signal_read_rtvars();
 		count = 0;
 
-		/* Auto-throttling if gui gets sluggish */
-		while ((g_async_queue_length(io_data_queue) > 2) || (g_async_queue_length(pf_dispatch_queue) > 3))
-		{
-			count++;
-			pf_queue_len = g_async_queue_length(pf_dispatch_queue);
-			io_queue_len = g_async_queue_length(io_data_queue);
-			//printf("Auto-throttling, io queue length %i, pf queue length %i, loop iterations %i\n",io_queue_len,pf_queue_len,count);
-			g_get_current_time(&time);
-			delay = MAX(io_queue_len,pf_queue_len);
-
-			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
-			g_time_val_add(&time,10000*(delay));
-			if (g_cond_timed_wait(cond,rtv_thread_mutex,&time))
-				goto breakout;
-		}
+//		/* Auto-throttling if gui gets sluggish */
+//		while ((g_async_queue_length(io_data_queue) > 2) || (g_async_queue_length(pf_dispatch_queue) > 3))
+//		{
+//			count++;
+//			pf_queue_len = g_async_queue_length(pf_dispatch_queue);
+//			io_queue_len = g_async_queue_length(io_data_queue);
+//			//printf("Auto-throttling, io queue length %i, pf queue length %i, loop iterations %i\n",io_queue_len,pf_queue_len,count);
+//			g_get_current_time(&time);
+//			delay = MAX(io_queue_len,pf_queue_len);
+//
+//			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
+//			g_time_val_add(&time,10000*(delay));
+//			if (g_cond_timed_wait(cond,rtv_thread_mutex,&time))
+//				goto breakout;
+//		}
 		//printf("serial_params->read_wait is %i\n",serial_params->read_wait);
 		g_get_current_time(&time);
 		g_time_val_add(&time,serial_params->read_wait*1000);
@@ -238,7 +234,6 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	}
 breakout:
 	g_async_queue_unref(io_data_queue);
-	g_async_queue_unref(pf_dispatch_queue);
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
 	g_mutex_unlock(rtv_thread_mutex);
