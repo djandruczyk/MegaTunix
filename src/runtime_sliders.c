@@ -333,13 +333,13 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	if (!size_group_left)
 	{
 		size_group_left = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-		DATA_SET(global_data,"size_group_left",size_group_left);
+		DATA_SET_FULL(global_data,"size_group_left",size_group_left,g_object_unref);
 	}
 	size_group_right = DATA_GET(global_data,"size_group_right");
 	if (!size_group_right)
 	{
 		size_group_right = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-		DATA_SET(global_data,"size_group_right",size_group_right);
+		DATA_SET_FULL(global_data,"size_group_right",size_group_right,g_object_unref);
 	}
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
