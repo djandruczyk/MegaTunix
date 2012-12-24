@@ -95,8 +95,6 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"dash_mutex",mutex);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"rtv_thread_mutex",mutex);
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"statuscounts_mutex",mutex);
 	pf_dispatch_mutex = g_mutex_new();
 	DATA_SET(global_data,"pf_dispatch_mutex",pf_dispatch_mutex);
 

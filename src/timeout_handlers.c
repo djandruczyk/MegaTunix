@@ -86,8 +86,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 				break;
 			if (!DATA_GET(global_data,"statuscounts_id"))
 			{
-				mutex = (GMutex *)DATA_GET(global_data,"statuscounts_mutex");
-				id = g_timeout_add_full(500,100,(GSourceFunc)update_errcounts_wrapper,mutex,timeout_done);
+				id = g_timeout_add_full(500,100,(GSourceFunc)update_errcounts_wrapper,NULL,NULL);
 				DATA_SET(global_data,"statuscounts_id",GINT_TO_POINTER(id));
 			}
 			else
