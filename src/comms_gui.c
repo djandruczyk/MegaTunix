@@ -137,10 +137,6 @@ G_MODULE_EXPORT gboolean update_errcounts(gpointer data)
 	if (tmp < 3)
 		pf_red = FALSE;
 	g_free(tmpbuf);
-	widget = lookup_widget("runtime_gui_queue_entry");
-	if (GTK_IS_ENTRY(widget))
-		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
-	g_free(tmpbuf);
 
 	return TRUE;
 }
