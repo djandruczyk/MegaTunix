@@ -640,28 +640,28 @@ not_in_thresh:
   */
 G_MODULE_EXPORT gboolean update_rttext(gpointer data)
 {       
-        static GMutex *rtt_mutex = NULL;
+	static GMutex *rtt_mutex = NULL;
 	static GtkTreeModel *rtt_model = NULL;
 	static GHashTable *rtt_hash = NULL;
 
 	/* Return false (cancel timeout) if leaving */
-        if (DATA_GET(global_data,"leaving"))
-                return FALSE;
+	if (DATA_GET(global_data,"leaving"))
+		return FALSE;
 
-        if (!rtt_mutex)
-                rtt_mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
-        if (!rtt_model)
-                rtt_model = (GtkTreeModel *)DATA_GET(global_data,"rtt_model");
-        if (!rtt_hash)
-                rtt_hash = (GHashTable *)DATA_GET(global_data,"rtt_hash");
-	
-        g_mutex_lock(rtt_mutex);
+	if (!rtt_mutex)
+		rtt_mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
+	if (!rtt_model)
+		rtt_model = (GtkTreeModel *)DATA_GET(global_data,"rtt_model");
+	if (!rtt_hash)
+		rtt_hash = (GHashTable *)DATA_GET(global_data,"rtt_hash");
+
+	g_mutex_lock(rtt_mutex);
 	/* Silently return if not yet ready */
 	if (rtt_model)
 		gtk_tree_model_foreach(rtt_model,rtt_foreach,NULL);
 	if (rtt_hash)
 		g_hash_table_foreach(rtt_hash,rtt_update_values,NULL);
-        g_mutex_unlock(rtt_mutex);
-        return TRUE;
+	g_mutex_unlock(rtt_mutex);
+	return FALSE;
 }
 

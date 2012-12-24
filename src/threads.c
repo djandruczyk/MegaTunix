@@ -503,7 +503,7 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_set_grop_color(group %s) about to send message\n",group);
+	printf("thread_set_group_color(group %s) about to send message\n",group);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
 	return;

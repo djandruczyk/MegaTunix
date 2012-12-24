@@ -3273,7 +3273,7 @@ gboolean delayed_reconfigure(gpointer data)
 G_MODULE_EXPORT gboolean update_ve3d_wrapper(gpointer data)
 {
 	g_idle_add(update_ve3d,data);
-	return FALSE;
+	return TRUE;
 }
 
 
@@ -3400,13 +3400,13 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 		goto redraw;
 	MTXDBG(OPENGL,_("Leaving without redraw\n"));
 	g_mutex_unlock(ve3d_mutex[table_num]);
-	return TRUE;
+	return FALSE;
 
 redraw:
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
 	MTXDBG(OPENGL,_("Leaving\n"));
 	g_mutex_unlock(ve3d_mutex[table_num]);
-	return TRUE;
+	return FALSE;
 }
 
 

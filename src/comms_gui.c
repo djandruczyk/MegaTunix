@@ -54,7 +54,7 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 G_MODULE_EXPORT gboolean update_errcounts_wrapper(gpointer data)
 {
 	g_idle_add(update_errcounts,data);
-	return FALSE;
+	return TRUE;
 }
 
 /*!
@@ -138,7 +138,7 @@ G_MODULE_EXPORT gboolean update_errcounts(gpointer data)
 		pf_red = FALSE;
 	g_free(tmpbuf);
 
-	return TRUE;
+	return FALSE;
 }
 
 

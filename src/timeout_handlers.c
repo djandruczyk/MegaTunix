@@ -295,5 +295,5 @@ void timeout_done(gpointer data)
 gboolean run_function(gboolean(*func)(gpointer))
 {
 	g_idle_add(func, NULL);
-	return FALSE;
+	return TRUE;
 }

@@ -950,7 +950,7 @@ G_MODULE_EXPORT gboolean pb_update_logview_traces(gpointer data)
 	gboolean force_redraw = (GBOOLEAN)data;
 
 	if (!DATA_GET(global_data,"playback_mode"))
-		return TRUE;
+		return FALSE;
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
 		adj_scale = TRUE;
@@ -959,7 +959,7 @@ G_MODULE_EXPORT gboolean pb_update_logview_traces(gpointer data)
 		g_static_mutex_unlock(&update_mutex);
 		scroll_logviewer_traces();
 	}
-	return TRUE;
+	return FALSE;
 }
 
 
