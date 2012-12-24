@@ -416,8 +416,6 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 			sep = gtk_hseparator_new();
 			gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,FALSE,0);
 			gtk_widget_show(gauge);
-			if (gtk_events_pending())
-				gtk_main_iteration();
 		}
 		for (i=0;i<g_list_length(s_list);i++)
 		{
@@ -444,8 +442,6 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 			sep = gtk_hseparator_new();
 			gtk_box_pack_start(GTK_BOX(vbox),sep,TRUE,FALSE,0);
 			gtk_widget_show(gauge);
-			if (gtk_events_pending())
-				gtk_main_iteration();
 		}
 		g_array_free(classes,TRUE);
 		classes = NULL;
@@ -459,13 +455,6 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 	}
 	gtk_widget_show_all(table);
 	gtk_widget_show_all(notebook);
-	/*
-	   while (gdk_events_pending())
-	   {
-	   gtk_main_iteration();
-	   }
-	 */
-
 }
 
 

@@ -195,18 +195,6 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 
 		if (!firmware)
 			break;
-
-		/* Allow gui to update as it should.... */
-		/*
-		while (gtk_events_pending())
-		{
-			if (DATA_GET(global_data,"leaving"))
-			{
-				return FALSE;
-			}
-			gtk_main_iteration();
-		}
-		*/
 	}
 	preload_deps(tabinfos);
 	DATA_SET_FULL(global_data,"tabinfos",tabinfos,dealloc_tabinfos);
@@ -285,12 +273,6 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		OBJ_SET(label,"not_rendered",NULL);
 
 		populate_master(topframe,(gpointer)cfgfile);
-		while (gtk_events_pending())
-		{
-			if (DATA_GET(global_data,"leaving"))
-				return FALSE;
-			gtk_main_iteration();
-		}
 
 		gtk_box_pack_start(GTK_BOX(placeholder),topframe,TRUE,TRUE,0);
 		OBJ_SET(placeholder,"topframe",topframe);
@@ -309,12 +291,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	update_groups_pf();
 	update_sources_pf();
 	/* Allow gui to update as it should.... */
-	while (gtk_events_pending())
-	{
-		if (DATA_GET(global_data,"leaving"))
-			return FALSE;
-		gtk_main_iteration();
-	}
+	gdk_flush();
 	return TRUE;
 }
 

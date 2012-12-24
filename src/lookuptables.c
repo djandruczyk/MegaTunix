@@ -786,8 +786,6 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 		while ((g_async_queue_length(io_data_queue) > 0) && (count < 30))
 		{
 			MTXDBG(CRITICAL,_("Draining I/O Queue, current length %i\n"),g_async_queue_length(io_data_queue));
-			while (gtk_events_pending())
-				gtk_main_iteration();
 			count++;
 		}
 

@@ -915,10 +915,6 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 
 	if  (NULL != (label = lookup_widget_f("info_label")))
 		gtk_label_set_text(GTK_LABEL(label),"Rescaling Table, Please wait...");
-	while (gtk_events_pending())
-	{
-		gtk_main_iteration();
-	}
 
 	for (x=0;x<g_strv_length(vector);x++)
 	{

@@ -114,8 +114,6 @@ void output (gchar *line, gboolean free_it)
 	}
 	if (free_it)
 		g_free(line);
-	while (gtk_events_pending())
-		gtk_main_iteration();
 }
 
 

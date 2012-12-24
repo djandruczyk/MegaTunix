@@ -371,7 +371,6 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
   */
 G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 {
-	static gint upd_count = 0;
 	static void (*insert_text_handler)(GtkEntry *, const gchar *, gint, gint *, gpointer);
 	GtkWidget *widget = (GtkWidget *)object;
 	gint tmpi = 0;
@@ -391,17 +390,6 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 	 */
 	if ((GTK_IS_WIDGET(data)) && (widget == data))
 		return;
-
-	upd_count++;
-	if ((upd_count%96) == 0)
-	{
-		while (gtk_events_pending())
-		{
-			if (DATA_GET(global_data,"leaving"))
-				return;
-			gtk_main_iteration();
-		}
-	}
 
 	/*printf("update_widget %s\n",(gchar *)glade_get_widget_name(widget));*/
 	/* update widget whether spin,radio or checkbutton  

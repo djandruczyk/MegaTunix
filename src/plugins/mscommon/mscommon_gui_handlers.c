@@ -1187,7 +1187,6 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
   */
 G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 {
-	static gint upd_count = 0;
 	static void (*insert_text_handler)(GtkEntry *, const gchar *, gint, gint *, gpointer);
 	GtkWidget *widget = (GtkWidget *)object;
 	gint last = -G_MAXINT;
@@ -1207,17 +1206,6 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	 */
 	if ((GTK_IS_WIDGET(user_data)) && (widget == user_data))
 		return;
-
-	upd_count++;
-	if ((upd_count%96) == 0)
-	{
-		while (gtk_events_pending())
-		{
-			if (DATA_GET(global_data,"leaving"))
-				return;
-			gtk_main_iteration();
-		}
-	}
 
 	/* update widget whether spin,radio or checkbutton  
 	 * (checkbutton encompases radio)

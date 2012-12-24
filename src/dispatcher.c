@@ -253,12 +253,10 @@ G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
 				break;
 				reset_temps(DATA_GET(global_data,"mtx_temp_units"));
 		}
-
-//		while (gtk_events_pending())
-//			gtk_main_iteration();
 	}
 	dealloc_gui_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
+	gdk_flush();
 	return FALSE;
 }
 
