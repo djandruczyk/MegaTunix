@@ -58,6 +58,7 @@ typedef enum
 	PLUGINS			= 1<<14,
 	PACKETS			= 1<<15,
 	DISPATCHER		= 1<<16,
+	FUNC			= 1<<17,
 	CRITICAL		= 1<<30
 }Dbg_Class;
 
@@ -80,8 +81,12 @@ typedef enum
 	PLUGINS_SHIFT		= 14,
 	PACKETS_SHIFT		= 15,
 	DISPATCHER_SHIFT	= 16,
+	FUNC_SHIFT			= 17,
 	CRITICAL_SHIFT		= 30
 }Dbg_Shift;
+
+#define ENTER() dbg_func((Dbg_Class)(FUNC),NULL,NULL,0,"Entered: %s\n",__FUNCTION__)
+#define EXIT() dbg_func((Dbg_Class)(FUNC),NULL,NULL,0,"Leaving: %s\n",__FUNCTION__)
 
 typedef struct _DebugLevel DebugLevel;
 

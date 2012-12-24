@@ -131,14 +131,13 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 	va_list args;
 
 	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
-	/*
-	   static struct tm *tm = NULL;
-	   static time_t *t = NULL;
-	 */
+
+	if (level & FUNC)
+		printf("MESSAGE has FUNC logging selected\n");
 
 	if (!dbg_channel)
 		return;
-	/* IF we don't debug this level, free message and exit */
+//	/* IF we don't debug this level, exit */
 	if (!(dbg_lvl & level))
 		return;
 
@@ -147,6 +146,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 	va_start(args,format);
 	str = g_strdup_vprintf(format,args);
 	va_end(args);
+//		printf("%s",str);
 	if ((file) && (func) && (line > 0))
 	{
 		tmpbuf = g_strdup_printf("[%s: %s(): line: %i]\n",file,func,line);
@@ -154,7 +154,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 	}
 	g_io_channel_write_chars(dbg_channel,str,-1,&count,&error);
 #ifdef DEBUG
-	if (level & CRITICAL)
+	if ((level & CRITICAL) || (level & FUNC))
 	{
 		if (tmpbuf)
 			printf("%s",tmpbuf);
