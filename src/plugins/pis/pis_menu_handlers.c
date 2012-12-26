@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <pis_menu_handlers.h>
 
 extern gconstpointer *global_data;
@@ -29,5 +30,7 @@ extern gconstpointer *global_data;
   */
 void ecu_plugin_menu_setup(GladeXML *xml)
 {
+	ENTER();
+	EXIT();
 	return;
 }
