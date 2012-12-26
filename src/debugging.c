@@ -29,7 +29,7 @@
 #include <time.h>
 
 extern gconstpointer *global_data;
-static GIOChannel * dbg_channel = NULL;
+static FILE * dbg_file = NULL;
 static GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
 static DebugLevel dbglevels[] = 
 {
@@ -57,7 +57,7 @@ static DebugLevel dbglevels[] =
 };
 
 /*!
-  \brief open_debug() opens the channel to the debugging information log.
+  \brief open_debug() opens the file for the debugging information log.
   The path defaults to the current working directory.
   */
 G_MODULE_EXPORT void open_debug(void)
@@ -78,23 +78,20 @@ G_MODULE_EXPORT void open_debug(void)
 	if (!project)
 		project = DEFAULT_PROJECT;
 
-	if(!dbg_channel)
+	if(!dbg_file)
 	{
 		if (!args->dbglog)
 			filename = g_build_filename(HOME(), "mtx",project,"debug.log",NULL);
 		else
 			filename = g_build_filename(HOME(),"mts",args->dbglog,NULL);
-		dbg_channel = g_io_channel_new_file(filename,"w",&error);
-		g_io_channel_set_encoding(dbg_channel,NULL,&error);
-		if (dbg_channel)
+		dbg_file = fopen(filename,"w");
+		if (dbg_file)
 		{
 			t = (time_t *)g_malloc(sizeof(time_t));
 			time(t);
 			tm = localtime(t);
 			g_free(t);
-			tmpbuf = g_strdup_printf(_("Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n"),1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
-			g_io_channel_write_chars(dbg_channel,tmpbuf,-1,&count,&error);
-			g_free(tmpbuf);
+			fprintf(dbg_file,_("Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n"),1+(tm->tm_mon),tm->tm_mday,1900+(tm->tm_year),tm->tm_hour,tm->tm_min);
 		}
 		g_free(filename);
 	}
@@ -103,15 +100,15 @@ G_MODULE_EXPORT void open_debug(void)
 
 
 /*!
-  \brief Closes the debug log iochannel
+  \brief Closes the debug log file
   */
 G_MODULE_EXPORT void close_debug(void)
 {
 	g_static_mutex_lock(&dbg_mutex);
-	if (dbg_channel)
+	if (dbg_file)
 	{
-		g_io_channel_shutdown(dbg_channel,TRUE,NULL);
-		g_io_channel_unref(dbg_channel);
+		fclose(dbg_file);
+		dbg_file = NULL;
 	}
 	g_static_mutex_unlock(&dbg_mutex);
 }
@@ -126,16 +123,12 @@ G_MODULE_EXPORT void close_debug(void)
 
 G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar * func, gint line, const gchar *format, ...)
 {
-	gchar * tmpbuf = NULL;
-	gsize count = 0;
-	gchar * str = NULL;
-	GError *error = NULL;
 	gint dbg_lvl = -1;
 	va_list args;
 
 	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 
-	if (!dbg_channel)
+	if (!dbg_file)
 		return;
 //	/* IF we don't debug this level, exit */
 	if (!(dbg_lvl & level))
@@ -143,26 +136,23 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 
 //	g_static_mutex_lock(&dbg_mutex);
 
-	va_start(args,format);
-	str = g_strdup_vprintf(format,args);
-	va_end(args);
 	if ((file) && (func) && (line > 0))
 	{
-		tmpbuf = g_strdup_printf("[%s: %s(): line: %i]\n",file,func,line);
-		g_io_channel_write_chars(dbg_channel,tmpbuf,-1,&count,&error);
+		fprintf(dbg_file,"[%s: %s(): line: %i]\n",file,func,line);
 	}
-	g_io_channel_write_chars(dbg_channel,str,-1,&count,&error);
+	va_start(args,format);
+	vfprintf(dbg_file,format,args);
+	va_end(args);
 #ifdef DEBUG
 	if ((level & CRITICAL) || (level & FUNC))
 	{
-		if (tmpbuf)
-			printf("%s",tmpbuf);
-		printf("%s",str);
+		va_start(args,format);
+		// Write output to console/terminal
+		vprintf(format,args);
+		va_end(args);
 	}
 #endif
-	g_free(tmpbuf);
-	g_free(str);
-//	g_io_channel_flush(dbg_channel,&error);
+	va_end(args);
 	g_static_mutex_unlock(&dbg_mutex);
 }
 
