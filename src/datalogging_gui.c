@@ -383,13 +383,13 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	if (!((DATA_GET(global_data,"connected")) && (DATA_GET(global_data,"interrogated"))))
 	{
 		EXIT();
-		return TRUE;
+		return FALSE;
 	}
 
 	if (!DATA_GET(global_data,"logging_active")) /* Logging isn't enabled.... */
 	{
 		EXIT();
-		return TRUE;
+		return FALSE;
 	}
 
 	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
@@ -397,7 +397,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	{
 		MTXDBG(CRITICAL,_("IO Channel undefined, returning NOW!!!\n"));
 		EXIT();
-		return TRUE;
+		return FALSE;
 	}
 
 	if (!object_list)
@@ -464,7 +464,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
 	g_string_free(output,TRUE);
 	EXIT();
-	return TRUE;
+	return FALSE;
 }
 
 

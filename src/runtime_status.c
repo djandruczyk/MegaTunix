@@ -306,7 +306,7 @@ G_MODULE_EXPORT gboolean update_rtstatus(void)
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(FALSE));
 	EXIT();
-	return TRUE;
+	return FALSE;
 }
 
 

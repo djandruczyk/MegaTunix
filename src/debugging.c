@@ -141,7 +141,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 	if (!(dbg_lvl & level))
 		return;
 
-	g_static_mutex_lock(&dbg_mutex);
+//	g_static_mutex_lock(&dbg_mutex);
 
 	va_start(args,format);
 	str = g_strdup_vprintf(format,args);
@@ -162,7 +162,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 #endif
 	g_free(tmpbuf);
 	g_free(str);
-	g_io_channel_flush(dbg_channel,&error);
+//	g_io_channel_flush(dbg_channel,&error);
 	g_static_mutex_unlock(&dbg_mutex);
 }
 
