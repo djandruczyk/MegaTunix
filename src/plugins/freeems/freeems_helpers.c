@@ -22,6 +22,7 @@
   */
 
 #include <datamgmt.h>
+#include <debugging.h>
 #include <firmware.h>
 #include <freeems_benchtest.h>
 #include <freeems_comms.h>
@@ -41,10 +42,12 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT void reset_counters(void)
 {
 	OutputData *output = NULL;
+	ENTER();
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_CLEAR_COUNTERS_AND_FLAGS_TO_ZERO));
 	io_cmd_f("empty_payload_pkt",output);
 
+	EXIT();
 	return;
 }
 
@@ -58,12 +61,14 @@ G_MODULE_EXPORT void stop_streaming(void)
 	GByteArray *payload = NULL;
 	guint8 byte = 0; /*Stop Streaming */
 
+	ENTER();
 	output = initialize_outputdata_f();
 	payload = g_byte_array_new();
 	g_byte_array_append(payload,&byte,1);
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_ASYNC_DATALOG_TYPE));
 	DATA_SET(output->data,"payload_data_array",payload);
 	io_cmd_f("basic_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -77,12 +82,14 @@ G_MODULE_EXPORT void start_streaming(void)
 	GByteArray *payload = NULL;
 	guint8 byte = 1;/* Start streaming */
 
+	ENTER();
 	output = initialize_outputdata_f();
 	payload = g_byte_array_new();
 	g_byte_array_append(payload,&byte,1);
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SET_ASYNC_DATALOG_TYPE));
 	DATA_SET(output->data,"payload_data_array",payload);
 	io_cmd_f("basic_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -93,9 +100,11 @@ G_MODULE_EXPORT void start_streaming(void)
 G_MODULE_EXPORT void soft_boot_ecu(void)
 {
 	OutputData *output = NULL;
+	ENTER();
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_SOFT_SYSTEM_RESET));
 	io_cmd_f("empty_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -106,9 +115,11 @@ G_MODULE_EXPORT void soft_boot_ecu(void)
 G_MODULE_EXPORT void hard_boot_ecu(void)
 {
 	OutputData *output = NULL;
+	ENTER();
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_HARD_SYSTEM_RESET));
 	io_cmd_f("empty_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -120,12 +131,18 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 {
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!firmware)
+	{
+		EXIT();
 		return;
+	}
 
 	set_title_f(g_strdup(_("Queuing read of all ECU data...")));
 	io_cmd_f(firmware->get_all_command,NULL);
+	EXIT();
+	return;
 }
 
 
@@ -142,6 +159,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 	GAsyncQueue *queue = NULL;
 	gint i = 0;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
@@ -178,6 +196,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 			printf("default case, nothing happening here\n");
 			break;
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -214,6 +233,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	const gchar * errmsg = NULL;
 	GTimeVal tval;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	message = (Io_Message *)data;
@@ -450,6 +470,8 @@ handle_write:
 			printf("MegaTunix does NOT know how to handle this packet response type..\n");
 			break;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -468,6 +490,7 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 	gint last_page = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/*printf("burn all helper\n");*/
@@ -493,6 +516,7 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 			}
 		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -510,6 +534,7 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 	FreeEMS_Packet *packet = NULL;
 	GAsyncQueue *queue = NULL;
 
+	ENTER();
 	g_return_val_if_fail(object,NULL);
 
 	if (queue_name) 
@@ -517,7 +542,10 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 	else /* Use "queue" key via DATA_GET */
 		queue = (GAsyncQueue *)DATA_GET(object,"queue");
 	if (!queue)
+	{
+		EXIT();
 		return NULL;
+	}
 #if GLIB_MINOR_VERSION < 31
 	g_get_current_time(&tval);
 	/* Set gigantic timeout for valgrind since it runs so slow */
@@ -529,6 +557,7 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 #else
 	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,5000000);
 #endif
+	EXIT();
 	return packet;
 }
 

@@ -66,6 +66,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 	static unsigned char lastChar = 0;
 	static unsigned int currentPacketLength = 0;
 
+	ENTER();
 	guchar character;
 	gint i = 0;
 	FreeEMS_Packet *packet = NULL;
@@ -194,6 +195,8 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 		else
 			charsDropped++;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -212,6 +215,7 @@ void *packet_handler(gpointer data)
 	GAsyncQueue *queue = (GAsyncQueue *)DATA_GET(global_data,"packet_queue");
 	GCond *cond = NULL;
 
+	ENTER();
 	while(TRUE)
 	{
 		if ((DATA_GET(global_data,"leaving") || (DATA_GET(global_data,"packet_handler_thread_exit"))))
@@ -232,6 +236,7 @@ void *packet_handler(gpointer data)
 			dispatch_packet_queues(packet);
 	}
 	g_thread_exit(0);
+	EXIT();
 	return NULL;
 }
 
@@ -250,6 +255,7 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 	const gchar * errmsg = NULL;
 	gint tmpi = 3; /* header and payload Are ALWAYS present */
 
+	ENTER();
 	packet->header_bits = ptr[0];
 	/*
 	   printf("Raw len %i\n",packet->raw_length);
@@ -307,11 +313,11 @@ gboolean packet_decode(FreeEMS_Packet *packet)
 			printf("BAD PACKET, PAYLOAD LENGTH issue!\n");
 			printf("payload length + header/payload EXCEEDS packet length, BUGGY PACKET!!\n");
 			printf("Payload ID: %i, Payload Length %i, raw pkt len %i\n",packet->payload_id,packet->payload_length,packet->raw_length);
+			EXIT();
 			return FALSE;
 		}
-		else
-			return TRUE;
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -333,6 +339,7 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 	static GMutex *mutex = NULL;
 	GList *list = NULL;
 
+	ENTER();
 	if (!mutex)
 		mutex = (GMutex *)DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
@@ -364,6 +371,7 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 			break;
 	}
 	g_mutex_unlock(mutex);
+	EXIT();
 	return;
 }
 
@@ -381,6 +389,7 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 	static GMutex *mutex = NULL;
 	GList *list = NULL;
 
+	ENTER();
 	if (!mutex)
 		mutex = (GMutex *)DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
@@ -436,6 +445,7 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 			break;
 	}
 	g_mutex_unlock(mutex);
+	EXIT();
 	return;
 }
 
@@ -459,6 +469,7 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	guint i = 0;
 	GList *list = NULL;
 
+	ENTER();
 	if (!mutex)
 		mutex = (GMutex *)DATA_GET(global_data,"queue_mutex");
 	if (!payloads)
@@ -506,6 +517,8 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 	}
 	g_mutex_unlock(mutex);
 	freeems_packet_cleanup(packet);
+	EXIT();
+	return;
 }
 
 
@@ -518,10 +531,15 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
 {
 	FreeEMS_Packet *newpkt = NULL;
+	ENTER();
 	if (!packet)
+	{
+		EXIT();
 		return NULL;
+	}
 	newpkt = (FreeEMS_Packet *)g_memdup(packet,sizeof(FreeEMS_Packet));
 	newpkt->data = (guchar *)g_memdup(packet->data,packet->raw_length);
+	EXIT();
 	return newpkt;
 }
 
@@ -532,10 +550,15 @@ FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
   */
 void freeems_packet_cleanup(FreeEMS_Packet *packet)
 {
+	ENTER();
 	if (!packet)
+	{
+		EXIT();
 		return ;
+	}
 	g_free(packet->data);
 	g_free(packet);
+	EXIT();
 	return;
 }
 
@@ -574,6 +597,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	guint8 *buf = NULL; /* Raw packet before escapes/start/stop */
 	DBlock *block = NULL;
 
+	ENTER();
 	if (data)
 		output = (OutputData *)data;
 
@@ -737,6 +761,8 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	g_free(buf);
 	g_array_append_val(message->sequence,block);
 	/*printf("\n\n\n");*/
+	EXIT();
+	return;
 }
 
 
@@ -756,6 +782,7 @@ guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
 	gint len = 0;
 	gint pos = 0;
 	guint8 *buf = NULL;
+	ENTER();
 	/* This should allocate a buffer,
 	   Escape any special bytes in the packet
 	   Checksum it
@@ -800,6 +827,7 @@ guint8 *finalize_packet(guint8 *raw, gint raw_length, gint *final_length )
 		printf("packet finalize problem, length mismatch\n");
 	if (final_length)
 		*final_length = len;
+	EXIT();
 	return buf;
 }
 
@@ -817,6 +845,7 @@ G_MODULE_EXPORT void mtxlog_packet(const void *buf, size_t len, gboolean toecu)
 	guint i = 0;
 	guint8 *ptr = (guint8 *)buf;
 
+	ENTER();
 	if (toecu)
 		MTXDBG(PACKETS,_("Packet TO ECU %i bytes \n\t"),(gint)len);
 	else
@@ -828,6 +857,8 @@ G_MODULE_EXPORT void mtxlog_packet(const void *buf, size_t len, gboolean toecu)
 			QUIET_MTXDBG(PACKETS,_("\n\t"));
 	}
 	QUIET_MTXDBG(PACKETS,_("\n"));
+	EXIT();
+	return;
 }
 
 
@@ -840,6 +871,7 @@ G_MODULE_EXPORT gint atomic_sequence()
 	static GMutex * mutex;
 	static guint8 seq = 0;
 
+	ENTER();
 	if (!mutex)
 		mutex = (GMutex *)DATA_GET(global_data,"atomic_sequence_mutex");
 	g_mutex_lock(mutex);
@@ -847,6 +879,7 @@ G_MODULE_EXPORT gint atomic_sequence()
 		seq = 0;
 	seq++;
 	g_mutex_unlock(mutex);
+	EXIT();
 	return seq;
 }
 
@@ -879,6 +912,7 @@ G_MODULE_EXPORT guint8 * make_me_a_packet(gint *final_length, ...)
 	guint8 *pkt = NULL;
 	guint8 *buf = NULL;
 	guint8 *payload_data = NULL;
+	ENTER();
 	va_list argp;
 	va_start(argp,final_length);
 	while (i != -1)
@@ -1024,6 +1058,7 @@ G_MODULE_EXPORT guint8 * make_me_a_packet(gint *final_length, ...)
 	/* Escape + start/stop it */
 	pkt = finalize_packet(buf,packet_length,final_length);
 	g_free(buf);
+	EXIT();
 	return pkt;
 }
 

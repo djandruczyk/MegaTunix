@@ -20,6 +20,7 @@
 
 #include <api-versions.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <defines.h>
 #include <fileio.h>
 #include <firmware.h>
@@ -51,10 +52,14 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	t = (time_t *)g_malloc(sizeof(time_t));
 	time(t);
@@ -76,6 +81,7 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 	if (filename == NULL)
 	{
 		update_logbar_f("tools_view","warning",_("NO FILE chosen for ECU Backup\n"),FALSE,FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
 	update_logbar_f("tools_view",NULL,_("Full Backup of ECU Initiated\n"),FALSE,FALSE,FALSE);
@@ -83,6 +89,7 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 	update_logbar_f("tools_view",NULL,_("Full Backup File Closed\n"),FALSE,FALSE,FALSE);
 	g_free(filename);
 	free_mtxfileio(fileio);
+	EXIT();
 	return TRUE;
 }
 
@@ -100,9 +107,13 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer
 	gchar *filename = NULL;
 	extern gconstpointer *global_data;
 
+	ENTER();
 	printf("select for restore!\n");
 	if (!DATA_GET(global_data,"interrogated"))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
@@ -117,12 +128,14 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_restore(GtkWidget *widget, gpointer
 	if (filename == NULL)
 	{
 		update_logbar_f("tools_view","warning",_("NO FILE chosen for ECU restore\n"),FALSE,FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
 	update_logbar_f("tools_view",NULL,_("Full Restore of ECU Initiated\n"),FALSE,FALSE,FALSE);
 	restore_all_ecu_settings(filename);
 	g_free(filename);
 	free_mtxfileio(fileio);
+	EXIT();
 	return TRUE;
 
 }
@@ -145,6 +158,7 @@ G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(filename);
 	g_return_if_fail(firmware);
@@ -209,6 +223,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(filename);
 	g_return_if_fail(firmware);
@@ -218,6 +233,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 	if (!cfgfile)
 	{
 		update_logbar_f("tools_view","warning",g_strdup_printf(_(":restore_all_ecu_settings()\n\t Unable to open this file (%s)\n"),filename),FALSE,FALSE,TRUE);
+		EXIT();
 		return;
 	}
 	if (cfgfile)
@@ -228,6 +244,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 		{
 			update_logbar_f("tools_view","warning",g_strdup_printf(_(":restore_all_ecu_settings()\n\tAPI MAJOR version mismatch: \"%i\" != \"%i\"\n can not load this file for restoration\n"),major,BACKUP_MAJOR_API),FALSE,FALSE,TRUE);
 			cfg_free(cfgfile);
+			EXIT();
 			return;
 		}
 		if (minor != BACKUP_MINOR_API) 
@@ -242,6 +259,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 			if (tmpbuf)
 				g_free(tmpbuf);
 			cfg_free(cfgfile);
+			EXIT();
 			return;
 		}
 		g_free(tmpbuf);

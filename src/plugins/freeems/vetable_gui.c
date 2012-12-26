@@ -19,6 +19,7 @@
   */
 
 #include <datamgmt.h>
+#include <debugging.h>
 #include <firmware.h>
 #include <freeems_plugin.h>
 #include <multi_expr_loader.h>
@@ -92,6 +93,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	MultiSource *multi = NULL;
 	GtkAllocation allocation;
 
+	ENTER();
 	if (!sources_hash)
 		sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	if (!ecu_widgets)
@@ -112,7 +114,10 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	active_table = (GINT)DATA_GET(global_data,"active_table");
 
 	if ((active_table < 0 ) || (active_table > (firmware->total_tables-1)))
+	{
+		EXIT();
 		return;
+	}
 
         if (!x_mult)
                 x_mult = g_new0(gfloat *, firmware->total_tables);
@@ -172,7 +177,10 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 			multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
+		{
+			EXIT();
 			return;
+		}
 		x_mult[table] = multi->multiplier;
                 x_add[table] = multi->adder;
 		lookup_current_value_f(multi->source,&x_source);
@@ -208,7 +216,10 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 			multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
 
 		if (!multi)
+		{
+			EXIT();
 			return;
+		}
 
 		y_mult[table] = multi->multiplier;
                 y_add[table] = multi->adder;
@@ -223,6 +234,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	if ((x_source == prev_x_source[table]) && (y_source == prev_y_source[table]))
 	{
 		/*printf("table marker,  values haven't changed\n"); */
+		EXIT();
 		return;
 	}
 	else
@@ -341,6 +353,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 	   for (i=0;i<4;i++)
 	   last_z_weight[i] = z_weight[i];
 	 */
+	EXIT();
 	return;
 
 redraw:
@@ -438,7 +451,10 @@ redraw:
 		widget = (GtkWidget *)g_list_nth_data(list,0);
 
 		if (!GTK_IS_WIDGET(widget))
+		{
+			EXIT();
 			return;
+		}
 		if ((i == heaviest) && (tracking_focus[table]))
 		{
 			g_object_get(widget,"has_focus",&focus,NULL);

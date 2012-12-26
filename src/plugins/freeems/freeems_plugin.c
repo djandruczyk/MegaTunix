@@ -20,6 +20,7 @@
 
 #define __FREEEMS_PLUGIN_C__
 #include <config.h>
+#include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
 #include <freeems_comms.h>
@@ -49,6 +50,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	GMutex *mutex = NULL;
 	GHashTable *hash = NULL;
 
+	ENTER();
 	global_data = data;
 	/* Initializes function pointers since on Winblows you can NOT
 	   call functions within the program that loaded this DLL, so
@@ -150,6 +152,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	DATA_SET(global_data,"burn_queue",queue);
 	thread = g_thread_create(packet_handler,NULL,TRUE,NULL);
 	DATA_SET(global_data,"packet_handler_thread",thread);
+	EXIT();
 	return;
 }
 
@@ -169,6 +172,7 @@ G_MODULE_EXPORT void plugin_shutdown()
 	GMutex *mutex = NULL;
 	gint id = 0;
 
+	ENTER();
 	teardown_rtv();
 	freeems_serial_disable();
 
@@ -247,6 +251,7 @@ G_MODULE_EXPORT void plugin_shutdown()
 	DATA_SET(global_data,"rtv_subscriber_mutex",NULL);
 
 	deregister_common_enums();
+	EXIT();
 	return;
 }
 
@@ -258,6 +263,7 @@ void register_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
@@ -332,6 +338,8 @@ void register_common_enums(void)
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+	EXIT();
+	return;
 }
 
 
@@ -342,6 +350,7 @@ void deregister_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
@@ -386,4 +395,6 @@ void deregister_common_enums(void)
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+	EXIT();
+	return;
 }

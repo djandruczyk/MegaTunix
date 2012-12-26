@@ -19,6 +19,7 @@
   */
 
 #include <datamgmt.h>
+#include <debugging.h>
 #include <firmware.h>
 #include <freeems_plugin.h>
 #include <stdio.h>
@@ -45,6 +46,7 @@ G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbo
 	gint bitshift = 0;
 	gchar *tmpbuf = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -68,6 +70,7 @@ G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbo
 			   printf("raw ecu at locID %i, offset %i is %i\n",locID,offset,freeems_get_ecu_data(canID,locID,offset,size));
 			   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(freeems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
 			 */
+			EXIT();
 			return ((freeems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
 			break;
 		case ECU_VAR:
@@ -83,12 +86,15 @@ G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbo
 			tmpbuf = g_strdup_printf("%s_size",symbol);
 			size = (DataSize)(GINT) DATA_GET(object,tmpbuf);
 			g_free(tmpbuf);
+			EXIT();
 			return (gdouble)freeems_get_ecu_data(canID,locID,offset,size);
 			break;
 		default:
+			EXIT();
 			return 0.0;
 			break;
 	}
+	EXIT();
 	return 0.0;
 }
 
@@ -112,6 +118,7 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 	gint bitshift = 0;
 	gchar *tmpbuf = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -140,6 +147,7 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 			   printf("raw ecu at locID %i, offset %i is %i\n",locID,offset,freeems_get_ecu_data(canID,locID,offset,size));
 			   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(freeems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
 			*/ 
+			EXIT();
 			return ((freeems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
 			break;
 		case ECU_VAR:
@@ -155,11 +163,14 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 			tmpbuf = g_strdup_printf("%s_size",symbol);
 			size = (DataSize)(GINT) OBJ_GET(object,tmpbuf);
 			g_free(tmpbuf);
+			EXIT();
 			return (gdouble)freeems_get_ecu_data(canID,locID,offset,size);
 			break;
 		default:
+			EXIT();
 			return 0.0;
 			break;
 	}
+	EXIT();
 	return 0.0;
 }

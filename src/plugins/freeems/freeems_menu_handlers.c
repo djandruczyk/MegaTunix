@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <freeems_helpers.h>
 #include <freeems_menu_handlers.h>
 #include <freeems_plugin.h>
@@ -38,6 +39,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	GtkWidget *item = NULL;
 	GtkWidget *image = NULL;
 
+	ENTER();
 	/* View->Tabs Menu */
 	/*
 	   menu = glade_xml_get_widget (xml, "goto_tab1_menu");
@@ -141,6 +143,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 
 	if (get_symbol_f("ecu_plugin_menu_setup",(void **)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);
+	EXIT();
 	return;
 }
 
@@ -150,5 +153,8 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
  */
 G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 {
+	ENTER();
+	EXIT();
+	return;
 	/* Don't need to do anything yet */
 }

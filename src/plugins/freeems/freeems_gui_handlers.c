@@ -21,6 +21,7 @@
 #include <config.h>
 #include <combo_loader.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
 #include <freeems_benchtest.h>
@@ -43,6 +44,7 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT void common_gui_init(void)
 {
 	void (*ecu_gui_init_f)(void) = NULL;
+	ENTER();
 	/* This function is for doing any gui finalization on the CORE gui
 	   for stuff specific to this firmware family.
 	   */
@@ -64,6 +66,7 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	FreeEMSCommonToggleHandler handler;
+	ENTER();
 
 	handler = (FreeEMSCommonToggleHandler)(GINT)OBJ_GET(widget,"handler");
 
@@ -73,15 +76,22 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_toggle_button_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_toggle_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 
 	}
+	EXIT();
 	return TRUE;
  }
 
@@ -98,6 +108,7 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	FreeEMSCommonStdHandler handler;
+	ENTER();
 
 	handler = (FreeEMSCommonStdHandler)(GINT)OBJ_GET(widget,"handler");
 
@@ -122,15 +133,22 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_std_button_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_std_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -147,6 +165,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	gint handler = 0;
+	ENTER();
 
 	handler = (GINT)OBJ_GET(widget,"handler");
 
@@ -157,16 +176,21 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_bitmask_button_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 	}
-
-
+	EXIT();
 	return TRUE;
 }
 
@@ -210,6 +234,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gint raw_upper = 0;
 	GdkColor color;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
@@ -297,12 +322,18 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_entry_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
@@ -320,11 +351,13 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		{
 			/*printf("not sent, returning!\n");*/
 			OBJ_SET(widget,"not_sent",NULL);
+			EXIT();
 			return TRUE;
 		}
 	}
 	OBJ_SET(widget,"not_sent",NULL);
 	OBJ_SET(widget,"last_value",GINT_TO_POINTER(tmpi*1000));
+	EXIT();
 	return TRUE;
 }
 
@@ -342,6 +375,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	gint offset = 0;
 	gint i = 0;
 
+	ENTER();
 	if (!ecu_widgets)
 		ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	if (!firmware)
@@ -358,6 +392,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Ready...</b>")));
     update_current_notebook_page_f();
 	set_title_f(g_strdup(_("Ready...")));
+	EXIT();
 	return;
 }
 
@@ -377,10 +412,17 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 	gint last = 0;
 	gdouble value = 0.0;
 
+	ENTER();
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return;
+	}
 	if (!GTK_IS_WIDGET(widget))
+	{
+		EXIT();
 		return;
+	}
 	if (!insert_text_handler)
 		get_symbol_f("insert_text_handler",(void **)&insert_text_handler);
 
@@ -389,7 +431,10 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 	 * we already updated the widget.
 	 */
 	if ((GTK_IS_WIDGET(data)) && (widget == data))
+	{
+		EXIT();
 		return;
+	}
 
 	/*printf("update_widget %s\n",(gchar *)glade_get_widget_name(widget));*/
 	/* update widget whether spin,radio or checkbutton  
@@ -402,6 +447,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 	if ((tmpi == last) && (!DATA_GET(global_data,"force_update")))
 	{
 		/*printf("new and old match, exiting early....\n");*/
+		EXIT();
 		return;
 	}
 	else
@@ -438,6 +484,8 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer data)
 		 */
 	}
 	/* IF control has groups linked to it's state, adjust */
+	EXIT();
+	return;
 }
 
 
@@ -456,6 +504,7 @@ void update_checkbutton(GtkWidget *widget)
 	gdouble value = 0.0;
 	gchar * set_labels = NULL;
 
+	ENTER();
 	get_essential_bits(widget, NULL, NULL, &bitval, &bitmask, &bitshift);
 
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
@@ -491,6 +540,8 @@ void update_checkbutton(GtkWidget *widget)
 		*/
 	if (OBJ_GET(widget,"toggle_groups"))
 		combo_toggle_groups_linked_f(widget,new_state);
+	EXIT();
+	return;
 }
 
 
@@ -516,6 +567,7 @@ void update_entry(GtkWidget *widget)
 	GdkColor color;
 	GdkColor black = {0,0,0,0};
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
@@ -575,6 +627,8 @@ void update_entry(GtkWidget *widget)
 		gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 		OBJ_SET(widget,"not_sent",NULL);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -601,7 +655,7 @@ void update_combo(GtkWidget *widget)
 	GdkColor red = {0,65535,0,0};
 	GdkColor white = {0,65535,65535,65535};
 
-
+	ENTER();
 	get_essential_bits(widget,&locID, &offset, &bitval, &bitmask, &bitshift);
 	/*printf("Combo at locID %i, offset %i, bitmask %i, bitshift %i, value %i\n",locID,offset,bitmask,bitshift,(GINT)value);*/
 	value = convert_after_upload_f(widget);
@@ -632,6 +686,7 @@ void update_combo(GtkWidget *widget)
 	}
 	/*printf("COULD NOT FIND MATCH for data for combo %p, data %i!!\n",widget,tmpi);*/
 	gtk_widget_modify_base(gtk_bin_get_child(GTK_BIN(widget)),GTK_STATE_NORMAL,&red);
+	EXIT();
 	return;
 
 combo_toggle:
@@ -643,6 +698,8 @@ combo_toggle:
 		swap_labels_f(widget,tmpi);
 	if (OBJ_GET(widget,"set_widgets_label"))
 		combo_set_labels_f(widget,model);
+	EXIT();
+	return;
 }
 
 
@@ -659,8 +716,12 @@ combo_toggle:
   */
 G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *locID, gint *offset, gint *bitval, gint *bitmask, gint *bitshift)
 {
+	ENTER();
 	if (!GTK_IS_WIDGET(widget))
+	{
+		EXIT();
 		return;
+	}
 	if (locID)
 		*locID = (GINT)OBJ_GET(widget,"location_id");
 	if (offset)
@@ -671,6 +732,8 @@ G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *locID, gint *of
 		*bitmask = (GINT)OBJ_GET(widget,"bitmask");
 	if (bitshift)
 		*bitshift = get_bitshift_f((GINT)OBJ_GET(widget,"bitmask"));
+	EXIT();
+	return;
 }
 
 
@@ -686,8 +749,12 @@ G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *locID, gint *of
   */
 G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *locID, gint *offset, DataSize *size, gint *precision)
 {
+	ENTER();
 	if (!GTK_IS_WIDGET(widget))
+	{
+		EXIT();
 		return;
+	}
 	if (locID)
 		*locID = (GINT)OBJ_GET(widget,"location_id");
 	if (offset)
@@ -701,5 +768,7 @@ G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *locID, gint *offset
 	}
 	if (precision)
 		*precision = (DataSize)(GINT)OBJ_GET(widget,"precision");
+	EXIT();
+	return;
 }
 

@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <defines.h>
 #include <freeems_benchtest.h>
 #include <freeems_plugin.h>
@@ -49,6 +50,7 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	Bt_Data data;
 	gint seq = atomic_sequence();
 
+	ENTER();
 	pull_data_from_gui(&data);
 	id = (GINT)DATA_GET(global_data,"benchtest_clock_id");
 	if (id)
@@ -99,6 +101,7 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("benchtest_pkt",output);
 
+	EXIT();
 	return;
 }
 
@@ -117,6 +120,7 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	GByteArray *payload = NULL;
 	gint seq = atomic_sequence();
 
+	ENTER();
 	DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(0));
 	id = (GINT)DATA_GET(global_data,"benchtest_clock_id");
 	if (id)
@@ -145,6 +149,7 @@ G_MODULE_EXPORT void benchtest_stop(void)
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("benchtest_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -165,6 +170,7 @@ G_MODULE_EXPORT void benchtest_bump(void)
 	Bt_Data data;
 	gchar * text = NULL;
 
+	ENTER();
 	pull_data_from_gui(&data);
 
         text = gtk_editable_get_chars(GTK_EDITABLE(lookup_widget_f("BTest_bump_entry")),0,-1);
@@ -192,6 +198,7 @@ G_MODULE_EXPORT void benchtest_bump(void)
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("benchtest_pkt",output);
 
+	EXIT();
 	return;
 }
 
@@ -208,6 +215,7 @@ gboolean pull_data_from_gui(Bt_Data *data)
 	gchar *text = NULL;
 	g_return_val_if_fail(data,FALSE);
 
+	ENTER();
 	widget = lookup_widget_f("BTest_events_per_cycle_entry");
         text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	data->events_per_cycle = (GINT)g_strtod(text,NULL);
@@ -283,13 +291,16 @@ gboolean pull_data_from_gui(Bt_Data *data)
 	data->pw_sources[5] = (GINT)g_strtod(text,NULL);
 	g_free(text);
 
+	EXIT();
 	return TRUE;
 }
 
 
 gboolean benchtest_clock_update_wrapper(gpointer data)
 {
+	ENTER();
 	g_idle_add(benchtest_clock_update,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -306,6 +317,7 @@ gboolean benchtest_clock_update(gpointer data)
 	gint msec = 0;
 	gint total = 0;
 
+	ENTER();
 	if (!label)
 		label = lookup_widget_f("BTest_time_remain_label");
 	g_return_val_if_fail(label,FALSE);
@@ -343,6 +355,7 @@ gboolean benchtest_clock_update(gpointer data)
 		tmpbuf = g_strdup_printf("<b>%.2i:%.2i:%.2i</b>",hour,min,sec);
 		gtk_label_set_markup(GTK_LABEL(label),tmpbuf);
 		g_free(tmpbuf);
+		EXIT();
 		return TRUE;
 	}
 	else
@@ -354,6 +367,9 @@ gboolean benchtest_clock_update(gpointer data)
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_entry"),FALSE);
 		gtk_label_set_markup(GTK_LABEL(label),"<b>HH:MM:SS</b>");
 		thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest completed...\n")),FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
+	EXIT();
+	return;
 }

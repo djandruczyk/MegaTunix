@@ -22,6 +22,7 @@
 
 #include <api-versions.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <getfiles.h>
 #include <interrogate.h>
 #include <freeems_plugin.h>
@@ -53,6 +54,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	GList *locations = NULL;
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 
+	ENTER();
 	/* prevent multiple runs of interrogator simultaneously */
 	g_static_mutex_lock(&mutex);
 	MTXDBG(INTERROGATOR,_("ENTERED\n\n"));
@@ -69,6 +71,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		MTXDBG(INTERROGATOR|CRITICAL,_("Didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
 		update_logbar_f("interr_view",NULL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"),FALSE,FALSE,TRUE);
 		g_static_mutex_unlock(&mutex);
+		EXIT();
 		return FALSE;
 	}
 	thread_widget_set_sensitive_f("offline_button",FALSE);
@@ -101,6 +104,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	g_hash_table_destroy(tests_hash);
 
 	g_static_mutex_unlock(&mutex);
+	EXIT();
 	return interrogated;
 }
 
@@ -130,11 +134,15 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 	guint8 sum = 0;
 	gint tmit_len = 0;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return g_strdup("Offline");
+	}
 
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
@@ -150,6 +158,7 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 		deregister_packet_queue(PAYLOAD_ID,queue,resp);
 		g_free(buf);
 		g_async_queue_unref(queue);
+		EXIT();
 		return NULL;
 	}
 	g_free(buf);
@@ -169,6 +178,7 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 			*length = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
+	EXIT();
 	return version;
 }
 
@@ -198,11 +208,15 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 	guint8 sum = 0;
 	gint tmit_len = 0;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return g_strdup("Offline");
+	}
 
 	pkt[HEADER_IDX] = 0;
 	pkt[H_PAYLOAD_IDX] = (req & 0xff00 ) >> 8;
@@ -218,6 +232,7 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 		deregister_packet_queue(PAYLOAD_ID,queue,resp);
 		g_free(buf);
 		g_async_queue_unref(queue);
+		EXIT();
 		return NULL;
 	}
 	g_free(buf);
@@ -244,6 +259,7 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 			*length = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
+	EXIT();
 	return version;
 }
 
@@ -258,6 +274,7 @@ G_MODULE_EXPORT void request_firmware_version()
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
 	gint seq = atomic_sequence();
+	ENTER();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
 //	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_VERSION);
@@ -266,6 +283,7 @@ G_MODULE_EXPORT void request_firmware_version()
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_VERSION));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -278,6 +296,7 @@ G_MODULE_EXPORT void request_firmware_build_date()
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
 	gint seq = atomic_sequence();
+	ENTER();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
 	//register_packet_queue(PAYLOAD_ID,queue,RESPONSE_FIRMWARE_BUILD_DATE);
@@ -286,6 +305,7 @@ G_MODULE_EXPORT void request_firmware_build_date()
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_BUILD_DATE));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -298,6 +318,7 @@ G_MODULE_EXPORT void request_firmware_decoder_name()
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
 	gint seq = atomic_sequence();
+	ENTER();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -305,6 +326,7 @@ G_MODULE_EXPORT void request_firmware_decoder_name()
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_DECODER_NAME));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -320,6 +342,7 @@ G_MODULE_EXPORT void request_firmware_compiler()
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
 	gint seq = atomic_sequence();
+	ENTER();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -327,6 +350,7 @@ G_MODULE_EXPORT void request_firmware_compiler()
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_COMPILER_VERSION));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -342,6 +366,7 @@ G_MODULE_EXPORT void request_firmware_build_os()
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
 	gint seq = atomic_sequence();
+	ENTER();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -349,6 +374,7 @@ G_MODULE_EXPORT void request_firmware_build_os()
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_FIRMWARE_COMPILER_OS));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -364,6 +390,7 @@ G_MODULE_EXPORT void request_interface_version()
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
 	gint seq = atomic_sequence();
+	ENTER();
 	output = initialize_outputdata_f();
 	queue = g_async_queue_new();
 	register_packet_queue(SEQUENCE_NUM,queue,seq);
@@ -371,6 +398,7 @@ G_MODULE_EXPORT void request_interface_version()
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_INTERFACE_VERSION));
 	DATA_SET(output->data,"queue",queue);
 	io_cmd_f("empty_payload_pkt",output);
+	EXIT();
 	return;
 }
 
@@ -402,6 +430,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 	guint8 flag = BLOCK_BITS_AND;
 	guint16 bits = 0;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
@@ -423,6 +452,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 		deregister_packet_queue(PAYLOAD_ID,queue,resp);
 		g_free(buf);
 		g_async_queue_unref(queue);
+		EXIT();
 		return NULL;
 	}
 	g_free(buf);
@@ -453,6 +483,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 			*length = packet->payload_length;
 		freeems_packet_cleanup(packet);
 	}
+	EXIT();
 	return list;
 }
 
@@ -481,6 +512,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	guint8 sum = 0;
 	gint tmit_len = 0;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,NULL);
 
@@ -500,6 +532,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LOCATION_ID_DETAILS);
 		g_free(buf);
 		g_async_queue_unref(queue);
+		EXIT();
 		return NULL;
 	}
 	g_free(buf);
@@ -547,6 +580,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 		/*printf("loc id details length %i\n",details->length);*/
 		freeems_packet_cleanup(packet);
 	}
+	EXIT();
 	return details;
 }
 
@@ -575,24 +609,30 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 	gint j = 0;
 	gchar *pathstub = NULL;
 
+	ENTER();
 	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"tests.cfg",NULL);
 	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
 	g_free(pathstub);
 	if (!filename)
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s not found!\n"),filename),FALSE,FALSE,TRUE);
+		EXIT();
 		return FALSE;
 	}
 
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
+	{
+		EXIT();
 		return FALSE;
+	}
 	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
 		g_free(filename);
 		cfg_free(cfgfile);
+		EXIT();
 		return FALSE;
 	}
 
@@ -637,6 +677,7 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 	}
 	cfg_free(cfgfile);
 	g_free(filename);
+	EXIT();
 	return TRUE;
 }
 
@@ -649,6 +690,7 @@ G_MODULE_EXPORT gboolean validate_and_load_tests(GArray **tests, GHashTable **te
 G_MODULE_EXPORT void test_cleanup(gpointer data)
 {
 	Detection_Test *test = (Detection_Test *)data;
+	ENTER();
 	cleanup_f(test->test_func);
 	cleanup_f(test->test_name);
 	cleanup_f(test->test_desc);
@@ -659,6 +701,8 @@ G_MODULE_EXPORT void test_cleanup(gpointer data)
 		if (test->result)
 			cleanup_f(test->result);
 	cleanup_f(test);
+	EXIT();
+	return;
 }
 
 
@@ -685,12 +729,14 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 	Firmware_Details *firmware = NULL;
 	gchar *pathstub = NULL;
 
+	ENTER();
 	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL);
 	filenames = get_files((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"prof",&classes);
 	g_free(pathstub);
 	if (!filenames)
 	{
 		MTXDBG(INTERROGATOR|CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n\n"));
+		EXIT();
 		return FALSE;
 	}
 	i = 0;
@@ -744,6 +790,7 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests, GHashTable *tests_hash)
 			retval = FALSE;
 	}
 	g_free(filename);
+	EXIT();
 	return(retval);
 }
 
@@ -770,15 +817,20 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	gint minor = 0;
 	MatchClass match_class;
 
+	ENTER();
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
 		cfg_free(cfgfile);
+		EXIT();
 		return FALSE;
 	}
 
@@ -806,6 +858,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 			MTXDBG(INTERROGATOR,_("MISMATCH,\"%s\" is NOT a match...\n\n"),filename);
 			cfg_free(cfgfile);
 			g_strfreev(match_on);
+			EXIT();
 			return FALSE;
 		}
 		vector = g_strsplit(tmpbuf,",",-1);
@@ -872,6 +925,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 			MTXDBG(INTERROGATOR,_("MISMATCH,\"%s\" is NOT a match...\n\n"),filename);
 			g_strfreev(match_on);
 			cfg_free(cfgfile);
+			EXIT();
 			return FALSE;
 		}
 
@@ -879,6 +933,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	g_strfreev(match_on);
 	MTXDBG(INTERROGATOR,_("\"%s\" is a match for all conditions ...\n\n"),filename);
 	cfg_free(cfgfile);
+	EXIT();
 	return TRUE;
 }
 
@@ -897,6 +952,7 @@ G_MODULE_EXPORT void update_ecu_info(void)
 	gchar *decoder = NULL;
 	gchar *info = NULL;
 
+	ENTER();
 	fw_version = (gchar *)DATA_GET(global_data,"fw_version");
 	int_version = (gchar *)DATA_GET(global_data,"int_version");
 	build_date = (gchar *)DATA_GET(global_data,"build_date");
@@ -909,6 +965,7 @@ G_MODULE_EXPORT void update_ecu_info(void)
 		thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(info));
 		g_free(info);
 	}
+	EXIT();
 	return;
 }
 
@@ -919,14 +976,20 @@ G_MODULE_EXPORT void update_ecu_info(void)
   */
 G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 {
+	ENTER();
 	if (!DATA_GET(global_data,"interrogated"))
+	{
+		EXIT();
 		return;
+	}
 	/* Request firmware version */
 	request_firmware_version();
 	request_interface_version();
 	request_firmware_build_date();
 	request_firmware_build_os();
 	request_firmware_compiler();
+	EXIT();
+	return;
 }
 
 
@@ -955,6 +1018,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	gint x_bins = 0;
 	gint y_bins = 0;
 
+	ENTER();
 
 	cfgfile = cfg_open_file((gchar *)filename);
 	if (!cfgfile)
@@ -964,6 +1028,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	{
 		thread_update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		cfg_free(cfgfile);
+		EXIT();
 		return FALSE;
 	}
 	MTXDBG(INTERROGATOR,_("File:%s opened successfully\n"),filename);
@@ -1233,6 +1298,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	thread_update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE);
 	cfg_free(cfgfile);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -1251,9 +1317,11 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 	gint value = 0;
 	gint tmpi = 0;
 
+	ENTER();
 	if (!string)
 	{
 		MTXDBG(INTERROGATOR|CRITICAL,_("String fed is NULL!\n"));
+		EXIT();
 		return -1;
 	}
 
@@ -1269,6 +1337,7 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 	}
 
 	g_strfreev(vector);
+	EXIT();
 	return value;
 }
 
@@ -1278,10 +1347,12 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 {
 	Page_Params *page_params = NULL;
+	ENTER();
 	page_params = (Page_Params *)g_malloc0(sizeof(Page_Params));
 	page_params->length = 0;
 	page_params->spconfig_offset = -1;
 	page_params->needs_burn = FALSE;
+	EXIT();
 	return page_params;
 }
 
@@ -1292,6 +1363,7 @@ G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 {
 	Table_Params *table_params = NULL;
+	ENTER();
 	table_params = (Table_Params *)g_malloc0(sizeof(Table_Params));
 	table_params->is_fuel = FALSE;
 	table_params->alternate_offset = -1;
@@ -1336,6 +1408,7 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 	table_params->y_dl_eval = NULL;
 	table_params->z_dl_eval = NULL;
 
+	EXIT();
 	return table_params;
 }
 
@@ -1355,6 +1428,7 @@ gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, g
 	Serial_Params *serial_params = NULL;
     GTimeVal tval;                                                              
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_return_val_if_fail(serial_params,FALSE);
 	g_return_val_if_fail(x_bins,FALSE);
@@ -1374,6 +1448,7 @@ gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, g
 		deregister_packet_queue(PAYLOAD_ID,queue,resp);
 		g_free(buf);
 		g_async_queue_unref(queue);
+		EXIT();
 		return FALSE;
 	}
 	g_free(buf);
@@ -1391,7 +1466,9 @@ gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, g
 		*x_bins = (packet->data[packet->payload_base_offset] << 8 ) + packet->data[packet->payload_base_offset +1];
 		*y_bins = (packet->data[packet->payload_base_offset+2] << 8 ) + packet->data[packet->payload_base_offset +3];
 		freeems_packet_cleanup(packet);
+		EXIT();
 		return TRUE;
 	}
+	EXIT();
 	return FALSE;
 }

@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <firmware.h>
 #include <freeems_plugin.h>
 #include <debugging.h>
@@ -40,6 +41,7 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, xmlNode *node, gch
 	gint tmpi = 0;
 	gchar *tmpbuf = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -109,9 +111,11 @@ G_MODULE_EXPORT void common_rtv_loader(gconstpointer *object, xmlNode *node, gch
 			name=NULL;
 			break;
 		default:
+			EXIT();
 			return;
 			break;
 	}
+	EXIT();
 	return;
 }
 
@@ -131,6 +135,7 @@ G_MODULE_EXPORT void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile,
 	gint tmpi = 0;
 	gchar *tmpbuf = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -199,8 +204,10 @@ G_MODULE_EXPORT void common_rtv_loader_obj(GObject *object, ConfigFile *cfgfile,
 			name=NULL;
 			break;
 		default:
+			EXIT();
 			return;
 			break;
 	}
+	EXIT();
 	return;
 }

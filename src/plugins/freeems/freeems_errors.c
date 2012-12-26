@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <freeems_errors.h>
 #include <freeems_plugin.h>
 
@@ -32,10 +33,15 @@ G_MODULE_EXPORT const gchar * lookup_error(guint code)
 {
 	guint i = 0;
 	gchar *msg = NULL;
+	ENTER();
 	for (i=0;i< sizeof(Errors)/sizeof(Errors[0]);i++)
 	{
 		if (Errors[i].code == code)
+		{
+			EXIT();
 			return Errors[i].message;
+		}
 	}
-	return ("Couldn't find error code");
+	EXIT();
+	return ("Couldn't find error code for 0x%X",code);
 }

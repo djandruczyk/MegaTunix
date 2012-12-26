@@ -19,6 +19,7 @@
   */
 
 #include <datamgmt.h>
+#include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
 #include <freeems_comms.h>
@@ -75,6 +76,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	gboolean (*lock_serial_f)(const gchar *) = NULL;
 	void (*setup_serial_params_f)(void) = NULL;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	get_symbol_f("setup_serial_params",(void **)&setup_serial_params_f);
@@ -195,6 +197,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 		g_strfreev(vector);
 	MTXDBG(THREADS|CRITICAL,_("Thread exiting, device found!\n"));
 	g_thread_exit(0);
+	EXIT();
 	return NULL;
 }
 		
@@ -214,6 +217,7 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	gboolean res = FALSE;
 	gint tmpi = 0;
 
+	ENTER();
 	DATA_SET(global_data,"serial_abort",GINT_TO_POINTER(TRUE));
 	thread = (GThread *)DATA_GET(global_data,"serial_thread_id");
 	g_mutex_lock(mutex);
@@ -235,6 +239,8 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	 */
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
+	EXIT();
+	return;
 }
 
 
@@ -248,10 +254,12 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	GThread *thread = NULL;
 	gint tmpi = 0;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	if ((!serial_params->open) || (!serial_params->fd))
 	{
 		MTXDBG(CRITICAL,_("Serial port is NOT open, or filedescriptor is invalid!\n"));
+		EXIT();
 		return;
 	}
 
@@ -263,6 +271,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 	thread = g_thread_create(unix_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
 #endif
 	DATA_SET(global_data,"serial_thread_id",thread);
+	EXIT();
 	return;
 }
 
@@ -287,6 +296,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	guint8 pkt[INTERFACE_VERSION_REQ_PKT_LEN];
 	gint tmit_len = 0;
 
+	ENTER();
 	Serial_Params *serial_params = NULL;
 
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
@@ -294,7 +304,10 @@ G_MODULE_EXPORT gboolean comms_test(void)
 
 	MTXDBG(SERIAL_RD,_("Entered...\n"));
 	if (!serial_params)
+	{
+		EXIT();
 		return FALSE;
+	}
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 #if GLIB_MINOR_VERSION < 31
@@ -311,6 +324,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 		g_async_queue_unref(queue);
 		freeems_packet_cleanup(packet);
 		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+		EXIT();
 		return TRUE;
 	}
 	else
@@ -331,6 +345,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 			g_free(buf);
 			deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 			g_async_queue_unref(queue);
+			EXIT();
 			return FALSE;
 		}
 		g_free(buf);
@@ -348,11 +363,13 @@ G_MODULE_EXPORT gboolean comms_test(void)
 			MTXDBG(SERIAL_RD,_("Found via probing!!\n"));
 			freeems_packet_cleanup(packet);
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
+			EXIT();
 			return TRUE; 
 		}
 	}
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
 	MTXDBG(SERIAL_RD,_("No device found...\n"));
+	EXIT();
 	return FALSE;
 }
 
@@ -380,6 +397,7 @@ void *win32_reader(gpointer data)
 	GError *err = NULL;
 	GCond *cond = NULL;
 
+	ENTER();
 	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	while (TRUE)
 	{
@@ -409,6 +427,7 @@ void *win32_reader(gpointer data)
 			handle_data((guchar *)buf+read_pos,received);
 		g_cond_signal(cond);
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -436,6 +455,7 @@ void *unix_reader(gpointer data)
 	fd_set readfds;
 	struct timeval t;
 
+	ENTER();
 	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	FD_ZERO(&readfds);
 	while (TRUE)
@@ -483,6 +503,7 @@ void *unix_reader(gpointer data)
 			g_cond_signal(cond);
 		}
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -498,6 +519,7 @@ G_MODULE_EXPORT void setup_rtv_pf(void)
 	GAsyncQueue *queue = NULL;
 	GThread *thread = NULL;
 
+	ENTER();
 	queue = g_async_queue_new();
 	DATA_SET(global_data,"rtv_subscriber_queue", queue);
 	thread = g_thread_create(rtv_subscriber,queue,TRUE,NULL);
@@ -506,6 +528,7 @@ G_MODULE_EXPORT void setup_rtv_pf(void)
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	/* Fake out so tickler doesn't try to start it */
 	DATA_SET(global_data,"realtime_id",GINT_TO_POINTER(1));
+	EXIT();
 	return;
 }
 
@@ -521,6 +544,7 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 	GThread *thread = NULL;
 	GMutex *mutex = (GMutex *)DATA_GET(global_data,"rtv_subscriber_mutex");
 
+	ENTER();
 	/* This sends packets to the rtv_subscriber queue */
 	thread = (GThread *)DATA_GET(global_data,"rtv_subscriber_thread");
 	if (thread)
@@ -537,6 +561,7 @@ G_MODULE_EXPORT gboolean teardown_rtv(void)
 	DATA_SET(global_data,"rtv_subscriber_queue",NULL);
 	g_mutex_unlock(mutex);
 	DATA_SET(global_data,"realtime_id",NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -553,6 +578,7 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 	GTimeVal now;
 	FreeEMS_Packet *packet = NULL;
 
+	ENTER();
 	mutex = (GMutex *)DATA_GET(global_data,"rtv_subscriber_mutex");
 	if (!mutex)
 		g_thread_exit(0);
@@ -577,6 +603,7 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 		}
 	}
 	g_thread_exit(0);
+	EXIT();
 	return NULL;
 }
 
@@ -589,6 +616,7 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	OutputData *output = NULL;	
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
         firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
@@ -597,6 +625,7 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	DATA_SET(output->data,"payload_id",GINT_TO_POINTER(REQUEST_BASIC_DATALOG));
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd_f(firmware->rt_command,output);
+	EXIT();
 	return;
 }
 
@@ -622,6 +651,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 	GtkWidget *widget = (GtkWidget *)data;
 	gconstpointer *gptr = (gconstpointer *)data;
 
+	ENTER();
 	if (!firmware)
         	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
@@ -654,6 +684,8 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 	}
 	/*printf("locID %i, offset, %i, value %i\n",locID,offset,value);*/
 	freeems_send_to_ecu(canID,locID,offset,size,value,queue_update);
+	EXIT();
+	return;
 }
 
 
@@ -678,6 +710,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 	guint32 u32 = 0;
 	gint32 s32 = 0;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -771,6 +804,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 
 	output->queue_update = queue_update;
 	io_cmd_f(firmware->write_command,output);
+	EXIT();
 	return;
 }
 
@@ -791,12 +825,15 @@ G_MODULE_EXPORT void ecu_chunk_write(gint canID, gint page, gint offset, gint nu
 {
 	gint locID = 0;
 	Firmware_Details *firmware = NULL;
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
 	locID = firmware->page_params[page]->phys_ecu_page;
 
 	freeems_chunk_write(canID,locID,offset,num_bytes,block);
+	EXIT();
+	return;
 }
 
 
@@ -815,6 +852,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	MTXDBG(SERIAL_WR,_("Sending canID %i, locID %i, offset %i, num_bytes %i, data %p\n"),canID,locID,offset,num_bytes,block);
@@ -833,6 +871,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	/*
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
 	*/
+	EXIT();
 	return;
 }
 
@@ -861,6 +900,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	gint z = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
@@ -926,7 +966,10 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	 */
 
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return;
+	}
 red_or_black:
 	for (gint i=0;i<firmware->total_pages;i++)
 	{
@@ -938,6 +981,7 @@ red_or_black:
 			firmware->page_params[i]->needs_burn = TRUE;
 			thread_set_group_color_f(RED,"burners");
 /*			thread_slaves_set_color(RED,"burners");*/
+			EXIT();
 			return;
 		}
 		else
@@ -945,6 +989,7 @@ red_or_black:
 	}
 	thread_set_group_color_f(BLACK,"burners");
 /*	thread_slaves_set_color(BLACK,"burners");*/
+	EXIT();
 	return;
 }
 
@@ -963,16 +1008,21 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 	gint locID = 0;
 	gint page = 0;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	locID = (GINT)DATA_GET(output->data,"location_id");
 	page = (GINT)DATA_GET(output->data,"page");
 
 	/* sync temp buffer with current burned settings */
 	if (firmware->page_params[page]->read_only)
+	{
+		EXIT();
 		return;
+	}
 	freeems_backup_current_data(firmware->canID,locID);
 
 	MTXDBG(SERIAL_WR,_("Burn to Flash Completed\n"));
 
+	EXIT();
 	return;
 }
