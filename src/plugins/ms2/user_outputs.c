@@ -24,6 +24,7 @@
 #undef GTK_DISABLE_DEPRECATED
 #endif
 
+#include <debugging.h>
 #include <ms2_plugin.h>
 #include <rtv_map_loader.h>
 #include <user_outputs.h>
@@ -66,12 +67,16 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
 
+	ENTER();
 	Rtv_Map *rtv_map = NULL;
 
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_map)
+	{
+		EXIT();
 		return;
+	}
 	/* Create the store for the combo, with severla hidden values
 	 */
 	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_POINTER,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_UCHAR);
@@ -202,6 +207,8 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		gtk_entry_completion_set_popup_single_match(completion,FALSE);
 		OBJ_SET(widget,"arrow-size",GINT_TO_POINTER(1));
 	}
+	EXIT();
+	return;
 }
 
 
@@ -233,6 +240,7 @@ G_MODULE_EXPORT void update_ms2_user_outputs(GtkWidget *widget)
 	void *eval = NULL;
 	GtkWidget *tmpwidget = NULL;
 
+	ENTER();
 	get_essential_bits_f(widget, NULL, NULL, NULL, NULL, &bitmask, &bitshift);
 
 	value = convert_after_upload_f(widget);
@@ -297,6 +305,8 @@ G_MODULE_EXPORT void update_ms2_user_outputs(GtkWidget *widget)
 		valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(model), &iter);
 		i++;
 	}
+	EXIT();
+	return;
 }
 
 /*!
@@ -310,6 +320,7 @@ gboolean find_in_list(gchar **vector, gchar *names)
 {
 	gboolean retval = FALSE;
 	gchar ** potentials = g_strsplit(names,",",-1);
+	ENTER();
 	for (int i=0;i<g_strv_length(potentials);i++)
 	{
 		for (int j=0;j<g_strv_length(vector);j++)
@@ -317,6 +328,7 @@ gboolean find_in_list(gchar **vector, gchar *names)
 				retval = TRUE;
 	}
 	g_strfreev(potentials);
+	EXIT();
 	return retval;
 }
 

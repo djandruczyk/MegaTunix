@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <firmware.h>
 #include <ms2_plugin.h>
 #include <ms2_tlogger.h>
@@ -32,8 +33,11 @@ MS2_TTMon_Data *ttm_data;
   */
 G_MODULE_EXPORT void bind_ttm_to_page(gint page)
 {
+	ENTER();
 	ttm_data->page = page;
 	OBJ_SET(ttm_data->darea,"page",GINT_TO_POINTER(page));
+	EXIT();
+	return;
 }
 
 
@@ -43,9 +47,12 @@ G_MODULE_EXPORT void bind_ttm_to_page(gint page)
 G_MODULE_EXPORT void ms2_ttm_reset_zoom(void)
 {
 	GtkWidget *widget = NULL;
+	ENTER();
 	widget = lookup_widget_f("ttm_zoom");
 	if (GTK_IS_WIDGET(widget))
 		gtk_range_set_value(GTK_RANGE(widget),1.0);
+	EXIT();
+	return;
 }
 
 
@@ -57,6 +64,7 @@ G_MODULE_EXPORT void ms2_ttm_reset_zoom(void)
   */
 G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 {
+	ENTER();
 	ttm_data = g_new0(MS2_TTMon_Data,1);
 	ttm_data->page = -1;
 	ttm_data->units = 1;
@@ -77,6 +85,7 @@ G_MODULE_EXPORT void ms2_setup_logger_display(GtkWidget * src_widget)
 	ttm_data->zoom = 1.0;
 
 	OBJ_SET(src_widget,"ttmon_data",(gpointer)ttm_data);
+	EXIT();
 	return;
 }
 
@@ -95,8 +104,12 @@ G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, Gdk
 	GdkWindow *window = gtk_widget_get_window(widget);
 	gtk_widget_get_allocation(widget,&allocation);
 
+	ENTER();
 	if (!ttm_data)
+	{
+		EXIT();
 		return FALSE;
+	}
 	if(window)
 	{
 		gint w = allocation.width;
@@ -118,11 +131,15 @@ G_MODULE_EXPORT gboolean ms2_logger_display_config_event(GtkWidget * widget, Gdk
 	}
 	/* Don't try to update if the page isn't bound YET */
 	if (ttm_data->page < 0)
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	ms2_crunch_trigtooth_data();
 	if (ttm_data->peak > 0)
 		ms2_update_trigtooth_display();
+	EXIT();
 	return TRUE;
 }
 
@@ -147,6 +164,7 @@ void ms2_crunch_trigtooth_data()
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware;
 
+	ENTER();
 	min = 1048576;
 	max = 1;
 	g_get_current_time(&current);
@@ -226,6 +244,8 @@ void ms2_crunch_trigtooth_data()
 	else
 		ttm_data->vdivisor = 240000;
 
+	EXIT();
+	return;
 }
 
 
@@ -252,6 +272,7 @@ void ms2_update_trigtooth_display()
 	GtkAllocation allocation;
 	GdkWindow *window = gtk_widget_get_window(ttm_data->darea);
 
+	ENTER();
 	gtk_widget_get_allocation(ttm_data->darea,&allocation);
 	
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -355,8 +376,13 @@ void ms2_update_trigtooth_display()
 
 	/* Trigger redraw to main screen */
 	if (!window) 
+	{
+		EXIT();
 		return;
+	}
 	gdk_window_clear(window);
+	EXIT();
+	return;
 }
 
 
@@ -368,11 +394,17 @@ void ms2_update_trigtooth_display()
  */
 G_MODULE_EXPORT void ms2_ttm_update(RtvWatch *watch)
 {
+	ENTER();
 	ms2_crunch_trigtooth_data();
 	ms2_update_trigtooth_display();
 	if (ttm_data->stop)
+	{
+		EXIT();
 		return;
+	}
 	io_cmd_f((gchar *)OBJ_GET(ttm_data->darea,"io_cmd_function"),NULL);
+	EXIT();
+	return;
 }
 
 
@@ -382,7 +414,10 @@ G_MODULE_EXPORT void ms2_ttm_update(RtvWatch *watch)
   */
 G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
 {
+	ENTER();
 	ms2_crunch_trigtooth_data();
+	EXIT();
+	return;
 }
 
 
@@ -391,7 +426,10 @@ G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
   */
 G_MODULE_EXPORT void ms2_ttm_watch(void)
 {
+	ENTER();
 	create_rtv_single_bit_state_watch_f("status3",1,TRUE,TRUE,"ms2_ttm_update", (gpointer)ttm_data->darea);
+	EXIT();
+	return;
 }
 
 
@@ -403,12 +441,14 @@ G_MODULE_EXPORT void ms2_ttm_watch(void)
 G_MODULE_EXPORT gboolean ms2_ttm_zoom(GtkWidget *widget, gpointer data)
 {
 	gint page = 0;
+	ENTER();
 	if (ttm_data)
 	{
 		ttm_data->zoom = (gfloat)gtk_range_get_value(GTK_RANGE(widget));
 		if (ttm_data->pixmap)
 			ms2_update_trigtooth_display();
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -427,6 +467,7 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
 	GdkWindow *window = gtk_widget_get_window(widget);
 	gtk_widget_get_allocation(widget,&allocation);
 
+	ENTER();
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
 #else
@@ -450,6 +491,7 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
 		cairo_fill(cr);
 		cairo_destroy(cr);
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -460,6 +502,7 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
 G_MODULE_EXPORT void reset_ttm_buttons(void)
 {
 	GtkWidget *widget = NULL;
+	ENTER();
 	widget = lookup_widget_f("toothlogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);

@@ -19,6 +19,7 @@
   */
 
 #include <combo_loader.h>
+#include <debugging.h>
 #include <firmware.h>
 #include <glade/glade.h>
 #include <ms2_gui_handlers.h>
@@ -41,7 +42,9 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 {
+	ENTER();
 	MTXDBG(CRITICAL,_("ERROR handler NOT found for widget %s, command aborted! BUG!!!\n"),glade_get_widget_name(widget));
+	EXIT();
 	return TRUE;
 
 }
@@ -60,6 +63,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 	gfloat tmpf = 0.0;
 	const gchar *dest = NULL;
 
+	ENTER();
 	handler = (MS2StdHandler)(GINT)OBJ_GET(widget,"handler");
 
 	switch ((MS2StdHandler)handler)
@@ -77,6 +81,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 			MTXDBG(CRITICAL,_("ERROR handler NOT found for widget %s, command aborted! BUG!!!\n"),glade_get_widget_name(widget));
 			break;
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -92,6 +97,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 	extern MS2_TTMon_Data *ttm_data;
 	gint handler = -1;
 	
+	ENTER();
 	handler = (GINT)OBJ_GET(widget,"handler");
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
@@ -143,6 +149,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 				break;
 		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -192,6 +199,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	void *eval = NULL;
 	void (*check_limits)(gint) = NULL;
 
+	ENTER();
 	handler = (GINT)OBJ_GET(widget,"handler");
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	page = (GINT)OBJ_GET(widget,"page");
@@ -214,7 +222,10 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 		   * not, and get the iter for it...
 		   */
 		if (!search_model_f(model,widget,&iter))
+		{
+			EXIT();
 			return FALSE;
+		}
 	}
 	gtk_tree_model_get(model,&iter,BITVAL_COL,&bitval,-1);
 
@@ -284,11 +295,13 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 				update_widget_f(tmpwidget,NULL);
 			}
 			g_free(range);
+			EXIT();
 			return TRUE;
 			break;
 
 		default:
 			MTXDBG(CRITICAL,_("Default case reached,  i.e. handler not found in global, common or ECU plugins for widget %s, BUG!\n"),glade_get_widget_name(widget));
+			EXIT();
 			return TRUE;
 			break;
 	}
@@ -297,6 +310,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 		dload_val = convert_before_download_f(widget,dload_val);
 		ms_send_to_ecu_f(canID, page, offset, size, dload_val, TRUE);
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -309,8 +323,10 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget * widget)
 {
+	ENTER();
 	if ((GINT)OBJ_GET(widget,"handler") == MS2_USER_OUTPUTS)
 		update_ms2_user_outputs(widget);
+	EXIT();
 	return TRUE;
 }
 
@@ -321,5 +337,8 @@ G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget * widget)
   */
 G_MODULE_EXPORT void ecu_gui_init(void)
 {
+	ENTER();
+	EXIT();
+	return;
 	/* We don't need anything specific to this ecu initialized */
 }

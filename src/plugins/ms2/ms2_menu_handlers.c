@@ -41,6 +41,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 	GtkWidget *item = NULL;
 	GtkWidget *image = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (firmware->capabilities & MS2)
@@ -113,6 +114,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 		gtk_widget_show_all(menu);
 	}
+	EXIT();
 	return;
 }
 
@@ -132,13 +134,17 @@ G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	g_return_val_if_fail(firmware,FALSE);
 	g_return_val_if_fail(main_xml,FALSE);
 	
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!GTK_IS_WIDGET(window))
 	{
@@ -219,6 +225,7 @@ G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget
 		register_widget_f("thermister_kelvin_rbutton",item);
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show(GTK_WIDGET(window));
+		EXIT();
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >= 18
@@ -232,6 +239,7 @@ G_MODULE_EXPORT gboolean show_ms2_therm_table_generator_window(GtkWidget *widget
 			gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(chooser));
 			gtk_widget_show(GTK_WIDGET(window));
 		}
+	EXIT();
 	return TRUE;
 }
 
@@ -252,11 +260,15 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 	Firmware_Details *firmware = NULL;
 	gboolean (*populate_afr_calibrator_combo_f)(GtkWidget *) = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!GTK_IS_WIDGET(window))
 	{
@@ -297,6 +309,7 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show(GTK_WIDGET(window));
+		EXIT();
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >= 18
@@ -307,6 +320,7 @@ G_MODULE_EXPORT gboolean show_ms2_afr_calibrator_window(GtkWidget *widget, gpoin
 		gtk_widget_hide(GTK_WIDGET(window));
 	else
 		gtk_widget_show(GTK_WIDGET(window));
+	EXIT();
 	return TRUE;
 }
 
@@ -328,6 +342,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	GList ***ecu_widgets;
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
+	ENTER();
 	if (!update_widget_f)
 		get_symbol_f("update_widget",(void **)&update_widget_f);
 
@@ -335,7 +350,10 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!GTK_IS_WIDGET(window))
 	{
@@ -508,6 +526,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 		glade_xml_signal_autoconnect(xml);
 		gtk_widget_show(GTK_WIDGET(window));
 
+		EXIT();
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >= 18
@@ -518,6 +537,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibrator_window(GtkWidget *widget, gpoint
 			gtk_widget_hide(GTK_WIDGET(window));
 		else
 			gtk_widget_show(GTK_WIDGET(window));
+	EXIT();
 	return TRUE;
 }
 
@@ -539,6 +559,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 	GList ***ecu_widgets;
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
+	ENTER();
 	if (!update_widget_f)
 		get_symbol_f("update_widget",(void **)&update_widget_f);
 
@@ -546,7 +567,10 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!GTK_IS_WIDGET(window))
 	{
@@ -601,6 +625,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show(GTK_WIDGET(window));
 
+		EXIT();
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >= 18
@@ -611,6 +636,7 @@ G_MODULE_EXPORT gboolean show_battery_calibrator_window(GtkWidget *widget, gpoin
 			gtk_widget_hide(GTK_WIDGET(window));
 		else
 			gtk_widget_show(GTK_WIDGET(window));
+	EXIT();
 	return TRUE;
 }
 
@@ -628,6 +654,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widget, gpointe
 	gchar * text = NULL;
 	GtkTextBuffer *buffer;
 
+	ENTER();
 	window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	view = gtk_text_view_new ();
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view),FALSE);
@@ -646,6 +673,7 @@ G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widget, gpointe
 	gtk_widget_show(window);
 
 
+	EXIT();
 	return TRUE;
 }
 
@@ -658,7 +686,9 @@ G_MODULE_EXPORT gboolean show_sensor_calibration_help(GtkWidget *widget, gpointe
  */
 G_MODULE_EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
 {
+	ENTER();
 	io_cmd_f("ms2_reinit",NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -670,7 +700,9 @@ G_MODULE_EXPORT gboolean ms2_reinit(GtkWidget *widget, gpointer data)
  */
 G_MODULE_EXPORT gboolean ms2_reboot(GtkWidget *widget, gpointer data)
 {
+	ENTER();
 	io_cmd_f("ms2_reboot",NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -690,6 +722,7 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 	GList ***ecu_widgets = NULL;
 	void (*update_widget_f)(gpointer, gpointer) = NULL;
 
+	ENTER();
 	if (!update_widget_f)
 		get_symbol_f("update_widget",(void **)&update_widget_f);
 
@@ -699,7 +732,10 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!GTK_IS_WIDGET(window))
 	{
@@ -792,6 +828,7 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 		OBJ_SET_FULL(item,"dest_widget",g_strdup("tpsMax_entry"),g_free);
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show(GTK_WIDGET(window));
+		EXIT();
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >=18
@@ -802,6 +839,7 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 			gtk_widget_hide(GTK_WIDGET(window));
 		else
 			gtk_widget_show(GTK_WIDGET(window));
+	EXIT();
 	return TRUE;
 }
 
@@ -816,11 +854,13 @@ G_MODULE_EXPORT gboolean therm_set_state(gpointer data, GtkWidget *widget)
 {
 	GtkWidget *dest = (GtkWidget *)data;
 	
+	ENTER();
 	g_return_val_if_fail(GTK_IS_WIDGET(dest),FALSE);
 
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		gtk_widget_set_sensitive(dest,TRUE);
 	else
 		gtk_widget_set_sensitive(dest,FALSE);
+	EXIT();
 	return TRUE;
 }

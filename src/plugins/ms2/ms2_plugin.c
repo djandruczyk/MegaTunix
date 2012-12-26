@@ -20,6 +20,7 @@
 
 #define __MS2_PLUGIN_C__
 #include <config.h>
+#include <debugging.h>
 #include <defines.h>
 #include <ms2_plugin.h>
 #include <ms2_gui_handlers.h>
@@ -37,6 +38,7 @@ gconstpointer *global_data;
   */
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
+	ENTER();
 	global_data = data;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
@@ -74,6 +76,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("update_widget",(void **)&update_widget_f);
 
 	register_ecu_enums();
+	EXIT();
+	return;
 }
 
 
@@ -84,9 +88,12 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 G_MODULE_EXPORT void plugin_shutdown(void)
 {
 	extern MS2_TTMon_Data *ttm_data;
+	ENTER();
 	if (ttm_data)
 		ttm_data->stop = TRUE;
 	deregister_ecu_enums();
+	EXIT();
+	return;
 }
 
 
@@ -98,6 +105,7 @@ void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
@@ -118,6 +126,8 @@ void register_ecu_enums(void)
 		g_hash_table_insert(str_2_enum,(gpointer)"_MS2_USER_OUTPUTS_",
 				GINT_TO_POINTER(MS2_USER_OUTPUTS));
 	}
+	EXIT();
+	return;
 }
 
 
@@ -129,6 +139,7 @@ void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
@@ -141,4 +152,6 @@ void deregister_ecu_enums(void)
 		g_hash_table_remove(str_2_enum,"_GET_CURR_TPS_");
 		g_hash_table_remove(str_2_enum,"_MS2_USER_OUTPUTS_");
 	}
+	EXIT();
+	return;
 }
