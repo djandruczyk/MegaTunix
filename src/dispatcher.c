@@ -70,7 +70,6 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 			}
 			if (pf->name)
 			{
-				printf(_("dispatching post function %s\n"),pf->name);
 				MTXDBG(DISPATCHER,_("dispatching post function %s\n"),pf->name);
 			}
 			if (pf->w_arg)
@@ -115,7 +114,7 @@ G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
 
 	ENTER();
 
-	printf("Processing a gui message in hopefuly main thread context!\n");
+	MTXDBG(DISPATCHER,_("Processing a gui message in hopefuly main thread context\n"));
 	gint len = message->functions->len;
 	for (gint i=0;i<len;i++)
 	{

@@ -82,7 +82,7 @@ G_MODULE_EXPORT void io_cmd(const gchar *cmd_name, void *data)
 		command = (Command *)g_hash_table_lookup(commands_hash,cmd_name);
 		if (!command)
 		{
-			printf(_("Command %s is INVALID, aborting call\n"),cmd_name);
+			MTXDBG(CRITICAL|IO_MSG|THREADS,_("Command %s is INVALID, aborting call\n"),cmd_name);
 			EXIT();
 			return;;
 		}
@@ -123,8 +123,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	/*	GTimer *clock;*/
 
 	ENTER();
-	MTXDBG(THREADS,_("Thread created!\n"));
-
 	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	get_symbol("serial_repair_thread",(void **)&serial_repair_thread);
@@ -148,7 +146,7 @@ fast_exit:
 				dealloc_io_message(message);
 			g_async_queue_unref(io_data_queue);
 
-			MTXDBG(THREADS,_("Thread exiting!!\n"));
+			EXIT();
 			g_thread_exit(0);
 		}
 #if GLIB_MINOR_VERSION < 31
@@ -160,11 +158,11 @@ fast_exit:
 #endif
 		if (!message) /* NULL message */
 		{
-			printf("No message\n");
+			MTXDBG(THREADS|IO_MSG,_("No message received...\n"));
 			continue;
 		}
 		else
-			printf ("MESSAGE ARRIVED on IO queue\n");
+			MTXDBG(THREADS|IO_MSG,_("MESSAGE ARRIVED on IO queue...\n"));
 
 		if ((!DATA_GET(global_data,"offline")) && 
 				(((!DATA_GET(global_data,"connected")) && 
@@ -196,7 +194,7 @@ fast_exit:
 		{
 			case FUNC_CALL:
 				if (!message->command->function)
-					printf(_("CRITICAL ERROR, function \"%s()\" is not found!!\n"),message->command->func_call_name);
+					MTXDBG(CRITICAL|THREADS,_("CRITICAL ERROR, function \"%s()\" is not found!!\n"),message->command->func_call_name);
 				else
 				{
 					/*printf("Calling FUNC_CALL, function \"%s()\" \n",message->command->func_call_name);*/
@@ -247,7 +245,7 @@ fast_exit:
 			g_idle_add(process_pf_message,message);
 	}
 	EXIT();
-	return;
+	return 0;
 }
 
 
@@ -293,9 +291,9 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
 	tmp = UPD_LOGBAR;
 	g_array_append_val(message->functions,tmp);
-	printf("thread_update_logbar(view %s, tag %s, msg \"%s\") about to send message\n",view_name,tag_name,msg);
+	//printf("thread_update_logbar(view %s, tag %s, msg \"%s\") about to send message\n",view_name,tag_name,msg);
 	g_idle_add(process_gui_message,message);
-	printf("sent message!\n");
+	//printf("sent message!\n");
 	EXIT();
 	return;
 }
@@ -327,9 +325,9 @@ G_MODULE_EXPORT gboolean queue_function(const gchar *name)
 	tmp = UPD_RUN_FUNCTION;
 	g_array_append_val(message->functions,tmp);
 
-	printf("queue_functions(function name %s) about to send message\n",name);
+	//printf("queue_functions(function name %s) about to send message\n",name);
 	g_idle_add(process_gui_message,message);
-	printf("sent message!\n");
+	//printf("sent message!\n");
 	EXIT();
 	return FALSE;
 }
@@ -369,9 +367,9 @@ G_MODULE_EXPORT void  thread_update_widget(
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_update_widget(widget %s, messages \"%s\") about to send message\n",widget_name,msg);
+	//printf("thread_update_widget(widget %s, messages \"%s\") about to send message\n",widget_name,msg);
 	g_idle_add(process_gui_message,message);
-	printf("sent message!\n");
+	//printf("sent message!\n");
 	EXIT();
 	return;
 }
@@ -403,9 +401,9 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_widget_set_sensitive(%s), about to send message\n",widget_name);
+	//printf("thread_widget_set_sensitive(%s), about to send message\n",widget_name);
 	g_idle_add(process_gui_message,message);
-	printf("sent message!\n");
+	//printf("sent message!\n");
 	EXIT();
 	return;
 }
@@ -429,9 +427,9 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 	tmp = UPD_REFRESH;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_refresh_widget(widget pointer %p) about to send message\n",(gpointer)widget);
+	//printf("thread_refresh_widget(widget pointer %p) about to send message\n",(gpointer)widget);
 	g_idle_add(process_gui_message,message);
-	printf("sent message!\n");
+	//printf("sent message!\n");
 	EXIT();
 	return;
 }
@@ -485,9 +483,9 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	tmp = UPD_REFRESH_RANGE;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_refresh_widget_range( page %i, offset %i, len %i) about to send message\n",page,offset,len);
+	//printf("thread_refresh_widget_range( page %i, offset %i, len %i) about to send message\n",page,offset,len);
 	g_idle_add(process_gui_message,message);
-	printf("sent message!\n");
+	//printf("sent message!\n");
 	printf("This will probably crash or DEADLOCK here\n");
 	update_ve3d_if_necessary(page,offset);
 	EXIT();
@@ -518,9 +516,9 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	tmp = UPD_WIDGET;
 	g_array_append_val(message->functions,tmp);
 
-	printf("thread_set_group_color(group %s) about to send message\n",group);
+	//printf("thread_set_group_color(group %s) about to send message\n",group);
 	g_idle_add(process_gui_message,message);
-	printf("sent message!\n");
+	//printf("sent message!\n");
 	EXIT();
 	return;
 }
