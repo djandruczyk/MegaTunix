@@ -45,6 +45,7 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 	gchar * tmpstr = NULL;
 	DataType keytype = MTX_STRING;
 
+	ENTER();
 	for (i=0;i<num_keys;i++)
 	{
 		keytype = (DataType)translate_string(keys[i]);
@@ -134,5 +135,6 @@ G_MODULE_EXPORT void bind_keys(GObject *object, ConfigFile *cfgfile, gchar *sect
 		}
 	}
 
+	EXIT();
 	return;
 }

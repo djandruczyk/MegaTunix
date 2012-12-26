@@ -63,13 +63,17 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	gchar *pathstub = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	MTXDBG(RTMLOADER,_("Entered"));
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
 	if ((!DATA_GET(global_data,"interrogated")) && 
 			(DATA_GET(global_data,"connected")))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	set_title(g_strdup(_("Loading Realtime Map...")));
 	pathstub = g_build_filename(REALTIME_MAPS_DATA_DIR,firmware->rtv_map_file,NULL);
@@ -99,6 +103,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 	if (doc == NULL)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("error: could not parse file %s\n"),filename);
+		EXIT();
 		return FALSE;
 	}
 	rtv_map = g_new0(Rtv_Map, 1);
@@ -125,6 +130,7 @@ G_MODULE_EXPORT gboolean load_realtime_map_pf(void )
 		set_title(g_strdup(_("RT Map XML Loaded OK!")));
 		DATA_SET(global_data,"rtvars_loaded",GINT_TO_POINTER(TRUE));
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -133,6 +139,7 @@ gboolean load_rtv_xml_elements(xmlNode *a_node, Rtv_Map *map)
 {
 	xmlNode *cur_node = NULL;
 
+	ENTER();
 	/* Iterate down... */
 	for (cur_node = a_node; cur_node;cur_node = cur_node->next)
 	{
@@ -142,6 +149,7 @@ gboolean load_rtv_xml_elements(xmlNode *a_node, Rtv_Map *map)
 				if (!xml_api_check(cur_node,RTV_MAP_MAJOR_API,RTV_MAP_MINOR_API))
 				{
 					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
+					EXIT();
 					return FALSE;
 				}
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"realtime_map") == 0)
@@ -150,8 +158,12 @@ gboolean load_rtv_xml_elements(xmlNode *a_node, Rtv_Map *map)
 				load_derived_var(cur_node,map);
 		}
 		if (!load_rtv_xml_elements(cur_node->children,map))
+		{
+			EXIT();
 			return FALSE;
+		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -161,10 +173,12 @@ void load_rtv_defaults(xmlNode *node, Rtv_Map *map)
 	xmlNode *cur_node = NULL;
 	gchar * tmpbuf = NULL;
 
+	ENTER();
 	MTXDBG(RTMLOADER,_("load_rtv_defaults!\n"));
 	if (!node->children)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_derived_var, xml node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -183,6 +197,8 @@ void load_rtv_defaults(xmlNode *node, Rtv_Map *map)
 		}
 		cur_node = cur_node->next; /* Iterate, iterate, iterate... */
 	}
+	EXIT();
+	return;
 }
 
 
@@ -205,10 +221,12 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 	gchar * internal_names = NULL;
 	gchar * tooltip = NULL;
 
+	ENTER();
 	MTXDBG(RTMLOADER,_("Load derived variable!\n"));
 	if (!node->children)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_derived_var, xml node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	if (!generic_xml_gchar_find(node,"tooltip",&tooltip))
@@ -234,6 +252,7 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 			(!tooltip) || (offset < 0))
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("MINIMUMS for RTV var NOT MET, skipping this one!!\n"));
+		EXIT();
 		return;
 	}
 	object = g_new0(gconstpointer, 1);
@@ -327,16 +346,21 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 	g_hash_table_replace(map->offset_hash,GINT_TO_POINTER(offset),(gpointer)list);
 	g_ptr_array_add(map->rtv_list,object);
 
+	EXIT();
+	return;
 }
 
 
 void load_rtv_xml_dependancies(gconstpointer *object, xmlNode *node)
 {
 	static void (*load_deps)(gconstpointer *,xmlNode *, const gchar *) = NULL;
+	ENTER();
 	if (!load_deps)
 		get_symbol("load_dependancies",(void **)&load_deps);
 	g_return_if_fail(load_deps);
 	load_deps(object,node,"depend_on");
+	EXIT();
+	return;
 }
 
 
@@ -357,6 +381,7 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 	gint total_symbols = 0;
 	gint total_symtypes = 0;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!common_rtv_loader)
@@ -368,6 +393,7 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 	if (!node->children)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("ERROR, load_derived_var, xml node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	if (!generic_xml_gchar_find(node,"fromecu_conv_expr",&fromecu_conv_expr))
@@ -386,6 +412,7 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Number of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n"),total_symbols,total_symtypes);
 		g_free(expr_types);
 		g_strfreev(expr_symbols);
+		EXIT();
 		return;
 	}
 	DATA_SET_FULL(object,"fromecu_conv_expr",g_strdup(fromecu_conv_expr),g_free);
@@ -459,6 +486,8 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("expr_type %i (%s) is UNDEFINED, this will cause a crash!!\n"),expr_types[i],expr_symbols[i]);
 		}
 	}
+	EXIT();
+	return;
 }
 
 
@@ -483,6 +512,7 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 	gint i = 0;
 	extern gconstpointer *global_data;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!common_rtv_loader_obj)
@@ -493,6 +523,7 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 	{
 		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Read of \"expr_symbols\" from section \"[%s]\" failed ABORTING!!!\n\n"),section);
 		g_free(tmpbuf);
+		EXIT();
 		return;
 	}
 	else
@@ -505,6 +536,7 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Read of \"expr_types\" from section \"[%s]\" failed, ABORTING!!!\n\n"),section);
 		g_strfreev(expr_symbols);
 		g_free(tmpbuf);
+		EXIT();
 		return;
 	}
 	else
@@ -517,6 +549,7 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Number of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n\n"),total_symbols,total_symtypes);
 		g_free(expr_types);
 		g_strfreev(expr_symbols);
+		EXIT();
 		return;
 	}
 	/* Store the lists as well so DO NOT DEALLOCATE THEM!!! */
@@ -578,4 +611,6 @@ G_MODULE_EXPORT void load_complex_params_obj(GObject *object, ConfigFile *cfgfil
 				MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("expr_type is UNDEFINED, this will cause a crash!!\n"));
 		}
 	}
+	EXIT();
+	return;
 }

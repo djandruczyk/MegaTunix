@@ -62,6 +62,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 	gchar *pathstub = NULL;
 	CmdLineArgs *args =  NULL;
 	
+	ENTER();
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -69,10 +70,14 @@ G_MODULE_EXPORT void load_status_pf(void)
 	g_return_if_fail(args);
 
 	if (!(DATA_GET(global_data,"interrogated")))
+	{
+		EXIT();
 		return;
+	}
 	if (!firmware->status_map_file)
 	{
 		MTXDBG(CRITICAL,_("firmware->status_map_file is UNDEFINED, exiting status window creation routine!!!!\n"));
+		EXIT();
 		return;
 	}
 
@@ -84,6 +89,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 	{
 		MTXDBG(CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->status_map_file);
 		set_title(g_strdup(_("ERROR RT Statusfile DOES NOT EXIST!!!")));
+		EXIT();
 		return;
 	}
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
@@ -116,6 +122,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
+		EXIT();
 		return;
 	}
 
@@ -132,6 +139,7 @@ G_MODULE_EXPORT void load_status_pf(void)
 		gtk_widget_show_all(window);
 
 	set_title(g_strdup(_("RT Status Loaded...")));
+	EXIT();
 	return;
 }
 
@@ -147,6 +155,7 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
 {
 	xmlNode *cur_node = NULL;
 
+	ENTER();
 	/* Iterate though all nodes... */
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
 	{
@@ -156,14 +165,19 @@ G_MODULE_EXPORT gboolean load_status_xml_elements(xmlNode *a_node, GtkWidget *pa
 				if (!xml_api_check(cur_node,RT_STATUS_MAJOR_API,RT_STATUS_MINOR_API))
 				{
 					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
+					EXIT();
 					return FALSE;
 				}
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"status") == 0)
 				load_status(cur_node,parent);
 		}
 		if (!load_status_xml_elements(cur_node->children,parent))
+		{
+			EXIT();
 			return FALSE;
+		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -187,9 +201,11 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 	GdkColor color;
 	xmlNode *cur_node = NULL;
 
+	ENTER();
 	if (!node->children)
 	{
 		printf(_("ERROR, load_potential_args, xml node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -245,6 +261,8 @@ G_MODULE_EXPORT void load_status(xmlNode *node,GtkWidget *parent)
 		}
 		gtk_box_pack_start(GTK_BOX(parent),frame,TRUE,TRUE,0);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -258,11 +276,18 @@ G_MODULE_EXPORT gboolean update_rtstatus(void)
 	static gboolean conn_status = FALSE;
 	gboolean curr_conn_status = (GBOOLEAN)DATA_GET(global_data,"connected");
 
+	ENTER();
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if (!DATA_GET(global_data,"interrogated"))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	count++;
 	if (conn_status != curr_conn_status)
@@ -280,6 +305,7 @@ G_MODULE_EXPORT gboolean update_rtstatus(void)
 		count = 0;
 
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(FALSE));
+	EXIT();
 	return TRUE;
 }
 
@@ -290,10 +316,13 @@ G_MODULE_EXPORT gboolean update_rtstatus(void)
   */
 G_MODULE_EXPORT void reset_runtime_status(void)
 {
+	ENTER();
 	/* Runtime screen */
 	g_list_foreach(get_list("runtime_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
 	/* Warmup Wizard screen */
 	g_list_foreach(get_list("ww_status"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+	EXIT();
+	return;
 }
 
 
@@ -319,8 +348,12 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
+	ENTER();
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return;
+	}
 
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 	g_return_if_fail(rtv_map);
@@ -328,20 +361,30 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 
 	source = (gchar *)OBJ_GET(widget,"source");
 	if (!source)
+	{
+		EXIT();
 		return;
+	}
 	if ((g_ascii_strcasecmp(source,last_source) != 0))
 	{
 		object = NULL;
 		object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 		if (!object)
+		{
+			EXIT();
 			return;
+		}
 		history = (GArray *)DATA_GET(object,"history");
 		if (!history)
+		{
+			EXIT();
 			return;
+		}
 	}
 	if (!DATA_GET(global_data,"connected"))
 	{
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
+		EXIT();
 		return;
 	}
 
@@ -360,13 +403,18 @@ G_MODULE_EXPORT void rt_update_status(gpointer key, gpointer data)
 	/* if the value hasn't changed, don't bother continuing */
 	if (((value & bitmask) == (previous_value & bitmask)) && 
 			(!DATA_GET(global_data,"forced_update")))
+	{
+		EXIT();
 		return;	
+	}
 
 	if (((value & bitmask) >> bitshift) == bitval) /* enable it */
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 	else	/* disable it.. */
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),FALSE);
 	last_source = source;
+	EXIT();
+	return;
 }
 
 

@@ -69,6 +69,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 	GtkSettings *settings = gtk_settings_get_default();
 	CmdLineArgs *args =  NULL;
 
+	ENTER();
 
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	g_return_val_if_fail(args,FALSE);
@@ -152,6 +153,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 			gtk_widget_hide(label);
 		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -181,6 +183,8 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	gint mtx_temp_units;
 	gint mtx_color_scale;
 	Serial_Params *serial_params = NULL;
+
+	ENTER();
 
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
@@ -480,6 +484,8 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	widget = glade_xml_get_widget(xml,"main_status_hbox");
 	if (GTK_IS_WIDGET(widget))
 		setup_main_status(widget);
+	EXIT();
+	return;
 }
 
 
@@ -491,6 +497,8 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 void setup_main_status(GtkWidget *parent)
 {
 	GtkWidget * image = NULL;
+
+	ENTER();
 
 	gtk_box_set_spacing(GTK_BOX(parent),5);
 	image = gtk_image_new_from_stock("gtk-connect",GTK_ICON_SIZE_MENU);
@@ -509,6 +517,8 @@ void setup_main_status(GtkWidget *parent)
 	gtk_widget_set_sensitive(image,FALSE);
 	gtk_box_pack_start(GTK_BOX(parent),image,FALSE,FALSE,0);
 	DATA_SET(global_data,"warning_icon", image);
+	EXIT();
+	return;
 }
 
 
@@ -520,6 +530,8 @@ void set_connected_icons_state(gboolean state)
 {
 	static GtkWidget * conn = NULL;
 	static GtkWidget * disconn = NULL;
+
+	ENTER();
 	
 	if (!conn)
 		conn = (GtkWidget *)DATA_GET(global_data,"connected_icon");
@@ -539,4 +551,6 @@ void set_connected_icons_state(gboolean state)
 		gtk_widget_set_sensitive(conn, FALSE);
 		gtk_widget_set_sensitive(disconn, TRUE);
 	}
+	EXIT();
+	return;
 }

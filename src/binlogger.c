@@ -20,6 +20,7 @@
   */
 
 #include <binlogger.h>
+#include <debugging.h>
 #include <defines.h>
 
 extern gconstpointer *global_data;
@@ -38,6 +39,8 @@ G_MODULE_EXPORT void open_binary_logs(void)
 	time_t *t = NULL;
 	struct tm *tm = NULL;
 	gchar *tmpbuf = NULL;
+
+	ENTER();
 
 	g_static_mutex_lock(&imutex);
 	g_static_mutex_lock(&omutex);
@@ -80,6 +83,8 @@ G_MODULE_EXPORT void open_binary_logs(void)
 	}
 	g_static_mutex_unlock(&imutex);
 	g_static_mutex_unlock(&omutex);
+	EXIT();
+	return;
 }
 
 
@@ -90,6 +95,8 @@ G_MODULE_EXPORT void close_binary_logs(void)
 {
 	GIOChannel *ichan = NULL;
 	GIOChannel *ochan = NULL;
+
+	ENTER();
 
 	g_static_mutex_lock(&imutex);
 	ichan = (GIOChannel *)DATA_GET(global_data,"inbound_raw_logchan");
@@ -109,6 +116,8 @@ G_MODULE_EXPORT void close_binary_logs(void)
 		g_io_channel_unref(ochan);
 	}
 	g_static_mutex_unlock(&omutex);
+	EXIT();
+	return;
 }
 
 
@@ -122,6 +131,8 @@ G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 	GIOChannel *ichan = NULL;
 	GIOChannel *ochan = NULL;
 
+	ENTER();
+
 	g_static_mutex_lock(&imutex);
 	ichan = (GIOChannel *)DATA_GET(global_data,"inbound_raw_logchan");
 	if (ichan)
@@ -133,6 +144,7 @@ G_MODULE_EXPORT gboolean flush_binary_logs(gpointer data)
 	if (ochan)
 		g_io_channel_flush(ochan,NULL);
 	g_static_mutex_unlock(&omutex);
+	EXIT();
 	return TRUE;
 }
 
@@ -146,11 +158,15 @@ G_MODULE_EXPORT void log_outbound_data(const void * buf, size_t count)
 {
 	GIOChannel *ochan = NULL;
 
+	ENTER();
+
 	g_static_mutex_lock(&omutex);
 	ochan = (GIOChannel *)DATA_GET(global_data,"outbound_raw_logchan");
 	if (ochan)
 		g_io_channel_write_chars(ochan,(const gchar *)buf,(gssize)count,NULL,NULL);
 	g_static_mutex_unlock(&omutex);
+	EXIT();
+	return;
 }
 
 
@@ -163,9 +179,13 @@ G_MODULE_EXPORT void log_inbound_data(const void * buf, size_t count)
 {
 	GIOChannel *ichan = NULL;
 
+	ENTER();
+
 	g_static_mutex_lock(&imutex);
 	ichan = (GIOChannel *)DATA_GET(global_data,"inbound_raw_logchan");
 	if (ichan)
 		g_io_channel_write_chars(ichan,(const gchar *)buf,(gssize)count,NULL,NULL);
 	g_static_mutex_unlock(&imutex);
+	EXIT();
+	return;
 }

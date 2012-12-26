@@ -51,6 +51,7 @@ G_MODULE_EXPORT void io_cmd(const gchar *cmd_name, void *data)
 	Io_Message *message = NULL;
 	Command *command = NULL;
 
+	ENTER();
 	if (!commands_hash)
 		commands_hash = (GHashTable *)DATA_GET(global_data,"commands_hash");
 	if (!io_data_queue)
@@ -82,6 +83,7 @@ G_MODULE_EXPORT void io_cmd(const gchar *cmd_name, void *data)
 		if (!command)
 		{
 			printf(_("Command %s is INVALID, aborting call\n"),cmd_name);
+			EXIT();
 			return;;
 		}
 		message = initialize_io_message();
@@ -96,6 +98,7 @@ G_MODULE_EXPORT void io_cmd(const gchar *cmd_name, void *data)
 	g_async_queue_ref(io_data_queue);
 	g_async_queue_push(io_data_queue,(gpointer)message);
 	g_async_queue_unref(io_data_queue);
+	EXIT();
 	return;
 }
 
@@ -119,6 +122,7 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 	void *(*serial_repair_thread)(gpointer data) = NULL;
 	/*	GTimer *clock;*/
 
+	ENTER();
 	MTXDBG(THREADS,_("Thread created!\n"));
 
 	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
@@ -242,6 +246,8 @@ fast_exit:
 		else
 			g_idle_add(process_pf_message,message);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -270,6 +276,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	Text_Message *t_message = NULL;
 	gint tmp = 0;
 
+	ENTER();
 	g_return_if_fail(view_name);
 	g_return_if_fail(msg);
 
@@ -289,6 +296,7 @@ G_MODULE_EXPORT void  thread_update_logbar(
 	printf("thread_update_logbar(view %s, tag %s, msg \"%s\") about to send message\n",view_name,tag_name,msg);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
+	EXIT();
 	return;
 }
 
@@ -308,6 +316,7 @@ G_MODULE_EXPORT gboolean queue_function(const gchar *name)
 	QFunction *qfunc = NULL;
 	gint tmp = 0;
 
+	ENTER();
 	message = initialize_gui_message();
 
 	qfunc = g_new0(QFunction, 1);
@@ -321,6 +330,7 @@ G_MODULE_EXPORT gboolean queue_function(const gchar *name)
 	printf("queue_functions(function name %s) about to send message\n",name);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
+	EXIT();
 	return FALSE;
 }
 
@@ -344,6 +354,7 @@ G_MODULE_EXPORT void  thread_update_widget(
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
+	ENTER();
 	g_return_if_fail(widget_name);
 
 	message = initialize_gui_message();
@@ -361,6 +372,7 @@ G_MODULE_EXPORT void  thread_update_widget(
 	printf("thread_update_widget(widget %s, messages \"%s\") about to send message\n",widget_name,msg);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
+	EXIT();
 	return;
 }
 
@@ -377,6 +389,7 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
+	ENTER();
 	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -393,6 +406,7 @@ G_MODULE_EXPORT void thread_widget_set_sensitive(const gchar * widget_name, gboo
 	printf("thread_widget_set_sensitive(%s), about to send message\n",widget_name);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
+	EXIT();
 	return;
 }
 
@@ -407,6 +421,7 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 	Gui_Message *message = NULL;
 	gint tmp = 0;
 
+	ENTER();
 	message = initialize_gui_message();
 
 	message->payload = (void *)widget;
@@ -417,6 +432,7 @@ G_MODULE_EXPORT void thread_refresh_widget(GtkWidget * widget)
 	printf("thread_refresh_widget(widget pointer %p) about to send message\n",(gpointer)widget);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
+	EXIT();
 	return;
 }
 
@@ -432,6 +448,7 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
 
+	ENTER();
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -439,6 +456,8 @@ G_MODULE_EXPORT void thread_refresh_widgets_at_offset(gint page, gint offset)
 	for (i=0;i<g_list_length(ecu_widgets[page][offset]);i++)
 		thread_refresh_widget((GtkWidget *)g_list_nth_data(ecu_widgets[page][offset],i));
 	update_ve3d_if_necessary(page,offset);
+	EXIT();
+	return;
 }
 
 
@@ -454,6 +473,7 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	Gui_Message *message = NULL;
 	Widget_Range *range = NULL;
 
+	ENTER();
 	message = initialize_gui_message();
 	range = g_new0(Widget_Range,1);
 
@@ -470,6 +490,7 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	printf("sent message!\n");
 	printf("This will probably crash or DEADLOCK here\n");
 	update_ve3d_if_necessary(page,offset);
+	EXIT();
 	return;
 }
 
@@ -483,6 +504,7 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	Widget_Update *w_update = NULL;
 	gint tmp = 0;
 
+	ENTER();
 	message = initialize_gui_message();
 
 	w_update = g_new0(Widget_Update, 1);
@@ -499,5 +521,6 @@ G_MODULE_EXPORT void thread_set_group_color(GuiColor color,const gchar *group)
 	printf("thread_set_group_color(group %s) about to send message\n",group);
 	g_idle_add(process_gui_message,message);
 	printf("sent message!\n");
+	EXIT();
 	return;
 }

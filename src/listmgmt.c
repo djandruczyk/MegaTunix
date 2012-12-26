@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <init.h>
 #include <listmgmt.h>
 
@@ -32,11 +33,13 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT GList * get_list(const gchar * key)
 {
+	ENTER();
 	if (!lists_hash)
 	{
 		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		DATA_SET_FULL(global_data,"lists_hash",lists_hash,dealloc_lists_hash);
 	}
+	EXIT();
 	return (GList *)g_hash_table_lookup(lists_hash,key);
 }
 
@@ -49,12 +52,14 @@ G_MODULE_EXPORT GList * get_list(const gchar * key)
   */
 G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
 {
+	ENTER();
 	if (!lists_hash)
 	{
 		lists_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
 		DATA_SET_FULL(global_data,"lists_hash",lists_hash,dealloc_lists_hash);
 	}
 	g_hash_table_replace(lists_hash,g_strdup(key),(gpointer)list);
+	EXIT();
 	return;
 }
 
@@ -66,9 +71,15 @@ G_MODULE_EXPORT void store_list(const gchar * key, GList * list)
   */
 G_MODULE_EXPORT void remove_list(const gchar *key)
 {
+	ENTER();
 	if (!lists_hash)
+	{
+		EXIT();
 		return;
+	}
 	g_hash_table_remove(lists_hash,key);
+	EXIT();
+	return;
 }
 
 
@@ -79,8 +90,10 @@ G_MODULE_EXPORT void remove_list(const gchar *key)
   */
 G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
 {
+	ENTER();
 	ListElement *a1 = (ListElement *)a;
 	ListElement *b1 = (ListElement *)b;
+	EXIT();
 	return g_ascii_strcasecmp(a1->name,b1->name);
 }
 
@@ -94,6 +107,8 @@ G_MODULE_EXPORT gint list_sort(gconstpointer a, gconstpointer b)
 G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer data)
 {
 	const gchar *key = (const gchar *)data;
+	ENTER();
+	EXIT();
 	return g_ascii_strcasecmp((gchar *)DATA_GET(a,key),(gchar *)DATA_GET(b,key));
 }
 
@@ -106,7 +121,10 @@ G_MODULE_EXPORT gint list_object_sort(gconstpointer a, gconstpointer b, gpointer
 G_MODULE_EXPORT void free_element(gpointer data, gpointer user_data)
 {
 	ListElement *a = (ListElement *)data;
+	ENTER();
 	g_free(a->filename);
 	g_free(a->name);
 	g_free(a);
+	EXIT();
+	return;
 }

@@ -18,6 +18,7 @@
   \author David Andruczyk
  */
 
+#include <debugging.h>
 #include <defines.h>
 #include <mem_mgmt.h>
 
@@ -40,6 +41,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 	gint32 s32 = 0;
 	g_assert(offset >= 0);
 
+	ENTER();
 	switch (size)
 	{
 		case MTX_CHAR:
@@ -47,9 +49,11 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("8 bit, returning %i\n",(guint8)data[offset]);
 			*/
+			EXIT();
 			return (guint8)data[offset];
 			break;
 		case MTX_S08:
+			EXIT();
 			return (gint8)data[offset];
 			break;
 		case MTX_U16:
@@ -61,6 +65,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("U16 bit, returning %i\n",result);
 			*/
+			EXIT();
 			return (guint16)result;
 			break;
 		case MTX_S16:
@@ -69,6 +74,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 				result = GINT16_FROM_BE(s16);
 			else
 				result = GINT16_FROM_LE(s16);
+			EXIT();
 			return (gint16)result;
 			/*
 			printf("S16 bit, returning %i\n",result);
@@ -83,6 +89,7 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("U32 bit, returning %i\n",result);
 			*/
+			EXIT();
 			return (guint32)result;
 			break;
 		case MTX_S32:
@@ -94,12 +101,14 @@ G_MODULE_EXPORT gint _get_sized_data(guint8 *data, gint offset, DataSize size, g
 			/*
 			printf("S32 bit, returning %i\n",result);
 			*/
+			EXIT();
 			return (gint32)result;
 			break;
 		default:
 			printf(__FILE__": _get_sized_data() Data type invalid! (SIZE INVALID!!!) Try one of U08,U16,U32,S08,S16,S32...\n");
 			break;
 	}
+	EXIT();
 	return 0;
 }
 
@@ -121,8 +130,12 @@ G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, g
 	guint32 u32 = 0;
 	gint32 s32 = 0;
 
+	ENTER();
 	if (!data)
+	{
+		EXIT();
 		return;
+	}
 	switch (size)
 	{
 		case MTX_CHAR:
@@ -171,5 +184,7 @@ G_MODULE_EXPORT void _set_sized_data(guint8 *data, gint offset, DataSize size, g
 		default:
 			printf(_("ERROR! attempted set of data with NO SIZE defined\n"));
 	}
+	EXIT();
+	return;
 }
 

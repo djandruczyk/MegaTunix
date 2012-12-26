@@ -67,16 +67,25 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 	gchar * tooltip = NULL;
 	Rtv_Map *rtv_map = NULL;
 
+	ENTER();
+
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return;
+	}
 	if (!((DATA_GET(global_data,"connected")) && 
 				(DATA_GET(global_data,"interrogated"))))
+	{
+		EXIT();
 		return;
+	}
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions are NOT LOADED!!!\n"));
+		EXIT();
 		return;
 	}
 	set_title(g_strdup(_("Populating Datalogger...")));
@@ -85,6 +94,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 	if (!GTK_IS_WIDGET(vbox))
 	{
 		printf(_("datalogger windows not present, returning\n"));
+		EXIT();
 		return;
 	}
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
@@ -161,6 +171,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 	g_list_free(list);
 	gtk_widget_show_all(vbox);
 	set_title(g_strdup(_("Datalogger Ready...")));
+	EXIT();
 	return;
 }
 
@@ -171,10 +182,18 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
   */
 G_MODULE_EXPORT void start_datalogging(void)
 {
+	ENTER();
+
 	if (DATA_GET(global_data,"logging_active"))
+	{
+		EXIT();
 		return;   /* Logging already running ... */
+	}
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return;
+	}
 	if (lookup_widget("dlog_logable_vars_vbox1"))
 		gtk_widget_set_sensitive(lookup_widget("dlog_logable_vars_vbox1"),FALSE);
 	if (lookup_widget("dlog_format_delimit_hbox1"))
@@ -189,6 +208,7 @@ G_MODULE_EXPORT void start_datalogging(void)
 	if (!DATA_GET(global_data,"offline"))
 		start_tickler(RTV_TICKLER);
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	EXIT();
 	return;
 }
 
@@ -199,12 +219,20 @@ G_MODULE_EXPORT void start_datalogging(void)
   */
 G_MODULE_EXPORT void stop_datalogging(void)
 {
+	ENTER();
+
 	GIOChannel *iochannel = NULL;
 	if (!DATA_GET(global_data,"logging_active"))
+	{
+		EXIT();
 		return;
+	}
 
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return;
+	}
 	DATA_SET(global_data,"logging_active",NULL);
 
 	if (lookup_widget("dlog_logable_vars_vbox1"))
@@ -233,6 +261,7 @@ G_MODULE_EXPORT void stop_datalogging(void)
 	last_len = 0;
 	OBJ_SET(lookup_widget("dlog_select_log_button"),"data",NULL);
 
+	EXIT();
 	return;
 }
 
@@ -250,12 +279,15 @@ G_MODULE_EXPORT gboolean log_value_set(GtkWidget * widget, gpointer data)
 	gconstpointer *object = NULL;
 	gboolean state = FALSE;
 
+	ENTER();
+
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
                 
 	/* get object from widget */
 	object = (gconstpointer *)OBJ_GET(widget,"object");
 	DATA_SET(object,"being_logged",GINT_TO_POINTER(state));
 
+	EXIT();
 	return TRUE;
 }
 
@@ -279,11 +311,14 @@ G_MODULE_EXPORT void write_log_header(GIOChannel *iochannel, gboolean override)
 	Firmware_Details *firmware = NULL;
 	Rtv_Map *rtv_map = NULL;
 
+	ENTER();
+
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!iochannel)
 	{
 		MTXDBG(CRITICAL,_("IOChannel pointer was undefined, returning NOW...\n"));
+		EXIT();
 		return;
 	}
 	/* Count total logable variables */
@@ -341,18 +376,27 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	gchar *tmpbuf = NULL;
 	Rtv_Map *rtv_map = NULL;
 
+	ENTER();
+
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!((DATA_GET(global_data,"connected")) && (DATA_GET(global_data,"interrogated"))))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!DATA_GET(global_data,"logging_active")) /* Logging isn't enabled.... */
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	iochannel = (GIOChannel *) OBJ_GET(lookup_widget("dlog_select_log_button"),"data");
 	if (!iochannel)
 	{
 		MTXDBG(CRITICAL,_("IO Channel undefined, returning NOW!!!\n"));
+		EXIT();
 		return TRUE;
 	}
 
@@ -419,6 +463,7 @@ G_MODULE_EXPORT gboolean run_datalog(void)
 	last_len = cur_len;
 	g_io_channel_write_chars(iochannel,output->str,output->len,&count,NULL);
 	g_string_free(output,TRUE);
+	EXIT();
 	return TRUE;
 }
 
@@ -432,6 +477,8 @@ G_MODULE_EXPORT void dlog_select_all(void)
 	gconstpointer * object = NULL;
 	GtkWidget *button = NULL;
 	Rtv_Map *rtv_map = NULL;
+
+	ENTER();
 
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
@@ -456,6 +503,8 @@ G_MODULE_EXPORT void dlog_deselect_all(void)
 	GtkWidget * button = NULL;
 	gconstpointer * object = NULL;
 	Rtv_Map *rtv_map = NULL;
+
+	ENTER();
 
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
@@ -490,6 +539,8 @@ G_MODULE_EXPORT void dlog_select_defaults(void)
 	gboolean state=FALSE;
 	Rtv_Map *rtv_map = NULL;
 
+	ENTER();
+
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	/* Uncheck all logable choices */
@@ -523,6 +574,8 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	time_t *t = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
+
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	t = (time_t *)g_malloc(sizeof(time_t));
@@ -544,6 +597,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	if (filename == NULL)
 	{
 		update_logbar("dlog_view","warning",_("NO FILE opened for normal datalogging!\n"),FALSE,FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
 
@@ -551,6 +605,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	if (!iochannel)
 	{
 		update_logbar("dlog_view","warning",_("File open FAILURE!\n"),FALSE,FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
 
@@ -561,6 +616,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_export(GtkWidget *widget, gpointer d
 	update_logbar("dlog_view",NULL,_("DataLog File Opened\n"),FALSE,FALSE,FALSE);
 
 	free_mtxfileio(fileio);
+	EXIT();
 	return TRUE;
 }
 
@@ -578,6 +634,8 @@ G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
 	gchar * tmpbuf = NULL;
 	static gint dlog_index = 0;
 
+	ENTER();
+
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
 	filename = g_strdup_printf("%s%s%s_%.3i.log",args->autolog_dump_dir,PSEP,args->autolog_basename,dlog_index);
@@ -590,6 +648,7 @@ G_MODULE_EXPORT gboolean autolog_dump(gpointer data)
 	tmpbuf = g_strdup_printf(_("Autolog dump (log number %i) successfully completed.\n"),dlog_index);
 	thread_update_logbar("dlog_view",NULL,tmpbuf,FALSE,FALSE);
 	g_free(filename);
+	EXIT();
 	return TRUE;
 }
 
@@ -608,6 +667,8 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	struct tm *tm = NULL;
 	time_t *t = NULL;
 	Firmware_Details *firmware = NULL;
+
+	ENTER();
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -630,6 +691,7 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	if (filename == NULL)
 	{
 		update_logbar("dlog_view","warning",_("NO FILE opened for internal log export, aborting dump!\n"),FALSE,FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
 
@@ -642,6 +704,7 @@ G_MODULE_EXPORT gboolean internal_datalog_dump(GtkWidget *widget, gpointer data)
 	update_logbar("dlog_view",NULL,_("Internal datalog successfully dumped to disk\n"),FALSE,FALSE,FALSE);
 	free_mtxfileio(fileio);
 	g_free(filename);
+	EXIT();
 	return TRUE;
 
 }
@@ -669,6 +732,8 @@ G_MODULE_EXPORT void dump_log_to_disk(GIOChannel *iochannel)
 	gboolean restart_tickler = FALSE;
 	GtkWidget * info_label = NULL;
 	Rtv_Map *rtv_map = NULL;
+
+	ENTER();
 
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 

@@ -39,9 +39,11 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 
+	ENTER();
 	if (filename == NULL)
 	{
 		MTXDBG(CRITICAL,_("XML filename is NULL!\n"));
+		EXIT();
 		return;
 	}
 
@@ -53,6 +55,7 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 	if (doc == NULL)
 	{
 		MTXDBG(CRITICAL,_("Could not parse file %s\n"),filename);
+		EXIT();
 		return;
 	}
 
@@ -63,6 +66,8 @@ G_MODULE_EXPORT void load_comm_xml(gchar *filename)
 	xmlCleanupParser();
 	/*g_hash_table_foreach((GHashTable *)DATA_GET(global_data,"commands_hash"),xmlcomm_dump_commands,NULL);*/
 
+	EXIT();
+	return;
 }
 
 
@@ -76,6 +81,7 @@ G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 	static GHashTable *commands = NULL;
 	xmlNode *cur_node = NULL;
 
+	ENTER();
 	if (!arguments)
 		arguments = (GHashTable *)DATA_GET(global_data,"potential_arguments");
 	if (!commands)
@@ -93,6 +99,8 @@ G_MODULE_EXPORT void load_xmlcomm_elements(xmlNode *a_node)
 		}
 		load_xmlcomm_elements(cur_node->children);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -108,9 +116,11 @@ G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 	xmlNode *cur_node = NULL;
 	PotentialArg *arg = NULL;
 
+	ENTER();
 	if (!node->children)
 	{
 		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -128,6 +138,8 @@ G_MODULE_EXPORT void load_potential_args(GHashTable *arguments, xmlNode *node)
 		cur_node = cur_node->next;
 
 	}
+	EXIT();
+	return;
 }
 
 
@@ -143,9 +155,11 @@ G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 	xmlNode *cur_node = NULL;
 	Command *cmd = NULL;
 
+	ENTER();
 	if (!node->children)
 	{
 		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -166,6 +180,8 @@ G_MODULE_EXPORT void load_commands(GHashTable *commands_hash, xmlNode *node)
 		cur_node = cur_node->next;
 
 	}
+	EXIT();
+	return;
 }
 
 
@@ -179,9 +195,11 @@ G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 	xmlNode *cur_node = NULL;
 	gchar *tmpbuf = NULL;
 
+	ENTER();
 	if (!node->children)
 	{
 		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -233,6 +251,8 @@ G_MODULE_EXPORT void load_arg_details(PotentialArg *arg, xmlNode *node)
 		}
 		cur_node = cur_node->next;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -246,9 +266,11 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 	xmlNode *cur_node = NULL;
 	gchar *tmpbuf = NULL;
 
+	ENTER();
 	if (!node->children)
 	{
 		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -308,6 +330,8 @@ G_MODULE_EXPORT void load_cmd_details(Command *cmd, xmlNode *node)
 		}
 		cur_node = cur_node->next;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -322,9 +346,11 @@ G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 	gchar * tmpbuf = NULL;
 	PotentialArg *arg = NULL;
 
+	ENTER();
 	if (!node->children)
 	{
 		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -343,6 +369,8 @@ G_MODULE_EXPORT void load_cmd_args(Command *cmd, xmlNode *node)
 		}
 		cur_node = cur_node->next;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -356,9 +384,11 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 	xmlNode *cur_node = NULL;
 	PostFunction *pf = NULL;
 
+	ENTER();
 	if (!node->children)
 	{
 		MTXDBG(CRITICAL,_("XML node is empty!!\n"));
+		EXIT();
 		return;
 	}
 
@@ -394,6 +424,8 @@ G_MODULE_EXPORT void load_cmd_post_functions(Command *cmd, xmlNode *node)
 		}
 		cur_node = cur_node->next;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -410,6 +442,7 @@ G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointe
 	PotentialArg *arg = NULL;
 	guint i = 0;
 
+	ENTER();
 	cmd = (Command *)value;
 	printf(_("Command key \"%s\"\n"),(gchar *)key);
 	printf(_("Command name \"%s\"\n"),cmd->name);
@@ -446,6 +479,8 @@ G_MODULE_EXPORT void xmlcomm_dump_commands(gpointer key, gpointer value, gpointe
 		printf(_("Function call %s (%p)\n"),cmd->func_call_name,(void *)cmd->function);
 	}
 	printf("\n\n");
+	EXIT();
+	return;
 }
 
 
@@ -463,6 +498,7 @@ void parse_hex_string(gchar *str, gchar *dest, gint *str_len)
 	gint len = 0;
 	gint tmpi = 0;
 	
+	ENTER();
 	g_assert(str_len);
 	vector = g_strsplit(str,",",-1);
 	len = g_strv_length(vector);
@@ -474,5 +510,6 @@ void parse_hex_string(gchar *str, gchar *dest, gint *str_len)
 	}
 	g_strfreev(vector);
 	*str_len = len;
+	EXIT();
 	return;
 }

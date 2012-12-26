@@ -19,6 +19,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <plugin.h>
 #include <rtv_processor.h>
 #include <stdio.h>
@@ -27,6 +28,7 @@
 extern gconstpointer *global_data;
 static GList *removal_list = NULL;
 
+
 /*!
   \brief fire_off_rtv_watches_pf() Trolls through the watch list and if
   conditions are met, calls the corresponding fucntion(s)
@@ -34,6 +36,7 @@ static GList *removal_list = NULL;
 G_MODULE_EXPORT gboolean fire_off_rtv_watches(void)
 {
 	static GHashTable *rtv_watch_hash;
+	ENTER();
 	
 	if (!rtv_watch_hash)
 		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
@@ -49,7 +52,8 @@ G_MODULE_EXPORT gboolean fire_off_rtv_watches(void)
 		g_list_free(removal_list);
 		removal_list = NULL;
 	}
-	return TRUE;
+	EXIT();
+	return FALSE;
 }
 
 
@@ -71,6 +75,7 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname,
 	RtvWatch *watch = NULL;
 	GHashTable *rtv_watch_hash = NULL;
 
+	ENTER();
 	if (!rtv_watch_hash)
 		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
 	g_return_val_if_fail(rtv_watch_hash,-1);
@@ -86,6 +91,7 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_state_watch(const gchar * varname,
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
+	EXIT();
 	return watch->id;
 }
 
@@ -107,6 +113,7 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname
 	RtvWatch *watch = NULL;
 	GHashTable *rtv_watch_hash = NULL;
 
+	ENTER();
 	if (!rtv_watch_hash)
 		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
 	g_return_val_if_fail(rtv_watch_hash,-1);
@@ -122,6 +129,7 @@ G_MODULE_EXPORT guint32 create_rtv_single_bit_change_watch(const gchar * varname
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
+	EXIT();
 	return watch->id;
 }
 
@@ -140,6 +148,7 @@ G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gbo
 	RtvWatch *watch = NULL;
 	GHashTable *rtv_watch_hash = NULL;
 
+	ENTER();
 	if (!rtv_watch_hash)
 		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
 	g_return_val_if_fail(rtv_watch_hash,-1);
@@ -153,6 +162,7 @@ G_MODULE_EXPORT guint32 create_rtv_value_change_watch(const gchar * varname, gbo
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
+	EXIT();
 	return watch->id;
 }
 
@@ -172,6 +182,7 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean
 	RtvWatch *watch = NULL;
 	GHashTable *rtv_watch_hash = NULL;
 
+	ENTER();
 	if (!rtv_watch_hash)
 		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
 	g_return_val_if_fail(rtv_watch_hash,-1);
@@ -187,6 +198,7 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_watch(gchar ** varnames, gboolean
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
+	EXIT();
 	return watch->id;
 }
 
@@ -206,6 +218,7 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varname
 	RtvWatch *watch = NULL;
 	GHashTable *rtv_watch_hash = NULL;
 
+	ENTER();
 	if (!rtv_watch_hash)
 		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
 	g_return_val_if_fail(rtv_watch_hash,-1);
@@ -222,6 +235,7 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varname
 	watch->one_shot = one_shot;
 	get_symbol(watch->function,(void **)&watch->func);
 	g_hash_table_insert(rtv_watch_hash,GINT_TO_POINTER(watch->id),watch);
+	EXIT();
 	return watch->id;
 }
 
@@ -233,6 +247,7 @@ G_MODULE_EXPORT guint32 create_rtv_multi_value_historical_watch(gchar ** varname
 G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
 {
 	RtvWatch *watch = (RtvWatch *)data;
+	ENTER();
 	/*printf("destroying watch %ui\n",watch->id);*/
 	if (watch->varname)
 		g_free(watch->varname);
@@ -249,6 +264,8 @@ G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
 	if (watch->function)
 		g_free(watch->function);
 	g_free(watch);
+	EXIT();
+	return;
 }
 
 
@@ -259,7 +276,10 @@ G_MODULE_EXPORT void rtv_watch_destroy(gpointer data)
   */
 G_MODULE_EXPORT void remove_rtv_watch(guint32 watch_id)
 {
+	ENTER();
 	removal_list = g_list_prepend(removal_list,GINT_TO_POINTER(watch_id));
+	EXIT();
+	return;
 }
 
 
@@ -280,6 +300,7 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 	gint index = 0;
 	gint newval = 0;
 	gint i = 0;
+	ENTER();
 	/*printf("process_rtv_watches running\n");*/
 	/*printf("process_rtv_watches is going to run \"%s\" real soon\n",watch->function);*/
 	switch (watch->style)
@@ -387,6 +408,8 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 		default:
 			break;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -398,13 +421,17 @@ G_MODULE_EXPORT void process_rtv_watches(gpointer key, gpointer value, gpointer 
 G_MODULE_EXPORT gboolean rtv_watch_active(guint32 id)
 {
 	GHashTable *rtv_watch_hash = NULL;
+	ENTER();
 
 	if (!rtv_watch_hash)
 		rtv_watch_hash = (GHashTable *)DATA_GET(global_data, "rtv_watch_hash");
 	g_return_val_if_fail(rtv_watch_hash,FALSE);
 	/*printf("watch_active call for watch %ui\n",id);*/
 	if (g_hash_table_lookup(rtv_watch_hash,GINT_TO_POINTER(id)))
+	{
+		EXIT();
 		return TRUE;
-	else
-		return FALSE;
+	}
+	EXIT();
+	return FALSE;
 }

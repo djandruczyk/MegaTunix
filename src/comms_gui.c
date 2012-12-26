@@ -21,6 +21,7 @@
   */
 
 #include <comms_gui.h>
+#include <debugging.h>
 #include <serialio.h>
 #include <widgetmgmt.h>
 
@@ -39,11 +40,15 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
 {
 	Serial_Params *serial_params = NULL;
+
+	ENTER();
+
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(0));
 	DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER(0));
 	DATA_SET(global_data,"reset_count",GINT_TO_POINTER(0));
+	EXIT();
 	return TRUE;
 }
 
@@ -53,7 +58,11 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
  * */
 G_MODULE_EXPORT gboolean update_errcounts_wrapper(gpointer data)
 {
+
+	ENTER();
+
 	g_idle_add(update_errcounts,data);
+	EXIT();
 	return TRUE;
 }
 
@@ -69,6 +78,9 @@ G_MODULE_EXPORT gboolean update_errcounts(gpointer data)
 	gint tmp = 0;
 	GtkWidget * widget = NULL;
 	Serial_Params *serial_params = NULL;
+
+	ENTER();
+
 
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
@@ -108,6 +120,7 @@ G_MODULE_EXPORT gboolean update_errcounts(gpointer data)
 		gtk_entry_set_text(GTK_ENTRY(widget),tmpbuf);
 	g_free(tmpbuf);
 
+	EXIT();
 	return FALSE;
 }
 
@@ -137,6 +150,8 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 	GList *buttons = NULL;
 	GError *err = NULL;
 	GtkWindow *top = (GtkWindow *)lookup_widget("main_window");
+
+	ENTER();
 
 	dialog = gtk_message_dialog_new (top,
 			GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -225,8 +240,10 @@ G_MODULE_EXPORT gboolean enumerate_dev(GtkWidget *widget, gpointer data)
 		g_free(g_list_nth_data(found,i));
 	g_list_free(found);
 
+	EXIT();
 	return TRUE;
 #else
+	EXIT();
 	return TRUE;
 #endif
 }
@@ -246,9 +263,13 @@ gboolean check_potential_ports(const gchar *name)
 #else
 	gchar *searchstr = g_strdup_printf("/dev/%s",name);
 #endif
+
+	ENTER();
+
 	ports = (gchar *)DATA_GET(global_data,"potential_ports");
 	if (g_strrstr(ports,searchstr))
 		retval = TRUE;
 	g_free(searchstr);
+	EXIT();
 	return retval;
 }

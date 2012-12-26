@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <defines.h>
 #include <widgetmgmt.h>
 
@@ -43,6 +44,7 @@ G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 	{-40,-28.8,-17.7,-6.6,4.4,15.5,26.6,37.7,54.4,71.1};
 	gfloat *range;
 
+	ENTER();
 	if ((GINT)DATA_GET(global_data,"mtx_temp_units") == FAHRENHEIT)	
 		range = F_temps;
 	else
@@ -72,4 +74,6 @@ G_MODULE_EXPORT void warmwizard_update_status(gfloat temp)
 			g_free(name);
 		}
 	}
+	EXIT();
+	return;
 }

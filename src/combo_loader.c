@@ -61,6 +61,8 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 	GtkWidget *entry = NULL;
 	extern gconstpointer *global_data;
 
+	ENTER();
+
 	cfg_read_string(cfgfile,section,"choices",&tmpbuf);
 
 	choices = parse_keys(tmpbuf,&num_choices,",");
@@ -129,4 +131,6 @@ G_MODULE_EXPORT void combo_setup(GObject *object, ConfigFile *cfgfile, gchar * s
 		gtk_entry_completion_set_popup_single_match(completion,FALSE);
 		OBJ_SET(object,"arrow-size",GINT_TO_POINTER(1));
 	}
+	EXIT();
+	return;
 }

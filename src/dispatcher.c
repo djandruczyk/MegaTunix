@@ -43,6 +43,8 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 	Io_Message *message = (Io_Message *)data;
 	extern gconstpointer *global_data;
 
+	ENTER();
+
 	g_return_val_if_fail(message,FALSE);
 
 	if (!message->status)
@@ -51,6 +53,7 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 		 * in this case.
 		 */
 		dealloc_io_message(message);
+		EXIT();
 		return FALSE;
 	}
 
@@ -89,6 +92,7 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 	}
 	dealloc_io_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
+	EXIT();
 	return FALSE;
 }
 
@@ -108,6 +112,8 @@ G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
 	Widget_Range *range = NULL;
 	QFunction *qfunc = NULL;
 	extern gconstpointer *global_data;
+
+	ENTER();
 
 	printf("Processing a gui message in hopefuly main thread context!\n");
 	gint len = message->functions->len;
@@ -208,6 +214,7 @@ G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
 	dealloc_gui_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
 	gdk_flush();
+	EXIT();
 	return FALSE;
 }
 

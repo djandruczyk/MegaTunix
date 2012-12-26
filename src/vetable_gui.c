@@ -19,6 +19,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <firmware.h>
 #include <gui_handlers.h>
 #include <plugin.h>
@@ -57,6 +58,7 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
 
+	ENTER();
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -112,6 +114,8 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
 		}
 	}
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	EXIT();
+	return;
 }
 
 
@@ -124,27 +128,34 @@ G_MODULE_EXPORT void rescale_table(GtkWidget *widget)
   */
 G_MODULE_EXPORT gfloat rescale(gfloat input, ScaleOp scaleop, gfloat factor)
 {
+	ENTER();
 	switch (scaleop)
 	{
 		case ADD:
+			EXIT();
 			return input+factor;
 			break;
 		case SUBTRACT:
+			EXIT();
 			return input-factor;
 			break;
 		case MULTIPLY:
+			EXIT();
 			return input*factor;
 			break;
 		case DIVIDE:
+			EXIT();
 			return input/factor;
 			break;
 		case EQUAL:
+			EXIT();
 			return factor;
 			break;
 		default:
 			printf(_("!!! ERROR !!!, rescaler passed invalid enum\n"));
 			break;
 	}
+	EXIT();
 	return 0;
 }
 
@@ -156,9 +167,11 @@ G_MODULE_EXPORT gboolean draw_ve_marker(void)
 {
 	static void (*common_draw_ve_marker)(void) = NULL;
 
+	ENTER();
 	if (!common_draw_ve_marker)
 		get_symbol("common_draw_ve_marker",(void **)&common_draw_ve_marker);
 	g_return_val_if_fail(common_draw_ve_marker,FALSE);
 	common_draw_ve_marker();
+	EXIT();
 	return TRUE;
 }

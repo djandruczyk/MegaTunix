@@ -43,7 +43,10 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 {
+	ENTER();
 	g_list_foreach(get_list(group), set_widget_color,(gpointer)color);
+	EXIT();
+	return;
 }
 
 
@@ -58,9 +61,12 @@ G_MODULE_EXPORT void set_group_color(GuiColor color, const gchar *group)
 G_MODULE_EXPORT void set_reqfuel_color(GuiColor color, gint table_num)
 {
 	gchar *name = NULL;
+	ENTER();
 	name = g_strdup_printf("interdep_%i_ctrl",table_num);
 	g_list_foreach(get_list(name), set_widget_color,(gpointer)color);
 	g_free(name);
+	EXIT();
+	return;
 }
 
 
@@ -74,6 +80,7 @@ G_MODULE_EXPORT void set_widget_color(gpointer w_ptr, gpointer c_ptr)
 {
 	GtkWidget *widget = (GtkWidget *)w_ptr;
 	GuiColor color = (GuiColor)(GINT)c_ptr;
+	ENTER();
 	switch (color)
 	{
 		case RED:
@@ -148,6 +155,8 @@ G_MODULE_EXPORT void set_widget_color(gpointer w_ptr, gpointer c_ptr)
 		default:
 			break;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -179,21 +188,29 @@ G_MODULE_EXPORT void  update_logbar(
 	gpointer result = NULL;
 	GtkWidget * widget = NULL;
 
+	ENTER();
 	widget = (GtkWidget *)lookup_widget(view_name);
 
 	if ((DATA_GET(global_data,"leaving")) || (!widget))
+	{
+		EXIT();
 		return;
+	}
 
 	if (!GTK_IS_OBJECT(widget))
 	{
 		MTXDBG(CRITICAL,_("Textview name passed: \"%s\" wasn't registered, not updating\n"),view_name);
+		EXIT();
 		return;
 	}
 
 	/* Add the message to the end of the textview */
 	textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
 	if (!textbuffer)
+	{
+		EXIT();
 		return;
+	}
 
 	gtk_text_buffer_get_end_iter (textbuffer, &iter);
 	result = OBJ_GET(widget,"counter");	
@@ -239,6 +256,7 @@ G_MODULE_EXPORT void  update_logbar(
 		g_free(tmpbuf);
 	if (free)
 		g_free(message);
+	EXIT();
 	return;	
 }
 
@@ -251,9 +269,15 @@ G_MODULE_EXPORT void conn_warning(void)
 {
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
+	ENTER();
 	if ((args->be_quiet) || (warning_present))
+	{
+		EXIT();
 		return;
+	}
 	warn_user(_("The ECU appears to be currently disconnected.  This means that either one of the following occurred:\n   1. MegaTunix couldn't determine the correct comm port to use\n   2. The serial link is not plugged in\n   3. The ECU does not have adequate power.\n   4. The ECU is in bootloader mode.\n\nTry power cycling your ECU and verifying all connections are in order."));
+	EXIT();
+	return;
 }
 
 
@@ -263,14 +287,20 @@ G_MODULE_EXPORT void conn_warning(void)
   */
 G_MODULE_EXPORT void kill_conn_warning(void)
 {
+	ENTER();
 	if (!warning_present)
+	{
+		EXIT();
 		return;
+	}
 	if (GTK_IS_WIDGET(warning_dialog))
 	{
 		gtk_widget_destroy(warning_dialog);
 		warning_dialog = NULL;
 		warning_present = FALSE;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -281,8 +311,12 @@ G_MODULE_EXPORT void kill_conn_warning(void)
 G_MODULE_EXPORT void warn_user(const gchar *message)
 {
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
+	ENTER();
 	if ((args->be_quiet))
+	{
+		EXIT();
 		return;
+	}
 
 	warning_dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),(GtkDialogFlags)0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 
@@ -304,6 +338,8 @@ G_MODULE_EXPORT void warn_user(const gchar *message)
 
 	warning_present = TRUE;
 	gtk_widget_show_all(warning_dialog);
+	EXIT();
+	return;
 }
 
 
@@ -316,6 +352,7 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
 {
 	GtkWidget *dialog = NULL;
 	gint result = 0;
+	ENTER();
 	dialog = gtk_message_dialog_new((GtkWindow *)lookup_widget("main_window"),(GtkDialogFlags)0,GTK_MESSAGE_ERROR,GTK_BUTTONS_NONE,"%s",message);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),(const gchar *)"Exit Megatunix",GTK_RESPONSE_CLOSE,(const gchar *)"Ignore at my peril!", GTK_RESPONSE_ACCEPT,NULL);
@@ -331,6 +368,7 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
 		case GTK_RESPONSE_ACCEPT:
 			gtk_widget_destroy(dialog);
 	}
+	EXIT();
 	return;
 }
 
@@ -344,6 +382,7 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
 G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 {
 	gint response = (GINT)data;
+	ENTER();
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		set_title(g_strdup(_("Offline Mode...")));
@@ -353,6 +392,7 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 		leave(NULL,NULL);
 	/* This might need a timeout (1500ms) +idle to delay */
 	g_idle_add(set_warning_flag,NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -362,7 +402,9 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean reset_infolabel_wrapper(gpointer data)
 {
+	ENTER();
 	g_idle_add(reset_infolabel,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -374,10 +416,12 @@ G_MODULE_EXPORT gboolean reset_infolabel_wrapper(gpointer data)
 G_MODULE_EXPORT gboolean reset_infolabel(gpointer data)
 {
 	static GtkWidget *info_label = NULL;
+	ENTER();
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");
 	if (GTK_IS_WIDGET(info_label))
 		gtk_label_set_markup(GTK_LABEL(info_label),"<b>Ready...</b>");
+	EXIT();
 	return FALSE;
 }
 
@@ -392,10 +436,14 @@ G_MODULE_EXPORT void set_title(gchar * text)
 	static GtkWidget *info_label = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if ((!lookup_widget("main_window")) || (DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return;
+	}
 	if (!info_label)
 		info_label = (GtkWidget *)lookup_widget("info_label");
 
@@ -421,6 +469,8 @@ G_MODULE_EXPORT void set_title(gchar * text)
 		}
 	}
 	g_free(text);
+	EXIT();
+	return;
 }
 
 
@@ -431,6 +481,8 @@ G_MODULE_EXPORT void set_title(gchar * text)
   */
 G_MODULE_EXPORT gboolean set_warning_flag(gpointer user_data)
 {
+	ENTER();
 	warning_present = FALSE;
+	EXIT();
 	return FALSE;
 }

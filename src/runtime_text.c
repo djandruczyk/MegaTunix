@@ -58,23 +58,32 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	Firmware_Details *firmware = NULL;
 	gchar *pathstub = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!(DATA_GET(global_data,"interrogated")))
+	{
+		EXIT();
 		return;
+	}
 	if (!firmware->rtt_map_file)
 	{
 		MTXDBG(CRITICAL,_("Firmware->rtt_map_file is UNDEFINED, exiting runtime text window creation routine!!!!\n"));
+		EXIT();
 		return;
 	}
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return;
+	}
 
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n"));
+		EXIT();
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Text...")));
@@ -86,6 +95,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	{
 		MTXDBG(RTMLOADER|CRITICAL,_("File \"%s.xml\" not found!!, exiting function\n"),firmware->rtt_map_file);
 		set_title(g_strdup(_("ERROR RunTimeText Map XML file DOES NOT EXIST!!!")));
+		EXIT();
 		return; 
 	}
 
@@ -108,6 +118,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
+		EXIT();
 		return;
 	}
 
@@ -131,6 +142,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 		gtk_widget_show_all(window);
 
 	set_title(g_strdup(_("RT Text Loaded...")));
+	EXIT();
 	return;
 }
 
@@ -145,6 +157,7 @@ G_MODULE_EXPORT void load_rt_text_pf(void)
 G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *store, GtkWidget *parent)
 {
 	xmlNode *cur_node = NULL;
+	ENTER();
 
 	/* Iterate though all nodes... */
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
@@ -155,14 +168,19 @@ G_MODULE_EXPORT gboolean load_rtt_xml_elements(xmlNode *a_node, GtkListStore *st
 				if (!xml_api_check(cur_node,RT_TEXT_MAJOR_API,RT_TEXT_MINOR_API))
 				{
 					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
+					EXIT();
 					return FALSE;
 				}
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,"rtt") == 0)
 				load_rtt(cur_node,store,parent);
 		}
 		if (!load_rtt_xml_elements(cur_node->children,store,parent))
+		{
+			EXIT();
 			return FALSE;
+		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -178,9 +196,11 @@ G_MODULE_EXPORT Rtt_Threshold *load_rtt_threshold(xmlNode *node)
 	Rtt_Threshold *thresh = NULL;
 	xmlNode *cur_node = NULL;
 	GdkColor color;
+	ENTER();
 	if (!node->children)
 	{
 		printf(_("ERROR, load_rtt_threshold, xml node is empty!!\n"));
+		EXIT();
 		return NULL;
 	}
 	cur_node = node->children;
@@ -209,6 +229,7 @@ G_MODULE_EXPORT Rtt_Threshold *load_rtt_threshold(xmlNode *node)
 	/*
 	printf("low, %f, high %f, bg (%s), fg (%s)\n",thresh->low,thresh->high,thresh->bg,thresh->fg);
 	*/
+	EXIT();
 	return thresh;
 }
 
@@ -220,9 +241,12 @@ G_MODULE_EXPORT Rtt_Threshold *load_rtt_threshold(xmlNode *node)
 void rtt_thresh_free(gpointer data)
 {
 	Rtt_Threshold *thresh = (Rtt_Threshold *)data;
+	ENTER();
 	g_free(thresh->fg);
 	g_free(thresh->bg);
 	g_free(thresh);
+	EXIT();
+	return;
 }
 
 
@@ -243,9 +267,11 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 	Rtt_Threshold *thresh = NULL;
 	GPtrArray *thresh_array = g_ptr_array_new_with_free_func(rtt_thresh_free);
 
+	ENTER();
 	if (!node->children)
 	{
 		printf(_("ERROR, load_rtt, xml node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -288,6 +314,8 @@ G_MODULE_EXPORT void load_rtt(xmlNode *node,GtkListStore *store,GtkWidget *paren
 		g_free(int_name);
 	if (source)
 		g_free(source);
+	EXIT();
+	return;
 }
 
 
@@ -306,17 +334,20 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
 
+	ENTER();
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	if (!rtv_map)
 	{
 		MTXDBG(CRITICAL,_("Bad things man, rtv_map is null!!\n"));
+		EXIT();
 		return NULL;
 	}
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,source);
 	if (!(object))
 	{
 		MTXDBG(CRITICAL,_("Bad things man, object doesn't exist for %s\n"),source);
+		EXIT();
 		return NULL;
 	}
 
@@ -326,6 +357,7 @@ G_MODULE_EXPORT Rt_Text * create_rtt(gchar *ctrl_name, gchar *source, gboolean s
 	rtt->friendly_name = (gchar *) DATA_GET(object,"dlog_gui_name");
 	rtt->object = object;
 
+	EXIT();
 	return rtt;
 }
 
@@ -347,6 +379,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	gchar * source = NULL;
 	gboolean show_prefix = FALSE;
 
+	ENTER();
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	source = (gchar *)OBJ_GET(parent,"source");
 	show_prefix = (GBOOLEAN)OBJ_GET(parent,"show_prefix");
@@ -361,6 +394,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	if (!(object))
 	{
 		MTXDBG(CRITICAL,_("ERROR, Object doesn't exist for datasource: %s\n"),source);
+		EXIT();
 		return NULL;
 	}
 
@@ -402,6 +436,7 @@ G_MODULE_EXPORT Rt_Text * add_rtt(GtkWidget *parent, gchar *ctrl_name)
 	rtt->parent = hbox;
 	gtk_widget_show_all(rtt->parent);
 
+	EXIT();
 	return rtt;
 }
 
@@ -417,6 +452,7 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 	gchar * ctrl_name = NULL;
 	Rt_Text *rt_text = NULL;
 
+	ENTER();
 	rtt_hash = (GHashTable *)DATA_GET(global_data,"rtt_hash");
 	ctrl_name = (gchar *)OBJ_GET(widget,"ctrl_name");
 
@@ -436,6 +472,7 @@ G_MODULE_EXPORT void add_additional_rtt(GtkWidget *widget)
 					g_strdup(ctrl_name),
 					(gpointer)rt_text);
 	}
+	EXIT();
 	return;
 }
 
@@ -463,9 +500,13 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 	gchar * tmpbuf = NULL;
 	gchar * tmpbuf2 = NULL;
 
+	ENTER();
 	rtt = (Rt_Text *)value;
 	if (!rtt)
+	{
+		EXIT();
 		return;
+	}
 	if (!rand)
 		rand = g_rand_new();
 	if (!rtv_mutex)
@@ -477,9 +518,15 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 	precision = (GINT)DATA_GET(rtt->object,"precision");
 
 	if (!history)
+	{
+		EXIT();
 		return;
+	}
 	if ((GINT)history->len-2 <= 0)
+	{
+		EXIT();
 		return;
+	}
 	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
 	previous = g_array_index(history, gfloat, history->len-2);
@@ -487,7 +534,10 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 
 	if (GTK_IS_WIDGET(gtk_widget_get_window(GTK_WIDGET(rtt->textval))))
 		if (!gdk_window_is_viewable(gtk_widget_get_window(GTK_WIDGET(rtt->textval))))
+		{
+			EXIT();
 			return;
+		}
 
 	if ((current != previous) 
 			|| (DATA_GET(global_data,"forced_update")) 
@@ -513,6 +563,7 @@ G_MODULE_EXPORT void rtt_update_values(gpointer key, gpointer value, gpointer da
 		count = 0;
 	rtt->count = count;
 	rtt->last_upd = last_upd;
+	EXIT();
 	return;
 }
 
@@ -528,6 +579,7 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 	GtkWidget *parent = gtk_widget_get_parent(treeview);
 	GtkStyle * style = NULL;
 
+	ENTER();
 	style = gtk_widget_get_style(parent);
 
 	renderer = gtk_cell_renderer_text_new();
@@ -548,6 +600,8 @@ G_MODULE_EXPORT void setup_rtt_treeview(GtkWidget *treeview)
 
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(treeview), FALSE);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(treeview), TRUE);
+	EXIT();
+	return;
 }
 
 
@@ -572,6 +626,7 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
 
+	ENTER();
 	if (!rtv_mutex)
 		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 
@@ -581,14 +636,23 @@ G_MODULE_EXPORT gboolean rtt_foreach(GtkTreeModel *model, GtkTreePath *path, Gtk
 			-1);
 
 	if (!(rtt->object))
+	{
+		EXIT();
 		return FALSE;
+	}
 	history = (GArray *)DATA_GET(rtt->object,"history");
 	precision = (GINT)DATA_GET(rtt->object,"precision");
 
 	if (!history)
+	{
+		EXIT();
 		return FALSE;
+	}
 	if ((GINT)history->len-1 <= 0)
+	{
+		EXIT();
 		return FALSE;
+	}
 	g_mutex_lock(rtv_mutex);
 	current = g_array_index(history, gfloat, history->len-1);
 	g_mutex_unlock(rtv_mutex);
@@ -629,6 +693,7 @@ not_in_thresh:
 
 		g_free(tmpbuf);
 	}
+	EXIT();
 	return FALSE;
 }
 
@@ -644,9 +709,13 @@ G_MODULE_EXPORT gboolean update_rttext(gpointer data)
 	static GtkTreeModel *rtt_model = NULL;
 	static GHashTable *rtt_hash = NULL;
 
+	ENTER();
 	/* Return false (cancel timeout) if leaving */
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if (!rtt_mutex)
 		rtt_mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
@@ -662,6 +731,7 @@ G_MODULE_EXPORT gboolean update_rttext(gpointer data)
 	if (rtt_hash)
 		g_hash_table_foreach(rtt_hash,rtt_update_values,NULL);
 	g_mutex_unlock(rtt_mutex);
+	EXIT();
 	return FALSE;
 }
 

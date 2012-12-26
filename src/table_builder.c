@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
@@ -56,6 +57,7 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 	Axis axis = (Axis)(GINT)OBJ_GET(parent,"axis");
 	gint table_num = (GINT)strtol((gchar *)OBJ_GET(parent,"table_num"),NULL,10);
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	top = gtk_widget_get_toplevel(parent);
@@ -298,4 +300,6 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 	}
 	OBJ_SET(top,"tab_widgets",tab_widgets);
 	gtk_widget_show_all(parent);
+	EXIT();
+	return;
 }

@@ -53,6 +53,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	Firmware_Details *firmware = NULL;
 	void (*load_firmware_details)(void *,const gchar *) = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	io_repair_queue = (GAsyncQueue *)DATA_GET(global_data,"io_repair_queue");
 
@@ -75,6 +76,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		/* Does this need a delay? */
 		g_idle_add((GSourceFunc)personality_choice,NULL);
 
+		EXIT();
 		return FALSE;
 	}
 
@@ -214,6 +216,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	pf->w_arg = TRUE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 	io_cmd(NULL,pfuncs);
+	EXIT();
 	return FALSE;
 }
 
@@ -249,12 +252,14 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	extern gconstpointer *global_data;
 	gchar * pathstub = NULL;
 
+	ENTER();
 	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL);
 	filenames = get_files((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"prof",&classes);
 	g_free(pathstub);
 	if (!filenames)
 	{
 		MTXDBG(CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n"));
+		EXIT();
 		return NULL;
 	}
 	i = 0;
@@ -409,12 +414,15 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	{
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK:
+			EXIT();
 			return (gchar *)DATA_GET(global_data,"offline_firmware_choice");
 			break;
 		case GTK_RESPONSE_CANCEL:
 		default:
+			EXIT();
 			return NULL;
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -430,6 +438,7 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	void (*restore_all_f)(const gchar *);
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	get_symbol("restore_all_ecu_settings",(void **)&restore_all_f);
 
@@ -437,7 +446,10 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	g_return_if_fail(restore_all_f);
 
 	if (!DATA_GET(global_data,"interrogated"))
+	{
+		EXIT();
 		return;
+	}
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
@@ -462,5 +474,6 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	else
 		io_cmd(firmware->get_all_command,NULL);
 
+	EXIT();
 	return;
 }

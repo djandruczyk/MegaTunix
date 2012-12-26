@@ -133,9 +133,6 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 
 	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 
-	if (level & FUNC)
-		printf("MESSAGE has FUNC logging selected\n");
-
 	if (!dbg_channel)
 		return;
 //	/* IF we don't debug this level, exit */
@@ -147,7 +144,6 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 	va_start(args,format);
 	str = g_strdup_vprintf(format,args);
 	va_end(args);
-//		printf("%s",str);
 	if ((file) && (func) && (line > 0))
 	{
 		tmpbuf = g_strdup_printf("[%s: %s(): line: %i]\n",file,func,line);
@@ -186,6 +182,7 @@ G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 	gint num_levels = sizeof(dbglevels)/sizeof(dbglevels[0]);
 	gint dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
 
+	ENTER();
 
 	vbox2 = gtk_vbox_new(FALSE,0);
 	gtk_container_add(GTK_CONTAINER(parent),vbox2);
@@ -225,6 +222,7 @@ G_MODULE_EXPORT void populate_debugging(GtkWidget *parent)
 			j = 0;
 		}
 	}
-
+	EXIT();
+	return;
 }
 

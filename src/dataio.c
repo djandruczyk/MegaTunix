@@ -78,7 +78,8 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, guint8 **buffer, gboolean rese
 	Serial_Params *serial_params = NULL;;
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
-	MTXDBG(IO_PROCESS,_("Entered\n"));
+	ENTER();
+
 	if (!serio_mutex)
 		serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 
@@ -155,7 +156,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, guint8 **buffer, gboolean rese
 		*buffer = g_memdup(buf,total_read);
 	dump_output(total_read,buf);
 	g_static_mutex_unlock(&mutex);
-	MTXDBG(IO_PROCESS,_("Leaving\n"));
+	EXIT();
 	return total_read;
 }
 
@@ -186,6 +187,8 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
 	static void (*store_new_block)(gpointer) = NULL;
 	static void (*set_ecu_data)(gpointer,gint *) = NULL;
+
+	ENTER();
 
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -228,12 +231,14 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		}
 		g_mutex_unlock(serio_mutex);
 		g_static_mutex_unlock(&mutex);
+		EXIT();
 		return TRUE;		/* can't write anything if offline */
 	}
 	if (!DATA_GET(global_data,"connected"))
 	{
 		g_mutex_unlock(serio_mutex);
 		g_static_mutex_unlock(&mutex);
+		EXIT();
 		return FALSE;		/* can't write anything if disconnected */
 	}
 
@@ -247,6 +252,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 		if (!buffer)
 		{
 			MTXDBG(CRITICAL|SERIAL_WR,_("MS3 CRC32 burst blob is not stored in the OutputData->data structure, ABORTING\n"));
+			EXIT();
 			return FALSE;
 		}
 		burst_len = (GINT)DATA_GET(message->data,"burst_len");
@@ -325,6 +331,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 
 	g_mutex_unlock(serio_mutex);
 	g_static_mutex_unlock(&mutex);
+	EXIT();
 	return retval;
 }
 
@@ -340,6 +347,8 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 	gchar * tmpbuf = NULL;
 	gint dbg_lvl = 0;
 	dbg_lvl = (GINT)DATA_GET(global_data,"dbg_lvl");
+
+	ENTER();
 
 	p = buf;
 	if (total_read > 0)
@@ -361,6 +370,8 @@ G_MODULE_EXPORT void dump_output(gint total_read, guchar *buf)
 		}
 		QUIET_MTXDBG(SERIAL_RD,_("\n\n"));
 	}
+	EXIT();
+	return;
 }
 
 
@@ -380,6 +391,8 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, guint8 * buf, size_t count, gint 
 	Serial_Params *serial_params = NULL;
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
+	ENTER();
+
 	FD_ZERO(&rd);
 	FD_SET(fd,&rd);
 
@@ -396,9 +409,13 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, guint8 * buf, size_t count, gint 
 	{
 		res = select(fd+1,&rd,NULL,NULL,&timeout);
 		if (res < 0) /* Error, socket close, abort */
+		{
+			EXIT();
 			return FALSE;
+		}
 		if (res > 0) /* Data Arrived! */
 			*len = recv(fd,buf,count,0);
+		EXIT();
 		return TRUE;
 	}
 	else
@@ -406,9 +423,13 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, guint8 * buf, size_t count, gint 
 	log_inbound_data(buf,res);
 
 	if (res < 0)
+	{
+		EXIT();
 		return FALSE;
+	}
 	else
 		*len = res;
+	EXIT();
 	return TRUE;
 }
 
@@ -427,6 +448,8 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const guint8 *buf, size_t count,
 	GError *error = NULL;
 	Serial_Params *serial_params = NULL;
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
+
+	ENTER();
 
 	log_outbound_data(buf,count);
 
@@ -456,8 +479,10 @@ G_MODULE_EXPORT gboolean write_wrapper(gint fd, const guint8 *buf, size_t count,
 	if (res < 0)
 	{
 		printf(_("Write error! \"%s\"\n"),strerror(errno));
+		EXIT();
 		return FALSE;
 	}
+	EXIT();
 	return TRUE;
 }
 

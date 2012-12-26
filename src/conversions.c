@@ -77,6 +77,8 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	gint *algorithm = NULL;
 	GHashTable *sources_hash = NULL;
 
+	ENTER();
+
 	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 
 	g_static_mutex_lock(&mutex);
@@ -274,6 +276,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 
 	g_static_mutex_unlock(&mutex);
+	EXIT();
 	return (return_value);
 }
 
@@ -321,6 +324,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	GHashTable *sources_hash = NULL;
 	extern gconstpointer *global_data;
 
+	ENTER();
 
 	if (!get_ecu_data_f)
 		get_symbol("get_ecu_data",(void **)&get_ecu_data_f);
@@ -534,6 +538,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 
 	}
 	g_static_mutex_unlock(&mutex);
+	EXIT();
 	return (return_value);
 }
 
@@ -561,6 +566,8 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	gint widget_temp = -1;
 	/*extern GdkColor black;*/
 	extern gconstpointer *global_data;
+
+	ENTER();
 
 	/* If this widgt depends on anything call check_dependancy which will
 	 * return TRUE/FALSE.  True if what it depends on is in the matching
@@ -788,6 +795,7 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 			}
 			break;
 	}
+	EXIT();
 }
 
 
@@ -799,7 +807,10 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
   */
 G_MODULE_EXPORT void reset_temps(gpointer type)
 {
+	ENTER();
 	g_list_foreach(get_list("temperature"),convert_temps,type);
+	EXIT();
+	return;
 }
 
 
@@ -812,6 +823,8 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 {
 	static Firmware_Details *firmware = NULL;
 	gdouble res = 0.0;
+
+	ENTER();
 
 	TempUnits mtx_temp_units = (TempUnits)(GINT)DATA_GET(global_data,"mtx_temp_units");
 
@@ -840,6 +853,7 @@ G_MODULE_EXPORT gdouble temp_to_host(gdouble in)
 		res = in;
 	}
 	return res;
+	EXIT();
 }
 
 
@@ -853,6 +867,8 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 	gdouble res = 0.0;
 	static Firmware_Details *firmware = NULL;
 	TempUnits mtx_temp_units = (TempUnits)(GINT)DATA_GET(global_data,"mtx_temp_units");
+
+	ENTER();
 
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -879,6 +895,7 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
 		res = in;
 	}
 	return res;
+	EXIT();
 }
 
 
@@ -889,7 +906,8 @@ G_MODULE_EXPORT gdouble temp_to_ecu(gdouble in)
   */
 G_MODULE_EXPORT gdouble c_to_f(gdouble in)
 {
-	/* Why the 0.001 ? return ((in *(9.0/5.0))+32.0)+0.001; */
+	ENTER();
+	EXIT();
 	return ((in *(9.0/5.0))+32.0);
 }
 
@@ -901,6 +919,8 @@ G_MODULE_EXPORT gdouble c_to_f(gdouble in)
   */
 G_MODULE_EXPORT gdouble c_to_k(gdouble in)
 {
+	ENTER();
+	EXIT();
 	return (in+273.0);
 }
 
@@ -912,7 +932,8 @@ G_MODULE_EXPORT gdouble c_to_k(gdouble in)
   */
 G_MODULE_EXPORT gdouble f_to_c(gdouble in)
 {
-	/* Why the 0.001 ? return ((in-32.0)*(5.0/9.0))+0.001; */
+	ENTER();
+	EXIT();
 	return ((in-32.0)*(5.0/9.0));
 }
 
@@ -924,7 +945,8 @@ G_MODULE_EXPORT gdouble f_to_c(gdouble in)
   */
 G_MODULE_EXPORT gdouble f_to_k(gdouble in)
 {
-	/* Why the 0.001 ? return ((in-32.0)*(5.0/9.0))+273.001; */
+	ENTER();
+	EXIT();
 	return ((in-32.0)*(5.0/9.0))+273;
 }
 
@@ -936,7 +958,8 @@ G_MODULE_EXPORT gdouble f_to_k(gdouble in)
   */
 G_MODULE_EXPORT gdouble k_to_f(gdouble in)
 {
-	/* Why hte 0.001 ? return (((in-273) *(9.0/5.0))+32.0)+0.001; */
+	ENTER();
+	EXIT();
 	return (((in-273) *(9.0/5.0))+32.0);
 }
 
@@ -948,6 +971,8 @@ G_MODULE_EXPORT gdouble k_to_f(gdouble in)
   */
 G_MODULE_EXPORT gdouble k_to_c(gdouble in)
 {
+	ENTER();
+	EXIT();
 	return (in-273.0);
 }
 
@@ -964,6 +989,8 @@ G_MODULE_EXPORT gdouble k_to_c(gdouble in)
 G_MODULE_EXPORT gfloat calc_value(gfloat in, gfloat *mult, gfloat *add, ConvDir dir)
 {
 	gfloat result = 0.0;
+
+	ENTER();
 
 	g_return_val_if_fail(((dir == FROMECU)||(dir == TOECU)),0.0);
 	if (dir == FROMECU)
@@ -984,6 +1011,7 @@ G_MODULE_EXPORT gfloat calc_value(gfloat in, gfloat *mult, gfloat *add, ConvDir 
 		else
 			result = in;
 	}
+	EXIT();
 	return result;
 }
 

@@ -46,6 +46,7 @@ G_MODULE_EXPORT void plugins_init()
 	void (*plugin_init)(gconstpointer *);
 	void (*common_gui_init)(void) = NULL;
 
+	ENTER();
 	/* MegaTunix itself */
 	module[MAIN] = g_module_open(NULL,G_MODULE_BIND_LAZY);
 	if (module[MAIN] == NULL)
@@ -112,6 +113,8 @@ G_MODULE_EXPORT void plugins_init()
 			NULL); /*GError Pointer */
 	if (id)
 		DATA_SET(global_data,"thread_dispatcher_id",id);
+	EXIT();
+	return;
 }
 
 
@@ -125,6 +128,7 @@ G_MODULE_EXPORT void plugins_shutdown()
 	GModule *module = NULL;
 	void (*plugin_shutdown)(void);
 
+	ENTER();
 	/* Shutdown ECU module */
 	module = (GModule *)DATA_GET(global_data,"ecu_module");
 	if (module)
@@ -141,6 +145,8 @@ G_MODULE_EXPORT void plugins_shutdown()
 			plugin_shutdown();
 		DATA_SET(global_data,"common_module",NULL);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -159,6 +165,7 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 	gboolean found = FALSE;
 	extern gconstpointer *global_data;
 
+	ENTER();
 	/* Megatunix itself */
 	module[MAIN] = (GModule *)DATA_GET(global_data,"megatunix_module");
 	/* Common library */
@@ -179,5 +186,6 @@ G_MODULE_EXPORT gboolean get_symbol(const gchar *name, void **function_p)
 	}
 	if (!found)
 		MTXDBG(CRITICAL,_("\nCRITICAL ERROR: Failed to find symbol/function\n\"%s\" in MegaTunix core or any plugins, returning FALSE, expect a crash\n"),name);
+	EXIT();
 	return found;
 }

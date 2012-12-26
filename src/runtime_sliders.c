@@ -56,22 +56,26 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 	gchar *pathstub = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
 		MTXDBG(CRITICAL,_("ERROR, NOT interrogated, returning!\n"));
+		EXIT();
 		return;
 	}
 
 	if (DATA_GET(global_data,"leaving"))
 	{
 		MTXDBG(CRITICAL,_("ERROR, \"leaving\" set, returning!\n"));
+		EXIT();
 		return;
 	}
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n"));
+		EXIT();
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Sliders...")));
@@ -90,6 +94,7 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
+		EXIT();
 		return;
 	}
 	root_element = xmlDocGetRootElement(doc);
@@ -99,6 +104,7 @@ G_MODULE_EXPORT void load_rt_sliders(void)
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
+	EXIT();
 	return;
 }
 
@@ -118,22 +124,26 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 	gchar *pathstub = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!DATA_GET(global_data,"interrogated"))
 	{
 		MTXDBG(CRITICAL,_("ERROR, NOT interrogated, returning!\n"));
+		EXIT();
 		return;
 	}
 
 	if (DATA_GET(global_data,"leaving"))
 	{
 		MTXDBG(CRITICAL,_("ERROR, \"leaving\" set, returning!\n"));
+		EXIT();
 		return;
 	}
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		MTXDBG(CRITICAL,_("CRITICAL ERROR, Realtime Variable definitions NOT LOADED!!!\n"));
+		EXIT();
 		return;
 	}
 	set_title(g_strdup(_("Loading RT Sliders...")));
@@ -153,6 +163,7 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
+		EXIT();
 		return;
 	}
 	res = load_rts_xml_elements(root_element,"ww_rts",ww_sliders,0,WARMUP_WIZ_TAB);
@@ -161,6 +172,7 @@ G_MODULE_EXPORT void load_ww_sliders(void)
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
+	EXIT();
 	return;
 }
 
@@ -179,6 +191,7 @@ G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *pre
 {
 	xmlNode *cur_node = NULL;
 
+	ENTER();
 	/* Iterate though all nodes... */
 	for (cur_node = a_node;cur_node;cur_node = cur_node->next)
 	{
@@ -188,14 +201,19 @@ G_MODULE_EXPORT gboolean load_rts_xml_elements(xmlNode *a_node, const gchar *pre
 				if (!xml_api_check(cur_node,RT_SLIDERS_MAJOR_API,RT_SLIDERS_MINOR_API))
 				{
 					MTXDBG(CRITICAL,_("API mismatch, won't load this file!!\n"));
+					EXIT();
 					return FALSE;
 				}
 			if (g_ascii_strcasecmp((gchar *)cur_node->name,prefix) == 0)
 				load_rts(cur_node,hash,table_num,tab_id);
 		}
 		if (!load_rts_xml_elements(cur_node->children,prefix,hash,table_num,tab_id))
+		{
+			EXIT();
 			return FALSE;
+		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -217,9 +235,11 @@ G_MODULE_EXPORT void load_rts(xmlNode *node, GHashTable *hash, gint table_num, T
 	Rt_Slider *slider = NULL;
 	xmlNode *cur_node = NULL;
 
+	ENTER();
 	if (!node->children)
 	{
 		printf(_("ERROR, load_rts, xml node is empty!!\n"));
+		EXIT();
 		return;
 	}
 	cur_node = node->children;
@@ -247,6 +267,8 @@ G_MODULE_EXPORT void load_rts(xmlNode *node, GHashTable *hash, gint table_num, T
 	}
 	g_free(slider_name);
 	g_free(source);
+	EXIT();
+	return;
 }
 
 
@@ -265,12 +287,14 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	gchar *pathstub = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!(DATA_GET(global_data,"rtvars_loaded")) || 
 			(!(DATA_GET(global_data,"tabs_loaded"))))
 	{
 		MTXDBG(CRITICAL,_("CRITICAL ERROR, Tabs not loaded OR Realtime Variable definitions NOT LOADED!!!\n"));
+		EXIT();
 		return;
 	}
 
@@ -291,6 +315,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	if (doc == NULL)
 	{
 		printf(_("error: could not parse file %s\n"),filename);
+		EXIT();
 		return;
 	}
 	root_element = xmlDocGetRootElement(doc);
@@ -300,6 +325,7 @@ G_MODULE_EXPORT void load_ve3d_sliders(gint table_num)
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
+	EXIT();
 	return;
 }
 
@@ -329,6 +355,7 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	Rtv_Map *rtv_map = NULL;
 	gconstpointer *object = NULL;
 
+	ENTER();
 	size_group_left = DATA_GET(global_data,"size_group_left");
 	if (!size_group_left)
 	{
@@ -346,6 +373,7 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	if (!(object))
 	{
 		MTXDBG(CRITICAL,_("Request to create slider for non-existant datasource \"%s\"\n"),source);
+		EXIT();
 		return NULL;
 	}
 
@@ -358,6 +386,7 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	else
 	{
 		MTXDBG(CRITICAL,_("Page ident passed is not handled, ERROR, widget add aborted\n"));
+		EXIT();
 		return NULL;
 	}
 	table = lookup_widget(name);
@@ -365,6 +394,7 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	{
 		MTXDBG(CRITICAL,_("Table \"%s\" was not found, RuntimeSlider map or runtime datamap has a typo\n"),name);
 		g_free(name);
+		EXIT();
 		return NULL;
 	}
 	g_free(name);
@@ -435,6 +465,7 @@ G_MODULE_EXPORT Rt_Slider * add_slider(gchar *ctrl_name, gint tbl, gint table_nu
 	slider->parent = table;
 	gtk_widget_show_all(slider->parent);
 
+	EXIT();
 	return slider;
 }
 
@@ -459,6 +490,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	TabIdent ident;
 	Rt_Slider *slider = NULL;
 
+	ENTER();
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	source = (gchar *)OBJ_GET(widget,"source");
 	ident = (TabIdent)(GINT)OBJ_GET(widget,"tab_ident");
@@ -498,6 +530,7 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 	if  (!(object))
 	{
 		MTXDBG(CRITICAL,_("ERROR! There is no datasource named \"%s\", Check config of widget %s\n"),source,(name == NULL ? "undefined":name));
+		EXIT();
 		return;
 	}
 	slider = (Rt_Slider *)g_malloc0(sizeof(Rt_Slider));
@@ -557,8 +590,8 @@ G_MODULE_EXPORT void register_rt_range(GtkWidget * widget)
 		default:
 			break;
 	}
-
-
+	EXIT();
+	return;
 }
 
 
@@ -573,6 +606,7 @@ G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 	gchar * widget = NULL;
 	GHashTable **tables = NULL;
 
+	ENTER();
 	tables = (GHashTable **)DATA_GET(global_data,"ve3d_sliders");
 	g_hash_table_destroy(tables[table_num]);
 	tables[table_num] = NULL;
@@ -584,6 +618,7 @@ G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
 	widget = g_strdup_printf("ve3d_rt_table1_%i",table_num);
 	deregister_widget(widget);
 	g_free(widget);
+	EXIT();
 	return FALSE;
 }
 
@@ -597,6 +632,8 @@ G_MODULE_EXPORT gboolean free_ve3d_sliders(gint table_num)
   */
 G_MODULE_EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
+	ENTER();
+	EXIT();
 	return TRUE;
 }
 
@@ -610,6 +647,8 @@ G_MODULE_EXPORT gboolean rtslider_button_handler(GtkWidget *widget, GdkEventButt
   */
 G_MODULE_EXPORT gboolean rtslider_motion_handler(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
+	ENTER();
+	EXIT();
 	return TRUE;
 }
 
@@ -627,6 +666,7 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
 	gboolean tpsae_ctrl_state = FALSE;
 	GHashTable *widget_group_states = NULL;
  	gfloat value = gtk_range_get_value(GTK_RANGE(widget));
+	ENTER();
 
 	if (value == 0)
 		tpsae_ctrl_state = FALSE;
@@ -643,8 +683,8 @@ G_MODULE_EXPORT gboolean ae_slider_check_limits(GtkWidget *widget, gpointer data
 	g_hash_table_insert(widget_group_states,g_strdup("map_ae_ctrls"),GINT_TO_POINTER(mapae_ctrl_state));
 	g_list_foreach(get_list("tps_ae_ctrls"),alter_widget_state,NULL);
 	g_list_foreach(get_list("map_ae_ctrls"),alter_widget_state,NULL);
+	EXIT();
 	return FALSE;
-
 }
 
 
@@ -662,11 +702,15 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 	TabIdent active_page;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ve3d_sliders = (GHashTable **)DATA_GET(global_data,"ve3d_sliders");
 
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	active_page = (TabIdent)(GINT)DATA_GET(global_data,"active_page");
 	/* Update all the dynamic RT Sliders */
@@ -699,6 +743,7 @@ G_MODULE_EXPORT gboolean update_rtsliders(gpointer data)
 				g_hash_table_foreach(ve3d_sliders[i],rt_update_values,NULL);
 		}               
 	}
+	EXIT();
 	return FALSE;            
 }
 
@@ -726,8 +771,12 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 	GArray *history = NULL;
 	gchar * tmpbuf = NULL;
 
+	ENTER();
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return;
+	}
 
 	if (!rtv_mutex)
 		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
@@ -735,9 +784,15 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 		rand = g_rand_new();
 	history = (GArray *)DATA_GET(slider->object,"history");
 	if (!history)
+	{
+		EXIT();
 		return;
+	}
 	if ((GINT)history->len-1 <= 0)
+	{
+		EXIT();
 		return;
+	}
 	precision = (GINT)DATA_GET(slider->object,"precision");
 	g_mutex_lock(rtv_mutex);
 	/*printf("runtime_gui history length is %i, current index %i\n",history->len,history->len-1);*/
@@ -811,5 +866,6 @@ G_MODULE_EXPORT void rt_update_values(gpointer key, gpointer value, gpointer dat
 		count = 0;
 	slider->count = count;
 	slider->last_upd = last_upd;
+	EXIT();
 	return;
 }

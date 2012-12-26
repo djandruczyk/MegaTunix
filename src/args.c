@@ -48,6 +48,8 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	gchar * netinfo = NULL;
 	gchar * dash = NULL;
 
+	ENTER();
+
 	args = init_args();
 	GOptionEntry entries[] =
 	{
@@ -234,6 +236,8 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 	}
 	DATA_SET_FULL(global_data,"args",args,args_free);
 	g_option_context_free(context);
+	EXIT();
+	return;
 }
 
 
@@ -244,6 +248,8 @@ G_MODULE_EXPORT void handle_args(gint argc, gchar * argv[])
 G_MODULE_EXPORT CmdLineArgs * init_args(void)
 {
 	CmdLineArgs *args;
+
+	ENTER();
 	args = g_new0(CmdLineArgs, 1);
 	args->debugargs = FALSE;
 	args->verbose = FALSE;
@@ -261,6 +267,7 @@ G_MODULE_EXPORT CmdLineArgs * init_args(void)
 	args->network_host = NULL;
 	args->network_port = 0;
 	
+	EXIT();
 	return (args);
 }
 
@@ -273,6 +280,8 @@ G_MODULE_EXPORT void args_free(gpointer data)
 {
 	CmdLineArgs *args = (CmdLineArgs *)data;
 
+	ENTER();
+
 	g_return_if_fail(args);
 	cleanup(args->dbglog);
 	cleanup(args->autolog_dump_dir);
@@ -281,4 +290,6 @@ G_MODULE_EXPORT void args_free(gpointer data)
 	cleanup(args->port);
 	cleanup(args->persona);
 	cleanup(args);
+	EXIT();
+	return;
 }

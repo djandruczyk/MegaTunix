@@ -20,6 +20,7 @@
   */
 
 #include <config.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <glade/glade.h>
@@ -48,11 +49,15 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 	GtkWidget *button = NULL;
 	gboolean *hidden_list = NULL;
 
+	ENTER();
 	if (!(GTK_IS_WIDGET(vis_window)))
 	{
 		main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 		if (!main_xml)
+		{
+			EXIT();
 			return FALSE;
+		}
 
 		notebook = glade_xml_get_widget(main_xml,"toplevel_notebook");
 		hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
@@ -95,6 +100,7 @@ G_MODULE_EXPORT gboolean show_tab_visibility_window(GtkWidget * widget, gpointer
 	}
 
 	gtk_widget_show_all(vis_window);
+	EXIT();
 	return TRUE;
 }
 
@@ -120,6 +126,7 @@ G_MODULE_EXPORT gboolean hide_tab(GtkWidget *widget, gpointer data)
 	gboolean hidden = FALSE;
 	gint *hidden_list;
 
+	ENTER();
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	hidden_list = (gboolean *)DATA_GET(global_data,"hidden_list");
 	notebook = glade_xml_get_widget(main_xml,"toplevel_notebook");
@@ -150,6 +157,7 @@ G_MODULE_EXPORT gboolean hide_tab(GtkWidget *widget, gpointer data)
 		 gtk_widget_modify_text(gtk_bin_get_child(GTK_BIN(item)),GTK_STATE_NORMAL,&red);
 	else
 		 gtk_widget_modify_text(gtk_bin_get_child(GTK_BIN(item)),GTK_STATE_NORMAL,&black);
+	EXIT();
 	return TRUE;
 }
 

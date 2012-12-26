@@ -72,6 +72,7 @@ G_MODULE_EXPORT void process_rt_vars(void *incoming, gint len)
 	gchar *special = NULL;
 	GHashTable *hash = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!rtv_map)
@@ -201,6 +202,7 @@ store_it:
 
 		}
 	}
+	EXIT();
 	return;
 }
 
@@ -238,6 +240,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	gdouble upper_limit = 0;
 	gdouble result = 0.0;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!common_rtv_processor)
@@ -361,6 +364,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr(gconstpointer *object, void * incomin
 	MTXDBG(COMPLEX_EXPR,_("Expression is %s\n"),evaluator_get_string(evaluator));
 	g_free(names);
 	g_free(values);
+	EXIT();
 	return result;
 }
 
@@ -398,6 +402,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	gdouble upper_limit = 0;
 	gdouble result = 0.0;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!common_rtv_processor_obj)
@@ -515,6 +520,7 @@ G_MODULE_EXPORT gfloat handle_complex_expr_obj(GObject *object, void * incoming,
 	MTXDBG(COMPLEX_EXPR,_("Expression is %s\n"),evaluator_get_string(evaluator));
 	g_free(names);
 	g_free(values);
+	EXIT();
 	return result;
 }
 
@@ -538,16 +544,19 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 	gchar *hash_key = NULL;
 	GHashTable *sources_hash = NULL;
 
+	ENTER();
 	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	if (!(object))
 	{
 		MTXDBG(COMPLEX_EXPR,_("ERROR: multi_expression object is NULL!\n"));
+		EXIT();
 		return 0.0;
 	}
 	key = (gchar *)DATA_GET(object,"source_key");
 	if (!key)
 	{
 		MTXDBG(COMPLEX_EXPR,_("ERROR: multi_expression source key is NULL!\n"));
+		EXIT();
 		return 0.0;
 	}
 	hash_key  = (gchar *)g_hash_table_lookup(sources_hash,key);
@@ -555,12 +564,14 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 	{
 		MTXDBG(COMPLEX_EXPR,_("ERROR: multi_expression hash key is NULL!\n"));
 		printf(_(": ERROR: multi_expression hash key is NULL!\n"));
+		EXIT();
 		return 0.0;
 	}
 	multi = (MultiExpr *)g_hash_table_lookup(hash,hash_key);
 	if (!multi)
 	{
 		MTXDBG(COMPLEX_EXPR,_("multi-expression data structure NOT found for key \"%s\"\n"),hash_key);
+		EXIT();
 		return 0.0;
 	}
 
@@ -578,6 +589,7 @@ G_MODULE_EXPORT gfloat handle_multi_expression(gconstpointer *object,guchar* raw
 		result = (x * (*multiplier));
 	else
 		result = x;
+	EXIT();
 	return result;
 }
 
@@ -596,6 +608,7 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 {
 	static GTimer *timer = NULL;
 
+	ENTER();
 	if (g_ascii_strcasecmp(handler_name,"hr_clock")==0)
 	{
 		if (!timer)
@@ -603,14 +616,17 @@ G_MODULE_EXPORT gfloat handle_special(gconstpointer *object,gchar *handler_name)
 		if (!timer)
 		{
 			MTXDBG(COMPLEX_EXPR|CRITICAL,_("\"mtx_uptime_timer\" pointer not found, unable to set high res clock for datalog!\n"));
+			EXIT();
 			return 0.0;
 		}
+		EXIT();
 		return g_timer_elapsed(timer,NULL);
 	}
 	else
 	{
 		MTXDBG(CRITICAL,_("Handler name is not recognized, \"%s\"\n"),handler_name);
 	}
+	EXIT();
 	return 0.0;
 }
 
@@ -630,21 +646,32 @@ G_MODULE_EXPORT gboolean lookup_current_index(const gchar *internal_name, gint *
 	GArray * history = NULL;
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
+	ENTER();
 	if (!rtv_mutex)
 		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	*value = 0;
 	if (!internal_name)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	*value = history->len;
+	EXIT();
 	return TRUE;
 }
 
@@ -664,26 +691,40 @@ G_MODULE_EXPORT gboolean lookup_current_value(const gchar *internal_name, gfloat
 	GArray * history = NULL;
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
+	ENTER();
 	if (!rtv_mutex)
 		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if ((GINT)history->len-1 <= 0)
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	g_mutex_lock(rtv_mutex);
 	*value = g_array_index(history,gfloat,history->len-1);
 	g_mutex_unlock(rtv_mutex);
+	EXIT();
 	return TRUE;
 }
 
@@ -703,26 +744,40 @@ G_MODULE_EXPORT gboolean lookup_previous_value(const gchar *internal_name, gfloa
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
+	ENTER();
 	if (!rtv_mutex)
 		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if ((GINT)history->len-2 <= 0)
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	g_mutex_lock(rtv_mutex);
 	*value = g_array_index(history,gfloat,history->len-2);
 	g_mutex_unlock(rtv_mutex);
+	EXIT();
 	return TRUE;
 }
 
@@ -745,22 +800,35 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
+	ENTER();
 	if (!rtv_mutex)
 		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	*value = 0.0;
 	if (!internal_name)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if ((GINT)history->len-n <= 0)
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	g_mutex_lock(rtv_mutex);
 	if (index > n)
@@ -768,6 +836,7 @@ G_MODULE_EXPORT gboolean lookup_previous_nth_value(const gchar *internal_name, g
 	*value = g_array_index(history,gfloat,index);
 	g_mutex_unlock(rtv_mutex);
 	history = (GArray *)DATA_GET(object,"history");
+	EXIT();
 	return TRUE;
 }
 
@@ -791,24 +860,37 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
+	ENTER();
 	if (!rtv_mutex)
 		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	/* Set default in case of failure */
 	for (i=0;i<n;i++)
 		values[i] = 0.0;
 	if (!internal_name)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if ((GINT)history->len-n <= 0)
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	g_mutex_lock(rtv_mutex);
 	index = history->len-1;
@@ -821,6 +903,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_values(const gchar *internal_name, gi
 		}
 	}
 	g_mutex_unlock(rtv_mutex);
+	EXIT();
 	return TRUE;
 }
 
@@ -843,23 +926,36 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
+	ENTER();
 	if (!rtv_mutex)
 		rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	for (i=0;i<n;i++)
 		values[i] = 0.0;
 	if (!internal_name)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	history = (GArray *)DATA_GET(object,"history");
 	if (!history)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if ((GINT)history->len-(n*skip) <= 0)
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	g_mutex_lock(rtv_mutex);
 	index = history->len-1;
@@ -872,6 +968,7 @@ G_MODULE_EXPORT gboolean lookup_previous_n_skip_x_values(const gchar *internal_n
 		}
 	}
 	g_mutex_unlock(rtv_mutex);
+	EXIT();
 	return TRUE;
 }
 
@@ -889,18 +986,22 @@ G_MODULE_EXPORT gboolean lookup_precision(const gchar *internal_name, gint *prec
 	Rtv_Map *rtv_map = NULL;
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
+	ENTER();
 	if (!internal_name)
 	{
 		*precision = 0;
+		EXIT();
 		return FALSE;
 	}
 	object = (gconstpointer *)g_hash_table_lookup(rtv_map->rtv_hash,internal_name);
 	if (!object)
 	{
 		*precision = 0;
+		EXIT();
 		return FALSE;
 	}
 	*precision = (GINT)DATA_GET(object,"precision");
+	EXIT();
 	return TRUE;
 }
 
@@ -921,6 +1022,7 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	rtv_mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 
+	ENTER();
 	/* Flush and recreate the timestamp array */
 	g_array_free(rtv_map->ts_array,TRUE);
 	rtv_map->ts_array = g_array_sized_new(FALSE,TRUE,sizeof(GTimeVal),4096);
@@ -950,4 +1052,6 @@ G_MODULE_EXPORT void flush_rt_arrays(void)
 		}
 	}
 	thread_update_logbar("dlog_view","warning",g_strdup(_("Realtime Variables History buffers flushed...\n")),FALSE,FALSE);
+	EXIT();
+	return;
 }

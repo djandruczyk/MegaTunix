@@ -23,6 +23,7 @@
   */
 
 #include <apicheck.h>
+#include <debugging.h>
 
 /*!
   \brief Sets the file API to version passed by major/minor
@@ -33,9 +34,12 @@
   */
 G_MODULE_EXPORT gboolean set_file_api(ConfigFile *cfg, gint major, gint minor)
 {
+	ENTER();
+
 	cfg_write_int(cfg,"API","major",major);
 	cfg_write_int(cfg,"API","minor",minor);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -53,13 +57,18 @@ G_MODULE_EXPORT gboolean get_file_api(ConfigFile *cfg, gint *major, gint *minor)
 {
 	gboolean result = TRUE;
 	gboolean result2 = TRUE;
+
+	ENTER();
+
 	if (major)
 		result = cfg_read_int(cfg,"API","major",&*major);
 	if (minor)
 		result2 = cfg_read_int(cfg,"API","minor",&*minor);
 	if ((result) && (result2))
+	{
+		EXIT();
 		return TRUE;
-	else
-		return FALSE;
-
+	}
+	EXIT();
+	return FALSE;
 }

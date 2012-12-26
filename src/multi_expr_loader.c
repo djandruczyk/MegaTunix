@@ -55,6 +55,7 @@ G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNo
 	GHashTable *hash = NULL;
 	MultiExpr *multi = NULL;
 
+	ENTER();
 	if (!generic_xml_gchar_find(node,"multi_expr_keys",&tmpbuf))
 	{
 		MTXDBG(CRITICAL,_("Can't find \"multi_expr_keys\" in the xml, exiting!\n"));
@@ -160,6 +161,8 @@ G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNo
 	g_strfreev(ul_adds);
 	g_strfreev(keys);
 	DATA_SET_FULL(object,"multi_expr_hash",hash,g_hash_table_destroy);
+	EXIT();
+	return;
 }
 
 
@@ -170,12 +173,18 @@ G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNo
 G_MODULE_EXPORT void free_multi_expr(gpointer data)
 {
 	MultiExpr *multi = (MultiExpr *)data;
+	ENTER();
 	if (!multi)
+	{
+		EXIT();
 		return;
+	}
 	cleanup(multi->fromecu_mult);	
 	cleanup(multi->fromecu_add);	
 	cleanup(multi->lookuptable);	
 	cleanup(multi);
+	EXIT();
+	return;
 }
 
 
@@ -186,9 +195,13 @@ G_MODULE_EXPORT void free_multi_expr(gpointer data)
 G_MODULE_EXPORT void free_multi_source(gpointer key, gpointer value, gpointer user_data)
 {
 	MultiSource *multi = (MultiSource *)value;
+	ENTER();
 	gchar * initial_key = (gchar *)key;
 	if (!multi)
+	{
+		EXIT();
 		return;
+	}
 	cleanup(initial_key);
 	cleanup(multi->source);	
 	cleanup(multi->multiplier);	
@@ -200,6 +213,8 @@ G_MODULE_EXPORT void free_multi_source(gpointer key, gpointer value, gpointer us
 	if (multi->ul_eval)
 		evaluator_destroy(multi->ul_eval);
 	cleanup(multi);
+	EXIT();
+	return;
 }
 
 
@@ -216,6 +231,7 @@ MultiSource * get_multi(gint table_num,GHashTable *hash,const gchar *hash_key)
 	extern gconstpointer *global_data;
 	gint * algorithm = NULL;
 	MultiSource *multi = NULL;
+	ENTER();
 	algorithm = (gint *)DATA_GET(global_data,"algorithm");
 	if (algorithm[table_num] == SPEED_DENSITY)
 	{
@@ -234,8 +250,11 @@ MultiSource * get_multi(gint table_num,GHashTable *hash,const gchar *hash_key)
 	}
 	else
 		multi = (MultiSource *)g_hash_table_lookup(hash,"DEFAULT");
-	if (!multi)
-		return NULL;
-	else
+	if (multi)
+	{
+		EXIT();
 		return multi;
+	}
+	EXIT();
+	return NULL;
 }

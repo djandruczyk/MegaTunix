@@ -69,6 +69,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	Rtv_Map *rtv_map = NULL;
 	Log_Info *log_info;
 
+	ENTER();
 	log_info = (Log_Info *)DATA_GET(global_data,"log_info");
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	darea = lookup_widget("logviewer_trace_darea");
@@ -78,6 +79,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 	if (!darea)
 	{
 		MTXDBG(CRITICAL,_("Pointer to drawing area was NULL, returning!!!\n"));
+		EXIT();
 		return;
 	}
 
@@ -236,6 +238,7 @@ G_MODULE_EXPORT void present_viewer_choices(void)
 
 	set_default_lview_choices_state();
 	gtk_widget_show_all(window);
+	EXIT();
 	return;
 }
 
@@ -247,7 +250,9 @@ G_MODULE_EXPORT void present_viewer_choices(void)
  */
 G_MODULE_EXPORT gboolean reenable_select_params_button(GtkWidget *widget)
 {
+	ENTER();
 	gtk_widget_set_sensitive(GTK_WIDGET(lookup_widget("logviewer_select_params_button")),TRUE);
+	EXIT();
 	return FALSE;
 
 }
@@ -267,6 +272,7 @@ G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 	gchar *name = NULL;
 	guint i = 0;
 
+	ENTER();
 	defaults = get_list("logviewer_defaults");
 	if (defaults)
 	{
@@ -291,6 +297,7 @@ G_MODULE_EXPORT gboolean save_default_choices(GtkWidget *widget)
 		}
 	}
 	store_list("logviewer_defaults",defaults);
+	EXIT();
 	return FALSE;
 }
 
@@ -307,6 +314,7 @@ G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
 	gconstpointer *object = NULL;
 	gboolean state = FALSE;
 
+	ENTER();
 	state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON (widget));
 
 	/* get object from widget */
@@ -317,6 +325,7 @@ G_MODULE_EXPORT gboolean view_value_set(GtkWidget *widget, gpointer data)
 	}
 	DATA_SET(object,"being_viewed",GINT_TO_POINTER(state));
 	populate_viewer();
+	EXIT();
 	return FALSE;
 }
 
@@ -336,6 +345,7 @@ G_MODULE_EXPORT void populate_viewer(void)
 	gconstpointer *object = NULL;
 	Log_Info *log_info = NULL;
 
+	ENTER();
 
 	g_static_mutex_lock(&update_mutex);
 	log_info = (Log_Info *)DATA_GET(global_data,"log_info");
@@ -451,6 +461,7 @@ G_MODULE_EXPORT void populate_viewer(void)
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 		lv_configure_event(lookup_widget("logviewer_trace_darea"),NULL,NULL);
 
+	EXIT();
 	return; 
 }
 
@@ -467,12 +478,16 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 	Rtv_Map *rtv_map = NULL;;
 	Log_Info *log_info;
 
+	ENTER();
 	log_info = (Log_Info *)DATA_GET(global_data,"log_info");
 
 	if (DATA_GET(global_data,"playback_mode"))
 	{
 		if (!log_info)
+		{
+			EXIT();
 			return;
+		}
 		for (i=0;i<log_info->field_count;i++)
 		{
 			object = NULL;
@@ -485,7 +500,10 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 	{
 		rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 		if (!rtv_map)
+		{
+			EXIT();
 			return;
+		}
 		for (i=0;i<rtv_map->derived_total;i++)
 		{
 			object = NULL;
@@ -495,7 +513,8 @@ G_MODULE_EXPORT void reset_logviewer_state(void)
 		}
 	}
 	populate_viewer();
-
+	EXIT();
+	return;
 }
 
 
@@ -510,6 +529,7 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 	Viewable_Value *v_value = NULL;
 	GdkPixmap *pixmap =  NULL;
 
+	ENTER();
 	pixmap = lv_data->pixmap;
 
 	v_value = (Viewable_Value *)g_malloc(sizeof(Viewable_Value));		
@@ -563,6 +583,7 @@ G_MODULE_EXPORT Viewable_Value * build_v_value(gconstpointer *object)
 	v_value->force_update = TRUE;
 	v_value->highlight = FALSE;
 
+	EXIT();
 	return v_value;
 }
 
@@ -581,6 +602,7 @@ G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 	GdkGCValues values;
 	GdkColormap *cmap = NULL;
 
+	ENTER();
 	cmap = gdk_colormap_get_system();
 
 	switch((GcType)type)
@@ -663,6 +685,7 @@ G_MODULE_EXPORT GdkGC * initialize_gc(GdkDrawable *drawable, GcType type)
 					GDK_GC_FOREGROUND);
 			break;
 	}	
+	EXIT();
 	return gc;	
 }
 
@@ -692,6 +715,7 @@ G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 	gfloat b = 0.0;
 	static GdkColormap *colormap = NULL;
 
+	ENTER();
 	count++;
 	if (!colormap)
 		colormap = gdk_colormap_get_system();
@@ -750,6 +774,7 @@ G_MODULE_EXPORT GdkColor get_colors_from_hue(gfloat hue, gfloat sat, gfloat val)
 	color.blue = b * 65535;
 	gdk_colormap_alloc_color(colormap,&color,FALSE,TRUE);
 
+	EXIT();
 	return (color);	
 }
 
@@ -777,6 +802,7 @@ G_MODULE_EXPORT void draw_infotext(void)
 	GdkPixmap *pixmap = lv_data->pixmap;
 	GtkAllocation allocation;
 
+	ENTER();
 	gtk_widget_get_allocation(lv_data->darea,&allocation);
 
 	h = allocation.height;
@@ -822,7 +848,8 @@ G_MODULE_EXPORT void draw_infotext(void)
 				FALSE, 0,i*lv_data->spread,
 				lv_data->info_width-1,lv_data->spread);
 	}
-
+	EXIT();
+	return;
 }
 
 
@@ -850,6 +877,7 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 	GdkPixmap *pixmap = lv_data->pixmap;
 	GtkAllocation allocation;
 
+	ENTER();
 	gtk_widget_get_allocation(lv_data->darea,&allocation);
 
 	h = allocation.height;
@@ -893,6 +921,8 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
 		gdk_draw_layout(pixmap,v_value->font_gc,val_x,val_y,layout);
 	}
 
+	EXIT();
+	return;
 }
 
 
@@ -905,15 +935,25 @@ G_MODULE_EXPORT void draw_valtext(gboolean force_draw)
   */
 G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 {
+	ENTER();
 	if (DATA_GET(global_data,"playback_mode"))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!((DATA_GET(global_data,"connected")) && 
 				(DATA_GET(global_data,"interrogated"))))
+	{
+		EXIT();
 		return FALSE;
+	}
 	
 	if (!lv_data)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
@@ -924,6 +964,7 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 		scroll_logviewer_traces();
 	}
 
+	EXIT();
 	return TRUE;
 }
 
@@ -933,7 +974,9 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
  * */
 G_MODULE_EXPORT gboolean pb_update_logview_traces_wrapper(gpointer data)
 {
+	ENTER();
 	g_idle_add(pb_update_logview_traces,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -948,9 +991,13 @@ G_MODULE_EXPORT gboolean pb_update_logview_traces_wrapper(gpointer data)
 G_MODULE_EXPORT gboolean pb_update_logview_traces(gpointer data)
 {
 	gboolean force_redraw = (GBOOLEAN)data;
+	ENTER();
 
 	if (!DATA_GET(global_data,"playback_mode"))
+	{
+		EXIT();
 		return FALSE;
+	}
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
 		adj_scale = TRUE;
@@ -959,6 +1006,7 @@ G_MODULE_EXPORT gboolean pb_update_logview_traces(gpointer data)
 		g_static_mutex_unlock(&update_mutex);
 		scroll_logviewer_traces();
 	}
+	EXIT();
 	return FALSE;
 }
 
@@ -990,6 +1038,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	static GtkWidget *scale = NULL;
 	GtkAllocation allocation;
 
+	ENTER();
 	gtk_widget_get_allocation(lv_data->darea,&allocation);
 
 	pixmap = lv_data->pixmap;
@@ -1019,6 +1068,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			len = array->len;
 			if (len == 0)	/* If empty */
 			{
+				EXIT();
 				return;
 			}
 			/*printf("length is %i\n", len);*/
@@ -1069,6 +1119,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 		}
 		draw_valtext(TRUE);
 		/*printf("redraw complete\n");*/
+		EXIT();
 		return;
 	}
 	/* Playback mode, playing from logfile.... */
@@ -1080,7 +1131,10 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			array = (GArray *)DATA_GET(v_value->object,v_value->data_source);
 			last_index = v_value->last_index;
 			if(last_index >= array->len)
+			{
+				EXIT();
 				return;
+			}
 
 			/*printf("got data from array at index %i\n",last_index+1);*/
 			val = g_array_index(array,gfloat,last_index+1);
@@ -1124,6 +1178,7 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 			}
 		}
 		draw_valtext(FALSE);
+		EXIT();
 		return;
 	}
 
@@ -1192,6 +1247,8 @@ G_MODULE_EXPORT void trace_update(gboolean redraw_all)
 	}
 	/* Update textual data */
 	draw_valtext(FALSE);
+	EXIT();
+	return;
 }
 
 
@@ -1211,16 +1268,23 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
+	ENTER();
 	if (!widget)
 		widget = lookup_widget("logviewer_trace_darea");
 	if (!widget)
+	{
+		EXIT();
 		return;
+	}
 	window = gtk_widget_get_window(widget);
 	gtk_widget_get_allocation(widget,&allocation);
 	pixmap = lv_data->pixmap;
 	pmap = lv_data->pmap;
 	if (!pixmap)
+	{
+		EXIT();
 		return;
+	}
 
 	lv_zoom = (GINT)DATA_GET(global_data,"lv_zoom");
 	w = allocation.width;
@@ -1266,6 +1330,8 @@ G_MODULE_EXPORT void scroll_logviewer_traces(void)
 			lv_zoom,h);
 
 	gdk_window_clear(window);
+	EXIT();
+	return;
 }
 
 
@@ -1280,8 +1346,10 @@ G_MODULE_EXPORT gboolean set_all_lview_choices_state(GtkWidget *widget, gpointer
 {
 	gboolean state = (GBOOLEAN)data;
 
+	ENTER();
 	g_list_foreach(get_list("viewables"),set_widget_active,GINT_TO_POINTER(state));
 
+	EXIT();
 	return TRUE;
 }
 
@@ -1300,6 +1368,7 @@ G_MODULE_EXPORT void set_default_lview_choices_state(void)
 	gchar * potential;
 	gconstpointer *object;
 
+	ENTER();
 	defaults = get_list("logviewer_defaults");
 	list = get_list("viewables");
 	for (i=0;i<g_list_length(defaults);i++)
@@ -1318,6 +1387,7 @@ G_MODULE_EXPORT void set_default_lview_choices_state(void)
 				set_widget_active(GTK_WIDGET(widget),GINT_TO_POINTER(TRUE));
 		}
 	}
+	EXIT();
 	return;
 }
 
@@ -1334,14 +1404,21 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 	gfloat val = 0.0;
 	GtkWidget *darea = NULL;
 
+	ENTER();
 	/* If we pass "TRUE" as the widget data we just ignore this signal as 
 	 * the redraw routine wil have to adjsut the slider as it scrolls 
 	 * through the data...
 	 */
 	if ((GBOOLEAN)data)
+	{
+		EXIT();
 		return TRUE;
+	}
 	if (blocked)
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	val = gtk_range_get_value(GTK_RANGE(widget));
 	darea = lookup_widget("logviewer_trace_darea");
@@ -1351,6 +1428,7 @@ G_MODULE_EXPORT gboolean logviewer_log_position_change(GtkWidget * widget, gpoin
 	scroll_logviewer_traces();
 	if ((val >= 100.0) && (DATA_GET(global_data,"playback_mode")))
 		stop_tickler(LV_PLAYBACK_TICKLER);
+	EXIT();
 	return TRUE;
 }
 
@@ -1367,6 +1445,7 @@ G_MODULE_EXPORT void enable_playback_controls(gboolean state)
 	GladeXML *xml = NULL;
 	GtkWidget *widget = NULL;
 	GtkAdjustment *adj = NULL;
+	ENTER();
 	if (state) /* show the controls */
 	{
 		if (!GTK_IS_WIDGET(playback_controls_window))
@@ -1410,6 +1489,7 @@ G_MODULE_EXPORT void enable_playback_controls(gboolean state)
 		if (GTK_IS_WIDGET(playback_controls_window))
 			gtk_widget_hide(playback_controls_window);
 	}
+	EXIT();
 	return;
 }
 
@@ -1422,6 +1502,7 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 {
 	GtkWidget *widget = NULL;
 
+	ENTER();
 	reset_logviewer_state();
 	free_log_info((Log_Info *)DATA_GET(global_data,"log_info"));
 	if (mode == LV_PLAYBACK)
@@ -1459,6 +1540,7 @@ G_MODULE_EXPORT void set_logviewer_mode(Lv_Mode mode)
 		col_sat = 1.0;
 		col_val = 1.0;
 	}
+	EXIT();
 }
 
 
@@ -1471,6 +1553,7 @@ G_MODULE_EXPORT void finish_logviewer(void)
 	GtkWidget * widget = NULL;
 	gint lv_zoom = 0;
 
+	ENTER();
 	lv_zoom = (GINT)DATA_GET(global_data,"lv_zoom");
 
 	lv_data = g_new0(Logview_Data,1);
@@ -1494,6 +1577,7 @@ G_MODULE_EXPORT void finish_logviewer(void)
 	if (GTK_IS_SPIN_BUTTON(widget))
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),lv_zoom);
 
+	EXIT();
 	return;
 }
 
@@ -1507,6 +1591,8 @@ G_MODULE_EXPORT void finish_logviewer(void)
   */
 G_MODULE_EXPORT gboolean slider_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
+	ENTER();
+	EXIT();
 	return FALSE;
 }
 
@@ -1522,6 +1608,7 @@ G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 	gchar * name = NULL;
 	GString *string = NULL;
 
+	ENTER();
 	list = get_list("logviewer_defaults");
 	if (list)
 	{
@@ -1538,6 +1625,8 @@ G_MODULE_EXPORT void write_logviewer_defaults(ConfigFile *cfgfile)
 	}
 	else
 		cfg_write_string(cfgfile,"Logviewer","defaults","");
+	EXIT();
+	return;
 }
 
 
@@ -1552,9 +1641,13 @@ G_MODULE_EXPORT void read_logviewer_defaults(ConfigFile *cfgfile)
 	gchar **vector = NULL;
 	guint i = 0;
 
+	ENTER();
 	cfg_read_string(cfgfile,"Logviewer","defaults",&tmpbuf);
 	if (!tmpbuf)
+	{
+		EXIT();
 		return;
+	}
 	
 	vector = g_strsplit(tmpbuf,",",-1);
 	g_free(tmpbuf);
@@ -1564,4 +1657,6 @@ G_MODULE_EXPORT void read_logviewer_defaults(ConfigFile *cfgfile)
 	if (defaults)
 		store_list("logviewer_defaults",defaults);
 
+	EXIT();
+	return;
 }

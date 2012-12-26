@@ -70,6 +70,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 
+	ENTER();
 //	printf("open serial\n");
 	g_mutex_lock(serio_mutex);
 	/*printf("Opening serial port %s\n",port_name);*/
@@ -134,6 +135,7 @@ G_MODULE_EXPORT gboolean open_serial(gchar * port_name, gboolean nonblock)
 
 	/*printf("open_serial returning\n");*/
 	g_mutex_unlock(serio_mutex);
+	EXIT();
 	return port_open;
 }
 	
@@ -152,8 +154,12 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 	Serial_Params *serial_params = NULL;
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
+	ENTER();
 	if (serial_params->net_mode)
+	{
+		EXIT();
 		return;
+	}
 
 	g_mutex_lock(serio_mutex);
 #ifdef __WIN32__
@@ -177,6 +183,8 @@ G_MODULE_EXPORT void flush_serial(gint fd, FlushDirection type)
 	}
 #endif	
 	g_mutex_unlock(serio_mutex);
+	EXIT();
+	return;
 }
 
 
@@ -197,6 +205,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 #ifndef __WIN32__
 	speed_t baud;
 #endif
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 	baud_str = (gchar *)DATA_GET(global_data,"ecu_baud_str");
@@ -206,10 +215,14 @@ G_MODULE_EXPORT void setup_serial_params(void)
 
 	DATA_SET(global_data,"ecu_baud",GINT_TO_POINTER(baudrate));
 	if (serial_params->open == FALSE)
+	{
+		EXIT();
 		return;
+	}
 	if (DATA_GET(global_data,"network_mode"))
 	{
 		printf("network mode, exiting!\n");
+		EXIT();
 		return;
 	}
 	/*printf("setup_serial_params entered\n");*/
@@ -408,6 +421,7 @@ G_MODULE_EXPORT void setup_serial_params(void)
 	flush_serial(serial_params->fd, BOTH);
 	g_usleep(1000);
 	flush_serial(serial_params->fd, BOTH);
+	EXIT();
 	return;
 }
 
@@ -422,10 +436,17 @@ G_MODULE_EXPORT void close_serial(void)
 	Serial_Params *serial_params = NULL;
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
+	ENTER();
 	if (!serial_params)
+	{
+		EXIT();
 		return;
+	}
 	if (serial_params->open == FALSE)
+	{
+		EXIT();
 		return;
+	}
 
 	/*printf("Closing serial port\n");*/
 	flush_serial(serial_params->fd, BOTH);
@@ -457,6 +478,7 @@ G_MODULE_EXPORT void close_serial(void)
 	if (!DATA_GET(global_data,"leaving"))
 		thread_update_logbar("comms_view",NULL,g_strdup_printf(_("Serial Port Closed\n")),FALSE,FALSE);
 	g_mutex_unlock(serio_mutex);
+	EXIT();
 	return;
 }
 
@@ -474,10 +496,12 @@ G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits,
 {
 	gchar **vector = NULL;
 	vector = g_strsplit(baud_str,",",-1);
+	ENTER();
 	if (g_strv_length(vector) != 4)
 	{
 		MTXDBG(SERIAL_RD|SERIAL_WR|CRITICAL,_("Baud string is NOT in correct format 'baud,bits,parity,stop'\n"));
 		g_strfreev(vector);
+		EXIT();
 		return FALSE;
 	}
 	if (baud)
@@ -498,5 +522,6 @@ G_MODULE_EXPORT gboolean parse_baud_str(gchar *baud_str, gint *baud, gint *bits,
 	if (stop)
 		*stop = (GINT)strtol(vector[3],NULL,10);
 	g_strfreev(vector);
+	EXIT();
 	return TRUE;
 }

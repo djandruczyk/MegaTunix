@@ -43,6 +43,7 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 	gchar *prefix = NULL;
 	GHashTable *dynamic_widgets = NULL;
 	ConfigFile *cfg = (ConfigFile *) user_data;
+	ENTER();
 	/*!
 	 Populates a big master hashtable of all dynamic widgets so that 
 	 various functions can do a lookup for the widgets name and get it's
@@ -62,11 +63,13 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 	if (name == NULL)
 	{
 		g_free(prefix);
+		EXIT();
 		return;
 	}
 	if (g_strrstr((gchar *)name,"topframe"))
 	{
 		g_free(prefix);
+		EXIT();
 		return;
 	}
 	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
@@ -85,6 +88,8 @@ G_MODULE_EXPORT void populate_master(GtkWidget *widget, gpointer user_data )
 
 	g_free(prefix);
 	g_free(fullname);
+	EXIT();
+	return;
 }
 
 
@@ -99,6 +104,7 @@ G_MODULE_EXPORT void register_widget(const gchar *name, GtkWidget * widget)
 {
 	GHashTable *dynamic_widgets = NULL;
 
+	ENTER();
 	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
 	if(!dynamic_widgets)
 	{
@@ -113,6 +119,8 @@ G_MODULE_EXPORT void register_widget(const gchar *name, GtkWidget * widget)
 	}
 	else
 		g_hash_table_insert(dynamic_widgets,g_strdup(name),(gpointer)widget);
+	EXIT();
+	return;
 }
 
 
@@ -126,7 +134,9 @@ G_MODULE_EXPORT void register_widget(const gchar *name, GtkWidget * widget)
 G_MODULE_EXPORT gboolean deregister_widget(const gchar *name)
 {
 	GHashTable *dynamic_widgets = NULL;
+	ENTER();
 	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
+	EXIT();
 	return (g_hash_table_remove(dynamic_widgets,name));
 }
 
@@ -145,27 +155,30 @@ G_MODULE_EXPORT GtkWidget * lookup_widget(const gchar * name)
 	dynamic_widgets = (GHashTable *)DATA_GET(global_data,"dynamic_widgets");
 	widget_2_tab_hash = (GHashTable *)DATA_GET(global_data,"widget_2_tab_hash");
 
+	ENTER();
 	g_return_val_if_fail(name,NULL);
 	g_return_val_if_fail(dynamic_widgets,NULL);
 	g_return_val_if_fail(widget_2_tab_hash,NULL);
 
 	if (g_hash_table_lookup_extended(dynamic_widgets,name,NULL,(gpointer *)&widget))
+	{
+		EXIT();
 		return widget;
+	}
 	else if (g_hash_table_lookup_extended(widget_2_tab_hash,name,NULL,(gpointer *)&datamap))
 	{
 		/* Load the tab this depends on and then search again! */
 		if (handle_dependant_tab_load(datamap))
 		{
 			if (g_hash_table_lookup_extended(dynamic_widgets,name,NULL,(gpointer *)&widget))
+			{
+				EXIT();
 				return widget;
+			}
 		}
-		else
-			return NULL;
-
-		return NULL;
 	}
-	else
-		return NULL;
+	EXIT();
+	return NULL;
 }
 
 /*!
@@ -182,6 +195,7 @@ G_MODULE_EXPORT gboolean get_state(gchar *string, gint index)
 	gboolean state = FALSE;
 	gchar *tmpstr = NULL;
 
+	ENTER();
 	tmpbuf = g_strsplit(string,",",0);
 	tmpstr = g_ascii_strup(tmpbuf[index],-1);
 	if (g_ascii_strcasecmp(tmpstr,"ENABLED") == 0)
@@ -190,6 +204,7 @@ G_MODULE_EXPORT gboolean get_state(gchar *string, gint index)
 		state =  FALSE;
 	g_free(tmpstr);
 	g_strfreev(tmpbuf);
+	EXIT();
 	return state;
 }
 
@@ -213,8 +228,12 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	MatchType type = AND;
 	GHashTable *widget_group_states = NULL;
 
+	ENTER();
 	if (!GTK_IS_WIDGET(widget))
+	{
+		EXIT();
 		return;
+	}
 
 	if (!OBJ_GET(widget,"bind_to_list"))
 	{
@@ -222,6 +241,7 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 		gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 		/*name = glade_get_widget_name(widget);
 		MTXDBG(CRITICAL,(_("alter_widget_state(): Error with widget \"%s\", bind_to_list is null\n"),(name == NULL ? "undefined":name)));*/
+		EXIT();
 		return;
 	}
 	else
@@ -258,6 +278,8 @@ G_MODULE_EXPORT void alter_widget_state(gpointer key, gpointer data)
 	g_strfreev(groups);
 	/*printf("%i\n",state);*/
 	gtk_widget_set_sensitive(GTK_WIDGET(widget),state);
+	EXIT();
+	return;
 }
 
 
@@ -276,6 +298,7 @@ G_MODULE_EXPORT void get_geo( GtkWidget *widget, const char *text, PangoRectangl
 	PangoLayout *layout;
 	int width, height;
 
+	ENTER();
 	layout = gtk_widget_create_pango_layout( widget, text );
 	pango_layout_get_pixel_size( layout, &width, &height );
 	g_object_unref( layout );
@@ -284,6 +307,8 @@ G_MODULE_EXPORT void get_geo( GtkWidget *widget, const char *text, PangoRectangl
 	 *          */
 	geo->width = width;
 	geo->height = height;
+	EXIT();
+	return;
 }
 
 /*!
@@ -295,11 +320,14 @@ G_MODULE_EXPORT void set_fixed_size( GtkWidget *widget, int nchars )
 {
 	PangoRectangle geo;
 
+	ENTER();
 	/*! Statically using the font size is BAD PRACTICE and should use
 	  the current theme settings,  but that has its own issues! */
 	get_geo( widget, "8", &geo );
 	gtk_widget_set_size_request( widget, geo.width * nchars, 
 			geo.height );
+	EXIT();
+	return;
 }
 
 
@@ -311,10 +339,13 @@ G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 {
 	GtkComboBox *box = GTK_COMBO_BOX(widget);
 	GtkEntry *entry = NULL;
+	ENTER();
 	entry =  GTK_ENTRY (gtk_bin_get_child(GTK_BIN (box)));
 	if (GTK_IS_ENTRY(entry))
 		gtk_editable_set_editable(GTK_EDITABLE(entry),FALSE);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget),0);
+	EXIT();
+	return;
 }
 
 
@@ -327,6 +358,7 @@ G_MODULE_EXPORT void lock_entry(GtkWidget *widget)
 G_MODULE_EXPORT gint get_multiplier(DataSize size)
 {
 	gint mult = 0;
+	ENTER();
 
 	switch (size)
 	{
@@ -346,6 +378,7 @@ G_MODULE_EXPORT gint get_multiplier(DataSize size)
 		default:
 			break;
 	}
+	EXIT();
 	return mult;
 }
 
@@ -361,6 +394,7 @@ G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_d
 {
 	const gchar * key = NULL;
 	gfloat *val = NULL;
+	ENTER();
 	key = g_quark_to_string(key_id);
 	switch (translate_string((char *)key))
 	{
@@ -379,6 +413,8 @@ G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_d
 			printf("Key %s is complex, ptr %p\n",key,data);
 			break;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -391,7 +427,10 @@ G_MODULE_EXPORT void dump_datalist(GQuark key_id, gpointer data, gpointer user_d
   */
 G_MODULE_EXPORT void set_widget_sensitive(gpointer widget, gpointer state)
 {
-        gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)state);
+	ENTER();
+	gtk_widget_set_sensitive(GTK_WIDGET(widget),(GBOOLEAN)state);
+	EXIT();
+	return;
 }
 
 
@@ -404,6 +443,9 @@ G_MODULE_EXPORT void set_widget_sensitive(gpointer widget, gpointer state)
   */
 G_MODULE_EXPORT void set_widget_active(gpointer widget, gpointer state)
 {
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)state);
+	ENTER();
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),(GBOOLEAN)state);
+	EXIT();
+	return;
 }
 

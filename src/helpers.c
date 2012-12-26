@@ -25,6 +25,7 @@
 #include <conversions.h>
 #include <dashboard.h>
 #include <datalogging_gui.h>
+#include <debugging.h>
 #include <init.h>
 #include <listmgmt.h>
 #include <notifications.h>
@@ -42,7 +43,10 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void start_statuscounts_pf(void)
 {
+	ENTER();
 	start_tickler(SCOUNTS_TICKLER);
+	EXIT();
+	return;
 }
 
 
@@ -51,7 +55,10 @@ G_MODULE_EXPORT void start_statuscounts_pf(void)
   */
 G_MODULE_EXPORT void enable_get_data_buttons_pf(void)
 {
+	ENTER();
 	g_list_foreach(get_list("get_data_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
+	EXIT();
+	return;
 }
 
 
@@ -62,6 +69,7 @@ G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
 {
 	static gboolean just_starting = TRUE;
 
+	ENTER();
 	if (just_starting)
 	{
 		if(g_getenv("_UNDER_VALGRIND"))
@@ -70,6 +78,8 @@ G_MODULE_EXPORT void conditional_start_rtv_tickler_pf(void)
 			start_tickler(RTV_TICKLER);
 		just_starting = FALSE;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -82,6 +92,7 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 	Firmware_Details *firmware = NULL;
 	static void (*slaves_set_color_f)(gint,const gchar *) = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	/* Only MS firmwares have TCP socket mode for now */
 	if ((firmware->capabilities & MS1 ) ||
@@ -96,6 +107,8 @@ G_MODULE_EXPORT void set_store_black_pf(void)
 		slaves_set_color_f(BLACK,"burners");
 	for (j=0;j<firmware->total_tables;j++)
 		set_reqfuel_color(BLACK,j);
+	EXIT();
+	return;
 }
 
 
@@ -104,7 +117,10 @@ G_MODULE_EXPORT void set_store_black_pf(void)
  */
 G_MODULE_EXPORT void enable_3d_buttons_pf(void)
 {
+	ENTER();
 	g_list_foreach(get_list("3d_buttons"),set_widget_sensitive,GINT_TO_POINTER(TRUE));
+	EXIT();
+	return;
 }
 
 
@@ -113,7 +129,10 @@ G_MODULE_EXPORT void enable_3d_buttons_pf(void)
  */
 G_MODULE_EXPORT void disable_burner_buttons_pf(void)
 {
+	ENTER();
 	g_list_foreach(get_list("burners"),set_widget_sensitive,GINT_TO_POINTER(FALSE));
+	EXIT();
+	return;
 }
 
 
@@ -123,8 +142,11 @@ G_MODULE_EXPORT void disable_burner_buttons_pf(void)
  */
 G_MODULE_EXPORT void reset_temps_pf(void)
 {
+	ENTER();
 	set_title(g_strdup(_("Adjusting for local Temp units...")));
 	reset_temps(DATA_GET(global_data,"mtx_temp_units"));
+	EXIT();
+	return;
 }
 
 
@@ -133,7 +155,9 @@ G_MODULE_EXPORT void reset_temps_pf(void)
   */
 G_MODULE_EXPORT void ready_msg_pf(void)
 {
+	ENTER();
 	set_title(g_strdup(_("Ready...")));
+	EXIT();
 	return;
 }
 
@@ -145,7 +169,9 @@ G_MODULE_EXPORT void ready_msg_pf(void)
   */
 G_MODULE_EXPORT void cleanup_pf(Io_Message *message)
 {
+	ENTER();
 	dealloc_array(message->command->post_functions,POST_FUNCTIONS);
+	EXIT();
 	return;
 }
 
@@ -159,6 +185,7 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	gint source = 0;
 	gint rate = 0;
 
+	ENTER();
 	set_title(g_strdup(_("Starting up data renderers...")));
 	rate = (GINT)DATA_GET(global_data,"rtslider_fps");
 	source = g_timeout_add_full(175,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)run_function,(gpointer)&update_rtsliders,NULL);
@@ -182,5 +209,7 @@ G_MODULE_EXPORT void startup_default_timeouts_pf(void)
 	source = g_timeout_add_full(210,(GINT)(1000.0/(gfloat)rate),(GSourceFunc)run_function, (gpointer)&fire_off_rtv_watches,NULL);
 
 	set_title(g_strdup(_("Data renderers running...")));
+	EXIT();
+	return;
 }
 

@@ -35,6 +35,7 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	GHashTable *str_2_enum = NULL;
 	str_2_enum = g_hash_table_new_full(g_str_hash,g_str_equal,NULL,NULL);
 
+	ENTER();
 	/* Interrogation field types */
 	g_hash_table_insert(str_2_enum,(gpointer)"_CHAR_",
 			GINT_TO_POINTER(MTX_CHAR));
@@ -489,6 +490,8 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
 	/*g_hash_table_foreach(str_2_enum,dump_hash,NULL);*/
 
 	DATA_SET_FULL(global_data,"str_2_enum",str_2_enum,g_hash_table_destroy);
+	EXIT();
+	return;
 }
 
 
@@ -501,7 +504,10 @@ G_MODULE_EXPORT void build_string_2_enum_table(void)
   */
 G_MODULE_EXPORT void dump_hash(gpointer key, gpointer value, gpointer user_data)
 {
+	ENTER();
 	MTXDBG(CRITICAL,_("Key %s, Value %i\n"),(gchar *)key, (GINT)value);
+	EXIT();
+	return;
 }
 
 
@@ -516,6 +522,7 @@ G_MODULE_EXPORT gint translate_string(const gchar *string)
 	static GHashTable *str_2_enum = NULL;
 	gint value = 0;
 
+	ENTER();
 	if (!str_2_enum)
         	str_2_enum = (GHashTable *)DATA_GET(global_data,"str_2_enum");
 
@@ -523,8 +530,9 @@ G_MODULE_EXPORT gint translate_string(const gchar *string)
 	if (value == 0)
 	{
 		/*MTXDBG(CRITICAL,_("String \"%s\" NOT FOUND in hashtable....\n"),string);*/
+		EXIT();
 		return (MTX_UNKNOWN);
 	}
-	else
-		return (GINT)value;
+	EXIT();	
+	return (GINT)value;
 }

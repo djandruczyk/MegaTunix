@@ -34,16 +34,20 @@
 G_MODULE_EXPORT gchar ** parse_keys(const gchar * string, gint * count, const gchar *delimiter)
 {
 	gchar **result = NULL;	
+
+	ENTER();
 	assert(string);
 	if (!string)
 	{
 		MTXDBG(KEYPARSER|CRITICAL,_("String passed was NULL\n"));
 		*count = 0;
+		EXIT();
 		return NULL;
 	}
 	result = g_strsplit(string,delimiter,0);
 	if (count)
 		*count = g_strv_length(result);
+	EXIT();
 	return result;
 }
 
@@ -62,11 +66,13 @@ G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const 
 	gint i = 0;
 	gint ct = 0;
 
+	ENTER();
 	assert(string);
 	if (!string)
 	{
 		MTXDBG(KEYPARSER|CRITICAL,_("String passed was NULL\n"));
 		*count = 0;
+		EXIT();
 		return 0;
 	}
 	vector = g_strsplit(string,delimiter,0);
@@ -84,6 +90,7 @@ G_MODULE_EXPORT gint * parse_keytypes(const gchar * string, gint * count, const 
 	g_strfreev(vector);
 	if (count)
 		*count = i;	
+	EXIT();
 	return keytypes;
 
 }

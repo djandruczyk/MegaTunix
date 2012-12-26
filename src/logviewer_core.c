@@ -53,6 +53,7 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 	DataSize size = MTX_U08;
 	Rtv_Map *rtv_map;
 
+	ENTER();
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	tmpbuf = (gchar *)OBJ_GET(parent,"sources");
 	if (tmpbuf);
@@ -88,7 +89,8 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
 	create_rtv_multi_value_historical_watch(sources,FALSE,"update_stripchart_data",chart);
 	g_strfreev(sources);
 	gtk_widget_show_all(parent);
-
+	EXIT();
+	return;
 }
 
 
@@ -98,7 +100,10 @@ G_MODULE_EXPORT void create_stripchart(GtkWidget *parent)
   */
 G_MODULE_EXPORT void update_stripchart_data(RtvWatch* watch)
 {
+	ENTER();
 	mtx_stripchart_set_n_values(MTX_STRIPCHART(watch->user_data),watch->count,watch->hist_vals);
+	EXIT();
+	return;
 }
 
 
@@ -113,9 +118,9 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 	gchar *filename = NULL;
 	GIOChannel *iochannel = NULL;
 
+	ENTER();
 	reset_logviewer_state();
 	free_log_info((Log_Info *)DATA_GET(global_data,"log_info"));
-
 
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->default_path = g_strdup(DATALOG_DATA_DIR);
@@ -129,6 +134,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 	if (filename == NULL)
 	{
 		update_logbar("dlog_view","warning",_("NO FILE opened for logviewing!\n"),FALSE,FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
 
@@ -136,6 +142,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 	if (!iochannel)
 	{
 		update_logbar("dlog_view","warning",_("File open FAILURE! \n"),FALSE,FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
 
@@ -148,6 +155,7 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 	gtk_widget_set_sensitive(lookup_widget("logviewer_controls_hbox"),TRUE);
 	enable_playback_controls(TRUE);
 	free_mtxfileio(fileio);
+	EXIT();
 	return TRUE;
 }
 
@@ -159,9 +167,11 @@ G_MODULE_EXPORT gboolean select_datalog_for_import(GtkWidget *widget, gpointer d
 G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 {
 	Log_Info *log_info = NULL;
+	ENTER();
 	if (!iochannel)
 	{
 		MTXDBG(CRITICAL,_("IO Channel pointer is NULL, returning!!\n"));
+		EXIT();
 		return;
 	}
 	log_info = initialize_log_info();
@@ -169,6 +179,7 @@ G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 	read_log_header(iochannel, log_info);
 	read_log_data(iochannel, log_info);
 	populate_limits(log_info);
+	EXIT();
 	return;
 }
 
@@ -181,11 +192,13 @@ G_MODULE_EXPORT void load_logviewer_file(GIOChannel *iochannel)
 G_MODULE_EXPORT Log_Info * initialize_log_info(void)
 {
 	Log_Info *log_info = NULL;
+	ENTER();
 	log_info = (Log_Info *)g_malloc0(sizeof(Log_Info));
 	log_info->field_count = 0;
 	log_info->delimiter = NULL;
 	log_info->signature = NULL;
 	log_info->log_list = g_ptr_array_new();
+	EXIT();
 	return log_info;
 }
 
@@ -207,6 +220,7 @@ G_MODULE_EXPORT void read_log_header(GIOChannel *iochannel, Log_Info *log_info )
 	Rtv_Map *rtv_map;
 	extern gconstpointer *global_data;
 	
+	ENTER();
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 read_again:
@@ -270,7 +284,8 @@ read_again:
 
 	}
 	g_free(delimiter);
-
+	EXIT();
+	return;
 }
 
 
@@ -291,6 +306,7 @@ G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 	gint tmpi = 0;
 	gint len = 0;
 
+	ENTER();
 	for (i=0;i<log_info->field_count;i++)
 	{
 		object = NULL;
@@ -317,6 +333,8 @@ G_MODULE_EXPORT void populate_limits(Log_Info *log_info)
 		DATA_SET_FULL(object,"real_upper", (gpointer)g_strdup_printf("%i",tmpi),g_free);
 
 	}
+	EXIT();
+	return;
 }
 
 
@@ -338,6 +356,7 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 	gfloat val = 0.0;
 	gconstpointer *object = NULL;
 
+	ENTER();
 	while(g_io_channel_read_line_string(iochannel,a_line,NULL,NULL) == G_IO_STATUS_NORMAL) 
 	{
 		if (g_strrstr(a_line->str,"MARK"))
@@ -386,6 +405,8 @@ G_MODULE_EXPORT void read_log_data(GIOChannel *iochannel, Log_Info *log_info)
 		g_strfreev(data);
 		x++;
 	}
+	EXIT();
+	return;
 }
 
 /*!
@@ -399,8 +420,12 @@ G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 	gconstpointer *object = NULL;
 	GArray *array = NULL;
 	
+	ENTER();
 	if (!log_info)
+	{
+		EXIT();
 		return;
+	}
 
 	for (i=0;i<log_info->field_count;i++)
 	{
@@ -418,7 +443,7 @@ G_MODULE_EXPORT void free_log_info(Log_Info *log_info)
 	g_free(log_info);
 	log_info = NULL;
 	DATA_SET(global_data,"log_info",NULL);
-
+	EXIT();
 	return;
 }
 
@@ -434,6 +459,7 @@ G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpoint
 	gfloat tmpf = 0.0;
 	extern gconstpointer *global_data;
 
+	ENTER();
 	tmpf = gtk_range_get_value(GTK_RANGE(widget));
 	DATA_SET(global_data,"lv_scroll_delay", GINT_TO_POINTER((GINT)tmpf));
 	if (DATA_GET(global_data,"playback_id"))
@@ -441,6 +467,6 @@ G_MODULE_EXPORT gboolean logviewer_scroll_speed_change(GtkWidget *widget, gpoint
 		stop_tickler(LV_PLAYBACK_TICKLER);
 		start_tickler(LV_PLAYBACK_TICKLER);
 	}
-
+	EXIT();
 	return TRUE;
 }

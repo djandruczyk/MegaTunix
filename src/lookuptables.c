@@ -60,6 +60,7 @@ G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer use
 	gchar ** vector = NULL;
 	gchar *pathstub = NULL;
 	
+	ENTER();
 	vector = g_strsplit((gchar *)fname,".",2);
 
 	pathstub = g_build_filename(LOOKUPTABLES_DATA_DIR,vector[0],NULL);
@@ -78,6 +79,8 @@ G_MODULE_EXPORT void get_table(gpointer table_name, gpointer fname, gpointer use
 		exit (-2);
 	}
 
+	EXIT();
+	return;
 }
 
 
@@ -104,6 +107,7 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 	gchar ** vector = NULL;
 	gint i = 0;
 
+	ENTER();
 	iochannel = g_io_channel_new_file(filename,"r", NULL);
 	status = g_io_channel_seek_position(iochannel,0,G_SEEK_SET,NULL);
 	if (status != G_IO_STATUS_NORMAL)
@@ -149,6 +153,7 @@ G_MODULE_EXPORT gboolean load_table(gchar *table_name, gchar *filename)
 	g_hash_table_replace((GHashTable *)DATA_GET(global_data,"lookuptables"),g_strdup(table_name),lookuptable);
 	/*g_hash_table_foreach(DATA_GET(global_data,"lookuptables"),dump_lookuptables,NULL);*/
 
+	EXIT();
 	return TRUE;
 }
 
@@ -176,6 +181,7 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 	gint len = 0;
 	gint weight[255];
 
+	ENTER();
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gint *array = NULL;
@@ -237,6 +243,7 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 
 	/*printf("closest index is %i\n",closest_index);*/
 
+	EXIT();
 	return closest_index;
 }
 
@@ -265,6 +272,7 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 	gint len = 0;
 	gint weight[255];
 
+	ENTER();
 	gconstpointer *dep_obj = NULL;
 	LookupTable *lookuptable = NULL;
 	gint *array = NULL;
@@ -327,6 +335,7 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 
 	/*printf("closest index is %i\n",closest_index);*/
 
+	EXIT();
 	return closest_index;
 }
 
@@ -348,12 +357,16 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 	gint len = 0;
 	gint weight[255];
 
+	ENTER();
 	LookupTable *lookuptable = NULL;
 	gint *array = NULL;
 
 	lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),table);	
 	if (!lookuptable)
+	{
+		EXIT();
 		return value;
+	}
 	array = lookuptable->array;
 
 	len=255;
@@ -391,6 +404,7 @@ G_MODULE_EXPORT gint direct_reverse_lookup(gchar *table, gint value)
 
 	/*printf("closest index is %i\n",closest_index);*/
 
+	EXIT();
 	return closest_index;
 }
 
@@ -412,6 +426,7 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 	gchar *alt_table = NULL;
 	gboolean state = FALSE;
 
+	ENTER();
 	if (!lookuptable_hash)
 		lookuptable_hash = (GHashTable *)DATA_GET(global_data,"lookuptables");
 	if (!check_deps)
@@ -439,6 +454,7 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 		else
 		{
 			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			EXIT();
 			return 0.0;
 		}
 	}
@@ -456,8 +472,10 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 	if (!lookuptable)
 	{
 		MTXDBG(CRITICAL,_("Lookuptable is NULL for control %s\n"),(gchar *) DATA_GET(object,"internal_names"));
+		EXIT();
 		return 0.0;
 	}
+	EXIT();
 	return lookuptable->array[offset];
 }
 
@@ -478,6 +496,7 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 	gboolean state = FALSE;
 	static gboolean (*check_deps)(gconstpointer *);
 
+	ENTER();
 	if (!check_deps)
 		get_symbol("check_dependancies",(void **)&check_deps);
 
@@ -507,8 +526,10 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 	if (!lookuptable)
 	{
 		MTXDBG(CRITICAL,_("Lookuptable is NULL for control %s\n"),(gchar *) DATA_GET(object,"internal_names"));
+		EXIT();
 		return 0.0;
 	}
+	EXIT();
 	return lookuptable->array[offset];
 }
 
@@ -524,6 +545,7 @@ G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 {
 	LookupTable *lookuptable = NULL;
 
+	ENTER();
 	if (!table)
 	{
 		printf(_("FATAL_ERROR: direct_lookup_data, table parameter is null\n"));
@@ -534,13 +556,16 @@ G_MODULE_EXPORT gfloat direct_lookup_data(gchar *table, gint offset)
 	if (!lookuptable)
 	{
 		printf(_("FATAL_ERROR: direct_lookup_data, table \"%s\" is null\n"),table);
+		EXIT();
 		return offset;
 	}
 	if (!lookuptable->array)
 	{
 		printf(_("FATAL_ERROR: direct_lookup_data, %s->array is null\n"),table);
+		EXIT();
 		return offset;
 	}
+	EXIT();
 	return lookuptable->array[offset];
 }
 
@@ -576,13 +601,18 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 	gchar ** tmpvector = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if ((ltc_created) && (ltc_visible))
+	{
+		EXIT();
 		return TRUE;
+	}
 	if ((ltc_created) && (!ltc_visible))
 	{
 		gtk_widget_show_all(lookuptables_config_window);
+		EXIT();
 		return TRUE;
 	}
 	else	/* i.e.  NOT created,  build it */
@@ -664,7 +694,10 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 
 		cfgfile = cfg_open_file(firmware->profile_filename);
 		if (!cfgfile)
+		{
+			EXIT();
 			return FALSE;
+		}
 		cfg_read_string(cfgfile,"lookuptables","tables",&tmpbuf);
 		vector = g_strsplit(tmpbuf,",",-1);
 		g_free(tmpbuf);
@@ -705,6 +738,7 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
 		gtk_tree_view_set_grid_lines( GTK_TREE_VIEW(tree),GTK_TREE_VIEW_GRID_LINES_BOTH);
 //		g_signal_connect(G_OBJECT(tree),"row-activated", G_CALLBACK(row_activated),NULL);
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -717,8 +751,10 @@ G_MODULE_EXPORT gboolean lookuptables_configurator(GtkWidget *widget, gpointer d
   */
 G_MODULE_EXPORT gboolean lookuptables_configurator_hide(GtkWidget *widget, gpointer data)
 {
+	ENTER();
 	gtk_widget_hide(widget);
 	ltc_visible = FALSE;
+	EXIT();
 	return TRUE;
 }
 
@@ -748,6 +784,7 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	GAsyncQueue *io_data_queue = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	io_data_queue = (GAsyncQueue *)DATA_GET(global_data,"io_data_queue");
 
@@ -763,6 +800,7 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	{
 		g_free(int_name);
 		g_free(old);
+		EXIT();
 		return TRUE;
 	}
 
@@ -770,12 +808,14 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	{
 		g_free(int_name);
 		g_free(old);
+		EXIT();
 		return TRUE;
 	}
 	if (g_ascii_strcasecmp(new_text,"System") == 0)
 	{
 		g_free(int_name);
 		g_free(old);
+		EXIT();
 		return TRUE;
 	}
 	if (DATA_GET(global_data,"realtime_id"))
@@ -800,6 +840,7 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	{
 		g_free(int_name);
 		g_free(old);
+		EXIT();
 		return FALSE;
 	}
 	g_hash_table_foreach((GHashTable *)DATA_GET(global_data,"lookuptables"),update_lt_config,cfgfile);
@@ -823,6 +864,7 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
 	/*printf("internal name %s, old table %s, new table %s\n",int_name,old,new_text);*/
 	g_free(int_name);
 	g_free(old);
+	EXIT();
 	return TRUE;
 }
 
@@ -835,11 +877,13 @@ G_MODULE_EXPORT gboolean lookuptable_changed(GtkCellRendererCombo *renderer, gch
   */
 G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer data)
 {
+	ENTER();
 	ConfigFile *cfgfile = (ConfigFile *)data;
 	LookupTable *lookuptable = (LookupTable *)value;
 	/*printf("updating %s, %s, %s\n",cfgfile->filename,(gchar *)key, lookuptable->filename);*/
 	cfg_write_string(cfgfile,"lookuptables",(gchar *)key,lookuptable->filename);
-
+	EXIT();
+	return;
 }
 
 
@@ -853,8 +897,11 @@ G_MODULE_EXPORT void update_lt_config(gpointer key, gpointer value, gpointer dat
 G_MODULE_EXPORT void dump_lookuptables(gpointer key, gpointer value, gpointer user_data)
 {
 	LookupTable *table;
+	ENTER();
 	table = (LookupTable *)value;
 	printf(_(": dump_hash()\n\tKey %s, Value %p, %s\n"),(gchar *)key, value,table->filename);
+	EXIT();
+	return;
 }
 
 
@@ -867,12 +914,16 @@ G_MODULE_EXPORT void dump_lookuptables(gpointer key, gpointer value, gpointer us
   */
 G_MODULE_EXPORT void row_activated(GtkTreeView *treeview, GtkTreePath *path, GtkTreeViewColumn *column, gpointer data)
 {
+	ENTER();
 	printf("A row was activated, should popdown the combo if possible...\n");
-	
+	EXIT();
+	return;
 }
+
 
 G_MODULE_EXPORT void started(GtkCellRenderer *renderer, GtkCellEditable *editable, gchar *path, gpointer data)
 {
+	ENTER();
 	printf("combo editing-started signal!\n");
 	if (GTK_IS_ENTRY(editable))
 		printf("Its an entry\n");
@@ -883,5 +934,7 @@ G_MODULE_EXPORT void started(GtkCellRenderer *renderer, GtkCellEditable *editabl
 	}
 	else
 		printf("Not sure what widget this is...\n");
+	EXIT();
+	return;
 }
 

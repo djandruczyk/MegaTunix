@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <logviewer_events.h>
 #include <logviewer_gui.h>
 #include <math.h>
@@ -43,6 +44,7 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 	GtkAllocation allocation;
 	GdkWindow *window = gtk_widget_get_window(widget);
 
+	ENTER();
 	gtk_widget_get_allocation(widget,&allocation);
 	/* Get pointer to backing pixmap ... */
 	if (!lv_data)
@@ -90,6 +92,7 @@ G_MODULE_EXPORT gboolean lv_configure_event(GtkWidget *widget, GdkEventConfigure
 		gdk_window_clear(window);
 	}
 
+	EXIT();
 	return FALSE;
 }
 
@@ -108,12 +111,14 @@ G_MODULE_EXPORT gboolean lv_expose_event(GtkWidget *widget, GdkEventExpose *even
 	pixmap = lv_data->pixmap;
 	cairo_t *cr = NULL;
 
+	ENTER();
 	/* Expose event handler... */
 	cr = gdk_cairo_create(gtk_widget_get_window(widget));
 	gdk_cairo_set_source_pixmap(cr,pixmap,0,0);
         cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
         cairo_fill(cr);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -136,22 +141,30 @@ G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion
 	extern Logview_Data *lv_data;
 	Viewable_Value *v_value = NULL;
 
+	ENTER();
 	x = event->x;
 	y = event->y;
 	state = event->state;
 
 	if (lv_data->active_traces == 0)
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (x > lv_data->info_width) /* If out of bounds just return... */
 	{
 		highlight_tinfo(lv_data->tselect,FALSE);
 		lv_data->tselect = -1;
+		EXIT();
 		return FALSE;
 	}
 
 	tnum = (guint)ceil(y/lv_data->spread);
 	if (tnum >= g_list_length(lv_data->tlist))
+	{
+		EXIT();
 		return FALSE;
+	}
 	v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,tnum);
 	if (lv_data->tselect != tnum)
 	{
@@ -160,8 +173,8 @@ G_MODULE_EXPORT gboolean lv_mouse_motion_event(GtkWidget *widget, GdkEventMotion
 		highlight_tinfo(tnum,TRUE);
 	}
 
+	EXIT();
 	return TRUE;
-
 }
 
 
@@ -178,6 +191,7 @@ G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 	GdkWindow *window = gtk_widget_get_window(lv_data->darea);
 	cairo_t *cr = NULL;
 
+	ENTER();
 	rect.x = 0;
 	rect.y = lv_data->spread*tnum;
 	rect.width =  lv_data->info_width-1;
@@ -197,8 +211,8 @@ G_MODULE_EXPORT void highlight_tinfo(gint tnum, gboolean state)
 
 	gdk_window_clear(window);
 
+	EXIT();
 	return;
-
 }
 
 
@@ -212,6 +226,7 @@ G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data
 {
 	Lv_Handler handler;
 	GtkWidget *tmpwidget = NULL;
+	ENTER();
 	handler = (Lv_Handler)(GINT)OBJ_GET(widget,"handler");
 	switch(handler)
 	{
@@ -241,6 +256,7 @@ G_MODULE_EXPORT gboolean logviewer_button_event(GtkWidget *widget, gpointer data
 			break;
 
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -265,6 +281,7 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	Viewable_Value *v_value = NULL;
 	GtkAllocation allocation;
 
+	ENTER();
 	x = event->x;
 	y = event->y;
 	gtk_widget_get_allocation(widget,&allocation);
@@ -272,19 +289,29 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	h=allocation.height;
 	state = event->state;
 
+	EXIT();
 	return FALSE;
 
 	/*printf("button with event is %i\n",event->button);
 	 *printf("state of event is %i\n",state);
 	 */
 	if (x > lv_data->info_width) /* If out of bounds just return... */
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (lv_data->active_traces == 0)
+	{
+		EXIT();
 		return TRUE;
+	}
 	tnum = (guint)ceil(y/lv_data->spread);
 	if (tnum >= g_list_length(lv_data->tlist))
+	{
+		EXIT();
 		return TRUE;
+	}
 	v_value = (Viewable_Value *)g_list_nth_data(lv_data->tlist,tnum);
 	cr = gdk_cairo_create(lv_data->pixmap);
 	if (event->state & (GDK_BUTTON3_MASK))
@@ -306,5 +333,6 @@ G_MODULE_EXPORT gboolean lv_mouse_button_event(GtkWidget *widget, GdkEventButton
 	trace_update(TRUE);
 	highlight_tinfo(tnum,TRUE);
 
+	EXIT();
 	return TRUE;
 }

@@ -43,6 +43,7 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 	gint id = 0;
 	GThread *realtime_id = (GThread *)DATA_GET(global_data,"realtime_id");
 	GMutex *mutex = NULL;
+	ENTER();
 	switch (type)
 	{
 		case RTV_TICKLER:
@@ -97,6 +98,8 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 			break;
 
 	}
+	EXIT();
+	return;
 }
 
 
@@ -112,6 +115,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 	GMutex *mutex = NULL;
 	GThread *realtime_id = NULL;
 
+	ENTER();
 	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
 	mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
 	g_return_if_fail(cond);
@@ -181,6 +185,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	gint pf_queue_len = 0;
 	gint delay = 0;
 
+	ENTER();
 	g_mutex_lock(mutex);
 	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
 	rtv_thread_mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
@@ -238,6 +243,7 @@ breakout:
 	g_mutex_free(mutex);
 	g_mutex_unlock(rtv_thread_mutex);
 	g_thread_exit(0);
+	EXIT();
 	return NULL;
 }
 
@@ -249,9 +255,11 @@ breakout:
   */
 G_MODULE_EXPORT gboolean early_interrogation(void)
 {
+	ENTER();
 	set_title(g_strdup(_("Initiating background ECU interrogation...")));
 	update_logbar("interr_view","warning",_("Initiating background ECU interrogation...\n"),FALSE,FALSE,FALSE);
 	io_cmd("interrogation",NULL);
+	EXIT();
 	return FALSE;
 }
 
@@ -262,11 +270,12 @@ G_MODULE_EXPORT gboolean early_interrogation(void)
   */
 G_MODULE_EXPORT gboolean check_for_first_time(void)
 {
+	ENTER();
 	if (DATA_GET(global_data,"first_time"))
 		printf("should run first_time_wizard\n");
     personality_choice();
+	EXIT();
 	return FALSE;
-
 }
 
 
@@ -278,9 +287,12 @@ G_MODULE_EXPORT gboolean check_for_first_time(void)
 void timeout_done(gpointer data)
 {
 	GMutex *mutex = (GMutex *)data;
+	ENTER();
 /*	printf("timeout_done, mutex pointer is %p\n",(gpointer)mutex);*/
 	if (mutex)
 		g_mutex_unlock(mutex);
+	EXIT();
+	return;
 }
 
 
@@ -289,6 +301,8 @@ void timeout_done(gpointer data)
  */
 gboolean run_function(gboolean(*func)(gpointer))
 {
+	ENTER();
 	g_idle_add(func, NULL);
+	EXIT();
 	return TRUE;
 }

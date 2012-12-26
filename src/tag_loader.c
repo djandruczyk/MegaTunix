@@ -54,6 +54,7 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 	GtkTextBuffer *textbuffer = NULL;
 	GtkTextTag * tag = NULL;
 
+	ENTER();
 	cfg_read_string(cfgfile,section,"create_tags",&tmpbuf);
 	tag_names = parse_keys(tmpbuf,&num_tags,",");
 	g_free(tmpbuf);
@@ -75,6 +76,7 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 			if (num_attrs%2)
 			{
 				MTXDBG(CRITICAL,_("Number of attributes is incorrect for widget \"%s\", key \"%s\" \n"),section,key);
+				EXIT();
 				return;
 			}
 			switch (num_attrs)
@@ -102,6 +104,7 @@ G_MODULE_EXPORT void load_tags(GObject *object, ConfigFile *cfgfile, gchar * sec
 
 	}
 	g_strfreev(tag_names);
+	EXIT();
 	return;
 }
 

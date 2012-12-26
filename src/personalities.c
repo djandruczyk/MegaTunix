@@ -61,12 +61,14 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	gchar * pathstub = NULL;
 	extern gconstpointer *global_data;
 
+	ENTER();
 	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",NULL);
 	dirs = get_dirs((const gchar *)DATA_GET(global_data,"project_name"),pathstub,&classes);
 	g_free(pathstub);
 	if (!dirs)
 	{
 		MTXDBG(CRITICAL,_("NO Interrogation profiles found, was MegaTunix installed properly?\n"));
+		EXIT();
 		return FALSE;
 	}
 	i = 0;
@@ -261,8 +263,10 @@ jumpahead_offline:
 			g_free(filename);
 			printf("about to call the set_offline_mode function\n");
 			g_idle_add((GSourceFunc)set_offline_mode,NULL);
+			EXIT();
 			return FALSE;
 	}
+	EXIT();
 	return FALSE;
 }
 
@@ -279,9 +283,12 @@ jumpahead_offline:
 G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 {
 	PersonaElement *element = (PersonaElement *)data;
-
+	ENTER();
 	if (!element)
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{
 		if (element->baud_str)
@@ -314,6 +321,7 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 		else
 			DATA_SET(global_data,"ecu_persona", NULL);
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -326,6 +334,7 @@ G_MODULE_EXPORT gboolean persona_selection(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
 {
 	PersonaElement *e = (PersonaElement *)data;
+	ENTER();
 	cleanup(e->filename);
 	cleanup(e->dirname);
 	cleanup(e->name);
@@ -335,6 +344,8 @@ G_MODULE_EXPORT void free_persona_element(gpointer data, gpointer user_data)
 	cleanup(e->sequence);
 	cleanup(e->persona);
 	cleanup(e);
+	EXIT();
+	return;
 }
 
 
@@ -349,5 +360,9 @@ G_MODULE_EXPORT gint persona_seq_sort(gconstpointer a, gconstpointer b)
 {
 	PersonaElement *a1 = (PersonaElement *)a;
 	PersonaElement *b1 = (PersonaElement *)b;
-	return g_ascii_strcasecmp(a1->sequence,b1->sequence);
+	gint res = 0;
+	ENTER();
+	res = g_ascii_strcasecmp(a1->sequence,b1->sequence);
+	EXIT();
+	return res;
 }

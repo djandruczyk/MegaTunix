@@ -19,6 +19,7 @@
   */
 
 #include <combo_mask.h>
+#include <debugging.h>
 #include <gauge.h>
 #include <mtxmatheval.h>
 #include <multi_expr_loader.h>
@@ -30,6 +31,8 @@
   */
 G_MODULE_EXPORT void * evaluator_create_w(char *expr)
 {
+	ENTER();
+	EXIT();
 	return evaluator_create(expr);
 }
 
@@ -52,6 +55,8 @@ G_MODULE_EXPORT void evaluator_destroy_w( void *eval)
   */
 G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
 {
+	ENTER();
+	EXIT();
 	return evaluator_evaluate_x(eval,x);
 }
 
@@ -63,5 +68,7 @@ G_MODULE_EXPORT double evaluator_evaluate_x_w(void * eval, double x)
   */
 G_MODULE_EXPORT GtkWidget *mask_entry_new_with_mask_w(gchar *mask)
 {
+	ENTER();
+	EXIT();
 	return mask_entry_new_with_mask(mask);
 }

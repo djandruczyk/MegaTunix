@@ -80,19 +80,35 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	CmdLineArgs *args = NULL;
 	gchar * pathstub = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 
 	if (DATA_GET(global_data,"tabs_loaded"))
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (!firmware)
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (!firmware->tab_list)
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (!firmware->tab_confs)
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (args->inhibit_tabs)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	set_title(g_strdup(_("Loading Gui Tabs...")));
 	notebook = lookup_widget("toplevel_notebook");
@@ -202,6 +218,7 @@ G_MODULE_EXPORT gboolean load_gui_tabs_pf(void)
 	MTXDBG(TABLOADER,_("All is well, leaving...\n\n"));
 	set_title(g_strdup(_("Gui Tabs Loaded...")));
 	gdk_flush();
+	EXIT();
 	return TRUE;
 }
 
@@ -229,6 +246,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	BindGroup *bindgroup = NULL;
 	extern GdkColor red;
 
+	ENTER();
 	placeholder =  gtk_notebook_get_nth_page(notebook,page);
 	label = gtk_notebook_get_tab_label(notebook,placeholder);
 
@@ -248,7 +266,8 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 		if (topframe == NULL)
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("\"topframe\" not found in xml, ABORTING!!\n"));
-			set_title(g_strdup(_("ERROR Gui Tabs XML problem!!!")));
+			set_title(g_strdup(_("ERROR Gui Tab XML problem, \"topframe\" element not found!!!")));
+			EXIT();
 			return FALSE;
 		}
 		OBJ_SET_FULL(topframe,"glade_xml",(gpointer)xml,g_object_unref);
@@ -292,6 +311,7 @@ G_MODULE_EXPORT gboolean load_actual_tab(GtkNotebook *notebook, gint page)
 	update_sources_pf();
 	/* Allow gui to update as it should.... */
 	gdk_flush();
+	EXIT();
 	return TRUE;
 }
 
@@ -308,6 +328,7 @@ G_MODULE_EXPORT void group_free(gpointer value)
 	gint i = 0;
 	DataType keytype = MTX_INT;
 
+	ENTER();
 	for (i=0;i<group->num_keys;i++)
 	{
 		keytype = (DataType)translate_string(group->keys[i]);
@@ -317,6 +338,8 @@ G_MODULE_EXPORT void group_free(gpointer value)
 	g_strfreev(group->keys);
 	g_free(group->keytypes);
 	g_free(group);
+	EXIT();
+	return;
 }
 
 /*!
@@ -341,6 +364,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 	GHashTable *groups = NULL;
 	void (*load_dep_obj)(GObject *,ConfigFile *,const gchar *,const gchar *) = NULL;
 
+	ENTER();
 	if(cfg_read_string(cfgfile,"global","groups",&tmpbuf))
 	{
 		groupnames = parse_keys(tmpbuf,&num_groups,",");
@@ -348,7 +372,10 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		g_free(tmpbuf);
 	}
 	else
+	{
+		EXIT();
 		return NULL;
+	}
 
 
 	groups = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,group_free);
@@ -401,9 +428,12 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 	}
 	g_strfreev(groupnames);
 	if (group)
+	{
+		EXIT();
 		return groups;
-	else
-		return NULL;
+	}
+	EXIT();
+	return NULL;
 }
 
 
@@ -426,10 +456,12 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 	Group *group = NULL;
 	DataType keytype = MTX_STRING;
 
+	ENTER();
 	group = (Group *)g_hash_table_lookup(groups,groupname);
 	if (!group)
 	{
 		MTXDBG(TABLOADER|CRITICAL,_("Group \"%s\" not found in file %s\n"),groupname,cfg->filename);
+		EXIT();
 		return -1;
 	}
 	/* Copy data from the group object to the */
@@ -466,6 +498,7 @@ G_MODULE_EXPORT gint bind_group_data(ConfigFile *cfg, GObject *object, GHashTabl
 				break;
 		}
 	}
+	EXIT();
 	return group->page;
 }
 
@@ -483,9 +516,11 @@ G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, const gchar * lists)
 	GList *dest_list = NULL;
 	gint i = 0;
 
+	ENTER();
 	if (!lists)
 	{
 		printf(_("Error, bind_to_lists(), lists is NULL\n"));
+		EXIT();
 		return;
 	}
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
@@ -506,6 +541,8 @@ G_MODULE_EXPORT void bind_to_lists(GtkWidget * widget, const gchar * lists)
 		store_list(tmpvector[i],dest_list);
 	}
 	g_strfreev(tmpvector);
+	EXIT();
+	return;
 }
 
 
@@ -521,8 +558,12 @@ G_MODULE_EXPORT void remove_from_lists(const gchar * lists, gpointer data)
 	gchar **tmpvector = NULL;
 	GList *list = NULL;
 
+	ENTER();
 	if (!lists)
+	{
+		EXIT();
 		return;
+	}
 
 	tmpvector = parse_keys(lists,&bind_num_keys,",");
 
@@ -533,6 +574,8 @@ G_MODULE_EXPORT void remove_from_lists(const gchar * lists, gpointer data)
 		store_list(tmpvector[i],list);
 	}
 	g_strfreev(tmpvector);
+	EXIT();
+	return;
 }
 
 /*!
@@ -574,6 +617,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	GList *tab_widgets = NULL;
 	void (*load_dep_obj)(GObject *, ConfigFile *,const gchar *,const gchar *) = NULL;
 
+	ENTER();
 	MTXDBG(TABLOADER,_("Entered"));
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -582,14 +626,20 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	g_return_if_fail(firmware);
 
 	if (!GTK_IS_WIDGET(widget))
+	{
+		EXIT();
 		return;
+	}
 
 	if (GTK_IS_WIDGET(widget))
 		if (GTK_IS_CONTAINER(widget))
 			gtk_container_foreach(GTK_CONTAINER(widget),bind_data,user_data);
 	name = gtk_widget_get_name(widget);
 	if (!name)
+	{
+		EXIT();
 		return;
+	}
 
 	if (NULL != (ptr = g_strrstr_len(name,strlen(name),"_of_")))
 	{
@@ -616,6 +666,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	else 
 	{
 		g_free(section);
+		EXIT();
 		return;
 	}
 
@@ -797,6 +848,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 			{
 				MTXDBG(TABLOADER|CRITICAL,_("Indexed Object %s has index and offset, but no size!!!!\n"),section);
 				g_free(section);
+				EXIT();
 				return;
 			}
 		}
@@ -813,6 +865,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, page %i, at offset %i...\n\n"),section,page,offset);
 			g_free(section);
+			EXIT();
 			return;
 		}
 		if (page < firmware->total_pages)
@@ -886,6 +939,8 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	}
 	g_free(section);
 	MTXDBG(TABLOADER,_("Leaving"));
+	EXIT();
+	return;
 }
 
 
@@ -897,7 +952,10 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
   */
 G_MODULE_EXPORT void run_post_functions(const gchar * functions)
 {
+	ENTER();
 	run_post_functions_with_arg(functions,NULL);
+	EXIT();
+	return;
 }
 
 
@@ -916,6 +974,7 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 	void (*post_func)(void) = NULL;
 	gchar ** vector = NULL;
 	guint i = 0;
+	ENTER();
 	vector = g_strsplit(functions,",",-1);
 	for (i=0;i<g_strv_length(vector);i++)
 	{
@@ -936,6 +995,8 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 		}
 	}
 	g_strfreev(vector);
+	EXIT();
+	return;
 }
 
 
@@ -955,6 +1016,7 @@ gboolean preload_deps(gpointer data)
 	guint i = 0;	
 	guint j = 0;	
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
@@ -974,6 +1036,7 @@ gboolean preload_deps(gpointer data)
 		cfg_free(cfgfile);
 	}
 	io_cmd(firmware->get_all_command,NULL);
+	EXIT();
 	return FALSE; /* Make it not run again... */
 }
 
@@ -1004,6 +1067,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	GList *list = NULL;
 	guint i = 0;
 
+	ENTER();
 	if (!widget_2_tab_hash)
 	{
 		widget_2_tab_hash = (GHashTable *)DATA_GET(global_data,"widget_2_tab_hash");
@@ -1015,6 +1079,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 	   else if (info->n_children == 0)
 	   {
 	   printf("%s is a BOTTOM WIDGET\n",info->name);
+	   EXIT();
 	   return FALSE;
 	   }
 	   else
@@ -1046,16 +1111,19 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		if (!cfg_read_string(cfgfile,info->name,"source_key",&source_key))
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("%s needs source_key\n"),info->name);
+			EXIT();
 			return TRUE;
 		}
 		if (!cfg_read_int(cfgfile,info->name,"offset",&offset))
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("%s needs offset\n"),info->name);
+			EXIT();
 			return TRUE;
 		}
 		if (!cfg_read_int(cfgfile,info->name,"bitmask",&bitmask))
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("%s needs bitmask\n"),info->name);
+			EXIT();
 			return TRUE;
 		}
 		if (!cfg_read_string(cfgfile,info->name,"bitvals",&bitvals))
@@ -1063,6 +1131,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			if (!cfg_read_int(cfgfile,info->name,"bitval",&bitval))
 			{
 				MTXDBG(TABLOADER|CRITICAL,_("%s needs bitvals or bitval\n"),info->name);
+				EXIT();
 				return TRUE;
 			}
 		}
@@ -1071,6 +1140,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			if (!cfg_read_int(cfgfile,"defaults","page",&page))
 			{
 				MTXDBG(TABLOADER|CRITICAL,_("%s has no page defined!\n"),info->name);
+				EXIT();
 				return TRUE;
 			}
 		}
@@ -1101,11 +1171,13 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		if (!cfg_read_int(cfgfile,info->name,"offset",&offset))
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("%s needs offset\n"),info->name);
+			EXIT();
 			return TRUE;
 		}
 		if (!cfg_read_int(cfgfile,info->name,"bitmask",&bitmask))
 		{
 			MTXDBG(TABLOADER|CRITICAL,_("%s needs bitmask\n"),info->name);
+			EXIT();
 			return TRUE;
 		}
 		if (!cfg_read_string(cfgfile,info->name,"bitvals",&bitvals))
@@ -1113,6 +1185,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			if (!cfg_read_int(cfgfile,info->name,"bitval",&bitval))
 			{
 				MTXDBG(TABLOADER|CRITICAL,_("%s needs bitvals or bitval\n"),info->name);
+				EXIT();
 				return TRUE;
 			}
 		}
@@ -1121,6 +1194,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 			if (!cfg_read_int(cfgfile,"defaults","page",&page))
 			{
 				MTXDBG(TABLOADER|CRITICAL,_("%s has no page defined!\n"),info->name);
+				EXIT();
 				return TRUE;
 			}
 		}
@@ -1130,6 +1204,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		   if (!cfg_read_int(cfgfile,"defaults","canID",&canID))
 		   {
 		   printf("%s has no canID defined!\n",info->name);
+		   EXIT();
 		   return TRUE;
 		   }
 		   }
@@ -1154,6 +1229,7 @@ gboolean descend_tree(GladeWidgetInfo *info,ConfigFile *cfgfile)
 		cleanup(source_key);
 		cleanup(source_values);
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -1169,6 +1245,7 @@ G_MODULE_EXPORT gboolean handle_dependant_tab_load(gchar * datamap)
 	guint i = 0;
 	TabInfo *tabinfo = NULL;
 
+	ENTER();
 	g_return_val_if_fail(datamap,FALSE);
 	tabinfos = (GPtrArray *)DATA_GET(global_data,"tabinfos");
 	g_return_val_if_fail(tabinfos,FALSE);
@@ -1188,9 +1265,11 @@ G_MODULE_EXPORT gboolean handle_dependant_tab_load(gchar * datamap)
 					(gpointer)notebook_page_changed,
 					NULL);
 			set_title(g_strdup(_("Tab Loaded")));
+			EXIT();
 			return TRUE;
 		}
 	}
+	EXIT();
 	return FALSE;
 }
 

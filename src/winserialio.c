@@ -18,10 +18,10 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <stdio.h>
 #include <winserialio.h>
 #ifdef __WIN32__
- #include <debugging.h>
  #include <io.h>
  #include <windows.h>
 #endif
@@ -43,9 +43,13 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 	serial_params = DATA_GET(global_data,"serial_params");
 	DCB dcb;
 	COMMTIMEOUTS timeouts;
+	ENTER();
 
 	if (serial_params->open == FALSE)
+	{
+		EXIT();
 		return;
+	}
 
 	ZeroMemory(&dcb, sizeof(dcb));
 	dcb.DCBlength = sizeof(dcb);
@@ -145,6 +149,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
 //		InvalidateHandle(serial_params->started_evt);
 //		serial_params->state = SS_Init;
 //	}
+	EXIT();
 	return;
 #endif
 }
@@ -159,6 +164,7 @@ G_MODULE_EXPORT void win32_setup_serial_params(gint fd, gint baud, gint bits, Pa
   */
 G_MODULE_EXPORT void win32_flush_serial(int fd, FlushDirection mode)
 {
+	ENTER();
 #ifdef __WIN32__
 	switch (mode)
 	{
@@ -175,6 +181,7 @@ G_MODULE_EXPORT void win32_flush_serial(int fd, FlushDirection mode)
 			break;
 	}
 #endif
+	EXIT();
     return;
 }
 

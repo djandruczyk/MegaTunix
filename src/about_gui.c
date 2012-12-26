@@ -21,6 +21,7 @@
 
 #include <about_gui.h>
 #include <config.h>
+#include <debugging.h>
 #include <logo.h>
 #include <widgetmgmt.h>
 #include <version.h>
@@ -34,11 +35,13 @@ G_MODULE_EXPORT void install_logo(GtkWidget *parent)
 	GdkPixbuf *pixbuf;
 	GtkWidget *image;
 
+	ENTER();
+
 	pixbuf = gdk_pixbuf_new_from_inline(sizeof(Logo),Logo,TRUE,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
 	gtk_container_add (GTK_CONTAINER (parent), image);
+	EXIT();
 	return;
-
 }
 
 
@@ -54,6 +57,8 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
 	GtkWidget *alignment;
 	GdkPixbuf *pixbuf;
 	GtkWidget *image;
+
+	ENTER();
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
@@ -72,7 +77,7 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
 	image = gtk_image_new_from_pixbuf(pixbuf);
 
 	gtk_container_add (GTK_CONTAINER (alignment), image);
-
+	EXIT();
 	return;
 }
 
@@ -85,6 +90,8 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
   */
 G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 {
+	ENTER();
+
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
 	{
@@ -105,6 +112,7 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 		g_free(comments);
 	}
 #endif
+	EXIT();
 	return TRUE;
 }
 

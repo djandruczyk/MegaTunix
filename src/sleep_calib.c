@@ -20,6 +20,7 @@
   */
 
 #include <defines.h>
+#include <debugging.h>
 #include <sleep_calib.h>
 #include <stdio.h>
 
@@ -39,6 +40,7 @@ void sleep_calib(void)
 	gfloat test = 1500;
 	gint i = 0;
 
+	ENTER();
 	factor = g_new0(gfloat, 1);
 	timer = g_timer_new();
 	for (i=0;i<10;i++)
@@ -56,6 +58,6 @@ void sleep_calib(void)
 	/*printf("Sleep Correction Factor is %f\n",*factor);*/
 	DATA_SET_FULL(global_data,"sleep_correction",(gpointer)factor,g_free);
 	g_timer_destroy(timer);
+	EXIT();
+	return;
 }
-
-

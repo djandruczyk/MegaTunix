@@ -20,6 +20,7 @@
   */
 
 #include <args.h>
+#include <debugging.h>
 #include <errno.h>
 #include <init.h>
 #include <locking.h>
@@ -48,13 +49,19 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void remove_mtx_lock(void)
 {
+	ENTER();
 	if (DATA_GET(global_data,"network_mode"))
+	{
+		EXIT();
 		return;
+	}
 #ifdef __WIN32__
 	win32_remove_mtx_lock();
 #else
 	unix_remove_mtx_lock();
 #endif
+	EXIT();
+	return;
 }
 
 
@@ -63,13 +70,18 @@ G_MODULE_EXPORT void remove_mtx_lock(void)
   */
 G_MODULE_EXPORT void create_mtx_lock(void)
 {
+	ENTER();
 	if (DATA_GET(global_data,"network_mode"))
+	{
+		EXIT();
 		return;
+	}
 #ifdef __WIN32__
 	win32_create_mtx_lock();
 #else
 	unix_create_mtx_lock();
 #endif
+	EXIT();
 }
 
 /*!
@@ -85,9 +97,13 @@ G_MODULE_EXPORT void unix_create_mtx_lock(void)
 	gchar * lockfile = NULL;
 	struct flock lock_struct;
 
+	ENTER();
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	if (args->network_mode)
+	{
+		EXIT();
 		return;
+	}
 
 	lockfile = g_build_filename(g_get_tmp_dir(), ".MTXlock",NULL);
 	tmpfd = g_open(lockfile,O_RDWR|O_CREAT|O_TRUNC,S_IRWXU);
@@ -124,6 +140,7 @@ G_MODULE_EXPORT void unix_create_mtx_lock(void)
 		}
 		exit(-1);
 	}
+	EXIT();
 #endif
 }
 
@@ -142,6 +159,8 @@ G_MODULE_EXPORT void unix_remove_mtx_lock(void)
 	tmpfd = g_open(lockfile,O_RDWR|O_CREAT|O_TRUNC,S_IRWXU);
 	cleanup(lockfile);
 
+	ENTER();
+
 	lock_struct.l_type=F_UNLCK;
 	lock_struct.l_start=0;
 	lock_struct.l_len=0;
@@ -149,6 +168,7 @@ G_MODULE_EXPORT void unix_remove_mtx_lock(void)
 	res = fcntl(tmpfd,F_SETLK,&lock_struct);
 	if (res == -1)
 		printf("Global MTX lock unlock failure!\n");
+	EXIT();
 	return;
 #endif
 }
@@ -163,6 +183,7 @@ G_MODULE_EXPORT void win32_create_mtx_lock(void)
 	GtkWidget *dialog = NULL;
 	gchar * file;
 
+	ENTER();
 	file = g_build_filename(g_get_tmp_dir(), ".MTXlock",NULL);
 	win32_global_lock = CreateFile(file,(GENERIC_READ | GENERIC_WRITE),0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL|FILE_FLAG_DELETE_ON_CLOSE,NULL);
 	if (win32_global_lock == INVALID_HANDLE_VALUE)
@@ -177,6 +198,7 @@ G_MODULE_EXPORT void win32_create_mtx_lock(void)
 			g_dataset_destroy(global_data);
 		exit(-1);
 	}
+	EXIT();
 	return;
 #endif
 }
@@ -187,8 +209,10 @@ G_MODULE_EXPORT void win32_create_mtx_lock(void)
 G_MODULE_EXPORT void win32_remove_mtx_lock(void)
 {
 #ifdef __WIN32__
+	ENTER();
 	if (win32_global_lock)
 		CloseHandle(win32_global_lock);
+	EXIT();
 	return;
 #endif
 }
@@ -201,6 +225,7 @@ G_MODULE_EXPORT void unlock_serial(void)
 {
 #ifndef __WIN32__
 	gchar *fname = (gchar *)DATA_GET(global_data,"serial_lockfile");
+	ENTER();
 
 	/*printf("told to unlock serial,  path \"%s\"\n",fname); */
 	if (fname)
@@ -211,6 +236,8 @@ G_MODULE_EXPORT void unlock_serial(void)
 			DATA_SET(global_data,"serial_lockfile", NULL);
 		}
 	}
+	EXIT();
+	return;
 #endif
 }
 
@@ -231,10 +258,14 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 	GError *err = NULL;
 	guint i = 0;
 
+	ENTER();
 	/*printf("told to lock serial port %s\n",name); */
 	/* If no /proc (i.e. os-X), just fake it and return */
 	if (!g_file_test("/var/lock",G_FILE_TEST_IS_DIR))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	tmpbuf = g_strdup_printf("/var/lock/LCK..");
 	vector = g_strsplit(name,PSEP,-1);
@@ -265,6 +296,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 			if (res)
 			{
 //				printf("process active\n");
+				EXIT();
 				return FALSE;
 			}
 			else
@@ -278,6 +310,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 	if (res)
 	{
 		DATA_SET_FULL(global_data,"serial_lockfile",(gpointer)lock,g_free);
+		EXIT();
 		return TRUE;
 	}
 	else
@@ -286,5 +319,6 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 		DATA_SET(global_data,"serial_lockfile",NULL);
 	}
 #endif
+	EXIT();
 	return TRUE;
 }

@@ -74,6 +74,8 @@ G_MODULE_EXPORT void init(void)
 	GHashTable *rtv_watch_hash = NULL;
 	gint i = 0;
 
+	ENTER();
+
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	colormap = gdk_colormap_get_system ();
@@ -161,6 +163,8 @@ G_MODULE_EXPORT void init(void)
 		widget_2_tab_hash = g_hash_table_new_full(g_str_hash,g_str_equal,cleanup,cleanup);
 		DATA_SET_FULL(global_data,"widget_2_tab_hash",widget_2_tab_hash,g_hash_table_destroy);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -183,6 +187,8 @@ G_MODULE_EXPORT gboolean read_config(void)
 	gboolean *hidden_list;
 	CmdLineArgs *args = NULL;
 	Serial_Params *serial_params = NULL;
+
+	ENTER();
 
 	project = (const gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
@@ -340,6 +346,7 @@ G_MODULE_EXPORT gboolean read_config(void)
 			DATA_SET(global_data,"lv_scroll_delay",GINT_TO_POINTER(100));
 		cfg_free(cfgfile);
 		cleanup(filename);
+		EXIT();
 		return TRUE;
 	}
 	else
@@ -348,8 +355,10 @@ G_MODULE_EXPORT gboolean read_config(void)
 		MTXDBG(CRITICAL,_("Config file not found, using defaults\n"));
 		cleanup(filename);
 		save_config();
+		EXIT();
 		return FALSE;	/* No file found */
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -381,6 +390,8 @@ G_MODULE_EXPORT void save_config()
 	const gchar *project = NULL;
 	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
+
+	ENTER();
 
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -592,6 +603,8 @@ G_MODULE_EXPORT void save_config()
 	cfg_free(cfgfile);
 	cleanup(filename);
 	g_static_mutex_unlock(&mutex);
+	EXIT();
+	return;
 }
 
 
@@ -610,6 +623,8 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 	const gchar *project = NULL;
 	gint perms = 0;
 	gint res = 0;
+
+	ENTER();
 
 	project = (const gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
@@ -711,6 +726,7 @@ G_MODULE_EXPORT void make_mtx_dirs(void )
 	if (res != 0)
 		MTXDBG(CRITICAL,_("Unable to create dir %s, error %s\n"),dirname,g_strerror(errno));
 	cleanup(dirname);
+	EXIT();
 	return;
 }
 
@@ -733,6 +749,8 @@ G_MODULE_EXPORT void mem_alloc(void)
 	GMutex **ve3d_mutex = NULL;
 	GList ***ecu_widgets = NULL;
 	GList **tab_gauges = NULL;
+
+	ENTER();
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
@@ -828,6 +846,8 @@ G_MODULE_EXPORT void mem_alloc(void)
 		}
 	}
 
+	EXIT();
+	return;
 }
 
 
@@ -858,6 +878,8 @@ G_MODULE_EXPORT void mem_dealloc(void)
 #ifdef DEBUG
 	gchar *tmpbuf = NULL;
 #endif
+
+	ENTER();
 
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
@@ -1072,6 +1094,8 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	g_dataset_foreach(global_data,dataset_dealloc,NULL);
 	g_dataset_destroy(global_data);
 	cleanup(global_data);
+	EXIT();
+	return;
 }
 
 
@@ -1083,8 +1107,12 @@ G_MODULE_EXPORT void mem_dealloc(void)
   */
 void dataset_dealloc(GQuark key_id,gpointer data, gpointer user_data)
 {
+	ENTER();
+
 	printf("removing data for %s\n",g_quark_to_string(key_id));
 	g_dataset_remove_data(data,g_quark_to_string(key_id));
+	EXIT();
+	return;
 }
 
 
@@ -1099,6 +1127,8 @@ G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 	/*static gint count = 0;*/
 	Io_Message *message = NULL;
 
+	ENTER();
+
 	message = g_new0(Io_Message, 1);
 	message->command = NULL;
 	message->sequence = NULL;
@@ -1109,6 +1139,7 @@ G_MODULE_EXPORT Io_Message * initialize_io_message(void)
 	DATA_SET(message->data,"_WILL_NEVER_USE_",GINT_TO_POINTER(1));
 
 	/*printf("Allocate message %i\n",count++); */
+	EXIT();
 	return message;
 }
 
@@ -1123,9 +1154,12 @@ G_MODULE_EXPORT Gui_Message * initialize_gui_message(void)
 {
 	Gui_Message *message = NULL;
 
+	ENTER();
+
 	message = g_new0(Gui_Message, 1);
 	message->functions = NULL;
 	message->payload = NULL;
+	EXIT();
 	return message;
 }
 
@@ -1137,9 +1171,12 @@ G_MODULE_EXPORT OutputData * initialize_outputdata(void)
 {
 	OutputData *output = NULL;
 
+	ENTER();
+
 	output = g_new0(OutputData, 1);
 	output->data = g_new0(gconstpointer, 1);
 	DATA_SET(output->data,"_WILL_NEVER_USE_",GINT_TO_POINTER(1));
+	EXIT();
 	return output;
 }
 
@@ -1155,8 +1192,13 @@ G_MODULE_EXPORT void dealloc_io_message(Io_Message * message)
 {
 	/*static gint count = 0;*/
 	OutputData *payload = NULL;
+	ENTER();
+
 	if (!message)
+	{
+		EXIT();
 		return;
+	}
 	/*printf("dealloc_io_message %i\n",count++);*/
 	/*printf ("message pointer %p\n",message);
 	printf ("message->functions pointer %p\n",message->functions);
@@ -1198,6 +1240,8 @@ G_MODULE_EXPORT void dealloc_io_message(Io_Message * message)
 	g_dataset_destroy(message->data);
 	cleanup(message->data);
     cleanup(message);
+	EXIT();
+	return;
 }
 
 
@@ -1208,6 +1252,8 @@ G_MODULE_EXPORT void dealloc_io_message(Io_Message * message)
   */
 G_MODULE_EXPORT void dealloc_gui_message (Gui_Message *message)
 {
+	ENTER();
+
 	if (message->functions)
 		dealloc_array(message->functions, FUNCTIONS);
 	message->functions = NULL;
@@ -1215,6 +1261,8 @@ G_MODULE_EXPORT void dealloc_gui_message (Gui_Message *message)
 	/* Message->payload is deallocated already for us
 	 * so don't touch message->payload
 	 */
+	EXIT();
+	return;
 }
 
 
@@ -1231,6 +1279,8 @@ G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 	PotentialArg *arg = NULL;
 	PostFunction *post = NULL;
 	guint i = 0;
+
+	ENTER();
 
 	/*printf("dealloc_array\n");*/
 	switch (type)
@@ -1281,6 +1331,8 @@ G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
 			g_array_free(array,TRUE);
 			break;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -1291,10 +1343,14 @@ G_MODULE_EXPORT void dealloc_array(GArray *array, ArrayType type)
   */
 G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
 {
+	ENTER();
+
 	/*printf("dealloc_w_update\n");*/
-        cleanup (w_update->group_name);
-        cleanup (w_update->msg);
-        cleanup (w_update);
+	cleanup (w_update->group_name);
+	cleanup (w_update->msg);
+	cleanup (w_update);
+	EXIT();
+	return;
 }
 
 
@@ -1305,12 +1361,18 @@ G_MODULE_EXPORT void dealloc_w_update(Widget_Update * w_update)
   */
 G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
 {
+	ENTER();
+
 	/*printf("dealloc_textmessage\n");*/
 	if (!message)
+	{
+		EXIT();
 		return;
+	}
 	if (message->msg)
 		cleanup(message->msg);
 	cleanup(message);
+	EXIT();
 	return;
 }
 
@@ -1323,8 +1385,12 @@ G_MODULE_EXPORT void dealloc_textmessage(Text_Message * message)
   */
 G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
 {
+	ENTER();
+
 	/*printf("dealloc_qfunction\n");*/
 	cleanup (qfunc);
+	EXIT();
+	return;
 }
 
 
@@ -1335,6 +1401,8 @@ G_MODULE_EXPORT void dealloc_qfunction(QFunction * qfunc)
   */
 G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 {
+	ENTER();
+
 	cleanup(table_params->table_name);
 	cleanup(table_params->bind_to_list);
 	cleanup(table_params->x_source_key);
@@ -1415,6 +1483,7 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 		g_object_unref(table_params->z_object);
 
 	cleanup(table_params);
+	EXIT();
 	return;
 }
 
@@ -1428,8 +1497,13 @@ G_MODULE_EXPORT void dealloc_table_params(Table_Params * table_params)
 G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 {
 	GArray * array = NULL;
+	ENTER();
+
 	if (!object)
+	{
+		EXIT();
 		return;
+	}
 	array = (GArray *)DATA_GET(object, "history");
 	if (array)
 	{
@@ -1441,6 +1515,8 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
 //	g_dataset_foreach(object,dataset_dealloc,NULL);
 	g_dataset_destroy(object);
 	cleanup(object);
+	EXIT();
+	return;
 }
 
 
@@ -1451,6 +1527,8 @@ G_MODULE_EXPORT void dealloc_rtv_object(gconstpointer *object)
   */
 G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 {
+	ENTER();
+
 	/*printf("dealloc_te_params\n");*/
 	cleanup(te_params->title);
 	cleanup(te_params->gauge);
@@ -1477,6 +1555,7 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 	cleanup(te_params->y_units);
 	g_list_free(te_params->entries);
 	cleanup(te_params);
+	EXIT();
 	return;
 }
 
@@ -1488,9 +1567,12 @@ G_MODULE_EXPORT void dealloc_te_params(TE_Params * te_params)
 G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 {
 	LookupTable * table = (LookupTable *)data;
+	ENTER();
+
 	cleanup(table->array);
 	cleanup(table->filename);
 	cleanup(table);
+	EXIT();
 	return;
 }
 
@@ -1503,8 +1585,12 @@ G_MODULE_EXPORT void dealloc_lookuptable(gpointer data)
 G_MODULE_EXPORT void dealloc_gauge(gpointer data, gpointer user_data)
 {
 	GtkWidget * widget = (GtkWidget *) data;
+	ENTER();
+
 	if (GTK_IS_WIDGET(widget))
 		gtk_widget_destroy(widget);
+	EXIT();
+	return;
 }
 
 
@@ -1518,6 +1604,8 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 	static CmdLineArgs *args = NULL;
 	const gchar * name = NULL;
 	GtkWidget * widget = (GtkWidget *) data;
+	ENTER();
+
 	if (!args)
 		args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	name = glade_get_widget_name(widget);
@@ -1529,10 +1617,15 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 #endif
 	}
 	if ((!GTK_IS_WIDGET(widget)) || (!name))
+	{
+		EXIT();
 		return;
+	}
 	else
 		gtk_widget_destroy(widget);
 	widget = NULL;
+	EXIT();
+	return;
 }
 
 
@@ -1547,10 +1640,13 @@ G_MODULE_EXPORT void dealloc_widget(gpointer data, gpointer user_data)
 G_MODULE_EXPORT gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter,gpointer user_data)
 {
 	Rt_Text *rtt = NULL;
+	ENTER();
+
 	gtk_tree_model_get (model, iter,
 			COL_RTT_OBJECT, &rtt,
 			-1);
 	dealloc_rtt((gpointer)rtt);
+	EXIT();
 	return FALSE;
 }
 
@@ -1561,6 +1657,8 @@ G_MODULE_EXPORT gboolean dealloc_rtt_model(GtkTreeModel *model, GtkTreePath *pat
 G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 {
 	Rt_Text *rtt = (Rt_Text *)data;
+	ENTER();
+
 	/*printf("dealloc_rtt\n");*/
 	cleanup(rtt->ctrl_name);
 	cleanup(rtt->label_prefix);
@@ -1568,6 +1666,8 @@ G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 	if (rtt->thresholds)
 		g_ptr_array_free(rtt->thresholds,TRUE);
 	cleanup(rtt);
+	EXIT();
+	return;
 }
 
 
@@ -1578,6 +1678,8 @@ G_MODULE_EXPORT void dealloc_rtt(gpointer data)
 G_MODULE_EXPORT void dealloc_slider(gpointer data)
 {
 	Rt_Slider *slider = (Rt_Slider *)data;
+	ENTER();
+
 	/*printf("dealloc_slider\n");*/
 	cleanup(slider->ctrl_name);
 	/* Don't free object or history or friendly_name 
@@ -1591,6 +1693,7 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 	if (slider->pbar)
 		gtk_widget_destroy(slider->pbar);
 	cleanup(slider);
+	EXIT();
 	return;
 }
 
@@ -1602,6 +1705,8 @@ G_MODULE_EXPORT void dealloc_slider(gpointer data)
 G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 {
 	Command *cmd = NULL;
+	ENTER();
+
 	cmd = (Command *)data;
 	g_return_if_fail(cmd);
 	cleanup(cmd->name);
@@ -1612,6 +1717,8 @@ G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 	dealloc_array(cmd->post_functions,POST_FUNCTIONS);
 	g_array_free(cmd->args,TRUE);
 	cleanup(cmd);
+	EXIT();
+	return;
 }
 
 
@@ -1622,6 +1729,8 @@ G_MODULE_EXPORT void xml_cmd_free(gpointer data)
 G_MODULE_EXPORT void xml_arg_free(gpointer data)
 {
 	PotentialArg *arg = NULL;
+	ENTER();
+
 	arg = (PotentialArg *)data;
 	g_return_if_fail(arg);
 	cleanup(arg->name);
@@ -1629,6 +1738,8 @@ G_MODULE_EXPORT void xml_arg_free(gpointer data)
 	cleanup(arg->internal_name);
 	cleanup(arg->static_string);
 	cleanup(arg);
+	EXIT();
+	return;
 }
 
 
@@ -1638,8 +1749,12 @@ G_MODULE_EXPORT void xml_arg_free(gpointer data)
   */
 G_MODULE_EXPORT void dealloc_lists_hash(gpointer data)
 {
+	ENTER();
+
 	g_hash_table_foreach((GHashTable *)data,(GHFunc)dealloc_list,NULL);
 	g_hash_table_destroy((GHashTable *)data);
+	EXIT();
+	return;
 }
 
 
@@ -1651,7 +1766,11 @@ G_MODULE_EXPORT void dealloc_lists_hash(gpointer data)
   */
 G_MODULE_EXPORT void dealloc_list(gpointer key, gpointer value, gpointer user_data)
 {
+	ENTER();
+
 	g_list_free((GList *)value);
+	EXIT();
+	return;
 }
 
 
@@ -1661,9 +1780,12 @@ G_MODULE_EXPORT void dealloc_list(gpointer key, gpointer value, gpointer user_da
   */
 G_MODULE_EXPORT void cleanup(void *data)
 {
+	ENTER();
+
 	if (data)
 		g_free(data);
 	data = NULL;
+	EXIT();
 	return;
 }
 
@@ -1675,9 +1797,13 @@ G_MODULE_EXPORT void cleanup(void *data)
   */
 G_MODULE_EXPORT void dealloc_tabinfos(gpointer data)
 {
+	ENTER();
+
 	g_ptr_array_foreach((GPtrArray *)data,(GFunc)dealloc_tabinfo,NULL);
 	g_ptr_array_free((GPtrArray *)data,TRUE);
 	DATA_SET(global_data,"tabinfos",NULL);
+	EXIT();
+	return;
 }
 
 
@@ -1688,10 +1814,14 @@ G_MODULE_EXPORT void dealloc_tabinfos(gpointer data)
   */
 G_MODULE_EXPORT void dealloc_tabinfo(gpointer data, gpointer user_data)
 {
+	ENTER();
+
 	TabInfo *tabinfo = (TabInfo *)data;
 	cleanup(tabinfo->glade_file);
 	cleanup(tabinfo->datamap_file);
 	cleanup(tabinfo);
+	EXIT();
+	return;
 }
 
 
@@ -1703,6 +1833,8 @@ G_MODULE_EXPORT void dealloc_tabinfo(gpointer data, gpointer user_data)
 G_MODULE_EXPORT void dealloc_rtv_map(gpointer data)
 {
 	Rtv_Map *rtv_map = (Rtv_Map *)data;
+	ENTER();
+
 	if (rtv_map)
 	{
 		if (rtv_map->raw_list)
@@ -1722,11 +1854,15 @@ G_MODULE_EXPORT void dealloc_rtv_map(gpointer data)
 		cleanup(rtv_map);
 		DATA_SET(global_data,"rtv_map",NULL);
 	}
+	EXIT();
+	return;
 }
 
 
 void free_test (gpointer data, gpointer user_data)
 {
 	GObject *object = (GObject *)data;
+	ENTER();
+
 	g_object_unref(object);
 }

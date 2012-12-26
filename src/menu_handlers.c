@@ -21,6 +21,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <firmware.h>
 #include <menu_handlers.h>
 #include <plugin.h>
@@ -64,11 +65,15 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 	GladeXML *xml = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!xml) || (DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return;
+	}
 
 	if (get_symbol ("common_plugin_menu_setup",(void **)&common_plugin_menu_setup))
 		common_plugin_menu_setup(xml);
@@ -97,6 +102,7 @@ G_MODULE_EXPORT void setup_menu_handlers_pf(void)
 			gtk_widget_set_sensitive(item,fio_items[i].sensitivity);
 		}
 	}
+	EXIT();
 	return;
 }
 
@@ -115,11 +121,18 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 	GtkWidget * child = NULL;
 	gint i = 0;
 	
+	ENTER();
 	notebook = lookup_widget( "toplevel_notebook");
 	if (!GTK_IS_NOTEBOOK(notebook))
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (!OBJ_GET(widget,"target_tab"))
+	{
+		EXIT();
 		return FALSE;
+	}
 	target = (TabIdent)(GINT)OBJ_GET(widget,"target_tab");
 	total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 	for (i=0;i<total;i++)
@@ -131,10 +144,11 @@ G_MODULE_EXPORT gboolean jump_to_tab(GtkWidget *widget, gpointer data)
 		if (c_tab == target)
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(notebook),i);
+			EXIT();
 			return TRUE;
 		}
 	}
-
+	EXIT();
 	return FALSE;
 }
 
@@ -152,6 +166,7 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 	void (*do_backup)(GtkWidget *, gpointer) = NULL;
 	void (*do_restore)(GtkWidget *, gpointer) = NULL;
 
+	ENTER();
 	switch (action)
 	{
 		case ALL_TABLE_IMPORT:
@@ -169,6 +184,7 @@ G_MODULE_EXPORT gboolean settings_transfer(GtkWidget *widget, gpointer data)
 				do_restore(NULL,NULL);
 			break;
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -186,9 +202,13 @@ G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 	GtkWidget * child = NULL;
 	gint i = 0;
 	
+	ENTER();
 	notebook = lookup_widget( "toplevel_notebook");
 	if (!GTK_IS_NOTEBOOK(notebook))
+	{
+		EXIT();
 		return FALSE;
+	}
 	total = gtk_notebook_get_n_pages(GTK_NOTEBOOK(notebook));
 	for (i=0;i<total;i++)
 	{
@@ -197,8 +217,12 @@ G_MODULE_EXPORT gboolean check_tab_existance(TabIdent target)
 			continue;
 		c_tab = (TabIdent)(GINT)OBJ_GET(child,"tab_ident");
 		if (c_tab == target)
+		{
+			EXIT();
 			return TRUE;
+		}
 	}
+	EXIT();
 	return FALSE;
 }
 
