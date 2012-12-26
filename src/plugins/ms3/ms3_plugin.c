@@ -19,6 +19,7 @@
   */
 
 #define __MS3_PLUGIN_C__
+#include <debugging.h>
 #include <ms3_plugin.h>
 #include <gtk/gtk.h>
 #include <stdio.h>
@@ -33,12 +34,15 @@ gconstpointer *global_data = NULL;
   */
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
+	ENTER();
 	global_data = data;
 	/* Initializes function pointers since on Winblows was can NOT
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
 	 */
 	register_ecu_enums();
+	EXIT();
+	return;
 }
 
 
@@ -47,7 +51,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
   */
 G_MODULE_EXPORT void plugin_shutdown()
 {
+	ENTER();
 	deregister_ecu_enums();
+	EXIT();
 	return;
 }
 
@@ -58,13 +64,15 @@ G_MODULE_EXPORT void plugin_shutdown()
 void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
-
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+	EXIT();
+	return;
 }
 
 
@@ -74,11 +82,13 @@ void register_ecu_enums(void)
 void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
-
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+	EXIT();
+	return;
 }
