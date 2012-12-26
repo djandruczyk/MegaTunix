@@ -119,8 +119,15 @@ gboolean mtx_stripchart_set_n_values (MtxStripChart *chart, gint count, gfloat**
 			val = values[i][j] > trace->max ? trace->max:values[i][j];
 			val = val < trace->min ? trace->min:val;
 			trace->history = g_array_append_val(trace->history,val);
+			/* DEBUG code
+			if (i == 1)
+				printf("appending %f to array, length is now %i\n",val,trace->history->len);
+				*/
 			if (trace->history->len > (guint)2*priv->w)
+			{
 				trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
+				//printf("history longer than 2x display, removing old history, length is now %i\n",trace->history->len);
+			}
 		}
 	}
 	priv->newsamples = count;

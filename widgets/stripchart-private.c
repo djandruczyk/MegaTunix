@@ -261,11 +261,11 @@ void update_stripchart_position (MtxStripChart *chart)
 
 	widget = GTK_WIDGET(chart);
 	shift = priv->newsamples;
-
-	/* Draw new data to trace pixmap */
+	
+	if (shift == 0)
+		return;
 
 	/* Scroll trace pixmap */
-
 	cr = gdk_cairo_create(priv->trace_pixmap);
 	gdk_cairo_set_source_pixmap(cr,priv->trace_pixmap,-shift,0);
 	cairo_rectangle(cr,0,0,priv->w,priv->h);
@@ -275,6 +275,7 @@ void update_stripchart_position (MtxStripChart *chart)
 	cairo_fill(cr);
 	/* Render new data */
 
+	/* Draw new data to trace pixmap */
 	for (i=0;i<priv->num_traces;i++)
 	{
 		trace = g_array_index(priv->traces,MtxStripChartTrace *,i);
@@ -284,15 +285,20 @@ void update_stripchart_position (MtxStripChart *chart)
 				trace->color.red/65535.0,
 				trace->color.green/65535.0,
 				trace->color.blue/65535.0);
-		for(j=shift;j>0;j--)
+		if (trace->history->len > 1)
 		{
-			if (trace->history->len > 1)
+			shift = shift >= trace->history->len ? trace->history->len-1:shift;
+			for(j=shift;j>0;j--)
 			{
-				start_x = priv->w - j;
-				start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-j-1)-trace->min) / (trace->max - trace->min))*priv->h);
+				start_x = priv->w - (j-1);
+				start_y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-(j))-trace->min) / (trace->max - trace->min))*priv->h);
 				cairo_move_to(cr,start_x,start_y);
-				x = priv->w-j+1;
-				y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-j)-trace->min) / (trace->max - trace->min))*priv->h);
+				x = priv->w-j;
+				y = priv->h - (((g_array_index(trace->history,gfloat,trace->history->len-(j+1))-trace->min) / (trace->max - trace->min))*priv->h);
+				/*
+				if (i == 1)
+					printf("history->len is %i, J is %i, Line from (%f - %f)\n",trace->history->len,j, g_array_index(trace->history,gfloat,trace->history->len-(j))),g_array_index(trace->history,gfloat,trace->history->len-(j+1));
+					*/
 				cairo_line_to(cr,x,y);
 				cairo_stroke(cr);
 			}
