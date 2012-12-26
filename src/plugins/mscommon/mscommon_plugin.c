@@ -21,6 +21,7 @@
 #define __MSCOMMON_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
+#include <debugging.h>
 #include <mscommon_plugin.h>
 #include <mscommon_helpers.h>
 #include <mscommon_gui_handlers.h>
@@ -44,6 +45,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
 	 */
+	ENTER();
 	*(void **)(&error_msg_f) = (void **)DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
 	*(void **)(&get_symbol_f) = (void **)DATA_GET(global_data,"get_symbol_f");
@@ -130,6 +132,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("write_wrapper",(void **)&write_wrapper_f);
 
 	register_common_enums();
+	EXIT();
+	return;
 }
 
 
@@ -138,7 +142,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
   */
 G_MODULE_EXPORT void plugin_shutdown()
 {
+	ENTER();
 	deregister_common_enums();
+	EXIT();
 	return;
 }
 
@@ -150,6 +156,7 @@ void register_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
@@ -307,6 +314,8 @@ void register_common_enums(void)
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+	EXIT();
+	return;
 }
 
 
@@ -317,6 +326,7 @@ void deregister_common_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
 
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET (global_data, "str_2_enum");
 	if (str_2_enum)
 	{
@@ -400,4 +410,6 @@ void deregister_common_enums(void)
 	}
 	else
 		printf ("COULD NOT FIND global pointer to str_2_enum table\n!");
+	EXIT();
+	return;
 }

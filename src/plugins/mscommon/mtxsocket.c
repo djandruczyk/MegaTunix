@@ -25,6 +25,7 @@
 #include <config.h>
 #include <configfile.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <errno.h>
@@ -76,6 +77,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	MtxSocket *mtxsock = NULL;
 	gboolean fail1,fail2,fail3;
 
+	ENTER();
 	/* Open The three sockets,  ASCII interface, binary interface
 	 * and control socket for telling other instances to update 
 	 * stuff..
@@ -141,11 +143,15 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	}
 
 	if ((!fail1) && (!fail2) &&(!fail3))
+	{
 		notify_slaves_id = g_thread_create(notify_slaves_thread,
 				NULL,/* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
 		DATA_SET(global_data,"notify_slaves_id",GINT_TO_POINTER(notify_slaves_id));
+	}
+	EXIT();
+	return;
 }
 
 
@@ -161,12 +167,14 @@ G_MODULE_EXPORT GSocket *setup_socket(gint port)
 	GInetAddress *inetaddr = NULL;
 	GSocketAddress *sockaddr = NULL;
 
+	ENTER();
 	sock = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!sock)
 	{
 		MTXDBG(CRITICAL|SERIAL_RD|SERIAL_WR,_("Socket creation error: %s\n"),error->message);
 		g_error_free(error);
 		error = NULL;
+		EXIT();
 		return NULL;
 
 	}
@@ -179,6 +187,7 @@ G_MODULE_EXPORT GSocket *setup_socket(gint port)
 		g_error_free(error);
 		error = NULL;
 		g_socket_close(sock,NULL);
+		EXIT();
 		return NULL;
 	}
 	g_object_unref(sockaddr);
@@ -192,10 +201,12 @@ G_MODULE_EXPORT GSocket *setup_socket(gint port)
 		g_error_free(error);
 		error = NULL;
 		g_socket_close(sock,NULL);
+		EXIT();
 		return NULL;
 	}
 
 	/*	printf("\nTCP/IP Socket ready: %s:%d\n\n",inet_ntoa(server_address.sin_addr),ntohs(server_address.sin_port));*/
+	EXIT();
 	return (sock);
 }
 
@@ -224,6 +235,7 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 	static MtxSocketClient *last_bin_client = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	MTXDBG(MTXSOCKET|THREADS|CRITICAL,_("Thread created!\n"));
@@ -314,6 +326,7 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 
 		}
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -335,6 +348,7 @@ G_MODULE_EXPORT void *ascii_socket_server(gpointer data)
 	gint res = 0;
 	GError *error = NULL;
 
+	ENTER();
 	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
 
 	tmpbuf = g_strdup_printf(_("Welcome to MegaTunix %s, ASCII mode enabled\nEnter 'help' for assistance\n"),VERSION);
@@ -392,6 +406,7 @@ close_ascii:
 			}
 		}
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -435,6 +450,7 @@ G_MODULE_EXPORT void *binary_socket_server(gpointer data)
 	GError *error = NULL;
 	Firmware_Details *firmware;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	state = WAITING_FOR_CMD;
@@ -855,6 +871,7 @@ close_binary2:
 				continue;
 		}
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -881,17 +898,22 @@ G_MODULE_EXPORT gboolean validate_remote_ascii_cmd(MtxSocketClient *client, gcha
 	gchar *tmpbuf = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	tmpbuf = g_strchomp(g_strdelimit(g_strndup(buf,len),"\n\r\t",' '));
 	if (!tmpbuf)
+	{
+		EXIT();
 		return TRUE;
+	}
 	vector = g_strsplit(tmpbuf,",",2);
 	g_free(tmpbuf);
 	args = g_strv_length(vector);
 	if (!vector[0])
 	{
 		g_strfreev(vector);
+		EXIT();
 		return TRUE;
 	}
 	tmpbuf = g_ascii_strup(vector[0],-1);
@@ -1057,6 +1079,7 @@ get_ecu_page,<canID>,<page> <-- returns the whole ECU page at canID,page\n\r\
 		net_send(client->socket,(guint8 *)"\n\r",strlen("\n\r"));
 	}
 	g_free(arg2);
+	EXIT();
 	return retval;
 }
 
@@ -1067,8 +1090,11 @@ get_ecu_page,<canID>,<page> <-- returns the whole ECU page at canID,page\n\r\
   */
 G_MODULE_EXPORT void return_socket_error(GSocket *socket)
 {
+	ENTER();
 	net_send(socket,(guint8 *)ERR_MSG,strlen(ERR_MSG));
 	net_send(socket,(guint8 *)"\n\r",strlen("\n\r"));
+	EXIT();
+	return;
 }
 
 
@@ -1091,6 +1117,7 @@ G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 	GString *output;
 	Rtv_Map *rtv_map = NULL;
 
+	ENTER();
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	vars = g_strsplit(arg2,",",-1);
@@ -1124,6 +1151,8 @@ G_MODULE_EXPORT void socket_get_rt_vars(GSocket *socket, gchar *arg2)
 	res = net_send(socket,(guint8 *)output->str,output->len);
 	g_string_free(output,TRUE);
 	g_strfreev(vars);
+	EXIT();
+	return;
 }
 
 
@@ -1140,6 +1169,7 @@ G_MODULE_EXPORT void socket_get_rtv_list(GSocket *socket)
 	gconstpointer * object = NULL;
 	Rtv_Map *rtv_map = NULL;
 
+	ENTER();
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 	for (i=0;i<rtv_map->rtv_list->len;i++)
 	{
@@ -1163,6 +1193,8 @@ G_MODULE_EXPORT void socket_get_rtv_list(GSocket *socket)
 	if (len != res)
 		printf(_("SHORT WRITE!\n"));
 	g_free(tmpbuf);
+	EXIT();
+	return;
 }
 
 
@@ -1180,6 +1212,7 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 	gchar * tmpbuf = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/* We want canID, page, offset
@@ -1207,6 +1240,8 @@ G_MODULE_EXPORT void socket_get_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		g_free(tmpbuf);
 		g_strfreev(vars); 
 	}
+	EXIT();
+	return;
 }
 
 
@@ -1223,6 +1258,7 @@ G_MODULE_EXPORT void socket_get_ecu_page(MtxSocketClient *client, gchar *arg2)
 	GString * output = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/* We want canID, page
@@ -1255,6 +1291,8 @@ G_MODULE_EXPORT void socket_get_ecu_page(MtxSocketClient *client, gchar *arg2)
 		net_send(client->socket,(guint8 *)output->str,output->len);
 		g_string_free(output,TRUE);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -1272,6 +1310,7 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 	gchar ** vars = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/* We want canID, page, offset, data
@@ -1294,6 +1333,8 @@ G_MODULE_EXPORT void socket_set_ecu_var(MtxSocketClient *client, gchar *arg2, Da
 		ms_send_to_ecu(canID,page,offset,size,data,TRUE);
 		g_strfreev(vars); 
 	}
+	EXIT();
+	return;
 }
 
 
@@ -1307,10 +1348,14 @@ G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 	gint i = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!firmware)
+	{
+		EXIT();
 		return FALSE;
+	}
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		if (!firmware->page_params[i]->dl_by_default)
@@ -1319,10 +1364,13 @@ G_MODULE_EXPORT gboolean check_for_changes(MtxSocketClient *client)
 		if (!firmware->ecu_data[i])
 			continue;
 		if(memcmp(client->ecu_data[i],firmware->ecu_data[i],firmware->page_params[i]->length) != 0)
+		{
+			EXIT();
 			return TRUE;
+		}
 	}
+	EXIT();
 	return FALSE;
-
 }
 
 
@@ -1348,6 +1396,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 	gchar ** vector = NULL;
 	CmdLineArgs *args = NULL;
 
+	ENTER();
 	get_symbol_f("setup_serial_params",(void **)&setup_serial_params_f);
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	g_return_val_if_fail(args,NULL);
@@ -1448,6 +1497,7 @@ G_MODULE_EXPORT void *network_repair_thread(gpointer data)
 		thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup_printf("%s:%i",host,port));
 	}
 	g_thread_exit(0);
+	EXIT();
 	return NULL;
 }
 
@@ -1470,6 +1520,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	Serial_Params *serial_params;
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
+	ENTER();
 
 	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
@@ -1477,6 +1528,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 		MTXDBG(CRITICAL|SERIAL_RD|SERIAL_WR,_("Socket open error: %s\n"),error->message);
 		g_error_free(error);
 		error = NULL;
+		EXIT();
 		return FALSE;
 	}
 
@@ -1489,6 +1541,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 		MTXDBG(SERIAL_RD|SERIAL_WR,_("Socket connect error: %s\n"),error->message);
 		g_error_free(error);
 		error = NULL;
+		EXIT();
 		return FALSE;
 	}
 	g_resolver_free_addresses(list);
@@ -1501,6 +1554,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 	serial_params->net_mode = TRUE;
 	serial_params->open = TRUE;
 
+	EXIT();
 	return TRUE;
 }
 
@@ -1511,6 +1565,7 @@ G_MODULE_EXPORT gboolean open_network(gchar * host, gint port)
 G_MODULE_EXPORT gboolean close_network(void)
 {
 	Serial_Params *serial_params;
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	/*	printf("Closing network port!\n");*/
 	g_socket_shutdown(serial_params->socket,TRUE,TRUE,NULL);
@@ -1518,6 +1573,7 @@ G_MODULE_EXPORT gboolean close_network(void)
 	serial_params->open = FALSE;
 	serial_params->fd = -1;
 	DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+	EXIT();
 	return TRUE;
 }
 
@@ -1528,10 +1584,12 @@ G_MODULE_EXPORT gboolean close_network(void)
 G_MODULE_EXPORT gboolean close_control_socket(void)
 {
 	Serial_Params *serial_params;
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	g_socket_shutdown(serial_params->ctrl_socket,TRUE,TRUE,NULL);
 	g_socket_close(serial_params->ctrl_socket,NULL);
 	serial_params->ctrl_socket = NULL;
+	EXIT();
 	return TRUE;
 }
 
@@ -1560,6 +1618,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 	gint len = 0;
 	guint8 *buffer = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!slave_msg_queue)
@@ -1696,6 +1755,7 @@ G_MODULE_EXPORT void *notify_slaves_thread(gpointer data)
 		g_free(msg);
 		msg = NULL;
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -1733,6 +1793,7 @@ G_MODULE_EXPORT void *control_socket_client(gpointer data)
 	GError *error = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	state = WAITING_FOR_CMD;
 	substate = UNDEFINED_SUBSTATE;
 	MTXDBG(MTXSOCKET|THREADS,_("Thread created!\n"));
@@ -1908,6 +1969,8 @@ close_control:
 
 		}
 	}
+	EXIT();
+	return;
 }
 
 
@@ -1928,6 +1991,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	Serial_Params *serial_params;
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
+	ENTER();
 	/*	printf ("Trying to open network port!\n");*/
 	clientsocket = g_socket_new(G_SOCKET_FAMILY_IPV4, G_SOCKET_TYPE_STREAM, G_SOCKET_PROTOCOL_TCP, &error);
 	if (!clientsocket)
@@ -1935,6 +1999,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 		MTXDBG(MTXSOCKET|CRITICAL|SERIAL_RD|SERIAL_WR,_("Socket open error: %s\n"),error->message);
 		g_error_free(error);
 		error = NULL;
+		EXIT();
 		return FALSE;
 	}
 
@@ -1947,6 +2012,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 		MTXDBG(MTXSOCKET|CRITICAL|SERIAL_RD|SERIAL_WR,_("Socket connect error: %s\n"),error->message);
 		g_error_free(error);
 		error = NULL;
+		EXIT();
 		return FALSE;
 	}
 	/*	printf("connected!!\n");*/
@@ -1968,6 +2034,7 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 			cli_data, /* Thread args */
 			TRUE,   /* Joinable */
 			NULL);  /* GError pointer */
+	EXIT();
 	return TRUE;
 }
 
@@ -1986,8 +2053,12 @@ G_MODULE_EXPORT gint net_send(GSocket *socket, guint8 *buf, gint len)
 	gint n = 0;
 	GError *error = NULL;
 
+	ENTER();
 	if (!buf)
+	{
+		EXIT();
 		return -1;
+	}
 
 	while (total < len) 
 	{
@@ -1997,12 +2068,14 @@ G_MODULE_EXPORT gint net_send(GSocket *socket, guint8 *buf, gint len)
 			MTXDBG(MTXSOCKET|CRITICAL|SERIAL_WR,_("Socket send error: \"%s\"\n"),error->message);
 			g_error_free(error);
 			error = NULL;
+			EXIT();
 			return -1; 
 		}
 		total += n;
 		bytesleft -= n;
 	}
 
+	EXIT();
 	return total; 
 }
 
@@ -2021,6 +2094,7 @@ G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint 
 	gint buflen = 0;
 	const gint headerlen = 7;
 
+	ENTER();
 	buflen = headerlen + msg->length;
 
 	buffer = g_new0(guint8,buflen);	/* 7 byte msg header */
@@ -2037,6 +2111,7 @@ G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint 
 		g_memmove(buffer+headerlen,msg->data,msg->length);
 
 	*msg_len = buflen;
+	EXIT();
 	return buffer;
 }
 
@@ -2055,6 +2130,7 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 	gint buflen = 0;
 	const gint headerlen = 5;
 
+	ENTER();
 	buflen = headerlen + msg->length;
 
 	buffer = g_new0(guint8,buflen);	
@@ -2066,6 +2142,7 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 	g_memmove(buffer+headerlen, msg->data,msg->length);
 
 	*msg_len = buflen;
+	EXIT();
 	return buffer;
 }
 
@@ -2079,6 +2156,7 @@ G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 {
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	/*printf("dealloc_client_data\n");*/
 	if (client)
@@ -2093,5 +2171,7 @@ G_MODULE_EXPORT void dealloc_client_data(MtxSocketClient *client)
 		}
 		g_free(client);
 	}
+	EXIT();
+	return;
 }
 

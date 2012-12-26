@@ -18,13 +18,13 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <firmware.h>
 #include <mscommon_plugin.h>
 #include <string.h>
 
 
 extern gconstpointer *global_data;
-
 
 /*!
   \brief A generic function to returns the data from the representation of
@@ -44,6 +44,7 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 	gconstpointer *container = NULL;
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
+	ENTER();
 	if (!_get_sized_data)
 		get_symbol_f("_get_sized_data",(void **)&_get_sized_data);
 	g_return_val_if_fail(_get_sized_data,0);
@@ -73,6 +74,7 @@ G_MODULE_EXPORT gint get_ecu_data(gpointer data)
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 
+	EXIT();
 	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
 
@@ -90,6 +92,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSiz
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
+	ENTER();
 	if (!_get_sized_data)
 		get_symbol_f("_get_sized_data",(void **)&_get_sized_data);
 	g_return_val_if_fail(_get_sized_data,0);
@@ -105,6 +108,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data(gint canID, gint page, gint offset, DataSiz
 	/*printf("offset %i, page[%i] length %i\n",offset,page,firmware->page_params[page]->length);*/
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
 
+	EXIT();
 	return _get_sized_data(firmware->ecu_data[page],offset,size,firmware->bigendian);
 }
 
@@ -121,6 +125,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, Da
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
+	ENTER();
 	if (!_get_sized_data)
 		get_symbol_f("_get_sized_data",(void **)&_get_sized_data);
 	g_return_val_if_fail(_get_sized_data,0);
@@ -133,6 +138,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data_last(gint canID, gint page, gint offset, Da
 	g_return_val_if_fail(page >= 0,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
+	EXIT();
 	return _get_sized_data(firmware->ecu_data_last[page],offset,size,firmware->bigendian);
 }
 
@@ -150,6 +156,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data_backup(gint canID, gint page, gint offset, 
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_get_sized_data)(guint8 *, gint, DataSize, gboolean) = NULL;
+	ENTER();
 	if (!_get_sized_data)
 		get_symbol_f("_get_sized_data",(void **)&_get_sized_data);
 	g_return_val_if_fail(_get_sized_data,0);
@@ -162,6 +169,7 @@ G_MODULE_EXPORT gint ms_get_ecu_data_backup(gint canID, gint page, gint offset, 
 	g_return_val_if_fail(page >= 0,0);
 	g_return_val_if_fail(firmware->page_params[page],0);
 	g_return_val_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)),0);
+	EXIT();
 	return _get_sized_data(firmware->ecu_data_backup[page],offset,size,firmware->bigendian);
 }
 
@@ -184,6 +192,7 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new_data)
 	GtkWidget *widget = NULL;
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
+	ENTER();
 	if (!_set_sized_data)
 		get_symbol_f("_set_sized_data",(void **)&_set_sized_data);
 
@@ -218,6 +227,8 @@ G_MODULE_EXPORT void set_ecu_data(gpointer data, gint *new_data)
 	g_return_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)));
 
 	_set_sized_data(firmware->ecu_data[page],offset,size,value,firmware->bigendian);
+	EXIT();
+	return;
 }
 
 
@@ -234,6 +245,7 @@ G_MODULE_EXPORT void ms_set_ecu_data(gint canID, gint page, gint offset, DataSiz
 {
 	Firmware_Details *firmware = NULL;
 	static gint (*_set_sized_data)(guint8 *, gint, DataSize, gint, gboolean) = NULL;
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!_set_sized_data)
 		get_symbol_f("_set_sized_data",(void **)&_set_sized_data);
@@ -241,6 +253,8 @@ G_MODULE_EXPORT void ms_set_ecu_data(gint canID, gint page, gint offset, DataSiz
 	g_return_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)));
 
 	_set_sized_data(firmware->ecu_data[page],offset,size,new_data,firmware->bigendian);
+	EXIT();
+	return;
 }
 
 
@@ -261,6 +275,7 @@ G_MODULE_EXPORT void store_new_block(gconstpointer *block)
 	Firmware_Details *firmware = NULL;
 	guint8 ** ecu_data = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(firmware);
@@ -278,6 +293,8 @@ G_MODULE_EXPORT void store_new_block(gconstpointer *block)
 	g_return_if_fail(firmware->ecu_data[page]);
 	g_return_if_fail(((offset >= 0 ) && (offset < firmware->page_params[page]->length)));
 	memcpy (ecu_data[page]+offset,data,num_bytes);
+	EXIT();
+	return;
 }
 
 /*!
@@ -294,6 +311,7 @@ G_MODULE_EXPORT void ms_store_new_block(gint canID, gint page, gint offset, void
 	Firmware_Details *firmware = NULL;
 	guint8 ** ecu_data = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(firmware);
@@ -303,6 +321,8 @@ G_MODULE_EXPORT void ms_store_new_block(gint canID, gint page, gint offset, void
 
 	ecu_data = firmware->ecu_data;
 	memcpy (ecu_data[page]+offset,buf,count);
+	EXIT();
+	return;
 }
 
 
@@ -317,6 +337,7 @@ G_MODULE_EXPORT void ms_backup_current_data(gint canID, gint page)
 	guint8 ** ecu_data_last = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_if_fail(firmware);
@@ -329,6 +350,8 @@ G_MODULE_EXPORT void ms_backup_current_data(gint canID, gint page)
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
 	memcpy (ecu_data_last[page],ecu_data[page],firmware->page_params[page]->length);
+	EXIT();
+	return;
 }
 
 
@@ -345,6 +368,7 @@ G_MODULE_EXPORT gboolean ms_find_mtx_page(gint tableID,gint *mtx_page)
 	Firmware_Details *firmware = NULL;
 	gint i = 0;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	g_return_val_if_fail(firmware,FALSE);
@@ -353,12 +377,17 @@ G_MODULE_EXPORT gboolean ms_find_mtx_page(gint tableID,gint *mtx_page)
 	for (i=0;i<firmware->total_pages;i++)
 	{
 		if (!firmware->page_params[i])
+		{
+			EXIT();
 			return FALSE;
+		}
 		if (firmware->page_params[i]->phys_ecu_page == tableID)
 		{
 			*mtx_page = i;
+			EXIT();
 			return TRUE;
 		}
 	}
+	EXIT();
 	return FALSE;
 }

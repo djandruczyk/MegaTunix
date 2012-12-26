@@ -20,6 +20,7 @@
 
 #include <config.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <mscommon_gui_handlers.h>
@@ -41,6 +42,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 	GtkWidget *item = NULL;
 	GtkWidget *image = NULL;
 
+	ENTER();
 	/* View->Tabs Menu */
 	menu = glade_xml_get_widget (xml, "goto_tab1_menu");
 	item = gtk_menu_item_new_with_mnemonic("_Boost Tables");
@@ -107,6 +109,7 @@ G_MODULE_EXPORT void common_plugin_menu_setup(GladeXML *xml)
 
 	if (get_symbol_f("ecu_plugin_menu_setup",(void **)&ecu_plugin_menu_setup))
 		ecu_plugin_menu_setup(xml);
+	EXIT();
 	return;
 }
 
@@ -154,6 +157,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	GtkTreeIter iter;
 	GtkTreeModel *model = NULL;
 
+	ENTER();
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	canID = firmware->canID;
@@ -165,6 +169,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	if (!item)
 	{
 		MTXDBG(CRITICAL,_("Unable to find spark table combo! where am I?\n"));
+		EXIT();
 		return TRUE;
 	}
 
@@ -172,6 +177,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	if (!gtk_combo_box_get_active_iter(GTK_COMBO_BOX(item),&iter))
 	{
 		MTXDBG(CRITICAL,_("Table was not found!\n"));
+		EXIT();
 		return TRUE;
 	}
 	model = gtk_combo_box_get_model(GTK_COMBO_BOX(item));
@@ -299,6 +305,7 @@ G_MODULE_EXPORT gboolean create_ignition_map(GtkWidget *widget, gpointer data)
 	}
 
 	gtk_widget_hide(glade_xml_get_widget (xml, "create_ignition_window"));
+	EXIT();
 	return TRUE;
 }
 
@@ -320,10 +327,14 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 	GtkListStore *store = NULL;
 	GtkTreeIter iter;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if ((!main_xml) || (DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!GTK_IS_WIDGET(window))
 	{
@@ -350,6 +361,7 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
+		EXIT();
 		return TRUE;
 	}
 
@@ -361,6 +373,7 @@ G_MODULE_EXPORT gboolean show_create_ignition_map_window(GtkWidget *widget, gpoi
 		gtk_widget_hide(GTK_WIDGET(window));
 	else
 		gtk_widget_show_all(GTK_WIDGET(window));
+	EXIT();
 	return TRUE;
 }
 
@@ -380,9 +393,18 @@ G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdo
 	gdouble slope1, slope2, result;
 	gdouble ratio;
 
+	ENTER();
 	/* prevent extrapolation */
-	if (offset <= slope1_a) return slope2_a;
-	if (offset >= slope1_b) return slope2_b;
+	if (offset <= slope1_a) 
+	{
+		EXIT();
+		return slope2_a;
+	}
+	if (offset >= slope1_b) 
+	{
+		EXIT();
+		return slope2_b;
+	}
 
 	offset -= slope1_a;
 	slope1 = slope1_b - slope1_a;
@@ -394,6 +416,7 @@ G_MODULE_EXPORT gdouble linear_interpolate(gdouble offset, gdouble slope1_a, gdo
 
 	ratio = (gdouble) offset / slope1;
 	result = ((gdouble)slope2_a * (1-ratio) + (gdouble)slope2_b * ratio);
+	EXIT();
 	return result;
 }
 
@@ -415,6 +438,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	GladeXML *xml = NULL;
 	GList ***ecu_widgets = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -426,7 +450,10 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 	g_return_val_if_fail(main_xml,FALSE);
 
 	if ((DATA_GET(global_data,"leaving")))
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	if (!GTK_IS_WIDGET(window))
 	{
@@ -495,6 +522,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		bind_to_lists_f(item,"burners");
 		gtk_window_set_transient_for(GTK_WINDOW(window),GTK_WINDOW(lookup_widget_f("main_window")));
 		gtk_widget_show_all(GTK_WIDGET(window));
+		EXIT();
 		return TRUE;
 	}
 #if GTK_MINOR_VERSION >= 18
@@ -507,6 +535,7 @@ G_MODULE_EXPORT gboolean show_trigger_offset_window(GtkWidget *widget, gpointer 
 		gtk_widget_show_all(GTK_WIDGET(window));
 
 
+	EXIT();
 	return TRUE;
 }
 

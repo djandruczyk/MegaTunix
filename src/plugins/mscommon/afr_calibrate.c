@@ -25,6 +25,7 @@
 #undef GTK_DISABLE_DEPRECATED
 #endif
 
+#include <debugging.h>
 #include <firmware.h>
 #include <math.h>
 #include <mscommon_comms.h>
@@ -96,6 +97,8 @@ static struct
   */
 G_MODULE_EXPORT gdouble NBFv (gint adc) 
 { 
+	ENTER();
+	EXIT();
 	return 100.0 * (1.0 - adc * 5.0/nADC); 
 }
 
@@ -105,6 +108,8 @@ G_MODULE_EXPORT gdouble NBFv (gint adc)
   */
 G_MODULE_EXPORT gdouble inno12Fv (gint adc) 
 { 
+	ENTER();
+	EXIT();
 	return  adc * 50.0 / (nADC-1.0); 
 }
 
@@ -114,6 +119,8 @@ G_MODULE_EXPORT gdouble inno12Fv (gint adc)
   */
 G_MODULE_EXPORT gdouble inno05Fv (gint adc) 
 {
+	ENTER();
+	EXIT();
 	return  10.0 + adc * 10.0 / (nADC-1.0); 
 }
 
@@ -123,6 +130,8 @@ G_MODULE_EXPORT gdouble inno05Fv (gint adc)
   */
 G_MODULE_EXPORT gdouble innoLC1Fv (gint adc)
 {
+	ENTER();
+	EXIT();
 	return  7.35 + adc * 14.7 / (nADC-1.0);
 }
 
@@ -132,6 +141,8 @@ G_MODULE_EXPORT gdouble innoLC1Fv (gint adc)
   */
 G_MODULE_EXPORT gdouble teWBlinFv (gint adc) 
 {
+	ENTER();
+	EXIT();
 	return   9.0 + adc * 10.0 / (nADC-1.0);
 }
 
@@ -141,6 +152,8 @@ G_MODULE_EXPORT gdouble teWBlinFv (gint adc)
   */
 G_MODULE_EXPORT gdouble djWBlinFv (gint adc) 
 {
+	ENTER();
+	EXIT();
 	return  10.0 + adc *  8.0 / (nADC-1.0);
 }
 
@@ -157,6 +170,7 @@ G_MODULE_EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
 	GtkTreeIter iter;
 	gint i = 0;
 
+	ENTER();
 	g_return_val_if_fail(GTK_IS_COMBO_BOX(combo),FALSE);
 
 	store = gtk_list_store_new(NUM_COLS,G_TYPE_STRING,G_TYPE_INT);
@@ -175,8 +189,7 @@ G_MODULE_EXPORT gboolean populate_afr_calibrator_combo(GtkWidget *combo)
 //#else
 //	gtk_combo_box_set_entry_text_column(GTK_COMBO_BOX(combo),COL_NAME);
 //#endif
-
-
+	EXIT();
 	return TRUE;
 }
 
@@ -192,6 +205,7 @@ G_MODULE_EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 	GtkTreeModel *model = NULL;
 	GtkTreeIter iter;
 
+	ENTER();
 	g_return_if_fail(GTK_IS_COMBO_BOX(widget));
 
 	state = gtk_combo_box_get_active_iter(GTK_COMBO_BOX(widget),&iter);
@@ -202,7 +216,7 @@ G_MODULE_EXPORT void afr_combo_changed(GtkWidget *widget, gpointer data)
 		gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(widget,"generic_controls"),TRUE);
 	else
 		gtk_widget_set_sensitive((GtkWidget *)OBJ_GET(widget,"generic_controls"),FALSE);
-
+	EXIT();
 	return;
 }
 
@@ -306,6 +320,7 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 	Firmware_Details *firmware = NULL;
 	extern gconstpointer *global_data;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 #define USE_TABLE(prefix) \
@@ -432,6 +447,6 @@ G_MODULE_EXPORT gboolean afr_calibrate_calc_and_dl(GtkWidget *widget, gpointer d
 	ms_table_write(firmware->ego_table_page,
 			firmware->page_params[firmware->ego_table_page]->length,
 			(guint8 *)table);
-
+	EXIT();
 	return TRUE;
 }

@@ -21,19 +21,20 @@
   */
 
 #include <datamgmt.h>
+#include <debugging.h>
 #include <mscommon_plugin.h>
 #include <stdio.h>
 
 
 /*!
- \brief check_dependancies() extracts the dependancy information from the 
+ \brief check_dependencies() extracts the dependancy information from the 
  object and checks each one in turn until one evauates to false, in that
  case it returns FALSE, otherwise if all deps succeed it'll return TRUE
  \param object is the pointer to the object containing dependacy information
  \returns TRUE if dependancy evaluates to TRUE, FALSE on any dep in the chain 
  evaluating to FALSE.
  */
-G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
+G_MODULE_EXPORT gboolean check_dependencies(gconstpointer *object )
 {
 	gint i = 0;
 	gint page = 0;
@@ -48,6 +49,7 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 	gint type = 0;
 	gint num_deps = 0;
 
+	ENTER();
 	num_deps = (GINT)DATA_GET(object,"num_deps");
 	deps = (gchar **)DATA_GET(object,"deps");
 	/*printf("number of deps %i, %i\n",num_deps,g_strv_length(deps));*/
@@ -94,6 +96,7 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 				if (!(((ms_get_ecu_data(canID,page,offset,size)) & bitmask) >> bitshift) == bitval)	
 				{
 					/*printf("dep_proc returning FALSE\n");*/
+					EXIT();
 					return FALSE;
 				}
 				break;
@@ -114,5 +117,6 @@ G_MODULE_EXPORT gboolean check_dependancies(gconstpointer *object )
 		}
 	}
 	/*printf("dep_proc returning TRUE\n");*/
+	EXIT();
 	return TRUE;
 }

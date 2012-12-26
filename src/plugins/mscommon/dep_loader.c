@@ -20,6 +20,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <dep_loader.h>
 #include <firmware.h>
 #include <mscommon_plugin.h>
@@ -54,6 +55,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, con
 	gint len = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!generic_xml_gchar_find(node,source_key,&tmpbuf))
@@ -206,6 +208,8 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, con
 
 	}
 	DATA_SET_FULL(object,"dep_object",(gpointer)dep_obj,g_dataset_destroy);
+	EXIT();
+	return;
 }
 
 
@@ -235,6 +239,7 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 	gint len = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (!cfg_read_string(cfgfile,section,source_key,&tmpbuf))
@@ -384,11 +389,14 @@ G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,
 		g_strfreev(vector);
 	}
 	OBJ_SET_FULL(object,"dep_object",(gpointer)dep_obj,g_dataset_destroy);
+	EXIT();
+	return;
 }
 
 
 G_MODULE_EXPORT gboolean check_size(DataSize size)
 {
+	ENTER();
 	switch (size)
 	{
 		case MTX_CHAR:
@@ -398,11 +406,14 @@ G_MODULE_EXPORT gboolean check_size(DataSize size)
 		case MTX_S16:
 		case MTX_U32:
 		case MTX_S32:
+			EXIT();
 			return TRUE;
 			break;
 		default:
+			EXIT();
 			return FALSE;
 			break;
 	}
+	EXIT();
 	return FALSE;
 }

@@ -20,6 +20,7 @@
 
 #include <args.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <firmware.h>
 #include <mscommon_comms.h>
 #include <mscommon_helpers.h>
@@ -38,11 +39,17 @@ G_MODULE_EXPORT void startup_tcpip_sockets_pf(void)
 {
 	CmdLineArgs *args = NULL;
 
+	ENTER();
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	if (args->network_mode)
+	{
+		EXIT();
 		return;
+	}
 	if ((DATA_GET(global_data,"interrogated")) && (!DATA_GET(global_data,"offline")))
 		open_tcpip_sockets();
+	EXIT();
+	return;
 }
 
 
@@ -53,12 +60,18 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
 {
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (!firmware)
+	{
+		EXIT();
 		return;
+	}
 
 	set_title_f(g_strdup(_("Queuing read of all ECU data...")));
 	io_cmd_f(firmware->get_all_command,NULL);
+	EXIT();
+	return;
 }
 
 
@@ -76,6 +89,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 	gint last_page = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	last_page = (GINT)DATA_GET(global_data,"last_page");
@@ -84,11 +98,15 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 	{
 		command = (Command *)data;
 		io_cmd_f(NULL,command->post_functions);
+		EXIT();
 		return TRUE;
 	}
 	/*printf("burn all helper\n");*/
 	if ((firmware->capabilities & MS2) && (firmware->capabilities & MS1))
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (!DATA_GET(global_data,"offline"))
 	{
 		/* MS2 extra is slightly different as it's paged like MS1 */
@@ -120,6 +138,7 @@ G_MODULE_EXPORT gboolean burn_all_helper(void *data, FuncCall func)
 	}
 	command = (Command *)data;
 	io_cmd_f(NULL,command->post_functions);
+	EXIT();
 	return TRUE;
 }
 
@@ -138,6 +157,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall func)
 	gint i = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	last_page = (GINT)DATA_GET(global_data,"last_page");
@@ -289,6 +309,7 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall func)
 		default:
 			break;
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -298,7 +319,10 @@ G_MODULE_EXPORT gboolean read_ve_const(void *data, FuncCall func)
   */
 G_MODULE_EXPORT void enable_ttm_buttons_pf(void)
 {
+	ENTER();
 	g_list_foreach(get_list_f("ttm_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(TRUE));
+	EXIT();
+	return;
 }
 
 
@@ -327,6 +351,7 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 	Firmware_Details *firmware = NULL;
 	Serial_Params *serial_params = NULL;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -565,6 +590,8 @@ G_MODULE_EXPORT void simple_read_hf(void * data, FuncCall func)
 		default:
 			break;
 	}
+	EXIT();
+	return;
 }
 
 /*!
@@ -575,6 +602,7 @@ G_MODULE_EXPORT void post_burn_pf(void)
 	gint i = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/* sync temp buffer with current burned settings */
@@ -587,6 +615,7 @@ G_MODULE_EXPORT void post_burn_pf(void)
 
 	MTXDBG(SERIAL_WR,_("Burn to Flash Completed\n"));
 
+	EXIT();
 	return;
 }
 
@@ -601,16 +630,21 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 	Firmware_Details *firmware = NULL;
 	gint page = 0;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	page = (GINT)DATA_GET(output->data,"page");
 
 	/* sync temp buffer with current burned settings */
 	if (!firmware->page_params[page]->dl_by_default)
+	{
+		EXIT();
 		return;
+	}
 	ms_backup_current_data(firmware->canID,page);
 
 	MTXDBG(SERIAL_WR,_("Burn to Flash Completed\n"));
 
+	EXIT();
 	return;
 }
 
@@ -621,6 +655,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 G_MODULE_EXPORT void ecu_info_update(Firmware_Details *firmware)
 {
 	gchar *tmpbuf = NULL;
+	ENTER();
 	g_return_if_fail(firmware);
 	tmpbuf = g_strdup_printf("<b>Firmware Version:</b> %s\n<b>Firmware Signature:</b> %s\n<b>Numeric Version:</b> %.1f",firmware->text_revision,firmware->actual_signature,firmware->ecu_revision/10.0);
 	thread_update_widget_f("ecu_info_label",MTX_LABEL,g_strdup(tmpbuf));

@@ -23,6 +23,7 @@
 #include <assert.h>
 #include <config.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <lookuptables.h>
@@ -59,7 +60,9 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT gboolean force_view_recompute_wrapper(gpointer data)
 {
+	ENTER();
 	g_idle_add(force_view_recompute,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -72,8 +75,10 @@ G_MODULE_EXPORT gboolean force_view_recompute_wrapper(gpointer data)
 G_MODULE_EXPORT gboolean force_view_recompute(gpointer data)
 {
 	guint i = 0;
+	ENTER();
 	for (i=0;i<g_list_length(views);i++)
 		update_model_from_view((GtkWidget *)g_list_nth_data(views,i));
+	EXIT();
 	return FALSE;
 }
 
@@ -90,10 +95,11 @@ G_MODULE_EXPORT void build_model_and_view(GtkWidget * widget)
 	GtkWidget *view = NULL;
 	GtkTreeModel *model = NULL;
 
-
+	ENTER();
 	if (!DATA_GET(global_data,"rtvars_loaded"))
 	{
 		MTXDBG(CRITICAL,_("Realtime Variable definitions NOT LOADED!!!\n"));
+		EXIT();
 		return;
 	}
 
@@ -135,6 +141,7 @@ G_MODULE_EXPORT GtkTreeModel * create_model(void)
 	gconstpointer * object = NULL;
 	Rtv_Map *rtv_map = NULL;
 
+	ENTER();
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
 	model = gtk_list_store_new (NUM_COLS, G_TYPE_POINTER, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, G_TYPE_BOOLEAN);
@@ -173,6 +180,7 @@ G_MODULE_EXPORT GtkTreeModel * create_model(void)
 				-1);
 		g_free(range);
 	}
+	EXIT();
 	return GTK_TREE_MODEL(model);
 }
 
@@ -190,6 +198,7 @@ G_MODULE_EXPORT void add_columns(GtkTreeView *view, GtkWidget *widget)
 	gchar * tmpbuf = NULL;
 	gint output = -1;
 
+	ENTER();
 	output = (GINT)OBJ_GET(widget,"output_num");
 	/* --- Column #1, name --- */
 	renderer = gtk_cell_renderer_text_new ();
@@ -309,6 +318,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 	GHashTable *hash = NULL;
 	GHashTable *sources_hash = NULL;
 
+	ENTER();
 	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	column = (GINT) OBJ_GET (cell, "column");
 	canID = (GINT) OBJ_GET(model,"canID");
@@ -341,7 +351,10 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 		else
 			multi = (MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 		if (!multi)
+		{
+			EXIT();
 			return;
+		}
 		if (newval < multi->lower_limit)
 			newval = multi->lower_limit;
 		if (newval > multi->upper_limit)
@@ -426,6 +439,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 			break;
 	}
 	g_timeout_add(500,(GSourceFunc)deferred_model_update,(GtkWidget *)view);
+	EXIT();
 	return;
 
 }
@@ -469,8 +483,12 @@ void update_model_from_view(GtkWidget * widget)
 	MultiExpr * multi = NULL;
 	GHashTable *sources_hash = NULL;
 
+	ENTER();
 	if (!gtk_tree_model_get_iter_first(model,&iter))
+	{
+		EXIT();
 		return;
+	}
 	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	mtx_temp_units = (GINT)DATA_GET(global_data,"mtx_temp_units");
 	src_offset = (GINT)OBJ_GET(model,"src_offset");
@@ -685,6 +703,8 @@ void update_model_from_view(GtkWidget * widget)
   */
 G_MODULE_EXPORT gboolean deferred_model_update(GtkWidget * widget)
 {
+	ENTER();
 	g_idle_add((GSourceFunc)update_model_from_view,widget);
+	EXIT();
 	return FALSE;
 }

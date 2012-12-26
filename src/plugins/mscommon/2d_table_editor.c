@@ -22,6 +22,7 @@
 #include <2d_table_editor.h>
 #include <config.h>
 #include <curve.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
@@ -95,12 +96,16 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	Firmware_Details *firmware = NULL;
 	gchar *pathstub = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if (!main_xml)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	xml = glade_xml_new(main_xml->filename,"table_editor_window",NULL);
 	window = glade_xml_get_widget(xml,"table_editor_window");
@@ -154,6 +159,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 		if (table_num >= firmware->total_te_tables)
 		{
 			warn_user_f("Requested to create 2D table editor window for an undefined (out of range) table ID");
+			EXIT();
 			return FALSE;
 		}
 		if (!firmware->te_params)
@@ -399,6 +405,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor_group(GtkWidget *button)
 	OBJ_SET(window,"curve_list",curve_list);
 	OBJ_SET(window,"gauge_list",gauge_list);
 	gtk_widget_show_all(window);
+	EXIT();
 	return TRUE;
 }
 
@@ -450,27 +457,34 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 	Firmware_Details *firmware = NULL;
 	gchar *pathstub = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 
 	if (table_num >= firmware->total_te_tables)
 	{
 		warn_user_f("Requested to create 2D table editor window for an undefined (out of range) table ID");
+		EXIT();
 		return FALSE;
 	}
 	if (!firmware->te_params)
 	{
 		warn_user_f("No 2D table Editor tables (te_tables) defined in interrogation profile, yet told to create a graph for a table... BUG detected!");
+		EXIT();
 		return FALSE;
 	}
 	if (!firmware->te_params[table_num])
 	{
 		warn_user_f("Requested to create a 2D table editor window for an undefined table!");
+		EXIT();
 		return FALSE;
 	}
 	main_xml = (GladeXML *)DATA_GET(global_data,"main_xml");
 	if (!main_xml)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	if (GTK_IS_WIDGET(parent)) /* Embedded mode */
 		embedded = TRUE;
@@ -828,6 +842,7 @@ G_MODULE_EXPORT gboolean create_2d_table_editor(gint table_num, GtkWidget *paren
 		gtk_widget_show_all(curve);
 	else
 		gtk_widget_show_all(window);
+	EXIT();
 	return TRUE;
 }
 
@@ -843,6 +858,7 @@ G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 {
 	GList *list = NULL;
 
+	ENTER();
 	list = (GList *)OBJ_GET(widget, "widget_list");
 	if (list)
 	{
@@ -865,6 +881,7 @@ G_MODULE_EXPORT gboolean close_2d_editor(GtkWidget * widget, gpointer data)
 		list = NULL;
 	}
 	gtk_widget_destroy(widget);
+	EXIT();
 	return FALSE;
 }
 
@@ -880,15 +897,21 @@ G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 	gint page = -1;
 	gint offset = -1;
 
+	ENTER();
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	remove_from_lists_f((const gchar *)OBJ_GET(widget_ptr,"bind_to_list"),widget_ptr);
 	if (!GTK_IS_ENTRY(widget_ptr))
+	{
+		EXIT();
 		return;
+	}
 	page = (GINT)OBJ_GET(widget_ptr,"page");
 	offset = (GINT)OBJ_GET(widget_ptr,"offset");
 	if (( page >= 0 ) && (offset >= 0))
 		ecu_widgets[page][offset] = g_list_remove(ecu_widgets[page][offset],widget_ptr);
 	/*dealloc_widget(widget_ptr,NULL);*/
+	EXIT();
+	return;
 }
 
 
@@ -900,11 +923,14 @@ G_MODULE_EXPORT void remove_widget(gpointer widget_ptr, gpointer data)
 G_MODULE_EXPORT void gauge_cleanup(gpointer gauge_ptr, gpointer data)
 {
 	GtkWidget *widget = (GtkWidget *)gauge_ptr;
+	ENTER();
 	if (OBJ_GET(widget, "gauge_id"))
 	{
 		guint id = (GINT)OBJ_GET(widget, "gauge_id");
 		remove_rtv_watch_f(id);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -921,6 +947,7 @@ G_MODULE_EXPORT void clean_curve(gpointer curve_ptr, gpointer data)
 	CurveData *cdata = NULL;
 	GtkWidget *widget = (GtkWidget *)curve_ptr;
 
+	ENTER();
 	array = (GArray *)OBJ_GET(widget, "x_entries");
 	if (array)
 		g_array_free(array,TRUE);
@@ -933,6 +960,8 @@ G_MODULE_EXPORT void clean_curve(gpointer curve_ptr, gpointer data)
 	id = (guint32)(GINT)OBJ_GET(widget, "marker_id");
 	if (id > 0)
 		remove_rtv_watch_f(id);
+	EXIT();
+	return;
 }
 
 
@@ -953,6 +982,7 @@ G_MODULE_EXPORT gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	gchar * text = NULL;
 	gfloat tmpf = 0.0;
 
+	ENTER();
 	index = (GINT) OBJ_GET(widget,"curve_index");
 	axis = (Axis)(GINT)OBJ_GET(widget,"curve_axis");
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
@@ -965,6 +995,7 @@ G_MODULE_EXPORT gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	else
 		printf(_("ERROR in update_2d_curve()!!!\n"));
 	mtx_curve_set_coords_at_index(MTX_CURVE(curve),index,point);
+	EXIT();
 	return FALSE;
 }
 
@@ -984,6 +1015,7 @@ G_MODULE_EXPORT void coords_changed(GtkWidget *curve, gpointer data)
 	GtkWidget *entry = NULL;
 	gchar * tmpbuf = NULL;
 
+	ENTER();
 	index = mtx_curve_get_active_coord_index(MTX_CURVE(curve));
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 
@@ -1010,6 +1042,8 @@ G_MODULE_EXPORT void coords_changed(GtkWidget *curve, gpointer data)
 		g_signal_emit_by_name(entry, "activate");
 		g_free(tmpbuf);
 	}
+	EXIT();
+	return;
 }
 
  
@@ -1030,11 +1064,15 @@ G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 	GdkColor blue = { 0, 0, 0, 65535};
 	GdkColor green = { 0, 0, 65535, 0};
 
+	ENTER();
 	index = mtx_curve_get_vertex_proximity_index(MTX_CURVE(curve));
 	x_array = (GArray *)OBJ_GET(curve,"x_entries");
 	y_array = (GArray *)OBJ_GET(curve,"y_entries");
 	if ((!x_array) || (!y_array))
+	{
+		EXIT();
 		return;
+	}
 	if (index >= 0)	/* we are on a vertex for sure */
 	{
 		/* Turn the current one red */
@@ -1049,6 +1087,7 @@ G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 			 * and break out
 			 */
 			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+			EXIT();
 			return;
 		}
 		else	/* Last IS defined, thus check for polarity */
@@ -1056,6 +1095,7 @@ G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 		if (last < 0)
 		{
 			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+			EXIT();
 			return;	/* No vertex to undo */
 		}
 		else
@@ -1086,6 +1126,7 @@ G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 			 * and break out
 			 */
 			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+			EXIT();
 			return;
 		}
 		else	/* Last IS defined, thus check for polarity */
@@ -1093,6 +1134,7 @@ G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 		if (last < 0)
 		{
 			OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
+			EXIT();
 			return;	/* No vertex to undo */
 		}
 		else
@@ -1116,6 +1158,8 @@ G_MODULE_EXPORT void vertex_proximity(GtkWidget *curve, gpointer data)
 	}
 	OBJ_SET(curve, "last_proximity_vertex",GINT_TO_POINTER(index+1));
 
+	EXIT();
+	return;
 }
 
 
@@ -1137,12 +1181,16 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 	GdkColor blue = { 0, 0, 0, 65535};
 	GdkColor green = { 0, 0, 65535, 0};
 
+	ENTER();
 	index = mtx_curve_get_marker_proximity_index(MTX_CURVE(curve));
 	m_index = mtx_curve_get_vertex_proximity_index(MTX_CURVE(curve));
 	x_array = (GArray *)OBJ_GET(curve,"x_entries");
 	y_array = (GArray *)OBJ_GET(curve,"y_entries");
 	if ((!x_array) || (!y_array))
+	{
+		EXIT();
 		return;
+	}
 	if ((index >= 0) && (m_index != index))	/* we are on a vertex for sure */
 	{
 		/* Turn the current one green */
@@ -1157,6 +1205,7 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 			 * and break out
 			 */
 			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
+			EXIT();
 			return;
 		}
 		else	/* Last IS defined, thus check for polarity */
@@ -1164,6 +1213,7 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 		if (last < 0)
 		{
 			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
+			EXIT();
 			return;	/* No vertex to undo */
 		}
 		else
@@ -1194,6 +1244,7 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 			 * and break out
 			 */
 			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
+			EXIT();
 			return;
 		}
 		else	/* Last IS defined, thus check for polarity */
@@ -1201,6 +1252,7 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 		if (last < 0)
 		{
 			OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
+			EXIT();
 			return;	/* No vertex to undo */
 		}
 		else
@@ -1224,6 +1276,8 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
 	}
 	OBJ_SET(curve, "last_marker_vertex",GINT_TO_POINTER(index+1));
 
+	EXIT();
+	return;
 }
 
 
@@ -1235,7 +1289,9 @@ G_MODULE_EXPORT void marker_proximity(GtkWidget *curve, gpointer data)
   */
 G_MODULE_EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 {
+	ENTER();
 	close_2d_editor((GtkWidget *)OBJ_GET(widget,"window"),NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -1249,15 +1305,19 @@ G_MODULE_EXPORT gboolean close_menu_handler(GtkWidget * widget, gpointer data)
 G_MODULE_EXPORT void update_curve_marker(RtvWatch *watch)
 {
 	CurveData *cdata = (CurveData *)watch->user_data;
+	ENTER();
 	if (!MTX_IS_CURVE(cdata->curve))
 	{
-	        remove_rtv_watch_f(watch->id);
+		remove_rtv_watch_f(watch->id);
+		EXIT();
 		return;
 	}
 	if (cdata->axis == _X_)
 		mtx_curve_set_x_marker_value(MTX_CURVE(cdata->curve),watch->val);
 	if (cdata->axis == _Y_)
 		mtx_curve_set_y_marker_value(MTX_CURVE(cdata->curve),watch->val);
+	EXIT();
+	return;
 }
 
 
@@ -1271,6 +1331,7 @@ G_MODULE_EXPORT gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 {
 	Axis axis = (Axis)(GINT)OBJ_GET(widget,"axis");
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+	ENTER();
 	if (state)
 		gtk_button_set_label(GTK_BUTTON(widget)," Locked ");
 	else
@@ -1279,6 +1340,7 @@ G_MODULE_EXPORT gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 		mtx_curve_set_x_axis_lock_state(MTX_CURVE(data),state);
 	if (axis == _Y_)
 		mtx_curve_set_y_axis_lock_state(MTX_CURVE(data),state);
+	EXIT();
 	return TRUE;
 }
 
@@ -1292,10 +1354,12 @@ G_MODULE_EXPORT gboolean set_axis_locking(GtkWidget *widget, gpointer data)
 G_MODULE_EXPORT gboolean add_2d_table(GtkWidget *widget)
 {
 	gint table_num = 0;
+	ENTER();
 	g_return_val_if_fail(GTK_IS_WIDGET(widget),FALSE);
 
 	table_num = (gint)g_ascii_strtod((gchar *)OBJ_GET(widget,"te_table_num"),NULL);
 	create_2d_table_editor(table_num,widget);
+	EXIT();
 	return TRUE;
 }
 
@@ -1314,6 +1378,7 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 	GdkWindow *window = NULL;
 	GdkColor white = {0,65535,65535,65535};
 	window = gtk_entry_get_text_window(GTK_ENTRY(widget));
+	ENTER();
 	if (GDK_IS_DRAWABLE(window))
 	{
 		cr = gdk_cairo_create(window);
@@ -1337,4 +1402,6 @@ G_MODULE_EXPORT void highlight_entry(GtkWidget *widget, GdkColor *color)
 		cairo_stroke(cr);
 		cairo_destroy(cr);
 	}
+	EXIT();
+	return;
 }

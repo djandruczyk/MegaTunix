@@ -21,6 +21,7 @@
 #include <config.h>
 #include <combo_loader.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
@@ -75,6 +76,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	gint raw_upper = 0;
 	GdkColor color;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
@@ -141,12 +143,18 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_entry_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_entry_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 	}
 	if (dl_type == IMMEDIATE)
@@ -159,6 +167,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	OBJ_SET(widget,"not_sent",NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -191,6 +200,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 	gchar * set_labels = NULL;
 	Deferred_Data *d_data = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
@@ -232,7 +242,10 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 			tmp = tmp | (bitval << bitshift);
 			dload_val = tmp;
 			if (dload_val == ms_get_ecu_data(canID,page,offset,size))
+			{
+				EXIT();
 				return FALSE;
+			}
 			break;
 
 		case ALT_SIMUL:
@@ -246,7 +259,10 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 				dload_val = tmp;
 				/*printf("ALT_SIMUL, MSnS-E, table num %i, dload_val %i, curr ecu val %i\n",table_num,dload_val, ms_get_ecu_data(canID,page,offset,size));*/
 				if (dload_val == ms_get_ecu_data(canID,page,offset,size))
+				{
+					EXIT();
 					return FALSE;
+				}
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
 				/*printf("last alt %i, cur alt %i\n",firmware->rf_params[table_num]->last_alternate,firmware->rf_params[table_num]->alternate);*/
@@ -267,7 +283,10 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 				table_num = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 				dload_val = bitval;
 				if (dload_val == ms_get_ecu_data(canID,page,offset,size))
+				{
+					EXIT();
 					return FALSE;
+				}
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
 				d_data = g_new0(Deferred_Data, 1);
@@ -286,14 +305,21 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_bitmask_button_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 					MTXDBG(CRITICAL,_("Default case, but there is NO ecu_bitmask_button_handler available, unhandled case for widget %s, BUG!\n"),glade_get_widget_name(widget));
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 
 			MTXDBG(CRITICAL,_("Bitmask button at page: %i, offset %i, NOT handled\n\tERROR!!, contact author\n"),page,offset);
+			EXIT();
 			return FALSE;
 			break;
 
@@ -328,6 +354,7 @@ G_MODULE_EXPORT gboolean common_bitmask_button_handler(GtkWidget *widget, gpoint
 		dload_val = convert_before_download_f(widget,dload_val);
 		ms_send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -344,6 +371,7 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
         static gboolean (*ecu_handler)(GtkWidget *widget, gpointer) = NULL;
 	gint handler = -1;
 
+	ENTER();
 	handler = (GINT)OBJ_GET(widget,"handler");
 
 	switch (handler)
@@ -352,15 +380,22 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_toggle_button_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 				{
 					MTXDBG(CRITICAL,_("Default case, ecu handler NOT found in plugins, BUG!\n"));
+					EXIT();
 					return TRUE;
 				}
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 	}
 }
@@ -383,6 +418,7 @@ G_MODULE_EXPORT gboolean common_slider_handler(GtkWidget *widget, gpointer data)
 	gfloat value = 0.0;
 	gint dload_val = 0;
 
+	ENTER();
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	get_essentials(widget,&canID,&page,&offset,&size,NULL);
 
@@ -397,6 +433,7 @@ G_MODULE_EXPORT gboolean common_slider_handler(GtkWidget *widget, gpointer data)
 		if (dload_val != ms_get_ecu_data(canID,page,offset,size))
 			ms_send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
+	EXIT();
 	return FALSE; /* Let other handlers run! */
 }
 
@@ -424,6 +461,7 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 	gchar * tmpbuf = NULL;
 	gchar * dest = NULL;
 
+	ENTER();
 	handler = (MSCommonStdHandler)(GINT)OBJ_GET(widget,"handler");
 
 	switch ((MSCommonStdHandler)handler)
@@ -462,17 +500,25 @@ G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer d
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_std_button_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 				{
 					MTXDBG(CRITICAL,_("Default case, ecu handler NOT found in plugins, BUG!\n"));
+					EXIT();
 					return TRUE;
 				}
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -521,6 +567,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 	GtkWidget *tmpwidget = NULL;
 	void *eval = NULL;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
@@ -547,7 +594,10 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 		 * not, and get the iter for it...
 		 */
 		if (!search_model(model,widget,&iter))
+		{
+			EXIT();
 			return FALSE;
+		}
 	}
 	gtk_tree_model_get(model,&iter,BITVAL_COL,&bitval,-1);
 			
@@ -564,6 +614,7 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 				if ((guint)gtk_combo_box_get_active(GTK_COMBO_BOX(widget)) >= g_strv_length(vector))
 				{
 					printf("combo size doesn't match source_values for multi_expression\n");
+					EXIT();
 					return FALSE;
 				}
 				/*printf("key %s value %s\n",(gchar *)OBJ_GET(widget,"source_key"),vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);*/
@@ -577,7 +628,10 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | (bitval << bitshift);
 			dload_val = tmp;
 			if (dload_val == ms_get_ecu_data(canID,page,offset,size))
+			{
+				EXIT();
 				return FALSE;
+			}
 			break;
 		case ALT_SIMUL:
 			/* Alternate or simultaneous */
@@ -595,7 +649,10 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 				dload_val = tmp;
 				/*printf("ALT_SIMUL, MSnS-E, table num %i, dload_val %i, curr ecu val %i\n",table_num,dload_val, ms_get_ecu_data(canID,page,offset,size));*/
 				if (dload_val == ms_get_ecu_data(canID,page,offset,size))
+				{
+					EXIT();
 					return FALSE;
+				}
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
 				/*printf("last alt %i, cur alt %i\n",firmware->rf_params[table_num]->last_alternate,firmware->rf_params[table_num]->alternate);*/
@@ -616,7 +673,10 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 				table_num = (GINT)strtol((gchar *)OBJ_GET(widget,"table_num"),NULL,10);
 				dload_val = bitval;
 				if (dload_val == ms_get_ecu_data(canID,page,offset,size))
+				{
+					EXIT();
 					return FALSE;
+				}
 				firmware->rf_params[table_num]->last_alternate = firmware->rf_params[table_num]->alternate;
 				firmware->rf_params[table_num]->alternate = bitval;
 				d_data = g_new0(Deferred_Data, 1);
@@ -635,15 +695,22 @@ G_MODULE_EXPORT gboolean common_combo_handler(GtkWidget *widget, gpointer data)
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_combo_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 				{
 					MTXDBG(CRITICAL,_("Default case, ecu handler NOT found in plugins, BUG!\n"));
+					EXIT();
 					return TRUE;
 				}
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 	}
 
@@ -678,6 +745,7 @@ combo_download:
 		dload_val = convert_before_download_f(widget,dload_val);
 		ms_send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -687,7 +755,9 @@ combo_download:
  */
 G_MODULE_EXPORT gboolean force_update_table_wrapper(gpointer data)
 {
+	ENTER();
 	g_idle_add(force_update_table,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -707,17 +777,27 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
 
+	ENTER();
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (page > firmware->total_pages)
+	{
+		EXIT();
 		return FALSE;
+	}
 	table_num = (GINT)strtol((gchar *)data,NULL,10);
 	if ((table_num < 0) || (table_num > (firmware->total_tables-1)))
+	{
+		EXIT();
 		return FALSE;
+	}
 	base = firmware->table_params[table_num]->z_base;
 	length = firmware->table_params[table_num]->x_bincount *
 		firmware->table_params[table_num]->y_bincount;
@@ -725,11 +805,15 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
 	for (offset=base;offset<base+length;offset++)
 	{
 		if ((DATA_GET(global_data,"leaving")) || (!firmware))
+		{
+			EXIT();
 			return FALSE;
+		}
 		if (ecu_widgets[page][offset] != NULL)
 			g_list_foreach(ecu_widgets[page][offset],update_widget,NULL);
 	}
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	EXIT();
 	return FALSE;
 }
 
@@ -739,7 +823,9 @@ G_MODULE_EXPORT gboolean force_update_table(gpointer data)
  */
 G_MODULE_EXPORT gboolean trigger_group_update_wrapper(gpointer data)
 {
+	ENTER();
 	g_idle_add(trigger_group_update,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -753,10 +839,15 @@ G_MODULE_EXPORT gboolean trigger_group_update_wrapper(gpointer data)
  */
 G_MODULE_EXPORT gboolean trigger_group_update(gpointer data)
 {
+	ENTER();
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	g_list_foreach(get_list_f((gchar *)data),update_widget,NULL);
+	EXIT();
 	return FALSE;/* Make it cancel and not run again till called */
 }
 
@@ -767,7 +858,9 @@ G_MODULE_EXPORT gboolean trigger_group_update(gpointer data)
   */
 G_MODULE_EXPORT gboolean update_multi_expression_wrapper(gpointer data)
 {
+	ENTER();
 	g_idle_add(update_multi_expression,data);
+	EXIT();
 	return FALSE;
 }
 
@@ -778,7 +871,9 @@ G_MODULE_EXPORT gboolean update_multi_expression_wrapper(gpointer data)
   */
 G_MODULE_EXPORT gboolean update_multi_expression(gpointer data)
 {
+	ENTER();
 	g_list_foreach(get_list_f("multi_expression"),update_widget,NULL);
+	EXIT();
 	return FALSE;
 }
 
@@ -805,6 +900,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
 
+	ENTER();
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -812,7 +908,10 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 
 	canID = firmware->canID;
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return;
+	}
 
 	set_title_f(g_strdup(_("Updating Controls...")));
 	DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
@@ -966,6 +1065,7 @@ G_MODULE_EXPORT void update_ecu_controls_pf(void)
 	thread_update_widget_f("info_label",MTX_LABEL,g_strdup_printf(_("<b>Ready...</b>")));
 	update_current_notebook_page_f();
 	set_title_f(g_strdup(_("Ready...")));
+	EXIT();
 	return;
 }
 
@@ -1010,6 +1110,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 	Deferred_Data *d_data = NULL;
 	GdkColor black = {0,0,0,0};
 
+	ENTER();
 
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -1155,15 +1256,22 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 			if (!ecu_handler)
 			{
 				if (get_symbol_f("ecu_spin_button_handler",(void **)&ecu_handler))
+				{
+					EXIT();
 					return ecu_handler(widget,data);
+				}
 				else
 				{
 					MTXDBG(CRITICAL,_("Default case, ecu handler NOT found in plugins, BUG!\n"));
+					EXIT();
 					return TRUE;
 				}
 			}
 			else
+			{
+				EXIT();
 				return ecu_handler(widget,data);
+			}
 			break;
 	}
 	if (dl_type == IMMEDIATE)
@@ -1175,6 +1283,7 @@ G_MODULE_EXPORT gboolean common_spin_button_handler(GtkWidget *widget, gpointer 
 			ms_send_to_ecu(canID, page, offset, size, dload_val, TRUE);
 	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+	EXIT();
 	return TRUE;
 }
 
@@ -1193,6 +1302,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	gint tmpi = 0;
 	gdouble value = 0.0;
 
+	ENTER();
 	if (!insert_text_handler)
 		get_symbol_f("insert_text_handler",(void **)&insert_text_handler);
 	g_return_if_fail(insert_text_handler);
@@ -1200,12 +1310,18 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	g_return_if_fail(GTK_IS_WIDGET(widget));
 
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return;
+	}
 	/* If passed widget and user data are identical,  break out as
 	 * we already updated the widget.
 	 */
 	if ((GTK_IS_WIDGET(user_data)) && (widget == user_data))
+	{
+		EXIT();
 		return;
+	}
 
 	/* update widget whether spin,radio or checkbutton  
 	 * (checkbutton encompases radio)
@@ -1217,6 +1333,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	if ((tmpi == last) && (!DATA_GET(global_data,"force_update")))
 	{
 		/*printf("new and old match, exiting early....\n");*/
+		EXIT();
 		return;
 	}
 	else
@@ -1263,6 +1380,7 @@ void update_range(GtkWidget *widget, gfloat value)
 	gdouble upper = 0.0;
 	gdouble lower = 0.0;
 
+	ENTER();
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
 	adj = gtk_range_get_adjustment(GTK_RANGE(widget));
 	upper = gtk_adjustment_get_upper(adj);
@@ -1296,6 +1414,7 @@ void update_checkbutton(GtkWidget *widget)
 	gdouble value = 0.0;
 	gchar * set_labels = NULL;
 
+	ENTER();
 	get_essential_bits(widget, NULL, NULL, NULL, &bitval, &bitmask, &bitshift);
 
 	if (gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget)))
@@ -1352,6 +1471,7 @@ void update_entry(GtkWidget *widget)
 	gint precision = 0;
 	GdkColor black = {0,0,0,0};
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
@@ -1442,6 +1562,7 @@ void update_combo(GtkWidget *widget)
 	GdkColor white = {0,65535,65535,65535};
 	gint dl_type = 0;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
@@ -1454,7 +1575,10 @@ void update_combo(GtkWidget *widget)
 	ecu_update_combo(widget);
 
 /*	if (dl_type == DEFERRED)
+	{
+		EXIT();
 		return;
+	}
 		*/
 
 	get_essential_bits(widget,&canID, &page, &offset, &bitval, &bitmask, &bitshift);
@@ -1486,6 +1610,7 @@ void update_combo(GtkWidget *widget)
 	}
 	/*printf("COULD NOT FIND MATCH for data for combo %p, data %i!!\n",widget,tmpi);*/
 	gtk_widget_modify_base(gtk_bin_get_child(GTK_BIN(widget)),GTK_STATE_NORMAL,&red);
+	EXIT();
 	return;
 
 combo_toggle:
@@ -1513,6 +1638,7 @@ void combo_handle_group_2_update(GtkWidget *widget)
 	gchar * source_key = NULL;
 	gchar * source_values = NULL;
 
+	ENTER();
 	if (!sources_hash)
 		sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 
@@ -1528,6 +1654,7 @@ void combo_handle_group_2_update(GtkWidget *widget)
 	{
 		MTXDBG(CRITICAL,_("COMBOBOX Problem with source_values, length mismatch, check datamap\n"));
 		g_strfreev(vector);
+		EXIT();
 		return ;
 	}
 	g_hash_table_replace(sources_hash,g_strdup(source_key),g_strdup(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]));
@@ -1548,6 +1675,7 @@ void combo_handle_algorithms(GtkWidget *widget)
 	gchar **vector = NULL;
 	gint *algorithm = NULL;
 
+	ENTER();
 	if (!algorithm)
 		algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
@@ -1561,6 +1689,7 @@ void combo_handle_algorithms(GtkWidget *widget)
 		{
 			MTXDBG(CRITICAL,_("COMBOBOX Problem with algorithms, length mismatch, check datamap\n"));
 			g_free(vector);
+			EXIT();
 			return ;
 		}
 		algo = translate_string_f(vector[gtk_combo_box_get_active(GTK_COMBO_BOX(widget))]);
@@ -1570,6 +1699,7 @@ void combo_handle_algorithms(GtkWidget *widget)
 		if (!tmpbuf)
 		{
 			MTXDBG(CRITICAL,_("Check/Radio button %s has algorithm defined, but no applicable tables, BUG!\n"),(gchar *)glade_get_widget_name(widget));
+			EXIT();
 			return;
 		}
 
@@ -1597,6 +1727,7 @@ void handle_algorithm(GtkWidget *widget)
 	gchar *tmpbuf = NULL;
 	gchar **vector = NULL;
 
+	ENTER();
 	if (!algorithm)
 		algorithm = (gint *)DATA_GET(global_data,"algorithm");
 
@@ -1608,6 +1739,7 @@ void handle_algorithm(GtkWidget *widget)
 		if (!tmpbuf)
 		{
 			MTXDBG(CRITICAL,_("Check/Radio button  %s has algorithm defines but no applicable tables, BUG!\n"),(gchar *)glade_get_widget_name(widget));
+			EXIT();
 			return;
 		}
 
@@ -1633,6 +1765,7 @@ void handle_group_2_update(GtkWidget *widget)
 	gchar * source_key = NULL;
 	gchar * source_value = NULL;
 
+	ENTER();
 	if (!sources_hash)
 		sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 
@@ -1668,6 +1801,7 @@ G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTr
 #else
 	const gchar * cur_text = gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (box))));
 #endif
+	ENTER();
 	valid = gtk_tree_model_get_iter_first(model,iter);
 	while (valid)
 	{
@@ -1676,11 +1810,13 @@ G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTr
 		{
 			gtk_combo_box_set_active_iter(GTK_COMBO_BOX(box),iter);
 			g_free(choice);
+			EXIT();
 			return TRUE;
 		}
 		g_free(choice);
 		valid = gtk_tree_model_iter_next (model, iter);
 	}
+	EXIT();
 	return FALSE;
 }
 
@@ -1698,8 +1834,12 @@ G_MODULE_EXPORT gboolean search_model(GtkTreeModel *model, GtkWidget *box, GtkTr
   */
 G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *canID, gint *page, gint *offset, gint *bitval, gint *bitmask, gint *bitshift)
 {
+	ENTER();
 	if (!GTK_IS_WIDGET(widget))
+	{
+		EXIT();
 		return;
+	}
 	if (canID)
 		*canID = (GINT)OBJ_GET(widget,"canID");
 	if (page)
@@ -1727,8 +1867,12 @@ G_MODULE_EXPORT void get_essential_bits(GtkWidget *widget, gint *canID, gint *pa
   */
 G_MODULE_EXPORT void get_essentials(GtkWidget *widget, gint *canID, gint *page, gint *offset, DataSize *size, gint *precision)
 {
+	ENTER();
 	if (!GTK_IS_WIDGET(widget))
+	{
+		EXIT();
 		return;
+	}
 	if (canID)
 		*canID = (GINT)OBJ_GET(widget,"canID");
 	if (page)
@@ -1757,6 +1901,7 @@ G_MODULE_EXPORT void common_gui_init(void)
 	void (*ecu_gui_init)(void) = NULL;
 	GtkWidget *widget = NULL;
 
+	ENTER();
 	/* Assigns additional data to the gui controls mainly so that
 	   functions within plugins can be located
 	   */

@@ -43,10 +43,14 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return;
+	}
 
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"canID", GINT_TO_POINTER(firmware->canID));
@@ -55,6 +59,8 @@ G_MODULE_EXPORT void queue_burn_ecu_flash(gint page)
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd_f(firmware->burn_command,output);
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
+	EXIT();
+	return;
 }
 
 
@@ -68,10 +74,14 @@ G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return;
+	}
 
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"page", GINT_TO_POINTER(page));
@@ -79,6 +89,7 @@ G_MODULE_EXPORT void queue_ms1_page_change(gint page)
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CMD_WRITE));
 	io_cmd_f(firmware->page_command,output);
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
+	EXIT();
 	return;
 }
 
@@ -101,8 +112,12 @@ G_MODULE_EXPORT gint comms_test(void)
 	Serial_Params *serial_params = NULL;
 	extern gconstpointer *global_data;
 
+	ENTER();
 	if (DATA_GET(global_data,"leaving"))
+	{
+		EXIT();
 		return TRUE;
+	}
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	g_return_val_if_fail(serial_params, FALSE);
@@ -118,6 +133,7 @@ G_MODULE_EXPORT gint comms_test(void)
 			MTXDBG(SERIAL_WR|CRITICAL,_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text);
 			thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Error writing \"C\" to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+			EXIT();
 			return FALSE;
 		}
 		result = read_data_f(1,NULL,FALSE);
@@ -136,6 +152,7 @@ G_MODULE_EXPORT gint comms_test(void)
 			MTXDBG(SERIAL_WR|CRITICAL,_("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n"),err_text);
 			thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("Error writing \"c\" (MS-II clock test) to the ecu, ERROR \"%s\" in comms_test()\n"),err_text),FALSE,FALSE);
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(FALSE));
+			EXIT();
 			return FALSE;
 		}
 		result = read_data_f(2,NULL,FALSE);
@@ -148,6 +165,7 @@ G_MODULE_EXPORT gint comms_test(void)
 		queue_function_f("kill_conn_warning");
 		thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("ECU Connected...")));
 		thread_update_logbar_f("comms_view","info",g_strdup_printf(_("ECU Comms Test Successful\n")),FALSE,FALSE);
+		EXIT();
 		return TRUE;
 
 	}
@@ -161,8 +179,10 @@ G_MODULE_EXPORT gint comms_test(void)
 		thread_update_widget_f("titlebar",MTX_TITLE,g_strdup_printf(_("COMMS ISSUES: Check COMMS tab")));
 		MTXDBG(SERIAL_RD|IO_PROCESS,_("I/O with ECU Timeout\n"));
 		thread_update_logbar_f("comms_view","warning",g_strdup_printf(_("I/O with ECU Timeout\n")),FALSE,FALSE);
+		EXIT();
 		return FALSE;
 	}
+	EXIT();
 	return FALSE;
 }
 
@@ -180,6 +200,7 @@ G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_static_mutex_lock(&mutex);
 
@@ -203,6 +224,7 @@ G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 	io_cmd_f(firmware->table_write_command,output);
 
 	g_static_mutex_unlock(&mutex);
+	EXIT();
 	return;
 }
 
@@ -219,6 +241,7 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 	guint8 **ecu_data_last = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
@@ -229,12 +252,14 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 	if (last == -1)  /* First Write of the day, burn not needed... */
 	{
 		queue_ms1_page_change(page);
+		EXIT();
 		return;
 	}
 	if ((page == last) && (!DATA_GET(global_data,"force_page_change")))
 	{
 		/*printf("page == last and force_page_change is not set\n");
 		 */
+		EXIT();
 		return;
 	}
 	/* If current page is NOT a dl_by_default page, but the last one WAS
@@ -248,6 +273,7 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 		queue_burn_ecu_flash(last);
 		if (firmware->capabilities & MS1)
 			queue_ms1_page_change(page);
+		EXIT();
 		return;
 	}
 	/* If current page is NOT a dl_by_default page, OR the last one was
@@ -263,6 +289,7 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 			 */
 			queue_ms1_page_change(page);
 		}
+		EXIT();
 		return;
 	}
 	/* If current and last pages are DIFFERENT,  do a memory buffer scan
@@ -283,6 +310,8 @@ G_MODULE_EXPORT void ms_handle_page_change(gint page, gint last)
 		 */
 		queue_ms1_page_change(page);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -305,6 +334,7 @@ G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
 	GtkWidget *widget = (GtkWidget *)data;
 	gconstpointer *gptr = (gconstpointer *)data;
 
+	ENTER();
 	if (GTK_IS_WIDGET(widget))
 	{
 		canID = (GINT)OBJ_GET(widget,"canID");
@@ -318,6 +348,8 @@ G_MODULE_EXPORT void chunk_write(gpointer data, gint num_bytes, guint8 * block)
 		offset = (GINT)DATA_GET(gptr,"offset");
 	}
 	ms_chunk_write(canID, page, offset, num_bytes, block);
+	EXIT();
+	return;
 }
 
 /*!
@@ -335,7 +367,10 @@ G_MODULE_EXPORT void ecu_chunk_write(gint canID, gint page, gint offset, gint nu
 	/* Should check if firmware is chunk capable first though and fallback
 	 * as needed
 	 */
+	ENTER();
 	ms_chunk_write(canID,page,offset,num_bytes,block);
+	EXIT();
+	return;
 }
 
 
@@ -355,6 +390,7 @@ G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num
 	Firmware_Details *firmware = NULL;
 	gint adder = 0;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (firmware->capabilities & MS3_NEWSERIAL)
 		adder = 6;
@@ -379,6 +415,7 @@ G_MODULE_EXPORT void ms_chunk_write(gint canID, gint page, gint offset, gint num
 	output->queue_update = TRUE;
 	io_cmd_f(firmware->chunk_write_command,output);
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
+	EXIT();
 	return;
 }
 
@@ -402,6 +439,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 	GtkWidget *widget = (GtkWidget *)data;
 	gconstpointer *gptr = (gconstpointer *)data;
 
+	ENTER();
 	if (GTK_IS_WIDGET(widget))
 	{
 		canID = (GINT)OBJ_GET(widget,"canID");
@@ -417,6 +455,8 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 		size = (DataSize)(GINT)DATA_GET(gptr,"size");
 	}
 	ms_send_to_ecu(canID,page,offset,size,value,queue_update);
+	EXIT();
+	return;
 }
 
 
@@ -446,6 +486,7 @@ G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize
 	gint adder = 0;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	if (firmware->capabilities & MS3_NEWSERIAL)
 		adder = 6;
@@ -585,6 +626,7 @@ G_MODULE_EXPORT void ms_send_to_ecu(gint canID, gint page, gint offset, DataSize
 	ms_set_ecu_data(canID,page,offset,size,value);
 
 	DATA_SET(global_data,"last_page",GINT_TO_POINTER(page));
+	EXIT();
 	return;
 }
 
@@ -602,14 +644,24 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 	OutputData *output = (OutputData *)message->payload;
 	SlaveMessage *msg = NULL;
 
+	ENTER();
 	if (!slave_msg_queue)
 		slave_msg_queue = (GAsyncQueue *)DATA_GET(global_data,"slave_msg_queue");
 	if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
+	{
+		EXIT();
 		return;
+	}
 	if (!output) /* If no data, don't bother the slaves */
+	{
+		EXIT();
 		return;
+	}
 	if (!slave_msg_queue)
+	{
+		EXIT();
 		return;
+	}
 	msg = g_new0(SlaveMessage, 1);
 	msg->page = (guint8)(GINT)DATA_GET(output->data,"page");
 	msg->offset = (guint16)(GINT)DATA_GET(output->data,"offset");
@@ -625,6 +677,7 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 	{
 		printf(_("Non simple/chunk write command, not notifying peers\n"));
 		g_free(msg);
+		EXIT();
 		return;
 	}
 
@@ -632,6 +685,7 @@ G_MODULE_EXPORT void send_to_slaves(void *data)
 	g_async_queue_ref(slave_msg_queue);
 	g_async_queue_push(slave_msg_queue,(gpointer)msg);
 	g_async_queue_unref(slave_msg_queue);
+	EXIT();
 	return;
 }
 
@@ -648,10 +702,14 @@ G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
 	static GAsyncQueue *slave_msg_queue = NULL;
 	SlaveMessage *msg = NULL;
 
+	ENTER();
 	if (!slave_msg_queue)
 		slave_msg_queue = (GAsyncQueue *)DATA_GET(global_data,"slave_msg_queue");
 	if (!(GBOOLEAN)DATA_GET(global_data,"network_access"))
+	{
+		EXIT();
 		return;
+	}
 
 	msg = g_new0(SlaveMessage, 1);
 	msg->type = MTX_STATUS_CHANGED;
@@ -664,6 +722,7 @@ G_MODULE_EXPORT void slaves_set_color(GuiColor clr, const gchar *groupname)
 	g_async_queue_ref(slave_msg_queue);
 	g_async_queue_push(slave_msg_queue,(gpointer)msg);
 	g_async_queue_unref(slave_msg_queue);
+	EXIT();
 	return;
 }
 
@@ -690,6 +749,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	WriteMode mode = MTX_CMD_WRITE;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	ecu_data = firmware->ecu_data;
 	ecu_data_last = firmware->ecu_data_last;
@@ -752,7 +812,10 @@ G_MODULE_EXPORT void update_write_status(void *data)
 	 */
 
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return;
+	}
 red_or_black:
 	for (i=0;i<firmware->total_pages;i++)
 	{
@@ -764,6 +827,7 @@ red_or_black:
 			firmware->page_params[i]->needs_burn = TRUE;
 			thread_set_group_color_f(RED,"burners");
 			slaves_set_color(RED,"burners");
+			EXIT();
 			return;
 		}
 		else
@@ -771,6 +835,7 @@ red_or_black:
 	}
 	thread_set_group_color_f(BLACK,"burners");
 	slaves_set_color(BLACK,"burners");
+	EXIT();
 	return;
 }
 
@@ -808,6 +873,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	gboolean (*lock_serial_f)(const gchar *) = NULL;
 	void (*setup_serial_params_f)(void) = NULL;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
 	get_symbol_f("setup_serial_params",(void **)&setup_serial_params_f);
@@ -944,6 +1010,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 		queue_function_f("kill_conn_warning");
 	MTXDBG(THREADS,_("Thread exiting, device found!\n"));
 	g_thread_exit(0);
+	EXIT();
 	return NULL;
 }
 
@@ -958,6 +1025,7 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	extern gconstpointer *global_data;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
@@ -973,6 +1041,7 @@ G_MODULE_EXPORT void signal_read_rtvars(void)
 	}
 	else /* MS1 */
 		io_cmd_f(firmware->rt_command,NULL);
+	EXIT();
 	return;
 }
 
@@ -1005,6 +1074,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	DBlock *block = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
@@ -1141,6 +1211,8 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
   */
 G_MODULE_EXPORT gboolean setup_rtv(void)
 {
+	ENTER();
+	EXIT();
 	return TRUE;
 }
 
@@ -1150,6 +1222,8 @@ G_MODULE_EXPORT gboolean setup_rtv(void)
   */
 G_MODULE_EXPORT gboolean teardown_rtv(void)
 {
+	ENTER();
+	EXIT();
 	return TRUE;
 }
 
@@ -1215,12 +1289,14 @@ G_MODULE_EXPORT unsigned long crc32_computebuf( unsigned long inCrc32, const voi
 	unsigned char *byteBuf = NULL;
 	size_t i = 0;
 
+	ENTER();
 	/** accumulate crc32 for buffer **/
 	crc32 = inCrc32 ^ 0xFFFFFFFF;
 	byteBuf = (unsigned char*) buf;
 	for (i=0; i < bufLen; i++) {
 		crc32 = (crc32 >> 8) ^ crcTable[ (crc32 ^ byteBuf[i]) & 0xFF ];
 	}                                                                                                               
+	EXIT();
 	return( crc32 ^ 0xFFFFFFFF );
 }
 

@@ -21,6 +21,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <firmware.h>
 #include <math.h>
 #include <mscommon_comms.h>
@@ -43,8 +44,10 @@ G_MODULE_EXPORT gboolean flip_table_gen_temp_label(GtkWidget *widget, gpointer d
 {
 	GtkWidget *temp_label = lookup_widget_f("temp_label");
 
+	ENTER();
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget))) /* Deg C */
 		gtk_label_set_text(GTK_LABEL(temp_label),(const gchar *)OBJ_GET(widget,"temp_label"));
+	EXIT();
 	return TRUE;
 }
 
@@ -63,19 +66,27 @@ G_MODULE_EXPORT gboolean import_table_from_file(GtkWidget *widget, gpointer data
 	/* This should load and sanity check the file, if good, store it
 	   so that the send to ecu button can deliver it.
 	   */
+	ENTER();
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(widget));
 	if (!filename)
+	{
+		EXIT();
 		return FALSE;
+	}
 	chan = g_io_channel_new_file(filename, "r", NULL);
 	g_free(filename);
 	if (!chan)
+	{
+		EXIT();
 		return FALSE;
+	}
 	res = read_import_file(chan);
 	if (!res)
 		DATA_SET(global_data,"import_file_table",NULL);
 	g_io_channel_shutdown(chan,FALSE,NULL);
         g_io_channel_unref(chan);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -98,6 +109,7 @@ gboolean read_import_file(GIOChannel *chan)
 	gchar **fields = NULL;
 	gint16 *table;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(chan,FALSE);
 	g_return_val_if_fail(firmware,FALSE);
@@ -125,6 +137,7 @@ gboolean read_import_file(GIOChannel *chan)
 		{
 			warn_user_f("Import table exceeds appropriate number of lines (1024), The CPU/GPU and the rest of this computer refuse to accept this file...\n");
 			g_free(table);
+			EXIT();
 			return FALSE;
 		}
 		if (firmware->bigendian)
@@ -137,13 +150,17 @@ gboolean read_import_file(GIOChannel *chan)
 	{
 		warn_user_f("Import table is NOT the appropriate number of lines (1024), The CPU/GPU and the rest of this computer refuse to accept this file...\n");
 		g_free(table);
+		EXIT();
 		return FALSE;
 	}
 	else
 	{
 		DATA_SET(global_data,"import_file_table",(gpointer)table);
+		EXIT();
 		return TRUE;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -169,6 +186,7 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	FILE *f = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	/* OK Button pressed,  we need to validate all input and calculate
@@ -285,7 +303,10 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 		printf("Using data from file\n");
 		table = (gint16 *)DATA_GET(global_data,"import_file_table");
 		if (!table)
+		{
+			EXIT();
 			return FALSE;
+		}
 	}
 
 	if (tabletype == CTS)
@@ -305,5 +326,6 @@ G_MODULE_EXPORT gboolean table_gen_process_and_dl(GtkWidget *widget, gpointer da
 	if (chooser)
 		gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(chooser));
 
+	EXIT();
 	return TRUE;
 }

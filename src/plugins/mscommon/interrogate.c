@@ -77,9 +77,13 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	gchar * message = NULL;
 	Serial_Params *serial_params = NULL;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	if (DATA_GET(global_data,"offline"))
+	{
+		EXIT();
 		return FALSE;
+	}
 	/* prevent multiple runs of interrogator simultaneously */
 	g_static_mutex_lock(&mutex);
 	MTXDBG(INTERROGATOR,_("Entered\n"));
@@ -88,6 +92,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	{
 		MTXDBG(INTERROGATOR,_("NOT connected to ECU!!!!\n"));
 		g_static_mutex_unlock(&mutex);
+		EXIT();
 		return FALSE;
 	}
 	thread_update_widget_f("titlebar",MTX_TITLE,g_strdup(_("Interrogating ECU...")));
@@ -101,6 +106,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		MTXDBG(INTERROGATOR|CRITICAL,_("validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
 		update_logbar_f("interr_view",NULL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"),FALSE,FALSE,TRUE);
 		g_static_mutex_unlock(&mutex);
+		EXIT();
 		return FALSE;
 	}
 	thread_widget_set_sensitive_f("offline_button",FALSE);
@@ -223,6 +229,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	g_static_mutex_unlock(&mutex);
 	MTXDBG(INTERROGATOR,_("Leaving\n"));
 	thread_update_widget_f("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
+	EXIT();
 	return interrogated;
 }
 
@@ -248,12 +255,14 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 	Firmware_Details *firmware = NULL;
 	gchar *pathstub = NULL;
 
+	ENTER();
 	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),NULL);
 	filenames = get_files((const gchar *)DATA_GET(global_data,"project_name"),pathstub,"prof",&classes);
 	g_free(pathstub);
 	if (!filenames)
 	{
 		MTXDBG(INTERROGATOR|CRITICAL,_("NO Interrogation profiles found,  was MegaTunix installed properly?\n"));
+		EXIT();
 		return FALSE;
 	}
 
@@ -304,6 +313,7 @@ G_MODULE_EXPORT gboolean determine_ecu(GArray *tests,GHashTable *tests_hash)
 			retval = FALSE;
 	}
 	g_free(filename);
+	EXIT();
 	return(retval);
 }
 
@@ -340,6 +350,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	gint len6 = 0;
 	gint j = 0;
 
+	ENTER();
 	g_return_val_if_fail(firmware,FALSE);
 	g_return_val_if_fail(filename,FALSE);
 
@@ -347,6 +358,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	if (!cfgfile)
 	{
 		MTXDBG(INTERROGATOR|CRITICAL,_("File \"%s\" NOT OPENED successfully\n"),filename);
+		EXIT();
 		return FALSE;
 	}
 	get_file_api_f(cfgfile,&major,&minor);
@@ -354,6 +366,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	{
 		thread_update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE);
 		cfg_free(cfgfile);
+		EXIT();
 		return FALSE;
 	}
 
@@ -1164,6 +1177,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 	update_logbar_f("interr_view","warning",g_strdup_printf(_("Detected Firmware: %s\n"),firmware->name),FALSE,FALSE,TRUE);
 	update_logbar_f("interr_view","info",g_strdup_printf(_("Loading Settings from: \"%s\"\n"),firmware->profile_filename),FALSE,FALSE,TRUE);
 
+	EXIT();
 	return TRUE;
 
 }
@@ -1194,12 +1208,14 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 	gint j = 0;
 	gchar *pathstub = NULL;
 
+	ENTER();
 	pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"tests.cfg",NULL);
 	filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
 	g_free(pathstub);
 	if (!filename)
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s not found!\n"),filename),FALSE,FALSE,TRUE);
+		EXIT();
 		return NULL;
 	}
 
@@ -1207,12 +1223,14 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 	if (!cfgfile)
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests file %s unable to be opened!\n"),filename),FALSE,FALSE,TRUE);
+		EXIT();
 		return NULL;
 	}
 	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile tests API mismatch (%i.%i != %i.%i):\n\tFile %s.\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
+		EXIT();
 		return NULL;
 	}
 
@@ -1281,6 +1299,7 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 	}
 	cfg_free(cfgfile);
 	g_free(filename);
+	EXIT();
 	return tests;
 }
 
@@ -1298,10 +1317,12 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 	gint value = 0;
 	gint tmpi = 0;
 
+	ENTER();
 
 	if (!string)
 	{
 		MTXDBG(INTERROGATOR|CRITICAL,_("String fed is NULL\n"));
+		EXIT();
 		return -1;
 	}
 
@@ -1317,6 +1338,7 @@ G_MODULE_EXPORT gint translate_capabilities(const gchar *string)
 	}
 
 	g_strfreev(vector);
+	EXIT();
 	return value;	
 }
 
@@ -1344,15 +1366,20 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	gint minor = 0;
 	MatchClass mclass;
 
+	ENTER();
 	cfgfile = cfg_open_file(filename);
 	if (!cfgfile)
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	get_file_api_f(cfgfile,&major,&minor);
 	if ((major != INTERROGATE_MAJOR_API) || (minor != INTERROGATE_MINOR_API))
 	{
 		update_logbar_f("interr_view","warning",g_strdup_printf(_("Interrogation profile API mismatch (%i.%i != %i.%i):\n\tFile %s will be skipped\n"),major,minor,INTERROGATE_MAJOR_API,INTERROGATE_MINOR_API,filename),FALSE,FALSE,TRUE);
 		cfg_free(cfgfile);
+		EXIT();
 		return FALSE;
 	}
 
@@ -1380,6 +1407,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 			MTXDBG(INTERROGATOR,_("MISMATCH,\"%s\" is NOT a match...\n\n"),filename);
 			cfg_free(cfgfile);
 			g_strfreev(match_on);
+			EXIT();
 			return FALSE;
 		}
 		vector = g_strsplit(tmpbuf,",",-1);
@@ -1447,6 +1475,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 			MTXDBG(INTERROGATOR,_("MISMATCH,\"%s\" is NOT a match...\n\n"),filename);
 			g_strfreev(match_on);
 			cfg_free(cfgfile);
+			EXIT();
 			return FALSE;
 		}
 
@@ -1454,6 +1483,7 @@ G_MODULE_EXPORT gboolean check_for_match(GHashTable *tests_hash, gchar *filename
 	g_strfreev(match_on);
 	MTXDBG(INTERROGATOR,_("\"%s\" is a match for all conditions ...\n"),filename);
 	cfg_free(cfgfile);
+	EXIT();
 	return TRUE;
 }
 
@@ -1467,6 +1497,7 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
 	guint i = 0;
 	Detection_Test *test = NULL;
 
+	ENTER();
 	for (i=0;i<tests->len;i++)
 	{
 		test = g_array_index(tests,Detection_Test *,i);
@@ -1485,6 +1516,8 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
 	}
 
 	g_array_free(tests,TRUE);
+	EXIT();
+	return;
 }
 
 
@@ -1496,6 +1529,9 @@ G_MODULE_EXPORT void free_tests_array(GArray *tests)
  */
 G_MODULE_EXPORT void interrogate_error(const gchar *text, gint num)
 {
+	ENTER();
+	EXIT();
+	return;
 }
 
 
@@ -1510,6 +1546,7 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 	Serial_Params *serial_params = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -1556,6 +1593,8 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 		io_cmd_f(firmware->NumVerVia,NULL);
 	if (firmware->SignatureVia)
 		io_cmd_f(firmware->SignatureVia,NULL);
+	EXIT();
+	return;
 }
 
 
@@ -1568,9 +1607,11 @@ G_MODULE_EXPORT void update_interrogation_gui_pf(void)
 G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 {
 	Page_Params *page_params = NULL;
+	ENTER();
 	page_params = (Page_Params *)g_malloc0(sizeof(Page_Params));
 	page_params->length = 0;
 	page_params->spconfig_offset = -1;
+	EXIT();
 	return page_params;
 }
 
@@ -1584,6 +1625,7 @@ G_MODULE_EXPORT Page_Params * initialize_page_params(void)
 G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 {
 	Table_Params *table_params = NULL;
+	ENTER();
 	table_params = (Table_Params *)g_malloc0(sizeof(Table_Params));
 	table_params->is_fuel = FALSE;
 	table_params->alternate_offset = -1;
@@ -1628,6 +1670,7 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 	table_params->y_multi_source = FALSE;
 	table_params->z_multi_source = FALSE;
 
+	EXIT();
 	return table_params;
 }
 
@@ -1641,6 +1684,7 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 G_MODULE_EXPORT TE_Params * initialize_te_params(void)
 {
 	TE_Params *te_params = NULL;
+	ENTER();
 	te_params = (TE_Params *)g_malloc0(sizeof(TE_Params));
 	te_params->x_lock = FALSE;
 	te_params->y_lock = FALSE;
@@ -1669,5 +1713,6 @@ G_MODULE_EXPORT TE_Params * initialize_te_params(void)
 	te_params->gauge_temp_dep = FALSE;
 	te_params->title = NULL;
 
+	EXIT();
 	return te_params;
 }

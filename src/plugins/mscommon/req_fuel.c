@@ -21,6 +21,7 @@
 #include <config.h>
 #include <configfile.h>
 #include <datamgmt.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
@@ -49,6 +50,7 @@ G_MODULE_EXPORT void reqd_fuel_change(GtkWidget *widget)
 	GdkColor red = { 0, 65535, 0, 0};
 	GdkColor black = { 0, 0, 0, 0};
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (OBJ_GET(widget,"reqd_fuel"))
@@ -56,6 +58,7 @@ G_MODULE_EXPORT void reqd_fuel_change(GtkWidget *widget)
 	else
 	{
 		MTXDBG(REQ_FUEL|CRITICAL,_("reqd_fuel data NOT bound to the widget pointer passed, RETURNING...\n"));
+		EXIT();
 		return;
 	}
 
@@ -91,6 +94,8 @@ G_MODULE_EXPORT void reqd_fuel_change(GtkWidget *widget)
 			gtk_widget_modify_text(GTK_WIDGET(reqd_fuel->calcd_val_spin),
 					GTK_STATE_NORMAL,&black);
 	}
+	EXIT();
+	return;
 }
 
 
@@ -120,6 +125,7 @@ G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 	Reqd_Fuel *reqd_fuel = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (OBJ_GET(widget,"table_num"))
@@ -128,6 +134,7 @@ G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 	{
 		printf(_("Serious Error, table_num not defined for reqfuel calc, contact author!\n"));
 		return FALSE;
+		EXIT();
 	}
 
 	if (OBJ_GET(widget,"reqd_fuel"))
@@ -139,7 +146,10 @@ G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 	}
 
 	if (reqd_fuel->visible)
+	{
+		EXIT();
 		return TRUE;
+	}
 	else
 		reqd_fuel->visible = TRUE;
 
@@ -367,6 +377,7 @@ G_MODULE_EXPORT gboolean reqd_fuel_popup(GtkWidget * widget)
 
 	gtk_widget_show_all(popup);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -389,6 +400,7 @@ G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	const gchar *project = NULL;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
@@ -444,6 +456,7 @@ G_MODULE_EXPORT gboolean save_reqd_fuel(GtkWidget *widget, gpointer data)
 	g_free(filename);
 	g_free(tmpbuf);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -458,9 +471,11 @@ G_MODULE_EXPORT gboolean close_popup(GtkWidget * widget)
 {
 	Reqd_Fuel *reqd_fuel = NULL;
 
+	ENTER();
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
 	gtk_widget_destroy(reqd_fuel->popup);
 	reqd_fuel->visible = FALSE;
+	EXIT();
 	return TRUE;
 }
 
@@ -502,6 +517,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	GHashTable ** interdep_vars;
 	Firmware_Details *firmware = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	interdep_vars = (GHashTable **)DATA_GET(global_data,"interdep_vars");
 	canID = firmware->canID;
@@ -564,7 +580,10 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	   occur in offline mode prior to loading a backup
 	   */
 	if ((num_cyls == 0) && (num_squirts == 0))
+	{
+		EXIT();
 		return;
+	}
 
 	/*
 	printf("\n\n\n\n");
@@ -582,6 +601,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 			(divider == last_divider))
 	{
 		/*printf("no reqfuel change\n");*/
+		EXIT();
 		return;
 	}
 
@@ -671,7 +691,10 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 		 */
 
 		if (DATA_GET(global_data,"paused_handlers"))
+		{
+			EXIT();
 			return;
+		}
 
 		if (firmware->capabilities & MS2)
 		{
@@ -711,6 +734,7 @@ G_MODULE_EXPORT void check_req_fuel_limits(gint table_num)
 	}
 	g_free(g_name);
 
+	EXIT();
 	return ;
 
 }
@@ -730,6 +754,7 @@ G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
 	gchar * tmpbuf = NULL;
 	const gchar * project = NULL;
 
+	ENTER();
 	project = (const gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
 		project = DEFAULT_PROJECT;
@@ -768,6 +793,7 @@ G_MODULE_EXPORT Reqd_Fuel * initialize_reqd_fuel(gint table_num)
 	g_free(tmpbuf);
 	g_free(filename);
 
+	EXIT();
 	return reqd_fuel;
 }
 
@@ -784,9 +810,11 @@ G_MODULE_EXPORT gboolean drain_hashtable(gpointer offset, gpointer value, gpoint
 {
 	Deferred_Data *data = (Deferred_Data *)value;
 
+	ENTER();
 	ms_send_to_ecu(data->canID,data->page,data->offset,data->size,data->value,FALSE);
 	g_free(data);
 	/* called per element from the hash table to drain and send to ECU */
+	EXIT();
 	return TRUE;
 }
 
@@ -803,6 +831,7 @@ G_MODULE_EXPORT gboolean rf_spin_button_handler(GtkWidget *widget, gpointer data
 	RfHandler handler;
 	gfloat value = 0.0;
 
+	ENTER();
 	reqd_fuel = (Reqd_Fuel *)OBJ_GET(widget,"reqd_fuel");
 	handler = (RfHandler)(GINT)OBJ_GET(widget,"handler");
 	value = (float)gtk_spin_button_get_value((GtkSpinButton *)widget);
@@ -835,6 +864,7 @@ G_MODULE_EXPORT gboolean rf_spin_button_handler(GtkWidget *widget, gpointer data
 			reqd_fuel_change(widget);
 			break;
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -877,6 +907,7 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	Firmware_Details *firmware = NULL;
 	GList ***ecu_widgets = NULL;
 
+	ENTER();
 	ecu_widgets = (GList ***)DATA_GET(global_data,"ecu_widgets");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
@@ -884,11 +915,13 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	if (!OBJ_GET(widget,"applicable_tables"))
 	{
 		printf(_("applicable tables not defined!!!\n"));
+		EXIT();
 		return;
 	}
 	if (!OBJ_GET(widget,"table_num"))
 	{
 		printf(_("table_num not defined!!!\n"));
+		EXIT();
 		return;
 	}
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
@@ -901,7 +934,10 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	tmpbuf = gtk_editable_get_chars(GTK_EDITABLE(tmpwidget),0,-1);
 	new_reqfuel = (gfloat)g_ascii_strtod(g_strdelimit(tmpbuf,",.",'.'),NULL);
 	if (new_reqfuel < 0.5)
+	{
+		EXIT();
 		return;
+	}
 	percentage = firmware->rf_params[table_num]->req_fuel_total/new_reqfuel;
 
 	firmware->rf_params[table_num]->last_req_fuel_total = firmware->rf_params[table_num]->req_fuel_total;
@@ -911,7 +947,10 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	tmpbuf = (gchar *)OBJ_GET(widget,"applicable_tables");
 	vector = g_strsplit(tmpbuf,",",-1);
 	if (!vector)
+	{
+		EXIT();
 		return;
+	}
 
 	if  (NULL != (label = lookup_widget_f("info_label")))
 		gtk_label_set_text(GTK_LABEL(label),"Rescaling Table, Please wait...");
@@ -1002,5 +1041,7 @@ G_MODULE_EXPORT void reqfuel_rescale_table(GtkWidget *widget)
 	}
 	g_strfreev(vector);
 	DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
+	EXIT();
+	return;
 }
 
