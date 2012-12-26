@@ -25,17 +25,8 @@ extern "C" {
 #ifndef __DEBUG_GUI_H__
 #define __DEBUG_GUI_H__
 
+#include <config.h>
 #include <gtk/gtk.h>
-
-/* When inside a plugin, use the alt dest function name (namespace issues) */
-#ifdef IN_PLUGIN
- #define MTXDBG(level, ...) dbg_func_f((Dbg_Class)(level),__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
- #define QUIET_MTXDBG(level, ...) dbg_func_f((Dbg_Class)(level),NULL,NULL,0, __VA_ARGS__)
-#else
- /* When inside mtx core, use the default dest function name */
- #define MTXDBG(level, ...) dbg_func((Dbg_Class)(level),__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
- #define QUIET_MTXDBG(level, ...) dbg_func((Dbg_Class)(level),NULL,NULL,0, __VA_ARGS__)
-#endif
 
 /* Debugging Enumerations */
 typedef enum
@@ -58,7 +49,9 @@ typedef enum
 	PLUGINS			= 1<<14,
 	PACKETS			= 1<<15,
 	DISPATCHER		= 1<<16,
+#ifdef DEBUG
 	FUNC			= 1<<17,
+#endif
 	CRITICAL		= 1<<30
 }Dbg_Class;
 
@@ -81,12 +74,36 @@ typedef enum
 	PLUGINS_SHIFT		= 14,
 	PACKETS_SHIFT		= 15,
 	DISPATCHER_SHIFT	= 16,
+#ifdef DEBUG
 	FUNC_SHIFT			= 17,
+#endif
 	CRITICAL_SHIFT		= 30
 }Dbg_Shift;
 
-#define ENTER() dbg_func((Dbg_Class)(FUNC),NULL,NULL,0,"Entered: %s\n",__FUNCTION__)
-#define EXIT() dbg_func((Dbg_Class)(FUNC),NULL,NULL,0,"Leaving: %s\n",__FUNCTION__)
+
+/* When inside a plugin, use the alt dest function name (namespace issues) */
+#ifdef IN_PLUGIN
+ #define MTXDBG(level, ...) dbg_func_f((Dbg_Class)(level),__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+ #define QUIET_MTXDBG(level, ...) dbg_func_f((Dbg_Class)(level),NULL,NULL,0, __VA_ARGS__)
+ #ifdef DEBUG
+  #define ENTER() dbg_func_f((Dbg_Class)(FUNC),NULL,NULL,0,"Entered: %s\n",__FUNCTION__)
+  #define EXIT() dbg_func_f((Dbg_Class)(FUNC),NULL,NULL,0,"Leaving: %s\n",__FUNCTION__)
+ #else
+  #define ENTER() ""
+  #define EXIT() ""
+ #endif
+#else
+ /* When inside mtx core, use the default dest function name */
+ #define MTXDBG(level, ...) dbg_func((Dbg_Class)(level),__FILE__,__FUNCTION__,__LINE__, __VA_ARGS__)
+ #define QUIET_MTXDBG(level, ...) dbg_func((Dbg_Class)(level),NULL,NULL,0, __VA_ARGS__)
+ #ifdef DEBUG
+  #define ENTER() dbg_func((Dbg_Class)(FUNC),NULL,NULL,0,"Entered: %s\n",__FUNCTION__)
+  #define EXIT() dbg_func((Dbg_Class)(FUNC),NULL,NULL,0,"Leaving: %s\n",__FUNCTION__)
+ #else
+  #define ENTER() ""
+  #define EXIT() ""
+ #endif
+#endif
 
 typedef struct _DebugLevel DebugLevel;
 
