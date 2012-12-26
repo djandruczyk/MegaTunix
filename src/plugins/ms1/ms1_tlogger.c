@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <firmware.h>
 #include <math.h>
 #include <ms1_plugin.h>
@@ -38,8 +39,11 @@ static TTMon_Data *ttm_data;
  */
 void bind_ttm_to_page(gint page)
 {
+	ENTER();
 	ttm_data->page = page;
 	OBJ_SET(ttm_data->darea,"page",GINT_TO_POINTER(page));
+	EXIT();
+	return;
 }
 
 
@@ -49,12 +53,15 @@ void bind_ttm_to_page(gint page)
 G_MODULE_EXPORT void reset_ttm_buttons(void)
 {
 	GtkWidget *widget = NULL;
+	ENTER();
 	widget = lookup_widget_f("toothlogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
 	widget = lookup_widget_f("triggerlogger_disable_radio_button");
 	if (GTK_IS_WIDGET(widget))
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+	EXIT();
+	return;
 }
 
 
@@ -65,6 +72,7 @@ G_MODULE_EXPORT void reset_ttm_buttons(void)
   */
 G_MODULE_EXPORT void setup_logger_display(GtkWidget * src_widget)
 {
+	ENTER();
 	ttm_data = g_new0(TTMon_Data,1);
 	ttm_data->page = -1;
 	ttm_data->pixmap = NULL;
@@ -83,6 +91,7 @@ G_MODULE_EXPORT void setup_logger_display(GtkWidget * src_widget)
 	ttm_data->last = g_new0(gushort,93);
 
 	OBJ_SET(src_widget,"ttmon_data",(gpointer)ttm_data);
+	EXIT();
 	return;
 }
 
@@ -100,6 +109,7 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 	GdkWindow *window = gtk_widget_get_window(widget);
 	GtkAllocation allocation;
 
+	ENTER();
 	gtk_widget_get_allocation(widget,&allocation);
 
 	if(window)
@@ -124,11 +134,15 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
 	}
 	/* Don't try to update if the page isn't bound YET */
 	if (ttm_data->page < 0)
+	{
+		EXIT();
 		return TRUE;
+	}
 
 	crunch_trigtooth_data();
 	if (ttm_data->peak > 0)
 		update_trigtooth_display(NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -142,33 +156,35 @@ G_MODULE_EXPORT gboolean logger_display_config_event(GtkWidget * widget, GdkEven
   */
 G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEventExpose *event , gpointer data)
 {
-        cairo_t *cr = NULL;
+	cairo_t *cr = NULL;
 	GdkWindow *window = gtk_widget_get_window(widget);
 	GtkAllocation allocation;
+	ENTER();
 	gtk_widget_get_allocation(widget,&allocation);
 #if GTK_MINOR_VERSION >= 18
-        if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
+	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
 #else
-        if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
+		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
-        {
-                cr = gdk_cairo_create(window);
-                gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
-                cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
-                cairo_fill(cr);
-                cairo_destroy(cr);
-        }
-        else    /* INSENSITIVE display so grey it */
-        {
-                cr = gdk_cairo_create(window);
-                gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
-                cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
-                cairo_fill(cr);
-                cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
-                cairo_rectangle(cr,0,0,allocation.width, allocation.height);
-                cairo_fill(cr);
-                cairo_destroy(cr);
-        }
+		{
+			cr = gdk_cairo_create(window);
+			gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
+			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+			cairo_fill(cr);
+			cairo_destroy(cr);
+		}
+		else    /* INSENSITIVE display so grey it */
+		{
+			cr = gdk_cairo_create(window);
+			gdk_cairo_set_source_pixmap(cr,ttm_data->pixmap,0,0);
+			cairo_rectangle(cr,event->area.x,event->area.y,event->area.width, event->area.height);
+			cairo_fill(cr);
+			cairo_set_source_rgba (cr, 0.3,0.3,0.3,0.5);
+			cairo_rectangle(cr,0,0,allocation.width, allocation.height);
+			cairo_fill(cr);
+			cairo_destroy(cr);
+		}
+	EXIT();
 	return TRUE;
 }
 
@@ -179,7 +195,10 @@ G_MODULE_EXPORT gboolean logger_display_expose_event(GtkWidget * widget, GdkEven
   */
 G_MODULE_EXPORT void crunch_trigtooth_data_pf(void)
 {
+	ENTER();
 	crunch_trigtooth_data();
+	EXIT();
+	return;
 }
 
 
@@ -202,6 +221,7 @@ void crunch_trigtooth_data(void)
 	extern gconstpointer *global_data;
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
+	ENTER();
 	canID = firmware->canID;
 	position = ms_get_ecu_data_f(canID,ttm_data->page,CTR,size);
 
@@ -377,6 +397,8 @@ void crunch_trigtooth_data(void)
 		ttm_data->vdivisor = 6000;
 	else if (tmp >= 48000)
 		ttm_data->vdivisor = 12000;
+	EXIT();
+	return;
 }
 
 
@@ -385,7 +407,10 @@ void crunch_trigtooth_data(void)
   */
 G_MODULE_EXPORT void update_trigtooth_display_pf(void)
 {
+	ENTER();
 	g_idle_add(update_trigtooth_display,NULL);
+	EXIT();
+	return;
 }
 
 
@@ -409,6 +434,7 @@ G_MODULE_EXPORT gboolean update_trigtooth_display(gpointer data)
 	GtkAllocation allocation;
 	GdkWindow *window = gtk_widget_get_window(ttm_data->darea);
 
+	ENTER();
 	gtk_widget_get_allocation(ttm_data->darea,&allocation);
 
 	w=allocation.width;
@@ -521,8 +547,12 @@ G_MODULE_EXPORT gboolean update_trigtooth_display(gpointer data)
 
 	/* Trigger redraw to main screen */
 	if (!window) 
+	{
+		EXIT();
 		return FALSE;
+	}
 	gdk_window_clear(window);
+	EXIT();
 	return FALSE;
 }
 
@@ -536,6 +566,7 @@ void start(EcuPluginTickler type)
 {
 	gint tmpi = 0;
 	extern gconstpointer *global_data;
+	ENTER();
 	switch (type)
 	{
 		case TOOTHMON_TICKLER:
@@ -573,6 +604,8 @@ void start(EcuPluginTickler type)
 				MTXDBG(CRITICAL,_("Trigmon tickler already active \n"));
 			break;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -584,6 +617,7 @@ void start(EcuPluginTickler type)
 void stop(EcuPluginTickler type)
 {
 	gint tmpi = 0;
+	ENTER();
 	extern gconstpointer *global_data;
 	switch (type)
 	{
@@ -612,6 +646,8 @@ void stop(EcuPluginTickler type)
 			}
 			break;
 	}
+	EXIT();
+	return;
 }
 
 
@@ -624,8 +660,9 @@ void stop(EcuPluginTickler type)
    */
 gboolean signal_toothtrig_read(EcuPluginTickler type)
 {
-	extern gconstpointer *global_data;
 	Firmware_Details * firmware = NULL;
+	extern gconstpointer *global_data;
+	ENTER();
 
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	MTXDBG(IO_MSG,_("Sending message to thread to read ToothTrigger data\n"));
@@ -648,6 +685,7 @@ gboolean signal_toothtrig_read(EcuPluginTickler type)
 		default:
 			break;
 	}
+	EXIT();
 	return TRUE;    /* Keep going.... */
 }
 

@@ -20,6 +20,7 @@
 
 #define __MS1_PLUGIN_C__
 #include <config.h>
+#include <debugging.h>
 #include <defines.h>
 #include <ms1_gui_handlers.h>
 #include <ms1_plugin.h>
@@ -44,6 +45,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	   call functions within the program that loaded this DLL, so
 	   we need to pass pointers over and assign them here.
 	 */
+	ENTER();
 	*(void **)(&error_msg_f) = DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
 	*(void **)(&get_symbol_f) = DATA_GET(global_data,"get_symbol_f");
@@ -73,6 +75,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("stop_tickler",(void **)&stop_tickler_f);
 
 	register_ecu_enums();
+	EXIT();
+	return;
 }
 
 
@@ -82,9 +86,12 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
   */
 G_MODULE_EXPORT void plugin_shutdown()
 {
+	ENTER();
 	stop(TOOTHMON_TICKLER);
 	stop(TRIGMON_TICKLER);
 	deregister_ecu_enums();
+	EXIT();
+	return;
 }
 
 
@@ -94,6 +101,7 @@ G_MODULE_EXPORT void plugin_shutdown()
 void register_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
@@ -113,8 +121,10 @@ void register_ecu_enums(void)
 				GINT_TO_POINTER(ODDFIRE_ANGLE));
 		/* Std button handlers */
 		g_hash_table_insert(str_2_enum,(gpointer)"_REBOOT_GETERR_",
-	                        GINT_TO_POINTER(REBOOT_GETERR));		
+				GINT_TO_POINTER(REBOOT_GETERR));		
 	}
+	EXIT();
+	return;
 }
 
 
@@ -125,6 +135,7 @@ void register_ecu_enums(void)
 void deregister_ecu_enums(void)
 {
 	GHashTable *str_2_enum = NULL;
+	ENTER();
 	str_2_enum = (GHashTable *)DATA_GET(global_data,"str_2_enum");
 	if (str_2_enum)
 	{
@@ -139,4 +150,6 @@ void deregister_ecu_enums(void)
 		/* Std button handlers */
 		g_hash_table_remove(str_2_enum,"_REBOOT_GETERR_");
 	}
+	EXIT();
+	return;
 }

@@ -19,6 +19,7 @@
   */
 
 #include <config.h>
+#include <debugging.h>
 #include <defines.h>
 #include <glade/glade.h>
 #include <ms1_plugin.h>
@@ -63,6 +64,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 	gboolean use_color = FALSE;
 	DataSize size = MTX_U08;
 
+	ENTER();
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
@@ -185,6 +187,7 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
 	OBJ_SET(widget,"not_sent",NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -218,6 +221,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 	GHashTable **interdep_vars = NULL;
 	GdkColor black = {0,0,0,0};
 
+	ENTER();
 
 	if (!firmware)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -319,6 +323,7 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
 			ms_send_to_ecu_f(canID, page, offset, size, dload_val, TRUE);
 	}
 	gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&black);
+	EXIT();
 	return TRUE;
 }
 
@@ -335,6 +340,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 	gint handler = -1;
 	gboolean restart = FALSE;
 
+	ENTER();
 	handler = (GINT)OBJ_GET(widget,"handler");
 
 	switch ((MS1StdHandler)handler)
@@ -356,6 +362,7 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
 			MTXDBG(CRITICAL,_("ERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
 			break;
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -371,6 +378,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 	GtkWidget *tmpwidget = NULL;
 	gint handler = (GINT)OBJ_GET(widget, "handler");
 
+	ENTER();
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
 	{       /* It's pressed (or checked) */
 		switch ((MS1ToggleHandler)handler)
@@ -407,6 +415,7 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
 				break;
 		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -436,6 +445,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	Firmware_Details *firmware = NULL;
 	void (*check_limits)(gint);
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	handler = (GINT)OBJ_GET(widget,"handler");
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
@@ -450,6 +460,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	{
 		default:
 			MTXDBG(CRITICAL,("ERROR  handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
+			EXIT();
 			return TRUE;
 			break;
 	}
@@ -458,6 +469,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 		dload_val = convert_before_download_f(widget,dload_val);
 		ms_send_to_ecu_f(canID, page, offset, size, dload_val, TRUE);
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -477,6 +489,7 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 	gint precision = 0;
 	gchar *tmpbuf = NULL;
 
+	ENTER();
 	handler = (GINT)OBJ_GET(widget,"handler");
 	value = convert_after_upload_f(widget);
 	get_essentials_f(widget, &canID, &page, &offset, &size, &precision);
@@ -512,7 +525,10 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 		case ODDFIRE_ANGLE:
 			offset = (GINT)OBJ_GET(widget,"oddfire_bit_offset");
 			if (offset == 0)
+			{
+				EXIT();
 				return;
+			}
 			switch ((GINT)ms_get_ecu_data_f(canID,page,offset,size))
 			{
 				case 4:
@@ -542,7 +558,8 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
 		default:
 			MTXDBG(CRITICAL,_("ERROR handler (%i) NOT found for widget %s, command aborted! BUG!!!\n"),handler,glade_get_widget_name(widget));
 	}
-
+	EXIT();
+	return;
 }
 
 
@@ -554,7 +571,9 @@ G_MODULE_EXPORT void ecu_update_entry(GtkWidget *widget)
   */
 G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget * widget)
 {
-        return TRUE;
+	ENTER();
+	EXIT();
+	return TRUE;
 }
 
 
@@ -564,6 +583,9 @@ G_MODULE_EXPORT gboolean ecu_update_combo(GtkWidget * widget)
   */
 G_MODULE_EXPORT void ecu_gui_init(void)
 {
+	ENTER();
+	EXIT();
+	return;
 	/* We don't need anything specific to this ecu initialized */
 }
 

@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <ms1_plugin.h>
 
 
@@ -26,6 +27,9 @@
   */
 G_MODULE_EXPORT void enable_reboot_button_pf(void)
 {
+	ENTER();
 	gtk_widget_set_sensitive(lookup_widget_f("error_status_reboot_button"),TRUE);
+	EXIT();
+	return;
 }
 

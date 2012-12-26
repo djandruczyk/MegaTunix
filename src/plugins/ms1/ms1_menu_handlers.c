@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <firmware.h>
 #include <ms1_plugin.h>
 #include <ms1_menu_handlers.h>
@@ -35,6 +36,7 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 	GtkWidget *menu = NULL;
 	GtkWidget *image = NULL;
 
+	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
 	if (firmware->capabilities & MS1)
@@ -49,5 +51,6 @@ G_MODULE_EXPORT void ecu_plugin_menu_setup(GladeXML *xml)
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu),item);
 		gtk_widget_show_all(menu);
 	}
+	EXIT();
 	return;
 }
