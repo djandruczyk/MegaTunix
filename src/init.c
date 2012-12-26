@@ -827,7 +827,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 		tab_gauges[i] = NULL;
 		ve3d_mutex[i] = g_mutex_new();
 		algorithm[i] = SPEED_DENSITY;
-		interdep_vars[i] = g_hash_table_new(NULL,NULL);
+		interdep_vars[i] = g_hash_table_new_full(NULL,NULL,NULL,g_free);
 	}
 
 	for (i=0;i<firmware->total_pages;i++)
