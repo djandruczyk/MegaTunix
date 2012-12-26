@@ -435,10 +435,27 @@
 	...
 	fun:main
 }
+
 {
 	GTK IM stuff
 	Memcheck:Leak
 	fun:*alloc
 	...
 	fun:*gtk_im_*
+}
+
+{
+	GTK murrine theme stuff
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:*raico_blur*
+}
+{
+	GTK liboverlay
+	Memcheck:Leak
+	fun:*alloc
+	...
+	fun:gdk_region_new
+	obj:/usr/lib/liboverlay-scrollbar-0.2.so.0.0.16
 }
