@@ -18,6 +18,7 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <null_gui_handlers.h>
 
 
@@ -28,7 +29,10 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT void ecu_gui_init(void)
 {
+	ENTER();
 	/* We don't need anything specific to this ecu initialized */
+	EXIT();
+	return;
 }
 
 
@@ -40,7 +44,9 @@ G_MODULE_EXPORT void ecu_gui_init(void)
   */
 G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	ENTER();
+	EXIT();
+	return TRUE;
 }
 
 
@@ -52,7 +58,9 @@ G_MODULE_EXPORT gboolean ecu_toggle_button_handler(GtkWidget *widget, gpointer d
   */
 G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	ENTER();
+	EXIT();
+	return TRUE;
 }
 
 
@@ -64,7 +72,9 @@ G_MODULE_EXPORT gboolean ecu_std_button_handler(GtkWidget *widget, gpointer data
   */
 G_MODULE_EXPORT gboolean ecu_bitmask_button_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	ENTER();
+	EXIT();
+	return TRUE;
 }
 
 
@@ -76,7 +86,9 @@ G_MODULE_EXPORT gboolean ecu_bitmask_button_handler(GtkWidget *widget, gpointer 
   */
 G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	ENTER();
+	EXIT();
+	return TRUE;
 }
 
 
@@ -88,7 +100,9 @@ G_MODULE_EXPORT gboolean ecu_spin_button_handler(GtkWidget *widget, gpointer dat
   */
 G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	ENTER();
+	EXIT();
+	return TRUE;
 }
 
 
@@ -101,6 +115,8 @@ G_MODULE_EXPORT gboolean ecu_entry_handler(GtkWidget *widget, gpointer data)
   */
 G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 {
-	        return TRUE;
+	ENTER();
+	EXIT();
+	return TRUE;
 }
 
