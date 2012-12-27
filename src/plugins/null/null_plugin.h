@@ -37,7 +37,9 @@ extern "C" {
 #endif
 
 /* Function Pointers */
-EXTERN void (*dbg_func_f)(int,const gchar *, const gchar *, gint ,const gchar *, ...);
+EXTERN void (*dbg_func_f)(int,const gchar *, const gchar *, gint ,const gchar *, ...);                                                                          
+EXTERN void (*error_msg_f)(const gchar *);
+EXTERN gboolean (*get_symbol_f)(const gchar *, void **);
 /* Function Pointers */
 
 /* Prototypes */

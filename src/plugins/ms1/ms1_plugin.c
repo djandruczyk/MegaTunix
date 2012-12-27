@@ -40,19 +40,19 @@ gconstpointer *global_data;
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	global_data = data;
-	/* Initializes function pointers since on Winblows was can NOT
-	   call functions within the program that loaded this DLL, so
-	   we need to pass pointers over and assign them here.
-	 */
-	ENTER();
 	*(void **)(&error_msg_f) = DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
 	*(void **)(&get_symbol_f) = DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
+	ENTER();
+	get_symbol_f("dbg_func",(void **)&dbg_func_f);
+	/* Initializes function pointers since on Winblows was can NOT
+	   call functions within the program that loaded this DLL, so
+	   we need to pass pointers over and assign them here.
+	 */
 	get_symbol_f("alter_widget_state",(void **)&alter_widget_state_f);
 	get_symbol_f("convert_after_upload",(void **)&convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void **)&convert_before_download_f);
-	get_symbol_f("dbg_func",(void **)&dbg_func_f);
 	get_symbol_f("entry_changed_handler",(void **)&entry_changed_handler_f);
 	get_symbol_f("get_colors_from_hue",(void **)&get_colors_from_hue_f);
 	get_symbol_f("get_bitshift",(void **)&get_bitshift_f);

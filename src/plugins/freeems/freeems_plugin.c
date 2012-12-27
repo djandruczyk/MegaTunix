@@ -49,16 +49,17 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	GMutex *mutex = NULL;
 	GHashTable *hash = NULL;
 
-	ENTER();
 	global_data = data;
-	/* Initializes function pointers since on Winblows you can NOT
-	   call functions within the program that loaded this DLL, so
-	   we need to pass pointers over and assign them here.
-	 */
 	*(void **)(&error_msg_f) = DATA_GET(global_data,"error_msg_f");
 	g_assert(error_msg_f);
 	*(void **)(&get_symbol_f) = DATA_GET(global_data,"get_symbol_f");
 	g_assert(get_symbol_f);
+	get_symbol_f("dbg_func",(void **)&dbg_func_f);
+	ENTER();
+	/* Initializes function pointers since on Winblows you can NOT
+	   call functions within the program that loaded this DLL, so
+	   we need to pass pointers over and assign them here.
+	 */
 	get_symbol_f("_get_sized_data",(void **)&_get_sized_data_f);
 	get_symbol_f("_set_sized_data",(void **)&_set_sized_data_f);
 	get_symbol_f("check_tab_existance",(void **)&check_tab_existance_f);
@@ -68,7 +69,6 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("combo_toggle_labels_linked",(void **)&combo_toggle_labels_linked_f);
 	get_symbol_f("convert_after_upload",(void **)&convert_after_upload_f);
 	get_symbol_f("convert_before_download",(void **)&convert_before_download_f);
-	get_symbol_f("dbg_func",(void **)&dbg_func_f);
 	get_symbol_f("dump_output",(void **)&dump_output_f);
 	get_symbol_f("entry_changed_handler",(void **)&entry_changed_handler_f);
 	get_symbol_f("evaluator_create",(void **)&evaluator_create_f);

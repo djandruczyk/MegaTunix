@@ -89,8 +89,8 @@ typedef enum
   #define ENTER() dbg_func_f((Dbg_Class)(FUNC),NULL,NULL,0,"Entered: %s\n",__FUNCTION__)
   #define EXIT() dbg_func_f((Dbg_Class)(FUNC),NULL,NULL,0,"Leaving: %s\n",__FUNCTION__)
  #else
-  #define ENTER() ""
-  #define EXIT() ""
+  #define ENTER() 
+  #define EXIT() 
  #endif
 #else
  /* When inside mtx core, use the default dest function name */
@@ -100,8 +100,8 @@ typedef enum
   #define ENTER() dbg_func((Dbg_Class)(FUNC),NULL,NULL,0,"Entered: %s\n",__FUNCTION__)
   #define EXIT() dbg_func((Dbg_Class)(FUNC),NULL,NULL,0,"Leaving: %s\n",__FUNCTION__)
  #else
-  #define ENTER() ""
-  #define EXIT() ""
+  #define ENTER() 
+  #define EXIT() 
  #endif
 #endif
 

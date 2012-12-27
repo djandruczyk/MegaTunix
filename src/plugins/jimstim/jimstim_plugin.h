@@ -25,9 +25,10 @@ extern "C" {
 #ifndef __JIMSTIM_PLUGIN_H__
 #define __JIMSTIM_PLUGIN_H__
 
+#include <plugindefines.h>
+#include <debugging.h>
 #include <gtk/gtk.h>
 #include <threads.h>
-#include <plugindefines.h>
 
 #ifdef __JIMSTIM_PLUGIN_C__
 #define EXTERN
