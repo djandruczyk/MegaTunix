@@ -130,9 +130,17 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		g_list_free(s_list);
 		DATA_SET(global_data,"cli_persona",NULL);
 		if (DATA_GET(global_data,"offline"))
-			goto jumpahead_offline;
+		{
+			persona_dialog_response(NULL,GTK_RESPONSE_CANCEL,NULL);
+			EXIT();
+			return FALSE;
+		}
 		else
-			goto jumpahead;
+		{
+			persona_dialog_response(NULL,GTK_RESPONSE_OK,NULL);
+			EXIT();
+			return FALSE;
+		}
 	}
 
 	set_title(g_strdup(_("Choose an ECU family?")));
@@ -148,6 +156,7 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 			"Find my ECU",
 			GTK_RESPONSE_OK,
 			NULL);
+	g_signal_connect(dialog,"response",G_CALLBACK(persona_dialog_response),NULL);
 	vbox = gtk_vbox_new(TRUE,2);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox),5);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),vbox,TRUE,TRUE,0);
@@ -227,24 +236,42 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 		}
 	}
 
+	OBJ_SET(dialog,"p_list",p_list);
+	OBJ_SET(dialog,"s_list",p_list);
 	gtk_widget_show_all(dialog);
-	result = gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_widget_destroy(dialog);
-	while(gtk_events_pending())
-		gtk_main_iteration();
+	EXIT();
+	return FALSE;
+}
 
-	g_list_foreach(p_list,free_persona_element,NULL);
-	g_list_foreach(s_list,free_persona_element,NULL);
-	g_list_free(p_list);
-	g_list_free(s_list);
-	switch (result)
+
+void persona_dialog_response(GtkDialog *dialog, gint response, gpointer data)
+{
+	gchar * pathstub = NULL;
+	gchar * filename = NULL;
+	GList *p_list = NULL;
+	GList *s_list = NULL;
+
+	if (GTK_IS_WIDGET(dialog))
+		gtk_widget_destroy(GTK_WIDGET(dialog));
+	p_list = OBJ_GET(dialog,"p_list");
+	s_list = OBJ_GET(dialog,"s_list");
+	if (p_list)
+	{
+		g_list_foreach(p_list,free_persona_element,NULL);
+		g_list_free(p_list);
+	}
+	if (s_list)
+	{
+		g_list_foreach(s_list,free_persona_element,NULL);
+		g_list_free(s_list);
+	}
+	switch (response)
 	{
 		case GTK_RESPONSE_CLOSE:
 			leave(NULL,NULL);
 			break;
 		case GTK_RESPONSE_ACCEPT:
 		case GTK_RESPONSE_OK: /* Normal mode */
-jumpahead:
 			plugins_init();
 			pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL);
 			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
@@ -254,7 +281,6 @@ jumpahead:
 			io_cmd("interrogation",NULL);
 			break;
 		default: /* Offline */
-jumpahead_offline:
 			plugins_init();
 			pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL);
 			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
@@ -263,10 +289,10 @@ jumpahead_offline:
 			g_free(filename);
 			set_offline_mode();
 			EXIT();
-			return FALSE;
+			return;
 	}
 	EXIT();
-	return FALSE;
+	return;
 }
 
 

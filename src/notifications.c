@@ -329,7 +329,7 @@ G_MODULE_EXPORT void warn_user(const gchar *message)
 	g_signal_connect (G_OBJECT(warning_dialog),
 			"response",
 			G_CALLBACK (get_response),
-			warning_dialog);
+			NULL);
 
 	g_signal_connect_swapped (G_OBJECT(warning_dialog),
 			"response",
@@ -379,9 +379,8 @@ G_MODULE_EXPORT void error_msg(const gchar *message)
   \param data is the response as an integer
   \returns TRUE
   */
-G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT void get_response(GtkWidget *widget, gint response, gpointer data)
 {
-	gint response = (GINT)data;
 	ENTER();
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
@@ -393,7 +392,7 @@ G_MODULE_EXPORT gboolean get_response(GtkWidget *widget, gpointer data)
 	/* This might need a timeout (1500ms) +idle to delay */
 	set_warning_flag(NULL);
 	EXIT();
-	return TRUE;
+	return;
 }
 
 

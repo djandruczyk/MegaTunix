@@ -273,6 +273,7 @@ G_MODULE_EXPORT gboolean check_for_first_time(void)
 	ENTER();
 	if (DATA_GET(global_data,"first_time"))
 		printf("should run first_time_wizard\n");
+	printf("gtk_main_level is %i\n",gtk_main_level);
     personality_choice();
 	EXIT();
 	return FALSE;

@@ -51,6 +51,7 @@ gboolean personality_choice(void);
 gboolean persona_selection(GtkWidget *, gpointer);
 void free_persona_element(gpointer, gpointer);
 gint persona_seq_sort(gconstpointer a, gconstpointer b);
+void persona_dialog_response(GtkDialog *, gint , gpointer );
 /* Prototypes */
 
 #endif
