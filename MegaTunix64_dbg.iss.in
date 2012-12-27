@@ -30,20 +30,20 @@ InfoBeforeFile=.\WIN_NOTES.txt
 ChangesEnvironment=yes
 
 [Files]
-Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
-Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
-Source: "z:\opt\crossroot64\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\2.24\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
-Source: "z:\opt\crossroot64_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\2.24\lib\gdk-pixbuf-2.0\2.10.0\"; Flags: ignoreversion
-Source: "z:\opt\crossroot64_dbg\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\2.24\lib\pango\1.6.0\modules"; Flags: ignoreversion
-Source: "z:\opt\crossroot64_dbg\etc\pango\pango.modules"; DestDir: "{app}\2.24\etc\pango\"; Flags: ignoreversion
-Source: "z:\opt\crossroot64_dbg\bin\*.dll"; DestDir: "{app}\2.24"; Flags: ignoreversion
-Source: "z:\opt\crossroot64_dbg\etc\*.*"; DestDir: "{app}\2.24\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64_dbg\share\themes\*.*"; DestDir: "{app}\2.24\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64_dbg\share\locale\de\*.*"; DestDir: "{app}\2.24\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64_dbg\share\locale\es\*.*"; DestDir: "{app}\2.24\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64_dbg\share\locale\fi\*.*"; DestDir: "{app}\2.24\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64_dbg\share\locale\fr\*.*"; DestDir: "{app}\2.24\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
+Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
+Source: "z:\opt\crossroot64\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\gtk\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\gtk\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
+Source: "z:\opt\crossroot64_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\gtk\lib\gdk-pixbuf-2.0\2.10.0\"; Flags: ignoreversion
+Source: "z:\opt\crossroot64_dbg\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\gtk\lib\pango\1.6.0\modules"; Flags: ignoreversion
+Source: "z:\opt\crossroot64_dbg\etc\pango\pango.modules"; DestDir: "{app}\gtk\etc\pango\"; Flags: ignoreversion
+Source: "z:\opt\crossroot64_dbg\bin\*.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
+Source: "z:\opt\crossroot64_dbg\etc\*.*"; DestDir: "{app}\gtk\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64_dbg\share\themes\*.*"; DestDir: "{app}\gtk\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64_dbg\share\locale\de\*.*"; DestDir: "{app}\gtk\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64_dbg\share\locale\es\*.*"; DestDir: "{app}\gtk\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64_dbg\share\locale\fi\*.*"; DestDir: "{app}\gtk\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot64_dbg\share\locale\fr\*.*"; DestDir: "{app}\gtk\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot64_dbg\dest\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\home\dave\git\MegaTunix\widgets\.libs\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
 Source: "z:\opt\crossroot64_dbg\dest\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
@@ -66,32 +66,32 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\MegaTunix"; Filena
  ; Magic stuff that makes the GL windows work
 Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "GDK_NATIVE_WINDOWS"; ValueData: "1"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\megatunix.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; gaugedesigner
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\gaugedesigner.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; dashdesigner
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\dashdesigner.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; mtxloader 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\mtxloader.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; msloader 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\msloader.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; curvedemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\curvedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\curvedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\curvedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\curvedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; gaugedemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\gaugedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; piedemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\piedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\piedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\piedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\piedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; progressdemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\progressdemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\progressdemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\progressdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\progressdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 ; stripchartdemo 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\stripchartdemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\stripchartdemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\stripchartdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\2.24;{app}"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\stripchartdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
 
