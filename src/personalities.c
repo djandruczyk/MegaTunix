@@ -252,18 +252,20 @@ void persona_dialog_response(GtkDialog *dialog, gint response, gpointer data)
 	GList *s_list = NULL;
 
 	if (GTK_IS_WIDGET(dialog))
+	{
+		p_list = OBJ_GET(dialog,"p_list");
+		s_list = OBJ_GET(dialog,"s_list");
+		if (p_list)
+		{
+			g_list_foreach(p_list,free_persona_element,NULL);
+			g_list_free(p_list);
+		}
+		if (s_list)
+		{
+			g_list_foreach(s_list,free_persona_element,NULL);
+			g_list_free(s_list);
+		}
 		gtk_widget_destroy(GTK_WIDGET(dialog));
-	p_list = OBJ_GET(dialog,"p_list");
-	s_list = OBJ_GET(dialog,"s_list");
-	if (p_list)
-	{
-		g_list_foreach(p_list,free_persona_element,NULL);
-		g_list_free(p_list);
-	}
-	if (s_list)
-	{
-		g_list_foreach(s_list,free_persona_element,NULL);
-		g_list_free(s_list);
 	}
 	switch (response)
 	{
