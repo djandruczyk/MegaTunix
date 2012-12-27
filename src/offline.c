@@ -74,7 +74,7 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 			gtk_widget_set_sensitive(GTK_WIDGET(widget),TRUE);
 		plugins_shutdown();
 		/* Does this need a delay? */
-		g_idle_add((GSourceFunc)personality_choice,NULL);
+		personality_choice();
 
 		EXIT();
 		return FALSE;
@@ -101,7 +101,9 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 		DATA_SET(global_data,"firmware",firmware);
 	}
 	if (get_symbol("load_firmware_details",(void **)&load_firmware_details))
+	{
 		load_firmware_details(firmware,filename);
+	}
 	else
 		printf("Unable to load firmware details!\n");
 
@@ -155,11 +157,13 @@ G_MODULE_EXPORT gboolean set_offline_mode(void)
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
 
+	/* BUG, causes deadlock
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("offline_ecu_restore_pf");
 	get_symbol(pf->name,(void **)&pf->function);
 	pf->w_arg = FALSE;
 	pfuncs = g_array_append_val(pfuncs,pf);
+	*/
 
 	pf = g_new0(PostFunction,1);
 	pf->name = g_strdup("setup_menu_handlers_pf");
@@ -396,7 +400,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	   gtk_toggle_button_toggled(GTK_TOGGLE_BUTTON(button));
 	   else
 	   gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button),TRUE);
-	 */
+	   */
 
 	g_strfreev(filenames);
 	g_array_free(classes,TRUE);
@@ -452,8 +456,8 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	}
 
 	fileio = g_new0(MtxFileIO ,1);
-	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->default_path = g_strdup(BACKUP_DATA_DIR);
+	fileio->project = (const gchar *)DATA_GET(global_data,"project_name");
 	fileio->parent = lookup_widget("main_window");
 	fileio->on_top = TRUE;
 	fileio->title = g_strdup("You should load an ECU backup from a file");
@@ -463,7 +467,6 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	fileio->default_filename = g_strdup((gchar *)DATA_GET(global_data,"last_offline_filename"));
 
 	filename = choose_file(fileio);
-	free_mtxfileio(fileio);
 	if (filename)
 	{
 		DATA_SET_FULL(global_data,"last_offline_filename",g_strdup(filename),g_free);
@@ -474,6 +477,7 @@ G_MODULE_EXPORT void offline_ecu_restore_pf(void)
 	else
 		io_cmd(firmware->get_all_command,NULL);
 
+	free_mtxfileio(fileio);
 	EXIT();
 	return;
 }

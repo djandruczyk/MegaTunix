@@ -19,12 +19,17 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <defines.h>
 #include <fcntl.h>
 #include <getfiles.h>
 #include <glib/gstdio.h>
 #include <unistd.h>
 
+#ifdef DEBUG
+ #define ENTER() ""
+ #define EXIT() ""
+#endif
 
 /*!
  \brief get_files() returns a list of files located at the pathstub passed
@@ -49,6 +54,7 @@ gchar ** get_files(const gchar *prj, const gchar *pathstub, const gchar * extens
 	GDir *dir = NULL;
 	const gchar *project = NULL;
 
+	ENTER();
 	if (prj)
 		project = prj;
 	else
@@ -144,10 +150,12 @@ finish:
 	if (!list)
 	{
 		/*dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);*/
+		EXIT();
 		return NULL;
 	}
 	vector = g_strsplit(list,",",0);
 	g_free(list);
+	EXIT();
 	return (vector);
 }
 
@@ -175,6 +183,7 @@ gchar ** get_dirs(const gchar *prj, const gchar *pathstub, GArray **classes)
 	GDir *dir = NULL;
 	const gchar *project = NULL;
 
+	ENTER();
 	if (prj)
 		project = prj;
 	else
@@ -279,11 +288,13 @@ finish:
 	{
 		/*dbg_func(g_strdup(__FILE__": get_files()\n\t File list was NULL\n"),CRITICAL);*/
 		/*printf("List was EMPTY!\n");*/
+		EXIT();
 		return NULL;
 	}
 	vector = g_strsplit(list,",",0);
 	/*printf("Returning list of %i dirs\n",g_strv_length(vector));*/
 	g_free(list);
+	EXIT();
 	return (vector);
 }
 
@@ -300,6 +311,7 @@ gchar * get_file(const gchar *prj, const gchar *pathstub, const gchar *extension
 	gchar *filename = NULL;
 	gchar *file = NULL;
 	const gchar *project = NULL;
+	ENTER();
 	if (extension)
 		file = g_strconcat(pathstub,".",extension,NULL);
 	else
@@ -315,6 +327,7 @@ gchar * get_file(const gchar *prj, const gchar *pathstub, const gchar *extension
 	if (g_file_test(filename,(GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
 	{
 		g_free(file);
+		EXIT();
 		return filename;
 	}
 	else 
@@ -326,10 +339,14 @@ gchar * get_file(const gchar *prj, const gchar *pathstub, const gchar *extension
 		g_free(file);
 
 		if (g_file_test(filename,(GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR)))
+		{
+			EXIT();
 			return filename;
+		}
 		else
 			g_free(filename);
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -355,6 +372,7 @@ gchar * choose_file(MtxFileIO *data)
 	gboolean res = FALSE;
 	guint i = 0;
 
+	ENTER();
 	if (!GTK_IS_WINDOW(data->parent))
 		data->parent = NULL;
 	printf("choose_file\n");
@@ -454,7 +472,10 @@ gchar * choose_file(MtxFileIO *data)
 
 	}
 	else
+	{
+		EXIT();
 		return NULL;
+	}
 	/* Add shortcut folders... */
 	if (data->shortcut_folders)
 	{
@@ -530,6 +551,7 @@ afterfilter:
 		g_free(tmpbuf);
 	}
 	gtk_widget_destroy (dialog);
+	EXIT();
 	return (filename);
 }
 
@@ -549,6 +571,7 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 	gchar *msg = NULL;
 	gint handle = -1;
 
+	ENTER();
 	filename = gtk_file_chooser_get_filename (chooser);
 
 	/* If read only select again */
@@ -561,6 +584,7 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 				"File %s\nis READ ONLY, Pleae Choose Another",filename);
 		gtk_dialog_run(GTK_DIALOG(dialog));
 		gtk_widget_destroy(dialog);
+		EXIT();
 		return GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
 	}
 	/* File exists but is NOT R/O,  prompt to truncate or not */
@@ -582,14 +606,17 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
 				getfiles_errmsg(msg);
 				g_free(msg);
 			}
+			EXIT();
 			return GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME;
 		}
 		else
 		{
 			gtk_widget_destroy(dialog);
+			EXIT();
 			return GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
 		}
 	}
+	EXIT();
 	return GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN;
 }
 #endif
@@ -602,8 +629,12 @@ confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
   */
 void free_mtxfileio(MtxFileIO *data)
 {
+	ENTER();
 	if (!data)
+	{
+		EXIT();
 		return;
+	}
 	if (data->title)
 		g_free(data->title);
 	if (data->filename)
@@ -623,6 +654,7 @@ void free_mtxfileio(MtxFileIO *data)
 	if (data->default_extension)
 		g_free(data->default_extension);
 	g_free(data);
+	EXIT();
 	return;
 }
 
@@ -635,6 +667,7 @@ void getfiles_errmsg(const gchar * text)
 {
 	GtkWidget *dialog = NULL;
 
+	ENTER();
 	dialog = gtk_message_dialog_new(NULL,
 			GTK_DIALOG_DESTROY_WITH_PARENT,
 			GTK_MESSAGE_ERROR,
@@ -643,6 +676,8 @@ void getfiles_errmsg(const gchar * text)
 			text);
 	gtk_dialog_run (GTK_DIALOG (dialog));
 	gtk_widget_destroy (dialog);
+	EXIT();
+	return;
 }
 
 
@@ -657,18 +692,24 @@ gboolean check_for_files(const gchar * path, const gchar *ext)
 	GDir * dir = NULL;
 	const gchar * file = NULL;
 
+	ENTER();
 	dir=g_dir_open(path,0,NULL);
 	if (!dir)
+	{
+		EXIT();
 		return FALSE;
+	}
 	while ((file = g_dir_read_name(dir)))
 	{
 		if (g_str_has_suffix(file,ext))
 		{
 			g_dir_close(dir);
+			EXIT();
 			return TRUE;
 		}
 	}
 	g_dir_close(dir);
+	EXIT();
 	return FALSE;
 }
 

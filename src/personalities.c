@@ -230,6 +230,9 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	gtk_widget_show_all(dialog);
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
+	while(gtk_events_pending())
+		gtk_main_iteration();
+
 	g_list_foreach(p_list,free_persona_element,NULL);
 	g_list_foreach(s_list,free_persona_element,NULL);
 	g_list_free(p_list);
@@ -252,17 +255,13 @@ jumpahead:
 			break;
 		default: /* Offline */
 jumpahead_offline:
-			printf("Offline mode?\n");
 			plugins_init();
-			printf("plugins are initted\n");
 			pathstub = g_build_filename(INTERROGATOR_DATA_DIR,"Profiles",DATA_GET(global_data,"ecu_family"),"comm.xml",NULL);
 			filename = get_file((const gchar *)DATA_GET(global_data,"project_name"),pathstub,NULL);
 			g_free(pathstub);
 			load_comm_xml(filename);
-			printf("comm xml is loaded\n");
 			g_free(filename);
-			printf("about to call the set_offline_mode function\n");
-			g_idle_add((GSourceFunc)set_offline_mode,NULL);
+			set_offline_mode();
 			EXIT();
 			return FALSE;
 	}

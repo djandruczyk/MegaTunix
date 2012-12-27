@@ -27,10 +27,15 @@
   */
 
 #include <configfile.h>
+#include <debugging.h>
 #include <glib/gprintf.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef DEBUG
+ #define ENTER() ""
+ #define EXIT() "" 
+#endif
 static ConfigSection *cfg_create_section(ConfigFile * cfg, const gchar * name);
 static ConfigLine *cfg_create_string(ConfigSection * section, const gchar * key, const gchar * value);
 
@@ -45,9 +50,11 @@ static ConfigLine *cfg_find_string(ConfigSection * section, const gchar * key);
 ConfigFile *cfg_new(void)
 {
 	ConfigFile *cfg;
+	ENTER();
 
 	cfg = (ConfigFile *)g_malloc0(sizeof (ConfigFile));
 
+	EXIT();
 	return cfg;
 }
 
@@ -61,7 +68,6 @@ ConfigFile *cfg_new(void)
 ConfigFile *cfg_open_file(const gchar * filename)
 {
 	ConfigFile *cfg;
-
 	gchar *tmp = NULL;
 	gchar *line = NULL;
 	gchar *decomp = NULL;
@@ -70,10 +76,12 @@ ConfigFile *cfg_open_file(const gchar * filename)
 	GError *error = NULL;
 	ConfigSection *section = NULL;
 
+	ENTER();
 	iochannel = g_io_channel_new_file(filename,"r",&error);
 	if(error)
 	{
 		g_error_free(error);
+		EXIT();
 		return NULL;
 	}
 
@@ -108,6 +116,7 @@ ConfigFile *cfg_open_file(const gchar * filename)
 	}
 	g_io_channel_unref(iochannel);
 	cfg->filename = g_strdup(filename);
+	EXIT();
 	return cfg;
 }
 
@@ -125,8 +134,12 @@ gboolean cfg_write_file(ConfigFile * cfg, const gchar * filename)
 	ConfigSection *section;
 	ConfigLine *line;
 
+	ENTER();
 	if (!(file = fopen(filename, "wb")))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	section_list = cfg->sections;
 	while (section_list)
@@ -147,6 +160,7 @@ gboolean cfg_write_file(ConfigFile * cfg, const gchar * filename)
 		section_list = g_list_next(section_list);
 	}
 	fclose(file);
+	EXIT();
 	return TRUE;
 }
 
@@ -164,11 +178,19 @@ gboolean cfg_read_string(ConfigFile * cfg, const gchar * section, const gchar * 
 	ConfigSection *sect;
 	ConfigLine *line;
 
+	ENTER();
 	if (!(sect = cfg_find_section(cfg, section)))
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (!(line = cfg_find_string(sect, key)))
+	{
+		EXIT();
 		return FALSE;
+	}
 	*value = g_strcompress(line->value);
+	EXIT();
 	return TRUE;
 }
 
@@ -185,11 +207,16 @@ gboolean cfg_read_int(ConfigFile * cfg, const gchar * section, const gchar * key
 {
 	gchar *str;
 
+	ENTER();
 	if (!cfg_read_string(cfg, section, key, &str))
+	{
+		EXIT();
 		return FALSE;
+	}
 	*value = atoi(str);
 	g_free(str);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -206,13 +233,18 @@ gboolean cfg_read_boolean(ConfigFile * cfg, const gchar * section, const gchar *
 {
 	gchar *str;
 
+	ENTER();
 	if (!cfg_read_string(cfg, section, key, &str))
+	{
+		EXIT();
 		return FALSE;
+	}
 	if (!g_ascii_strcasecmp(str, "TRUE"))
 		*value = TRUE;
 	else
 		*value = FALSE;
 	g_free(str);
+	EXIT();
 	return TRUE;
 }
 
@@ -229,12 +261,17 @@ gboolean cfg_read_float(ConfigFile * cfg, const gchar * section, const gchar * k
 {
 	gchar *str;
 
+	ENTER();
 	if (!cfg_read_string(cfg, section, key, &str))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	*value = (gfloat) g_ascii_strtod(g_strdelimit(str,",.",'.'), NULL);
 	g_free(str);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -251,12 +288,17 @@ gboolean cfg_read_double(ConfigFile * cfg, const gchar * section, const gchar * 
 {
 	gchar *str;
 
+	ENTER();
 	if (!cfg_read_string(cfg, section, key, &str))
+	{
+		EXIT();
 		return FALSE;
+	}
 
 	*value = g_ascii_strtod(str, NULL);
 	g_free(str);
 
+	EXIT();
 	return TRUE;
 }
 
@@ -274,6 +316,7 @@ void cfg_write_string(ConfigFile * cfg, const gchar * section, const gchar * key
 	ConfigLine *line;
 	gchar * tmpbuf = NULL;
 
+	ENTER();
 	sect = cfg_find_section(cfg, section);
 	if (!sect)
 		sect = cfg_create_section(cfg, section);
@@ -286,6 +329,8 @@ void cfg_write_string(ConfigFile * cfg, const gchar * section, const gchar * key
 	}
 	else
 		cfg_create_string(sect, key, value);
+	EXIT();
+	return;
 }
 
 
@@ -300,9 +345,12 @@ void cfg_write_int(ConfigFile * cfg, const gchar * section, const gchar * key, g
 {
 	gchar *strvalue;
 
+	ENTER();
 	strvalue = g_strdup_printf("%d", value);
 	cfg_write_string(cfg, section, key, strvalue);
 	g_free(strvalue);
+	EXIT();
+	return;
 }
 
 
@@ -315,10 +363,13 @@ void cfg_write_int(ConfigFile * cfg, const gchar * section, const gchar * key, g
  */
 void cfg_write_boolean(ConfigFile * cfg, const gchar * section, const gchar * key, gboolean value)
 {
+	ENTER();
 	if (value)
 		cfg_write_string(cfg, section, key, "TRUE");
 	else
 		cfg_write_string(cfg, section, key, "FALSE");
+	EXIT();
+	return;
 }
 
 
@@ -333,9 +384,12 @@ void cfg_write_float(ConfigFile * cfg, const gchar * section, const gchar * key,
 {
 	gchar *strvalue;
 
+	ENTER();
 	strvalue = g_strdup_printf("%g", value);
 	cfg_write_string(cfg, section, key, strvalue);
 	g_free(strvalue);
+	EXIT();
+	return;
 }
 
 
@@ -350,9 +404,12 @@ void cfg_write_double(ConfigFile * cfg, const gchar * section, const gchar * key
 {
 	gchar *strvalue;
 
+	ENTER();
 	strvalue = g_strdup_printf("%g", value);
 	cfg_write_string(cfg, section, key, strvalue);
 	g_free(strvalue);
+	EXIT();
+	return;
 }
 
 
@@ -367,6 +424,7 @@ void cfg_remove_key(ConfigFile * cfg, const gchar * section, const gchar * key)
 	ConfigSection *sect;
 	ConfigLine *line;
 
+	ENTER();
 	if ((sect = cfg_find_section(cfg, section)))
 	{
 		if ((line = cfg_find_string(sect, key)))
@@ -377,6 +435,8 @@ void cfg_remove_key(ConfigFile * cfg, const gchar * section, const gchar * key)
 			sect->lines = g_list_remove(sect->lines, line);
 		}
 	}
+	EXIT();
+	return;
 }
 
 
@@ -390,6 +450,7 @@ void cfg_free(ConfigFile * cfg)
 	ConfigLine *line;
 	GList *section_list, *line_list;
 
+	ENTER();
 	section_list = cfg->sections;
 	while (section_list)
 	{
@@ -413,6 +474,8 @@ void cfg_free(ConfigFile * cfg)
 	g_list_free(cfg->sections);
 	g_free(cfg->filename);
 	g_free(cfg);
+	EXIT();
+	return;
 }
 
 
@@ -426,10 +489,12 @@ static ConfigSection *cfg_create_section(ConfigFile * cfg, const gchar * name)
 {
 	ConfigSection *section;
 
+	ENTER();
 	section = (ConfigSection *)g_malloc0(sizeof (ConfigSection));
 	section->name = g_strdup(name);
 	cfg->sections = g_list_prepend(cfg->sections, section);
 
+	EXIT();
 	return section;
 }
 
@@ -446,6 +511,7 @@ static ConfigLine *cfg_create_string(ConfigSection * section, const gchar * key,
 	ConfigLine *line;
 	gchar * tmpbuf = NULL;
 
+	ENTER();
 	line = (ConfigLine *)g_malloc0(sizeof (ConfigLine));
 	tmpbuf = g_strdup(key);
 	line->key = g_strdup(g_strstrip(tmpbuf));
@@ -455,6 +521,7 @@ static ConfigLine *cfg_create_string(ConfigSection * section, const gchar * key,
 	g_free(tmpbuf);
 	section->lines = g_list_prepend(section->lines, line);
 
+	EXIT();
 	return line;
 }
 
@@ -470,14 +537,19 @@ ConfigSection *cfg_find_section(ConfigFile * cfg, const gchar * name)
 	ConfigSection *section;
 	GList *list;
 
+	ENTER();
 	list = cfg->sections;
 	while (list)
 	{
 		section = (ConfigSection *) list->data;
 		if (!g_ascii_strcasecmp(section->name, name))
+		{
+			EXIT();
 			return section;
+		}
 		list = g_list_next(list);
 	}
+	EXIT();
 	return NULL;
 }
 
@@ -492,14 +564,18 @@ static ConfigLine *cfg_find_string(ConfigSection * section, const gchar * key)
 {
 	ConfigLine *line;
 	GList *list;
-
+	ENTER();
 	list = section->lines;
 	while (list)
 	{
 		line = (ConfigLine *) list->data;
 		if (!g_ascii_strcasecmp(line->key, key))
+		{
+			EXIT();
 			return line;
+		}
 		list = g_list_next(list);
 	}
+	EXIT();
 	return NULL;
 }

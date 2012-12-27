@@ -19,9 +19,17 @@
   \author David Andruczyk
   */
 
+#include <debugging.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <xmlbase.h>
+
+#ifdef DEBUG
+ #undef ENTER()
+ #undef EXIT()
+ #define ENTER() ""
+ #define EXIT() ""
+#endif
 
 /*!
   \brief Reads an Integer from an XML node and stores in the dest var
@@ -33,6 +41,7 @@ gboolean generic_xml_gint_import(xmlNode *node, gpointer dest)
 {
 	gint *val = NULL;
 
+	ENTER();
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
@@ -40,6 +49,7 @@ gboolean generic_xml_gint_import(xmlNode *node, gpointer dest)
 
 	val = (gint *)dest;
 	*val = (gint)g_ascii_strtod((gchar*)node->children->content,NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -54,6 +64,7 @@ gboolean generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 {
 	gboolean *val = NULL;
 
+	ENTER();
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
@@ -64,6 +75,7 @@ gboolean generic_xml_gboolean_import(xmlNode *node, gpointer dest)
 		*val = TRUE;
 	else
 		*val = FALSE;
+	EXIT();
 	return TRUE;
 }
 
@@ -78,6 +90,7 @@ void generic_xml_gint_export(xmlNode *parent, const gchar *element_name, gint *v
 {
 	gchar * tmpbuf = NULL;
 
+	ENTER();
 	g_return_if_fail(parent);
 	g_return_if_fail(element_name);
 	g_return_if_fail(val);
@@ -86,6 +99,8 @@ void generic_xml_gint_export(xmlNode *parent, const gchar *element_name, gint *v
 	xmlNewChild(parent, NULL, BAD_CAST element_name,
 			BAD_CAST tmpbuf);
 	g_free(tmpbuf);
+	EXIT();
+	return;
 }
 
 
@@ -97,6 +112,7 @@ void generic_xml_gint_export(xmlNode *parent, const gchar *element_name, gint *v
   */
 void generic_xml_gboolean_export(xmlNode *parent, const gchar *element_name, gboolean *val)
 {
+	ENTER();
 	g_return_if_fail(parent);
 	g_return_if_fail(element_name);
 	g_return_if_fail(val);
@@ -107,6 +123,8 @@ void generic_xml_gboolean_export(xmlNode *parent, const gchar *element_name, gbo
 	else
 		xmlNewChild(parent, NULL, BAD_CAST element_name,
 				BAD_CAST "FALSE");
+	EXIT();
+	return;
 }
 
 
@@ -120,6 +138,7 @@ gboolean generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 {
 	gfloat *val = NULL;
 
+	ENTER();
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
@@ -127,6 +146,7 @@ gboolean generic_xml_gfloat_import(xmlNode *node, gpointer dest)
 
 	val = (gfloat *)dest;
 	*val = g_ascii_strtod((gchar*)g_strdelimit((gchar *)node->children->content,",.",'.'),NULL);
+	EXIT();
 	return TRUE;
 }
 
@@ -142,6 +162,7 @@ void generic_xml_gfloat_export(xmlNode *parent, const gchar *element_name, gfloa
 	gchar tmpbuf[10];
 	gchar * buf = NULL;
 
+	ENTER();
 	g_return_if_fail(parent);
 	g_return_if_fail(element_name);
 	g_return_if_fail(val);
@@ -150,6 +171,8 @@ void generic_xml_gfloat_export(xmlNode *parent, const gchar *element_name, gfloa
 	/*tmpbuf = g_strdup_printf("%f",*val); */
 	xmlNewChild(parent, NULL, BAD_CAST element_name,
 			BAD_CAST buf);
+	EXIT();
+	return;
 }
 
 
@@ -163,17 +186,20 @@ gboolean generic_xml_gchar_import(xmlNode *node, gpointer dest)
 {
 	gchar **val = NULL;
 
+	ENTER();
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
 	val = (gchar **)dest;
 	if (!node->children) /* Empty node */
 	{
 		*val = g_strdup("");
+		EXIT();
 		return TRUE;
 	}
 	g_return_val_if_fail((node->children->type == XML_TEXT_NODE),FALSE);
 	g_return_val_if_fail(node->children->content,FALSE);
 	*val = g_strdup((gchar *)node->children->content);
+	EXIT();
 	return TRUE;
 }
 
@@ -186,6 +212,7 @@ gboolean generic_xml_gchar_import(xmlNode *node, gpointer dest)
   */
 void generic_xml_gchar_export(xmlNode *parent, const gchar *element_name, gchar **val)
 {
+	ENTER();
 	g_return_if_fail(parent);
 	g_return_if_fail(element_name);
 
@@ -193,8 +220,8 @@ void generic_xml_gchar_export(xmlNode *parent, const gchar *element_name, gchar 
 	 * empty var */
 	if (*(gchar **)val)
 		xmlNewChild(parent, NULL, BAD_CAST element_name,BAD_CAST *(gchar **)val);
-	else
-		return;
+	EXIT();
+	return;
 }
 
 
@@ -211,6 +238,7 @@ gboolean generic_xml_color_import(xmlNode *node, gpointer dest)
 	gchar **vector = NULL;
 	gint tmp = 0;
 
+	ENTER();
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(dest,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
@@ -249,6 +277,7 @@ gboolean generic_xml_color_import(xmlNode *node, gpointer dest)
 			cur_node = cur_node->next;
 		}
 	}
+	EXIT();
 	return TRUE;
 }
 
@@ -264,6 +293,7 @@ void generic_xml_color_export(xmlNode *parent, const gchar * element_name, GdkCo
 	gchar * tmpbuf =  NULL;
 	xmlNode *child = NULL;
 
+	ENTER();
 	g_return_if_fail(parent);
 	g_return_if_fail(element_name);
 	g_return_if_fail(color);
@@ -279,6 +309,8 @@ void generic_xml_color_export(xmlNode *parent, const gchar * element_name, GdkCo
 	tmpbuf = g_strdup_printf("%i",color->blue);
 	xmlNewChild(child, NULL, BAD_CAST "blue",BAD_CAST tmpbuf);
 	g_free(tmpbuf);
+	EXIT();
+	return;
 }
 
 
@@ -295,6 +327,7 @@ gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 	gint min = -1;
 	xmlNode *cur_node = NULL;
 
+	ENTER();
 	g_return_val_if_fail(node,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
 
@@ -313,9 +346,12 @@ gboolean xml_api_check(xmlNode *node, gint major, gint minor)
 	}
 	
 	if ((major != maj) || (minor != min))
+	{
+		EXIT();
 		return FALSE;
-	else
-		return TRUE;
+	}
+	EXIT();
+	return TRUE;
 }
 
 
@@ -336,6 +372,7 @@ gboolean generic_xml_gint_find(xmlNode *node, const gchar *name, gpointer dest)
 	g_return_val_if_fail(dest,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
 
+	ENTER();
 	val = (gint *)dest;
 
 	cur_node = node->children;
@@ -351,6 +388,7 @@ gboolean generic_xml_gint_find(xmlNode *node, const gchar *name, gpointer dest)
 		}
 		cur_node = cur_node->next;
 	}
+	EXIT();
 	return found;
 }
 
@@ -371,6 +409,7 @@ gboolean generic_xml_gboolean_find(xmlNode *node, const gchar *name, gpointer de
 	g_return_val_if_fail(dest,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
 
+	ENTER();
 	val = (gboolean *)dest;
 	cur_node = node->children;
 	while (cur_node->next)
@@ -385,6 +424,7 @@ gboolean generic_xml_gboolean_find(xmlNode *node, const gchar *name, gpointer de
 		}
 		cur_node = cur_node->next;
 	}
+	EXIT();
 	return found;
 }
 
@@ -405,6 +445,7 @@ gboolean generic_xml_gfloat_find(xmlNode *node, const gchar *name, gpointer dest
 	g_return_val_if_fail(dest,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
 
+	ENTER();
 	val = (gfloat *)dest;
 	cur_node = node->children;
 	while (cur_node->next)
@@ -419,6 +460,7 @@ gboolean generic_xml_gfloat_find(xmlNode *node, const gchar *name, gpointer dest
 		}
 		cur_node = cur_node->next;
 	}
+	EXIT();
 	return found;
 }
 
@@ -438,6 +480,7 @@ gboolean generic_xml_gchar_find(xmlNode *node, const gchar *name, gpointer dest)
 	g_return_val_if_fail(dest,FALSE);
 	g_return_val_if_fail(node->children,FALSE);
 
+	ENTER();
 	cur_node = node->children;
 	while (cur_node->next)
 	{
@@ -451,5 +494,6 @@ gboolean generic_xml_gchar_find(xmlNode *node, const gchar *name, gpointer dest)
 		}
 		cur_node = cur_node->next;
 	}
+	EXIT();
 	return found;
 }

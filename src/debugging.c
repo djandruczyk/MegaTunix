@@ -134,7 +134,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 	if (!(dbg_lvl & level))
 		return;
 
-//	g_static_mutex_lock(&dbg_mutex);
+	g_static_mutex_lock(&dbg_mutex);
 
 	if ((file) && (func) && (line > 0))
 	{

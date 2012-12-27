@@ -70,6 +70,7 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 			}
 			if (pf->name)
 			{
+				printf("Running %s\n",pf->name);
 				MTXDBG(DISPATCHER,_("dispatching post function %s\n"),pf->name);
 			}
 			if (pf->w_arg)
@@ -92,6 +93,7 @@ G_MODULE_EXPORT gboolean process_pf_message(gpointer data)
 	dealloc_io_message(message);
 	MTXDBG(DISPATCHER,_("deallocation of dispatch message complete\n"));
 	EXIT();
+	printf("process_pf_message EXITING\n");
 	return FALSE;
 }
 

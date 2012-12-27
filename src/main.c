@@ -148,5 +148,5 @@ gint main(gint argc, gchar ** argv)
 	gtk_main();
 	gdk_threads_leave();
 	EXIT();
-	return (0) ;
+	return (0);
 }

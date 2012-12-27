@@ -829,7 +829,7 @@ G_MODULE_EXPORT gboolean std_button_handler(GtkWidget *widget, gpointer data)
 			break;
 		case OFFLINE_MODE:
 			set_title(g_strdup(_("Offline Mode...")));
-			g_idle_add((GSourceFunc)set_offline_mode,NULL);
+			set_offline_mode();
 			break;
 		case TE_TABLE:
 			if (OBJ_GET(widget,"te_table_num"))

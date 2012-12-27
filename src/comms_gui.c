@@ -58,9 +58,7 @@ G_MODULE_EXPORT gboolean reset_errcounts(GtkWidget *widget)
  * */
 G_MODULE_EXPORT gboolean update_errcounts_wrapper(gpointer data)
 {
-
 	ENTER();
-
 	g_idle_add(update_errcounts,data);
 	EXIT();
 	return TRUE;
@@ -80,7 +78,6 @@ G_MODULE_EXPORT gboolean update_errcounts(gpointer data)
 	Serial_Params *serial_params = NULL;
 
 	ENTER();
-
 
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 
