@@ -19,7 +19,6 @@
   */
 
 #define __PIS_PLUGIN_C__
-#include <debugging.h>
 #include <pis_plugin.h>
 #include <gtk/gtk.h>
 #include <stdio.h>

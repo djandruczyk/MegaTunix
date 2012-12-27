@@ -21,7 +21,6 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
 #include <firmware.h>
 #include <math.h>
 #include <mscommon_comms.h>

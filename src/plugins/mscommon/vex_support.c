@@ -19,12 +19,10 @@
   */
 
 #include <datamgmt.h>
-#include <debugging.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
-#include <debugging.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>

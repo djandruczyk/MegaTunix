@@ -20,13 +20,11 @@
 
 #include <config.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <firmware.h>
 #include <gtk/gtk.h>
 #include <mscommon_gui_handlers.h>
 #include <mscommon_menu_handlers.h>
 #include <mscommon_plugin.h>
-#include <debugging.h>
 
 extern gconstpointer *global_data;
 

@@ -22,11 +22,9 @@
 
 #include <api-versions.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <getfiles.h>
 #include <interrogate.h>
 #include <freeems_plugin.h>
-#include <debugging.h>
 #include <freeems_helpers.h>
 #include <libgen.h>
 #include <serialio.h>

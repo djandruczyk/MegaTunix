@@ -20,7 +20,6 @@
 
 #define __FREEEMS_PLUGIN_C__
 #include <config.h>
-#include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
 #include <freeems_comms.h>

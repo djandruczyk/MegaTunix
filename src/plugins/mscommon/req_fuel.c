@@ -21,7 +21,6 @@
 #include <config.h>
 #include <configfile.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
@@ -29,7 +28,6 @@
 #include <math.h>
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
-#include <debugging.h>
 #include <req_fuel.h>
 
 extern gconstpointer *global_data;

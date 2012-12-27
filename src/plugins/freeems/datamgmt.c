@@ -19,10 +19,8 @@
   */
 
 #include <datamgmt.h>
-#include <debugging.h>
 #include <firmware.h>
 #include <freeems_plugin.h>
-#include <debugging.h>
 #include <string.h>
 
 

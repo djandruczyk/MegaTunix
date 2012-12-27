@@ -25,10 +25,11 @@ extern "C" {
 #ifndef __MS1_PLUGIN_H__
 #define __MS1_PLUGIN_H__
 
+#include <plugindefines.h>
 #include <gtk/gtk.h>
+#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
-#include <plugindefines.h>
 
 #ifdef __MS1_PLUGIN_C__
 #define EXTERN

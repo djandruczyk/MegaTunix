@@ -19,12 +19,10 @@
   */
 
 #include <datamgmt.h>
-#include <debugging.h>
 #include <defines.h>
 #include <firmware.h>
 #include <freeems_comms.h>
 #include <freeems_plugin.h>
-#include <debugging.h>
 #include <packet_handlers.h>
 #ifdef __WIN32__
 #include <winsock2.h>

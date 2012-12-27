@@ -20,7 +20,6 @@
 
 #define __MS2_PLUGIN_C__
 #include <config.h>
-#include <debugging.h>
 #include <defines.h>
 #include <ms2_plugin.h>
 #include <ms2_gui_handlers.h>

@@ -20,7 +20,6 @@
 
 #define __MS1_PLUGIN_C__
 #include <config.h>
-#include <debugging.h>
 #include <defines.h>
 #include <ms1_gui_handlers.h>
 #include <ms1_plugin.h>

@@ -24,7 +24,6 @@
 #undef GTK_DISABLE_DEPRECATED
 #endif
 
-#include <debugging.h>
 #include <ms2_plugin.h>
 #include <rtv_map_loader.h>
 #include <user_outputs.h>

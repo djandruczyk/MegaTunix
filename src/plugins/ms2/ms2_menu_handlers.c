@@ -19,7 +19,6 @@
   */
 
 #include <config.h>
-#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>

@@ -18,7 +18,7 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
+#include <ms3_plugin.h>
 #include <ms3_gui_handlers.h>
 
 

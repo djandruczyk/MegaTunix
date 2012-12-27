@@ -25,11 +25,12 @@ extern "C" {
 #ifndef __MSCOMMON_PLUGIN_H__
 #define __MSCOMMON_PLUGIN_H__
 
+#include <plugindefines.h>
 #include <gtk/gtk.h>
 #include <defines.h>
+#include <debugging.h>
 #include <configfile.h>
 #include <enums.h>
-#include <plugindefines.h>
 #include <threads.h>
 
 #ifdef __MSCOMMON_PLUGIN_C__

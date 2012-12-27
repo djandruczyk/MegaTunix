@@ -20,14 +20,12 @@
 
 #include <api-versions.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <defines.h>
 #include <fileio.h>
 #include <firmware.h>
 #include <getfiles.h>
 #include <freeems_comms.h>
 #include <freeems_plugin.h>
-#include <debugging.h>
 #include <stdio.h>
 #include <time.h>
 #ifdef __WIN32__

@@ -18,7 +18,7 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
+#include <ms3_plugin.h>
 #include <ms3_menu_handlers.h>
 
 extern gconstpointer *global_data;

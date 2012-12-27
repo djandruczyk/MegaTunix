@@ -19,7 +19,6 @@
   */
 
 #define __MS3_PLUGIN_C__
-#include <debugging.h>
 #include <ms3_plugin.h>
 #include <gtk/gtk.h>
 #include <stdio.h>

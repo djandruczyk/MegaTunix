@@ -18,7 +18,7 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
+#include <pis_plugin.h>
 #include <pis_gui_handlers.h>
 
 

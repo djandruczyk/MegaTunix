@@ -22,7 +22,6 @@
 #include <2d_table_editor.h>
 #include <config.h>
 #include <curve.h>
-#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>

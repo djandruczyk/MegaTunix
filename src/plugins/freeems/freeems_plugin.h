@@ -25,11 +25,12 @@ extern "C" {
 #ifndef __FREEEMS_PLUGIN_H__
 #define __FREEEMS_PLUGIN_H__
 
+#include <plugindefines.h>
 #include <gtk/gtk.h>
+#include <debugging.h>
 #include <defines.h>
 #include <configfile.h>
 #include <enums.h>
-#include <plugindefines.h>
 #include <threads.h>
 
 #ifdef __FREEEMS_PLUGIN_C__

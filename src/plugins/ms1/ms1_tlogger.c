@@ -18,11 +18,9 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
 #include <firmware.h>
 #include <math.h>
 #include <ms1_plugin.h>
-#include <debugging.h>
 #include <ms1_tlogger.h>
 #include <stdio.h>
 

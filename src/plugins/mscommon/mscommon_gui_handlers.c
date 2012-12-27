@@ -21,7 +21,6 @@
 #include <config.h>
 #include <combo_loader.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <firmware.h>
@@ -29,7 +28,6 @@
 #include <mscommon_comms.h>
 #include <mscommon_gui_handlers.h>
 #include <mscommon_plugin.h>
-#include <debugging.h>
 #include <req_fuel.h>
 #include <serialio.h>
 #include <stdlib.h>

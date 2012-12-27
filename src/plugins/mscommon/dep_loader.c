@@ -20,11 +20,9 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
 #include <dep_loader.h>
 #include <firmware.h>
 #include <mscommon_plugin.h>
-#include <debugging.h>
 #include <stdlib.h>
 #include <xmlbase.h>
 

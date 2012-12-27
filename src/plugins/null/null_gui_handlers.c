@@ -18,7 +18,7 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
+#include <null_plugin.h>
 #include <null_gui_handlers.h>
 
 

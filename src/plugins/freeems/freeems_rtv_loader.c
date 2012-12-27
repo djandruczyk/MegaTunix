@@ -18,10 +18,8 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
 #include <firmware.h>
 #include <freeems_plugin.h>
-#include <debugging.h>
 #include <xmlbase.h>
 
 extern gconstpointer *global_data;

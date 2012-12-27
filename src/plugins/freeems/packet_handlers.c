@@ -23,7 +23,6 @@
 
 #include <freeems_errors.h>
 #include <freeems_plugin.h>
-#include <debugging.h>
 #include <packet_handlers.h>
 #include <stdio.h>
 #include <string.h>

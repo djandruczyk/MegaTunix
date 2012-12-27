@@ -25,7 +25,6 @@
 #include <config.h>
 #include <configfile.h>
 #include <datamgmt.h>
-#include <debugging.h>
 #include <defines.h>
 #include <enums.h>
 #include <errno.h>
@@ -37,7 +36,6 @@
 #include <init.h>
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
-#include <debugging.h>
 #include <mtxsocket.h>
 #include <rtv_map_loader.h>
 #include <serialio.h>

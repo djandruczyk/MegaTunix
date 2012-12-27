@@ -18,7 +18,7 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
+#include <pis_plugin.h>
 #include <pis_menu_handlers.h>
 
 extern gconstpointer *global_data;

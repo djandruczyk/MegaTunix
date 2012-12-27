@@ -18,7 +18,6 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
 #include <freeems_errors.h>
 #include <freeems_plugin.h>
 

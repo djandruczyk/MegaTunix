@@ -18,7 +18,6 @@
   \author David Andruczyk
   */
 
-#include <debugging.h>
 #include <firmware.h>
 #include <ms2_plugin.h>
 #include <ms2_tlogger.h>

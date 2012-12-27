@@ -25,6 +25,8 @@ extern "C" {
 #ifndef __MS3_PLUGIN_H__
 #define __MS3_PLUGIN_H__
 
+#include <plugindefines.h>
+#include <debugging.h>
 #include <defines.h>
 #include <configfile.h>
 

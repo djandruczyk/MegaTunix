@@ -25,7 +25,6 @@
 #undef GTK_DISABLE_DEPRECATED
 #endif
 
-#include <debugging.h>
 #include <firmware.h>
 #include <math.h>
 #include <mscommon_comms.h>

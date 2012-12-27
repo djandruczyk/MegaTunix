@@ -23,7 +23,6 @@
 #include <firmware.h>
 #include <mscommon_comms.h>
 #include <mscommon_plugin.h>
-#include <debugging.h>
 #include <mtxsocket.h>
 #include <serialio.h>
 #include <stdio.h>
