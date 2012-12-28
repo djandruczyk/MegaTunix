@@ -30,7 +30,7 @@ ChangesEnvironment=yes
 [Files]
 Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
 Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\gtk\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\crossroot32_dbg\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\gtk\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot32_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\gtk\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
 Source: "z:\opt\crossroot32_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\gtk\lib\gdk-pixbuf-2.0\2.10.0\"; Flags: ignoreversion
 Source: "z:\opt\crossroot32_dbg\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\gtk\lib\pango\1.6.0\modules"; Flags: ignoreversion

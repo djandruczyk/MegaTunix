@@ -1552,7 +1552,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 			{
 				*(void **)(&func) = g_list_nth_data(func_list,i);
 				fps = (GINT)g_list_nth_data(func_fps_list,i);
-				id = g_timeout_add_full(110,1000.0/fps,(GSourceFunc)run_function, &func,NULL);
+				id = g_timeout_add_full(110,1000.0/fps,(GSourceFunc)run_function, (gpointer)func,NULL);
 				g_signal_connect(G_OBJECT(notebook), "switch_page",
 						G_CALLBACK(cancel_visible_function),
 						GINT_TO_POINTER(id));
@@ -1583,7 +1583,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 					{
 						*(void **)(&func) = g_list_nth_data(func_list,i);
 						fps = (GINT)g_list_nth_data(func_fps_list,i);
-						id = g_timeout_add_full(110,1000.0/fps,(GSourceFunc)run_function, (gpointer)&func,NULL);
+						id = g_timeout_add_full(110,1000.0/fps,(GSourceFunc)run_function, (gpointer)func,NULL);
 						g_signal_connect(G_OBJECT(notebook), "switch_page",
 								G_CALLBACK(cancel_visible_function),
 								GINT_TO_POINTER(id));
