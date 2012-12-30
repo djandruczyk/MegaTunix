@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEB_RELEASES="lenny hardy lucid maverick oneiric precise"
+DEB_RELEASES="lucid natty oneiric precise quantal stable testing unstable"
 
 trap "{ echo \"ABORT!!\"; exit 255; }" SIGINT SIGTERM
 
@@ -11,12 +11,22 @@ else
 	dists="$DEB_RELEASES"
 fi
 
-echo "Building for dists \"$dists\""
-for dist in `echo "$dists"` ; do
-	echo "Building for Distro $dist"
-	pdebuild --buildresult ../MTX_Builds/Output/"$dist" --pbuilderroot "sudo DIST=$dist"
-	if [ $? -ne 0 ] ; then
-		echo "Build failure for dist $dist"
-		exit -1
-	fi
+if test `uname -m` = "x86_64" ; then
+	echo "Detected 64 bit machine, building for 32 and 64 bit"
+	ARCHS="i386 amd64"
+else
+	echo "Detected 32 bit machine, building for 32 bit only"
+	ARCHS="i386"
+fi
+
+echo "Building for dists \"${dists}\" on archiectures \"${ARCHS}\""
+for dist in `echo "${dists}"` ; do
+	for arch in `echo ${ARCHS}` ; do
+		echo "Building for Distro $dist on arch $arch"
+		pdebuild --architecture $arch --buildresult ../MTX_Builds/Output/"$dist" --pbuilderroot "sudo DIST=$dist ARCH=${arch}" --debbuildopts -j4 
+		if [ $? -ne 0 ] ; then
+			echo "Build failure for dist $dist"
+			exit -1
+		fi
+	done
 done
