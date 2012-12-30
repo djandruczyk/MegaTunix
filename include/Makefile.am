@@ -78,9 +78,9 @@ headers = \
 version: 
 	@./regen-version.sh
 
-all: version
+dist distdir distcheck all: version
 
-EXTRA_DIST=$(headers)
+EXTRA_DIST=$(headers) regen-version.sh
 
 CLEANFILES = version.h
 
