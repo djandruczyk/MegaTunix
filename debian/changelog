@@ -1,11 +1,13 @@
-megatunix (0.9.24) stable; urgency=low
+megatunix (0.9.24) unstable; urgency=low
+  * Complete reworked threading code to use g_idle_adds and ZERO (hopefully)
+    gui calls from any thread or timeout function.
   * FreeEMS Plugin functional and working reasonably reliably (alpha)
   * Revamped tab loading code to be about 30x more efficient.
   * Fixed post function stack-up issues using different GTK+ priorities for
     timeouts
-  * Support for 3.1.1 ALS
+  * Support for 3.1.1 ALS, 3.2.1 and 3.2.4
 
- -- David Andruczyk <dandruczyk@gmail.com>  Mon, 01 Jan 2012 21:21:08 -0500
+ -- David Andruczyk <dandruczyk@gmail.com>  Mon, 30 Dec 2012 12:58:08 -0500
 
 megatunix (0.9.24-modular-0.4) stable; urgency=low
   * Major memory leaks all throughout the code were repaired.
