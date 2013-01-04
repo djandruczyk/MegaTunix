@@ -2,6 +2,10 @@ Gui/B_n_G_constants.glade
 Gui/datalogging.glade
 Gui/dt-params.glade
 Gui/Dualtable-constants.glade
+Gui/dynamic-table_x1.glade
+Gui/dynamic-table_x2.glade
+Gui/dynamic-table_x3.glade
+Gui/dynamic-table_x4.glade
 Gui/enrichments.glade
 Gui/error_status.glade
 Gui/freeems-benchtest.glade
@@ -50,6 +54,8 @@ Gui/ms1-e-toothtrigger.glade
 Gui/ms1-e-traction.glade
 Gui/ms1-e-water-nos-launch.glade
 Gui/ms1-e-wheeldecode.glade
+Gui/ms2-2.905-globals.glade
+Gui/ms2-2.905-misc-fuel.glade
 Gui/ms2-accel.glade
 Gui/ms2-alpha-n_6x6x1.glade
 Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade
@@ -156,7 +162,6 @@ src/plugins/freeems/freeems_menu_handlers.c
 src/plugins/freeems/freeems_plugin.c
 src/plugins/freeems/freeems_rtv_loader.c
 src/plugins/freeems/freeems_rtv_processor.c
-src/plugins/freeems/freeems_tableio.c
 src/plugins/freeems/interrogate.c
 src/plugins/freeems/packet_handlers.c
 src/plugins/freeems/vetable_gui.c
@@ -191,7 +196,6 @@ src/plugins/mscommon/mscommon_menu_handlers.c
 src/plugins/mscommon/mscommon_plugin.c
 src/plugins/mscommon/mscommon_rtv_loader.c
 src/plugins/mscommon/mscommon_rtv_processor.c
-src/plugins/mscommon/mscommon_tableio.c
 src/plugins/mscommon/mtxsocket.c
 src/plugins/mscommon/req_fuel.c
 src/plugins/mscommon/therm.c
@@ -204,9 +208,6 @@ src/plugins/null/null_plugin.c
 src/plugins/pis/pis_gui_handlers.c
 src/plugins/pis/pis_menu_handlers.c
 src/plugins/pis/pis_plugin.c
-src/plugins/secu3/secu3_gui_handlers.c
-src/plugins/secu3/secu3_menu_handlers.c
-src/plugins/secu3/secu3_plugin.c
 src/rtv_map_loader.c
 src/rtv_processor.c
 src/runtime_sliders.c
@@ -215,6 +216,7 @@ src/runtime_text.c
 src/serialio.c
 src/sleep_calib.c
 src/stringmatch.c
+src/table_builder.c
 src/tabloader.c
 src/tag_loader.c
 src/template.c

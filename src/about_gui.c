@@ -24,7 +24,6 @@
 #include <debugging.h>
 #include <logo.h>
 #include <widgetmgmt.h>
-#include <version.h>
 
 /*!
   \brief build_about makes the about tab and presents the MegaTunix logo
@@ -62,7 +61,7 @@ G_MODULE_EXPORT void build_about(GtkWidget *frame)
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_add (GTK_CONTAINER (frame), vbox);
-	tmpbuf = g_strdup_printf(_("MegaTunix %s-%s Tuning Software for Unix-class OS's"),MTX_VER_STRING,MTX_VER_SUFFIX);
+	tmpbuf = g_strdup_printf(_("MegaTunix Tuning Software for Unix-class OS's"),GIT_COMMIT);
 	label = gtk_label_new(tmpbuf);
 	g_free(tmpbuf);
 	gtk_box_pack_start(GTK_BOX(vbox),label,FALSE,FALSE,0);
@@ -97,10 +96,10 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
 	{
 		const gchar *authors[] = {"David J. Andruczyk",NULL};
 		const gchar *artists[] = {"Dale Anderson\nChristopher Mire\nTrent Stromkins\nWayne (TurboCamaro)\n71jeep",NULL};
-		gchar *comments = g_strdup_printf("MegaTunix is a Graphical Tuning software designed to make it easy and (hopefully) intuitive to tune your EFI powered vehicle.  Please send suggestions to the author for ways to improve MegaTunix.\nGit Hash: %s",MTX_GIT_HASH);
+		gchar *comments = g_strdup_printf("MegaTunix is a Graphical Tuning software designed to make it easy and (hopefully) intuitive to tune your EFI powered vehicle.  Please send suggestions to the author for ways to improve MegaTunix.\nGit Hash: %s",GIT_HASH);
 		gtk_show_about_dialog(GTK_WINDOW(lookup_widget("main_window")),
 				"name","MegaTunix Tuning Software",
-				"version",MTX_VER_STRING"-"MTX_VER_SUFFIX,
+				"version",GIT_COMMIT,
 				"copyright","David J. Andruczyk(2012)",
 				"comments",comments,
 				"license","GPL v2",

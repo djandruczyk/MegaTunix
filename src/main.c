@@ -37,7 +37,6 @@
 #include <sleep_calib.h>
 #include <stringmatch.h>
 #include <timeout_handlers.h>
-#include <version.h>
 
 gboolean gl_ability = FALSE;
 gconstpointer *global_data = NULL;
@@ -67,7 +66,7 @@ gint main(gint argc, gchar ** argv)
 	textdomain (PACKAGE);
 
 #ifdef DEBUG
-	printf("This is a debug release, Git hash: %s\n",MTX_GIT_HASH);
+	printf("This is a debug release, Git hash: %s\n",GIT_HASH);
 #endif
 	if(!g_thread_supported())
 		g_thread_init(NULL);

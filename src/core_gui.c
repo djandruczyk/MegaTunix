@@ -32,7 +32,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <version.h>
 #include <widgetmgmt.h>
 
 /* Default window size and MINIMUM size as well... */
@@ -125,7 +124,7 @@ G_MODULE_EXPORT gboolean setup_gui(void)
 			g_object_set(settings,"gtk-enable-tooltips",FALSE,NULL);
 	}
 	gtk_widget_set_size_request(window,def_width,def_height);
-	gtk_window_set_title(GTK_WINDOW(window),"MegaTunix "MTX_VER_STRING"-"MTX_VER_SUFFIX);
+	gtk_window_set_title(GTK_WINDOW(window),"MegaTunix "GIT_COMMIT);
 	finalize_core_gui(xml);
 
 	if (!args->hide_maingui)
@@ -194,7 +193,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	register_widget("toplevel_notebook",widget);
 	/* Set about tab title */
 	label = glade_xml_get_widget(xml,"about_title_label");
-	tmpbuf = g_strdup_printf(_("MegaTunix %s-%s Tuning Software for Unix-class OS's"),MTX_VER_STRING,MTX_VER_SUFFIX);
+	tmpbuf = g_strdup_printf(_("MegaTunix %s Tuning Software for Unix-class OS's"),GIT_COMMIT);
 	gtk_label_set_text(GTK_LABEL(label),tmpbuf);
 	g_free(tmpbuf);
 

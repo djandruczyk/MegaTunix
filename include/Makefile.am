@@ -62,7 +62,6 @@ headers = \
 	template.h \
 	threads.h \
 	timeout_handlers.h \
-	version.h \
 	vetable_gui.h \
 	visibility.h \
 	warmwizard_gui.h \
@@ -75,12 +74,7 @@ headers = \
 	xmlbase.h \
 	xmlcomm.h 
 
-version: 
-	@./regen-version.sh
+EXTRA_DIST=$(headers)
 
-dist distdir distcheck all: version
-
-EXTRA_DIST=$(headers) regen-version.sh
-
-CLEANFILES = version.h
+CLEANFILES = 
 

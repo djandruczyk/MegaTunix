@@ -27,6 +27,7 @@
 #include <table_builder.h>
 #include <widgetmgmt.h>
 
+
 extern gconstpointer *global_data;
 
 G_MODULE_EXPORT void table_builder(GtkWidget *parent)

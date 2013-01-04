@@ -1,4 +1,6 @@
 SUBDIRS = plugins
+GIT_COMMIT = $(shell git describe)
+GIT_HASH = $(shell git log -n 1 --pretty=format:%H)
 
 INCLUDES = \
 	-I$(top_srcdir)/include \
@@ -8,7 +10,7 @@ INCLUDES = \
 	@DEPRECATED_CFLAGS@ \
 	@GLEXT_CFLAGS@ \
 	@LIBGLADE_CFLAGS@ \
-	@MEGATUNIX_DEFINES@
+	@MEGATUNIX_DEFINES@ -DGIT_HASH=\"$(GIT_HASH)\" -DGIT_COMMIT=\"$(GIT_COMMIT)\"
 
 bin_PROGRAMS = megatunix
 
