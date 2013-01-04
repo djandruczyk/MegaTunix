@@ -131,7 +131,7 @@ G_MODULE_EXPORT void stop_tickler(TicklerType type)
 				g_mutex_lock(mutex);
 				g_cond_signal(cond);
 				g_mutex_unlock(mutex);
-				g_thread_join(realtime_id);
+			//	g_thread_join(realtime_id);
 				DATA_SET(global_data,"realtime_id",NULL);
 				update_logbar("comms_view",NULL,_("Realtime Reader stopped\n"),FALSE,FALSE,FALSE);
 			}
@@ -217,20 +217,17 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 		count = 0;
 
 //		/* Auto-throttling if gui gets sluggish */
-//		while ((g_async_queue_length(io_data_queue) > 2) || (g_async_queue_length(pf_dispatch_queue) > 3))
-//		{
-//			count++;
-//			pf_queue_len = g_async_queue_length(pf_dispatch_queue);
-//			io_queue_len = g_async_queue_length(io_data_queue);
-//			//printf("Auto-throttling, io queue length %i, pf queue length %i, loop iterations %i\n",io_queue_len,pf_queue_len,count);
-//			g_get_current_time(&time);
-//			delay = MAX(io_queue_len,pf_queue_len);
-//
-//			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
-//			g_time_val_add(&time,10000*(delay));
-//			if (g_cond_timed_wait(cond,rtv_thread_mutex,&time))
-//				goto breakout;
-//		}
+		while ((g_async_queue_length(io_data_queue) > 2))
+		{
+			count++;
+			io_queue_len = g_async_queue_length(io_data_queue);
+			//printf("Auto-throttling, io queue length %i, pf queue length %i, loop iterations %i\n",io_queue_len,pf_queue_len,count);
+			g_get_current_time(&time);
+			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
+			g_time_val_add(&time,10000*(io_queue_len));
+			if (g_cond_timed_wait(cond,rtv_thread_mutex,&time))
+				goto breakout;
+		}
 		//printf("serial_params->read_wait is %i\n",serial_params->read_wait);
 		g_get_current_time(&time);
 		g_time_val_add(&time,serial_params->read_wait*1000);
@@ -242,8 +239,8 @@ breakout:
 	g_mutex_unlock(mutex);
 	g_mutex_free(mutex);
 	g_mutex_unlock(rtv_thread_mutex);
-	g_thread_exit(0);
 	EXIT();
+	g_thread_exit(0);
 	return NULL;
 }
 

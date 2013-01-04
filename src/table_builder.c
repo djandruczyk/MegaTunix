@@ -98,7 +98,7 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 			register_widget(tmpbuf,entry);
 			OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
 
-			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,NULL);
+			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",5,NULL);
 			gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
 			g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
 			g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
@@ -172,7 +172,7 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 			OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
 			register_widget(tmpbuf,entry);
 			OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
-			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,NULL);
+			g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",5,NULL);
 			gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
 			g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
 			g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
@@ -248,7 +248,7 @@ G_MODULE_EXPORT void table_builder(GtkWidget *parent)
 				OBJ_SET_FULL(entry,"fullname",tmpbuf,g_free);
 				register_widget(tmpbuf,entry);
 				OBJ_SET(entry,"last_value",GINT_TO_POINTER(-G_MAXINT));
-				g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",3,NULL);
+				g_object_set(G_OBJECT(entry),"has-frame",FALSE,"max-length",6,"width-chars",5,NULL);
 				gtk_widget_add_events(entry,GDK_BUTTON_PRESS_MASK|GDK_KEY_PRESS_MASK|GDK_KEY_RELEASE_MASK|GDK_FOCUS_CHANGE_MASK);
 				g_signal_connect(G_OBJECT(entry),"activate",G_CALLBACK(std_entry_handler),NULL);
 				g_signal_connect(G_OBJECT(entry),"focus_out_event",G_CALLBACK(focus_out_handler),NULL);
