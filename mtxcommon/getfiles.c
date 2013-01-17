@@ -33,6 +33,8 @@
  #define EXIT() ""
 #endif
 
+static void remove_filter(gpointer, gpointer);
+
 /*!
  \brief get_files() returns a list of files located at the pathstub passed
  this function will first search starting from ~/mtx/<PROJECT>/+pathstub and
@@ -364,6 +366,7 @@ gchar * choose_file(MtxFileIO *data)
 {
 	GtkWidget *dialog = NULL;
 	GtkFileFilter *filter = NULL;
+	GSList *filters = NULL;
 	gchar *path = NULL;
 	gchar *defdir = NULL;
 	gchar *filename = NULL;
@@ -441,8 +444,8 @@ gchar * choose_file(MtxFileIO *data)
 				NULL);	
 		printf("after gtk_file_chooser_dialog_new\n");
 
-//		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
-//			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
+		//		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
+		//			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
 
 		if (data->default_path)
 		{
@@ -512,6 +515,7 @@ gchar * choose_file(MtxFileIO *data)
 	/*
 	if (data->filter)
 	{
+		printf("data->filter is set to \"%s\"\n",data->filter);
 		vector = g_strsplit(data->filter,",",-1);
 		if (g_strv_length(vector)%2 > 0)
 			goto afterfilter;
@@ -519,14 +523,16 @@ gchar * choose_file(MtxFileIO *data)
 		{
 			filter = gtk_file_filter_new();
 			gtk_file_filter_add_pattern(GTK_FILE_FILTER(filter),vector[i]);
+			printf("Filter glob is set to \"%s\"\n",vector[i]);
 			gtk_file_filter_set_name(GTK_FILE_FILTER(filter),vector[i+1]);
+			printf("Filter name is set to \"%s\"\n",vector[i+1]);
 			gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog),filter);
 		}
 		gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),filter);
 		g_strfreev(vector);
 	}
-afterfilter:
 	*/
+afterfilter:
 	// Turn on overwriteconfirmation 
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 	g_signal_connect(G_OBJECT(dialog),"confirm-overwrite",
@@ -557,6 +563,13 @@ afterfilter:
 			filename = g_strdup(tmpbuf);
 		g_free(tmpbuf);
 	}
+	filters = gtk_file_chooser_list_filters(GTK_FILE_CHOOSER(dialog));
+	if (filters)
+	{
+		g_slist_foreach(filters, remove_filter ,dialog);
+		g_slist_free(filters);
+	}
+
 	gtk_widget_destroy (dialog);
 	EXIT();
 	return (filename);
@@ -720,3 +733,9 @@ gboolean check_for_files(const gchar * path, const gchar *ext)
 	return FALSE;
 }
 
+
+static void remove_filter(gpointer filter, gpointer dialog)
+{
+	printf("Removing file filter!\n");
+	gtk_file_chooser_remove_filter(GTK_FILE_CHOOSER(dialog),GTK_FILE_FILTER(filter));
+}
