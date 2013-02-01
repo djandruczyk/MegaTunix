@@ -404,6 +404,7 @@ G_MODULE_EXPORT gchar * present_firmware_choices(void)
 	g_strfreev(filenames);
 	g_array_free(classes,TRUE);
 
+	gtk_window_set_transient_for(GTK_WINDOW(dialog),GTK_WINDOW(lookup_widget("main_window")));
 	gtk_widget_show_all(dialog);
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
