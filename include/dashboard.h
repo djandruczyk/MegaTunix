@@ -89,6 +89,7 @@ void toggle_gui_visible(GtkWidget *widget, gpointer data);
 void print_dash_choices(gchar *);
 gboolean update_dashboards(gpointer);
 gchar * validate_dash_choice(gchar *, gboolean *);
+void dash_file_chosen(GtkFileChooserButton *, gpointer);
 
 
 /* Prototypes */

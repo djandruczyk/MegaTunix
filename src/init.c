@@ -441,6 +441,7 @@ G_MODULE_EXPORT void save_config()
 			widget =  lookup_widget(tmpbuf);
 			if (GTK_IS_WIDGET(widget))
 			{
+				printf("found widget info!\n");
 				gtk_window_get_position(GTK_WINDOW(widget),&x,&y);
 				cfg_write_int(cfgfile, "Dashboards", "dash_1_x_origin", x);
 				cfg_write_int(cfgfile, "Dashboards", "dash_1_y_origin", y);
@@ -459,6 +460,8 @@ G_MODULE_EXPORT void save_config()
 					cfg_write_float(cfgfile, "Dashboards", "dash_1_size_ratio", ratio);
 				}
 			}
+			else
+				printf("COULD NOT find dash widget for %s\n",tmpbuf);
 		}
 		tmpbuf = NULL;
 	}

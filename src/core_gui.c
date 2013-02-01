@@ -171,13 +171,18 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	GtkTextTag *tag = NULL;
 	GtkWidget *alignment = NULL;
 	GtkWidget *button = NULL;
-	GtkWidget *cbutton = NULL;
+	GtkWidget *close_button = NULL;
 	GtkWidget *ebox = NULL;
 	GtkWidget *label = NULL;
 	GtkWidget *frame = NULL;
 	GtkWidget *widget = NULL;
 	GtkWidget *image = NULL;
 	GdkPixbuf *pixbuf = NULL;
+	GtkFileFilter *all_filter =  NULL;
+	GtkFileFilter *xml_filter =  NULL;
+	gchar *homepath = NULL;
+	gchar *syspath = NULL;
+	gchar *path = NULL;
 	gchar * tmpbuf = NULL;
 	gint mtx_temp_units;
 	gint mtx_color_scale;
@@ -268,57 +273,52 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	gtk_widget_set_tooltip_text(ebox,_("This box provides your choice for the active dashboard to be used"));
 
 	/* General Tab, Dashboard 1 */
-	button = glade_xml_get_widget(xml,"dash1_choice_button");
-	cbutton = glade_xml_get_widget(xml,"dash1_cbutton");
-	register_widget("dash1_cbutton",cbutton);
-	g_signal_connect(G_OBJECT(cbutton),"clicked",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(1));
-	tmpbuf = (gchar *)DATA_GET(global_data,"dash_1_name");
-	if ((tmpbuf) && (strlen(tmpbuf) != 0))
-	{
-		gtk_button_set_label(GTK_BUTTON(button),tmpbuf);
-		gtk_widget_set_sensitive(GTK_WIDGET(cbutton),TRUE);
-	}
-	else
-		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
+	syspath = g_build_filename(MTXSYSDATA,"Dashboards",NULL);
+	homepath = g_build_filename(HOME(),"mtx",(const gchar *)DATA_GET(global_data,"project_name"),"Dashboards",NULL);
+	all_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(GTK_FILE_FILTER(all_filter),"*.*");
+	gtk_file_filter_set_name(GTK_FILE_FILTER(all_filter),"All Files");
+	xml_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(GTK_FILE_FILTER(xml_filter),"*.xml");
+	gtk_file_filter_set_name(GTK_FILE_FILTER(xml_filter),"XML Files");
 
-	OBJ_SET(button,"label",gtk_bin_get_child(GTK_BIN(button)));
-	OBJ_SET(cbutton,"label",gtk_bin_get_child(GTK_BIN(button)));
-	label  = gtk_bin_get_child(GTK_BIN(button));
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
-#endif
-	register_widget("dash_1_label",label);
-	/* Bind signal to the button to choose a new dash */
-	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK(present_dash_filechooser),
-			GINT_TO_POINTER(1));
+
+	button = glade_xml_get_widget(xml,"dash1_choice_button");
+	if (g_file_test(syspath,G_FILE_TEST_IS_DIR))
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),syspath);
+	else if (g_file_test(homepath,G_FILE_TEST_IS_DIR))
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),homepath);
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(button),all_filter);
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(button),xml_filter);
+	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(button),xml_filter);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),syspath,NULL);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),homepath,NULL);
+
+	OBJ_SET(button,"dash_index",GINT_TO_POINTER(1));
+	close_button = glade_xml_get_widget(xml,"dash_1_close_button");
+	OBJ_SET(close_button,"choice_button",(gpointer)button);
+	register_widget("dash_1_choice_button",button);
+	register_widget("dash_1_close_button",close_button);
+	g_signal_connect(G_OBJECT(close_button),"clicked",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(1));
 
 	/* General Tab, Dashboard 2 */
 	button = glade_xml_get_widget(xml,"dash2_choice_button");
-	cbutton = glade_xml_get_widget(xml,"dash2_cbutton");
-	register_widget("dash2_cbutton",cbutton);
-	g_signal_connect(G_OBJECT(cbutton),"clicked",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(2));
-	tmpbuf = (gchar *)DATA_GET(global_data,"dash_2_name");
-	if ((tmpbuf) && (strlen(tmpbuf) != 0))
-	{
-		gtk_button_set_label(GTK_BUTTON(button),tmpbuf);
-		gtk_widget_set_sensitive(GTK_WIDGET(cbutton),TRUE);
-	}
-	else
-		gtk_button_set_label(GTK_BUTTON(button),"Choose a Dashboard File");
-	OBJ_SET(button,"label",gtk_bin_get_child(GTK_BIN(button)));
-	OBJ_SET(cbutton,"label",gtk_bin_get_child(GTK_BIN(button)));
-	label  = gtk_bin_get_child(GTK_BIN(button));
-#if GTK_MINOR_VERSION >= 6
-	if (gtk_minor_version >= 6)
-		gtk_label_set_ellipsize(GTK_LABEL(label),PANGO_ELLIPSIZE_MIDDLE);
-#endif
-	register_widget("dash_2_label",label);
-	/* Bind signal to the button to choose a new dash */
-	g_signal_connect(G_OBJECT(button),"clicked",
-			G_CALLBACK(present_dash_filechooser),
-			GINT_TO_POINTER(2));
+	if (g_file_test(syspath,G_FILE_TEST_IS_DIR))
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),syspath);
+	else if (g_file_test(homepath,G_FILE_TEST_IS_DIR))
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),homepath);
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(button),all_filter);
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(button),xml_filter);
+	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(button),xml_filter);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),syspath,NULL);
+	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),homepath,NULL);
+
+	OBJ_SET(button,"dash_index",GINT_TO_POINTER(2));
+	close_button = glade_xml_get_widget(xml,"dash_2_close_button");
+	OBJ_SET(close_button,"choice_button",(gpointer)button);
+	register_widget("dash_2_choice_button",button);
+	register_widget("dash_2_close_button",close_button);
+	g_signal_connect(G_OBJECT(close_button),"clicked",G_CALLBACK(remove_dashboard),GINT_TO_POINTER(2));
 
 	frame = glade_xml_get_widget(xml,"binary_logging_frame");
 	register_widget("binary_logging_frame",frame);

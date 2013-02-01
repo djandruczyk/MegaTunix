@@ -973,6 +973,7 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 
 	ENTER();
 
+	printf("Close_Dash called with index %i\n",(GINT)data);
 	/* IF gui isn't visible, make it visible */
 	if (!(GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 		toggle_gui_visible(NULL,NULL);
@@ -1242,7 +1243,8 @@ G_MODULE_EXPORT gboolean dash_button_event(GtkWidget *widget, GdkEventButton *ev
 G_MODULE_EXPORT void initialize_dashboards_pf(void)
 {
 	GtkWidget *widget = NULL;
-	GtkWidget * label = NULL;
+	GtkWidget *label = NULL;
+	GtkWidget *choice_button = NULL;
 	gboolean retval = FALSE;
 	gchar * tmpbuf = NULL;
 	gchar * tmpstr = NULL;
@@ -1254,16 +1256,15 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 
 	if (args->dashboard)
 	{
-		label = lookup_widget("dash_1_label");
-		if (GTK_IS_LABEL(label))
+		choice_button = lookup_widget("dash_1_choice_button");
+		if (GTK_IS_WIDGET(choice_button))
 		{
-			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
-			tmpstr = g_filename_to_utf8(args->dashboard,-1,NULL,NULL,NULL);
-			gtk_label_set_text(GTK_LABEL(label),tmpstr);
-			g_free(tmpstr);
+			printf("Filename was %s\n",args->dashboard);
+			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(choice_button),args->dashboard);
+			gtk_widget_set_sensitive(lookup_widget("dash_1_close_button"),TRUE);
 			widget = load_dashboard(g_strdup(args->dashboard),GINT_TO_POINTER(1));
 			register_widget(args->dashboard,widget);
-			OBJ_SET_FULL(lookup_widget("dash1_cbutton"),"filename",g_strdup(args->dashboard),g_free);
+			OBJ_SET_FULL(lookup_widget("dash_1_close_button"),"filename",g_strdup(args->dashboard),g_free);
 			nodash1 = FALSE;
 		}
 		if ((GTK_IS_WIDGET(widget) && (args->dash_fullscreen)))
@@ -1271,37 +1272,32 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 	}
 	else
 	{
-		label = lookup_widget("dash_1_label");
+		choice_button = lookup_widget("dash_1_choice_button");
 		if (DATA_GET(global_data,"dash_1_name") != NULL)
 			tmpbuf = (gchar *)DATA_GET(global_data,"dash_1_name");
-		if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (strlen(tmpbuf) != 0))
+		if ((GTK_IS_WIDGET(choice_button)) && (tmpbuf != NULL) && (strlen(tmpbuf) != 0))
 		{
-			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
-			tmpstr = g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL);
-			gtk_label_set_text(GTK_LABEL(label),tmpstr);
-			g_free(tmpstr);
+			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(choice_button),tmpbuf);
+			gtk_widget_set_sensitive(lookup_widget("dash_1_close_button"),TRUE);
 			widget = load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(1));
 			register_widget(tmpbuf,widget);
-			OBJ_SET_FULL(lookup_widget("dash1_cbutton"),"filename",g_strdup(tmpbuf),g_free);
+			OBJ_SET_FULL(lookup_widget("dash_1_close_button"),"filename",g_strdup(tmpbuf),g_free);
 			tmpbuf = NULL;
 			nodash1 = FALSE;
 		}
-	}
-
-	label = lookup_widget("dash_2_label");
-	if (DATA_GET(global_data,"dash_2_name") != NULL)
-		tmpbuf = (gchar *)DATA_GET(global_data,"dash_2_name");
-	if ((GTK_IS_LABEL(label)) && (tmpbuf != NULL) && (strlen(tmpbuf) != 0))
-	{
-		gtk_widget_set_sensitive(lookup_widget("dash2_cbutton"),TRUE);
-		tmpstr = g_filename_to_utf8(tmpbuf,-1,NULL,NULL,NULL);
-		gtk_label_set_text(GTK_LABEL(label),tmpstr);
-		g_free(tmpstr);
-		widget = load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(2));
-		register_widget(tmpbuf,widget);
-		OBJ_SET_FULL(lookup_widget("dash2_cbutton"),"filename",g_strdup(tmpbuf),g_free);
-		tmpbuf = NULL;
-		nodash2 = FALSE;
+		choice_button = lookup_widget("dash_2_choice_button");
+		if (DATA_GET(global_data,"dash_2_name") != NULL)
+			tmpbuf = (gchar *)DATA_GET(global_data,"dash_2_name");
+		if ((GTK_IS_WIDGET(choice_button)) && (tmpbuf != NULL) && (strlen(tmpbuf) != 0))
+		{
+			gtk_widget_set_sensitive(lookup_widget("dash_2_close_button"),TRUE);
+			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(choice_button),tmpbuf);
+			widget = load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(2));
+			register_widget(tmpbuf,widget);
+			OBJ_SET_FULL(lookup_widget("dash_2_close_button"),"filename",g_strdup(tmpbuf),g_free);
+			tmpbuf = NULL;
+			nodash2 = FALSE;
+		}
 	}
 	/* Case to handle when no default dashboards are set, but the user
 	 * choose to run with no main gui (thus can't quit or select a dash)
@@ -1309,40 +1305,15 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 	 */
 	if ((nodash1) && (nodash2) && (args->hide_maingui))
 	{
-		retval = present_dash_filechooser(NULL,GINT_TO_POINTER(1));
-		gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
-		if (!retval)
-		{
-			args->be_quiet = TRUE;
-			g_signal_emit_by_name(lookup_widget("main_window"),"destroy_event");
-		}
+		error_msg("You've selected a mode with the gui hidden, but NO dashboards specified,  you need to specify a dash on the command line, or run megatunix ONCE and select a working dash and close cleanly before attempting this again");
+		gtk_main_quit();
 	}
 	EXIT();
 	return;
 }
 
 
-/*!
-  \brief Presents a filechooser to pick the dash you want
-  \param widget is the pointer to dash choice button
-  \param data is unused
-  \returns, TRUE if it handles something, or FALSE otherwise
-  */
-G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer data)
-{
-	MtxFileIO *fileio = NULL;
-	gchar *filename = NULL;
-	GtkWidget *label = NULL;
-	GtkWidget *dash = NULL;
-	GHashTable *dash_hash = (GHashTable *)DATA_GET(global_data,"dash_hash");
-
-	ENTER();
-	if (!DATA_GET(global_data,"interrogated"))
-	{
-		EXIT();
-		return FALSE;
-	}
-
+/*
 	fileio = g_new0(MtxFileIO ,1);
 	fileio->default_path = g_strdup("Dashboards");
 	fileio->parent = lookup_widget("main_window");
@@ -1351,43 +1322,7 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
 	fileio->action = GTK_FILE_CHOOSER_ACTION_OPEN;
 	fileio->filter = g_strdup("*.*,All Files,*.xml,XML Files");
 	fileio->shortcut_folders = g_strdup("Dashboards");
-
-
-	filename = choose_file(fileio);
-	free_mtxfileio(fileio);
-	if (filename)
-	{
-		if (dash_hash)
-			g_hash_table_foreach_remove(dash_hash,remove_dashcluster,data);
-		if (GTK_IS_WIDGET(widget))
-		{
-			label = (GtkWidget *)OBJ_GET(widget,"label");
-			if (GTK_IS_LABEL(label))
-				gtk_label_set_text(GTK_LABEL(label),g_filename_to_utf8(filename,-1,NULL,NULL,NULL));
-			if ((GINT)data == 1)
-				gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),TRUE);
-			if ((GINT)data == 2)
-				gtk_widget_set_sensitive(lookup_widget("dash2_cbutton"),TRUE);
-		}
-		dash = load_dashboard(filename,data);
-		register_widget(filename,dash);
-		if ((GINT)data == 1)
-			OBJ_SET_FULL(lookup_widget("dash1_cbutton"),"filename",g_strdup(filename),g_free);
-		if ((GINT)data == 2)
-			OBJ_SET_FULL(lookup_widget("dash2_cbutton"),"filename",g_strdup(filename),g_free);
-		EXIT();
-		return TRUE;
-	}
-	else
-	{
-		if ((GINT)data == 1)
-			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),FALSE);
-		if ((GINT)data == 2)
-			gtk_widget_set_sensitive(lookup_widget("dash2_cbutton"),FALSE);
-	}
-	EXIT();
-	return FALSE;
-}
+	*/
 
 
 /*!
@@ -1398,28 +1333,30 @@ G_MODULE_EXPORT gboolean present_dash_filechooser(GtkWidget *widget, gpointer da
   */
 G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *label = NULL;
+	GtkWidget *choice_button = NULL;
 	GMutex *dash_mutex = (GMutex *)DATA_GET(global_data,"dash_mutex");
 	GHashTable *dash_hash = (GHashTable *)DATA_GET(global_data,"dash_hash");
 
 	ENTER();
 
 	g_mutex_lock(dash_mutex);
-	label = (GtkWidget *)OBJ_GET(widget,"label");
-	if (GTK_IS_WIDGET(label))
+	choice_button = (GtkWidget *)OBJ_GET(widget,"choice_button");
+	if (GTK_IS_WIDGET(choice_button))
 	{
-		gtk_label_set_text(GTK_LABEL(label),"Choose a Dashboard File");
+		/* Resets to "None" */
+		printf("remove dashboard, file chooser should clear...\n");
+		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(choice_button),"None");
 		if ((GINT)data == 1)
 		{
 			DATA_SET(global_data,"dash_1_name",NULL);
-			gtk_widget_set_sensitive(lookup_widget("dash1_cbutton"),FALSE);
-			deregister_widget((const gchar *)OBJ_GET(lookup_widget("dash1_cbutton"),"filename"));
+			gtk_widget_set_sensitive(lookup_widget("dash_1_close_button"),FALSE);
+			deregister_widget((const gchar *)OBJ_GET(lookup_widget("dash_1_close_button"),"filename"));
 		}
 		if ((GINT)data == 2)
 		{
 			DATA_SET(global_data,"dash_2_name",NULL);
-			gtk_widget_set_sensitive(lookup_widget("dash2_cbutton"),FALSE);
-			deregister_widget((const gchar *)OBJ_GET(lookup_widget("dash2_cbutton"),"filename"));
+			gtk_widget_set_sensitive(lookup_widget("dash_2_close_button"),FALSE);
+			deregister_widget((const gchar *)OBJ_GET(lookup_widget("dash_2_close_button"),"filename"));
 		}
 	}
 	if (dash_hash)
@@ -1871,5 +1808,50 @@ G_MODULE_EXPORT gchar * validate_dash_choice(gchar * choice, gboolean *result)
 		return (path);
 	else 
 		return NULL;
+}
 
+
+G_MODULE_EXPORT void dash_file_chosen(GtkFileChooserButton *button, gpointer data)
+{
+	gchar * filename = NULL;
+	gint index = 0;
+	GtkWidget *dash = NULL;
+	GHashTable *dash_hash = (GHashTable *)DATA_GET(global_data,"dash_hash");
+	ENTER();
+	if (!dash_hash)
+	{
+		dash_hash = g_hash_table_new_full(g_str_hash,g_str_equal,g_free,NULL);
+		DATA_SET_FULL(global_data,"dash_hash",dash_hash,(GDestroyNotify)g_hash_table_destroy);
+	}
+
+	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(button));
+	index = (GINT)OBJ_GET(button,"dash_index");
+	if (filename)
+	{
+		if (dash_hash)
+			g_hash_table_foreach_remove(dash_hash,remove_dashcluster,data);
+		if (GTK_IS_WIDGET(button))
+		{
+			if (index == 1)
+			{
+				gtk_widget_set_sensitive(lookup_widget("dash_1_close_button"),TRUE);
+				OBJ_SET_FULL(lookup_widget("dash_1_close_button"),"filename",g_strdup(filename),g_free);
+			}
+			if (index == 2)
+			{
+				gtk_widget_set_sensitive(lookup_widget("dash_2_close_button"),TRUE);
+				OBJ_SET_FULL(lookup_widget("dash_2_close_button"),"filename",g_strdup(filename),g_free);
+			}
+		}
+		dash = load_dashboard(filename,GINT_TO_POINTER(index));
+		register_widget(filename,dash);
+	}
+	else
+	{
+		if (index == 1)
+			gtk_widget_set_sensitive(lookup_widget("dash_1_close_button"),FALSE);
+		if (index == 2)
+			gtk_widget_set_sensitive(lookup_widget("dash_2_close_button"),FALSE);
+	}
+	EXIT();
 }

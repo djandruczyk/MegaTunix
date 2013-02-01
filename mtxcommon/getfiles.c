@@ -498,6 +498,7 @@ gchar * choose_file(MtxFileIO *data)
 		}
 		g_strfreev(vector);
 	}
+	
 	// If default path switch to that place 
 	if ((data->external_path) && (!(data->default_path)))
 	{
