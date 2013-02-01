@@ -927,6 +927,7 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 
 	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 	{
+		printf("context menu dash index is %i\n",(GINT)OBJ_GET(widget,"index"));
 		item = gtk_menu_item_new_with_label("Close Dash...");
 		g_signal_connect(G_OBJECT(item),"activate",
 				G_CALLBACK(close_dash),OBJ_GET(widget,"index"));
@@ -969,21 +970,20 @@ G_MODULE_EXPORT gboolean close_dash(GtkWidget *widget, gpointer data)
 {
 	gint index = 0;
 	gchar * tmpbuf = NULL;
-	GtkWidget *cbutton = NULL;
+	GtkWidget *close_button = NULL;
 
 	ENTER();
 
-	printf("Close_Dash called with index %i\n",(GINT)data);
 	/* IF gui isn't visible, make it visible */
 	if (!(GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 		toggle_gui_visible(NULL,NULL);
 
 	DATA_SET(global_data,"dash_fullscreen",GINT_TO_POINTER(FALSE));
 	index = (GINT)data;
-	tmpbuf = g_strdup_printf("dash%i_cbutton",index);
-	cbutton = lookup_widget(tmpbuf);
-	if (GTK_IS_BUTTON(cbutton))
-		g_signal_emit_by_name(cbutton,"clicked");
+	tmpbuf = g_strdup_printf("dash_%i_close_button",index);
+	close_button = lookup_widget(tmpbuf);
+	if (GTK_IS_BUTTON(close_button))
+		g_signal_emit_by_name(close_button,"clicked");
 	g_free(tmpbuf);
 	EXIT();
 	return TRUE;
@@ -1349,8 +1349,8 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	if (GTK_IS_WIDGET(choice_button))
 	{
 		/* Resets to "None" */
-		printf("remove dashboard, file chooser should clear...\n");
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(choice_button),"None");
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(choice_button),(gchar *)OBJ_GET(choice_button,"last_folder"));
 		if ((GINT)data == 1)
 		{
 			DATA_SET(global_data,"dash_1_name",NULL);
@@ -1831,6 +1831,7 @@ G_MODULE_EXPORT void dash_file_chosen(GtkFileChooserButton *button, gpointer dat
 	}
 
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(button));
+	OBJ_SET_FULL(button,"last_folder",gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button)),g_free);
 	index = (GINT)OBJ_GET(button,"dash_index");
 	if (filename)
 	{
@@ -1861,4 +1862,44 @@ G_MODULE_EXPORT void dash_file_chosen(GtkFileChooserButton *button, gpointer dat
 	}
 	g_free(filename);
 	EXIT();
+}
+
+
+/*!
+ *\brief sets up default settings for dash filechooserbuttons
+ */
+void dash_set_chooser_button_defaults(GtkFileChooser *button)
+{
+	gchar *syspath = NULL;
+	gchar *homepath = NULL;
+	GtkFileFilter *all_filter =  NULL;
+	GtkFileFilter *xml_filter =  NULL;
+
+	ENTER();
+
+	syspath = g_build_filename(MTXSYSDATA,"Dashboards",NULL);                   
+	homepath = g_build_filename(HOME(),"mtx",(const gchar *)DATA_GET(global_data,"project_name"),"Dashboards",NULL);
+	gtk_file_chooser_set_current_folder(button,syspath);
+	OBJ_SET_FULL(button,"syspath",g_strdup(syspath),g_free);
+	OBJ_SET_FULL(button,"homepath",g_strdup(homepath),g_free);
+	all_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(all_filter,"*.*");
+	gtk_file_filter_set_name(all_filter,"All Files");
+	xml_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(xml_filter,"*.xml");
+	gtk_file_filter_set_name(xml_filter,"XML Files");
+	if (g_file_test(syspath,G_FILE_TEST_IS_DIR))                                
+		gtk_file_chooser_set_current_folder(button,syspath);
+	else if (g_file_test(homepath,G_FILE_TEST_IS_DIR))
+		gtk_file_chooser_set_current_folder(button,homepath);
+	gtk_file_chooser_add_filter(button,all_filter);
+	gtk_file_chooser_add_filter(button,xml_filter);
+	gtk_file_chooser_set_filter(button,xml_filter);
+	gtk_file_chooser_add_shortcut_folder(button,syspath,NULL);
+	gtk_file_chooser_add_shortcut_folder(button,homepath,NULL);
+	g_free(syspath);                                                            
+	g_free(homepath);
+
+	EXIT();
+	return;
 }

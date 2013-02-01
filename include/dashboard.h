@@ -90,8 +90,7 @@ void print_dash_choices(gchar *);
 gboolean update_dashboards(gpointer);
 gchar * validate_dash_choice(gchar *, gboolean *);
 void dash_file_chosen(GtkFileChooserButton *, gpointer);
-
-
+void dash_set_chooser_button_defaults(GtkFileChooser *);
 /* Prototypes */
 
 #endif

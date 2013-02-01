@@ -178,11 +178,6 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	GtkWidget *widget = NULL;
 	GtkWidget *image = NULL;
 	GdkPixbuf *pixbuf = NULL;
-	GtkFileFilter *all_filter =  NULL;
-	GtkFileFilter *xml_filter =  NULL;
-	gchar *homepath = NULL;
-	gchar *syspath = NULL;
-	gchar *path = NULL;
 	gchar * tmpbuf = NULL;
 	gint mtx_temp_units;
 	gint mtx_color_scale;
@@ -273,27 +268,9 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	gtk_widget_set_tooltip_text(ebox,_("This box provides your choice for the active dashboard to be used"));
 
 	/* General Tab, Dashboard 1 */
-	syspath = g_build_filename(MTXSYSDATA,"Dashboards",NULL);
-	homepath = g_build_filename(HOME(),"mtx",(const gchar *)DATA_GET(global_data,"project_name"),"Dashboards",NULL);
-	all_filter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(GTK_FILE_FILTER(all_filter),"*.*");
-	gtk_file_filter_set_name(GTK_FILE_FILTER(all_filter),"All Files");
-	xml_filter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(GTK_FILE_FILTER(xml_filter),"*.xml");
-	gtk_file_filter_set_name(GTK_FILE_FILTER(xml_filter),"XML Files");
-
 
 	button = glade_xml_get_widget(xml,"dash1_choice_button");
-	if (g_file_test(syspath,G_FILE_TEST_IS_DIR))
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),syspath);
-	else if (g_file_test(homepath,G_FILE_TEST_IS_DIR))
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),homepath);
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(button),all_filter);
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(button),xml_filter);
-	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(button),xml_filter);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),syspath,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),homepath,NULL);
-
+	dash_set_chooser_button_defaults(GTK_FILE_CHOOSER(button));
 	OBJ_SET(button,"dash_index",GINT_TO_POINTER(1));
 	close_button = glade_xml_get_widget(xml,"dash_1_close_button");
 	OBJ_SET(close_button,"choice_button",(gpointer)button);
@@ -303,18 +280,7 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 
 	/* General Tab, Dashboard 2 */
 	button = glade_xml_get_widget(xml,"dash2_choice_button");
-	if (g_file_test(syspath,G_FILE_TEST_IS_DIR))
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),syspath);
-	else if (g_file_test(homepath,G_FILE_TEST_IS_DIR))
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button),homepath);
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(button),all_filter);
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(button),xml_filter);
-	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(button),xml_filter);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),syspath,NULL);
-	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),homepath,NULL);
-	g_free(syspath);
-	g_free(homepath);
-
+	dash_set_chooser_button_defaults(GTK_FILE_CHOOSER(button));
 	OBJ_SET(button,"dash_index",GINT_TO_POINTER(2));
 	close_button = glade_xml_get_widget(xml,"dash_2_close_button");
 	OBJ_SET(close_button,"choice_button",(gpointer)button);
