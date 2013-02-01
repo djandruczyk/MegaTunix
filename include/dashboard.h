@@ -46,7 +46,7 @@ struct _Dash_Gauge
 };
 
 /* Prototypes */
-GtkWidget * load_dashboard(gchar *, gpointer);
+GtkWidget * load_dashboard(const gchar *, gint);
 gboolean remove_dashboard(GtkWidget *, gpointer );
 void load_elements(GtkWidget *, xmlNode * );
 void load_geometry(GtkWidget *, xmlNode *);

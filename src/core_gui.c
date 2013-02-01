@@ -312,6 +312,8 @@ G_MODULE_EXPORT void finalize_core_gui(GladeXML * xml)
 	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(button),xml_filter);
 	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),syspath,NULL);
 	gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(button),homepath,NULL);
+	g_free(syspath);
+	g_free(homepath);
 
 	OBJ_SET(button,"dash_index",GINT_TO_POINTER(2));
 	close_button = glade_xml_get_widget(xml,"dash_2_close_button");

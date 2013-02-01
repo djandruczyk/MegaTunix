@@ -30,6 +30,7 @@
 #include <math.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <notifications.h>
 #include <rtv_map_loader.h>
 #include <rtv_processor.h>
 #include <stdio.h>
@@ -42,10 +43,10 @@ extern gconstpointer *global_data;
   \brief load_dashboard() loads the specified dashboard configuration file
   and initializes the dash.
   \param filename is the pointer to the file we should load
-  \param data is the dash ID (1 or 2)
+  \param index is the dash ID (1 or 2)
   \returns pointer to a new dashboard container widget
   */
-G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
+G_MODULE_EXPORT GtkWidget * load_dashboard(const gchar *filename, gint index)
 {
 	GtkWidget *window = NULL;
 	GtkWidget *dash = NULL;
@@ -124,10 +125,10 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 
-	link_dash_datasources(dash,data);
+	link_dash_datasources(dash,GINT_TO_POINTER(index));
 
 	/* Store global info about this dash */
-	prefix = g_strdup_printf("dash_%i",(GINT)data);
+	prefix = g_strdup_printf("dash_%i",index);
 	key = g_strdup_printf("%s_name",prefix);
 	DATA_SET_FULL(global_data,key, g_strdup(filename),g_free);
 	g_free(key);
@@ -142,8 +143,7 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(gchar *filename, gpointer data)
 	ratio = (gfloat *)DATA_GET(global_data,key);
 	g_free(key);
 	g_free(prefix);
-	g_free(filename);
-	OBJ_SET(ebox,"index", data);
+	OBJ_SET(ebox,"index", GINT_TO_POINTER(index));
 
 	width = (GINT)OBJ_GET(dash,"orig_width");
 	height = (GINT)OBJ_GET(dash,"orig_height");
@@ -1246,8 +1246,8 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 	GtkWidget *label = NULL;
 	GtkWidget *choice_button = NULL;
 	gboolean retval = FALSE;
-	gchar * tmpbuf = NULL;
-	gchar * tmpstr = NULL;
+	const gchar * tmpbuf = NULL;
+	gchar *filename = NULL;
 	gboolean nodash1 = TRUE;
 	gboolean nodash2 = TRUE;
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
@@ -1259,11 +1259,12 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 		choice_button = lookup_widget("dash_1_choice_button");
 		if (GTK_IS_WIDGET(choice_button))
 		{
-			printf("Filename was %s\n",args->dashboard);
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(choice_button),args->dashboard);
 			gtk_widget_set_sensitive(lookup_widget("dash_1_close_button"),TRUE);
-			widget = load_dashboard(g_strdup(args->dashboard),GINT_TO_POINTER(1));
-			register_widget(args->dashboard,widget);
+			filename = g_strdup(args->dashboard);
+			widget = load_dashboard(args->dashboard,1);
+			register_widget(filename,widget);
+			g_free(filename);
 			OBJ_SET_FULL(lookup_widget("dash_1_close_button"),"filename",g_strdup(args->dashboard),g_free);
 			nodash1 = FALSE;
 		}
@@ -1279,9 +1280,11 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 		{
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(choice_button),tmpbuf);
 			gtk_widget_set_sensitive(lookup_widget("dash_1_close_button"),TRUE);
-			widget = load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(1));
-			register_widget(tmpbuf,widget);
-			OBJ_SET_FULL(lookup_widget("dash_1_close_button"),"filename",g_strdup(tmpbuf),g_free);
+			filename = g_strdup(tmpbuf);
+			widget = load_dashboard(tmpbuf,1);
+			register_widget(filename,widget);
+			OBJ_SET_FULL(lookup_widget("dash_1_close_button"),"filename",g_strdup(filename),g_free);
+			g_free(filename);
 			tmpbuf = NULL;
 			nodash1 = FALSE;
 		}
@@ -1292,9 +1295,11 @@ G_MODULE_EXPORT void initialize_dashboards_pf(void)
 		{
 			gtk_widget_set_sensitive(lookup_widget("dash_2_close_button"),TRUE);
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(choice_button),tmpbuf);
-			widget = load_dashboard(g_strdup(tmpbuf),GINT_TO_POINTER(2));
-			register_widget(tmpbuf,widget);
-			OBJ_SET_FULL(lookup_widget("dash_2_close_button"),"filename",g_strdup(tmpbuf),g_free);
+			filename = g_strdup(tmpbuf);
+			widget = load_dashboard(tmpbuf,2);
+			register_widget(filename,widget);
+			OBJ_SET_FULL(lookup_widget("dash_2_close_button"),"filename",g_strdup(filename),g_free);
+			g_free(filename);
 			tmpbuf = NULL;
 			nodash2 = FALSE;
 		}
@@ -1398,6 +1403,7 @@ G_MODULE_EXPORT gboolean remove_dashcluster(gpointer key, gpointer value, gpoint
 			}
 			gtk_widget_destroy(gtk_widget_get_toplevel(d_gauge->dash));
 		}
+		g_free(d_gauge);
 		EXIT();
 		return TRUE;
 	}
@@ -1843,7 +1849,7 @@ G_MODULE_EXPORT void dash_file_chosen(GtkFileChooserButton *button, gpointer dat
 				OBJ_SET_FULL(lookup_widget("dash_2_close_button"),"filename",g_strdup(filename),g_free);
 			}
 		}
-		dash = load_dashboard(filename,GINT_TO_POINTER(index));
+		dash = load_dashboard(filename,index);
 		register_widget(filename,dash);
 	}
 	else
@@ -1853,5 +1859,6 @@ G_MODULE_EXPORT void dash_file_chosen(GtkFileChooserButton *button, gpointer dat
 		if (index == 2)
 			gtk_widget_set_sensitive(lookup_widget("dash_2_close_button"),FALSE);
 	}
+	g_free(filename);
 	EXIT();
 }
