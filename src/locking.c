@@ -255,6 +255,7 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 	gchar **vector = NULL;
 	gchar *contents = NULL;
 	gboolean res = FALSE;
+	GString *str = NULL;
 	GError *err = NULL;
 	guint i = 0;
 
@@ -269,14 +270,16 @@ G_MODULE_EXPORT gboolean lock_serial(gchar * name)
 
 	tmpbuf = g_strdup_printf("/var/lock/LCK..");
 	vector = g_strsplit(name,PSEP,-1);
+	str = g_string_new(tmpbuf);
 	for (i=0;i<g_strv_length(vector);i++)
 	{
 		if ((g_ascii_strcasecmp(vector[i],"") == 0) || (g_ascii_strcasecmp(vector[i],"dev") == 0) || (g_ascii_strcasecmp(vector[i],"tmp") == 0))
 			continue;
-		lock = g_strconcat(tmpbuf,vector[i],NULL);
-		cleanup(tmpbuf);
+		str = g_string_append(str,vector[i]);
 	}
+	g_free(tmpbuf);
 	g_strfreev(vector);
+	lock = g_string_free(str,FALSE);
 	if (g_file_test(lock,G_FILE_TEST_IS_REGULAR))
 	{
 //		printf("found existing lock!\n");

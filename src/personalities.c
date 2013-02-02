@@ -125,8 +125,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	if (shouldjump)
 	{
 		g_list_foreach(p_list,free_persona_element,NULL);
-		g_list_foreach(s_list,free_persona_element,NULL);
 		g_list_free(p_list);
+		g_list_foreach(s_list,free_persona_element,NULL);
 		g_list_free(s_list);
 		DATA_SET(global_data,"cli_persona",NULL);
 		if (DATA_GET(global_data,"offline"))
@@ -237,7 +237,8 @@ G_MODULE_EXPORT gboolean personality_choice(void)
 	}
 
 	OBJ_SET(dialog,"p_list",p_list);
-	OBJ_SET(dialog,"s_list",p_list);
+	OBJ_SET(dialog,"s_list",s_list);
+	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(lookup_widget("main_window")));
 	gtk_widget_show_all(dialog);
 	EXIT();
 	return FALSE;

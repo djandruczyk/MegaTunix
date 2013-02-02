@@ -188,15 +188,16 @@ G_MODULE_EXPORT void  update_logbar(
 	GtkWidget * widget = NULL;
 
 	ENTER();
+	g_return_if_fail(message);
 	widget = (GtkWidget *)lookup_widget(view_name);
 
-	if ((DATA_GET(global_data,"leaving")) || (!widget))
+	if (DATA_GET(global_data,"leaving"))
 	{
 		EXIT();
 		return;
 	}
 
-	if (!GTK_IS_OBJECT(widget))
+	if (!GTK_IS_WIDGET(widget))
 	{
 		MTXDBG(CRITICAL,_("Textview name passed: \"%s\" wasn't registered, not updating\n"),view_name);
 		EXIT();
@@ -245,7 +246,7 @@ G_MODULE_EXPORT void  update_logbar(
 	 * bottom so the new message is visible... 
 	 */
 	parent = gtk_widget_get_parent(widget);
-	if (parent != NULL)
+	if (GTK_IS_WIDGET(parent))
 	{
 		adj = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(parent));
 		gtk_adjustment_set_value(adj,gtk_adjustment_get_upper(adj));

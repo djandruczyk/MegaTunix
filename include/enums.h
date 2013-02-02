@@ -82,7 +82,8 @@ typedef enum
 /*	UPD_RAW_MEMORY,*/
 	UPD_RUN_FUNCTION,
 	UPD_REFRESH,
-	UPD_REFRESH_RANGE
+	UPD_REFRESH_RANGE,
+	UPD_VE3D,
 }UpdateFunction;
 
 typedef enum

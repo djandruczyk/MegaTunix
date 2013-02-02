@@ -483,11 +483,19 @@ G_MODULE_EXPORT void thread_refresh_widget_range(gint page, gint offset, gint le
 	tmp = UPD_REFRESH_RANGE;
 	g_array_append_val(message->functions,tmp);
 
+	message = initialize_gui_message();
+	range = g_new0(Widget_Range,1);
+
+	range->page = page;
+	range->offset = offset;
+	range->len = len;
+	message->payload = (void *)range;
+	message->functions = g_array_new(FALSE,TRUE,sizeof(gint));
+	tmp = UPD_VE3D;
+	g_array_append_val(message->functions,tmp);
+	
 	//printf("thread_refresh_widget_range( page %i, offset %i, len %i) about to send message\n",page,offset,len);
 	g_idle_add(process_gui_message,message);
-	//printf("sent message!\n");
-	printf("This will probably crash or DEADLOCK here\n");
-	update_ve3d_if_necessary(page,offset);
 	EXIT();
 	return;
 }

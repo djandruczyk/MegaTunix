@@ -987,6 +987,7 @@ G_MODULE_EXPORT gboolean update_2d_curve(GtkWidget *widget, gpointer data)
 	mtx_curve_get_coords_at_index(MTX_CURVE(curve),index,&point);
 	text = gtk_editable_get_chars(GTK_EDITABLE(widget),0,-1);
 	tmpf = (gfloat)strtod(g_strdelimit(text,",.",'.'),NULL);
+	g_free(text);
 	if (axis == _X_)
 		point.x = tmpf;
 	else if (axis == _Y_)

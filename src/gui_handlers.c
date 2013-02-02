@@ -1765,6 +1765,7 @@ G_MODULE_EXPORT void prompt_to_save(void)
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),hbox,TRUE,TRUE,10);
 	pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
+	g_object_unref(pixbuf);
 	gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
 	label = gtk_label_new(_("Would you like to save the internal datalog for this session to disk?  It is a complete log and useful for playback/analysis at a future point in time"));
 	gtk_label_set_line_wrap(GTK_LABEL(label),TRUE);
@@ -1774,11 +1775,9 @@ G_MODULE_EXPORT void prompt_to_save(void)
 	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(lookup_widget("main_window")));
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
-	g_object_unref(pixbuf);
 	if (result == GTK_RESPONSE_YES)
 		internal_datalog_dump(NULL,NULL);
 	gtk_widget_destroy (dialog);
-
 
 	dialog = gtk_dialog_new_with_buttons(_("Save ECU settings to file?"),
 			GTK_WINDOW(lookup_widget("main_window")),GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -1790,6 +1789,7 @@ G_MODULE_EXPORT void prompt_to_save(void)
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),hbox,TRUE,TRUE,10);
 	pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
+	g_object_unref(pixbuf);
 	gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
 	label = gtk_label_new(_("Would you like to save the ECU settings to a file so that they can be restored at a future time?"));
 	gtk_label_set_line_wrap(GTK_LABEL(label),TRUE);
@@ -1804,7 +1804,6 @@ G_MODULE_EXPORT void prompt_to_save(void)
 		do_ecu_backup(NULL,NULL);
 	}
 	gtk_widget_destroy (dialog);
-
 }
 
 
@@ -1819,6 +1818,7 @@ G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 	GtkWidget *hbox = NULL;
 	GdkPixbuf *pixbuf = NULL;
 	GtkWidget *image = NULL;
+	gboolean retval = FALSE;
 
 	ENTER();
 
@@ -1832,6 +1832,7 @@ G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),hbox,TRUE,TRUE,10);
 	pixbuf = gtk_widget_render_icon (hbox,GTK_STOCK_DIALOG_QUESTION,GTK_ICON_SIZE_DIALOG,NULL);
 	image = gtk_image_new_from_pixbuf(pixbuf);
+	g_object_unref(pixbuf);
 	gtk_box_pack_start(GTK_BOX(hbox),image,TRUE,TRUE,10);
 	label = gtk_label_new(_("Are you sure you want to quit?"));
 	gtk_label_set_line_wrap(GTK_LABEL(label),TRUE);
@@ -1841,21 +1842,11 @@ G_MODULE_EXPORT gboolean prompt_r_u_sure(void)
 	gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(lookup_widget("main_window")));
 
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
-	g_object_unref(pixbuf);
 	gtk_widget_destroy (dialog);
-
 	if (result == GTK_RESPONSE_YES)
-	{
-		EXIT();
-		return TRUE;
-	}
-	else 
-	{
-		EXIT();
-		return FALSE;
-	}
+		retval = TRUE;
 	EXIT();
-	return FALSE;
+	return retval;
 }
 
 

@@ -153,6 +153,17 @@ G_MODULE_EXPORT gboolean process_gui_message(gpointer data)
 				cleanup(range);
 				message->payload = NULL;
 				break;
+			case UPD_VE3D:
+				MTXDBG(DISPATCHER,_("VE3D update\n"));
+				range = (Widget_Range *)message->payload;
+				if (!range)
+					break;
+				DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(TRUE));
+				update_ve3d_if_necessary(range->page,range->offset);
+				DATA_SET(global_data,"paused_handlers",GINT_TO_POINTER(FALSE));
+				cleanup(range);
+				message->payload = NULL;
+				break;
 			case UPD_LOGBAR:
 				MTXDBG(DISPATCHER,_("Logbar update\n"));
 				t_message = (Text_Message *)message->payload;

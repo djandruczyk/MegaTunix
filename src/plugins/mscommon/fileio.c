@@ -75,6 +75,7 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 	fileio->shortcut_folders = g_strdup("MTX_ecu_snapshots");
 
 	filename = choose_file(fileio);
+	free_mtxfileio(fileio);
 	if (filename == NULL)
 	{
 		update_logbar_f("tools_view","warning",_("NO FILE chosen for ECU Backup\n"),FALSE,FALSE,FALSE);
@@ -85,7 +86,6 @@ G_MODULE_EXPORT gboolean select_file_for_ecu_backup(GtkWidget *widget, gpointer 
 	backup_all_ecu_settings(filename);
 	update_logbar_f("tools_view",NULL,_("Full Backup File Closed\n"),FALSE,FALSE,FALSE);
 	g_free(filename);
-	free_mtxfileio(fileio);
 	EXIT();
 	return TRUE;
 }
