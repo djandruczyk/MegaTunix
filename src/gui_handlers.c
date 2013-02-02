@@ -2433,7 +2433,7 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	gint z_page = 0;
 	DataSize z_size = MTX_U08;
 	gint z_mult = 0;
-	GObject *container = NULL;
+	gconstpointer *container = NULL;
 	gint tmpi = 0;
 	gint max = 0;
 	gint min = 0;
@@ -2448,8 +2448,7 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	g_return_if_fail(firmware);
 	g_return_if_fail(get_ecu_data_f);
 
-	container = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
-        g_object_ref_sink(container);
+	container = g_new0(gconstpointer, 1);
 	g_return_if_fail(container);
 
 	/* Limit check */
@@ -2465,9 +2464,9 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	z_base = firmware->table_params[table_num]->z_base;
 	z_page = firmware->table_params[table_num]->z_page;
 	z_size = firmware->table_params[table_num]->z_size;
-	OBJ_SET(container,"page",GINT_TO_POINTER(z_page));
-	OBJ_SET(container,"size",GINT_TO_POINTER(z_size));
-	OBJ_SET(container,"canID",GINT_TO_POINTER(canID));
+	DATA_SET(container,"page",GINT_TO_POINTER(z_page));
+	DATA_SET(container,"size",GINT_TO_POINTER(z_size));
+	DATA_SET(container,"canID",GINT_TO_POINTER(canID));
 	z_mult = get_multiplier(z_size);
 	min = get_extreme_from_size(z_size,UPPER);
 	max = get_extreme_from_size(z_size,LOWER);
@@ -2475,7 +2474,7 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	/*printf("x_count %i, y_count %i, table_num %i, z_base %i z_page %i, length of page %i\n",x_count,y_count,table_num,z_base,z_page, firmware->page_params[z_page]->length);*/
 	for (i=0;i<x_count*y_count;i++)
 	{
-		OBJ_SET(container,"offset",GINT_TO_POINTER(z_base+(i*z_mult)));
+		DATA_SET(container,"offset",GINT_TO_POINTER(z_base+(i*z_mult)));
 		tmpi = get_ecu_data_f(container);
 		if (tmpi > max)
 			max = tmpi;
@@ -2490,7 +2489,7 @@ G_MODULE_EXPORT void recalc_table_limits(gint canID, gint table_num)
 	firmware->table_params[table_num]->z_maxval = max;
 	firmware->table_params[table_num]->z_minval = min;
 	/*printf("table %i min %i, max %i\n",table_num,min,max); */
-	g_object_unref(container);
+	g_free(container);
 	EXIT();
 	return;
 }
