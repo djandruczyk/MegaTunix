@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "This preloads a special shared library to override an offending GLIB"
+echo "function to hopefully mitigate a crash caused by a GLIB internal"
+echo "race condition that supposedly exists within GLIB 2.32.x."
+echo ""
+echo ""
+echo "DO NOT use this wrapper if your glib version is NOT 2.32.x"
+
+LD_PRELOAD=@prefix@/lib/libmtx_glib_bug_override.so @prefix@/bin/megatunix $*

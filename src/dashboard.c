@@ -927,7 +927,6 @@ G_MODULE_EXPORT void dash_context_popup(GtkWidget *widget, GdkEventButton *event
 
 	if ((GBOOLEAN)DATA_GET(global_data,"gui_visible"))
 	{
-		printf("context menu dash index is %i\n",(GINT)OBJ_GET(widget,"index"));
 		item = gtk_menu_item_new_with_label("Close Dash...");
 		g_signal_connect(G_OBJECT(item),"activate",
 				G_CALLBACK(close_dash),OBJ_GET(widget,"index"));
@@ -1350,7 +1349,10 @@ G_MODULE_EXPORT gboolean remove_dashboard(GtkWidget *widget, gpointer data)
 	{
 		/* Resets to "None" */
 		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(choice_button),"None");
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(choice_button),(gchar *)OBJ_GET(choice_button,"last_folder"));
+		if (OBJ_GET(choice_button,"last_folder"))
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(choice_button),(gchar *)OBJ_GET(choice_button,"last_folder"));
+		else
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(choice_button),(gchar *)OBJ_GET(choice_button,"syspath"));
 		if ((GINT)data == 1)
 		{
 			DATA_SET(global_data,"dash_1_name",NULL);

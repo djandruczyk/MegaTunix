@@ -5,6 +5,7 @@ AC_INIT(megatunix,0.9.24)
 AC_CONFIG_SRCDIR([src/main.c])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
+AC_PREFIX_DEFAULT(/usr/local)
 dnl Need to be able to do long paths (over 100chars)
 AM_INIT_AUTOMAKE(tar-ustar)
 AM_MAINTAINER_MODE([enable])
@@ -197,6 +198,7 @@ dnl ==============
 dnl Output files for build
 dnl ==============
 
+PREFIX=${prefix}
 DASHDESIGNER_GLADE_DIR=dashdesigner
 GAUGEDESIGNER_GLADE_DIR=gaugedesigner
 GUI_DATA_DIR=Gui
@@ -212,6 +214,7 @@ RTSTATUS_DATA_DIR=RuntimeStatus
 DATA_DIR=$datarootdir/MegaTunix
 LOCALE_DIR=$datarootdir/MegaTunix/locale
 
+AC_SUBST(PREFIX)
 AC_SUBST(DATA_DIR)
 AC_SUBST(LOCALE_DIR)
 AC_SUBST(GUI_DATA_DIR)
@@ -241,9 +244,11 @@ MEGATUNIX_DEFINES=" -DMTXPLUGINDIR=\\\"$MTXPLUGIN_DIR\\\" -DLOCALEDIR=\\\"$LOCAL
 AC_SUBST(MEGATUNIX_DEFINES)
 
 AC_CONFIG_FILES([ po/Makefile.in
+src/fix_glib_megatunix
 Makefile 
 include/Makefile
 include/yaml-cpp/Makefile
+glib_override/Makefile
 yaml-cpp/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile

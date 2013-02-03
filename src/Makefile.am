@@ -1,3 +1,4 @@
+AUTOMAKE_OPTIONS=-Wno-portability
 SUBDIRS = plugins
 GIT_COMMIT = $(shell git describe)
 GIT_HASH = $(shell git log -n 1 --pretty=format:%H)
