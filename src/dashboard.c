@@ -92,15 +92,18 @@ G_MODULE_EXPORT GtkWidget * load_dashboard(const gchar *filename, gint index)
 	gtk_container_add(GTK_CONTAINER(window),ebox);
 
 	gtk_widget_add_events(GTK_WIDGET(ebox),
-			/*			GDK_POINTER_MOTION_MASK|
-						GDK_POINTER_MOTION_HINT_MASK|
-			 */
 			GDK_BUTTON_PRESS_MASK |
 			GDK_BUTTON_RELEASE_MASK |
+			/*
+			GDK_POINTER_MOTION_HINT_MASK |
+			GDK_POINTER_MOTION_MASK |
+			*/
 			GDK_KEY_PRESS_MASK |
 			GDK_LEAVE_NOTIFY_MASK
 			);
 
+//	g_signal_connect (G_OBJECT (ebox), "motion_notify_event",
+//			G_CALLBACK (dash_motion_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "leave-notify-event",
 			G_CALLBACK (enter_leave_event), NULL);
 	g_signal_connect (G_OBJECT (ebox), "button_release_event",
@@ -578,13 +581,29 @@ G_MODULE_EXPORT void dash_shape_combine(GtkWidget *dash, gboolean hide_resizers)
   \param data is unused
   \return FALSE so other handlers run
   */
+/*
 G_MODULE_EXPORT gboolean dash_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
-	
+	int x,y;
+	GdkModifierType state;
 	ENTER();
+	if (event->is_hint)
+	{
+		gdk_window_get_pointer(event->window, &x, &y, &state);
+		printf("motion hint, at %i,%i\n",x,y);
+	}
+	else
+	{
+		x = event->x;
+		y = event->y;
+		state = event->state;
+		printf("motion at %i,%i\n",x,y);
+	}
+	printf("dash motion event!\n");
 	EXIT();
 	return FALSE;
 }
+*/
 
 
 /*!

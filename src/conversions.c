@@ -47,7 +47,7 @@ extern gconstpointer *global_data;
   */
 G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 {
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GMutex mutex;
 	gint return_value = 0;
 	gint tmpi = 0;
 	gint dl_type = IMMEDIATE;
@@ -81,7 +81,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 
-	g_static_mutex_lock(&mutex);
+	g_mutex_lock(&mutex);
 
 
 	if (!OBJ_GET(widget,"size"))
@@ -275,7 +275,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	}
 
 
-	g_static_mutex_unlock(&mutex);
+	g_mutex_unlock(&mutex);
 	EXIT();
 	return (return_value);
 }
@@ -290,7 +290,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
   */
 G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 {
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GMutex mutex;
 	static gint (*get_ecu_data_f)(gpointer);
 	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
 	gfloat return_value = 0.0;
@@ -334,7 +334,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	g_return_val_if_fail(send_to_ecu_f,0.0);
 	name = glade_get_widget_name(widget);
 
-	g_static_mutex_lock(&mutex);
+	g_mutex_lock(&mutex);
 
 	size = (DataSize)(GINT)OBJ_GET(widget,"size");
 	dl_type = (GINT)OBJ_GET(widget,"dl_type");
@@ -356,7 +356,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	fromecu_complex = (GBOOLEAN)OBJ_GET(widget,"fromecu_complex");
 	if (fromecu_complex)
 	{
-		g_static_mutex_unlock(&mutex);
+		g_mutex_unlock(&mutex);
 		/*printf("Complex upload conversion for widget at page %i, offset %i, name %s\n",(GINT)OBJ_GET(widget,"page"),(GINT)OBJ_GET(widget,"offset"),(name == NULL ? "undefined" : name));
 		  */
 		return handle_complex_expr_obj(G_OBJECT(widget),NULL,UPLOAD);
@@ -537,7 +537,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		}
 
 	}
-	g_static_mutex_unlock(&mutex);
+	g_mutex_unlock(&mutex);
 	EXIT();
 	return (return_value);
 }

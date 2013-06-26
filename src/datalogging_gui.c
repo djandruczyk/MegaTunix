@@ -98,7 +98,7 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 		return;
 	}
 	table_rows = ceil((float)rtv_map->derived_total/(float)TABLE_COLS);
-	table = gtk_table_new(table_rows,TABLE_COLS,TRUE);
+	table = gtk_table_new(table_rows,TABLE_COLS,FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table),0);
 	gtk_table_set_col_spacings(GTK_TABLE(table),0);
 	gtk_container_set_border_width(GTK_CONTAINER(table),0);
@@ -159,6 +159,8 @@ G_MODULE_EXPORT void populate_dlog_choices(void)
 		gtk_table_attach (GTK_TABLE (table), button, j, j+1, k, k+1,
 				(GtkAttachOptions) (GTK_EXPAND|GTK_FILL|GTK_SHRINK),
 				(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
+				//(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
+				//(GtkAttachOptions) (GTK_FILL|GTK_SHRINK),
 				0, 0);
 		j++;
 

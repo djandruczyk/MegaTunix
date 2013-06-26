@@ -50,11 +50,11 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	guint i = 0;
 	gboolean interrogated = FALSE;
 	GList *locations = NULL;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GMutex mutex;
 
 	ENTER();
 	/* prevent multiple runs of interrogator simultaneously */
-	g_static_mutex_lock(&mutex);
+	g_mutex_lock(&mutex);
 	MTXDBG(INTERROGATOR,_("ENTERED\n\n"));
 
 	/* ECU has already been detected via comms test
@@ -68,7 +68,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	{
 		MTXDBG(INTERROGATOR|CRITICAL,_("Didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
 		update_logbar_f("interr_view",NULL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"),FALSE,FALSE,TRUE);
-		g_static_mutex_unlock(&mutex);
+		g_mutex_unlock(&mutex);
 		EXIT();
 		return FALSE;
 	}
@@ -101,7 +101,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	g_array_free(tests,TRUE);
 	g_hash_table_destroy(tests_hash);
 
-	g_static_mutex_unlock(&mutex);
+	g_mutex_unlock(&mutex);
 	EXIT();
 	return interrogated;
 }

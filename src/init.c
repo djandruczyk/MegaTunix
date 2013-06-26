@@ -373,7 +373,7 @@ G_MODULE_EXPORT gboolean read_config(void)
  */
 G_MODULE_EXPORT void save_config()
 {
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GMutex mutex;
 	gchar *filename = NULL;
 	gchar * tmpbuf = NULL;
 	GtkWidget *widget = NULL;
@@ -398,7 +398,7 @@ G_MODULE_EXPORT void save_config()
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 
-	g_static_mutex_lock(&mutex);
+	g_mutex_lock(&mutex);
 	project = (const gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
 		project = DEFAULT_PROJECT;
@@ -604,7 +604,7 @@ G_MODULE_EXPORT void save_config()
 	cfg_write_file(cfgfile, filename);
 	cfg_free(cfgfile);
 	cleanup(filename);
-	g_static_mutex_unlock(&mutex);
+	g_mutex_unlock(&mutex);
 	EXIT();
 	return;
 }

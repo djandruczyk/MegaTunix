@@ -30,7 +30,7 @@
 
 extern gconstpointer *global_data;
 static FILE * dbg_file = NULL;
-static GStaticMutex dbg_mutex = G_STATIC_MUTEX_INIT;
+static GMutex dbg_mutex;
 static DebugLevel dbglevels[] = 
 {
 	{ "Interrogation", DEBUG_LEVEL, INTERROGATOR, INTERROGATOR_SHIFT,FALSE},
@@ -72,7 +72,7 @@ G_MODULE_EXPORT void open_debug(void)
 	GError *error = NULL;
 	const gchar *project = NULL;
 
-	g_static_mutex_lock(&dbg_mutex);
+	g_mutex_lock(&dbg_mutex);
 	args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	project = (const gchar *)DATA_GET(global_data,"project_name");
 	if (!project)
@@ -95,7 +95,7 @@ G_MODULE_EXPORT void open_debug(void)
 		}
 		g_free(filename);
 	}
-	g_static_mutex_unlock(&dbg_mutex);
+	g_mutex_unlock(&dbg_mutex);
 }
 
 
@@ -104,13 +104,13 @@ G_MODULE_EXPORT void open_debug(void)
   */
 G_MODULE_EXPORT void close_debug(void)
 {
-	g_static_mutex_lock(&dbg_mutex);
+	g_mutex_lock(&dbg_mutex);
 	if (dbg_file)
 	{
 		fclose(dbg_file);
 		dbg_file = NULL;
 	}
-	g_static_mutex_unlock(&dbg_mutex);
+	g_mutex_unlock(&dbg_mutex);
 }
 
 
@@ -134,7 +134,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 	if (!(dbg_lvl & level))
 		return;
 
-	g_static_mutex_lock(&dbg_mutex);
+	g_mutex_lock(&dbg_mutex);
 
 	if ((file) && (func) && (line > 0))
 	{
@@ -153,7 +153,7 @@ G_MODULE_EXPORT void dbg_func(Dbg_Class level, const gchar * file, const gchar *
 	}
 #endif
 	va_end(args);
-	g_static_mutex_unlock(&dbg_mutex);
+	g_mutex_unlock(&dbg_mutex);
 }
 
 

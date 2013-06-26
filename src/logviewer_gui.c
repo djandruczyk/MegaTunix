@@ -37,7 +37,7 @@ static gfloat hue = -60.0;
 static gfloat col_sat = 1.0;
 static gfloat col_val = 1.0;
 Logview_Data *lv_data = NULL;
-static GStaticMutex update_mutex = G_STATIC_MUTEX_INIT;
+static GMutex update_mutex;
 extern gconstpointer *global_data;
 
 /*!
@@ -347,7 +347,7 @@ G_MODULE_EXPORT void populate_viewer(void)
 
 	ENTER();
 
-	g_static_mutex_lock(&update_mutex);
+	g_mutex_lock(&update_mutex);
 	log_info = (Log_Info *)DATA_GET(global_data,"log_info");
 	rtv_map = (Rtv_Map *)DATA_GET(global_data,"rtv_map");
 
@@ -457,7 +457,7 @@ G_MODULE_EXPORT void populate_viewer(void)
 	/* If traces selected, emit a configure_Event to clear the window
 	 * and draw the traces (IF ONLY reading a log for playback)
 	 */
-	g_static_mutex_unlock(&update_mutex);
+	g_mutex_unlock(&update_mutex);
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 		lv_configure_event(lookup_widget("logviewer_trace_darea"),NULL,NULL);
 
@@ -958,9 +958,9 @@ G_MODULE_EXPORT gboolean update_logview_traces_pf(gboolean force_redraw)
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
 		adj_scale = TRUE;
-		g_static_mutex_lock(&update_mutex);
+		g_mutex_lock(&update_mutex);
 		trace_update(force_redraw);
-		g_static_mutex_unlock(&update_mutex);
+		g_mutex_unlock(&update_mutex);
 		scroll_logviewer_traces();
 	}
 
@@ -1001,9 +1001,9 @@ G_MODULE_EXPORT gboolean pb_update_logview_traces(gpointer data)
 	if ((lv_data->traces) && (g_list_length(lv_data->tlist) > 0))
 	{
 		adj_scale = TRUE;
-		g_static_mutex_lock(&update_mutex);
+		g_mutex_lock(&update_mutex);
 		trace_update(force_redraw);
-		g_static_mutex_unlock(&update_mutex);
+		g_mutex_unlock(&update_mutex);
 		scroll_logviewer_traces();
 	}
 	EXIT();

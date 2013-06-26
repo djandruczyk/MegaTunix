@@ -195,13 +195,13 @@ G_MODULE_EXPORT gint comms_test(void)
  */
 G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 {
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GMutex mutex;
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
 
 	ENTER();
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
-	g_static_mutex_lock(&mutex);
+	g_mutex_lock(&mutex);
 
 	MTXDBG(SERIAL_WR,_("Sending page %i, num_bytes %i, data %p\n"),page,num_bytes,data);
 
@@ -222,7 +222,7 @@ G_MODULE_EXPORT void ms_table_write(gint page, gint num_bytes, guint8 * data)
 	output->queue_update = TRUE;
 	io_cmd_f(firmware->table_write_command,output);
 
-	g_static_mutex_unlock(&mutex);
+	g_mutex_unlock(&mutex);
 	EXIT();
 	return;
 }

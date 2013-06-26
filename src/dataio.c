@@ -64,7 +64,7 @@ extern gconstpointer *global_data;
 G_MODULE_EXPORT gint read_data(gint total_wanted, guint8 **buffer, gboolean reset_on_fail)
 {
 	static GMutex *serio_mutex = NULL;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GMutex mutex;
 	static gint failcount = 0;
 	static gboolean reset = FALSE;
 	gboolean res = 0;
@@ -83,7 +83,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, guint8 **buffer, gboolean rese
 	if (!serio_mutex)
 		serio_mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
 
-	g_static_mutex_lock(&mutex);
+	g_mutex_lock(&mutex);
 
 	total_read = 0;
 	zerocount = 0;
@@ -155,7 +155,7 @@ G_MODULE_EXPORT gint read_data(gint total_wanted, guint8 **buffer, gboolean rese
 	if (buffer)
 		*buffer = g_memdup(buf,total_read);
 	dump_output(total_read,buf);
-	g_static_mutex_unlock(&mutex);
+	g_mutex_unlock(&mutex);
 	EXIT();
 	return total_read;
 }
@@ -184,7 +184,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	WriteMode mode = MTX_CMD_WRITE;
 	gboolean retval = TRUE;
 	DBlock *block = NULL;
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GMutex mutex;
 	static void (*store_new_block)(gpointer) = NULL;
 	static void (*set_ecu_data)(gpointer,gint *) = NULL;
 
@@ -210,7 +210,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	g_return_val_if_fail(set_ecu_data,FALSE);
 	g_return_val_if_fail(store_new_block,FALSE);
 
-	g_static_mutex_lock(&mutex);
+	g_mutex_lock(&mutex);
 	g_mutex_lock(serio_mutex);
 
 	if (output)
@@ -230,14 +230,14 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 				break;
 		}
 		g_mutex_unlock(serio_mutex);
-		g_static_mutex_unlock(&mutex);
+		g_mutex_unlock(&mutex);
 		EXIT();
 		return TRUE;		/* can't write anything if offline */
 	}
 	if (!DATA_GET(global_data,"connected"))
 	{
 		g_mutex_unlock(serio_mutex);
-		g_static_mutex_unlock(&mutex);
+		g_mutex_unlock(&mutex);
 		EXIT();
 		return FALSE;		/* can't write anything if disconnected */
 	}
@@ -330,7 +330,7 @@ G_MODULE_EXPORT gboolean write_data(Io_Message *message)
 	}
 
 	g_mutex_unlock(serio_mutex);
-	g_static_mutex_unlock(&mutex);
+	g_mutex_unlock(&mutex);
 	EXIT();
 	return retval;
 }

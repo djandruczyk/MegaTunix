@@ -98,7 +98,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	GIOChannel * iochannel = NULL;
 	GTimeVal now;
 	GtkWidget *main_window = NULL;
-	static GStaticMutex leave_mutex = G_STATIC_MUTEX_INIT;
+	static GMutex leave_mutex;
 	CmdLineArgs *args = (CmdLineArgs *)DATA_GET(global_data,"args");
 	GMutex *mutex = NULL;
 	GTimer *timer = NULL;
@@ -126,7 +126,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 		}
 		prompt_to_save();
 	}
-	g_static_mutex_lock(&leave_mutex);
+	g_mutex_lock(&leave_mutex);
 	/* Commits any pending data to ECU flash */
 /*	BUGGY CODE, causes deadlock, disabled....
 	if ((DATA_GET(global_data,"connected")) && 
@@ -262,6 +262,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	//MTXDBG(CRITICAL,_("After mem_dealloc()\n"));
 	//MTXDBG(CRITICAL,_("Before close_debug(), exiting...\n"));
 	close_debug();
+	g_mutex_unlock(&leave_mutex);
 	gtk_main_quit();
 	exit(0);
 	EXIT();

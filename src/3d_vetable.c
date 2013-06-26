@@ -1886,7 +1886,7 @@ G_MODULE_EXPORT void ve3d_draw_text(GtkWidget * widget, char* text, gfloat x, gf
 G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
                                       *event, gpointer data)
 {
-	static GStaticMutex key_mutex = G_STATIC_MUTEX_INIT;
+	static GMutex key_mutex;
 	static gint (*get_ecu_data_f)(gpointer) = NULL;
 	static void (*send_to_ecu_f)(gpointer, gint, gboolean) = NULL;
 	gint offset = 0;
@@ -1934,7 +1934,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 	g_return_val_if_fail(send_to_ecu_f,FALSE);
 	g_return_val_if_fail(ve_view,FALSE);
 
-	g_static_mutex_lock(&key_mutex);
+	g_mutex_lock(&key_mutex);
 
 	window = gtk_widget_get_window(ve_view->drawing_area);
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
@@ -2300,7 +2300,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 
 		default:
 			MTXDBG(OPENGL,_("Keypress not handled, code: %#.4X\"\n"),event->keyval);
-			g_static_mutex_unlock(&key_mutex);
+			g_mutex_unlock(&key_mutex);
 			return FALSE;
 	}
 	if (update_widgets)
@@ -2311,7 +2311,7 @@ G_MODULE_EXPORT gboolean ve3d_key_press_event (GtkWidget *widget, GdkEventKey
 		DATA_SET(global_data,"forced_update",GINT_TO_POINTER(TRUE));
 	}
 
-	g_static_mutex_unlock(&key_mutex);
+	g_mutex_unlock(&key_mutex);
 	EXIT();
 	return TRUE;
 }

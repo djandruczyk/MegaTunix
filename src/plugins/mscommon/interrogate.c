@@ -47,7 +47,7 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
-	static GStaticMutex mutex = G_STATIC_MUTEX_INIT;
+	static GMutex mutex;
 	gboolean interrogated = FALSE;
 	GArray *tests = NULL;
 	GHashTable *tests_hash = NULL;
@@ -84,13 +84,13 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		return FALSE;
 	}
 	/* prevent multiple runs of interrogator simultaneously */
-	g_static_mutex_lock(&mutex);
+	g_mutex_lock(&mutex);
 	MTXDBG(INTERROGATOR,_("Entered\n"));
 
 	if (!DATA_GET(global_data,"connected"))
 	{
 		MTXDBG(INTERROGATOR,_("NOT connected to ECU!!!!\n"));
-		g_static_mutex_unlock(&mutex);
+		g_mutex_unlock(&mutex);
 		EXIT();
 		return FALSE;
 	}
@@ -104,7 +104,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 	{
 		MTXDBG(INTERROGATOR|CRITICAL,_("validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"));
 		update_logbar_f("interr_view",NULL,g_strdup(__FILE__": interrogate_ecu()\n\t validate_and_load_tests() didn't return a valid list of commands\n\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"),FALSE,FALSE,TRUE);
-		g_static_mutex_unlock(&mutex);
+		g_mutex_unlock(&mutex);
 		EXIT();
 		return FALSE;
 	}
@@ -225,7 +225,7 @@ G_MODULE_EXPORT gboolean interrogate_ecu(void)
 		thread_widget_set_sensitive_f("offline_button",TRUE);
 	}
 
-	g_static_mutex_unlock(&mutex);
+	g_mutex_unlock(&mutex);
 	MTXDBG(INTERROGATOR,_("Leaving\n"));
 	thread_update_widget_f("titlebar",MTX_TITLE,g_strdup("Interrogation Complete..."));
 	EXIT();
