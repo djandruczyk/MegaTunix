@@ -90,7 +90,7 @@ extern "C" {
 #define MTX_SOCKET_CONTROL_PORT 12766
 
 /* For datalogging and Logviewer */
-#define TABLE_COLS 6
+#define TABLE_COLS 5
 
 /*! Temp Sensor default Bias resistor value */
 #define DEFAULT_BIAS 2490

@@ -2206,7 +2206,7 @@
 		<barometer_size>_S16_</barometer_size>
 	</derived>
 	<derived>
-		<dlog_gui_name>Vacuum in inches of Hg</dlog_gui_name>
+		<dlog_gui_name>Vacuum (in/Hg)</dlog_gui_name>
 		<dlog_field_name>Vacuum</dlog_field_name>
 		<internal_names>vacuum</internal_names>
 		<offset>18</offset>
