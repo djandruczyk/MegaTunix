@@ -757,10 +757,12 @@ G_MODULE_EXPORT void mem_alloc(void)
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_if_fail(firmware);
 
+	/*
 	if (g_mem_gc_friendly)
 		printf("gc-friendly is set\n");
 	else
 		printf("gc-friendly is NOT set\n");
+		*/
 	if (!firmware->rt_data)
 		firmware->rt_data = g_new0(guint8, firmware->rtvars_size);
 	if (!firmware->rt_data_last)
