@@ -703,56 +703,56 @@ _tooltip=Sets whether this is a simple threshold based port, or one depending on
 [pm2_thresh1_entry]
 keys=offset,size,precision,tooltip
 offset=840
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pm3_thresh1_entry]
 keys=offset,size,precision,tooltip
 offset=842
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pm4_thresh1_entry]
 keys=offset,size,precision,tooltip
 offset=844
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pm5_thresh1_entry]
 keys=offset,size,precision,tooltip
 offset=846
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pt6_thresh1_entry]
 keys=offset,size,precision,tooltip
 offset=848
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pt7_thresh1_entry]
 keys=offset,size,precision,tooltip
 offset=850
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pa0_thresh1_entry]
 keys=offset,size,precision,tooltip
 offset=852
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pm2_thresh2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=854
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pm2_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -760,7 +760,7 @@ _tooltip= The threshold to set this condition true
 [pm3_thresh2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=856
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pm3_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -768,7 +768,7 @@ _tooltip= The threshold to set this condition true
 [pm4_thresh2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=858
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pm4_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -776,7 +776,7 @@ _tooltip= The threshold to set this condition true
 [pm5_thresh2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=860
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pm5_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -784,7 +784,7 @@ _tooltip= The threshold to set this condition true
 [pt6_thresh2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=862
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pt6_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -792,7 +792,7 @@ _tooltip= The threshold to set this condition true
 [pt7_thresh2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=864
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pt7_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -800,7 +800,7 @@ _tooltip= The threshold to set this condition true
 [pa0_thresh2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=866
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pa0_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -808,56 +808,56 @@ _tooltip= The threshold to set this condition true
 [pm2_hyst1_entry]
 keys=offset,size,precision,tooltip
 offset=868
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pm3_hyst1_entry]
 keys=offset,size,precision,tooltip
 offset=870
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pm4_hyst1_entry]
 keys=offset,size,precision,tooltip
 offset=872
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pm5_hyst1_entry]
 keys=offset,size,precision,tooltip
 offset=874
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pt6_hyst1_entry]
 keys=offset,size,precision,tooltip
 offset=876
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pt7_hyst1_entry]
 keys=offset,size,precision,tooltip
 offset=878
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pa0_hyst1_entry]
 keys=offset,size,precision,tooltip
 offset=880
-size=_S16_
+size=_U16_
 precision=1
 _tooltip= The threshold to set this condition true
 
 [pm2_hyst2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=882
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pm2_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -865,7 +865,7 @@ _tooltip= The threshold to set this condition true
 [pm3_hyst2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=884
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pm3_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -873,7 +873,7 @@ _tooltip= The threshold to set this condition true
 [pm4_hyst2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=886
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pm4_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -881,7 +881,7 @@ _tooltip= The threshold to set this condition true
 [pm5_hyst2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=888
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pm5_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -889,7 +889,7 @@ _tooltip= The threshold to set this condition true
 [pt6_hyst2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=890
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pt6_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -897,7 +897,7 @@ _tooltip= The threshold to set this condition true
 [pt7_hyst2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=892
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pt7_2nd_cond
 _tooltip= The threshold to set this condition true
@@ -905,7 +905,7 @@ _tooltip= The threshold to set this condition true
 [pa0_hyst2_entry]
 keys=offset,size,bind_to_list,precision,tooltip
 offset=894
-size=_S16_
+size=_U16_
 precision=1
 bind_to_list=pa0_2nd_cond
 _tooltip= The threshold to set this condition true
