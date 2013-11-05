@@ -1,0 +1,1014 @@
+[global]
+description=Object data map for the MS2 Extra Remote User Outputs (Spare ports)
+tab_name=_Remote Outputs
+id_prefix=RUO_
+groups=defaults
+#bind_to_list=poll_remote,poll_generic,can_poll_ports,ports_out,port_generic
+bind_to_list=can_polling,can_poll_ports,poll_generic,can_pollers,ports_out
+
+#----- Groups ----------------------------------------------------------------
+
+[defaults]
+keys=page,size,raw_lower,raw_upper,dl_type,handler
+page=1
+size=_U08_
+raw_lower=0
+raw_upper=255
+dl_type=_IMMEDIATE_
+handler=_GENERIC_
+
+#----- Buttons ---------------------------------------------------------------
+
+[get_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_READ_VE_CONST_
+bind_to_list=get_data_buttons
+_tooltip=This button retrieves the VE/Constants block of data (all pages) and updates all controls with the current values.
+
+[burn_data_button]
+keys=handler,bind_to_list,tooltip
+handler=_BURN_FLASH_
+bind_to_list=burners
+_tooltip=This button will turn red when a value is changed in the ECU's RAM but it needs to be burnt to flash for permanent storage.  By clicking this it will burn the ram to flash and the button will turn back to black.
+
+#----- Widgets ---------------------------------------------------------------
+
+[topframe]
+keys=bind_to_list
+#bind_to_list=poll_remote,poll_generic,can_poll_ports,ports_out,port_generic
+bind_to_list=can_polling,can_poll_ports,poll_generic,can_pollers
+
+[rmt1_second_cond_table]
+keys=bind_to_list
+bind_to_list=rmt1_2nd_cond
+
+[rmt2_second_cond_table]
+keys=bind_to_list
+bind_to_list=rmt2_2nd_cond
+
+[rmt3_second_cond_table]
+keys=bind_to_list
+bind_to_list=rmt3_2nd_cond
+
+[rmt4_second_cond_table]
+keys=bind_to_list
+bind_to_list=rmt4_2nd_cond
+
+[rmt5_second_cond_table]
+keys=bind_to_list
+bind_to_list=rmt5_2nd_cond
+
+[rmt6_second_cond_table]
+keys=bind_to_list
+bind_to_list=rmt6_2nd_cond
+
+[rmt7_second_cond_table]
+keys=bind_to_list
+bind_to_list=rmt7_2nd_cond
+
+[rmt8_second_cond_table]
+keys=bind_to_list
+bind_to_list=rmt8_2nd_cond
+
+[rmt1_values_table]
+keys=bind_to_list
+bind_to_list=rmt1
+
+[rmt2_values_table]
+keys=bind_to_list
+bind_to_list=rmt2
+
+[rmt3_values_table]
+keys=bind_to_list
+bind_to_list=rmt3
+
+[rmt4_values_table]
+keys=bind_to_list
+bind_to_list=rmt4
+
+[rmt5_values_table]
+keys=bind_to_list
+bind_to_list=rmt5
+
+[rmt6_values_table]
+keys=bind_to_list
+bind_to_list=rmt6
+
+[rmt7_values_table]
+keys=bind_to_list
+bind_to_list=rmt7
+
+[rmt8_values_table]
+keys=bind_to_list
+bind_to_list=rmt8
+
+[rmt1_conditions_frame]
+keys=bind_to_list
+bind_to_list=rmt1
+
+[rmt2_conditions_frame]
+keys=bind_to_list
+bind_to_list=rmt2
+
+[rmt3_conditions_frame]
+keys=bind_to_list
+bind_to_list=rmt3
+
+[rmt4_conditions_frame]
+keys=bind_to_list
+bind_to_list=rmt4
+
+[rmt5_conditions_frame]
+keys=bind_to_list
+bind_to_list=rmt5
+
+[rmt6_conditions_frame]
+keys=bind_to_list
+bind_to_list=rmt6
+
+[rmt7_conditions_frame]
+keys=bind_to_list
+bind_to_list=rmt7
+
+[rmt8_conditions_frame]
+keys=bind_to_list
+bind_to_list=rmt8
+
+#----- Labels ----------------------------------------------------------------
+
+[rmt1_range2_label]
+keys=bind_to_list
+bind_to_list=rmt1_2nd_cond
+
+[rmt2_range2_label]
+keys=bind_to_list
+bind_to_list=rmt2_2nd_cond
+
+[rmt3_range2_label]
+keys=bind_to_list
+bind_to_list=rmt3_2nd_cond
+
+[rmt4_range2_label]
+keys=bind_to_list
+bind_to_list=rmt4_2nd_cond
+
+[rmt5_range2_label]
+keys=bind_to_list
+bind_to_list=rmt5_2nd_cond
+
+[rmt6_range2_label]
+keys=bind_to_list
+bind_to_list=rmt6_2nd_cond
+
+[rmt7_range2_label]
+keys=bind_to_list
+bind_to_list=rmt7_2nd_cond
+
+[rmt8_range2_label]
+keys=bind_to_list
+bind_to_list=rmt8_2nd_cond
+
+#----- Combos ----------------------------------------------------------------
+
+[rmt1_enable_toggle_button]
+keys=offset,bitmask,bitval,toggle_groups,tooltip
+offset=864
+bitmask=255
+bitval=1
+toggle_groups=,rmt1
+_tooltip=Initial value for this pin at power on
+
+[rmt2_enable_toggle_button]
+keys=offset,bitmask,bitval,toggle_groups,tooltip
+offset=865
+bitmask=255
+bitval=1
+toggle_groups=,rmt2
+_tooltip=Initial value for this pin at power on
+
+[rmt3_enable_toggle_button]
+keys=offset,bitmask,bitval,toggle_groups,tooltip
+offset=866
+bitmask=255
+bitval=1
+toggle_groups=,rmt3
+_tooltip=Initial value for this pin at power on
+
+[rmt4_enable_toggle_button]
+keys=offset,bitmask,bitval,toggle_groups,tooltip
+offset=867
+bitmask=255
+bitval=1
+toggle_groups=,rmt4
+_tooltip=Initial value for this pin at power on
+
+[rmt5_enable_toggle_button]
+keys=offset,bitmask,bitval,toggle_groups,tooltip
+offset=868
+bitmask=255
+bitval=1
+toggle_groups=,rmt5
+_tooltip=Initial value for this pin at power on
+
+[rmt6_enable_toggle_button]
+keys=offset,bitmask,bitval,toggle_groups,tooltip
+offset=869
+bitmask=255
+bitval=1
+toggle_groups=,rmt6
+_tooltip=Initial value for this pin at power on
+
+[rmt7_enable_toggle_button]
+keys=offset,bitmask,bitval,toggle_groups,tooltip
+offset=870
+bitmask=255
+bitval=1
+toggle_groups=,rmt7
+_tooltip=Initial value for this pin at power on
+
+[rmt8_enable_toggle_button]
+keys=offset,bitmask,bitval,toggle_groups,tooltip
+offset=871
+bitmask=255
+bitval=1
+toggle_groups=,rmt8
+_tooltip=Initial value for this pin at power on
+
+[rmt1_poweron_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=896
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Initial value for this pin at power on
+
+[rmt2_poweron_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=897
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Initial value for this pin at power on
+
+[rmt3_poweron_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=898
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Initial value for this pin at power on
+
+[rmt4_poweron_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=899
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Initial value for this pin at power on
+
+[rmt5_poweron_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=900
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Initial value for this pin at power on
+
+[rmt6_poweron_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=901
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Initial value for this pin at power on
+
+[rmt7_poweron_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=902
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Initial value for this pin at power on
+
+[rmt8_poweron_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=903
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Initial value for this pin at power on
+
+[rmt1_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=904
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Value when this output is triggered
+
+[rmt2_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=905
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Value when this output is triggered
+
+[rmt3_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=906
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Value when this output is triggered
+
+[rmt4_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=907
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Value when this output is triggered
+
+[rmt5_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=908
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Value when this output is triggered
+
+[rmt6_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=909
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Value when this output is triggered
+
+[rmt7_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=910
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Value when this output is triggered
+
+[rmt8_triggerval_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=911
+bitmask=255
+bitvals=0,1
+choices=0,1
+_tooltip=Value when this output is triggered
+
+[rmt1_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=872
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt2_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=874
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt3_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=876
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt4_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=878
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt5_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=880
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt6_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=882
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt7_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=884
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt8_cond1_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=886
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt1_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=873
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt2_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=875
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt3_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=877
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt4_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=879
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt5_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=881
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt6_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=883
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt7_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=885
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt8_cond2_combo]
+keys=offset,bitmask,bitvals,choices,tooltip
+offset=887
+bitmask=255
+bitvals=60,61,62
+choices=Less Than,Equal To,Greater Than
+_tooltip=Comparison Operator, Less than, Equal to or Greater Than
+
+[rmt1_output_source1_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=928
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=912
+range_label=RUO_rmt1_range1_label
+thresh_widget=RUO_rmt1_thresh1_entry
+hyst_widget=RUO_rmt1_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt2_output_source1_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=930
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=913
+range_label=RUO_rmt2_range1_label
+thresh_widget=RUO_rmt2_thresh1_entry
+hyst_widget=RUO_rmt2_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt3_output_source1_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=932
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=914
+range_label=RUO_rmt3_range1_label
+thresh_widget=RUO_rmt3_thresh1_entry
+hyst_widget=RUO_rmt3_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt4_output_source1_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=934
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=915
+range_label=RUO_rmt4_range1_label
+thresh_widget=RUO_rmt4_thresh1_entry
+hyst_widget=RUO_rmt4_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt5_output_source1_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=936
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=916
+range_label=RUO_rmt5_range1_label
+thresh_widget=RUO_rmt5_thresh1_entry
+hyst_widget=RUO_rmt5_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt6_output_source1_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=938
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=917
+range_label=RUO_rmt6_range1_label
+thresh_widget=RUO_rmt6_thresh1_entry
+hyst_widget=RUO_rmt6_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt7_output_source1_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=940
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=918
+range_label=RUO_rmt7_range1_label
+thresh_widget=RUO_rmt7_thresh1_entry
+hyst_widget=RUO_rmt7_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt8_output_source1_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=942
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=919
+range_label=RUO_rmt8_range1_label
+thresh_widget=RUO_rmt8_thresh1_entry
+hyst_widget=RUO_rmt8_hyst1_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt1_output_source2_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=944
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=920
+range_label=RUO_rmt1_range2_label
+thresh_widget=RUO_rmt1_thresh2_entry
+hyst_widget=RUO_rmt1_hyst2_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt2_output_source2_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=946
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=921
+range_label=RUO_rmt2_range2_label
+thresh_widget=RUO_rmt2_thresh2_entry
+hyst_widget=RUO_rmt2_hyst2_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt3_output_source2_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=948
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=922
+range_label=RUO_rmt3_range2_label
+thresh_widget=RUO_rmt3_thresh2_entry
+hyst_widget=RUO_rmt3_hyst2_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt4_output_source2_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=950
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=923
+range_label=RUO_rmt4_range2_label
+thresh_widget=RUO_rmt4_thresh2_entry
+hyst_widget=RUO_rmt4_hyst2_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt5_output_source2_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=952
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=924
+range_label=RUO_rmt5_range2_label
+thresh_widget=RUO_rmt5_thresh2_entry
+hyst_widget=RUO_rmt5_hyst2_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt6_output_source2_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=954
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=925
+range_label=RUO_rmt6_range2_label
+thresh_widget=RUO_rmt6_thresh2_entry
+hyst_widget=RUO_rmt6_hyst2_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt7_output_source2_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=956
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=926
+range_label=RUO_rmt7_range2_label
+thresh_widget=RUO_rmt7_thresh2_entry
+hyst_widget=RUO_rmt7_hyst2_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt8_output_source2_combo]
+keys=offset,size,bitmask,post_functions_with_arg,size_offset,range_label,thresh_widget,hyst_widget,handler,tooltip
+offset=958
+bitmask=65535
+size=_U16_
+post_functions_with_arg=ms2_output_combo_setup
+size_offset=927
+range_label=RUO_rmt8_range2_label
+thresh_widget=RUO_rmt8_thresh2_entry
+hyst_widget=RUO_rmt8_hyst2_entry
+handler=_MS2_USER_OUTPUTS_
+_tooltip=Source to compare against.
+
+[rmt1_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=888
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,rmt1_2nd_cond,rmt1_2nd_cond
+_tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+[rmt2_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=889
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,rmt2_2nd_cond,rmt2_2nd_cond
+_tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+[rmt3_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=890
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,rmt3_2nd_cond,rmt3_2nd_cond
+_tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+[rmt4_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=891
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,rmt4_2nd_cond,rmt4_2nd_cond
+_tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+[rmt5_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=892
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,rmt5_2nd_cond,rmt5_2nd_cond
+_tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+[rmt6_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=893
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,rmt6_2nd_cond,rmt6_2nd_cond
+_tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+[rmt7_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=894
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,rmt7_2nd_cond,rmt7_2nd_cond
+_tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+[rmt8_additional_combo]
+keys=offset,bitmask,bitvals,choices,toggle_groups,tooltip
+offset=895
+bitmask=255
+bitvals=32,124,38
+choices=No Additional condition,Or,And
+toggle_groups=,rmt8_2nd_cond,rmt8_2nd_cond
+_tooltip=Sets whether this is a simple threshold based port, or one depending on either both states (AND) or one of each (OR)
+
+#----- Entries ---------------------------------------------------------------
+
+[rmt1_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=960
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt2_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=962
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt3_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=964
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt4_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=966
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt5_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=968
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt6_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=970
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt7_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=972
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt8_thresh1_entry]
+keys=offset,size,precision,tooltip
+offset=974
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt1_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=976
+size=_S16_
+precision=1
+bind_to_list=rmt1_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt2_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=978
+size=_S16_
+precision=1
+bind_to_list=rmt2_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt3_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=980
+size=_S16_
+precision=1
+bind_to_list=rmt3_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt4_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=982
+size=_S16_
+precision=1
+bind_to_list=rmt4_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt5_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=984
+size=_S16_
+precision=1
+bind_to_list=rmt5_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt6_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=986
+size=_S16_
+precision=1
+bind_to_list=rmt6_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt7_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=988
+size=_S16_
+precision=1
+bind_to_list=rmt7_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt8_thresh2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=990
+size=_S16_
+precision=1
+bind_to_list=rmt8_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt1_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=992
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt2_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=994
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt3_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=996
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt4_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=998
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt5_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=1000
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt6_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=1002
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt7_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=1004
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt8_hyst1_entry]
+keys=offset,size,precision,tooltip
+offset=1006
+size=_S16_
+precision=1
+_tooltip=The threshold to set this condition true
+
+[rmt1_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=1008
+size=_S16_
+precision=1
+bind_to_list=rmt1_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt2_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=1010
+size=_S16_
+precision=1
+bind_to_list=rmt2_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt3_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=1012
+size=_S16_
+precision=1
+bind_to_list=rmt3_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt4_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=1014
+size=_S16_
+precision=1
+bind_to_list=rmt4_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt5_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=1016
+size=_S16_
+precision=1
+bind_to_list=rmt5_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt6_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=1018
+size=_S16_
+precision=1
+bind_to_list=rmt6_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt7_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=1020
+size=_S16_
+precision=1
+bind_to_list=rmt7_2nd_cond
+_tooltip=The threshold to set this condition true
+
+[rmt8_hyst2_entry]
+keys=offset,size,bind_to_list,precision,tooltip
+offset=1022
+size=_S16_
+precision=1
+bind_to_list=rmt8_2nd_cond
+_tooltip=The threshold to set this condition true
+

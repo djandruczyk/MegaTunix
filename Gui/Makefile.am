@@ -208,6 +208,8 @@ gui_in_files = 	\
 		ms2-e-3.1.1_17-vetrim_16x16x4.datamap.in \
 		ms2-e-3.1.x-crank_idle_warmup.datamap.in \
 		ms2-e-3.2.1-ego_rev.datamap.in \
+		ms2-e-3.2.5-local_outputs.datamap.in \
+		ms2-e-3.2.5-remote_outputs.datamap.in \
 		ms2-e-3.x-accel.datamap.in \
 		ms2-e-3.x-als.datamap.in \
 		ms2-e-3.x-boost_knock_launch.datamap.in \
