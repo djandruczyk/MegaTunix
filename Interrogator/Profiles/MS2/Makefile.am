@@ -11,6 +11,7 @@ profiles_in = \
 	MS2-Extra_3.1.x.als.prof.in \
 	MS2-Extra_3.2.1.prof.in \
 	MS2-Extra_3.2.4.prof.in \
+	MS2-Extra_3.2.5.prof.in \
 	MS2.prof.in  \
 	MS2-2.905.prof.in 
 
