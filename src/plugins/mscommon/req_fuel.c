@@ -809,8 +809,12 @@ G_MODULE_EXPORT gboolean drain_hashtable(gpointer offset, gpointer value, gpoint
 	Deferred_Data *data = (Deferred_Data *)value;
 
 	ENTER();
+	g_assert(data);
+	/*printf("canID %i, page %i, offset %i, size %i, value %i\n",data->canID,data->page,data->offset,data->size,data->value);*/
 	ms_send_to_ecu(data->canID,data->page,data->offset,data->size,data->value,FALSE);
-	g_free(data);
+	/* Don't delete it as itgets purged on replace, as well as on hash 
+	 * destroy when MTX closes
+	 */
 	/* called per element from the hash table to drain and send to ECU */
 	EXIT();
 	return TRUE;
