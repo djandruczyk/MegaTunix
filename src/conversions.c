@@ -98,6 +98,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	else
 		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
+	//printf("lower %f, upper %f\n",lower,upper);
 	/* MULTI EXPRESSION ONLY, i.e. different math conversions that depend on a named source_key! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
@@ -261,16 +262,16 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	name = glade_get_widget_name(widget);
 	MTXDBG(CONVERSIONS,_("Widget %s raw %.2f, sent %i\n"),(name == NULL ? "undefined" : name),value,return_value);
-	if (return_value > upper)
+	if ((gfloat)return_value > upper)
 	{
 		if (dl_type != IGNORED)
-			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING value clamped at %f (%f <- %f -> %f)!!\n"),upper,lower,value,upper);
+			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING value clamped at %f (%f <- %i -> %f)!!\n"),upper,lower,return_value,upper);
 		return_value = upper;
 	}
-	if (return_value < lower)
+	if ((gfloat)return_value < lower)
 	{
 		if (dl_type != IGNORED)
-			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING value clamped at %f (%f <- %f -> %f)!!\n"),lower,lower,value,upper);
+			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING value clamped at %f (%f <- %i -> %f)!!\n"),lower,lower,return_value,upper);
 		return_value = lower;
 	}
 
@@ -353,6 +354,7 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	else
 		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
+	/*	printf("Variable %s has lower %f, upper %f\n",name,lower,upper);*/
 	fromecu_complex = (GBOOLEAN)OBJ_GET(widget,"fromecu_complex");
 	if (fromecu_complex)
 	{
@@ -366,18 +368,18 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 		tmpi = lookup_data_obj(G_OBJECT(widget),get_ecu_data_f(widget));
 	else
 		tmpi = get_ecu_data_f(widget);
-	if (tmpi < lower)
+	if ((gfloat)tmpi < lower)
 	{
 		if (dl_type != IGNORED)
 			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),lower,lower,tmpi,upper);
-		tmpi = lower;
+		tmpi = (gint)lower;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
-	if (tmpi > upper)
+	if ((gfloat)tmpi > upper)
 	{
 		if (dl_type != IGNORED)
-			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),lower,lower,tmpi,upper);
-		tmpi = upper;
+			MTXDBG(CONVERSIONS|CRITICAL,_("WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> %.1f), updating ECU with valid value within limits!!\n"),(name == NULL ? "undefined" : name),upper,lower,tmpi,upper);
+		tmpi = (gint)upper;
 		send_to_ecu_f(widget,tmpi,TRUE);
 	}
 	/* MULTI EXPRESSION ONLY! */
