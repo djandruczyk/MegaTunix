@@ -72,6 +72,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("signal_read_rtvars",(void **)&signal_read_rtvars_f);
 	get_symbol_f("start_tickler",(void **)&start_tickler_f);
 	get_symbol_f("stop_tickler",(void **)&stop_tickler_f);
+	get_symbol_f("temp_to_host",(void **)&temp_to_host_f);
 	get_symbol_f("update_widget",(void **)&update_widget_f);
 
 	register_ecu_enums();

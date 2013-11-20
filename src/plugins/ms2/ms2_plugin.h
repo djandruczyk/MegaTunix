@@ -66,6 +66,7 @@ EXTERN void (*get_essential_bits_f)(GtkWidget *, gint *, gint *, gint *, gint *,
 EXTERN gfloat (*convert_after_upload_f)(GtkWidget *);
 EXTERN gfloat (*calc_value_f)(gfloat, gfloat *, gfloat *, ConvDir);
 EXTERN glong (*get_extreme_from_size_f)(DataSize, Extreme);
+EXTERN gdouble (*temp_to_host_f)(gdouble);
 
 /* Function pointers */
 

@@ -189,6 +189,9 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 	guint8 tmp = 0;
 	gint dload_val = 0;
 	gint dl_type = 0;
+	gfloat real_lower = 0.0;
+	gfloat real_upper = 0.0;
+	gboolean temp_dep = FALSE;
 	gfloat tmpf = 0.0;
 	gfloat tmpf2 = 0.0;
 	gboolean state = FALSE;
@@ -236,7 +239,7 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			tmp = tmp | (bitval << bitshift);
 			ms_send_to_ecu_f(canID, page, offset, size, tmp, TRUE);
 			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(model,&iter,UO_SIZE_COL,&size,UO_RAW_LOWER_COL,&lower,UO_RAW_UPPER_COL,&upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_FROMECU_MULT_COL,&multiplier,UO_FROMECU_ADD_COL,&adder,-1);
+			gtk_tree_model_get(model,&iter,UO_TEMP_DEP_COL,&temp_dep,UO_SIZE_COL,&size,UO_RAW_LOWER_COL,&lower,UO_RAW_UPPER_COL,&upper,UO_REAL_LOWER_COL,&real_lower,UO_REAL_UPPER_COL,&real_upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_FROMECU_MULT_COL,&multiplier,UO_FROMECU_ADD_COL,&adder,-1);
 
 			/* Send the "size" of the offset to the ecu */
 			if (OBJ_GET(widget,"size_offset"))
@@ -251,7 +254,16 @@ G_MODULE_EXPORT gboolean ecu_combo_handler(GtkWidget *widget, gpointer data)
 			if (tmpbuf)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_LABEL(tmpwidget))
-				gtk_label_set_text(GTK_LABEL(tmpwidget),range);
+			{
+				if (temp_dep)
+				{
+					tmpbuf = g_strdup_printf("Valid Range: %.1f <-> %.1f",temp_to_host_f(real_lower),temp_to_host_f(real_upper));
+					gtk_label_set_text(GTK_LABEL(tmpwidget),tmpbuf);
+					g_free(tmpbuf);
+				}
+				else
+					gtk_label_set_text(GTK_LABEL(tmpwidget),range);
+			}
 
 			tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
 			if (tmpbuf)
