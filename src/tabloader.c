@@ -604,6 +604,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	gchar *size = NULL;
 	gint count = 0;
 	gint tmpi = 0;
+	gboolean hidden = FALSE;
 	gchar *ptr = NULL;
 	gchar **vector = NULL;
 	gchar **vec2 = NULL;
@@ -828,6 +829,8 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		}
 		g_free(initializer);
 	}
+	/* Hidden widgets have special handlers and should NOT be updated normally */
+	cfg_read_boolean(cfgfile,section, "hidden", &hidden);
 	offset = -1;
 	cfg_read_int(cfgfile,section, "offset", &offset);
 	if (offset >= 0 && indexed)
@@ -872,7 +875,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		{
 			if (offset >= firmware->page_params[page]->length)
 				MTXDBG(TABLOADER|CRITICAL,_("Attempting to append widget beyond bounds of Firmware Parameters,  there is a bug with this datamap widget %s, at offset %i...\n\n"),section,offset);
-			else
+			else if (!hidden)
 			{
 
 				tab_widgets = OBJ_GET(bindgroup->topframe,"tab_widgets");
@@ -885,8 +888,8 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 		}
 		else
 			MTXDBG(TABLOADER|CRITICAL,_("Attempting to append widget beyond bounds of Firmware Parameters, there is a bug with this datamap for widget %s, at page %i offset %i...\n\n"),section,page,offset);
-
 	}
+
 	/* If there is a "group" key in a section it means that it gets the
 	 * rest of it's setting from the groupname listed.  This reduces
 	 * redundant keys all throughout the file...
