@@ -67,6 +67,9 @@ EXTERN gfloat (*convert_after_upload_f)(GtkWidget *);
 EXTERN gfloat (*calc_value_f)(gfloat, gfloat *, gfloat *, ConvDir);
 EXTERN glong (*get_extreme_from_size_f)(DataSize, Extreme);
 EXTERN gdouble (*temp_to_host_f)(gdouble);
+EXTERN gdouble (*f_to_c_f)(gdouble);
+EXTERN gdouble (*f_to_k_f)(gdouble);
+EXTERN void (*remove_from_lists_f)(const gchar *, gpointer);
 
 /* Function pointers */
 

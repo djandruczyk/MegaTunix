@@ -57,6 +57,8 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("evaluator_create",(void **)&evaluator_create_f);
 	get_symbol_f("evaluator_destroy",(void **)&evaluator_destroy_f);
 	get_symbol_f("evaluator_evaluate_x",(void **)&evaluator_evaluate_x_f);
+	get_symbol_f("f_to_c",(void **)&f_to_c_f);
+	get_symbol_f("f_to_k",(void **)&f_to_k_f);
 	get_symbol_f("get_essential_bits",(void **)&get_essential_bits_f);
 	get_symbol_f("get_extreme_from_size",(void **)&get_extreme_from_size_f);
 	get_symbol_f("get_bitshift",(void **)&get_bitshift_f);
@@ -68,6 +70,7 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("ms_get_ecu_data",(void **)&ms_get_ecu_data_f);
 	get_symbol_f("ms_send_to_ecu",(void **)&ms_send_to_ecu_f);
 	get_symbol_f("register_widget",(void **)&register_widget_f);
+	get_symbol_f("remove_from_lists",(void **)&remove_from_lists_f);
 	get_symbol_f("search_model",(void **)&search_model_f);
 	get_symbol_f("signal_read_rtvars",(void **)&signal_read_rtvars_f);
 	get_symbol_f("start_tickler",(void **)&start_tickler_f);
