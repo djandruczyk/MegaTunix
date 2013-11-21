@@ -57,6 +57,9 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	gboolean temp_dep = FALSE;
 	gchar *raw_lower_str = NULL;
 	gchar *raw_upper_str = NULL;
+	gchar *tempc_range = NULL;
+	gchar *tempf_range = NULL;
+	gchar *tempk_range = NULL;
 	gfloat real_lower = 0.0;
 	gfloat real_upper = 0.0;
 	gfloat tmpf = 0.0;
@@ -79,7 +82,22 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 	}
 	/* Create the store for the combo, with severla hidden values
 	 */
-	store = gtk_list_store_new(UO_COMBO_COLS,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_POINTER,G_TYPE_POINTER,G_TYPE_STRING,G_TYPE_STRING,G_TYPE_FLOAT,G_TYPE_FLOAT,G_TYPE_STRING,G_TYPE_UCHAR,G_TYPE_BOOLEAN,G_TYPE_UCHAR);
+	store = gtk_list_store_new(UO_COMBO_COLS,
+			G_TYPE_STRING,	/* Choice */
+			G_TYPE_UCHAR,	/* BITval */
+			G_TYPE_POINTER,	/* FromECU Multiplier (gfloat *) */
+			G_TYPE_POINTER,	/* FromECU Adder (gfloat *) */
+			G_TYPE_STRING,	/* Raw Lower clamp limit */
+			G_TYPE_STRING,	/* Raw Upper clamp limit */
+			G_TYPE_FLOAT,	/* Real Lower limit (gfloat) */
+			G_TYPE_FLOAT,	/* Real Upper limit (gfloat) */
+			G_TYPE_STRING,	/* Range widget string (non temp ctrls) */
+			G_TYPE_STRING,	/* Range widget string (Celsius) */
+			G_TYPE_STRING,	/* Range widget string (Fahrenheit) */
+			G_TYPE_STRING,	/* Range widget string (Kelvin) */
+			G_TYPE_UCHAR,	/* Size enumeration (_U08_, _U16_, etc.) */
+			G_TYPE_UCHAR,	/* Precision (floating point precision) */
+			G_TYPE_BOOLEAN);/* Temp dependent flag */
 
 	/* Iterate across valid variables */
 	for (i=0;i<rtv_map->rtv_list->len;i++)
@@ -111,40 +129,24 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 		if (DATA_GET(object,"real_lower"))
 		{
 			lower = (gchar *)DATA_GET(object,"real_lower");
-			if (temp_dep)
-				real_lower = temp_to_host_f(g_strtod(lower,NULL));
-			else
-				real_lower = g_strtod(lower,NULL);
+			real_lower = g_strtod(lower,NULL);
 			raw_lower = calc_value_f(real_lower,multiplier,adder,TOECU);
 		}
 		else
-		{
 			raw_lower = get_extreme_from_size_f(size,LOWER);
-			tmpf = calc_value_f(raw_lower,multiplier,adder,FROMECU);
-			lower = g_strdup_printf("%i",(gint)tmpf);
-			freelower = TRUE;
-		}
 		if (DATA_GET(object,"real_upper"))
 		{
 			upper = (gchar *)DATA_GET(object,"real_upper");
-			if (temp_dep)
-				real_upper = temp_to_host_f(g_strtod(upper,NULL));
-			else
-				real_upper = g_strtod(upper,NULL);
+			real_upper = g_strtod(upper,NULL);
 			raw_upper = calc_value_f(real_upper,multiplier,adder,TOECU);
 		}
 		else
 		{
 			raw_upper = get_extreme_from_size_f(size,UPPER);
-			tmpf = calc_value_f(raw_upper,multiplier,adder,FROMECU);
-			upper = g_strdup_printf("%i",(gint)tmpf);
-			freeupper = TRUE;
-		}
 		range = g_strdup_printf("Valid Range: %.1f <-> %.1f",real_lower,real_upper);
-		if (freelower)
-			g_free(lower);
-		if (freeupper)
-			g_free(upper);
+		tempc_range = g_strdup_printf("Valid Range: %.1f <-> %.1f",f_to_c_f(real_lower),f_to_c_f(real_upper));
+		tempf_range = g_strdup_printf("Valid Range: %.1f <-> %.1f",real_lower,real_upper);
+		tempk_range = g_strdup_printf("Valid Range: %.1f <-> %.1f",f_to_k_f(real_lower),f_to_k_f(real_upper));
 		raw_lower_str = g_strdup_printf("%i",raw_lower);
 		raw_upper_str = g_strdup_printf("%i",raw_upper);
 
@@ -159,13 +161,19 @@ G_MODULE_EXPORT void ms2_output_combo_setup(GtkWidget *widget)
 				UO_REAL_LOWER_COL,real_lower,
 				UO_REAL_UPPER_COL,real_upper,
 				UO_RANGE_COL,range,
+				UO_RANGE_TEMPC_COL,tempc_range,
+				UO_RANGE_TEMPF_COL,tempf_range,
+				UO_RANGE_TEMPK_COL,tempk_range,
 				UO_SIZE_COL,size,
-				UO_TEMP_DEP_COL,temp_dep,
 				UO_PRECISION_COL,precision,
+				UO_TEMP_DEP_COL,temp_dep,
 				-1);
 		g_free(raw_lower_str);
 		g_free(raw_upper_str);
 		g_free(range);
+		g_free(tempc_range);
+		g_free(tempf_range);
+		g_free(tempk_range);
 	}
 /*#if GTK_MINOR_VERSION < 24 */
 	if (GTK_IS_COMBO_BOX_ENTRY(widget))
@@ -224,6 +232,9 @@ G_MODULE_EXPORT void update_ms2_user_outputs(GtkWidget *widget)
 	gchar *lower = NULL;
 	gchar *upper = NULL;
 	gchar *range = NULL;
+	gchar *tempc_range = NULL;
+	gchar *tempf_range = NULL;
+	gchar *tempk_range = NULL;
 	gchar *tmpbuf = NULL;
 	gchar *tmpstr = NULL;
 	gint bitmask = 0;
@@ -253,7 +264,20 @@ G_MODULE_EXPORT void update_ms2_user_outputs(GtkWidget *widget)
 		if (tmpi == t_bitval)
 		{
 			/* Get the rest of the data from the combo */
-			gtk_tree_model_get(GTK_TREE_MODEL(model),&iter,UO_TEMP_DEP_COL,&temp_dep,UO_SIZE_COL,&size,UO_RAW_LOWER_COL,&lower,UO_RAW_UPPER_COL,&upper,UO_REAL_LOWER_COL,&real_lower,UO_REAL_UPPER_COL,&real_upper,UO_RANGE_COL,&range,UO_PRECISION_COL,&precision,UO_FROMECU_MULT_COL,&multiplier,UO_FROMECU_ADD_COL,&adder,-1);
+			gtk_tree_model_get(GTK_TREE_MODEL(model),&iter,
+					UO_TEMP_DEP_COL,&temp_dep,
+					UO_SIZE_COL,&size,
+					UO_RAW_LOWER_COL,&lower,
+					UO_RAW_UPPER_COL,&upper,
+					UO_REAL_LOWER_COL,&real_lower,
+					UO_REAL_UPPER_COL,&real_upper,
+					UO_RANGE_COL,&range,
+					UO_RANGE_TEMPC_COL,&tempc_range,
+					UO_RANGE_TEMPF_COL,&tempf_range,
+					UO_RANGE_TEMPK_COL,&tempk_range,
+					UO_PRECISION_COL,&precision,
+					UO_FROMECU_MULT_COL,&multiplier,
+					UO_FROMECU_ADD_COL,&adder,-1);
 			/*
 			if (temp_dep)
 			{
@@ -273,21 +297,42 @@ G_MODULE_EXPORT void update_ms2_user_outputs(GtkWidget *widget)
 			{
 				if (temp_dep)
 				{
-					tmpstr = g_strdup_printf("Valid Range: %.1f <-> %.1f",temp_to_host_f(real_lower),temp_to_host_f(real_upper));
+					OBJ_SET(widget,"widget_temp".DATA_GET(global_data,"mtx_temp_units"));
+					OBJ_SET(widget,"c_label".tempc_range);
+					OBJ_SET(widget,"f_label".tempc_range);
+					OBJ_SET(widget,"k_label".tempc_range);
+					bind_to_lists_f(widget,"temperature");
 					gtk_label_set_text(GTK_LABEL(tmpwidget),tmpstr);
-					g_free(tmpstr);
+					update_widget_f(tmpwidget,NULL);
 				}
 				else
+				{
+					remove_from_lists(widget,"temperature");
+					OBJ_SET(widget,"widget_temp".NULL);
+					OBJ_SET(widget,"temp_dep".NULL);
+					OBJ_SET(widget,"c_label".NULL);
+					OBJ_SET(widget,"f_label".NULL);
+					OBJ_SET(widget,"k_label".NULL);
 					gtk_label_set_text(GTK_LABEL(tmpwidget),range);
+				}
 			}
 			tmpbuf = (gchar *)OBJ_GET(widget,"thresh_widget");
 			if (tmpbuf)
 				tmpwidget = lookup_widget_f(tmpbuf);
 			if (GTK_IS_WIDGET(tmpwidget))
 			{
+				if (temp_dep)
+				{
+					OBJ_SET(widget,"widget_temp".DATA_GET(global_data,"mtx_temp_units"));
+					OBJ_SET(tmpwidget,"temp_dep",GINT_TO_POINTER(temp_dep));
+				}
+				else
+				{
+					OBJ_SET(widget,"widget_temp".NULL);
+					OBJ_SET(widget,"temp_dep".NULL);
+				}
 				OBJ_SET(tmpwidget,"size",GINT_TO_POINTER(size));
 				OBJ_SET(tmpwidget,"precision",GINT_TO_POINTER(precision));
-				OBJ_SET(tmpwidget,"temp_dep",GINT_TO_POINTER(temp_dep));
 				OBJ_SET(tmpwidget,"raw_lower",lower);
 				OBJ_SET(tmpwidget,"raw_upper",upper);
 				if (multiplier)
