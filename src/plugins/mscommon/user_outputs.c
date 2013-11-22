@@ -402,7 +402,7 @@ G_MODULE_EXPORT void cell_edited(GtkCellRendererText *cell,
 
 			gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,g_strdup_printf("%1$.*2$f",newval,precision), -1);
 
-		/* First conver to fahrenheit temp scale if temp dependant */
+		/* First conver to ECU temp scale if temp dependant */
 		if (temp_dep)
 			x = temp_to_ecu_f(newval);
 		else
@@ -525,7 +525,6 @@ void update_model_from_view(GtkWidget * widget)
 					multi = (MultiExpr *)g_hash_table_lookup(hash,"DEFAULT");
 				if (!multi)
 					continue;
-
 
 				/* TEXT ENTRY part */
 				if (multi->lookuptable)
