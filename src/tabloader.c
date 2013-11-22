@@ -408,7 +408,7 @@ G_MODULE_EXPORT GHashTable * load_groups(ConfigFile *cfgfile)
 		 */
 		if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 		{
-			if (get_symbol("load_dependancies_obj",(void **)&load_dep_obj))
+			if (get_symbol("load_dependencies_obj",(void **)&load_dep_obj))
 				load_dep_obj(group->object,cfgfile,section,"depend_on");
 			g_free(tmpbuf);
 		}
@@ -727,7 +727,7 @@ G_MODULE_EXPORT void bind_data(GtkWidget *widget, gpointer user_data)
 	 */
 	if (cfg_read_string(cfgfile,section,"depend_on",&tmpbuf))
 	{
-		if (get_symbol("load_dependancies_obj",(void **)&load_dep_obj))
+		if (get_symbol("load_dependencies_obj",(void **)&load_dep_obj))
 			load_dep_obj(G_OBJECT(widget),cfgfile,section,"depend_on");
 		g_free(tmpbuf);
 	}
@@ -1004,7 +1004,7 @@ G_MODULE_EXPORT void run_post_functions_with_arg(const gchar * functions, GtkWid
 
 
 /*!
-  \brief Pre-loads the dependancies related to a tab/group of tabs
+  \brief Pre-loads the dependencies related to a tab/group of tabs
   \param data is the pointer to a GPtrArray list of tab infos, used to traverse 
   each tab config file to preload the needed interdependancy structures
   */
