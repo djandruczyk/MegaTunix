@@ -32,18 +32,18 @@ extern "C" {
 /* Enumerations */
 typedef enum
 {
-        SWEEP_START = LAST_COMMON_STD_HANDLER_ENUM + 1,
-        SWEEP_STOP,
+	SWEEP_START = LAST_COMMON_STD_HANDLER_ENUM + 1,
+	SWEEP_STOP,
 	RPM_MODE
 }JimStimStdHandler;
 
 /* Prototypes */
-void ecu_gui_init(void);
-gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
-gboolean ecu_button_handler(GtkWidget *, gpointer);
 gboolean ecu_bitmask_button_handler(GtkWidget *, gpointer);
-gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
+gboolean ecu_button_handler(GtkWidget *, gpointer);
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
+void ecu_gui_init(void);
+gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
+gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 gboolean ecu_update_combo(GtkWidget *, gpointer);
 gboolean jimstim_rpm_value_changed(GtkWidget *, gpointer);
 /* Prototypes */

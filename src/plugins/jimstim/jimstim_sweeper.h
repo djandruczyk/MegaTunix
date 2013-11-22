@@ -60,10 +60,10 @@ struct _JimStim_Data
 };
 
 /* Prototypes */
-G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *, gpointer);
-G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *, gpointer);
-G_MODULE_EXPORT gboolean jimstim_rpm_sweep_wrapper(JimStim_Data *);
 G_MODULE_EXPORT gboolean jimstim_rpm_sweep(JimStim_Data *);
+G_MODULE_EXPORT gboolean jimstim_rpm_sweep_wrapper(JimStim_Data *);
+G_MODULE_EXPORT gboolean jimstim_sweep_end(GtkWidget *, gpointer);
+G_MODULE_EXPORT gboolean jimstim_sweep_start(GtkWidget *, gpointer);
 G_MODULE_EXPORT void jimstim_sweeper_init(GtkWidget *);
 /* Prototypes */
 
