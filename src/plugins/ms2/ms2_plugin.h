@@ -70,6 +70,7 @@ EXTERN gdouble (*temp_to_host_f)(gdouble);
 EXTERN gdouble (*f_to_c_f)(gdouble);
 EXTERN gdouble (*f_to_k_f)(gdouble);
 EXTERN void (*remove_from_lists_f)(const gchar *, gpointer);
+EXTERN void (*convert_temps_f)(gpointer, gpointer);
 
 /* Function pointers */
 
