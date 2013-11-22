@@ -30,8 +30,8 @@ extern "C" {
 #include <configfile.h>
 
 /* Prototypes */
-gboolean set_file_api(ConfigFile *, gint, gint);
 gboolean get_file_api(ConfigFile *, gint *, gint *);
+gboolean set_file_api(ConfigFile *, gint, gint);
 /* Prototypes */
 
 #endif

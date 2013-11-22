@@ -38,15 +38,14 @@ typedef enum
 }StatusCols;
 
 /* Prototypes */
-void reset_runtime_status(void);
-void rt_update_status(gpointer, gpointer);
+void load_status(xmlNode *, GtkWidget *);
 void load_status_pf(void );
 gboolean load_status_xml_elements(xmlNode *, GtkWidget *);
-void load_status(xmlNode *, GtkWidget *);
-void setup_status_treeview(GtkWidget *);
+void reset_runtime_status(void);
+void rt_update_status(gpointer, gpointer);
 gboolean status_foreach(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+void setup_status_treeview(GtkWidget *);
 gboolean update_rtstatus(void);
-
 /* Prototypes */
 
 #endif

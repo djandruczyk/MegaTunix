@@ -36,13 +36,13 @@ typedef enum
 }EcuState;
 
 /* Prototypes */
-gboolean do_ms1_load(gint, gint);
 EcuState detect_ecu(gint);
+gboolean do_ms1_load(gint, gint);
 gboolean jump_to_bootloader(gint);
-gboolean prepare_for_upload(gint);
-void upload_firmware(gint, gint);
-void reboot_ecu(gint);
 void output(gchar *, gboolean);
+gboolean prepare_for_upload(gint);
+void reboot_ecu(gint);
+void upload_firmware(gint, gint);
 
 #endif
 #ifdef __cplusplus

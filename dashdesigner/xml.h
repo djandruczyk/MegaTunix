@@ -23,14 +23,14 @@
 
 
 /* Prototypes */
-
-void import_dash_xml(gchar *);
-void export_dash_xml(gchar *);
 void clear_dashboard(GtkWidget *);
+void export_dash_xml(gchar *);
+void import_dash_xml(gchar *);
 void load_elements(GtkWidget *, xmlNode * );
-void load_geometry(GtkWidget *, xmlNode *);
 void load_gauge(GtkWidget *, xmlNode *);
+void load_geometry(GtkWidget *, xmlNode *);
 void load_integer_from_xml(xmlNode *, gint *);
 void load_string_from_xml(xmlNode *, gchar **);
+/* Prototypes */
 
 #endif

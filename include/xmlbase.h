@@ -34,23 +34,22 @@ extern "C" {
 /* Prototypes */
 
 /* import funcs */
-gboolean generic_xml_gint_import(xmlNode *, gpointer);
-gboolean generic_xml_gchar_import(xmlNode *, gpointer);
-gboolean generic_xml_gfloat_import(xmlNode *, gpointer);
-gboolean generic_xml_gboolean_import(xmlNode *, gpointer);
-gboolean generic_xml_color_import(xmlNode *, gpointer);
-gboolean generic_xml_gint_find(xmlNode *, const gchar *, gpointer);
+gboolean generic_xml_gboolean_find(xmlNode *, const gchar *, gpointer);
 gboolean generic_xml_gchar_find(xmlNode *, const gchar *, gpointer);
 gboolean generic_xml_gfloat_find(xmlNode *, const gchar *, gpointer);
-gboolean generic_xml_gboolean_find(xmlNode *, const gchar *, gpointer);
-
+gboolean generic_xml_gint_find(xmlNode *, const gchar *, gpointer);
+gboolean generic_xml_color_import(xmlNode *, gpointer);
+gboolean generic_xml_gboolean_import(xmlNode *, gpointer);
+gboolean generic_xml_gchar_import(xmlNode *, gpointer);
+gboolean generic_xml_gint_import(xmlNode *, gpointer);
+gboolean generic_xml_gfloat_import(xmlNode *, gpointer);
 
 /* export funcs */
-void generic_xml_gint_export(xmlNode *, const gchar *, gint *);
+void generic_xml_color_export(xmlNode *, const gchar *, GdkColor *);
+void generic_xml_gboolean_export(xmlNode *, const gchar *, gboolean *);
 void generic_xml_gchar_export(xmlNode *, const gchar *, gchar **);
 void generic_xml_gfloat_export(xmlNode *, const gchar *, gfloat *);
-void generic_xml_gboolean_export(xmlNode *, const gchar *, gboolean *);
-void generic_xml_color_export(xmlNode *, const gchar *, GdkColor *);
+void generic_xml_gint_export(xmlNode *, const gchar *, gint *);
 
 /* Oddball funcs */
 gboolean xml_api_check(xmlNode *,gint , gint);

@@ -68,38 +68,35 @@ ConfigFile;
 /* Structures */
 
 /* Prototypes */
+ConfigSection *cfg_find_section(ConfigFile * cfg, const gchar * name);
+void cfg_free(ConfigFile * cfg);
 ConfigFile *cfg_new(void);
 ConfigFile *cfg_open_file(const gchar * filename);
-ConfigSection *cfg_find_section(ConfigFile * cfg, const gchar * name);
-gboolean cfg_write_file(ConfigFile * cfg, const gchar * filename);
-void cfg_free(ConfigFile * cfg);
-gboolean cfg_read_string(ConfigFile * cfg, const gchar * section, \
-                const gchar * key, gchar ** value);
-gboolean cfg_read_int(ConfigFile * cfg, const gchar * section, \
-                const gchar * key, gint * value);
 gboolean cfg_read_boolean(ConfigFile * cfg, const gchar * section, \
                 const gchar * key, gboolean * value);
-gboolean cfg_read_float(ConfigFile * cfg, const gchar * section, \
-                const gchar * key, gfloat * value);
 gboolean cfg_read_double(ConfigFile * cfg, const gchar * section, \
                 const gchar * key, gdouble * value);
-void cfg_write_string(ConfigFile * cfg, const gchar * section, \
-                const gchar * key, const gchar * value);
-void cfg_write_int(ConfigFile * cfg, const gchar * section, \
-                const gchar * key, gint value);
+gboolean cfg_read_float(ConfigFile * cfg, const gchar * section, \
+                const gchar * key, gfloat * value);
+gboolean cfg_read_int(ConfigFile * cfg, const gchar * section, \
+                const gchar * key, gint * value);
+gboolean cfg_read_string(ConfigFile * cfg, const gchar * section, \
+                const gchar * key, gchar ** value);
+void cfg_remove_key(ConfigFile * cfg, const gchar * section, const gchar * key);
 void cfg_write_boolean(ConfigFile * cfg, const gchar * section, \
                 const gchar * key, gboolean value);
-void cfg_write_float(ConfigFile * cfg, const gchar * section, \
-                const gchar * key, gfloat value);
+gboolean cfg_write_file(ConfigFile * cfg, const gchar * filename);
 void cfg_write_double(ConfigFile * cfg, const gchar * section, \
                 const gchar * key, gdouble value);
-void cfg_remove_key(ConfigFile * cfg, const gchar * section, const gchar * key);
+void cfg_write_float(ConfigFile * cfg, const gchar * section, \
+                const gchar * key, gfloat value);
+void cfg_write_int(ConfigFile * cfg, const gchar * section, \
+                const gchar * key, gint value);
+void cfg_write_string(ConfigFile * cfg, const gchar * section, \
+                const gchar * key, const gchar * value);
 /* Prototypes */
 
-
 #endif
-
-
 #ifdef __cplusplus
 } /* closing brace for extern "C" */
 #endif

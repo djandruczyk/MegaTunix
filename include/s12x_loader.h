@@ -29,18 +29,19 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean check_status(gint);
 gboolean do_ms2_load(gint, gint);
 gboolean do_freeems_load(gint, gint);
-gint read_s19(gint);
-void ms2_enter_boot_mode(gint);
-gboolean wakeup_S12(gint);
-gboolean check_status(gint);
 gboolean erase_S12(gint);
-gboolean send_S12(gint, guint);
 void free_s19(guint);
-void reset_proc(gint);
-void output(gchar *, gboolean);
+void ms2_enter_boot_mode(gint);
+gint read_s19(gint);
 gboolean readback_block(gint, gint, guchar *, gint);
+void reset_proc(gint);
+gboolean send_S12(gint, guint);
+void output(gchar *, gboolean);
+gboolean wakeup_S12(gint);
+/* Prototypes */
 
 #endif
 #ifdef __cplusplus

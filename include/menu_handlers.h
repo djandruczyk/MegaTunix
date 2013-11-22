@@ -39,10 +39,10 @@ typedef enum
 }FioAction;
 
 /* Prototypes */
-void setup_menu_handlers_pf(void);
+gboolean check_tab_existance(TabIdent );
 gboolean jump_to_tab(GtkWidget *, gpointer );
 gboolean settings_transfer(GtkWidget *, gpointer );
-gboolean check_tab_existance(TabIdent );
+void setup_menu_handlers_pf(void);
 /* Prototypes */
 
 #endif

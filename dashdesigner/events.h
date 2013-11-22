@@ -27,22 +27,20 @@ typedef enum
 
 /* Prototypes */
 
-gboolean dashdesigner_about(GtkWidget *, gpointer );
 gboolean add_gauge(GtkWidget *, gpointer );
-gboolean dashdesigner_quit(GtkWidget *, gpointer );
-gboolean create_preview_list(GtkWidget *, gpointer );
-gboolean gauge_choice_button_event(GtkWidget *, GdkEventButton *,gpointer );
 gboolean close_current_dash(GtkWidget *, gchar * );
-void raise_fixed_child (GtkWidget * );
-void update_properties(GtkWidget *,Choice);
-void set_combo_to_source(GtkWidget *, gchar * );
-void free_element(gpointer ,gpointer );
-void scan_for_gauges(gpointer, gpointer);
-
-gint list_sort(gconstpointer , gconstpointer );
-
+gboolean create_preview_list(GtkWidget *, gpointer );
+gboolean dashdesigner_about(GtkWidget *, gpointer );
+gboolean dashdesigner_quit(GtkWidget *, gpointer );
 gboolean dummy(GtkWidget *, gpointer );
+void free_element(gpointer ,gpointer );
+gboolean gauge_choice_button_event(GtkWidget *, GdkEventButton *,gpointer );
+gint list_sort(gconstpointer , gconstpointer );
 gboolean optimize_dash_size(GtkWidget *, gpointer );
+void raise_fixed_child (GtkWidget * );
+void scan_for_gauges(gpointer, gpointer);
+void set_combo_to_source(GtkWidget *, gchar * );
+void update_properties(GtkWidget *,Choice);
 			 
 /* Prototypes */
 

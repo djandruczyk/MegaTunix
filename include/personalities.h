@@ -47,11 +47,11 @@ struct _PersonaElement
 	gboolean def;		/*!< Default choice */
 };
 /* Prototypes */
-gboolean personality_choice(void);
-gboolean persona_selection(GtkWidget *, gpointer);
 void free_persona_element(gpointer, gpointer);
-gint persona_seq_sort(gconstpointer a, gconstpointer b);
 void persona_dialog_response(GtkDialog *, gint , gpointer );
+gboolean persona_selection(GtkWidget *, gpointer);
+gint persona_seq_sort(gconstpointer a, gconstpointer b);
+gboolean personality_choice(void);
 /* Prototypes */
 
 #endif

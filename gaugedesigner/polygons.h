@@ -19,13 +19,13 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean alter_polygon_data(GtkWidget *, gpointer );
+GtkWidget *build_polygon(MtxPolygon *, gint );
 gboolean create_polygon_event(GtkWidget *, gpointer );
 gboolean new_poly_response(GtkDialog *, gint, gpointer);
+gboolean remove_polygon(GtkWidget *, gpointer );
 void reset_onscreen_polygons(void);
 void update_onscreen_polygons(void);
-gboolean alter_polygon_data(GtkWidget *, gpointer );
-gboolean remove_polygon(GtkWidget *, gpointer );
-GtkWidget *build_polygon(MtxPolygon *, gint );
 /* Prototypes */
 
 #endif

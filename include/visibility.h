@@ -30,8 +30,8 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean show_tab_visibility_window(GtkWidget *, gpointer);
 gboolean hide_tab(GtkWidget *, gpointer );
+gboolean show_tab_visibility_window(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif

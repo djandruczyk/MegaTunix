@@ -72,18 +72,17 @@ struct _Log_Info
 
 
 /* Prototypes */
-void create_stripchart(GtkWidget *);
-gboolean select_datalog_for_import(GtkWidget *, gpointer );
-gboolean logviewer_scroll_speed_change(GtkWidget *, gpointer );
-void update_stripchart_data(RtvWatch *);
-void load_logviewer_file(GIOChannel * );
-void read_log_header(GIOChannel *, Log_Info * );
-void read_log_data(GIOChannel *, Log_Info * );
-Log_Info * initialize_log_info(void);
 void allocate_buffers(Log_Info *);
-void populate_limits(Log_Info *);
+void create_stripchart(GtkWidget *);
 void free_log_info(Log_Info *);
-
+Log_Info * initialize_log_info(void);
+void load_logviewer_file(GIOChannel * );
+gboolean logviewer_scroll_speed_change(GtkWidget *, gpointer );
+void populate_limits(Log_Info *);
+void read_log_data(GIOChannel *, Log_Info * );
+void read_log_header(GIOChannel *, Log_Info * );
+gboolean select_datalog_for_import(GtkWidget *, gpointer );
+void update_stripchart_data(RtvWatch *);
 /* Prototypes */
 
 #endif

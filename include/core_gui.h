@@ -29,10 +29,10 @@ extern "C" {
 #include <glade/glade.h>
 
 /* Prototypes */
-gint setup_gui(void);
 void finalize_core_gui(GladeXML *);
-void setup_main_status(GtkWidget *);
 void set_connected_icons_state(gboolean);
+gint setup_gui(void);
+void setup_main_status(GtkWidget *);
 
 /* Prototypes */
 

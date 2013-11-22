@@ -29,11 +29,9 @@ extern "C" {
 #include <enums.h>
 
 /* Prototypes */
-
-void rescale_table(GtkWidget * );
 gboolean draw_ve_marker(void );
 gfloat rescale(gfloat , ScaleOp , gfloat );
-
+void rescale_table(GtkWidget * );
 /* Prototypes */
 
 #endif

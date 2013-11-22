@@ -30,7 +30,6 @@ extern "C" {
 
 /* Prototypes */
 void bind_keys(GObject *, ConfigFile *, gchar *, gchar **, gint);
-
 /* Prototypes */
 
 #endif

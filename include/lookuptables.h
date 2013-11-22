@@ -45,21 +45,21 @@ struct _LookupTable
 };
 
 /* Prototypes */
-gboolean load_table(gchar *, gchar *);
-void get_table(gpointer, gpointer, gpointer );
-gint reverse_lookup(gconstpointer *, gint );
-gint reverse_lookup_obj(GObject *, gint );
+gfloat direct_lookup_data(gchar *, gint );
 gint direct_reverse_lookup(gchar *, gint );
+void dump_lookuptables(gpointer , gpointer , gpointer);
+void get_table(gpointer, gpointer, gpointer );
+gboolean load_table(gchar *, gchar *);
 gfloat lookup_data(gconstpointer *, gint );
 gfloat lookup_data_obj(GObject *, gint );
-gfloat direct_lookup_data(gchar *, gint );
+gboolean lookuptable_changed(GtkCellRendererCombo *, gchar  *, GtkTreeIter  *, gpointer );
 gboolean lookuptables_configurator(GtkWidget *, gpointer );
 gboolean lookuptables_configurator_hide(GtkWidget *, gpointer );
-gboolean lookuptable_changed(GtkCellRendererCombo *, gchar  *, GtkTreeIter  *, gpointer );
+gint reverse_lookup(gconstpointer *, gint );
+gint reverse_lookup_obj(GObject *, gint );
 void row_activated(GtkTreeView *, GtkTreePath *, GtkTreeViewColumn *, gpointer);
 void update_lt_config(gpointer , gpointer , gpointer );
-void dump_lookuptables(gpointer , gpointer , gpointer);
-
+/* Prototypes */
 
 #endif
 #ifdef __cplusplus

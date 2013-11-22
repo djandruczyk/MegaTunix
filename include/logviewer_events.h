@@ -28,13 +28,12 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
+void highlight_tinfo(gint, gboolean );
+gboolean logviewer_button_event(GtkWidget *, gpointer );
 gboolean lv_configure_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean lv_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
-gboolean lv_mouse_motion_event(GtkWidget *, GdkEventMotion *, gpointer);
 gboolean lv_mouse_button_event(GtkWidget *, GdkEventButton *, gpointer);
-gboolean logviewer_button_event(GtkWidget *, gpointer );
-void highlight_tinfo(gint, gboolean );
-
+gboolean lv_mouse_motion_event(GtkWidget *, GdkEventMotion *, gpointer);
 /* Prototypes */
 
 #endif

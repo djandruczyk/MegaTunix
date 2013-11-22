@@ -80,19 +80,18 @@ struct _TabInfo
 
 
 /* Prototypes */
-gboolean load_gui_tabs_pf(void);
-void group_free(gpointer );
-GHashTable * load_groups(ConfigFile *);
 void bind_data(GtkWidget *, gpointer);
 gint bind_group_data(ConfigFile *,GObject *, GHashTable *, const gchar *);
 void bind_to_lists(GtkWidget * , const gchar * );
-void run_post_functions_with_arg(const gchar *, GtkWidget *);
-void run_post_functions(const gchar * );
-void remove_from_lists(const gchar *, gpointer);
-gboolean load_actual_tab(GtkNotebook *,gint);
-gboolean preload_deps(gpointer);
+void group_free(gpointer );
 gboolean handle_dependant_tab_load(gchar *);
-
+gboolean load_actual_tab(GtkNotebook *,gint);
+GHashTable * load_groups(ConfigFile *);
+gboolean load_gui_tabs_pf(void);
+gboolean preload_deps(gpointer);
+void remove_from_lists(const gchar *, gpointer);
+void run_post_functions(const gchar * );
+void run_post_functions_with_arg(const gchar *, GtkWidget *);
 /* Prototypes */
 
 #endif

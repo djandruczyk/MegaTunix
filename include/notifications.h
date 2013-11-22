@@ -29,23 +29,22 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gint close_dialog(GtkWidget *, gpointer);
+void conn_warning(void);
+gint dialog_response(GtkWidget *, gpointer );
+void get_response(GtkWidget *, gint, gpointer );
+void kill_conn_warning(void);
+void no_ms_connection(void);
+void error_msg(const gchar *);
+gboolean reset_infolabel(gpointer);
+gboolean reset_infolabel_wrapper(gpointer);
 void set_group_color(GuiColor, const gchar * );
 void set_reqfuel_color(GuiColor, gint );
+void set_title(gchar *);
+gboolean set_warning_flag(gpointer);
 void set_widget_color(gpointer, gpointer );
 void update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean,gboolean);
-void no_ms_connection(void);
 void warn_user(const gchar *);
-void error_msg(const gchar *);
-void set_title(gchar *);
-void conn_warning(void);
-void kill_conn_warning(void);
-gboolean reset_infolabel_wrapper(gpointer);
-gboolean reset_infolabel(gpointer);
-void get_response(GtkWidget *, gint, gpointer );
-
-gint close_dialog(GtkWidget *, gpointer);
-gint dialog_response(GtkWidget *, gpointer );
-gboolean set_warning_flag(gpointer);
 /* Prototypes */
 
 #endif

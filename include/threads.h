@@ -137,15 +137,15 @@ struct _Text_Message
 
 /* Prototypes */
 void io_cmd(const gchar *, gpointer);	/* Send message down the queue */
+gboolean queue_function(const gchar * );
 void *thread_dispatcher(gpointer);	/* thread that processes messages */
-void thread_update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean);
-void thread_update_widget(const gchar *, WidgetType, gchar *);
 void thread_refresh_widget(GtkWidget *);
 void thread_refresh_widget_range(gint, gint, gint);
 void thread_refresh_widgets_at_offset(gint, gint);
-void thread_widget_set_sensitive(const gchar * widget_name, gboolean state);
 void thread_set_group_color(GuiColor, const gchar *);
-gboolean queue_function(const gchar * );
+void thread_update_logbar(const gchar *, const gchar *, gchar *, gboolean, gboolean);
+void thread_update_widget(const gchar *, WidgetType, gchar *);
+void thread_widget_set_sensitive(const gchar * widget_name, gboolean state);
 /* Prototypes */
 
 #endif

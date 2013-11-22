@@ -104,16 +104,16 @@ struct _DBlock
 
 };
 /* Prototypes */
-void load_comm_xml(gchar *);
-void load_xmlcomm_elements(xmlNode *);
-void load_potential_args(GHashTable *, xmlNode *);
-void load_commands(GHashTable *, xmlNode *);
 void load_arg_details(PotentialArg *, xmlNode *);
-void load_cmd_details(Command *, xmlNode *);
 void load_cmd_args(Command *, xmlNode *);
+void load_cmd_details(Command *, xmlNode *);
 void load_cmd_post_functions(Command *, xmlNode *);
-void xmlcomm_dump_commands(gpointer, gpointer, gpointer);
+void load_comm_xml(gchar *);
+void load_commands(GHashTable *, xmlNode *);
+void load_potential_args(GHashTable *, xmlNode *);
+void load_xmlcomm_elements(xmlNode *);
 void parse_hex_string(gchar *, gchar *, gint *);
+void xmlcomm_dump_commands(gpointer, gpointer, gpointer);
 /* Prototypes */
 
 #endif

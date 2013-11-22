@@ -29,20 +29,20 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void populate_master(GtkWidget *, gpointer );
-void store_widget_data(gpointer , gpointer );
-GtkWidget * lookup_widget(const gchar *);
-void register_widget(const gchar *, GtkWidget *);
-gboolean deregister_widget(const gchar *);
-gboolean get_state(gchar *, gint );
 void alter_widget_state(gpointer, gpointer);
-void get_geo(GtkWidget *, const char *, PangoRectangle *);
-void set_fixed_size(GtkWidget *, int);
-void lock_entry(GtkWidget *);
-gint get_multiplier(DataSize );
+gboolean deregister_widget(const gchar *);
 void dump_datalist(GQuark, gpointer, gpointer);
-void set_widget_sensitive(gpointer, gpointer);
+void get_geo(GtkWidget *, const char *, PangoRectangle *);
+gint get_multiplier(DataSize );
+gboolean get_state(gchar *, gint );
+void lock_entry(GtkWidget *);
+GtkWidget * lookup_widget(const gchar *);
+void populate_master(GtkWidget *, gpointer );
+void register_widget(const gchar *, GtkWidget *);
+void set_fixed_size(GtkWidget *, int);
 void set_widget_active(gpointer, gpointer);
+void set_widget_sensitive(gpointer, gpointer);
+void store_widget_data(gpointer , gpointer );
 /* Prototypes */
 
 #endif

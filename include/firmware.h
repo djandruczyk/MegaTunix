@@ -410,7 +410,6 @@ struct _Deferred_Data
 
 /* Prototypes */
 void load_firmware_file(Io_File *);
-
 /* Prototypes */
 
 #endif

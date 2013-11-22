@@ -28,9 +28,9 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
+void *clock_watcher(gpointer);
 gboolean process_pf_message(gpointer);
 gboolean process_gui_message(gpointer);
-void *clock_watcher(gpointer);
 /* Prototypes */
 
 #endif

@@ -77,20 +77,19 @@ struct _Rtt_Threshold
 };
 
 /* Prototypes */
+void add_additional_rtt(GtkWidget *);
+Rt_Text *add_rtt(GtkWidget *, gchar *);
+Rt_Text *create_rtt(gchar *, gchar *, gboolean);
 void load_rt_text_pf(void );
-Rt_Text * create_rtt(gchar *, gchar *, gboolean);
-Rt_Text * add_rtt(GtkWidget *, gchar *);
+void load_rtt(xmlNode *, GtkListStore *, GtkWidget *);
+Rtt_Threshold *load_rtt_threshold(xmlNode *);
+gboolean load_rtt_xml_elements(xmlNode *, GtkListStore *, GtkWidget *);
+gboolean rtt_foreach(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
+void rtt_thresh_free(gpointer);
 void rtt_update_values(gpointer,gpointer,gpointer);
 void rtt_update_start_watches(gpointer,gpointer,gpointer);
-void add_additional_rtt(GtkWidget *);
-gboolean load_rtt_xml_elements(xmlNode *, GtkListStore *, GtkWidget *);
-Rtt_Threshold *load_rtt_threshold(xmlNode *);
-void load_rtt(xmlNode *, GtkListStore *, GtkWidget *);
 void setup_rtt_treeview(GtkWidget *);
-void rtt_thresh_free(gpointer);
-gboolean rtt_foreach(GtkTreeModel *, GtkTreePath *, GtkTreeIter *, gpointer);
 gboolean update_rttext(gpointer);
-
 /* Prototypes */
 
 #endif

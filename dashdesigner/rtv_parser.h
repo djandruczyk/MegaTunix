@@ -59,15 +59,13 @@ enum
 };
 
 /* Prototypes */
-
-void retrieve_rt_vars(void);
-void load_rtvars(gchar **, Rtv_Data *);
-gint sort(gconstpointer , gconstpointer );
-void load_rtv_defaults(xmlNode *, Rtv_Data *, Persona_Info **);
-gboolean parse_rtv_xml_for_dash(xmlNode *, Rtv_Data *);
-void parse_derived_var(xmlNode *, Rtv_Data *, Persona_Info *);
 void info_free(gpointer);
-		 
+void load_rtv_defaults(xmlNode *, Rtv_Data *, Persona_Info **);
+void load_rtvars(gchar **, Rtv_Data *);
+void parse_derived_var(xmlNode *, Rtv_Data *, Persona_Info *);
+gboolean parse_rtv_xml_for_dash(xmlNode *, Rtv_Data *);
+void retrieve_rt_vars(void);
+gint sort(gconstpointer , gconstpointer );
 /* Prototypes */
 
 #endif

@@ -35,20 +35,19 @@ typedef enum
 	FREEEMS
 }FirmwareType;
 
-
 /* Prototypes */
-gint open_port(gchar *);
-gint setup_port(gint, gint);
+void close_port(gint);
+FirmwareType detect_firmware(gchar *);
 void flush_serial(gint, FlushDirection);
 gboolean get_ecu_signature(gint);
-void close_port(gint);
-void unlock_port(void);
 gboolean lock_port(gchar *);
-FirmwareType detect_firmware(gchar *);
+gint open_port(gchar *);
 void progress_update(gfloat);
 gint read_wrapper(gint, gchar *, gint);
+gint setup_port(gint, gint);
+void unlock_port(void);
 gint write_wrapper(gint, guchar *, gint);
-
+/* Prototypes */
 
 #endif
 #ifdef __cplusplus

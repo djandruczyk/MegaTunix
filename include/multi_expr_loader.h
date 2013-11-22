@@ -69,11 +69,10 @@ struct _MultiSource
 
 
 /* Prototypes */
-void load_rtv_xml_multi_expressions(gconstpointer *, xmlNode *);
 void free_multi_expr(gpointer);
 void free_multi_source(gpointer, gpointer, gpointer);
 MultiSource * get_multi(gint, GHashTable *, const gchar *);
-
+void load_rtv_xml_multi_expressions(gconstpointer *, xmlNode *);
 /* Prototypes */
 
 #endif
