@@ -863,7 +863,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, const
 			{
 				firmware->table_params[i]->z_object = (GObject *)g_object_new(GTK_TYPE_INVISIBLE,NULL);
 				g_object_ref_sink(GTK_OBJECT(firmware->table_params[i]->z_object));
-				load_dependancies_obj(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
+				load_dependencies_obj(firmware->table_params[i]->z_object,cfgfile,section,"z_depend_on");
 				if(!cfg_read_string(cfgfile,section,"z_alt_lookuptable",&tmpbuf))
 					MTXDBG(INTERROGATOR|CRITICAL,_("\"z_alt_lookuptable\" variable not found in interrogation profile, NOT NECESSARILY AN ERROR\n"));
 				else

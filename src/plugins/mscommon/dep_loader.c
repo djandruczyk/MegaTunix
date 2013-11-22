@@ -29,16 +29,16 @@
 extern gconstpointer *global_data;
 
 /*!
- \brief load_dependancies() is called when a "depend_on" key is found in
+ \brief load_dependencies() is called when a "depend_on" key is found in
  a datamap or realtime map, and triggers the loading of all the 
  keys/values that will allow megatunix to process a dependancy 
  (or multiple deps) on other variables
  \param object is a pointer to a place to store the retrieved data
  \param node is the pointer to the XML node that contains the data
  \param source_key is the source key in the above section to read the data from
- \see check_dependancies
+ \see check_dependencies
  */
-G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, const gchar * source_key)
+G_MODULE_EXPORT void load_dependencies(gconstpointer *object, xmlNode *node, const gchar * source_key)
 {
 	gconstpointer *dep_obj = NULL;
 	gchar *tmpbuf = NULL;
@@ -212,7 +212,7 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, con
 
 
 /*!
- \brief load_dependancies_obj() is called when a "depend_on" key is found in
+ \brief load_dependencies_obj() is called when a "depend_on" key is found in
  a datamap or realtimemap, and triggers the loading of all of the keys/values that
  will allow megatunix to process a dependancy (or multiple deps) on other
  variables
@@ -220,9 +220,9 @@ G_MODULE_EXPORT void load_dependancies(gconstpointer *object, xmlNode *node, con
  \param cfgfile is the pointer to cfgfile that contains the data
  \param section is the section to read the data from
  \param source_key is the source key in section to read the data from
- \see check_dependancies
+ \see check_dependencies
  */
-G_MODULE_EXPORT void load_dependancies_obj(GObject *object, ConfigFile *cfgfile,const gchar * section, const gchar * source_key)
+G_MODULE_EXPORT void load_dependencies_obj(GObject *object, ConfigFile *cfgfile,const gchar * section, const gchar * source_key)
 {
 	gconstpointer *dep_obj = NULL;
 	gchar *tmpbuf = NULL;

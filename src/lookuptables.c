@@ -191,7 +191,7 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 	static gboolean (*check_deps)(gconstpointer *);
 
 	if (!check_deps)
-		get_symbol("check_dependancies",(void **)&check_deps);
+		get_symbol("check_dependencies",(void **)&check_deps);
 	table = (gchar *)DATA_GET(object,"lookuptable");
 	alt_table = (gchar *)DATA_GET(object,"alt_lookuptable");
 	dep_obj = (gconstpointer *)DATA_GET(object,"dep_object");
@@ -200,7 +200,7 @@ G_MODULE_EXPORT gint reverse_lookup(gconstpointer *object, gint value)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependencies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
 		lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),alt_table);	
@@ -282,7 +282,7 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 	static gboolean (*check_deps)(gconstpointer *);
 
 	if (!check_deps)
-		get_symbol("check_dependancies",(void **)&check_deps);
+		get_symbol("check_dependencies",(void **)&check_deps);
 
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
@@ -292,7 +292,7 @@ G_MODULE_EXPORT gint reverse_lookup_obj(GObject *object, gint value)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependencies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
 		lookuptable = (LookupTable *)g_hash_table_lookup((GHashTable *)DATA_GET(global_data,"lookuptables"),alt_table);	
@@ -430,7 +430,7 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 	if (!lookuptable_hash)
 		lookuptable_hash = (GHashTable *)DATA_GET(global_data,"lookuptables");
 	if (!check_deps)
-		get_symbol("check_dependancies",(void **)&check_deps);
+		get_symbol("check_dependencies",(void **)&check_deps);
 
 	table = (gchar *)DATA_GET(object,"lookuptable");
 	alt_table = (gchar *)DATA_GET(object,"alt_lookuptable");
@@ -453,7 +453,7 @@ G_MODULE_EXPORT gfloat lookup_data(gconstpointer *object, gint offset)
 			state = check_deps(dep_obj);
 		else
 		{
-			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependencies\" function in any of the plugins, BUG!\n"));
 			EXIT();
 			return 0.0;
 		}
@@ -498,7 +498,7 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 
 	ENTER();
 	if (!check_deps)
-		get_symbol("check_dependancies",(void **)&check_deps);
+		get_symbol("check_dependencies",(void **)&check_deps);
 
 	table = (gchar *)OBJ_GET(object,"lookuptable");
 	alt_table = (gchar *)OBJ_GET(object,"alt_lookuptable");
@@ -510,7 +510,7 @@ G_MODULE_EXPORT gfloat lookup_data_obj(GObject *object, gint offset)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependancies\" function in any of the plugins, BUG!\n"));
+			MTXDBG(CRITICAL,_("Could NOT locate \"check_dependencies\" function in any of the plugins, BUG!\n"));
 	}
 	if (state)
 	{

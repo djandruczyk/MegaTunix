@@ -31,8 +31,8 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void load_dependancies(gconstpointer *,xmlNode *, const gchar *);
-void load_dependancies_obj(GObject *,ConfigFile * , const gchar *, const gchar *);
+void load_dependencies(gconstpointer *,xmlNode *, const gchar *);
+void load_dependencies_obj(GObject *,ConfigFile * , const gchar *, const gchar *);
 gboolean check_size(DataSize);
 /* Prototypes */
 
