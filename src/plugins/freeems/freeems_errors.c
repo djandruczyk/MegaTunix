@@ -42,5 +42,5 @@ G_MODULE_EXPORT const gchar * lookup_error(guint code)
 		}
 	}
 	EXIT();
-	return ("Couldn't find error code for 0x%X",code);
+	return (const gchar *)("Couldn't find error code for 0x%X",code);
 }

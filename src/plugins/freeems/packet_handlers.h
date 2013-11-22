@@ -221,20 +221,20 @@ struct _FreeEMS_Packet
 
 
 /* Prototypes */
-void handle_data(guchar *buf, gint);
-gboolean packet_decode(FreeEMS_Packet *);
-void *packet_handler(gpointer data);
-void register_packet_queue(gint type, GAsyncQueue *queue, gint data);
+gint atomic_sequence();
+void build_output_message(Io_Message *, Command *, gpointer);
+void cond_bcast (gpointer, gpointer);
 void deregister_packet_queue(gint type, GAsyncQueue *queue, gint data);
 void dispatch_packet_queues(FreeEMS_Packet *);
-void cond_bcast (gpointer, gpointer);
-FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *);
-void freeems_packet_cleanup(FreeEMS_Packet *);
 guint8 *finalize_packet(guint8 *, gint, gint *);
-void build_output_message(Io_Message *, Command *, gpointer);
-void mtxlog_packet(const void *, size_t, gboolean);
-gint atomic_sequence();
+void freeems_packet_cleanup(FreeEMS_Packet *);
+void handle_data(guchar *buf, gint);
 guint8 * make_me_a_packet(gint *, ...);
+void mtxlog_packet(const void *, size_t, gboolean);
+gboolean packet_decode(FreeEMS_Packet *);
+FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *);
+void *packet_handler(gpointer data);
+void register_packet_queue(gint type, GAsyncQueue *queue, gint data);
 /* Prototypes */
 
 #endif

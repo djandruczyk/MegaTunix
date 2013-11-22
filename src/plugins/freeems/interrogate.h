@@ -88,26 +88,26 @@ struct _Location_Details
 };
 
 /* Prototypes */
-void test_cleanup(gpointer);
+gboolean check_for_match(GHashTable *, gchar *);
+gboolean determine_ecu(GArray *, GHashTable *);
+gboolean get_dimensions(gint, gint, gint,gint *, gint *);
+Page_Params *initialize_page_params(void);
+Table_Params *initialize_table_params(void);
 gboolean interrogate_ecu(void);
-void request_firmware_compiler(void);
-void request_firmware_build_os(void);
+gboolean load_firmware_details(Firmware_Details *, gchar *);
 void request_firmware_build_date(void);
-void request_interface_version(void);
+void request_firmware_build_os(void);
+void request_firmware_compiler(void);
 void request_firmware_version(void);
 gchar *request_firmware_version_callback(gint *);
-void update_ecu_info(void);
+void request_interface_version(void);
 GList *request_location_ids(gint *);
 Location_Details *request_location_id_details(guint16);
-gboolean validate_and_load_tests(GArray **, GHashTable **);
-gboolean determine_ecu(GArray *, GHashTable *);
-gboolean check_for_match(GHashTable *, gchar *);
-void update_interrogation_gui_pf(void);
-gboolean load_firmware_details(Firmware_Details *, gchar *);
+void test_cleanup(gpointer);
 gint translate_capabilities(const gchar *);
-Page_Params * initialize_page_params(void);
-Table_Params * initialize_table_params(void);
-gboolean get_dimensions(gint, gint, gint,gint *, gint *);
+void update_ecu_info(void);
+void update_interrogation_gui_pf(void);
+gboolean validate_and_load_tests(GArray **, GHashTable **);
 
 
 /* Prototypes */
