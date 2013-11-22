@@ -46,11 +46,9 @@ typedef enum
 }UOComboCols;
 
 /* Prototypes */
+gboolean find_in_list(gchar **, gchar *);
 void ms2_output_combo_setup(GtkWidget *);
 void update_ms2_user_outputs(GtkWidget *);
-gboolean find_in_list(gchar **, gchar *);
-
-
 /* Prototypes */
 
 #endif
