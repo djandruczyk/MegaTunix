@@ -365,7 +365,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			g_strdup(firmware->table_params[table_num]->z_suffix);
 		ve_view->z_precision =
 			firmware->table_params[table_num]->z_precision;
-		/* Z axis lookuptable dependancies */
+		/* Z axis lookuptable dependencies */
 		if (firmware->table_params[table_num]->z_depend_on)
 			ve_view->z_depend_on = firmware->table_params[table_num]->z_depend_on;
 	}

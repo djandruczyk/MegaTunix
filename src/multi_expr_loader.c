@@ -37,7 +37,7 @@
   multiple circumstances
   \param object is the place to store the retrieved data
   \param node is the xml node that contains the data
-  \see check_dependancies
+  \see check_dependencies
   */
 G_MODULE_EXPORT void load_rtv_xml_multi_expressions(gconstpointer *object, xmlNode *node)
 {

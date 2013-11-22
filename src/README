@@ -30,7 +30,7 @@ based distros split packages into a runtime and devel package.  Runtime
 ones are needed to run the program, and devel packages are needed for 
 programs like megatunix to compile against.
 
-MegaTunix requires the following libraries (and their dependancies);
+MegaTunix requires the following libraries (and their dependencies);
 * minimum GTK-2.12 or newer and the dev package(s).
   - GTK+ depends on pango, fontconfig, freetype2, glib and atk
 * Gtkglext-1.x (and the dev package)

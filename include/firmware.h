@@ -396,7 +396,7 @@ struct _TE_Params
 /*!
   \brief _Deferred_Data is a container for a block of data that is dependant
   on something else, and thus this holds onto it it for a deferred send to the
-  ECU at some future time after further verification of its dependancies
+  ECU at some future time after further verification of its dependencies
   */
 struct _Deferred_Data
 {
