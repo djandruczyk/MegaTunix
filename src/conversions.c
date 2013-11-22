@@ -83,6 +83,7 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 
 	g_mutex_lock(&mutex);
 
+	name = glade_get_widget_name(widget);
 
 	if (!OBJ_GET(widget,"size"))
 		printf(__FILE__"%s %s\n",_(": convert_before_download, FATAL ERROR, size undefined for widget %s "),(name == NULL ? "undefined" : name));
@@ -98,7 +99,6 @@ G_MODULE_EXPORT gint convert_before_download(GtkWidget *widget, gfloat value)
 	else
 		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
-	//printf("lower %f, upper %f\n",lower,upper);
 	/* MULTI EXPRESSION ONLY, i.e. different math conversions that depend on a named source_key! */
 	if (OBJ_GET(widget,"multi_expr_keys"))
 	{
@@ -354,7 +354,6 @@ G_MODULE_EXPORT gfloat convert_after_upload(GtkWidget * widget)
 	else
 		upper = (gfloat)get_extreme_from_size(size,UPPER);
 
-	/*	printf("Variable %s has lower %f, upper %f\n",name,lower,upper);*/
 	fromecu_complex = (GBOOLEAN)OBJ_GET(widget,"fromecu_complex");
 	if (fromecu_complex)
 	{
@@ -578,8 +577,8 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 	if ((!widget) || (DATA_GET(global_data,"leaving")))
 		return;
 	if (!check_deps)
-		if (!get_symbol("check_dependancies",(void **)&check_deps))
-			MTXDBG(CRITICAL|CONVERSIONS,_("Can NOT locate \"check_dependancies\" function pointer in plugins, BUG!\n"));
+		if (!get_symbol("check_dependencies",(void **)&check_deps))
+			MTXDBG(CRITICAL|CONVERSIONS,_("Can NOT locate \"check_dependencies\" function pointer in plugins, BUG!\n"));
 	if (!update_widget_f)
 		if(!get_symbol("update_widget",(void **)&update_widget_f))
 			MTXDBG(CRITICAL|CONVERSIONS,_("Can NOT locate \"update_widget\" function pointer in plugins, BUG!\n"));
@@ -591,9 +590,8 @@ G_MODULE_EXPORT void convert_temps(gpointer widget, gpointer units)
 		if (check_deps)
 			state = check_deps(dep_obj);
 		else
-			MTXDBG(CRITICAL|CONVERSIONS,_("Widget %s has dependant object bound but can't locate function ptr for \"check_dependancies\" from plugins, BUG!\n"),(name == NULL ? "undefined" : name));
+			MTXDBG(CRITICAL|CONVERSIONS,_("Widget %s has dependant object bound but can't locate function ptr for \"check_dependencies\" from plugins, BUG!\n"),(name == NULL ? "undefined" : name));
 	}
-
 	switch ((TempUnits)(GINT)units)
 	{
 		case FAHRENHEIT:
