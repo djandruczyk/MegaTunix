@@ -327,7 +327,7 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 	{
 		DATA_SET_FULL(object,"depend_on",g_strdup(tmpbuf),g_free);
 		g_free(tmpbuf);
-		load_rtv_xml_dependancies(object,node);
+		load_rtv_xml_dependencies(object,node);
 	}
 	if (generic_xml_gboolean_find(node,"fromecu_complex",&tmpi))
 	{
@@ -351,12 +351,12 @@ void load_derived_var(xmlNode *node, Rtv_Map *map)
 }
 
 
-void load_rtv_xml_dependancies(gconstpointer *object, xmlNode *node)
+void load_rtv_xml_dependencies(gconstpointer *object, xmlNode *node)
 {
 	static void (*load_deps)(gconstpointer *,xmlNode *, const gchar *) = NULL;
 	ENTER();
 	if (!load_deps)
-		get_symbol("load_dependancies",(void **)&load_deps);
+		get_symbol("load_dependencies",(void **)&load_deps);
 	g_return_if_fail(load_deps);
 	load_deps(object,node,"depend_on");
 	EXIT();
