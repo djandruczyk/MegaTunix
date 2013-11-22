@@ -68,19 +68,19 @@ struct _Detection_Test
 
 };
 /* Prototypes */
-gboolean interrogate_ecu(void);
-gboolean determine_ecu(GArray *,GHashTable *);
-GArray * validate_and_load_tests(GHashTable **);
 gboolean check_for_match(GHashTable *,gchar *);
+gboolean determine_ecu(GArray *,GHashTable *);
 void free_results_array(GArray *);
 void free_tests_array(GArray *);
-void interrogate_error(const gchar *, gint);
-gint translate_capabilities(const gchar *);
-gboolean load_firmware_details(Firmware_Details *, const gchar * );
-void update_interrogation_gui_pf(void);
 Page_Params * initialize_page_params(void);
 Table_Params * initialize_table_params(void);
 TE_Params * initialize_te_params(void);
+gboolean interrogate_ecu(void);
+void interrogate_error(const gchar *, gint);
+gboolean load_firmware_details(Firmware_Details *, const gchar * );
+gint translate_capabilities(const gchar *);
+void update_interrogation_gui_pf(void);
+GArray *validate_and_load_tests(GHashTable **);
 /* Prototypes */
 
 #endif

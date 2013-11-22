@@ -64,16 +64,15 @@ struct _Reqd_Fuel
 };
 
 /* Prototypes */
-gint reqd_fuel_popup(GtkWidget *);
-gboolean save_reqd_fuel(GtkWidget *, gpointer);
-gboolean close_popup(GtkWidget *);
-void reqd_fuel_change(GtkWidget *);
 void check_req_fuel_limits(gint);
-Reqd_Fuel * initialize_reqd_fuel(gint );
+gboolean close_popup(GtkWidget *);
 gboolean drain_hashtable(gpointer, gpointer, gpointer);
-gboolean rf_spin_button_handler(GtkWidget *, gpointer);
+Reqd_Fuel *initialize_reqd_fuel(gint );
+void reqd_fuel_change(GtkWidget *);
+gint reqd_fuel_popup(GtkWidget *);
 void reqfuel_rescale_table(GtkWidget *);
-
+gboolean rf_spin_button_handler(GtkWidget *, gpointer);
+gboolean save_reqd_fuel(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif

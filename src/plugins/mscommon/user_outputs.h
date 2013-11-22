@@ -28,14 +28,14 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
+void add_columns (GtkTreeView *, GtkWidget *);
 void build_model_and_view(GtkWidget *);
 GtkTreeModel * create_model(void);
-void add_columns (GtkTreeView *, GtkWidget *);
-void update_model_from_view(GtkWidget * );
 void cell_edited(GtkCellRendererText *, const gchar * ,const gchar * ,gpointer );
+gboolean deferred_model_update(GtkWidget * );
 gboolean force_view_recompute_wrapper(gpointer);
 gboolean force_view_recompute(gpointer);
-gboolean deferred_model_update(GtkWidget * );
+void update_model_from_view(GtkWidget * );
 /* Prototypes */
 
 #endif

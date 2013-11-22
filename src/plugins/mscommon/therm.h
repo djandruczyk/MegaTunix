@@ -29,8 +29,8 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
- gboolean flip_table_gen_temp_label(GtkWidget *, gpointer);
- gboolean table_gen_process_and_dl(GtkWidget *, gpointer);
+gboolean flip_table_gen_temp_label(GtkWidget *, gpointer);
+gboolean table_gen_process_and_dl(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif

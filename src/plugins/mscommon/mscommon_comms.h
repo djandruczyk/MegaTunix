@@ -31,25 +31,25 @@ extern "C" {
 
 
 /* Prototypes */
+void build_output_message(Io_Message *, Command *, gpointer);
+void chunk_write(gpointer, gint, guint8 *);
+unsigned long crc32_computebuf(unsigned long, const void *, size_t);
+gint comms_test(void);
+void ecu_chunk_write(gint, gint, gint, gint, guint8 *);
+void ms_chunk_write(gint, gint, gint, gint, guint8 *);
+void ms_handle_page_change(gint , gint );
+void ms_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
+void ms_table_write(gint, gint, guint8 *);
+void send_to_ecu(gpointer, gint, gboolean);
+void send_to_slaves(void *);
+void *serial_repair_thread(gpointer);
+gboolean setup_rtv(void);
+void signal_read_rtvars(void);
+void slaves_set_color(GuiColor,const gchar *);
+gboolean teardown_rtv(void);
 void queue_burn_ecu_flash(gint);
 void queue_ms1_page_change(gint);
-gint comms_test(void);
-void ms_handle_page_change(gint , gint );
-void ms_table_write(gint, gint, guint8 *);
-void ms_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
-void send_to_ecu(gpointer, gint, gboolean);
-void ms_chunk_write(gint, gint, gint, gint, guint8 *);
-void ecu_chunk_write(gint, gint, gint, gint, guint8 *);
-void chunk_write(gpointer, gint, guint8 *);
-void send_to_slaves(void *);
-void slaves_set_color(GuiColor,const gchar *);
 void update_write_status(void *);
-void *serial_repair_thread(gpointer);
-void signal_read_rtvars(void);
-void build_output_message(Io_Message *, Command *, gpointer);
-gboolean setup_rtv(void);
-gboolean teardown_rtv(void);
-unsigned long crc32_computebuf(unsigned long, const void *, size_t);
 /* Prototypes */
 
 #endif

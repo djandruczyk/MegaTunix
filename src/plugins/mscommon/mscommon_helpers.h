@@ -55,16 +55,15 @@ typedef enum
 }FuncCall;
 
 /* Prototypes */
-void spawn_read_all_pf(void);
-void enable_get_data_buttons_pf(void);
-void simple_read_hf(void *, FuncCall);
-gboolean read_ve_const(void *, FuncCall);
 gboolean burn_all_helper(void *, FuncCall);
-void post_single_burn_pf(void *data);
-void post_burn_pf(void);
-void startup_tcpip_sockets_pf(void);
 void ecu_info_update(Firmware_Details *);
-
+void enable_get_data_buttons_pf(void);
+void post_burn_pf(void);
+void post_single_burn_pf(void *data);
+gboolean read_ve_const(void *, FuncCall);
+void simple_read_hf(void *, FuncCall);
+void spawn_read_all_pf(void);
+void startup_tcpip_sockets_pf(void);
 /* Prototypes */
 
 #endif

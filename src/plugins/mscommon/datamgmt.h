@@ -29,17 +29,17 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gint ms_get_ecu_data(gint, gint, gint, DataSize); 
-gint ms_get_ecu_data_last(gint, gint, gint, DataSize); 
-gint ms_get_ecu_data_backup(gint, gint, gint, DataSize); 
-void ms_set_ecu_data(gint, gint, gint, DataSize, gint); 
-void ms_set_ecu_data_pending(gint, gint, gint, DataSize, gint); 
-void ms_store_new_block_pending(gint, gint, gint, void *, gint );
-void ms_store_new_block(gint, gint, gint, void *, gint );
+gint get_ecu_data(gpointer);
 void ms_backup_current_data(gint, gint );
 gboolean ms_find_mtx_page(gint,gint *);
+gint ms_get_ecu_data(gint, gint, gint, DataSize); 
+gint ms_get_ecu_data_backup(gint, gint, gint, DataSize); 
+gint ms_get_ecu_data_last(gint, gint, gint, DataSize); 
+void ms_set_ecu_data(gint, gint, gint, DataSize, gint); 
+void ms_set_ecu_data_pending(gint, gint, gint, DataSize, gint); 
+void ms_store_new_block(gint, gint, gint, void *, gint );
+void ms_store_new_block_pending(gint, gint, gint, void *, gint );
 void set_ecu_data(gpointer,gint *);
-gint get_ecu_data(gpointer);
 void store_new_block(gconstpointer *);
 /* Prototypes */
 

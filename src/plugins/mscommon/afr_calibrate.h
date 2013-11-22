@@ -29,9 +29,9 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
- gboolean afr_calibrate_calc_and_dl(GtkWidget *, gpointer);
- gboolean populate_afr_calibrator_combo(GtkWidget *);
- void afr_combo_changed(GtkWidget *, gpointer);
+gboolean afr_calibrate_calc_and_dl(GtkWidget *, gpointer);
+void afr_combo_changed(GtkWidget *, gpointer);
+gboolean populate_afr_calibrator_combo(GtkWidget *);
 /* Prototypes */
 
 #endif

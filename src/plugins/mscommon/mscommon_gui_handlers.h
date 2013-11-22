@@ -56,42 +56,39 @@ typedef enum
 }MSCommonToggleHandler;
 
 /* Prototypes */
-gboolean common_std_button_handler(GtkWidget *, gpointer);
-gboolean common_toggle_button_handler(GtkWidget *, gpointer);
-gboolean common_bitmask_button_handler(GtkWidget *, gpointer);
-gboolean common_entry_handler(GtkWidget *, gpointer);
-gboolean common_slider_handler(GtkWidget *, gpointer);
-gboolean common_combo_handler(GtkWidget *, gpointer);
-gboolean common_spin_button_handler(GtkWidget *, gpointer);
-
-void update_range(GtkWidget *, gfloat);
-void update_combo(GtkWidget *);
-void update_entry(GtkWidget *);
-void update_checkbutton(GtkWidget *);
-gboolean force_update_table_wrapper(gpointer);
-gboolean force_update_table(gpointer);
-gboolean trigger_group_update_wrapper(gpointer);
-gboolean trigger_group_update(gpointer);
-gboolean update_multi_expression_wrapper(gpointer);
-gboolean update_multi_expression(gpointer);
 void combo_handle_group_2_update(GtkWidget *);
 void combo_handle_algorithms(GtkWidget *);
-void handle_group_2_update(GtkWidget *);
-void handle_algorithm(GtkWidget *);
 void combo_set_labels(GtkWidget *, GtkTreeModel *);
-gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
-void toggle_groups_linked(GtkWidget *, gboolean);
 void combo_toggle_groups_linked(GtkWidget *,gint);
 void combo_toggle_labels_linked(GtkWidget *,gint);
-void set_widget_label_from_array(gpointer, gpointer);
-void get_essential_bits(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
-void get_essentials(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
-void update_widget(gpointer, gpointer);
-void recalc_table_limits(gint, gint);
+gboolean common_bitmask_button_handler(GtkWidget *, gpointer);
+gboolean common_combo_handler(GtkWidget *, gpointer);
+gboolean common_entry_handler(GtkWidget *, gpointer);
 void common_gui_init(void);
+gboolean common_slider_handler(GtkWidget *, gpointer);
+gboolean common_spin_button_handler(GtkWidget *, gpointer);
+gboolean common_std_button_handler(GtkWidget *, gpointer);
+gboolean common_toggle_button_handler(GtkWidget *, gpointer);
+void get_essentials(GtkWidget *, gint *, gint *, gint *, DataSize *, gint *);
+void get_essential_bits(GtkWidget *, gint *, gint *, gint *, gint *, gint *, gint *);
+gboolean force_update_table_wrapper(gpointer);
+gboolean force_update_table(gpointer);
+void handle_algorithm(GtkWidget *);
+void handle_group_2_update(GtkWidget *);
+void recalc_table_limits(gint, gint);
+gboolean search_model(GtkTreeModel *, GtkWidget *, GtkTreeIter *);
+void set_widget_label_from_array(gpointer, gpointer);
+void toggle_groups_linked(GtkWidget *, gboolean);
+gboolean trigger_group_update_wrapper(gpointer);
+gboolean trigger_group_update(gpointer);
+void update_checkbutton(GtkWidget *);
+void update_combo(GtkWidget *);
+void update_entry(GtkWidget *);
+void update_range(GtkWidget *, gfloat);
+void update_widget(gpointer, gpointer);
+gboolean update_multi_expression(gpointer);
+gboolean update_multi_expression_wrapper(gpointer);
 /* Prototypes */
-
-
 
 #endif
 #ifdef __cplusplus
