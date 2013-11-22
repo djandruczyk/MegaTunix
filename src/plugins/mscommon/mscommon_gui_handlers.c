@@ -1328,7 +1328,7 @@ G_MODULE_EXPORT void update_widget(gpointer object, gpointer user_data)
 	tmpi = value*1000;
 	last = (GINT)OBJ_GET(widget,"last_value");
 	/*printf("Old %i, new %i\n",last, tmpi);*/
-	if ((tmpi == last) && (!DATA_GET(global_data,"force_update")))
+	if ((tmpi == last) && (!DATA_GET(global_data,"force_update")) && (!OBJ_GET(widget,"temp_dep")))
 	{
 		/*printf("new and old match, exiting early....\n");*/
 		EXIT();
@@ -1490,7 +1490,6 @@ void update_entry(GtkWidget *widget)
 		}
 		else
 			update_handler(widget);
-
 	}
 	if ((GBOOLEAN)OBJ_GET(widget,"temp_dep"))
 		value = temp_to_host_f(value);
