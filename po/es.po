@@ -10006,7 +10006,7 @@ msgstr ""
 
 #: ../src/conversions.c:580
 msgid ""
-"Can NOT locate \"check_dependancies\" function pointer in plugins, BUG!\n"
+"Can NOT locate \"check_dependencies\" function pointer in plugins, BUG!\n"
 msgstr ""
 
 #: ../src/conversions.c:583
@@ -10017,7 +10017,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Widget %s has dependant object bound but can't locate function ptr for "
-"\"check_dependancies\" from plugins, BUG!\n"
+"\"check_dependencies\" from plugins, BUG!\n"
 msgstr ""
 
 #: ../src/core_gui.c:79
@@ -10790,7 +10790,7 @@ msgstr ""
 #: ../src/lookuptables.c:203 ../src/lookuptables.c:295
 #: ../src/lookuptables.c:456 ../src/lookuptables.c:513
 msgid ""
-"Could NOT locate \"check_dependancies\" function in any of the plugins, "
+"Could NOT locate \"check_dependencies\" function in any of the plugins, "
 "BUG!\n"
 msgstr ""
 
