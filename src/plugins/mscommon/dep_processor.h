@@ -28,7 +28,7 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean check_dependancies(gconstpointer *);
+gboolean check_dependencies(gconstpointer *);
 /* Prototypes */
 
 #endif
