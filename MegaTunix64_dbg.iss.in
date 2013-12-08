@@ -30,7 +30,7 @@ InfoBeforeFile=.\WIN_NOTES.txt
 ChangesEnvironment=yes
 
 [Files]
-Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
+; Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
 Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
 Source: "z:\opt\crossroot64_dbg\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\gtk\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot64_dbg\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\gtk\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
@@ -45,7 +45,7 @@ Source: "z:\opt\crossroot64_dbg\share\locale\es\*.*"; DestDir: "{app}\gtk\share\
 Source: "z:\opt\crossroot64_dbg\share\locale\fi\*.*"; DestDir: "{app}\gtk\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot64_dbg\share\locale\fr\*.*"; DestDir: "{app}\gtk\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot64_dbg\dest\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\home\dave\git\MegaTunix\widgets\.libs\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
+Source: "z:\@CWD@\widgets\.libs\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
 Source: "z:\opt\crossroot64_dbg\dest\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]

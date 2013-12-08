@@ -1,12 +1,14 @@
 #!/bin/sh
 
-GITDIR=/home/dave/git/MegaTunix
-ISS_FILE=dave/git/MegaTunix/MegaTunix32.iss
-DRIVE=L
+if [ ! -d .git ] ; then
+	echo "This needs to be run from the top level of the working copy"
+	exit -1
+fi
 
-VERSION=$(grep PACKAGE_VERSION ${GITDIR}/config.h |cut -f2 -d\")
-SUFFIX=`cat ${GITDIR}/include/version.h |grep SUFFIX | cut -f2 -d\" |tr -d [:cntrl:]`
-wine ~/.wine/drive_c/Program\ Files/Inno\ Setup\ 5/ISCC.exe "${DRIVE}":/"${ISS_FILE}"
-mv "${GITDIR}"/Output/setup.exe "${GITDIR}"/../MTX_Builds/Output/windows/megatunix-"${VERSION}"-"${SUFFIX}"-win32-setup.exe && cd "${GITDIR}"/../MTX_Builds/Output/windows/ && zip -Z store megatunix-"${VERSION}"-"${SUFFIX}"-win32-setup.zip megatunix-"${VERSION}"-"${SUFFIX}"-win32-setup.exe && cd -
+ISS_FILE=MegaTunix32.iss
+HASH=`git log -n1 |grep ^commit |cut -f2 -d\  |head -c8`
+VERSION=$(grep PACKAGE_VERSION config.h |cut -f2 -d\")
+iscc ${ISS_FILE}
+mv Output/setup.exe Output/megatunix-"${VERSION}"-"${HASH}"-win32-setup.exe 
 echo ""
-echo "File name is ${GITDIR}/../MTX_Builds/Output/windows/megatunix-${SUFFIX}-win32-setup.zip"
+echo "File name is Output/megatunix-${VERSION}-${HASH}-win32-setup.zip"

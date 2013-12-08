@@ -43,7 +43,7 @@ Source: "z:\opt\crossroot32_dbg\share\locale\es\*.*"; DestDir: "{app}\gtk\share\
 Source: "z:\opt\crossroot32_dbg\share\locale\fi\*.*"; DestDir: "{app}\gtk\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot32_dbg\share\locale\fr\*.*"; DestDir: "{app}\gtk\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot32_dbg\dest\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\home\dave\git\MegaTunix\widgets\.libs\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
+Source: "z:\@CWD@\widgets\.libs\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
 Source: "z:\opt\crossroot32_dbg\dest\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]
