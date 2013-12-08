@@ -29,8 +29,8 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean about_popup(GtkWidget *, gpointer );
 void build_about(GtkWidget *);
- gboolean about_popup(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif

@@ -59,10 +59,12 @@ struct _MaskEntryClass
 	GtkEntryClass parent_class;	/*!< Parent Class */
 };
 
+/* Prototypes */
 void mask_entry_editable_init (GtkEditableClass *iface);
+void mask_entry_finalize(GObject *);
 GtkWidget *mask_entry_new (void);
 GtkWidget *mask_entry_new_with_mask (gchar *mask);
-void mask_entry_finalize(GObject *);
+/* Prototypes */
 
 G_END_DECLS
 

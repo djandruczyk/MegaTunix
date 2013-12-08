@@ -45,17 +45,15 @@ typedef enum
 
 
 /* Prototypes */
-void reset_counters(void);
-void stop_streaming(void);
-void start_streaming(void);
-void soft_boot_ecu(void);
-void hard_boot_ecu(void);
 gboolean freeems_burn_all(void *, FuncCall);
-gboolean read_freeems_data(void *, FuncCall);
 void handle_transaction_hf(void *, FuncCall);
-FreeEMS_Packet * retrieve_packet(gconstpointer *, const gchar *);
-
-
+void hard_boot_ecu(void);
+gboolean read_freeems_data(void *, FuncCall);
+void reset_counters(void);
+FreeEMS_Packet *retrieve_packet(gconstpointer *, const gchar *);
+void soft_boot_ecu(void);
+void start_streaming(void);
+void stop_streaming(void);
 /* Prototypes */
 
 #endif

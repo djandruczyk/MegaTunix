@@ -30,9 +30,9 @@ extern "C" {
 
 
 /* Prototypes */
+void win32_flush_serial(int, FlushDirection);
 void win32_setup_serial_params(gint, gint, gint, Parity, gint);
 void win32_toggle_serial_control_lines(void);
-void win32_flush_serial(int, FlushDirection);
 /* Prototypes */
 
 #endif

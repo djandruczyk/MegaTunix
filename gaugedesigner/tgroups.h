@@ -20,12 +20,12 @@
 
 
 /* Prototypes */
+gboolean alter_tgroup_data(GtkWidget *, gpointer );
+GtkWidget *build_tgroup(MtxTickGroup *, gint );
 gboolean create_tick_group_event(GtkWidget *, gpointer );
+gboolean remove_tgroup(GtkWidget *, gpointer );
 void reset_onscreen_tgroups(void);
 void update_onscreen_tgroups(void);
-gboolean alter_tgroup_data(GtkWidget *, gpointer );
-gboolean remove_tgroup(GtkWidget *, gpointer );
-GtkWidget * build_tgroup(MtxTickGroup *, gint );
 /* Prototypes */
 
 #endif

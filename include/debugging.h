@@ -124,8 +124,8 @@ struct _DebugLevel
 
 /* Prototypes */
 void close_debug(void);
-void open_debug(void);
 void dbg_func(Dbg_Class, const gchar *, const gchar *, gint, const gchar *, ...);
+void open_debug(void);
 void populate_debugging(GtkWidget *);
 /* Prototypes */
 

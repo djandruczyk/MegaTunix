@@ -19,12 +19,12 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean alter_tblock_data(GtkWidget *, gpointer );
+GtkWidget *build_tblock(MtxTextBlock *, gint );
 gboolean create_text_block_event(GtkWidget *, gpointer );
+gboolean remove_tblock(GtkWidget *, gpointer );
 void reset_onscreen_tblocks(void);
 void update_onscreen_tblocks(void);
-gboolean alter_tblock_data(GtkWidget *, gpointer );
-gboolean remove_tblock(GtkWidget *, gpointer );
-GtkWidget * build_tblock(MtxTextBlock *, gint );
 /* Prototypes */
 
 #endif

@@ -32,21 +32,20 @@ extern "C" {
 #include <watches.h>
 
 /* Prototypes */
-gboolean create_2d_table_editor_group(GtkWidget *);
-gboolean create_2d_table_editor(gint, GtkWidget *);
 gboolean update_2d_curve(GtkWidget *, gpointer);
 gboolean close_2d_editor(GtkWidget *, gpointer);
 void coords_changed(GtkWidget *, gpointer);
-void remove_widget(gpointer, gpointer);
-gboolean close_menu_handler(GtkWidget *, gpointer);
 void clean_curve(gpointer, gpointer);
+gboolean close_menu_handler(GtkWidget *, gpointer);
+gboolean create_2d_table_editor(gint, GtkWidget *);
+gboolean create_2d_table_editor_group(GtkWidget *);
+void gauge_cleanup(gpointer , gpointer );
+void highlight_entry(GtkWidget *, GdkColor *);
+void marker_proximity(GtkWidget *, gpointer);
+void remove_widget(gpointer, gpointer);
+gboolean set_axis_locking(GtkWidget *, gpointer );
 void update_curve_marker(RtvWatch *);
 void vertex_proximity(GtkWidget *, gpointer);
-void marker_proximity(GtkWidget *, gpointer);
-gboolean set_axis_locking(GtkWidget *, gpointer );
-void highlight_entry(GtkWidget *, GdkColor *);
-void gauge_cleanup(gpointer , gpointer );
-
 /* Prototypes */
 
 #endif

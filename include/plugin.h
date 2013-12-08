@@ -36,10 +36,10 @@ typedef enum
 }ModIndex;
 
 /* Prototypes */
+gboolean get_symbol(const gchar *, void **);
 gboolean plugin_function(GtkWidget *, gpointer);
 void plugins_init(void);
 void plugins_shutdown(void);
-gboolean get_symbol(const gchar *, void **);
 /* Prototypes */
 
 #endif

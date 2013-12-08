@@ -36,8 +36,8 @@ typedef enum
 }ComboCols;
 
 /* Prototypes */
-void combo_setup(GObject *, ConfigFile *, gchar * );
 gboolean combo_match_selected(GtkEntryCompletion *, GtkTreeModel *, GtkTreeIter *, gpointer);
+void combo_setup(GObject *, ConfigFile *, gchar * );
 /* Prototypes */
 
 #endif

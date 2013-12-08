@@ -30,7 +30,6 @@ extern "C" {
 /* Prototypes */
 gchar ** parse_keys(const gchar *, gint *, const gchar * );
 gint * parse_keytypes(const gchar *, gint *, const gchar * );
-
 /* Prototypes */
 
 #endif

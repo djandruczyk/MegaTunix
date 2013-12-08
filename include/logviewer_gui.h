@@ -61,31 +61,31 @@ struct _Viewable_Value
 	
 
 /* Prototypes */
-void present_viewer_choices(void);
-void scroll_logviewer_traces(void);
-void reset_logviewer_state(void);
-gboolean view_value_set(GtkWidget *, gpointer );
-gboolean set_all_lview_choices_state(GtkWidget *, gpointer);
-gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
 Viewable_Value * build_v_value(gconstpointer * );
-GdkGC * initialize_gc(GdkDrawable *, GcType );
-GdkColor get_colors_from_hue(gfloat, gfloat, gfloat);
 void draw_infotext(void);
 void draw_valtext(gboolean);
-gboolean update_logview_traces_pf(gboolean);
-gboolean pb_update_logview_traces_wrapper(gpointer);
-gboolean pb_update_logview_traces(gpointer);
-void trace_update(gboolean );
-gboolean logviewer_log_position_change(GtkWidget *, gpointer);
-void set_logviewer_mode(Lv_Mode);
-void finish_logviewer(void);
-void populate_viewer(void);
-gboolean reenable_select_params_button(GtkWidget *);
-gboolean save_default_choices(GtkWidget *);
-void set_default_lview_choices_state(void);
-void write_logviewer_defaults(ConfigFile *);
-void read_logviewer_defaults(ConfigFile *);
 void enable_playback_controls(gboolean );
+void finish_logviewer(void);
+GdkColor get_colors_from_hue(gfloat, gfloat, gfloat);
+GdkGC * initialize_gc(GdkDrawable *, GcType );
+gboolean logviewer_log_position_change(GtkWidget *, gpointer);
+gboolean pb_update_logview_traces(gpointer);
+gboolean pb_update_logview_traces_wrapper(gpointer);
+void populate_viewer(void);
+void present_viewer_choices(void);
+void read_logviewer_defaults(ConfigFile *);
+gboolean reenable_select_params_button(GtkWidget *);
+void reset_logviewer_state(void);
+gboolean save_default_choices(GtkWidget *);
+void scroll_logviewer_traces(void);
+gboolean set_all_lview_choices_state(GtkWidget *, gpointer);
+void set_default_lview_choices_state(void);
+void set_logviewer_mode(Lv_Mode);
+gboolean slider_key_press_event(GtkWidget *, GdkEventKey *, gpointer);
+void trace_update(gboolean );
+gboolean update_logview_traces_pf(gboolean);
+gboolean view_value_set(GtkWidget *, gpointer );
+void write_logviewer_defaults(ConfigFile *);
 /* Prototypes */
 
 #endif

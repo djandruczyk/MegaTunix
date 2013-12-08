@@ -80,14 +80,14 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	get_symbol_f("get_file_api",(void **)&get_file_api_f);
 	get_symbol_f("get_list",(void **)&get_list_f);
 	get_symbol_f("get_multiplier",(void **)&get_multiplier_f);
-	get_symbol_f("lookup_current_value",(void **)&lookup_current_value_f);
-	get_symbol_f("lookup_widget",(void **)&lookup_widget_f);
 	get_symbol_f("insert_text_handler",(void **)&insert_text_handler_f);
 	get_symbol_f("io_cmd",(void **)&io_cmd_f);
 	get_symbol_f("initialize_outputdata",(void **)&initialize_outputdata_f);
 	get_symbol_f("jump_to_tab",(void **)&jump_to_tab_f);
 	get_symbol_f("log_inbound_data",(void **)&log_inbound_data_f);
 	get_symbol_f("log_outbound_data",(void **)&log_outbound_data_f);
+	get_symbol_f("lookup_current_value",(void **)&lookup_current_value_f);
+	get_symbol_f("lookup_widget",(void **)&lookup_widget_f);
 	get_symbol_f("mem_alloc",(void **)&mem_alloc_f);
 	get_symbol_f("parse_keys",(void **)&parse_keys_f);
 	get_symbol_f("queue_function",(void **)&queue_function_f);

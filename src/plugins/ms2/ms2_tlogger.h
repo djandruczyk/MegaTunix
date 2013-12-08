@@ -69,15 +69,14 @@ struct _MS2_TTMon_Data
 
 /* Prototypes */
 void bind_ttm_to_page(gint);
-void ms2_setup_ms2_logger_display(GtkWidget *);
-gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
-gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
-void ms2_ttm_update(RtvWatch *);
 void ms2_crunch_trigtooth_data(void);
+gboolean ms2_logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
+void ms2_setup_ms2_logger_display(GtkWidget *);
+void ms2_ttm_update(RtvWatch *);
+gboolean ms2_ttm_zoom(GtkWidget *, gpointer);
 void ms2_update_trigtooth_display(void);
 void reset_ttm_buttons(void);
-
 /* Prototypes */
 
 #endif

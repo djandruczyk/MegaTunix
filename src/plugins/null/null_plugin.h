@@ -43,10 +43,10 @@ EXTERN gboolean (*get_symbol_f)(const gchar *, void **);
 /* Function Pointers */
 
 /* Prototypes */
+void deregister_ecu_enums(void);
 void plugin_init(gconstpointer *);
 void plugin_shutdown(void);
 void register_ecu_enums(void);
-void deregister_ecu_enums(void);
 /* Prototypes */
 
 #endif

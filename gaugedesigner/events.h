@@ -44,24 +44,24 @@ typedef enum
 
 
 /* Prototypes */
+gboolean alter_polygon_data(GtkWidget *, gpointer );
+gboolean animate_gauge(GtkWidget *, gpointer );
+gboolean change_font(GtkWidget *, gpointer );
+gboolean close_current_gauge(GtkWidget *, gpointer );
+gboolean create_new_gauge(GtkWidget *, gpointer );
+gboolean create_polygon_event(GtkWidget *, gpointer );
 gboolean gauge_motion(GtkWidget *, GdkEventMotion *, gpointer );
 gboolean gauge_button(GtkWidget *, GdkEventButton *, gpointer );
-gboolean create_new_gauge(GtkWidget *, gpointer );
-gboolean close_current_gauge(GtkWidget *, gpointer );
-gboolean create_polygon_event(GtkWidget *, gpointer );
-gboolean set_antialiased_mode(GtkWidget *, gpointer );
-gboolean change_font(GtkWidget *, gpointer );
-gboolean animate_gauge(GtkWidget *, gpointer );
-gboolean toggle_skip_params(GtkWidget *, gpointer );
+gboolean grab_coords_event(GtkWidget *, gpointer);
 gboolean link_range_spinners(GtkWidget *, gpointer );
 void update_attributes(void);
+gboolean remove_polygon(GtkWidget *, gpointer );
 void reset_onscreen_controls(void);
 void reset_onscreen_polygons(void);
-void update_onscreen_polygons(void);
-gboolean alter_polygon_data(GtkWidget *, gpointer );
-gboolean remove_polygon(GtkWidget *, gpointer );
+gboolean set_antialiased_mode(GtkWidget *, gpointer );
 gboolean sweep_gauge(gpointer data);
-gboolean grab_coords_event(GtkWidget *, gpointer);
+gboolean toggle_skip_params(GtkWidget *, gpointer );
+void update_onscreen_polygons(void);
 /* Prototypes */
 
 #endif

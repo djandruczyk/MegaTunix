@@ -29,10 +29,10 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean select_file_for_ecu_backup(GtkWidget *, gpointer );
-gboolean select_file_for_ecu_restore(GtkWidget *, gpointer );
 void backup_all_ecu_settings(gchar  *);
 void restore_all_ecu_settings(gchar  *);
+gboolean select_file_for_ecu_backup(GtkWidget *, gpointer );
+gboolean select_file_for_ecu_restore(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif

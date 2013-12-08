@@ -42,12 +42,12 @@ struct _ListElement
 };
 
 /* Prototypes */
-GList * get_list(const gchar * );
-void store_list(const gchar * , GList * );
-void remove_list(const gchar *);
+void free_element(gpointer, gpointer);
+GList *get_list(const gchar * );
 gint list_sort(gconstpointer, gconstpointer);
 gint list_object_sort(gconstpointer, gconstpointer, gpointer);
-void free_element(gpointer, gpointer);
+void remove_list(const gchar *);
+void store_list(const gchar * , GList * );
 /* Prototypes */
 
 #endif

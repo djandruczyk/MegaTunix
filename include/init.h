@@ -30,40 +30,39 @@ extern "C" {
 #include <threads.h>
 
 /* Prototypes */
-void init(void);
-gboolean read_config(void);
-void save_config(void);
-void make_mtx_dirs(void);
-void mem_alloc(void);
-void mem_dealloc(void);
-void dealloc_textmessage(Text_Message * );
-void dealloc_gui_message(Gui_Message * );
-void dealloc_io_message(Io_Message * );
-void dealloc_w_update(Widget_Update * );
-void dealloc_tabinfos(gpointer );
-void dealloc_table_params(Table_Params * );
-void dealloc_te_params(TE_Params * );
-void dealloc_qfunction(QFunction * );
-void dealloc_array(GArray *, ArrayType );
-void dealloc_rtv_object(gconstpointer *);
-void dealloc_lists_hash(gpointer);
-void dealloc_list(gpointer, gpointer, gpointer);
-void dealloc_rtt(gpointer);
-void dealloc_rtv_map(gpointer);
-void dealloc_slider(gpointer);
-void dealloc_lookuptable(gpointer data);
-void dealloc_widget(gpointer, gpointer);
-void dealloc_gauge(gpointer, gpointer);
-void dealloc_tabinfo(gpointer, gpointer);
-void xml_cmd_free(gpointer);
-void xml_arg_free(gpointer);
 void cleanup(void *);
-
-gboolean dealloc_rtt_model(GtkTreeModel *, GtkTreePath *, GtkTreeIter *,gpointer);
+void init(void);
+Gui_Message * initialize_gui_message(void);
 Io_Message * initialize_io_message(void);
 OutputData * initialize_outputdata(void);
 Text_Message * initialize_text_message(void);
-Gui_Message * initialize_gui_message(void);
+void dealloc_array(GArray *, ArrayType );
+void dealloc_gauge(gpointer, gpointer);
+void dealloc_gui_message(Gui_Message * );
+void dealloc_io_message(Io_Message * );
+void dealloc_list(gpointer, gpointer, gpointer);
+void dealloc_lists_hash(gpointer);
+void dealloc_lookuptable(gpointer data);
+void dealloc_qfunction(QFunction * );
+void dealloc_rtt(gpointer);
+gboolean dealloc_rtt_model(GtkTreeModel *, GtkTreePath *, GtkTreeIter *,gpointer);
+void dealloc_rtv_map(gpointer);
+void dealloc_rtv_object(gconstpointer *);
+void dealloc_slider(gpointer);
+void dealloc_tabinfo(gpointer, gpointer);
+void dealloc_tabinfos(gpointer );
+void dealloc_table_params(Table_Params * );
+void dealloc_te_params(TE_Params * );
+void dealloc_textmessage(Text_Message * );
+void dealloc_w_update(Widget_Update * );
+void dealloc_widget(gpointer, gpointer);
+void make_mtx_dirs(void);
+void mem_alloc(void);
+void mem_dealloc(void);
+gboolean read_config(void);
+void save_config(void);
+void xml_cmd_free(gpointer);
+void xml_arg_free(gpointer);
 /* Prototypes */
 
 #endif

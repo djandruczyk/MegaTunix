@@ -18,12 +18,12 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean check_datasources_set(GtkWidget *);
 gboolean load_handler(GtkWidget *, gpointer );
+void prompt_to_save(void);
 gboolean save_handler(GtkWidget *, gpointer );
 gboolean save_as_handler(GtkWidget *, gpointer );
 void setup_file_filters(GtkFileChooser *);
-gboolean check_datasources_set(GtkWidget *);
-void prompt_to_save(void);
 /* Prototypes */
 
 #endif

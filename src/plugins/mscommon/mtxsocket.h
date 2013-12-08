@@ -169,35 +169,35 @@ struct _SlaveMessage
 };
 
 /* Prototypes */
-void open_tcpip_sockets(void);
-void close_tcpip_sockets(void);
-GSocket * setup_socket(gint);
-void *socket_thread_manager(gpointer);
-void * ascii_socket_server(gpointer );
-void * binary_socket_server(gpointer );
-void * control_socket_client(gpointer );
-void * notify_slaves_thread(gpointer );
-gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
-void return_socket_error(GSocket *);
-void socket_get_rt_vars(GSocket *, gchar *);
-void socket_get_rtv_list(GSocket *);
-void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
-void socket_get_ecu_page(MtxSocketClient *, gchar *);
-void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
-void dealloc_client_data(MtxSocketClient *);
+void *ascii_socket_server(gpointer );
+void *binary_socket_server(gpointer );
+guint8 *build_netmsg(guint8,SlaveMessage *,gint *);
+guint8 *build_status_update(guint8,SlaveMessage *,gint *);
 gboolean check_for_changes(MtxSocketClient *);
-gint * convert_socket_data(gchar *, gint);
+gboolean close_control_socket(void);
+gboolean close_network(void);
+void close_tcpip_sockets(void);
+void *control_socket_client(gpointer );
+gint *convert_socket_data(gchar *, gint);
+void dealloc_client_data(MtxSocketClient *);
+gint net_send(GSocket *, guint8 *, gint);
 void *network_repair_thread(gpointer);
+void notify_slave(gpointer, gpointer);
+void *notify_slaves_thread(gpointer );
+gboolean open_control_socket(gchar *, gint);
 gboolean open_network(gchar *, gint);
 gboolean open_notification_link(gchar *, gint);
-gboolean close_network(void);
-gboolean close_control_socket(void);
+void open_tcpip_sockets(void);
+void return_socket_error(GSocket *);
+GSocket *setup_socket(gint);
+void socket_get_ecu_page(MtxSocketClient *, gchar *);
+void socket_get_ecu_var(MtxSocketClient *, gchar *, DataSize);
 gint socket_get_more_data(gint, void *, gint, gint);
-gboolean open_control_socket(gchar *, gint);
-void notify_slave(gpointer, gpointer);
-guint8 * build_netmsg(guint8,SlaveMessage *,gint *);
-guint8 * build_status_update(guint8,SlaveMessage *,gint *);
-gint net_send(GSocket *, guint8 *, gint);
+void socket_get_rt_vars(GSocket *, gchar *);
+void socket_get_rtv_list(GSocket *);
+void socket_set_ecu_var(MtxSocketClient *, gchar *, DataSize);
+void *socket_thread_manager(gpointer);
+gboolean validate_remote_ascii_cmd(MtxSocketClient *, gchar *, gint);
 /* Prototypes */
 
 #endif

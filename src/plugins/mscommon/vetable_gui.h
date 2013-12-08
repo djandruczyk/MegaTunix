@@ -29,9 +29,7 @@ extern "C" {
 #include <enums.h>
 
 /* Prototypes */
-
 void common_draw_ve_marker(void );
-
 /* Prototypes */
 
 #endif

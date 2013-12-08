@@ -33,12 +33,12 @@ extern "C" {
 /* Enumerations */
 
 /* Prototypes */
-void ecu_gui_init(void);
-gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
-gboolean ecu_button_handler(GtkWidget *, gpointer);
 gboolean ecu_bitmask_button_handler(GtkWidget *, gpointer);
-gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
+gboolean ecu_button_handler(GtkWidget *, gpointer);
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
+void ecu_gui_init(void);
+gboolean ecu_spin_button_handler(GtkWidget *, gpointer);
+gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
 /* Prototypes */
 
 #endif

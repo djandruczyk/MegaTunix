@@ -56,14 +56,14 @@ struct _Rtv_Map
 
 
 /* Prototypes */
-gboolean load_realtime_map_pf(void );
 void load_complex_params(gconstpointer *, ConfigFile *, gchar * );
 void load_complex_params_obj(GObject *, ConfigFile *, gchar * );
-gboolean load_rtv_xml_elements(xmlNode *, Rtv_Map *);
+void load_derived_var(xmlNode *, Rtv_Map *);
+gboolean load_realtime_map_pf(void );
 void load_rtv_defaults(xmlNode *, Rtv_Map *);
 void load_rtv_xml_complex_expression(gconstpointer *, xmlNode *);
 void load_rtv_xml_dependencies(gconstpointer *, xmlNode *);
-void load_derived_var(xmlNode *, Rtv_Map *);
+gboolean load_rtv_xml_elements(xmlNode *, Rtv_Map *);
 /* Prototypes */
 
 #endif

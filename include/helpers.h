@@ -30,16 +30,16 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void start_statuscounts_pf(void);
-void enable_get_data_buttons_pf(void);
-void conditional_start_rtv_tickler_pf(void);
-void set_store_black_pf(void);
-void enable_3d_buttons_pf(void);
-void disable_burner_buttons_pf(void);
-void reset_temps_pf(void);
-void ready_msg_pf(void);
-void startup_default_timeouts_pf(void);
 void cleanup_pf(Io_Message *);
+void conditional_start_rtv_tickler_pf(void);
+void enable_3d_buttons_pf(void);
+void enable_get_data_buttons_pf(void);
+void disable_burner_buttons_pf(void);
+void ready_msg_pf(void);
+void reset_temps_pf(void);
+void set_store_black_pf(void);
+void start_statuscounts_pf(void);
+void startup_default_timeouts_pf(void);
 /* Prototypes */
 
 #endif

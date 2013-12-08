@@ -29,10 +29,10 @@ extern "C" {
 
 
 /* Prototypes */
-gboolean set_offline_mode(void);
-gchar * present_firmware_choices(void);
-gint ptr_sort(gconstpointer , gconstpointer );
 void offline_ecu_restore_pf(void);
+gchar *present_firmware_choices(void);
+gint ptr_sort(gconstpointer , gconstpointer );
+gboolean set_offline_mode(void);
 /* Prototypes */
 
 #endif

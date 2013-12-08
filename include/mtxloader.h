@@ -28,19 +28,19 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-gboolean load_firmware (GtkButton*);
-gboolean get_signature (GtkButton*);
-gboolean leave (GtkWidget *, gpointer);
 gboolean about_popup (GtkWidget *, gpointer);
-gboolean persona_choice (GtkWidget *, gpointer);
-void load_defaults(void);
-void save_defaults(void);
-void init_controls(void);
-void output(gchar *, gboolean);
-void lock_buttons(void);
-void unlock_buttons(void);
+gboolean get_signature (GtkButton*);
 void gui_progress_update(gfloat);
-
+void init_controls(void);
+gboolean leave (GtkWidget *, gpointer);
+void load_defaults(void);
+gboolean load_firmware (GtkButton*);
+void lock_buttons(void);
+void output(gchar *, gboolean);
+gboolean persona_choice (GtkWidget *, gpointer);
+void save_defaults(void);
+void unlock_buttons(void);
+/* Prototypes */
 
 #endif
 #ifdef __cplusplus

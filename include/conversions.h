@@ -31,17 +31,17 @@ extern "C" {
 
 
 /* Prototypes */
-void reset_temps(gpointer);
-void convert_temps(gpointer,gpointer);
-gint convert_before_download(GtkWidget *, gfloat);
-gfloat convert_after_upload(GtkWidget *);
+gdouble c_to_f(gdouble);
+gdouble c_to_k(gdouble);
 gfloat calc_value(gfloat, gfloat *, gfloat *, ConvDir);
+gfloat convert_after_upload(GtkWidget *);
+gint convert_before_download(GtkWidget *, gfloat);
+void convert_temps(gpointer,gpointer);
 gdouble f_to_k(gdouble);
 gdouble f_to_c(gdouble);
 gdouble k_to_c(gdouble);
 gdouble k_to_f(gdouble);
-gdouble c_to_f(gdouble);
-gdouble c_to_k(gdouble);
+void reset_temps(gpointer);
 gdouble temp_to_ecu(gdouble);
 gdouble temp_to_host(gdouble);
 /* Prototypes */

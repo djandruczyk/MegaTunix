@@ -30,21 +30,21 @@ extern "C" {
 
 
 /* Prototypes */
+gboolean autolog_dump(gpointer);
+void clear_logables(void);
+void dlog_deselect_all(void);
+void dlog_select_all(void);
+void dlog_select_defaults(void);
+void dump_log_to_disk(GIOChannel *);
 gboolean internal_datalog_dump(GtkWidget *, gpointer );
-gboolean select_datalog_for_export(GtkWidget *, gpointer );
+gboolean log_value_set(GtkWidget *, gpointer);
 void populate_dlog_choices(void);
+gboolean run_datalog(void);
+gboolean select_datalog_for_export(GtkWidget *, gpointer );
+gboolean set_logging_mode(GtkWidget * , gpointer);
 void start_datalogging(void);
 void stop_datalogging(void);
-void clear_logables(void);
-gboolean log_value_set(GtkWidget *, gpointer);
 void write_log_header(GIOChannel *, gboolean);
-gboolean run_datalog(void);
-gboolean set_logging_mode(GtkWidget * , gpointer);
-void dlog_select_defaults(void);
-void dlog_select_all(void);
-void dlog_deselect_all(void);
-void dump_log_to_disk(GIOChannel *);
-gboolean autolog_dump(gpointer);
 /* Prototypes */
 
 #endif

@@ -64,18 +64,18 @@ struct _Rt_Slider
 };
 
 /* Prototypes */
+Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );
+gboolean free_ve3d_sliders(gint);
 void load_rt_sliders(void );
+void load_rts(xmlNode *, GHashTable *, gint, TabIdent);
+gboolean load_rts_xml_elements(xmlNode *, const gchar *, GHashTable *,gint, TabIdent);
 void load_ww_sliders(void );
 void load_ve3d_sliders(gint );
 void register_rt_range(GtkWidget *);
-Rt_Slider * add_slider(gchar *, gint, gint, gint, gchar *,TabIdent );
-gboolean free_ve3d_sliders(gint);
-gboolean load_rts_xml_elements(xmlNode *, const gchar *, GHashTable *,gint, TabIdent);
-void load_rts(xmlNode *, GHashTable *, gint, TabIdent);
 gboolean rtslider_button_handler(GtkWidget *, GdkEventButton *, gpointer);
 gboolean rtslider_motion_handler(GtkWidget *, GdkEventMotion *, gpointer);
-gboolean update_rtsliders(gpointer);
 void rt_update_values(gpointer,gpointer,gpointer);
+gboolean update_rtsliders(gpointer);
 /* Prototypes */
 
 #endif

@@ -45,13 +45,12 @@ typedef enum
 }MS2StdHandler;
 
 /* Prototypes */
+gboolean ecu_combo_handler(GtkWidget *, gpointer);
 gboolean ecu_entry_handler(GtkWidget *, gpointer);
+void ecu_gui_init();
 gboolean ecu_std_button_handler(GtkWidget *, gpointer);
 gboolean ecu_toggle_button_handler(GtkWidget *, gpointer);
-gboolean ecu_combo_handler(GtkWidget *, gpointer);
-void ecu_gui_init();
 gboolean ecu_update_combo(GtkWidget *);
-
 /* Prototypes */
 
 #endif

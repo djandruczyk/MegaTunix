@@ -29,14 +29,14 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void start_tickler(TicklerType);
-void stop_tickler(TicklerType);
-void *signal_read_rtvars_thread(gpointer);
-void timeout_done(gpointer);
+gboolean check_for_first_time(void);
 gboolean early_interrogation(void);
 gboolean personality_choice(void);
-gboolean check_for_first_time(void);
 gboolean run_function(gboolean(*)(gpointer));
+void *signal_read_rtvars_thread(gpointer);
+void start_tickler(TicklerType);
+void stop_tickler(TicklerType);
+void timeout_done(gpointer);
 /* Prototypes */
 
 #endif

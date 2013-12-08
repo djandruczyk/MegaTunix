@@ -69,19 +69,19 @@ struct _TTMon_Data
 };
 
 /* Prototypes */
-void setup_logger_display(GtkWidget *);
-void reset_ttm_buttons(void);
+void bind_ttm_to_page(gint page);
+void crunch_trigtooth_data(void);
+void crunch_trigtooth_data_pf(void);
 gboolean logger_display_config_event(GtkWidget *, GdkEventConfigure *, gpointer);
 gboolean logger_display_expose_event(GtkWidget *, GdkEventExpose *, gpointer);
 gboolean ms1_tlogger_button_handler(GtkWidget *, gpointer);
-void crunch_trigtooth_data(void);
-void crunch_trigtooth_data_pf(void);
-gboolean update_trigtooth_display(gpointer);
-void update_trigtooth_display_pf(void);
-void bind_ttm_to_page(gint page);
+void reset_ttm_buttons(void);
+void setup_logger_display(GtkWidget *);
+gboolean signal_toothtrig_read(EcuPluginTickler);
 void start(EcuPluginTickler);
 void stop(EcuPluginTickler);
-gboolean signal_toothtrig_read(EcuPluginTickler);
+gboolean update_trigtooth_display(gpointer);
+void update_trigtooth_display_pf(void);
 /* Prototypes */
 
 #endif

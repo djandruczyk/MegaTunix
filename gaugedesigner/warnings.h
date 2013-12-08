@@ -19,11 +19,11 @@
 #include <gtk/gtk.h>
 
 /* Prototypes */
+gboolean alter_w_range_data(GtkWidget *, gpointer );
 gboolean create_warning_span_event(GtkWidget *, gpointer );
+gboolean remove_w_range(GtkWidget *, gpointer );
 void reset_onscreen_w_ranges(void);
 void update_onscreen_w_ranges(void);
-gboolean alter_w_range_data(GtkWidget *, gpointer );
-gboolean remove_w_range(GtkWidget *, gpointer );
 /* Prototypes */
 
 #endif

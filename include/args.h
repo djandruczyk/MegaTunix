@@ -64,9 +64,9 @@ struct _CmdLineArgs
 };
 
 /* Prototypes */
-CmdLineArgs * init_args(void);
-void handle_args(gint, gchar ** );
 void args_free(gpointer);
+void handle_args(gint, gchar ** );
+CmdLineArgs *init_args(void);
 /* Prototypes */
 
 #endif

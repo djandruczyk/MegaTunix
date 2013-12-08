@@ -370,5 +370,5 @@ gboolean benchtest_clock_update(gpointer data)
 		return FALSE;
 	}
 	EXIT();
-	return;
+	return TRUE;
 }

@@ -20,12 +20,12 @@
 
 
 /* Prototypes */
+gboolean alter_a_range_data(GtkWidget *, gpointer );
+GtkWidget * build_a_range(MtxAlertRange *, gint );
 gboolean create_alert_span_event(GtkWidget *, gpointer );
+gboolean remove_a_range(GtkWidget *, gpointer );
 void reset_onscreen_a_ranges(void);
 void update_onscreen_a_ranges(void);
-gboolean alter_a_range_data(GtkWidget *, gpointer );
-gboolean remove_a_range(GtkWidget *, gpointer );
-GtkWidget * build_a_range(MtxAlertRange *, gint );
 /* Prototypes */
 
 #endif

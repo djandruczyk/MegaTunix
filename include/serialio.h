@@ -95,13 +95,13 @@ typedef enum
 }FlushDirection;
 
 /* Prototypes */
-gboolean open_serial(gchar *, gboolean);
 void close_serial(void);
+void flush_serial(gint,FlushDirection);
+gboolean open_serial(gchar *, gboolean);
+gboolean parse_baud_str(gchar *, gint *, gint *, Parity *, gint *);
+void *serial_repair_thread(gpointer );
 void setup_serial_params(void);
 void toggle_serial_control_lines(void );
-void flush_serial(gint,FlushDirection);
-void *serial_repair_thread(gpointer );
-gboolean parse_baud_str(gchar *, gint *, gint *, Parity *, gint *);
 /* Prototypes */
 
 #endif

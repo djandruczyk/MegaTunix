@@ -31,24 +31,22 @@ extern "C" {
 
 
 /* Prototypes */
-void *win32_reader(gpointer);
-void *unix_reader(gpointer);
+gboolean comms_test(void);
+void ecu_chunk_write(gint, gint, gint, gint, guint8 *);
+void freeems_chunk_write(gint, gint, gint, gint, guint8 *);
+void freeems_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
 void freeems_serial_enable(void);
 void freeems_serial_disable(void);
-gboolean comms_test(void);
-void setup_rtv_pf(void);
-gboolean teardown_rtv(void);
-void signal_read_rtvars(void);
+void post_single_burn_pf(void *);
 void *rtv_subscriber(gpointer);
 void *serial_repair_thread(gpointer);
 void send_to_ecu(gpointer, gint, gboolean);
-void freeems_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
-void freeems_chunk_write(gint, gint, gint, gint, guint8 *);
-void ecu_chunk_write(gint, gint, gint, gint, guint8 *);
+void setup_rtv_pf(void);
+void signal_read_rtvars(void);
+gboolean teardown_rtv(void);
 void update_write_status(void *);
-void post_single_burn_pf(void *);
-
-void send_to_ecu(gpointer, gint, gboolean);
+void *unix_reader(gpointer);
+void *win32_reader(gpointer);
 /* Prototypes */
 
 #endif

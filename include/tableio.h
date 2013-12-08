@@ -28,18 +28,17 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void import_single_table(gint);
+gfloat *convert_fromecu_bins(gint, Axis);
+gint *convert_toecu_bins(gint, gfloat *, Axis);
+void ecu_table_import(gint, gfloat *, gfloat *, gfloat *);
 void export_single_table(gint);
 void export_table_to_yaml(gchar *, gint);
+const gchar *get_table_suffix(gint, Axis);
+void import_single_table(gint);
 void select_all_tables_for_export(void);
-void ecu_table_import(gint, gfloat *, gfloat *, gfloat *);
-gint * convert_toecu_bins(gint, gfloat *, Axis);
-gfloat * convert_fromecu_bins(gint, Axis);
-const gchar * get_table_suffix(gint, Axis);
 /* Prototypes */
 
 #endif
-
 #ifdef __cplusplus
 }
 #endif
