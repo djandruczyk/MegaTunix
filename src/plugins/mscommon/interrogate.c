@@ -47,7 +47,7 @@ extern gconstpointer *global_data;
  */
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
-	static GMutex mutex;
+	static GMutex *mutex;
 	gboolean interrogated = FALSE;
 	GArray *tests = NULL;
 	GHashTable *tests_hash = NULL;
