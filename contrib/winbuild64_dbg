@@ -2,10 +2,11 @@
 
 export INSTALL_DBG=1
 . cross64
+CPUS=`cat /proc/cpuinfo |grep -c ^processor`
 
 make distclean
 cross64-configure ./configure --enable-debug --prefix=/opt/crossroot64_dbg/dest $* && \
-	make -j5  && rm -rf /opt/crossroot64_dbg/dest/* && make install && \
+	make -j${CPUS} && rm -rf /opt/crossroot64_dbg/dest/* && make install && \
 	./contrib/builder64_dbg && \
 . uncross 
 export INSTALL_DBG=
