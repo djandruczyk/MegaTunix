@@ -30,7 +30,7 @@ InfoBeforeFile=.\WIN_NOTES.txt
 ChangesEnvironment=yes
 
 [Files]
-Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
+;Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
 Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
 Source: "z:\opt\crossroot64\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\gtk\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crossroot64\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\gtk\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
