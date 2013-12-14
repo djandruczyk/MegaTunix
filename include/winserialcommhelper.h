@@ -24,6 +24,7 @@
 #ifndef __winserialcommhelper_H__
 #define __winserialcommhelper_H__
 
+#include <glib.h>
 #include <gtk/gtk.h>
 #include <windows.h>
 #include <winserialbuffer.h>
@@ -63,8 +64,8 @@ public:
 
 	inline void LockThis() {g_mutex_lock (lock);}	
 	inline void UnLockThis() {g_mutex_unlock (lock); }
-	inline void InitLock() {lock = g_mutex_new();}
-	inline void DelLock() {g_mutex_free(lock );}
+	inline void InitLock() {g_mutex_init(lock);}
+	inline void DelLock() {g_mutex_clear(lock );}
  	inline bool IsInputAvailable()
 	{
 		LockThis (); 

@@ -5,6 +5,7 @@
 #ifdef __WIN32__
 #include <defines.h>
 #include <debugging.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 #include <windows.h>
 #include <winserialbuffer.h>
@@ -22,7 +23,7 @@ CSerialBuffer::CSerialBuffer()
 
 void CSerialBuffer::Init()
 {
-	lock = g_mutex_new();
+	g_mutex_init(lock);
 	lock_always = true;
  	int_cur_pos = 0;
 	bytes_unread = 0;
@@ -32,7 +33,7 @@ void CSerialBuffer::Init()
 
 CSerialBuffer::~CSerialBuffer()
 {
-	g_mutex_free(lock);
+	g_mutex_clear(lock);
 }
 
 
