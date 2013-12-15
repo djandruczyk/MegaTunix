@@ -25,10 +25,14 @@
 #include <xmlbase.h>
 
 #ifdef DEBUG
- #undef ENTER()
- #undef EXIT()
- #define ENTER() ""
- #define EXIT() ""
+ #ifdef ENTER
+  #undef ENTER
+  #define ENTER() ""
+ #endif
+ #ifdef EXIT
+  #undef EXIT
+  #define EXIT() ""
+ #endif
 #endif
 
 /*!
