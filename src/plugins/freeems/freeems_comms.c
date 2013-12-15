@@ -209,23 +209,28 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	GAsyncQueue *queue = NULL;
 	Serial_Params *serial_params = NULL;
 	GTimeVal now;
+	GMutex *mutex = NULL;
 	GCond *cond = NULL;
-	GMutex *mutex = g_mutex_new();
 	GThread *thread = NULL;
 	gboolean res = FALSE;
 	gint tmpi = 0;
 
 	ENTER();
+	g_mutex_init(mutex);
 	DATA_SET(global_data,"serial_abort",GINT_TO_POINTER(TRUE));
 	thread = (GThread *)DATA_GET(global_data,"serial_thread_id");
 	g_mutex_lock(mutex);
-	g_get_current_time(&now);
 	/* Wait up to 0.25 seconds for thread to exit */
-	g_time_val_add(&now,250000);
 	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	if ((cond) && (thread))
 	{
+#if GLIB_MINOR_VERSION < 32
+		g_get_current_time(&now);
+		g_time_val_add(&now,250000);
 		res = g_cond_timed_wait(cond,mutex,&now);
+#else
+		res = g_cond_wait_until(cond,mutex,g_get_monotonic_time() + 250 * G_TIME_SPAN_MILLISECOND);
+#endif
 		g_thread_join(thread);
 	}
 	DATA_SET(global_data,"serial_thread_id",NULL);
@@ -236,7 +241,7 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	   printf("cond timeout\n");
 	 */
 	g_mutex_unlock(mutex);
-	g_mutex_free(mutex);
+	g_mutex_clear(mutex);
 	EXIT();
 	return;
 }
@@ -263,10 +268,18 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 
 	DATA_SET(global_data,"serial_abort",GINT_TO_POINTER(FALSE));
 #ifdef __WIN32__
+#if GLIB_MINOR_VERSION < 32
 	thread = g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
+#else
+	thread = g_thread_new("Win32 Reader",win32_reader,GINT_TO_POINTER(serial_params->fd));
+#endif
 	
 #else
+#if GLIB_MINOR_VERSION < 32
 	thread = g_thread_create(unix_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
+#else
+	thread = g_thread_new("UNIX Reader",unix_reader,GINT_TO_POINTER(serial_params->fd));
+#endif
 #endif
 	DATA_SET(global_data,"serial_thread_id",thread);
 	EXIT();
@@ -520,7 +533,11 @@ G_MODULE_EXPORT void setup_rtv_pf(void)
 	ENTER();
 	queue = g_async_queue_new();
 	DATA_SET(global_data,"rtv_subscriber_queue", queue);
+#if GLIB_MINOR_VERSION < 32
 	thread = g_thread_create(rtv_subscriber,queue,TRUE,NULL);
+#else
+	thread = g_thread_new("RTV Subscriber thread", rtv_subscriber,queue);
+#endif
 	DATA_SET(global_data,"rtv_subscriber_thread", thread);
 	/* This sends packets to the rtv_subscriber queue */
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);

@@ -86,10 +86,15 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	mtxsock->type = MTX_SOCKET_ASCII;
 	if (mtxsock->fd)
 	{
+#if GLIB_MINOR_VERSION < 32
 		ascii_socket_id = g_thread_create(socket_thread_manager,
 				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
+#else
+		ascii_socket_id = g_thread_new("ASCII TCP socketthread",socket_thread_manager,
+				(gpointer)mtxsock); /* Thread args */
+#endif
 		DATA_SET(global_data,"ascii_socket",mtxsock);
 		fail1 = FALSE;
 	}
@@ -106,10 +111,16 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	mtxsock->type = MTX_SOCKET_BINARY;
 	if (mtxsock->fd)
 	{
+#if GLIB_MINOR_VERSION < 32
 		binary_socket_id = g_thread_create(socket_thread_manager,
 				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
+#else
+		binary_socket_id = g_thread_new("Binary TCP Socket Thread",
+				socket_thread_manager,
+				(gpointer)mtxsock); /* Thread args */
+#endif
 		DATA_SET(global_data,"binary_socket",mtxsock);
 		fail2 = FALSE;
 	}
@@ -117,7 +128,7 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	{
 		fail2 = TRUE;
 		g_free(mtxsock);
-		MTXDBG(CRITICAL,_("ERROR setting up BINARY TCP control socket\n"));
+		MTXDBG(CRITICAL,_("ERROR setting up BINARY TCP socket\n"));
 	}
 
 	mtxsock = g_new0(MtxSocket,1);
@@ -126,10 +137,16 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 	mtxsock->type = MTX_SOCKET_CONTROL;
 	if (mtxsock->fd)
 	{
+#if GLIB_MINOR_VERSION < 32
 		control_socket_id = g_thread_create(socket_thread_manager,
 				(gpointer)mtxsock, /* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
+#else
+		control_socket_id = g_thread_new("Binary TCP Control Socket Thread",
+				socket_thread_manager,
+				(gpointer)mtxsock); /* Thread args */
+#endif
 		DATA_SET(global_data,"control_socket",mtxsock);
 		fail3 = FALSE;
 	}
@@ -142,10 +159,16 @@ G_MODULE_EXPORT void open_tcpip_sockets(void)
 
 	if ((!fail1) && (!fail2) &&(!fail3))
 	{
+#if GLIB_MINOR_VERSION < 32
 		notify_slaves_id = g_thread_create(notify_slaves_thread,
 				NULL,/* Thread args */
 				TRUE, /* Joinable */
 				NULL); /*GError Pointer */
+#else
+		notify_slaves_id = g_thread_new("Slave Notifier Thread",
+				notify_slaves_thread,
+				NULL); /* Thread args */
+#endif
 		DATA_SET(global_data,"notify_slaves_id",GINT_TO_POINTER(notify_slaves_id));
 	}
 	EXIT();
@@ -295,18 +318,30 @@ G_MODULE_EXPORT void *socket_thread_manager(gpointer data)
 
 		if (mtxsock->type == MTX_SOCKET_ASCII)
 		{
+#if GLIB_MINOR_VERSION < 32
 			g_thread_create(ascii_socket_server,
 					cli_data, /* Thread args */
 					TRUE,   /* Joinable */
 					NULL);  /* GError pointer */
+#else
+			g_thread_new("ASCII Socket Server",
+					ascii_socket_server,
+					cli_data); /* Thread args */
+#endif
 		}
 		if (mtxsock->type == MTX_SOCKET_BINARY)
 		{
 			last_bin_client = cli_data;
+#if GLIB_MINOR_VERSION < 32
 			g_thread_create(binary_socket_server,
 					cli_data, /* Thread args */
 					TRUE,   /* Joinable */
 					NULL);  /* GError pointer */
+#else
+			g_thread_new("BINARY Socket Server",
+					binary_socket_server,
+					cli_data); /* Thread args */
+#endif
 		}
 		if (mtxsock->type == MTX_SOCKET_CONTROL)
 		{
@@ -2028,10 +2063,16 @@ G_MODULE_EXPORT gboolean open_control_socket(gchar * host, gint port)
 	g_object_unref(resolver);
 	g_object_unref(sockaddr);
 
+#if GLIB_MINOR_VERSION < 32
 	g_thread_create(control_socket_client,
 			cli_data, /* Thread args */
 			TRUE,   /* Joinable */
 			NULL);  /* GError pointer */
+#else
+	g_thread_new("CONTROL Socket Client",
+			control_socket_client,
+			cli_data); /* Thread args */
+#endif
 	EXIT();
 	return TRUE;
 }

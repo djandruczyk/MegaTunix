@@ -60,10 +60,16 @@ G_MODULE_EXPORT void start_tickler(TicklerType type)
 			{
 				flush_rt_arrays();
 
+#if GLIB_MINOR_VERSION < 32
 				realtime_id = g_thread_create(signal_read_rtvars_thread,
 						NULL, /* Thread args */
 						TRUE, /* Joinable */
 						NULL); /*GError Pointer */
+#else
+				realtime_id = g_thread_new("Signal read_rtvars Thread",
+						signal_read_rtvars_thread,
+						NULL); /* Thread args */
+#endif
 				DATA_SET(global_data,"realtime_id",(gpointer)realtime_id);
 				update_logbar("comms_view",NULL,_("Realtime Reader started\n"),FALSE,FALSE,FALSE);
 			}
@@ -175,7 +181,7 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	static void (*signal_read_rtvars)(void);
 	static gboolean (*setup_rtv)(void);
 	Serial_Params *serial_params;
-	GMutex * mutex = g_mutex_new();
+	GMutex * mutex = NULL;
 	GTimeVal time;
 	GAsyncQueue *io_data_queue = NULL;
 	GCond *cond = NULL;
@@ -186,6 +192,11 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	gint delay = 0;
 
 	ENTER();
+#if GLIB_MINOR_VERSION < 32
+	mutex = g_mutex_new();
+#else
+	g_mutex_init(mutex);
+#endif
 	g_mutex_lock(mutex);
 	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
 	rtv_thread_mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
@@ -204,7 +215,11 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 	if (!setup_rtv())
 	{
 		g_mutex_unlock(mutex);
+#if GLIB_MINOR_VERSION < 32
 		g_mutex_free(mutex);
+#else
+		g_mutex_clear(mutex);
+#endif
 		g_thread_exit(NULL);
 	}
 	g_async_queue_ref(io_data_queue);
@@ -225,19 +240,31 @@ G_MODULE_EXPORT void * signal_read_rtvars_thread(gpointer data)
 			g_get_current_time(&time);
 			//printf("io_queue_len is %i pf queue length is %i, delay is %i\n",io_queue_len,pf_queue_len,delay );
 			g_time_val_add(&time,10000*(io_queue_len));
+#if GLIB_MINOR_VERSION < 32
 			if (g_cond_timed_wait(cond,rtv_thread_mutex,&time))
+#else
+			if (g_cond_wait_until(cond,rtv_thread_mutex,g_get_monotonic_time() + 10 * io_queue_len * G_TIME_SPAN_MILLISECOND))
+#endif
 				goto breakout;
 		}
 		//printf("serial_params->read_wait is %i\n",serial_params->read_wait);
 		g_get_current_time(&time);
 		g_time_val_add(&time,serial_params->read_wait*1000);
+#if GLIB_MINOR_VERSION < 32
 		if (g_cond_timed_wait(cond,rtv_thread_mutex,&time))
+#else
+		if (g_cond_wait_until(cond,rtv_thread_mutex,g_get_monotonic_time() + serial_params->read_wait * G_TIME_SPAN_MILLISECOND))
+#endif
 			goto breakout;
 	}
 breakout:
 	g_async_queue_unref(io_data_queue);
 	g_mutex_unlock(mutex);
+#if GLIB_MINOR_VERSION < 32
 	g_mutex_free(mutex);
+#else
+	g_mutex_clear(mutex);
+#endif
 	g_mutex_unlock(rtv_thread_mutex);
 	EXIT();
 	g_thread_exit(0);

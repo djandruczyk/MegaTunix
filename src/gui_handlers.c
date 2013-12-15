@@ -2848,10 +2848,16 @@ G_MODULE_EXPORT void start_restore_monitor(void)
 
 	ENTER();
 	printf("start_restore_monitor!\n");
+#if GLIB_MINOR_VERSION < 32
 	restore_update_thread = g_thread_create(restore_update,
 			NULL, /* Thread args */
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
+#else
+	restore_update_thread = g_thread_new("Restore update thread", 
+			restore_update,
+			NULL); /* Thread args */
+#endif
 	EXIT();
 	return;
 }

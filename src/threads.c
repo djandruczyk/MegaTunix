@@ -173,12 +173,20 @@ fast_exit:
 			if (args->network_mode)
 			{
 				MTXDBG(THREADS,_("LINK DOWN, Initiating NETWORK repair thread!\n"));
+#if GLIB_MINOR_VERSION < 32
 				repair_thread = g_thread_create(network_repair_thread,NULL,TRUE,NULL);
+#else
+				repair_thread = g_thread_new("Network Repair thread",network_repair_thread,NULL);
+#endif
 			}
 			else
 			{
 				MTXDBG(THREADS,_("LINK DOWN, Initiating serial repair thread!\n"));
+#if GLIB_MINOR_VERSION < 32
 				repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
+#else
+				repair_thread = g_thread_new("Serial Repair thread",serial_repair_thread,NULL);
+#endif
 			}
 			g_thread_join(repair_thread);
 		}

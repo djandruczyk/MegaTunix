@@ -81,6 +81,8 @@ gint main(gint argc, gchar ** argv)
 
 	global_data = g_new0(gconstpointer, 1);
 
+
+#if GLIB_MINOR_VERSION < 32
 	/* Condition Variables */
 	cond = g_cond_new();
 	DATA_SET(global_data,"rtv_thread_cond",cond);
@@ -95,6 +97,22 @@ gint main(gint argc, gchar ** argv)
 	DATA_SET(global_data,"dash_mutex",mutex);
 	mutex = g_mutex_new();
 	DATA_SET(global_data,"rtv_thread_mutex",mutex);
+#else
+	/* Condition Variables */
+	g_cond_init(cond);
+	DATA_SET(global_data,"rtv_thread_cond",cond);
+	/* Mutexes */
+	g_mutex_init(mutex);
+	DATA_SET(global_data,"serio_mutex",mutex);
+	g_mutex_init(mutex);
+	DATA_SET(global_data,"rtt_mutex",mutex);
+	g_mutex_init(mutex);
+	DATA_SET(global_data,"rtv_mutex",mutex);
+	g_mutex_init(mutex);
+	DATA_SET(global_data,"dash_mutex",mutex);
+	g_mutex_init(mutex);
+	DATA_SET(global_data,"rtv_thread_mutex",mutex);
+#endif
 
 	/* For testing if gettext works
 	   printf(_("Hello World!\n"));

@@ -107,10 +107,16 @@ G_MODULE_EXPORT void plugins_init()
 		common_gui_init();
 
 	/* Startup dispatcher thread */
+#if GLIB_MINOR_VERSION < 32
 	id =  g_thread_create(thread_dispatcher,
 			NULL, /* Thread args */
 			TRUE, /* Joinable */
 			NULL); /*GError Pointer */
+#else
+	id =  g_thread_new("Dispatcher Thread",
+			thread_dispatcher,
+			NULL); /* Thread args */
+#endif
 	if (id)
 		DATA_SET(global_data,"thread_dispatcher_id",id);
 	EXIT();
