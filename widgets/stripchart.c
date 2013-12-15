@@ -126,7 +126,7 @@ gboolean mtx_stripchart_set_n_values (MtxStripChart *chart, gint count, gfloat**
 			if (trace->history->len > (guint)2*priv->w)
 			{
 				trace->history = g_array_remove_range(trace->history,0,trace->history->len-(2*priv->w));
-				//printf("history longer than 2x display, removing old history, length is now %i\n",trace->history->len);
+				/*printf("history longer than 2x display, removing old history, length is now %i\n",trace->history->len);*/
 			}
 		}
 	}
