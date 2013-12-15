@@ -68,7 +68,9 @@ gint main(gint argc, gchar ** argv)
 #ifdef DEBUG
 	printf("This is a debug release, Git hash: %s\n",GIT_HASH);
 #endif
+#if GLIB_MINOR_VERSION < 32
 	g_thread_init(NULL);
+#endif
 	// Not needed?
 //	gdk_threads_init();
 	gtk_init(&argc, &argv);
