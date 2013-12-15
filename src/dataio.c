@@ -414,7 +414,7 @@ G_MODULE_EXPORT gboolean read_wrapper(gint fd, guint8 * buf, size_t count, gint 
 			return FALSE;
 		}
 		if (res > 0) /* Data Arrived! */
-			*len = recv(fd,buf,count,0);
+			*len = recv(fd,(void *)buf,count,0);
 		EXIT();
 		return TRUE;
 	}
