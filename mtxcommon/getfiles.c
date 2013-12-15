@@ -406,7 +406,7 @@ gchar * choose_file(MtxFileIO *data)
 	{
 		printf("ACTION_OPEN before gtk_file_chooser_dialog_new\n");
 		dialog = gtk_file_chooser_dialog_new(data->title,
-				//GTK_WINDOW(data->parent),
+				/*GTK_WINDOW(data->parent), */
 				0,
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
