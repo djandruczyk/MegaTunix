@@ -748,7 +748,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	GHashTable **interdep_vars = NULL;
 	GHashTable *sources_hash = NULL;
 	GHashTable *ve_view_hash = NULL;
-	GMutex **ve3d_mutex = NULL;
+	GMutex *ve3d_mutex = NULL;
 	GList ***ecu_widgets = NULL;
 	GList **tab_gauges = NULL;
 
@@ -783,7 +783,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	{
 		tab_gauges = (GList **)g_new0(GList *, firmware->total_tables);
 		DATA_SET(global_data,"tab_gauges",tab_gauges);
-		ve3d_mutex = (GMutex **)g_new0(GMutex *, firmware->total_tables);
+		ve3d_mutex = (GMutex *)g_new0(GMutex, firmware->total_tables);
 		DATA_SET(global_data,"ve3d_mutex",ve3d_mutex);
 	}
 	if (!sources_hash)
@@ -827,11 +827,7 @@ G_MODULE_EXPORT void mem_alloc(void)
 	for (i=0;i<firmware->total_tables;i++)
 	{
 		tab_gauges[i] = NULL;
-#if GLIB_MINOR_VERSION < 32
-		ve3d_mutex[i] = g_mutex_new();
-#else
-		g_mutex_init(ve3d_mutex[i]);
-#endif
+		g_mutex_init(&ve3d_mutex[i]);
 		algorithm[i] = SPEED_DENSITY;
 		interdep_vars[i] = g_hash_table_new_full(NULL,NULL,NULL,g_free);
 	}
@@ -880,7 +876,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	GMutex *serio_mutex = NULL;
 	GMutex *rtt_mutex = NULL;
 	GMutex *mutex = NULL;
-	GMutex **ve3d_mutex = NULL;
+	GMutex *ve3d_mutex = NULL;
 	CmdLineArgs *args = NULL;
 	GCond *cond = NULL;
 #ifdef DEBUG
@@ -898,7 +894,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	rtt_mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
 	toggle_group_list = (GList *)DATA_GET(global_data,"toggle_group_list");
 	source_list = (GList *)DATA_GET(global_data,"source_list");
-	ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
+	ve3d_mutex = (GMutex *)DATA_GET(global_data,"ve3d_mutex");
 
 	g_mutex_lock(serio_mutex);
 	cleanup(serial_params->port_name);
@@ -951,11 +947,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		if (ve3d_mutex)
 		{
 			for (i=0;i<firmware->total_tables;i++)
-#if GLIB_MINOR_VERSION < 32
-				g_mutex_free(ve3d_mutex[i]);
-#else
-				g_mutex_clear(ve3d_mutex[i]);
-#endif
+				g_mutex_clear(&ve3d_mutex[i]);
 			cleanup(ve3d_mutex);
 			DATA_SET(global_data,"ve3d_mutex",NULL);
 		}
@@ -1057,51 +1049,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	DATA_SET(global_data,"interrogated",NULL);
 
 	/* Condition Variables */
-#if GLIB_MINOR_VERSION < 32
-	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
-	if (cond)
-	{
-		g_cond_free(cond);
-		DATA_SET(global_data,"rtv_thread_cond", NULL);
-	}
-	/* Mutexes */
-	mutex = (GMutex *)DATA_GET(global_data,"rtv_thread_mutex");
-	if (mutex)
-	{
-		g_mutex_free(mutex);
-		DATA_SET(global_data,"rtv_thread_mutex", NULL);
-	}
-	mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
-	if (mutex)
-	{
-		g_mutex_free(mutex);
-		DATA_SET(global_data,"serio_mutex", NULL);
-	}
-	mutex = (GMutex *)DATA_GET(global_data,"rtt_mutex");
-	if (mutex)
-	{
-		g_mutex_free(mutex);
-		DATA_SET(global_data,"rtt_mutex", NULL);
-	}
-	mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
-	if (mutex)
-	{
-		g_mutex_free(mutex);
-		DATA_SET(global_data,"rtv_mutex", NULL);
-	}
-	mutex = (GMutex *)DATA_GET(global_data,"dash_mutex");
-	if (mutex)
-	{
-		g_mutex_free(mutex);
-		DATA_SET(global_data,"dash_mutex", NULL);
-	}
-	mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
-	if (mutex)
-	{
-		g_mutex_free(mutex);
-		DATA_SET(global_data,"pf_dispatch_mutex", NULL);
-	}
-#else
 	cond = (GCond *)DATA_GET(global_data,"rtv_thread_cond");
 	if (cond)
 	{
@@ -1145,7 +1092,6 @@ G_MODULE_EXPORT void mem_dealloc(void)
 		g_mutex_clear(mutex);
 		DATA_SET(global_data,"pf_dispatch_mutex", NULL);
 	}
-#endif
 
 	/* Free all global data and structures */
 	printf("Deallocing GLOBAL DATA\n");

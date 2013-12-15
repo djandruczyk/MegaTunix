@@ -208,7 +208,6 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	GIOChannel *channel = NULL;
 	GAsyncQueue *queue = NULL;
 	Serial_Params *serial_params = NULL;
-	GTimeVal now;
 	GMutex *mutex = NULL;
 	GCond *cond = NULL;
 	GThread *thread = NULL;
@@ -224,13 +223,7 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	if ((cond) && (thread))
 	{
-#if GLIB_MINOR_VERSION < 32
-		g_get_current_time(&now);
-		g_time_val_add(&now,250000);
-		res = g_cond_timed_wait(cond,mutex,&now);
-#else
 		res = g_cond_wait_until(cond,mutex,g_get_monotonic_time() + 250 * G_TIME_SPAN_MILLISECOND);
-#endif
 		g_thread_join(thread);
 	}
 	DATA_SET(global_data,"serial_thread_id",NULL);
@@ -268,18 +261,9 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 
 	DATA_SET(global_data,"serial_abort",GINT_TO_POINTER(FALSE));
 #ifdef __WIN32__
-#if GLIB_MINOR_VERSION < 32
-	thread = g_thread_create(win32_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
-#else
 	thread = g_thread_new("Win32 Reader",win32_reader,GINT_TO_POINTER(serial_params->fd));
-#endif
-	
-#else
-#if GLIB_MINOR_VERSION < 32
-	thread = g_thread_create(unix_reader,GINT_TO_POINTER(serial_params->fd),TRUE,NULL);
 #else
 	thread = g_thread_new("UNIX Reader",unix_reader,GINT_TO_POINTER(serial_params->fd));
-#endif
 #endif
 	DATA_SET(global_data,"serial_thread_id",thread);
 	EXIT();
@@ -298,7 +282,6 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	FreeEMS_Packet *packet = NULL;
 	GCond *cond = NULL;
 	gboolean res = FALSE;
-	GTimeVal tval;
 	gint len = 0;
 	/* Packet sends back Interface Version */
 	/* START, Header, Payload ID H, PAyload ID L, CKsum, STOP */
@@ -321,13 +304,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	}
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
-#if GLIB_MINOR_VERSION < 31
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,250000);
-	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
-#endif
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	if (packet)
 	{
@@ -360,13 +337,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 			return FALSE;
 		}
 		g_free(buf);
-#if GLIB_MINOR_VERSION < 31
-		g_get_current_time(&tval);
-		g_time_val_add(&tval,250000);
-		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
-#endif
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		g_async_queue_unref(queue);
 		if (packet)
@@ -533,11 +504,7 @@ G_MODULE_EXPORT void setup_rtv_pf(void)
 	ENTER();
 	queue = g_async_queue_new();
 	DATA_SET(global_data,"rtv_subscriber_queue", queue);
-#if GLIB_MINOR_VERSION < 32
-	thread = g_thread_create(rtv_subscriber,queue,TRUE,NULL);
-#else
 	thread = g_thread_new("RTV Subscriber thread", rtv_subscriber,queue);
-#endif
 	DATA_SET(global_data,"rtv_subscriber_thread", thread);
 	/* This sends packets to the rtv_subscriber queue */
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
@@ -590,7 +557,6 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 {
 	GAsyncQueue *queue = (GAsyncQueue *)data;
 	static GMutex *mutex = NULL;
-	GTimeVal now;
 	FreeEMS_Packet *packet = NULL;
 
 	ENTER();
@@ -600,15 +566,8 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 
 	while (!DATA_GET(global_data,"rtv_subscriber_thread_exit"))
 	{
-		g_get_current_time(&now);
 		/* Wait up to 0.25 seconds for thread to exit */
-#if GLIB_MINOR_VERSION < 31
-		g_time_val_add(&now,250000);
-		g_mutex_lock(mutex);
-		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&now);
-#else
 		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
-#endif
 		g_mutex_unlock(mutex);
 		if (packet)
 		{

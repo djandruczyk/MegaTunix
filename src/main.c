@@ -53,8 +53,12 @@ gint main(gint argc, gchar ** argv)
 {
 	Serial_Params *serial_params = NULL;
 	GAsyncQueue *queue = NULL;
-	GCond *cond = NULL;
-	GMutex *mutex = NULL;
+	GCond cond;
+	GMutex dash_mutex;
+	GMutex rtt_mutex;
+	GMutex rtv_mutex;
+	GMutex rtv_thread_mutex;
+	GMutex serio_mutex;
 	GTimer *timer = NULL;
 	gint id = 0;
 	setlocale(LC_ALL,"");
@@ -68,9 +72,6 @@ gint main(gint argc, gchar ** argv)
 #ifdef DEBUG
 	printf("This is a debug release, Git hash: %s\n",GIT_HASH);
 #endif
-#if GLIB_MINOR_VERSION < 32
-	g_thread_init(NULL);
-#endif
 	// Not needed?
 //	gdk_threads_init();
 	gtk_init(&argc, &argv);
@@ -81,38 +82,20 @@ gint main(gint argc, gchar ** argv)
 
 	global_data = g_new0(gconstpointer, 1);
 
-
-#if GLIB_MINOR_VERSION < 32
 	/* Condition Variables */
-	cond = g_cond_new();
-	DATA_SET(global_data,"rtv_thread_cond",cond);
+	g_cond_init(&cond);
+	DATA_SET(global_data,"rtv_thread_cond",&cond);
 	/* Mutexes */
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"serio_mutex",mutex);
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"rtt_mutex",mutex);
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"rtv_mutex",mutex);
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"dash_mutex",mutex);
-	mutex = g_mutex_new();
-	DATA_SET(global_data,"rtv_thread_mutex",mutex);
-#else
-	/* Condition Variables */
-	g_cond_init(cond);
-	DATA_SET(global_data,"rtv_thread_cond",cond);
-	/* Mutexes */
-	g_mutex_init(mutex);
-	DATA_SET(global_data,"serio_mutex",mutex);
-	g_mutex_init(mutex);
-	DATA_SET(global_data,"rtt_mutex",mutex);
-	g_mutex_init(mutex);
-	DATA_SET(global_data,"rtv_mutex",mutex);
-	g_mutex_init(mutex);
-	DATA_SET(global_data,"dash_mutex",mutex);
-	g_mutex_init(mutex);
-	DATA_SET(global_data,"rtv_thread_mutex",mutex);
-#endif
+	g_mutex_init(&dash_mutex);
+	DATA_SET(global_data,"dash_mutex",&dash_mutex);
+	g_mutex_init(&rtt_mutex);
+	DATA_SET(global_data,"rtt_mutex",&rtt_mutex);
+	g_mutex_init(&rtv_mutex);
+	DATA_SET(global_data,"rtv_mutex",&rtv_mutex);
+	g_mutex_init(&rtv_thread_mutex);
+	DATA_SET(global_data,"rtv_thread_mutex",&rtv_thread_mutex);
+	g_mutex_init(&serio_mutex);
+	DATA_SET(global_data,"serio_mutex",&serio_mutex);
 
 	/* For testing if gettext works
 	   printf(_("Hello World!\n"));

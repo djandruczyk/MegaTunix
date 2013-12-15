@@ -39,7 +39,7 @@ extern "C" {
 
 /* GL includes */
 #include <gtk/gtk.h>
-#include <gtk/gtkgl.h>
+#include <gtk/gtkgl.h> 
 #ifdef __WIN32__
  #include <gdk/gdkglglext.h>
 #endif

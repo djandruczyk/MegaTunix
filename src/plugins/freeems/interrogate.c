@@ -119,7 +119,6 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
 	gchar *version = NULL;
-	GTimeVal tval;
 	Serial_Params *serial_params = NULL;
 	/* Raw packet */
 	guint8 *buf = NULL;
@@ -160,13 +159,7 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 		return NULL;
 	}
 	g_free(buf);
-#if GLIB_MINOR_VERSION < 31
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
-#endif
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -193,7 +186,6 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
 	gchar *version = NULL;
-	GTimeVal tval;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
 	/* Raw packet */
@@ -234,13 +226,7 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 		return NULL;
 	}
 	g_free(buf);
-#if GLIB_MINOR_VERSION < 31
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
-#endif
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	/*
@@ -412,7 +398,6 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
-	GTimeVal tval;
 	GList *list = NULL;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
@@ -454,13 +439,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 		return NULL;
 	}
 	g_free(buf);
-#if GLIB_MINOR_VERSION < 31
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
-#endif
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -498,7 +477,6 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
 	FreeEMS_Packet *packet = NULL;
-	GTimeVal tval;
 	GList *list = NULL;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
@@ -534,13 +512,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 		return NULL;
 	}
 	g_free(buf);
-#if GLIB_MINOR_VERSION < 31
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
-#endif
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LOCATION_ID_DETAILS);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -1424,7 +1396,6 @@ gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, g
 	guint16 *ptr = NULL;
 	gint resp = RESPONSE_RETRIEVE_BLOCK_FROM_RAM;
 	Serial_Params *serial_params = NULL;
-    GTimeVal tval;                                                              
 
 	ENTER();
 	serial_params = (Serial_Params *)DATA_GET(global_data,"serial_params");
@@ -1450,13 +1421,7 @@ gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, g
 		return FALSE;
 	}
 	g_free(buf);
-#if GLIB_MINOR_VERSION < 31
-	g_get_current_time(&tval);
-	g_time_val_add(&tval,500000);
-	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
-#endif
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)

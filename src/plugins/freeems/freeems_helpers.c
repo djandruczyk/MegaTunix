@@ -529,7 +529,6 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
   */
 G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gchar * queue_name)
 {
-	GTimeVal tval;
 	FreeEMS_Packet *packet = NULL;
 	GAsyncQueue *queue = NULL;
 
@@ -545,17 +544,7 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 		EXIT();
 		return NULL;
 	}
-#if GLIB_MINOR_VERSION < 31
-	g_get_current_time(&tval);
-	/* Set gigantic timeout for valgrind since it runs so slow */
-	if (g_getenv("_UNDER_VALGRIND"))
-		g_time_val_add(&tval,5000000);
-	else
-		g_time_val_add(&tval,500000);
-	packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,5000000);
-#endif
 	EXIT();
 	return packet;
 }
