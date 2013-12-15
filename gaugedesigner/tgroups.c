@@ -13,7 +13,7 @@ extern gboolean changed;
 extern GtkBuilder *toplevel;
 extern GtkBuilder *tgroups;
 
-G_MODULE_EXPORT gboolean create_tick_group_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_tick_group_event(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *dummy = NULL;
@@ -202,7 +202,7 @@ void reset_onscreen_tgroups()
 }
 
 
-gboolean alter_tgroup_data(GtkWidget *widget, gpointer data)
+gboolean alter_tgroup_data(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
@@ -258,7 +258,7 @@ gboolean alter_tgroup_data(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean remove_tgroup(GtkWidget * widget, gpointer data)
+gboolean remove_tgroup(GtkWidget * widget, gpointer UNUSED(data))
 {
 	gint index = -1;
 	if (!GTK_IS_WIDGET(gauge))

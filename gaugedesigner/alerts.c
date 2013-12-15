@@ -10,7 +10,7 @@ extern GdkColor white;
 extern gboolean changed;
 extern GtkBuilder *toplevel;
 
-G_MODULE_EXPORT gboolean create_alert_span_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_alert_span_event(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	GtkWidget *dialog = NULL;
 	GtkWidget *spinner = NULL;
@@ -157,7 +157,7 @@ void reset_onscreen_a_ranges()
 }
 
 
-gboolean remove_a_range(GtkWidget * widget, gpointer data)
+gboolean remove_a_range(GtkWidget * widget, gpointer UNUSED(data))
 {
 	gint index = -1;
 	if (!GTK_IS_WIDGET(gauge))
@@ -172,7 +172,7 @@ gboolean remove_a_range(GtkWidget * widget, gpointer data)
 }
 
 
-gboolean alter_a_range_data(GtkWidget *widget, gpointer data)
+gboolean alter_a_range_data(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;

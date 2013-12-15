@@ -19,7 +19,7 @@ extern GtkBuilder *toplevel;
 static gboolean poly_event_active = FALSE;
 
 
-G_MODULE_EXPORT gboolean create_polygon_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_polygon_event(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	GtkBuilder *polygons = NULL;
 	GtkWidget *dialog = NULL;
@@ -300,7 +300,7 @@ void reset_onscreen_polygons()
 }
 
 
-gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
+gboolean alter_polygon_data(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
@@ -381,7 +381,7 @@ gboolean alter_polygon_data(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean remove_polygon(GtkWidget * widget, gpointer data)
+gboolean remove_polygon(GtkWidget * widget, gpointer UNUSED(data))
 {
 	gint index = -1;
 	if (!GTK_IS_WIDGET(gauge))
@@ -396,7 +396,7 @@ gboolean remove_polygon(GtkWidget * widget, gpointer data)
 }
 
 
-gboolean polygon_type_changed_event(GtkWidget *widget, gpointer data)
+gboolean polygon_type_changed_event(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gchar * tmpbuf = NULL;
 	gchar * up = NULL;
@@ -445,7 +445,7 @@ gboolean polygon_type_changed_event(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean adj_generic_num_points(GtkWidget *widget, gpointer data)
+gboolean adj_generic_num_points(GtkWidget *widget, gpointer UNUSED(data))
 {
 	GtkWidget *table = NULL;
 	GtkWidget *dummy = NULL;
