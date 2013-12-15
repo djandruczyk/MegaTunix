@@ -117,7 +117,7 @@ void output (gchar *line, gboolean free_it)
 }
 
 
-G_MODULE_EXPORT gboolean persona_choice (GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean persona_choice (GtkWidget *widget, gpointer UNUSED(data))
 {
 	gint persona = 0;
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
@@ -129,7 +129,7 @@ G_MODULE_EXPORT gboolean persona_choice (GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean load_firmware (GtkButton *button)
+G_MODULE_EXPORT gboolean load_firmware (GtkButton * UNUSED(button))
 {
 	GtkWidget *widget = NULL;
 	gchar *port;
@@ -224,7 +224,7 @@ void unlock_buttons()
 
 
 
-G_MODULE_EXPORT gboolean leave(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean leave(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	save_defaults();
 	gtk_main_quit();
@@ -235,7 +235,7 @@ G_MODULE_EXPORT gboolean leave(GtkWidget * widget, gpointer data)
 /*!
  \brief about_popup makes the about tab and presents the MegaTunix logo
  */
-G_MODULE_EXPORT gboolean about_popup(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean about_popup(GtkWidget *UNUSED(widget), gpointer UNUSED(data))
 {
 #if GTK_MINOR_VERSION >= 8
 	if (gtk_minor_version >= 8)
@@ -325,7 +325,7 @@ void save_defaults()
 }
 
 
-void textbuffer_changed(GtkTextBuffer *buffer, gpointer data)
+void textbuffer_changed(GtkTextBuffer *buffer, gpointer UNUSED(data))
 {
 	GtkTextMark *insert, *end;
 	GtkTextIter end_iter;
