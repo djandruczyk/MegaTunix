@@ -55,12 +55,26 @@ extern "C" {
 #endif
 #define HOME g_get_home_dir
 
+/* Fancy casting tricks */
 #ifdef __64BIT__
 #define GINT gint)(gint64
 #define GBOOLEAN gboolean)(gint64
 #else
 #define GINT gint
 #define GBOOLEAN gboolean
+#endif
+
+/* attributes for unused vars/functions */
+#ifdef __GNUC__
+#  define UNUSED(x) UNUSED_ ## x __attribute__((__unused__))
+#else
+#  define UNUSED(x) UNUSED_ ## x
+#endif
+
+#ifdef __GNUC__
+#  define UNUSED_FUNCTION(x) __attribute__((__unused__)) UNUSED_ ## x
+#else
+#  define UNUSED_FUNCTION(x) UNUSED_ ## x
 #endif
 
 /* Gettext support
