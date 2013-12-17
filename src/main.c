@@ -29,6 +29,7 @@
 #include <debugging.h>
 #include <dispatcher.h>
 #include <locale.h>
+#include <gtkgl/gtkglarea.h>
 #include <locking.h>
 #include <init.h>
 #include <serialio.h>
@@ -75,6 +76,14 @@ gint main(gint argc, gchar ** argv)
 //	gdk_threads_init();
 	gtk_init(&argc, &argv);
 	glade_init();
+
+	/* Check if OpenGL is supported. */
+	if (gdk_gl_query() == FALSE) {
+		g_print("OpenGL not supported\n");
+		return 0;
+	}
+	else
+		gl_ability = TRUE;
 
 //	gdk_gl_init_check(&argc, &argv);
 //	gl_ability = gtk_gl_init_check(&argc, &argv);
