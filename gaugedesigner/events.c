@@ -20,7 +20,7 @@ extern GtkBuilder *toplevel;
 
 
 
-G_MODULE_EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_new_gauge(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	GtkWidget *tmp = NULL;
 
@@ -56,7 +56,7 @@ G_MODULE_EXPORT gboolean create_new_gauge(GtkWidget * widget, gpointer data)
 
 
 
-G_MODULE_EXPORT gboolean close_current_gauge(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean close_current_gauge(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	GtkWidget *tmp = NULL;
 
@@ -115,14 +115,14 @@ void update_attributes(void)
 	return;
 }
 
-G_MODULE_EXPORT gboolean entry_change_color(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean entry_change_color(GtkWidget * widget, gpointer UNUSED(data))
 {
         gtk_widget_modify_text(widget,GTK_STATE_NORMAL,&red);
 	return TRUE;
 
 }
 
-G_MODULE_EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean change_font(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gchar * tmpbuf = NULL;
 	MtxGaugeFace *g = NULL;
@@ -146,7 +146,7 @@ G_MODULE_EXPORT gboolean change_font(GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer UNUSED(data))
 {
 	GdkColor color;
 	gint handler = (GINT)OBJ_GET((widget),"handler");
@@ -165,7 +165,7 @@ G_MODULE_EXPORT gboolean color_button_color_set(GtkWidget *widget, gpointer data
 }
 
 
-G_MODULE_EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer UNUSED(data))
 {
 	GtkAdjustment *adj = NULL;
 	GtkWidget *upper_spin = NULL;
@@ -194,7 +194,7 @@ G_MODULE_EXPORT gboolean link_range_spinners(GtkWidget *widget, gpointer data)
 
 
 
-G_MODULE_EXPORT gboolean animate_gauge(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean animate_gauge(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gfloat lower = 0.0;
 	gfloat upper = 0.0;
@@ -257,7 +257,7 @@ gboolean sweep_gauge(gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean grab_coords_event(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean grab_coords_event(GtkWidget *widget, gpointer UNUSED(daa))
 {
 	gdouble x = 0.0;
 	gdouble y = 0.0;
@@ -277,7 +277,7 @@ G_MODULE_EXPORT gboolean grab_coords_event(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean gauge_motion(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+gboolean gauge_motion(GtkWidget *widget, GdkEventMotion *event, gpointer UNUSED(daa))
 {
 	GtkWidget *x_spin = NULL;
 	GtkWidget *y_spin = NULL;
@@ -314,7 +314,7 @@ gboolean gauge_motion(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 }
 
 
-gboolean gauge_button(GtkWidget *widget, GdkEventButton *event, gpointer data)
+gboolean gauge_button(GtkWidget *UNUSED(widget), GdkEventButton *UNUSED(event), gpointer UNUSED(daa))
 {
 	GtkWidget * tmp = NULL;
 

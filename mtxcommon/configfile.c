@@ -33,8 +33,14 @@
 #include <stdlib.h>
 
 #ifdef DEBUG
- #define ENTER() ""
- #define EXIT() "" 
+ #ifdef ENTER
+  #undef ENTER
+  #define ENTER() ""
+ #endif
+ #ifdef ENTER
+  #undef EXIT
+  #define EXIT() "" 
+ #endif
 #endif
 static ConfigSection *cfg_create_section(ConfigFile * cfg, const gchar * name);
 static ConfigLine *cfg_create_string(ConfigSection * section, const gchar * key, const gchar * value);

@@ -56,7 +56,7 @@ typedef enum
 	UR
 }CornerType;
 
-G_MODULE_EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean dashdesigner_about(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	extern GtkWidget *main_window;
 #if GTK_MINOR_VERSION >= 8
@@ -81,7 +81,7 @@ G_MODULE_EXPORT gboolean dashdesigner_about(GtkWidget * widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean create_preview_list(GtkWidget *UNUSED(widget), gpointer UNUSED(data))
 {
 
 	static gboolean created = FALSE;
@@ -458,7 +458,7 @@ void scan_for_gauges(gpointer data, gpointer user_data)
 }
 
 
-G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventButton *event, gpointer UNUSED(data))
 {
 	GtkWidget *table = NULL;
 	gint i = 0;
@@ -530,7 +530,7 @@ G_MODULE_EXPORT gboolean gauge_choice_button_event(GtkWidget *widget, GdkEventBu
 }
 
 
-G_MODULE_EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean dashdesigner_quit(GtkWidget *UNUSED(widget), gpointer UNUSED(data))
 {
 	extern GtkTreeStore *store;
 	if (changed)
@@ -542,7 +542,7 @@ G_MODULE_EXPORT gboolean dashdesigner_quit(GtkWidget *widget, gpointer data)
 
 
 
-G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer UNUSED(data))
 {
 	gint x_cur;
 	gint y_cur;
@@ -622,7 +622,7 @@ G_MODULE_EXPORT gboolean motion_event(GtkWidget *widget, GdkEventMotion *event, 
 
 
 
-G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+G_MODULE_EXPORT gboolean button_event(GtkWidget *widget, GdkEventButton *event, gpointer UNUSED(data))
 {
 	GtkWidget * fixed = gtk_bin_get_child(GTK_BIN(widget));
 	GList *list = NULL;
@@ -955,7 +955,7 @@ again:
 }
 
 
-G_MODULE_EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
+G_MODULE_EXPORT gboolean close_current_dash(GtkWidget *UNUSED(widget), gchar * UNUSED(source))
 {
 	GtkWidget *dash = NULL;
 	GtkWidget *topwidget = NULL;
@@ -979,7 +979,7 @@ G_MODULE_EXPORT gboolean close_current_dash(GtkWidget *widget, gchar * source)
 }
 
 
-G_MODULE_EXPORT gboolean dummy(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean dummy(GtkWidget *UNUSED(widget), gpointer UNUSED(data))
 {
 	return TRUE;
 }
@@ -991,7 +991,7 @@ gint list_sort(gconstpointer a, gconstpointer b)
 	return g_ascii_strcasecmp(a1,b1);
 }
 
-void free_element(gpointer data, gpointer user_data)
+void free_element(gpointer data, gpointer UNUSED(user_data))
 {
         gchar *a = (gchar *)data;
 	if (a)
@@ -999,7 +999,7 @@ void free_element(gpointer data, gpointer user_data)
 }
 
 
-G_MODULE_EXPORT gboolean optimize_dash_size(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean optimize_dash_size(GtkWidget *UNUSED(widget), gpointer UNUSED(data))
 {
 	GtkWidget *dash = NULL;
 	GtkWidget *g = NULL;

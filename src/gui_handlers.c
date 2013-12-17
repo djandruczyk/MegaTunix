@@ -2848,10 +2848,9 @@ G_MODULE_EXPORT void start_restore_monitor(void)
 
 	ENTER();
 	printf("start_restore_monitor!\n");
-	restore_update_thread = g_thread_create(restore_update,
-			NULL, /* Thread args */
-			TRUE, /* Joinable */
-			NULL); /*GError Pointer */
+	restore_update_thread = g_thread_new("Restore update thread", 
+			restore_update,
+			NULL); /* Thread args */
 	EXIT();
 	return;
 }

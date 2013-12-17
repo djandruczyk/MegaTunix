@@ -32,7 +32,9 @@ int main (int argc, char **argv)
 	GtkWidget *gauge = NULL;
 	gint timeout = 0;
 
+#if GLIB_MINOR_VERSION < 32
 	g_thread_init(NULL);
+#endif
 	gdk_threads_init();
 	gtk_init (&argc, &argv);
 

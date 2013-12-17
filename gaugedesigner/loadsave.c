@@ -33,7 +33,7 @@ void prompt_to_save()
 	}
 	return;
 }
-G_MODULE_EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean load_handler(GtkWidget *widget, gpointer UNUSED(data))
 {
 	MtxFileIO *fileio = NULL;
 	gchar *filename = NULL;
@@ -68,13 +68,13 @@ G_MODULE_EXPORT gboolean load_handler(GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean save_as_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean save_as_handler(GtkWidget *widget, gpointer UNUSED(data))
 {
 	save_handler(widget,GINT_TO_POINTER(TRUE));
 	return TRUE;
 }
 
-G_MODULE_EXPORT gboolean save_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean save_handler(GtkWidget *UNUSED(widget), gpointer UNUSED(data))
 {
 	gchar * tmpbuf = NULL;
 	gchar * filename = NULL;

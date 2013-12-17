@@ -39,7 +39,9 @@ int main (int argc, char **argv)
 	gint timeout = 0;
 	gint i = 0;
 
+#if GLIB_MINOR_VERSION < 32
 	g_thread_init(NULL);
+#endif
 	gdk_threads_init();
 	gtk_init (&argc, &argv);
 

@@ -11,7 +11,7 @@ extern gboolean changed;
 extern GtkBuilder *toplevel;
 
 
-G_MODULE_EXPORT gboolean create_text_block_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_text_block_event(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	GtkBuilder *tblocks = NULL;
 	GtkWidget *dialog = NULL;
@@ -153,7 +153,7 @@ void reset_onscreen_tblocks()
 }
 
 
-gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
+gboolean alter_tblock_data(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gint index = (GINT)OBJ_GET((widget),"index");
 	gfloat value = 0.0;
@@ -196,7 +196,7 @@ gboolean alter_tblock_data(GtkWidget *widget, gpointer data)
 }
 
 
-gboolean remove_tblock(GtkWidget * widget, gpointer data)
+gboolean remove_tblock(GtkWidget * widget, gpointer UNUSED(data))
 {
 	gint index = -1;
 	if (!GTK_IS_WIDGET(gauge))

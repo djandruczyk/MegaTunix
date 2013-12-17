@@ -406,7 +406,7 @@ gchar * choose_file(MtxFileIO *data)
 	{
 		printf("ACTION_OPEN before gtk_file_chooser_dialog_new\n");
 		dialog = gtk_file_chooser_dialog_new(data->title,
-				//GTK_WINDOW(data->parent),
+				/*GTK_WINDOW(data->parent), */
 				0,
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -436,7 +436,7 @@ gchar * choose_file(MtxFileIO *data)
 	{
 		printf("ACTION_SAVE calling gtk_file_chooser_dialog_new\n");
 		dialog = gtk_file_chooser_dialog_new(data->title,
-				//GTK_WINDOW(data->parent),
+				/*GTK_WINDOW(data->parent), */
 				0,
 				data->action,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -444,8 +444,9 @@ gchar * choose_file(MtxFileIO *data)
 				NULL);	
 		printf("after gtk_file_chooser_dialog_new\n");
 
-		//		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
-		//			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
+		/*		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
+					gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
+		*/
 
 		if (data->default_path)
 		{
@@ -455,7 +456,7 @@ gchar * choose_file(MtxFileIO *data)
 		}
 		else
 			defdir = g_build_filename(HOME(),"mtx",data->project, NULL);
-		// If filename passed check/adj path 
+		/* If filename passed check/adj path  */
 		if (data->filename)
 		{
 			if (g_strrstr(data->filename,DATA_DIR) != NULL)
@@ -483,7 +484,7 @@ gchar * choose_file(MtxFileIO *data)
 		EXIT();
 		return NULL;
 	}
-	// Add shortcut folders... 
+	/* Add shortcut folders...  */
 	if (data->shortcut_folders)
 	{
 		vector = g_strsplit(data->shortcut_folders,",",-1);
@@ -499,7 +500,7 @@ gchar * choose_file(MtxFileIO *data)
 		g_strfreev(vector);
 	}
 	
-	// If default path switch to that place 
+	/* If default path switch to that place  */
 	if ((data->external_path) && (!(data->default_path)))
 	{
 		printf("external path with no default path\n");
@@ -511,8 +512,9 @@ gchar * choose_file(MtxFileIO *data)
 
 	}
 
-	// If filters, assign them 
-	//  CAUSES SEGFAULTS???
+	/* If filters, assign them 
+	  CAUSES SEGFAULTS???
+	  */
 	/*
 	if (data->filter)
 	{
@@ -534,7 +536,7 @@ gchar * choose_file(MtxFileIO *data)
 	}
 	*/
 afterfilter:
-	// Turn on overwriteconfirmation 
+	/* Turn on overwriteconfirmation  */
 	gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 	g_signal_connect(G_OBJECT(dialog),"confirm-overwrite",
 			G_CALLBACK (confirm_overwrite_callback), NULL);
@@ -584,7 +586,7 @@ afterfilter:
   \returns a GtkFileChooserConfirmation enumeration
   */
 GtkFileChooserConfirmation
-confirm_overwrite_callback (GtkFileChooser *chooser, gpointer data)
+confirm_overwrite_callback (GtkFileChooser *chooser, gpointer UNUSED(data))
 {
 	GtkWidget *dialog = NULL;
 	char *filename;

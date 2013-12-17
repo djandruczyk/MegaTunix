@@ -209,7 +209,6 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
   */
 void *packet_handler(gpointer data)
 {
-	GTimeVal tval;
 	FreeEMS_Packet *packet = NULL;
 	GAsyncQueue *queue = (GAsyncQueue *)DATA_GET(global_data,"packet_queue");
 	GCond *cond = NULL;
@@ -224,13 +223,7 @@ void *packet_handler(gpointer data)
 				g_cond_signal(cond);
                         g_thread_exit(0);
 		}
-#if GLIB_MINOR_VERSION < 31
-		g_get_current_time(&tval);
-		g_time_val_add(&tval,250000);
-		packet = (FreeEMS_Packet *)g_async_queue_timed_pop(queue,&tval);
-#else
 		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
-#endif
 		if (packet)
 			dispatch_packet_queues(packet);
 	}

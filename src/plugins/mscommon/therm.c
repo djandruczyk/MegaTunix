@@ -159,7 +159,7 @@ gboolean read_import_file(GIOChannel *chan)
 		return TRUE;
 	}
 	EXIT();
-	return;
+	return FALSE;
 }
 
 

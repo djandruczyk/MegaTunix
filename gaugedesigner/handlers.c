@@ -11,7 +11,7 @@ extern gboolean changed;
 extern gboolean gauge_loaded;
 
 
-G_MODULE_EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean text_attributes_menu_handler(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -22,7 +22,7 @@ G_MODULE_EXPORT gboolean text_attributes_menu_handler(GtkWidget * widget, gpoint
 }
 
 
-G_MODULE_EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean tick_groups_menu_handler(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -32,7 +32,7 @@ G_MODULE_EXPORT gboolean tick_groups_menu_handler(GtkWidget * widget, gpointer d
 }
 
 
-G_MODULE_EXPORT gboolean polygon_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean polygon_menu_handler(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -135,7 +135,7 @@ void reset_text_controls()
 
 
 
-G_MODULE_EXPORT gboolean general_attributes_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean general_attributes_menu_handler(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -316,7 +316,7 @@ void reset_general_controls()
 }
 
 
-G_MODULE_EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean warning_ranges_menu_handler(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -326,7 +326,7 @@ G_MODULE_EXPORT gboolean warning_ranges_menu_handler(GtkWidget * widget, gpointe
 }
 
 
-G_MODULE_EXPORT gboolean alert_ranges_menu_handler(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean alert_ranges_menu_handler(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	if (!GTK_IS_WIDGET(gauge))
 		return FALSE;
@@ -335,7 +335,7 @@ G_MODULE_EXPORT gboolean alert_ranges_menu_handler(GtkWidget * widget, gpointer 
 	return TRUE;
 }
 
-G_MODULE_EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean about_menu_handler(GtkWidget *UNUSED(widget), gpointer UNUSED(data))
 {
 	extern GtkWidget *main_window;
 #if GTK_MINOR_VERSION >= 8
@@ -360,7 +360,7 @@ G_MODULE_EXPORT gboolean about_menu_handler(GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean quit_gaugedesigner(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean quit_gaugedesigner(GtkWidget *UNUSED(widget), gpointer UNUSED(data))
 {
 	if ((gauge_loaded) && (changed))
 		prompt_to_save();
@@ -369,7 +369,7 @@ G_MODULE_EXPORT gboolean quit_gaugedesigner(GtkWidget *widget, gpointer data)
 }
 
 
-G_MODULE_EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gfloat tmpf = 0.0;
 	MtxGaugeFace *g = NULL;
@@ -398,7 +398,7 @@ G_MODULE_EXPORT gboolean generic_spin_button_handler(GtkWidget *widget, gpointer
 }
 
 
-G_MODULE_EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gint tmpi = 0;
 	gfloat tmpf = 0.0;
@@ -487,7 +487,7 @@ G_MODULE_EXPORT gboolean tg_spin_button_handler(GtkWidget *widget, gpointer data
 }
 
 
-G_MODULE_EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer UNUSED(data))
 {
 	MtxGaugeFace *g = NULL;
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -505,7 +505,7 @@ G_MODULE_EXPORT gboolean day_nite_handler(GtkWidget *widget, gpointer data)
 
 
 
-G_MODULE_EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	gint value = (GINT)OBJ_GET((widget),"special_value");
@@ -527,7 +527,7 @@ G_MODULE_EXPORT gboolean radio_button_handler(GtkWidget *widget, gpointer data)
 	return TRUE;
 }
 
-G_MODULE_EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer data)
+G_MODULE_EXPORT gboolean checkbutton_handler(GtkWidget *widget, gpointer UNUSED(data))
 {
 	gboolean state = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 	gint handler = (GINT)OBJ_GET((widget),"handler");

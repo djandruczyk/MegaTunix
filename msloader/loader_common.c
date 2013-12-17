@@ -221,7 +221,11 @@ void unlock_port()
 }
 
 
+#ifdef __WIN32__
+gboolean lock_port(gchar * UNUSED(name))
+#else
 gboolean lock_port(gchar * name)
+#endif
 {
 #ifndef __WIN32__
 	gchar *tmpbuf = NULL;

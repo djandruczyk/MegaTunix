@@ -114,7 +114,6 @@ G_MODULE_EXPORT void *thread_dispatcher(gpointer data)
 {
 	GThread * repair_thread = NULL;
 	Serial_Params *serial_params = NULL;
-	GTimeVal cur;
 	Io_Message *message = NULL;	
 	GAsyncQueue *io_data_queue = NULL;
 	CmdLineArgs *args  = NULL;
@@ -149,13 +148,7 @@ fast_exit:
 			EXIT();
 			g_thread_exit(0);
 		}
-#if GLIB_MINOR_VERSION < 31
-		g_get_current_time(&cur);
-		g_time_val_add(&cur,1000000); /* 10 ms timeout */
-		message = (Io_Message *)g_async_queue_timed_pop(io_data_queue,&cur);
-#else
 		message = (Io_Message *)g_async_queue_timeout_pop(io_data_queue,1000000);
-#endif
 		if (!message) /* NULL message */
 		{
 			MTXDBG(THREADS|IO_MSG,_("No message received...\n"));
@@ -173,12 +166,12 @@ fast_exit:
 			if (args->network_mode)
 			{
 				MTXDBG(THREADS,_("LINK DOWN, Initiating NETWORK repair thread!\n"));
-				repair_thread = g_thread_create(network_repair_thread,NULL,TRUE,NULL);
+				repair_thread = g_thread_new("Network Repair thread",network_repair_thread,NULL);
 			}
 			else
 			{
 				MTXDBG(THREADS,_("LINK DOWN, Initiating serial repair thread!\n"));
-				repair_thread = g_thread_create(serial_repair_thread,NULL,TRUE,NULL);
+				repair_thread = g_thread_new("Serial Repair thread",serial_repair_thread,NULL);
 			}
 			g_thread_join(repair_thread);
 		}

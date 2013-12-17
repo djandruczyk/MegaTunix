@@ -11,7 +11,7 @@ extern gboolean changed;
 extern GtkBuilder *toplevel;
 
 
-G_MODULE_EXPORT gboolean create_warning_span_event(GtkWidget * widget, gpointer data)
+G_MODULE_EXPORT gboolean create_warning_span_event(GtkWidget * UNUSED(widget), gpointer UNUSED(data))
 {
 	GtkBuilder *warnings;
 	GtkWidget *dialog = NULL;
@@ -225,7 +225,7 @@ void reset_onscreen_w_ranges()
 }
 
 
-gboolean remove_w_range(GtkWidget * widget, gpointer data)
+gboolean remove_w_range(GtkWidget * widget, gpointer UNUSED(data))
 {
 	gint index = -1;
 	if (!GTK_IS_WIDGET(gauge))

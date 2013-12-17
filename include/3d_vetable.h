@@ -40,10 +40,10 @@ extern "C" {
 /* GL includes */
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>
-/*#ifdef __WIN32__
- #include <gdk/gdkglglext.h>
+#ifdef __WIN32__
+ #include <gtk/gtkglarea.h> 
+// #include <gdk/gdkglglext.h>
 #endif
-*/
 #include <GL/gl.h>
 #include <GL/glu.h>
 
