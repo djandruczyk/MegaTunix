@@ -39,10 +39,11 @@ extern "C" {
 
 /* GL includes */
 #include <gtk/gtk.h>
-#include <gtk/gtkgl.h>
-#ifdef __WIN32__
+#include <gtkgl/gtkglarea.h>
+/*#ifdef __WIN32__
  #include <gdk/gdkglglext.h>
 #endif
+*/
 #include <GL/gl.h>
 #include <GL/glu.h>
 
@@ -232,7 +233,7 @@ void free_current_values(Cur_Vals *);
 void generate_quad_mesh(Ve_View_3D *, Cur_Vals *);
 Cur_Vals * get_current_values(Ve_View_3D *);
 gfloat get_fixed_pos(Ve_View_3D *, gfloat, Axis);
-GdkGLConfig* get_gl_config(void);
+//GdkGLConfig* get_gl_config(void);
 void gl_print_string(GtkWidget *, const gchar *);
 void gl_destroy_font(GtkWidget *);
 void gl_create_font(GtkWidget *);

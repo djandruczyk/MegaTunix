@@ -47,11 +47,10 @@
 #include <conversions.h>
 #include <dashboard.h>
 #include <debugging.h>
-#include <gdk/gdkglglext.h>
+//#include <gdk/gdkglglext.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <pango/pangoft2.h>
-#include <gtk/gtkgl.h>
 #include <gui_handlers.h>
 #include <listmgmt.h>
 #include <logviewer_gui.h>
@@ -278,12 +277,13 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	gfloat *mult = NULL;
 	gfloat *add = NULL;
 	gfloat tmpf = 0.0;
-	GdkGLConfig *gl_config;
+//	GdkGLConfig *gl_config;
 	gchar * tmpbuf = NULL;
 	gint x = 0;
 	gint y = 0;
 	gint smallstep = 0;
 	gint bigstep = 0;
+	int attrlist[] = {GDK_GL_RGBA,TRUE,GDK_GL_NONE};
 	Ve_View_3D *ve_view;
 	GHashTable *ve_view_hash = NULL;
 	extern gboolean gl_ability;
@@ -551,7 +551,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			GINT_TO_POINTER(table_num));
 	gtk_widget_show(window);
 
-	gl_config = get_gl_config();
+/*	gl_config = get_gl_config(); */
 
 	vbox = gtk_vbox_new(FALSE,0);
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
@@ -563,9 +563,10 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	frame = gtk_frame_new("3D Table display");
 	gtk_box_pack_start(GTK_BOX(hbox),frame,TRUE,TRUE,0);
 
-	drawing_area = gtk_drawing_area_new();
-	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
+	drawing_area = gtk_gl_area_new(attrlist);
+/*	gtk_widget_set_gl_capability(drawing_area, gl_config, NULL,
 			TRUE, GDK_GL_RGBA_TYPE);
+			*/
 	gtk_widget_set_size_request(drawing_area,320,240);
 	OBJ_SET(drawing_area,"ve_view",(gpointer)ve_view);
 	ve_view->drawing_area = drawing_area;
@@ -579,8 +580,10 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 			GDK_VISIBILITY_NOTIFY_MASK);
 	
 
+	/*
 	g_signal_connect_after(G_OBJECT (drawing_area), "realize",
 			G_CALLBACK (ve3d_realize), NULL);
+			*/
 	g_signal_connect(G_OBJECT (drawing_area), "configure_event",
 			G_CALLBACK (ve3d_configure_event), GINT_TO_POINTER(table_num));
 	/* Connect signal handlers to the drawing area */
@@ -826,7 +829,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpoin
 	if (ve_view->drawing_area)
 	{
 		window = gtk_widget_get_window(ve_view->drawing_area);
-		gdk_window_unset_gl_capability(window);
+//		gdk_window_unset_gl_capability(window);
 		gtk_widget_destroy(ve_view->drawing_area);
 		ve_view->drawing_area = NULL;
 	}
@@ -884,34 +887,34 @@ G_MODULE_EXPORT void reset_3d_view(GtkWidget * widget)
   \brief get_gl_config gets the OpenGL mode creates a GL config and returns it
   \returns pointer to a GdkGLConfig structure
   */
-GdkGLConfig* get_gl_config(void)
-{
-	GdkGLConfig* gl_config;
-
-	ENTER();
-	/* Try double-buffered visual */
-	gl_config = gdk_gl_config_new_by_mode ((GdkGLConfigMode)(GDK_GL_MODE_RGB |
-			GDK_GL_MODE_DEPTH |
-			GDK_GL_MODE_DOUBLE));
-	if (gl_config == NULL)
-	{
-		MTXDBG(CRITICAL,_("Cannot find the double-buffered visual.  Trying single-buffered visual.\n"));
-
-		/* Try single-buffered visual */
-		gl_config = gdk_gl_config_new_by_mode ((GdkGLConfigMode)(GDK_GL_MODE_RGB|GDK_GL_MODE_DEPTH));
-				
-		if (gl_config == NULL)
-		{
-			/* Should make a non-GL basic drawing area version
-			   instead of dumping the user out of here, or at least 
-			   render a non-GL found text on the drawing area */
-			MTXDBG(CRITICAL,_("No appropriate OpenGL-capable visual found. EXITING!!\n"));
-			exit (-1);
-		}
-	}
-	EXIT();
-	return gl_config;
-}
+//GdkGLConfig* get_gl_config(void)
+//{
+//	GdkGLConfig* gl_config;
+//
+//	ENTER();
+//	/* Try double-buffered visual */
+//	gl_config = gdk_gl_config_new_by_mode ((GdkGLConfigMode)(GDK_GL_MODE_RGB |
+//			GDK_GL_MODE_DEPTH |
+//			GDK_GL_MODE_DOUBLE));
+//	if (gl_config == NULL)
+//	{
+//		MTXDBG(CRITICAL,_("Cannot find the double-buffered visual.  Trying single-buffered visual.\n"));
+//
+//		/* Try single-buffered visual */
+//		gl_config = gdk_gl_config_new_by_mode ((GdkGLConfigMode)(GDK_GL_MODE_RGB|GDK_GL_MODE_DEPTH));
+//				
+//		if (gl_config == NULL)
+//		{
+//			/* Should make a non-GL basic drawing area version
+//			   instead of dumping the user out of here, or at least 
+//			   render a non-GL found text on the drawing area */
+//			MTXDBG(CRITICAL,_("No appropriate OpenGL-capable visual found. EXITING!!\n"));
+//			exit (-1);
+//		}
+//	}
+//	EXIT();
+//	return gl_config;
+//}
 
 
 /*!
@@ -925,8 +928,8 @@ GdkGLConfig* get_gl_config(void)
 G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	Ve_View_3D *ve_view = NULL;
-	GdkGLContext *glcontext = NULL;
-	GdkGLDrawable *gldrawable = NULL;
+//	GdkGLContext *glcontext = NULL;
+//	GdkGLDrawable *gldrawable = NULL;
 	GtkAllocation allocation;
 	GLfloat w;
 	GLfloat h;
@@ -942,28 +945,30 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
 	if (ve_view->font_created)
 		gl_destroy_font(widget);
-	glcontext = gtk_widget_get_gl_context(widget);
-	gldrawable = gtk_widget_get_gl_drawable(widget);
-	if (!glcontext)
-	{
-		//printf("app configure event left (no glcontext!) FALSE!\n");
-		return FALSE;
-	}
-	if (!gldrawable)
-	{
-		//printf("app configure event left (no gldrawable!) FALSE!\n");
-		return FALSE;
-	}
+//	glcontext = gtk_widget_get_gl_context(widget);
+//	gldrawable = gtk_widget_get_gl_drawable(widget);
+//	if (!glcontext)
+//	{
+//		//printf("app configure event left (no glcontext!) FALSE!\n");
+//		return FALSE;
+//	}
+//	if (!gldrawable)
+//	{
+//		//printf("app configure event left (no gldrawable!) FALSE!\n");
+//		return FALSE;
+//	}
 
 	MTXDBG(OPENGL,_("W %f, H %f\n"),w,h);
 
 	/*** OpenGL BEGIN ***/
-	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
+//	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
+	gtk_gl_area_make_current((GtkGLArea *)widget);
 	ve_view->aspect = 1.0;
 	glViewport (0, 0, w, h);
 	glMatrixMode(GL_MODELVIEW);
 	gl_create_font(widget);
-	gdk_gl_drawable_gl_end (gldrawable);
+	glFlush();
+//	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	EXIT();
 	return TRUE;
@@ -982,8 +987,8 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
 G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	static GMutex ** ve3d_mutex = NULL;
-	GdkGLContext *glcontext = NULL;
-	GdkGLDrawable *gldrawable = NULL;
+//	GdkGLContext *glcontext = NULL;
+//	GdkGLDrawable *gldrawable = NULL;
 	Ve_View_3D *ve_view = NULL;
 	Cur_Vals *cur_vals = NULL;
 	ve_view = (Ve_View_3D *)OBJ_GET(widget,"ve_view");
@@ -994,13 +999,13 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	if (!ve3d_mutex)
 		ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
 	//printf("app expose event entered!\n");
-	glcontext = gtk_widget_get_gl_context(widget);
-	gldrawable = gtk_widget_get_gl_drawable(widget);
+//	glcontext = gtk_widget_get_gl_context(widget);
+//	gldrawable = gtk_widget_get_gl_drawable(widget);
 
 	g_return_val_if_fail(ve3d_mutex,FALSE);
 	g_return_val_if_fail(ve_view,FALSE);
-	g_return_val_if_fail(glcontext,FALSE);
-	g_return_val_if_fail(gldrawable,FALSE);
+//	g_return_val_if_fail(glcontext,FALSE);
+//	g_return_val_if_fail(gldrawable,FALSE);
 
 	g_mutex_lock(ve3d_mutex[table_num]);
 
@@ -1012,7 +1017,8 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	}
 
 	/*** OpenGL BEGIN ***/
-	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
+//	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
+	gtk_gl_area_make_current((GtkGLArea *)widget);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -1050,13 +1056,13 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	else
 		ve3d_grey_window(ve_view);
 
-	if (gdk_gl_drawable_is_double_buffered (gldrawable))
-		gdk_gl_drawable_swap_buffers (gldrawable);
-	else
+//	if (gdk_gl_drawable_is_double_buffered (gldrawable))
+//		gdk_gl_drawable_swap_buffers (gldrawable);
+//	else
 		glFlush ();
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	gdk_gl_drawable_gl_end (gldrawable);
+//	gdk_gl_drawable_gl_end (gldrawable);
 	/*** OpenGL END ***/
 	//printf("app expose event left (TRUE)!\n");
 	g_mutex_unlock(ve3d_mutex[table_num]);
@@ -1167,17 +1173,18 @@ G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 
 void gl_init(GtkWidget *widget)
 {
-	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
-	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
+//	GdkGLContext *glcontext = gtk_widget_get_gl_context (widget);
+//	GdkGLDrawable *gldrawable = gtk_widget_get_gl_drawable (widget);
 
 	ENTER();
 
-	g_return_if_fail(glcontext);
-	g_return_if_fail(gldrawable);
+//	g_return_if_fail(glcontext);
+//	g_return_if_fail(gldrawable);
 
 	/*! Stuff we used to do in the realize handler... */
 	/*** OpenGL BEGIN ***/
-	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
+//	gdk_gl_drawable_gl_begin (gldrawable, glcontext);
+	gtk_gl_area_make_current((GtkGLArea *)widget);
 
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
@@ -1188,7 +1195,8 @@ void gl_init(GtkWidget *widget)
 	glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glMatrixMode(GL_MODELVIEW);
-	gdk_gl_drawable_gl_end (gldrawable);
+//	gdk_gl_drawable_gl_end (gldrawable);
+	glFlush();
 	/*** OpenGL END ***/
 	EXIT();
 	return;

@@ -28,7 +28,6 @@
 #include <core_gui.h>
 #include <debugging.h>
 #include <dispatcher.h>
-#include <gtk/gtkgl.h>
 #include <locale.h>
 #include <locking.h>
 #include <init.h>
@@ -74,8 +73,8 @@ gint main(gint argc, gchar ** argv)
 	gtk_init(&argc, &argv);
 	glade_init();
 
-	gdk_gl_init_check(&argc, &argv);
-	gl_ability = gtk_gl_init_check(&argc, &argv);
+//	gdk_gl_init_check(&argc, &argv);
+//	gl_ability = gtk_gl_init_check(&argc, &argv);
 
 	global_data = g_new0(gconstpointer, 1);
 

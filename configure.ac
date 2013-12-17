@@ -92,10 +92,10 @@ dnl for GTK 3.x   	GTK_CFLAGS+="-DGSEAL_ENABLE"
 
 PKG_CHECK_GTK()
 
-dnl check for gtkglext library
-PKG_CHECK_MODULES(GLEXT, [gtkglext-1.0 gdkglext-1.0])
-AC_SUBST(GLEXT_CFLAGS)
-AC_SUBST(GLEXT_LIBS)
+dnl check for gtkgl library
+PKG_CHECK_MODULES(GLLIB, [gtkgl-2.0])
+AC_SUBST(GLLIB_CFLAGS)
+AC_SUBST(GLLIB_LIBS)
 
 dnl check for glade-2.x library
 PKG_CHECK_MODULES(LIBGLADE,libglade-2.0 )
