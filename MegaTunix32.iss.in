@@ -63,7 +63,7 @@ Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\locale\fi\*.*"; DestDir: "
 Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\locale\fr\*.*"; DestDir: "{app}\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\tmp/mtx_win32\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\@CWD@\widgets\.libs\*.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\@CWD@\win_support\loaders.cache32"; DestDir: "{app}\lib\gdk-pixbug-2.0\2.10.0\"; DestName: "loaders.cache"; Flags: ignoreversion
+Source: "z:\@CWD@\win_support\loaders.cache32"; DestDir: "{app}\lib\gdk-pixbuf-2.0\2.10.0\"; DestName: "loaders.cache"; Flags: ignoreversion
 Source: "z:\@CWD@\win_support\pango.modules32"; DestDir: "{app}\etc\pango\"; DestName: "pango.modules"; Flags: ignoreversion
 Source: "z:\tmp\mtx_win32\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
