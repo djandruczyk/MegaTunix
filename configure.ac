@@ -93,9 +93,9 @@ dnl for GTK 3.x   	GTK_CFLAGS+="-DGSEAL_ENABLE"
 PKG_CHECK_GTK()
 
 dnl check for gtkgl library
-PKG_CHECK_MODULES(GLLIB, [gtkgl-2.0])
-AC_SUBST(GLLIB_CFLAGS)
-AC_SUBST(GLLIB_LIBS)
+PKG_CHECK_MODULES(GTKGL, [gtkgl-2.0])
+AC_SUBST(GTKGL_CFLAGS)
+AC_SUBST(GTKGL_LIBS)
 
 dnl check for glade-2.x library
 PKG_CHECK_MODULES(LIBGLADE,libglade-2.0 )
@@ -148,9 +148,10 @@ AC_ARG_ENABLE(debug,
 
 if test "$enable_debug" = yes ; then
 DEBUG_FLAGS="$DEBUG_FLAGS -g -DDEBUG"
-AM_CFLAGS="-O0 -Wall -Wno-long-long -Wno-unused -Wno-strict-aliasing -pedantic -Wno-format-extra-args -std=gnu99"
+AM_CFLAGS="-O0 -Wall -Wno-long-long -Wno-unused -Wno-strict-aliasing -Wno-format-extra-args -std=gnu99"
 else
-AM_CFLAGS="-O2 -Wall -Wno-long-long -Wno-unused -Wno-strict-aliasing -pedantic -Wno-format-extra-args -std=gnu99"
+DEBUG_FLAGS=""
+AM_CFLAGS="-O2 -Wall -Wno-long-long -Wno-unused -Wno-strict-aliasing -Wno-format-extra-args -std=gnu99"
 fi
 AC_SUBST(DEBUG_FLAGS)
 AC_SUBST(AM_CFLAGS)
@@ -305,6 +306,7 @@ menu/Makefile
 desktop/Makefile
 category/Makefile
 icons/Makefile
+win_support/Makefile
 MegaTunix32.iss
 MegaTunix64.iss
 MegaTunix32_dbg.iss
