@@ -1,11 +1,16 @@
 #!/bin/sh
 
-. cross32
 CPUS=`cat /proc/cpuinfo |grep -c ^processor`
+HOST="i686-w64-mingw32.shared"
+OLDPATH=${PATH}
+export PATH=/opt/mxe/usr/bin:${PATH}
+export PKG_CONFIG_PATH_i686_w64_mingw32=/opt/mxe/usr/${HOST}/lib/pkgconfig
+DEST=/tmp/mtx_win32
 
 make distclean
-cross32-configure ./configure --prefix=/opt/crossroot32/dest $* && \
-	make -j${CPUS}  && rm -rf /opt/crossroot32/dest/* && make install && \
-	./contrib/builder32 && \
-. uncross 
+./configure --host=${HOST} --prefix=${DEST} $* && \
+	make -j${CPUS}  && rm -rf ${DEST} && make install && \
+	./contrib/builder32 
+export PATH=$OLDPATH
+export PKG_CONFIG_PATH_i686_w64_mingw32=
 # make distclean
