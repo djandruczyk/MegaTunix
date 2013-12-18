@@ -28,8 +28,6 @@ InfoBeforeFile=.\WIN_NOTES.txt
 ChangesEnvironment=yes
 
 [Files]
-Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\lib\gtk-2.0\2.10.0\immodules\*.dll"; DestDir: "{app}\lib\gtk-2.0\2.10.0\immodules"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\lib\gtk-2.0\modules\*.dll"; DestDir: "{app}\lib\gtk-2.0\modules"; Flags: ignoreversion recursesubdirs createallsubdirs
