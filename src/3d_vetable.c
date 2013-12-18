@@ -46,6 +46,7 @@
 #include <3d_vetable.h>
 #include <conversions.h>
 #include <dashboard.h>
+#include <glade/glade.h>
 #include <debugging.h>
 //#include <gdk/gdkglglext.h>
 #include <gdk/gdkkeysyms.h>
@@ -74,6 +75,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
+#include <gtkgl/gtkglarea.h>
 
 #define ONE_SECOND 	 1	/* one second */
 #define DEFAULT_WIDTH  640
@@ -89,6 +91,7 @@ static const char font_string[] = "Sans";
 #endif
 
 void gl_init(GtkWidget *);
+void drawOrthoText(GtkWidget *, char *, GLclampf, GLclampf, GLclampf, GLfloat, GLfloat);
 
 /*!
   \brief Calculates the frames per second for the 3D display
@@ -294,7 +297,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 	GHashTable *ve_view_hash = NULL;
 	extern gboolean gl_ability;
 	Firmware_Details *firmware = NULL;
-	GMutex **ve3d_mutex = NULL;
+	GMutex *ve3d_mutex = NULL;
 	gint table_num =  -1;
 
 
@@ -305,7 +308,7 @@ G_MODULE_EXPORT gboolean create_ve3d_view(GtkWidget *widget, gpointer data)
 		return FALSE;
 	}
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
-	ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
+	ve3d_mutex = (GMutex *)DATA_GET(global_data,"ve3d_mutex");
 	tmpbuf = (gchar *)OBJ_GET(widget,"table_num");
 	table_num = (GINT)g_ascii_strtod(tmpbuf,NULL);
 	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
@@ -807,7 +810,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpoin
 	GdkWindow *window = NULL;
 	Ve_View_3D *ve_view =  NULL;
 	gint table_num = (GINT)data;
-	GMutex **ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
+	GMutex *ve3d_mutex = (GMutex *)DATA_GET(global_data,"ve3d_mutex");
 	ve_view = (Ve_View_3D*)OBJ_GET(widget,"ve_view");
 	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
 
@@ -815,7 +818,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpoin
 			
 	g_return_val_if_fail(ve_view,FALSE);
 	g_return_val_if_fail(ve_view_hash,FALSE);
-	g_mutex_lock(ve3d_mutex[table_num]);
+	g_mutex_lock(&ve3d_mutex[table_num]);
 	//printf("ve3d_shutdown, ve_view ptr is %p\n",ve_view);
 
 	if (ve_view->render_id > 0)
@@ -842,7 +845,7 @@ G_MODULE_EXPORT gboolean ve3d_shutdown(GtkWidget *widget, GdkEvent *event, gpoin
 	
 	//printf("ve3d_shutdown complete, ve_view ptr is %p\n",ve_view);
 	/* MUST return false otherwise other handlers won't run*/
-	g_mutex_unlock(ve3d_mutex[table_num]);
+	g_mutex_unlock(&ve3d_mutex[table_num]);
 	EXIT();
 	return FALSE;  
 }
@@ -936,7 +939,7 @@ G_MODULE_EXPORT gboolean ve3d_configure_event(GtkWidget *widget, GdkEventConfigu
   */
 G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	static GMutex ** ve3d_mutex = NULL;
+	static GMutex * ve3d_mutex = NULL;
 //	GdkGLContext *glcontext = NULL;
 //	GdkGLDrawable *gldrawable = NULL;
 	gboolean result = FALSE;
@@ -948,13 +951,13 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	ENTER();
 
 	if (!ve3d_mutex)
-		ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
+		ve3d_mutex = (GMutex *)DATA_GET(global_data,"ve3d_mutex");
 	//printf("app expose event entered!\n");
 
 	g_return_val_if_fail(ve3d_mutex,FALSE);
 	g_return_val_if_fail(ve_view,FALSE);
 
-	g_mutex_lock(ve3d_mutex[table_num]);
+	g_mutex_lock(&ve3d_mutex[table_num]);
 
 	/*** OpenGL BEGIN ***/
 	result = gtk_gl_area_make_current(GTK_GL_AREA(widget));
@@ -999,7 +1002,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	/*** OpenGL END ***/
 /*	printf("app expose event left (TRUE)!\n");*/
-	g_mutex_unlock(ve3d_mutex[table_num]);
+	g_mutex_unlock(&ve3d_mutex[table_num]);
 	EXIT();
 	return TRUE;
 }
@@ -1115,7 +1118,7 @@ G_MODULE_EXPORT gint ve3d_realize (GtkWidget *widget, gpointer data)
 	}
 	/*** OpenGL END ***/
 	EXIT();
-	return;
+	return TRUE;
 }
 
 
@@ -3300,14 +3303,14 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	Firmware_Details *firmware = NULL;
 	GHashTable *sources_hash = NULL;
 	GHashTable *ve_view_hash = NULL;
-	GMutex **ve3d_mutex = NULL;
+	GMutex *ve3d_mutex = NULL;
 	gint table_num = (GINT)data;
 	GtkAllocation allocation;
 	GdkWindow *window = NULL;
 
 	ENTER();
 
-	ve3d_mutex = (GMutex **)DATA_GET(global_data,"ve3d_mutex");
+	ve3d_mutex = (GMutex *)DATA_GET(global_data,"ve3d_mutex");
 	ve_view_hash = (GHashTable *)DATA_GET(global_data,"ve_view_hash");
 	sources_hash = (GHashTable *)DATA_GET(global_data,"sources_hash");
 	firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
@@ -3322,18 +3325,18 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	ve_view = (Ve_View_3D *)g_hash_table_lookup(ve_view_hash,GINT_TO_POINTER(table_num));
 	if (!ve_view)
 		return FALSE;
-	g_mutex_lock(ve3d_mutex[table_num]);
+	g_mutex_lock(&ve3d_mutex[table_num]);
 	if (DATA_GET(global_data,"leaving"))
 	{
 		MTXDBG(OPENGL,_("global \"leaving\" set, Leaving...\n"));
-		g_mutex_unlock(ve3d_mutex[table_num]);
+		g_mutex_unlock(&ve3d_mutex[table_num]);
 		return FALSE;
 	}
 
 	if (!GTK_IS_WIDGET(ve_view->drawing_area))
 	{
 		MTXDBG(OPENGL,_("ve_view->drawing_area is NOT a widget, Leaving...\n"));
-		g_mutex_unlock(ve3d_mutex[table_num]);
+		g_mutex_unlock(&ve3d_mutex[table_num]);
 		return FALSE;
 	}
 	gtk_widget_get_allocation(ve_view->drawing_area,&allocation);
@@ -3404,12 +3407,12 @@ G_MODULE_EXPORT gboolean update_ve3d(gpointer data)
 	if (((fabs(z[0]-z[1])/z[0]) > 0.01) || (DATA_GET(global_data,"forced_update")))
 		goto redraw;
 	MTXDBG(OPENGL,_("Leaving without redraw\n"));
-	g_mutex_unlock(ve3d_mutex[table_num]);
+	g_mutex_unlock(&ve3d_mutex[table_num]);
 	return FALSE;
 
 redraw:
 	gdk_window_invalidate_rect (window, &allocation, FALSE);
-	g_mutex_unlock(ve3d_mutex[table_num]);
+	g_mutex_unlock(&ve3d_mutex[table_num]);
 	EXIT();
 	return FALSE;
 }

@@ -34,13 +34,11 @@ extern "C" {
 #define __3D_VETABLE_H__
 
 #include <enums.h>
+#include <glade/glade.h>
 #include <gtk/gtk.h>
 #include <multi_expr_loader.h>
 
 /* GL includes */
-#include <gtkgl/gtkglarea.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 typedef struct _RGB3f RGB3f;
 typedef struct _Quad Quad;
@@ -223,7 +221,6 @@ gboolean delayed_expose(gpointer);
 gboolean delayed_expose_wrapper(gpointer);
 gboolean delayed_reconfigure(gpointer);
 gboolean delayed_reconfigure_wrapper(gpointer);
-void drawOrthoText(GtkWidget *, char *, GLclampf, GLclampf, GLclampf, GLfloat, GLfloat);
 void free_current_values(Cur_Vals *);
 void generate_quad_mesh(Ve_View_3D *, Cur_Vals *);
 Cur_Vals * get_current_values(Ve_View_3D *);

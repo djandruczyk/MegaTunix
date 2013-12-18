@@ -9,7 +9,7 @@ INCLUDES = \
 	-I$(top_srcdir)/mtxmatheval \
 	@GTK_CFLAGS@ \
 	@DEPRECATED_CFLAGS@ \
-	@GLLIB_CFLAGS@ \
+	@GTKGL_CFLAGS@ \
 	@LIBGLADE_CFLAGS@ \
 	@MEGATUNIX_DEFINES@ -DGIT_HASH=\"$(GIT_HASH)\" -DGIT_COMMIT=\"$(GIT_COMMIT)\"
 
@@ -80,7 +80,7 @@ megatunix_DEPENDENCIES = @WIN32_RESOURCES@  ../widgets/libmtxgauge.la ../widgets
 resources.o:
 	$(WINDRES) -i resources.rc -o resources.o
 
-megatunix_LDADD = @GTK_LIBS@ @GLLIB_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../widgets/libmtxgauge.la ../widgets/libmtxcombo_mask.la ../yaml-cpp/libmtxyamlcpp.la  @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
+megatunix_LDADD = @GTK_LIBS@ @GTKGL_LIBS@ @LIBGLADE_LIBS@ ../mtxmatheval/libmtxmatheval.la -lfl ../mtxcommon/libmtxcommon.la ../widgets/libmtxprogress.la ../widgets/libmtxpie.la ../widgets/libmtxstripchart.la ../widgets/libmtxgauge.la ../widgets/libmtxcombo_mask.la ../yaml-cpp/libmtxyamlcpp.la  @EXTRA_LIBS@ @WIN32_RESOURCES@ @PROF_FLAGS@
 
 megatunix_LDFLAGS = $(LTLIBINTL)
 
