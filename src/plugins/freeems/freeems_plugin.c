@@ -44,9 +44,12 @@ gconstpointer *global_data = NULL;
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	GAsyncQueue *queue = NULL;
-	GCond *cond = NULL;
+	GCond sr_cond;
+	GCond ph_cond;
 	GThread *thread = NULL;
-	GMutex *mutex = NULL;
+	GMutex rtv_mutex;
+	GMutex seq_mutex;
+	GMutex queue_mutex;
 	GHashTable *hash = NULL;
 
 	global_data = data;
@@ -123,16 +126,17 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	register_common_enums();
 
 	/* Packet handling queue */
-	g_cond_init(cond);
-	DATA_SET(global_data,"serial_reader_cond",cond);
-	g_cond_init(cond);
-	DATA_SET(global_data,"packet_handler_cond",cond);
-	g_mutex_init(mutex);
-	DATA_SET(global_data,"rtv_subscriber_mutex",mutex);
-	g_mutex_init(mutex);
-	DATA_SET(global_data,"atomic_sequence_mutex",mutex);
-	g_mutex_init(mutex);
-	DATA_SET(global_data,"queue_mutex",mutex);
+	g_cond_init(&sr_cond);
+	DATA_SET(global_data,"serial_reader_cond",&sr_cond);
+	g_cond_init(&ph_cond);
+	DATA_SET(global_data,"packet_handler_cond",&ph_cond);
+	g_mutex_init(&rtv_mutex);
+	DATA_SET(global_data,"rtv_subscriber_mutex",&rtv_mutex);
+	g_mutex_init(&seq_mutex);
+	DATA_SET(global_data,"atomic_sequence_mutex",&seq_mutex);
+	g_mutex_init(&queue_mutex);
+	printf("queue_mutex initial pointer %p\n",&queue_mutex);
+	DATA_SET(global_data,"queue_mutex",&queue_mutex);
 	thread = g_thread_new("Packet Handler Thread",packet_handler,NULL);
 	DATA_SET(global_data,"packet_handler_thread",thread);
 	/* Packet subscribers */
@@ -165,10 +169,10 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 G_MODULE_EXPORT void plugin_shutdown()
 {
 	GThread *thread = NULL;
-	GCond *cond = NULL;
+	GCond *cond;
 	GAsyncQueue *queue = NULL;
 	GHashTable *hash = NULL;
-	GMutex *mutex = NULL;
+	GMutex *mutex;
 	gint id = 0;
 
 	ENTER();
@@ -229,12 +233,10 @@ G_MODULE_EXPORT void plugin_shutdown()
 	cond = (GCond *)DATA_GET(global_data,"packet_handler_cond");
 	if (cond)
 		g_cond_clear(cond);
-	cond = NULL;
 	DATA_SET(global_data,"packet_handler_cond",NULL);
 	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	if (cond)
 		g_cond_clear(cond);
-	cond = NULL;
 	DATA_SET(global_data,"serial_reader_cond",NULL);
 	mutex = (GMutex *)DATA_GET(global_data,"queue_mutex");
 	if (mutex)
