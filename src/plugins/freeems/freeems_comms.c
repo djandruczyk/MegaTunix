@@ -208,22 +208,23 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	GIOChannel *channel = NULL;
 	GAsyncQueue *queue = NULL;
 	Serial_Params *serial_params = NULL;
-	GMutex *mutex = NULL;
+	GMutex mutex;
 	GCond *cond = NULL;
 	GThread *thread = NULL;
 	gboolean res = FALSE;
 	gint tmpi = 0;
 
 	ENTER();
-	g_mutex_init(mutex);
+	g_mutex_init(&mutex);
 	DATA_SET(global_data,"serial_abort",GINT_TO_POINTER(TRUE));
 	thread = (GThread *)DATA_GET(global_data,"serial_thread_id");
-	g_mutex_lock(mutex);
+	g_mutex_lock(&mutex);
 	/* Wait up to 0.25 seconds for thread to exit */
 	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
+	g_return_if_fail(cond);
 	if ((cond) && (thread))
 	{
-		res = g_cond_wait_until(cond,mutex,g_get_monotonic_time() + 250 * G_TIME_SPAN_MILLISECOND);
+		res = g_cond_wait_until(cond,&mutex,g_get_monotonic_time() + 250 * G_TIME_SPAN_MILLISECOND);
 		g_thread_join(thread);
 	}
 	DATA_SET(global_data,"serial_thread_id",NULL);
@@ -233,8 +234,8 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 	   else
 	   printf("cond timeout\n");
 	 */
-	g_mutex_unlock(mutex);
-	g_mutex_clear(mutex);
+	g_mutex_unlock(&mutex);
+	g_mutex_clear(&mutex);
 	EXIT();
 	return;
 }

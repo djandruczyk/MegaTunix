@@ -223,9 +223,14 @@ void *packet_handler(gpointer data)
 				g_cond_signal(cond);
                         g_thread_exit(0);
 		}
-		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
-		if (packet)
-			dispatch_packet_queues(packet);
+		if (!queue)
+			MTXDBG(PACKETS,_("Packet queue pointer is NULL!!\n\t"));
+		else
+		{
+			packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+			if (packet)
+				dispatch_packet_queues(packet);
+		}
 	}
 	g_thread_exit(0);
 	EXIT();
@@ -338,7 +343,7 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 		payloads = (GHashTable *)DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
 		sequences = (GHashTable *)DATA_GET(global_data,"sequence_num_queue_hash");
-	printf("register_packet_queue  queue_mutex pointer %p\n",mutex);
+	printf("register_packet_queue queue_mutex pointer %p\n",mutex);
 	g_return_if_fail(mutex);
 	g_return_if_fail(queue);
 	g_mutex_lock(mutex);

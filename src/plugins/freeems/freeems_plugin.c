@@ -32,6 +32,11 @@
 
 
 gconstpointer *global_data = NULL;
+static GCond fems_sr_cond;
+static GCond fems_ph_cond;
+static GMutex fems_rtv_mutex;
+static GMutex fems_seq_mutex;
+static GMutex fems_queue_mutex;
 
 
 /*!
@@ -44,12 +49,7 @@ gconstpointer *global_data = NULL;
 G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 {
 	GAsyncQueue *queue = NULL;
-	GCond sr_cond;
-	GCond ph_cond;
 	GThread *thread = NULL;
-	GMutex rtv_mutex;
-	GMutex seq_mutex;
-	GMutex queue_mutex;
 	GHashTable *hash = NULL;
 
 	global_data = data;
@@ -126,17 +126,16 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	register_common_enums();
 
 	/* Packet handling queue */
-	g_cond_init(&sr_cond);
-	DATA_SET(global_data,"serial_reader_cond",&sr_cond);
-	g_cond_init(&ph_cond);
-	DATA_SET(global_data,"packet_handler_cond",&ph_cond);
-	g_mutex_init(&rtv_mutex);
-	DATA_SET(global_data,"rtv_subscriber_mutex",&rtv_mutex);
-	g_mutex_init(&seq_mutex);
-	DATA_SET(global_data,"atomic_sequence_mutex",&seq_mutex);
-	g_mutex_init(&queue_mutex);
-	printf("queue_mutex initial pointer %p\n",&queue_mutex);
-	DATA_SET(global_data,"queue_mutex",&queue_mutex);
+	g_cond_init(&fems_sr_cond);
+	DATA_SET(global_data,"serial_reader_cond",&fems_sr_cond);
+	g_cond_init(&fems_ph_cond);
+	DATA_SET(global_data,"packet_handler_cond",&fems_ph_cond);
+	g_mutex_init(&fems_rtv_mutex);
+	DATA_SET(global_data,"rtv_subscriber_mutex",&fems_rtv_mutex);
+	g_mutex_init(&fems_seq_mutex);
+	DATA_SET(global_data,"atomic_sequence_mutex",&fems_seq_mutex);
+	g_mutex_init(&fems_queue_mutex);
+	DATA_SET(global_data,"queue_mutex",&fems_queue_mutex);
 	thread = g_thread_new("Packet Handler Thread",packet_handler,NULL);
 	DATA_SET(global_data,"packet_handler_thread",thread);
 	/* Packet subscribers */
@@ -169,9 +168,9 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 G_MODULE_EXPORT void plugin_shutdown()
 {
 	GThread *thread = NULL;
-	GCond *cond;
 	GAsyncQueue *queue = NULL;
 	GHashTable *hash = NULL;
+	GCond *cond;
 	GMutex *mutex;
 	gint id = 0;
 

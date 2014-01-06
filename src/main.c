@@ -40,12 +40,12 @@
 
 gboolean gl_ability = FALSE;
 gconstpointer *global_data = NULL;
-GCond rtv_thread_cond;
-GMutex dash_mutex;
-GMutex rtt_mutex;
-GMutex rtv_mutex;
-GMutex rtv_thread_mutex;
-GMutex serio_mutex;
+static GCond rtv_thread_cond;
+static GMutex dash_mutex;
+static GMutex rtt_mutex;
+static GMutex rtv_mutex;
+static GMutex rtv_thread_mutex;
+static GMutex serio_mutex;
 
 /*!
   \brief main() is the typical main function in a C program, it performs
