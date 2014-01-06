@@ -898,8 +898,8 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 		cairo_paint(cr);
 		cairo_set_operator(cr,CAIRO_OPERATOR_SOURCE);
 		cairo_set_source_rgb (cr, 1.0,1.0,1.0);
-		/* Drag border boxes... */
 
+		/* Drag border boxes... */
 		if (priv->show_drag_border)
 		{
 			cairo_rectangle(cr,0,0,DRAG_BORDER,DRAG_BORDER);
@@ -908,6 +908,7 @@ gboolean mtx_gauge_face_configure (GtkWidget *widget, GdkEventConfigure *event)
 			cairo_rectangle(cr,0,priv->h-DRAG_BORDER,DRAG_BORDER,DRAG_BORDER);
 			cairo_fill(cr);
 		}
+		/* Mask for gauge itself */
 		cairo_arc(cr, priv->xc, priv->yc, priv->radius, 0, 2 * M_PI);
 		cairo_fill(cr);
 		cairo_stroke(cr);
@@ -946,7 +947,7 @@ gboolean mtx_gauge_face_expose (GtkWidget *widget, GdkEventExpose *event)
 #if GTK_MINOR_VERSION >= 18
 	if (gtk_widget_is_sensitive(GTK_WIDGET(widget)))
 #else
-		if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
+	if (GTK_WIDGET_IS_SENSITIVE(GTK_WIDGET(widget)))
 #endif
 		{
 			cr = gdk_cairo_create(window);

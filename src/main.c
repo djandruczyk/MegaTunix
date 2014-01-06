@@ -40,6 +40,12 @@
 
 gboolean gl_ability = FALSE;
 gconstpointer *global_data = NULL;
+GCond rtv_thread_cond;
+GMutex dash_mutex;
+GMutex rtt_mutex;
+GMutex rtv_mutex;
+GMutex rtv_thread_mutex;
+GMutex serio_mutex;
 
 /*!
   \brief main() is the typical main function in a C program, it performs
@@ -53,12 +59,6 @@ gint main(gint argc, gchar ** argv)
 {
 	Serial_Params *serial_params = NULL;
 	GAsyncQueue *queue = NULL;
-	GCond cond;
-	GMutex dash_mutex;
-	GMutex rtt_mutex;
-	GMutex rtv_mutex;
-	GMutex rtv_thread_mutex;
-	GMutex serio_mutex;
 	GTimer *timer = NULL;
 	gint id = 0;
 	setlocale(LC_ALL,"");
@@ -91,8 +91,8 @@ gint main(gint argc, gchar ** argv)
 	global_data = g_new0(gconstpointer, 1);
 
 	/* Condition Variables */
-	g_cond_init(&cond);
-	DATA_SET(global_data,"rtv_thread_cond",&cond);
+	g_cond_init(&rtv_thread_cond);
+	DATA_SET(global_data,"rtv_thread_cond",&rtv_thread_cond);
 	/* Mutexes */
 	g_mutex_init(&dash_mutex);
 	DATA_SET(global_data,"dash_mutex",&dash_mutex);
