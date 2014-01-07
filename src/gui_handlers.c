@@ -165,32 +165,6 @@ G_MODULE_EXPORT gboolean leave(GtkWidget *widget, gpointer data)
 	g_thread_join(thread);
 	DATA_SET(global_data,"thread_dispatcher_id",NULL);
 
-	/* NOTE: Timeouts are not threads and they behave differently
-	 * So we use a litle spicy magic. The timeout has a function that 
-	 * it will call which it is destroyed. The function will unlock the
-	 * mutex associated with that timeout.  So in order to syncronize with
-	 * the timeout's deletion, we wil lock it first, then set the global
-	 * variable the timeout will be looking for (if it's running), as well
-	 * as tell glib to remove it's ID, so the destroy notify gets called.
-	 * Meanwhile we try to lock the mutex again and will block until the 
-	 * destroynotify runs which unlocks the mutex and unblocks us here,
-	 * so we have a foolproof way to know the timeout has shutdown.
-	 */
-	/* PF dispatch queue */
-	mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
-	id = (GINT)DATA_GET(global_data,"pf_dispatcher_id");
-	if (id)
-	{
-		g_mutex_lock(mutex);
-		DATA_SET(global_data,"pf_dispatcher_exit",GINT_TO_POINTER(1));
-		g_source_remove(id);
-		DATA_SET(global_data,"pf_dispatcher_id",NULL);
-		g_mutex_lock(mutex);
-		/* When the above returns, the timeout is done */
-		g_mutex_unlock(mutex);
-		DATA_SET(global_data,"pf_dispatcher_exit",NULL);
-	}
-
 	/* Binary Log flusher */
 	id = (GINT)DATA_GET(global_data,"binlog_flush_id");
 	if (id)

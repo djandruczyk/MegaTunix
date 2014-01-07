@@ -1053,6 +1053,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	if (cond)
 	{
 		g_cond_clear(cond);
+		g_free(cond);
 		DATA_SET(global_data,"rtv_thread_cond", NULL);
 	}
 	/* Mutexes */
@@ -1060,6 +1061,7 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	if (mutex)
 	{
 		g_mutex_clear(mutex);
+		g_free(mutex);
 		DATA_SET(global_data,"rtv_thread_mutex", NULL);
 	}
 	mutex = (GMutex *)DATA_GET(global_data,"serio_mutex");
@@ -1072,25 +1074,22 @@ G_MODULE_EXPORT void mem_dealloc(void)
 	if (mutex)
 	{
 		g_mutex_clear(mutex);
+		g_free(mutex);
 		DATA_SET(global_data,"rtt_mutex", NULL);
 	}
 	mutex = (GMutex *)DATA_GET(global_data,"rtv_mutex");
 	if (mutex)
 	{
 		g_mutex_clear(mutex);
+		g_free(mutex);
 		DATA_SET(global_data,"rtv_mutex", NULL);
 	}
 	mutex = (GMutex *)DATA_GET(global_data,"dash_mutex");
 	if (mutex)
 	{
 		g_mutex_clear(mutex);
+		g_free(mutex);
 		DATA_SET(global_data,"dash_mutex", NULL);
-	}
-	mutex = (GMutex *)DATA_GET(global_data,"pf_dispatch_mutex");
-	if (mutex)
-	{
-		g_mutex_clear(mutex);
-		DATA_SET(global_data,"pf_dispatch_mutex", NULL);
 	}
 
 	/* Free all global data and structures */

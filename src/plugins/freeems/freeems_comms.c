@@ -82,12 +82,12 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	get_symbol_f("close_serial",(void **)&close_serial_f);
 	get_symbol_f("lock_serial",(void **)&lock_serial_f);
 	get_symbol_f("unlock_serial",(void **)&unlock_serial_f);
-	MTXDBG(THREADS|CRITICAL,_("Thread created!\n"));
+	MTXDBG(THREADS|CRITICAL,_("LibreEMS serial_repair_thread() created!\n"));
 
 	if (DATA_GET(global_data,"offline"))
 	{
 		g_timeout_add(100,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
-		MTXDBG(THREADS|CRITICAL,_("Thread exiting, offline mode!\n"));
+		MTXDBG(THREADS|CRITICAL,_("LibreEMS serial_repair_thread() exiting, offline mode!\n"));
 		g_thread_exit(0);
 	}
 	if (!io_repair_queue)
@@ -133,7 +133,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 			if (g_async_queue_try_pop(io_repair_queue))
 			{
 				g_timeout_add(300,(GSourceFunc)queue_function_f,(gpointer)"kill_conn_warning");
-				MTXDBG(THREADS|CRITICAL,_("Thread exiting, told to!\n"));
+				MTXDBG(THREADS|CRITICAL,_("LibreEMS serial_repair_thread() exiting, told to!\n"));
 				g_thread_exit(0);
 			}
 			if (!g_file_test(vector[i],G_FILE_TEST_EXISTS))
@@ -193,7 +193,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	}
 	if (vector)
 		g_strfreev(vector);
-	MTXDBG(THREADS|CRITICAL,_("Thread exiting, device found!\n"));
+	MTXDBG(THREADS|CRITICAL,_("LibreEMS serial_repair_thread()  exiting, device found!\n"));
 	g_thread_exit(0);
 	EXIT();
 	return NULL;

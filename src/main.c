@@ -40,12 +40,6 @@
 
 gboolean gl_ability = FALSE;
 gconstpointer *global_data = NULL;
-static GCond rtv_thread_cond;
-static GMutex dash_mutex;
-static GMutex rtt_mutex;
-static GMutex rtv_mutex;
-static GMutex rtv_thread_mutex;
-static GMutex serio_mutex;
 
 /*!
   \brief main() is the typical main function in a C program, it performs
@@ -60,6 +54,12 @@ gint main(gint argc, gchar ** argv)
 	Serial_Params *serial_params = NULL;
 	GAsyncQueue *queue = NULL;
 	GTimer *timer = NULL;
+	GCond *rtv_thread_cond = NULL;
+	GMutex *dash_mutex = NULL;
+	GMutex *rtt_mutex = NULL;
+	GMutex *rtv_mutex = NULL;
+	GMutex *rtv_thread_mutex = NULL;
+	GMutex *serio_mutex = NULL;
 	gint id = 0;
 	setlocale(LC_ALL,"");
 #ifdef __WIN32__
@@ -91,19 +91,25 @@ gint main(gint argc, gchar ** argv)
 	global_data = g_new0(gconstpointer, 1);
 
 	/* Condition Variables */
-	g_cond_init(&rtv_thread_cond);
-	DATA_SET(global_data,"rtv_thread_cond",&rtv_thread_cond);
+	rtv_thread_cond = g_new0(GCond,1);
+	g_cond_init(rtv_thread_cond);
+	DATA_SET(global_data,"rtv_thread_cond",rtv_thread_cond);
 	/* Mutexes */
-	g_mutex_init(&dash_mutex);
-	DATA_SET(global_data,"dash_mutex",&dash_mutex);
-	g_mutex_init(&rtt_mutex);
-	DATA_SET(global_data,"rtt_mutex",&rtt_mutex);
-	g_mutex_init(&rtv_mutex);
-	DATA_SET(global_data,"rtv_mutex",&rtv_mutex);
-	g_mutex_init(&rtv_thread_mutex);
-	DATA_SET(global_data,"rtv_thread_mutex",&rtv_thread_mutex);
-	g_mutex_init(&serio_mutex);
-	DATA_SET(global_data,"serio_mutex",&serio_mutex);
+	dash_mutex = g_new0(GMutex, 1);
+	g_mutex_init(dash_mutex);
+	DATA_SET(global_data,"dash_mutex",dash_mutex);
+	rtt_mutex = g_new0(GMutex, 1);
+	g_mutex_init(rtt_mutex);
+	DATA_SET(global_data,"rtt_mutex",rtt_mutex);
+	rtv_mutex = g_new0(GMutex, 1);
+	g_mutex_init(rtv_mutex);
+	DATA_SET(global_data,"rtv_mutex",rtv_mutex);
+	rtv_thread_mutex = g_new0(GMutex, 1);
+	g_mutex_init(rtv_thread_mutex);
+	DATA_SET(global_data,"rtv_thread_mutex",rtv_thread_mutex);
+	serio_mutex = g_new0(GMutex, 1);
+	g_mutex_init(serio_mutex);
+	DATA_SET(global_data,"serio_mutex",serio_mutex);
 
 	/* For testing if gettext works
 	   printf(_("Hello World!\n"));

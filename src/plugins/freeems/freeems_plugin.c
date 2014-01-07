@@ -32,11 +32,6 @@
 
 
 gconstpointer *global_data = NULL;
-static GCond fems_sr_cond;
-static GCond fems_ph_cond;
-static GMutex fems_rtv_mutex;
-static GMutex fems_seq_mutex;
-static GMutex fems_queue_mutex;
 
 
 /*!
@@ -51,6 +46,11 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	GAsyncQueue *queue = NULL;
 	GThread *thread = NULL;
 	GHashTable *hash = NULL;
+	GCond *serial_reader_cond = NULL;
+	GCond *packet_handler_cond = NULL;
+	GMutex *rtv_subscriber_mutex = NULL;
+	GMutex *atomic_sequence_mutex = NULL;
+	GMutex *queue_mutex = NULL;
 
 	global_data = data;
 	*(void **)(&error_msg_f) = DATA_GET(global_data,"error_msg_f");
@@ -126,16 +126,21 @@ G_MODULE_EXPORT void plugin_init(gconstpointer *data)
 	register_common_enums();
 
 	/* Packet handling queue */
-	g_cond_init(&fems_sr_cond);
-	DATA_SET(global_data,"serial_reader_cond",&fems_sr_cond);
-	g_cond_init(&fems_ph_cond);
-	DATA_SET(global_data,"packet_handler_cond",&fems_ph_cond);
-	g_mutex_init(&fems_rtv_mutex);
-	DATA_SET(global_data,"rtv_subscriber_mutex",&fems_rtv_mutex);
-	g_mutex_init(&fems_seq_mutex);
-	DATA_SET(global_data,"atomic_sequence_mutex",&fems_seq_mutex);
-	g_mutex_init(&fems_queue_mutex);
-	DATA_SET(global_data,"queue_mutex",&fems_queue_mutex);
+	serial_reader_cond = g_new0(GCond, 1);
+	g_cond_init(serial_reader_cond);
+	DATA_SET(global_data,"serial_reader_cond",serial_reader_cond);
+	packet_handler_cond = g_new0(GCond, 1);
+	g_cond_init(packet_handler_cond);
+	DATA_SET(global_data,"packet_handler_cond",packet_handler_cond);
+	rtv_subscriber_mutex = g_new0(GMutex, 1);
+	g_mutex_init(rtv_subscriber_mutex);
+	DATA_SET(global_data,"rtv_subscriber_mutex",rtv_subscriber_mutex);
+	atomic_sequence_mutex = g_new0(GMutex, 1);
+	g_mutex_init(atomic_sequence_mutex);
+	DATA_SET(global_data,"atomic_sequence_mutex",atomic_sequence_mutex);
+	queue_mutex = g_new0(GMutex, 1);
+	g_mutex_init(queue_mutex);
+	DATA_SET(global_data,"queue_mutex",queue_mutex);
 	thread = g_thread_new("Packet Handler Thread",packet_handler,NULL);
 	DATA_SET(global_data,"packet_handler_thread",thread);
 	/* Packet subscribers */
@@ -231,23 +236,38 @@ G_MODULE_EXPORT void plugin_shutdown()
 
 	cond = (GCond *)DATA_GET(global_data,"packet_handler_cond");
 	if (cond)
+	{
 		g_cond_clear(cond);
+		g_free(cond);
+	}
 	DATA_SET(global_data,"packet_handler_cond",NULL);
 	cond = (GCond *)DATA_GET(global_data,"serial_reader_cond");
 	if (cond)
+	{
 		g_cond_clear(cond);
+		g_free(cond);
+	}
 	DATA_SET(global_data,"serial_reader_cond",NULL);
 	mutex = (GMutex *)DATA_GET(global_data,"queue_mutex");
 	if (mutex)
+	{
 		g_mutex_clear(mutex);
+		g_free(mutex);
+	}
 	DATA_SET(global_data,"queue_mutex",NULL);
 	mutex = (GMutex *)DATA_GET(global_data,"atomic_sequence_mutex");
 	if (mutex)
+	{
 		g_mutex_clear(mutex);
+		g_free(mutex);
+	}
 	DATA_SET(global_data,"atomic_sequence_mutex",NULL);
 	mutex = (GMutex *)DATA_GET(global_data,"rtv_subscriber_mutex");
 	if (mutex)
+	{
 		g_mutex_clear(mutex);
+		g_free(mutex);
+	}
 	DATA_SET(global_data,"rtv_subscriber_mutex",NULL);
 	deregister_common_enums();
 	EXIT();

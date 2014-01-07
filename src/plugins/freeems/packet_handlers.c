@@ -343,7 +343,6 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 		payloads = (GHashTable *)DATA_GET(global_data,"payload_id_queue_hash");
 	if (!sequences)
 		sequences = (GHashTable *)DATA_GET(global_data,"sequence_num_queue_hash");
-	printf("register_packet_queue queue_mutex pointer %p\n",mutex);
 	g_return_if_fail(mutex);
 	g_return_if_fail(queue);
 	g_mutex_lock(mutex);
