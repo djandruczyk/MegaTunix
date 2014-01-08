@@ -23,9 +23,9 @@ DisableStartupPrompt=Yes
 LicenseFile=.\LICENSE
 ; Page 5: Information.  Shown if InfoBeforeFile is set. Name the file
 ; to make it easy to recognise
-InfoBeforeFile=.\WIN_NOTES.txt
+;InfoBeforeFile=.\WIN_NOTES.txt
 ; Forces open apps to detect environment var change
-ChangesEnvironment=yes
+;ChangesEnvironment=yes
 
 [Files]
 Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -65,8 +65,8 @@ Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\locale\fi\*.*"; DestDir: "
 Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\locale\fr\*.*"; DestDir: "{app}\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\tmp\mtx_win32_dbg\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\@CWD@\widgets\.libs\*.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\@CWD@\contrib/post_install.bat"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
 Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\gdk-pixbuf-query-loaders.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\gtk-query-immodules-2.0.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\pango-querymodules.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\tmp\mtx_win32_dbg\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
@@ -84,5 +84,15 @@ Name: "{userdesktop}\MegaTunix @MTX_VER_STRING@"; Filename: "{app}\MegaTunix.exe
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 
 [Registry]
-; Megatunix itself
- ; Magic stuff that makes the GL windows work
+; Magic stuff that makes the GL windows work
+
+[Dirs]
+Name: "{app}\etc\pango"
+Name: "{app}\lib\gdk-pixbuf-2.0\2.10.0"
+
+[Run]
+Filename: "{app}\post_install.bat"; WorkingDir: {app}; Flags: runascurrentuser shellexec
+
+[UninstallDelete]
+Type: files; Name: "{app}\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"
+Type: filesandordirs; Name: "{app}\etc\pango"

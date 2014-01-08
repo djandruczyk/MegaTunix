@@ -5,7 +5,7 @@ HOST="i686-w64-mingw32.shared"
 OLDPATH=${PATH}
 export PATH=/opt/mxe/usr/bin:${PATH}
 export PKG_CONFIG_PATH_i686_w64_mingw32=/opt/mxe/usr/${HOST}/lib/pkgconfig
-DEST=/tmp/mtx_win32
+DEST="/tmp/mtx_win32"
 
 #. cross32 
 make distclean

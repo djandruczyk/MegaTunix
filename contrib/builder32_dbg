@@ -10,6 +10,5 @@ HASH=`git log -n1 |grep ^commit |cut -f2 -d\  |head -c8`
 VERSION=$(grep PACKAGE_VERSION config.h |cut -f2 -d\")
 iscc ${ISS_FILE}
 mv Output/setup.exe Output/megatunix-"${VERSION}"-"${HASH}"-win32_dbg-setup.exe
-
 echo ""
 echo "File name is Output/megatunix-${VERSION}-${HASH}-win32_dbg-setup.zip"

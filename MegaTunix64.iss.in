@@ -25,29 +25,52 @@ DisableStartupPrompt=Yes
 LicenseFile=.\LICENSE
 ; Page 5: Information.  Shown if InfoBeforeFile is set. Name the file
 ; to make it easy to recognise
-InfoBeforeFile=.\WIN_NOTES.txt
+; InfoBeforeFile=.\WIN_NOTES.txt
 ; Forces open apps to detect environment var change
-ChangesEnvironment=yes
+; ChangesEnvironment=yes
 
 [Files]
-;Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
-Source: "z:\opt\crosstools64\x86_64-w64-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
-Source: "z:\opt\crossroot64\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\gtk\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\gtk\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
-Source: "z:\opt\crossroot64\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\gtk\lib\gdk-pixbuf-2.0\2.10.0\"; Flags: ignoreversion
-Source: "z:\opt\crossroot64\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\gtk\lib\pango\1.6.0\modules"; Flags: ignoreversion
-Source: "z:\opt\crossroot64\etc\pango\pango.modules"; DestDir: "{app}\gtk\etc\pango\"; Flags: ignoreversion
-Source: "z:\opt\crossroot64\bin\*.dll"; DestDir: "{app}\gtk"; Flags: ignoreversion
-Source: "z:\opt\crossroot64\etc\*.*"; DestDir: "{app}\gtk\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64\lib\gtk-2.0\2.10.0\*.*"; DestDir: "{app}\gtk"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64\share\themes\*.*"; DestDir: "{app}\gtk\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64\share\locale\de\*.*"; DestDir: "{app}\gtk\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64\share\locale\es\*.*"; DestDir: "{app}\gtk\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64\share\locale\fi\*.*"; DestDir: "{app}\gtk\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64\share\locale\fr\*.*"; DestDir: "{app}\gtk\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot64\dest\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\@CWD@\widgets\.libs\*.exe"; DestDir: "{app}\widgets"; Flags: ignoreversion
-Source: "z:\opt\crossroot64\dest\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
+;Source: "z:\opt\mxe\usr\x86_64-w32-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: "z:\opt\mxe\usr\x86_64-w32-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\lib\gtk-2.0\2.10.0\immodules\*.dll"; DestDir: "{app}\lib\gtk-2.0\2.10.0\immodules"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\lib\gtk-2.0\modules\*.dll"; DestDir: "{app}\lib\gtk-2.0\modules"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\lib\pango\1.8.0\modules\*.dll"; DestDir: "{app}\lib\pango\1.8.0\modules"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*atk*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*bz2*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*cairo*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*charset*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*dbus*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*expat*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*ffi*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*font*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*free*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*harfbuzz*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*iconv*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*intl*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*jpeg*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*lzma*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*libg*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*pango*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*pcre*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*pixman*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*png*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*tiff*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*xml2*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\*zlib*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\etc\*.*"; DestDir: "{app}\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\share\themes\*.*"; DestDir: "{app}\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\share\locale\de\*.*"; DestDir: "{app}\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\share\locale\es\*.*"; DestDir: "{app}\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\share\locale\fi\*.*"; DestDir: "{app}\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\share\locale\fr\*.*"; DestDir: "{app}\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\tmp\mtx_win64\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\@CWD@\widgets\.libs\*.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\@CWD@\contrib\post_install.bat"; DestDir: "{app}"; Flags: ignoreversion deleteafterinstall
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\gdk-pixbuf-query-loaders.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\x86_64-w64-mingw32.shared\bin\pango-querymodules.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\tmp\mtx_win64\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]
 Name: "{group}\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
@@ -63,36 +86,18 @@ Name: "{userdesktop}\MegaTunix @MTX_VER_STRING@"; Filename: "{app}\MegaTunix.exe
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\MegaTunix"; Filename: "{app}\MegaTunix.exe"; WorkingDir: "{app}"
 
 [Registry]
-; Megatunix itself
- ; Magic stuff that makes the GL windows work
-Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "GDK_NATIVE_WINDOWS"; ValueData: "1"; Flags: uninsdeletevalue
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\megatunix.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\megatunix.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; gaugedesigner
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\gaugedesigner.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; dashdesigner
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\dashdesigner.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\dashdesigner.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; mtxloader 
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\mtxloader.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\mtxloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; msloader 
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\msloader.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\msloader.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; curvedemo 
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\curvedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\curvedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\curvedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; gaugedemo 
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\gaugedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\gaugedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; piedemo 
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\piedemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\piedemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\piedemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; progressdemo 
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\progressdemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\progressdemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\progressdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
-; stripchartdemo 
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\stripchartdemo.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\widgets\stripchartdemo.exe"; Flags: uninsdeletekey
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\stripchartdemo.exe"; ValueType: string; ValueName: "Path"; ValueData: "{app}\gtk;{app}"; Flags: uninsdeletekey
+; Magic stuff that makes the GL windows work
+
+[Dirs]
+;Name: "{app}\etc\pango"; Permissions: users-modify
+;Name: "{app}\lib\gdk-pixbuf-2.0\2.10.0"; Permissions: users-modify
+Name: "{app}\etc\pango"
+Name: "{app}\lib\gdk-pixbuf-2.0\2.10.0"
+
+[Run]
+Filename: "{app}\post_install.bat"; WorkingDir: {app}; Flags: runascurrentuser shellexec
+
+[UninstallDelete]
+Type: files; Name: "{app}\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"
+Type: filesandordirs; Name: "{app}\etc\pango"
 
