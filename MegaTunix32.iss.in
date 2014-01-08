@@ -30,45 +30,44 @@ ChangesEnvironment=yes
 [Files]
 Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libgcc_s_sjlj-1.dll"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\opt\crosstools32\i686-w32-mingw32\lib\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\lib\gtk-2.0\2.10.0\immodules\*.dll"; DestDir: "{app}\lib\gtk-2.0\2.10.0\immodules"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\lib\gtk-2.0\modules\*.dll"; DestDir: "{app}\lib\gtk-2.0\modules"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\lib\pango\1.6.0\modules\*.dll"; DestDir: "{app}\lib\pango\1.6.0\modules"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*atk*.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "z:\opt\crossroot32\bin\*bz2*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*cairo*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*charset*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*dbus*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*expat*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*ffi*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*font*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*free*.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "z:\opt\crossroot32\bin\*harfbuzz*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*iconv*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*intl*.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "z:\opt\crossroot32\bin\*jpeg*.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "z:\opt\crossroot32\bin\*lzma*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*libg*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*pango*.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "z:\opt\crossroot32\bin\*pcre*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*pixman*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*png*.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "z:\opt\crossroot32\bin\*tiff*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*xml2*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\bin\*zlib*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\etc\*.*"; DestDir: "{app}\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\share\themes\*.*"; DestDir: "{app}\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\share\locale\de\*.*"; DestDir: "{app}\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\share\locale\es\*.*"; DestDir: "{app}\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\share\locale\fi\*.*"; DestDir: "{app}\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "z:\opt\crossroot32\share\locale\fr\*.*"; DestDir: "{app}\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\lib\gtk-2.0\2.10.0\engines\*.dll"; DestDir: "{app}\lib\gtk-2.0\2.10.0\engines"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\lib\gtk-2.0\2.10.0\immodules\*.dll"; DestDir: "{app}\lib\gtk-2.0\2.10.0\immodules"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\lib\gtk-2.0\modules\*.dll"; DestDir: "{app}\lib\gtk-2.0\modules"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\lib\gdk-pixbuf-2.0\2.10.0\loaders\*.dll"; DestDir: "{app}\lib\gdk-pixbuf-2.0\2.10.0\loaders"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\lib\pango\1.8.0\modules\*.dll"; DestDir: "{app}\lib\pango\1.8.0\modules"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*atk*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*bz2*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*cairo*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*charset*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*dbus*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*expat*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*ffi*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*font*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*free*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*harfbuzz*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*iconv*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*intl*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*jpeg*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*lzma*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*libg*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*pango*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*pcre*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*pixman*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*png*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*tiff*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*xml2*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\*zlib*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\etc\*.*"; DestDir: "{app}\etc"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\themes\*.*"; DestDir: "{app}\share\themes"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\locale\de\*.*"; DestDir: "{app}\share\locale\de"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\locale\es\*.*"; DestDir: "{app}\share\locale\es"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\locale\fi\*.*"; DestDir: "{app}\share\locale\fi"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\share\locale\fr\*.*"; DestDir: "{app}\share\locale\fr"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "z:\tmp\mtx_win32\bin\*.*"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\@CWD@\widgets\.libs\*.exe"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "z:\@CWD@\win_support\loaders.cache32"; DestDir: "{app}\lib\gdk-pixbuf-2.0\2.10.0\"; DestName: "loaders.cache"; Flags: ignoreversion
-;Source: "z:\@CWD@\win_support\pango.modules32"; DestDir: "{app}\etc\pango\"; DestName: "pango.modules"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"; DestDir: "{app}\lib\gdk-pixbuf-2.0\2.10.0\"; DestName: "loaders.cache"; Flags: ignoreversion
-Source: "z:\opt\crossroot32\etc\pango\pango.modules"; DestDir: "{app}\etc\pango\"; DestName: "pango.modules"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\gdk-pixbuf-query-loaders.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\gtk-query-immodules-2.0.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "z:\opt\mxe\usr\i686-w64-mingw32.shared\bin\pango-querymodules.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "z:\tmp\mtx_win32\share\MegaTunix\*.*"; DestDir: "{app}\dist\"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]

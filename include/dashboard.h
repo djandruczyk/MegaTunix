@@ -89,7 +89,7 @@ void toggle_status_visible(void);
 void update_dash_gauge(gpointer , gpointer , gpointer );
 void toggle_dash_on_top(GtkWidget *, gpointer);
 gboolean update_dashboards(gpointer);
-void update_tab_gauges(void);
+gboolean update_tab_gauges(void);
 gchar * validate_dash_choice(gchar *, gboolean *);
 /* Prototypes */
 

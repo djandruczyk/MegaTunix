@@ -1,18 +1,19 @@
 #!/bin/sh
 
 CPUS=`cat /proc/cpuinfo |grep -c ^processor`
-#HOST="i686-w64-mingw32.shared"
-#OLDPATH=${PATH}
-#export PATH=/opt/mxe/usr/bin:${PATH}
-#export PKG_CONFIG_PATH_i686_w64_mingw32=/opt/mxe/usr/${HOST}/lib/pkgconfig
+HOST="i686-w64-mingw32.shared"
+OLDPATH=${PATH}
+export PATH=/opt/mxe/usr/bin:${PATH}
+export PKG_CONFIG_PATH_i686_w64_mingw32=/opt/mxe/usr/${HOST}/lib/pkgconfig
 DEST=/tmp/mtx_win32
 
-. cross32 
+#. cross32 
 make distclean
-cross32-configure ./configure  --prefix=${DEST} $* && \
+#cross32-configure ./configure  --prefix=${DEST} $* && \
+./configure  --prefix=${DEST} --host=${HOST} $* && \
 	make -j${CPUS}  && rm -rf ${DEST} && make install && \
 	./contrib/builder32 
-. uncross
-#export PATH=$OLDPATH
-#export PKG_CONFIG_PATH_i686_w64_mingw32=
+#. uncross
+export PATH=$OLDPATH
+export PKG_CONFIG_PATH_i686_w64_mingw32=
 # make distclean

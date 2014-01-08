@@ -1493,7 +1493,7 @@ G_MODULE_EXPORT void create_gauge(GtkWidget *parent)
 /*!
   \brief updates tab gauges with new data
   */
-G_MODULE_EXPORT void update_tab_gauges(void)
+G_MODULE_EXPORT gboolean update_tab_gauges(void)
 {
 	GtkWidget *gauge = NULL;
 	gchar * source = NULL;
@@ -1511,7 +1511,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 	if ((!tab_gauges) || ((GINT)DATA_GET(global_data,"active_table") < 0))
 	{
 		EXIT();
-		return;
+		return FALSE;
 	}
 	list = g_list_first(tab_gauges[(GINT)DATA_GET(global_data,"active_table")]);
 	for (i=0;i<g_list_length(list);i++)
@@ -1554,7 +1554,7 @@ G_MODULE_EXPORT void update_tab_gauges(void)
 	printf("done updating gauges\n");
 	*/
 	EXIT();
-	return;
+	return FALSE;
 }
 
 

@@ -167,11 +167,12 @@ G_MODULE_EXPORT gboolean draw_ve_marker(void)
 {
 	static void (*common_draw_ve_marker)(void) = NULL;
 
+	printf("draw_ve_marker\n");
 	ENTER();
 	if (!common_draw_ve_marker)
 		get_symbol("common_draw_ve_marker",(void **)&common_draw_ve_marker);
 	g_return_val_if_fail(common_draw_ve_marker,FALSE);
 	common_draw_ve_marker();
 	EXIT();
-	return TRUE;
+	return FALSE;
 }
