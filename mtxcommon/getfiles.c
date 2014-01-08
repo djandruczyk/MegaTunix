@@ -380,6 +380,7 @@ gchar * choose_file(MtxFileIO *data)
 	ENTER();
 	if (!GTK_IS_WINDOW(data->parent))
 		data->parent = NULL;
+	/*
 	printf("choose_file\n");
 	printf("parent %p\n",(void *)data->parent);
 	printf("on_top %s\n",data->on_top? "TRUE":"FALSE");
@@ -393,6 +394,7 @@ gchar * choose_file(MtxFileIO *data)
 	printf("shortcut_folders %s\n",data->shortcut_folders);
 	printf("project %s\n",data->project);
 	printf("title %s\n",data->title);
+	*/
 	if (data->project)
 		project = data->project;
 	else
@@ -404,7 +406,7 @@ gchar * choose_file(MtxFileIO *data)
 	if ((data->action == GTK_FILE_CHOOSER_ACTION_OPEN) || 
 			(data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
 	{
-		printf("ACTION_OPEN before gtk_file_chooser_dialog_new\n");
+		/*printf("ACTION_OPEN before gtk_file_chooser_dialog_new\n");*/
 		dialog = gtk_file_chooser_dialog_new(data->title,
 				/*GTK_WINDOW(data->parent), */
 				0,
@@ -412,7 +414,7 @@ gchar * choose_file(MtxFileIO *data)
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 				NULL);
-		printf("after gtk_file_chooser_dialog_new\n");
+		/*printf("after gtk_file_chooser_dialog_new\n");*/
 		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
 			gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
 
@@ -420,13 +422,13 @@ gchar * choose_file(MtxFileIO *data)
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),data->absolute_path);
 		else if (data->default_path)
 		{
-			printf("should be using system path + %s\n",data->default_path);
+			/*printf("should be using system path + %s\n",data->default_path);*/
 			path = g_build_filename(MTXSYSDATA,data->default_path,NULL);
 			if (!g_file_test(path,G_FILE_TEST_IS_DIR))
 			{
 				g_free(path);
 				path = g_build_filename(HOME(),"mtx",data->project,data->default_path, NULL);
-				printf("System path is not found, falling back to user path %s\n",path);
+				/*printf("System path is not found, falling back to user path %s\n",path);*/
 			}
 			gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog),path);
 			g_free(path);
@@ -434,7 +436,7 @@ gchar * choose_file(MtxFileIO *data)
 	}
 	else if (data->action == GTK_FILE_CHOOSER_ACTION_SAVE)
 	{
-		printf("ACTION_SAVE calling gtk_file_chooser_dialog_new\n");
+		/*printf("ACTION_SAVE calling gtk_file_chooser_dialog_new\n");*/
 		dialog = gtk_file_chooser_dialog_new(data->title,
 				/*GTK_WINDOW(data->parent), */
 				0,
@@ -442,7 +444,7 @@ gchar * choose_file(MtxFileIO *data)
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 				NULL);	
-		printf("after gtk_file_chooser_dialog_new\n");
+		/*printf("after gtk_file_chooser_dialog_new\n");*/
 
 		/*		if ((data->on_top) && (GTK_IS_WIDGET(data->parent)))
 					gtk_window_set_transient_for(GTK_WINDOW(gtk_widget_get_toplevel(dialog)),GTK_WINDOW(data->parent));
@@ -503,7 +505,7 @@ gchar * choose_file(MtxFileIO *data)
 	/* If default path switch to that place  */
 	if ((data->external_path) && (!(data->default_path)))
 	{
-		printf("external path with no default path\n");
+		/*printf("external path with no default path\n");*/
 		path = g_build_filename(HOME(),"mtx",data->project,data->external_path,NULL);
 		if (!g_file_test(path,G_FILE_TEST_IS_DIR))
 			g_mkdir(path,0755);
@@ -544,14 +546,14 @@ afterfilter:
 	{
 		if (data->default_filename)
 		{
-			printf("data->default_filename is set to \"%s\"\n",data->default_filename);
+			/*printf("data->default_filename is set to \"%s\"\n",data->default_filename);*/
 			gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(dialog),data->default_filename);
 		}
 	}
 
-	printf("initiating dialog to run\n");
+	/*printf("initiating dialog to run\n");*/
 	response = gtk_dialog_run (GTK_DIALOG (dialog));
-	printf("it returned \n");
+	/*printf("it returned \n");*/
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
 		tmpbuf = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
@@ -739,6 +741,6 @@ gboolean check_for_files(const gchar * path, const gchar *ext)
 
 static void remove_filter(gpointer filter, gpointer dialog)
 {
-	printf("Removing file filter!\n");
+	/*printf("Removing file filter!\n");*/
 	gtk_file_chooser_remove_filter(GTK_FILE_CHOOSER(dialog),GTK_FILE_FILTER(filter));
 }
