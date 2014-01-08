@@ -412,6 +412,7 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 		MTXDBG(RTMLOADER|COMPLEX_EXPR|CRITICAL,_("Number of symbols(%i) and symbol types(%i)\n\tare different, ABORTING!!!\n"),total_symbols,total_symtypes);
 		g_free(expr_types);
 		g_strfreev(expr_symbols);
+		g_free(fromecu_conv_expr);
 		EXIT();
 		return;
 	}
@@ -421,7 +422,6 @@ void load_rtv_xml_complex_expression(gconstpointer *object, xmlNode *node)
 		MTXDBG(COMPLEX_EXPR|CRITICAL,_("Unable to create evaluator for expression \"%s\", expect a crash\n"),fromecu_conv_expr);
 	else
 		DATA_SET_FULL(object,"ul_evaluator",evaluator,evaluator_destroy);
-
 
 	g_free(fromecu_conv_expr);
 	// Store the lists as well so DO NOT DEALLOCATE THEM!!! 
