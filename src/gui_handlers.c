@@ -1528,7 +1528,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 				*(void **)(&func) = g_list_nth_data(func_list,i);
 				fps = (GINT)g_list_nth_data(func_fps_list,i);
 				id = g_timeout_add_full(110,(GINT)(1000.0/(gfloat)fps),(GSourceFunc)run_function, (gpointer)func,NULL);
-				printf("Calling a visibility function on toplevel noteboook page at %i fps, id %i\n",fps,id);
+				/*printf("Calling a visibility function on toplevel noteboook page at %i fps, id %i\n",fps,id);*/
 				g_signal_connect(G_OBJECT(notebook), "switch_page",
 						G_CALLBACK(cancel_visible_function),
 						GINT_TO_POINTER(id));
@@ -1560,7 +1560,7 @@ G_MODULE_EXPORT void notebook_page_changed(GtkNotebook *notebook, GtkWidget *pag
 						*(void **)(&func) = g_list_nth_data(func_list,i);
 						fps = (GINT)g_list_nth_data(func_fps_list,i);
 						id = g_timeout_add_full(110,(GINT)(1000.0/(gfloat)fps),(GSourceFunc)run_function, (gpointer)func,NULL);
-				printf("Calling a visibility function on sub-noteboook page at %i fps, id %i\n",fps,id);
+						/*printf("Calling a visibility function on sub-noteboook page at %i fps, id %i\n",fps,id);*/
 						g_signal_connect(G_OBJECT(notebook), "switch_page",
 								G_CALLBACK(cancel_visible_function),
 								GINT_TO_POINTER(id));
@@ -1630,7 +1630,7 @@ G_MODULE_EXPORT void subtab_changed(GtkNotebook *notebook, GtkWidget *page, guin
 				*(void **)(&func) = g_list_nth_data(func_list,i);
 				fps = (GINT)g_list_nth_data(func_fps_list,i);
 				id = g_timeout_add_full(110,(GINT)(1000.0/(gfloat)fps),(GSourceFunc)run_function,(gpointer)&func,NULL);
-				printf("Calling a visibility function on sub-tab page at %i fps, id %i\n",fps,id);
+				/*printf("Calling a visibility function on sub-tab page at %i fps, id %i\n",fps,id);*/
 				g_signal_connect(G_OBJECT(notebook), "switch_page",
 						G_CALLBACK(cancel_visible_function),
 						GINT_TO_POINTER(id));
@@ -2651,7 +2651,7 @@ G_MODULE_EXPORT void update_current_notebook_page()
 G_MODULE_EXPORT void cancel_visible_function(GtkNotebook *notebook, GtkWidget *page, guint page_no, gpointer data)
 {
 	ENTER();
-	printf("Cancelling visible function id %i\n",(GINT)data);
+	/*printf("Cancelling visible function id %i\n",(GINT)data);*/
 	g_source_remove((GINT)data);
 	EXIT();
 	return;
