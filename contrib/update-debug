@@ -1,8 +1,7 @@
 #!/bin/bash
 
-git pull && ./autogen.sh --enable-debug && make clean && make -j2 
-
-sudo make install
+git pull && ./autogen.sh --enable-debug && make clean && make -j2 && \
+sudo make install && \
 sudo ldconfig
 
 echo "To get valid debug info, cd src/.libs ; gdb ./megatunix"
