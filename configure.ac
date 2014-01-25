@@ -306,7 +306,6 @@ menu/Makefile
 desktop/Makefile
 category/Makefile
 icons/Makefile
-win_support/Makefile
 MegaTunix32.iss
 MegaTunix64.iss
 MegaTunix32_dbg.iss
