@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
+<!-- vim: set ts=4 sw=4 noexpandtab:  -->
 <comms>
 	<potential_args>
-		<arg>	
+		<arg>   
 			<name>PAYLOAD_DATA</name>
 			<desc>Data to transfer to ECU, length is variable, packed into a g_byte_array structure, length is part of the structure.</desc>
 			<type>_PAYLOAD_DATA_</type>
 			<internal_name>payload_data_array</internal_name>
 			<size>_UNDEF_</size>
 		</arg>
-		<arg>	
+		<arg>   
 			<name>DATACHUNK</name>
 			<desc>Data to transfer to ECU, length is variable.</desc>
 			<type>_DATA_</type>
@@ -16,217 +17,217 @@
 			<size>_UNDEF_</size>
 		</arg>
 		<!--
-		<arg>	
-			<name>BYTE</name>
-			<desc>single byte.</desc>
-			<type>_DATABYTE_</type>
-			<internal_name>byte</internal_name>
-			<size>_U08_</size>
-		</arg>
-		-->
-		<arg>
-			<name>PAUSE_100MS</name>
-			<desc>Pause for 100ms.</desc>
-			<type>_ACTION_</type>
-			<action>_SLEEP_</action>
-			<action_arg>100000</action_arg>
-		</arg>
-		<arg>
-			<name>PAUSE_500MS</name>
-			<desc>Pause for 500ms.</desc>
-			<type>_ACTION_</type>
-			<action>_SLEEP_</action>
-			<action_arg>500000</action_arg>
-		</arg>
-		<arg>
-			<name>SEQUENCE_NUM</name>
-			<desc>Sequence Number</desc>
-			<type>_SEQUENCE_NUM_</type>
-			<internal_name>sequence_num</internal_name>
-			<size>_U08_</size>
-		</arg>
-		<arg>
-			<name>PAYLOAD_ID</name>
-			<desc>Payload ID</desc>
-			<type>_PAYLOAD_ID_</type>
-			<internal_name>payload_id</internal_name>
-			<size>_U16_</size>
-		</arg>
-		<arg>
-			<name>LOCATION_ID</name>
-			<desc>Table/Location ID</desc>
-			<type>_LOCATION_ID_</type>
-			<internal_name>location_id</internal_name>
-			<size>_U16_</size>
-		</arg>
-		<arg>
-			<name>OFFSET</name>
-			<desc>Offset from the beginning of the table</desc>
-			<type>_OFFSET_</type>
-			<internal_name>offset</internal_name>
-			<size>_U16_</size>
-		</arg>
-		<arg>
-			<name>LENGTH</name>
-			<desc>Length of the block requested or sent</desc>
-			<type>_LENGTH_</type>
-			<internal_name>length</internal_name>
-			<size>_U16_</size>
-		</arg>
-	</potential_args>
-	<commands>
-		<cmd>
-			<name>basic_payload_pkt</name>
-			<desc>Special Case Throwaway Payload packet</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg> 
-				<arg>PAYLOAD_ID</arg>
-				<arg>PAYLOAD_DATA</arg>
-			</args>
-			<helper_func>handle_transaction_hf</helper_func>
-            <helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>empty_payload_pkt</name>
-			<desc>Special Case Empty Payload packet</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg> 
-				<arg>PAYLOAD_ID</arg>
-			</args>
-			<helper_func>handle_transaction_hf</helper_func>
-            <helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>benchtest_pkt</name>
-			<desc>Special Case benchtest packet</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg> 
-				<arg>PAYLOAD_ID</arg>
-				<arg>PAYLOAD_DATA</arg>
-			</args>
-			<helper_func>handle_transaction_hf</helper_func>
-            <helper_func_arg>_BENCHTEST_RESPONSE_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>basic_datalog</name>
-			<desc>Request basic datalog (once)</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg> 
-				<arg>PAYLOAD_ID</arg>
-			</args>
-		</cmd>
-		<cmd>
-			<name>datalog_post_functions</name>
-			<desc>datalog stream post functions</desc>
-			<type>_NULL_CMD_</type>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function>update_logview_traces_pf</function>
-			</post_functions>
-		</cmd>
-		<cmd>
-            <name>burn_all</name>
-            <desc>Calls a function to burn ALL applicable pages to flash</desc>
-            <type>_FUNC_CALL_</type>
-            <func_call_name>freeems_burn_all</func_call_name>
-        </cmd>
-		<cmd>
-            <name>burn</name>
-            <desc>burns the RAM to flash</desc>
-            <type>_WRITE_CMD_</type>
-            <args>
-				<arg>SEQUENCE_NUM</arg> 
-				<arg>PAYLOAD_ID</arg>
-				<arg>LOCATION_ID</arg>
-				<arg>OFFSET</arg>
-				<arg>LENGTH</arg>
-            </args>
-			<helper_func>handle_transaction_hf</helper_func>
-            <helper_func_arg>_GENERIC_BURN_</helper_func_arg>
-        </cmd>
-		<cmd>
-			<name>generic_RAM_write</name>
-			<desc>Generic RAM write function</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg>
-				<arg>PAYLOAD_ID</arg>
-				<arg>LOCATION_ID</arg>
-				<arg>OFFSET</arg>
-				<arg>LENGTH</arg>
-				<arg>DATACHUNK</arg>
-			</args>
-			<helper_func>handle_transaction_hf</helper_func>
-            <helper_func_arg>_GENERIC_RAM_WRITE_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>generic_FLASH_write</name>
-			<desc>Generic FLASH write function</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg>
-				<arg>PAYLOAD_ID</arg>
-				<arg>LOCATION_ID</arg>
-				<arg>OFFSET</arg>
-				<arg>LENGTH</arg>
-				<arg>DATACHUNK</arg>
-			</args>
-			<helper_func>handle_transaction_hf</helper_func>
-            <helper_func_arg>_GENERIC_FLASH_WRITE_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>generic_read</name>
-			<desc>Generic read function</desc>
-			<type>_WRITE_CMD_</type>
-			<args>
-				<arg>SEQUENCE_NUM</arg>
-				<arg>PAYLOAD_ID</arg>
-				<arg>LOCATION_ID</arg>
-				<arg>OFFSET</arg>
-				<arg>LENGTH</arg>
-			</args>
-			<helper_func>handle_transaction_hf</helper_func>
-            <helper_func_arg>_GENERIC_READ_</helper_func_arg>
-		</cmd>
-		<cmd>
-			<name>freeems_read_all</name>
-			<desc>Reads ALL ecu vars for ALL modules </desc>
-			<type>_FUNC_CALL_</type>
-			<func_call_name>read_freeems_data</func_call_name>
-			<func_call_arg>_FREEEMS_ALL_</func_call_arg>
-			<defer_post_functions>TRUE</defer_post_functions>
-			<post_functions>
-				<function>update_groups_pf</function>
-				<function>update_sources_pf</function>
-				<function>update_ecu_controls_pf</function>
-				<function>set_store_black_pf</function>
-				<function>enable_get_data_buttons_pf</function>
-			</post_functions>
-		</cmd>
-		<cmd>
-			<name>interrogation</name>
-			<desc>Interrogates ECU to determine what it is</desc>
-			<type>_FUNC_CALL_</type>
-			<func_call_name>interrogate_ecu</func_call_name>
-			<defer_post_functions>FALSE</defer_post_functions>
-			<post_functions>
-				<function>update_interrogation_gui_pf</function>
-				<function>load_realtime_map_pf</function>
-				<function>initialize_dashboards_pf</function>
-				<function>load_status_pf</function>
-				<function>load_rt_text_pf</function>
-				<function>load_gui_tabs_pf</function>
-				<function>setup_menu_handlers_pf</function>
-				<function>start_statuscounts_pf</function>
-				<function>startup_default_timeouts_pf</function>
-				<function>reset_temps_pf</function>
-				<function>setup_rtv_pf</function>
-				<function>ready_msg_pf</function>
-			</post_functions>
-		</cmd>
-	</commands>
-</comms>
+				<arg>   
+						<name>BYTE</name>
+						<desc>single byte.</desc>
+						<type>_DATABYTE_</type>
+						<internal_name>byte</internal_name>
+						<size>_U08_</size>
+				</arg>
+				-->
+				<arg>
+					<name>PAUSE_100MS</name>
+					<desc>Pause for 100ms.</desc>
+					<type>_ACTION_</type>
+					<action>_SLEEP_</action>
+					<action_arg>100000</action_arg>
+				</arg>
+				<arg>
+					<name>PAUSE_500MS</name>
+					<desc>Pause for 500ms.</desc>
+					<type>_ACTION_</type>
+					<action>_SLEEP_</action>
+					<action_arg>500000</action_arg>
+				</arg>
+				<arg>
+					<name>SEQUENCE_NUM</name>
+					<desc>Sequence Number</desc>
+					<type>_SEQUENCE_NUM_</type>
+					<internal_name>sequence_num</internal_name>
+					<size>_U08_</size>
+				</arg>
+				<arg>
+					<name>PAYLOAD_ID</name>
+					<desc>Payload ID</desc>
+					<type>_PAYLOAD_ID_</type>
+					<internal_name>payload_id</internal_name>
+					<size>_U16_</size>
+				</arg>
+				<arg>
+					<name>LOCATION_ID</name>
+					<desc>Table/Location ID</desc>
+					<type>_LOCATION_ID_</type>
+					<internal_name>location_id</internal_name>
+					<size>_U16_</size>
+				</arg>
+				<arg>
+					<name>OFFSET</name>
+					<desc>Offset from the beginning of the table</desc>
+					<type>_OFFSET_</type>
+					<internal_name>offset</internal_name>
+					<size>_U16_</size>
+				</arg>
+				<arg>
+					<name>LENGTH</name>
+					<desc>Length of the block requested or sent</desc>
+					<type>_LENGTH_</type>
+					<internal_name>length</internal_name>
+					<size>_U16_</size>
+				</arg>
+			</potential_args>
+			<commands>
+				<cmd>
+					<name>basic_payload_pkt</name>
+					<desc>Special Case Throwaway Payload packet</desc>
+					<type>_WRITE_CMD_</type>
+					<args>
+						<arg>SEQUENCE_NUM</arg> 
+						<arg>PAYLOAD_ID</arg>
+						<arg>PAYLOAD_DATA</arg>
+					</args>
+					<helper_func>handle_transaction_hf</helper_func>
+					<helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
+				</cmd>
+				<cmd>
+					<name>empty_payload_pkt</name>
+					<desc>Special Case Empty Payload packet</desc>
+					<type>_WRITE_CMD_</type>
+					<args>
+						<arg>SEQUENCE_NUM</arg> 
+						<arg>PAYLOAD_ID</arg>
+					</args>
+					<helper_func>handle_transaction_hf</helper_func>
+					<helper_func_arg>_EMPTY_PAYLOAD_</helper_func_arg>
+				</cmd>
+				<cmd>
+					<name>benchtest_pkt</name>
+					<desc>Special Case benchtest packet</desc>
+					<type>_WRITE_CMD_</type>
+					<args>
+						<arg>SEQUENCE_NUM</arg> 
+						<arg>PAYLOAD_ID</arg>
+						<arg>PAYLOAD_DATA</arg>
+					</args>
+					<helper_func>handle_transaction_hf</helper_func>
+					<helper_func_arg>_BENCHTEST_RESPONSE_</helper_func_arg>
+				</cmd>
+				<cmd>
+					<name>basic_datalog</name>
+					<desc>Request basic datalog (once)</desc>
+					<type>_WRITE_CMD_</type>
+					<args>
+						<arg>SEQUENCE_NUM</arg> 
+						<arg>PAYLOAD_ID</arg>
+					</args>
+				</cmd>
+				<cmd>
+					<name>datalog_post_functions</name>
+					<desc>datalog stream post functions</desc>
+					<type>_NULL_CMD_</type>
+					<defer_post_functions>FALSE</defer_post_functions>
+					<post_functions>
+						<function>update_logview_traces_pf</function>
+					</post_functions>
+				</cmd>
+				<cmd>
+					<name>burn_all</name>
+					<desc>Calls a function to burn ALL applicable pages to flash</desc>
+					<type>_FUNC_CALL_</type>
+					<func_call_name>freeems_burn_all</func_call_name>
+				</cmd>
+				<cmd>
+					<name>burn</name>
+					<desc>burns the RAM to flash</desc>
+					<type>_WRITE_CMD_</type>
+					<args>
+						<arg>SEQUENCE_NUM</arg> 
+						<arg>PAYLOAD_ID</arg>
+						<arg>LOCATION_ID</arg>
+						<arg>OFFSET</arg>
+						<arg>LENGTH</arg>
+					</args>
+					<helper_func>handle_transaction_hf</helper_func>
+					<helper_func_arg>_GENERIC_BURN_</helper_func_arg>
+				</cmd>
+				<cmd>
+					<name>generic_RAM_write</name>
+					<desc>Generic RAM write function</desc>
+					<type>_WRITE_CMD_</type>
+					<args>
+						<arg>SEQUENCE_NUM</arg>
+						<arg>PAYLOAD_ID</arg>
+						<arg>LOCATION_ID</arg>
+						<arg>OFFSET</arg>
+						<arg>LENGTH</arg>
+						<arg>DATACHUNK</arg>
+					</args>
+					<helper_func>handle_transaction_hf</helper_func>
+					<helper_func_arg>_GENERIC_RAM_WRITE_</helper_func_arg>
+				</cmd>
+				<cmd>
+					<name>generic_FLASH_write</name>
+					<desc>Generic FLASH write function</desc>
+					<type>_WRITE_CMD_</type>
+					<args>
+						<arg>SEQUENCE_NUM</arg>
+						<arg>PAYLOAD_ID</arg>
+						<arg>LOCATION_ID</arg>
+						<arg>OFFSET</arg>
+						<arg>LENGTH</arg>
+						<arg>DATACHUNK</arg>
+					</args>
+					<helper_func>handle_transaction_hf</helper_func>
+					<helper_func_arg>_GENERIC_FLASH_WRITE_</helper_func_arg>
+				</cmd>
+				<cmd>
+					<name>generic_read</name>
+					<desc>Generic read function</desc>
+					<type>_WRITE_CMD_</type>
+					<args>
+						<arg>SEQUENCE_NUM</arg>
+						<arg>PAYLOAD_ID</arg>
+						<arg>LOCATION_ID</arg>
+						<arg>OFFSET</arg>
+						<arg>LENGTH</arg>
+					</args>
+					<helper_func>handle_transaction_hf</helper_func>
+					<helper_func_arg>_GENERIC_READ_</helper_func_arg>
+				</cmd>
+				<cmd>
+					<name>freeems_read_all</name>
+					<desc>Reads ALL ecu vars for ALL modules </desc>
+					<type>_FUNC_CALL_</type>
+					<func_call_name>read_freeems_data</func_call_name>
+					<func_call_arg>_FREEEMS_ALL_</func_call_arg>
+					<defer_post_functions>TRUE</defer_post_functions>
+					<post_functions>
+						<function>update_groups_pf</function>
+						<function>update_sources_pf</function>
+						<function>update_ecu_controls_pf</function>
+						<function>set_store_black_pf</function>
+						<function>enable_get_data_buttons_pf</function>
+					</post_functions>
+				</cmd>
+				<cmd>
+					<name>interrogation</name>
+					<desc>Interrogates ECU to determine what it is</desc>
+					<type>_FUNC_CALL_</type>
+					<func_call_name>interrogate_ecu</func_call_name>
+					<defer_post_functions>FALSE</defer_post_functions>
+					<post_functions>
+						<function>update_interrogation_gui_pf</function>
+						<function>load_realtime_map_pf</function>
+						<function>initialize_dashboards_pf</function>
+						<function>load_status_pf</function>
+						<function>load_rt_text_pf</function>
+						<function>load_gui_tabs_pf</function>
+						<function>setup_menu_handlers_pf</function>
+						<function>start_statuscounts_pf</function>
+						<function>startup_default_timeouts_pf</function>
+						<function>reset_temps_pf</function>
+						<function>setup_rtv_pf</function>
+						<function>ready_msg_pf</function>
+					</post_functions>
+				</cmd>
+			</commands>
+		</comms>

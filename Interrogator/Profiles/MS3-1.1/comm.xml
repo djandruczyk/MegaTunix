@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- vim: set ts=4 sw=4 noexpandtab:  -->
 <comms>
 	<potential_args>
 		<arg>
@@ -141,7 +142,7 @@
 				<arg>DATACHUNK</arg>
 			</args>
 			<post_functions>
-			<defer_post_functions>FALSE</defer_post_functions>
+				<defer_post_functions>FALSE</defer_post_functions>
 				<function_w_arg>send_to_slaves</function_w_arg>
 				<function_w_arg>update_write_status</function_w_arg>
 			</post_functions>
@@ -319,7 +320,7 @@
 				<function>update_ecu_controls_pf</function>
 				<function>set_store_black_pf</function>
 				<function>enable_get_data_buttons_pf</function>
-			<!--	<function>enable_ttm_buttons_pf</function> -->
+				<!--	<function>enable_ttm_buttons_pf</function> -->
 				<function>conditional_start_rtv_tickler_pf</function>
 			</post_functions>
 		</cmd>

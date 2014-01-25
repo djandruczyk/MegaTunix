@@ -2,13 +2,11 @@ This README describes the contents of this dir and their file structure.
 
 Last Edited, Feb 27th 14:21 PM
 
-	Inside this dir "Profiles", contains several files with a ".prof" 
-and a extension.  The .prof files are MegaTunix's interrogation profiles
-used to match against and load up a whole slew of parameters specific to the
-Firmware being used by megatunix
-The profile is laid out in .ini file format using the common "section",
-"key","value" layout as shown below.
-
+	Inside this dir "Profiles", contains several files with a ".prof.in" 
+extension. During installation these are converted to .prof files.  The 
+.prof files are MegaTunix's interrogation profiles used to match against 
+and load up a whole slew of parameters specific to the Firmware being 
+used by megatunix The profile is laid out in .ini file format using the common "section", "key", "value" layout as shown below.
 
 [section]
 key=value
