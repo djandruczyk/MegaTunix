@@ -251,7 +251,7 @@ src/fix_glib_megatunix
 Makefile 
 include/Makefile
 include/yaml-cpp/Makefile
-glib_override/Makefile
+#glib_override/Makefile
 yaml-cpp/Makefile
 mtxcommon/Makefile
 mtxmatheval/Makefile
