@@ -153,7 +153,7 @@ gboolean do_ms2_load(gint port_fd, gint file_fd)
 	return TRUE;
 }
 
-gboolean do_freeems_load(gint port_fd, gint file_fd)
+gboolean do_libreems_load(gint port_fd, gint file_fd)
 {
 	GTimeVal begin;
 	GTimeVal end;

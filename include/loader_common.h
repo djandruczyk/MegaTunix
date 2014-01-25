@@ -32,7 +32,7 @@ typedef enum
 {
 	MS1=0xcca,
 	MS2,
-	FREEEMS
+	LIBREEMS
 }FirmwareType;
 
 /* Prototypes */

@@ -31,7 +31,7 @@ extern "C" {
 /* Prototypes */
 gboolean check_status(gint);
 gboolean do_ms2_load(gint, gint);
-gboolean do_freeems_load(gint, gint);
+gboolean do_libreems_load(gint, gint);
 gboolean erase_S12(gint);
 void free_s19(guint);
 void ms2_enter_boot_mode(gint);

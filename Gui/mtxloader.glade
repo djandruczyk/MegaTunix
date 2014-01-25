@@ -169,8 +169,8 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="freeems_rbutton">
-                            <property name="label" translatable="yes">FreeEMS</property>
+                          <object class="GtkRadioButton" id="libreems_rbutton">
+							  <property name="label" translatable="yes">LibreEMS/FreeEMS</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>

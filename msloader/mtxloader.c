@@ -188,10 +188,10 @@ G_MODULE_EXPORT gboolean load_firmware (GtkButton * UNUSED(button))
 		setup_port(port_fd, 115200);
 		do_ms2_load(port_fd,file_fd);
 	}
-	else if ((GINT)DATA_GET(global_data,"persona") == FREEEMS)
+	else if ((GINT)DATA_GET(global_data,"persona") == LIBREEMS)
 	{
 		setup_port(port_fd, 115200);
-		do_freeems_load(port_fd,file_fd);
+		do_libreems_load(port_fd,file_fd);
 	}
 	unlock_buttons();
 	close_port(port_fd);
@@ -246,7 +246,7 @@ G_MODULE_EXPORT gboolean about_popup(GtkWidget *UNUSED(widget), gpointer UNUSED(
 				"name","MegaTunix Firmware Loading Software",
 				"version",VERSION,
 				"copyright","David J. Andruczyk(2011)",
-				"comments","MTXloader is a Graphical Firmware Loader designed to make it easy and (hopefully) intuitive to upgrade the firmware on your MegaSquirt I,II or FreeEMS powered vehicle. This tool is capable of loading any firmware version for both series of ECUs.  This code is loosely based upon code provided by James Murray, Ken Culver from the MS2-Extra project.  Please send suggestions to the author for ways to improve mtxloader.",
+				"comments","MTXloader is a Graphical Firmware Loader designed to make it easy and (hopefully) intuitive to upgrade the firmware on your MegaSquirt I,II, LibreEMS or FreeEMS powered vehicle. This tool is capable of loading any firmware version for both series of ECUs.  This code is loosely based upon code provided by James Murray, Ken Culver from the MS2-Extra project.  Please send suggestions to the author for ways to improve mtxloader.",
 				"license","GPL v2",
 				"website","http://megatunix.sourceforge.net",
 				"authors",authors,
@@ -296,9 +296,9 @@ void load_defaults()
 		object = gtk_builder_get_object(builder,"ms2_rbutton");
 		if (G_IS_OBJECT(object))
 			OBJ_SET(object,"persona",GINT_TO_POINTER(MS2));
-		object = gtk_builder_get_object(builder,"freeems_rbutton");
+		object = gtk_builder_get_object(builder,"libreems_rbutton");
 		if (G_IS_OBJECT(object))
-			OBJ_SET(object,"persona",GINT_TO_POINTER(FREEEMS));
+			OBJ_SET(object,"persona",GINT_TO_POINTER(LIBREEMS));
 		cfg_free(cfgfile);
 		g_free(filename);
 	}

@@ -94,10 +94,10 @@ gint main(gint argc, gchar ** argv)
 		do_ms2_load(port_fd,file_fd);
 	}
 
-	else if (type == FREEEMS)
+	else if (type == LIBREEMS)
 	{
 		setup_port(port_fd,115200);
-		do_freeems_load(port_fd,file_fd);
+		do_libreems_load(port_fd,file_fd);
 	}
 
 	flush_serial(port_fd,BOTH);
@@ -119,7 +119,9 @@ void verify_args(gint argc, gchar **argv)
 	else if (g_ascii_strcasecmp(argv[1],"MS2") == 0)
 		type = MS2;
 	else if (g_ascii_strcasecmp(argv[1],"FREEEMS") == 0)
-		type = FREEEMS;
+		type = LIBREEMS;
+	else if (g_ascii_strcasecmp(argv[1],"LIBREEMS") == 0)
+		type = LIBREEMS;
 	else
 		usage_and_exit(g_strdup_printf("Device type \"%s\" not recognized",argv[1]));
 
@@ -134,7 +136,7 @@ void usage_and_exit(gchar * msg)
 {
 	printf("\nERROR!!!\n - %s\n",msg);
 	g_free(msg);
-	printf("\nINVALID USAGE\n - msloader [MS1|MS2|FREEEMS] /path/to/port /path/to/.s19\n\n");
+	printf("\nINVALID USAGE\n - msloader [MS1|MS2|FREEEMS|LIBREEMS] /path/to/port /path/to/.s19\n\n");
 	exit (-1);
 }
 
