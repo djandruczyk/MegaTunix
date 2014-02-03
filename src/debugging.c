@@ -83,7 +83,7 @@ G_MODULE_EXPORT void open_debug(void)
 		if (!args->dbglog)
 			filename = g_build_filename(HOME(), "mtx",project,"debug.log",NULL);
 		else
-			filename = g_build_filename(HOME(),"mts",args->dbglog,NULL);
+			filename = g_build_filename(HOME(),"mtx",args->dbglog,NULL);
 		dbg_file = fopen(filename,"w");
 		if (dbg_file)
 		{
