@@ -3748,6 +3748,7 @@
 		  <property name="can_focus">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:48:35 GMT"/>
 		  <signal name="clicked" handler="gtk_widget_hide" object="calibrate_tps_window"/>
 
 		  <child>
@@ -3831,6 +3832,7 @@
 		  <property name="use_stock">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="std_button_handler" last_modification_time="Mon, 30 Aug 2004 18:48:35 GMT"/>
 		  <signal name="clicked" handler="gtk_widget_hide" object="calibrate_tps_window"/>
 		</widget>
 		<packing>

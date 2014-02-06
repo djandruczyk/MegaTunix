@@ -296,6 +296,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 						ms_store_new_block(canID,page,0,data,num_keys);
 					else
 						ms_chunk_write(canID,page,0,num_keys,data);
+					queue_burn_ecu_flash(page);
 				}
 				else
 				{

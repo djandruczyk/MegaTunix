@@ -810,6 +810,13 @@ G_MODULE_EXPORT gboolean show_tps_calibrator_window(GtkWidget *widget, gpointer 
 
 		}
 
+
+		item = glade_xml_get_widget(xml,"calibrate_tps_cancel_button");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_FLASH));
+
+		item = glade_xml_get_widget(xml,"tps_calibrate_ok_button");
+		OBJ_SET(item,"handler",GINT_TO_POINTER(BURN_FLASH));
+
 		item = glade_xml_get_widget(xml,"get_tps_button_min");
 		OBJ_SET(item,"handler",GINT_TO_POINTER(GET_CURR_TPS));
 		if (firmware->capabilities & PIS)
