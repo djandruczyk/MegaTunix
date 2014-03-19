@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: megatunix\n"
 "Report-Msgid-Bugs-To: djandruczyk@yahoo.com\n"
-"POT-Creation-Date: 2013-01-03 21:22-0500\n"
+"POT-Creation-Date: 2014-03-19 16:04-0400\n"
 "PO-Revision-Date: 2012-11-02 16:09-0400\n"
 "Last-Translator: David Andruczyk <dandruczyk@gmail.com>\n"
 "Language-Team: German \n"
@@ -80,10 +80,6 @@ msgstr "Fast Idle Threshold (Deg F.)"
 #: ../Gui/Dualtable-constants.glade.h:10 ../Gui/dynamic-table_x1.glade.h:6
 #: ../Gui/dynamic-table_x2.glade.h:6 ../Gui/dynamic-table_x3.glade.h:6
 #: ../Gui/dynamic-table_x4.glade.h:6 ../Gui/enrichments.glade.h:4
-#: ../Gui/freeems-benchtest.glade.h:19
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:1
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:1
-#: ../Gui/freeems-vetable_16x16x1.glade.h:2
 #: ../Gui/generic-afrtable_12x12x2.glade.h:1
 #: ../Gui/generic-afrtable_8x8x2.glade.h:2
 #: ../Gui/generic-boost_6x6x3.glade.h:2
@@ -99,6 +95,10 @@ msgstr "Fast Idle Threshold (Deg F.)"
 #: ../Gui/generic-vetable_16x16x1.glade.h:2
 #: ../Gui/generic-vetable_16x16x3.glade.h:2
 #: ../Gui/generic-vetable_8x8x1.glade.h:3 ../Gui/inj_timing_6x6x3.glade.h:2
+#: ../Gui/libreems-benchtest.glade.h:19
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:1
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:1
+#: ../Gui/libreems-vetable_16x16x1.glade.h:2
 #: ../Gui/ms1-e-029yx-wheeldecode.glade.h:11
 #: ../Gui/ms1-e-accelwizard.glade.h:4 ../Gui/ms1-e-advanced.glade.h:7
 #: ../Gui/ms1-e-boost-knock.glade.h:4 ../Gui/ms1-e-crank-ase.glade.h:1
@@ -174,10 +174,6 @@ msgstr "Erforderlich Fuel (Für einen Zylinder in ms.)"
 #: ../Gui/Dualtable-constants.glade.h:27 ../Gui/dynamic-table_x1.glade.h:37
 #: ../Gui/dynamic-table_x2.glade.h:40 ../Gui/dynamic-table_x3.glade.h:42
 #: ../Gui/dynamic-table_x4.glade.h:44 ../Gui/enrichments.glade.h:43
-#: ../Gui/freeems-debug.glade.h:5
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:23
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:23
-#: ../Gui/freeems-vetable_16x16x1.glade.h:24
 #: ../Gui/generic-afrtable_12x12x2.glade.h:32
 #: ../Gui/generic-afrtable_8x8x2.glade.h:28
 #: ../Gui/generic-boost_6x6x3.glade.h:29
@@ -194,6 +190,10 @@ msgstr "Erforderlich Fuel (Für einen Zylinder in ms.)"
 #: ../Gui/generic-vetable_16x16x3.glade.h:38
 #: ../Gui/generic-vetable_8x8x1.glade.h:33 ../Gui/inj_timing_6x6x3.glade.h:27
 #: ../Gui/JimStim-0.x.glade.h:16 ../Gui/JimStim-2.x.glade.h:24
+#: ../Gui/libreems-debug.glade.h:5
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:23
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:23
+#: ../Gui/libreems-vetable_16x16x1.glade.h:24
 #: ../Gui/ms1-e-029yx-wheeldecode.glade.h:44
 #: ../Gui/ms1-e-accelwizard.glade.h:42 ../Gui/ms1-e-advanced.glade.h:42
 #: ../Gui/ms1-e-boost-knock.glade.h:41 ../Gui/ms1-e-crank-ase.glade.h:49
@@ -249,10 +249,6 @@ msgstr "Dauerhaft speichern Daten in ECU"
 #: ../Gui/Dualtable-constants.glade.h:28 ../Gui/dynamic-table_x1.glade.h:38
 #: ../Gui/dynamic-table_x2.glade.h:41 ../Gui/dynamic-table_x3.glade.h:43
 #: ../Gui/dynamic-table_x4.glade.h:45 ../Gui/enrichments.glade.h:44
-#: ../Gui/freeems-debug.glade.h:6
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:24
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:24
-#: ../Gui/freeems-vetable_16x16x1.glade.h:25
 #: ../Gui/generic-afrtable_12x12x2.glade.h:33
 #: ../Gui/generic-afrtable_8x8x2.glade.h:29
 #: ../Gui/generic-boost_6x6x3.glade.h:30
@@ -269,7 +265,11 @@ msgstr "Dauerhaft speichern Daten in ECU"
 #: ../Gui/generic-vetable_16x16x3.glade.h:39
 #: ../Gui/generic-vetable_8x8x1.glade.h:34 ../Gui/inj_timing_6x6x3.glade.h:28
 #: ../Gui/JimStim-0.x.glade.h:17 ../Gui/JimStim-2.x.glade.h:25
-#: ../Gui/main.glade.h:74 ../Gui/ms1-e-029yx-wheeldecode.glade.h:45
+#: ../Gui/libreems-debug.glade.h:6
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:24
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:24
+#: ../Gui/libreems-vetable_16x16x1.glade.h:25 ../Gui/main.glade.h:75
+#: ../Gui/ms1-e-029yx-wheeldecode.glade.h:45
 #: ../Gui/ms1-e-accelwizard.glade.h:43 ../Gui/ms1-e-advanced.glade.h:43
 #: ../Gui/ms1-e-boost-knock.glade.h:42 ../Gui/ms1-e-crank-ase.glade.h:50
 #: ../Gui/ms1-e-ego.glade.h:37 ../Gui/ms1-e-features.glade.h:33
@@ -325,10 +325,6 @@ msgstr "Get Data von ECU"
 #: ../Gui/Dualtable-constants.glade.h:29 ../Gui/dynamic-table_x1.glade.h:39
 #: ../Gui/dynamic-table_x2.glade.h:42 ../Gui/dynamic-table_x3.glade.h:44
 #: ../Gui/dynamic-table_x4.glade.h:46 ../Gui/enrichments.glade.h:45
-#: ../Gui/freeems-debug.glade.h:7
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:25
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:25
-#: ../Gui/freeems-vetable_16x16x1.glade.h:26
 #: ../Gui/generic-afrtable_12x12x2.glade.h:34
 #: ../Gui/generic-afrtable_8x8x2.glade.h:30
 #: ../Gui/generic-boost_6x6x3.glade.h:31
@@ -345,7 +341,10 @@ msgstr "Get Data von ECU"
 #: ../Gui/generic-vetable_16x16x3.glade.h:40
 #: ../Gui/generic-vetable_8x8x1.glade.h:35 ../Gui/inj_timing_6x6x3.glade.h:29
 #: ../Gui/JimStim-0.x.glade.h:18 ../Gui/JimStim-2.x.glade.h:26
-#: ../Gui/jimstim-runtime.glade.h:11 ../Gui/main.glade.h:76
+#: ../Gui/jimstim-runtime.glade.h:11 ../Gui/libreems-debug.glade.h:7
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:25
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:25
+#: ../Gui/libreems-vetable_16x16x1.glade.h:26 ../Gui/main.glade.h:77
 #: ../Gui/ms1-e-029yx-wheeldecode.glade.h:46
 #: ../Gui/ms1-e-accelwizard.glade.h:44 ../Gui/ms1-e-advanced.glade.h:44
 #: ../Gui/ms1-e-boost-knock.glade.h:43 ../Gui/ms1-e-crank-ase.glade.h:51
@@ -633,9 +632,6 @@ msgstr "Motor / Injektionsparameter"
 
 #: ../Gui/dynamic-table_x1.glade.h:1 ../Gui/dynamic-table_x2.glade.h:1
 #: ../Gui/dynamic-table_x3.glade.h:1 ../Gui/dynamic-table_x4.glade.h:1
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:7
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:5
-#: ../Gui/freeems-vetable_16x16x1.glade.h:1
 #: ../Gui/generic-afrtable_12x12x2.glade.h:4
 #: ../Gui/generic-afrtable_8x8x2.glade.h:5
 #: ../Gui/generic-boost_6x6x3.glade.h:6
@@ -651,6 +647,9 @@ msgstr "Motor / Injektionsparameter"
 #: ../Gui/generic-vetable_16x16x1.glade.h:1
 #: ../Gui/generic-vetable_16x16x3.glade.h:1
 #: ../Gui/generic-vetable_8x8x1.glade.h:7 ../Gui/inj_timing_6x6x3.glade.h:5
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:7
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:5
+#: ../Gui/libreems-vetable_16x16x1.glade.h:1
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:5
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:65
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:64
@@ -686,9 +685,6 @@ msgstr ""
 
 #: ../Gui/dynamic-table_x1.glade.h:7 ../Gui/dynamic-table_x2.glade.h:7
 #: ../Gui/dynamic-table_x3.glade.h:7 ../Gui/dynamic-table_x4.glade.h:7
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:8
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:8
-#: ../Gui/freeems-vetable_16x16x1.glade.h:9
 #: ../Gui/generic-afrtable_12x12x2.glade.h:7
 #: ../Gui/generic-afrtable_8x8x2.glade.h:6
 #: ../Gui/generic-boost_6x6x3.glade.h:11
@@ -704,6 +700,9 @@ msgstr ""
 #: ../Gui/generic-vetable_16x16x1.glade.h:9
 #: ../Gui/generic-vetable_16x16x3.glade.h:9
 #: ../Gui/generic-vetable_8x8x1.glade.h:10 ../Gui/inj_timing_6x6x3.glade.h:9
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:8
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:8
+#: ../Gui/libreems-vetable_16x16x1.glade.h:9
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:10
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:70
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:69
@@ -717,9 +716,6 @@ msgstr "<b>X</b>"
 
 #: ../Gui/dynamic-table_x1.glade.h:8 ../Gui/dynamic-table_x2.glade.h:8
 #: ../Gui/dynamic-table_x3.glade.h:8 ../Gui/dynamic-table_x4.glade.h:8
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:9
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:9
-#: ../Gui/freeems-vetable_16x16x1.glade.h:10
 #: ../Gui/generic-afrtable_12x12x2.glade.h:8
 #: ../Gui/generic-afrtable_8x8x2.glade.h:7
 #: ../Gui/generic-boost_6x6x3.glade.h:12
@@ -735,6 +731,9 @@ msgstr "<b>X</b>"
 #: ../Gui/generic-vetable_16x16x1.glade.h:10
 #: ../Gui/generic-vetable_16x16x3.glade.h:10
 #: ../Gui/generic-vetable_8x8x1.glade.h:11 ../Gui/inj_timing_6x6x3.glade.h:10
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:9
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:9
+#: ../Gui/libreems-vetable_16x16x1.glade.h:10
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:11
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:71
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:70
@@ -748,9 +747,6 @@ msgstr "Neu berechnen"
 
 #: ../Gui/dynamic-table_x1.glade.h:9 ../Gui/dynamic-table_x2.glade.h:9
 #: ../Gui/dynamic-table_x3.glade.h:9 ../Gui/dynamic-table_x4.glade.h:9
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:10
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:10
-#: ../Gui/freeems-vetable_16x16x1.glade.h:11
 #: ../Gui/generic-afrtable_12x12x2.glade.h:9
 #: ../Gui/generic-afrtable_8x8x2.glade.h:8
 #: ../Gui/generic-boost_6x6x3.glade.h:13
@@ -766,6 +762,9 @@ msgstr "Neu berechnen"
 #: ../Gui/generic-vetable_16x16x1.glade.h:11
 #: ../Gui/generic-vetable_16x16x3.glade.h:11
 #: ../Gui/generic-vetable_8x8x1.glade.h:12 ../Gui/inj_timing_6x6x3.glade.h:11
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:10
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:10
+#: ../Gui/libreems-vetable_16x16x1.glade.h:11
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:12
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:72
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:71
@@ -785,9 +784,6 @@ msgstr "+ - * / ="
 
 #: ../Gui/dynamic-table_x1.glade.h:14 ../Gui/dynamic-table_x2.glade.h:14
 #: ../Gui/dynamic-table_x3.glade.h:14 ../Gui/dynamic-table_x4.glade.h:14
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:15
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:15
-#: ../Gui/freeems-vetable_16x16x1.glade.h:16
 #: ../Gui/generic-afrtable_12x12x2.glade.h:14
 #: ../Gui/generic-afrtable_8x8x2.glade.h:13
 #: ../Gui/generic-boost_6x6x3.glade.h:18
@@ -803,6 +799,9 @@ msgstr "+ - * / ="
 #: ../Gui/generic-vetable_16x16x1.glade.h:16
 #: ../Gui/generic-vetable_16x16x3.glade.h:16
 #: ../Gui/generic-vetable_8x8x1.glade.h:17 ../Gui/inj_timing_6x6x3.glade.h:16
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:15
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:15
+#: ../Gui/libreems-vetable_16x16x1.glade.h:16
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:17
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:77
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:76
@@ -817,9 +816,6 @@ msgstr "Rescale Subset der Tabelle"
 
 #: ../Gui/dynamic-table_x1.glade.h:15 ../Gui/dynamic-table_x2.glade.h:15
 #: ../Gui/dynamic-table_x3.glade.h:15 ../Gui/dynamic-table_x4.glade.h:15
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:16
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:16
-#: ../Gui/freeems-vetable_16x16x1.glade.h:17
 #: ../Gui/generic-afrtable_12x12x2.glade.h:15
 #: ../Gui/generic-afrtable_8x8x2.glade.h:14
 #: ../Gui/generic-boost_6x6x3.glade.h:19
@@ -835,6 +831,9 @@ msgstr "Rescale Subset der Tabelle"
 #: ../Gui/generic-vetable_16x16x1.glade.h:17
 #: ../Gui/generic-vetable_16x16x3.glade.h:17
 #: ../Gui/generic-vetable_8x8x1.glade.h:18 ../Gui/inj_timing_6x6x3.glade.h:17
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:16
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:16
+#: ../Gui/libreems-vetable_16x16x1.glade.h:17
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:18
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:78
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:77
@@ -959,9 +958,6 @@ msgstr "Timing-Offset Controls"
 
 #: ../Gui/dynamic-table_x1.glade.h:34 ../Gui/dynamic-table_x2.glade.h:34
 #: ../Gui/dynamic-table_x3.glade.h:34 ../Gui/dynamic-table_x4.glade.h:34
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:20
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:20
-#: ../Gui/freeems-vetable_16x16x1.glade.h:21
 #: ../Gui/generic-afrtable_12x12x2.glade.h:26
 #: ../Gui/generic-afrtable_8x8x2.glade.h:18
 #: ../Gui/generic-boost_6x6x3.glade.h:23
@@ -977,6 +973,9 @@ msgstr "Timing-Offset Controls"
 #: ../Gui/generic-vetable_16x16x1.glade.h:21
 #: ../Gui/generic-vetable_16x16x3.glade.h:28
 #: ../Gui/generic-vetable_8x8x1.glade.h:30 ../Gui/inj_timing_6x6x3.glade.h:21
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:20
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:20
+#: ../Gui/libreems-vetable_16x16x1.glade.h:21
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:22
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:82
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:81
@@ -991,9 +990,6 @@ msgstr "Tabelle exportieren"
 
 #: ../Gui/dynamic-table_x1.glade.h:35 ../Gui/dynamic-table_x2.glade.h:35
 #: ../Gui/dynamic-table_x3.glade.h:35 ../Gui/dynamic-table_x4.glade.h:35
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:21
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:21
-#: ../Gui/freeems-vetable_16x16x1.glade.h:22
 #: ../Gui/generic-afrtable_12x12x2.glade.h:27
 #: ../Gui/generic-afrtable_8x8x2.glade.h:19
 #: ../Gui/generic-boost_6x6x3.glade.h:24
@@ -1009,6 +1005,9 @@ msgstr "Tabelle exportieren"
 #: ../Gui/generic-vetable_16x16x1.glade.h:22
 #: ../Gui/generic-vetable_16x16x3.glade.h:29
 #: ../Gui/generic-vetable_8x8x1.glade.h:31 ../Gui/inj_timing_6x6x3.glade.h:22
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:21
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:21
+#: ../Gui/libreems-vetable_16x16x1.glade.h:22
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:23
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:83
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:82
@@ -1023,9 +1022,6 @@ msgstr "Tabelle importieren"
 
 #: ../Gui/dynamic-table_x1.glade.h:36 ../Gui/dynamic-table_x2.glade.h:36
 #: ../Gui/dynamic-table_x3.glade.h:36 ../Gui/dynamic-table_x4.glade.h:36
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:22
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:22
-#: ../Gui/freeems-vetable_16x16x1.glade.h:23
 #: ../Gui/generic-afrtable_12x12x2.glade.h:28
 #: ../Gui/generic-afrtable_8x8x2.glade.h:20
 #: ../Gui/generic-boost_6x6x3.glade.h:25
@@ -1041,6 +1037,9 @@ msgstr "Tabelle importieren"
 #: ../Gui/generic-vetable_16x16x1.glade.h:23
 #: ../Gui/generic-vetable_16x16x3.glade.h:30
 #: ../Gui/generic-vetable_8x8x1.glade.h:32 ../Gui/inj_timing_6x6x3.glade.h:23
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:22
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:22
+#: ../Gui/libreems-vetable_16x16x1.glade.h:23
 #: ../Gui/ms2-alpha-n_6x6x1.glade.h:24
 #: ../Gui/ms2-e-3.0.3v-nitrous_staging_orfc.glade.h:84
 #: ../Gui/ms2-e-3.x-nitrous_staging_orfc.glade.h:83
@@ -1265,321 +1264,6 @@ msgstr "ECU-Fehlermeldungen"
 msgid "ECU Tools"
 msgstr "_Tools"
 
-#: ../Gui/freeems-benchtest.glade.h:1
-msgid ""
-"Notes:\n"
-"\n"
-"* Once you hit start the ONLY way (currently) to stop the test, click on the "
-"\"Stop Test\" button\n"
-"* To determine how long your test will run for, simply multiply the first "
-"three values together!\n"
-"* To determine the duty cycle divide the PW (if chosen explicitly) by the "
-"result of multiplying the \"Events Per Cycle\" by \"Time Per Event\" "
-"together.\n"
-"* Events To Fire values equal to, or in excess of, Events Per Cycle are "
-"considered off!\n"
-"* PW Source OR Value values have special meanings, 0 = OFF, 1 = RefPW, 2 = "
-"Dwell, above some arbitrary value = a literal PW.\n"
-"* Time and PW literals are in 0.8us ticks, divide by 1250 for ms.\n"
-"* PW = Pulse Width\n"
-"* Please select appropriate values for your coils and/or injectors and, when "
-"ready, press start!"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:11
-#, fuzzy
-msgid "Help Text"
-msgstr "Text"
-
-#: ../Gui/freeems-benchtest.glade.h:12
-#, fuzzy
-msgid "Events per Cycle (1-255)"
-msgstr "pro Zyklus (Frau)"
-
-#: ../Gui/freeems-benchtest.glade.h:13
-#, fuzzy
-msgid "12"
-msgstr "1"
-
-#: ../Gui/freeems-benchtest.glade.h:14
-#, fuzzy
-msgid "Number of Cycles (1-65535)"
-msgstr "Anzahl der Windungen"
-
-#: ../Gui/freeems-benchtest.glade.h:15
-msgid "Time Per Event (0-65535)"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:16
-msgid "Events To Fire From (0-255)"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:17
-msgid "PW Source OR Value (0-65535)"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:18
-msgid "10000"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:20
-msgid "50000"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:21
-#, fuzzy
-msgid "50"
-msgstr "5,0"
-
-#: ../Gui/freeems-benchtest.glade.h:22
-msgid "2"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:23 ../Gui/main.glade.h:114
-msgid "4"
-msgstr "4"
-
-#: ../Gui/freeems-benchtest.glade.h:24
-msgid "6"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:25
-msgid "8"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:26
-#, fuzzy
-msgid "10"
-msgstr "100"
-
-#: ../Gui/freeems-benchtest.glade.h:27
-msgid "Start Bench Test"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:28
-msgid "Stop Test"
-msgstr ""
-
-#: ../Gui/freeems-benchtest.glade.h:29
-#, fuzzy
-msgid "Add Cycles"
-msgstr "Cycles"
-
-#: ../Gui/freeems-benchtest.glade.h:30
-#, fuzzy
-msgid "<b>HH:MM:SS</b>"
-msgstr "<b>X</b>"
-
-#: ../Gui/freeems-benchtest.glade.h:31
-#, fuzzy
-msgid "Bench Test Settings"
-msgstr "Gauge Texteinstellungen"
-
-#: ../Gui/freeems-benchtest.glade.h:32 ../Gui/JimStim-2.x.glade.h:21
-#, fuzzy
-msgid "Messages"
-msgstr "Statusmeldungen"
-
-#: ../Gui/freeems-benchtest.glade.h:33
-msgid "FreeEMS Bench Test Decoder"
-msgstr ""
-
-#: ../Gui/freeems-debug.glade.h:1
-msgid "Soft Boot the ECU"
-msgstr ""
-
-#: ../Gui/freeems-debug.glade.h:2 ../Gui/template.glade.h:6
-msgid "Frame 4"
-msgstr "Frame 4"
-
-#: ../Gui/freeems-debug.glade.h:3
-msgid "Hard Boot the ECU"
-msgstr ""
-
-#: ../Gui/freeems-debug.glade.h:4 ../Gui/template.glade.h:7
-msgid "Frame 2"
-msgstr "Frame 2"
-
-#: ../Gui/freeems-debug.glade.h:8 ../Gui/JimStim-0.x.glade.h:19
-#: ../Gui/JimStim-2.x.glade.h:27 ../Gui/template.glade.h:11
-msgid "Template Tab"
-msgstr "Registerkarte \"Vorlage\""
-
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:3
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:3
-#: ../Gui/freeems-vetable_16x16x1.glade.h:7
-#: ../Gui/generic-lambdatable_16x16x1.glade.h:3
-#: ../Gui/generic-sparktable_12x12x3.glade.h:10
-#: ../Gui/generic-sparktable_16x16x1.glade.h:3
-#: ../Gui/generic-vetable_16x16x1.glade.h:7
-#: ../Gui/generic-vetable_16x16x3.glade.h:7 ../Gui/ms1-e-crank-ase.glade.h:42
-#: ../Gui/ms2-accel.glade.h:52
-#: ../Gui/ms2-e-3.1.1_17-crank_idle_warmup.glade.h:5
-#: ../Gui/ms2-e-3.1.x-crank_idle_warmup.glade.h:5
-#: ../Gui/ms2-e-3.x-corrections_misc.glade.h:22
-#: ../Gui/ms2-e-3.x-crank_idle_warmup.glade.h:5 ../Gui/ms2-e-accel.glade.h:34
-#: ../Gui/ms2-e-corrections_misc.glade.h:8
-#: ../Gui/ms2-e-crank_idle_warmup.glade.h:5
-#: ../Gui/ms2-e-rotary-split.glade.h:22 ../Gui/ms2-e-vetrim_16x16x4.glade.h:6
-#: ../Gui/ms2-warmup.glade.h:31
-#, no-c-format
-msgid "(%)"
-msgstr "(%)"
-
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:4
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:4
-#: ../Gui/freeems-vetable_16x16x1.glade.h:8
-#, fuzzy
-msgid "Load Axis"
-msgstr "Load% Bins"
-
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:5
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:6
-#: ../Gui/freeems-vetable_16x16x1.glade.h:5
-#, fuzzy
-msgid "RPM Axis"
-msgstr "RPM Bins"
-
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:6
-#: ../Gui/generic-sparktable_16x16x1.glade.h:6
-#, fuzzy
-msgid "Spark Advance"
-msgstr "_Spark Advance"
-
-#: ../Gui/freeems-ignitiontable_16x16x1.glade.h:19
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:19
-#: ../Gui/freeems-vetable_16x16x1.glade.h:20
-#: ../Gui/generic-afrtable_12x12x2.glade.h:18
-#: ../Gui/generic-lambdatable_16x16x1.glade.h:19
-#: ../Gui/generic-sparktable_12x12x1.glade.h:24
-#: ../Gui/generic-sparktable_12x12x2.glade.h:26
-#: ../Gui/generic-sparktable_16x16x1.glade.h:19
-#: ../Gui/generic-sparktable_8x8x1.glade.h:23
-#: ../Gui/generictable_XxYxZ.glade.h:25
-#: ../Gui/generic-vetable_12x12x2.glade.h:19
-#: ../Gui/generic-vetable_12x12x3.glade.h:19
-#: ../Gui/generic-vetable_16x16x1.glade.h:20
-#: ../Gui/generic-vetable_16x16x3.glade.h:20
-#: ../Gui/generic-vetable_8x8x1.glade.h:21
-#: ../Gui/ms2-e-vetrim_16x16x4.glade.h:19
-#: ../Gui/PIS-alpha_biar_16x10.glade.h:16
-#: ../Gui/PIS-alpha_bpw_16x10.glade.h:16 ../Gui/PIS-biar_16x16.glade.h:15
-#: ../Gui/PIS-boost_16x10.glade.h:16 ../Gui/PIS-bpw_16x16.glade.h:16
-#: ../Gui/PIS-ego_16x16.glade.h:15
-msgid "Tracking  option"
-msgstr "Tracking-Option"
-
-#: ../Gui/freeems-lambdatable_16x16x1.glade.h:7
-msgid "Lambda"
-msgstr "Lambda"
-
-#: ../Gui/freeems-runtime.glade.h:1
-#, fuzzy
-msgid "Main Inputs"
-msgstr "Max Nichtangetriebene Input (V)"
-
-#: ../Gui/freeems-runtime.glade.h:2
-msgid "COMBUSTION SYNC"
-msgstr ""
-
-#: ../Gui/freeems-runtime.glade.h:3
-#, fuzzy
-msgid "CRANK SYNC"
-msgstr "Kurbeln"
-
-#: ../Gui/freeems-runtime.glade.h:4
-msgid "CAM SYNC"
-msgstr ""
-
-#: ../Gui/freeems-runtime.glade.h:5
-msgid "LAST STAMP VALID"
-msgstr ""
-
-#: ../Gui/freeems-runtime.glade.h:6
-msgid "LAST PERIOD VALID"
-msgstr ""
-
-#: ../Gui/freeems-runtime.glade.h:7
-msgid "FUEL PUMP PRIME"
-msgstr ""
-
-#: ../Gui/freeems-runtime.glade.h:8
-#, fuzzy
-msgid "Statuses"
-msgstr "Statusmeldungen"
-
-#: ../Gui/freeems-runtime.glade.h:9 ../Gui/jimstim-runtime.glade.h:2
-#: ../Gui/ms2-e-runtime.glade.h:2 ../Gui/ms2-runtime.glade.h:10
-#: ../Gui/runtime.glade.h:9
-msgid "VE/Constants Reads"
-msgstr "VE / Konstanten Liest"
-
-#: ../Gui/freeems-runtime.glade.h:10
-msgid "Datalog Packets"
-msgstr ""
-
-#: ../Gui/freeems-runtime.glade.h:11 ../Gui/jimstim-runtime.glade.h:4
-#: ../Gui/main.glade.h:60 ../Gui/ms2-e-runtime.glade.h:4
-#: ../Gui/ms2-runtime.glade.h:12 ../Gui/runtime.glade.h:11
-msgid "Hard Resets"
-msgstr "Hard Resets"
-
-#: ../Gui/freeems-runtime.glade.h:12 ../Gui/jimstim-runtime.glade.h:5
-#: ../Gui/main.glade.h:59 ../Gui/ms2-e-runtime.glade.h:5
-#: ../Gui/ms2-runtime.glade.h:13 ../Gui/runtime.glade.h:12
-msgid "Serial I/O Errors"
-msgstr "Serial I / O Errors"
-
-#: ../Gui/freeems-runtime.glade.h:13 ../Gui/jimstim-runtime.glade.h:6
-#: ../Gui/ms2-e-runtime.glade.h:6 ../Gui/ms2-runtime.glade.h:14
-#: ../Gui/PIS-runtime.glade.h:7 ../Gui/runtime.glade.h:13
-msgid "Reset Status Counters"
-msgstr "Reset Status Zähler"
-
-#: ../Gui/freeems-runtime.glade.h:14
-#, fuzzy
-msgid "I/O Stats"
-msgstr "IAC Start"
-
-#: ../Gui/freeems-runtime.glade.h:15
-#, fuzzy
-msgid "Corrections/Enrichments/Counters/etc"
-msgstr "Korrekturen / Anreicherungen"
-
-#: ../Gui/freeems-runtime.glade.h:16 ../Gui/runtime.glade.h:19
-#, fuzzy
-msgid "Runtime Display"
-msgstr "_Runtime Display"
-
-#: ../Gui/freeems-tools.glade.h:1 ../Gui/tools.glade.h:1
-msgid "Tools Status Messages"
-msgstr "Tools Statusmeldungen"
-
-#: ../Gui/freeems-tools.glade.h:2 ../Gui/tools.glade.h:2
-msgid "Backup All ECU Parameters"
-msgstr "Sichern Sie alle Steuergeräte-Parametern"
-
-#: ../Gui/freeems-tools.glade.h:3 ../Gui/tools.glade.h:3
-msgid "Restore All ECU Parameters"
-msgstr "Restore Alle Steuergeräte-Parametern"
-
-#: ../Gui/freeems-tools.glade.h:4 ../Gui/tools.glade.h:4
-msgid "Backup/Restore All Settings"
-msgstr "Backup / Restore \"Alle Einstellungen"
-
-#: ../Gui/freeems-tools.glade.h:5
-msgid "FreeEMS Tools"
-msgstr ""
-
-#: ../Gui/freeems-vetable_16x16x1.glade.h:4
-#: ../Gui/generic-vetable_12x12x2.glade.h:6
-#: ../Gui/generic-vetable_12x12x3.glade.h:6
-#: ../Gui/generic-vetable_16x16x1.glade.h:4
-#: ../Gui/generic-vetable_16x16x3.glade.h:4
-#, no-c-format
-msgid "Fuel Table 1 Volumetric Efficiency (%)"
-msgstr "Fuel Tabelle 1 volumetrischen Wirkungsgrad (%)"
-
 #: ../Gui/generic-afrtable_12x12x2.glade.h:2
 #: ../Gui/generic-sparktable_12x12x1.glade.h:9
 #: ../Gui/generic-sparktable_12x12x2.glade.h:9
@@ -1632,6 +1316,29 @@ msgstr "AFR Tabelle 1 (AFR)"
 #: ../Gui/PIS-ego_16x16.glade.h:5 ../Gui/rotary-trail.glade.h:17
 msgid "RPM Bins"
 msgstr "RPM Bins"
+
+#: ../Gui/generic-afrtable_12x12x2.glade.h:18
+#: ../Gui/generic-lambdatable_16x16x1.glade.h:19
+#: ../Gui/generic-sparktable_12x12x1.glade.h:24
+#: ../Gui/generic-sparktable_12x12x2.glade.h:26
+#: ../Gui/generic-sparktable_16x16x1.glade.h:19
+#: ../Gui/generic-sparktable_8x8x1.glade.h:23
+#: ../Gui/generictable_XxYxZ.glade.h:25
+#: ../Gui/generic-vetable_12x12x2.glade.h:19
+#: ../Gui/generic-vetable_12x12x3.glade.h:19
+#: ../Gui/generic-vetable_16x16x1.glade.h:20
+#: ../Gui/generic-vetable_16x16x3.glade.h:20
+#: ../Gui/generic-vetable_8x8x1.glade.h:21
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:19
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:19
+#: ../Gui/libreems-vetable_16x16x1.glade.h:20
+#: ../Gui/ms2-e-vetrim_16x16x4.glade.h:19
+#: ../Gui/PIS-alpha_biar_16x10.glade.h:16
+#: ../Gui/PIS-alpha_bpw_16x10.glade.h:16 ../Gui/PIS-biar_16x16.glade.h:15
+#: ../Gui/PIS-boost_16x10.glade.h:16 ../Gui/PIS-bpw_16x16.glade.h:16
+#: ../Gui/PIS-ego_16x16.glade.h:15
+msgid "Tracking  option"
+msgstr "Tracking-Option"
 
 #: ../Gui/generic-afrtable_12x12x2.glade.h:29
 msgid "AFR-Table 1"
@@ -1729,6 +1436,27 @@ msgstr "BoostTable 2 (KPA Target)"
 msgid "ECU Boost Tables"
 msgstr "_Boost Tabellen"
 
+#: ../Gui/generic-lambdatable_16x16x1.glade.h:3
+#: ../Gui/generic-sparktable_12x12x3.glade.h:10
+#: ../Gui/generic-sparktable_16x16x1.glade.h:3
+#: ../Gui/generic-vetable_16x16x1.glade.h:7
+#: ../Gui/generic-vetable_16x16x3.glade.h:7
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:3
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:3
+#: ../Gui/libreems-vetable_16x16x1.glade.h:7 ../Gui/ms1-e-crank-ase.glade.h:42
+#: ../Gui/ms2-accel.glade.h:52
+#: ../Gui/ms2-e-3.1.1_17-crank_idle_warmup.glade.h:5
+#: ../Gui/ms2-e-3.1.x-crank_idle_warmup.glade.h:5
+#: ../Gui/ms2-e-3.x-corrections_misc.glade.h:22
+#: ../Gui/ms2-e-3.x-crank_idle_warmup.glade.h:5 ../Gui/ms2-e-accel.glade.h:34
+#: ../Gui/ms2-e-corrections_misc.glade.h:8
+#: ../Gui/ms2-e-crank_idle_warmup.glade.h:5
+#: ../Gui/ms2-e-rotary-split.glade.h:22 ../Gui/ms2-e-vetrim_16x16x4.glade.h:6
+#: ../Gui/ms2-warmup.glade.h:31
+#, no-c-format
+msgid "(%)"
+msgstr "(%)"
+
 #: ../Gui/generic-lambdatable_16x16x1.glade.h:4 ../Gui/mtxloader.glade.h:10
 msgid "Load"
 msgstr "Last"
@@ -1820,6 +1548,12 @@ msgstr "MS2 - Extra Spark Tabellen"
 msgid "Fuel Load"
 msgstr "Kernbrennstoff"
 
+#: ../Gui/generic-sparktable_16x16x1.glade.h:6
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:6
+#, fuzzy
+msgid "Spark Advance"
+msgstr "_Spark Advance"
+
 #: ../Gui/generic-sparktable_8x8x1.glade.h:1
 msgid "Spark Advance table"
 msgstr "Zündverstellung Tisch"
@@ -1851,6 +1585,15 @@ msgstr "Last%"
 #: ../Gui/generictable_XxYxZ.glade.h:30
 msgid "Topframe Title"
 msgstr ""
+
+#: ../Gui/generic-vetable_12x12x2.glade.h:6
+#: ../Gui/generic-vetable_12x12x3.glade.h:6
+#: ../Gui/generic-vetable_16x16x1.glade.h:4
+#: ../Gui/generic-vetable_16x16x3.glade.h:4
+#: ../Gui/libreems-vetable_16x16x1.glade.h:4
+#, no-c-format
+msgid "Fuel Table 1 Volumetric Efficiency (%)"
+msgstr "Fuel Tabelle 1 volumetrischen Wirkungsgrad (%)"
 
 #: ../Gui/generic-vetable_12x12x2.glade.h:30
 #: ../Gui/generic-vetable_12x12x3.glade.h:30
@@ -2015,6 +1758,11 @@ msgstr ""
 msgid "Dynamic RPM Control"
 msgstr "Latch PWM Idle Control"
 
+#: ../Gui/JimStim-0.x.glade.h:19 ../Gui/JimStim-2.x.glade.h:27
+#: ../Gui/libreems-debug.glade.h:8 ../Gui/template.glade.h:11
+msgid "Template Tab"
+msgstr "Registerkarte \"Vorlage\""
+
 #: ../Gui/JimStim-2.x.glade.h:2
 msgid "Invert Primary Tach"
 msgstr ""
@@ -2063,6 +1811,11 @@ msgid ""
 "parameter and adjust the RPM step to suit."
 msgstr ""
 
+#: ../Gui/JimStim-2.x.glade.h:21 ../Gui/libreems-benchtest.glade.h:32
+#, fuzzy
+msgid "Messages"
+msgstr "Statusmeldungen"
+
 #: ../Gui/JimStim-2.x.glade.h:23
 #, fuzzy
 msgid "Manual RPM Control"
@@ -2074,10 +1827,33 @@ msgstr "Lüftersteuerung"
 msgid "Runtime Data"
 msgstr "Runtime Data"
 
+#: ../Gui/jimstim-runtime.glade.h:2 ../Gui/libreems-runtime.glade.h:9
+#: ../Gui/ms2-e-runtime.glade.h:2 ../Gui/ms2-runtime.glade.h:10
+msgid "VE/Constants Reads"
+msgstr "VE / Konstanten Liest"
+
 #: ../Gui/jimstim-runtime.glade.h:3 ../Gui/ms2-e-runtime.glade.h:3
-#: ../Gui/ms2-runtime.glade.h:11 ../Gui/runtime.glade.h:10
+#: ../Gui/ms2-runtime.glade.h:11
 msgid "Runtime Reads"
 msgstr "Liest Runtime"
+
+#: ../Gui/jimstim-runtime.glade.h:4 ../Gui/libreems-runtime.glade.h:11
+#: ../Gui/main.glade.h:61 ../Gui/ms2-e-runtime.glade.h:4
+#: ../Gui/ms2-runtime.glade.h:12 ../Gui/runtime.glade.h:11
+msgid "Hard Resets"
+msgstr "Hard Resets"
+
+#: ../Gui/jimstim-runtime.glade.h:5 ../Gui/libreems-runtime.glade.h:12
+#: ../Gui/main.glade.h:60 ../Gui/ms2-e-runtime.glade.h:5
+#: ../Gui/ms2-runtime.glade.h:13 ../Gui/runtime.glade.h:12
+msgid "Serial I/O Errors"
+msgstr "Serial I / O Errors"
+
+#: ../Gui/jimstim-runtime.glade.h:6 ../Gui/libreems-runtime.glade.h:13
+#: ../Gui/ms2-e-runtime.glade.h:6 ../Gui/ms2-runtime.glade.h:14
+#: ../Gui/PIS-runtime.glade.h:7 ../Gui/runtime.glade.h:13
+msgid "Reset Status Counters"
+msgstr "Reset Status Zähler"
 
 #: ../Gui/jimstim-runtime.glade.h:7
 #, fuzzy
@@ -2090,7 +1866,7 @@ msgid "JimStim Wheel Mode"
 msgstr "Stim für Rad"
 
 #: ../Gui/jimstim-runtime.glade.h:9 ../Gui/ms2-e-runtime.glade.h:18
-#: ../Gui/ms2-runtime.glade.h:17 ../Gui/PIS-alpha_biar_16x10.glade.h:21
+#: ../Gui/ms2-runtime.glade.h:18 ../Gui/PIS-alpha_biar_16x10.glade.h:21
 #: ../Gui/PIS-alpha_bpw_16x10.glade.h:24 ../Gui/PIS-biar_16x16.glade.h:20
 #: ../Gui/PIS-boost_16x10.glade.h:21 ../Gui/PIS-bpw_16x16.glade.h:21
 #: ../Gui/PIS-corrections.glade.h:41 ../Gui/PIS-ego_16x16.glade.h:20
@@ -2100,7 +1876,7 @@ msgid "Stop Reading RT Data"
 msgstr "Stop Reading RT-Daten"
 
 #: ../Gui/jimstim-runtime.glade.h:10 ../Gui/ms2-e-runtime.glade.h:19
-#: ../Gui/ms2-runtime.glade.h:18 ../Gui/PIS-alpha_biar_16x10.glade.h:22
+#: ../Gui/ms2-runtime.glade.h:17 ../Gui/PIS-alpha_biar_16x10.glade.h:22
 #: ../Gui/PIS-alpha_bpw_16x10.glade.h:23 ../Gui/PIS-biar_16x16.glade.h:21
 #: ../Gui/PIS-boost_16x10.glade.h:22 ../Gui/PIS-bpw_16x16.glade.h:22
 #: ../Gui/PIS-corrections.glade.h:42 ../Gui/PIS-ego_16x16.glade.h:21
@@ -2113,6 +1889,229 @@ msgstr "Start Reading RT-Daten"
 #, fuzzy
 msgid "JimStim Runtime Display"
 msgstr "_Runtime Display"
+
+#: ../Gui/libreems-benchtest.glade.h:1
+msgid ""
+"Notes:\n"
+"\n"
+"* Once you hit start the ONLY way (currently) to stop the test, click on the "
+"\"Stop Test\" button\n"
+"* To determine how long your test will run for, simply multiply the first "
+"three values together!\n"
+"* To determine the duty cycle divide the PW (if chosen explicitly) by the "
+"result of multiplying the \"Events Per Cycle\" by \"Time Per Event\" "
+"together.\n"
+"* Events To Fire values equal to, or in excess of, Events Per Cycle are "
+"considered off!\n"
+"* PW Source OR Value values have special meanings, 0 = OFF, 1 = RefPW, 2 = "
+"Dwell, above some arbitrary value = a literal PW.\n"
+"* Time and PW literals are in 0.8us ticks, divide by 1250 for ms.\n"
+"* PW = Pulse Width\n"
+"* Please select appropriate values for your coils and/or injectors and, when "
+"ready, press start!"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:11
+#, fuzzy
+msgid "Help Text"
+msgstr "Text"
+
+#: ../Gui/libreems-benchtest.glade.h:12
+#, fuzzy
+msgid "Events per Cycle (1-255)"
+msgstr "pro Zyklus (Frau)"
+
+#: ../Gui/libreems-benchtest.glade.h:13
+#, fuzzy
+msgid "12"
+msgstr "1"
+
+#: ../Gui/libreems-benchtest.glade.h:14
+#, fuzzy
+msgid "Number of Cycles (1-65535)"
+msgstr "Anzahl der Windungen"
+
+#: ../Gui/libreems-benchtest.glade.h:15
+msgid "Time Per Event (0-65535)"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:16
+msgid "Events To Fire From (0-255)"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:17
+msgid "PW Source OR Value (0-65535)"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:18
+msgid "10000"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:20
+msgid "50000"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:21
+#, fuzzy
+msgid "50"
+msgstr "5,0"
+
+#: ../Gui/libreems-benchtest.glade.h:22
+msgid "2"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:23 ../Gui/main.glade.h:114
+msgid "4"
+msgstr "4"
+
+#: ../Gui/libreems-benchtest.glade.h:24
+msgid "6"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:25
+msgid "8"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:26
+#, fuzzy
+msgid "10"
+msgstr "100"
+
+#: ../Gui/libreems-benchtest.glade.h:27
+msgid "Start Bench Test"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:28
+msgid "Stop Test"
+msgstr ""
+
+#: ../Gui/libreems-benchtest.glade.h:29
+#, fuzzy
+msgid "Add Cycles"
+msgstr "Cycles"
+
+#: ../Gui/libreems-benchtest.glade.h:30
+#, fuzzy
+msgid "<b>HH:MM:SS</b>"
+msgstr "<b>X</b>"
+
+#: ../Gui/libreems-benchtest.glade.h:31
+#, fuzzy
+msgid "Bench Test Settings"
+msgstr "Gauge Texteinstellungen"
+
+#: ../Gui/libreems-benchtest.glade.h:33
+msgid "LibreEMS Bench Test Decoder"
+msgstr ""
+
+#: ../Gui/libreems-debug.glade.h:1
+msgid "Soft Boot the ECU"
+msgstr ""
+
+#: ../Gui/libreems-debug.glade.h:2 ../Gui/template.glade.h:6
+msgid "Frame 4"
+msgstr "Frame 4"
+
+#: ../Gui/libreems-debug.glade.h:3
+msgid "Hard Boot the ECU"
+msgstr ""
+
+#: ../Gui/libreems-debug.glade.h:4 ../Gui/template.glade.h:7
+msgid "Frame 2"
+msgstr "Frame 2"
+
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:4
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:4
+#: ../Gui/libreems-vetable_16x16x1.glade.h:8
+#, fuzzy
+msgid "Load Axis"
+msgstr "Load% Bins"
+
+#: ../Gui/libreems-ignitiontable_16x16x1.glade.h:5
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:6
+#: ../Gui/libreems-vetable_16x16x1.glade.h:5
+#, fuzzy
+msgid "RPM Axis"
+msgstr "RPM Bins"
+
+#: ../Gui/libreems-lambdatable_16x16x1.glade.h:7
+msgid "Lambda"
+msgstr "Lambda"
+
+#: ../Gui/libreems-runtime.glade.h:1
+#, fuzzy
+msgid "Main Inputs"
+msgstr "Max Nichtangetriebene Input (V)"
+
+#: ../Gui/libreems-runtime.glade.h:2
+msgid "COMBUSTION SYNC"
+msgstr ""
+
+#: ../Gui/libreems-runtime.glade.h:3
+#, fuzzy
+msgid "CRANK SYNC"
+msgstr "Kurbeln"
+
+#: ../Gui/libreems-runtime.glade.h:4
+msgid "CAM SYNC"
+msgstr ""
+
+#: ../Gui/libreems-runtime.glade.h:5
+msgid "LAST STAMP VALID"
+msgstr ""
+
+#: ../Gui/libreems-runtime.glade.h:6
+msgid "LAST PERIOD VALID"
+msgstr ""
+
+#: ../Gui/libreems-runtime.glade.h:7
+msgid "FUEL PUMP PRIME"
+msgstr ""
+
+#: ../Gui/libreems-runtime.glade.h:8
+#, fuzzy
+msgid "Statuses"
+msgstr "Statusmeldungen"
+
+#: ../Gui/libreems-runtime.glade.h:10
+msgid "Datalog Packets"
+msgstr ""
+
+#: ../Gui/libreems-runtime.glade.h:14
+#, fuzzy
+msgid "I/O Stats"
+msgstr "IAC Start"
+
+#: ../Gui/libreems-runtime.glade.h:15
+#, fuzzy
+msgid "Corrections/Enrichments/Counters/etc"
+msgstr "Korrekturen / Anreicherungen"
+
+#: ../Gui/libreems-runtime.glade.h:16 ../Gui/runtime.glade.h:19
+#, fuzzy
+msgid "Runtime Display"
+msgstr "_Runtime Display"
+
+#: ../Gui/libreems-tools.glade.h:1 ../Gui/tools.glade.h:1
+msgid "Tools Status Messages"
+msgstr "Tools Statusmeldungen"
+
+#: ../Gui/libreems-tools.glade.h:2 ../Gui/tools.glade.h:2
+msgid "Backup All ECU Parameters"
+msgstr "Sichern Sie alle Steuergeräte-Parametern"
+
+#: ../Gui/libreems-tools.glade.h:3 ../Gui/tools.glade.h:3
+msgid "Restore All ECU Parameters"
+msgstr "Restore Alle Steuergeräte-Parametern"
+
+#: ../Gui/libreems-tools.glade.h:4 ../Gui/tools.glade.h:4
+msgid "Backup/Restore All Settings"
+msgstr "Backup / Restore \"Alle Einstellungen"
+
+#: ../Gui/libreems-tools.glade.h:5
+#, fuzzy
+msgid "LibreEMS Tools"
+msgstr "_Tools"
 
 #: ../Gui/logviewer.glade.h:2
 #, no-c-format
@@ -2324,63 +2323,68 @@ msgid "Tab Labels"
 msgstr "Gui Tabs geladen ..."
 
 #: ../Gui/main.glade.h:33
+#, fuzzy
+msgid "Select a File"
+msgstr "Wählen Sie eine Datei"
+
+#: ../Gui/main.glade.h:34
 msgid "Dashboard(s) Selection"
 msgstr "Dashboard (s) Selection"
 
-#: ../Gui/main.glade.h:34
+#: ../Gui/main.glade.h:35
 msgid "MegaTunix Debugging"
 msgstr "MegaTunix Debugging"
 
-#: ../Gui/main.glade.h:35
+#: ../Gui/main.glade.h:36
 msgid "Interrogate ECU"
 msgstr "Interrogate ECU"
 
-#: ../Gui/main.glade.h:36
+#: ../Gui/main.glade.h:37
 msgid "Use Offline Mode"
 msgstr "Verwenden Sie Offline-Modus"
-
-#: ../Gui/main.glade.h:37
-#, fuzzy
-msgid "ECU Information"
-msgstr "MegaSquirt ECU Information"
 
 #: ../Gui/main.glade.h:38
 msgid "Interrogation/Tab status"
 msgstr "Interrogation / Tab-Status"
 
 #: ../Gui/main.glade.h:39
+#, fuzzy
+msgid "ECU Information"
+msgstr "MegaSquirt ECU Information"
+
+#: ../Gui/main.glade.h:40
 msgid "General MegaTunix Settings"
 msgstr "General Settings MegaTunix"
 
-#: ../Gui/main.glade.h:40
+#: ../Gui/main.glade.h:41
 msgid "_General"
 msgstr "_Allgemeine"
 
-#: ../Gui/main.glade.h:41
+#: ../Gui/main.glade.h:42
 msgid "Serial Port"
 msgstr "Serial Port"
 
-#: ../Gui/main.glade.h:42
+#: ../Gui/main.glade.h:43
 msgid "Serial/Network Read Timeout (ms)"
 msgstr "Serial / Network Lesen Timeout (ms)"
 
-#: ../Gui/main.glade.h:43
+#: ../Gui/main.glade.h:44
 msgid "Auto-Scan Serial Ports"
 msgstr "Auto-Scan Serial Ports"
 
-#: ../Gui/main.glade.h:44
+#: ../Gui/main.glade.h:45
 msgid "Locate Port"
 msgstr "Suchen Port"
 
-#: ../Gui/main.glade.h:45
+#: ../Gui/main.glade.h:46
 msgid "Allow Network Access"
 msgstr "Lassen Network Access"
 
-#: ../Gui/main.glade.h:46
+#: ../Gui/main.glade.h:47
 msgid "Slaves:"
 msgstr "Slaves:"
 
-#: ../Gui/main.glade.h:47
+#: ../Gui/main.glade.h:48
 msgid ""
 "Type in the hostname that you want to CONNECT to to allow remote mtx "
 "access.  This is so you can \"phone home\" to a remotely waiting megatunix "
@@ -2394,7 +2398,7 @@ msgstr ""
 "können zusammen Melodie. Dies lindert dass dazu spezielle Firewall-Ports zu "
 "öffnen auf Ihrer Seite, solange Ihr Rechner verbinden können outbound."
 
-#: ../Gui/main.glade.h:48
+#: ../Gui/main.glade.h:49
 msgid ""
 "Type in the hostname that you want to CONNECT to  in the box to the right of "
 "this button to allow remote access to your tuning session from a remote user "
@@ -2411,134 +2415,129 @@ msgstr ""
 "Melodie. Dies lindert dass dazu spezielle Firewall-Ports zu öffnen auf Ihrer "
 "Seite, solange Ihr Rechner verbinden können outbound."
 
-#: ../Gui/main.glade.h:49
+#: ../Gui/main.glade.h:50
 msgid "Reverse Connect"
 msgstr "Connect Reverse"
 
-#: ../Gui/main.glade.h:50
+#: ../Gui/main.glade.h:51
 msgid "Comm Port and Baud Rate"
 msgstr "Comm-Port und Baudrate"
 
-#: ../Gui/main.glade.h:51
+#: ../Gui/main.glade.h:52
 msgid "Delay between reads (ms)"
 msgstr "Verzögerung zwischen (ms gelesen)"
 
-#: ../Gui/main.glade.h:52
+#: ../Gui/main.glade.h:53
 msgid "Runtime Sliders update rate (FPS)"
 msgstr "Runtime Sliders Update-Rate (FPS)"
 
-#: ../Gui/main.glade.h:53
+#: ../Gui/main.glade.h:54
 msgid "Runtime Text update rate (FPS)"
 msgstr "Runtime Text Update-Rate (FPS)"
 
-#: ../Gui/main.glade.h:54
+#: ../Gui/main.glade.h:55
 msgid "Dashboard update rate (FPS)"
 msgstr "Dashboard-Update-Rate (FPS)"
 
-#: ../Gui/main.glade.h:55
+#: ../Gui/main.glade.h:56
 msgid "3D Display/VEtable update rate (FPS)"
 msgstr "3D-Display / VEtable Update-Rate (FPS)"
 
-#: ../Gui/main.glade.h:56
+#: ../Gui/main.glade.h:57
 msgid "ECU Runtime Variable Settings"
 msgstr "ECU Runtime Variable Einstellungen"
 
-#: ../Gui/main.glade.h:57
+#: ../Gui/main.glade.h:58 ../Gui/runtime.glade.h:9
 #, fuzzy
 msgid "ECU Table Reads"
 msgstr "_VE Tabellen"
 
-#: ../Gui/main.glade.h:58
+#: ../Gui/main.glade.h:59 ../Gui/runtime.glade.h:10
 msgid "Live Data Reads"
 msgstr ""
 
-#: ../Gui/main.glade.h:61
+#: ../Gui/main.glade.h:62
 msgid "Reset I/O Status Counters"
 msgstr "Reset I / O Status Zähler"
 
-#: ../Gui/main.glade.h:62
+#: ../Gui/main.glade.h:63
 #, fuzzy
 msgid "I/O Statistics"
 msgstr "MegaSquirt I / O-Statistik"
 
-#: ../Gui/main.glade.h:63
+#: ../Gui/main.glade.h:64
 msgid "Serial Status Messages"
 msgstr "Serial-Statusmeldungen"
 
-#: ../Gui/main.glade.h:64
+#: ../Gui/main.glade.h:65
 msgid "MegaTunix Communication Parameters"
 msgstr "MegaTunix Kommunikationsparameter"
 
-#: ../Gui/main.glade.h:65
+#: ../Gui/main.glade.h:66
 msgid "_Communications"
 msgstr "_Communications"
 
-#: ../Gui/main.glade.h:66
+#: ../Gui/main.glade.h:67
 msgid "        Exit          "
 msgstr "Ausgang"
 
-#: ../Gui/main.glade.h:67
+#: ../Gui/main.glade.h:68
 msgid ""
 "<small>MegaTunix recommends:</small>\n"
 "<b><a href=\"http://www.diyautotune.com\">http://www.diyautotune.com</a></b>"
 msgstr ""
 
-#: ../Gui/main.glade.h:69
+#: ../Gui/main.glade.h:70
 msgid "MegaTunix Tab Visibility"
 msgstr "MegaTunix Tab Sichtweite"
 
-#: ../Gui/main.glade.h:70
+#: ../Gui/main.glade.h:71
 msgid "<b><big>Tab Visibility</big></b>"
 msgstr "<big><b>Tab Sichtweite</b></big>"
 
-#: ../Gui/main.glade.h:71
+#: ../Gui/main.glade.h:72
 msgid "<big>Hidden</big>"
 msgstr "<big>Versteckt</big>"
 
-#: ../Gui/main.glade.h:72
+#: ../Gui/main.glade.h:73
 msgid "<big>Tab Name</big>"
 msgstr "<big>Tab Name</big>"
 
-#: ../Gui/main.glade.h:73 ../src/plugins/mscommon/2d_table_editor.c:508
+#: ../Gui/main.glade.h:74 ../src/plugins/mscommon/2d_table_editor.c:508
 msgid "2D Table Editor"
 msgstr "2D-Table Editor"
 
-#: ../Gui/main.glade.h:75
+#: ../Gui/main.glade.h:76
 msgid "Burn to ECU Flash"
 msgstr "Burn to ECU Flash"
 
-#: ../Gui/main.glade.h:77
+#: ../Gui/main.glade.h:78
 msgid "Calibrate TPS"
 msgstr "Kalibrieren TPS"
 
-#: ../Gui/main.glade.h:78
+#: ../Gui/main.glade.h:79
 msgid "Closed Throttle ADC Count"
 msgstr "Drosselklappe geschlossen ADC Graf"
 
-#: ../Gui/main.glade.h:79
+#: ../Gui/main.glade.h:80
 msgid "Full Throttle ADC Count"
 msgstr "Full Throttle ADC Graf"
 
-#: ../Gui/main.glade.h:80
+#: ../Gui/main.glade.h:81
 msgid "Get Current"
 msgstr "Get Current"
 
-#: ../Gui/main.glade.h:81
+#: ../Gui/main.glade.h:82
 msgid "Send to ECU"
 msgstr "Per E-ECU"
 
-#: ../Gui/main.glade.h:82
+#: ../Gui/main.glade.h:83
 msgid "Calibrate Throttle Position Sensor"
 msgstr "Kalibrieren Drosselklappenpotentiometer"
 
-#: ../Gui/main.glade.h:83
+#: ../Gui/main.glade.h:84
 msgid "Table Generator"
 msgstr "Table Generator"
-
-#: ../Gui/main.glade.h:84
-#, fuzzy
-msgid "Select a File"
-msgstr "Wählen Sie eine Datei"
 
 #: ../Gui/main.glade.h:85
 msgid "File to import to ECU"
@@ -8801,7 +8800,7 @@ msgid "MS2"
 msgstr ""
 
 #: ../Gui/mtxloader.glade.h:8
-msgid "FreeEMS"
+msgid "LibreEMS/FreeEMS"
 msgstr ""
 
 #: ../Gui/mtxloader.glade.h:9 ../Gui/test.glade.h:4
@@ -9471,20 +9470,20 @@ msgid "ECU Warmup Wizard"
 msgstr "_Warmup Wizard"
 
 #. Copy the frames per second into a string to display in the window
-#: ../src/3d_vetable.c:121
+#: ../src/3d_vetable.c:123
 #, c-format
 msgid "FPS: %i"
 msgstr ""
 
-#: ../src/3d_vetable.c:298
+#: ../src/3d_vetable.c:307
 msgid "GtkGLEXT Library initialization failed, no GL for you :(\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:620
+#: ../src/3d_vetable.c:624
 msgid "Reads in the Constants and Tables from the EC and populates the GUI"
 msgstr ""
 
-#: ../src/3d_vetable.c:635
+#: ../src/3d_vetable.c:639
 msgid ""
 "Even though MegaTunix writes data to the ECU as soon as its changed, it has "
 "only written it to the ECU's RAM, thus you need to select this to burn all "
@@ -9493,147 +9492,135 @@ msgid ""
 "of exceeding the max number of write cycles to the flash memory."
 msgstr ""
 
-#: ../src/3d_vetable.c:678
+#: ../src/3d_vetable.c:682
 #, fuzzy
 msgid "Rendering Mode"
 msgstr "Tanken Mode"
 
-#: ../src/3d_vetable.c:725
+#: ../src/3d_vetable.c:729
 msgid "Opacity"
 msgstr ""
 
-#: ../src/3d_vetable.c:738
+#: ../src/3d_vetable.c:742
 #, fuzzy
 msgid "FPS"
 msgstr "TPS"
 
 #. Realtime var slider gauges
-#: ../src/3d_vetable.c:742
+#: ../src/3d_vetable.c:746
 #, fuzzy
 msgid "Real-Time Variables"
 msgstr "Wählen Sie Variablen"
 
-#: ../src/3d_vetable.c:898
-msgid ""
-"Cannot find the double-buffered visual.  Trying single-buffered visual.\n"
-msgstr ""
-
-#. Should make a non-GL basic drawing area version
-#. instead of dumping the user out of here, or at least
-#. render a non-GL found text on the drawing area
-#: ../src/3d_vetable.c:908
-msgid "No appropriate OpenGL-capable visual found. EXITING!!\n"
-msgstr ""
-
-#: ../src/3d_vetable.c:958
+#: ../src/3d_vetable.c:916
 #, c-format
 msgid "W %f, H %f\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:1549
+#: ../src/3d_vetable.c:1476
 msgid ""
 "\"z_source\" is NOT defined, check the .datamap file for\n"
 "\tmissing \"z_source\" key for [3d_view_button]\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:1983
+#: ../src/3d_vetable.c:1910
 msgid "\"UP\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2009
+#: ../src/3d_vetable.c:1936
 msgid "\"DOWN\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2034
+#: ../src/3d_vetable.c:1961
 msgid "\"LEFT\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2059
+#: ../src/3d_vetable.c:1986
 msgid "\"RIGHT\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2082
+#: ../src/3d_vetable.c:2009
 msgid "\"Page Up\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2138
+#: ../src/3d_vetable.c:2065
 msgid "\"PLUS\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2188
+#: ../src/3d_vetable.c:2115
 msgid "\"Page Down\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2241
+#: ../src/3d_vetable.c:2168
 msgid "\"MINUS\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2293
+#: ../src/3d_vetable.c:2220
 msgid "\"t/T\" (tracking enable/disable)\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2302
+#: ../src/3d_vetable.c:2229
 #, c-format
 msgid "Keypress not handled, code: %#.4X\"\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2308
+#: ../src/3d_vetable.c:2235
 msgid "Updating widget data in ECU\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:2808 ../src/tableio.cpp:712
+#: ../src/3d_vetable.c:2735 ../src/tableio.cpp:712
 #, fuzzy
 msgid "BUG! X multi is null!\n"
 msgstr "Multi ist null!\n"
 
-#: ../src/3d_vetable.c:2839 ../src/tableio.cpp:729
+#: ../src/3d_vetable.c:2766 ../src/tableio.cpp:729
 #, fuzzy
 msgid "BUG! Y multi is null!\n"
 msgstr "Multi ist null!\n"
 
-#: ../src/3d_vetable.c:2873 ../src/tableio.cpp:747
+#: ../src/3d_vetable.c:2800 ../src/tableio.cpp:747
 #, fuzzy
 msgid "BUG! Z multi is null!\n"
 msgstr "Multi ist null!\n"
 
-#: ../src/3d_vetable.c:2915 ../src/3d_vetable.c:2945 ../src/3d_vetable.c:2971
-#: ../src/3d_vetable.c:2997 ../src/3d_vetable.c:3023
+#: ../src/3d_vetable.c:2842 ../src/3d_vetable.c:2872 ../src/3d_vetable.c:2898
+#: ../src/3d_vetable.c:2924 ../src/3d_vetable.c:2950
 msgid "No ve_view leaving!\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:3183 ../src/gui_handlers.c:2725
+#: ../src/3d_vetable.c:3110 ../src/gui_handlers.c:2694
 #, c-format
 msgid "mtx_color_scale value is undefined (%i)\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:3404
+#: ../src/3d_vetable.c:3331
 msgid "global \"leaving\" set, Leaving...\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:3411
+#: ../src/3d_vetable.c:3338
 msgid "ve_view->drawing_area is NOT a widget, Leaving...\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:3428 ../src/3d_vetable.c:3450 ../src/3d_vetable.c:3472
+#: ../src/3d_vetable.c:3355 ../src/3d_vetable.c:3377 ../src/3d_vetable.c:3399
 #, fuzzy
 msgid "BUG! multi is NULL!\n"
 msgstr "Multi ist null!\n"
 
-#: ../src/3d_vetable.c:3482
+#: ../src/3d_vetable.c:3409
 msgid "Leaving without redraw\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:3515
+#: ../src/3d_vetable.c:3442
 msgid ""
 "Programming error: gl_create_font() was already called; you must call "
 "gl_destroy_font() before creating font again...\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:3569
+#: ../src/3d_vetable.c:3496
 msgid "Programming error: gl_destroy_font() called when font does not exist\n"
 msgstr ""
 
-#: ../src/3d_vetable.c:3616
+#: ../src/3d_vetable.c:3543
 msgid ""
 "Programming error: gl_print_string() called but font does not exist; you "
 "should have called glt_create_font() first\n"
@@ -9795,63 +9782,63 @@ msgid ""
 "to be used to locate your ECU\n"
 msgstr ""
 
-#: ../src/conversions.c:88
+#: ../src/conversions.c:89
 #, fuzzy, c-format
 msgid ": convert_before_download, FATAL ERROR, size undefined for widget %s "
 msgstr ""
 ": Convert_before_download, FATAL ERROR, Größe undefined Widget für die auf "
 "Seite"
 
-#: ../src/conversions.c:148 ../src/conversions.c:435
+#: ../src/conversions.c:149 ../src/conversions.c:436
 #, c-format
 msgid "big problem, source key is undefined!!\n"
 msgstr "großes Problem, ist Quelle Schlüssel undefined!\n"
 
-#: ../src/conversions.c:263
+#: ../src/conversions.c:264
 #, c-format
 msgid "Widget %s raw %.2f, sent %i\n"
 msgstr ""
 
-#: ../src/conversions.c:267 ../src/conversions.c:273
+#: ../src/conversions.c:268 ../src/conversions.c:274
 #, c-format
-msgid "WARNING value clamped at %f (%f <- %f -> %f)!!\n"
+msgid "WARNING value clamped at %f (%f <- %i -> %f)!!\n"
 msgstr ""
 
-#: ../src/conversions.c:343
+#: ../src/conversions.c:344
 #, fuzzy, c-format
 msgid "BIG PROBLEM, size undefined! widget %s, default to U08 \n"
 msgstr ""
 "Großes Problem, Größe undefiniert! auf Seite %i, %i ausgeglichen, Widget%s\n"
 
-#: ../src/conversions.c:372 ../src/conversions.c:379
+#: ../src/conversions.c:373 ../src/conversions.c:380
 #, c-format
 msgid ""
 "WARNING RAW value out of range for widget %s, clamped at %.1f (%.1f <- %i -> "
 "%.1f), updating ECU with valid value within limits!!\n"
 msgstr ""
 
-#: ../src/conversions.c:401
+#: ../src/conversions.c:402
 #, c-format
 msgid ""
 "BUG, widget %s is multi_expression but doesn't have fromecu_mults defined!\n"
 msgstr ""
 
-#: ../src/conversions.c:403
+#: ../src/conversions.c:404
 #, c-format
 msgid ""
 "BUG, widget %s is multi_expression but doesn't have fromecu_adds defined!\n"
 msgstr ""
 
-#: ../src/conversions.c:580
+#: ../src/conversions.c:581
 msgid ""
 "Can NOT locate \"check_dependencies\" function pointer in plugins, BUG!\n"
 msgstr ""
 
-#: ../src/conversions.c:583
+#: ../src/conversions.c:584
 msgid "Can NOT locate \"update_widget\" function pointer in plugins, BUG!\n"
 msgstr ""
 
-#: ../src/conversions.c:592
+#: ../src/conversions.c:593
 #, c-format
 msgid ""
 "Widget %s has dependant object bound but can't locate function ptr for "
@@ -9901,7 +9888,7 @@ msgstr ""
 msgid "This box provides your choice for the active dashboard to be used"
 msgstr ""
 
-#: ../src/core_gui.c:327
+#: ../src/core_gui.c:295
 msgid ""
 "This box gives you the debugging choices.  Each one is independantly "
 "selectable.  Logging output will be written to ~/mtx/<PROJECT>/debug.log "
@@ -9910,7 +9897,7 @@ msgid ""
 "log on Windows XP.."
 msgstr ""
 
-#: ../src/core_gui.c:333
+#: ../src/core_gui.c:301
 msgid ""
 "This box shows you the ECU Interrogation report.  Due to the rise of various "
 "ECU variants, several of them unfortunately return the same version number "
@@ -9919,7 +9906,7 @@ msgid ""
 "thinks is the closest match."
 msgstr ""
 
-#: ../src/core_gui.c:337
+#: ../src/core_gui.c:305
 #, c-format
 msgid ""
 "This button interrogates the connected ECU to attempt to determine what "
@@ -9929,14 +9916,14 @@ msgid ""
 "your firmware details."
 msgstr ""
 
-#: ../src/core_gui.c:344
+#: ../src/core_gui.c:312
 msgid ""
 "This button Enables \"Offline Mode\" so that you can load tabs specific to "
 "an ECU and set settings, modify maps without doing any Serial I/O. This will "
 "allow you to modify maps offline when not connected to the vehicle/ECU."
 msgstr ""
 
-#: ../src/core_gui.c:355
+#: ../src/core_gui.c:323
 #, c-format
 msgid ""
 "This window shows the status of the ECU interrogation progress.  The way it "
@@ -9947,7 +9934,7 @@ msgid ""
 "from the outside interface.\n"
 msgstr ""
 
-#: ../src/core_gui.c:375
+#: ../src/core_gui.c:343
 msgid ""
 "These controls set parameters specific to Serial/Network communication.  The "
 "read timeout should be set to 100 ms for serial and low latency network "
@@ -9960,36 +9947,36 @@ msgid ""
 "usbserial0, and under FreeBSD /dev/cuaa0)"
 msgstr ""
 
-#: ../src/dashboard.c:77
+#: ../src/dashboard.c:78
 #, c-format
 msgid "Error: could not parse dashboard XML file %s"
 msgstr "Fehler: konnte nicht analysiert werden Armaturenbrett XML-Datei%s"
 
-#: ../src/dashboard.c:81
+#: ../src/dashboard.c:82
 msgid "Dash Cluster"
 msgstr "Dash Cluster"
 
-#: ../src/dashboard.c:270
+#: ../src/dashboard.c:273
 #, c-format
 msgid "ERROR, load_geometry, xml node is empty!!\n"
 msgstr "ERROR, load_geometry, XML-Knoten ist leer!\n"
 
-#: ../src/dashboard.c:320
+#: ../src/dashboard.c:323
 #, c-format
 msgid "ERROR, load_gauge, xml node is empty!!\n"
 msgstr "ERROR, load_gauge, XML-Knoten ist leer!]\n"
 
-#: ../src/dashboard.c:416
+#: ../src/dashboard.c:419
 #, c-format
 msgid "Bad things man!, object doesn't exist for %s\n"
 msgstr ""
 
-#: ../src/dashboard.c:763
+#: ../src/dashboard.c:782
 #, c-format
 msgid "dashboard widget is null cannot set attribute(s)!\n"
 msgstr "Dashboard-Widget ist null-Attribut kann nicht gesetzt (s)!\n"
 
-#: ../src/dashboard.c:1106
+#: ../src/dashboard.c:1125
 #, c-format
 msgid "dashboard widget is null cannot reset tattletale!\n"
 msgstr "Dashboard-Widget ist null kann nicht zurückgesetzt Petzen!\n"
@@ -10065,12 +10052,12 @@ msgstr ""
 msgid "Data is in HEX!!\n"
 msgstr ""
 
-#: ../src/dataio.c:367 ../src/plugins/freeems/packet_handlers.c:854
+#: ../src/dataio.c:367 ../src/plugins/libreems/packet_handlers.c:852
 #, c-format
 msgid "%.2X "
 msgstr ""
 
-#: ../src/dataio.c:369 ../src/plugins/freeems/packet_handlers.c:858
+#: ../src/dataio.c:369 ../src/plugins/libreems/packet_handlers.c:856
 msgid "\n"
 msgstr ""
 
@@ -10105,56 +10092,56 @@ msgstr "Auffüllen Datalogger ..."
 msgid "datalogger windows not present, returning\n"
 msgstr "Datenlogger-Fenster nicht vorhanden ist, wieder\n"
 
-#: ../src/datalogging_gui.c:173
+#: ../src/datalogging_gui.c:175
 msgid "Datalogger Ready..."
 msgstr "Datalogger Ready ..."
 
-#: ../src/datalogging_gui.c:206
+#: ../src/datalogging_gui.c:208
 msgid "DataLogging Started...\n"
 msgstr "DataLogging Started ...\n"
 
-#: ../src/datalogging_gui.c:251
+#: ../src/datalogging_gui.c:253
 msgid "DataLogging Stopped...\n"
 msgstr "DataLogging Stopped ...\n"
 
-#: ../src/datalogging_gui.c:320
+#: ../src/datalogging_gui.c:322
 msgid "IOChannel pointer was undefined, returning NOW...\n"
 msgstr ""
 
-#: ../src/datalogging_gui.c:398
+#: ../src/datalogging_gui.c:400
 msgid "IO Channel undefined, returning NOW!!!\n"
 msgstr ""
 
-#: ../src/datalogging_gui.c:599
+#: ../src/datalogging_gui.c:601
 msgid "NO FILE opened for normal datalogging!\n"
 msgstr "NO-Datei geöffnet für normale datalogging!\n"
 
-#: ../src/datalogging_gui.c:607
+#: ../src/datalogging_gui.c:609
 msgid "File open FAILURE!\n"
 msgstr "File öffnen Versager!\n"
 
-#: ../src/datalogging_gui.c:616
+#: ../src/datalogging_gui.c:618
 msgid "DataLog File Opened\n"
 msgstr "DataLog geöffneten Datei\n"
 
-#: ../src/datalogging_gui.c:648
+#: ../src/datalogging_gui.c:650
 #, c-format
 msgid "Autolog dump (log number %i) successfully completed.\n"
 msgstr "Autolog dump (log Zahl% i) erfolgreich abgeschlossen.\n"
 
-#: ../src/datalogging_gui.c:693
+#: ../src/datalogging_gui.c:695
 msgid "NO FILE opened for internal log export, aborting dump!\n"
 msgstr "NO-Datei geöffnet für die interne log export, Abbruch-Dump!\n"
 
-#: ../src/datalogging_gui.c:700
+#: ../src/datalogging_gui.c:702
 msgid "File opened successfully for internal log dump\n"
 msgstr "Datei erfolgreich geöffnet für die interne log-Dump\n"
 
-#: ../src/datalogging_gui.c:704
+#: ../src/datalogging_gui.c:706
 msgid "Internal datalog successfully dumped to disk\n"
 msgstr "Interne Datenlogger erfolgreich auf die Festplatte gedumpten\n"
 
-#: ../src/datalogging_gui.c:784
+#: ../src/datalogging_gui.c:786
 #, c-format
 msgid "Flushing Datalog %i of %i records"
 msgstr "Flushing Datalog %i von %i Datensätze"
@@ -10164,138 +10151,142 @@ msgstr "Flushing Datalog %i von %i Datensätze"
 msgid "Logfile opened for appending on %i-%.2i-%i at %.2i:%.2i \n"
 msgstr "Logfile eröffnet zum Anhängen von %i-%.2i-%i auf %.2i:%.2i \n"
 
-#: ../src/dispatcher.c:68
+#: ../src/dispatcher.c:69
 msgid "ERROR postfunction was NULL, continuing\n"
 msgstr "ERROR postfunction war NULL, Fortsetzung\n"
 
-#: ../src/dispatcher.c:73
+#: ../src/dispatcher.c:74
 #, c-format
 msgid "dispatching post function %s\n"
 msgstr ""
 
-#: ../src/dispatcher.c:78
+#: ../src/dispatcher.c:79
 #, c-format
 msgid "ERROR, couldn't find function with arg \"%s\"\n"
 msgstr "Fehler, konnte nicht gefunden Funktion mit arg \"%s\"\n"
 
-#: ../src/dispatcher.c:85
+#: ../src/dispatcher.c:86
 #, c-format
 msgid "ERROR, couldn't find function \"%s\"\n"
 msgstr "Fehler, konnte nicht gefunden Funktion \"%s\"\n"
 
-#: ../src/dispatcher.c:93 ../src/dispatcher.c:214
+#: ../src/dispatcher.c:94 ../src/dispatcher.c:226
 msgid "deallocation of dispatch message complete\n"
 msgstr ""
 
-#: ../src/dispatcher.c:117
+#: ../src/dispatcher.c:118
 msgid "Processing a gui message in hopefuly main thread context\n"
 msgstr ""
 
-#: ../src/dispatcher.c:125
+#: ../src/dispatcher.c:126
 msgid "Single widget update\n"
 msgstr ""
 
-#: ../src/dispatcher.c:138
+#: ../src/dispatcher.c:139
 msgid "Widget range update\n"
 msgstr ""
 
-#: ../src/dispatcher.c:157
+#: ../src/dispatcher.c:158
+msgid "VE3D update\n"
+msgstr ""
+
+#: ../src/dispatcher.c:169
 msgid "Logbar update\n"
 msgstr ""
 
-#: ../src/dispatcher.c:164
+#: ../src/dispatcher.c:176
 #, fuzzy
 msgid "Run function\n"
 msgstr "X2 (JS0)-Funktion"
 
-#: ../src/dispatcher.c:172
+#: ../src/dispatcher.c:184
 msgid "Widget update\n"
 msgstr ""
 
-#: ../src/dispatcher.c:178
+#: ../src/dispatcher.c:190
 #, fuzzy
 msgid "group color\n"
 msgstr "Hintergrundfarbe"
 
-#: ../src/dispatcher.c:183
+#: ../src/dispatcher.c:195
 msgid "entry\n"
 msgstr ""
 
-#: ../src/dispatcher.c:189
+#: ../src/dispatcher.c:201
 #, fuzzy
 msgid "label\n"
 msgstr "label387"
 
-#: ../src/dispatcher.c:195
+#: ../src/dispatcher.c:207
 msgid "title\n"
 msgstr ""
 
-#: ../src/dispatcher.c:199
+#: ../src/dispatcher.c:211
 msgid "sensitivity change\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:386
+#: ../src/gui_handlers.c:361
 msgid "Setting Log delimiter to a \"Comma\"\n"
 msgstr "Einstellen Anmelden Trennzeichen ein \"Komma\"\n"
 
-#: ../src/gui_handlers.c:391
+#: ../src/gui_handlers.c:366
 msgid "Setting Log delimiter to a \"Tab\"\n"
 msgstr "Einstellen Anmelden Trennzeichen ein \"Tab\"\n"
 
-#: ../src/gui_handlers.c:410 ../src/gui_handlers.c:476
+#: ../src/gui_handlers.c:385 ../src/gui_handlers.c:451
 msgid "Toggle button handler in common plugin is MISSING, BUG!\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:554
+#: ../src/gui_handlers.c:529
 msgid "Bitmask button handler in common plugin is MISSING, BUG!\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:656
+#: ../src/gui_handlers.c:631
 msgid "Slider handler in common plugin is MISSING, BUG!\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:746
+#: ../src/gui_handlers.c:721
 msgid "Handler not bound to object, CRITICAL ERROR, aborting\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:768
+#: ../src/gui_handlers.c:743
 msgid "User initiated interrogation..."
 msgstr "Benutzer initiierte Befragung ..."
 
-#: ../src/gui_handlers.c:769
+#: ../src/gui_handlers.c:744
 msgid "USER Initiated ECU interrogation...\n"
 msgstr "User Initiated ECU Verhör ...\n"
 
-#: ../src/gui_handlers.c:796
+#: ../src/gui_handlers.c:771
 msgid "Reading VE/Constants..."
 msgstr "Reading VE / Konstanten ..."
 
-#: ../src/gui_handlers.c:831 ../src/notifications.c:386
+#: ../src/gui_handlers.c:806 ../src/notifications.c:387
 msgid "Offline Mode..."
 msgstr "Offline-Modus ..."
 
-#: ../src/gui_handlers.c:853 ../src/gui_handlers.c:1029
+#: ../src/gui_handlers.c:828 ../src/gui_handlers.c:1004
 msgid "Default case, common handler NOT found in plugins, BUG!\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:901
+#: ../src/gui_handlers.c:876
 msgid "Combo handler in common plugin is MISSING, BUG!\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:945
+#: ../src/gui_handlers.c:920
 msgid "Widget pointer is NOT valid\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:1465
+#: ../src/gui_handlers.c:1440
 msgid "\"rescaler_frame\" key could NOT be found\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:1519 ../src/tabloader.c:1262
+#: ../src/gui_handlers.c:1494 ../src/tabloader.c:1265
 #, fuzzy
 msgid "Rendering Tab..."
 msgstr "Loading Gui Tabs ..."
 
-#: ../src/gui_handlers.c:1531 ../src/gui_handlers.c:2671
+#: ../src/gui_handlers.c:1506 ../src/gui_handlers.c:2639
 msgid "Updating Tab with current data..."
 msgstr ""
 
@@ -10303,17 +10294,17 @@ msgstr ""
 #. else
 #. printf("WARNING: this tab has no tab_widgets list assigned\n");
 #.
-#: ../src/gui_handlers.c:1606 ../src/gui_handlers.c:2678 ../src/helpers.c:159
-#: ../src/plugins/freeems/freeems_gui_handlers.c:392
+#: ../src/gui_handlers.c:1583 ../src/gui_handlers.c:2646 ../src/helpers.c:159
+#: ../src/plugins/libreems/libreems_gui_handlers.c:392
 #: ../src/plugins/mscommon/mscommon_gui_handlers.c:1065
 msgid "Ready..."
 msgstr "Ready ..."
 
-#: ../src/gui_handlers.c:1758
+#: ../src/gui_handlers.c:1736
 msgid "Save internal log, yes/no ?"
 msgstr "Save interne log, ja / nein?"
 
-#: ../src/gui_handlers.c:1769
+#: ../src/gui_handlers.c:1748
 msgid ""
 "Would you like to save the internal datalog for this session to disk?  It is "
 "a complete log and useful for playback/analysis at a future point in time"
@@ -10322,11 +10313,11 @@ msgstr ""
 "speichern? Es ist ein vollständiges Protokoll und nützlich für die "
 "Wiedergabe / Analyse zu einem zukünftigen Zeitpunkt"
 
-#: ../src/gui_handlers.c:1783
+#: ../src/gui_handlers.c:1760
 msgid "Save ECU settings to file?"
 msgstr "Speichern Sie die Einstellungen für ECU-Datei?"
 
-#: ../src/gui_handlers.c:1794
+#: ../src/gui_handlers.c:1772
 msgid ""
 "Would you like to save the ECU settings to a file so that they can be "
 "restored at a future time?"
@@ -10334,45 +10325,45 @@ msgstr ""
 "Möchten Sie die ECU Einstellungen in einer Datei, so dass sie zu einem "
 "späteren Zeitpunkt wiederhergestellt werden kann sparen?"
 
-#: ../src/gui_handlers.c:1825
+#: ../src/gui_handlers.c:1803
 msgid "Quit MegaTunix, yes/no ?"
 msgstr "Beenden MegaTunix, ja / nein?"
 
-#: ../src/gui_handlers.c:1836
+#: ../src/gui_handlers.c:1815
 msgid "Are you sure you want to quit?"
 msgstr "Sind Sie sicher, das Sie beenden wollen?"
 
-#: ../src/gui_handlers.c:2108
+#: ../src/gui_handlers.c:2077
 #, c-format
 msgid ""
 "String passed was not properly formatted, should be an even number of "
 "elements, Total elements %i, string itself \"%s\""
 msgstr ""
 
-#: ../src/gui_handlers.c:2119
+#: ../src/gui_handlers.c:2088
 #, c-format
 msgid "Widget \"%s\" could NOT be located or is NOT a label\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:2252
+#: ../src/gui_handlers.c:2221
 #, fuzzy, c-format
 msgid "active is %i, num_choices is %i\n"
 msgstr "aktiv ist, %i, %i ist num_choices\n"
 
-#: ../src/gui_handlers.c:2253
+#: ../src/gui_handlers.c:2222
 #, c-format
 msgid "active is out of bounds for widget %s\n"
 msgstr "aktiv ist außerhalb der Schranken für die Widget %s\n"
 
-#: ../src/gui_handlers.c:2318
+#: ../src/gui_handlers.c:2287
 msgid "Problem with set_labels, counts don't match up\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:2892
+#: ../src/gui_handlers.c:2860
 msgid "restore update thread created!\n"
 msgstr ""
 
-#: ../src/gui_handlers.c:2893
+#: ../src/gui_handlers.c:2861
 #, c-format
 msgid ""
 "There are %i pending I/O transactions waiting to get to the ECU, please be "
@@ -10381,17 +10372,17 @@ msgstr ""
 "Es sind %i bis I / O-Transaktionen warten auf die ECU zu bekommen, seien Sie "
 "bitte geduldig.\n"
 
-#: ../src/gui_handlers.c:2900
+#: ../src/gui_handlers.c:2868
 #, c-format
 msgid "Approximately %i Transactions remaining, please wait\n"
 msgstr "Etwa% i verbleibenden Transaktionen, bitte warten\n"
 
-#: ../src/gui_handlers.c:2904
+#: ../src/gui_handlers.c:2872
 #, c-format
 msgid "All Transactions complete\n"
 msgstr "Alle Transaktionen abgeschlossen\n"
 
-#: ../src/gui_handlers.c:2906
+#: ../src/gui_handlers.c:2874
 msgid "restore update thread exiting!\n"
 msgstr ""
 
@@ -10477,13 +10468,13 @@ msgstr ""
 msgid "String passed was NULL\n"
 msgstr ""
 
-#: ../src/keyparser.c:85 ../src/plugins/freeems/interrogate.c:1330
+#: ../src/keyparser.c:85 ../src/plugins/libreems/interrogate.c:1302
 #: ../src/plugins/mscommon/interrogate.c:1332
 #, c-format
 msgid "Trying to translate %s\n"
 msgstr ""
 
-#: ../src/keyparser.c:87 ../src/plugins/freeems/interrogate.c:1332
+#: ../src/keyparser.c:87 ../src/plugins/libreems/interrogate.c:1304
 #: ../src/plugins/mscommon/interrogate.c:1334
 #, c-format
 msgid "Translated value of %s is %i\n"
@@ -10508,7 +10499,7 @@ msgstr ""
 " Mehrere Fälle sind <u><b>nicht</b></u> erlaubt, außer in laufenden Netzwerk-"
 "Socket-Modus finden Sie die Option-n!\n"
 
-#: ../src/locking.c:318
+#: ../src/locking.c:321
 #, c-format
 msgid "Error setting serial lock %s\n"
 msgstr "Fehler beim Einstellen der seriellen lock%s\n"
@@ -10699,12 +10690,12 @@ msgstr ""
 msgid "Key \"source_key\" NOT FOUND in xml, EXITING!!\n"
 msgstr ""
 
-#: ../src/notifications.c:201
+#: ../src/notifications.c:202
 #, c-format
 msgid "Textview name passed: \"%s\" wasn't registered, not updating\n"
 msgstr ""
 
-#: ../src/notifications.c:277
+#: ../src/notifications.c:278
 msgid ""
 "The ECU appears to be currently disconnected.  This means that either one of "
 "the following occurred:\n"
@@ -10724,8 +10715,8 @@ msgstr ""
 msgid "Interrogation profile damaged!, was MegaTunix installed properly?\n"
 msgstr ""
 
-#: ../src/offline.c:282 ../src/plugins/freeems/interrogate.c:829
-#: ../src/plugins/freeems/interrogate.c:1027
+#: ../src/offline.c:282 ../src/plugins/libreems/interrogate.c:801
+#: ../src/plugins/libreems/interrogate.c:999
 #: ../src/plugins/mscommon/interrogate.c:366
 #: ../src/plugins/mscommon/interrogate.c:1379
 #, c-format
@@ -10736,7 +10727,7 @@ msgstr ""
 "Interrogation Profil API mismatch (%i.%i != %i.%i): Die Datei %s wird "
 "übersprungen\n"
 
-#: ../src/offline.c:472 ../src/plugins/freeems/fileio.c:132
+#: ../src/offline.c:473 ../src/plugins/libreems/fileio.c:132
 #: ../src/plugins/mscommon/fileio.c:130
 msgid "Full Restore of ECU Initiated\n"
 msgstr "Voller ECU Restore Initiiert\n"
@@ -10777,705 +10768,12 @@ msgid ""
 "\t%s\n"
 msgstr ""
 
-#: ../src/plugin.c:188
+#: ../src/plugin.c:187
 #, c-format
 msgid ""
 "\n"
 "CRITICAL ERROR: Failed to find symbol/function\n"
 "\"%s\" in MegaTunix core or any plugins, returning FALSE, expect a crash\n"
-msgstr ""
-
-#: ../src/plugins/freeems/datamgmt.c:351
-#, c-format
-msgid ""
-"Attempted to write beyond end of Location ID (%i), page (%i)\n"
-" Loc ID size %i, write offset %i, length %i\n"
-msgstr ""
-
-#: ../src/plugins/freeems/fileio.c:81 ../src/plugins/mscommon/fileio.c:80
-msgid "NO FILE chosen for ECU Backup\n"
-msgstr "Keine Datei ausgewählt ECU Backup\n"
-
-#: ../src/plugins/freeems/fileio.c:85 ../src/plugins/mscommon/fileio.c:84
-msgid "Full Backup of ECU Initiated\n"
-msgstr "Full Backup von ECU Initiiert\n"
-
-#: ../src/plugins/freeems/fileio.c:87 ../src/plugins/mscommon/fileio.c:86
-msgid "Full Backup File Closed\n"
-msgstr "Full Backup Datei geschlossen\n"
-
-#: ../src/plugins/freeems/fileio.c:128 ../src/plugins/mscommon/fileio.c:126
-msgid "NO FILE chosen for ECU restore\n"
-msgstr "Keine Datei ausgewählt ECU wiederherstellen\n"
-
-#: ../src/plugins/freeems/fileio.c:170 ../src/plugins/mscommon/fileio.c:168
-msgid ""
-"Full Backup Commencing to file:\n"
-"\t"
-msgstr ""
-"Full Backup Beginnend zu dieser Datei:\n"
-"       "
-
-#: ../src/plugins/freeems/fileio.c:190 ../src/plugins/mscommon/fileio.c:187
-msgid "Full Backup Complete...\n"
-msgstr "Full Backup Complete ...\n"
-
-#: ../src/plugins/freeems/fileio.c:233 ../src/plugins/mscommon/fileio.c:233
-#, fuzzy, c-format
-msgid ""
-":restore_all_ecu_settings()\n"
-"\t Unable to open this file (%s)\n"
-msgstr ""
-": Restore_all_ecu_settings () Firmware name mismatch: \"%s\" != \"%s\" kann "
-"diese Datei nicht laden zur Restaurierung\n"
-
-#: ../src/plugins/freeems/fileio.c:243 ../src/plugins/mscommon/fileio.c:242
-#, c-format
-msgid ""
-":restore_all_ecu_settings()\n"
-"\tAPI MAJOR version mismatch: \"%i\" != \"%i\"\n"
-" can not load this file for restoration\n"
-msgstr ""
-": Restore_all_ecu_settings () API MAJOR Versionskonflikt: \"%i\" != \"%i\" "
-"kann diese Datei nicht laden zur Restaurierung\n"
-
-#: ../src/plugins/freeems/fileio.c:249 ../src/plugins/mscommon/fileio.c:248
-#, fuzzy, c-format
-msgid ""
-": restore_all_ecu_settings()\n"
-"\tAPI MINOR version mismatch: \"%i\" != \"%i\"\n"
-" Will try to load this file for restoration, expect issues\n"
-msgstr ""
-": Restore_all_ecu_settings () API MINOR Versionskonflikt: \"%i\" != \"%i\" "
-"kann diese Datei nicht laden zur Restaurierung\n"
-
-#: ../src/plugins/freeems/fileio.c:254
-#, fuzzy, c-format
-msgid ""
-"Firmware name mismatch:\"%s\" != \"%s\",cannot load this file for "
-"restoration\n"
-msgstr ""
-": Restore_all_ecu_settings () Firmware name mismatch: \"%s\" != \"%s\" kann "
-"diese Datei nicht laden zur Restaurierung\n"
-
-#: ../src/plugins/freeems/fileio.c:256 ../src/plugins/mscommon/fileio.c:255
-#, fuzzy, c-format
-msgid ""
-": restore_all_ecu_settings()\n"
-"Firmware name mismatch: \"%s\" != \"%s\"\n"
-"can NOT load this file for restoration!\n"
-msgstr ""
-": Restore_all_ecu_settings () Firmware name mismatch: \"%s\" != \"%s\" kann "
-"diese Datei nicht laden zur Restaurierung\n"
-
-#: ../src/plugins/freeems/fileio.c:264 ../src/plugins/mscommon/fileio.c:263
-msgid "Restoring ECU settings from File"
-msgstr "Wiederherstellen der Einstellungen von ECU-Datei"
-
-#: ../src/plugins/freeems/fileio.c:275 ../src/plugins/mscommon/fileio.c:278
-#, c-format
-msgid ""
-": restore_all_ecu_settings()\n"
-"\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do "
-"NOT match,\n"
-"\tcorruption SHOULD be expected\n"
-msgstr ""
-": Restore_all_ecu_settings () Anzahl der Variablen im Backup \"%i\" und "
-"Firmware-Spezifikation \"%i\" nicht, passen die Korruption muss gerechnet "
-"werden\n"
-
-#: ../src/plugins/freeems/fileio.c:276 ../src/plugins/mscommon/fileio.c:279
-#, fuzzy, c-format
-msgid ""
-"Number of variables in backup \"%i\" and firmware specification \"%i\" do "
-"NOT match,\n"
-"\tcorruption SHOULD be expected\n"
-msgstr ""
-": Restore_all_ecu_settings () Anzahl der Variablen im Backup \"%i\" und "
-"Firmware-Spezifikation \"%i\" nicht, passen die Korruption muss gerechnet "
-"werden\n"
-
-#: ../src/plugins/freeems/fileio.c:284 ../src/plugins/mscommon/fileio.c:287
-#, c-format
-msgid ""
-": restore_all_ecu_settings()\n"
-"\tNumber of variables in this backup \"%i\" does NOT match the length of the "
-"table \"%i\", expect a crash!!!\n"
-msgstr ""
-": Restore_all_ecu_settings () Anzahl der Variablen in diesem backup \"%i\" "
-"entspricht nicht der Länge der Tabelle \"%i\", erwarten einen Absturz!\n"
-
-#: ../src/plugins/freeems/fileio.c:285 ../src/plugins/mscommon/fileio.c:288
-#, fuzzy, c-format
-msgid ""
-"Number of variables in this backup \"%i\" does NOT match the length of the "
-"table \"%i\", expect a crash!!!\n"
-msgstr ""
-": Restore_all_ecu_settings () Anzahl der Variablen in diesem backup \"%i\" "
-"entspricht nicht der Länge der Tabelle \"%i\", erwarten einen Absturz!\n"
-
-#: ../src/plugins/freeems/freeems_benchtest.c:368
-#, fuzzy, c-format
-msgid "Benchtest completed...\n"
-msgstr "abgeschlossen.\n"
-
-#: ../src/plugins/freeems/freeems_comms.c:85
-#: ../src/plugins/mscommon/mtxsocket.c:239
-#: ../src/plugins/mscommon/mtxsocket.c:350
-#: ../src/plugins/mscommon/mtxsocket.c:458
-#: ../src/plugins/mscommon/mtxsocket.c:1403
-#: ../src/plugins/mscommon/mtxsocket.c:1627
-#: ../src/plugins/mscommon/mtxsocket.c:1797
-msgid "Thread created!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:90
-#: ../src/plugins/mscommon/mscommon_comms.c:895
-msgid "Thread exiting, offline mode!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:102
-#: ../src/plugins/mscommon/mscommon_comms.c:908
-#: ../src/plugins/mscommon/mtxsocket.c:1418
-msgid "Port considered open, but throwing errors\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:114
-#: ../src/plugins/mscommon/mscommon_comms.c:931
-msgid "Port NOT considered open yet.\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:136
-#: ../src/plugins/mscommon/mscommon_comms.c:953
-msgid "Thread exiting, told to!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:141
-#: ../src/plugins/mscommon/mscommon_comms.c:958
-#, c-format
-msgid "Port %s does NOT exist\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:148
-#: ../src/plugins/freeems/freeems_comms.c:149
-#: ../src/plugins/mscommon/mscommon_comms.c:966
-#: ../src/plugins/mscommon/mscommon_comms.c:967
-#, c-format
-msgid "Attempting to open port %s\n"
-msgstr "Der Versuch, Port %s nicht öffnen\n"
-
-#: ../src/plugins/freeems/freeems_comms.c:156
-#: ../src/plugins/mscommon/mscommon_comms.c:974
-#, c-format
-msgid "Port %s opened\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:160
-#: ../src/plugins/mscommon/mscommon_comms.c:979
-#, c-format
-msgid "Searching for ECU\n"
-msgstr "Die Suche nach ECU\n"
-
-#: ../src/plugins/freeems/freeems_comms.c:161
-#: ../src/plugins/mscommon/mscommon_comms.c:980
-#, c-format
-msgid "Performing ECU comms test via port %s.\n"
-msgstr ""
-
-#. We have a winner !!  Abort loop
-#: ../src/plugins/freeems/freeems_comms.c:164
-#: ../src/plugins/mscommon/mscommon_comms.c:983
-#, c-format
-msgid "Search successfull\n"
-msgstr "Suche erfolgreich\n"
-
-#: ../src/plugins/freeems/freeems_comms.c:170
-#: ../src/plugins/mscommon/mscommon_comms.c:990
-#, c-format
-msgid "COMMS test failed, no ECU found, closing port %s.\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:171
-#: ../src/plugins/mscommon/mscommon_comms.c:991
-#, fuzzy, c-format
-msgid "No ECU found...\n"
-msgstr "ECU verbunden ..."
-
-#: ../src/plugins/freeems/freeems_comms.c:182
-#: ../src/plugins/freeems/freeems_comms.c:183
-#: ../src/plugins/mscommon/mscommon_comms.c:1001
-#: ../src/plugins/mscommon/mscommon_comms.c:1002
-#, c-format
-msgid "Port %s is open by another application\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:196
-#: ../src/plugins/mscommon/mscommon_comms.c:1010
-msgid "Thread exiting, device found!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:259
-msgid "Serial port is NOT open, or filedescriptor is invalid!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:303
-msgid "Entered...\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:321
-msgid "Found streaming ECU!!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:331
-msgid "Requesting FreeEMS Interface Version\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:361
-msgid "Found via probing!!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:369
-msgid "No device found...\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:718
-#, c-format
-msgid "Sending locID %i, offset %i, value %i \n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:736
-#, fuzzy, c-format
-msgid ""
-"freeems_send_to_ecu() ERROR!!! Size undefined for variable at canID %i, "
-"offset %i\n"
-msgstr ""
-"ERROR! Undefined variable Größe für Caniden %i bei, Seite %i, %i Offset\n"
-
-#: ../src/plugins/freeems/freeems_comms.c:856
-#, c-format
-msgid "Sending canID %i, locID %i, offset %i, num_bytes %i, data %p\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:923
-#: ../src/plugins/mscommon/mscommon_comms.c:768
-msgid "WRITE failed, rolling back!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_comms.c:1022
-#: ../src/plugins/mscommon/mscommon_helpers.c:614
-#: ../src/plugins/mscommon/mscommon_helpers.c:643
-#, fuzzy
-msgid "Burn to Flash Completed\n"
-msgstr "Burn to Flash"
-
-#: ../src/plugins/freeems/freeems_gui_handlers.c:82
-#, c-format
-msgid ""
-"Default case, but there is NO ecu_toggle_button_handler available, unhandled "
-"case for widget %s, BUG!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_gui_handlers.c:139
-#, c-format
-msgid ""
-"Default case, but there is NO ecu_std_button_handler available, unhandled "
-"case for widget %s, BUG!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_gui_handlers.c:182
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:311
-#, c-format
-msgid ""
-"Default case, but there is NO ecu_bitmask_button_handler available, "
-"unhandled case for widget %s, BUG!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_gui_handlers.c:328
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:149
-#, c-format
-msgid ""
-"Default case, but there is NO ecu_entry_handler available, unhandled case "
-"for widget %s, BUG!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_gui_handlers.c:385
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:914
-msgid "Updating Controls..."
-msgstr "Aktualisierung Controls ..."
-
-#: ../src/plugins/freeems/freeems_gui_handlers.c:390
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1063
-#, fuzzy, c-format
-msgid "<b>Ready...</b>"
-msgstr "<b>Gegenbrand</b>"
-
-#: ../src/plugins/freeems/freeems_gui_handlers.c:585
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1489
-#, c-format
-msgid ""
-"Default case, but there is NO ecu_update_entry function available, unhandled "
-"case for widget %s, BUG!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_gui_handlers.c:663
-#, fuzzy, c-format
-msgid ""
-"ERROR no model for Combo at locID %i, offset %i, bitmask %i, bitshift %i, "
-"value %i\n"
-msgstr ""
-"ERROR kein Modell für Combo auf Seite %i, %i ausgeglichen, Bitmaske %i, %i "
-"BitShift, Wert %i\n"
-
-#: ../src/plugins/freeems/freeems_helpers.c:141
-#: ../src/plugins/mscommon/mscommon_helpers.c:69
-msgid "Queuing read of all ECU data..."
-msgstr "Queuing aller ECU Daten zu lesen ..."
-
-#: ../src/plugins/freeems/freeems_helpers.c:315
-#, c-format
-msgid "Benchtest Packet ERROR, Code (0X%.4X), \"%s\"\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_helpers.c:324
-#, c-format
-msgid ""
-"Benchtest bumped by the user (added %.2f seconds to the clock), Total time "
-"remaining is now %.2f seconds\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_helpers.c:329
-#, c-format
-msgid ""
-"Initiating FreeEMS Benchtest: Run time should be about %.1f seconds...\n"
-msgstr ""
-
-#. stop
-#: ../src/plugins/freeems/freeems_helpers.c:334
-#, c-format
-msgid "Benchtest stopped by the user...\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_rtv_loader.c:54
-#: ../src/plugins/freeems/freeems_rtv_loader.c:60
-#: ../src/plugins/freeems/freeems_rtv_loader.c:72
-#: ../src/plugins/freeems/freeems_rtv_loader.c:147
-#: ../src/plugins/freeems/freeems_rtv_loader.c:153
-#: ../src/plugins/freeems/freeems_rtv_loader.c:165
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:53
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:59
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:71
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:146
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:152
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:164
-#, c-format
-msgid "ECU_EMB_BIT, failure looking for:%s\n"
-msgstr ""
-
-#: ../src/plugins/freeems/freeems_rtv_loader.c:89
-#: ../src/plugins/freeems/freeems_rtv_loader.c:95
-#: ../src/plugins/freeems/freeems_rtv_loader.c:182
-#: ../src/plugins/freeems/freeems_rtv_loader.c:188
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:88
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:94
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:181
-#: ../src/plugins/mscommon/mscommon_rtv_loader.c:187
-#, c-format
-msgid "ECU_VAR, failure looking for:%s\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:58
-msgid ""
-"ENTERED\n"
-"\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:69
-msgid ""
-"Didn't return a valid list of commands\n"
-"\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:616
-#: ../src/plugins/mscommon/interrogate.c:1216
-#, fuzzy, c-format
-msgid "Interrogation profile tests file %s not found!\n"
-msgstr ""
-"Interrogation Profil Tests API mismatch (%i.%i != %i.%i): Die Datei %s.\n"
-
-#: ../src/plugins/freeems/interrogate.c:630
-#: ../src/plugins/mscommon/interrogate.c:1231
-#, c-format
-msgid ""
-"Interrogation profile tests API mismatch (%i.%i != %i.%i):\n"
-"\tFile %s.\n"
-msgstr ""
-"Interrogation Profil Tests API mismatch (%i.%i != %i.%i): Die Datei %s.\n"
-
-#: ../src/plugins/freeems/interrogate.c:639
-#: ../src/plugins/mscommon/interrogate.c:1238
-#, fuzzy, c-format
-msgid "File %s, opened successfully\n"
-msgstr "%s erfolgreich geöffnet\n"
-
-#: ../src/plugins/freeems/interrogate.c:648
-#: ../src/plugins/mscommon/interrogate.c:1249
-#, c-format
-msgid "test_name for %s is NULL\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:654
-#: ../src/plugins/mscommon/interrogate.c:1255
-#, c-format
-msgid "test_result_type for %s is NULL\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:665
-#, fuzzy, c-format
-msgid "test_function for %s is NULL\n"
-msgstr "Error-Funktion%s ist NULL\n"
-
-#: ../src/plugins/freeems/interrogate.c:736
-msgid ""
-"NO Interrogation profiles found, was MegaTunix installed properly?\n"
-"\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:759
-#, fuzzy, c-format
-msgid "Command (%s): returned %i byts\n"
-msgstr "Command \"%s\" (%s), kehrte %i bytes\n"
-
-#: ../src/plugins/freeems/interrogate.c:764
-#, fuzzy, c-format
-msgid "Command (%s): returned (%s)\n"
-msgstr "Command \"%s\" (%s), kehrte %i Bytes (%s)\n"
-
-#: ../src/plugins/freeems/interrogate.c:769
-#, fuzzy, c-format
-msgid "Command (%s): returned %i elements\n"
-msgstr "Command \"%s\" (%s), kehrte %i bytes\n"
-
-#: ../src/plugins/freeems/interrogate.c:775
-#, c-format
-msgid ""
-"Firmware NOT DETECTED, Enable Interrogation deb  ugging, retry "
-"interrogation,\n"
-"close megatunix, and send ~/mtx/%s/debug.log to   the author for analysis "
-"with a note\n"
-"describing which firmware you are attempt  ing to talk to.\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:836
-#: ../src/plugins/mscommon/interrogate.c:1386
-#, c-format
-msgid ""
-"ERROR:!! \"match_on\" key missing from interrogation profile [interrogation] "
-"section\n"
-msgstr "FEHLER:! \"Match_on\"-Taste fehlt Verhör Profil [Verhör]-Abschnitt\n"
-
-#: ../src/plugins/freeems/interrogate.c:847
-#: ../src/plugins/mscommon/interrogate.c:1397
-#, c-format
-msgid "ERROR test data not found for test \"%s\"\n"
-msgstr "ERROR Testdaten für Test nicht gefunden \"%s\"\n"
-
-#: ../src/plugins/freeems/interrogate.c:856
-#: ../src/plugins/freeems/interrogate.c:923
-#: ../src/plugins/mscommon/interrogate.c:1406
-#: ../src/plugins/mscommon/interrogate.c:1474
-#, c-format
-msgid ""
-"MISMATCH,\"%s\" is NOT a match...\n"
-"\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:868
-#: ../src/plugins/mscommon/interrogate.c:1418
-#, c-format
-msgid ""
-"ERROR interrogation check_for match vector does NOT have two args it has %i\n"
-msgstr ""
-"ERROR Verhör check_for Match Vektor nicht haben zwei Argumente hat es %i\n"
-
-#: ../src/plugins/freeems/interrogate.c:932
-#, c-format
-msgid ""
-"\"%s\" is a match for all conditions ...\n"
-"\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1023
-#: ../src/plugins/mscommon/interrogate.c:359
-#, c-format
-msgid "File \"%s\" NOT OPENED successfully\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1032
-#: ../src/plugins/mscommon/interrogate.c:386
-#, fuzzy, c-format
-msgid "File:%s opened successfully\n"
-msgstr "%s erfolgreich geöffnet\n"
-
-#: ../src/plugins/freeems/interrogate.c:1042
-#: ../src/plugins/mscommon/interrogate.c:384
-msgid "Failed to find EcuTempUnits key in interrogation profile\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1046
-#: ../src/plugins/mscommon/interrogate.c:389
-msgid ""
-"\"BigEndian\" key not found in interrogation profile, assuming ECU firmware "
-"byte order is big endian, ERROR in interrogation profile\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1051
-#: ../src/plugins/mscommon/interrogate.c:394
-msgid ""
-"\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1059
-#: ../src/plugins/mscommon/interrogate.c:427
-msgid "\"RT_Command\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1062
-#: ../src/plugins/mscommon/interrogate.c:460
-msgid "\"RT_total_bytes\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1066
-#: ../src/plugins/mscommon/interrogate.c:463
-msgid ""
-"\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1069
-#: ../src/plugins/mscommon/interrogate.c:466
-msgid "\"Read_Command\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1072
-#: ../src/plugins/mscommon/interrogate.c:469
-msgid "\"Write_Command\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1075
-#: ../src/plugins/mscommon/interrogate.c:472
-msgid "\"Burn_Command\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1078
-#: ../src/plugins/mscommon/interrogate.c:475
-msgid ""
-"\"Burn_All_Command\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1081
-#: ../src/plugins/mscommon/interrogate.c:487
-msgid ""
-"\"ChunkWriteSupport\" flag not found in parameters section in interrogation "
-"profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1086
-#: ../src/plugins/mscommon/interrogate.c:492
-msgid ""
-"\"Chunk_Write_Command\" flag not found in parameters section in "
-"interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1091
-#: ../src/plugins/mscommon/interrogate.c:523
-msgid "\"LoadTabs\" list not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1099
-#: ../src/plugins/mscommon/interrogate.c:531
-msgid "\"TabConfs\" list not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1107
-#: ../src/plugins/mscommon/interrogate.c:539
-msgid ""
-"\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1110
-#: ../src/plugins/mscommon/interrogate.c:542
-msgid "\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1113
-msgid ""
-"\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1116
-msgid "\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1156
-#: ../src/plugins/freeems/interrogate.c:1205
-#: ../src/plugins/freeems/interrogate.c:1251
-#, c-format
-msgid "CRITICAL FAULT, unable to determine mtx page for location ID %i\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1290
-msgid "FAILED TO LOCATE \"mem_alloc\" function within core/plugins\n"
-msgstr ""
-
-#. Display firmware version in the window...
-#: ../src/plugins/freeems/interrogate.c:1294
-#: ../src/plugins/freeems/interrogate.c:1295
-#: ../src/plugins/mscommon/interrogate.c:1175
-#: ../src/plugins/mscommon/interrogate.c:1176
-#, c-format
-msgid "Detected Firmware: %s\n"
-msgstr "Erkannt Firmware: %s\n"
-
-#: ../src/plugins/freeems/interrogate.c:1296
-#: ../src/plugins/mscommon/interrogate.c:1177
-#, c-format
-msgid "Loading Settings from: \"%s\"\n"
-msgstr "Lädt Einstellungen aus: \"%s\"\n"
-
-#: ../src/plugins/freeems/interrogate.c:1321
-msgid "String fed is NULL!\n"
-msgstr ""
-
-#: ../src/plugins/freeems/interrogate.c:1327
-#: ../src/plugins/mscommon/interrogate.c:1329
-#, c-format
-msgid "String fed is %s\n"
-msgstr ""
-
-#: ../src/plugins/freeems/packet_handlers.c:153
-#, c-format
-msgid ""
-"Packet number %u ending of length %u at char number %u failed checksum! "
-"Received %u Calculated %u\n"
-msgstr ""
-
-#: ../src/plugins/freeems/packet_handlers.c:849
-#, c-format
-msgid ""
-"Packet TO ECU %i bytes \n"
-"\t"
-msgstr ""
-
-#: ../src/plugins/freeems/packet_handlers.c:851
-#, c-format
-msgid ""
-"Packet FROM ECU %i bytes \n"
-"\t"
-msgstr ""
-
-#: ../src/plugins/freeems/packet_handlers.c:856
-msgid ""
-"\n"
-"\t"
 msgstr ""
 
 #: ../src/plugins/jimstim/jimstim_sweeper.c:113
@@ -11520,6 +10818,696 @@ msgstr ""
 #, fuzzy
 msgid "Sweeper stopped\n"
 msgstr "Realtime Reader gestoppt\n"
+
+#: ../src/plugins/libreems/datamgmt.c:351
+#, c-format
+msgid ""
+"Attempted to write beyond end of Location ID (%i), page (%i)\n"
+" Loc ID size %i, write offset %i, length %i\n"
+msgstr ""
+
+#: ../src/plugins/libreems/fileio.c:82 ../src/plugins/mscommon/fileio.c:81
+msgid "NO FILE chosen for ECU Backup\n"
+msgstr "Keine Datei ausgewählt ECU Backup\n"
+
+#: ../src/plugins/libreems/fileio.c:86 ../src/plugins/mscommon/fileio.c:85
+msgid "Full Backup of ECU Initiated\n"
+msgstr "Full Backup von ECU Initiiert\n"
+
+#: ../src/plugins/libreems/fileio.c:88 ../src/plugins/mscommon/fileio.c:87
+msgid "Full Backup File Closed\n"
+msgstr "Full Backup Datei geschlossen\n"
+
+#: ../src/plugins/libreems/fileio.c:128 ../src/plugins/mscommon/fileio.c:126
+msgid "NO FILE chosen for ECU restore\n"
+msgstr "Keine Datei ausgewählt ECU wiederherstellen\n"
+
+#: ../src/plugins/libreems/fileio.c:170 ../src/plugins/mscommon/fileio.c:168
+msgid ""
+"Full Backup Commencing to file:\n"
+"\t"
+msgstr ""
+"Full Backup Beginnend zu dieser Datei:\n"
+"       "
+
+#: ../src/plugins/libreems/fileio.c:190 ../src/plugins/mscommon/fileio.c:187
+msgid "Full Backup Complete...\n"
+msgstr "Full Backup Complete ...\n"
+
+#: ../src/plugins/libreems/fileio.c:233 ../src/plugins/mscommon/fileio.c:233
+#, fuzzy, c-format
+msgid ""
+":restore_all_ecu_settings()\n"
+"\t Unable to open this file (%s)\n"
+msgstr ""
+": Restore_all_ecu_settings () Firmware name mismatch: \"%s\" != \"%s\" kann "
+"diese Datei nicht laden zur Restaurierung\n"
+
+#: ../src/plugins/libreems/fileio.c:243 ../src/plugins/mscommon/fileio.c:242
+#, c-format
+msgid ""
+":restore_all_ecu_settings()\n"
+"\tAPI MAJOR version mismatch: \"%i\" != \"%i\"\n"
+" can not load this file for restoration\n"
+msgstr ""
+": Restore_all_ecu_settings () API MAJOR Versionskonflikt: \"%i\" != \"%i\" "
+"kann diese Datei nicht laden zur Restaurierung\n"
+
+#: ../src/plugins/libreems/fileio.c:249 ../src/plugins/mscommon/fileio.c:248
+#, fuzzy, c-format
+msgid ""
+": restore_all_ecu_settings()\n"
+"\tAPI MINOR version mismatch: \"%i\" != \"%i\"\n"
+" Will try to load this file for restoration, expect issues\n"
+msgstr ""
+": Restore_all_ecu_settings () API MINOR Versionskonflikt: \"%i\" != \"%i\" "
+"kann diese Datei nicht laden zur Restaurierung\n"
+
+#: ../src/plugins/libreems/fileio.c:254
+#, fuzzy, c-format
+msgid ""
+"Firmware name mismatch:\"%s\" != \"%s\",cannot load this file for "
+"restoration\n"
+msgstr ""
+": Restore_all_ecu_settings () Firmware name mismatch: \"%s\" != \"%s\" kann "
+"diese Datei nicht laden zur Restaurierung\n"
+
+#: ../src/plugins/libreems/fileio.c:256 ../src/plugins/mscommon/fileio.c:255
+#, fuzzy, c-format
+msgid ""
+": restore_all_ecu_settings()\n"
+"Firmware name mismatch: \"%s\" != \"%s\"\n"
+"can NOT load this file for restoration!\n"
+msgstr ""
+": Restore_all_ecu_settings () Firmware name mismatch: \"%s\" != \"%s\" kann "
+"diese Datei nicht laden zur Restaurierung\n"
+
+#: ../src/plugins/libreems/fileio.c:264 ../src/plugins/mscommon/fileio.c:263
+msgid "Restoring ECU settings from File"
+msgstr "Wiederherstellen der Einstellungen von ECU-Datei"
+
+#: ../src/plugins/libreems/fileio.c:275 ../src/plugins/mscommon/fileio.c:278
+#, c-format
+msgid ""
+": restore_all_ecu_settings()\n"
+"\tNumber of variables in backup \"%i\" and firmware specification \"%i\" do "
+"NOT match,\n"
+"\tcorruption SHOULD be expected\n"
+msgstr ""
+": Restore_all_ecu_settings () Anzahl der Variablen im Backup \"%i\" und "
+"Firmware-Spezifikation \"%i\" nicht, passen die Korruption muss gerechnet "
+"werden\n"
+
+#: ../src/plugins/libreems/fileio.c:276 ../src/plugins/mscommon/fileio.c:279
+#, fuzzy, c-format
+msgid ""
+"Number of variables in backup \"%i\" and firmware specification \"%i\" do "
+"NOT match,\n"
+"\tcorruption SHOULD be expected\n"
+msgstr ""
+": Restore_all_ecu_settings () Anzahl der Variablen im Backup \"%i\" und "
+"Firmware-Spezifikation \"%i\" nicht, passen die Korruption muss gerechnet "
+"werden\n"
+
+#: ../src/plugins/libreems/fileio.c:284 ../src/plugins/mscommon/fileio.c:287
+#, c-format
+msgid ""
+": restore_all_ecu_settings()\n"
+"\tNumber of variables in this backup \"%i\" does NOT match the length of the "
+"table \"%i\", expect a crash!!!\n"
+msgstr ""
+": Restore_all_ecu_settings () Anzahl der Variablen in diesem backup \"%i\" "
+"entspricht nicht der Länge der Tabelle \"%i\", erwarten einen Absturz!\n"
+
+#: ../src/plugins/libreems/fileio.c:285 ../src/plugins/mscommon/fileio.c:288
+#, fuzzy, c-format
+msgid ""
+"Number of variables in this backup \"%i\" does NOT match the length of the "
+"table \"%i\", expect a crash!!!\n"
+msgstr ""
+": Restore_all_ecu_settings () Anzahl der Variablen in diesem backup \"%i\" "
+"entspricht nicht der Länge der Tabelle \"%i\", erwarten einen Absturz!\n"
+
+#: ../src/plugins/libreems/interrogate.c:58
+msgid ""
+"ENTERED\n"
+"\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:69
+msgid ""
+"Didn't return a valid list of commands\n"
+"\t MegaTunix was NOT installed correctly, Aborting Interrogation\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:588
+#: ../src/plugins/mscommon/interrogate.c:1216
+#, fuzzy, c-format
+msgid "Interrogation profile tests file %s not found!\n"
+msgstr ""
+"Interrogation Profil Tests API mismatch (%i.%i != %i.%i): Die Datei %s.\n"
+
+#: ../src/plugins/libreems/interrogate.c:602
+#: ../src/plugins/mscommon/interrogate.c:1231
+#, c-format
+msgid ""
+"Interrogation profile tests API mismatch (%i.%i != %i.%i):\n"
+"\tFile %s.\n"
+msgstr ""
+"Interrogation Profil Tests API mismatch (%i.%i != %i.%i): Die Datei %s.\n"
+
+#: ../src/plugins/libreems/interrogate.c:611
+#: ../src/plugins/mscommon/interrogate.c:1238
+#, fuzzy, c-format
+msgid "File %s, opened successfully\n"
+msgstr "%s erfolgreich geöffnet\n"
+
+#: ../src/plugins/libreems/interrogate.c:620
+#: ../src/plugins/mscommon/interrogate.c:1249
+#, c-format
+msgid "test_name for %s is NULL\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:626
+#: ../src/plugins/mscommon/interrogate.c:1255
+#, c-format
+msgid "test_result_type for %s is NULL\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:637
+#, fuzzy, c-format
+msgid "test_function for %s is NULL\n"
+msgstr "Error-Funktion%s ist NULL\n"
+
+#: ../src/plugins/libreems/interrogate.c:708
+msgid ""
+"NO Interrogation profiles found, was MegaTunix installed properly?\n"
+"\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:731
+#, fuzzy, c-format
+msgid "Command (%s): returned %i byts\n"
+msgstr "Command \"%s\" (%s), kehrte %i bytes\n"
+
+#: ../src/plugins/libreems/interrogate.c:736
+#, fuzzy, c-format
+msgid "Command (%s): returned (%s)\n"
+msgstr "Command \"%s\" (%s), kehrte %i Bytes (%s)\n"
+
+#: ../src/plugins/libreems/interrogate.c:741
+#, fuzzy, c-format
+msgid "Command (%s): returned %i elements\n"
+msgstr "Command \"%s\" (%s), kehrte %i bytes\n"
+
+#: ../src/plugins/libreems/interrogate.c:747
+#, c-format
+msgid ""
+"Firmware NOT DETECTED, Enable Interrogation deb  ugging, retry "
+"interrogation,\n"
+"close megatunix, and send ~/mtx/%s/debug.log to   the author for analysis "
+"with a note\n"
+"describing which firmware you are attempt  ing to talk to.\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:808
+#: ../src/plugins/mscommon/interrogate.c:1386
+#, c-format
+msgid ""
+"ERROR:!! \"match_on\" key missing from interrogation profile [interrogation] "
+"section\n"
+msgstr "FEHLER:! \"Match_on\"-Taste fehlt Verhör Profil [Verhör]-Abschnitt\n"
+
+#: ../src/plugins/libreems/interrogate.c:819
+#: ../src/plugins/mscommon/interrogate.c:1397
+#, c-format
+msgid "ERROR test data not found for test \"%s\"\n"
+msgstr "ERROR Testdaten für Test nicht gefunden \"%s\"\n"
+
+#: ../src/plugins/libreems/interrogate.c:828
+#: ../src/plugins/libreems/interrogate.c:895
+#: ../src/plugins/mscommon/interrogate.c:1406
+#: ../src/plugins/mscommon/interrogate.c:1474
+#, c-format
+msgid ""
+"MISMATCH,\"%s\" is NOT a match...\n"
+"\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:840
+#: ../src/plugins/mscommon/interrogate.c:1418
+#, c-format
+msgid ""
+"ERROR interrogation check_for match vector does NOT have two args it has %i\n"
+msgstr ""
+"ERROR Verhör check_for Match Vektor nicht haben zwei Argumente hat es %i\n"
+
+#: ../src/plugins/libreems/interrogate.c:904
+#, c-format
+msgid ""
+"\"%s\" is a match for all conditions ...\n"
+"\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:995
+#: ../src/plugins/mscommon/interrogate.c:359
+#, c-format
+msgid "File \"%s\" NOT OPENED successfully\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1004
+#: ../src/plugins/mscommon/interrogate.c:386
+#, fuzzy, c-format
+msgid "File:%s opened successfully\n"
+msgstr "%s erfolgreich geöffnet\n"
+
+#: ../src/plugins/libreems/interrogate.c:1014
+#: ../src/plugins/mscommon/interrogate.c:384
+msgid "Failed to find EcuTempUnits key in interrogation profile\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1018
+#: ../src/plugins/mscommon/interrogate.c:389
+msgid ""
+"\"BigEndian\" key not found in interrogation profile, assuming ECU firmware "
+"byte order is big endian, ERROR in interrogation profile\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1023
+#: ../src/plugins/mscommon/interrogate.c:394
+msgid ""
+"\"Capabilities\" enumeration list not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1031
+#: ../src/plugins/mscommon/interrogate.c:427
+msgid "\"RT_Command\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1034
+#: ../src/plugins/mscommon/interrogate.c:460
+msgid "\"RT_total_bytes\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1038
+#: ../src/plugins/mscommon/interrogate.c:463
+msgid ""
+"\"Get_All_Command\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1041
+#: ../src/plugins/mscommon/interrogate.c:466
+msgid "\"Read_Command\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1044
+#: ../src/plugins/mscommon/interrogate.c:469
+msgid "\"Write_Command\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1047
+#: ../src/plugins/mscommon/interrogate.c:472
+msgid "\"Burn_Command\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1050
+#: ../src/plugins/mscommon/interrogate.c:475
+msgid ""
+"\"Burn_All_Command\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1053
+#: ../src/plugins/mscommon/interrogate.c:487
+msgid ""
+"\"ChunkWriteSupport\" flag not found in parameters section in interrogation "
+"profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1058
+#: ../src/plugins/mscommon/interrogate.c:492
+msgid ""
+"\"Chunk_Write_Command\" flag not found in parameters section in "
+"interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1063
+#: ../src/plugins/mscommon/interrogate.c:523
+msgid "\"LoadTabs\" list not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1071
+#: ../src/plugins/mscommon/interrogate.c:531
+msgid "\"TabConfs\" list not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1079
+#: ../src/plugins/mscommon/interrogate.c:539
+msgid ""
+"\"RealtimeMapFile\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1082
+#: ../src/plugins/mscommon/interrogate.c:542
+msgid "\"SliderMapFile\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1085
+msgid ""
+"\"RuntimeTextMapFile\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1088
+msgid "\"StatusMapFile\" variable not found in interrogation profile, ERROR\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1128
+#: ../src/plugins/libreems/interrogate.c:1177
+#: ../src/plugins/libreems/interrogate.c:1223
+#, c-format
+msgid "CRITICAL FAULT, unable to determine mtx page for location ID %i\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1262
+msgid "FAILED TO LOCATE \"mem_alloc\" function within core/plugins\n"
+msgstr ""
+
+#. Display firmware version in the window...
+#: ../src/plugins/libreems/interrogate.c:1266
+#: ../src/plugins/libreems/interrogate.c:1267
+#: ../src/plugins/mscommon/interrogate.c:1175
+#: ../src/plugins/mscommon/interrogate.c:1176
+#, c-format
+msgid "Detected Firmware: %s\n"
+msgstr "Erkannt Firmware: %s\n"
+
+#: ../src/plugins/libreems/interrogate.c:1268
+#: ../src/plugins/mscommon/interrogate.c:1177
+#, c-format
+msgid "Loading Settings from: \"%s\"\n"
+msgstr "Lädt Einstellungen aus: \"%s\"\n"
+
+#: ../src/plugins/libreems/interrogate.c:1293
+msgid "String fed is NULL!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/interrogate.c:1299
+#: ../src/plugins/mscommon/interrogate.c:1329
+#, c-format
+msgid "String fed is %s\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_benchtest.c:368
+#, fuzzy, c-format
+msgid "Benchtest completed...\n"
+msgstr "abgeschlossen.\n"
+
+#: ../src/plugins/libreems/libreems_comms.c:85
+msgid "LibreEMS serial_repair_thread() created!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:90
+msgid "LibreEMS serial_repair_thread() exiting, offline mode!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:102
+#: ../src/plugins/mscommon/mscommon_comms.c:908
+#: ../src/plugins/mscommon/mtxsocket.c:1411
+msgid "Port considered open, but throwing errors\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:114
+#: ../src/plugins/mscommon/mscommon_comms.c:931
+msgid "Port NOT considered open yet.\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:136
+msgid "LibreEMS serial_repair_thread() exiting, told to!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:141
+#: ../src/plugins/mscommon/mscommon_comms.c:958
+#, c-format
+msgid "Port %s does NOT exist\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:148
+#: ../src/plugins/libreems/libreems_comms.c:149
+#: ../src/plugins/mscommon/mscommon_comms.c:966
+#: ../src/plugins/mscommon/mscommon_comms.c:967
+#, c-format
+msgid "Attempting to open port %s\n"
+msgstr "Der Versuch, Port %s nicht öffnen\n"
+
+#: ../src/plugins/libreems/libreems_comms.c:156
+#: ../src/plugins/mscommon/mscommon_comms.c:974
+#, c-format
+msgid "Port %s opened\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:160
+#: ../src/plugins/mscommon/mscommon_comms.c:979
+#, c-format
+msgid "Searching for ECU\n"
+msgstr "Die Suche nach ECU\n"
+
+#: ../src/plugins/libreems/libreems_comms.c:161
+#: ../src/plugins/mscommon/mscommon_comms.c:980
+#, c-format
+msgid "Performing ECU comms test via port %s.\n"
+msgstr ""
+
+#. We have a winner !!  Abort loop
+#: ../src/plugins/libreems/libreems_comms.c:164
+#: ../src/plugins/mscommon/mscommon_comms.c:983
+#, c-format
+msgid "Search successfull\n"
+msgstr "Suche erfolgreich\n"
+
+#: ../src/plugins/libreems/libreems_comms.c:170
+#: ../src/plugins/mscommon/mscommon_comms.c:990
+#, c-format
+msgid "COMMS test failed, no ECU found, closing port %s.\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:171
+#: ../src/plugins/mscommon/mscommon_comms.c:991
+#, fuzzy, c-format
+msgid "No ECU found...\n"
+msgstr "ECU verbunden ..."
+
+#: ../src/plugins/libreems/libreems_comms.c:182
+#: ../src/plugins/libreems/libreems_comms.c:183
+#: ../src/plugins/mscommon/mscommon_comms.c:1001
+#: ../src/plugins/mscommon/mscommon_comms.c:1002
+#, c-format
+msgid "Port %s is open by another application\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:196
+msgid "LibreEMS serial_repair_thread()  exiting, device found!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:258
+msgid "Serial port is NOT open, or filedescriptor is invalid!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:300
+msgid "Entered...\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:312
+msgid "Found streaming ECU!!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:322
+msgid "Requesting LibreEMS Interface Version\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:346
+msgid "Found via probing!!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:354
+msgid "No device found...\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:695
+#, c-format
+msgid "Sending locID %i, offset %i, value %i \n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:713
+#, fuzzy, c-format
+msgid ""
+"libreems_send_to_ecu() ERROR!!! Size undefined for variable at canID %i, "
+"offset %i\n"
+msgstr ""
+"ERROR! Undefined variable Größe für Caniden %i bei, Seite %i, %i Offset\n"
+
+#: ../src/plugins/libreems/libreems_comms.c:833
+#, c-format
+msgid "Sending canID %i, locID %i, offset %i, num_bytes %i, data %p\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:900
+#: ../src/plugins/mscommon/mscommon_comms.c:768
+msgid "WRITE failed, rolling back!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_comms.c:999
+#: ../src/plugins/mscommon/mscommon_helpers.c:614
+#: ../src/plugins/mscommon/mscommon_helpers.c:643
+#, fuzzy
+msgid "Burn to Flash Completed\n"
+msgstr "Burn to Flash"
+
+#: ../src/plugins/libreems/libreems_gui_handlers.c:82
+#, c-format
+msgid ""
+"Default case, but there is NO ecu_toggle_button_handler available, unhandled "
+"case for widget %s, BUG!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_gui_handlers.c:139
+#, c-format
+msgid ""
+"Default case, but there is NO ecu_std_button_handler available, unhandled "
+"case for widget %s, BUG!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_gui_handlers.c:182
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:311
+#, c-format
+msgid ""
+"Default case, but there is NO ecu_bitmask_button_handler available, "
+"unhandled case for widget %s, BUG!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_gui_handlers.c:328
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:149
+#, c-format
+msgid ""
+"Default case, but there is NO ecu_entry_handler available, unhandled case "
+"for widget %s, BUG!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_gui_handlers.c:385
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:914
+msgid "Updating Controls..."
+msgstr "Aktualisierung Controls ..."
+
+#: ../src/plugins/libreems/libreems_gui_handlers.c:390
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1063
+#, fuzzy, c-format
+msgid "<b>Ready...</b>"
+msgstr "<b>Gegenbrand</b>"
+
+#: ../src/plugins/libreems/libreems_gui_handlers.c:585
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1489
+#, c-format
+msgid ""
+"Default case, but there is NO ecu_update_entry function available, unhandled "
+"case for widget %s, BUG!\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_gui_handlers.c:663
+#, fuzzy, c-format
+msgid ""
+"ERROR no model for Combo at locID %i, offset %i, bitmask %i, bitshift %i, "
+"value %i\n"
+msgstr ""
+"ERROR kein Modell für Combo auf Seite %i, %i ausgeglichen, Bitmaske %i, %i "
+"BitShift, Wert %i\n"
+
+#: ../src/plugins/libreems/libreems_helpers.c:141
+#: ../src/plugins/mscommon/mscommon_helpers.c:69
+msgid "Queuing read of all ECU data..."
+msgstr "Queuing aller ECU Daten zu lesen ..."
+
+#: ../src/plugins/libreems/libreems_helpers.c:315
+#, c-format
+msgid "Benchtest Packet ERROR, Code (0X%.4X), \"%s\"\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_helpers.c:324
+#, c-format
+msgid ""
+"Benchtest bumped by the user (added %.2f seconds to the clock), Total time "
+"remaining is now %.2f seconds\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_helpers.c:329
+#, c-format
+msgid ""
+"Initiating LibreEMS Benchtest: Run time should be about %.1f seconds...\n"
+msgstr ""
+
+#. stop
+#: ../src/plugins/libreems/libreems_helpers.c:334
+#, c-format
+msgid "Benchtest stopped by the user...\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_rtv_loader.c:54
+#: ../src/plugins/libreems/libreems_rtv_loader.c:60
+#: ../src/plugins/libreems/libreems_rtv_loader.c:72
+#: ../src/plugins/libreems/libreems_rtv_loader.c:147
+#: ../src/plugins/libreems/libreems_rtv_loader.c:153
+#: ../src/plugins/libreems/libreems_rtv_loader.c:165
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:53
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:59
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:71
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:146
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:152
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:164
+#, c-format
+msgid "ECU_EMB_BIT, failure looking for:%s\n"
+msgstr ""
+
+#: ../src/plugins/libreems/libreems_rtv_loader.c:89
+#: ../src/plugins/libreems/libreems_rtv_loader.c:95
+#: ../src/plugins/libreems/libreems_rtv_loader.c:182
+#: ../src/plugins/libreems/libreems_rtv_loader.c:188
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:88
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:94
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:181
+#: ../src/plugins/mscommon/mscommon_rtv_loader.c:187
+#, c-format
+msgid "ECU_VAR, failure looking for:%s\n"
+msgstr ""
+
+#: ../src/plugins/libreems/packet_handlers.c:153
+#, c-format
+msgid ""
+"Packet number %u ending of length %u at char number %u failed checksum! "
+"Received %u Calculated %u\n"
+msgstr ""
+
+#: ../src/plugins/libreems/packet_handlers.c:227
+msgid ""
+"Packet queue pointer is NULL!!\n"
+"\t"
+msgstr ""
+
+#: ../src/plugins/libreems/packet_handlers.c:847
+#, c-format
+msgid ""
+"Packet TO ECU %i bytes \n"
+"\t"
+msgstr ""
+
+#: ../src/plugins/libreems/packet_handlers.c:849
+#, c-format
+msgid ""
+"Packet FROM ECU %i bytes \n"
+"\t"
+msgstr ""
+
+#: ../src/plugins/libreems/packet_handlers.c:854
+msgid ""
+"\n"
+"\t"
+msgstr ""
 
 #: ../src/plugins/ms1/ms1_gui_handlers.c:95
 msgid ""
@@ -11611,7 +11599,7 @@ msgid "ERROR handler NOT found for widget %s, command aborted! BUG!!!\n"
 msgstr ""
 
 #: ../src/plugins/ms2/ms2_gui_handlers.c:146
-#: ../src/plugins/ms2/ms2_gui_handlers.c:301
+#: ../src/plugins/ms2/ms2_gui_handlers.c:260
 #, c-format
 msgid ""
 "Default case reached,  i.e. handler not found in global, common or ECU "
@@ -11622,7 +11610,7 @@ msgstr ""
 msgid "2D Table Group Editor"
 msgstr "2D-Table Group Editor"
 
-#: ../src/plugins/mscommon/2d_table_editor.c:995
+#: ../src/plugins/mscommon/2d_table_editor.c:996
 #, c-format
 msgid "ERROR in update_2d_curve()!!!\n"
 msgstr "ERROR in update_2d_curve ()!!!\n"
@@ -12471,14 +12459,26 @@ msgstr "Nicht einfach / Stück Schreib-Befehl, nicht mitgeteilt peers\n"
 msgid "serial repair thread created!\n"
 msgstr ""
 
+#: ../src/plugins/mscommon/mscommon_comms.c:895
+msgid "Thread exiting, offline mode!\n"
+msgstr ""
+
 #: ../src/plugins/mscommon/mscommon_comms.c:912
-#: ../src/plugins/mscommon/mtxsocket.c:1422
+#: ../src/plugins/mscommon/mtxsocket.c:1415
 #, c-format
 msgid "Calling comms_test, attempt %i\n"
 msgstr ""
 
 #: ../src/plugins/mscommon/mscommon_comms.c:915
 msgid "Thread exiting, successfull comms test!\n"
+msgstr ""
+
+#: ../src/plugins/mscommon/mscommon_comms.c:953
+msgid "Thread exiting, told to!\n"
+msgstr ""
+
+#: ../src/plugins/mscommon/mscommon_comms.c:1010
+msgid "Thread exiting, device found!\n"
 msgstr ""
 
 #: ../src/plugins/mscommon/mscommon_comms.c:1165
@@ -12504,7 +12504,7 @@ msgstr ""
 msgid "Problem with set_widget_labels, counts don't match up\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1589
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1588
 #, c-format
 msgid ""
 "ERROR no model for Combo at page %i, offset %i, bitmask %i, bitshift %i, "
@@ -12513,21 +12513,21 @@ msgstr ""
 "ERROR kein Modell für Combo auf Seite %i, %i ausgeglichen, Bitmaske %i, %i "
 "BitShift, Wert %i\n"
 
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1653
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1652
 msgid "COMBOBOX Problem with source_values, length mismatch, check datamap\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1688
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1687
 msgid "COMBOBOX Problem with algorithms, length mismatch, check datamap\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1699
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1698
 #, c-format
 msgid ""
 "Check/Radio button %s has algorithm defined, but no applicable tables, BUG!\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1739
+#: ../src/plugins/mscommon/mscommon_gui_handlers.c:1738
 #, c-format
 msgid ""
 "Check/Radio button  %s has algorithm defines but no applicable tables, BUG!\n"
@@ -12611,34 +12611,43 @@ msgstr ""
 msgid "Table was not found!\n"
 msgstr "entsprechenden Tabellen nicht definiert!\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:100
+#: ../src/plugins/mscommon/mtxsocket.c:98
 msgid "ERROR setting up ASCII TCP socket\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:120
-msgid "ERROR setting up BINARY TCP control socket\n"
+#: ../src/plugins/mscommon/mtxsocket.c:117
+msgid "ERROR setting up BINARY TCP socket\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:140
+#: ../src/plugins/mscommon/mtxsocket.c:136
 msgid "ERROR setting up TCP control socket\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:172
+#: ../src/plugins/mscommon/mtxsocket.c:167
 #, fuzzy, c-format
 msgid "Socket creation error: %s\n"
 msgstr "nicht sicher, was der Fehler ist\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:184
+#: ../src/plugins/mscommon/mtxsocket.c:179
 #, c-format
 msgid "Socket bind error: %s\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:198
+#: ../src/plugins/mscommon/mtxsocket.c:193
 #, fuzzy, c-format
 msgid "Socket listen error: %s\n"
 msgstr "Schreib-Fehler! \"%s\"\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:352
+#: ../src/plugins/mscommon/mtxsocket.c:234
+#: ../src/plugins/mscommon/mtxsocket.c:343
+#: ../src/plugins/mscommon/mtxsocket.c:451
+#: ../src/plugins/mscommon/mtxsocket.c:1396
+#: ../src/plugins/mscommon/mtxsocket.c:1619
+#: ../src/plugins/mscommon/mtxsocket.c:1783
+msgid "Thread created!\n"
+msgstr ""
+
+#: ../src/plugins/mscommon/mtxsocket.c:345
 #, c-format
 msgid ""
 "Welcome to MegaTunix %s, ASCII mode enabled\n"
@@ -12647,202 +12656,202 @@ msgstr ""
 "Willkommen auf MegaTunix %s, ASCII-Modus aktiviert Enter &#39;help&#39; für "
 "die Unterstützung\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:382
-#: ../src/plugins/mscommon/mtxsocket.c:475
+#: ../src/plugins/mscommon/mtxsocket.c:375
+#: ../src/plugins/mscommon/mtxsocket.c:468
 #, fuzzy, c-format
 msgid "Receive error \"%s\"\n"
 msgstr "Schreib-Fehler! \"%s\"\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:607
+#: ../src/plugins/mscommon/mtxsocket.c:600
 #, c-format
 msgid "text_revision undefined!\n"
 msgstr "text_revision undefined!\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1018
-#: ../src/plugins/mscommon/mtxsocket.c:1030
+#: ../src/plugins/mscommon/mtxsocket.c:1011
+#: ../src/plugins/mscommon/mtxsocket.c:1023
 msgid "Not Connected yet"
 msgstr "Not Connected noch"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1024
+#: ../src/plugins/mscommon/mtxsocket.c:1017
 msgid "Offline mode, no signature"
 msgstr "Offline-Modus, keine Unterschrift"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1036
+#: ../src/plugins/mscommon/mtxsocket.c:1029
 msgid "Offline mode, no revision"
 msgstr "Offline-Modus, keine Revision"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1184
-#: ../src/plugins/mscommon/mtxsocket.c:1192
-#: ../src/plugins/mscommon/mtxsocket.c:1237
+#: ../src/plugins/mscommon/mtxsocket.c:1177
+#: ../src/plugins/mscommon/mtxsocket.c:1185
+#: ../src/plugins/mscommon/mtxsocket.c:1230
 #, c-format
 msgid "SHORT WRITE!\n"
 msgstr "KURZE schreiben!\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1463
+#: ../src/plugins/mscommon/mtxsocket.c:1456
 #, fuzzy, c-format
 msgid "Attempting to open connection to %s:%i\n"
 msgstr "Der Versuch, Port %s nicht öffnen\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1468
+#: ../src/plugins/mscommon/mtxsocket.c:1461
 #, c-format
 msgid "Network Connection established to %s:%i\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1472
+#: ../src/plugins/mscommon/mtxsocket.c:1465
 #, c-format
 msgid "Comms Test Success!, Opening Control Socket\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1479
+#: ../src/plugins/mscommon/mtxsocket.c:1472
 #, c-format
 msgid "Comms Test failed, closing port\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1489
+#: ../src/plugins/mscommon/mtxsocket.c:1482
 #, c-format
 msgid "Failed to open network connection to %s:%i, sleeping...\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1526
-#: ../src/plugins/mscommon/mtxsocket.c:1997
+#: ../src/plugins/mscommon/mtxsocket.c:1519
+#: ../src/plugins/mscommon/mtxsocket.c:1983
 #, fuzzy, c-format
 msgid "Socket open error: %s\n"
 msgstr "Schreib-Fehler! \"%s\"\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1539
-#: ../src/plugins/mscommon/mtxsocket.c:2010
+#: ../src/plugins/mscommon/mtxsocket.c:1532
+#: ../src/plugins/mscommon/mtxsocket.c:1996
 #, c-format
 msgid "Socket connect error: %s\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1714
-#: ../src/plugins/mscommon/mtxsocket.c:1722
+#: ../src/plugins/mscommon/mtxsocket.c:1700
+#: ../src/plugins/mscommon/mtxsocket.c:1708
 #, c-format
 msgid "Peer update WRITE ERROR!\n"
 msgstr "Peer Update WRITE ERROR!\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1806
+#: ../src/plugins/mscommon/mtxsocket.c:1792
 #, fuzzy, c-format
 msgid "Receive error: \"%s\"\n"
 msgstr "Schreib-Fehler! \"%s\"\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1814
+#: ../src/plugins/mscommon/mtxsocket.c:1800
 msgid "controlsocket Data arrived!\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1815
+#: ../src/plugins/mscommon/mtxsocket.c:1801
 #, c-format
 msgid "Integer \"%i\", Hex \"%.2X\"\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1821
+#: ../src/plugins/mscommon/mtxsocket.c:1807
 msgid "Slave chunk update received\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1827
+#: ../src/plugins/mscommon/mtxsocket.c:1813
 msgid "slave status update!\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1838
+#: ../src/plugins/mscommon/mtxsocket.c:1824
 msgid "Got action message!\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1845
+#: ../src/plugins/mscommon/mtxsocket.c:1831
 #, fuzzy
 msgid "got color message\n"
 msgstr "Hintergrundfarbe"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1851
+#: ../src/plugins/mscommon/mtxsocket.c:1837
 msgid "get_canid block\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1853
+#: ../src/plugins/mscommon/mtxsocket.c:1839
 #, c-format
 msgid "canID received is %i\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1857
+#: ../src/plugins/mscommon/mtxsocket.c:1843
 msgid "get_mtx_page block\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1859
+#: ../src/plugins/mscommon/mtxsocket.c:1845
 #, c-format
 msgid "page received is %i\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1863
+#: ../src/plugins/mscommon/mtxsocket.c:1849
 msgid "get_high_offset block\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1865
+#: ../src/plugins/mscommon/mtxsocket.c:1851
 #, c-format
 msgid "high offset received is %i\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1869
+#: ../src/plugins/mscommon/mtxsocket.c:1855
 msgid "get_low_offset block\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1871
+#: ../src/plugins/mscommon/mtxsocket.c:1857
 #, c-format
 msgid "low offset received is %i\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1876
+#: ../src/plugins/mscommon/mtxsocket.c:1862
 msgid "get_high_count block\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1878
+#: ../src/plugins/mscommon/mtxsocket.c:1864
 #, c-format
 msgid "high count received is %i\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1882
+#: ../src/plugins/mscommon/mtxsocket.c:1868
 msgid "get_low_count block\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1884
+#: ../src/plugins/mscommon/mtxsocket.c:1870
 #, c-format
 msgid "low count received is %i\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1901
+#: ../src/plugins/mscommon/mtxsocket.c:1887
 msgid "get_string\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1903
+#: ../src/plugins/mscommon/mtxsocket.c:1889
 #, c-format
 msgid "Charactor \"%c\"\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1910
+#: ../src/plugins/mscommon/mtxsocket.c:1896
 #, fuzzy, c-format
 msgid "setting group \"%s\" color \n"
 msgstr "Hintergrundfarbe"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1920
+#: ../src/plugins/mscommon/mtxsocket.c:1906
 msgid "get_datablock\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1923
+#: ../src/plugins/mscommon/mtxsocket.c:1909
 #, c-format
 msgid "Datablock index %i of %i\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1926
+#: ../src/plugins/mscommon/mtxsocket.c:1912
 msgid "Got all needed data, updating gui\n"
 msgstr ""
 
-#: ../src/plugins/mscommon/mtxsocket.c:1959
+#: ../src/plugins/mscommon/mtxsocket.c:1945
 #, fuzzy
 msgid "Gui Update complete\n"
 msgstr "abgeschlossen.\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:1965
+#: ../src/plugins/mscommon/mtxsocket.c:1951
 msgid "Case not handled, bug in state machine!\n"
 msgstr "Fall nicht behandelt, Fehler in State-Maschine!\n"
 
-#: ../src/plugins/mscommon/mtxsocket.c:2066
+#: ../src/plugins/mscommon/mtxsocket.c:2051
 #, fuzzy, c-format
 msgid "Socket send error: \"%s\"\n"
 msgstr "Schreib-Fehler! \"%s\"\n"
@@ -12892,12 +12901,12 @@ msgstr "Erforderlich Fuel Calculator"
 msgid "Required Fuel parameters"
 msgstr "Erforderlich Kraftstoffparameter"
 
-#: ../src/plugins/mscommon/req_fuel.c:915
+#: ../src/plugins/mscommon/req_fuel.c:919
 #, c-format
 msgid "applicable tables not defined!!!\n"
 msgstr "entsprechenden Tabellen nicht definiert!\n"
 
-#: ../src/plugins/mscommon/req_fuel.c:921
+#: ../src/plugins/mscommon/req_fuel.c:925
 #, c-format
 msgid "table_num not defined!!!\n"
 msgstr "table_num nicht definiert!\n"
@@ -13080,7 +13089,7 @@ msgstr ""
 msgid "Reverting to previous settings....\n"
 msgstr "Zurückkehren zum vorherigen Einstellungen ....\n"
 
-#: ../src/rtv_map_loader.c:67 ../src/tabloader.c:621
+#: ../src/rtv_map_loader.c:67 ../src/tabloader.c:622
 msgid "Entered"
 msgstr ""
 
@@ -13203,7 +13212,7 @@ msgid ""
 "\tare different, ABORTING!!!\n"
 msgstr ""
 
-#: ../src/rtv_map_loader.c:421 ../src/rtv_processor.c:323
+#: ../src/rtv_map_loader.c:422 ../src/rtv_processor.c:323
 #: ../src/rtv_processor.c:336 ../src/rtv_processor.c:484
 #: ../src/rtv_processor.c:495
 #, c-format
@@ -13684,27 +13693,27 @@ msgstr ""
 msgid "Error, bind_to_lists(), lists is NULL\n"
 msgstr "Fehler, bind_to_lists (), Listen ist NULL\n"
 
-#: ../src/tabloader.c:663
+#: ../src/tabloader.c:664
 #, fuzzy, c-format
 msgid "Number of keys for %s is %i\n"
 msgstr "Anzahl der Windungen"
 
-#: ../src/tabloader.c:689
+#: ../src/tabloader.c:690
 #, c-format
 msgid "Object %s doesn't have a page assigned!!!!\n"
 msgstr ""
 
-#: ../src/tabloader.c:809
+#: ../src/tabloader.c:810
 #, c-format
 msgid "Object %s has initializer, but no widget_type!!!!\n"
 msgstr ""
 
-#: ../src/tabloader.c:849
+#: ../src/tabloader.c:852
 #, c-format
 msgid "Indexed Object %s has index and offset, but no size!!!!\n"
 msgstr ""
 
-#: ../src/tabloader.c:866
+#: ../src/tabloader.c:869
 #, c-format
 msgid ""
 "Attempting to append widget beyond bounds of Firmware Parameters,  there is "
@@ -13712,7 +13721,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../src/tabloader.c:874
+#: ../src/tabloader.c:877
 #, c-format
 msgid ""
 "Attempting to append widget beyond bounds of Firmware Parameters,  there is "
@@ -13720,7 +13729,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../src/tabloader.c:887
+#: ../src/tabloader.c:890
 #, c-format
 msgid ""
 "Attempting to append widget beyond bounds of Firmware Parameters, there is a "
@@ -13728,43 +13737,43 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../src/tabloader.c:941
+#: ../src/tabloader.c:944
 msgid "Leaving"
 msgstr ""
 
-#: ../src/tabloader.c:987 ../src/tabloader.c:994
+#: ../src/tabloader.c:990 ../src/tabloader.c:997
 #, fuzzy, c-format
 msgid ""
 "Error finding symbol \"%s\", error:\n"
 "\t%s\n"
 msgstr "Fehler beim Öffnen \"%s\", Fehlercode: %s \n"
 
-#: ../src/tabloader.c:1113
+#: ../src/tabloader.c:1116
 #, c-format
 msgid "%s needs source_key\n"
 msgstr ""
 
-#: ../src/tabloader.c:1119 ../src/tabloader.c:1173
+#: ../src/tabloader.c:1122 ../src/tabloader.c:1176
 #, c-format
 msgid "%s needs offset\n"
 msgstr ""
 
-#: ../src/tabloader.c:1125 ../src/tabloader.c:1179
+#: ../src/tabloader.c:1128 ../src/tabloader.c:1182
 #, c-format
 msgid "%s needs bitmask\n"
 msgstr ""
 
-#: ../src/tabloader.c:1133 ../src/tabloader.c:1187
+#: ../src/tabloader.c:1136 ../src/tabloader.c:1190
 #, c-format
 msgid "%s needs bitvals or bitval\n"
 msgstr ""
 
-#: ../src/tabloader.c:1142 ../src/tabloader.c:1196
+#: ../src/tabloader.c:1145 ../src/tabloader.c:1199
 #, c-format
 msgid "%s has no page defined!\n"
 msgstr ""
 
-#: ../src/tabloader.c:1267
+#: ../src/tabloader.c:1270
 #, fuzzy
 msgid "Tab Loaded"
 msgstr "Gui Tabs geladen ..."
@@ -13785,32 +13794,32 @@ msgstr ""
 msgid "Command %s is INVALID, aborting call\n"
 msgstr "Command%s ist ungültig, Abbruch Anruf\n"
 
-#: ../src/threads.c:161
+#: ../src/threads.c:154
 msgid "No message received...\n"
 msgstr ""
 
-#: ../src/threads.c:165
+#: ../src/threads.c:158
 msgid "MESSAGE ARRIVED on IO queue...\n"
 msgstr ""
 
-#: ../src/threads.c:175
+#: ../src/threads.c:168
 msgid "LINK DOWN, Initiating NETWORK repair thread!\n"
 msgstr ""
 
-#: ../src/threads.c:180
+#: ../src/threads.c:173
 msgid "LINK DOWN, Initiating serial repair thread!\n"
 msgstr ""
 
-#: ../src/threads.c:187
+#: ../src/threads.c:180
 msgid "LINK DOWN, Can't process requested command, aborting call\n"
 msgstr ""
 
-#: ../src/threads.c:197
+#: ../src/threads.c:190
 #, c-format
 msgid "CRITICAL ERROR, function \"%s()\" is not found!!\n"
 msgstr "Kritischer Fehler, Funktion \"%s ()\" nicht gefunden!\n"
 
-#: ../src/threads.c:233
+#: ../src/threads.c:226
 msgid "Hit default case, this SHOULD NOT HAPPEN it's a bug, notify author! \n"
 msgstr ""
 
@@ -13818,39 +13827,39 @@ msgstr ""
 msgid "TTM is active, Realtime Reader suspended\n"
 msgstr "TTM aktiv ist, ausgesetzt Realtime Reader\n"
 
-#: ../src/timeout_handlers.c:68
+#: ../src/timeout_handlers.c:67
 msgid "Realtime Reader started\n"
 msgstr "Realtime Reader gestartet\n"
 
-#: ../src/timeout_handlers.c:71
+#: ../src/timeout_handlers.c:70
 msgid "Realtime Reader ALREADY started\n"
 msgstr "Realtime Reader bereits begonnen\n"
 
-#: ../src/timeout_handlers.c:80
+#: ../src/timeout_handlers.c:79
 msgid "Playback already running \n"
 msgstr ""
 
-#: ../src/timeout_handlers.c:94
+#: ../src/timeout_handlers.c:93
 msgid "Statuscounts tickler already active \n"
 msgstr ""
 
-#: ../src/timeout_handlers.c:136
+#: ../src/timeout_handlers.c:135
 msgid "Realtime Reader stopped\n"
 msgstr "Realtime Reader gestoppt\n"
 
-#: ../src/timeout_handlers.c:139
+#: ../src/timeout_handlers.c:138
 msgid "Realtime Reader ALREADY stopped\n"
 msgstr "Realtime Reader bereits gestoppt\n"
 
-#: ../src/timeout_handlers.c:214
+#: ../src/timeout_handlers.c:211
 msgid "Sending message to thread to read RT vars\n"
 msgstr ""
 
-#: ../src/timeout_handlers.c:256
+#: ../src/timeout_handlers.c:248
 msgid "Initiating background ECU interrogation..."
 msgstr "Initiieren Hintergrund ECU Verhör ..."
 
-#: ../src/timeout_handlers.c:257
+#: ../src/timeout_handlers.c:249
 msgid "Initiating background ECU interrogation...\n"
 msgstr "Initiieren Hintergrund ECU Verhör ...\n"
 
@@ -13976,48 +13985,48 @@ msgstr "NO FILE für VEX Import ausgewählt\n"
 msgid "NO FILE chosen for Table export\n"
 msgstr "NO FILE für VEX Export ausgewählt\n"
 
-#: ../src/winserialbuffer.cpp:41
+#: ../src/winserialbuffer.cpp:42
 #, c-format
 msgid "CSerialBuffer : (tid:%d) AddData(char) cled "
 msgstr ""
 
-#: ../src/winserialbuffer.cpp:49
+#: ../src/winserialbuffer.cpp:50
 #, c-format
 msgid "CSerialBuffer : (tid:%d) AddData(%s,%d) cled "
 msgstr ""
 
-#: ../src/winserialbuffer.cpp:57
+#: ../src/winserialbuffer.cpp:58
 #, c-format
 msgid "CSerialBuffer : (tid:%d) AddData(char*,%d) cled "
 msgstr ""
 
-#: ../src/winserialbuffer.cpp:66
+#: ../src/winserialbuffer.cpp:67
 #, c-format
 msgid "CSerialBuffer : (tid:%d) AddData(%s) cled "
 msgstr ""
 
-#: ../src/winserialbuffer.cpp:84
+#: ../src/winserialbuffer.cpp:85
 #, c-format
 msgid "CSerialBuffer : (tid:%d) Read_N() cled "
 msgstr ""
 
-#: ../src/winserialbuffer.cpp:102
+#: ../src/winserialbuffer.cpp:103
 #, c-format
 msgid "CSerialBuffer : (tid:%d) Read_N returned %d bytes (data:%s)  "
 msgstr ""
 
-#: ../src/winserialbuffer.cpp:109 ../src/winserialbuffer.cpp:135
-#: ../src/winserialbuffer.cpp:182
+#: ../src/winserialbuffer.cpp:110 ../src/winserialbuffer.cpp:136
+#: ../src/winserialbuffer.cpp:183
 #, c-format
 msgid "CSerialBuffer : (tid:%d) Read_Upto cled "
 msgstr ""
 
-#: ../src/winserialbuffer.cpp:118
+#: ../src/winserialbuffer.cpp:119
 #, c-format
 msgid "CSerialBuffer : (tid:%d) Read_Available returned (data:%s)  "
 msgstr ""
 
-#: ../src/winserialbuffer.cpp:175
+#: ../src/winserialbuffer.cpp:176
 #, c-format
 msgid "CSerialBuffer : (tid:%d) Read_Upto returned %d bytes (data:%s)  "
 msgstr ""

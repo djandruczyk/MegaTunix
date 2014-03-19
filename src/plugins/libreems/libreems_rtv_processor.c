@@ -12,15 +12,15 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_rtv_processor.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS Personality specific RTV processor functions
+  \file src/plugins/libreems/libreems_rtv_processor.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS Personality specific RTV processor functions
   \author David Andruczyk
   */
 
 #include <datamgmt.h>
 #include <firmware.h>
-#include <freeems_plugin.h>
+#include <libreems_plugin.h>
 #include <stdio.h>
 
 extern gconstpointer *global_data;
@@ -66,11 +66,11 @@ G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbo
 			g_free(tmpbuf);
 			bitshift = get_bitshift_f(bitmask);
 			/*
-			   printf("raw ecu at locID %i, offset %i is %i\n",locID,offset,freeems_get_ecu_data(canID,locID,offset,size));
-			   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(freeems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
+			   printf("raw ecu at locID %i, offset %i is %i\n",locID,offset,libreems_get_ecu_data(canID,locID,offset,size));
+			   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(libreems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
 			 */
 			EXIT();
-			return ((freeems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
+			return ((libreems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
 			break;
 		case ECU_VAR:
 			tmpbuf = g_strdup_printf("%s_locID",symbol);
@@ -86,7 +86,7 @@ G_MODULE_EXPORT gdouble common_rtv_processor(gconstpointer *object, gchar *symbo
 			size = (DataSize)(GINT) DATA_GET(object,tmpbuf);
 			g_free(tmpbuf);
 			EXIT();
-			return (gdouble)freeems_get_ecu_data(canID,locID,offset,size);
+			return (gdouble)libreems_get_ecu_data(canID,locID,offset,size);
 			break;
 		default:
 			EXIT();
@@ -143,11 +143,11 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 			bitshift = get_bitshift_f(bitmask);
 			
 			/*
-			   printf("raw ecu at locID %i, offset %i is %i\n",locID,offset,freeems_get_ecu_data(canID,locID,offset,size));
-			   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(freeems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
+			   printf("raw ecu at locID %i, offset %i is %i\n",locID,offset,libreems_get_ecu_data(canID,locID,offset,size));
+			   printf("value masked by %i, shifted by %i is %i\n",bitmask,bitshift,(libreems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
 			*/ 
 			EXIT();
-			return ((freeems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
+			return ((libreems_get_ecu_data(canID,locID,offset,size) & bitmask) >> bitshift);
 			break;
 		case ECU_VAR:
 			tmpbuf = g_strdup_printf("%s_locID",symbol);
@@ -163,7 +163,7 @@ G_MODULE_EXPORT gdouble common_rtv_processor_obj(GObject *object, gchar *symbol,
 			size = (DataSize)(GINT) OBJ_GET(object,tmpbuf);
 			g_free(tmpbuf);
 			EXIT();
-			return (gdouble)freeems_get_ecu_data(canID,locID,offset,size);
+			return (gdouble)libreems_get_ecu_data(canID,locID,offset,size);
 			break;
 		default:
 			EXIT();

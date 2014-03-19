@@ -1,4 +1,4 @@
-gaugesdir = $(datadir)/MegaTunix/$(GAUGES_DATA_DIR)/FreeEMS_AM_SportComp
+gaugesdir = $(datadir)/MegaTunix/$(GAUGES_DATA_DIR)/LibreEMS_AM_SportComp
 
 gauges_files = 	\
 Air_Fuel_Ratio_10-20.xml \

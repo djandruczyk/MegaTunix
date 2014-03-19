@@ -12,14 +12,14 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_errors.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS specific error reporting function(s)
+  \file src/plugins/libreems/libreems_errors.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS specific error reporting function(s)
   \author David Andruczyk
   */
 
-#include <freeems_errors.h>
-#include <freeems_plugin.h>
+#include <libreems_errors.h>
+#include <libreems_plugin.h>
 
 
 /*!

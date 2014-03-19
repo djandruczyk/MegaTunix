@@ -9,33 +9,33 @@ INCLUDES = \
         @MEGATUNIX_DEFINES@
 
 
-plugin_LTLIBRARIES = libfreeems.la 
+plugin_LTLIBRARIES = liblibreems.la 
 
-libfreeems_la_SOURCES = \
+liblibreems_la_SOURCES = \
 	Makefile \
 	datamgmt.c \
 	datamgmt.h \
 	fileio.c \
 	fileio.h \
-	freeems_benchtest.c \
-	freeems_benchtest.h \
-	freeems_errors.c \
-	freeems_errors.h \
-	freeems_globaldefs.h \
-	freeems_comms.c \
-	freeems_comms.h \
-	freeems_menu_handlers.c \
-	freeems_menu_handlers.h \
-	freeems_gui_handlers.c \
-	freeems_gui_handlers.h \
-	freeems_helpers.c \
-	freeems_helpers.h \
-	freeems_plugin.c \
-	freeems_plugin.h \
-	freeems_rtv_loader.c \
-	freeems_rtv_loader.h \
-	freeems_rtv_processor.c \
-	freeems_rtv_processor.h \
+	libreems_benchtest.c \
+	libreems_benchtest.h \
+	libreems_errors.c \
+	libreems_errors.h \
+	libreems_globaldefs.h \
+	libreems_comms.c \
+	libreems_comms.h \
+	libreems_menu_handlers.c \
+	libreems_menu_handlers.h \
+	libreems_gui_handlers.c \
+	libreems_gui_handlers.h \
+	libreems_helpers.c \
+	libreems_helpers.h \
+	libreems_plugin.c \
+	libreems_plugin.h \
+	libreems_rtv_loader.c \
+	libreems_rtv_loader.h \
+	libreems_rtv_processor.c \
+	libreems_rtv_processor.h \
 	interrogate.c \
 	interrogate.h \
 	packet_handlers.c \
@@ -43,8 +43,8 @@ libfreeems_la_SOURCES = \
 	vetable_gui.c \
 	vetable_gui.h 
 
-libfreeems_la_LDFLAGS = -shared $(no_undefined) -module
-libfreeems_la_LIBADD = ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la ../../../widgets/libmtxcurve.la ../../../widgets/libmtxgauge.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@
+liblibreems_la_LDFLAGS = -shared $(no_undefined) -module
+liblibreems_la_LIBADD = ../../../mtxcommon/libmtxcommon.la ../../../widgets/libmtxcombo_mask.la ../../../widgets/libmtxcurve.la ../../../widgets/libmtxgauge.la @EXTRA_LIBS@ @GTK_LIBS@ @LIBXML2_LIBS@ @LIBGLADE_LIBS@
 
 
 COMMON_FLAGS = @PROF_FLAGS@ @DEBUG_FLAGS@ 

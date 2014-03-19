@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_comms.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Comms functions
+  \file src/plugins/libreems/libreems_comms.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Comms functions
   \author David Andruczyk
   */
 
@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_COMMS_H__
-#define __FREEEMS_COMMS_H__
+#ifndef __LIBREEMS_COMMS_H__
+#define __LIBREEMS_COMMS_H__
 
 #include <gtk/gtk.h>
 #include <defines.h>
@@ -33,10 +33,10 @@ extern "C" {
 /* Prototypes */
 gboolean comms_test(void);
 void ecu_chunk_write(gint, gint, gint, gint, guint8 *);
-void freeems_chunk_write(gint, gint, gint, gint, guint8 *);
-void freeems_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
-void freeems_serial_enable(void);
-void freeems_serial_disable(void);
+void libreems_chunk_write(gint, gint, gint, gint, guint8 *);
+void libreems_send_to_ecu(gint, gint, gint, DataSize, gint, gboolean);
+void libreems_serial_enable(void);
+void libreems_serial_disable(void);
 void post_single_burn_pf(void *);
 void *rtv_subscriber(gpointer);
 void *serial_repair_thread(gpointer);

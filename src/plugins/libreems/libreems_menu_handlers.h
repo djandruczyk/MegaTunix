@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_menu_handlers.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Menu Handlers
+  \file src/plugins/libreems/libreems_menu_handlers.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Menu Handlers
   \author David Andruczyk
   */
 
@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_MENU_HANDLERS_H__
-#define __FREEEMS_MENU_HANDLERS_H__
+#ifndef __LIBREEMS_MENU_HANDLERS_H__
+#define __LIBREEMS_MENU_HANDLERS_H__
 
 #include <defines.h>
 #include <glade/glade.h>

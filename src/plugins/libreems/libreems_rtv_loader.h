@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_RTV_LOADER_H__
-#define __FREEEMS_RTV_LOADER_H__
+#ifndef __LIBREEMS_RTV_LOADER_H__
+#define __LIBREEMS_RTV_LOADER_H__
 
 #include <defines.h>
 #include <gtk/gtk.h>

@@ -14,9 +14,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/interrogate.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS specific interrogation routine (INCOMPLETE/IN FLUX)
+  \file src/plugins/libreems/interrogate.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS specific interrogation routine (INCOMPLETE/IN FLUX)
   \author David Andruczyk
   */
 
@@ -24,8 +24,8 @@
 #include <datamgmt.h>
 #include <getfiles.h>
 #include <interrogate.h>
-#include <freeems_plugin.h>
-#include <freeems_helpers.h>
+#include <libreems_plugin.h>
+#include <libreems_helpers.h>
 #include <libgen.h>
 #include <serialio.h>
 #include <stdio.h>
@@ -39,7 +39,7 @@ extern gconstpointer *global_data;
  firmware it is running.  It does this by reading a list of tests, sending
  those tests in turn, reading the responses and them comparing the group of
  responses against a list of interrogation profiles until it finds a match.
- NOTE: This function is NOT yet complete for FreeEMS
+ NOTE: This function is NOT yet complete for LibreEMS
  */
 G_MODULE_EXPORT gboolean interrogate_ecu(void)
 {
@@ -117,7 +117,7 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	gchar *version = NULL;
 	Serial_Params *serial_params = NULL;
 	/* Raw packet */
@@ -159,7 +159,7 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 		return NULL;
 	}
 	g_free(buf);
-	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
+	packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -167,7 +167,7 @@ G_MODULE_EXPORT gchar *raw_request_firmware_version(gint *length)
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
 		if (length)
 			*length = packet->payload_length;
-		freeems_packet_cleanup(packet);
+		libreems_packet_cleanup(packet);
 	}
 	EXIT();
 	return version;
@@ -184,7 +184,7 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	gchar *version = NULL;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
@@ -226,7 +226,7 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 		return NULL;
 	}
 	g_free(buf);
-	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
+	packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	/*
@@ -241,7 +241,7 @@ G_MODULE_EXPORT gchar * raw_request_interface_version(gint *length)
 		version = g_strndup((const gchar *)(packet->data+packet->payload_base_offset),packet->payload_length);
 		if (length)
 			*length = packet->payload_length;
-		freeems_packet_cleanup(packet);
+		libreems_packet_cleanup(packet);
 	}
 	EXIT();
 	return version;
@@ -397,7 +397,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	GList *list = NULL;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
@@ -439,7 +439,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 		return NULL;
 	}
 	g_free(buf);
-	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
+	packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -458,7 +458,7 @@ G_MODULE_EXPORT GList *raw_request_location_ids(gint * length)
 		}
 		if (length)
 			*length = packet->payload_length;
-		freeems_packet_cleanup(packet);
+		libreems_packet_cleanup(packet);
 	}
 	EXIT();
 	return list;
@@ -476,7 +476,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 {
 	OutputData *output = NULL;
 	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	GList *list = NULL;
 	Serial_Params *serial_params = NULL;
 	guint8 *buf = NULL;
@@ -512,7 +512,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 		return NULL;
 	}
 	g_free(buf);
-	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
+	packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_LOCATION_ID_DETAILS);
 	g_async_queue_unref(queue);
 	if (packet)
@@ -548,7 +548,7 @@ G_MODULE_EXPORT Location_Details *request_location_id_details(guint16 loc_id)
 		l = packet->data[packet->payload_base_offset+11];
 		details->length = (h << 8) + l;
 		/*printf("loc id details length %i\n",details->length);*/
-		freeems_packet_cleanup(packet);
+		libreems_packet_cleanup(packet);
 	}
 	EXIT();
 	return details;
@@ -1116,7 +1116,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params = g_new0(Table_Params *,firmware->total_tables);
 	/* Fuel Table */
 	firmware->table_params[0] = initialize_table_params();
-	res = freeems_find_mtx_page(0,&tmpi);
+	res = libreems_find_mtx_page(0,&tmpi);
 	if (res)
 	{
 		firmware->table_params[0]->x_page = tmpi;
@@ -1162,10 +1162,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[0]->x_use_color = FALSE;
 	firmware->table_params[0]->y_use_color = FALSE;
 	firmware->table_params[0]->z_use_color = TRUE;
-	firmware->table_params[0]->table_name = g_strdup("FreeEMS very alpha fuel table");;
+	firmware->table_params[0]->table_name = g_strdup("LibreEMS very alpha fuel table");;
 	/* Lambda Table */
 	firmware->table_params[1] = initialize_table_params();
-	res = freeems_find_mtx_page(6,&tmpi);
+	res = libreems_find_mtx_page(6,&tmpi);
 	if (res)
 	{
 		firmware->table_params[1]->x_page = tmpi;
@@ -1208,10 +1208,10 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[1]->x_use_color = FALSE;
 	firmware->table_params[1]->y_use_color = FALSE;
 	firmware->table_params[1]->z_use_color = TRUE;
-	firmware->table_params[1]->table_name = g_strdup("FreeEMS very alpha lambda table");;
+	firmware->table_params[1]->table_name = g_strdup("LibreEMS very alpha lambda table");;
 
 	firmware->table_params[2] = initialize_table_params();
-	res = freeems_find_mtx_page(8,&tmpi);
+	res = libreems_find_mtx_page(8,&tmpi);
 	if (res)
 	{
 		firmware->table_params[2]->x_page = tmpi;
@@ -1254,7 +1254,7 @@ G_MODULE_EXPORT gboolean load_firmware_details(Firmware_Details *firmware, gchar
 	firmware->table_params[2]->x_use_color = FALSE;
 	firmware->table_params[2]->y_use_color = FALSE;
 	firmware->table_params[2]->z_use_color = TRUE;
-	firmware->table_params[2]->table_name = g_strdup("FreeEMS very alpha spark table");;
+	firmware->table_params[2]->table_name = g_strdup("LibreEMS very alpha spark table");;
 
 	if (mem_alloc_f)
 		mem_alloc_f();
@@ -1390,7 +1390,7 @@ G_MODULE_EXPORT Table_Params * initialize_table_params(void)
 gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, gint *y_bins)
 {
 	guint8 *buf = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	gint size = 0;
 	GAsyncQueue *queue = NULL;
 	guint16 *ptr = NULL;
@@ -1421,14 +1421,14 @@ gboolean get_dimensions(gint location_id,gint offset,gint length,gint *x_bins, g
 		return FALSE;
 	}
 	g_free(buf);
-	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
+	packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,500000);
 	deregister_packet_queue(PAYLOAD_ID,queue,resp);
 	g_async_queue_unref(queue);
 	if (packet)
 	{
 		*x_bins = (packet->data[packet->payload_base_offset] << 8 ) + packet->data[packet->payload_base_offset +1];
 		*y_bins = (packet->data[packet->payload_base_offset+2] << 8 ) + packet->data[packet->payload_base_offset +3];
-		freeems_packet_cleanup(packet);
+		libreems_packet_cleanup(packet);
 		EXIT();
 		return TRUE;
 	}

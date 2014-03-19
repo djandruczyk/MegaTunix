@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_globaldefs.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Global defines
+  \file src/plugins/libreems/libreems_globaldefs.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Global defines
   \author David Andruczyk
   */
 
@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_GLOBALDEFS_H__
-#define __FREEEMS_GLOBALDEFS_H__
+#ifndef __LIBREEMS_GLOBALDEFS_H__
+#define __LIBREEMS_GLOBALDEFS_H__
 
 /* Individual bits WARNING, do not not these for notted versions, use the notted ones below instead : http://supp.iar.com/Support/?note=12582&from=search+result */
 #define BIT0            0x01    /* 1st bit      = 1             */

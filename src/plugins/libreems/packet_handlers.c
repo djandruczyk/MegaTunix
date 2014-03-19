@@ -14,15 +14,15 @@
  */
 
 /*!
-  \file src/plugins/freeems/packet_handlers.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS packet handling code for parsing, generating and verifying
+  \file src/plugins/libreems/packet_handlers.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS packet handling code for parsing, generating and verifying
   ECU packets of data
   \author David Andruczyk
   */
 
-#include <freeems_errors.h>
-#include <freeems_plugin.h>
+#include <libreems_errors.h>
+#include <libreems_plugin.h>
 #include <packet_handlers.h>
 #include <stdio.h>
 #include <string.h>
@@ -32,7 +32,7 @@ extern gconstpointer *global_data;
 
 /*!
   \brief This functions handles all incoing data from the ECU and validates
-  its content for proper START/STOP/ESCAPING and allocates a FreeEMS_Packet
+  its content for proper START/STOP/ESCAPING and allocates a LibreEMS_Packet
   structure for VALID packets and populates the required fields as needed
   \param buf is a pointer to the incoming data buffer
   \param len is the numbe of bytes to pull from the incoming buffer
@@ -68,7 +68,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 	ENTER();
 	guchar character;
 	gint i = 0;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	if (!queue)
 		queue = (GAsyncQueue *)DATA_GET(global_data,"packet_queue");
 	log_inbound_data_f(buf,len);
@@ -159,14 +159,14 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
 					/* Add the length to the SUM */
 					sumOfGoodPacketLengths += currentPacketLength;
 					/* Clear the state */
-					packet = g_new0(FreeEMS_Packet, 1);
+					packet = g_new0(LibreEMS_Packet, 1);
 					packet->data = (guchar *)g_memdup(packetBuffer,currentPacketLength);
 					packet->raw_length = currentPacketLength;
 					mtxlog_packet(packet->data,packet->raw_length,FALSE);
 					if (!packet_decode(packet))
 					{
 						printf("Packet fields don't make sense!\n");
-						freeems_packet_cleanup(packet);
+						libreems_packet_cleanup(packet);
 						badPackets++;
 					}
 					else if (queue)
@@ -209,7 +209,7 @@ G_MODULE_EXPORT void handle_data(guchar *buf, gint len)
   */
 void *packet_handler(gpointer data)
 {
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	GAsyncQueue *queue = (GAsyncQueue *)DATA_GET(global_data,"packet_queue");
 	GCond *cond = NULL;
 
@@ -227,7 +227,7 @@ void *packet_handler(gpointer data)
 			MTXDBG(PACKETS,_("Packet queue pointer is NULL!!\n\t"));
 		else
 		{
-			packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+			packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
 			if (packet)
 				dispatch_packet_queues(packet);
 		}
@@ -240,13 +240,13 @@ void *packet_handler(gpointer data)
 
 /*!
   \brief packet decoder and verifier of packet syntax.  This function takes
-  in a FreeEMS_Packet pointer and validates that the fields within it make
+  in a LibreEMS_Packet pointer and validates that the fields within it make
   sense,  i.e. lengths add up, fields are sane (where applicable), if all is
   well it returns TRUE, otherwise FALSE
-  \param packet is a pointer to a populated FreeEMS_Packet structure
+  \param packet is a pointer to a populated LibreEMS_Packet structure
   \returns TRUE on good packet, FALSE otherwise
   */
-gboolean packet_decode(FreeEMS_Packet *packet)
+gboolean packet_decode(LibreEMS_Packet *packet)
 {
 	guint8 *ptr = packet->data;
 	const gchar * errmsg = NULL;
@@ -347,7 +347,7 @@ G_MODULE_EXPORT void register_packet_queue(gint type, GAsyncQueue *queue, gint d
 	g_return_if_fail(queue);
 	g_mutex_lock(mutex);
 
-	switch ((FreeEMSArgTypes)type)
+	switch ((LibreEMSArgTypes)type)
 	{
 		case PAYLOAD_ID:
 			list = (GList *)g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
@@ -397,7 +397,7 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
 	g_return_if_fail(mutex);
 	g_return_if_fail(queue);
 	g_mutex_lock(mutex);
-	switch ((FreeEMSArgTypes)type)
+	switch ((LibreEMSArgTypes)type)
 	{
 		case PAYLOAD_ID:
 			list = (GList *)g_hash_table_lookup(payloads,GINT_TO_POINTER(data));
@@ -454,9 +454,9 @@ G_MODULE_EXPORT void deregister_packet_queue(gint type, GAsyncQueue *queue, gint
  multiple subscribers per payloadID or sequence number, which offers some
  interesting flexibility
  \param packet is a pointer to the new packet
- \see FreeEMS_Packet
+ \see LibreEMS_Packet
  */
-G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
+G_MODULE_EXPORT void dispatch_packet_queues(LibreEMS_Packet *packet)
 {
 	static GHashTable *payloads = NULL;
 	static GHashTable *sequences = NULL;
@@ -513,7 +513,7 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
 		}
 	}
 	g_mutex_unlock(mutex);
-	freeems_packet_cleanup(packet);
+	libreems_packet_cleanup(packet);
 	EXIT();
 	return;
 }
@@ -525,16 +525,16 @@ G_MODULE_EXPORT void dispatch_packet_queues(FreeEMS_Packet *packet)
   \param packet is the packet to copy
   \returns a pointer to a full (deep) copy
   */
-FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
+LibreEMS_Packet *packet_deep_copy(LibreEMS_Packet *packet)
 {
-	FreeEMS_Packet *newpkt = NULL;
+	LibreEMS_Packet *newpkt = NULL;
 	ENTER();
 	if (!packet)
 	{
 		EXIT();
 		return NULL;
 	}
-	newpkt = (FreeEMS_Packet *)g_memdup(packet,sizeof(FreeEMS_Packet));
+	newpkt = (LibreEMS_Packet *)g_memdup(packet,sizeof(LibreEMS_Packet));
 	newpkt->data = (guchar *)g_memdup(packet->data,packet->raw_length);
 	EXIT();
 	return newpkt;
@@ -542,10 +542,10 @@ FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *packet)
 
 
 /*!
-  \brief Deallocates a FreeEMS_Packet structure
+  \brief Deallocates a LibreEMS_Packet structure
   \param packet is a pointer to the packet being deallocated
   */
-void freeems_packet_cleanup(FreeEMS_Packet *packet)
+void libreems_packet_cleanup(LibreEMS_Packet *packet)
 {
 	ENTER();
 	if (!packet)
@@ -653,7 +653,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 				payload_data = (guint8 *)array->data;
 				break;
 			default:
-				printf("FreeEMS doesn't handle this type %s\n",arg->name);
+				printf("LibreEMS doesn't handle this type %s\n",arg->name);
 				break;
 		}
 	}

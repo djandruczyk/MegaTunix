@@ -5,8 +5,8 @@
 		<minor>7</minor>
 	</api>
 	<realtime_map>
-		<persona>FreeEMS</persona>
-		<applicable_signatures>FreeEMS 0.0.0</applicable_signatures>
+		<persona>LibreEMS</persona>
+		<applicable_signatures>LibreEMS 0.0.0</applicable_signatures>
 	</realtime_map>
 	<derived>
 		<dlog_gui_name>HR Clock</dlog_gui_name>
@@ -414,7 +414,7 @@
 		<real_lower>0</real_lower>
 		<real_upper>255</real_upper>
 		<precision>0</precision>
-		<tooltip>FreeEMS status bits, right now, not much, just fuel pump prime</tooltip>
+		<tooltip>LibreEMS status bits, right now, not much, just fuel pump prime</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>

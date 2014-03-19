@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_gui_handlers.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Gui handlers
+  \file src/plugins/libreems/libreems_gui_handlers.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Gui handlers
   \author David Andruczyk
   */
 
@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_GUI_HANDLERS_H__
-#define __FREEEMS_GUI_HANDLERS_H__
+#ifndef __LIBREEMS_GUI_HANDLERS_H__
+#define __LIBREEMS_GUI_HANDLERS_H__
 
 #include <defines.h>
 #include <gui_handlers.h>
@@ -38,13 +38,13 @@ typedef enum
 	BENCHTEST_STOP,
 	BENCHTEST_BUMP,
 	NOOP
-}FreeEMSCommonStdHandler;
+}LibreEMSCommonStdHandler;
 
 
 typedef enum
 {
-	FREEEMS_TOGGLE = LAST_GLOBAL_TOGGLE_HANDLER_ENUM + 1
-}FreeEMSCommonToggleHandler;
+	LIBREEMS_TOGGLE = LAST_GLOBAL_TOGGLE_HANDLER_ENUM + 1
+}LibreEMSCommonToggleHandler;
 /* Enumerations */
 
 

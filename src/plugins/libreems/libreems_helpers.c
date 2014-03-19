@@ -14,20 +14,20 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_helpers.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS utility functions, mostly referenced from comm.xml as post
+  \file src/plugins/libreems/libreems_helpers.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS utility functions, mostly referenced from comm.xml as post
   functions
   \author David Andruczyk
   */
 
 #include <datamgmt.h>
 #include <firmware.h>
-#include <freeems_benchtest.h>
-#include <freeems_comms.h>
-#include <freeems_errors.h>
-#include <freeems_helpers.h>
-#include <freeems_plugin.h>
+#include <libreems_benchtest.h>
+#include <libreems_comms.h>
+#include <libreems_errors.h>
+#include <libreems_helpers.h>
+#include <libreems_plugin.h>
 #include <interrogate.h>
 #include <serialio.h>
 #include <stdio.h>
@@ -149,7 +149,7 @@ G_MODULE_EXPORT void spawn_read_all_pf(void)
   \brief This handler is called to issue packets to read each ECU page in turn
   then pass the original post functions to run.
   */
-G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
+G_MODULE_EXPORT gboolean read_libreems_data(void *data, FuncCall type)
 {
 	static Firmware_Details *firmware = NULL;
 	OutputData *output = NULL;
@@ -165,7 +165,7 @@ G_MODULE_EXPORT gboolean read_freeems_data(void *data, FuncCall type)
 
 	switch (type)
 	{
-		case FREEEMS_ALL:
+		case LIBREEMS_ALL:
 			if (!DATA_GET(global_data,"offline"))
 			{
 				g_list_foreach(get_list_f("get_data_buttons"),set_widget_sensitive_f,GINT_TO_POINTER(FALSE));
@@ -216,7 +216,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 	OutputData *output = NULL;
 	OutputData *retry = NULL;
 	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	gint payload_id = 0;
 	gint seq = 0;
 	gint clock = 0;
@@ -270,10 +270,10 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					/*printf("Packet arrived for GENERIC_READ case with sequence %i (%.2X), locID %i\n",seq,seq,locID);
 					  printf("store new block locid %i, offset %i, data %p raw pkt len %i, payload len %i, num_wanted %i\n",locID,offset,packet->data+packet->payload_base_offset,packet->raw_length,packet->payload_length,size);
 					  */
-					freeems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
-					freeems_backup_current_data(canID,locID);
+					libreems_store_new_block(canID,locID,offset,packet->data+packet->payload_base_offset,size);
+					libreems_backup_current_data(canID,locID);
 
-					freeems_packet_cleanup(packet);
+					libreems_packet_cleanup(packet);
 					tmpi = (GINT)DATA_GET(global_data,"ve_goodread_count");
 					DATA_SET(global_data,"ve_goodread_count",GINT_TO_POINTER(++tmpi));
 				}
@@ -312,7 +312,7 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 				{
 					errorcode = ((guint8)packet->data[packet->payload_base_offset] << 8) + (guint8)packet->data[packet->payload_base_offset+1];
 					errmsg = lookup_error(errorcode);
-					thread_update_logbar_f("freeems_benchtest_view","warning",g_strdup_printf(_("Benchtest Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE);
+					thread_update_logbar_f("libreems_benchtest_view","warning",g_strdup_printf(_("Benchtest Packet ERROR, Code (0X%.4X), \"%s\"\n"),errorcode,errmsg),FALSE,FALSE);
 				}
 				else
 				{
@@ -321,20 +321,20 @@ G_MODULE_EXPORT void handle_transaction_hf(void * data, FuncCall type)
 					/* If bumping, increase the total time */
 					if (DATA_GET(output->data,"bump"))
 					{
-						thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock), Total time remaining is now %.2f seconds\n"),clock/1000.0, ((GINT)DATA_GET(global_data,"benchtest_total")+clock)/1000.0),FALSE,FALSE);
+						thread_update_logbar_f("libreems_benchtest_view",NULL,g_strdup_printf(_("Benchtest bumped by the user (added %.2f seconds to the clock), Total time remaining is now %.2f seconds\n"),clock/1000.0, ((GINT)DATA_GET(global_data,"benchtest_total")+clock)/1000.0),FALSE,FALSE);
 						DATA_SET(global_data,"benchtest_total",GINT_TO_POINTER(((GINT)DATA_GET(global_data,"benchtest_total")+clock)));
 					}
 					else if (DATA_GET(output->data, "start")) /* start */
 					{
-						thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Initiating FreeEMS Benchtest: Run time should be about %.1f seconds...\n"),clock/1000.0),FALSE,FALSE);
+						thread_update_logbar_f("libreems_benchtest_view",NULL,g_strdup_printf(_("Initiating LibreEMS Benchtest: Run time should be about %.1f seconds...\n"),clock/1000.0),FALSE,FALSE);
 						id = g_timeout_add(500,benchtest_clock_update_wrapper,GINT_TO_POINTER(clock));
 						DATA_SET(global_data,"benchtest_clock_id",GINT_TO_POINTER(id));
 					}
 					else if (DATA_GET(output->data, "stop")) /* stop */
-						thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest stopped by the user...\n")),FALSE,FALSE);
+						thread_update_logbar_f("libreems_benchtest_view",NULL,g_strdup_printf(_("Benchtest stopped by the user...\n")),FALSE,FALSE);
 
 				}
-				freeems_packet_cleanup(packet);
+				libreems_packet_cleanup(packet);
 			}
 			break;
 		case GENERIC_FLASH_WRITE:
@@ -353,7 +353,7 @@ handle_write:
 					message->status = FALSE;
 				}
 				update_write_status(data);
-				freeems_packet_cleanup(packet);
+				libreems_packet_cleanup(packet);
 			}
 			else
 			{
@@ -397,7 +397,7 @@ handle_write:
 					post_single_burn_pf(data);
 				}
 				update_write_status(data);
-				freeems_packet_cleanup(packet);
+				libreems_packet_cleanup(packet);
 			}
 			else
 			{
@@ -460,7 +460,7 @@ handle_write:
 						printf("payload ID not matched, %i!\n",payload_id);
 						break;
 				}
-				freeems_packet_cleanup(packet);
+				libreems_packet_cleanup(packet);
 			}
 			else
 				printf("EMPTY PAYLOAD PACKET TIMEOUT, retry not implemented for this one yet!!\n");
@@ -482,7 +482,7 @@ handle_write:
   \see Io_Message
   \see FuncCall
   */
-G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
+G_MODULE_EXPORT gboolean libreems_burn_all(void *data, FuncCall type)
 {
 	OutputData *output = NULL;
 	Command *command = NULL;
@@ -495,7 +495,7 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
 	/*printf("burn all helper\n");*/
 	if (!DATA_GET(global_data,"offline"))
 	{
-		/* FreeEMS allows all pages to be in ram at will*/
+		/* LibreEMS allows all pages to be in ram at will*/
 		for (gint i=0;i<firmware->total_pages;i++)
 		{
 			if (firmware->page_params[i]->read_only)
@@ -525,11 +525,11 @@ G_MODULE_EXPORT gboolean freeems_burn_all(void *data, FuncCall type)
   "queue" variable within the object
   \param object is a gconstpointer to an object
   \param queue_name is the name of the queue to pull the packet from
-  \returns a pointer to a FreeEMS_Packet structure or NULL of no packet is found
+  \returns a pointer to a LibreEMS_Packet structure or NULL of no packet is found
   */
-G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gchar * queue_name)
+G_MODULE_EXPORT LibreEMS_Packet * retrieve_packet(gconstpointer *object,const gchar * queue_name)
 {
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	GAsyncQueue *queue = NULL;
 
 	ENTER();
@@ -544,7 +544,7 @@ G_MODULE_EXPORT FreeEMS_Packet * retrieve_packet(gconstpointer *object,const gch
 		EXIT();
 		return NULL;
 	}
-	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,5000000);
+	packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,5000000);
 	EXIT();
 	return packet;
 }

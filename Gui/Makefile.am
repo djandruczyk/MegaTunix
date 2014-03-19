@@ -22,13 +22,13 @@ gui_glade_files = 	\
 		dynamic-table_x4.glade \
 		enrichments.glade \
 		error_status.glade \
-		freeems-benchtest.glade \
-		freeems-debug.glade \
-		freeems-ignitiontable_16x16x1.glade \
-		freeems-lambdatable_16x16x1.glade \
-		freeems-runtime.glade \
-		freeems-tools.glade \
-		freeems-vetable_16x16x1.glade \
+		libreems-benchtest.glade \
+		libreems-debug.glade \
+		libreems-ignitiontable_16x16x1.glade \
+		libreems-lambdatable_16x16x1.glade \
+		libreems-runtime.glade \
+		libreems-tools.glade \
+		libreems-vetable_16x16x1.glade \
 		generic-afrtable_8x8x2.glade \
 		generic-afrtable_12x12x2.glade \
 		generic-boost_6x6x3.glade \
@@ -144,16 +144,16 @@ gui_in_files = 	\
 		dt-params.datamap.in \
 		enrichments_BnG.datamap.in \
 		error_status.datamap.in \
-		freeems-debug.datamap.in \
-		freeems-dynamic-ignitiontable_x1.datamap.in \
-		freeems-dynamic-lambdatable_x1.datamap.in \
-		freeems-dynamic-vetable_x1.datamap.in \
-		freeems-runtime.datamap.in \
-		freeems-benchtest.datamap.in \
-		freeems-lambdatable_16x16x1.datamap.in \
-		freeems-ignitiontable_16x16x1.datamap.in \
-		freeems-tools.datamap.in \
-		freeems-vetable_16x16x1.datamap.in \
+		libreems-debug.datamap.in \
+		libreems-dynamic-ignitiontable_x1.datamap.in \
+		libreems-dynamic-lambdatable_x1.datamap.in \
+		libreems-dynamic-vetable_x1.datamap.in \
+		libreems-runtime.datamap.in \
+		libreems-benchtest.datamap.in \
+		libreems-lambdatable_16x16x1.datamap.in \
+		libreems-ignitiontable_16x16x1.datamap.in \
+		libreems-tools.datamap.in \
+		libreems-vetable_16x16x1.datamap.in \
 		jimstim-runtime.datamap.in \
 		logviewer.datamap.in \
 		memviewer.datamap.in \

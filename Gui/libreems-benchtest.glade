@@ -782,7 +782,7 @@
                                 <property name="hscrollbar_policy">automatic</property>
                                 <property name="vscrollbar_policy">automatic</property>
                                 <child>
-                                  <widget class="GtkTextView" id="freeems_benchtest_view">
+                                  <widget class="GtkTextView" id="libreems_benchtest_view">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="border_width">5</property>
@@ -822,7 +822,7 @@
         <child>
           <widget class="GtkLabel" id="topframe_title">
             <property name="visible">True</property>
-            <property name="label" translatable="yes">FreeEMS Bench Test Decoder</property>
+            <property name="label" translatable="yes">LibreEMS Bench Test Decoder</property>
           </widget>
           <packing>
             <property name="type">label_item</property>

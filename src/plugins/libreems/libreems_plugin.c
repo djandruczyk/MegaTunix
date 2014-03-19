@@ -12,20 +12,20 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_plugin.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS Plugin init/shutdown functionality
+  \file src/plugins/libreems/libreems_plugin.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS Plugin init/shutdown functionality
   \author David Andruczyk
   */
 
-#define __FREEEMS_PLUGIN_C__
+#define __LIBREEMS_PLUGIN_C__
 #include <config.h>
 #include <defines.h>
 #include <firmware.h>
-#include <freeems_comms.h>
-#include <freeems_gui_handlers.h>
-#include <freeems_helpers.h>
-#include <freeems_plugin.h>
+#include <libreems_comms.h>
+#include <libreems_gui_handlers.h>
+#include <libreems_helpers.h>
+#include <libreems_plugin.h>
 #include <gtk/gtk.h>
 #include <interrogate.h>
 #include <packet_handlers.h>
@@ -35,7 +35,7 @@ gconstpointer *global_data = NULL;
 
 
 /*!
-  \brief initializes the FreeEMS plugin via locating and attaching to all
+  \brief initializes the LibreEMS plugin via locating and attaching to all
   needed functions within the core MegaTunix. It also registers any 
   plugin specific enumerations, and registers/sets up any additional resources
   needed like threads, Queues, memory, etc
@@ -181,7 +181,7 @@ G_MODULE_EXPORT void plugin_shutdown()
 
 	ENTER();
 	teardown_rtv();
-	freeems_serial_disable();
+	libreems_serial_disable();
 
 	thread = (GThread *)DATA_GET(global_data,"packet_handler_thread");
 	if (thread)
@@ -276,7 +276,7 @@ G_MODULE_EXPORT void plugin_shutdown()
 
 
 /*!
-  \brief registers enumerations specific to the FreeEMS plugin
+  \brief registers enumerations specific to the LibreEMS plugin
   */
 void register_common_enums(void)
 {
@@ -287,8 +287,8 @@ void register_common_enums(void)
 	if (str_2_enum)
 	{
 		/* Firmware capabilities */
-		g_hash_table_insert (str_2_enum,(gpointer) "_FREEEMS_",
-				GINT_TO_POINTER (FREEEMS));
+		g_hash_table_insert (str_2_enum,(gpointer) "_LIBREEMS_",
+				GINT_TO_POINTER (LIBREEMS));
 		g_hash_table_insert (str_2_enum,(gpointer) "_COUNT_", 
 				GINT_TO_POINTER (COUNT));
 		g_hash_table_insert (str_2_enum,(gpointer) "_SUBMATCH_",
@@ -325,8 +325,8 @@ void register_common_enums(void)
 				*/
 		g_hash_table_insert (str_2_enum,(gpointer) "_PAYLOAD_DATA_",
 				GINT_TO_POINTER(PAYLOAD_DATA));
-		g_hash_table_insert (str_2_enum,(gpointer) "_FREEEMS_ALL_",
-				GINT_TO_POINTER(FREEEMS_ALL));
+		g_hash_table_insert (str_2_enum,(gpointer) "_LIBREEMS_ALL_",
+				GINT_TO_POINTER(LIBREEMS_ALL));
 		g_hash_table_insert (str_2_enum,(gpointer) "_CALLBACK_",
 				GINT_TO_POINTER(CALLBACK));
 		g_hash_table_insert (str_2_enum,(gpointer) "_EMPTY_PAYLOAD_",
@@ -363,7 +363,7 @@ void register_common_enums(void)
 
 
 /*!
-  \brief De-registers enumerations specific to the FreeEMS plugin
+  \brief De-registers enumerations specific to the LibreEMS plugin
   */
 void deregister_common_enums(void)
 {
@@ -374,7 +374,7 @@ void deregister_common_enums(void)
 	if (str_2_enum)
 	{
 		/* Firmware capabilities */
-		g_hash_table_remove (str_2_enum, "_FREEEMS_");
+		g_hash_table_remove (str_2_enum, "_LIBREEMS_");
 		g_hash_table_remove (str_2_enum, "_COUNT_");
 		g_hash_table_remove (str_2_enum, "_SUBMATCH_");
 		g_hash_table_remove (str_2_enum, "_NUMMATCH_");
@@ -397,7 +397,7 @@ void deregister_common_enums(void)
 		*/
 		g_hash_table_remove (str_2_enum, "_CALLBACK_");
 		g_hash_table_remove (str_2_enum, "_EMPTY_PAYLOAD_");
-		g_hash_table_remove (str_2_enum, "_FREEEMS_ALL_");
+		g_hash_table_remove (str_2_enum, "_LIBREEMS_ALL_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_READ_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_RAM_WRITE_");
 		g_hash_table_remove (str_2_enum, "_GENERIC_FLASH_WRITE_");

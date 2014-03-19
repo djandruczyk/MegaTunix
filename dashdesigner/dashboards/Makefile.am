@@ -1,7 +1,7 @@
 dashesdir = $(datadir)/MegaTunix/$(DASHES_DATA_DIR)
 
 dashes_files = 	\
-		FreeEMS-Tuning.xml \
+		LibreEMS-Tuning.xml \
 		Default_Dash.xml \
 		Default_Dash_degC.xml \
 		Default_Dash_MS2.xml \

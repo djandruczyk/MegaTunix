@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/datamgmt.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Data management functions
+  \file src/plugins/libreems/datamgmt.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Data management functions
   \author David Andruczyk
   */
 
@@ -29,13 +29,13 @@ extern "C" {
 #include <gtk/gtk.h>
 
 /* Prototypes */
-void freeems_backup_current_data(gint, gint );
-gboolean freeems_find_mtx_page(gint, gint *);
-gint freeems_get_ecu_data(gint, gint, gint, DataSize); 
-gint freeems_get_ecu_data_backup(gint, gint, gint, DataSize); 
-gint freeems_get_ecu_data_last(gint, gint, gint, DataSize); 
-void freeems_set_ecu_data(gint, gint, gint, DataSize, gint); 
-void freeems_store_new_block(gint, gint, gint, void *, gint );
+void libreems_backup_current_data(gint, gint );
+gboolean libreems_find_mtx_page(gint, gint *);
+gint libreems_get_ecu_data(gint, gint, gint, DataSize); 
+gint libreems_get_ecu_data_backup(gint, gint, gint, DataSize); 
+gint libreems_get_ecu_data_last(gint, gint, gint, DataSize); 
+void libreems_set_ecu_data(gint, gint, gint, DataSize, gint); 
+void libreems_store_new_block(gint, gint, gint, void *, gint );
 void set_ecu_data(gpointer, gint *);
 gint get_ecu_data(gpointer);
 void store_new_block(gpointer);

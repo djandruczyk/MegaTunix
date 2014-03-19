@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/packet_handlers.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Packet handler functions
+  \file src/plugins/libreems/packet_handlers.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Packet handler functions
   \author David Andruczyk
   */
 
@@ -28,7 +28,7 @@ extern "C" {
 #include <gtk/gtk.h>
 #include <defines.h>
 #include <configfile.h>
-#include <freeems_globaldefs.h>
+#include <libreems_globaldefs.h>
 #include <enums.h>
 #include <threads.h>
 
@@ -41,14 +41,14 @@ typedef enum
 	LENGTH,
 	/*DATABYTE, NOT USED*/
 	PAYLOAD_DATA
-}FreeEMSArgTypes;
+}LibreEMSArgTypes;
 
 typedef enum
 {
 	BENCH_TEST_STOP = 0,
 	BENCH_TEST_INIT,
 	BENCH_TEST_BUMP
-}FreeEMSBenchTest;
+}LibreEMSBenchTest;
 /* For raw packet generation in interrogator */
 #define DECODER_NAME_REQ_PKT_LEN 4
 #define FIRMWARE_COMPILER_VER_REQ_PKT_LEN 4
@@ -193,12 +193,12 @@ struct
 #define L_LEN_IDX 5
 
 
-typedef struct _FreeEMS_Packet FreeEMS_Packet;
+typedef struct _LibreEMS_Packet LibreEMS_Packet;
 
 /*!
-  \brief _FreeEMS_Packet packet detailed container
+  \brief _LibreEMS_Packet packet detailed container
   */
-struct _FreeEMS_Packet
+struct _LibreEMS_Packet
 {
 	guchar *data;		/*!< Raw packet data */
 	guint16 raw_length;	/*!< Raw packet length */
@@ -225,14 +225,14 @@ gint atomic_sequence();
 void build_output_message(Io_Message *, Command *, gpointer);
 void cond_bcast (gpointer, gpointer);
 void deregister_packet_queue(gint type, GAsyncQueue *queue, gint data);
-void dispatch_packet_queues(FreeEMS_Packet *);
+void dispatch_packet_queues(LibreEMS_Packet *);
 guint8 *finalize_packet(guint8 *, gint, gint *);
-void freeems_packet_cleanup(FreeEMS_Packet *);
+void libreems_packet_cleanup(LibreEMS_Packet *);
 void handle_data(guchar *buf, gint);
 guint8 * make_me_a_packet(gint *, ...);
 void mtxlog_packet(const void *, size_t, gboolean);
-gboolean packet_decode(FreeEMS_Packet *);
-FreeEMS_Packet *packet_deep_copy(FreeEMS_Packet *);
+gboolean packet_decode(LibreEMS_Packet *);
+LibreEMS_Packet *packet_deep_copy(LibreEMS_Packet *);
 void *packet_handler(gpointer data);
 void register_packet_queue(gint type, GAsyncQueue *queue, gint data);
 /* Prototypes */

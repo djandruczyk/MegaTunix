@@ -12,14 +12,14 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_rtv_loader.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS Personality specific runtime var loader handlers
+  \file src/plugins/libreems/libreems_rtv_loader.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS Personality specific runtime var loader handlers
   \author David Andruczyk
   */
 
 #include <firmware.h>
-#include <freeems_plugin.h>
+#include <libreems_plugin.h>
 #include <xmlbase.h>
 
 extern gconstpointer *global_data;

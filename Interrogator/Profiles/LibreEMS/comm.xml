@@ -133,7 +133,7 @@
 					<name>burn_all</name>
 					<desc>Calls a function to burn ALL applicable pages to flash</desc>
 					<type>_FUNC_CALL_</type>
-					<func_call_name>freeems_burn_all</func_call_name>
+					<func_call_name>libreems_burn_all</func_call_name>
 				</cmd>
 				<cmd>
 					<name>burn</name>
@@ -194,11 +194,11 @@
 					<helper_func_arg>_GENERIC_READ_</helper_func_arg>
 				</cmd>
 				<cmd>
-					<name>freeems_read_all</name>
+					<name>libreems_read_all</name>
 					<desc>Reads ALL ecu vars for ALL modules </desc>
 					<type>_FUNC_CALL_</type>
-					<func_call_name>read_freeems_data</func_call_name>
-					<func_call_arg>_FREEEMS_ALL_</func_call_arg>
+					<func_call_name>read_libreems_data</func_call_name>
+					<func_call_arg>_LIBREEMS_ALL_</func_call_arg>
 					<defer_post_functions>TRUE</defer_post_functions>
 					<post_functions>
 						<function>update_groups_pf</function>

@@ -12,15 +12,15 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_menu_handlers.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS Menu handlers for ECU specific menu hooks
+  \file src/plugins/libreems/libreems_menu_handlers.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS Menu handlers for ECU specific menu hooks
   \author David Andruczyk
   */
 
-#include <freeems_helpers.h>
-#include <freeems_menu_handlers.h>
-#include <freeems_plugin.h>
+#include <libreems_helpers.h>
+#include <libreems_menu_handlers.h>
+#include <libreems_plugin.h>
 
 extern gconstpointer *global_data;
 

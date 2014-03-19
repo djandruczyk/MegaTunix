@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/vetable_gui.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS VETable highlighter functions
+  \file src/plugins/libreems/vetable_gui.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS VETable highlighter functions
   \author David Andruczyk
   */
 

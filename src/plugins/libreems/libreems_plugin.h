@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_plugin.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Plugin init/shutdown functions
+  \file src/plugins/libreems/libreems_plugin.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Plugin init/shutdown functions
   \author David Andruczyk
   */
 
@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_PLUGIN_H__
-#define __FREEEMS_PLUGIN_H__
+#ifndef __LIBREEMS_PLUGIN_H__
+#define __LIBREEMS_PLUGIN_H__
 
 #include <plugindefines.h>
 #include <gtk/gtk.h>
@@ -33,7 +33,7 @@ extern "C" {
 #include <enums.h>
 #include <threads.h>
 
-#ifdef __FREEEMS_PLUGIN_C__
+#ifdef __LIBREEMS_PLUGIN_C__
 #define EXTERN
 #else
 #define EXTERN extern

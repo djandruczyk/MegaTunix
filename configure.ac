@@ -256,7 +256,7 @@ mtxcommon/Makefile
 mtxmatheval/Makefile
 src/Makefile
 src/plugins/Makefile
-src/plugins/freeems/Makefile
+src/plugins/libreems/Makefile
 src/plugins/jimstim/Makefile
 src/plugins/ms1/Makefile
 src/plugins/ms2/Makefile
@@ -269,7 +269,7 @@ msloader/resources.rc
 gaugedesigner/resources.rc
 gaugedesigner/Makefile
 gaugedesigner/gauges/Makefile
-gaugedesigner/gauges/FreeEMS_AM_SportComp/Makefile
+gaugedesigner/gauges/LibreEMS_AM_SportComp/Makefile
 gaugedesigner/gauges/AutoGauge/Makefile
 gaugedesigner/gauges/Speco/Makefile
 gaugedesigner/gauges/SportComp/Makefile
@@ -297,7 +297,7 @@ Interrogator/Profiles/MS1/Makefile
 Interrogator/Profiles/MS2/Makefile
 Interrogator/Profiles/MS3-1.0/Makefile
 Interrogator/Profiles/MS3-1.1/Makefile
-Interrogator/Profiles/FreeEMS/Makefile
+Interrogator/Profiles/LibreEMS/Makefile
 Interrogator/Profiles/PIS/Makefile
 Interrogator/Profiles/JimStim/Makefile
 Gui/Makefile

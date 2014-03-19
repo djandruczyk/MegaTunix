@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_gui_handlers.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS specific Gui handlers
+  \file src/plugins/libreems/libreems_gui_handlers.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS specific Gui handlers
   \author David Andruczyk
   */
 
@@ -23,11 +23,11 @@
 #include <datamgmt.h>
 #include <defines.h>
 #include <firmware.h>
-#include <freeems_benchtest.h>
-#include <freeems_comms.h>
-#include <freeems_helpers.h>
-#include <freeems_gui_handlers.h>
-#include <freeems_plugin.h>
+#include <libreems_benchtest.h>
+#include <libreems_comms.h>
+#include <libreems_helpers.h>
+#include <libreems_gui_handlers.h>
+#include <libreems_plugin.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
 
@@ -63,10 +63,10 @@ G_MODULE_EXPORT void common_gui_init(void)
 G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
-	FreeEMSCommonToggleHandler handler;
+	LibreEMSCommonToggleHandler handler;
 	ENTER();
 
-	handler = (FreeEMSCommonToggleHandler)(GINT)OBJ_GET(widget,"handler");
+	handler = (LibreEMSCommonToggleHandler)(GINT)OBJ_GET(widget,"handler");
 
 	switch (handler)
 	{
@@ -105,10 +105,10 @@ G_MODULE_EXPORT gboolean common_toggle_button_handler(GtkWidget *widget, gpointe
 G_MODULE_EXPORT gboolean common_std_button_handler(GtkWidget *widget, gpointer data)
 {
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
-	FreeEMSCommonStdHandler handler;
+	LibreEMSCommonStdHandler handler;
 	ENTER();
 
-	handler = (FreeEMSCommonStdHandler)(GINT)OBJ_GET(widget,"handler");
+	handler = (LibreEMSCommonStdHandler)(GINT)OBJ_GET(widget,"handler");
 
 	switch (handler)
 	{
@@ -206,7 +206,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	static Firmware_Details *firmware = NULL;
 	static gboolean (*ecu_handler)(GtkWidget *, gpointer) = NULL;
 	GdkColor black = {0,0,0,0};
-	FreeEMSCommonStdHandler handler;
+	LibreEMSCommonStdHandler handler;
 	gchar *text = NULL;
 	gchar *tmpbuf = NULL;
 	gfloat tmpf = -1;
@@ -237,7 +237,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 		firmware = (Firmware_Details *)DATA_GET(global_data,"firmware");
 	g_return_val_if_fail(firmware,FALSE);
 
-	handler = (FreeEMSCommonStdHandler)(GINT)OBJ_GET(widget,"handler");
+	handler = (LibreEMSCommonStdHandler)(GINT)OBJ_GET(widget,"handler");
 	dl_type = (GINT) OBJ_GET(widget,"dl_type");
 	precision = (GINT) OBJ_GET(widget,"precision");
 	get_essentials(widget,&locID,&offset,&size,&precision);
@@ -265,7 +265,7 @@ G_MODULE_EXPORT gboolean common_entry_handler(GtkWidget *widget, gpointer data)
 	switch (handler)
 	{
 		case NOOP: /* Used for special widgets that do NOT refer to
-			      direct ECU locations (FreeEMS BenchTest tool) */
+			      direct ECU locations (LibreEMS BenchTest tool) */
 			if (OBJ_GET(widget,"temp_dep"))
 				value = temp_to_ecu_f(tmpf);
 			else

@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_benchtest.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Bench Test functions
+  \file src/plugins/libreems/libreems_benchtest.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Bench Test functions
   \author David Andruczyk
   */
 
@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_BENCHTEST_H__
-#define __FREEEMS_BENCHTEST_H__
+#ifndef __LIBREEMS_BENCHTEST_H__
+#define __LIBREEMS_BENCHTEST_H__
 
 #include <gtk/gtk.h>
 

@@ -12,8 +12,8 @@
  */
 
 /*!
-  \file src/plugins/freeems/fileio.c
-  \ingroup FreeEMSPlugin,Plugins
+  \file src/plugins/libreems/fileio.c
+  \ingroup LibreEMSPlugin,Plugins
   \brief ECU Specific file save/restore functions
   \author David Andruczyk
   */
@@ -24,8 +24,8 @@
 #include <fileio.h>
 #include <firmware.h>
 #include <getfiles.h>
-#include <freeems_comms.h>
-#include <freeems_plugin.h>
+#include <libreems_comms.h>
+#include <libreems_plugin.h>
 #include <stdio.h>
 #include <time.h>
 #ifdef __WIN32__
@@ -179,7 +179,7 @@ G_MODULE_EXPORT void backup_all_ecu_settings(gchar *filename)
 		for(x=0;x<firmware->page_params[i]->length;x++)
 		{
 			locID = firmware->page_params[i]->phys_ecu_page;
-			g_string_append_printf(string,"%i",freeems_get_ecu_data(canID,locID,x,size));
+			g_string_append_printf(string,"%i",libreems_get_ecu_data(canID,locID,x,size));
 			if (x < (firmware->page_params[i]->length-1))
 				string = g_string_append(string,",");
 		}
@@ -290,9 +290,9 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 					for (offset=0;offset<num_keys;offset++)
 						data[offset]=(guint8)atoi(keys[offset]);
 					if (DATA_GET(global_data,"offline"))
-						freeems_store_new_block(canID,locID,0,data,num_keys);
+						libreems_store_new_block(canID,locID,0,data,num_keys);
 					else
-						freeems_chunk_write(canID,locID,0,num_keys,data);
+						libreems_chunk_write(canID,locID,0,num_keys,data);
 				}
 				else
 				{
@@ -302,7 +302,7 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 						for (offset=0;offset<num_keys;offset++)
 						{
 							dload_val = atoi(keys[offset]);
-							freeems_set_ecu_data(canID,locID,offset,size,dload_val);
+							libreems_set_ecu_data(canID,locID,offset,size,dload_val);
 						}
 					}
 					else
@@ -310,10 +310,10 @@ G_MODULE_EXPORT void restore_all_ecu_settings(gchar *filename)
 						for (offset=0;offset<num_keys;offset++)
 						{
 							dload_val = atoi(keys[offset]);
-							if (dload_val != freeems_get_ecu_data_last(canID,locID,offset,size))
+							if (dload_val != libreems_get_ecu_data_last(canID,locID,offset,size))
 							{
 								/*printf("writing data for page %i, offset %i\n",page,offset);*/
-								freeems_send_to_ecu(canID,locID,offset,size,dload_val, FALSE);
+								libreems_send_to_ecu(canID,locID,offset,size,dload_val, FALSE);
 							}
 						}
 					}

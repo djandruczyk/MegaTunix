@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/fileio.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS File IO functions
+  \file src/plugins/libreems/fileio.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS File IO functions
   \author David Andruczyk
   */
 

@@ -12,17 +12,17 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_comms.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS Specific comms routines
+  \file src/plugins/libreems/libreems_comms.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS Specific comms routines
   \author David Andruczyk
   */
 
 #include <datamgmt.h>
 #include <defines.h>
 #include <firmware.h>
-#include <freeems_comms.h>
-#include <freeems_plugin.h>
+#include <libreems_comms.h>
+#include <libreems_plugin.h>
 #include <packet_handlers.h>
 #ifdef __WIN32__
 #include <winsock2.h>
@@ -100,7 +100,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 	if (serial_is_open == TRUE)
 	{
 		MTXDBG(SERIAL_RD|SERIAL_WR,_("Port considered open, but throwing errors\n"));
-		freeems_serial_disable();
+		libreems_serial_disable();
 		close_serial_f();
 		unlock_serial_f();
 		serial_is_open = FALSE;
@@ -155,7 +155,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 						thread_update_widget_f("active_port_entry",MTX_ENTRY,g_strdup(vector[i]));
 					MTXDBG(SERIAL_RD|SERIAL_WR,_("Port %s opened\n"),vector[i]);
 					setup_serial_params_f();
-					freeems_serial_enable();
+					libreems_serial_enable();
 
 					thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("Searching for ECU\n")),FALSE,FALSE);
 					MTXDBG(SERIAL_RD|SERIAL_WR,_("Performing ECU comms test via port %s.\n"),vector[i]);
@@ -169,7 +169,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 					{
 						MTXDBG(SERIAL_RD|SERIAL_WR,_("COMMS test failed, no ECU found, closing port %s.\n"),vector[i]);
 						thread_update_logbar_f("comms_view",NULL,g_strdup_printf(_("No ECU found...\n")),FALSE,FALSE);
-						freeems_serial_disable();
+						libreems_serial_disable();
 						close_serial_f();
 						unlock_serial_f();
 						/*g_usleep(100000);*/
@@ -203,7 +203,7 @@ G_MODULE_EXPORT void *serial_repair_thread(gpointer data)
 /*!
  \brief Disables the serial connection and shuts down the reader thread
   */
-G_MODULE_EXPORT void freeems_serial_disable(void)
+G_MODULE_EXPORT void libreems_serial_disable(void)
 {
 	GIOChannel *channel = NULL;
 	GAsyncQueue *queue = NULL;
@@ -244,7 +244,7 @@ G_MODULE_EXPORT void freeems_serial_disable(void)
 /*!
  \brief Enables the serial connection and starts up  the reader thread
   */
-G_MODULE_EXPORT void freeems_serial_enable(void)
+G_MODULE_EXPORT void libreems_serial_enable(void)
 {
 	GIOChannel *channel = NULL;
 	Serial_Params *serial_params = NULL;
@@ -280,7 +280,7 @@ G_MODULE_EXPORT void freeems_serial_enable(void)
 G_MODULE_EXPORT gboolean comms_test(void)
 {
 	GAsyncQueue *queue = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	GCond *cond = NULL;
 	gboolean res = FALSE;
 	gint len = 0;
@@ -305,13 +305,13 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	}
 	queue = g_async_queue_new();
 	register_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
-	packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+	packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
 	deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_BASIC_DATALOG);
 	if (packet)
 	{
 		MTXDBG(SERIAL_RD,_("Found streaming ECU!!\n"));
 		g_async_queue_unref(queue);
-		freeems_packet_cleanup(packet);
+		libreems_packet_cleanup(packet);
 		DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 		EXIT();
 		return TRUE;
@@ -319,7 +319,7 @@ G_MODULE_EXPORT gboolean comms_test(void)
 	else
 	{ /* Assume ECU is in non-streaming mode, try and probe it */
 		gint sum = 0;
-		MTXDBG(SERIAL_RD,_("Requesting FreeEMS Interface Version\n"));
+		MTXDBG(SERIAL_RD,_("Requesting LibreEMS Interface Version\n"));
 		register_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		pkt[HEADER_IDX] = 0;
 		pkt[H_PAYLOAD_IDX] = (REQUEST_INTERFACE_VERSION & 0xff00 ) >> 8;
@@ -338,13 +338,13 @@ G_MODULE_EXPORT gboolean comms_test(void)
 			return FALSE;
 		}
 		g_free(buf);
-		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+		packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
 		deregister_packet_queue(PAYLOAD_ID,queue,RESPONSE_INTERFACE_VERSION);
 		g_async_queue_unref(queue);
 		if (packet)
 		{
 			MTXDBG(SERIAL_RD,_("Found via probing!!\n"));
-			freeems_packet_cleanup(packet);
+			libreems_packet_cleanup(packet);
 			DATA_SET(global_data,"connected",GINT_TO_POINTER(TRUE));
 			EXIT();
 			return TRUE; 
@@ -558,7 +558,7 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 {
 	GAsyncQueue *queue = (GAsyncQueue *)data;
 	static GMutex *mutex = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 
 	ENTER();
 	mutex = (GMutex *)DATA_GET(global_data,"rtv_subscriber_mutex");
@@ -568,13 +568,13 @@ G_MODULE_EXPORT void *rtv_subscriber(gpointer data)
 	while (!DATA_GET(global_data,"rtv_subscriber_thread_exit"))
 	{
 		/* Wait up to 0.25 seconds for thread to exit */
-		packet = (FreeEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
+		packet = (LibreEMS_Packet *)g_async_queue_timeout_pop(queue,250000);
 		g_mutex_unlock(mutex);
 		if (packet)
 		{
 			DATA_SET(global_data,"rt_goodread_count",GINT_TO_POINTER((GINT)DATA_GET(global_data,"rt_goodread_count")+1));
 			process_rt_vars_f(packet->data+packet->payload_base_offset,packet->payload_length);
-			freeems_packet_cleanup(packet);
+			libreems_packet_cleanup(packet);
 		}
 	}
 	g_thread_exit(0);
@@ -658,7 +658,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
 		size = (DataSize)(GINT)DATA_GET(gptr,"size");
 	}
 	/*printf("locID %i, offset, %i, value %i\n",locID,offset,value);*/
-	freeems_send_to_ecu(canID,locID,offset,size,value,queue_update);
+	libreems_send_to_ecu(canID,locID,offset,size,value,queue_update);
 	EXIT();
 	return;
 }
@@ -675,7 +675,7 @@ G_MODULE_EXPORT void send_to_ecu(gpointer data, gint value, gboolean queue_updat
  \param queue_update if true queues a gui update, used to prevent
  a horrible stall when doing an ECU restore or batch load...
  */
-G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, DataSize size, gint value, gboolean queue_update)
+G_MODULE_EXPORT void libreems_send_to_ecu(gint canID, gint locID, gint offset, DataSize size, gint value, gboolean queue_update)
 {
 	static Firmware_Details *firmware = NULL;
 	OutputData *output = NULL;
@@ -710,7 +710,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 			/*printf("32 bit var %i at offset %i\n",value,offset);*/
 			break;
 		default:
-			printf(_("freeems_send_to_ecu() ERROR!!! Size undefined for variable at canID %i, offset %i\n"),locID,offset);
+			printf(_("libreems_send_to_ecu() ERROR!!! Size undefined for variable at canID %i, offset %i\n"),locID,offset);
 	}
 	output = initialize_outputdata_f();
 	DATA_SET(output->data,"location_id", GINT_TO_POINTER(locID));
@@ -774,7 +774,7 @@ G_MODULE_EXPORT void freeems_send_to_ecu(gint canID, gint locID, gint offset, Da
 	/* Set it here otherwise there's a risk of a missed burn due to 
 	 * a potential race condition in the burn checker
 	 */
-	freeems_set_ecu_data(canID,locID,offset,size,value);
+	libreems_set_ecu_data(canID,locID,offset,size,value);
 	/* IF the packet fails, update_write_status will rollback properly */
 
 	output->queue_update = queue_update;
@@ -806,7 +806,7 @@ G_MODULE_EXPORT void ecu_chunk_write(gint canID, gint page, gint offset, gint nu
 
 	locID = firmware->page_params[page]->phys_ecu_page;
 
-	freeems_chunk_write(canID,locID,offset,num_bytes,block);
+	libreems_chunk_write(canID,locID,offset,num_bytes,block);
 	EXIT();
 	return;
 }
@@ -822,7 +822,7 @@ G_MODULE_EXPORT void ecu_chunk_write(gint canID, gint page, gint offset, gint nu
  \param block is the block of data to be sent which better damn well be
  int ECU byte order if there is an endianness thing..
  */
-G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gint num_bytes, guint8 * block)
+G_MODULE_EXPORT void libreems_chunk_write(gint canID, gint locID, gint offset, gint num_bytes, guint8 * block)
 {
 	OutputData *output = NULL;
 	Firmware_Details *firmware = NULL;
@@ -840,7 +840,7 @@ G_MODULE_EXPORT void freeems_chunk_write(gint canID, gint locID, gint offset, gi
 	DATA_SET_FULL(output->data,"data", (gpointer)block, g_free);
 	DATA_SET(output->data,"mode", GINT_TO_POINTER(MTX_CHUNK_WRITE));
 
-	freeems_store_new_block(canID,locID,offset,block,num_bytes);
+	libreems_store_new_block(canID,locID,offset,block,num_bytes);
 	output->queue_update = TRUE;
 	io_cmd_f(firmware->write_command,output);
 	/*
@@ -892,7 +892,7 @@ G_MODULE_EXPORT void update_write_status(void *data)
 		length = (GINT)DATA_GET(output->data,"length");
 		block = (guint8 *)DATA_GET(output->data,"data");
 		mode = (WriteMode)(GINT)DATA_GET(output->data,"mode");
-		freeems_find_mtx_page(locID,&page);
+		libreems_find_mtx_page(locID,&page);
 
 //		printf("locID %i, page %i\n",locID,page);
 		if (!message->status) /* Bad write! */
@@ -994,7 +994,7 @@ G_MODULE_EXPORT void post_single_burn_pf(void *data)
 		EXIT();
 		return;
 	}
-	freeems_backup_current_data(firmware->canID,locID);
+	libreems_backup_current_data(firmware->canID,locID);
 
 	MTXDBG(SERIAL_WR,_("Burn to Flash Completed\n"));
 

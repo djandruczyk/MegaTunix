@@ -118,8 +118,6 @@ void verify_args(gint argc, gchar **argv)
 		type = MS1;
 	else if (g_ascii_strcasecmp(argv[1],"MS2") == 0)
 		type = MS2;
-	else if (g_ascii_strcasecmp(argv[1],"FREEEMS") == 0)
-		type = LIBREEMS;
 	else if (g_ascii_strcasecmp(argv[1],"LIBREEMS") == 0)
 		type = LIBREEMS;
 	else
@@ -136,7 +134,7 @@ void usage_and_exit(gchar * msg)
 {
 	printf("\nERROR!!!\n - %s\n",msg);
 	g_free(msg);
-	printf("\nINVALID USAGE\n - msloader [MS1|MS2|FREEEMS|LIBREEMS] /path/to/port /path/to/.s19\n\n");
+	printf("\nINVALID USAGE\n - msloader [MS1|MS2|LIBREEMS] /path/to/port /path/to/.s19\n\n");
 	exit (-1);
 }
 

@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/interrogate.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Interrogator functions
+  \file src/plugins/libreems/interrogate.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Interrogator functions
   \author David Andruczyk
   */
 

@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_errors.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS Error functions
+  \file src/plugins/libreems/libreems_errors.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS Error functions
   \author David Andruczyk
   */
 
@@ -22,21 +22,21 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_ERRORS_H__
-#define __FREEEMS_ERRORS_H__
+#ifndef __LIBREEMS_ERRORS_H__
+#define __LIBREEMS_ERRORS_H__
 
 #include <gtk/gtk.h>
 #include <defines.h>
 #include <configfile.h>
-#include <freeems_globaldefs.h>
+#include <libreems_globaldefs.h>
 #include <enums.h>
 #include <threads.h>
 
-typedef struct _FreeEMS_Errors FreeEMS_Errors;
+typedef struct _LibreEMS_Errors LibreEMS_Errors;
 /*!
-  \brief FreeEMS Error codes
+  \brief LibreEMS Error codes
   */
-static struct _FreeEMS_Errors
+static struct _LibreEMS_Errors
 {
 	guint code;
 	const gchar *message;

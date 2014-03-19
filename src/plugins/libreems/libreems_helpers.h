@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_helpers.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS comm.xml helpers
+  \file src/plugins/libreems/libreems_helpers.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS comm.xml helpers
   \author David Andruczyk
   */
 
@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_HELPERS_H__
-#define __FREEEMS_HELPERS_H__
+#ifndef __LIBREEMS_HELPERS_H__
+#define __LIBREEMS_HELPERS_H__
 
 #include <defines.h>
 #include <enums.h>
@@ -32,7 +32,7 @@ extern "C" {
 
 typedef enum
 {
-	FREEEMS_ALL = 0x290,
+	LIBREEMS_ALL = 0x290,
 	CALLBACK,
 	EMPTY_PAYLOAD,
 	GENERIC_READ,
@@ -45,12 +45,12 @@ typedef enum
 
 
 /* Prototypes */
-gboolean freeems_burn_all(void *, FuncCall);
+gboolean libreems_burn_all(void *, FuncCall);
 void handle_transaction_hf(void *, FuncCall);
 void hard_boot_ecu(void);
-gboolean read_freeems_data(void *, FuncCall);
+gboolean read_libreems_data(void *, FuncCall);
 void reset_counters(void);
-FreeEMS_Packet *retrieve_packet(gconstpointer *, const gchar *);
+LibreEMS_Packet *retrieve_packet(gconstpointer *, const gchar *);
 void soft_boot_ecu(void);
 void start_streaming(void);
 void stop_streaming(void);

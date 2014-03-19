@@ -1,7 +1,7 @@
 rtmapdir = $(datadir)/MegaTunix/$(REALTIME_MAPS_DATA_DIR)
 
 rtxml_files = 	\
-		FreeEMS.xml \
+		LibreEMS.xml \
 		JimStim-2.x.xml \
 		MS1-BnG-Std.xml \
 		MS1-DT-Std.xml \

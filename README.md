@@ -6,7 +6,7 @@ Designed and written by David J. Andruczyk
 
 MegaTunix is a tuning application for Linux, Mac OS-X, other Unix variants and
 Windows XP/Vista/7 32 bit variants. It supports some of the available DIY EFI
-Fuel injection solutions including many MegaSquirt products and FreeEMS. It's
+Fuel injection solutions including many MegaSquirt products and LibreEMS. It's
 written in C using the GTK windowing toolkit and is licensed under GPL V2.
 
 ### More Detail
@@ -44,8 +44,8 @@ things out, it's time to ask someone in-the-know for help. You can make contact
 one one of two forums, via email, or over IRC.
 
 - MSExtra forum: http://www.msextra.com/forums/viewforum.php?f=106
-- FreeEMS forum: http://forum.diyefi.org/viewforum.php?f=11
-- FreeNode IRC: ##megasquirt, #freeems-dev, #freeems, #freeems-ot
+- LibreEMS forum: https://forums.libreems.org
+- FreeNode IRC: ##megasquirt, #libreems-dev, #libreems
 - Dave's Email: dandruczyk <at> gmail <dot> com
 
 Using a public medium reduces the load on Dave by allowing others the opportuniy

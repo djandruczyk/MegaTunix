@@ -45,7 +45,7 @@ typedef enum
 	MS3			       = 1<<8,
 	MS3_NEWSERIAL      = 1<<9,
 	PIS                = 1<<10,
-	FREEEMS            = 1<<11,
+	LIBREEMS           = 1<<11,
 	JIMSTIM            = 1<<12
 }Capability;
 

@@ -12,15 +12,15 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_benchtest.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS specific benchtest helper functions
+  \file src/plugins/libreems/libreems_benchtest.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS specific benchtest helper functions
   \author David Andruczyk
   */
 
 #include <defines.h>
-#include <freeems_benchtest.h>
-#include <freeems_plugin.h>
+#include <libreems_benchtest.h>
+#include <libreems_plugin.h>
 #include <gtk/gtk.h>
 #include <packet_handlers.h>
 #include <serialio.h>
@@ -36,7 +36,7 @@ G_MODULE_EXPORT void benchtest_validate_and_run(void)
 {
 	GAsyncQueue *queue = NULL;
 	OutputData *output = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	GTimeVal tval;
 	gint res = 0;
 	gint tmit_len = 0;
@@ -112,7 +112,7 @@ G_MODULE_EXPORT void benchtest_stop(void)
 {
 	GAsyncQueue *queue = NULL;
 	OutputData *output = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	GTimeVal tval;
 	guint8 byte = 0;
 	gint i = 0;
@@ -160,7 +160,7 @@ G_MODULE_EXPORT void benchtest_bump(void)
 {
 	GAsyncQueue *queue = NULL;
 	OutputData *output = NULL;
-	FreeEMS_Packet *packet = NULL;
+	LibreEMS_Packet *packet = NULL;
 	guint8 byte = 0;
 	gint seq = 71;
 	guint64 addition = 0;
@@ -365,7 +365,7 @@ gboolean benchtest_clock_update(gpointer data)
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_button"),FALSE);
 		gtk_widget_set_sensitive(lookup_widget_f("BTest_bump_entry"),FALSE);
 		gtk_label_set_markup(GTK_LABEL(label),"<b>HH:MM:SS</b>");
-		thread_update_logbar_f("freeems_benchtest_view",NULL,g_strdup_printf(_("Benchtest completed...\n")),FALSE,FALSE);
+		thread_update_logbar_f("libreems_benchtest_view",NULL,g_strdup_printf(_("Benchtest completed...\n")),FALSE,FALSE);
 		EXIT();
 		return FALSE;
 	}

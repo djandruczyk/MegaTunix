@@ -10,7 +10,7 @@
     <height>378</height>
     <x_offset>323</x_offset>
     <y_offset>41</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Tacho_8k_RPM.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Tacho_8k_RPM.xml</gauge_xml_name>
     <datasource>RPM</datasource>
   </gauge>
   <gauge>
@@ -18,7 +18,7 @@
     <height>200</height>
     <x_offset>690</x_offset>
     <y_offset>50</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Boost_35_PSI.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Boost_35_PSI.xml</gauge_xml_name>
     <datasource>PSI</datasource>
   </gauge>
   <gauge>
@@ -26,7 +26,7 @@
     <height>150</height>
     <x_offset>150</x_offset>
     <y_offset>450</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Duty_Cycle_Electrical.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Duty_Cycle_Electrical.xml</gauge_xml_name>
     <datasource>ElecDuty</datasource>
   </gauge>
   <gauge>
@@ -34,7 +34,7 @@
     <height>150</height>
     <x_offset>0</x_offset>
     <y_offset>0</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Coolant_Temp_Narrow_C.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Coolant_Temp_Narrow_C.xml</gauge_xml_name>
     <datasource>CHT</datasource>
   </gauge>
   <gauge>
@@ -42,7 +42,7 @@
     <height>150</height>
     <x_offset>0</x_offset>
     <y_offset>150</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Intake_Air_Temp_C.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Intake_Air_Temp_C.xml</gauge_xml_name>
     <datasource>IAT</datasource>
   </gauge>
   <gauge>
@@ -50,7 +50,7 @@
     <height>150</height>
     <x_offset>0</x_offset>
     <y_offset>300</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Voltage_Narrow_12V.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Voltage_Narrow_12V.xml</gauge_xml_name>
     <datasource>BRV</datasource>
   </gauge>
   <gauge>
@@ -58,7 +58,7 @@
     <height>150</height>
     <x_offset>0</x_offset>
     <y_offset>450</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Atmospheric_Absolute_Pressure_kPa.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Atmospheric_Absolute_Pressure_kPa.xml</gauge_xml_name>
     <datasource>AAP</datasource>
   </gauge>
   <gauge>
@@ -66,7 +66,7 @@
     <height>150</height>
     <x_offset>874</x_offset>
     <y_offset>0</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Ignition_Advance.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Ignition_Advance.xml</gauge_xml_name>
     <datasource>Advance</datasource>
   </gauge>
   <gauge>
@@ -74,7 +74,7 @@
     <height>150</height>
     <x_offset>874</x_offset>
     <y_offset>150</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Dwell_Time.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Dwell_Time.xml</gauge_xml_name>
     <datasource>Dwell</datasource>
   </gauge>
   <gauge>
@@ -82,7 +82,7 @@
     <height>150</height>
     <x_offset>874</x_offset>
     <y_offset>300</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Effective_PW_Narrow.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Effective_PW_Narrow.xml</gauge_xml_name>
     <datasource>EffectivePW</datasource>
   </gauge>
   <gauge>
@@ -90,7 +90,7 @@
     <height>150</height>
     <x_offset>874</x_offset>
     <y_offset>450</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Injector_Dead_Time.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Injector_Dead_Time.xml</gauge_xml_name>
     <datasource>IDT</datasource>
   </gauge>
   <gauge>
@@ -98,7 +98,7 @@
     <height>200</height>
     <x_offset>134</x_offset>
     <y_offset>50</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Lambda_Exhaust.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Lambda_Exhaust.xml</gauge_xml_name>
     <datasource>EGO</datasource>
   </gauge>
   <gauge>
@@ -106,7 +106,7 @@
     <height>150</height>
     <x_offset>724</x_offset>
     <y_offset>450</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Duty_Cycle_Fuel.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Duty_Cycle_Fuel.xml</gauge_xml_name>
     <datasource>FuelDuty</datasource>
   </gauge>
   <gauge>
@@ -114,7 +114,7 @@
     <height>200</height>
     <x_offset>149</x_offset>
     <y_offset>250</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Lambda_Integral.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Lambda_Integral.xml</gauge_xml_name>
     <datasource>IntegralLambda</datasource>
   </gauge>
   <gauge>
@@ -122,7 +122,7 @@
     <height>200</height>
     <x_offset>675</x_offset>
     <y_offset>250</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Vacuum_30_inHg.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Vacuum_30_inHg.xml</gauge_xml_name>
     <datasource>inHg</datasource>
   </gauge>
   <gauge>
@@ -130,7 +130,7 @@
     <height>200</height>
     <x_offset>298</x_offset>
     <y_offset>396</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Volumetric_Efficiency.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Volumetric_Efficiency.xml</gauge_xml_name>
     <datasource>VEMain</datasource>
   </gauge>
   <gauge>
@@ -138,7 +138,7 @@
     <height>200</height>
     <x_offset>526</x_offset>
     <y_offset>396</y_offset>
-    <gauge_xml_name>FreeEMS_AM_SportComp/Manifold_Absolute_Pressure_250_kPa.xml</gauge_xml_name>
+    <gauge_xml_name>LibreEMS_AM_SportComp/Manifold_Absolute_Pressure_250_kPa.xml</gauge_xml_name>
     <datasource>MAP</datasource>
   </gauge>
 </dashboard>

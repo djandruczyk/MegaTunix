@@ -52,7 +52,7 @@ visible_functions=draw_ve_marker:13,update_tab_gauges:16
 
 [topframe_title]
 keys=set_label
-set_label=FreeEMS Lambda Table
+set_label=LibreEMS Lambda Table
 
 [notebook_tab_label]
 keys=set_label
@@ -125,35 +125,35 @@ table_num=1
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=FreeEMS_AM_SportComp/Tacho_8k_RPM.xml
+gaugexml=LibreEMS_AM_SportComp/Tacho_8k_RPM.xml
 datasource=RPM
 
 [gaugeframe2_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=FreeEMS_AM_SportComp/Load_Percent_260.xml
+gaugexml=LibreEMS_AM_SportComp/Load_Percent_260.xml
 datasource=LoadMain
 
 [gaugeframe3_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=FreeEMS_AM_SportComp/Lambda_Integral.xml
+gaugexml=LibreEMS_AM_SportComp/Lambda_Integral.xml
 datasource=IntegralLambda
 
 [gaugeframe4_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=FreeEMS_AM_SportComp/Lambda_Exhaust.xml
+gaugexml=LibreEMS_AM_SportComp/Lambda_Exhaust.xml
 datasource=EGO
 
 [gaugeframe5_1]
 keys=post_functions_with_arg,gaugexml,datasource,table_num
 table_num=1
 post_functions_with_arg=create_gauge
-gaugexml=FreeEMS_AM_SportComp/Volumetric_Efficiency.xml
+gaugexml=LibreEMS_AM_SportComp/Volumetric_Efficiency.xml
 datasource=VEMain
 
 ;#----- Rescale Entries ------------------------------------------------------

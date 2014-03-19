@@ -1,7 +1,7 @@
 rtsliderdir = $(datadir)/MegaTunix/$(RTSLIDERS_DATA_DIR)
 
 rtslider_files = 	README \
-			FreeEMS.xml \
+			LibreEMS.xml \
 			JimStim-2.x.xml \
 			MS1-DT.xml \
 			MS1-Extra.xml \

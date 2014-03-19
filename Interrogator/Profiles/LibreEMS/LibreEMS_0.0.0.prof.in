@@ -3,11 +3,11 @@ major=1
 minor=11
 
 [interrogation_profile]
-name=FreeEMS 0.0.0
+name=LibreEMS 0.0.0
 
 [parameters]
 EcuTempUnits=_KELVIN_
-Get_All_Command=freeems_read_all
+Get_All_Command=libreems_read_all
 Read_Command=generic_read
 Write_Command=generic_RAM_write
 Chunk_Write_Command=generic_RAM_write
@@ -16,7 +16,7 @@ RT_total_bytes=98
 Burn_Command=burn
 Burn_All_Command=burn_all
 ChunkWriteSupport=TRUE
-Capabilities=_FREEEMS_
+Capabilities=_LIBREEMS_
 BigEndian=TRUE
 MultiPage=FALSE
 
@@ -75,19 +75,19 @@ MultiPage=FALSE
 [interrogation]
 #match_on=FW_VER
 match_on=IFACE_VER
-IFACE_VER=_REGEX_,FreeEMS Vanilla 0.0.0
-#FW_VER=_REGEX_,FreeEMS Vanilla 0.1.2 SNAPSHOT
+IFACE_VER=_REGEX_,LibreeEMS Vanilla 0.0.0
+#FW_VER=_REGEX_,LibreEMS Vanilla 0.1.2 SNAPSHOT
 
 [gui]
-RealtimeMapFile=FreeEMS
-SliderMapFile=FreeEMS
-RuntimeTextMapFile=FreeEMS
-StatusMapFile=FreeEMS
+RealtimeMapFile=LibreEMS
+SliderMapFile=LibreEMS
+RuntimeTextMapFile=LibreEMS
+StatusMapFile=LibreEMS
 
 # These correspond to Gui/*.glade files
-LoadTabs=freeems-runtime,datalogging,freeems-tools,logviewer,dynamic-table_x1,dynamic-table_x1,dynamic-table_x1,freeems-benchtest
+LoadTabs=libreems-runtime,datalogging,libreems-tools,logviewer,dynamic-table_x1,dynamic-table_x1,dynamic-table_x1,libreems-benchtest
 # These correspond to Gui/*.datamap.in files
-TabConfs=freeems-runtime,datalogging,freeems-tools,logviewer,freeems-dynamic-vetable_x1,freeems-dynamic-ignitiontable_x1,freeems-dynamic-lambdatable_x1,freeems-benchtest
+TabConfs=libreems-runtime,datalogging,libreems-tools,logviewer,libreems-dynamic-vetable_x1,libreems-dynamic-ignitiontable_x1,libreems-dynamic-lambdatable_x1,libreems-benchtest
 
 [lookuptables]
 tables=mat_table,clt_table,nbo2_table,wbo2_table,na_map,boosted_map

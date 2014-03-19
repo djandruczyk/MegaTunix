@@ -12,9 +12,9 @@
  */
 
 /*!
-  \file src/plugins/freeems/freeems_rtv_processor.h
-  \ingroup FreeEMSPlugin,Headers
-  \brief FreeEMS RTV processor
+  \file src/plugins/libreems/libreems_rtv_processor.h
+  \ingroup LibreEMSPlugin,Headers
+  \brief LibreEMS RTV processor
   \author David Andruczyk
   */
 
@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#ifndef __FREEEMS_RTV_PROCESSOR_H__
-#define __FREEEMS_RTV_PROCESSOR_H__
+#ifndef __LIBREEMS_RTV_PROCESSOR_H__
+#define __LIBREEMS_RTV_PROCESSOR_H__
 
 #include <defines.h>
 #include <gtk/gtk.h>

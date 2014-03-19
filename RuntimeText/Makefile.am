@@ -1,7 +1,7 @@
 rttextdir = $(datadir)/MegaTunix/$(RTTEXT_DATA_DIR)
 
 rttext_files = 	\
-		FreeEMS.xml \
+		LibreEMS.xml \
 		JimStim-2.x.xml \
 		MS1-DT.xml \
 		MS1-Extra.xml \

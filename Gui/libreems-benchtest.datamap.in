@@ -1,5 +1,5 @@
 [global]
-description=Object data map for the FreeEMS BenchTest Tab
+description=Object data map for the LibreEMS BenchTest Tab
 _tab_name=_BenchTest
 id_prefix=BTest_
 groups=defaults
@@ -42,9 +42,9 @@ handler=_BENCHTEST_BUMP_
 
 #----- Widgets ---------------------------------------------------------------
 
-[freeems_benchtest_view]
+[libreems_benchtest_view]
 keys=create_tags,register_as
-register_as=freeems_benchtest_view
+register_as=libreems_benchtest_view
 create_tags=warning
 warning=foreground,red
 

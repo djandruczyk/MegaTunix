@@ -12,15 +12,15 @@
  */
 
 /*!
-  \file src/plugins/freeems/vetable_gui.c
-  \ingroup FreeEMSPlugin,Plugins
-  \brief FreeEMS specific VEtable active vertex highlighter
+  \file src/plugins/libreems/vetable_gui.c
+  \ingroup LibreEMSPlugin,Plugins
+  \brief LibreEMS specific VEtable active vertex highlighter
   \author David Andruczyk
   */
 
 #include <datamgmt.h>
 #include <firmware.h>
-#include <freeems_plugin.h>
+#include <libreems_plugin.h>
 #include <multi_expr_loader.h>
 #include <math.h>
 #include <stdio.h>
@@ -256,7 +256,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
                 x_raw = x_source;
 	for (i=0;i<firmware->table_params[table]->x_bincount-1;i++)
 	{
-		if (freeems_get_ecu_data(canID,locID,base,size) >= x_raw)
+		if (libreems_get_ecu_data(canID,locID,base,size) >= x_raw)
 		{
 			bin[0] = -1;
 			bin[1] = 0;
@@ -264,8 +264,8 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 			right_w = 1;
 			break;
 		}
-		left = freeems_get_ecu_data(canID,locID,base+(i*mult),size);
-		right = freeems_get_ecu_data(canID,locID,base+((i+1)*mult),size);
+		left = libreems_get_ecu_data(canID,locID,base+(i*mult),size);
+		right = libreems_get_ecu_data(canID,locID,base+((i+1)*mult),size);
 
 		if ((x_raw > left) && (x_raw <= right))
 		{
@@ -300,7 +300,7 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
                 y_raw = y_source;
 	for (i=0;i<firmware->table_params[table]->y_bincount-1;i++)
 	{
-		if (freeems_get_ecu_data(canID,locID,base,size) >= y_raw)
+		if (libreems_get_ecu_data(canID,locID,base,size) >= y_raw)
 		{
 			bin[2] = -1;
 			bin[3] = 0;
@@ -308,8 +308,8 @@ G_MODULE_EXPORT void common_draw_ve_marker(void)
 			bottom_w = 0;
 			break;
 		}
-		bottom = freeems_get_ecu_data(canID,locID,base+(i*mult),size);
-		top = freeems_get_ecu_data(canID,locID,base+((i+1)*mult),size);
+		bottom = libreems_get_ecu_data(canID,locID,base+(i*mult),size);
+		top = libreems_get_ecu_data(canID,locID,base+((i+1)*mult),size);
 
 		if ((y_raw > bottom) && (y_raw <= top))
 		{
