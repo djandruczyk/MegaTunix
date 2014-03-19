@@ -75,7 +75,7 @@ MultiPage=FALSE
 [interrogation]
 #match_on=FW_VER
 match_on=IFACE_VER
-IFACE_VER=_REGEX_,LibreeEMS Vanilla 0.0.0
+IFACE_VER=_REGEX_,eEMS Vanilla 0.0.0
 #FW_VER=_REGEX_,LibreEMS Vanilla 0.1.2 SNAPSHOT
 
 [gui]
