@@ -181,9 +181,14 @@ struct
 }header_bits;
 */
 
-#define HAS_LENGTH_MASK		1
-#define ACK_TYPE_MASK		2
-#define HAS_SEQUENCE_MASK	4
+#define HAS_LENGTH_MASK    BIT0
+#define ACK_TYPE_MASK      BIT1
+#define HAS_SEQUENCE_MASK  BIT2
+#define IS_PARTIAL_PAYLOAD BIT3
+#define HEADER_RESERVED_D  BIT4
+#define HEADER_RESERVED_C  BIT5
+#define HEADER_RESERVED_B  BIT6
+#define HEADER_RESERVED_A  BIT7
 /*Where in the header the bytes are */
 #define HEADER_IDX 0
 #define H_PAYLOAD_IDX 1
