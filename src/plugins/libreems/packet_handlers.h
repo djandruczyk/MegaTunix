@@ -173,7 +173,7 @@ struct
 	guint8 has_length:1;
 	guint8 ack_type:1;
 	guint8 has_sequence:1;
-	guint8 reserved_5:1;
+	guint8 is_partial_packet:1;
 	guint8 reserved_4:1;
 	guint8 reserved_3:1;
 	guint8 reserved_2:1;
@@ -205,24 +205,26 @@ typedef struct _LibreEMS_Packet LibreEMS_Packet;
   */
 struct _LibreEMS_Packet
 {
-	guchar *data;		/*!< Raw packet data */
-	guint16 raw_length;	/*!< Raw packet length */
-	guint8 header_bits;	/*!< Header Bits */
-	gboolean has_sequence;	/*!< Does this packet have a sequence */
-	gboolean has_length;	/*!< Does this packet have a length */
-	gboolean is_nack;	/*!< Is this a negative ack? */
-	guint8 seq_num;		/*!< Sequence Number */
-	guint16 payload_id;	/*!< Payload ID */
-	guint16 payload_base_offset;	/*!< PAylaod base offset within pkt */
-	guint16 payload_length;	/*!< Payload length in bytes */
+	guchar *data; /*!< Raw packet data */
+	guint16 raw_length; /*!< Raw packet length */
+	guint8 header_bits; /*!< Header Bits */
+	gboolean has_sequence; /*!< Does this packet have a sequence */
+	gboolean has_length; /*!< Does this packet have a length */
+	gboolean is_nack; /*!< Is this a negative ack? */
+	gboolean is_partial_packet; /*!< Flag meaning this is a partial */
+	guint8 seq_num; /*!< Sequence Number */
+	guint8 parent_packet_seq_num; /*!< Packet we need to append to */
+	guint16 payload_id; /*!< Payload ID */
+	guint16 payload_base_offset; /*!< PAylaod base offset within pkt */
+	guint16 payload_length; /*!< Payload length in bytes */
 };
 
-#define	ESCAPE_BYTE			0xBB
-#define	START_BYTE			0xAA
-#define	STOP_BYTE			0xCC
-#define ESCAPED_ESCAPE_BYTE             0x44
-#define ESCAPED_START_BYTE              0x55
-#define ESCAPED_STOP_BYTE               0x33
+#define	ESCAPE_BYTE         0xBB
+#define	START_BYTE          0xAA
+#define	STOP_BYTE           0xCC
+#define ESCAPED_ESCAPE_BYTE 0x44
+#define ESCAPED_START_BYTE  0x55
+#define ESCAPED_STOP_BYTE   0x33
 
 
 /* Prototypes */
