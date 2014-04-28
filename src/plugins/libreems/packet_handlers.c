@@ -259,16 +259,16 @@ gboolean packet_decode(LibreEMS_Packet *packet)
 	   for (i=0;i<packet->raw_length;i++)
 	   printf("packet byte %i, valud 0x%0.2X\n",i,ptr[i]);
 	 */
-	if ((packet->header_bits & HAS_LENGTH_MASK) > 0)
+	if ((packet->header_bits & HEADER_HAS_LENGTH) > 0)
 	{
 		packet->has_length = TRUE;
 		tmpi += 2;
-		if (packet->header_bits & HAS_SEQUENCE_MASK)
+		if (packet->header_bits & HEADER_HAS_SEQUENCE)
 			packet->payload_length = (ptr[H_LEN_IDX] << 8) + ptr [L_LEN_IDX];
 		else
 			packet->payload_length = (ptr[H_LEN_IDX-1] << 8) + ptr [L_LEN_IDX-1];
 	}
-	if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
+	if ((packet->header_bits & HEADER_HAS_SEQUENCE) > 0)
 	{
 		packet->has_sequence = TRUE;
 		tmpi += 1;
@@ -276,7 +276,7 @@ gboolean packet_decode(LibreEMS_Packet *packet)
 	}
 	packet->payload_id = (ptr[H_PAYLOAD_IDX] << 8) + ptr[L_PAYLOAD_IDX];
 	packet->payload_base_offset = tmpi;
-	packet->is_nack = ((packet->header_bits & ACK_TYPE_MASK) > 0) ? 1:0;
+	packet->is_nack = ((packet->header_bits & HEADER_IS_NACK) > 0) ? 1:0;
 
 	if (g_getenv("PKT_DEBUG"))
 	{
@@ -284,12 +284,12 @@ gboolean packet_decode(LibreEMS_Packet *packet)
 		if (packet->is_nack)
 			printf("WARNING packet NACK received for payload ID %i\n",packet->payload_id);
 		printf("Ack/Nack Flag: %i\n",packet->is_nack);
-		printf("Has Sequence Flag: %i\n",((packet->header_bits & HAS_SEQUENCE_MASK) > 0) ? 1:0);
-		if ((packet->header_bits & HAS_SEQUENCE_MASK) > 0)
+		printf("Has Sequence Flag: %i\n",((packet->header_bits & HEADER_HAS_SEQUENCE) > 0) ? 1:0);
+		if ((packet->header_bits & HEADER_HAS_SEQUENCE) > 0)
 			printf("Sequence id: %i\n",packet->seq_num); 
 		printf("Payload id: %i\n",packet->payload_id);
-		printf("Has Length Flag: %i\n",((packet->header_bits & HAS_LENGTH_MASK) > 0) ? 1:0);
-		if ((packet->header_bits & HAS_LENGTH_MASK) > 0)
+		printf("Has Length Flag: %i\n",((packet->header_bits & HEADER_HAS_LENGTH) > 0) ? 1:0);
+		if ((packet->header_bits & HEADER_HAS_LENGTH) > 0)
 			printf("Payload length %i\n",packet->payload_length);
 		printf("Payload base offset: %i\n",packet->payload_base_offset);
 		printf("RAW PACKET: ->> ");
@@ -303,7 +303,7 @@ gboolean packet_decode(LibreEMS_Packet *packet)
 		errmsg = lookup_error(error);
 		printf("Packet ERROR Code 0x%.4X, \"%s\"\n",error,errmsg);
 	}
-	if (packet->header_bits & HAS_LENGTH_MASK)
+	if (packet->header_bits & HEADER_HAS_LENGTH)
 	{
 		if ((packet->payload_length - 3) > packet->raw_length)
 		{
@@ -477,7 +477,7 @@ G_MODULE_EXPORT void dispatch_packet_queues(LibreEMS_Packet *packet)
 	g_return_if_fail(mutex);
 	g_mutex_lock(mutex);
 	/* If sequence set, look for it and dispatch if found */
-	if ((sequences) && ((packet->header_bits & HAS_SEQUENCE_MASK) > 0))
+	if ((sequences) && ((packet->header_bits & HEADER_HAS_SEQUENCE) > 0))
 	{
 		list = (GList *)g_hash_table_lookup(sequences,GINT_TO_POINTER((GINT)packet->seq_num));
 		if (list)
@@ -686,7 +686,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	/* Sequence number if present */
 	if (have_sequence)
 	{
-		buf[HEADER_IDX] |= HAS_SEQUENCE_MASK;
+		buf[HEADER_IDX] |= HEADER_HAS_SEQUENCE;
 		buf[SEQ_IDX] = (guint8)seq_num;
 		pos += 1; /* 4, header+payload_id+seq */
 	}
@@ -694,7 +694,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 	/* Payload Length if present */
 	if (payload_length > 0)
 	{
-		buf[HEADER_IDX] |= HAS_LENGTH_MASK;
+		buf[HEADER_IDX] |= HEADER_HAS_LENGTH;
 		if (have_sequence)
 		{
 			buf[H_LEN_IDX] = (guint8)((payload_length & 0xff00) >> 8); 
@@ -989,7 +989,7 @@ G_MODULE_EXPORT guint8 * make_me_a_packet(gint *final_length, ...)
 	/* Sequence number if present */
 	if (have_sequence_num)
 	{
-		buf[HEADER_IDX] |= HAS_SEQUENCE_MASK;
+		buf[HEADER_IDX] |= HEADER_HAS_SEQUENCE;
 		buf[SEQ_IDX] = (guint8)sequence_num;
 		pos += 1; /* 4, header+payload_id+seq */
 	}
@@ -997,7 +997,7 @@ G_MODULE_EXPORT guint8 * make_me_a_packet(gint *final_length, ...)
 	/* Payload Length if present */
 	if (have_location_id)
 	{
-		buf[HEADER_IDX] |= HAS_LENGTH_MASK;
+		buf[HEADER_IDX] |= HEADER_HAS_LENGTH;
 		if (have_sequence_num)
 		{
 			buf[H_LEN_IDX] = (guint8)((payload_length & 0xff00) >> 8); 
