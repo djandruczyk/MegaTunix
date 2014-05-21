@@ -72,6 +72,12 @@ Justin Maiuto <justin<dot>maiuto<at>gmail<dot>com>
 	bunch of bugfixes for the Boost tab in MSnS-E, and lookup tables for 
 	400Kpa sensors, and GM/Commodore 3800 V6 MAT/CLT sensors.
 
+Markus Ippy <Markus.IA.Ippy@bmw.co.za>
+    Leveraged some MegaTunix code (dashboard/gauges) to create 
+	raspexiviewer https://sites.google.com/site/raspexiviewer/ which reads
+	data from an Apexi PowerFC and displays the live data in gauges.
+	Contruibuted some gauges specific to his code back to Mtx
+
 YOU could be here!!  Submit patches, dontate applicable hardware, provide 
 assistance and suggestions and you'll make the list, with all the prestige 
 that comes with it... :)
