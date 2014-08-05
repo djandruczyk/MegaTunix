@@ -22,6 +22,5 @@ on your system.  It will NOT remove directories though.  so if you want
 to get rid of everything delete /usr/local/share/MegaTunix (assumes you ran
 ./configure with no options to change the default prefix of "/usr/local")
 
-Send bugreports/suggestions/comments/flames to:
-
+Send bug reports/suggestions/comments/flames to:
 dandruczyk <at> gmail <dot> com
