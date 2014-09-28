@@ -1,6 +1,7 @@
 profilesdir = $(datadir)/MegaTunix/$(INTERROGATOR_DATA_DIR)/Profiles/LibreEMS
 
-profiles_in = LibreEMS_0.0.0.prof.in
+profiles_in = FreeEMS_0.0.0.prof.in \
+			  LibreEMS_0.0.0.prof.in
 
 
 profiles_DATA = details.cfg \

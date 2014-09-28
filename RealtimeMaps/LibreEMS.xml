@@ -737,6 +737,24 @@
 		<RawRPM_size>_U16_</RawRPM_size>
 	</derived>
 	<derived>
+		<dlog_gui_name>rawairflow</dlog_gui_name>
+		<dlog_field_name>rawairflow</dlog_field_name>
+		<internal_names>rawairflow</internal_names>
+		<offset>0</offset>
+		<real_lower>0</real_lower>
+		<real_upper>4294967296</real_upper>
+		<tooltip>"rawairflow" is the raw airflow in 32 bit from zsp8/9.</tooltip>
+		<log_by_default>FALSE</log_by_default>
+		<fromecu_complex>TRUE</fromecu_complex>
+		<fromecu_conv_expr>((zsp8 * 65536)+zsp9)</fromecu_conv_expr>
+		<expr_types>_RAW_VAR_,_RAW_VAR_</expr_types>
+		<expr_symbols>zsp8,zsp9</expr_symbols>
+		<zsp8_offset>80</zsp8_offset>
+		<zsp8_size>_U16_</zsp8_size>
+		<zsp9_offset>78</zsp9_offset>
+		<zsp9_size>_U16_</zsp9_size>
+	</derived>
+	<derived>
 		<dlog_gui_name>Elec. Duty</dlog_gui_name>
 		<dlog_field_name>ElecDuty</dlog_field_name>
 		<internal_names>ElecDuty</internal_names>
