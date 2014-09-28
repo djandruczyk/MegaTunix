@@ -732,7 +732,7 @@ G_MODULE_EXPORT void build_output_message(Io_Message *message, Command *command,
 			if ((!payload_data) && (payload_data_length > 0))
 				printf("MAJOR ISSUE, payload_data is null, but payload data length is %i\n",payload_data_length);
 			/*printf("position before appending blob is %i, len %i\n",pos, payload_data_length); */
-			g_memmove(buf+pos,payload_data,payload_data_length);
+			memmove(buf+pos,payload_data,payload_data_length);
 			pos += payload_data_length;
 		}
 	}
@@ -1033,7 +1033,7 @@ G_MODULE_EXPORT guint8 * make_me_a_packet(gint *final_length, ...)
 			if ((!payload_data) && (length > 0))
 				printf("MAJOR ISSUE, payload_data is null, but payload length is %i\n",length);
 			/*printf("position before appending blob is %i, len %i\n",pos, payload_data_length); */
-			g_memmove(buf+pos,payload_data,length);
+			memmove(buf+pos,payload_data,length);
 			pos += length;
 		}
 	}

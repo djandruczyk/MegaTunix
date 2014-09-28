@@ -2089,9 +2089,9 @@ G_MODULE_EXPORT guint8 * build_netmsg(guint8 update_type,SlaveMessage *msg,gint 
 	buffer[5] = (msg->length >> 8) & 0xff; /* Highbyte of length */
 	buffer[6] = msg->length & 0xff; /* Highbyte of length */
 	if (msg->mode == MTX_SIMPLE_WRITE)
-		g_memmove(buffer+headerlen,&msg->value,msg->length);
+		memmove(buffer+headerlen,&msg->value,msg->length);
 	if (msg->mode == MTX_CHUNK_WRITE)
-		g_memmove(buffer+headerlen,msg->data,msg->length);
+		memmove(buffer+headerlen,msg->data,msg->length);
 
 	*msg_len = buflen;
 	EXIT();
@@ -2122,7 +2122,7 @@ G_MODULE_EXPORT guint8 * build_status_update(guint8 update_type,SlaveMessage *ms
 	buffer[2] = (guint8)msg->value;
 	buffer[3] = (msg->length >> 8) & 0xff; /* Highbyte of length */
 	buffer[4] = msg->length & 0xff; /* Highbyte of length */
-	g_memmove(buffer+headerlen, msg->data,msg->length);
+	memmove(buffer+headerlen, msg->data,msg->length);
 
 	*msg_len = buflen;
 	EXIT();

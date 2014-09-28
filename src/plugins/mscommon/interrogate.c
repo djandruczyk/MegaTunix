@@ -1275,7 +1275,7 @@ G_MODULE_EXPORT GArray * validate_and_load_tests(GHashTable **tests_hash)
 			test->send_buf = g_new0(guint8, len + 6); /*length + CRC32 */
 			test->send_buf[0] = (len >> 8 ) & 0xff;
 			test->send_buf[1] = len & 0xff;
-			g_memmove(&test->send_buf[2],test->actual_test,len);
+			memmove(&test->send_buf[2],test->actual_test,len);
 			crc32 = crc32_computebuf(0,&test->send_buf[2],len);
 			test->send_buf[2 + len + 0] = (crc32 >> 24) & 0xff;
 			test->send_buf[2 + len + 1] = (crc32 >> 16) & 0xff;
