@@ -189,7 +189,7 @@ struct
 	guint8 ack_type:1;
 	guint8 has_sequence:1;
 	guint8 is_partial_packet:1;
-	guint8 reserved_4:1;
+	guint8 last_partial_packet:1;
 	guint8 reserved_3:1;
 	guint8 reserved_2:1;
 	guint8 reserved_1:1;
