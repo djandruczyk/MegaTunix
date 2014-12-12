@@ -184,9 +184,7 @@ gboolean do_libreems_load(gint port_fd, gint file_fd)
 		return FALSE;
 	}
 	free_s19(count);
-	/* Make fred happier
-	   reset_proc(port_fd);
-	   */
+	reset_libreems_proc(port_fd);
 	g_get_current_time(&end);
 	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps)\nwith %i verify errors, and %i successful recoveries.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count,verify_retry_success_count),TRUE);
 	if ((verify_failure_count > 0) && 
@@ -770,6 +768,26 @@ void reset_proc(gint port_fd)
 	res = read_wrapper(port_fd,buf,1);
 	if (res == 1)
 		output((gchar *)"Processor Reset complete\n",FALSE);
+}
+
+
+void reset_libreems_proc(gint port_fd)
+{
+	gint res = 0;
+	gchar buf[10];
+	guchar command[4] = {C_WRITE_PC,0xCC,0x20,C_GO};
+
+	if (debug >= 4) {
+		output(g_strdup_printf("TX: %02x %02x %02x %02x\n", command[0], command[1], command[2], command[3] ),TRUE);
+	}
+
+	res = write_wrapper(port_fd, command, 4);
+	if (res != 4)
+		output(g_strdup_printf("reset_libreems_proc(): SHORT WRITE %i of 4",res),TRUE);
+	/* Read out response and toss it */
+	res = read_wrapper(port_fd,buf,1);
+	if (res == 1)
+		output(g_strdup_printf("Processor Reset complete, result 0x%X\n",(int)buf[0]),TRUE);
 }
 
 

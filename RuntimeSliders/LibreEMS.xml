@@ -197,6 +197,12 @@
 		<row>7</row>
 		<source>syncResetCalls</source>
 	</rt_rts>
+	<rt_rts>
+		<slider_name>EthanolPercentage</slider_name>
+		<table>3</table>
+		<row>8</row>
+		<source>EthanolPercentage</source>
+	</rt_rts>
 
 <!--  -->
 	<ve3d_rts>

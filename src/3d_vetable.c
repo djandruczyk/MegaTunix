@@ -154,6 +154,7 @@ G_MODULE_EXPORT void drawOrthoText(GtkWidget *widget, char *str, GLclampf r, GLc
 	glPushMatrix();
 	glLoadIdentity();
 	gluOrtho2D(0.0, 1.0, 0.0, 1.0);
+	//glOrtho2D(0.0, 1.0, 0.0, 1.0,-1.0,1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
@@ -965,6 +966,7 @@ G_MODULE_EXPORT gboolean ve3d_expose_event(GtkWidget *widget, GdkEventExpose *ev
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(65.0, 1.0, 0.1, 4);
+//	glMultMatrix(GLKMatrix4MakePerspective(65.0, 1.0, 0.1, 4).m);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 

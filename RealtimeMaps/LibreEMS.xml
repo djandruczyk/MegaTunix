@@ -215,15 +215,15 @@
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>
-		<dlog_gui_name>2nd deriv RPM</dlog_gui_name>
-		<dlog_field_name>DDRPM</dlog_field_name>
-		<internal_names>DDRPM</internal_names>
+		<dlog_gui_name>Ethanol %</dlog_gui_name>
+		<dlog_field_name>EthanolPercentage</dlog_field_name>
+		<internal_names>EthanolPercentage</internal_names>
 		<offset>30</offset>
 		<size>_U16_</size>
 		<real_lower>0</real_lower>
 		<real_upper>65535</real_upper>
 		<precision>1</precision>
-		<tooltip>"DDRPM" will be the Delta Delta Engine RPM in RPM/second^2 or similar but is currently unused</tooltip>
+		<tooltip>Percentage of Ethanol in your fuel</tooltip>
 		<log_by_default>TRUE</log_by_default>
 	</derived>
 	<derived>

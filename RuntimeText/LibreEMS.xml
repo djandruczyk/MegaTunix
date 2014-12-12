@@ -44,6 +44,10 @@
 		</threshold>
 	</rtt>
 	<rtt>
+		<internal_name>EthanolPercentage</internal_name>
+		<datasource>EthanolPercentage</datasource>
+	</rtt>
+	<rtt>
 		<internal_name>TPS</internal_name>
 		<datasource>TPS</datasource>
 	</rtt>

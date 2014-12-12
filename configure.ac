@@ -171,7 +171,7 @@ if test "$cross_compiling" = yes ; then
 		EXTRA_LIBS=" -mwindows -lole32 -lws2_32"
 	fi
 else
-	EXTRA_LIBS=" -lm"
+	EXTRA_LIBS="-lGLU -lm"
 	MTXPLUGIN_DIR="$datarootdir/MegaTunix/plugins"
 fi
 AC_SUBST(MTXPLUGIN_DIR)
