@@ -3444,8 +3444,8 @@ void gl_create_font(GtkWidget *widget)
 		ve_view->font_created = TRUE;
 
 	// This call is deprecated so we'll have to fix it sometime.
-	ve_view->ft2_context = pango_ft2_get_context(72, 72);
-	//ve_view->ft2_context = gtk_widget_get_pango_context(widget);
+	//ve_view->ft2_context = pango_ft2_get_context(72, 72);
+	ve_view->ft2_context = pango_font_map_create_context(pango_ft2_font_map_new());
 
 	gtk_widget_get_allocation(widget,&allocation);
 	min = MIN(allocation.width,allocation.height);
