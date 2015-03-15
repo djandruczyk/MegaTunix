@@ -1651,3 +1651,37 @@ void mtx_gauge_face_get_last_click_coords(MtxGaugeFace *gauge, gdouble *x, gdoub
 		*y = priv->last_click_y;
 	return;
 }
+
+
+/*!
+ \brief sets the value text justification mode (center,left,right)
+ \param gauge is the pointer to the gauge object
+ \param justify is the enumeration to set it to
+ */
+gboolean mtx_gauge_face_set_value_text_justification(MtxGaugeFace *gauge, MtxTextJustification justification)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail (MTX_IS_GAUGE_FACE(gauge));
+	g_return_if_fail (
+			(justification == MTX_JUSTIFY_LEFT) || 
+			(justification == MTX_JUSTIFY_RIGHT) ||
+			(justification == MTX_JUSTIFY_CENTER)
+			);
+	priv->value_justification = justification;
+	generate_gauge_background(gauge);
+	mtx_gauge_face_redraw_canvas (gauge);
+	return TRUE;
+}
+
+
+/*!
+ \brief gets the value text justification mode (center,left,right)
+ \param gauge is the pointer to the gauge object
+ */
+MtxTextJustification mtx_gauge_face_get_value_text_justification(MtxGaugeFace *gauge)
+{
+	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
+	g_return_if_fail (MTX_IS_GAUGE_FACE(gauge));
+	return priv->value_justification;
+}
+

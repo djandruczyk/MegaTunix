@@ -178,6 +178,7 @@ void mtx_gauge_face_finalize (GObject *gauge)
 	g_object_set_data(G_OBJECT(gauge),"ubound", NULL);
 	g_object_set_data(G_OBJECT(gauge),"value_font", NULL);
 	g_object_set_data(G_OBJECT(gauge),"value_font_scale", NULL);
+	g_object_set_data(G_OBJECT(gauge),"value_justification", NULL);
 	g_object_set_data(G_OBJECT(gauge),"value_str_xpos", NULL);
 	g_object_set_data(G_OBJECT(gauge),"value_str_ypos", NULL);
 	g_object_set_data(G_OBJECT(gauge),"antialias", NULL);
@@ -373,6 +374,7 @@ void mtx_gauge_face_init (MtxGaugeFace *gauge)
 	priv->value_xpos = 0.0;
 	priv->value_ypos = 0.40;
 	priv->value_font_scale = 0.2;
+	priv->value_justification = MTX_JUSTIFY_CENTER;
 	priv->antialias = TRUE;
 	priv->show_value = TRUE;
 	priv->show_tattletale = FALSE;
@@ -441,6 +443,7 @@ void mtx_gauge_face_init_name_bindings(MtxGaugeFace *gauge)
 	g_object_set_data(G_OBJECT(gauge),"ubound", &priv->ubound);
 	g_object_set_data(G_OBJECT(gauge),"value_font", &priv->value_font);
 	g_object_set_data(G_OBJECT(gauge),"value_font_scale", &priv->value_font_scale);
+	g_object_set_data(G_OBJECT(gauge),"value_justification", &priv->value_justification);
 	g_object_set_data(G_OBJECT(gauge),"value_str_xpos", &priv->value_xpos);
 	g_object_set_data(G_OBJECT(gauge),"value_str_ypos", &priv->value_ypos);
 	g_object_set_data(G_OBJECT(gauge),"antialias", &priv->antialias);
@@ -700,20 +703,29 @@ cairo_jump_out_of_alerts:
 
 		cairo_text_extents (cr, message, &extents);
 
-		cairo_move_to (cr, 
-				priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius),
-				priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius));
+		switch (priv->value_justification) {
+			case MTX_JUSTIFY_LEFT:
+				/* Left justified */
+				cairo_move_to (cr, 
+						priv->xc-(extents.x_bearing)+(priv->value_xpos*priv->radius),
+						priv->yc-(extents.height + extents.y_bearing)+(priv->value_ypos*priv->radius));
+				break;
+			case MTX_JUSTIFY_RIGHT:
+				cairo_move_to (cr, 
+						priv->xc-(extents.width + extents.x_bearing)+(priv->value_xpos*priv->radius),
+						priv->yc-(extents.height + extents.y_bearing)+(priv->value_ypos*priv->radius));
+				break;
+			case MTX_JUSTIFY_CENTER:
+			default:
+				/* Centered positioning */
+				cairo_move_to (cr, 
+						priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius),
+						priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius));
+				break;
+		}
 		cairo_show_text (cr, message);
-		/*
-		priv->value_bounding_box.x = priv->xc-(extents.width/2 + extents.x_bearing)+(priv->value_xpos*priv->radius);
-		priv->value_bounding_box.y = priv->yc-(extents.height/2 + extents.y_bearing)+(priv->value_ypos*priv->radius)-extents.height;
-		priv->value_bounding_box.width = extents.width + extents.x_advance + 2; 
-		priv->value_bounding_box.height = extents.height + extents.y_advance + 2;
-		*/
-		/*printf("Value bounding box is at %i,%i, width/height %i,%i\n",priv->value_bounding_box.x,priv->value_bounding_box.y,priv->value_bounding_box.width,priv->value_bounding_box.height); */
 
 		g_free(message);
-
 		cairo_stroke (cr);
 	}
 

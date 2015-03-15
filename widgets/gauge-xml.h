@@ -132,6 +132,7 @@ static const struct
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"ubound",FALSE},
 	{ mtx_gauge_gchar_import, mtx_gauge_gchar_export,"value_font",FALSE},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_font_scale",FALSE},
+	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"value_justification",FALSE},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_str_xpos",FALSE},
 	{ mtx_gauge_gfloat_import, mtx_gauge_gfloat_export,"value_str_ypos",FALSE},
 	{ mtx_gauge_gint_import, mtx_gauge_gint_export,"antialias",FALSE},

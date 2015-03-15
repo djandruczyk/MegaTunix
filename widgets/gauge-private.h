@@ -82,6 +82,7 @@ struct _MtxGaugeFacePrivate
 	gfloat value_font_scale;/*!< Array of font scales */
 	gfloat value_xpos;      /*!< Array of X offsets for strings */
 	gfloat value_ypos;      /*!< Array of X offsets for strings */
+	MtxTextJustification value_justification; /*!< Justification mode for value text */
 	gint precision;         /*!< number of decimal places for val */
 	gfloat start_angle;     /*!< Start point, (Cairo, CW rotation) */
 	gfloat sweep_angle;     /*!< Sweep of gauge (cairo, CW increasing) */
@@ -100,7 +101,6 @@ struct _MtxGaugeFacePrivate
 	gfloat needle_tail_width;/*!< % of rad width of needle tip */
 	gint needle_polygon_points;	/*!< Number of points in the needle */
 	GdkRectangle needle_bounding_box;	/*!< needle bounding box */
-	GdkRectangle value_bounding_box;	/*!< value text bounding box */
 	MtxPoint needle_coords[6];      /*!< 6 point needle for now */
 	MtxPoint tattle_coords[6];      /*!< 6 point needle for now */
 	MtxDayNite daytime_mode;	/*!< Color enum */

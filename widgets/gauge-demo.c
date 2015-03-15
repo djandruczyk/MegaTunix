@@ -61,6 +61,7 @@ int main (int argc, char **argv)
 		
 		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE (gauge), PRECISION, (gfloat)1);
 		mtx_gauge_face_set_daytime_mode(MTX_GAUGE_FACE(gauge),MTX_DAY);
+		mtx_gauge_face_set_value_text_justification(MTX_GAUGE_FACE(gauge),MTX_JUSTIFY_CENTER);
 	}
 	else
 	{
