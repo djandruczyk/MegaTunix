@@ -82,7 +82,7 @@ struct _MtxGaugeFacePrivate
 	gfloat value_font_scale;/*!< Array of font scales */
 	gfloat value_xpos;      /*!< Array of X offsets for strings */
 	gfloat value_ypos;      /*!< Array of X offsets for strings */
-	MtxTextJustification value_justification; /*!< Justification mode for value text */
+	MtxValueJustification value_justification; /*!< Justification mode for value text */
 	gint precision;         /*!< number of decimal places for val */
 	gfloat start_angle;     /*!< Start point, (Cairo, CW rotation) */
 	gfloat sweep_angle;     /*!< Sweep of gauge (cairo, CW increasing) */

@@ -491,6 +491,7 @@ const GArray * mtx_gauge_face_get_polygons(MtxGaugeFace *gauge)
  */
 gboolean mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gfloat value)
 {
+	MtxValueJustification justify;
 	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
 	g_return_val_if_fail (MTX_IS_GAUGE_FACE (gauge),FALSE);
 	g_return_val_if_fail (field < NUM_ATTRIBUTES,FALSE);
@@ -553,6 +554,15 @@ gboolean mtx_gauge_face_set_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 			break;
 		case SHOW_VALUE:
 			priv->show_value = (gint)value;
+			break;
+		case VALUE_JUSTIFICATION:
+			justify = (MtxValueJustification)value;
+			g_return_val_if_fail(
+					((gint)value == MTX_JUSTIFY_LEFT) ||
+					((gint)value == MTX_JUSTIFY_CENTER) ||
+					((gint)value == MTX_JUSTIFY_RIGHT)
+					,FALSE);
+			priv->value_justification = justify;
 			break;
 		default:
 			break;
@@ -641,6 +651,8 @@ gboolean mtx_gauge_face_get_attribute(MtxGaugeFace *gauge,MtxGenAttr field, gflo
 		case SHOW_VALUE:
 			*value = (gfloat)priv->show_value;
 			break;
+		case VALUE_JUSTIFICATION:
+			*value = (gfloat)priv->value_justification;
 		default:
 			return FALSE;
 			break;
@@ -1650,38 +1662,5 @@ void mtx_gauge_face_get_last_click_coords(MtxGaugeFace *gauge, gdouble *x, gdoub
 	if (y)
 		*y = priv->last_click_y;
 	return;
-}
-
-
-/*!
- \brief sets the value text justification mode (center,left,right)
- \param gauge is the pointer to the gauge object
- \param justify is the enumeration to set it to
- */
-gboolean mtx_gauge_face_set_value_text_justification(MtxGaugeFace *gauge, MtxTextJustification justification)
-{
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE(gauge));
-	g_return_if_fail (
-			(justification == MTX_JUSTIFY_LEFT) || 
-			(justification == MTX_JUSTIFY_RIGHT) ||
-			(justification == MTX_JUSTIFY_CENTER)
-			);
-	priv->value_justification = justification;
-	generate_gauge_background(gauge);
-	mtx_gauge_face_redraw_canvas (gauge);
-	return TRUE;
-}
-
-
-/*!
- \brief gets the value text justification mode (center,left,right)
- \param gauge is the pointer to the gauge object
- */
-MtxTextJustification mtx_gauge_face_get_value_text_justification(MtxGaugeFace *gauge)
-{
-	MtxGaugeFacePrivate *priv = MTX_GAUGE_FACE_GET_PRIVATE(gauge);
-	g_return_if_fail (MTX_IS_GAUGE_FACE(gauge));
-	return priv->value_justification;
 }
 

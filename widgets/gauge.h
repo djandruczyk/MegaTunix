@@ -91,7 +91,7 @@ typedef enum
 	MTX_JUSTIFY_CENTER = 0xdd,
 	MTX_JUSTIFY_LEFT,
 	MTX_JUSTIFY_RIGHT
-}MtxTextJustification;
+}MtxValueJustification;
 
 /*! GaugeColorIndex enum, for indexing into the color arrays */
 typedef enum  
@@ -227,6 +227,7 @@ typedef enum
 	TATTLETALE,
 	TATTLETALE_ALPHA,
 	SHOW_VALUE,
+	VALUE_JUSTIFICATION,
 	NUM_ATTRIBUTES
 }MtxGenAttr;
 
@@ -481,10 +482,6 @@ gboolean mtx_gauge_face_get_value (MtxGaugeFace *gauge, gfloat *value);
 /* Value Font */
 gboolean mtx_gauge_face_set_value_font (MtxGaugeFace *gauge, gchar *);
 gchar * mtx_gauge_face_get_value_font (MtxGaugeFace *gauge);
-
-/* Value Text justification */
-gboolean mtx_gauge_face_set_value_text_justification(MtxGaugeFace *gauge, MtxTextJustification justify);
-MtxTextJustification mtx_gauge_face_get_value_text_justification(MtxGaugeFace *gauge);
 
 /* Warning Ranges */
 const GArray * mtx_gauge_face_get_warning_ranges(MtxGaugeFace *gauge);
