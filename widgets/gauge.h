@@ -85,6 +85,13 @@ typedef enum
 	NUM_POLYS
 }MtxPolyType;
 
+/* MtxTextJustify enumeration, for text placement */
+typedef enum
+{
+	MTX_JUSTIFY_CENTER = 0xdd,
+	MTX_JUSTIFY_LEFT,
+	MTX_JUSTIFY_RIGHT
+}MtxValueJustification;
 
 /*! GaugeColorIndex enum, for indexing into the color arrays */
 typedef enum  
@@ -220,6 +227,7 @@ typedef enum
 	TATTLETALE,
 	TATTLETALE_ALPHA,
 	SHOW_VALUE,
+	VALUE_JUSTIFICATION,
 	NUM_ATTRIBUTES
 }MtxGenAttr;
 

@@ -27,6 +27,12 @@ G_MODULE_EXPORT gboolean init_text_attributes(GtkBuilder *builder)
 	OBJ_SET((gtk_builder_get_object(builder,"value_font_scale_spin")),"handler",GINT_TO_POINTER(VALUE_FONTSCALE));
 	OBJ_SET((gtk_builder_get_object(builder,"value_color_day_button")),"handler",GINT_TO_POINTER(GAUGE_COL_VALUE_FONT_DAY));
 	OBJ_SET((gtk_builder_get_object(builder,"value_color_nite_button")),"handler",GINT_TO_POINTER(GAUGE_COL_VALUE_FONT_NITE));
+	OBJ_SET((gtk_builder_get_object(builder,"left_justify_radio")),"handler",GINT_TO_POINTER(VALUE_JUSTIFICATION));
+	OBJ_SET((gtk_builder_get_object(builder,"left_justify_radio")),"special_value",GINT_TO_POINTER(MTX_JUSTIFY_LEFT));
+	OBJ_SET((gtk_builder_get_object(builder,"right_justify_radio")),"handler",GINT_TO_POINTER(VALUE_JUSTIFICATION));
+	OBJ_SET((gtk_builder_get_object(builder,"right_justify_radio")),"special_value",GINT_TO_POINTER(MTX_JUSTIFY_RIGHT));
+	OBJ_SET((gtk_builder_get_object(builder,"center_justify_radio")),"handler",GINT_TO_POINTER(VALUE_JUSTIFICATION));
+	OBJ_SET((gtk_builder_get_object(builder,"center_justify_radio")),"special_value",GINT_TO_POINTER(MTX_JUSTIFY_CENTER));
 	OBJ_SET((gtk_builder_get_object(builder,"show_value_check")),"handler",GINT_TO_POINTER(SHOW_VALUE));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(builder,"value_color_day_button")),&white);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(gtk_builder_get_object(builder,"value_color_nite_button")),&black);

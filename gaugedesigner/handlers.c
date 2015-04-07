@@ -96,6 +96,21 @@ void update_text_controls()
 	(void)mtx_gauge_face_get_color(g,GAUGE_COL_VALUE_FONT_NITE, &color);
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
+	mtx_gauge_face_get_attribute(g, VALUE_JUSTIFICATION, &tmp1);
+	switch ((MtxValueJustification)tmp1) {
+		case MTX_JUSTIFY_LEFT:
+			widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"left_justify_radio"));
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+			break;
+		case MTX_JUSTIFY_CENTER:
+			widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"center_justify_radio"));
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+			break;
+		case MTX_JUSTIFY_RIGHT:
+			widget = GTK_WIDGET (gtk_builder_get_object(toplevel,"right_justify_radio"));
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),TRUE);
+			break;
+	}
 	hold_handlers = FALSE;
 }
 

@@ -61,6 +61,7 @@ int main (int argc, char **argv)
 		
 		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE (gauge), PRECISION, (gfloat)1);
 		mtx_gauge_face_set_daytime_mode(MTX_GAUGE_FACE(gauge),MTX_DAY);
+		mtx_gauge_face_set_attribute(MTX_GAUGE_FACE(gauge),VALUE_JUSTIFICATION, MTX_JUSTIFY_CENTER);
 	}
 	else
 	{
@@ -130,7 +131,8 @@ gboolean key_event_handler(GtkWidget *widget, GdkEventKey *event, gpointer data)
 
 gboolean close_demo(GtkWidget *widget, gpointer data)
 {
-	g_source_remove((guint)data);
+	guint source = (guint)(guint64)data;
+	g_source_remove(source);
 	gtk_widget_destroy(widget);
 	gtk_main_quit();
 	return TRUE;
