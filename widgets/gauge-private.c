@@ -707,13 +707,13 @@ cairo_jump_out_of_alerts:
 			case MTX_JUSTIFY_LEFT:
 				/* Left justified */
 				cairo_move_to (cr, 
-						priv->xc-(extents.x_bearing)+(priv->value_xpos*priv->radius),
-						priv->yc-(extents.height + extents.y_bearing)+(priv->value_ypos*priv->radius));
+						priv->xc+(priv->value_xpos*priv->radius),
+						priv->yc+(priv->value_ypos*priv->radius));
 				break;
 			case MTX_JUSTIFY_RIGHT:
 				cairo_move_to (cr, 
-						priv->xc-(extents.width + extents.x_bearing)+(priv->value_xpos*priv->radius),
-						priv->yc-(extents.height + extents.y_bearing)+(priv->value_ypos*priv->radius));
+						priv->xc-(extents.x_advance)+(priv->value_xpos*priv->radius),
+						priv->yc-(extents.y_advance)+(priv->value_ypos*priv->radius));
 				break;
 			case MTX_JUSTIFY_CENTER:
 			default:
