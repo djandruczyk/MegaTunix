@@ -163,6 +163,7 @@ gboolean do_libreems_load(gint port_fd, gint file_fd)
 	if (count == 0)
 		return FALSE;
 	g_get_current_time(&begin);
+	jump_to_loader_if_streaming(port_fd);
 	if (!wakeup_S12(port_fd))
 	{
 		output((gchar *)"Unable to wakeup device!\nCheck to make sure it's present\n",FALSE);
@@ -184,9 +185,7 @@ gboolean do_libreems_load(gint port_fd, gint file_fd)
 		return FALSE;
 	}
 	free_s19(count);
-	/* Make fred happier
-	   reset_proc(port_fd);
-	   */
+	reset_proc(port_fd);
 	g_get_current_time(&end);
 	output(g_strdup_printf("Wrote %d bytes in %i seconds (%.1f Bps)\nwith %i verify errors, and %i successful recoveries.\n", total_bytes,(int)(end.tv_sec-begin.tv_sec),total_bytes/(gfloat)(end.tv_sec-begin.tv_sec),verify_failure_count,verify_retry_success_count),TRUE);
 	if ((verify_failure_count > 0) && 
@@ -290,6 +289,29 @@ guchar extract_data(gchar *data, guint nBytes, guchar checksum, guchar *binary)
 	}
 
 	return checksum;
+}
+
+void jump_to_loader_if_streaming(gint port_fd)
+{
+	gint res = 0;
+	gchar buf[1024];
+	guchar jump_to_sm[] = "\xAA\x00\x03\x0A\x0D\xCC";
+	output((gchar *)"Checking if ECU is not in bootloader mode\n",FALSE);
+	g_usleep(50000);
+	if (read_wrapper(port_fd, buf, 1024) > 0)
+	{
+		output((gchar *)"Streaming activity detected\n",FALSE);
+		res = write_wrapper(port_fd,jump_to_sm,6);
+		g_usleep(50000);
+		read_wrapper(port_fd, buf, 1024);
+	} else {
+		if (!wakeup_S12(port_fd)) {
+			res = write_wrapper(port_fd,jump_to_sm,6);
+			g_usleep(50000);
+			read_wrapper(port_fd, buf, 1024);
+		}
+	}
+	return;
 }
 
 gboolean wakeup_S12(gint port_fd)

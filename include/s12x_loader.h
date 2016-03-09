@@ -41,6 +41,7 @@ void reset_proc(gint);
 gboolean send_S12(gint, guint);
 void output(gchar *, gboolean);
 gboolean wakeup_S12(gint);
+void jump_to_loader_if_streaming(gint);
 /* Prototypes */
 
 #endif

@@ -46,7 +46,7 @@
 #ifndef CRTSCTS
 #define CRTSCTS 0
 #endif
-#define POLL_ATTEMPTS 4
+#define POLL_ATTEMPTS 2
 
 /* Globals */
 #ifndef __WIN32__
